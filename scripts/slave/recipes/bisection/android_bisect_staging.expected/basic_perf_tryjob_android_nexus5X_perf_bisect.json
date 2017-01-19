@@ -1247,7 +1247,6 @@
     "cwd": "[BUILDER_CACHE]/android_nexus5X_perf_bisect",
     "name": "Results",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>N<br/><br/>o<br/><br/> <br/><br/>v<br/><br/>a<br/><br/>l<br/><br/>u<br/><br/>e<br/><br/>s<br/><br/> <br/><br/>g<br/><br/>e<br/><br/>n<br/><br/>e<br/><br/>r<br/><br/>a<br/><br/>t<br/><br/>e<br/><br/>d<br/><br/> <br/><br/>f<br/><br/>r<br/><br/>o<br/><br/>m<br/><br/> <br/><br/>t<br/><br/>e<br/><br/>s<br/><br/>t<br/><br/>.<br/>@@@",
       "@@@STEP_LINK@HTML Results@https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-without@@@"
     ]
   },

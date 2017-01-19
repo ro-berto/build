@@ -303,12 +303,25 @@ class PerfTryJobApi(recipe_api.RecipeApi):
     results_link = (cloud_links_without_patch['html'][0]
                     if cloud_links_without_patch['html'] else '')
 
+    if results_link:
+      step_result.presentation.links.update({'HTML Results': results_link})
+
+    profiler_with_patch = cloud_links_with_patch['profiler']
+    profiler_without_patch = cloud_links_without_patch['profiler']
+
+    if profiler_with_patch and profiler_without_patch:
+      for i in xrange(len(profiler_with_patch)):  # pragma: no cover
+        step_result.presentation.links.update({
+            '%s[%d]' % (
+                labels.get('profiler_link1'), i): profiler_with_patch[i]
+        })
+      for i in xrange(len(profiler_without_patch)):  # pragma: no cover
+        step_result.presentation.links.update({
+            '%s[%d]' % (
+                labels.get('profiler_link2'), i): profiler_without_patch[i]
+        })
+
     if not values_with_patch or not values_without_patch:
-      step_result.presentation.step_text += (
-          self.m.test_utils.format_step_text(
-              'No values generated from test.'))
-      if results_link:
-        step_result.presentation.links.update({'HTML Results': results_link})
       return
 
     mean_with_patch = self.m.math_utils.mean(values_with_patch)
@@ -321,9 +334,6 @@ class PerfTryJobApi(recipe_api.RecipeApi):
     stderr_with_patch = self.m.math_utils.standard_error(values_with_patch)
     stderr_without_patch = self.m.math_utils.standard_error(
         values_without_patch)
-
-    profiler_with_patch = cloud_links_with_patch['profiler']
-    profiler_without_patch = cloud_links_without_patch['profiler']
 
     # Calculate the % difference in the means of the 2 runs.
     relative_change = None
@@ -348,22 +358,7 @@ class PerfTryJobApi(recipe_api.RecipeApi):
           'results': _pretty_table(data),
       }
       step_result.presentation.step_text += (
-          self.m.test_utils.format_step_text(display_results))
-
-    if results_link:
-      step_result.presentation.links.update({'HTML Results': results_link})
-
-    if profiler_with_patch and profiler_without_patch:
-      for i in xrange(len(profiler_with_patch)):  # pragma: no cover
-        step_result.presentation.links.update({
-            '%s[%d]' % (
-                labels.get('profiler_link1'), i): profiler_with_patch[i]
-        })
-      for i in xrange(len(profiler_without_patch)):  # pragma: no cover
-        step_result.presentation.links.update({
-            '%s[%d]' % (
-                labels.get('profiler_link2'), i): profiler_without_patch[i]
-        })
+          self.m.test_utils.format_step_text([[display_results]]))
 
   def parse_cloud_links(self, output):
     html_results_pattern = re.compile(CLOUD_RESULTS_LINK, re.MULTILINE)
