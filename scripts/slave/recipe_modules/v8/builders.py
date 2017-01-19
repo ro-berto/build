@@ -1352,7 +1352,7 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [
-          V8Testing_2,
+          V8Testing_3,
           V8TestingExtra_2,
           Test262,
           Test262Extra_2,
@@ -1364,11 +1364,11 @@ BUILDERS = {
         ] + with_test_args(
             'armv8-a',
             ['--extra-flags', '--enable-armv8'],
-            [V8Testing_2, Test262, Mozilla, SimdJs],
+            [V8Testing_3, Test262, Mozilla, SimdJs],
         ) + with_test_args(
             'novfp3',
             ['--novfp3'],
-            [V8Testing_2, Test262, Mozilla, SimdJs],
+            [V8Testing_3, Test262, Mozilla, SimdJs],
             V8NoExhaustiveVariants(),
         ),
         'testing': {'platform': 'linux'},
