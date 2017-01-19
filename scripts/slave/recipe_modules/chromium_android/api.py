@@ -1441,12 +1441,9 @@ class AndroidApi(recipe_api.RecipeApi):
       command_line_args: A list of command line arguments you want set for
           webview.
     """
-    _WEBVIEW_COMMAND_LINE = '/data/local/tmp/webview-command-line'
-
     command_line_script_args = [
         '--adb-path', self.m.adb.adb_path(),
-        '--device-path', _WEBVIEW_COMMAND_LINE,
-        '--executable', 'webview',
+        '--name', 'webview-command-line',
     ]
     command_line_script_args.extend(command_line_args)
     self.m.python('write webview command line file',

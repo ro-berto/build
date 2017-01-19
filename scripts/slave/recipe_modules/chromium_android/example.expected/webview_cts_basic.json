@@ -1119,10 +1119,8 @@
       "[START_DIR]/src/build/android/adb_command_line.py",
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
-      "--device-path",
-      "/data/local/tmp/webview-command-line",
-      "--executable",
-      "webview",
+      "--name",
+      "webview-command-line",
       "--webview_arg_1",
       "--webview_arg_2"
     ],
