@@ -48,8 +48,7 @@ def RunSteps(api):
                  '--time',
                  '--failure-summary',
                  '--write-debug-log',
-                 '--write-test-outcome-log',
-                 '--copy-coredumps']
+                 '--write-test-outcome-log']
     test_args.extend(extra_test_args)
     api.python('test vm',
                api.path['checkout'].join('tools', 'test.py'),

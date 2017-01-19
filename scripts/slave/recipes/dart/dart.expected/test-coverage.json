@@ -78,7 +78,6 @@
       "--failure-summary",
       "--write-debug-log",
       "--write-test-outcome-log",
-      "--copy-coredumps",
       "-cprecompiler",
       "-rdart_precompiled",
       "--system=android"

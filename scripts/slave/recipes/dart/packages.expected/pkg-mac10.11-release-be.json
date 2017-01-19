@@ -145,7 +145,6 @@
       "--failure-summary",
       "--write-debug-log",
       "--write-test-outcome-log",
-      "--copy-coredumps",
       "pkg"
     ],
     "cwd": "[START_DIR]/sdk",
@@ -169,7 +168,6 @@
       "--failure-summary",
       "--write-debug-log",
       "--write-test-outcome-log",
-      "--copy-coredumps",
       "--append_logs",
       "--use-public-packages",
       "pkgbuild"
@@ -195,7 +193,6 @@
       "--failure-summary",
       "--write-debug-log",
       "--write-test-outcome-log",
-      "--copy-coredumps",
       "--append_logs",
       "--use-repository-packages",
       "pkgbuild"

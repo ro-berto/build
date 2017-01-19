@@ -146,8 +146,7 @@ def RunSteps(api):
                    '--time',
                    '--failure-summary',
                    '--write-debug-log',
-                   '--write-test-outcome-log',
-                   '--copy-coredumps']
+                   '--write-test-outcome-log']
       for option in options:
         test_args.append(all_options[option])
       if sharded:

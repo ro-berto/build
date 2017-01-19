@@ -77,8 +77,7 @@
       "--time",
       "--failure-summary",
       "--write-debug-log",
-      "--write-test-outcome-log",
-      "--copy-coredumps"
+      "--write-test-outcome-log"
     ],
     "cwd": "[START_DIR]/sdk",
     "name": "test vm"

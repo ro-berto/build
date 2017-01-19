@@ -145,7 +145,6 @@
       "--failure-summary",
       "--write-debug-log",
       "--write-test-outcome-log",
-      "--copy-coredumps",
       "pkg/analyzer"
     ],
     "cwd": "[START_DIR]/sdk",
@@ -169,7 +168,6 @@
       "--failure-summary",
       "--write-debug-log",
       "--write-test-outcome-log",
-      "--copy-coredumps",
       "--append_logs",
       "pkg/analysis_server"
     ],
@@ -194,7 +192,6 @@
       "--failure-summary",
       "--write-debug-log",
       "--write-test-outcome-log",
-      "--copy-coredumps",
       "--append_logs",
       "pkg/analyzer_cli"
     ],
@@ -219,7 +216,6 @@
       "--failure-summary",
       "--write-debug-log",
       "--write-test-outcome-log",
-      "--copy-coredumps",
       "--append_logs",
       "pkg/front_end"
     ],

@@ -92,7 +92,6 @@
       "--failure-summary",
       "--write-debug-log",
       "--write-test-outcome-log",
-      "--copy-coredumps",
       "--builder-tag=win7",
       "html",
       "pkg",
@@ -119,7 +118,6 @@
       "--failure-summary",
       "--write-debug-log",
       "--write-test-outcome-log",
-      "--copy-coredumps",
       "--builder-tag=win7",
       "--append_logs",
       "co19"
