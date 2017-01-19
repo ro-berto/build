@@ -367,6 +367,21 @@ def GenTests(api):
     api.time.step(120)
   )
 
+  # Same as above with a windows bot. Regression test making sure that
+  # the swarming hashes are searched in a windows bucket.
+  f = Filter()
+  f = f.include_re(r'.*check build.*')
+  yield (
+    api.v8.test(
+        'client.v8',
+        'V8 Win32',
+        'bisect',
+    ) +
+    api.v8.fail('Check') +
+    api.post_process(f) +
+    api.time.step(120)
+  )
+
   # Disable bisection due to a recurring failure. Steps:
   # Bisect a0 -> failures.
   yield (
