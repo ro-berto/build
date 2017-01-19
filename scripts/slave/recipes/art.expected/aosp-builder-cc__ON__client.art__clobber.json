@@ -19,13 +19,32 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[START_DIR]/out"
+    ],
+    "name": "rmtree clobber",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
       "make",
       "-j8",
       "clean-oat-host"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ART_USE_READ_BARRIER": "false",
+      "ART_USE_READ_BARRIER": "true",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
@@ -42,7 +61,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ART_USE_READ_BARRIER": "false",
+      "ART_USE_READ_BARRIER": "true",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
@@ -50,11 +69,7 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_x86"
     },
-    "name": "build x86",
-    "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_FAILURE@@@"
-    ]
+    "name": "build x86"
   },
   {
     "cmd": [
@@ -64,7 +79,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ART_USE_READ_BARRIER": "false",
+      "ART_USE_READ_BARRIER": "true",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
@@ -81,7 +96,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ART_USE_READ_BARRIER": "false",
+      "ART_USE_READ_BARRIER": "true",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
@@ -99,7 +114,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ART_USE_READ_BARRIER": "false",
+      "ART_USE_READ_BARRIER": "true",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
@@ -116,7 +131,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ART_USE_READ_BARRIER": "false",
+      "ART_USE_READ_BARRIER": "true",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
@@ -134,7 +149,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ART_USE_READ_BARRIER": "false",
+      "ART_USE_READ_BARRIER": "true",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
@@ -151,7 +166,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ART_USE_READ_BARRIER": "false",
+      "ART_USE_READ_BARRIER": "true",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
@@ -163,8 +178,7 @@
   },
   {
     "name": "$result",
-    "reason": "1 out of 8 aggregated steps failed. Failures: Step('build x86') failed with return_code 1",
     "recipe_result": null,
-    "status_code": 1
+    "status_code": 0
   }
 ]

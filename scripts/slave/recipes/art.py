@@ -27,11 +27,6 @@ _TARGET_DEVICE_MAP = {
       'make_jobs': 4,
       'product': 'silvermont',
       },
-    'mips64_emulator': {
-      'bitness': 64,
-      'make_jobs': 1,
-      'product': 'mips64r6',
-      },
     'mips32': {
       'bitness': 32,
       'make_jobs': 2,
@@ -81,7 +76,6 @@ def setup_host_x86(api, debug, bitness, concurrent_collector=False):
                         api.path.pathsep +
                         '/usr/lib/jvm/java-8-openjdk-amd64/bin/' +
                         api.path.pathsep + '%(PATH)s',
-            'ART_USE_OPTIMIZING_COMPILER' : 'true',
             'ART_TEST_RUN_TEST_2ND_ARCH': 'false',
             'ART_TEST_INTERPRETER': 'true',
             'ART_TEST_JIT': 'true',
@@ -99,6 +93,9 @@ def setup_host_x86(api, debug, bitness, concurrent_collector=False):
     if concurrent_collector:
       env.update({ 'ART_USE_READ_BARRIER' : 'true'  })
       env.update({ 'ART_HEAP_POISONING' : 'true'  })
+    else:
+      env.update({ 'ART_USE_READ_BARRIER' : 'false' })
+      env.update({ 'ART_HEAP_POISONING' : 'false' })
 
     api.step('build sdk-eng',
              [art_tools.join('buildbot-build.sh'), '-j8', '--host'],
@@ -165,7 +162,6 @@ def setup_target(api,
          'JACK_REPOSITORY': str(build_top_dir.join('prebuilts', 'sdk', 'tools',
                                                    'jacks')),
          'ART_TEST_RUN_TEST_2ND_ARCH': 'false',
-         'ART_USE_OPTIMIZING_COMPILER' : 'true',
          'ART_TEST_INTERPRETER': 'true',
          'ART_TEST_JIT': 'true',
          'ART_TEST_OPTIMIZING': 'true',
@@ -182,6 +178,9 @@ def setup_target(api,
   if concurrent_collector:
     env.update({ 'ART_USE_READ_BARRIER' : 'true' })
     env.update({ 'ART_HEAP_POISONING' : 'true' })
+  else:
+    env.update({ 'ART_USE_READ_BARRIER' : 'false' })
+    env.update({ 'ART_HEAP_POISONING' : 'false' })
 
 
   bitness = _TARGET_DEVICE_MAP[device]['bitness']
@@ -208,10 +207,6 @@ def setup_target(api,
     api.step('build target', [art_tools.join('buildbot-build.sh'),
                               '-j8', '--target'],
              env=env)
-
-    # Mips64 testing is broken.
-    if device == 'mips64_emulator':
-      return
 
     api.step('setup device', [art_tools.join('setup-buildbot-device.sh')],
              env=env)
@@ -280,34 +275,27 @@ def setup_target(api,
     api.step('test jdwp aot', jdwp_command, env=test_env)
     test_logging(api, 'test jdwp aot')
 
-def setup_aosp_builder(api):
+def setup_aosp_builder(api, read_barrier):
   full_checkout(api)
   clobber(api)
-  # Build the static version of dex2oat
-  env = { 'ART_USE_OPTIMIZING_COMPILER': 'true',
-          'TARGET_PRODUCT': 'aosp_x86_64',
-          'LEGACY_USE_JAVA7': 'true',
-          'ART_BUILD_HOST_STATIC': 'true',
-          'TARGET_BUILD_VARIANT': 'eng',
-          'TARGET_BUILD_TYPE': 'release'}
-  api.step('build dex2oats',
-           ['make', '-j8', 'out/host/linux-x86/bin/dex2oats'],
-           env=env)
+  builds = ['x86', 'x86_64', 'arm', 'arm64']
+  build_top_dir = api.path['start_dir']
+  with api.step.defer_results():
+    for build in builds:
+      env = { 'TARGET_PRODUCT': 'aosp_%s' % build,
+              'TARGET_BUILD_VARIANT': 'eng',
+              'TARGET_BUILD_TYPE': 'release',
+              'ANDROID_BUILD_TOP': build_top_dir,
+              'PATH': '/usr/lib/jvm/java-8-openjdk-amd64/bin/' +
+                      api.path.pathsep + '%(PATH)s',
+              'JACK_SERVER': 'false',
+              'JACK_REPOSITORY': str(build_top_dir.join('prebuilts', 'sdk',
+                                                        'tools', 'jacks')),
+              'ART_USE_READ_BARRIER': 'true' if read_barrier else 'false'}
+      api.step('Clean oat %s' % build, ['make', '-j8', 'clean-oat-host'],
+          env=env)
+      api.step('build %s' % build, ['make', '-j8'], env=env)
 
-  # Re-enable when we have Java8 jdk on the slave
-  #builds = ['x86', 'x86_64', 'arm', 'arm64']
-  # TODO: adds mips and mips64 once we have enough storage on the bot.
-  # ['mips', 'mips64']
-  #with api.step.defer_results():
-  #  for build in builds:
-  #    env = { 'ART_USE_OPTIMIZING_COMPILER': 'true',
-  #            'TARGET_PRODUCT': 'aosp_%s' % build,
-  #            'LEGACY_USE_JAVA7': 'true',
-  #            'TARGET_BUILD_VARIANT': 'eng',
-  #            'TARGET_BUILD_TYPE': 'release'}
-  #    api.step('Clean oat %s' % build, ['make', '-j8', 'clean-oat-host'],
-  #        env=env)
-  #    api.step('build %s' % build, ['make', '-j8'], env=env)
 
 _CONFIG_MAP = {
   'client.art': {
@@ -384,11 +372,6 @@ _CONFIG_MAP = {
         'debug': True,
         'concurrent_collector': True,
       },
-      'mips64-emulator-debug': {
-        'serial': 'emulator-5554',
-        'device': 'mips64_emulator',
-        'debug': True,
-      },
       'angler-armv8-ndebug': {
         'serial': '84B7N15A28014046',
         'device': 'angler',
@@ -408,7 +391,12 @@ _CONFIG_MAP = {
     },
 
     'aosp': {
-      'aosp-builder': {},
+      'aosp-builder-cms': {
+        'read_barrier': False
+      },
+      'aosp-builder-cc': {
+        'read_barrier': True
+      },
     },
   },
 }
@@ -494,10 +482,10 @@ def GenTests(api):
       api.test('aosp_x86_build_failure') +
       api.properties(
         mastername='client.art',
-        buildername='aosp-builder',
+        buildername='aosp-builder-cms',
         slavename='TestSlave',
       ) +
-      api.step_data('build dex2oats', retcode=1))
+      api.step_data('build x86', retcode=1))
 #  These tests *should* exist, but can't be included as they cause the recipe
 #  simulation to error out, instead of showing that the build should become
 #  purple instead. This may need to be fixed in the simulation test script.
@@ -505,7 +493,7 @@ def GenTests(api):
 #      api.test('invalid mastername') +
 #      api.properties(
 #        mastername='client.art.does_not_exist',
-#        buildername='aosp-builder',
+#        buildername='aosp-builder-cms',
 #        slavename='TestSlave',
 #      )
 #    )
