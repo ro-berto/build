@@ -671,7 +671,7 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
+      "@@@STEP_LOG_LINE@Captured Output@text from actual benchmark, (ignored)@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -680,7 +680,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "benchmark text",
+      "text from actual benchmark, (ignored)",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -749,7 +749,7 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
+      "@@@STEP_LOG_LINE@Captured Output@text from actual benchmark, (ignored)@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -758,7 +758,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "benchmark text",
+      "text from actual benchmark, (ignored)",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -827,7 +827,7 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
+      "@@@STEP_LOG_LINE@Captured Output@text from actual benchmark, (ignored)@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -836,7 +836,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "benchmark text",
+      "text from actual benchmark, (ignored)",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -905,7 +905,7 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
+      "@@@STEP_LOG_LINE@Captured Output@text from actual benchmark, (ignored)@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -914,7 +914,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "benchmark text",
+      "text from actual benchmark, (ignored)",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -983,7 +983,7 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
+      "@@@STEP_LOG_LINE@Captured Output@text from actual benchmark, (ignored)@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -992,7 +992,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "benchmark text",
+      "text from actual benchmark, (ignored)",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -1307,7 +1307,7 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
-      "@@@STEP_LOG_LINE@Failure Output@benchmark text@@@",
+      "@@@STEP_LOG_LINE@Failure Output@text from actual benchmark, (ignored)@@@",
       "@@@STEP_LOG_END@Failure Output@@@",
       "@@@STEP_WARNINGS@@@"
     ]
@@ -1317,7 +1317,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "benchmark text",
+      "text from actual benchmark, (ignored)",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -1387,7 +1387,7 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
-      "@@@STEP_LOG_LINE@Failure Output@benchmark text@@@",
+      "@@@STEP_LOG_LINE@Failure Output@text from actual benchmark, (ignored)@@@",
       "@@@STEP_LOG_END@Failure Output@@@",
       "@@@STEP_WARNINGS@@@"
     ]
@@ -1397,7 +1397,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "benchmark text",
+      "text from actual benchmark, (ignored)",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -1467,7 +1467,7 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
-      "@@@STEP_LOG_LINE@Failure Output@benchmark text@@@",
+      "@@@STEP_LOG_LINE@Failure Output@text from actual benchmark, (ignored)@@@",
       "@@@STEP_LOG_END@Failure Output@@@",
       "@@@STEP_WARNINGS@@@"
     ]
@@ -1477,7 +1477,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "benchmark text",
+      "text from actual benchmark, (ignored)",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -1547,7 +1547,7 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
-      "@@@STEP_LOG_LINE@Failure Output@benchmark text@@@",
+      "@@@STEP_LOG_LINE@Failure Output@text from actual benchmark, (ignored)@@@",
       "@@@STEP_LOG_END@Failure Output@@@",
       "@@@STEP_WARNINGS@@@"
     ]
@@ -1557,7 +1557,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "benchmark text",
+      "text from actual benchmark, (ignored)",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -1627,7 +1627,7 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
-      "@@@STEP_LOG_LINE@Failure Output@benchmark text@@@",
+      "@@@STEP_LOG_LINE@Failure Output@text from actual benchmark, (ignored)@@@",
       "@@@STEP_LOG_END@Failure Output@@@",
       "@@@STEP_WARNINGS@@@"
     ]
@@ -1637,7 +1637,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "benchmark text",
+      "text from actual benchmark, (ignored)",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -2108,7 +2108,7 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
-      "@@@STEP_LOG_LINE@Failure Output@benchmark text@@@",
+      "@@@STEP_LOG_LINE@Failure Output@text from actual benchmark, (ignored)@@@",
       "@@@STEP_LOG_END@Failure Output@@@",
       "@@@STEP_WARNINGS@@@"
     ]
@@ -2118,7 +2118,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "benchmark text",
+      "text from actual benchmark, (ignored)",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -2188,7 +2188,7 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
-      "@@@STEP_LOG_LINE@Failure Output@benchmark text@@@",
+      "@@@STEP_LOG_LINE@Failure Output@text from actual benchmark, (ignored)@@@",
       "@@@STEP_LOG_END@Failure Output@@@",
       "@@@STEP_WARNINGS@@@"
     ]
@@ -2198,7 +2198,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "benchmark text",
+      "text from actual benchmark, (ignored)",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -2268,7 +2268,7 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
-      "@@@STEP_LOG_LINE@Failure Output@benchmark text@@@",
+      "@@@STEP_LOG_LINE@Failure Output@text from actual benchmark, (ignored)@@@",
       "@@@STEP_LOG_END@Failure Output@@@",
       "@@@STEP_WARNINGS@@@"
     ]
@@ -2278,7 +2278,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "benchmark text",
+      "text from actual benchmark, (ignored)",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -2348,7 +2348,7 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
-      "@@@STEP_LOG_LINE@Failure Output@benchmark text@@@",
+      "@@@STEP_LOG_LINE@Failure Output@text from actual benchmark, (ignored)@@@",
       "@@@STEP_LOG_END@Failure Output@@@",
       "@@@STEP_WARNINGS@@@"
     ]
@@ -2358,7 +2358,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "benchmark text",
+      "text from actual benchmark, (ignored)",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -2428,7 +2428,7 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
-      "@@@STEP_LOG_LINE@Failure Output@benchmark text@@@",
+      "@@@STEP_LOG_LINE@Failure Output@text from actual benchmark, (ignored)@@@",
       "@@@STEP_LOG_END@Failure Output@@@",
       "@@@STEP_WARNINGS@@@"
     ]
@@ -2438,7 +2438,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "benchmark text",
+      "text from actual benchmark, (ignored)",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -2846,7 +2846,7 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
+      "@@@STEP_LOG_LINE@Captured Output@text from actual benchmark, (ignored)@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -2855,7 +2855,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "benchmark text",
+      "text from actual benchmark, (ignored)",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -2924,7 +2924,7 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
+      "@@@STEP_LOG_LINE@Captured Output@text from actual benchmark, (ignored)@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -2933,7 +2933,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "benchmark text",
+      "text from actual benchmark, (ignored)",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -3002,7 +3002,7 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
+      "@@@STEP_LOG_LINE@Captured Output@text from actual benchmark, (ignored)@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -3011,7 +3011,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "benchmark text",
+      "text from actual benchmark, (ignored)",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -3080,7 +3080,7 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
+      "@@@STEP_LOG_LINE@Captured Output@text from actual benchmark, (ignored)@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -3089,7 +3089,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "benchmark text",
+      "text from actual benchmark, (ignored)",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -3158,7 +3158,7 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
+      "@@@STEP_LOG_LINE@Captured Output@text from actual benchmark, (ignored)@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -3167,7 +3167,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "benchmark text",
+      "text from actual benchmark, (ignored)",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {

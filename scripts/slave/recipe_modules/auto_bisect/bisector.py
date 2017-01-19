@@ -579,9 +579,9 @@ class Bisector(object):
     # If we emit a null step then add a log to it, the log should be kept
     # longer than 7 days (which is often needed to debug some issues).
     self.api.m.step('Debug Info', [])
-    debug_info_step = self.api.m.step.active_result
+    current_step = self.api.m.step.active_result
     lines = self._results_debug_message().splitlines()
-    debug_info_step.presentation.logs['Debug Info'] = lines
+    current_step.presentation.logs['Debug Info'] = lines
 
   def post_result(self, halt_on_failure=False):
     """Posts bisect results to Perf Dashboard."""

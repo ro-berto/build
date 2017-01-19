@@ -22,8 +22,8 @@ PERF_MEASUREMENTS_PATH = 'tools/perf/measurements'
 BUILDBOT_BUILDERNAME = 'BUILDBOT_BUILDERNAME'
 BENCHMARKS_JSON_FILE = 'benchmarks.json'
 
-CLOUD_RESULTS_LINK = (r'\s(?P<VALUES>http://storage.googleapis.com/'
-                      'chromium-telemetry/html-results/results-[a-z0-9-_]+)\s')
+CLOUD_RESULTS_LINK = (r'\s(?P<VALUES>https://console.developers.google.com/'
+    'm/cloudstorage/b/chromium-telemetry/o/html-results/results-[a-z0-9-_]+)\s')
 PROFILER_RESULTS_LINK = (r'\s(?P<VALUES>https://console.developers.google.com/'
                          'm/cloudstorage/b/[a-z-]+/o/profiler-[a-z0-9-_.]+)\s')
 RESULTS_BANNER = """
@@ -62,27 +62,31 @@ class PerfTryJobApi(recipe_api.RecipeApi):
     # TODO(prasadv): This is tempory hack to prepend 'src' to test command,
     # until dashboard and trybot scripts are changed.
     _prepend_src_to_path_in_command(test_cfg)
-    # Run with patch.
-    results_with_patch = self._build_and_run_tests(
-        test_cfg, bot_update_step, bot_db, r[0],
-        name='With Patch' if r[0] is None else r[0],
-        reset_on_first_run=True,
-        upload_on_last_run=True,
-        results_label='Patch' if r[0] is None else r[0],
-        allow_flakes=False)
 
-    if not any(r):
-      # Revert changes.
-      self.m.chromium_tests.deapply_patch(bot_update_step)
+    # Run with patch.
+    with self.m.step.nest('Running WITH patch'):
+      results_with_patch = self._build_and_run_tests(
+          test_cfg, bot_update_step, bot_db, r[0],
+          name='With Patch' if r[0] is None else r[0],
+          reset_on_first_run=True,
+          upload_on_last_run=True,
+          results_label='Patch' if r[0] is None else r[0],
+          allow_flakes=False)
+
+    with self.m.step.nest('De-applying patch'):
+      if not any(r):
+        # Revert changes.
+        self.m.chromium_tests.deapply_patch(bot_update_step)
 
     # Run without patch.
-    results_without_patch = self._build_and_run_tests(
-        test_cfg, bot_update_step, bot_db, r[1],
-        name='Without Patch' if r[1] is None else r[1],
-        reset_on_first_run=False,
-        upload_on_last_run=True,
-        results_label='TOT' if r[1] is None else r[1],
-        allow_flakes=False)
+    with self.m.step.nest('Running WITHOUT patch'):
+      results_without_patch = self._build_and_run_tests(
+          test_cfg, bot_update_step, bot_db, r[1],
+          name='Without Patch' if r[1] is None else r[1],
+          reset_on_first_run=False,
+          upload_on_last_run=True,
+          results_label='TOT' if r[1] is None else r[1],
+          allow_flakes=False)
 
     labels = {
         'profiler_link1': ('%s - Profiler Data' % 'With Patch'
@@ -93,14 +97,16 @@ class PerfTryJobApi(recipe_api.RecipeApi):
 
     # TODO(chrisphan): Deprecate this.  perf_dashboard.post_bisect_results below
     # already outputs data in json format.
-    self._compare_and_present_results(
-        test_cfg, results_without_patch, results_with_patch, labels)
+    with self.m.step.nest('Results'):
+      self._compare_and_present_results(
+          test_cfg, results_without_patch, results_with_patch, labels)
 
-    bisect_results = self.get_result(
-        test_cfg, results_without_patch, results_with_patch, labels)
-    self.m.perf_dashboard.set_default_config()
-    self.m.perf_dashboard.post_bisect_results(
-        bisect_results, halt_on_failure=True)
+    with self.m.step.nest('Notify dashboard'):
+      bisect_results = self.get_result(
+          test_cfg, results_without_patch, results_with_patch, labels)
+      self.m.perf_dashboard.set_default_config()
+      self.m.perf_dashboard.post_bisect_results(
+          bisect_results, halt_on_failure=True)
 
   def run_cq_job(self, update_step, bot_db, files_in_patch):
     """Runs benchmarks affected by a CL on CQ."""
@@ -198,8 +204,8 @@ class PerfTryJobApi(recipe_api.RecipeApi):
     revision = build_state.BuildState(self, revision_hash, with_patch)
     # request build and wait for it only when the build is nonexistent
     if with_patch or not self._gsutil_file_exists(revision.build_file_path):
-        revision.request_build()
-        revision.wait_for()
+      revision.request_build()
+      revision.wait_for()
     revision.download_build(update_step, bot_db)
     if self.m.chromium.c.TARGET_PLATFORM == 'android':
       self.m.chromium_android.adb_install_apk('ChromePublic.apk')
@@ -279,18 +285,15 @@ class PerfTryJobApi(recipe_api.RecipeApi):
   def _compare_and_present_results(
       self, cfg, results_without_patch, results_with_patch, labels):
     """Parses results and creates Results step."""
+    step_result = self.m.step.active_result
+
     output_with_patch = results_with_patch.get('output')
     output_without_patch = results_without_patch.get('output')
-    values_with_patch = self.parse_values_only(
+    values_with_patch, values_without_patch = self.parse_values(
         results_with_patch.get('results'),
-        cfg.get('metric'),
-        _output_format(cfg.get('command')),
-        step_test_data=lambda: self.m.json.test_api.output_stream([1, 1, 1]))
-    values_without_patch = self.parse_values_only(
         results_without_patch.get('results'),
         cfg.get('metric'),
-        _output_format(cfg.get('command')),
-        step_test_data=lambda: self.m.json.test_api.output_stream([9, 9, 9]))
+        _output_format(cfg.get('command')))
 
     cloud_links_without_patch = self.parse_cloud_links(output_without_patch)
     cloud_links_with_patch = self.parse_cloud_links(output_with_patch)
@@ -298,14 +301,25 @@ class PerfTryJobApi(recipe_api.RecipeApi):
     results_link = (cloud_links_without_patch['html'][0]
                     if cloud_links_without_patch['html'] else '')
 
+    if results_link:
+      step_result.presentation.links.update({'HTML Results': results_link})
+
+    profiler_with_patch = cloud_links_with_patch['profiler']
+    profiler_without_patch = cloud_links_without_patch['profiler']
+
+    if profiler_with_patch and profiler_without_patch:
+      for i in xrange(len(profiler_with_patch)):  # pragma: no cover
+        step_result.presentation.links.update({
+            '%s[%d]' % (
+                labels.get('profiler_link1'), i): profiler_with_patch[i]
+        })
+      for i in xrange(len(profiler_without_patch)):  # pragma: no cover
+        step_result.presentation.links.update({
+            '%s[%d]' % (
+                labels.get('profiler_link2'), i): profiler_without_patch[i]
+        })
+
     if not values_with_patch or not values_without_patch:
-      step_result = self.m.step('Results', [])
-      step_result.presentation.step_text = (
-          'No values from test with patch, or none from test without patch.\n'
-          'Output with patch:\n%s\n\nOutput without patch:\n%s' % (
-              output_with_patch, output_without_patch))
-      if results_link:
-        step_result.presentation.links.update({'HTML Results': results_link})
       return
 
     mean_with_patch = self.m.math_utils.mean(values_with_patch)
@@ -319,9 +333,6 @@ class PerfTryJobApi(recipe_api.RecipeApi):
     stderr_without_patch = self.m.math_utils.standard_error(
         values_without_patch)
 
-    profiler_with_patch = cloud_links_with_patch['profiler']
-    profiler_without_patch = cloud_links_without_patch['profiler']
-
     # Calculate the % difference in the means of the 2 runs.
     relative_change = None
     std_err = None
@@ -331,7 +342,6 @@ class PerfTryJobApi(recipe_api.RecipeApi):
       std_err = self.m.math_utils.pooled_standard_error(
           [values_with_patch, values_without_patch])
 
-    step_result = self.m.step('Results', [])
     if relative_change is not None and std_err is not None:
       data = [
           ['Revision', 'Mean', 'Std.Error'],
@@ -345,22 +355,8 @@ class PerfTryJobApi(recipe_api.RecipeApi):
           'std_err': std_err,
           'results': _pretty_table(data),
       }
-      step_result.presentation.step_text = display_results
-
-    if results_link:
-      step_result.presentation.links.update({'HTML Results': results_link})
-
-    if profiler_with_patch and profiler_without_patch:
-      for i in xrange(len(profiler_with_patch)):  # pragma: no cover
-        step_result.presentation.links.update({
-            '%s[%d]' % (
-                labels.get('profiler_link1'), i): profiler_with_patch[i]
-        })
-      for i in xrange(len(profiler_without_patch)):  # pragma: no cover
-        step_result.presentation.links.update({
-            '%s[%d]' % (
-                labels.get('profiler_link2'), i): profiler_without_patch[i]
-        })
+      step_result.presentation.step_text += (
+          self.m.test_utils.format_step_text([[display_results]]))
 
   def parse_cloud_links(self, output):
     html_results_pattern = re.compile(CLOUD_RESULTS_LINK, re.MULTILINE)
@@ -378,16 +374,12 @@ class PerfTryJobApi(recipe_api.RecipeApi):
     """Returns the results as a dict."""
     output_with_patch = results_with_patch.get('output')
     output_without_patch = results_without_patch.get('output')
-    values_with_patch = self.parse_values_only(
+
+    values_with_patch, values_without_patch = self.parse_values(
         results_with_patch.get('results'),
-        config.get('metric'),
-        _output_format(config.get('command')),
-        step_test_data=lambda: self.m.json.test_api.output_stream([1, 1, 1]))
-    values_without_patch = self.parse_values_only(
         results_without_patch.get('results'),
         config.get('metric'),
-        _output_format(config.get('command')),
-        step_test_data=lambda: self.m.json.test_api.output_stream([9, 9, 9]))
+        _output_format(config.get('command')))
 
     cloud_links_without_patch = self.parse_cloud_links(output_without_patch)
     cloud_links_with_patch = self.parse_cloud_links(output_with_patch)
@@ -465,33 +457,43 @@ class PerfTryJobApi(recipe_api.RecipeApi):
     return '%sbuilders/%s/builds/%s' % (bot_url, builder_name, builder_number)
 
 
-  def parse_values_only(self, results, metric, output_format, **kwargs):
+  def parse_values(self, results_a, results_b, metric, output_format, **kwargs):
     """Parse the values for a given metric for the given results.
 
     This is meant to be used by tryjobs with a metric."""
     if not metric:
-      return None
+      return None, None
 
+    results_index = None
     if output_format == 'buildbot':
-      files = results['stdout_paths']
+      results_index = 'stdout_paths'
     elif output_format == 'chartjson':
-      files = results['chartjson_paths']
+      results_index = 'chartjson_paths'
     elif output_format == 'valueset':
-      files = results['valueset_paths']
+      results_index = 'valueset_paths'
     else:  # pragma: no cover
       raise self.m.step.StepFailure('Unsupported format: ' + output_format)
 
+    files_a = ','.join(map(str, results_a[results_index]))
+    files_b = ','.join(map(str, results_b[results_index]))
+
     # Apply str to files to constrain cmdline args to ascii, as this used to
     # break when unicode things were passed instead.
-    args = [','.join(map(str, files)), str(metric), '--' + output_format]
+    args = [files_a, files_b, str(metric), '--' + output_format]
     script = self.m.path['catapult'].join(
-        'tracing', 'bin', 'parse_metric_cmdline')
-    return self.m.python(
+        'tracing', 'bin', 'compare_samples')
+    result = self.m.python(
         'Parse metric values',
         script=script,
         args=args,
         stdout=self.m.json.output(),
+        step_test_data=lambda: self.m.json.test_api.output_stream(
+            {'sampleA':[1, 1, 1], 'sampleB':[9, 9, 9]}),
         **kwargs).stdout
+
+    sample_a = result.get('sampleA', [])
+    sample_b = result.get('sampleB', [])
+    return sample_a, sample_b
 
 
 def _validate_perf_config(config_contents, required_parameters):

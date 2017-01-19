@@ -70,14 +70,14 @@ def GenTests(api):
               'hash': 'a6298e4afedbf2cd461755ea6f45b0ad64222222',
               'commit_pos': '314015',
               'parsed_values': [19, 20, 23, 1],
-              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+              'test_results': 5 * [{'retcode': 0}],
               'gsutil_exists': 10 * [False]
           },
           {
               'hash': 'dcdcdc0ff1122212323134879ddceeb1240b0988',
               'commit_pos': '314016',
               'parsed_values': [12, 13, 16, 7],
-              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+              'test_results': 5 * [{'retcode': 0}],
               'gsutil_exists': [True],
               'cl_info': {
                   'author': 'DummyAuthor',
@@ -92,7 +92,7 @@ def GenTests(api):
               'hash': '00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111',
               'commit_pos': '314017',
               'parsed_values': [12, 13, 16, 7],
-              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+              'test_results': 5 * [{'retcode': 0}],
           }]))
   yield (
       api.test('basic_win64_bisect')
@@ -124,13 +124,13 @@ def GenTests(api):
               'hash': 'a6298e4afedbf2cd461755ea6f45b0ad64222222',
               'commit_pos': '314015',
               'parsed_values': [19, 20, 21, 22, 23, 1],
-              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+              'test_results': 5 * [{'retcode': 0}],
               'gsutil_exists': 5 * [False]
           },
           {
               'hash': 'dcdcdc0ff1122212323134879ddceeb1240b0988',
               'commit_pos': '314016',
-              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+              'test_results': 5 * [{'retcode': 0}],
               'parsed_values': [19, 20, 21, 22, 23, 7],
               'cl_info': {
                   'author': 'DummyAuthor',
@@ -145,7 +145,7 @@ def GenTests(api):
               'hash': '00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111',
               'commit_pos': '314017',
               'parsed_values': [19, 20, 21, 22, 23, 7],
-              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+              'test_results': 5 * [{'retcode': 0}],
           }]))
   yield (
       api.test('basic_win32_bisect')
@@ -177,14 +177,14 @@ def GenTests(api):
               'hash': 'a6298e4afedbf2cd461755ea6f45b0ad64222222',
               'commit_pos': '314015',
               'parsed_values': [19, 20, 21, 22, 23, 1],
-              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+              'test_results': 5 * [{'retcode': 0}],
               'gsutil_exists': 5 * [False]
           },
           {
               'hash': 'dcdcdc0ff1122212323134879ddceeb1240b0988',
               'commit_pos': '314016',
               'parsed_values': [19, 20, 21, 22, 23, 7],
-              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+              'test_results': 5 * [{'retcode': 0}],
               'cl_info': {
                   'author': 'DummyAuthor',
                   'email': 'dummy@nowhere.com',
@@ -198,7 +198,7 @@ def GenTests(api):
               'hash': '00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111',
               'commit_pos': '314017',
               'parsed_values': [19, 20, 21, 22, 23, 7],
-              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+              'test_results': 5 * [{'retcode': 0}],
           }]))
   yield (
       api.test('basic_mac_bisect')
@@ -230,13 +230,13 @@ def GenTests(api):
               'hash': 'a6298e4afedbf2cd461755ea6f45b0ad64222222',
               'commit_pos': '314015',
               'parsed_values': [19, 20, 21, 22, 1],
-              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+              'test_results': 5 * [{'retcode': 0}],
               'gsutil_exists': 5 * [False]
           },
           {
               'hash': 'dcdcdc0ff1122212323134879ddceeb1240b0988',
               'commit_pos': '314016',
-              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+              'test_results': 5 * [{'retcode': 0}],
               'parsed_values': [19, 20, 21, 22, 7],
               'cl_info': {
                   'author': 'DummyAuthor',
@@ -251,7 +251,7 @@ def GenTests(api):
               'hash': '00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111',
               'commit_pos': '314017',
               'parsed_values': [19, 20, 21, 22, 7],
-              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+              'test_results': 5 * [{'retcode': 0}],
           }]))
   yield (
       api.test('basic_buildbot_bisect')
@@ -281,14 +281,14 @@ def GenTests(api):
               'hash': 'a6298e4afedbf2cd461755ea6f45b0ad64222222',
               'commit_pos': '314015',
               'parsed_values': [19, 20, 23, 1],
-              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+              'test_results': 5 * [{'retcode': 0}],
               'gsutil_exists': 10 * [False]
           },
           {
               'hash': 'dcdcdc0ff1122212323134879ddceeb1240b0988',
               'commit_pos': '314016',
               'parsed_values': [12, 13, 16, 7],
-              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+              'test_results': 5 * [{'retcode': 0}],
               'gsutil_exists': [True],
               'cl_info': {
                   'author': 'DummyAuthor',
@@ -303,7 +303,7 @@ def GenTests(api):
               'hash': '00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111',
               'commit_pos': '314017',
               'parsed_values': [12, 13, 16, 7],
-              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+              'test_results': 5 * [{'retcode': 0}],
           }]))
   yield (
       api.test('v8_roll_bisect_bis')
@@ -334,13 +334,13 @@ def GenTests(api):
               'hash': 'a6298e4afedbf2cd461755ea6f45b0ad64222222',
               'commit_pos': '314015',
               'parsed_values': [19, 20, 21, 22, 1],
-              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+              'test_results': 5 * [{'retcode': 0}],
           },
           {
               'hash': 'dcdcdc0ff1122212323134879ddceeb1240b0988',
               'commit_pos': '314016',
               'parsed_values': [19, 20, 21, 22, 1],
-              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+              'test_results': 5 * [{'retcode': 0}],
               "DEPS": ("vars={'v8_revision': '001'};"
                        "deps = {'src/v8': 'v8.git@' + Var('v8_revision'),"
                        "'src/third_party/WebKit': 'webkit.git@010'}"),
@@ -349,7 +349,7 @@ def GenTests(api):
               'depot':'v8', 
               'hash': '002',
               'parsed_values': [12, 13, 14, 15, 7],
-              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+              'test_results': 5 * [{'retcode': 0}],
               'gsutil_exists': 10 * [False],
               'cl_info': {
                   'author': 'DummyAuthor',
@@ -364,13 +364,13 @@ def GenTests(api):
               'depot':'v8', 
               'hash': '003',
               'parsed_values': [12, 13, 14, 15, 7],
-              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+              'test_results': 5 * [{'retcode': 0}],
           },
           {
               'hash': '00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111',
               'commit_pos': '314017',
               'parsed_values': [12, 13, 14, 15, 7],
-              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+              'test_results': 5 * [{'retcode': 0}],
               'DEPS_change': 'True',
               "DEPS": ("vars={'v8_revision': '004'};"
                        "deps = {'src/v8': 'v8.git@' + Var('v8_revision'),"
@@ -406,7 +406,7 @@ def GenTests(api):
               'hash': 'a6298e4afedbf2cd461755ea6f45b0ad64222222',
               'commit_pos': '314015',
               'parsed_values': [19, 20, 21, 22, 1],
-              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+              'test_results': 5 * [{'retcode': 0}],
               "DEPS": ("vars={'v8_revision': '001'};"
                        "deps = {'src/v8': 'v8.git@' + Var('v8_revision'),"
                        "'src/third_party/WebKit': 'webkit.git@010'}"),
@@ -415,7 +415,7 @@ def GenTests(api):
               'depot':'v8',
               'hash': '002',
               'parsed_values': [12, 13, 14, 15, 7],
-              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+              'test_results': 5 * [{'retcode': 0}],
               'gsutil_exists': 10 * [False],
               'cl_info': {
                   'author': 'DummyAuthor',
@@ -430,13 +430,13 @@ def GenTests(api):
               'depot':'v8', 
               'hash': '003',
               'parsed_values': [12, 13, 14, 15, 7],
-              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+              'test_results': 5 * [{'retcode': 0}],
           },
           {
               'hash': 'dcdcdc0ff1122212323134879ddceeb1240b0988',
               'commit_pos': '314016',
               'parsed_values': [12, 13, 14, 15, 7],
-              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+              'test_results': 5 * [{'retcode': 0}],
               'DEPS_change': 'True',
               "DEPS": ("vars={'v8_revision': '004'};"
                        "deps = {'src/v8': 'v8.git@' + Var('v8_revision'),"
@@ -447,7 +447,7 @@ def GenTests(api):
               'hash': '00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111',
               'commit_pos': '314017',
               'parsed_values': [12, 13, 14, 15, 7],
-              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+              'test_results': 5 * [{'retcode': 0}],
           }]))
   yield (
       api.test('retest_bisect')
@@ -540,25 +540,25 @@ def GenTests(api):
               'hash': '0a1b2c3d4f0a1b2c3d4f0a1b2c3d4f0a1b2c3d4f',
               'commit_pos': '314014',
               'parsed_values': [19, 20, 23, 1],
-              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+              'test_results': 5 * [{'retcode': 0}],
           },
           {
               'hash': 'a6298e4afedbf2cd461755ea6f45b0ad64222222',
               'commit_pos': '314015',
               'parsed_values': [19, 20, 23, 1],
-              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+              'test_results': 5 * [{'retcode': 0}],
           },
           {
               'hash': 'dcdcdc0ff1122212323134879ddceeb1240b0988',
               'commit_pos': '314016',
               'parsed_values': [20, 19, 23, 7],
-              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 1}],
+              'test_results': 5 * [{'retcode': 1}],
           },
           {
               'hash': '00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111',
               'commit_pos': '314017',
               'parsed_values': [20, 19, 23, 7],
-              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 1}],
+              'test_results': 5 * [{'retcode': 1}],
           }]))
   yield (
       api.test('return_code_fail')
@@ -588,13 +588,13 @@ def GenTests(api):
               'hash': '0a1b2c3d4f0a1b2c3d4f0a1b2c3d4f0a1b2c3d4f',
               'commit_pos': '314014',
               'parsed_values': [19, 20, 23, 1],
-              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+              'test_results': 5 * [{'retcode': 0}],
           },
           {
               'hash': '00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111',
               'commit_pos': '314017',
               'parsed_values': [20, 19, 23, 7],
-              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+              'test_results': 5 * [{'retcode': 0}],
           }]))
   yield (
       api.test('basic_bisect_other_direction')
@@ -625,19 +625,19 @@ def GenTests(api):
               'hash': 'a6298e4afedbf2cd461755ea6f45b0ad64222222',
               'commit_pos': '314015',
               'parsed_values': [19, 20, 23, 1],
-              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+              'test_results': 5 * [{'retcode': 0}],
           },
           {
               'hash': 'dcdcdc0ff1122212323134879ddceeb1240b0988',
               'commit_pos': '314016',
               'parsed_values': [19, 20, 23, 1],
-              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+              'test_results': 5 * [{'retcode': 0}],
           },
           {
               'hash': '00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111',
               'commit_pos': '314017',
               'parsed_values': [12, 13, 14, 7],
-              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+              'test_results': 5 * [{'retcode': 0}],
               'cl_info': {
                   'author': 'DummyAuthor',
                   'email': 'dummy@nowhere.com',
@@ -676,13 +676,13 @@ def GenTests(api):
               'hash': 'a6298e4afedbf2cd461755ea6f45b0ad64222222',
               'commit_pos': '314015',
               'parsed_values': [19, 20, 23, 1],
-              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+              'test_results': 5 * [{'retcode': 0}],
           },
           {
               'hash': 'dcdcdc0ff1122212323134879ddceeb1240b0988',
               'commit_pos': '314016',
               'parsed_values': [19, 20, 23, 1],
-              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+              'test_results': 5 * [{'retcode': 0}],
           },
           ]))
   yield (
@@ -714,13 +714,13 @@ def GenTests(api):
               'hash': 'a6298e4afedbf2cd461755ea6f45b0ad64222222',
               'commit_pos': '314015',
               'parsed_values': [],
-              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 1}],
+              'test_results': 5 * [{'retcode': 1}],
           },
           {
               'hash': 'dcdcdc0ff1122212323134879ddceeb1240b0988',
               'commit_pos': '314016',
               'parsed_values': [],
-              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 1}],
+              'test_results': 5 * [{'retcode': 1}],
           },
           ]))
   yield (
@@ -753,7 +753,7 @@ def GenTests(api):
               'commit_pos': '314015',
               'parsed_values': [19, 20, 23, 1],
               'gsutil_exists': 2 * [False],
-              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+              'test_results': 5 * [{'retcode': 0}],
               'build_status': [{'build': {'status': 'SCHEDULED'}},
                                {'build': {'status': 'COMPLETED',
                                           'result': 'SUCCESS'}}],
@@ -797,7 +797,7 @@ def GenTests(api):
               'commit_pos': '314015',
               'parsed_values': [19, 20, 23, 1],
               'gsutil_exists': 2 * [False],
-              'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
+              'test_results': 5 * [{'retcode': 0}],
               'build_status': [{'build': {'status': 'SCHEDULED'}},
                                {'build': {'status': 'COMPLETED',
                                           'result': 'SUCCESS'}}],
@@ -838,19 +838,19 @@ def GenTests(api):
               'hash': 'a6298e4afedbf2cd461755ea6f45b0ad64222222',
               'commit_pos': '314015',
               'parsed_values': [19, 20, 23, 1],
-              'test_results': 21 * [{'stdout': 'benchmark text', 'retcode': 0}],
+              'test_results': 21 * [{'retcode': 0}],
           },
           {
               'hash': 'dcdcdc0ff1122212323134879ddceeb1240b0988',
               'commit_pos': '314016',
               'parsed_values': [404],
-              'test_results': 21 * [{'stdout': 'benchmark txt', 'retcode': 0}],
+              'test_results': 21 * [{'retcode': 0}],
           },
           {
               'hash': '00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111',
               'commit_pos': '314017',
               'parsed_values': [12, 13, 14, 15, 7],
-              'test_results': 21 * [{'stdout': 'benchmark text', 'retcode': 0}],
+              'test_results': 21 * [{'retcode': 0}],
           }]))
   yield (
       api.test('failed_build_inconclusive_1')

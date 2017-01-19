@@ -582,7 +582,7 @@ class Bisector(object):
     current_step = self.api.m.step.active_result
     lines = self._results_debug_message().splitlines()
     current_step.presentation.logs['Debug Info'] = lines
-    
+
   def post_result(self, halt_on_failure=False):
     """Posts bisect results to Perf Dashboard."""
     self.api.m.perf_dashboard.set_default_config()

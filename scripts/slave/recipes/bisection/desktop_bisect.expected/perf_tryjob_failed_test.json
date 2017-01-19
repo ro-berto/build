@@ -303,6 +303,11 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
+    "name": "Running WITH patch"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -312,7 +317,10 @@
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "cleanup_temp"
+    "name": "Running WITH patch.cleanup_temp",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -325,9 +333,10 @@
       "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"123456\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf-tryjob/Linux Builder/full-build-linuxf27fede2220bcd326aee3e86ddfd4ebd0fe58cb9_123456.zip\\\", \\\"clobber\\\": true, \\\"issue\\\": \\\"12345\\\", \\\"parent_got_revision\\\": \\\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\\\", \\\"patch_storage\\\": \\\"rietveld\\\", \\\"patchset\\\": \\\"20001\\\", \\\"rietveld\\\": \\\"https://codereview.chromium.org\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"parent_buildername:linux_perf_bisect\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "buildbucket.put",
+    "name": "Running WITH patch.buildbucket.put",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"results\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
@@ -360,9 +369,10 @@
       "9016911228971028736"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "buildbucket.get",
+    "name": "Running WITH patch.buildbucket.get",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"build\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"bucket\": \"master.tryserver.chromium.perf\", @@@",
@@ -387,9 +397,10 @@
       "9016911228971028736"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "buildbucket.get (2)",
+    "name": "Running WITH patch.buildbucket.get (2)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"build\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"bucket\": \"master.tryserver.chromium.perf\", @@@",
@@ -413,8 +424,9 @@
       "[BUILDER_CACHE]/linux_perf_bisect/src/out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "rmtree build directory",
+    "name": "Running WITH patch.rmtree build directory",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
       "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
@@ -449,7 +461,10 @@
       "571"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "extract build"
+    "name": "Running WITH patch.extract build",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -460,8 +475,9 @@
       "511"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "makedirs results directory",
+    "name": "Running WITH patch.makedirs results directory",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
       "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
@@ -502,10 +518,11 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "Performance Test (With Patch) 1 of 1",
+    "name": "Running WITH patch.Performance Test (With Patch) 1 of 1",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
       "@@@STEP_LOG_END@Failure Output@@@",
       "@@@STEP_WARNINGS@@@"
@@ -520,13 +537,19 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "Reading valueset results",
+    "name": "Running WITH patch.Reading valueset results",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"dummy\": \"dict\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
+    "name": "De-applying patch"
   },
   {
     "cmd": [
@@ -553,8 +576,9 @@
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
-    "name": "bot_update (without patch)",
+    "name": "De-applying patch.bot_update (without patch)",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Some step text@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
@@ -629,7 +653,15 @@
       "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library gomadir='[CACHE]/cipd/goma' target_arch=x64 use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
-    "name": "gclient runhooks (without patch)"
+    "name": "De-applying patch.gclient runhooks (without patch)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
+    "name": "Running WITHOUT patch"
   },
   {
     "cmd": [
@@ -643,8 +675,9 @@
       "gs://chrome-perf/Linux Builder/full-build-linuxf27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.zip"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "gsutil exists",
+    "name": "Running WITHOUT patch.gsutil exists",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
       "@@@STEP_EXCEPTION@@@"
     ]
@@ -659,7 +692,10 @@
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "cleanup_temp (2)"
+    "name": "Running WITHOUT patch.cleanup_temp",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -672,9 +708,10 @@
       "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"123456\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Linux Builder/full-build-linuxf27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"parent_buildername:linux_perf_bisect\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "buildbucket.put (2)",
+    "name": "Running WITHOUT patch.buildbucket.put",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"results\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
@@ -707,9 +744,10 @@
       "9016911228971028736"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "buildbucket.get (3)",
+    "name": "Running WITHOUT patch.buildbucket.get",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"build\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"status\": \"COMPLETED\"@@@",
@@ -727,9 +765,10 @@
       "9016911228971028736"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "buildbucket.get (4)",
+    "name": "Running WITHOUT patch.buildbucket.get (2)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"build\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"result\": \"SUCCESS\", @@@",
@@ -747,8 +786,9 @@
       "[BUILDER_CACHE]/linux_perf_bisect/src/out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "rmtree build directory (2)",
+    "name": "Running WITHOUT patch.rmtree build directory",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
       "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
@@ -783,7 +823,10 @@
       "571"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "extract build (2)"
+    "name": "Running WITHOUT patch.extract build",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -794,8 +837,9 @@
       "511"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "makedirs results directory (2)",
+    "name": "Running WITHOUT patch.makedirs results directory",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
       "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
@@ -835,10 +879,11 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "Performance Test (Without Patch) 1 of 1",
+    "name": "Running WITHOUT patch.Performance Test (Without Patch) 1 of 1",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -851,53 +896,12 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "Reading valueset results (2)",
+    "name": "Running WITHOUT patch.Reading valueset results",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"dummy\": \"dict\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/catapult/tracing/bin/parse_metric_cmdline",
-      "[START_DIR]/bisect_results/dummy/results-valueset.json",
-      "dummy/dummy",
-      "--valueset"
-    ],
-    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "Parse metric values",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  1, @@@",
-      "@@@STEP_LOG_LINE@json.output@  1, @@@",
-      "@@@STEP_LOG_LINE@json.output@  1@@@",
-      "@@@STEP_LOG_LINE@json.output@]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/catapult/tracing/bin/parse_metric_cmdline",
-      "[START_DIR]/bisect_results/dummy/results-valueset.json",
-      "dummy/dummy",
-      "--valueset"
-    ],
-    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "Parse metric values (2)",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  9, @@@",
-      "@@@STEP_LOG_LINE@json.output@  9, @@@",
-      "@@@STEP_LOG_LINE@json.output@  9@@@",
-      "@@@STEP_LOG_LINE@json.output@]@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
@@ -906,7 +910,7 @@
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "Results",
     "~followup_annotations": [
-      "@@@STEP_TEXT@",
+      "@@@STEP_TEXT@<br/>",
       "===== PERF TRY JOB RESULTS =====",
       "",
       "Test Command: src/tools/perf/run_benchmark -v --browser=release sunspider --output_format=valueset",
@@ -917,48 +921,71 @@
       "Revision    Mean        Std.Error",
       "Patch       1.0         0.0",
       "No Patch    9.0         0.0",
-      "@@@"
+      "<br/>@@@"
     ]
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/catapult/tracing/bin/parse_metric_cmdline",
+      "[START_DIR]/catapult/tracing/bin/compare_samples",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "dummy/dummy",
       "--valueset"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "Parse metric values (3)",
+    "name": "Results.Parse metric values",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  1, @@@",
-      "@@@STEP_LOG_LINE@json.output@  1, @@@",
-      "@@@STEP_LOG_LINE@json.output@  1@@@",
-      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"sampleA\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    1, @@@",
+      "@@@STEP_LOG_LINE@json.output@    1, @@@",
+      "@@@STEP_LOG_LINE@json.output@    1@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"sampleB\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    9, @@@",
+      "@@@STEP_LOG_LINE@json.output@    9, @@@",
+      "@@@STEP_LOG_LINE@json.output@    9@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
+    "name": "Notify dashboard"
+  },
+  {
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/catapult/tracing/bin/parse_metric_cmdline",
+      "[START_DIR]/catapult/tracing/bin/compare_samples",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "dummy/dummy",
       "--valueset"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "Parse metric values (4)",
+    "name": "Notify dashboard.Parse metric values",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  9, @@@",
-      "@@@STEP_LOG_LINE@json.output@  9, @@@",
-      "@@@STEP_LOG_LINE@json.output@  9@@@",
-      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"sampleA\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    1, @@@",
+      "@@@STEP_LOG_LINE@json.output@    1, @@@",
+      "@@@STEP_LOG_LINE@json.output@    1@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"sampleB\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    9, @@@",
+      "@@@STEP_LOG_LINE@json.output@    9, @@@",
+      "@@@STEP_LOG_LINE@json.output@    9@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
@@ -974,8 +1001,9 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "Post bisect results",
+    "name": "Notify dashboard.Post bisect results",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Failed to post to Perf Dashboard. Error response: None@@@",
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",

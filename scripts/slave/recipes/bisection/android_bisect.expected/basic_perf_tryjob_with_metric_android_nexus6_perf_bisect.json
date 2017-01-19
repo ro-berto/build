@@ -518,6 +518,11 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
+    "name": "Running WITH patch"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -528,8 +533,9 @@
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
-    "name": "clean local files (2)",
+    "name": "Running WITH patch.clean local files",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import shutil, sys, os@@@",
       "@@@STEP_LOG_LINE@python.inline@shutil.rmtree(sys.argv[1], True)@@@",
@@ -556,9 +562,10 @@
       "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"123456\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"android_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf-tryjob/Android Builder/full-build-linux_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9_123456.zip\\\", \\\"clobber\\\": true, \\\"issue\\\": \\\"12345\\\", \\\"parent_got_revision\\\": \\\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\\\", \\\"patch_storage\\\": \\\"rietveld\\\", \\\"patchset\\\": \\\"20001\\\", \\\"rietveld\\\": \\\"https://codereview.chromium.org\\\"}}\", \"tags\": [\"builder:android_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"parent_buildername:android_nexus6_perf_bisect\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
-    "name": "buildbucket.put",
+    "name": "Running WITH patch.buildbucket.put",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"results\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
@@ -591,9 +598,10 @@
       "9016911228971028736"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
-    "name": "buildbucket.get",
+    "name": "Running WITH patch.buildbucket.get",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"build\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"bucket\": \"master.tryserver.chromium.perf\", @@@",
@@ -618,9 +626,10 @@
       "9016911228971028736"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
-    "name": "buildbucket.get (2)",
+    "name": "Running WITH patch.buildbucket.get (2)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"build\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"bucket\": \"master.tryserver.chromium.perf\", @@@",
@@ -644,8 +653,9 @@
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
-    "name": "rmtree build directory",
+    "name": "Running WITH patch.rmtree build directory",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
       "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
@@ -671,7 +681,10 @@
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/out/build_product.zip"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
-    "name": "gsutil download_build_product"
+    "name": "Running WITH patch.gsutil download_build_product",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -680,7 +693,10 @@
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/out/build_product.zip"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src",
-    "name": "unzip_build_product"
+    "name": "Running WITH patch.unzip_build_product",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -691,7 +707,10 @@
       "/path/to/tmp/"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
-    "name": "get version"
+    "name": "Running WITH patch.get version",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -709,7 +728,10 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus6_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "install ChromePublic.apk"
+    "name": "Running WITH patch.install ChromePublic.apk",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -720,8 +742,9 @@
       "511"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
-    "name": "makedirs results directory",
+    "name": "Running WITH patch.makedirs results directory",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
       "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
@@ -767,17 +790,18 @@
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/out/Release"
     },
-    "name": "Performance Test (With Patch) 1 of 1",
+    "name": "Running WITH patch.Performance Test (With Patch) 1 of 1",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@Captured Output@*RESULT dummy: dummy= [5.83,6.013,5.573]ms@@@",
       "@@@STEP_LOG_LINE@Captured Output@Avg dummy: 5.907711ms@@@",
       "@@@STEP_LOG_LINE@Captured Output@Sd  dummy: 0.255921ms@@@",
       "@@@STEP_LOG_LINE@Captured Output@RESULT telemetry_page_measurement_results: num_failed= 0 count@@@",
       "@@@STEP_LOG_LINE@Captured Output@RESULT telemetry_page_measurement_results: num_errored= 0 count@@@",
       "@@@STEP_LOG_LINE@Captured Output@@@@",
-      "@@@STEP_LOG_LINE@Captured Output@View online at http://storage.googleapis.com/chromium-telemetry/html-results/results-with_patch@@@",
+      "@@@STEP_LOG_LINE@Captured Output@View online at https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-without@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -786,11 +810,14 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "*RESULT dummy: dummy= [5.83,6.013,5.573]ms\nAvg dummy: 5.907711ms\nSd  dummy: 0.255921ms\nRESULT telemetry_page_measurement_results: num_failed= 0 count\nRESULT telemetry_page_measurement_results: num_errored= 0 count\n\nView online at http://storage.googleapis.com/chromium-telemetry/html-results/results-with_patch\n",
+      "*RESULT dummy: dummy= [5.83,6.013,5.573]ms\nAvg dummy: 5.907711ms\nSd  dummy: 0.255921ms\nRESULT telemetry_page_measurement_results: num_failed= 0 count\nRESULT telemetry_page_measurement_results: num_errored= 0 count\n\nView online at https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-without\n",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
-    "name": "write buildbot output to disk"
+    "name": "Running WITH patch.write buildbot output to disk",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -801,11 +828,17 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
-    "name": "Reading chartjson results",
+    "name": "Running WITH patch.Reading chartjson results",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@"
     ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
+    "name": "De-applying patch"
   },
   {
     "cmd": [
@@ -832,8 +865,9 @@
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
-    "name": "bot_update (without patch)",
+    "name": "De-applying patch.bot_update (without patch)",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Some step text@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
@@ -909,7 +943,15 @@
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[CACHE]/cipd/goma' target_arch=arm use_goma=1",
       "PATH": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus6_perf_bisect/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
-    "name": "gclient runhooks (without patch)"
+    "name": "De-applying patch.gclient runhooks (without patch)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
+    "name": "Running WITHOUT patch"
   },
   {
     "cmd": [
@@ -923,8 +965,9 @@
       "gs://chrome-perf/Android Builder/full-build-linux_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.zip"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
-    "name": "gsutil exists",
+    "name": "Running WITHOUT patch.gsutil exists",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
       "@@@STEP_EXCEPTION@@@"
     ]
@@ -940,8 +983,9 @@
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
-    "name": "clean local files (3)",
+    "name": "Running WITHOUT patch.clean local files",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import shutil, sys, os@@@",
       "@@@STEP_LOG_LINE@python.inline@shutil.rmtree(sys.argv[1], True)@@@",
@@ -968,9 +1012,10 @@
       "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"123456\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"android_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Android Builder/full-build-linux_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\\\"}}\", \"tags\": [\"builder:android_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"parent_buildername:android_nexus6_perf_bisect\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
-    "name": "buildbucket.put (2)",
+    "name": "Running WITHOUT patch.buildbucket.put",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"results\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
@@ -1003,9 +1048,10 @@
       "9016911228971028736"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
-    "name": "buildbucket.get (3)",
+    "name": "Running WITHOUT patch.buildbucket.get",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"build\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"status\": \"COMPLETED\"@@@",
@@ -1023,9 +1069,10 @@
       "9016911228971028736"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
-    "name": "buildbucket.get (4)",
+    "name": "Running WITHOUT patch.buildbucket.get (2)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"build\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"result\": \"SUCCESS\", @@@",
@@ -1043,8 +1090,9 @@
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
-    "name": "rmtree build directory (2)",
+    "name": "Running WITHOUT patch.rmtree build directory",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
       "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
@@ -1070,7 +1118,10 @@
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/out/build_product.zip"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
-    "name": "gsutil download_build_product (2)"
+    "name": "Running WITHOUT patch.gsutil download_build_product",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -1079,7 +1130,10 @@
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/out/build_product.zip"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src",
-    "name": "unzip_build_product (2)"
+    "name": "Running WITHOUT patch.unzip_build_product",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -1090,7 +1144,10 @@
       "/path/to/tmp/"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
-    "name": "get version (2)"
+    "name": "Running WITHOUT patch.get version",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -1108,7 +1165,10 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus6_perf_bisect/src/build/android:%(PATH)s"
     },
-    "name": "install ChromePublic.apk (2)"
+    "name": "Running WITHOUT patch.install ChromePublic.apk",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -1119,8 +1179,9 @@
       "511"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
-    "name": "makedirs results directory (2)",
+    "name": "Running WITHOUT patch.makedirs results directory",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
       "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
@@ -1165,17 +1226,18 @@
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/out/Release"
     },
-    "name": "Performance Test (Without Patch) 1 of 1",
+    "name": "Running WITHOUT patch.Performance Test (Without Patch) 1 of 1",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@Captured Output@*RESULT dummy: dummy= [5.83,6.013,5.573]ms@@@",
       "@@@STEP_LOG_LINE@Captured Output@Avg dummy: 5.907711ms@@@",
       "@@@STEP_LOG_LINE@Captured Output@Sd  dummy: 0.255921ms@@@",
       "@@@STEP_LOG_LINE@Captured Output@RESULT telemetry_page_measurement_results: num_failed= 0 count@@@",
       "@@@STEP_LOG_LINE@Captured Output@RESULT telemetry_page_measurement_results: num_errored= 0 count@@@",
       "@@@STEP_LOG_LINE@Captured Output@@@@",
-      "@@@STEP_LOG_LINE@Captured Output@View online at http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch@@@",
+      "@@@STEP_LOG_LINE@Captured Output@View online at https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-with@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -1184,11 +1246,14 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "*RESULT dummy: dummy= [5.83,6.013,5.573]ms\nAvg dummy: 5.907711ms\nSd  dummy: 0.255921ms\nRESULT telemetry_page_measurement_results: num_failed= 0 count\nRESULT telemetry_page_measurement_results: num_errored= 0 count\n\nView online at http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch\n",
+      "*RESULT dummy: dummy= [5.83,6.013,5.573]ms\nAvg dummy: 5.907711ms\nSd  dummy: 0.255921ms\nRESULT telemetry_page_measurement_results: num_failed= 0 count\nRESULT telemetry_page_measurement_results: num_errored= 0 count\n\nView online at https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-with\n",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
-    "name": "write buildbot output to disk (2)"
+    "name": "Running WITHOUT patch.write buildbot output to disk",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -1199,52 +1264,11 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
-    "name": "Reading chartjson results (2)",
+    "name": "Running WITHOUT patch.Reading chartjson results",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILDER_CACHE]/android_nexus6_perf_bisect/catapult/tracing/bin/parse_metric_cmdline",
-      "",
-      "dummy/dummy",
-      "--chartjson"
-    ],
-    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
-    "name": "Parse metric values",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  1, @@@",
-      "@@@STEP_LOG_LINE@json.output@  1, @@@",
-      "@@@STEP_LOG_LINE@json.output@  1@@@",
-      "@@@STEP_LOG_LINE@json.output@]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILDER_CACHE]/android_nexus6_perf_bisect/catapult/tracing/bin/parse_metric_cmdline",
-      "",
-      "dummy/dummy",
-      "--chartjson"
-    ],
-    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
-    "name": "Parse metric values (2)",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  9, @@@",
-      "@@@STEP_LOG_LINE@json.output@  9, @@@",
-      "@@@STEP_LOG_LINE@json.output@  9@@@",
-      "@@@STEP_LOG_LINE@json.output@]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
@@ -1252,7 +1276,7 @@
     "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "name": "Results",
     "~followup_annotations": [
-      "@@@STEP_TEXT@",
+      "@@@STEP_TEXT@<br/>",
       "===== PERF TRY JOB RESULTS =====",
       "",
       "Test Command: src/tools/perf/run_benchmark -v --browser=android-chrome --output-format=chartjson sunspider",
@@ -1263,49 +1287,72 @@
       "Revision    Mean        Std.Error",
       "Patch       1.0         0.0",
       "No Patch    9.0         0.0",
-      "@@@",
-      "@@@STEP_LINK@HTML Results@http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch@@@"
+      "<br/>@@@",
+      "@@@STEP_LINK@HTML Results@https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-with@@@"
     ]
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/android_nexus6_perf_bisect/catapult/tracing/bin/parse_metric_cmdline",
+      "[BUILDER_CACHE]/android_nexus6_perf_bisect/catapult/tracing/bin/compare_samples",
+      "",
       "",
       "dummy/dummy",
       "--chartjson"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
-    "name": "Parse metric values (3)",
+    "name": "Results.Parse metric values",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  1, @@@",
-      "@@@STEP_LOG_LINE@json.output@  1, @@@",
-      "@@@STEP_LOG_LINE@json.output@  1@@@",
-      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"sampleA\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    1, @@@",
+      "@@@STEP_LOG_LINE@json.output@    1, @@@",
+      "@@@STEP_LOG_LINE@json.output@    1@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"sampleB\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    9, @@@",
+      "@@@STEP_LOG_LINE@json.output@    9, @@@",
+      "@@@STEP_LOG_LINE@json.output@    9@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
+    "name": "Notify dashboard"
+  },
+  {
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/android_nexus6_perf_bisect/catapult/tracing/bin/parse_metric_cmdline",
+      "[BUILDER_CACHE]/android_nexus6_perf_bisect/catapult/tracing/bin/compare_samples",
+      "",
       "",
       "dummy/dummy",
       "--chartjson"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
-    "name": "Parse metric values (4)",
+    "name": "Notify dashboard.Parse metric values",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  9, @@@",
-      "@@@STEP_LOG_LINE@json.output@  9, @@@",
-      "@@@STEP_LOG_LINE@json.output@  9@@@",
-      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"sampleA\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    1, @@@",
+      "@@@STEP_LOG_LINE@json.output@    1, @@@",
+      "@@@STEP_LOG_LINE@json.output@    1@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"sampleB\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    9, @@@",
+      "@@@STEP_LOG_LINE@json.output@    9, @@@",
+      "@@@STEP_LOG_LINE@json.output@    9@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
@@ -1316,17 +1363,18 @@
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py",
       "https://chromeperf.appspot.com/post_bisect_results",
       "-i",
-      "{\"data\": \"{\\\"status\\\": \\\"completed\\\", \\\"std_err\\\": 0.0, \\\"metric\\\": \\\"dummy/dummy\\\", \\\"profiler_links\\\": [], \\\"buildbot_log_url\\\": \\\"http://c.org/p/cr/builders/android_nexus6_perf_bisect/builds/571\\\", \\\"command\\\": \\\"src/tools/perf/run_benchmark -v --browser=android-chrome --output-format=chartjson sunspider\\\", \\\"result\\\": \\\"Revision    Mean        Std.Error\\\\nPatch       1.0         0.0\\\\nNo Patch    9.0         0.0\\\", \\\"bisect_bot\\\": \\\"android_nexus6_perf_bisect\\\", \\\"try_job_id\\\": null, \\\"cloud_link\\\": \\\"http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch\\\", \\\"change\\\": 88.88888888888889}\"}",
+      "{\"data\": \"{\\\"status\\\": \\\"completed\\\", \\\"std_err\\\": 0.0, \\\"metric\\\": \\\"dummy/dummy\\\", \\\"profiler_links\\\": [], \\\"buildbot_log_url\\\": \\\"http://c.org/p/cr/builders/android_nexus6_perf_bisect/builds/571\\\", \\\"command\\\": \\\"src/tools/perf/run_benchmark -v --browser=android-chrome --output-format=chartjson sunspider\\\", \\\"result\\\": \\\"Revision    Mean        Std.Error\\\\nPatch       1.0         0.0\\\\nNo Patch    9.0         0.0\\\", \\\"bisect_bot\\\": \\\"android_nexus6_perf_bisect\\\", \\\"try_job_id\\\": null, \\\"cloud_link\\\": \\\"https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-with\\\", \\\"change\\\": 88.88888888888889}\"}",
       "-o",
       "/path/to/tmp/json"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
-    "name": "Post bisect results",
+    "name": "Notify dashboard.Post bisect results",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Failed to post to Perf Dashboard. Error response: None@@@",
-      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"status_code\": 200@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
@@ -1508,7 +1556,7 @@
       "/path/to/tmp/"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
-    "name": "get version (3)"
+    "name": "get version"
   },
   {
     "cmd": [
@@ -1547,8 +1595,7 @@
   },
   {
     "name": "$result",
-    "reason": "Failed to post to Perf Dashboard. Error response: None",
     "recipe_result": null,
-    "status_code": 1
+    "status_code": 0
   }
 ]

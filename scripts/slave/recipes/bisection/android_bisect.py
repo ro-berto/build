@@ -175,8 +175,8 @@ Sd  dummy: 0.255921ms
 RESULT telemetry_page_measurement_results: num_failed= 0 count
 RESULT telemetry_page_measurement_results: num_errored= 0 count
 
-View online at http://storage.googleapis.com/chromium-telemetry/\
-html-results/results-with_patch
+View online at https://console.developers.google.com/\
+m/cloudstorage/b/chromium-telemetry/o/html-results/results-with
 """
 
   results_without_patch = """*RESULT dummy: dummy= [5.83,6.013,5.573]ms
@@ -185,8 +185,8 @@ Sd  dummy: 0.255921ms
 RESULT telemetry_page_measurement_results: num_failed= 0 count
 RESULT telemetry_page_measurement_results: num_errored= 0 count
 
-View online at http://storage.googleapis.com/chromium-telemetry/html-results/\
-results-without_patch
+View online at https://console.developers.google.com/\
+m/cloudstorage/b/chromium-telemetry/o/html-results/results-without
 """
   buildbucket_put_response = {
        "results":[{
@@ -239,19 +239,28 @@ results-without_patch
                   'git diff to analyze patch',
                   api.raw_io.stream_output('tools/run-perf-test.cfg')) +
           api.override_step_data('load config', api.json.output(config_json)) +
-          api.step_data('gsutil exists', retcode=1) +
-          api.step_data('buildbucket.put',
-                        stdout=api.json.output(buildbucket_put_response)) +
-          api.step_data('buildbucket.put (2)',
-                        stdout=api.json.output(buildbucket_put_response)) +
-          api.step_data('buildbucket.get',
-                        stdout=api.json.output(buildbucket_get_response)) +
-          api.step_data('buildbucket.get (2)',
-                        stdout=api.json.output(buildbucket_get_response)) +
-          api.step_data('Performance Test (Without Patch) 1 of 1',
-                        stdout=api.raw_io.output(str(results_without_patch))) +
-          api.step_data('Performance Test (With Patch) 1 of 1',
-                        stdout=api.raw_io.output(str(results_with_patch))))
+          api.step_data('Running WITHOUT patch.gsutil exists', retcode=1) +
+          api.step_data(
+            'Running WITH patch.buildbucket.put',
+            stdout=api.json.output(buildbucket_put_response)) +
+          api.step_data(
+            'Running WITHOUT patch.buildbucket.put',
+            stdout=api.json.output(buildbucket_put_response)) +
+          api.step_data(
+            'Running WITH patch.buildbucket.get',
+            stdout=api.json.output(buildbucket_get_response)) +
+          api.step_data(
+            'Running WITH patch.buildbucket.get (2)',
+            stdout=api.json.output(buildbucket_get_response)) +
+          api.step_data(
+            'Running WITH patch.Performance Test (With Patch) 1 of 1',
+            stdout=api.raw_io.output(str(results_without_patch))) +
+          api.step_data(
+            'Running WITHOUT patch.Performance Test (Without Patch) 1 of 1',
+            stdout=api.raw_io.output(str(results_with_patch))) +
+          api.step_data(
+            'Notify dashboard.Post bisect results',
+            api.json.output({'status_code': 200})))
       config_json.update({'metric': 'dummy/dummy'})
 
       yield (api.test('basic_perf_tryjob_with_metric_' + buildername) +
@@ -268,19 +277,28 @@ results-without_patch
                        api.raw_io.stream_output('tools/run-perf-test.cfg')) +
               api.override_step_data('load config',
                    api.json.output(config_json)) +
-              api.step_data('gsutil exists', retcode=1) +
-              api.step_data('buildbucket.put',
-                  stdout=api.json.output(buildbucket_put_response)) +
-              api.step_data('buildbucket.put (2)',
-                  stdout=api.json.output(buildbucket_put_response)) +
-              api.step_data('buildbucket.get',
-                  stdout=api.json.output(buildbucket_get_response)) +
-              api.step_data('buildbucket.get (2)',
-                  stdout=api.json.output(buildbucket_get_response)) +
-              api.step_data('Performance Test (Without Patch) 1 of 1',
-                  stdout=api.raw_io.output(results_without_patch)) +
-              api.step_data('Performance Test (With Patch) 1 of 1',
-                  stdout=api.raw_io.output(results_with_patch)))
+              api.step_data('Running WITHOUT patch.gsutil exists', retcode=1) +
+              api.step_data(
+                'Running WITH patch.buildbucket.put',
+                stdout=api.json.output(buildbucket_put_response)) +
+              api.step_data(
+                'Running WITHOUT patch.buildbucket.put',
+                stdout=api.json.output(buildbucket_put_response)) +
+              api.step_data(
+                'Running WITH patch.buildbucket.get',
+                stdout=api.json.output(buildbucket_get_response)) +
+              api.step_data(
+                'Running WITH patch.buildbucket.get (2)',
+                stdout=api.json.output(buildbucket_get_response)) +
+              api.step_data(
+                'Running WITH patch.Performance Test (With Patch) 1 of 1',
+                stdout=api.raw_io.output(str(results_without_patch))) +
+              api.step_data(
+                'Running WITHOUT patch.Performance Test (Without Patch) 1 of 1',
+                stdout=api.raw_io.output(str(results_with_patch))) +
+              api.step_data(
+                'Notify dashboard.Post bisect results',
+                api.json.output({'status_code': 200})))
 
       yield (api.test('perf_tryjob_failed_test_' + buildername) +
           api.properties.tryserver(
@@ -295,18 +313,24 @@ results-without_patch
           api.override_step_data(
               'git diff to analyze patch',
               api.raw_io.stream_output('tools/run-perf-test.cfg')) +
-
           api.override_step_data('load config', api.json.output(config_json)) +
-          api.step_data('gsutil exists', retcode=1) +
-          api.step_data('buildbucket.put',
+          api.step_data('Running WITHOUT patch.gsutil exists', retcode=1) +
+          api.step_data(
+              'Running WITH patch.buildbucket.put',
               stdout=api.json.output(buildbucket_put_response)) +
-          api.step_data('buildbucket.put (2)',
+          api.step_data(
+              'Running WITHOUT patch.buildbucket.put',
               stdout=api.json.output(buildbucket_put_response)) +
-          api.step_data('buildbucket.get',
-                        stdout=api.json.output(buildbucket_get_response)) +
-          api.step_data('buildbucket.get (2)',
-                        stdout=api.json.output(buildbucket_get_response)) +
-          api.step_data('Performance Test (With Patch) 1 of 1', retcode=1))
+          api.step_data(
+              'Running WITH patch.buildbucket.get',
+              stdout=api.json.output(buildbucket_get_response)) +
+          api.step_data(
+              'Running WITH patch.buildbucket.get (2)',
+              stdout=api.json.output(buildbucket_get_response)) +
+          api.step_data(
+              'Running WITH patch.Performance Test (With Patch) 1 of 1',
+              retcode=1))
+
       config_json.update({'good_revision': '306475',
                           'bad_revision': '306476'})
 
@@ -331,17 +355,23 @@ results-without_patch
           api.step_data('resolving commit_pos ' + config_json['bad_revision'],
                         stdout=api.raw_io.output(
                             'hash:bad49c331def2a3bbf3ddd0096eb51551155')) +
-          api.step_data('gsutil exists', retcode=1) +
-          api.step_data('buildbucket.put',
-                        stdout=api.json.output(buildbucket_put_response)) +
-          api.step_data('buildbucket.get',
-                        stdout=api.json.output(buildbucket_get_response)) +
+          api.step_data('Running WITHOUT patch.gsutil exists', retcode=1) +
           api.step_data(
-              'Performance Test (d49c331def2a3bbf3ddd0096eb51551155) 1 of 1',
+              'Running WITHOUT patch.buildbucket.put',
+              stdout=api.json.output(buildbucket_put_response)) +
+          api.step_data(
+              'Running WITHOUT patch.buildbucket.get',
+              stdout=api.json.output(buildbucket_get_response)) +
+          api.step_data(
+              'Running WITHOUT patch.Performance Test ' +
+              '(d49c331def2a3bbf3ddd0096eb51551155) 1 of 1',
               stdout=api.raw_io.output(results_without_patch)) +
           api.step_data(
-              'Performance Test (bad49c331def2a3bbf3ddd0096eb51551155) 1 of 1',
-              stdout=api.raw_io.output(results_with_patch)))
+              'Running WITH patch.Performance Test ' +
+              '(bad49c331def2a3bbf3ddd0096eb51551155) 1 of 1',
+              stdout=api.raw_io.output(results_with_patch)) +
+          api.step_data('Notify dashboard.Post bisect results',
+                        api.json.output({'status_code': 200})))
 
       config_json = {
           'max_time_minutes': '25',

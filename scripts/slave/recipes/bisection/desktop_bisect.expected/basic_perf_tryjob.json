@@ -302,6 +302,11 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
+    "name": "Running WITH patch"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -311,7 +316,10 @@
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "cleanup_temp"
+    "name": "Running WITH patch.cleanup_temp",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -324,9 +332,10 @@
       "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"123456\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf-tryjob/Linux Builder/full-build-linuxf27fede2220bcd326aee3e86ddfd4ebd0fe58cb9_123456.zip\\\", \\\"clobber\\\": true, \\\"issue\\\": \\\"12345\\\", \\\"parent_got_revision\\\": \\\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\\\", \\\"patch_storage\\\": \\\"rietveld\\\", \\\"patchset\\\": \\\"20001\\\", \\\"rietveld\\\": \\\"https://codereview.chromium.org\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"parent_buildername:linux_perf_bisect\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "buildbucket.put",
+    "name": "Running WITH patch.buildbucket.put",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"results\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
@@ -359,9 +368,10 @@
       "9016911228971028736"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "buildbucket.get",
+    "name": "Running WITH patch.buildbucket.get",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"build\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"bucket\": \"master.tryserver.chromium.perf\", @@@",
@@ -386,9 +396,10 @@
       "9016911228971028736"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "buildbucket.get (2)",
+    "name": "Running WITH patch.buildbucket.get (2)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"build\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"bucket\": \"master.tryserver.chromium.perf\", @@@",
@@ -412,8 +423,9 @@
       "[BUILDER_CACHE]/linux_perf_bisect/src/out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "rmtree build directory",
+    "name": "Running WITH patch.rmtree build directory",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
       "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
@@ -448,7 +460,10 @@
       "571"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "extract build"
+    "name": "Running WITH patch.extract build",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -459,8 +474,9 @@
       "511"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "makedirs results directory",
+    "name": "Running WITH patch.makedirs results directory",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
       "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
@@ -499,17 +515,18 @@
       "--results-label=Patch"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "Performance Test (With Patch) 1 of 1",
+    "name": "Running WITH patch.Performance Test (With Patch) 1 of 1",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@Captured Output@*RESULT dummy: dummy= [5.83,6.013,5.573]ms@@@",
       "@@@STEP_LOG_LINE@Captured Output@Avg dummy: 5.907711ms@@@",
       "@@@STEP_LOG_LINE@Captured Output@Sd  dummy: 0.255921ms@@@",
       "@@@STEP_LOG_LINE@Captured Output@RESULT telemetry_page_measurement_results: num_failed= 0 count@@@",
       "@@@STEP_LOG_LINE@Captured Output@RESULT telemetry_page_measurement_results: num_errored= 0 count@@@",
       "@@@STEP_LOG_LINE@Captured Output@@@@",
-      "@@@STEP_LOG_LINE@Captured Output@View online at http://storage.googleapis.com/chromium-telemetry/html-results/results-with_patch@@@",
+      "@@@STEP_LOG_LINE@Captured Output@View online at https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-without@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -518,11 +535,19 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "*RESULT dummy: dummy= [5.83,6.013,5.573]ms\nAvg dummy: 5.907711ms\nSd  dummy: 0.255921ms\nRESULT telemetry_page_measurement_results: num_failed= 0 count\nRESULT telemetry_page_measurement_results: num_errored= 0 count\n\nView online at http://storage.googleapis.com/chromium-telemetry/html-results/results-with_patch\n",
+      "*RESULT dummy: dummy= [5.83,6.013,5.573]ms\nAvg dummy: 5.907711ms\nSd  dummy: 0.255921ms\nRESULT telemetry_page_measurement_results: num_failed= 0 count\nRESULT telemetry_page_measurement_results: num_errored= 0 count\n\nView online at https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-without\n",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "write buildbot output to disk"
+    "name": "Running WITH patch.write buildbot output to disk",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
+    "name": "De-applying patch"
   },
   {
     "cmd": [
@@ -549,8 +574,9 @@
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
-    "name": "bot_update (without patch)",
+    "name": "De-applying patch.bot_update (without patch)",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Some step text@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
@@ -625,7 +651,15 @@
       "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library gomadir='[CACHE]/cipd/goma' target_arch=x64 use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
-    "name": "gclient runhooks (without patch)"
+    "name": "De-applying patch.gclient runhooks (without patch)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
+    "name": "Running WITHOUT patch"
   },
   {
     "cmd": [
@@ -639,8 +673,9 @@
       "gs://chrome-perf/Linux Builder/full-build-linuxf27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.zip"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "gsutil exists",
+    "name": "Running WITHOUT patch.gsutil exists",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
       "@@@STEP_EXCEPTION@@@"
     ]
@@ -655,7 +690,10 @@
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "cleanup_temp (2)"
+    "name": "Running WITHOUT patch.cleanup_temp",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -668,9 +706,10 @@
       "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"123456\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Linux Builder/full-build-linuxf27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"parent_buildername:linux_perf_bisect\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "buildbucket.put (2)",
+    "name": "Running WITHOUT patch.buildbucket.put",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"results\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
@@ -703,9 +742,10 @@
       "9016911228971028736"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "buildbucket.get (3)",
+    "name": "Running WITHOUT patch.buildbucket.get",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"build\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"status\": \"COMPLETED\"@@@",
@@ -723,9 +763,10 @@
       "9016911228971028736"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "buildbucket.get (4)",
+    "name": "Running WITHOUT patch.buildbucket.get (2)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"build\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"result\": \"SUCCESS\", @@@",
@@ -743,8 +784,9 @@
       "[BUILDER_CACHE]/linux_perf_bisect/src/out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "rmtree build directory (2)",
+    "name": "Running WITHOUT patch.rmtree build directory",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
       "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
@@ -779,7 +821,10 @@
       "571"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "extract build (2)"
+    "name": "Running WITHOUT patch.extract build",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -790,8 +835,9 @@
       "511"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "makedirs results directory (2)",
+    "name": "Running WITHOUT patch.makedirs results directory",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
       "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
@@ -829,17 +875,18 @@
       "--results-label=TOT"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "Performance Test (Without Patch) 1 of 1",
+    "name": "Running WITHOUT patch.Performance Test (Without Patch) 1 of 1",
     "stderr": "/path/to/tmp/",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@Captured Output@*RESULT dummy: dummy= [5.83,6.013,5.573]ms@@@",
       "@@@STEP_LOG_LINE@Captured Output@Avg dummy: 5.907711ms@@@",
       "@@@STEP_LOG_LINE@Captured Output@Sd  dummy: 0.255921ms@@@",
       "@@@STEP_LOG_LINE@Captured Output@RESULT telemetry_page_measurement_results: num_failed= 0 count@@@",
       "@@@STEP_LOG_LINE@Captured Output@RESULT telemetry_page_measurement_results: num_errored= 0 count@@@",
       "@@@STEP_LOG_LINE@Captured Output@@@@",
-      "@@@STEP_LOG_LINE@Captured Output@View online at http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch@@@",
+      "@@@STEP_LOG_LINE@Captured Output@View online at https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-with@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -848,39 +895,27 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "*RESULT dummy: dummy= [5.83,6.013,5.573]ms\nAvg dummy: 5.907711ms\nSd  dummy: 0.255921ms\nRESULT telemetry_page_measurement_results: num_failed= 0 count\nRESULT telemetry_page_measurement_results: num_errored= 0 count\n\nView online at http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch\n",
+      "*RESULT dummy: dummy= [5.83,6.013,5.573]ms\nAvg dummy: 5.907711ms\nSd  dummy: 0.255921ms\nRESULT telemetry_page_measurement_results: num_failed= 0 count\nRESULT telemetry_page_measurement_results: num_errored= 0 count\n\nView online at https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-with\n",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "write buildbot output to disk (2)"
+    "name": "Running WITHOUT patch.write buildbot output to disk",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "Results",
     "~followup_annotations": [
-      "@@@STEP_TEXT@No values from test with patch, or none from test without patch.",
-      "Output with patch:",
-      "*RESULT dummy: dummy= [5.83,6.013,5.573]ms",
-      "Avg dummy: 5.907711ms",
-      "Sd  dummy: 0.255921ms",
-      "RESULT telemetry_page_measurement_results: num_failed= 0 count",
-      "RESULT telemetry_page_measurement_results: num_errored= 0 count",
-      "",
-      "View online at http://storage.googleapis.com/chromium-telemetry/html-results/results-with_patch",
-      "",
-      "",
-      "Output without patch:",
-      "*RESULT dummy: dummy= [5.83,6.013,5.573]ms",
-      "Avg dummy: 5.907711ms",
-      "Sd  dummy: 0.255921ms",
-      "RESULT telemetry_page_measurement_results: num_failed= 0 count",
-      "RESULT telemetry_page_measurement_results: num_errored= 0 count",
-      "",
-      "View online at http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch",
-      "@@@",
-      "@@@STEP_LINK@HTML Results@http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch@@@"
+      "@@@STEP_LINK@HTML Results@https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-with@@@"
     ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
+    "name": "Notify dashboard"
   },
   {
     "cmd": [
@@ -889,13 +924,14 @@
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py",
       "https://chromeperf.appspot.com/post_bisect_results",
       "-i",
-      "{\"data\": \"{\\\"status\\\": \\\"completed\\\", \\\"warnings\\\": [\\\"No values from test with patch, or none from test without patch.\\\\n Output with patch:\\\\n*RESULT dummy: dummy= [5.83,6.013,5.573]ms\\\\nAvg dummy: 5.907711ms\\\\nSd  dummy: 0.255921ms\\\\nRESULT telemetry_page_measurement_results: num_failed= 0 count\\\\nRESULT telemetry_page_measurement_results: num_errored= 0 count\\\\n\\\\nView online at http://storage.googleapis.com/chromium-telemetry/html-results/results-with_patch\\\\n\\\\n\\\\nOutput without patch:\\\\n*RESULT dummy: dummy= [5.83,6.013,5.573]ms\\\\nAvg dummy: 5.907711ms\\\\nSd  dummy: 0.255921ms\\\\nRESULT telemetry_page_measurement_results: num_failed= 0 count\\\\nRESULT telemetry_page_measurement_results: num_errored= 0 count\\\\n\\\\nView online at http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch\\\\n\\\"], \\\"metric\\\": null, \\\"buildbot_log_url\\\": \\\"http://c.org/p/cr/builders/linux_perf_bisect/builds/571\\\", \\\"command\\\": \\\"src/tools/perf/run_benchmark -v --browser=release sunspider\\\", \\\"bisect_bot\\\": \\\"linux_perf_bisect\\\", \\\"try_job_id\\\": null, \\\"cloud_link\\\": \\\"http://storage.googleapis.com/chromium-telemetry/html-results/results-without_patch\\\"}\"}",
+      "{\"data\": \"{\\\"status\\\": \\\"completed\\\", \\\"warnings\\\": [\\\"No values from test with patch, or none from test without patch.\\\\n Output with patch:\\\\n*RESULT dummy: dummy= [5.83,6.013,5.573]ms\\\\nAvg dummy: 5.907711ms\\\\nSd  dummy: 0.255921ms\\\\nRESULT telemetry_page_measurement_results: num_failed= 0 count\\\\nRESULT telemetry_page_measurement_results: num_errored= 0 count\\\\n\\\\nView online at https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-without\\\\n\\\\n\\\\nOutput without patch:\\\\n*RESULT dummy: dummy= [5.83,6.013,5.573]ms\\\\nAvg dummy: 5.907711ms\\\\nSd  dummy: 0.255921ms\\\\nRESULT telemetry_page_measurement_results: num_failed= 0 count\\\\nRESULT telemetry_page_measurement_results: num_errored= 0 count\\\\n\\\\nView online at https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-with\\\\n\\\"], \\\"metric\\\": null, \\\"buildbot_log_url\\\": \\\"http://c.org/p/cr/builders/linux_perf_bisect/builds/571\\\", \\\"command\\\": \\\"src/tools/perf/run_benchmark -v --browser=release sunspider\\\", \\\"bisect_bot\\\": \\\"linux_perf_bisect\\\", \\\"try_job_id\\\": null, \\\"cloud_link\\\": \\\"https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-with\\\"}\"}",
       "-o",
       "/path/to/tmp/json"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "Post bisect results",
+    "name": "Notify dashboard.Post bisect results",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"status_code\": 200@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
