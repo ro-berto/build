@@ -1,19 +1,26 @@
-# Copyright 2013 The Chromium Authors. All rights reserved.
+# Copyright 2015 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
+
+# This file was generated from
+# scripts/tools/buildbot_tool_templates/master_site_config.py
+# by "../../build/scripts/tools/buildbot-tool gen .".
+# DO NOT EDIT BY HAND!
+
 
 """ActiveMaster definition."""
 
 from config_bootstrap import Master
 
 class ChromiumGPU(Master.Master1):
-  project_name = 'Chromium GPU'
+  project_name = 'ChromiumGPU'
   master_port = 8051
   slave_port = 8151
   master_port_alt = 8251
-  tree_closing_notification_recipients = [
-    'chrome-gpu-build-failures@google.com']
-  buildbot_url = 'http://build.chromium.org/p/chromium.gpu/'
+  buildbot_url = 'https://build.chromium.org/p/chromium.gpu/'
+  buildbucket_bucket = None
+  service_account_file = None
+  # To enable outbound pubsub event streaming.
   pubsub_service_account_file = 'service-account-luci-milo.json'
   pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
   name = 'chromium.gpu'
