@@ -116,6 +116,7 @@
   'chrome': {
     'chromium.perf': {},
     'chromium.perf.fyi': {},
+    'tryserver.chromium.perf': {},
   },
 
   # The CrOS tryserver is considered "internal" for viewing purposes, even
