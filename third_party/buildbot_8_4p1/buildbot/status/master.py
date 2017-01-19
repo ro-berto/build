@@ -348,9 +348,8 @@ class Status:
     def build_started(self, brid, buildername, buildnum):
         if brid in self._buildreq_observers:
             bs = self.getBuilder(buildername).getBuild(buildnum)
-            if bs:
-                for o in self._buildreq_observers[brid]:
-                    eventually(o, bs)
+            for o in self._buildreq_observers[brid]:
+                eventually(o, bs)
 
     def _buildrequest_subscribe(self, brid, observer):
         self._buildreq_observers.add(brid, observer)

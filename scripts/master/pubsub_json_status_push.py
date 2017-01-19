@@ -43,6 +43,13 @@ class BuildRequestObserver(object):
     self.request = request
 
   def __call__(self, _bs):
+    """Called by buildbot.status.master's "build_started" when the build for
+    this observer has started.
+
+    Note that '_bs' may (Will probably? Will always?) be None, so don't rely
+    on it having any value. Fortunately, the BuildREquestObserver is already
+    bound to the build request that it is observing, so we don't need it.
+    """
     if self.request.buildername not in self.client._pending_builds:
       log.msg(
           'PubSub: ERROR - Tried to remove build request %s from builder %s '
