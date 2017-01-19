@@ -83,6 +83,7 @@ SPEC = freeze({
       'package_filename': 'chromium-src',
       'platform': 'linux',
       'sync_generated_files': True,
+      'corpus': 'chromium-linux',
     },
     'ChromiumOS Codesearch': {
       # TODO(emso): Get the below compile targets (also for the staging builder)
@@ -125,6 +126,7 @@ SPEC = freeze({
       'environment': 'prod',
       'package_filename': 'chromiumos-src',
       'platform': 'chromeos',
+      'corpus': 'chromium-chromeos',
     },
     'Chromium Android Codesearch': {
       'compile_targets': [
@@ -134,6 +136,7 @@ SPEC = freeze({
       'package_filename': 'chromium-android-src',
       'platform': 'android',
       'sync_generated_files': True,
+      'corpus': 'chromium-android',
     },
     'Chromium Linux Codesearch Builder': {
       'compile_targets': [
@@ -142,6 +145,7 @@ SPEC = freeze({
       'environment': 'staging',
       'package_filename': 'chromium-src',
       'platform': 'linux',
+      'corpus': 'chromium-linux',
     },
     'ChromiumOS Codesearch Builder': {
       # Compile targets used by the 'Linux ChromiumOS Full' builder (2016-12-16)
@@ -182,6 +186,7 @@ SPEC = freeze({
       'environment': 'staging',
       'package_filename': 'chromiumos-src',
       'platform': 'chromeos',
+      'corpus': 'chromium-chromeos',
     },
     'Chromium Android Codesearch Builder': {
       'compile_targets': [
@@ -190,6 +195,7 @@ SPEC = freeze({
       'environment': 'staging',
       'package_filename': 'chromium-android-src',
       'platform': 'android',
+      'corpus': 'chromium-android',
     },
   },
 })
