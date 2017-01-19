@@ -472,6 +472,9 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "/path/to/tmp/",
+      "--",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -496,7 +499,6 @@
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "Running WITH patch.Performance Test (With Patch) 1 of 1",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@Captured Output@*RESULT dummy: dummy= [5.83,6.013,5.573]ms@@@",
@@ -505,7 +507,7 @@
       "@@@STEP_LOG_LINE@Captured Output@RESULT telemetry_page_measurement_results: num_failed= 0 count@@@",
       "@@@STEP_LOG_LINE@Captured Output@RESULT telemetry_page_measurement_results: num_errored= 0 count@@@",
       "@@@STEP_LOG_LINE@Captured Output@@@@",
-      "@@@STEP_LOG_LINE@Captured Output@View online at https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-without@@@",
+      "@@@STEP_LOG_LINE@Captured Output@View online at https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-with@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -514,7 +516,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "*RESULT dummy: dummy= [5.83,6.013,5.573]ms\nAvg dummy: 5.907711ms\nSd  dummy: 0.255921ms\nRESULT telemetry_page_measurement_results: num_failed= 0 count\nRESULT telemetry_page_measurement_results: num_errored= 0 count\n\nView online at https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-without\n",
+      "*RESULT dummy: dummy= [5.83,6.013,5.573]ms\nAvg dummy: 5.907711ms\nSd  dummy: 0.255921ms\nRESULT telemetry_page_measurement_results: num_failed= 0 count\nRESULT telemetry_page_measurement_results: num_errored= 0 count\n\nView online at https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-with\n",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
@@ -836,6 +838,9 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "/path/to/tmp/",
+      "--",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -859,7 +864,6 @@
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "Running WITHOUT patch.Performance Test (Without Patch) 1 of 1",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@Captured Output@*RESULT dummy: dummy= [5.83,6.013,5.573]ms@@@",
@@ -868,7 +872,7 @@
       "@@@STEP_LOG_LINE@Captured Output@RESULT telemetry_page_measurement_results: num_failed= 0 count@@@",
       "@@@STEP_LOG_LINE@Captured Output@RESULT telemetry_page_measurement_results: num_errored= 0 count@@@",
       "@@@STEP_LOG_LINE@Captured Output@@@@",
-      "@@@STEP_LOG_LINE@Captured Output@View online at https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-with@@@",
+      "@@@STEP_LOG_LINE@Captured Output@View online at https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-without@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -877,7 +881,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "*RESULT dummy: dummy= [5.83,6.013,5.573]ms\nAvg dummy: 5.907711ms\nSd  dummy: 0.255921ms\nRESULT telemetry_page_measurement_results: num_failed= 0 count\nRESULT telemetry_page_measurement_results: num_errored= 0 count\n\nView online at https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-with\n",
+      "*RESULT dummy: dummy= [5.83,6.013,5.573]ms\nAvg dummy: 5.907711ms\nSd  dummy: 0.255921ms\nRESULT telemetry_page_measurement_results: num_failed= 0 count\nRESULT telemetry_page_measurement_results: num_errored= 0 count\n\nView online at https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-without\n",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
@@ -892,7 +896,7 @@
     "name": "Results",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>N<br/><br/>o<br/><br/> <br/><br/>v<br/><br/>a<br/><br/>l<br/><br/>u<br/><br/>e<br/><br/>s<br/><br/> <br/><br/>g<br/><br/>e<br/><br/>n<br/><br/>e<br/><br/>r<br/><br/>a<br/><br/>t<br/><br/>e<br/><br/>d<br/><br/> <br/><br/>f<br/><br/>r<br/><br/>o<br/><br/>m<br/><br/> <br/><br/>t<br/><br/>e<br/><br/>s<br/><br/>t<br/><br/>.<br/>@@@",
-      "@@@STEP_LINK@HTML Results@https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-with@@@"
+      "@@@STEP_LINK@HTML Results@https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-without@@@"
     ]
   },
   {
@@ -907,7 +911,7 @@
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py",
       "https://chromeperf.appspot.com/post_bisect_results",
       "-i",
-      "{\"data\": \"{\\\"status\\\": \\\"completed\\\", \\\"warnings\\\": [\\\"No values from test with patch, or none from test without patch.\\\\n Output with patch:\\\\n*RESULT dummy: dummy= [5.83,6.013,5.573]ms\\\\nAvg dummy: 5.907711ms\\\\nSd  dummy: 0.255921ms\\\\nRESULT telemetry_page_measurement_results: num_failed= 0 count\\\\nRESULT telemetry_page_measurement_results: num_errored= 0 count\\\\n\\\\nView online at https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-without\\\\n\\\\n\\\\nOutput without patch:\\\\n*RESULT dummy: dummy= [5.83,6.013,5.573]ms\\\\nAvg dummy: 5.907711ms\\\\nSd  dummy: 0.255921ms\\\\nRESULT telemetry_page_measurement_results: num_failed= 0 count\\\\nRESULT telemetry_page_measurement_results: num_errored= 0 count\\\\n\\\\nView online at https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-with\\\\n\\\"], \\\"metric\\\": null, \\\"buildbot_log_url\\\": \\\"http://c.org/p/cr/builders/linux_perf_bisect/builds/571\\\", \\\"command\\\": \\\"src/tools/perf/run_benchmark -v --browser=release sunspider\\\", \\\"bisect_bot\\\": \\\"linux_perf_bisect\\\", \\\"try_job_id\\\": null, \\\"cloud_link\\\": \\\"https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-with\\\"}\"}",
+      "{\"data\": \"{\\\"status\\\": \\\"completed\\\", \\\"warnings\\\": [\\\"No values from test with patch, or none from test without patch.\\\\n Output with patch:\\\\n*RESULT dummy: dummy= [5.83,6.013,5.573]ms\\\\nAvg dummy: 5.907711ms\\\\nSd  dummy: 0.255921ms\\\\nRESULT telemetry_page_measurement_results: num_failed= 0 count\\\\nRESULT telemetry_page_measurement_results: num_errored= 0 count\\\\n\\\\nView online at https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-with\\\\n\\\\n\\\\nOutput without patch:\\\\n*RESULT dummy: dummy= [5.83,6.013,5.573]ms\\\\nAvg dummy: 5.907711ms\\\\nSd  dummy: 0.255921ms\\\\nRESULT telemetry_page_measurement_results: num_failed= 0 count\\\\nRESULT telemetry_page_measurement_results: num_errored= 0 count\\\\n\\\\nView online at https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-without\\\\n\\\"], \\\"metric\\\": null, \\\"buildbot_log_url\\\": \\\"http://c.org/p/cr/builders/linux_perf_bisect/builds/571\\\", \\\"command\\\": \\\"src/tools/perf/run_benchmark -v --browser=release sunspider\\\", \\\"bisect_bot\\\": \\\"linux_perf_bisect\\\", \\\"try_job_id\\\": null, \\\"cloud_link\\\": \\\"https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-without\\\"}\"}",
       "-o",
       "/path/to/tmp/json"
     ],

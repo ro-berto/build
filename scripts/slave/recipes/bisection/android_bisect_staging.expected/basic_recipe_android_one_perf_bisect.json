@@ -599,6 +599,9 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "/path/to/tmp/",
+      "--",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -627,7 +630,6 @@
     },
     "name": "Performance Test 1 of 2",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
@@ -682,6 +684,9 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "/path/to/tmp/",
+      "--",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -710,7 +715,6 @@
     },
     "name": "Performance Test 2 of 2",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_END@Captured Output@@@"
     ]

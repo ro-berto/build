@@ -183,12 +183,18 @@ def _rebase_path(api, file_path):
 
 def _run_command(api, command, step_name, **kwargs):
   command_parts = command.split()
-  stdout = api.m.raw_io.output()
+  stdout_proxy = api.m.raw_io.output(name='stdout_proxy')
   stderr = api.m.raw_io.output()
 
   inner_kwargs = {}
   if 'step_test_data' in kwargs:
-    inner_kwargs['step_test_data'] = kwargs['step_test_data']
+    inner_kwargs['step_test_data'] = (
+        lambda: kwargs['step_test_data']() +
+                api.m.raw_io.test_api.output('benchmark text',
+                                             name='stdout_proxy'))
+  else:
+    inner_kwargs['step_test_data'] = (
+        lambda: api.m.raw_io.test_api.output('', name='stdout_proxy'))
   # TODO(prasadv): Remove this once bisect runs are no longer running
   # against revisions from February 2016 or earlier.
   if 'android-chrome' in command:  # pragma: no cover
@@ -209,6 +215,7 @@ def _run_command(api, command, step_name, **kwargs):
     # run_benchmark is a python script without an extension, hence we force
     # python mode.
     python_mode = True
+
   try:
     step_result = api.m.chromium.runtest(
         test=_rebase_path(api, command_parts[0]),
@@ -216,17 +223,17 @@ def _run_command(api, command, step_name, **kwargs):
         xvfb=True,
         name=step_name,
         python_mode=python_mode,
-        stdout=stdout,
+        tee_stdout_file=stdout_proxy,
         stderr=stderr,
         **inner_kwargs)
     step_result.presentation.logs['Captured Output'] = (
-        step_result.stdout or '').splitlines()
+        step_result.raw_io.outputs.get('stdout_proxy', '')).splitlines()
   except api.m.step.StepFailure as sf:
     sf.result.presentation.status = api.m.step.WARNING
     sf.result.presentation.logs['Failure Output'] = (
-        sf.result.stdout or '').splitlines()
+        sf.result.raw_io.outputs.get('stdout_proxy')).splitlines()
     if sf.result.stderr:  # pragma: no cover
       sf.result.presentation.logs['stderr'] = (
         sf.result.stderr).splitlines()
-    return sf.result.stdout, sf.result.stderr, sf.result.retcode
-  return step_result.stdout, step_result.stderr, step_result.retcode
+    return sf.result.raw_io.outputs.get('stdout_proxy'), sf.result.stderr, sf.result.retcode
+  return step_result.raw_io.outputs.get('stdout_proxy'), step_result.stderr, step_result.retcode

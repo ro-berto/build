@@ -310,7 +310,8 @@ class ChromiumApi(recipe_api.RecipeApi):
               point_id=None, revision=None, webkit_revision=None,
               test_launcher_summary_output=None, flakiness_dash=None,
               perf_id=None, perf_config=None, chartjson_file=False,
-              disable_src_side_runtest_py=False, **kwargs):
+              disable_src_side_runtest_py=False, tee_stdout_file=None,
+              **kwargs):
     """Return a runtest.py invocation."""
     args = args or []
     assert isinstance(args, list)
@@ -418,6 +419,10 @@ class ChromiumApi(recipe_api.RecipeApi):
       # Note that -- is needed since full_args are not indended
       # for wrapper script but for real runtest.py .
       full_args = ['--'] + full_args
+    if tee_stdout_file:
+      full_args = [tee_stdout_file, '--', runtest_path] + full_args
+      runtest_path = self.package_repo_resource(
+          'scripts', 'slave', 'tee.py')
     return self.m.python(
       step_name,
       runtest_path,

@@ -539,6 +539,9 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "/path/to/tmp/",
+      "--",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -565,7 +568,6 @@
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "Running WITH patch.Performance Test (bad49c331def2a3bbf3ddd0096eb51551155) 1 of 1",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@Captured Output@*RESULT dummy: dummy= [5.83,6.013,5.573]ms@@@",
@@ -927,6 +929,9 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "/path/to/tmp/",
+      "--",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -952,7 +957,6 @@
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "Running WITHOUT patch.Performance Test (d49c331def2a3bbf3ddd0096eb51551155) 1 of 1",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@Captured Output@*RESULT dummy: dummy= [5.83,6.013,5.573]ms@@@",
