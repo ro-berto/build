@@ -1294,7 +1294,11 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
         # warn if we have results and aren't uploading them
         step_result.presentation.logs['NOT_UPLOADING_CHART_JSON'] = [
             'Info: Bot is missing perf_id and/or results_url configuration, so'
-            'not uploading chart json']
+            ' not uploading chart json']
+      return
+
+    if not results:
+      # No data was generated
       return
 
     if not results.get('enabled', True):
@@ -1308,7 +1312,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
         ['Info: Setting up arguments for perf dashboard']
 
     results_file = api.raw_io.input(data=json.dumps(results))
-    """Produces a step that uploads results to dashboard"""
+    # Produces a step that uploads results to dashboard
     args = [
         '--results-file', results_file,
         # We are passing this in solely to have the output show up as a link
@@ -1340,7 +1344,6 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
       api.chromium.package_repo_resource(
           'scripts', 'slave', 'upload_perf_dashboard_results.py'),
       args)
-
 
 
 def generate_isolated_script(api, chromium_tests_api, mastername, buildername,

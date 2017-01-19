@@ -614,6 +614,59 @@ def GenTests(api):
   )
 
   yield (
+    api.test(
+        'dynamic_swarmed_sharded_passed_isolated_script_perf_test_empty') +
+    api.properties.generic(mastername='chromium.perf.fyi',
+                           buildername='Win 10 Low-End Perf Tests',
+                           parent_buildername='Win Builder FYI',
+                           got_revision_cp='refs/heads/master@{#291141}',
+                           buildnumber='1234',
+                           version='v23523',
+                           git_revision='asdfawe2342',
+                           got_webrtc_revision='asdfas',
+                           got_v8_revision='asdfadsfa4e3w') +
+
+    api.properties(
+      swarm_hashes={
+      'telemetry_perf_tests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+      }, **{'perf-id': 'testid', 'results-url': 'http://test-results-url'}) +
+    api.platform('win', 64) +
+    api.override_step_data(
+        'read test spec (chromium.perf.fyi.json)',
+        api.json.output({
+            'Win 10 Low-End Perf Tests': {
+                'isolated_scripts': [
+                    {
+                        'isolate_name': 'telemetry_perf_tests',
+                        'name': 'benchmark',
+                        'swarming': {
+                            'can_use_on_swarming_builders': True,
+                            'shards': 2,
+                            'dimension_sets': [
+                                {
+                                    'gpu': '8086:22b1',
+                                    'id': "build187-b4",
+                                    'os': "Windows-10-10586",
+                                    'pool': "Chrome-perf",
+                                },
+                            ],
+                          'io_timeout': 900,
+                        },
+                    },
+                ],
+            },
+        })
+    ) +
+    api.override_step_data(
+        'benchmark on Intel GPU on Windows on Windows-10-10586',
+        api.test_utils.canned_isolated_script_output(
+            passing=True, is_win=True, swarming=True,
+            shards=1, isolated_script_passing=True, valid=True,
+            output_chartjson=True, benchmark_enabled=False, empty_shards=[1]),
+        retcode=0)
+  )
+
+  yield (
     api.test('dynamic_swarmed_sharded_invalid_format_isolated_script_test') +
     api.properties.generic(mastername='chromium.linux',
                            buildername='Linux Tests',
@@ -819,6 +872,48 @@ def GenTests(api):
             shards=2, isolated_script_passing=True, valid=True,
             output_chartjson=True, benchmark_enabled=False),
         retcode=0)
+  )
+
+  yield (
+    api.test(
+        'dynamic_swarmed_sharded_isolated_chartjson_test_missing_all_shards') +
+    api.properties.generic(mastername='chromium.linux',
+                           buildername='Linux Tests',
+                           parent_buildername='Linux Builder',
+                           got_revision_cp='refs/heads/master@{#291141}'
+                           ) +
+    api.properties(swarm_hashes={
+      'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    }) +
+    api.platform('linux', 64) +
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'isolated_scripts': [
+                    {
+                        'isolate_name': 'telemetry_gpu_unittests',
+                        'name': 'telemetry_gpu_unittests',
+                        'swarming': {
+                            'can_use_on_swarming_builders': True,
+                            'shards': 2,
+                        },
+                    },
+                ],
+            },
+        })
+    ) +
+    api.override_step_data(
+      'telemetry_gpu_unittests',
+      api.test_utils.canned_isolated_script_output(
+        passing=True, is_win=False, swarming=True,
+        shards=2, isolated_script_passing=True, valid=True,
+        missing_shards=[1], output_chartjson=True),
+      retcode=1) +
+    api.post_process(
+        post_process.DoesNotRun, 'telemetry_gpu_unittests Dashboard Upload') +
+    api.post_process(
+        post_process.Filter('telemetry_gpu_unittests'))
   )
 
   yield (
