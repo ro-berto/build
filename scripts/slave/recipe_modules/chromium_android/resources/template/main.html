@@ -23,10 +23,10 @@
       .left {
         text-align: left;
       }
-      td a {
+      a {
         text-decoration: none;
       }
-      td a:hover {
+      a:hover {
         text-decoration: underline;
         cursor: pointer;
       }
@@ -48,6 +48,8 @@
         {% include 'template/table.html' %}
       {% endfor %}
     </div>
+  </br>
+    <a onclick="reportIssues();"><b>Feedback</b></a>
   </body>
   <script>
     loadPage();
