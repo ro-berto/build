@@ -1052,7 +1052,7 @@ class AndroidApi(recipe_api.RecipeApi):
     if self.c.coverage or self.c.incremental_coverage:
       args.extend(['--coverage-dir', self.coverage_dir])
     if result_details and not json_results_file:
-        json_results_file = self.m.test_utils.gtest_results(add_json_log=False)
+      json_results_file = self.m.test_utils.gtest_results(add_json_log=False)
     if json_results_file:
       args.extend(['--json-results-file', json_results_file])
     if store_tombstones:

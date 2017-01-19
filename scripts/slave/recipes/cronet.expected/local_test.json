@@ -533,6 +533,8 @@
       "--blacklist-file",
       "[START_DIR]/src/out/bad_devices.json",
       "--verbose",
+      "--json-results-file",
+      "/path/to/tmp/json",
       "--num-retries",
       "0",
       "--adb-path",
@@ -544,10 +546,29 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::chromium_android]/resources/test_results_presentation.py",
+      "--json-file",
+      "{}",
+      "--master-name",
+      "chromium.testing.master"
+    ],
+    "name": "cronet_sample_test_apk: generate result details",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result_details@<!DOCTYPE html><html></html>@@@",
+      "@@@STEP_LOG_END@result_details@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[START_DIR]/src/out/Debug/bin/run_cronet_smoketests_missing_native_library_instrumentation_apk",
       "--blacklist-file",
       "[START_DIR]/src/out/bad_devices.json",
       "--verbose",
+      "--json-results-file",
+      "/path/to/tmp/json",
       "--num-retries",
       "0",
       "--adb-path",
@@ -559,10 +580,29 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::chromium_android]/resources/test_results_presentation.py",
+      "--json-file",
+      "{}",
+      "--master-name",
+      "chromium.testing.master"
+    ],
+    "name": "cronet_smoketests_missing_native_library_instrumentation_apk: generate result details",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result_details@<!DOCTYPE html><html></html>@@@",
+      "@@@STEP_LOG_END@result_details@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[START_DIR]/src/out/Debug/bin/run_cronet_smoketests_platform_only_instrumentation_apk",
       "--blacklist-file",
       "[START_DIR]/src/out/bad_devices.json",
       "--verbose",
+      "--json-results-file",
+      "/path/to/tmp/json",
       "--num-retries",
       "0",
       "--adb-path",
@@ -574,16 +614,52 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::chromium_android]/resources/test_results_presentation.py",
+      "--json-file",
+      "{}",
+      "--master-name",
+      "chromium.testing.master"
+    ],
+    "name": "cronet_smoketests_platform_only_instrumentation_apk: generate result details",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result_details@<!DOCTYPE html><html></html>@@@",
+      "@@@STEP_LOG_END@result_details@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[START_DIR]/src/out/Debug/bin/run_cronet_test_instrumentation_apk",
       "--blacklist-file",
       "[START_DIR]/src/out/bad_devices.json",
       "--verbose",
+      "--json-results-file",
+      "/path/to/tmp/json",
       "--num-retries",
       "0",
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "name": "cronet_test_instrumentation_apk"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::chromium_android]/resources/test_results_presentation.py",
+      "--json-file",
+      "{}",
+      "--master-name",
+      "chromium.testing.master"
+    ],
+    "name": "cronet_test_instrumentation_apk: generate result details",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result_details@<!DOCTYPE html><html></html>@@@",
+      "@@@STEP_LOG_END@result_details@@@"
+    ]
   },
   {
     "cmd": [

@@ -126,5 +126,6 @@ class CronetApi(recipe_api.RecipeApi):
             verbose=True,
             wrapper_script_suite_name=suite['target'],
             num_retries=0,
+            result_details=True,
             **suite.get('kwargs', {}))
       droid.common_tests_final_steps()
