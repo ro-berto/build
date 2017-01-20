@@ -18,7 +18,6 @@ import StringIO
 import test_env  # pylint: disable=W0403,W0611
 
 import mock
-from common import annotator
 from common import env
 from slave import logdog_bootstrap as ldbs
 from slave import cipd
@@ -305,17 +304,17 @@ class LogDogBootstrapTest(unittest.TestCase):
   def test_get_bootstrap_result(self):
     mo = mock.mock_open(read_data='{"return_code": 1337}')
     with mock.patch('slave.logdog_bootstrap.open', mo, create=True):
-      bs = ldbs.BootstrapState([], '/foo/bar', 'project', 'prefix')
+      bs = ldbs.BootstrapState([], '/foo/bar')
       self.assertEqual(bs.get_result(), 1337)
 
     mo = mock.mock_open(read_data='!!! NOT JSON? !!!')
     with mock.patch('slave.logdog_bootstrap.open', mo, create=True):
-      bs = ldbs.BootstrapState([], '/foo/bar', 'project', 'prefix')
+      bs = ldbs.BootstrapState([], '/foo/bar')
       self.assertRaises(ldbs.BootstrapError, bs.get_result)
 
     mo = mock.mock_open(read_data='{"invalid": "json"}')
     with mock.patch('slave.logdog_bootstrap.open', mo, create=True):
-      bs = ldbs.BootstrapState([], '/foo/bar', 'project', 'prefix')
+      bs = ldbs.BootstrapState([], '/foo/bar')
       self.assertRaises(ldbs.BootstrapError, bs.get_result)
 
     mo = mock.mock_open()
@@ -323,22 +322,6 @@ class LogDogBootstrapTest(unittest.TestCase):
       mo.side_effect = IOError('Test not found')
       self.assertRaises(ldbs.BootstrapError, bs.get_result)
 
-  def test_bootstrap_annotations(self):
-    sio = StringIO.StringIO()
-    stream = annotator.StructuredAnnotationStream(stream=sio)
-    bs = ldbs.BootstrapState([], '/foo/bar', 'project', 'foo/bar/baz')
-    bs.annotate(stream)
-
-    lines = [l for l in sio.getvalue().splitlines() if l]
-    self.assertEqual(lines, [
-        '@@@SEED_STEP LogDog Bootstrap@@@',
-        '@@@STEP_CURSOR LogDog Bootstrap@@@',
-        '@@@STEP_STARTED@@@',
-        '@@@SET_BUILD_PROPERTY@logdog_project@project@@@',
-        '@@@SET_BUILD_PROPERTY@logdog_prefix@foo/bar/baz@@@',
-        '@@@STEP_CURSOR LogDog Bootstrap@@@',
-        '@@@STEP_CLOSED@@@',
-    ])
 
   @mock.patch('os.path.isfile')
   def test_can_find_credentials(self, isfile):

@@ -12,7 +12,6 @@ import os
 import subprocess
 import sys
 
-from common import annotator
 from common import chromium_utils
 from common import env
 from slave import cipd
@@ -582,15 +581,13 @@ def bootstrap(rt, opts, basedir, tempdir, properties, cmd):
       start_api, params.api)
 
   cmd = butler_args + ['--'] + annotee_args
-  return BootstrapState(cmd, bootstrap_result_path, params.project, prefix)
+  return BootstrapState(cmd, bootstrap_result_path)
 
 
 class BootstrapState(object):
-  def __init__(self, cmd, bootstrap_result_path, project, prefix):
+  def __init__(self, cmd, bootstrap_result_path):
     self._cmd = cmd
     self._bootstrap_result_path = bootstrap_result_path
-    self._project = project
-    self._prefix = prefix
 
   @property
   def cmd(self):
@@ -616,17 +613,6 @@ class BootstrapState(object):
     except KeyError as e:
       raise BootstrapError('Invalid bootstrap result file [%s]: %s' % (
           self._bootstrap_result_path, e))
-
-  def annotate(self, stream):
-    """Writes LogDog bootstrap annotations to an annotation stream.
-
-    Args:
-      stream (annotator.StructuredAnnotationStream): The annotation stream to
-          write to.
-    """
-    with stream.step('LogDog Bootstrap') as st:
-      st.set_build_property('logdog_project', self._project)
-      st.set_build_property('logdog_prefix', self._prefix)
 
 
 def add_arguments(parser):
