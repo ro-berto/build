@@ -81,6 +81,7 @@ _AddTestSpec('mac_10_12_perf_bisect', 'mac')
 _AddTestSpec('mac_retina_perf_bisect', 'mac')
 _AddTestSpec('mac_pro_perf_bisect', 'mac')
 _AddTestSpec('mac_air_perf_bisect', 'mac')
+_AddTestSpec('mac_10_12_mini_8gb_perf_bisect', 'mac')
 
 _AddTestSpec('linux_perf_bisect', 'linux')
 
