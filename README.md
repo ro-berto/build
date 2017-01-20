@@ -1,8 +1,8 @@
 # build
 
-Hi build contributor! If you do any change in `scripts/master/` or touching the
+Hi build contributor! If you do any change in `scripts/master/` or touching any
 master's `html/` directories, you must restart master.chromium.fyi first and
-ensure that the master still work.
+ensure that it still works before restarting other masters.
 
 ## Recipes
 
