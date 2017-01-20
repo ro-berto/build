@@ -41,6 +41,10 @@ class PerfTryJobApi(recipe_api.RecipeApi):
 
   def __init__(self, *args, **kwargs):
     super(PerfTryJobApi, self).__init__(*args, **kwargs)
+    self.is_internal = False
+
+  def set_internal(self):
+    self.is_internal = True  # pragma: no cover
 
   def start_perf_try_job(self, api, affected_files, bot_update_step, bot_db):
     """Entry point pert tryjob or CQ tryjob."""
@@ -65,7 +69,7 @@ class PerfTryJobApi(recipe_api.RecipeApi):
 
     # Always set the upload bucket to public for perf try jobs on the public
     # waterfall, and private on internal ones.
-    _modify_upload_bucket(test_cfg, not self.m.auto_bisect.internal_bisect)
+    _modify_upload_bucket(test_cfg, not self.is_internal)
 
     # Run with patch.
     with self.m.step.nest('Running WITH patch'):

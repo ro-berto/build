@@ -392,6 +392,9 @@ class AutoBisectStagingApi(recipe_api.RecipeApi):
                                            api.properties)
         else:
           api.step('***PERF TRYJOB***', [])
+          if self.internal_bisect:  # pragma: no cover
+            self.m.perf_try_staging.set_internal()
+
           self.m.perf_try_staging.start_perf_try_job(
               api, affected_files, update_step, self.bot_db)
 
