@@ -932,6 +932,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       # Done so that raising an InfraFailure doesn't cause an error.
       # TODO(martiniss): Remove this hack. Requires recipe engine change
       step_result._retcode = 2
+      step_result.presentation.status = self.m.step.EXCEPTION
       raise recipe_api.InfraFailure(
           '\n'.join(template % f for f in infra_failures), result=step_result)
 
