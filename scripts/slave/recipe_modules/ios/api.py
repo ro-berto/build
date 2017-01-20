@@ -113,6 +113,7 @@ class iOSApi(recipe_api.RecipeApi):
     self.__config.setdefault('gn_args', [])
     self.__config.setdefault('tests', [])
     self.__config.setdefault('triggered bots', {})
+    self.__config.setdefault('upload', [])
 
     self.__config['mastername'] = master_name
 
@@ -335,6 +336,63 @@ class iOSApi(recipe_api.RecipeApi):
             ninja_log_compiler='goma',
             ninja_log_command=cmd,
             ninja_log_exit_status=exit_status)
+
+  def upload_tgz(self, artifact, bucket, path):
+    """Tar gzips and uploads the given artifact to Google Storage.
+
+    Args:
+      artifact: Name of the artifact to upload. Will be found relative to the
+        out directory, so must have already been compiled.
+      bucket: Name of the Google Storage bucket to upload to.
+      path: Path to upload the artifact to relative to the bucket.
+    """
+    tgz = self.m.path.basename(path)
+    archive = self.m.path.mkdtemp('tgz').join(tgz)
+    cwd = self.m.path['start_dir'].join(self.most_recent_app_dir)
+    cmd = [
+        'tar',
+        '--create',
+        '--directory', cwd,
+        '--file', archive,
+        '--gzip',
+        '--verbose',
+        artifact,
+    ]
+    self.m.step('tar %s' % tgz, cmd, cwd=cwd)
+    self.m.gsutil.upload(
+        archive,
+        bucket,
+        path,
+        link_name=tgz,
+        name='upload %s' % tgz,
+    )
+
+  def upload(self):
+    """Uploads built artifacts as instructed by this bot's build config."""
+    assert self.__config
+
+    base_path = '%s/%s' % (
+        self.m.properties['buildername'],
+        str(self.m.properties['buildnumber'] or 0),
+    )
+
+    for artifact in self.__config['upload']:
+      name = str(artifact['artifact'])
+      if artifact.get('compress'):
+        with self.m.step.nest('upload %s' % name):
+          self.upload_tgz(
+              name,
+              artifact.get('bucket', self.bucket),
+              '%s/%s' % (base_path, '%s.tar.gz' % (name.split('.', 1)[0])),
+          )
+      else:
+        self.m.gsutil.upload(
+            self.m.path['start_dir'].join(self.most_recent_app_dir, name),
+            artifact.get('bucket', self.bucket),
+            '%s/%s' % (base_path, name),
+            link_name=name,
+            name='upload %s' % name,
+        )
 
   def bootstrap_swarming(self):
     """Bootstraps Swarming."""

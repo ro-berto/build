@@ -13,6 +13,7 @@ def RunSteps(api):
   api.ios.checkout()
   api.ios.read_build_config()
   api.ios.build()
+  api.ios.upload()
   api.ios.test_swarming()
 
 def GenTests(api):
@@ -34,6 +35,7 @@ def GenTests(api):
       },
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.0',
+      'bucket': 'fake-bucket-1',
       'tests': [
         {
           'app': 'fake tests 1',
@@ -50,6 +52,16 @@ def GenTests(api):
           'device type': 'fake device 3',
           'os': '9.3',
           'xctest': True,
+        },
+      ],
+      'upload': [
+        {
+          'artifact': 'fake tests 1.app',
+          'compress': True,
+        },
+        {
+          'artifact': 'fake tests 2.app',
+          'bucket': 'fake-bucket-2',
         },
       ],
     })
