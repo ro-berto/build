@@ -292,9 +292,8 @@
     "name": "load config",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"command\": \"./tools/perf/run_benchmark -v --browser=release sunspider --output_format=valueset\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"command\": \"src/tools/perf/run_benchmark -v --browser=release sunspider --upload-bucket=private\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"max_time_minutes\": \"25\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"metric\": \"dummy/dummy\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"repeat_count\": \"1\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"target_arch\": \"ia32\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"truncate_percent\": \"25\"@@@",
@@ -514,58 +513,17 @@
       "-v",
       "--browser=release",
       "sunspider",
-      "--output_format=valueset",
       "--upload-bucket=public",
       "--reset-results",
       "--upload-results",
-      "--results-label=Patch",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--results-label=Patch"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "Running WITH patch.Performance Test (With Patch) 1 of 1",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@Captured Output@*RESULT dummy: dummy= [5.83,6.013,5.573]ms@@@",
-      "@@@STEP_LOG_LINE@Captured Output@Avg dummy: 5.907711ms@@@",
-      "@@@STEP_LOG_LINE@Captured Output@Sd  dummy: 0.255921ms@@@",
-      "@@@STEP_LOG_LINE@Captured Output@RESULT telemetry_page_measurement_results: num_failed= 0 count@@@",
-      "@@@STEP_LOG_LINE@Captured Output@RESULT telemetry_page_measurement_results: num_errored= 0 count@@@",
-      "@@@STEP_LOG_LINE@Captured Output@@@@",
-      "@@@STEP_LOG_LINE@Captured Output@View online at https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-with@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "*RESULT dummy: dummy= [5.83,6.013,5.573]ms\nAvg dummy: 5.907711ms\nSd  dummy: 0.255921ms\nRESULT telemetry_page_measurement_results: num_failed= 0 count\nRESULT telemetry_page_measurement_results: num_errored= 0 count\n\nView online at https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-with\n",
-      "[START_DIR]/bisect_results/dummy/results.txt"
-    ],
-    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "Running WITH patch.write buildbot output to disk",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[START_DIR]/bisect_results/dummy/results-valueset.json",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "Running WITH patch.Reading valueset results",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"dummy\": \"dict\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
@@ -898,108 +856,22 @@
       "-v",
       "--browser=release",
       "sunspider",
-      "--output_format=valueset",
       "--upload-bucket=public",
       "--upload-results",
-      "--results-label=TOT",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--results-label=TOT"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "Running WITHOUT patch.Performance Test (Without Patch) 1 of 1",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@Captured Output@*RESULT dummy: dummy= [5.83,6.013,5.573]ms@@@",
-      "@@@STEP_LOG_LINE@Captured Output@Avg dummy: 5.907711ms@@@",
-      "@@@STEP_LOG_LINE@Captured Output@Sd  dummy: 0.255921ms@@@",
-      "@@@STEP_LOG_LINE@Captured Output@RESULT telemetry_page_measurement_results: num_failed= 0 count@@@",
-      "@@@STEP_LOG_LINE@Captured Output@RESULT telemetry_page_measurement_results: num_errored= 0 count@@@",
-      "@@@STEP_LOG_LINE@Captured Output@@@@",
-      "@@@STEP_LOG_LINE@Captured Output@View online at https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-without@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "*RESULT dummy: dummy= [5.83,6.013,5.573]ms\nAvg dummy: 5.907711ms\nSd  dummy: 0.255921ms\nRESULT telemetry_page_measurement_results: num_failed= 0 count\nRESULT telemetry_page_measurement_results: num_errored= 0 count\n\nView online at https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-without\n",
-      "[START_DIR]/bisect_results/dummy/results.txt"
-    ],
-    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "Running WITHOUT patch.write buildbot output to disk",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[START_DIR]/bisect_results/dummy/results-valueset.json",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "Running WITHOUT patch.Reading valueset results",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"dummy\": \"dict\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "Results",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>",
-      "===== PERF TRY JOB RESULTS =====",
-      "",
-      "Test Command: src/tools/perf/run_benchmark -v --browser=release sunspider --output_format=valueset --upload-bucket=public",
-      "Test Metric: dummy/dummy",
-      "Relative Change: 88.88889%",
-      "Standard Error: +- 0.00000 delta",
-      "",
-      "Revision    Mean        Std.Error",
-      "Patch       1.0         0.0",
-      "No Patch    9.0         0.0",
-      "<br/>@@@",
-      "@@@STEP_LINK@HTML Results@https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-without@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/catapult/tracing/bin/compare_samples",
-      "[START_DIR]/bisect_results/dummy/results-valueset.json",
-      "[START_DIR]/bisect_results/dummy/results-valueset.json",
-      "dummy/dummy",
-      "--valueset"
-    ],
-    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "Results.Parse metric values",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"sampleA\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    1, @@@",
-      "@@@STEP_LOG_LINE@json.output@    1, @@@",
-      "@@@STEP_LOG_LINE@json.output@    1@@@",
-      "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"sampleB\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    9, @@@",
-      "@@@STEP_LOG_LINE@json.output@    9, @@@",
-      "@@@STEP_LOG_LINE@json.output@    9@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
+    "name": "Results"
   },
   {
     "cmd": [],
@@ -1010,40 +882,10 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/catapult/tracing/bin/compare_samples",
-      "[START_DIR]/bisect_results/dummy/results-valueset.json",
-      "[START_DIR]/bisect_results/dummy/results-valueset.json",
-      "dummy/dummy",
-      "--valueset"
-    ],
-    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "name": "Notify dashboard.Parse metric values",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"sampleA\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    1, @@@",
-      "@@@STEP_LOG_LINE@json.output@    1, @@@",
-      "@@@STEP_LOG_LINE@json.output@    1@@@",
-      "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"sampleB\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    9, @@@",
-      "@@@STEP_LOG_LINE@json.output@    9, @@@",
-      "@@@STEP_LOG_LINE@json.output@    9@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py",
       "https://chromeperf.appspot.com/post_bisect_results",
       "-i",
-      "{\"data\": \"{\\\"status\\\": \\\"completed\\\", \\\"std_err\\\": 0.0, \\\"metric\\\": \\\"dummy/dummy\\\", \\\"profiler_links\\\": [], \\\"buildbot_log_url\\\": \\\"http://c.org/p/cr/builders/linux_perf_bisect/builds/571\\\", \\\"command\\\": \\\"src/tools/perf/run_benchmark -v --browser=release sunspider --output_format=valueset --upload-bucket=public\\\", \\\"result\\\": \\\"Revision    Mean        Std.Error\\\\nPatch       1.0         0.0\\\\nNo Patch    9.0         0.0\\\", \\\"bisect_bot\\\": \\\"linux_perf_bisect\\\", \\\"try_job_id\\\": null, \\\"cloud_link\\\": \\\"https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-without\\\", \\\"change\\\": 88.88888888888889}\"}",
+      "{\"data\": \"{\\\"status\\\": \\\"completed\\\", \\\"warnings\\\": [\\\"No values from test with patch, or none from test without patch.\\\\n Output with patch:\\\\n\\\\n\\\\nOutput without patch:\\\\n\\\"], \\\"metric\\\": null, \\\"buildbot_log_url\\\": \\\"http://c.org/p/cr/builders/linux_perf_bisect/builds/571\\\", \\\"command\\\": \\\"src/tools/perf/run_benchmark -v --browser=release sunspider --upload-bucket=public\\\", \\\"bisect_bot\\\": \\\"linux_perf_bisect\\\", \\\"try_job_id\\\": null, \\\"cloud_link\\\": \\\"\\\"}\"}",
       "-o",
       "/path/to/tmp/json"
     ],

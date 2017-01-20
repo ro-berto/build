@@ -147,6 +147,50 @@ m/cloudstorage/b/chromium-telemetry/o/html-results/results-without
             api.json.output({'status_code': 200})))
 
   perf_try_json = {
+      'command': 'src/tools/perf/run_benchmark -v --browser=release sunspider' +
+          ' --upload-bucket=private',
+      'max_time_minutes': '25',
+      'repeat_count': '1',
+      'truncate_percent': '25',
+      'target_arch': 'ia32',
+  }
+
+  yield (api.test('basic_perf_tryjob_with_bucket') + api.properties.tryserver(
+      path_config='kitchen',
+      mastername='tryserver.chromium.perf',
+      buildername='linux_perf_bisect',
+      patch_storage='rietveld',
+      patchset='20001',
+      issue='12345',
+      is_test=True,
+      rietveld="https://codereview.chromium.org") + api.override_step_data(
+          'git diff to analyze patch',
+          api.raw_io.stream_output('tools/run-perf-test.cfg')) +
+         api.override_step_data('load config', api.json.output(perf_try_json)) +
+         api.step_data('Running WITHOUT patch.gsutil exists', retcode=1) +
+         api.step_data(
+            'Running WITH patch.buildbucket.put',
+            stdout=api.json.output(buildbucket_put_response)) +
+         api.step_data(
+            'Running WITHOUT patch.buildbucket.put',
+            stdout=api.json.output(buildbucket_put_response)) +
+         api.step_data(
+            'Running WITH patch.buildbucket.get',
+            stdout=api.json.output(buildbucket_get_response)) +
+         api.step_data(
+            'Running WITH patch.buildbucket.get (2)',
+            stdout=api.json.output(buildbucket_get_response)) +
+         api.step_data(
+            'Running WITH patch.Performance Test (With Patch) 1 of 1',
+            stdout=api.raw_io.output(str(results_without_patch))) +
+         api.step_data(
+            'Running WITHOUT patch.Performance Test (Without Patch) 1 of 1',
+            stdout=api.raw_io.output(str(results_with_patch))) +
+         api.step_data(
+            'Notify dashboard.Post bisect results',
+            api.json.output({'status_code': 200})))
+
+  perf_try_json = {
       'command': 'src/tools/perf/run_benchmark -v --browser=release sunspider',
       'max_time_minutes': '25',
       'repeat_count': '1',

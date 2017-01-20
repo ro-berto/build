@@ -1,4 +1,5 @@
 DEPS = [
+    'auto_bisect',
     'bisect_tester_staging',
     'buildbucket',
     'chromium',

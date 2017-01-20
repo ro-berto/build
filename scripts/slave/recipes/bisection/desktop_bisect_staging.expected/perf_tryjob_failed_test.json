@@ -515,6 +515,7 @@
       "--browser=release",
       "sunspider",
       "--output_format=valueset",
+      "--upload-bucket=public",
       "--reset-results",
       "--upload-results",
       "--results-label=Patch",
@@ -879,6 +880,7 @@
       "--browser=release",
       "sunspider",
       "--output_format=valueset",
+      "--upload-bucket=public",
       "--upload-results",
       "--results-label=TOT",
       "--output-dir=[START_DIR]/bisect_results/dummy"
@@ -917,7 +919,7 @@
       "@@@STEP_TEXT@<br/>",
       "===== PERF TRY JOB RESULTS =====",
       "",
-      "Test Command: src/tools/perf/run_benchmark -v --browser=release sunspider --output_format=valueset",
+      "Test Command: src/tools/perf/run_benchmark -v --browser=release sunspider --output_format=valueset --upload-bucket=public",
       "Test Metric: dummy/dummy",
       "Relative Change: 88.88889%",
       "Standard Error: +- 0.00000 delta",
@@ -1000,7 +1002,7 @@
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py",
       "https://chromeperf.appspot.com/post_bisect_results",
       "-i",
-      "{\"data\": \"{\\\"status\\\": \\\"completed\\\", \\\"std_err\\\": 0.0, \\\"metric\\\": \\\"dummy/dummy\\\", \\\"profiler_links\\\": [], \\\"buildbot_log_url\\\": \\\"http://c.org/p/cr/builders/linux_perf_bisect/builds/571\\\", \\\"command\\\": \\\"src/tools/perf/run_benchmark -v --browser=release sunspider --output_format=valueset\\\", \\\"result\\\": \\\"Revision    Mean        Std.Error\\\\nPatch       1.0         0.0\\\\nNo Patch    9.0         0.0\\\", \\\"bisect_bot\\\": \\\"linux_perf_bisect\\\", \\\"try_job_id\\\": null, \\\"cloud_link\\\": \\\"\\\", \\\"change\\\": 88.88888888888889}\"}",
+      "{\"data\": \"{\\\"status\\\": \\\"completed\\\", \\\"std_err\\\": 0.0, \\\"metric\\\": \\\"dummy/dummy\\\", \\\"profiler_links\\\": [], \\\"buildbot_log_url\\\": \\\"http://c.org/p/cr/builders/linux_perf_bisect/builds/571\\\", \\\"command\\\": \\\"src/tools/perf/run_benchmark -v --browser=release sunspider --output_format=valueset --upload-bucket=public\\\", \\\"result\\\": \\\"Revision    Mean        Std.Error\\\\nPatch       1.0         0.0\\\\nNo Patch    9.0         0.0\\\", \\\"bisect_bot\\\": \\\"linux_perf_bisect\\\", \\\"try_job_id\\\": null, \\\"cloud_link\\\": \\\"\\\", \\\"change\\\": 88.88888888888889}\"}",
       "-o",
       "/path/to/tmp/json"
     ],

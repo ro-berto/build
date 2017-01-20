@@ -63,6 +63,10 @@ class PerfTryJobApi(recipe_api.RecipeApi):
     # until dashboard and trybot scripts are changed.
     _prepend_src_to_path_in_command(test_cfg)
 
+    # Always set the upload bucket to public for perf try jobs on the public
+    # waterfall, and private on internal ones.
+    _modify_upload_bucket(test_cfg, not self.m.auto_bisect.internal_bisect)
+
     # Run with patch.
     with self.m.step.nest('Running WITH patch'):
       results_with_patch = self._build_and_run_tests(
@@ -547,6 +551,20 @@ def _pretty_table(data):
   for row in data:
     results.append(('%-12s' * len(row) % tuple(row)).rstrip())
   return '\n'.join(results)
+
+
+def _modify_upload_bucket(test_cfg, is_public):
+  bucket = 'public' if is_public else 'private'
+  new_arg = '--upload-bucket=' + bucket
+  command = test_cfg.get('command')
+
+  if not '--upload-bucket' in command:
+    command = '%s %s' % (command, new_arg)
+  else:
+    out_dir_regex = re.compile(
+        r"--upload-bucket[= ](?P<path>([a-zA-Z]+))")
+    command = out_dir_regex.sub(new_arg, command)
+  test_cfg.update({'command': command})
 
 
 def _prepend_src_to_path_in_command(test_cfg):
