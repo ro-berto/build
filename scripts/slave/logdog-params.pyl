@@ -114,9 +114,21 @@
   # chromium.perf logs are considered "internal" for viewing purposes, even
   # though they are described in Chromium's build repository.
   'chrome': {
-    'chromium.perf': {},
-    'chromium.perf.fyi': {},
-    'tryserver.chromium.perf': {},
+    'chromium.perf': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'chromium.perf.fyi': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'tryserver.chromium.perf': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
   },
 
   # The CrOS tryserver is considered "internal" for viewing purposes, even
