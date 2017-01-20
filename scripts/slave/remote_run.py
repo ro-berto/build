@@ -88,7 +88,7 @@ def _install_cipd_packages(path, *packages):
     raise Exception('Failed to install CIPD packages.')
 
 
-def main(argv):
+def main(argv, stream):
   parser = argparse.ArgumentParser()
   parser.add_argument('--repository', required=True,
       help='URL of a git repository to fetch.')
@@ -233,6 +233,7 @@ def main(argv):
                                       recipe_cmd)
 
       LOGGER.info('Bootstrapping through LogDog: %s', bs.cmd)
+      bs.annotate(stream)
       _ = _call(bs.cmd)
       recipe_return_code = bs.get_result()
     except logdog_bootstrap.NotBootstrapped as e:
@@ -277,8 +278,17 @@ def shell_main(argv):
     return _call([sys.executable] + argv)
 
   stream = annotator.StructuredAnnotationStream()
+  exc_info = None
+  try:
+    return main(argv, stream)
+  except Exception:
+    exc_info = sys.exc_info()
+
+  # Report on the "remote_run" execution. If an exception (infra failure)
+  # occurred, raise it so that the build and the step turn purple.
   with stream.step('remote_run_result'):
-    return main(argv)
+    if exc_info is not None:
+      raise exc_info[0], exc_info[1], exc_info[2]
 
 
 if __name__ == '__main__':
