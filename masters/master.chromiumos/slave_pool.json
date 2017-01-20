@@ -5,28 +5,28 @@
         "build98-m2"
       ], 
       "amd64-generic-incremental": [
-        "build86-m2"
+        "cros-beefy423-c2"
       ], 
       "amd64-generic-paladin": [
         "build203-m2"
       ], 
       "arm-generic-full": [
-        "build92-m2"
+        "cros-beefy424-c2"
       ], 
       "arm-generic-paladin": [
-        "build263-m2"
+        "cros-beefy425-c2"
       ], 
       "chromiumos-sdk": [
         "build112-m2"
       ], 
       "daisy-full": [
-        "build326-m2"
+        "cros-beefy426-c2"
       ], 
       "daisy-incremental": [
-        "build87-m2"
+        "cros-beefy427-c2"
       ], 
       "oak-full": [
-        "build323-m2"
+        "cros-beefy428-c2"
       ], 
       "x86-generic-full": [
         "build182-m2"
@@ -54,8 +54,13 @@
     }
   }, 
   "unallocated": [
+    "build263-m2", 
+    "build323-m2", 
+    "build326-m2", 
     "build333-m2", 
-    "build94-m2", 
-    "cros199-c2"
+    "build86-m2", 
+    "build87-m2", 
+    "build92-m2", 
+    "build94-m2"
   ]
 }
