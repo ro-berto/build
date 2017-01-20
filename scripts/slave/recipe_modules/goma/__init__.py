@@ -2,6 +2,7 @@ DEPS = [
   'depot_tools/cipd',
   'depot_tools/depot_tools',
   'depot_tools/gclient',
+  'file',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/platform',

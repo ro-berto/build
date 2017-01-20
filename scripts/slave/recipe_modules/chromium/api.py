@@ -170,11 +170,8 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     goma_env['GOMA_CACHE_DIR'] = self.m.goma.default_cache_path
 
-    safe_buildername = re.sub(r'[^a-zA-Z0-9]', '_',
-                              self.m.properties['buildername']) + '.gomadeps'
-
-    goma_env['GOMA_DEPS_CACHE_FILE'] = safe_buildername
-
+    # Enable goma DepsCache
+    goma_env['GOMA_DEPS_CACHE_FILE'] = "goma_deps_cache"
 
     if self.c.compile_py.mode:
       if (self.c.compile_py.mode == 'google_chrome' or

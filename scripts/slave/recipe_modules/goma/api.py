@@ -53,12 +53,14 @@ class GomaApi(recipe_api.RecipeApi):
 
   @property
   def default_cache_path(self):
+    safe_buildername = re.sub(r'[^a-zA-Z0-9]', '_',
+                              self.m.properties['buildername'])
     try:
       # Legacy Buildbot cache path:
-      return self.m.path['goma_cache']
+      return self.m.path['goma_cache'].join(safe_buildername)
     except KeyError:
       # New more generic cache path
-      return self.m.path['cache'].join('goma')
+      return self.m.path['cache'].join('goma', safe_buildername)
 
   @property
   def recommended_goma_jobs(self):
@@ -135,6 +137,11 @@ class GomaApi(recipe_api.RecipeApi):
   @property
   def build_data_dir(self):
     return self.m.properties.get('build_data_dir')
+
+  def _make_goma_cache_dir(self, goma_cache_dir):
+    """Ensure goma_cache_dir exist. Make it if not exists."""
+
+    self.m.file.makedirs('goma cache directory', goma_cache_dir)
 
   def _start_cloudtail(self):
     """Start cloudtail to upload compiler_proxy.INFO
@@ -218,6 +225,7 @@ class GomaApi(recipe_api.RecipeApi):
         goma_ctl_start_env.update(env)
 
       try:
+        self._make_goma_cache_dir(self.default_cache_path)
         self.m.python(
             name='start_goma',
             script=self.goma_ctl,
