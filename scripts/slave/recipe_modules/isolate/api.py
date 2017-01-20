@@ -157,8 +157,8 @@ class IsolateApi(recipe_api.RecipeApi):
           'isolate %s' % target,
           self.resource('isolate.py'),
           args + [
-            '--isolate', build_dir.join('%s.isolate' % t),
-            '--isolated', build_dir.join('%s.isolated' % t),
+            '--isolate', build_dir.join('%s.isolate' % target),
+            '--isolated', build_dir.join('%s.isolated' % target),
           ],
           step_test_data=lambda: self.test_api.output_json([target]),
           **kwargs)
