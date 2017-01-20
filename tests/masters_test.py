@@ -268,6 +268,7 @@ def main(argv):
       'master.client.syzygy': 'Syzygy',
       'master.client.v8': 'V8',
       'master.client.v8.branches': 'V8Branches',
+      'master.client.v8.chromium': 'V8Chromium',
       'master.client.v8.fyi': 'V8FYI',
       'master.client.v8.ports': 'V8Ports',
       'master.client.wasm.llvm': 'WasmLlvm',
