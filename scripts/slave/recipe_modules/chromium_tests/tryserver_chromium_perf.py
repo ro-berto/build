@@ -79,7 +79,6 @@ _AddTestSpec('winx64nvidia_perf_bisect', 'win')
 _AddTestSpec('mac_10_11_perf_bisect', 'mac')
 _AddTestSpec('mac_10_12_perf_bisect', 'mac')
 _AddTestSpec('mac_retina_perf_bisect', 'mac')
-_AddTestSpec('mac_hdd_perf_bisect', 'mac')
 _AddTestSpec('mac_pro_perf_bisect', 'mac')
 _AddTestSpec('mac_air_perf_bisect', 'mac')
 
