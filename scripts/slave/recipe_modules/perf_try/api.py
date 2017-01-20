@@ -41,6 +41,10 @@ class PerfTryJobApi(recipe_api.RecipeApi):
 
   def __init__(self, *args, **kwargs):
     super(PerfTryJobApi, self).__init__(*args, **kwargs)
+    self.is_internal = False
+
+  def set_internal(self):
+    self.is_internal = True  # pragma: no cover
 
   def start_perf_try_job(self, api, affected_files, bot_update_step, bot_db):
     """Entry point pert tryjob or CQ tryjob."""
@@ -62,6 +66,10 @@ class PerfTryJobApi(recipe_api.RecipeApi):
     # TODO(prasadv): This is tempory hack to prepend 'src' to test command,
     # until dashboard and trybot scripts are changed.
     _prepend_src_to_path_in_command(test_cfg)
+
+    # Always set the upload bucket to public for perf try jobs on the public
+    # waterfall, and private on internal ones.
+    _modify_upload_bucket(test_cfg, not self.is_internal)
 
     # Run with patch.
     with self.m.step.nest('Running WITH patch'):
@@ -547,6 +555,20 @@ def _pretty_table(data):
   for row in data:
     results.append(('%-12s' * len(row) % tuple(row)).rstrip())
   return '\n'.join(results)
+
+
+def _modify_upload_bucket(test_cfg, is_public):
+  bucket = 'public' if is_public else 'private'
+  new_arg = '--upload-bucket=' + bucket
+  command = test_cfg.get('command')
+
+  if not '--upload-bucket' in command:
+    command = '%s %s' % (command, new_arg)
+  else:
+    out_dir_regex = re.compile(
+        r"--upload-bucket[= ](?P<path>([a-zA-Z]+))")
+    command = out_dir_regex.sub(new_arg, command)
+  test_cfg.update({'command': command})
 
 
 def _prepend_src_to_path_in_command(test_cfg):
