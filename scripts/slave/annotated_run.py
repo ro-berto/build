@@ -74,7 +74,7 @@ def _check_command(cmd, **kwargs):
   return stdout
 
 
-def get_recipe_properties(workdir, build_properties,
+def get_recipe_properties(stream, workdir, build_properties,
                           use_factory_properties_from_disk):
   """Constructs the recipe's properties from buildbot's properties.
 
@@ -95,7 +95,6 @@ def get_recipe_properties(workdir, build_properties,
   if not use_factory_properties_from_disk:
     return build_properties
 
-  stream = annotator.StructuredAnnotationStream()
   with stream.step('setup_properties') as s:
     factory_properties = {}
 
@@ -246,7 +245,7 @@ def clean_old_recipe_engine():
         os.remove(os.path.join(dirpath, filename))
 
 
-def _exec_recipe(rt, opts, basedir, tdir, properties):
+def _exec_recipe(rt, opts, stream, basedir, tdir, properties):
   # Find out if the recipe we intend to run is in build_internal's recipes. If
   # so, use recipes.py from there, otherwise use the one from build.
   recipe_file = properties['recipe'].replace('/', os.path.sep) + '.py'
@@ -298,6 +297,7 @@ def _exec_recipe(rt, opts, basedir, tdir, properties):
                                     recipe_cmd)
 
     LOGGER.info('Bootstrapping through LogDog: %s', bs.cmd)
+    bs.annotate(stream)
     _, _ = _run_command(bs.cmd, dry_run=opts.dry_run)
     recipe_return_code = bs.get_result()
   except logdog_bootstrap.NotBootstrapped as e:
@@ -354,8 +354,10 @@ def main(argv):
     # TODO(crbug.com/551165): remove flag "factory_properties".
     use_factory_properties_from_disk = (opts.use_factory_properties_from_disk or
                                         bool(opts.factory_properties))
+
+    stream = annotator.StructuredAnnotationStream()
     properties = get_recipe_properties(
-        tdir, opts.build_properties, use_factory_properties_from_disk)
+        stream, tdir, opts.build_properties, use_factory_properties_from_disk)
     LOGGER.debug('Loaded properties: %s', properties)
 
     # Setup monitoring directory and send a monitoring event.
@@ -372,7 +374,7 @@ def main(argv):
     monitoring_utils.write_build_monitoring_event(build_data_dir, properties)
 
     # Execute our recipe.
-    return _exec_recipe(rt, opts, basedir, tdir, properties)
+    return _exec_recipe(rt, opts, stream, basedir, tdir, properties)
 
 
 def shell_main(argv):

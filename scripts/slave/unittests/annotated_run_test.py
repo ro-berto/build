@@ -10,6 +10,7 @@ import collections
 import json
 import logging
 import os
+import StringIO
 import subprocess
 import sys
 import tempfile
@@ -18,6 +19,7 @@ import unittest
 import test_env  # pylint: disable=W0403,W0611
 
 import mock
+from common import annotator
 from common import env
 from slave import annotated_run
 from slave import logdog_bootstrap
@@ -92,6 +94,9 @@ class AnnotatedRunExecTest(unittest.TestCase):
     annotated_run._builder_dir.return_value = '/home/user/builder'
 
     self.rt = robust_tempdir.RobustTempdir(prefix='annotated_run_test')
+    self.stream_output = StringIO.StringIO()
+    self.stream = annotator.StructuredAnnotationStream(
+        stream=self.stream_output)
     self.basedir = self.rt.tempdir()
     self.tdir = self.rt.tempdir()
     self.opts = MockOptions(
@@ -137,8 +142,9 @@ class AnnotatedRunExecTest(unittest.TestCase):
   def test_exec_successful(self):
     annotated_run._run_command.return_value = (0, '')
 
-    rv = annotated_run._exec_recipe(self.rt, self.opts, self.basedir, self.tdir,
-                                    self.properties)
+    rv = annotated_run._exec_recipe(
+        self.rt, self.opts, self.stream, self.basedir, self.tdir,
+        self.properties)
     self.assertEqual(rv, 0)
     self._assertRecipeProperties(self.properties)
 
@@ -149,25 +155,41 @@ class AnnotatedRunExecTest(unittest.TestCase):
   @mock.patch('slave.logdog_bootstrap.BootstrapState.get_result')
   def test_exec_with_logdog_bootstrap(self, bs_result, bootstrap):
     bootstrap.return_value = logdog_bootstrap.BootstrapState(
-        ['logdog_bootstrap'] + self.recipe_args, '/path/to/result.json')
+        ['logdog_bootstrap'] + self.recipe_args, '/path/to/result.json',
+        'project', 'prefix')
     bootstrap.return_value.get_result.return_value = 13
     annotated_run._run_command.return_value = (13, '')
 
-    rv = annotated_run._exec_recipe(self.rt, self.opts, self.basedir, self.tdir,
-                                    self.properties)
+    rv = annotated_run._exec_recipe(
+        self.rt, self.opts, self.stream, self.basedir, self.tdir,
+        self.properties)
 
     self.assertEqual(rv, 13)
     annotated_run._run_command.assert_called_once_with(
         ['logdog_bootstrap'] + self.recipe_args, dry_run=False)
     self._assertRecipeProperties(self.properties)
 
+    self.assertEqual(
+        [l for l in self.stream_output.getvalue().splitlines() if l],
+        [
+            '@@@SEED_STEP LogDog Bootstrap@@@',
+            '@@@STEP_CURSOR LogDog Bootstrap@@@',
+            '@@@STEP_STARTED@@@',
+            '@@@SET_BUILD_PROPERTY@logdog_project@project@@@',
+            '@@@SET_BUILD_PROPERTY@logdog_prefix@prefix@@@',
+            '@@@STEP_CURSOR LogDog Bootstrap@@@',
+            '@@@STEP_CLOSED@@@',
+        ]
+    )
+
   @mock.patch('slave.logdog_bootstrap.bootstrap',
               side_effect=Exception('Unhandled situation.'))
   def test_runs_directly_if_bootstrap_fails(self, bootstrap):
     annotated_run._run_command.return_value = (123, '')
 
-    rv = annotated_run._exec_recipe(self.rt, self.opts, self.basedir, self.tdir,
-                                    self.properties)
+    rv = annotated_run._exec_recipe(
+        self.rt, self.opts, self.stream, self.basedir, self.tdir,
+        self.properties)
     self.assertEqual(rv, 123)
 
     bootstrap.assert_called_once()
@@ -178,7 +200,8 @@ class AnnotatedRunExecTest(unittest.TestCase):
   @mock.patch('slave.logdog_bootstrap.BootstrapState.get_result')
   def test_runs_directly_if_logdog_error(self, bs_result, bootstrap):
     bootstrap.return_value = logdog_bootstrap.BootstrapState(
-        ['logdog_bootstrap'] + self.recipe_args, '/path/to/result.json')
+        ['logdog_bootstrap'] + self.recipe_args, '/path/to/result.json',
+        'project', 'prefix')
     bs_result.side_effect = logdog_bootstrap.BootstrapError()
 
     # Return a different error code depending on whether we're bootstrapping so
@@ -190,8 +213,9 @@ class AnnotatedRunExecTest(unittest.TestCase):
       return (2, '')
     annotated_run._run_command.side_effect = get_error_code
 
-    rv = annotated_run._exec_recipe(self.rt, self.opts, self.basedir, self.tdir,
-                                    self.properties)
+    rv = annotated_run._exec_recipe(
+        self.rt, self.opts, self.stream, self.basedir, self.tdir,
+        self.properties)
     self.assertEqual(rv, 2)
 
     bootstrap.assert_called_once()
@@ -200,6 +224,18 @@ class AnnotatedRunExecTest(unittest.TestCase):
         mock.call(['logdog_bootstrap'] + self.recipe_args, dry_run=False),
         mock.call(self.recipe_args, dry_run=False),
     ])
+    self.assertEqual(
+        [l for l in self.stream_output.getvalue().splitlines() if l],
+        [
+            '@@@SEED_STEP LogDog Bootstrap@@@',
+            '@@@STEP_CURSOR LogDog Bootstrap@@@',
+            '@@@STEP_STARTED@@@',
+            '@@@SET_BUILD_PROPERTY@logdog_project@project@@@',
+            '@@@SET_BUILD_PROPERTY@logdog_prefix@prefix@@@',
+            '@@@STEP_CURSOR LogDog Bootstrap@@@',
+            '@@@STEP_CLOSED@@@',
+        ]
+    )
 
 
 if __name__ == '__main__':

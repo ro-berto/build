@@ -88,7 +88,7 @@ def _install_cipd_packages(path, *packages):
     raise Exception('Failed to install CIPD packages.')
 
 
-def main(argv):
+def main(argv, stream):
   parser = argparse.ArgumentParser()
   parser.add_argument('--repository', required=True,
       help='URL of a git repository to fetch.')
@@ -233,6 +233,7 @@ def main(argv):
                                       recipe_cmd)
 
       LOGGER.info('Bootstrapping through LogDog: %s', bs.cmd)
+      bs.annotate(stream)
       _ = _call(bs.cmd)
       recipe_return_code = bs.get_result()
     except logdog_bootstrap.NotBootstrapped as e:
@@ -278,7 +279,7 @@ def shell_main(argv):
 
   stream = annotator.StructuredAnnotationStream()
   with stream.step('remote_run_result'):
-    return main(argv)
+    return main(argv, stream)
 
 
 if __name__ == '__main__':
