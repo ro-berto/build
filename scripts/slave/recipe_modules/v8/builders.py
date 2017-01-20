@@ -305,7 +305,7 @@ BUILDERS = {
         'build_gs_archive': 'linux_nosnap_rel_archive',
         'enable_swarming': True,
         'tests': [
-          V8Testing_2,
+          V8Testing_3,
           SimdJs,
           Test262,
           Mozilla,
@@ -323,7 +323,7 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - nosnap debug builder',
         'build_gs_archive': 'linux_nosnap_dbg_archive',
         'enable_swarming': True,
-        'tests': [V8Testing_4, Mozilla, SimdJs],
+        'tests': [V8Testing_5, Mozilla, SimdJs],
         'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
         'swarming_properties': {
@@ -1323,7 +1323,7 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [
-          V8Testing_2,
+          V8Testing_3,
           V8TestingExtra_2,
           Test262,
           Test262Extra_2,
@@ -1335,11 +1335,11 @@ BUILDERS = {
         ] + with_test_args(
             'armv8-a',
             ['--extra-flags', '--enable-armv8'],
-            [V8Testing_2, Test262, Mozilla, SimdJs],
+            [V8Testing_3, Test262, Mozilla, SimdJs],
         ) + with_test_args(
             'novfp3',
             ['--novfp3'],
-            [V8Testing_2, Test262, Mozilla, SimdJs],
+            [V8Testing_3, Test262, Mozilla, SimdJs],
         ),
         'testing': {'platform': 'linux'},
       },
