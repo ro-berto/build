@@ -34,8 +34,8 @@ def RunSteps(api):
   api.path.c.dynamic_paths['bisect_results'] = api.path['start_dir'].join(
       'bisect_results')
   api.auto_bisect.start_try_job(api, update_step=update_step,
-                                        bot_db=bot_db,
-                                        do_not_nest_wait_for_revision=True)
+                                bot_db=bot_db,
+                                do_not_nest_wait_for_revision=True)
 
 
 def GenTests(api):
@@ -109,18 +109,20 @@ m/cloudstorage/b/chromium-telemetry/o/html-results/results-without
     }
 }
 
-  yield (api.test('basic_perf_tryjob') + api.properties.tryserver(
-      path_config='kitchen',
-      mastername='tryserver.chromium.perf',
-      buildername='linux_perf_bisect',
-      patch_storage='rietveld',
-      patchset='20001',
-      issue='12345',
-      is_test=True,
-      rietveld="https://codereview.chromium.org") + api.override_step_data(
+  yield (
+      api.test('basic_perf_tryjob') + api.properties.tryserver(
+          path_config='kitchen',
+          mastername='tryserver.chromium.perf',
+          buildername='linux_perf_bisect',
+          patch_storage='rietveld',
+          patchset='20001',
+          issue='12345',
+          is_test=True,
+          rietveld="https://codereview.chromium.org") +
+      api.override_step_data(
           'git diff to analyze patch',
           api.raw_io.stream_output('tools/run-perf-test.cfg')) +
-         api.override_step_data('load config', api.json.output(config_json)) +
+      api.override_step_data('load config', api.json.output(config_json)) +
          api.step_data('Running WITHOUT patch.gsutil exists', retcode=1) +
          api.step_data(
             'Running WITH patch.buildbucket.put',
@@ -136,10 +138,12 @@ m/cloudstorage/b/chromium-telemetry/o/html-results/results-without
             stdout=api.json.output(buildbucket_get_response)) +
          api.step_data(
             'Running WITH patch.Performance Test (With Patch) 1 of 1',
-            stdout=api.raw_io.output(str(results_without_patch))) +
+            api.raw_io.output(
+                str(results_with_patch), name='stdout_proxy')) +
          api.step_data(
             'Running WITHOUT patch.Performance Test (Without Patch) 1 of 1',
-            stdout=api.raw_io.output(str(results_with_patch))) +
+            api.raw_io.output(
+                str(results_without_patch), name='stdout_proxy')) +
          api.step_data(
             'Notify dashboard.Post bisect results',
             api.json.output({'status_code': 200})))
@@ -151,153 +155,50 @@ m/cloudstorage/b/chromium-telemetry/o/html-results/results-without
       'truncate_percent': '25',
       'target_arch': 'ia32',
   }
-  yield (api.test('deps_perf_tryjob') + api.properties.tryserver(
-      path_config='kitchen',
-      mastername='tryserver.chromium.perf',
-      buildername='linux_perf_bisect',
-      patch_project='v8',
-      deps_revision_overrides={'src/v8': 'feeedbeed'},
-      patch_storage='rietveld',
-      patchset='20001',
-      issue='12345',
-      is_test=True,
-      rietveld="https://codereview.chromium.org")
-      + api.properties(perf_try_config=perf_try_json)
-      + api.override_step_data(
+  yield (
+      api.test('deps_perf_tryjob') + api.properties.tryserver(
+          path_config='kitchen',
+          mastername='tryserver.chromium.perf',
+          buildername='linux_perf_bisect',
+          patch_project='v8',
+          deps_revision_overrides={'src/v8': 'feeedbeed'},
+          patch_storage='rietveld',
+          patchset='20001',
+          issue='12345',
+          is_test=True,
+          rietveld="https://codereview.chromium.org") +
+      api.properties(perf_try_config=perf_try_json) +
+      api.override_step_data(
           'git diff to analyze patch', api.raw_io.stream_output('')) +
-         api.step_data('Running WITHOUT patch.gsutil exists', retcode=1) +
-         api.step_data(
-            'Running WITH patch.buildbucket.put',
-            stdout=api.json.output(buildbucket_put_response)) +
-         api.step_data(
-            'Running WITHOUT patch.buildbucket.put',
-            stdout=api.json.output(buildbucket_put_response)) +
-         api.step_data(
-            'Running WITH patch.buildbucket.get',
-            stdout=api.json.output(buildbucket_get_response)) +
-         api.step_data(
-            'Running WITH patch.buildbucket.get (2)',
-            stdout=api.json.output(buildbucket_get_response)) +
-         api.step_data(
-            'Running WITH patch.Performance Test (With Patch) 1 of 1',
-            stdout=api.raw_io.output(str(results_without_patch))) +
-         api.step_data(
-            'Running WITHOUT patch.Performance Test (Without Patch) 1 of 1',
-            stdout=api.raw_io.output(str(results_with_patch))) +
-         api.step_data(
+      api.step_data('Running WITHOUT patch.gsutil exists', retcode=1) +
+      api.step_data(
+          'Running WITH patch.buildbucket.put',
+          stdout=api.json.output(buildbucket_put_response)) +
+      api.step_data(
+          'Running WITHOUT patch.buildbucket.put',
+          stdout=api.json.output(buildbucket_put_response)) +
+      api.step_data(
+          'Running WITH patch.buildbucket.get',
+          stdout=api.json.output(buildbucket_get_response)) +
+      api.step_data(
+          'Running WITH patch.buildbucket.get (2)',
+          stdout=api.json.output(buildbucket_get_response)) +
+      api.step_data(
+          'Running WITH patch.Performance Test (With Patch) 1 of 1',
+          api.raw_io.output(
+              str(results_with_patch), name='stdout_proxy')) +
+      api.step_data(
+          'Running WITHOUT patch.Performance Test (Without Patch) 1 of 1',
+          api.raw_io.output(
+              str(results_without_patch), name='stdout_proxy')) +
+      api.step_data(
             'Notify dashboard.Post bisect results',
             api.json.output({'status_code': 200})))
   config_json.update({'metric': 'dummy/dummy'})
 
-  yield (api.test('basic_perf_tryjob_with_metric') + api.properties.tryserver(
-      path_config='kitchen',
-      mastername='tryserver.chromium.perf',
-      buildername='linux_perf_bisect',
-      patch_storage='rietveld',
-      patchset='20001',
-      issue='12345',
-      is_test=True,
-      rietveld="https://codereview.chromium.org") + api.override_step_data(
-          'git diff to analyze patch',
-          api.raw_io.stream_output('tools/run-perf-test.cfg')) +
-          api.override_step_data('load config', api.json.output(config_json)) +
-          api.step_data('Running WITHOUT patch.gsutil exists', retcode=1) +
-          api.step_data(
-            'Running WITH patch.buildbucket.put',
-            stdout=api.json.output(buildbucket_put_response)) +
-          api.step_data(
-            'Running WITHOUT patch.buildbucket.put',
-            stdout=api.json.output(buildbucket_put_response)) +
-          api.step_data(
-            'Running WITH patch.buildbucket.get',
-            stdout=api.json.output(buildbucket_get_response)) +
-          api.step_data(
-            'Running WITH patch.buildbucket.get (2)',
-            stdout=api.json.output(buildbucket_get_response)) +
-          api.step_data(
-            'Running WITH patch.Performance Test (With Patch) 1 of 1',
-            stdout=api.raw_io.output(str(results_without_patch))) +
-          api.step_data(
-            'Running WITHOUT patch.Performance Test (Without Patch) 1 of 1',
-            stdout=api.raw_io.output(str(results_with_patch))) +
-          api.step_data(
-            'Notify dashboard.Post bisect results',
-            api.json.output({'status_code': 200})))
-
-  config_valueset = config_json
-  config_valueset['command'] += ' --output_format=valueset'
   yield (
-      api.test('basic_perf_tryjob_with_metric_valueset') +
+      api.test('basic_perf_tryjob_with_metric') +
       api.properties.tryserver(
-        path_config='kitchen',
-        mastername='tryserver.chromium.perf',
-        buildername='linux_perf_bisect',
-        patch_storage='rietveld',
-        patchset='20001',
-        issue='12345',
-        is_test=True,
-        rietveld="https://codereview.chromium.org") +
-      api.override_step_data(
-        'git diff to analyze patch',
-        api.raw_io.stream_output('tools/run-perf-test.cfg')) +
-      api.override_step_data(
-          'load config', api.json.output(config_valueset)) +
-      api.step_data('Running WITHOUT patch.gsutil exists', retcode=1) +
-      api.step_data(
-        'Running WITH patch.buildbucket.put',
-        stdout=api.json.output(buildbucket_put_response)) +
-      api.step_data(
-        'Running WITHOUT patch.buildbucket.put',
-        stdout=api.json.output(buildbucket_put_response)) +
-      api.step_data(
-        'Running WITH patch.buildbucket.get',
-        stdout=api.json.output(buildbucket_get_response)) +
-      api.step_data(
-        'Running WITH patch.buildbucket.get (2)',
-        stdout=api.json.output(buildbucket_get_response)) +
-      api.step_data(
-        'Running WITH patch.Performance Test (With Patch) 1 of 1',
-        stdout=api.raw_io.output(str(results_without_patch))) +
-      api.step_data(
-        'Running WITHOUT patch.Performance Test (Without Patch) 1 of 1',
-        stdout=api.raw_io.output(str(results_with_patch))) +
-      api.step_data(
-        'Notify dashboard.Post bisect results',
-        api.json.output({'status_code': 200})))
-
-  yield (api.test('perf_tryjob_failed_test') + api.properties.tryserver(
-      path_config='kitchen',
-      mastername='tryserver.chromium.perf',
-      buildername='linux_perf_bisect',
-      patch_storage='rietveld',
-      patchset='20001',
-      issue='12345',
-      is_test=True,
-      rietveld="https://codereview.chromium.org") + api.override_step_data(
-          'git diff to analyze patch',
-          api.raw_io.stream_output('tools/run-perf-test.cfg')) +
-          api.override_step_data('load config', api.json.output(config_json)) +
-          api.step_data('Running WITHOUT patch.gsutil exists', retcode=1) +
-          api.step_data(
-              'Running WITH patch.buildbucket.put',
-              stdout=api.json.output(buildbucket_put_response)) +
-          api.step_data(
-              'Running WITHOUT patch.buildbucket.put',
-              stdout=api.json.output(buildbucket_put_response)) +
-          api.step_data(
-              'Running WITH patch.buildbucket.get',
-              stdout=api.json.output(buildbucket_get_response)) +
-          api.step_data(
-              'Running WITH patch.buildbucket.get (2)',
-              stdout=api.json.output(buildbucket_get_response)) +
-          api.step_data(
-              'Running WITH patch.Performance Test (With Patch) 1 of 1',
-              retcode=1))
-
-  config_json.update({'good_revision': '306475', 'bad_revision': '306476'})
-
-  yield (
-      api.test('basic_perf_tryjob_with_revisions') + api.properties.tryserver(
           path_config='kitchen',
           mastername='tryserver.chromium.perf',
           buildername='linux_perf_bisect',
@@ -305,9 +206,126 @@ m/cloudstorage/b/chromium-telemetry/o/html-results/results-without
           patchset='20001',
           issue='12345',
           is_test=True,
-          rietveld="https://codereview.chromium.org") + api.override_step_data(
-              'git diff to analyze patch',
-              api.raw_io.stream_output('tools/run-perf-test.cfg')) +
+          rietveld="https://codereview.chromium.org") +
+      api.override_step_data(
+          'git diff to analyze patch',
+      api.raw_io.stream_output('tools/run-perf-test.cfg')) +
+      api.override_step_data('load config', api.json.output(config_json)) +
+      api.step_data('Running WITHOUT patch.gsutil exists', retcode=1) +
+      api.step_data(
+          'Running WITH patch.buildbucket.put',
+          stdout=api.json.output(buildbucket_put_response)) +
+      api.step_data(
+          'Running WITHOUT patch.buildbucket.put',
+          stdout=api.json.output(buildbucket_put_response)) +
+      api.step_data(
+          'Running WITH patch.buildbucket.get',
+          stdout=api.json.output(buildbucket_get_response)) +
+      api.step_data(
+          'Running WITH patch.buildbucket.get (2)',
+          stdout=api.json.output(buildbucket_get_response)) +
+      api.step_data(
+          'Running WITH patch.Performance Test (With Patch) 1 of 1',
+          api.raw_io.output(
+              str(results_with_patch), name='stdout_proxy')) +
+      api.step_data(
+          'Running WITHOUT patch.Performance Test (Without Patch) 1 of 1',
+          api.raw_io.output(
+              str(results_with_patch), name='stdout_proxy')) +
+      api.step_data(
+          'Notify dashboard.Post bisect results',
+          api.json.output({'status_code': 200})))
+
+  config_valueset = config_json
+  config_valueset['command'] += ' --output_format=valueset'
+  yield (
+      api.test('basic_perf_tryjob_with_metric_valueset') +
+      api.properties.tryserver(
+          path_config='kitchen',
+          mastername='tryserver.chromium.perf',
+          buildername='linux_perf_bisect',
+          patch_storage='rietveld',
+          patchset='20001',
+          issue='12345',
+          is_test=True,
+          rietveld="https://codereview.chromium.org") +
+      api.override_step_data(
+          'git diff to analyze patch',
+          api.raw_io.stream_output('tools/run-perf-test.cfg')) +
+      api.override_step_data(
+          'load config', api.json.output(config_valueset)) +
+      api.step_data('Running WITHOUT patch.gsutil exists', retcode=1) +
+      api.step_data(
+          'Running WITH patch.buildbucket.put',
+          stdout=api.json.output(buildbucket_put_response)) +
+      api.step_data(
+          'Running WITHOUT patch.buildbucket.put',
+          stdout=api.json.output(buildbucket_put_response)) +
+      api.step_data(
+          'Running WITH patch.buildbucket.get',
+          stdout=api.json.output(buildbucket_get_response)) +
+      api.step_data(
+          'Running WITH patch.buildbucket.get (2)',
+          stdout=api.json.output(buildbucket_get_response)) +
+      api.step_data(
+          'Running WITH patch.Performance Test (With Patch) 1 of 1',
+          api.raw_io.output(
+              str(results_with_patch), name='stdout_proxy')) +
+      api.step_data(
+          'Running WITHOUT patch.Performance Test (Without Patch) 1 of 1',
+          api.raw_io.output(
+              str(results_without_patch), name='stdout_proxy')) +
+      api.step_data(
+          'Notify dashboard.Post bisect results',
+          api.json.output({'status_code': 200})))
+
+  yield (
+      api.test('perf_tryjob_failed_test') + api.properties.tryserver(
+          path_config='kitchen',
+          mastername='tryserver.chromium.perf',
+          buildername='linux_perf_bisect',
+          patch_storage='rietveld',
+          patchset='20001',
+          issue='12345',
+          is_test=True,
+          rietveld="https://codereview.chromium.org") +
+      api.override_step_data(
+          'git diff to analyze patch',
+      api.raw_io.stream_output('tools/run-perf-test.cfg')) +
+      api.override_step_data('load config', api.json.output(config_json)) +
+      api.step_data('Running WITHOUT patch.gsutil exists', retcode=1) +
+      api.step_data(
+          'Running WITH patch.buildbucket.put',
+          stdout=api.json.output(buildbucket_put_response)) +
+      api.step_data(
+          'Running WITHOUT patch.buildbucket.put',
+          stdout=api.json.output(buildbucket_put_response)) +
+      api.step_data(
+          'Running WITH patch.buildbucket.get',
+          stdout=api.json.output(buildbucket_get_response)) +
+      api.step_data(
+          'Running WITH patch.buildbucket.get (2)',
+          stdout=api.json.output(buildbucket_get_response)) +
+      api.step_data(
+          'Running WITH patch.Performance Test (With Patch) 1 of 1',
+          retcode=1))
+
+  config_json.update({'good_revision': '306475', 'bad_revision': '306476'})
+
+  yield (
+      api.test('basic_perf_tryjob_with_revisions') +
+      api.properties.tryserver(
+          path_config='kitchen',
+          mastername='tryserver.chromium.perf',
+          buildername='linux_perf_bisect',
+          patch_storage='rietveld',
+          patchset='20001',
+          issue='12345',
+          is_test=True,
+          rietveld="https://codereview.chromium.org") +
+      api.override_step_data(
+          'git diff to analyze patch',
+          api.raw_io.stream_output('tools/run-perf-test.cfg')) +
       api.override_step_data('load config', api.json.output(config_json)) +
       api.step_data(
           'resolving commit_pos ' + config_json['good_revision'],
@@ -327,13 +345,14 @@ m/cloudstorage/b/chromium-telemetry/o/html-results/results-without
       api.step_data(
           'Running WITHOUT patch.Performance Test ' +
           '(d49c331def2a3bbf3ddd0096eb51551155) 1 of 1',
-          stdout=api.raw_io.output(results_without_patch)) +
+          api.raw_io.output(str(results_without_patch), name='stdout_proxy')) +
       api.step_data(
           'Running WITH patch.Performance Test ' +
           '(bad49c331def2a3bbf3ddd0096eb51551155) 1 of 1',
-          stdout=api.raw_io.output(results_with_patch)) +
-      api.step_data('Notify dashboard.Post bisect results',
-                    api.json.output({'status_code': 200})))
+          api.raw_io.output(str(results_with_patch), name='stdout_proxy')) +
+      api.step_data(
+          'Notify dashboard.Post bisect results',
+          api.json.output({'status_code': 200})))
 
   config_json = {
       'max_time_minutes': '25',
@@ -342,16 +361,20 @@ m/cloudstorage/b/chromium-telemetry/o/html-results/results-without
       'target_arch': 'ia32',
   }
 
-  yield (api.test('perf_tryjob_config_error') + api.properties.tryserver(
-      path_config='kitchen',
-      mastername='tryserver.chromium.perf',
-      buildername='linux_perf_bisect') + api.properties(
-          requester='abcdxyz@chromium.org') + api.override_step_data(
-              'git diff to analyze patch',
-              api.raw_io.stream_output('tools/run-perf-test.cfg')) +
-         api.override_step_data('load config', api.json.output(config_json)))
+  yield (
+      api.test('perf_tryjob_config_error') +
+      api.properties.tryserver(
+          path_config='kitchen',
+          mastername='tryserver.chromium.perf',
+          buildername='linux_perf_bisect') +
+      api.properties(requester='abcdxyz@chromium.org') +
+      api.override_step_data(
+          'git diff to analyze patch',
+          api.raw_io.stream_output('tools/run-perf-test.cfg')) +
+      api.override_step_data('load config', api.json.output(config_json)))
 
-  yield (api.test('perf_cq_run_benchmark') +
+  yield (
+      api.test('perf_cq_run_benchmark') +
       api.properties.tryserver(
           path_config='kitchen',
           mastername='tryserver.chromium.perf',
@@ -366,9 +389,9 @@ m/cloudstorage/b/chromium-telemetry/o/html-results/results-without
           'git diff to analyze patch',
           api.raw_io.stream_output('tools/perf/benchmarks/blink_perf.py')) +
       api.step_data('buildbucket.put',
-              stdout=api.json.output(buildbucket_put_response)) +
+          stdout=api.json.output(buildbucket_put_response)) +
       api.step_data('buildbucket.get',
-              stdout=api.json.output(buildbucket_get_response)))
+          stdout=api.json.output(buildbucket_get_response)))
 
   yield (api.test('perf_cq_no_changes') +
       api.properties.tryserver(
@@ -382,8 +405,8 @@ m/cloudstorage/b/chromium-telemetry/o/html-results/results-without
           rietveld="https://codereview.chromium.org") +
       api.properties(requester='commit-bot@chromium.org') +
       api.override_step_data(
-              'git diff to analyze patch',
-              api.raw_io.stream_output('tools/no_benchmark_file')))
+          'git diff to analyze patch',
+          api.raw_io.stream_output('tools/no_benchmark_file')))
 
   yield (api.test('perf_cq_no_benchmark_to_run') +
       api.properties.tryserver(
@@ -397,10 +420,10 @@ m/cloudstorage/b/chromium-telemetry/o/html-results/results-without
           rietveld="https://codereview.chromium.org") +
       api.properties(requester='commit-bot@chromium.org') +
       api.override_step_data(
-              'git diff to analyze patch',
-              api.raw_io.stream_output('tools/perf/benchmarks/sunspider.py')) +
+          'git diff to analyze patch',
+          api.raw_io.stream_output('tools/perf/benchmarks/sunspider.py')) +
       api.step_data('buildbucket.put',
-              stdout=api.json.output(buildbucket_put_response)) +
+          stdout=api.json.output(buildbucket_put_response)) +
       api.step_data('buildbucket.get',
-              stdout=api.json.output(buildbucket_get_response)))
+          stdout=api.json.output(buildbucket_get_response)))
 

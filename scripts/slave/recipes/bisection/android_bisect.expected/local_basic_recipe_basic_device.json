@@ -1163,6 +1163,9 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "/path/to/tmp/",
+      "--",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -1193,7 +1196,6 @@
     },
     "name": "Gathering reference values.Performance Test 1 of 6",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
@@ -1269,6 +1271,9 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "/path/to/tmp/",
+      "--",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -1299,7 +1304,6 @@
     },
     "name": "Gathering reference values.Performance Test 2 of 6",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
@@ -1375,6 +1379,9 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "/path/to/tmp/",
+      "--",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -1405,7 +1412,6 @@
     },
     "name": "Gathering reference values.Performance Test 3 of 6",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
@@ -1481,6 +1487,9 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "/path/to/tmp/",
+      "--",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -1511,7 +1520,6 @@
     },
     "name": "Gathering reference values.Performance Test 4 of 6",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
@@ -1587,6 +1595,9 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "/path/to/tmp/",
+      "--",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -1617,7 +1628,6 @@
     },
     "name": "Gathering reference values.Performance Test 5 of 6",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
@@ -1693,6 +1703,9 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "/path/to/tmp/",
+      "--",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -1723,10 +1736,9 @@
     },
     "name": "Gathering reference values.Performance Test 6 of 6",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@Captured Output@mock output@@@",
+      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -1735,7 +1747,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "mock output",
+      "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -2036,6 +2048,9 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "/path/to/tmp/",
+      "--",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -2066,7 +2081,6 @@
     },
     "name": "Gathering reference values.Performance Test 1 of 6 (2)",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
@@ -2142,6 +2156,9 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "/path/to/tmp/",
+      "--",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -2172,7 +2189,6 @@
     },
     "name": "Gathering reference values.Performance Test 2 of 6 (2)",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
@@ -2248,6 +2264,9 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "/path/to/tmp/",
+      "--",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -2278,7 +2297,6 @@
     },
     "name": "Gathering reference values.Performance Test 3 of 6 (2)",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
@@ -2354,6 +2372,9 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "/path/to/tmp/",
+      "--",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -2384,7 +2405,6 @@
     },
     "name": "Gathering reference values.Performance Test 4 of 6 (2)",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
@@ -2460,6 +2480,9 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "/path/to/tmp/",
+      "--",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -2490,7 +2513,6 @@
     },
     "name": "Gathering reference values.Performance Test 5 of 6 (2)",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
@@ -2566,6 +2588,9 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "/path/to/tmp/",
+      "--",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -2596,10 +2621,9 @@
     },
     "name": "Gathering reference values.Performance Test 6 of 6 (2)",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@Captured Output@mock output@@@",
+      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -2608,7 +2632,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "mock output",
+      "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -2943,6 +2967,9 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "/path/to/tmp/",
+      "--",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -2973,10 +3000,9 @@
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 1 of 3",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@Captured Output@mock output@@@",
+      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -2985,7 +3011,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "mock output",
+      "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -3049,6 +3075,9 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "/path/to/tmp/",
+      "--",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -3079,10 +3108,9 @@
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 2 of 3",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@Captured Output@mock output@@@",
+      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -3091,7 +3119,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "mock output",
+      "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -3155,6 +3183,9 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "/path/to/tmp/",
+      "--",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -3185,10 +3216,9 @@
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 3 of 3",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@Captured Output@mock output@@@",
+      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -3197,7 +3227,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "mock output",
+      "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -3528,6 +3558,9 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "/path/to/tmp/",
+      "--",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -3558,10 +3591,9 @@
     },
     "name": "Re-testing reference range.Retesting BAD revision.Performance Test 1 of 3",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@Captured Output@mock output@@@",
+      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -3570,7 +3602,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "mock output",
+      "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -3634,6 +3666,9 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "/path/to/tmp/",
+      "--",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -3664,10 +3699,9 @@
     },
     "name": "Re-testing reference range.Retesting BAD revision.Performance Test 2 of 3",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@Captured Output@mock output@@@",
+      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -3676,7 +3710,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "mock output",
+      "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -3740,6 +3774,9 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "/path/to/tmp/",
+      "--",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -3770,10 +3807,9 @@
     },
     "name": "Re-testing reference range.Retesting BAD revision.Performance Test 3 of 3",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@Captured Output@mock output@@@",
+      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -3782,7 +3818,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "mock output",
+      "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -4113,6 +4149,9 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "/path/to/tmp/",
+      "--",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -4143,10 +4182,9 @@
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 1 of 5",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@Captured Output@mock output@@@",
+      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -4155,7 +4193,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "mock output",
+      "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -4219,6 +4257,9 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "/path/to/tmp/",
+      "--",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -4249,10 +4290,9 @@
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 2 of 5",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@Captured Output@mock output@@@",
+      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -4261,7 +4301,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "mock output",
+      "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -4325,6 +4365,9 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "/path/to/tmp/",
+      "--",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -4355,10 +4398,9 @@
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 3 of 5",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@Captured Output@mock output@@@",
+      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -4367,7 +4409,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "mock output",
+      "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -4431,6 +4473,9 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "/path/to/tmp/",
+      "--",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -4461,10 +4506,9 @@
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 4 of 5",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@Captured Output@mock output@@@",
+      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -4473,7 +4517,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "mock output",
+      "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -4537,6 +4581,9 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "/path/to/tmp/",
+      "--",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -4567,10 +4614,9 @@
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 5 of 5",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@Captured Output@mock output@@@",
+      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -4579,7 +4625,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "mock output",
+      "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -4910,6 +4956,9 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "/path/to/tmp/",
+      "--",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -4940,10 +4989,9 @@
     },
     "name": "Re-testing reference range.Retesting BAD revision.Performance Test 1 of 5",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@Captured Output@mock output@@@",
+      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -4952,7 +5000,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "mock output",
+      "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -5016,6 +5064,9 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "/path/to/tmp/",
+      "--",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -5046,10 +5097,9 @@
     },
     "name": "Re-testing reference range.Retesting BAD revision.Performance Test 2 of 5",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@Captured Output@mock output@@@",
+      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -5058,7 +5108,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "mock output",
+      "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -5122,6 +5172,9 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "/path/to/tmp/",
+      "--",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -5152,10 +5205,9 @@
     },
     "name": "Re-testing reference range.Retesting BAD revision.Performance Test 3 of 5",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@Captured Output@mock output@@@",
+      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -5164,7 +5216,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "mock output",
+      "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -5228,6 +5280,9 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "/path/to/tmp/",
+      "--",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -5258,10 +5313,9 @@
     },
     "name": "Re-testing reference range.Retesting BAD revision.Performance Test 4 of 5",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@Captured Output@mock output@@@",
+      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -5270,7 +5324,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "mock output",
+      "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -5334,6 +5388,9 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "/path/to/tmp/",
+      "--",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -5364,10 +5421,9 @@
     },
     "name": "Re-testing reference range.Retesting BAD revision.Performance Test 5 of 5",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@Captured Output@mock output@@@",
+      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -5376,7 +5432,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "mock output",
+      "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -5707,6 +5763,9 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "/path/to/tmp/",
+      "--",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -5737,10 +5796,9 @@
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 1 of 7",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@Captured Output@mock output@@@",
+      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -5749,7 +5807,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "mock output",
+      "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -5813,6 +5871,9 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "/path/to/tmp/",
+      "--",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -5843,10 +5904,9 @@
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 2 of 7",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@Captured Output@mock output@@@",
+      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -5855,7 +5915,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "mock output",
+      "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -5919,6 +5979,9 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "/path/to/tmp/",
+      "--",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -5949,10 +6012,9 @@
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 3 of 7",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@Captured Output@mock output@@@",
+      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -5961,7 +6023,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "mock output",
+      "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -6025,6 +6087,9 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "/path/to/tmp/",
+      "--",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -6055,10 +6120,9 @@
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 4 of 7",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@Captured Output@mock output@@@",
+      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -6067,7 +6131,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "mock output",
+      "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -6131,6 +6195,9 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "/path/to/tmp/",
+      "--",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -6161,10 +6228,9 @@
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 5 of 7",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@Captured Output@mock output@@@",
+      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -6173,7 +6239,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "mock output",
+      "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -6237,6 +6303,9 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "/path/to/tmp/",
+      "--",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -6267,10 +6336,9 @@
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 6 of 7",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@Captured Output@mock output@@@",
+      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -6279,7 +6347,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "mock output",
+      "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
@@ -6343,6 +6411,9 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "/path/to/tmp/",
+      "--",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
@@ -6373,10 +6444,9 @@
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 7 of 7",
     "stderr": "/path/to/tmp/",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@Captured Output@mock output@@@",
+      "@@@STEP_LOG_LINE@Captured Output@benchmark text@@@",
       "@@@STEP_LOG_END@Captured Output@@@"
     ]
   },
@@ -6385,7 +6455,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "mock output",
+      "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "env": {
