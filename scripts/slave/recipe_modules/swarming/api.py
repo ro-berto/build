@@ -924,6 +924,8 @@ class SwarmingApi(recipe_api.RecipeApi):
       if url and self.show_shards_in_collect_step:
         links[display_text] = url
 
+    self._display_pending(summary, step_result.presentation)
+
     if infra_failures:
       template = 'Shard #%s failed: %s'
 
@@ -932,9 +934,6 @@ class SwarmingApi(recipe_api.RecipeApi):
       step_result._retcode = 2
       raise recipe_api.InfraFailure(
           '\n'.join(template % f for f in infra_failures), result=step_result)
-
-    self._display_pending(summary, step_result.presentation)
-
 
   def get_collect_cmd_args(self, task):
     """SwarmingTask -> argument list for 'swarming.py' command."""
