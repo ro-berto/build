@@ -3,6 +3,10 @@
 # found in the LICENSE file.
 
 
+from master.autoreboot_buildslave import AutoRebootBuildSlave
+from master.master_utils import InvalidConfig
+
+
 def distribute_subdir_slaves(master, builders, hostnames, slaves):
   """Distributes a list of builders to a list of hostnames with subdirs.
 
@@ -37,3 +41,11 @@ def distribute_subdir_slaves(master, builders, hostnames, slaves):
       'subdir': str(subdir_index),
     })
     hostname_index += 1
+
+
+def verify_subdir_slaves(c):
+  """Checks that subdir slaves are not auto-rebooted."""
+  for s in c['slaves']:
+    if '#' in s.slavename and isinstance(s, AutoRebootBuildSlave):
+      raise InvalidConfig(
+          'Subdir slaves must not auto-reboot. But found %s' % s.slavename)
