@@ -109,6 +109,7 @@ for mode in ['debug', 'release', 'product']:
     'env': default_envs['linux'],
     'test_args': ['-capp_jit',
                   '--builder-tag=no_ipv6'],
+    'archive_core_dumps': True,
   }
   builders['precomp-linux-%s-x64' % mode] = {
     'mode': mode,
@@ -117,7 +118,7 @@ for mode in ['debug', 'release', 'product']:
     'test_args': ['-cprecompiler', '-rdart_precompiled', '--use-blobs',
                   '--builder-tag=no_ipv6'],
     'build_args': ['runtime_precompiled'],
-    'archive_core_dumps': mode == 'debug',
+    'archive_core_dumps': True,
   }
   for arch in ['x64', 'simdbc64']:
     builders['vm-linux-%s-%s-reload' % (mode, arch)] = {
@@ -194,7 +195,6 @@ def RunSteps(api):
                  cwd=api.path['checkout'],
                  env=b['env'])
 
-    # TODO(whesse): Add archive coredumps step from dart_factory.py.
     api.python('taskkill after testing',
                api.path['checkout'].join('tools', 'task_kill.py'),
                args=['--kill_browsers=True'],
