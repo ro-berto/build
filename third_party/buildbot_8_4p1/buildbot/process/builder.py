@@ -509,8 +509,8 @@ class Builder(pb.Referenceable, service.MultiService):
             yield wfd
             bids.append(wfd.getResult())
 
-        # let status know
-        self.master.status.build_started(req.id, self.name, bs.number)
+            # let status know
+            self.master.status.build_started(req.id, self.name, bs.number)
 
         # start the build. This will first set up the steps, then tell the
         # BuildStatus that it has started, which will announce it to the world
@@ -865,7 +865,7 @@ class Builder(pb.Referenceable, service.MultiService):
                 to_defer = lambda : mergeRequests_fn(
                     breq_object,
                     other_breq_object,
-                    len(unclaimed_request_objects), 
+                    len(unclaimed_request_objects),
                     len(merged_request_objects),
                 )
             else:
