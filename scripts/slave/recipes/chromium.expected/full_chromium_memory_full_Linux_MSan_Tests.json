@@ -347,7 +347,7 @@
       "--shards",
       "1",
       "--task-name",
-      "browser_tests/Ubuntu-12.04/ffffffffff/Linux MSan Tests/571",
+      "browser_tests/Ubuntu-14.04/ffffffffff/Linux MSan Tests/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -364,7 +364,7 @@
       "none",
       "--dimension",
       "os",
-      "Ubuntu-12.04",
+      "Ubuntu-14.04",
       "--dimension",
       "pool",
       "Chrome",
@@ -381,7 +381,7 @@
       "--tag",
       "name:browser_tests",
       "--tag",
-      "os:Ubuntu-12.04",
+      "os:Ubuntu-14.04",
       "--tag",
       "project:chromium",
       "--tag",
@@ -391,7 +391,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:browser_tests",
+      "stepname:browser_tests on Ubuntu-14.04",
       "--idempotent",
       "ffffffffffffffffffffffffffffffffffffffff",
       "--",
@@ -402,13 +402,13 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "[trigger] browser_tests",
+    "name": "[trigger] browser_tests on Ubuntu-14.04",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"browser_tests/Ubuntu-12.04/ffffffffff/Linux MSan Tests/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"browser_tests/Ubuntu-14.04/ffffffffff/Linux MSan Tests/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"browser_tests/Ubuntu-12.04/ffffffffff/Linux MSan Tests/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"browser_tests/Ubuntu-14.04/ffffffffff/Linux MSan Tests/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -440,24 +440,24 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"browser_tests/Ubuntu-12.04/ffffffffff/Linux MSan Tests/571\", \"tasks\": {\"browser_tests/Ubuntu-12.04/ffffffffff/Linux MSan Tests/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"browser_tests/Ubuntu-14.04/ffffffffff/Linux MSan Tests/571\", \"tasks\": {\"browser_tests/Ubuntu-14.04/ffffffffff/Linux MSan Tests/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_MSan_Tests",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "browser_tests",
+    "name": "browser_tests on Ubuntu-14.04",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@step_metadata@{@@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"browser_tests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"cpu\": \"x86-64\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"gpu\": \"none\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-12.04\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-14.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"browser_tests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"browser_tests on Ubuntu-14.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
@@ -483,7 +483,7 @@
       "--build-number",
       "571",
       "--test-type",
-      "browser_tests",
+      "browser_tests on Ubuntu-14.04",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
@@ -493,7 +493,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Upload to test-results [browser_tests]"
+    "name": "Upload to test-results [browser_tests on Ubuntu-14.04]"
   },
   {
     "name": "$result",

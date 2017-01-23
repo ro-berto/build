@@ -36,6 +36,10 @@ SPEC = {
       'parent_buildername': 'Chromium Linux MSan Builder',
       'testing': {'platform': 'linux'},
       'enable_swarming': True,
+      'swarming_dimensions': {
+        'cpu': 'x86-64',
+        'os': 'Ubuntu-14.04',
+      },
     },
     'Chromium Linux ChromeOS MSan Builder': {
       'chromium_config': 'chromium_msan',
@@ -65,6 +69,10 @@ SPEC = {
       'parent_buildername': 'Chromium Linux ChromeOS MSan Builder',
       'testing': {'platform': 'linux'},
       'enable_swarming': True,
+      'swarming_dimensions': {
+        'cpu': 'x86-64',
+        'os': 'Ubuntu-14.04',
+      },
     },
   },
 }
