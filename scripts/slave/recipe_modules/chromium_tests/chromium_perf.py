@@ -78,7 +78,6 @@ def BuildSpec(
   if enable_swarming:
     spec['enable_swarming'] = True
     spec['perf_isolate_lookup'] = True
-    spec['use_isolate'] = True
   spec['compile_targets'] = ['chromium_builder_perf']
   if extra_compile_targets:
     spec['compile_targets'] += extra_compile_targets

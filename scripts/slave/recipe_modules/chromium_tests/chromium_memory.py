@@ -26,7 +26,6 @@ SPEC = {
       'bot_type': 'builder',
       'testing': {'platform': 'linux'},
       'enable_swarming': True,
-      'use_isolate': True,
     },
     'Linux ASan LSan Tests (1)': {
       'chromium_config': 'chromium_linux_asan',
@@ -70,7 +69,6 @@ SPEC = {
         'platform': 'linux',
       },
       'enable_swarming': True,
-      'use_isolate': True,
     },
     'Linux TSan Tests': {
       'chromium_config': 'chromium_tsan2',
@@ -97,7 +95,6 @@ SPEC = {
       'bot_type': 'builder',
       'testing': {'platform': 'mac'},
       'enable_swarming': True,
-      'use_isolate': True,
       'checkout_dir': 'mac_ng',
     },
     'Mac ASan 64 Tests (1)': {
@@ -123,7 +120,6 @@ SPEC = {
       'bot_type': 'builder',
       'testing': {'platform': 'linux'},
       'enable_swarming': True,
-      'use_isolate': True,
     },
     'Linux Chromium OS ASan LSan Tests (1)': {
       'chromium_config': 'chromium_chromiumos_asan',

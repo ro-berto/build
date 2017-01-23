@@ -26,7 +26,6 @@ KITCHEN_TEST_SPEC = {
   'testing': {
     'platform': 'linux',
   },
-  'use_isolate': True,
   'enable_swarming': True,
 }
 
@@ -95,7 +94,6 @@ SPEC = {
       },
       'archive_build': True,
       'gs_bucket': 'chromium-fyi-archive',
-      'use_isolate': True,
       'enable_swarming': True,
       'swarming_dimensions': {
         'cpu': 'armv7l-32',
@@ -144,7 +142,6 @@ SPEC = {
           'platform': 'linux',
       },
       'enable_swarming': True,
-      'use_isolate': True,
     },
     'WebKit Linux - WPTServe':{
       'chromium_config': 'chromium',
@@ -167,7 +164,6 @@ SPEC = {
           'platform': 'linux',
       },
       'enable_swarming': True,
-      'use_isolate': True,
     },
     'WebKit Linux - TraceWrappables': {
       'chromium_config': 'chromium',
@@ -193,7 +189,6 @@ SPEC = {
         'platform': 'linux',
       },
       'enable_swarming': True,
-      'use_isolate': True,
     },
     'WebKit Linux - RandomOrder':{
       'chromium_config': 'chromium',
@@ -214,7 +209,6 @@ SPEC = {
           'platform': 'linux',
       },
       'enable_swarming': True,
-      'use_isolate': True,
     },
     'WebKit Mac - RandomOrder':{
       'chromium_config': 'chromium',
@@ -234,7 +228,6 @@ SPEC = {
           'platform': 'mac',
       },
       'enable_swarming': True,
-      'use_isolate': True,
     },
     'WebKit Win - RandomOrder':{
       'chromium_config': 'chromium',
@@ -258,7 +251,6 @@ SPEC = {
           'platform': 'win',
       },
       'enable_swarming': True,
-      'use_isolate': True,
     },
     'WebKit Mac - WPTServe':{
       'chromium_config': 'chromium',
@@ -281,7 +273,6 @@ SPEC = {
           'platform': 'mac',
       },
       'enable_swarming': True,
-      'use_isolate': True,
     },
     'WebKit Win - WPTServe':{
       'chromium_config': 'chromium',
@@ -304,7 +295,6 @@ SPEC = {
           'platform': 'win',
       },
       'enable_swarming': True,
-      'use_isolate': True,
     },
     'Print Preview Linux': {
       'chromium_config': 'chromium',
@@ -514,7 +504,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'use_isolate': True,
       'enable_swarming': True,
     },
     'Site Isolation Android': {
@@ -537,7 +526,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'use_isolate': True,
       'enable_swarming': True,
     },
     'Site Isolation Linux': {
@@ -571,7 +559,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'use_isolate': True,
       'enable_swarming': True,
     },
     'Site Isolation Win': {
@@ -603,7 +590,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'use_isolate': True,
       'enable_swarming': True,
     },
     'Browser Side Navigation Linux': {
@@ -626,7 +612,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'use_isolate': True,
       'enable_swarming': True,
     },
     'CrWinClang': {
@@ -646,7 +631,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'use_isolate': True,
       'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
@@ -685,7 +669,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'use_isolate': True,
       'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
@@ -724,7 +707,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'use_isolate': True,
       'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
@@ -762,7 +744,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'use_isolate': True,
       'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
@@ -801,7 +782,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'use_isolate': True,
       'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
@@ -840,7 +820,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'use_isolate': True,
       'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
@@ -879,7 +858,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'use_isolate': True,
       'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
@@ -917,7 +895,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'use_isolate': True,
       'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
@@ -955,7 +932,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'use_isolate': True,
       'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
@@ -993,7 +969,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'use_isolate': True,
       'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
@@ -1027,7 +1002,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'use_isolate': True,
       'enable_swarming': True,
       'compile_targets': [ 'chromium_builder_asan' ],
       # add_tests_as_compile_targets not needed for the asan bot, it doesn't
@@ -1062,7 +1036,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'use_isolate': True,
       'enable_swarming': True,
       'compile_targets': [ 'chromium_builder_asan' ],
       # add_tests_as_compile_targets not needed for the asan bot, it doesn't
@@ -1096,7 +1069,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'use_isolate': True,
       'enable_swarming': True,
       'compile_targets': [ 'chromium_builder_asan' ],
       # add_tests_as_compile_targets not needed for the asan bot, it doesn't
@@ -1233,7 +1205,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'use_isolate': True,
       'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
@@ -1409,7 +1380,6 @@ SPEC = {
       'tests': {
         steps.SizesStep(RESULTS_URL, 'ClangToTLinux')
       },
-      'use_isolate': True,
       'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
@@ -1447,7 +1417,6 @@ SPEC = {
       'tests': {
         steps.SizesStep(RESULTS_URL, 'ClangToTLinux (dbg)')
       },
-      'use_isolate': True,
       'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
@@ -1470,7 +1439,6 @@ SPEC = {
       'tests': {
         steps.SizesStep(RESULTS_URL, 'ClangToTLinuxASan')
       },
-      'use_isolate': True,
       'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
@@ -1504,7 +1472,6 @@ SPEC = {
       'bot_type': 'builder',
       'test_results_config': 'staging_server',
       'testing': { 'platform': 'linux', },
-      'use_isolate': True,
       'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
@@ -1540,7 +1507,6 @@ SPEC = {
       'tests': {
         steps.SizesStep(RESULTS_URL, 'ClangToTLinuxUBSanVptr')
       },
-      'use_isolate': True,
       'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
@@ -1668,7 +1634,6 @@ SPEC = {
       'test_results_config': 'staging_server',
       'testing': { 'platform': 'linux', },
       'enable_swarming': True,
-      'use_isolate': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -1693,7 +1658,6 @@ SPEC = {
       'tests': {
         steps.SizesStep(RESULTS_URL, 'ClangToTMac')
       },
-      'use_isolate': True,
       'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
@@ -1731,7 +1695,6 @@ SPEC = {
       'tests': {
         steps.SizesStep(RESULTS_URL, 'ClangToTMac (dbg)')
       },
-      'use_isolate': True,
       'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
@@ -1754,7 +1717,6 @@ SPEC = {
       'tests': {
         steps.SizesStep(RESULTS_URL, 'ClangToTMacASan')
       },
-      'use_isolate': True,
       'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
@@ -1789,7 +1751,6 @@ SPEC = {
       'test_results_config': 'staging_server',
       'testing': { 'platform': 'win', },
       'tests': { steps.SizesStep(RESULTS_URL, 'ClangToTWin') },
-      'use_isolate': True,
       'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
@@ -1823,7 +1784,6 @@ SPEC = {
       'test_results_config': 'staging_server',
       'testing': { 'platform': 'win', },
       'tests': { steps.SizesStep(RESULTS_URL, 'ClangToTWin(dbg)') },
-      'use_isolate': True,
       'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
@@ -1858,7 +1818,6 @@ SPEC = {
       'test_results_config': 'staging_server',
       'testing': { 'platform': 'win', },
       'tests': { steps.SizesStep(RESULTS_URL, 'ClangToTWin(dll)') },
-      'use_isolate': True,
       'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
@@ -1893,7 +1852,6 @@ SPEC = {
       'test_results_config': 'staging_server',
       'testing': { 'platform': 'win', },
       'tests': { steps.SizesStep(RESULTS_URL, 'ClangToTWin64') },
-      'use_isolate': True,
       'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
@@ -1927,7 +1885,6 @@ SPEC = {
       'test_results_config': 'staging_server',
       'testing': { 'platform': 'win', },
       'tests': { steps.SizesStep(RESULTS_URL, 'ClangToTWin64(dbg)') },
-      'use_isolate': True,
       'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
@@ -1962,7 +1919,6 @@ SPEC = {
       'test_results_config': 'staging_server',
       'testing': { 'platform': 'win', },
       'tests': { steps.SizesStep(RESULTS_URL, 'ClangToTWin64(dll)') },
-      'use_isolate': True,
       'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
@@ -1999,7 +1955,6 @@ SPEC = {
       },
       'patch_root': 'src/third_party/angle',
       'enable_swarming': True,
-      'use_isolate': True,
     },
     'Win7 Tests (ANGLE)': {
       'chromium_config': 'chromium',
@@ -2016,7 +1971,6 @@ SPEC = {
         'platform': 'win',
       },
       'enable_swarming': True,
-      'use_isolate': True,
     },
 
     'Headless Linux (dbg)': {
@@ -2226,7 +2180,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'use_isolate': True,
       'enable_swarming': True,
     },
     'Linux remote_run Tester': {
@@ -2250,7 +2203,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'use_isolate': True,
       'enable_swarming': True,
     },
     'Mojo ChromiumOS': {
@@ -2265,7 +2217,6 @@ SPEC = {
       'bot_type': 'builder_tester',
       'test_results_config': 'staging_server',
       'testing': { 'platform': 'linux', },
-      'use_isolate': True,
       'enable_swarming': True,
     },
     'Mojo Windows': {
@@ -2280,7 +2231,6 @@ SPEC = {
       'bot_type': 'builder_tester',
       'test_results_config': 'staging_server',
       'testing': { 'platform': 'win', },
-      'use_isolate': True,
       'enable_swarming': True,
     },
   },

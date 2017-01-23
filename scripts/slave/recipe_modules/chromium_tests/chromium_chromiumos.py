@@ -83,7 +83,6 @@ SPEC = {
         'platform': 'linux',
       },
       'enable_swarming': True,
-      'use_isolate': True,
       'checkout_dir': 'linux_chromeos',
     },
     'Linux ChromiumOS Tests (1)': {
@@ -117,7 +116,6 @@ SPEC = {
         'platform': 'linux',
       },
       'enable_swarming': True,
-      'use_isolate': True,
       'checkout_dir': 'linux_chromeos',
     },
     'Linux ChromiumOS Ozone Tests (1)': {
@@ -134,7 +132,6 @@ SPEC = {
         'platform': 'linux',
       },
       'enable_swarming': True,
-      'use_isolate': True,
     },
     'Linux ChromiumOS Builder (dbg)': {
       'chromium_config': 'chromium',
@@ -152,7 +149,6 @@ SPEC = {
         'platform': 'linux',
       },
       'enable_swarming': True,
-      'use_isolate': True,
       'checkout_dir': 'linux_chromeos',
     },
     'Linux ChromiumOS Tests (dbg)(1)': {

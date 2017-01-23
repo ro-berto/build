@@ -33,7 +33,6 @@ SPEC = {
         'platform': 'mac',
       },
       'enable_swarming': True,
-      'use_isolate': True,
       'checkout_dir': 'mac',
     },
     'Mac10.9 Tests': {
@@ -109,7 +108,6 @@ SPEC = {
         'platform': 'mac',
       },
       'enable_swarming': True,
-      'use_isolate': True,
       'checkout_dir': 'mac',
     },
     'Mac10.9 Tests (dbg)': {

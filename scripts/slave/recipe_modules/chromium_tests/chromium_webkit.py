@@ -25,7 +25,6 @@ SPEC['builders'] = {
       'platform': 'win',
     },
     'enable_swarming': True,
-    'use_isolate': True,
     'checkout_dir': 'win_layout',
   },
   'WebKit Win7': {
@@ -45,7 +44,6 @@ SPEC['builders'] = {
       'platform': 'win',
     },
     'enable_swarming': True,
-    'use_isolate': True,
     'checkout_dir': 'win_layout',
   },
   'WebKit Win10': {
@@ -65,7 +63,6 @@ SPEC['builders'] = {
       'platform': 'win',
     },
     'enable_swarming': True,
-    'use_isolate': True,
     'checkout_dir': 'win_layout',
   },
   'WebKit Win x64 Builder': {
@@ -85,7 +82,6 @@ SPEC['builders'] = {
       'platform': 'win',
     },
     'enable_swarming': True,
-    'use_isolate': True,
     'checkout_dir': 'win_layout',
   },
   'WebKit Win Builder (dbg)': {
@@ -101,7 +97,6 @@ SPEC['builders'] = {
       'platform': 'win',
     },
     'enable_swarming': True,
-    'use_isolate': True,
     'checkout_dir': 'win_layout',
   },
   'WebKit Win7 (dbg)': {
@@ -121,7 +116,6 @@ SPEC['builders'] = {
       'platform': 'win',
     },
     'enable_swarming': True,
-    'use_isolate': True,
     'checkout_dir': 'win_layout',
   },
   'WebKit Win x64 Builder (dbg)': {
@@ -141,7 +135,6 @@ SPEC['builders'] = {
       'platform': 'win',
     },
     'enable_swarming': True,
-    'use_isolate': True,
     'checkout_dir': 'win_layout',
   },
   'WebKit Mac Builder': {
@@ -160,7 +153,6 @@ SPEC['builders'] = {
     'swarming_dimensions': {
       'os': 'Mac-10.11',
     },
-    'use_isolate': True,
     'checkout_dir': 'mac_layout',
   },
   'WebKit Mac10.11 (retina)': {
@@ -184,7 +176,6 @@ SPEC['builders'] = {
       'os': 'Mac-10.11',
       'hidpi': '1',
     },
-    'use_isolate': True,
     'checkout_dir': 'mac_layout',
   },
   'WebKit Mac10.9': {
@@ -207,7 +198,6 @@ SPEC['builders'] = {
     'swarming_dimensions': {
       'os': 'Mac-10.9',
     },
-    'use_isolate': True,
     'checkout_dir': 'mac_layout',
   },
   'WebKit Mac10.10': {
@@ -230,7 +220,6 @@ SPEC['builders'] = {
     'swarming_dimensions': {
       'os': 'Mac-10.10',
     },
-    'use_isolate': True,
     'checkout_dir': 'mac_layout',
   },
   'WebKit Mac10.11': {
@@ -253,7 +242,6 @@ SPEC['builders'] = {
     'swarming_dimensions': {
       'os': 'Mac-10.11',
     },
-    'use_isolate': True,
     'checkout_dir': 'mac_layout',
   },
   'WebKit Mac Builder (dbg)': {
@@ -272,7 +260,6 @@ SPEC['builders'] = {
     'swarming_dimensions': {
       'os': 'Mac-10.11',
     },
-    'use_isolate': True,
     'checkout_dir': 'mac_layout',
   },
   'WebKit Mac10.11 (dbg)': {
@@ -295,7 +282,6 @@ SPEC['builders'] = {
     'swarming_dimensions': {
       'os': 'Mac-10.11',
     },
-    'use_isolate': True,
     'checkout_dir': 'mac_layout',
   },
   'WebKit Linux Trusty': {
@@ -316,7 +302,6 @@ SPEC['builders'] = {
       'platform': 'linux',
     },
     'enable_swarming': True,
-    'use_isolate': True,
     'checkout_dir': 'linux_layout',
   },
   'WebKit Linux Trusty ASAN': {
@@ -340,7 +325,6 @@ SPEC['builders'] = {
       'platform': 'linux',
     },
     'enable_swarming': True,
-    'use_isolate': True,
     'checkout_dir': 'linux_layout',
   },
   'WebKit Linux Trusty MSAN': {
@@ -370,7 +354,6 @@ SPEC['builders'] = {
       'platform': 'linux',
     },
     'enable_swarming': True,
-    'use_isolate': True,
     'checkout_dir': 'linux_layout',
   },
   'WebKit Linux Trusty (dbg)': {
@@ -388,7 +371,6 @@ SPEC['builders'] = {
       'platform': 'linux',
     },
     'enable_swarming': True,
-    'use_isolate': True,
     'checkout_dir': 'linux_layout',
   },
   'Android Builder': {
@@ -452,6 +434,5 @@ SPEC['builders'] = {
       'platform': 'linux',
     },
     'enable_swarming': True,
-    'use_isolate': True,
   },
 }

@@ -33,7 +33,6 @@ SPEC = {
         'platform': 'win',
       },
       'enable_swarming': True,
-      'use_isolate': True,
       'checkout_dir': 'win',
     },
     'Win10 Tests x64': {
@@ -108,7 +107,6 @@ SPEC = {
         'platform': 'win',
       },
       'enable_swarming': True,
-      'use_isolate': True,
       'checkout_dir': 'win',
     },
     'Win 7 Tests x64 (1)': {
@@ -145,7 +143,6 @@ SPEC = {
         'platform': 'win',
       },
       'enable_swarming': True,
-      'use_isolate': True,
     },
 
     'Win Builder (dbg)': {
@@ -164,7 +161,6 @@ SPEC = {
         'platform': 'win',
       },
       'enable_swarming': True,
-      'use_isolate': True,
       'checkout_dir': 'win',
     },
     'Win7 Tests (dbg)(1)': {
@@ -199,7 +195,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'use_isolate': True,
       'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.

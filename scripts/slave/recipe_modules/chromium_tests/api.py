@@ -123,8 +123,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # not support that.
     self.m.chromium.c.gyp_env.GYP_DEFINES.update(
         bot_config.get('GYP_DEFINES', {}))
-    if bot_config.get('use_isolate'):
-      self.m.isolate.set_isolate_environment(self.m.chromium.c)
 
     self.m.gclient.set_config(
         bot_config.get('gclient_config'),

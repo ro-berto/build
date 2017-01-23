@@ -11,7 +11,6 @@ SPEC = {
   },
   'builders': {
     'Android arm Builder (dbg)': {
-      'use_isolate': True,
       'chromium_config': 'android',
       'enable_swarming': True,
       'chromium_apply_config': ['chrome_with_codecs'],
@@ -30,7 +29,6 @@ SPEC = {
     },
 
     'Android arm64 Builder (dbg)': {
-      'use_isolate': True,
       'enable_swarming': True,
       'chromium_config': 'android',
       'chromium_apply_config': ['chrome_with_codecs'],
@@ -154,7 +152,6 @@ SPEC = {
     },
 
     'Lollipop Phone Tester': {
-      'use_isolate': True,
       'enable_swarming': True,
       'chromium_config': 'android',
       'gclient_config': 'chromium',
@@ -209,7 +206,6 @@ SPEC = {
     },
 
     'Android N5X Swarm Builder': {
-      'use_isolate': True,
       'enable_swarming': True,
       'chromium_config': 'android',
       'chromium_apply_config': ['chrome_with_codecs'],

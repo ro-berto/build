@@ -35,7 +35,6 @@ SPEC = {
         'platform': 'win',
       },
       'enable_swarming': True,
-      'use_isolate': True,
       'checkout_dir': 'win',
     },
     'GPU Win Builder (dbg)': {
@@ -59,7 +58,6 @@ SPEC = {
         'platform': 'win',
       },
       'enable_swarming': True,
-      'use_isolate': True,
       'checkout_dir': 'win',
     },
     'Win7 Release (NVIDIA)': {
@@ -265,7 +263,6 @@ SPEC = {
         'platform': 'win',
       },
       'enable_swarming': True,
-      'use_isolate': True,
       'checkout_dir': 'win',
     },
     'GPU Win x64 Builder (dbg)': {
@@ -289,7 +286,6 @@ SPEC = {
         'platform': 'win',
       },
       'enable_swarming': True,
-      'use_isolate': True,
       'checkout_dir': 'win',
     },
     'Win7 x64 Release (NVIDIA)': {
@@ -349,7 +345,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'use_isolate': True,
       'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
@@ -373,7 +368,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'use_isolate': True,
       'enable_swarming': True,
       'checkout_dir': 'linux',
     },
@@ -394,7 +388,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'use_isolate': True,
       'enable_swarming': True,
       'checkout_dir': 'linux',
     },
@@ -538,7 +531,6 @@ SPEC = {
         'platform': 'mac',
       },
       'enable_swarming': True,
-      'use_isolate': True,
       'checkout_dir': 'mac',
     },
     'GPU Mac Builder (dbg)': {
@@ -560,7 +552,6 @@ SPEC = {
         'platform': 'mac',
       },
       'enable_swarming': True,
-      'use_isolate': True,
       'checkout_dir': 'mac',
     },
     'Mac 10.10 Release (Intel)': {
@@ -765,7 +756,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'use_isolate': False,
       'enable_swarming': False,
     },
     'Android Release (Nexus 5X)': {
@@ -784,7 +774,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'use_isolate': True,
       'enable_swarming': True,
       'checkout_dir': 'android',
     },
@@ -806,7 +795,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'use_isolate': False,
       'enable_swarming': False,
     },
     'Android Release (Nexus 6P)': {
@@ -825,7 +813,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'use_isolate': False,
       'enable_swarming': False,
     },
     'Android Release (Nexus 9)': {
@@ -844,7 +831,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'use_isolate': False,
       'enable_swarming': False,
     },
     'Android Release (Pixel C)': {
@@ -863,7 +849,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'use_isolate': False,
       'enable_swarming': False,
     },
 
@@ -882,7 +867,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'use_isolate': True,
       'enable_swarming': True,
     },
     'Fake Linux Release (NVIDIA)': {
@@ -1017,7 +1001,6 @@ SPEC = {
         'platform': 'linux',
       },
       'enable_swarming': False,
-      'use_isolate': True,
     },
     'Linux ChromiumOS Ozone Builder': {
       'chromium_config': 'chromium',
@@ -1042,7 +1025,6 @@ SPEC = {
         'platform': 'linux',
       },
       'enable_swarming': False,
-      'use_isolate': True,
     },
   },
 }

@@ -32,7 +32,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'use_isolate': True,
       'enable_swarming': True,
       'checkout_dir': 'linux',
     },
@@ -67,7 +66,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'use_isolate': True,
       'enable_swarming': True,
       'checkout_dir': 'linux',
       # Temporary hack because the binaries are too large to be isolated.
@@ -104,7 +102,6 @@ SPEC = {
         'platform': 'linux',
       },
       'enable_swarming': True,
-      'use_isolate': True,
       'checkout_dir': 'linux',
     },
     'Linux Tests (dbg)(1)': {
@@ -143,7 +140,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'use_isolate': True,
       'enable_swarming': True,
       'checkout_dir': 'linux',
     },
@@ -178,7 +174,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'use_isolate': True,
       'enable_swarming': True,
       'checkout_dir': 'linux',
       # Temporary hack because the binaries are too large to be isolated.
@@ -215,7 +210,6 @@ SPEC = {
         'platform': 'linux',
       },
       'enable_swarming': True,
-      'use_isolate': True,
       'checkout_dir': 'linux',
     },
     'Linux Tests Trusty (dbg)(1)': {
@@ -264,7 +258,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'use_isolate': True,
       'enable_swarming': True,
       'checkout_dir': 'android',
     },
@@ -304,7 +297,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'use_isolate': True,
       'enable_swarming': True,
       'checkout_dir': 'android',
     },

@@ -23,7 +23,6 @@ SPEC = {
       'bot_type': 'builder',
       'testing': {'platform': 'linux'},
       'enable_swarming': True,
-      'use_isolate': True,
     },
     'Linux MSan Tests': {
       'chromium_config': 'chromium_msan',
@@ -56,7 +55,6 @@ SPEC = {
       'bot_type': 'builder',
       'testing': {'platform': 'linux'},
       'enable_swarming': True,
-      'use_isolate': True,
     },
     'Linux ChromeOS MSan Tests': {
       'chromium_config': 'chromium_msan',

@@ -318,7 +318,6 @@ SPEC = {
       'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
       'enable_swarming': True,
       'serialize_tests': True,
-      'use_isolate': True,
     },
     'Mac Release (Intel)': {
       'chromium_config': 'chromium',
@@ -346,7 +345,6 @@ SPEC = {
       'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
       'enable_swarming': True,
       'serialize_tests': True,
-      'use_isolate': True,
     },
     'Linux Release (NVIDIA)': {
       'chromium_config': 'chromium',
@@ -374,7 +372,6 @@ SPEC = {
       'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
       'enable_swarming': True,
       'serialize_tests': True,
-      'use_isolate': True,
     },
   },
 }
