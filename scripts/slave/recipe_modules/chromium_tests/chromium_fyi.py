@@ -1245,6 +1245,22 @@ SPEC = {
         'platform': 'linux'
       }
     },
+    'Chromium Linux Goma Canary LocalOutputCache': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['clobber', 'goma_canary', 'mb'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'compile_targets': [ 'chromium_builder_tests' ],
+      'goma_canary': True,
+      'tests': steps.GOMA_TESTS,
+      'test_results_config': 'staging_server',
+      'testing': {
+        'platform': 'linux'
+      }
+    },
     'Chromium Linux Precise Goma LinkTest': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['goma_canary', 'goma_linktest', 'mb'],
