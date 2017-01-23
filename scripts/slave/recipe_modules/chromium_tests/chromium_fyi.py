@@ -501,7 +501,7 @@ SPEC = {
     },
     'Ozone Linux': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
+      'chromium_apply_config': ['mb', 'ozone'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
