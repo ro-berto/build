@@ -720,6 +720,33 @@
     ]
   },
   {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[BUILDER_CACHE]/mac/src/out/Release",
+      "-j",
+      "50",
+      "browser_tests",
+      "browser_tests_run",
+      "gl_tests",
+      "gl_tests_run",
+      "-d",
+      "explain",
+      "-n"
+    ],
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "test r5.compile confirm no-op",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
     "cmd": [],
     "name": "test r5.postprocess_for_goma",
     "~followup_annotations": [
@@ -1652,6 +1679,31 @@
     ]
   },
   {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[BUILDER_CACHE]/mac/src/out/Release",
+      "-j",
+      "50",
+      "browser_tests",
+      "browser_tests_run",
+      "-d",
+      "explain",
+      "-n"
+    ],
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "test r6.compile confirm no-op",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
     "cmd": [],
     "name": "test r6.postprocess_for_goma",
     "~followup_annotations": [
@@ -2414,6 +2466,31 @@
     ]
   },
   {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[BUILDER_CACHE]/mac/src/out/Release",
+      "-j",
+      "50",
+      "gl_tests",
+      "gl_tests_run",
+      "-d",
+      "explain",
+      "-n"
+    ],
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "test r2.compile confirm no-op",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
     "cmd": [],
     "name": "test r2.postprocess_for_goma",
     "~followup_annotations": [
@@ -3169,6 +3246,31 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "test r3.compile",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[BUILDER_CACHE]/mac/src/out/Release",
+      "-j",
+      "50",
+      "gl_tests",
+      "gl_tests_run",
+      "-d",
+      "explain",
+      "-n"
+    ],
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "test r3.compile confirm no-op",
+    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]

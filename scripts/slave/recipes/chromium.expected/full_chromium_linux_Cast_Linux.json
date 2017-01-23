@@ -382,6 +382,26 @@
     "name": "compile"
   },
   {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[BUILDER_CACHE]/Cast_Linux/src/out/Release",
+      "-j",
+      "50",
+      "cast_shell",
+      "-d",
+      "explain",
+      "-n"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "compile confirm no-op",
+    "stdout": "/path/to/tmp/"
+  },
+  {
     "cmd": [],
     "name": "postprocess_for_goma"
   },

@@ -151,6 +151,96 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     return (buildername, bot_config)
 
+  def _run_ninja(self, ninja_command, name=None, ninja_env=None,
+                 ninja_confirm_noop=False, **kwargs):
+    """
+    Run ninja with given command and env.
+
+    Args:
+      ninja_command: Command used for build.
+                     This is sent as part of log.
+                     (e.g. ['ninja', '-C', 'out/Release'])
+      name: Name of compile step.
+      ninja_env: Environment for ninja.
+      ninja_confirm_noop (bool):
+        If this is True, check that ninja does nothing in second build.
+
+    Raises:
+      StepFailure or InfraFailure if it fails to build or
+      occurs something failure on goma steps.
+    """
+
+    self.m.step(name or 'compile', ninja_command,
+                env=ninja_env, **kwargs)
+
+    if not ninja_confirm_noop:
+      return
+
+    ninja_command_explain = ninja_command + ['-d', 'explain', '-n']
+
+    ninja_no_work = 'ninja: no work to do.'
+
+    step_result = self.m.step(
+        (name or 'compile') + ' confirm no-op',
+        ninja_command_explain, env=ninja_env,
+        stdout=self.m.raw_io.output(),
+        step_test_data=(
+            lambda: self.m.raw_io.test_api.stream_output(
+                ninja_no_work
+            )))
+
+    if ninja_no_work not in step_result.stdout: # pragma: no cover
+      raise self.m.step.StepFailure(
+          """Failing build because ninja reported work to do.
+          This means that after completing a compile, another was run and
+          it resulted in still having work to do (that is, a no-op build
+          wasn't a no-op). Consult the first "ninja explain:" line for a
+          likely culprit.""")
+
+
+  def _run_ninja_with_goma(self, ninja_command, name=None,
+                           ninja_log_outdir=None, ninja_log_compiler=None,
+                           goma_env=None, ninja_env=None,
+                           ninja_confirm_noop=False, **kwargs):
+    """
+    Run ninja with goma.
+    This function start goma, call _run_ninja and stop goma using goma module.
+
+    Args:
+      ninja_command: Command used for build.
+                     This is sent as part of log.
+                     (e.g. ['ninja', '-C', 'out/Release'])
+      name: Name of compile step.
+      ninja_log_outdir: Directory of ninja log. (e.g. "out/Release")
+      ninja_log_compiler: Compiler used in ninja. (e.g. "clang")
+      goma_env: Environment controlling goma behavior.
+      ninja_env: Environment for ninja.
+      ninja_confirm_noop (bool):
+        If this is True, check that ninja does nothing in second build.
+
+    Raises:
+      StepFailure or InfraFailure if it fails to build or
+      occurs something failure on goma steps.
+    """
+
+    ninja_log_exit_status = None
+
+    self.m.goma.start(goma_env)
+
+    try:
+      self._run_ninja(ninja_command, name, ninja_env,
+                      ninja_confirm_noop, **kwargs)
+      ninja_log_exit_status = 0
+    except self.m.step.StepFailure as e:
+      ninja_log_exit_status = e.retcode
+      raise e
+
+    finally:
+      self.m.goma.stop(ninja_log_outdir=ninja_log_outdir,
+                       ninja_log_compiler=ninja_log_compiler,
+                       ninja_log_command=ninja_command,
+                       ninja_log_exit_status=ninja_log_exit_status)
+
   # TODO(tikuta): Remove use_goma_module.
   # Decrease the number of ways configuring with or without goma.
   def compile(self, targets=None, name=None, out_dir=None,
@@ -236,10 +326,11 @@ class ChromiumApi(recipe_api.RecipeApi):
     if not use_goma_module:
       compile_exit_status = 1
       try:
-        self.m.step(name or 'compile',
-                    command,
-                    env=ninja_env,
-                    **kwargs)
+        self._run_ninja(ninja_command=command,
+                        name=name or 'compile',
+                        ninja_env=ninja_env,
+                        ninja_confirm_noop=self.c.compile_py.ninja_confirm_noop,
+                        **kwargs)
         compile_exit_status = 0
       except self.m.step.StepFailure as e:
         compile_exit_status = e.retcode
@@ -262,13 +353,14 @@ class ChromiumApi(recipe_api.RecipeApi):
       return
 
     try:
-      self.m.goma.build_with_goma(
+      self._run_ninja_with_goma(
           name=name or 'compile',
           ninja_command=command,
           ninja_env=ninja_env,
           goma_env=goma_env,
           ninja_log_outdir=target_output_dir,
           ninja_log_compiler=self.c.compile_py.compiler or 'goma',
+          ninja_confirm_noop=self.c.compile_py.ninja_confirm_noop,
           **kwargs)
     except self.m.step.StepFailure as e:
       # Handle failures caused by goma.

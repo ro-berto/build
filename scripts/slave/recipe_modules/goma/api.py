@@ -250,15 +250,13 @@ class GomaApi(recipe_api.RecipeApi):
            ninja_log_command=None, ninja_log_exit_status=None, **kwargs):
     """Stop goma compiler_proxy.
 
-    A user MUST execute start beforehand.
+    A user is expected to execute start beforehand.
     It is user's responsibility to handle failure of stopping compiler_proxy.
 
     Raises:
       StepFailure if it fails to stop goma or upload logs.
     """
-
     assert self._goma_dir
-    assert self._goma_started
 
     with self.m.step.nest('postprocess_for_goma'):
       with self.m.step.defer_results():
@@ -279,6 +277,26 @@ class GomaApi(recipe_api.RecipeApi):
   def _upload_logs(self, ninja_log_outdir=None, ninja_log_compiler=None,
                    ninja_log_command=None, ninja_log_exit_status=None,
                    name=None):
+    """
+    Upload some logs to goma client log/monitoring server.
+    * log of compiler_proxy
+    * log of ninja
+    * command line args for ninja
+    * build exit status and etc.
+
+    Args:
+      ninja_log_outdir: Directory of ninja log. (e.g. "out/Release")
+      ninja_log_compiler: Compiler used in ninja. (e.g. "clang")
+      ninja_log_command:
+        Command used for build.
+        (e.g. ['ninja', '-C', 'out/Release'])
+
+      ninja_log_exit_status: Exit status of ninja. (e.g. 0)
+      name: Step name of log upload.
+      skip_sendgomatsmon:
+        Represents whether sending log to goma tsmon.
+    """
+
     args = [
         '--upload-compiler-proxy-info',
         '--gsutil-py-path', self.m.depot_tools.gsutil_py_path,
