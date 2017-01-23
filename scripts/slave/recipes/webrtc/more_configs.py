@@ -95,6 +95,7 @@ def RunSteps(api):
   BuildSteps(api, name='minimal')
   BuildSteps(api, gn_arg='rtc_enable_intelligibility_enhancer=true')
   BuildSteps(api, gn_arg='rtc_include_tests=false')
+  BuildSteps(api, gn_arg='rtc_enable_protobuf=false')
 
 
 def GenTests(api):
