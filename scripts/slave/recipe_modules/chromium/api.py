@@ -509,7 +509,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       # for wrapper script but for real runtest.py .
       full_args = ['--'] + full_args
     if tee_stdout_file:
-      full_args = [tee_stdout_file, '--', runtest_path] + full_args
+      full_args = [tee_stdout_file, '--', 'python', runtest_path] + full_args
       runtest_path = self.package_repo_resource(
           'scripts', 'slave', 'tee.py')
     return self.m.python(
