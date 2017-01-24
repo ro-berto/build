@@ -100,10 +100,7 @@ class BotConfig(object):
               chromium_tests_api.generate_tests_from_test_spec(
                   test_spec, builder_dict,
                   loop_buildername, mastername,
-                  # TODO(phajdan.jr): Get enable_swarming value from
-                  # builder_dict. Above should remove the need to get
-                  # bot_config and buildername in this method.
-                  self.get('enable_swarming', False),
+                  builder_dict.get('enable_swarming', False),
                   builder_dict.get('swarming_dimensions', {}),
                   scripts_compile_targets,
                   test_generators,
