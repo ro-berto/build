@@ -181,8 +181,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         bot_config, root_solution_revision, force)
 
   def set_up_swarming(self, bot_config):
-    if not bot_config.get('enable_swarming'):
-      return
     self.m.isolate.set_isolate_environment(self.m.chromium.c)
     self.m.swarming.check_client_version()
     for key, value in bot_config.get('swarming_dimensions', {}).iteritems():
@@ -236,6 +234,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     api.chromium_tests = self
     return api
 
+  # TODO(phajdan.jr): remove enable_swarming (http://crbug.com/684067).
   def generate_tests_from_test_spec(self, test_spec, builder_dict,
       buildername, mastername, enable_swarming, swarming_dimensions,
       scripts_compile_targets, generators, bot_update_step):

@@ -186,6 +186,19 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/chromeos_amd64_generic_chromium_compile_only_ng/src/tools/swarming_client/swarming.py",
+      "--version"
+    ],
+    "name": "swarming.py --version",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@0.8.6@@@"
+    ]
+  },
+  {
+    "cmd": [
       "RECIPE_PACKAGE_REPO[depot_tools]/cros",
       "chrome-sdk",
       "--board=amd64-generic",
