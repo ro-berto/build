@@ -1253,17 +1253,14 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
 
   def validate_task_results(self, api, step_result):
     results = getattr(step_result, 'isolated_script_results', None) or {}
-    valid = True
+    valid = False
     failures = []
-    try:
-      if is_json_results_format(results):
-        valid, failures = self.validate_json_test_results(api, results)
-      else:
-        valid, failures = self.validate_simplified_results(results)
-    except (ValueError, KeyError) as e:
-      step_result.presentation.logs['invalid_results_exc'] = [repr(e)]
-      valid = False
-      failures = None
+
+    if is_json_results_format(results):
+      valid, failures = self.validate_json_test_results(api, results)
+    elif results:
+      valid, failures = self.validate_simplified_results(results)
+
     if not failures and step_result.retcode != 0:
       failures = ['%s (entire test suite)' % self.name]
       valid = False
