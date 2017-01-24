@@ -37,3 +37,12 @@ def distribute_subdir_slaves(master, builders, hostnames, slaves):
       'subdir': str(subdir_index),
     })
     hostname_index += 1
+
+
+def verify_subdir_slaves(c):
+  """Checks that subdir slaves are not auto-rebooted."""
+  for s in c['slaves']:
+    # Note, we can't import the class AutoRebootBuildSlave
+    if '#' in s.slavename and s.__class__.__name__ == 'AutoRebootBuildSlave':
+      raise Exception(
+          'Subdir slaves must not auto-reboot. But found %s' % s.slavename)
