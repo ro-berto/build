@@ -185,19 +185,6 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Linux_Snapshot_Builder/src/tools/swarming_client/swarming.py",
-      "--version"
-    ],
-    "name": "swarming.py --version",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@0.8.6@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
@@ -205,7 +192,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "component=static_library gomadir='[CACHE]/cipd/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1",
+      "GYP_DEFINES": "component=static_library gomadir='[CACHE]/cipd/goma' target_arch=x64 use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -519,7 +506,7 @@
       "--target",
       "Release",
       "--factory-properties",
-      "{\"gclient_env\": {\"GYP_DEFINES\": \"component=static_library gomadir='[CACHE]/cipd/goma' target_arch=x64 test_isolation_mode=prepare use_goma=1\"}, \"gs_acl\": \"public-read\", \"gs_bucket\": \"gs://chromium-v8-snapshots\"}",
+      "{\"gclient_env\": {\"GYP_DEFINES\": \"component=static_library gomadir='[CACHE]/cipd/goma' target_arch=x64 use_goma=1\"}, \"gs_acl\": \"public-read\", \"gs_bucket\": \"gs://chromium-v8-snapshots\"}",
       "--slave-utils-gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--build-properties",

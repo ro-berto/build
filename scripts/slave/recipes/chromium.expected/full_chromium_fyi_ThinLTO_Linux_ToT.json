@@ -124,19 +124,6 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/ThinLTO_Linux_ToT/src/tools/swarming_client/swarming.py",
-      "--version"
-    ],
-    "name": "swarming.py --version",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@0.8.6@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
@@ -144,7 +131,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "clang=1 clang_use_chrome_plugins=0 component=static_library target_arch=x64 test_isolation_mode=prepare",
+      "GYP_DEFINES": "clang=1 clang_use_chrome_plugins=0 component=static_library target_arch=x64",
       "LLVM_FORCE_HEAD_REVISION": "YES",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },

@@ -182,19 +182,6 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/ASan_Release__32_bit_x86_with_V8_ARM_/src/tools/swarming_client/swarming.py",
-      "--version"
-    ],
-    "name": "swarming.py --version",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@0.8.6@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
       "[BUILDER_CACHE]/ASan_Release__32_bit_x86_with_V8_ARM_/src/out/Release"
     ],
@@ -221,7 +208,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "asan=1 clang=1 component=static_library disable_nacl=1 enable_ipc_fuzzer=1 gomadir='[CACHE]/cipd/goma' host_arch=x86_64 sanitizer_coverage=edge target_arch=ia32 test_isolation_mode=prepare use_goma=1 v8_enable_verify_heap=1 v8_target_arch=arm",
+      "GYP_DEFINES": "asan=1 clang=1 component=static_library disable_nacl=1 enable_ipc_fuzzer=1 gomadir='[CACHE]/cipd/goma' host_arch=x86_64 sanitizer_coverage=edge target_arch=ia32 use_goma=1 v8_enable_verify_heap=1 v8_target_arch=arm",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
