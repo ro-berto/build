@@ -492,8 +492,7 @@
       "[START_DIR]/v8/out/Release/bot_default.isolated.gen.json",
       "[START_DIR]/v8/out/Release/optimize_for_size.isolated.gen.json",
       "[START_DIR]/v8/out/Release/perf.isolated.gen.json",
-      "[START_DIR]/v8/out/Release/simdjs.isolated.gen.json",
-      "[START_DIR]/v8/out/Release/test262.isolated.gen.json"
+      "[START_DIR]/v8/out/Release/simdjs.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [
@@ -502,8 +501,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"bot_default\": \"[dummy hash for bot_default]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"optimize_for_size\": \"[dummy hash for optimize_for_size]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"perf\": \"[dummy hash for perf]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"simdjs\": \"[dummy hash for simdjs]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"test262\": \"[dummy hash for test262]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"simdjs\": \"[dummy hash for simdjs]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -519,7 +517,7 @@
       "cp",
       "-a",
       "public-read",
-      "{\"benchmarks\": \"[dummy hash for benchmarks]\", \"bot_default\": \"[dummy hash for bot_default]\", \"optimize_for_size\": \"[dummy hash for optimize_for_size]\", \"perf\": \"[dummy hash for perf]\", \"simdjs\": \"[dummy hash for simdjs]\", \"test262\": \"[dummy hash for test262]\"}",
+      "{\"benchmarks\": \"[dummy hash for benchmarks]\", \"bot_default\": \"[dummy hash for bot_default]\", \"optimize_for_size\": \"[dummy hash for optimize_for_size]\", \"perf\": \"[dummy hash for perf]\", \"simdjs\": \"[dummy hash for simdjs]\"}",
       "gs://chromium-v8/v8-arm-rel/full-build-linux_f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json"
     ],
     "name": "gsutil upload",
@@ -574,8 +572,7 @@
             "bot_default": "[dummy hash for bot_default]",
             "optimize_for_size": "[dummy hash for optimize_for_size]",
             "perf": "[dummy hash for perf]",
-            "simdjs": "[dummy hash for simdjs]",
-            "test262": "[dummy hash for test262]"
+            "simdjs": "[dummy hash for simdjs]"
           }
         }
       }
@@ -611,8 +608,7 @@
             "bot_default": "[dummy hash for bot_default]",
             "optimize_for_size": "[dummy hash for optimize_for_size]",
             "perf": "[dummy hash for perf]",
-            "simdjs": "[dummy hash for simdjs]",
-            "test262": "[dummy hash for test262]"
+            "simdjs": "[dummy hash for simdjs]"
           }
         }
       }

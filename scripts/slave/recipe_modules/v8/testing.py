@@ -94,13 +94,6 @@ TEST_CONFIGS = freeze({
     'tool': 'run-gcmole',
     'isolated_target': 'run-gcmole',
   },
-  'ignition_turbofan': {
-    'name': 'Ignition - turbofan',
-    'tests': ['bot_default'],
-    'suite_mapping': [
-        'mjsunit', 'cctest', 'webkit', 'message', 'preparser', 'intl'],
-    'variants': V8Variant('ignition_turbofan'),
-  },
   'mjsunit': {
     'name': 'Mjsunit',
     'tests': ['mjsunit'],
@@ -109,11 +102,6 @@ TEST_CONFIGS = freeze({
     'name': 'Mjsunit - extra',
     'tests': ['mjsunit'],
     'variants': V8Variant('extra'),
-  },
-  'mjsunit_ignition_turbofan': {
-    'name': 'Mjsunit - ignition - turbofan',
-    'tests': ['mjsunit'],
-    'variants': V8Variant('ignition_turbofan'),
   },
   'mjsunit_sp_frame_access': {
     'name': 'Mjsunit - sp frame access',
@@ -152,12 +140,6 @@ TEST_CONFIGS = freeze({
     'tests': ['test262'],
     'test_args': ['--download-data'],
     'variants': V8Variant('extra'),
-  },
-  'test262_ignition_turbofan': {
-    'name': 'Test262 - ignition - turbofan',
-    'tests': ['test262'],
-    'test_args': ['--download-data'],
-    'variants': V8Variant('ignition_turbofan'),
   },
   'test262_variants': {
     'name': 'Test262',
