@@ -529,9 +529,9 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
     swarming_expiration = None
     swarming_hard_timeout = None
     cipd_packages = None
-    swarming_spec = test.get('swarming', {})
-    if swarming_spec.get('can_use_on_swarming_builders'):
-      if enable_swarming:
+    if enable_swarming:
+      swarming_spec = test.get('swarming', {})
+      if swarming_spec.get('can_use_on_swarming_builders'):
         use_swarming = True
         swarming_shards = swarming_spec.get('shards', 1)
         swarming_dimension_sets = swarming_spec.get('dimension_sets')
@@ -544,12 +544,6 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
                             p['cipd_package'],
                             p['revision'])
                            for p in packages]
-      else:  # pragma: no cover
-        api.python.failing_step(
-            'swarming_sanity_check',
-            ('%r sets can_use_on_swarming_builders in src/testing/buildbot, '
-             'but %r:%r disables swarming') % (
-                test['test'], mastername, buildername))
     override_compile_targets = test.get('override_compile_targets', None)
     override_isolate_target = test.get('override_isolate_target', None)
     target_name = str(test['test'])
@@ -599,20 +593,14 @@ def generate_instrumentation_test(api, chromium_tests_api, mastername,
   for test in test_spec.get(buildername, {}).get('instrumentation_tests', []):
     test_name = str(test.get('test'))
     use_swarming = False
-    swarming_spec = test.get('swarming', {})
-    if swarming_spec.get('can_use_on_swarming_builders'):
-      if enable_swarming:
+    if enable_swarming:
+      swarming_spec = test.get('swarming', {})
+      if swarming_spec.get('can_use_on_swarming_builders'):
         use_swarming = True
         swarming_shards = swarming_spec.get('shards', 1)
         swarming_dimension_sets = swarming_spec.get('dimension_sets')
         swarming_priority = swarming_spec.get('priority_adjustment')
         swarming_expiration = swarming_spec.get('expiration')
-      else:  # pragma: no cover
-        api.python.failing_step(
-            'swarming_sanity_check',
-            ('%r sets can_use_on_swarming_builders in src/testing/buildbot, '
-             'but %r:%r disables swarming') % (
-                test_name, mastername, buildername))
     args = get_args_for_test(api, chromium_tests_api, test,
                              bot_update_step)
     if use_swarming and swarming_dimension_sets:
@@ -1376,9 +1364,9 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
     swarming_expiration = None
     swarming_hard_timeout = None
     swarming_io_timeout = None
-    swarming_spec = spec.get('swarming', {})
-    if swarming_spec.get('can_use_on_swarming_builders', False):
-      if enable_swarming:
+    if enable_swarming:
+      swarming_spec = spec.get('swarming', {})
+      if swarming_spec.get('can_use_on_swarming_builders', False):
         use_swarming = True
         swarming_shards = swarming_spec.get('shards', 1)
         swarming_dimension_sets = swarming_spec.get('dimension_sets')
@@ -1386,12 +1374,6 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
         swarming_expiration = swarming_spec.get('expiration')
         swarming_hard_timeout = swarming_spec.get('hard_timeout')
         swarming_io_timeout = swarming_spec.get('io_timeout')
-      else:  # pragma: no cover
-        api.python.failing_step(
-            'swarming_sanity_check',
-            ('%r sets can_use_on_swarming_builders in src/testing/buildbot, '
-             'but %r:%r disables swarming') % (
-                spec['name'], mastername, buildername))
     name = str(spec['name'])
     # The variable substitution and precommit/non-precommit arguments
     # could be supported for the other test types too, but that wasn't
