@@ -309,19 +309,578 @@
     "cmd": [
       "python",
       "-u",
-      "import sys; sys.exit(1)"
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
-    "name": "swarming_sanity_check",
+    "name": "cleanup_temp"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil, sys, os\nshutil.rmtree(sys.argv[1], True)\nshutil.rmtree(sys.argv[2], True)\ntry:\n  os.remove(sys.argv[3])\nexcept OSError:\n  pass\nfor base, _dirs, files in os.walk(sys.argv[4]):\n  for f in files:\n    if f.endswith('.pyc'):\n      os.remove(os.path.join(base, f))\n",
+      "[BUILDER_CACHE]/Android_arm_Builder__dbg_/src/out/Debug/debug_info_dumps",
+      "[BUILDER_CACHE]/Android_arm_Builder__dbg_/src/out/Debug/test_logs",
+      "[BUILDER_CACHE]/Android_arm_Builder__dbg_/src/out/build_product.zip",
+      "[BUILDER_CACHE]/Android_arm_Builder__dbg_/src"
+    ],
+    "name": "clean local files",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@'browser_tests' sets can_use_on_swarming_builders in src/testing/buildbot, but 'chromium.android':'Android WebView M (dbg)' disables swarming@@@",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import shutil, sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@shutil.rmtree(sys.argv[1], True)@@@",
+      "@@@STEP_LOG_LINE@python.inline@shutil.rmtree(sys.argv[2], True)@@@",
+      "@@@STEP_LOG_LINE@python.inline@try:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.remove(sys.argv[3])@@@",
+      "@@@STEP_LOG_LINE@python.inline@except OSError:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  pass@@@",
+      "@@@STEP_LOG_LINE@python.inline@for base, _dirs, files in os.walk(sys.argv[4]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  for f in files:@@@",
+      "@@@STEP_LOG_LINE@python.inline@    if f.endswith('.pyc'):@@@",
+      "@@@STEP_LOG_LINE@python.inline@      os.remove(os.path.join(base, f))@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/Android_arm_Builder__dbg_/src/build/tree_truth.sh",
+      "[BUILDER_CACHE]/Android_arm_Builder__dbg_/src",
+      "src"
+    ],
+    "name": "tree truth steps"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
+      "--build-dir",
+      "[BUILDER_CACHE]/Android_arm_Builder__dbg_/src/out/Debug",
+      "--clean-isolated-files"
+    ],
+    "name": "clean isolated files"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/Android_arm_Builder__dbg_/src/tools/mb/mb.py",
+      "gen",
+      "-m",
+      "chromium.android",
+      "-b",
+      "Android arm Builder (dbg)",
+      "--config-file",
+      "[BUILDER_CACHE]/Android_arm_Builder__dbg_/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[CACHE]/cipd/goma",
+      "--swarming-targets-file",
+      "browser_tests_apk\n",
+      "//out/Debug"
+    ],
+    "cwd": "[BUILDER_CACHE]/Android_arm_Builder__dbg_/src",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "generate_build_files",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@browser_tests_apk@@@",
+      "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "python",
+      "RECIPE_MODULE[build::goma]/resources/utils.py",
+      "jobs",
+      "--file-path",
+      "/path/to/tmp/"
+    ],
+    "name": "calculate the number of recommended jobs"
+  },
+  {
+    "cmd": [],
+    "name": "preprocess_for_goma"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[GOMA_CACHE]/Android_arm_Builder__dbg_",
+      "511"
+    ],
+    "name": "preprocess_for_goma.makedirs goma cache directory",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/cipd/goma/goma_ctl.py",
+      "restart"
+    ],
+    "env": {
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[ROOT]/build_data_dir/crash_report_id_file",
+      "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/Android_arm_Builder__dbg_",
+      "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
+      "GOMA_DUMP_STATS_FILE": "[ROOT]/build_data_dir/goma_stats_proto",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/Android_arm_Builder__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_arm_Builder__dbg_/src/build/android:%(PATH)s"
+    },
+    "name": "preprocess_for_goma.start_goma",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
+      "start",
+      "--cloudtail-path",
+      "[CACHE]/cipd/goma/cloudtail",
+      "--cloudtail-service-account-json",
+      "/creds/service_accounts/service-account-goma-cloudtail.json",
+      "--pid-file",
+      "[TMP_BASE]/cloudtail.pid"
+    ],
+    "name": "preprocess_for_goma.start cloudtail",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[BUILDER_CACHE]/Android_arm_Builder__dbg_/src/out/Debug",
+      "-j",
+      "50",
+      "android_tools",
+      "browser_tests_apk",
+      "browser_tests_apk_run",
+      "gfx_unittests_apk",
+      "system_webview_apk",
+      "system_webview_shell_layout_test_apk",
+      "webview_ui_test_app_test_apk"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/Android_arm_Builder__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_arm_Builder__dbg_/src/build/android:%(PATH)s"
+    },
+    "name": "compile"
+  },
+  {
+    "cmd": [],
+    "name": "postprocess_for_goma"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/cipd/goma/goma_ctl.py",
+      "jsonstatus"
+    ],
+    "env": {
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[ROOT]/build_data_dir/crash_report_id_file",
+      "GOMA_DUMP_STATS_FILE": "[ROOT]/build_data_dir/goma_stats_proto",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "postprocess_for_goma.goma_jsonstatus",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"notice\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"infra_status\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"num_user_error\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"ping_status_code\": 200@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "{\"notice\": [{\"infra_status\": {\"num_user_error\": 0, \"ping_status_code\": 200}}]}",
+      "[CACHE]/cipd/goma/jsonstatus"
+    ],
+    "name": "postprocess_for_goma.write_jsonstatus",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/cipd/goma/goma_ctl.py",
+      "stat"
+    ],
+    "env": {
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[ROOT]/build_data_dir/crash_report_id_file",
+      "GOMA_DUMP_STATS_FILE": "[ROOT]/build_data_dir/goma_stats_proto",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "postprocess_for_goma.goma_stat",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/cipd/goma/goma_ctl.py",
+      "stop"
+    ],
+    "env": {
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[ROOT]/build_data_dir/crash_report_id_file",
+      "GOMA_DUMP_STATS_FILE": "[ROOT]/build_data_dir/goma_stats_proto",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "postprocess_for_goma.stop_goma",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/upload_goma_logs.py",
+      "--upload-compiler-proxy-info",
+      "--gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--json-status",
+      "[CACHE]/cipd/goma/jsonstatus",
+      "--ninja-log-outdir",
+      "[BUILDER_CACHE]/Android_arm_Builder__dbg_/src/out/Debug",
+      "--ninja-log-command",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Android_arm_Builder__dbg_/src/out/Debug', '-j', 50, 'android_tools', 'browser_tests_apk', 'browser_tests_apk_run', 'gfx_unittests_apk', 'system_webview_apk', 'system_webview_shell_layout_test_apk', 'webview_ui_test_app_test_apk']",
+      "--ninja-log-exit-status",
+      "0",
+      "--ninja-log-compiler",
+      "goma",
+      "--goma-stats-file",
+      "[ROOT]/build_data_dir/goma_stats_proto",
+      "--goma-crash-report-id-file",
+      "[ROOT]/build_data_dir/crash_report_id_file",
+      "--build-data-dir",
+      "[ROOT]/build_data_dir",
+      "--buildbot-buildername",
+      "Android arm Builder (dbg)",
+      "--buildbot-mastername",
+      "chromium.android",
+      "--buildbot-slavename",
+      "TestSlavename"
+    ],
+    "name": "postprocess_for_goma.upload_log",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
+      "stop",
+      "--killed-pid-file",
+      "[TMP_BASE]/cloudtail.pid"
+    ],
+    "name": "postprocess_for_goma.stop cloudtail",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/Android_arm_Builder__dbg_/src/tools/determinism/remove_build_metadata.py",
+      "--build-dir",
+      "[BUILDER_CACHE]/Android_arm_Builder__dbg_/src/out/Debug"
+    ],
+    "cwd": "[START_DIR]",
+    "name": "remove_build_metadata"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::isolate]/resources/isolate.py",
+      "[BUILDER_CACHE]/Android_arm_Builder__dbg_/src/tools/swarming_client",
+      "batcharchive",
+      "--dump-json",
+      "/path/to/tmp/json",
+      "--isolate-server",
+      "https://isolateserver.appspot.com",
+      "--verbose",
+      "[BUILDER_CACHE]/Android_arm_Builder__dbg_/src/out/Debug/browser_tests_apk.isolated.gen.json"
+    ],
+    "name": "isolate tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"browser_tests_apk\": \"[dummy hash for browser_tests_apk]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/zip_build.py",
+      "--target",
+      "Debug",
+      "--gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--staging-dir",
+      "[CACHE]/chrome_staging",
+      "--src-dir",
+      "[BUILDER_CACHE]/Android_arm_Builder__dbg_/src",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--build-url",
+      "gs://chromium-android-archive/chromium.android/Android arm Builder (dbg)",
+      "--build_revision",
+      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"Android arm Builder (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.android\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"Android arm Builder (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.android\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+    ],
+    "name": "package build"
+  },
+  {
+    "cmd": [],
+    "name": "trigger",
+    "trigger_specs": [
+      {
+        "builder_name": "Android WebView L (dbg)",
+        "properties": {
+          "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
+          "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
+          "parent_got_buildtools_revision": "f0319a328b2809876916353cb994259692140934",
+          "parent_got_buildtools_revision_cp": "refs/heads/master@{#182578}",
+          "parent_got_nacl_revision": "d998e125e8253980d76e269b7982aeeefc1b9b50",
+          "parent_got_nacl_revision_cp": "refs/heads/master@{#274981}",
+          "parent_got_revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+          "parent_got_revision_cp": "refs/heads/master@{#170242}",
+          "parent_got_swarming_client_revision": "a0ee5d99f1d4b38ddaa4c759c837980b63b99566",
+          "parent_got_swarming_client_revision_cp": "refs/heads/master@{#276089}",
+          "parent_got_v8_revision": "801ada225ddc271c132c3a35f03975671d43e399",
+          "parent_got_v8_revision_cp": "refs/heads/master@{#43426}",
+          "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
+          "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}",
+          "parent_mastername": "chromium.android"
+        }
+      },
+      {
+        "builder_name": "Android WebView M (dbg)",
+        "properties": {
+          "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
+          "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
+          "parent_got_buildtools_revision": "f0319a328b2809876916353cb994259692140934",
+          "parent_got_buildtools_revision_cp": "refs/heads/master@{#182578}",
+          "parent_got_nacl_revision": "d998e125e8253980d76e269b7982aeeefc1b9b50",
+          "parent_got_nacl_revision_cp": "refs/heads/master@{#274981}",
+          "parent_got_revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+          "parent_got_revision_cp": "refs/heads/master@{#170242}",
+          "parent_got_swarming_client_revision": "a0ee5d99f1d4b38ddaa4c759c837980b63b99566",
+          "parent_got_swarming_client_revision_cp": "refs/heads/master@{#276089}",
+          "parent_got_v8_revision": "801ada225ddc271c132c3a35f03975671d43e399",
+          "parent_got_v8_revision_cp": "refs/heads/master@{#43426}",
+          "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
+          "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}",
+          "parent_mastername": "chromium.android"
+        }
+      },
+      {
+        "builder_name": "KitKat Tablet Tester",
+        "properties": {
+          "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
+          "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
+          "parent_got_buildtools_revision": "f0319a328b2809876916353cb994259692140934",
+          "parent_got_buildtools_revision_cp": "refs/heads/master@{#182578}",
+          "parent_got_nacl_revision": "d998e125e8253980d76e269b7982aeeefc1b9b50",
+          "parent_got_nacl_revision_cp": "refs/heads/master@{#274981}",
+          "parent_got_revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+          "parent_got_revision_cp": "refs/heads/master@{#170242}",
+          "parent_got_swarming_client_revision": "a0ee5d99f1d4b38ddaa4c759c837980b63b99566",
+          "parent_got_swarming_client_revision_cp": "refs/heads/master@{#276089}",
+          "parent_got_v8_revision": "801ada225ddc271c132c3a35f03975671d43e399",
+          "parent_got_v8_revision_cp": "refs/heads/master@{#43426}",
+          "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
+          "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}",
+          "parent_mastername": "chromium.android"
+        }
+      },
+      {
+        "builder_name": "Lollipop Phone Tester",
+        "properties": {
+          "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
+          "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
+          "parent_got_buildtools_revision": "f0319a328b2809876916353cb994259692140934",
+          "parent_got_buildtools_revision_cp": "refs/heads/master@{#182578}",
+          "parent_got_nacl_revision": "d998e125e8253980d76e269b7982aeeefc1b9b50",
+          "parent_got_nacl_revision_cp": "refs/heads/master@{#274981}",
+          "parent_got_revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+          "parent_got_revision_cp": "refs/heads/master@{#170242}",
+          "parent_got_swarming_client_revision": "a0ee5d99f1d4b38ddaa4c759c837980b63b99566",
+          "parent_got_swarming_client_revision_cp": "refs/heads/master@{#276089}",
+          "parent_got_v8_revision": "801ada225ddc271c132c3a35f03975671d43e399",
+          "parent_got_v8_revision_cp": "refs/heads/master@{#43426}",
+          "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
+          "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}",
+          "parent_mastername": "chromium.android"
+        }
+      },
+      {
+        "builder_name": "Lollipop Tablet Tester",
+        "properties": {
+          "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
+          "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
+          "parent_got_buildtools_revision": "f0319a328b2809876916353cb994259692140934",
+          "parent_got_buildtools_revision_cp": "refs/heads/master@{#182578}",
+          "parent_got_nacl_revision": "d998e125e8253980d76e269b7982aeeefc1b9b50",
+          "parent_got_nacl_revision_cp": "refs/heads/master@{#274981}",
+          "parent_got_revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+          "parent_got_revision_cp": "refs/heads/master@{#170242}",
+          "parent_got_swarming_client_revision": "a0ee5d99f1d4b38ddaa4c759c837980b63b99566",
+          "parent_got_swarming_client_revision_cp": "refs/heads/master@{#276089}",
+          "parent_got_v8_revision": "801ada225ddc271c132c3a35f03975671d43e399",
+          "parent_got_v8_revision_cp": "refs/heads/master@{#43426}",
+          "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
+          "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}",
+          "parent_mastername": "chromium.android"
+        }
+      },
+      {
+        "builder_name": "Marshmallow Tablet Tester",
+        "properties": {
+          "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
+          "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
+          "parent_got_buildtools_revision": "f0319a328b2809876916353cb994259692140934",
+          "parent_got_buildtools_revision_cp": "refs/heads/master@{#182578}",
+          "parent_got_nacl_revision": "d998e125e8253980d76e269b7982aeeefc1b9b50",
+          "parent_got_nacl_revision_cp": "refs/heads/master@{#274981}",
+          "parent_got_revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+          "parent_got_revision_cp": "refs/heads/master@{#170242}",
+          "parent_got_swarming_client_revision": "a0ee5d99f1d4b38ddaa4c759c837980b63b99566",
+          "parent_got_swarming_client_revision_cp": "refs/heads/master@{#276089}",
+          "parent_got_v8_revision": "801ada225ddc271c132c3a35f03975671d43e399",
+          "parent_got_v8_revision_cp": "refs/heads/master@{#43426}",
+          "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
+          "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}",
+          "parent_mastername": "chromium.android"
+        }
+      },
+      {
+        "bucket": "master.chromium.android.fyi",
+        "builder_name": "Android Tests (trial)(dbg)",
+        "properties": {
+          "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
+          "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
+          "parent_got_buildtools_revision": "f0319a328b2809876916353cb994259692140934",
+          "parent_got_buildtools_revision_cp": "refs/heads/master@{#182578}",
+          "parent_got_nacl_revision": "d998e125e8253980d76e269b7982aeeefc1b9b50",
+          "parent_got_nacl_revision_cp": "refs/heads/master@{#274981}",
+          "parent_got_revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+          "parent_got_revision_cp": "refs/heads/master@{#170242}",
+          "parent_got_swarming_client_revision": "a0ee5d99f1d4b38ddaa4c759c837980b63b99566",
+          "parent_got_swarming_client_revision_cp": "refs/heads/master@{#276089}",
+          "parent_got_v8_revision": "801ada225ddc271c132c3a35f03975671d43e399",
+          "parent_got_v8_revision_cp": "refs/heads/master@{#43426}",
+          "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
+          "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}",
+          "parent_mastername": "chromium.android"
+        }
+      },
+      {
+        "bucket": "master.chromium.android.fyi",
+        "builder_name": "Jelly Bean Tester",
+        "properties": {
+          "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
+          "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
+          "parent_got_buildtools_revision": "f0319a328b2809876916353cb994259692140934",
+          "parent_got_buildtools_revision_cp": "refs/heads/master@{#182578}",
+          "parent_got_nacl_revision": "d998e125e8253980d76e269b7982aeeefc1b9b50",
+          "parent_got_nacl_revision_cp": "refs/heads/master@{#274981}",
+          "parent_got_revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+          "parent_got_revision_cp": "refs/heads/master@{#170242}",
+          "parent_got_swarming_client_revision": "a0ee5d99f1d4b38ddaa4c759c837980b63b99566",
+          "parent_got_swarming_client_revision_cp": "refs/heads/master@{#276089}",
+          "parent_got_v8_revision": "801ada225ddc271c132c3a35f03975671d43e399",
+          "parent_got_v8_revision_cp": "refs/heads/master@{#43426}",
+          "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
+          "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}",
+          "parent_mastername": "chromium.android"
+        }
+      },
+      {
+        "bucket": "master.chromium.android.fyi",
+        "builder_name": "Lollipop Low-end Tester",
+        "properties": {
+          "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
+          "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
+          "parent_got_buildtools_revision": "f0319a328b2809876916353cb994259692140934",
+          "parent_got_buildtools_revision_cp": "refs/heads/master@{#182578}",
+          "parent_got_nacl_revision": "d998e125e8253980d76e269b7982aeeefc1b9b50",
+          "parent_got_nacl_revision_cp": "refs/heads/master@{#274981}",
+          "parent_got_revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+          "parent_got_revision_cp": "refs/heads/master@{#170242}",
+          "parent_got_swarming_client_revision": "a0ee5d99f1d4b38ddaa4c759c837980b63b99566",
+          "parent_got_swarming_client_revision_cp": "refs/heads/master@{#276089}",
+          "parent_got_v8_revision": "801ada225ddc271c132c3a35f03975671d43e399",
+          "parent_got_v8_revision_cp": "refs/heads/master@{#43426}",
+          "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
+          "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}",
+          "parent_mastername": "chromium.android"
+        }
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Android Tests (trial)(dbg)<br />Android WebView L (dbg)<br />Android WebView M (dbg)<br />Jelly Bean Tester<br />KitKat Tablet Tester<br />Lollipop Low-end Tester<br />Lollipop Phone Tester<br />Lollipop Tablet Tester<br />Marshmallow Tablet Tester@@@"
     ]
   },
   {
     "name": "$result",
-    "reason": "Step('swarming_sanity_check') failed with return_code 1",
     "recipe_result": null,
-    "status_code": 1
+    "status_code": 0
   }
 ]
