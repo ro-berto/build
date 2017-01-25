@@ -174,7 +174,6 @@
       "[START_DIR]/src/tools-webrtc/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/cipd/goma",
-      "--isolate-map-file=[START_DIR]/src/webrtc/build/gn_isolate_map.pyl",
       "//out/Release"
     ],
     "cwd": "[START_DIR]/src",

@@ -188,7 +188,6 @@
       "[BUILDER_CACHE]\\Win32_Debug__Clang_\\src\\tools-webrtc\\mb\\mb_config.pyl",
       "--goma-dir",
       "[CACHE]\\cipd\\goma",
-      "--isolate-map-file=[BUILDER_CACHE]\\Win32_Debug__Clang_\\src\\webrtc\\build\\gn_isolate_map.pyl",
       "//out/Debug"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Debug__Clang_\\src",

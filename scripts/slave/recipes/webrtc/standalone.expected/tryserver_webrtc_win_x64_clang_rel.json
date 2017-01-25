@@ -236,7 +236,6 @@
       "[BUILDER_CACHE]\\win_x64_clang_rel\\src\\tools-webrtc\\mb\\mb_config.pyl",
       "--goma-dir",
       "[CACHE]\\cipd\\goma",
-      "--isolate-map-file=[BUILDER_CACHE]\\win_x64_clang_rel\\src\\webrtc\\build\\gn_isolate_map.pyl",
       "//out/Release_x64"
     ],
     "cwd": "[BUILDER_CACHE]\\win_x64_clang_rel\\src",

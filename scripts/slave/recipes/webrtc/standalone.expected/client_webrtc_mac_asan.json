@@ -214,7 +214,6 @@
       "[CACHE]/cipd/goma",
       "--swarming-targets-file",
       "audio_decoder_unittests\ncommon_audio_unittests\ncommon_video_unittests\nmodules_tests\nmodules_unittests\npeerconnection_unittests\nrtc_media_unittests\nrtc_pc_unittests\nrtc_stats_unittests\nrtc_unittests\nsystem_wrappers_unittests\ntest_support_unittests\ntools_unittests\nvideo_engine_tests\nvoice_engine_unittests\nwebrtc_nonparallel_tests\n",
-      "--isolate-map-file=[BUILDER_CACHE]/Mac_Asan/src/webrtc/build/gn_isolate_map.pyl",
       "//out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/Mac_Asan/src",

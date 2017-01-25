@@ -238,7 +238,6 @@
       "[BUILDER_CACHE]/android_compile_dbg/src/tools-webrtc/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/cipd/goma",
-      "--isolate-map-file=[BUILDER_CACHE]/android_compile_dbg/src/webrtc/build/gn_isolate_map.pyl",
       "//out/Debug"
     ],
     "cwd": "[BUILDER_CACHE]/android_compile_dbg/src",

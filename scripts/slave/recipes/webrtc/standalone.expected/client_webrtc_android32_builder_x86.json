@@ -201,7 +201,6 @@
       "[BUILDER_CACHE]/Android32_Builder_x86/src/tools-webrtc/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/cipd/goma",
-      "--isolate-map-file=[BUILDER_CACHE]/Android32_Builder_x86/src/webrtc/build/gn_isolate_map.pyl",
       "//out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/Android32_Builder_x86/src",
