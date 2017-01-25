@@ -1157,6 +1157,24 @@
     ]
   },
   {
+    "cmd": [
+      "echo",
+      "[BUILDER_CACHE]/Android_Nexus6_Perf__3_/out/Release"
+    ],
+    "cwd": "[BUILDER_CACHE]/Android_Nexus6_Perf__3_",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/Android_Nexus6_Perf__3_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Nexus6_Perf__3_/src/build/android:%(PATH)s"
+    },
+    "name": "no microdump stackwalk",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@info@This bot appears to not have the microdump_stackwalk binary.@@@",
+      "@@@STEP_LOG_LINE@info@This is needed by the bot to run stack walking logic for androidbuilds.@@@",
+      "@@@STEP_LOG_LINE@info@No action is needed at this time; contact martiniss@ for any questions or issues@@@",
+      "@@@STEP_LOG_END@info@@@"
+    ]
+  },
+  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0

@@ -1220,6 +1220,19 @@ class AndroidApi(recipe_api.RecipeApi):
     build_dir = root_chromium_dir.join(
         'out', self.m.chromium.c.BUILD_CONFIG)
     logcat = build_dir.join('full_log')
+
+    microdump_stackwalk_path = build_dir.join('microdump_stackwalk')
+    if not self.m.path.exists(microdump_stackwalk_path):
+      result = self.m.step('no microdump stackwalk', ['echo', build_dir])
+      result.presentation.logs['info'] = [
+          'This bot appears to not have the microdump_stackwalk binary.',
+          'This is needed by the bot to run stack walking logic for android'
+          'builds.',
+          'No action is needed at this time; contact martiniss@ for any'
+          ' questions or issues',
+      ]
+      return
+
     with self.m.tempfile.temp_dir('symbols') as temp_symbols_dir:
       # TODO(mikecase): Only generate breakpad symbols if we
       # know there is at least one breakpad crash. This step takes
@@ -1228,7 +1241,7 @@ class AndroidApi(recipe_api.RecipeApi):
         self.generate_breakpad_symbols(
             temp_symbols_dir, binary, root_chromium_dir)
       stackwalker_args = ['--stackwalker-binary-path',
-                          build_dir.join('microdump_stackwalk'),
+                          microdump_stackwalk_path,
                           '--stack-trace-path', logcat,
                           '--symbols-path', temp_symbols_dir]
       self.m.python('symbolized breakpad crashes',
@@ -1325,13 +1338,23 @@ class AndroidApi(recipe_api.RecipeApi):
       self.asan_device_setup()
 
   def common_tests_final_steps(self, logcat_gs_bucket='chromium-android',
-                               force_latest_version=False):
+                               force_latest_version=False, checkout_dir=None,
+                               uses_webview=False):
     self.shutdown_device_monitor()
     self.logcat_dump(gs_bucket=logcat_gs_bucket)
     self.stack_tool_steps(force_latest_version)
     if self.m.chromium.c.gyp_env.GYP_DEFINES.get('asan', 0) == 1:
       self.asan_device_teardown()
     self.test_report()
+
+    if checkout_dir:
+      binary_dir = self.m.chromium.output_dir.join('lib.unstripped')
+      breakpad_binaries = [binary_dir.join('libchrome.so')]
+      if uses_webview:
+        breakpad_binaries.append(binary_dir.join('libwebviewchromium.so'))
+      self.stackwalker(
+          root_chromium_dir=checkout_dir,
+          binary_paths=breakpad_binaries)
 
   def android_build_wrapper(self, logcat_gs_bucket='chromium-android'):
     @contextlib.contextmanager

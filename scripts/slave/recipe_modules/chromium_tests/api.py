@@ -647,7 +647,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         if self.m.chromium.c.TARGET_PLATFORM == 'android':
           if require_device_steps:
             self.m.chromium_android.common_tests_final_steps(
-                logcat_gs_bucket='chromium-android')
+                logcat_gs_bucket='chromium-android',
+                checkout_dir=self.m.chromium_checkout.working_dir,
+                uses_webview=bool(bot_config.get('remove_system_webview')))
           else:
             self.m.chromium_android.test_report()
 

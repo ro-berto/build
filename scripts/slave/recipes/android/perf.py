@@ -241,7 +241,10 @@ def GenTests(api):
               parent_revision='deadbeef',
               revision='deadbeef',
               slavename='slavename',
-              target='Release'))
+              target='Release') +
+          api.path.exists(api.path['start_dir'].join(
+              'src', 'out', 'Release', 'microdump_stackwalk'))
+      )
   yield (api.test('provision_devices') +
       api.properties.generic(
           path_config='kitchen',
@@ -254,8 +257,10 @@ def GenTests(api):
               parent_revision='deadbeef',
               revision='deadbeef',
               slavename='slavename',
-              target='Release')
-      + api.step_data('provision_devices', retcode=1))
+              target='Release') +
+      api.path.exists(api.path['start_dir'].join(
+          'src', 'out', 'Release', 'microdump_stackwalk')) +
+      api.step_data('provision_devices', retcode=1))
   yield (api.test('get_perf_test_list_old_data') +
       api.properties.generic(
           path_config='kitchen',
@@ -269,6 +274,8 @@ def GenTests(api):
           revision='deadbeef',
           slavename='slavename',
           target='Release') +
+      api.path.exists(api.path['start_dir'].join(
+          'src', 'out', 'Release', 'microdump_stackwalk')) +
       api.override_step_data(
         'get perf test list',
         api.json.output(['perf_test.foo', 'page_cycler.foo'])))
@@ -285,6 +292,8 @@ def GenTests(api):
           revision='deadbeef',
           slavename='slavename',
           target='Release') +
+      api.path.exists(api.path['start_dir'].join(
+          'src', 'out', 'Release', 'microdump_stackwalk')) +
       api.override_step_data(
         'read test spec (chromium.perf.json)',
         api.json.output({
@@ -308,6 +317,8 @@ def GenTests(api):
           revision='deadbeef',
           slavename='slavename',
           target='Release') +
+      api.path.exists(api.path['start_dir'].join(
+          'src', 'out', 'Release', 'microdump_stackwalk')) +
       api.override_step_data(
           'perf_test.foo', retcode=1))
   yield (api.test('missing_device') +
@@ -323,6 +334,8 @@ def GenTests(api):
           revision='deadbeef',
           slavename='slavename',
           target='Release') +
+      api.path.exists(api.path['start_dir'].join(
+          'src', 'out', 'Release', 'microdump_stackwalk')) +
       api.override_step_data(
           'perf_test.foo', retcode=87))
   yield (api.test('host_info_failure') +
@@ -338,6 +351,8 @@ def GenTests(api):
               revision='deadbeef',
               slavename='slavename',
               target='Release') +
+      api.path.exists(api.path['start_dir'].join(
+          'src', 'out', 'Release', 'microdump_stackwalk')) +
       api.override_step_data(
           'Host Info',
           api.json.output({
