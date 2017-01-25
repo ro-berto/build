@@ -58,6 +58,7 @@ def RunSteps(api):
   assert system in ['linux', 'mac10.11', 'win7', 'win8', 'win10']
   mode = builder_fragments[2]
   assert mode in ['debug', 'release']
+  strong = builder_fragments[3] == 'strong'
   channel = builder_fragments[-1]
   assert channel in ['be', 'dev', 'stable', 'integration']
 
@@ -87,6 +88,40 @@ def RunSteps(api):
     api.zip.unzip('Unzip sdk', zipfile, build_dir)
 
   with api.step.defer_results():
+    if builder_type == 'analyzer':
+      test_args = ['--mode=%s' % mode,
+                   '--arch=x64',
+                   '--use-sdk',
+                   '--compiler=dart2analyzer',
+                   '--runtime=none',
+                   '--progress=buildbot',
+                   '--report',
+                   '--time',
+                   '--failure-summary',
+                   '--write-debug-log',
+                   '--write-test-outcome-log']
+      test_specs = [
+        {'name': 'analyze tests',
+         'tests': []},
+        {'name': 'analyze pkg tests',
+         'tests': ['pkg']},
+        {'name': 'analyze tests checked',
+         'tests': ['--checked']},
+        {'name': 'analyze pkg tests checked',
+         'tests': ['--checked', 'pkg']},
+      ]
+      if strong:
+        test_args.extend(['--strong', '--builder-tag=strong'])
+        test_specs.extend([
+          {'name': 'analyze strong tests',
+           'tests': ['language_strong', 'lib_strong', 'corelib_strong']},
+          {'name': 'analyze strong tests checked',
+           'tests': ['--checked', 'language_strong', 'lib_strong',
+                     'corelib_strong']},
+        ])
+      RunTests(api, test_args, test_specs)
+
+    # Run package unit tests
     test_args = ['--mode=%s' % mode,
                  '--arch=x64',
                  '--use-sdk',
@@ -124,7 +159,7 @@ def RunSteps(api):
         {'name': 'get dependencies - repo',
          'tests': ['--use-repository-packages', 'pkgbuild']},
       ]
-    RunTests(api, tuple(test_args), test_specs)
+    RunTests(api, test_args, test_specs)
 
     # TODO(whesse): Add archive coredumps step from dart_factory.py.
     api.python('taskkill after testing',
@@ -141,11 +176,11 @@ def RunSteps(api):
 
 def GenTests(api):
    yield (
-      api.test('analyzer-linux-release-be') +
+      api.test('analyzer-linux-release-strong-be') +
       api.platform('linux', 64) +
       api.properties.generic(
         mastername='client.dart',
-        buildername='analyzer-linux-release-be',
+        buildername='analyzer-linux-release-strong-be',
         revision='hash_of_revision'))
    yield (
       api.test('analyzer-win7-debug-dev') + api.platform('win', 32) +
