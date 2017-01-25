@@ -306,6 +306,7 @@
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
       "-d",
       "abc123",
+      "--keep_data",
       "--release"
     ],
     "env": {

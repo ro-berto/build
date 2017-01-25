@@ -645,7 +645,8 @@ class AndroidApi(recipe_api.RecipeApi):
   def apk_path(self, apk):
     return self.m.chromium.output_dir.join('apks', apk) if apk else None
 
-  def adb_install_apk(self, apk, allow_downgrade=False, devices=None):
+  def adb_install_apk(self, apk, allow_downgrade=False, keep_data=False,
+                      devices=None):
     install_cmd = [
         self.m.path['checkout'].join('build',
                                      'android',
@@ -659,6 +660,8 @@ class AndroidApi(recipe_api.RecipeApi):
         install_cmd += ['-d', d]
     if allow_downgrade:
       install_cmd.append('--downgrade')
+    if keep_data:
+      install_cmd.append('--keep_data')
     if self.m.chromium.c.BUILD_CONFIG == 'Release':
       install_cmd.append('--release')
     return self.m.step('install ' + self.m.path.basename(apk), install_cmd,

@@ -289,6 +289,36 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[START_DIR]/src/chrome/VERSION",
+      "/path/to/tmp/"
+    ],
+    "name": "get version (2)"
+  },
+  {
+    "cmd": [
+      "[START_DIR]/src/build/android/adb_install_apk.py",
+      "Chrome.apk",
+      "-v",
+      "--blacklist-file",
+      "[START_DIR]/src/out/bad_devices.json",
+      "--adb-path",
+      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "-d",
+      "abc123",
+      "--downgrade",
+      "--release"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
+    },
+    "name": "install Chrome.apk"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[build::adb]/resources/list_devices.py",
       "['[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb', 'devices']",
       "/path/to/tmp/json"
@@ -1021,34 +1051,6 @@
       "@@@STEP_LOG_LINE@03e0363a003c6ad6: blacklisted@}@@@",
       "@@@STEP_LOG_END@03e0363a003c6ad6: blacklisted@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[START_DIR]/src/chrome/VERSION",
-      "/path/to/tmp/"
-    ],
-    "name": "get version (2)"
-  },
-  {
-    "cmd": [
-      "[START_DIR]/src/build/android/adb_install_apk.py",
-      "apk",
-      "-v",
-      "--blacklist-file",
-      "[START_DIR]/src/out/bad_devices.json",
-      "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
-      "--downgrade",
-      "--release"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
-    },
-    "name": "install apk"
   },
   {
     "cmd": [

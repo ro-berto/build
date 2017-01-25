@@ -64,11 +64,13 @@ BUILDERS = freeze({
     'slow_tester': {
         'timeout_scale': 2,
     },
-    'specific_install_tester': {
-        'specific_install': True,
-    },
     'downgrade_install_tester': {
+        'specific_install': True,
         'downgrade': True,
+    },
+    'keep_data_install_tester': {
+        'specific_install': True,
+        'keep_data': True,
     },
     'no_strict_mode_tester': {
         'strict_mode': 'off',
@@ -164,7 +166,12 @@ def RunSteps(api, buildername):
   api.chromium_android.git_number()
 
   if config.get('specific_install'):
-    api.chromium_android.adb_install_apk('Chrome.apk', devices=['abc123'])
+    api.chromium_android.adb_install_apk(
+        'Chrome.apk',
+        devices=['abc123'],
+        allow_downgrade=config.get('downgrade', False),
+        keep_data=config.get('keep_data', False),
+    )
 
   api.adb.root_devices()
   api.chromium_android.spawn_logcat_monitor()
@@ -192,9 +199,6 @@ def RunSteps(api, buildername):
 
   except api.step.StepFailure as f:
     failure = f
-
-  if config.get('downgrade'):
-    api.chromium_android.adb_install_apk('apk', allow_downgrade=True)
 
   api.chromium_android.monkey_test()
 
