@@ -171,15 +171,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       dep = bot_config.get('set_component_rev')
       self.m.gclient.c.revisions[dep['name']] = dep['rev_str'] % component_rev
 
-  # TODO(phajdan.jr): fix callers and remove chromium_tests.get_checkout_dir.
-  def get_checkout_dir(self, bot_config):  # pragma: no cover
-    return self.m.chromium_checkout.get_checkout_dir(bot_config)
-
-  # TODO(phajdan.jr): fix callers and remove chromium_tests.ensure_checkout.
-  def ensure_checkout(self, bot_config, root_solution_revision=None):
-    return self.m.chromium_checkout.ensure_checkout(  # pragma: no cover
-        bot_config, root_solution_revision, force)
-
   def set_up_swarming(self, bot_config):
     if not bot_config.get('enable_swarming'):
       return
@@ -762,16 +753,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
               'test results',
               'TESTS FAILED; retries without patch disabled (%s)'
                   % deapply_patch_reason)
-
-  # TODO(phajdan.jr): fix callers and remove get_files_affected_by_patch.
-  def get_files_affected_by_patch(self, relative_to='src/', cwd=None):
-    return self.m.chromium_checkout.get_files_affected_by_patch(  # pragma: no cover
-        relative_to, cwd)
-
-  # TODO(phajdan.jr): fix callers and remove chromium_tests.configure_swarming.
-  def configure_swarming(self, project_name, precommit, mastername=None):
-    return self.m.chromium_swarming.configure_swarming(  # pragma: no cover
-        project_name, precommit, mastername)
 
   def _build_bisect_gs_archive_url(self, master_config):
     return self.m.archive.legacy_upload_url(
