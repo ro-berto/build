@@ -85,6 +85,14 @@ DETERMINISTIC_BUILDERS = freeze({
     'platform': 'mac',
     'targets': ['all'],
   },
+
+  # runs in tryserver.chromium.linux.
+  'linux_chromium_clobber_deterministic': {
+    'chromium_config': 'chromium',
+    'gclient_config': 'chromium',
+    'platform': 'linux',
+    'targets': ['all'],
+  },
 })
 
 
