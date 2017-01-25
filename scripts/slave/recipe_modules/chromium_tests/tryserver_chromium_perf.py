@@ -56,11 +56,6 @@ _AddBuildSpec('mac_perf_bisect_builder', 'mac')
 _AddBuildSpec('linux_perf_bisect_builder', 'linux')
 
 
-_AddTestSpec('winx64_10_perf_cq', 'win')
-_AddTestSpec('mac_retina_perf_cq', 'mac')
-_AddTestSpec('linux_perf_cq', 'linux')
-
-
 _AddTestSpec('win_fyi_perf_bisect', 'win', target_bits=32)
 _AddTestSpec('mac_fyi_perf_bisect', 'mac')
 _AddTestSpec('linux_fyi_perf_bisect', 'linux')
