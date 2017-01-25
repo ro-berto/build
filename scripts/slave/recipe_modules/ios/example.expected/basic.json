@@ -1516,45 +1516,6 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "archive fake test 1 (fake device 1 iOS 8.1)"
-  },
-  {
-    "cmd": [
-      "tar",
-      "--create",
-      "--directory",
-      "[TMP_BASE]/0_tmp_2/0",
-      "--file",
-      "[TMP_BASE]/0_tmp_2/test_data.tar.gz",
-      "--gzip",
-      "--verbose",
-      "."
-    ],
-    "name": "archive fake test 1 (fake device 1 iOS 8.1).tar",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "cp",
-      "[TMP_BASE]/0_tmp_2/test_data.tar.gz",
-      "gs://mock-gcs-bucket/chromium.fake/ios/0/fake test 1 (fake device 1 iOS 8.1)/test_data.tar.gz"
-    ],
-    "name": "archive fake test 1 (fake device 1 iOS 8.1).gsutil upload test_data.tar.gz",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@test_data.tar.gz@https://storage.cloud.google.com/mock-gcs-bucket/chromium.fake/ios/0/fake test 1 (fake device 1 iOS 8.1)/test_data.tar.gz@@@"
-    ]
-  },
-  {
     "cmd": [
       "python",
       "-u",
