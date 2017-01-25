@@ -19,6 +19,13 @@
       "slave_pools": ["mac"],
       "builder_timeout_s": 7200, # 2 hours max
     },
+    # TODO(goderbauer): activate when scripts have been ported to windows
+    # "Windows": {
+    #   "recipe": "flutter/flutter",
+    #   "scheduler": "flutter_commits",
+    #   "slave_pools": ["windows"],
+    #   "builder_timeout_s": 7200, # 2 hours max
+    # },
     "Linux Engine": {
       "recipe": "flutter/engine",
       "scheduler": "engine_commits",
@@ -30,6 +37,13 @@
       "recipe": "flutter/engine",
       "scheduler": "engine_commits",
       "slave_pools": ["mac"],
+      "mergeRequests": False, # Build every revision.
+      "builder_timeout_s": 7200, # 2 hours max
+    },
+    "Windows Engine": {
+      "recipe": "flutter/engine",
+      "scheduler": "engine_commits",
+      "slave_pools": ["windows"],
       "mergeRequests": False, # Build every revision.
       "builder_timeout_s": 7200, # 2 hours max
     },
@@ -62,6 +76,14 @@
         "version": "10.11",
       },
       "slaves": ["build21-m3", "build22-m3"],
+    },
+    "windows": {
+      "slave_data": {
+        "bits": 64,
+        "os":  "win",
+        "version": "win10",
+      },
+      "slaves": ["vm7-m3", "vm12-m3"],
     },
   },
 }

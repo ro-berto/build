@@ -258,6 +258,22 @@ def BuildIOS(api):
       'release', 'ios_release', 'ios_debug_sim', 'ios-release')
 
 
+def BuildWindows(api):
+  RunGN(api, '--runtime-mode', 'profile')
+  RunGN(api, '--runtime-mode', 'release')
+
+  Build(api, 'host_profile', 'gen_snapshot')
+  Build(api, 'host_release', 'gen_snapshot')
+
+  UploadArtifacts(api, "android-arm-profile" , [
+    'out/host_profile/gen_snapshot.exe',
+  ], archive_name='windows-x64.zip')
+
+  UploadArtifacts(api, "android-arm-release" , [
+    'out/host_release/gen_snapshot.exe',
+  ], archive_name='windows-x64.zip')
+
+
 def GetCheckout(api):
   src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
@@ -286,9 +302,9 @@ def RunSteps(api):
 
   # The context adds dart to the path, only needed for the analyze step for now.
   with api.step.context({'env': env}):
-    AnalyzeDartUI(api)
 
     if api.platform.is_linux:
+      AnalyzeDartUI(api)
       BuildLinux(api)
       TestObservatory(api)
       BuildLinuxAndroidArm(api)
@@ -298,10 +314,13 @@ def RunSteps(api):
       BuildMac(api)
       BuildIOS(api)
 
+    if api.platform.is_win:
+      BuildWindows(api)
+
 
 def GenTests(api):
   # A valid commit to flutter/engine, to make the gsutil urls look real.
-  for platform in ('mac', 'linux'):
+  for platform in ('mac', 'linux', 'win'):
     yield (api.test(platform) + api.platform(platform, 64)
         + api.properties(mastername='client.flutter',
               buildername='%s Engine' % platform.capitalize(),

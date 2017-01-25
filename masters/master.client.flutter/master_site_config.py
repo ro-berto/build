@@ -16,10 +16,11 @@ class ClientFlutter(Master.Master3):
   project_name = 'ClientFlutter'
   master_port = 20307
   slave_port = 30307
-  master_port_alt = 25307
+  master_port_alt = 40307
   buildbot_url = 'https://build.chromium.org/p/client.flutter/'
   buildbucket_bucket = None
   service_account_file = None
-  pubsub_service_account_file = 'service-account-luci-milo.json'
-  pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
+  # To enable outbound pubsub event streaming.
+  pubsub_service_account_file = None
+  pubsub_topic = None
   name = 'client.flutter'
