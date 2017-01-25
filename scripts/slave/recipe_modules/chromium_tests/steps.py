@@ -550,6 +550,7 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
     name = str(test.get('name', target_name))
     swarming_dimensions = swarming_dimensions or {}
     use_xvfb = test.get('use_xvfb', True)
+    max_failures = test.get('max_failures')
     if use_swarming and swarming_dimension_sets:
       for dimensions in swarming_dimension_sets:
         # Yield potentially multiple invocations of the same test, on
@@ -568,7 +569,8 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
                         override_isolate_target=override_isolate_target,
                         use_xvfb=use_xvfb, cipd_packages=cipd_packages,
                         waterfall_mastername=mastername,
-                        waterfall_buildername=buildername)
+                        waterfall_buildername=buildername,
+                        max_failures=max_failures)
     else:
       yield GTestTest(name, args=args, target_name=target_name,
                       flakiness_dash=True,
@@ -582,7 +584,8 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
                       override_isolate_target=override_isolate_target,
                       use_xvfb=use_xvfb, cipd_packages=cipd_packages,
                       waterfall_mastername=mastername,
-                      waterfall_buildername=buildername)
+                      waterfall_buildername=buildername,
+                      max_failures=max_failures)
 
 
 def generate_instrumentation_test(api, chromium_tests_api, mastername,
@@ -968,7 +971,7 @@ class SwarmingGTestTest(SwarmingTest):
                expiration=None, hard_timeout=None, upload_test_results=True,
                override_compile_targets=None, override_isolate_target=None,
                cipd_packages=None, waterfall_mastername=None,
-               waterfall_buildername=None):
+               waterfall_buildername=None, max_failures=None):
     super(SwarmingGTestTest, self).__init__(
         name, dimensions, tags, target_name, extra_suffix, priority, expiration,
         hard_timeout, waterfall_mastername=waterfall_mastername,
@@ -980,6 +983,7 @@ class SwarmingGTestTest(SwarmingTest):
     self._override_isolate_target = override_isolate_target
     self._cipd_packages = cipd_packages
     self._gtest_results = {}
+    self._max_failures = max_failures
 
   @Test.test_options.setter
   def test_options(self, value):
@@ -1019,7 +1023,12 @@ class SwarmingGTestTest(SwarmingTest):
 
     if suffix == 'without patch':
       # If rerunning without a patch, run only tests that failed.
-      test_filter = sorted(self.failures(api, 'with patch'))
+      failures = self.failures(api, 'with patch')
+      if self._max_failures is None or len(failures) <= self._max_failures:
+        test_filter = sorted(failures)
+      else:
+        raise api.step.StepFailure(
+            'Too many tests failed. Not going to retry without the patch.')
 
     args = GTestTest.args_from_options(api, args, self,
                                        override_test_filter=test_filter)
@@ -1422,7 +1431,7 @@ class GTestTest(Test):
                swarming_extra_suffix=None, swarming_priority=None,
                swarming_expiration=None, swarming_hard_timeout=None,
                cipd_packages=None, waterfall_mastername=None,
-               waterfall_buildername=None,
+               waterfall_buildername=None, max_failures=None,
                **runtest_kwargs):
     super(GTestTest, self).__init__(
         waterfall_mastername=waterfall_mastername,
@@ -1438,7 +1447,8 @@ class GTestTest(Test):
           override_isolate_target=runtest_kwargs.get(
               'override_isolate_target'),
           waterfall_mastername=waterfall_mastername,
-          waterfall_buildername=waterfall_buildername)
+          waterfall_buildername=waterfall_buildername,
+          max_failures=max_failures)
     else:
       self._test = LocalGTestTest(
           name, args, target_name, waterfall_mastername=waterfall_mastername,
