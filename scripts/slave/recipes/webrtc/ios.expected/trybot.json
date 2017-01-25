@@ -115,7 +115,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/ios/src/webrtc/build/ios/chromium.fake/ios.json",
+      "[BUILDER_CACHE]/ios/src/tools-webrtc/ios/chromium.fake/ios.json",
       "/path/to/tmp/json"
     ],
     "name": "read build config",

@@ -21,8 +21,7 @@ def RunSteps(api):
   api.webrtc.checkout()
 
   build_config_base_dir = api.path['checkout'].join(
-      'webrtc',
-      'build',
+      'tools-webrtc',
       'ios',
   )
   buildername = api.properties['buildername'].replace(' ', '_')
