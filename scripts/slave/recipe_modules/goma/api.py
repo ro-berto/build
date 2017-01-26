@@ -298,6 +298,10 @@ class GomaApi(recipe_api.RecipeApi):
     """
 
     args = [
+        '--show-path',
+        'python',
+        self.package_repo_resource(
+            'scripts', 'slave', 'upload_goma_logs.py'),
         '--upload-compiler-proxy-info',
         '--gsutil-py-path', self.m.depot_tools.gsutil_py_path,
     ]
@@ -336,8 +340,7 @@ class GomaApi(recipe_api.RecipeApi):
 
     self.m.python(
       name=name or 'upload_log',
-      script=self.package_repo_resource(
-          'scripts', 'slave', 'upload_goma_logs.py'),
+      script=self.package_repo_resource('scripts', 'tools', 'runit.py'),
       args=args)
 
   def build_with_goma(self, ninja_command, name=None, ninja_log_outdir=None,
