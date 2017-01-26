@@ -52,8 +52,7 @@ def upload_test_results(host, params, files, timeout_secs):
 
 
 def _try_uploading_test_results(host, attrs, file_objs, timeout_secs):
-  # TODO(estaab): https:// for prod.
-  url = 'http://%s/testfile/upload' % host
+  url = 'https://%s/testfile/upload' % host
   content_type, data = _encode_form_data(attrs, file_objs)
   headers = {'Content-Type': content_type}
   request = urllib2.Request(url, data, headers)

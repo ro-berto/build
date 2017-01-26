@@ -14,7 +14,7 @@ class TestResultsUploader(object):
     self._host = host
 
   def _upload_files(self, attrs, file_objs):
-    url = "http://%s/testfile/upload" % self._host
+    url = "https://%s/testfile/upload" % self._host
     url_helper.upload_files(url, attrs, file_objs)
 
   def upload(self, params, files, timeout_seconds):

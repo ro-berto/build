@@ -21,7 +21,7 @@ def getText(result, observer, name):
   Updates the waterfall with any unusual test output, with a link to logs of
   failed test steps.
   """
-  GTEST_DASHBOARD_BASE = ('http://test-results.appspot.com'
+  GTEST_DASHBOARD_BASE = ('https://test-results.appspot.com'
                           '/dashboards/flakiness_dashboard.html')
 
   # TODO(xusydoc): unify this with gtest reporting below so getText() is
