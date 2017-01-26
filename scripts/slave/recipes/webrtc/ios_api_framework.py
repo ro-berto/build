@@ -25,7 +25,7 @@ def RunSteps(api):
   api.webrtc.checkout()
   api.gclient.runhooks()
 
-  build_script = api.path['checkout'].join('webrtc', 'build', 'ios',
+  build_script = api.path['checkout'].join('tools-webrtc', 'ios',
                                            'build_ios_libs.sh')
   if not api.tryserver.is_tryserver:
     api.step('cleanup', [build_script, '-c'], cwd=api.path['checkout'])

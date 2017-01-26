@@ -125,7 +125,7 @@
   },
   {
     "cmd": [
-      "[BUILDER_CACHE]/ios_api_framework/src/webrtc/build/ios/build_ios_libs.sh",
+      "[BUILDER_CACHE]/ios_api_framework/src/tools-webrtc/ios/build_ios_libs.sh",
       "-r",
       "170242",
       "-e"
