@@ -96,6 +96,10 @@ def RunSteps(api):
   BuildSteps(api, gn_arg='rtc_enable_intelligibility_enhancer=true')
   BuildSteps(api, gn_arg='rtc_include_tests=false')
   BuildSteps(api, gn_arg='rtc_enable_protobuf=false')
+  BuildSteps(api, gn_arg='rtc_enable_sctp=false')
+  if (api.chromium.c.TARGET_PLATFORM == 'linux'):
+    # Sanity check for the rtc_enable_sctp=false build.
+    api.webrtc.add_test('peerconnection_unittests')
 
 
 def GenTests(api):
