@@ -30,7 +30,7 @@ def RunSteps(api):
   if not api.tryserver.is_tryserver:
     api.step('cleanup', [build_script, '-c'], cwd=api.path['checkout'])
 
-  api.step('build', [build_script, '-r', api.webrtc.revision_number],
+  api.step('build', [build_script, '-r', api.webrtc.revision_number, '-e'],
            cwd=api.path['checkout'])
 
   if not api.tryserver.is_tryserver:

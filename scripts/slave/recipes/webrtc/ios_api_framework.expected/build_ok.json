@@ -106,7 +106,8 @@
     "cmd": [
       "[BUILDER_CACHE]/iOS_API_Framework_Builder/src/webrtc/build/ios/build_ios_libs.sh",
       "-r",
-      "170242"
+      "170242",
+      "-e"
     ],
     "cwd": "[BUILDER_CACHE]/iOS_API_Framework_Builder/src",
     "name": "build"

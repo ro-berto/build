@@ -127,7 +127,8 @@
     "cmd": [
       "[BUILDER_CACHE]/ios_api_framework/src/webrtc/build/ios/build_ios_libs.sh",
       "-r",
-      "170242"
+      "170242",
+      "-e"
     ],
     "cwd": "[BUILDER_CACHE]/ios_api_framework/src",
     "name": "build"
