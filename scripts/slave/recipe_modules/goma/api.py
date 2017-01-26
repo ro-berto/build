@@ -327,7 +327,7 @@ class GomaApi(recipe_api.RecipeApi):
           '--build-data-dir', self.build_data_dir,
       ])
 
-    # Set some buildbot info used in goma_utils.SendGomaTsMon.
+    # Set buildbot info used in goma_utils.MakeGomaStatusCounter etc.
     for key in ['buildername', 'mastername', 'slavename', 'clobber']:
       if key in self.m.properties:
         args.extend([
