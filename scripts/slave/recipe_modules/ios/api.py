@@ -704,6 +704,21 @@ class iOSApi(recipe_api.RecipeApi):
           step_result.presentation.step_text = '%s<br />%s' % (
             step_result.presentation.step_text, test_summary_json['step_text'])
 
+      # Upload test results JSON to the flakiness dashboard.
+      if self.m.bot_update.last_returned_properties:
+        test_results = self.m.path.join(
+          task.task.task_output_dir, '0', 'full_results.json')
+        if self.m.path.exists(test_results):
+          self.m.test_results.upload(
+            test_results,
+            task.test['app'],
+            self.m.bot_update.last_returned_properties.get(
+              'got_revision_cp', 'x@{#0}'),
+            builder_name_suffix='%s-%s' % (
+              task.test['device type'], task.test['os']),
+            test_results_server='test-results.appspot.com',
+          )
+
     if test_failures:
       raise self.m.step.StepFailure(
         'Failed %s.' % ', '.join(sorted(set(test_failures + infra_failures))))

@@ -3,6 +3,8 @@
 # found in the LICENSE file.
 
 DEPS = [
+  'build/chromium',
+  'build/chromium_checkout',
   'build/file',
   'build/filter',
   'build/goma',
@@ -10,8 +12,7 @@ DEPS = [
   'build/isolate',
   'build/swarming',
   'build/swarming_client',
-  'chromium',
-  'chromium_checkout',
+  'build/test_results',
   'depot_tools/bot_update',
   'depot_tools/gclient',
   'depot_tools/tryserver',

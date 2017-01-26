@@ -1522,6 +1522,28 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
+      "--input-json",
+      "[TMP_BASE]/0_tmp_2/0/full_results.json",
+      "--master-name",
+      "chromium.fake",
+      "--builder-name",
+      "ios-fake device 1-8.1",
+      "--build-number",
+      "0",
+      "--test-type",
+      "fake test 1",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "refs/heads/master@{#170242}"
+    ],
+    "name": "Upload to test-results [fake test 1]"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[START_DIR]/swarming.client/swarming.py",
       "collect",
       "--swarming",

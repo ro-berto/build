@@ -69,6 +69,7 @@ def GenTests(api):
     )
     + api.path.exists(
         api.path['tmp_base'].join('0_tmp_2', '0'),
+        api.path['tmp_base'].join('0_tmp_2', '0', 'full_results.json'),
     )
   )
 
