@@ -99,8 +99,7 @@ class BotConfig(object):
           builders[loop_buildername]['tests'] = (
               chromium_tests_api.generate_tests_from_test_spec(
                   test_spec, builder_dict,
-                  loop_buildername, mastername,
-                  builder_dict.get('enable_swarming', False),
+                  loop_buildername, mastername, True,
                   builder_dict.get('swarming_dimensions', {}),
                   scripts_compile_targets,
                   test_generators,

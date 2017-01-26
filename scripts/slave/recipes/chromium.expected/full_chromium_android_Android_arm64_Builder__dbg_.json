@@ -439,7 +439,6 @@
       "[BUILDER_CACHE]/Android_arm64_Builder__dbg_/src/out/Debug",
       "-j",
       "50",
-      "browser_tests_apk",
       "browser_tests_apk_run",
       "system_webview_apk"
     ],
@@ -545,7 +544,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/Android_arm64_Builder__dbg_/src/out/Debug",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Android_arm64_Builder__dbg_/src/out/Debug', '-j', 50, 'browser_tests_apk', 'browser_tests_apk_run', 'system_webview_apk']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Android_arm64_Builder__dbg_/src/out/Debug', '-j', 50, 'browser_tests_apk_run', 'system_webview_apk']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",

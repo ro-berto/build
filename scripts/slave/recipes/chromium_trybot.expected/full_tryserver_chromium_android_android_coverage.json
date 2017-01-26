@@ -188,6 +188,19 @@
     "cmd": [
       "python",
       "-u",
+      "[BUILDER_CACHE]/android/src/tools/swarming_client/swarming.py",
+      "--version"
+    ],
+    "name": "swarming.py --version",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@0.8.6@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
@@ -196,7 +209,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library dcheck_always_on=1 emma_coverage=1 emma_filter='org.chromium.*' fastbuild=1 gomadir='[CACHE]/cipd/goma' target_arch=arm use_goma=1",
+      "GYP_DEFINES": "OS=android component=static_library dcheck_always_on=1 emma_coverage=1 emma_filter='org.chromium.*' fastbuild=1 gomadir='[CACHE]/cipd/goma' target_arch=arm test_isolation_mode=prepare use_goma=1",
       "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks (with patch)"
@@ -1484,7 +1497,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library dcheck_always_on=1 emma_coverage=1 emma_filter='org.chromium.*' fastbuild=1 gomadir='[CACHE]/cipd/goma' target_arch=arm use_goma=1",
+      "GYP_DEFINES": "OS=android component=static_library dcheck_always_on=1 emma_coverage=1 emma_filter='org.chromium.*' fastbuild=1 gomadir='[CACHE]/cipd/goma' target_arch=arm test_isolation_mode=prepare use_goma=1",
       "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks (without patch)"
