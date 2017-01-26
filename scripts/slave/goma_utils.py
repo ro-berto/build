@@ -301,63 +301,14 @@ def GetCompilerProxyStartTime():
       return datetime.datetime.strptime(matched.group(1), TIMESTAMP_FORMAT)
 
 
-def SendCountersToTsMon(counters):
-  """Send goma status counter to ts_mon.
-
-  Args:
-    counters: a list of data which is sent to ts_mon.
-  """
-
-  if not counters:
-    print('No counter to send to ts_mon is specified')
-    return
-
-  try:
-    run_cmd = PLATFORM_RUN_CMD.get(os.name)
-    if not run_cmd:
-      print 'Unknown os.name: %s' % os.name
-      return
-
-    counters_json = []
-    for c in counters:
-      c_json = json.dumps(c)
-      # base64 encode on windows because it doesn't like json
-      # on the command-line.
-      if os.name == 'nt':
-        c_json = base64.b64encode(c_json)
-      counters_json.append('--counter')
-      counters_json.append(c_json)
-
-    cmd = [sys.executable,
-           run_cmd,
-           'infra.tools.send_ts_mon_values', '--verbose',
-           '--ts-mon-target-type', 'task',
-           '--ts-mon-task-service-name', 'goma-client',
-           '--ts-mon-task-job-name', 'default']
-    cmd.extend(counters_json)
-    cmd_filter = chromium_utils.FilterCapture()
-    retcode = chromium_utils.RunCommand(cmd, filter_obj=cmd_filter,
-                                        max_time=30)
-    if retcode:
-      print('Execution of send_ts_mon_values failed with code %s'
-            % retcode)
-      print '\n'.join(cmd_filter.text)
-  except Exception as ex:
-    print('error while sending counters to ts_mon: counter=%s: %s'
-          % (counters, ex))
-
-
-def MakeGomaStatusCounter(json_file, exit_status,
-                          builder='unknown', master='unknown', slave='unknown',
-                          clobber=''):
-  """Make latest Goma status counter which will be sent to ts_mon.
+def SendGomaTsMon(json_file, exit_status,
+                  builder='unknown', master='unknown', slave='unknown',
+                  clobber=''):
+  """Send latest Goma status to ts_mon.
 
   Args:
     json_file: json filename string that has goma_ctl.py jsonstatus.
     exit_status: integer exit status of the build.
-
-  Returns:
-    counter dict if succeeded. None if failed.
   """
   json_statuses = {}
   try:
@@ -366,16 +317,16 @@ def MakeGomaStatusCounter(json_file, exit_status,
 
     if not json_statuses:
       print('no json status is recorded in %s' % json_file)
-      return None
+      return
 
     if len(json_statuses.get('notice', [])) != 1:
       print('unknown json statuses style: %s' % json_statuses)
-      return None
+      return
 
     json_status = json_statuses['notice'][0]
     if json_status['version'] != 1:
       print('unknown version: %s' % json_status)
-      return None
+      return
 
     infra_status = json_status.get('infra_status')
 
@@ -409,12 +360,33 @@ def MakeGomaStatusCounter(json_file, exit_status,
     start_time = GetCompilerProxyStartTime()
     if start_time:
       counter['start_time'] = int(time.mktime(start_time.timetuple()))
-    return counter
+    run_cmd = PLATFORM_RUN_CMD.get(os.name)
+    if not run_cmd:
+      print 'Unknown os.name: %s' % os.name
+      return
+
+    counter_json = json.dumps(counter)
+    # base64 encode on windows because it doesn't like json on the command-line.
+    if os.name == 'nt':
+      counter_json = base64.b64encode(counter_json)
+    cmd = [sys.executable,
+           run_cmd,
+           'infra.tools.send_ts_mon_values', '--verbose',
+           '--ts-mon-target-type', 'task',
+           '--ts-mon-task-service-name', 'goma-client',
+           '--ts-mon-task-job-name', 'default',
+           '--counter', counter_json]
+    cmd_filter = chromium_utils.FilterCapture()
+    retcode = chromium_utils.RunCommand(
+      cmd, filter_obj=cmd_filter,
+      max_time=30)
+    if retcode:
+      print('Execution of send_ts_mon_values failed with code %s'
+            % retcode)
+      print '\n'.join(cmd_filter.text)
 
   except Exception as ex:
-    print('error while making goma status counter for ts_mon: jons_file=%s: %s'
-          % (json_file, ex))
-    return None
+    print('error while sending ts mon json_file=%s: %s' % (json_file, ex))
 
 
 def DetermineGomaJobs():

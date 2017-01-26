@@ -105,15 +105,11 @@ def main():
     # So, let me send some logs instead of
     # error in parse_args() using required option.
     assert args.json_status is not None and os.path.exists(args.json_status)
-    counter = goma_utils.MakeGomaStatusCounter(
-        args.json_status,
-        args.ninja_log_exit_status,
-        builder=args.buildbot_buildername,
-        master=args.buildbot_mastername,
-        slave=args.buildbot_slavename,
-        clobber=args.buildbot_clobber)
-    if counter:
-      goma_utils.SendCountersToTsMon([counter])
+    goma_utils.SendGomaTsMon(args.json_status, args.ninja_log_exit_status,
+                             builder=args.buildbot_buildername,
+                             master=args.buildbot_mastername,
+                             slave=args.buildbot_slavename,
+                             clobber=args.buildbot_clobber)
 
   return 0
 
