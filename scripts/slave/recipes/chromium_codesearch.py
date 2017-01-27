@@ -250,6 +250,8 @@ def RunSteps(api):
   # Checkout the repositories that are either directly needed or should be
   # included in the source archive.
   gclient_config = api.gclient.make_config('chromium')
+  if platform == 'android':
+    gclient_config.target_os = ['android']
   for name, url in ADDITIONAL_REPOS.iteritems():
     solution = gclient_config.solutions.add()
     solution.name = name
@@ -268,7 +270,9 @@ def RunSteps(api):
   targets = bot_config.get('compile_targets', [])
   api.chromium.set_config('codesearch', BUILD_CONFIG='Debug')
   api.chromium.ensure_goma()
-  api.chromium.runhooks()
+  # CHROME_HEADLESS makes sure that running 'gclient runhooks' doesn't require
+  # entering 'y' to agree to a license.
+  api.chromium.runhooks(env={'CHROME_HEADLESS': '1'})
 
   result = GenerateCompilationDatabase(api, debug_path, targets, platform)
 
