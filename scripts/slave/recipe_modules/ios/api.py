@@ -54,6 +54,68 @@ class iOSApi(recipe_api.RecipeApi):
 
     return self.m.bot_update.ensure_checkout(**kwargs)
 
+  def parse_tests(self, tests, include_dir):
+    """Parses the tests dict, reading necessary includes.
+
+    Args:
+      tests: A list of test dicts.
+    """
+    # Elements of the "tests" list are dicts. There are two types of elements,
+    # determined by the presence of one of these mutually exclusive keys:
+    #   "app": This says to run a particular app.
+    #   "include": This says to include a common set of tests from include_dir.
+    # So now we go through the "tests" list replacing any "include" keys.
+    # The value of an "include" key is the name of a set of tests to include,
+    # which can be found as a .json file in include_dir. Read the contents
+    # lazily as needed into includes.
+    includes = {}
+
+    # expanded_tests_list will be the list of test dicts, with
+    # any "include" replaced with the tests from that include.
+    expanded_tests_list = []
+
+    # Generate a unique ID we can use to refer to each test, since the config
+    # may specify to run the exact same test multiple times.
+    i = 0
+
+    for element in tests:
+      if element.get('include'):
+        # This is an include dict.
+        include = str(element.pop('include'))
+
+        # Lazily read the include if we haven't already.
+        if include not in includes:
+          includes[include] = self.m.json.read(
+            'include %s' % include,
+            include_dir.join(include),
+            step_test_data=lambda: self.m.json.test_api.output({
+              'tests': [
+                {
+                  'app': 'fake included test 1',
+                },
+                {
+                  'app': 'fake included test 2',
+                },
+              ],
+            }),
+          ).json.output
+
+        # Now take each test dict from the include, update it with the
+        # extra keys (e.g. device, OS), and append to the list of tests.
+        for included_test in includes[include]['tests']:
+          expanded_tests_list.append(copy.deepcopy(included_test))
+          expanded_tests_list[-1].update(element)
+          expanded_tests_list[-1]['id'] = str(i)
+          i += 1
+
+      else:
+        # This is a test dict.
+        expanded_tests_list.append(copy.deepcopy(element))
+        expanded_tests_list[-1]['id'] = str(i)
+        i += 1
+
+    return expanded_tests_list
+
   def read_build_config(
     self,
     master_name=None,
@@ -117,72 +179,8 @@ class iOSApi(recipe_api.RecipeApi):
 
     self.__config['mastername'] = master_name
 
-    # Elements of the "tests" list are dicts. There are two types of elements,
-    # determined by the presence of one of these mutually exclusive keys:
-    #   "app": This says to run a particular app.
-    #   "include": This says to include a common set of tests from include_dir.
-    # So now we go through the "tests" list replacing any "include" keys.
-    # The value of an "include" key is the name of a set of tests to include,
-    # which can be found as a .json file in include_dir. Read the contents
-    # lazily as needed into includes.
-    def read_include(includes):
-      """Reads the contents of the given include.
-
-      Args:
-        include: Name of the include.
-      """
-      return self.m.json.read(
-        'include %s' % include,
-        include_dir.join(include),
-        step_test_data=lambda: self.m.json.test_api.output({
-          'tests': [
-            {
-              'app': 'fake included test 1',
-            },
-            {
-              'app': 'fake included test 2',
-            },
-          ],
-        }),
-      ).json.output
-
-    includes = {}
-    expanded_tests_list = []
-
-    # expanded_tests_list will be the list of test dicts, with
-    # any "include" replaced with the tests from that include.
-    for element in self.__config['tests']:
-      if element.get('include'):
-        # This is an include dict.
-        include = str(element.pop('include'))
-
-        # Lazily read the include if we haven't already.
-        if include not in includes:
-          includes[include] = read_include(include)
-
-        # Now take each test dict from the include, update it with the
-        # extra keys (e.g. device, OS), and append to the list of tests.
-        for included_test in includes[include]['tests']:
-          expanded_tests_list.append(copy.deepcopy(included_test))
-          expanded_tests_list[-1].update(element)
-      else:
-        # This is a test dict.
-        expanded_tests_list.append(element)
-
-    self.__config['tests'] = expanded_tests_list
-
-    # Generate a unique ID we can use to refer to each test, since the config
-    # may specify to run the exact same test multiple times.
-    i = 0
-    for test in self.__config['tests']:
-      test['id'] = str(i)
-      i += 1
-
-    self.m.step('finalize build config', [
-      'echo',
-      '-e',
-      self.m.json.dumps(self.__config, indent=2),
-    ])
+    self.__config['tests'] = self.parse_tests(
+        self.__config['tests'], include_dir)
 
     cfg = self.m.chromium.make_config()
 

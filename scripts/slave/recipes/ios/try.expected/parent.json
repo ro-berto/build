@@ -169,14 +169,6 @@
   },
   {
     "cmd": [
-      "echo",
-      "-e",
-      "{\n  \"additional_compile_targets\": [], \n  \"compiler flags\": [], \n  \"configuration\": \"Debug\", \n  \"env\": {}, \n  \"gn_args\": [], \n  \"mastername\": \"chromium.mac\", \n  \"sdk\": \"iphonesimulator8.0\", \n  \"tests\": [\n    {\n      \"app\": \"fake tests\", \n      \"device type\": \"fake device\", \n      \"id\": \"0\", \n      \"os\": \"8.1\"\n    }\n  ], \n  \"triggered bots\": {}, \n  \"triggered by\": \"parent\", \n  \"upload\": [], \n  \"xcode version\": \"fake xcode version\"\n}"
-    ],
-    "name": "finalize build config"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",

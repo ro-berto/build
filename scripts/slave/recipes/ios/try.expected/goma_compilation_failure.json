@@ -159,14 +159,6 @@
     ]
   },
   {
-    "cmd": [
-      "echo",
-      "-e",
-      "{\n  \"additional_compile_targets\": [], \n  \"compiler flags\": [], \n  \"configuration\": \"Debug\", \n  \"env\": {}, \n  \"gn_args\": [\n    \"target_os=\\\"ios\\\"\", \n    \"ios_enable_code_signing=false\", \n    \"use_goma=true\"\n  ], \n  \"mastername\": \"chromium.mac\", \n  \"mb_type\": \"gn\", \n  \"sdk\": \"iphonesimulator8.0\", \n  \"tests\": [\n    {\n      \"app\": \"fake tests\", \n      \"device type\": \"fake device\", \n      \"id\": \"0\", \n      \"os\": \"8.1\"\n    }\n  ], \n  \"triggered bots\": {}, \n  \"upload\": [], \n  \"use_analyze\": true, \n  \"xcode version\": \"fake xcode version\"\n}"
-    ],
-    "name": "finalize build config"
-  },
-  {
     "cmd": [],
     "name": "ensure_goma"
   },
