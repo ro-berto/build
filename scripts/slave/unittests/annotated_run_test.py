@@ -182,61 +182,6 @@ class AnnotatedRunExecTest(unittest.TestCase):
         ]
     )
 
-  @mock.patch('slave.logdog_bootstrap.bootstrap',
-              side_effect=Exception('Unhandled situation.'))
-  def test_runs_directly_if_bootstrap_fails(self, bootstrap):
-    annotated_run._run_command.return_value = (123, '')
-
-    rv = annotated_run._exec_recipe(
-        self.rt, self.opts, self.stream, self.basedir, self.tdir,
-        self.properties)
-    self.assertEqual(rv, 123)
-
-    bootstrap.assert_called_once()
-    annotated_run._run_command.assert_called_once_with(self.recipe_args,
-                                                       dry_run=False)
-
-  @mock.patch('slave.logdog_bootstrap.bootstrap')
-  @mock.patch('slave.logdog_bootstrap.BootstrapState.get_result')
-  def test_runs_directly_if_logdog_error(self, bs_result, bootstrap):
-    bootstrap.return_value = logdog_bootstrap.BootstrapState(
-        ['logdog_bootstrap'] + self.recipe_args, '/path/to/result.json',
-        'project', 'prefix')
-    bs_result.side_effect = logdog_bootstrap.BootstrapError()
-
-    # Return a different error code depending on whether we're bootstrapping so
-    # we can assert that specifically the non-bootstrapped error code is the one
-    # that is returned.
-    def get_error_code(args, **_kw):
-      if len(args) > 0 and args[0] == 'logdog_bootstrap':
-        return (1, '')
-      return (2, '')
-    annotated_run._run_command.side_effect = get_error_code
-
-    rv = annotated_run._exec_recipe(
-        self.rt, self.opts, self.stream, self.basedir, self.tdir,
-        self.properties)
-    self.assertEqual(rv, 2)
-
-    bootstrap.assert_called_once()
-    bs_result.assert_called_once()
-    annotated_run._run_command.assert_has_calls([
-        mock.call(['logdog_bootstrap'] + self.recipe_args, dry_run=False),
-        mock.call(self.recipe_args, dry_run=False),
-    ])
-    self.assertEqual(
-        [l for l in self.stream_output.getvalue().splitlines() if l],
-        [
-            '@@@SEED_STEP LogDog Bootstrap@@@',
-            '@@@STEP_CURSOR LogDog Bootstrap@@@',
-            '@@@STEP_STARTED@@@',
-            '@@@SET_BUILD_PROPERTY@logdog_project@"project"@@@',
-            '@@@SET_BUILD_PROPERTY@logdog_prefix@"prefix"@@@',
-            '@@@STEP_CURSOR LogDog Bootstrap@@@',
-            '@@@STEP_CLOSED@@@',
-        ]
-    )
-
 
 if __name__ == '__main__':
   unittest.main()

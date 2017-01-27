@@ -227,7 +227,6 @@ def main(argv, stream):
     # If we bootstrap through logdog, the recipe command line gets written
     # to a temporary file and does not appear in the log.
     LOGGER.info('Recipe command line: %r', recipe_cmd)
-    recipe_return_code = None
     try:
       bs = logdog_bootstrap.bootstrap(rt, args, basedir, tempdir, properties,
                                       recipe_cmd)
@@ -237,16 +236,9 @@ def main(argv, stream):
       _ = _call(bs.cmd)
       recipe_return_code = bs.get_result()
     except logdog_bootstrap.NotBootstrapped as e:
-      LOGGER.info('Not bootstrapped: %s', e.message)
-    except logdog_bootstrap.BootstrapError as e:
-      LOGGER.warning('Could not bootstrap LogDog: %s', e.message)
-    except Exception as e:
-      LOGGER.exception('Exception while bootstrapping LogDog.')
+      LOGGER.info('Not using LogDog. Invoking `recipes.py` directly.')
+      recipe_return_code = _call(recipe_cmd)
     finally:
-      if recipe_return_code is None:
-        LOGGER.info('Not using LogDog. Invoking `recipes.py` directly.')
-        recipe_return_code = _call(recipe_cmd)
-
       # Try to open recipe result JSON. Any failure will result in an exception
       # and an infra failure.
       with open(recipe_result_path) as f:

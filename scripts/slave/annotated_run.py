@@ -301,16 +301,9 @@ def _exec_recipe(rt, opts, stream, basedir, tdir, properties):
     _, _ = _run_command(bs.cmd, dry_run=opts.dry_run)
     recipe_return_code = bs.get_result()
   except logdog_bootstrap.NotBootstrapped as e:
-    LOGGER.info('Not bootstrapped: %s', e.message)
-  except logdog_bootstrap.BootstrapError as e:
-    LOGGER.warning('Could not bootstrap LogDog: %s', e.message)
-  except Exception as e:
-    LOGGER.exception('Exception while bootstrapping LogDog.')
+    LOGGER.info('Not using LogDog. Invoking `recipes.py` directly: %s', e)
+    recipe_return_code, _ = _run_command(recipe_cmd, dry_run=opts.dry_run)
   finally:
-    if recipe_return_code is None:
-      LOGGER.info('Not using LogDog. Invoking `recipes.py` directly.')
-      recipe_return_code, _ = _run_command(recipe_cmd, dry_run=opts.dry_run)
-
     if engine_flags.get('use_result_proto'):
       with open(recipe_result_path, 'r') as f:
         return_value = json.load(f)
@@ -327,8 +320,6 @@ def _exec_recipe(rt, opts, stream, basedir, tdir, properties):
           # return code != 0 is for the benefit of buildbot, which uses return
           # code to decide if a step failed or not.
           recipe_return_code = 1
-
-
   return recipe_return_code
 
 
