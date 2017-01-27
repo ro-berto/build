@@ -221,7 +221,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "asan=1 clang=1 component=static_library enable_ipc_fuzzer=1 ffmpeg_branding=ChromeOS gomadir='[CACHE]/cipd/goma' lsan=1 proprietary_codecs=1 sanitizer_coverage=edge target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_enable_verify_heap=1",
+      "GYP_DEFINES": "asan=1 clang=1 component=static_library enable_ipc_fuzzer=1 ffmpeg_branding=ChromeOS gomadir='[CACHE]/cipd/goma' lsan=1 proprietary_codecs=1 sanitizer_coverage=edge target_arch=x64 use_goma=1 v8_enable_verify_heap=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"

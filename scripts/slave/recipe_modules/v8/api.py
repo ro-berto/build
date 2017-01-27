@@ -215,7 +215,6 @@ class V8Api(recipe_api.RecipeApi):
 
   def set_up_swarming(self):
     if self.bot_config.get('enable_swarming'):
-      self.m.isolate.set_isolate_environment(self.m.chromium.c)
       self.m.swarming.check_client_version()
 
     self.m.swarming.set_default_dimension('pool', 'Chrome')

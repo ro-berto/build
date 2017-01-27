@@ -24,24 +24,11 @@ class IsolateApi(recipe_api.RecipeApi):
     """Changes URL of Isolate server to use."""
     self._isolate_server = value
 
-  def set_isolate_environment(self, config):
-    """Modifies the config to include isolate related GYP_DEFINES.
-
-    Modifies the passed Config (which should generally be api.chromium.c) to set
-    up the appropriate GYP_DEFINES to prepare all necessary files to do this
-    after compile. This must be called early in your recipe; definitely before
-    the checkout and runhooks steps.
-    """
-    config.gyp_env.GYP_DEFINES['test_isolation_mode'] = 'prepare'
-
   def clean_isolated_files(self, build_dir):
     """Cleans out all *.isolated files from the build directory in
     preparation for the compile. Needed in order to ensure isolates
     are rebuilt properly because their dependencies are currently not
     completely described to gyp.
-
-    Should be invoked before compilation in both 'archive' or 'prepare' modes
-    (see 'set_isolate_environment').
     """
     self.m.python(
       'clean isolated files',
@@ -54,7 +41,7 @@ class IsolateApi(recipe_api.RecipeApi):
   def find_isolated_tests(self, build_dir, targets=None, **kwargs):
     """Returns a step which finds all *.isolated files in a build directory.
 
-    Useful only with 'archive' isolation mode (see 'set_isolate_environment').
+    Useful only with 'archive' isolation mode.
     In 'prepare' mode use 'isolate_tests' instead.
 
     Assigns the dict {target name -> *.isolated file hash} to the swarm_hashes
@@ -101,10 +88,8 @@ class IsolateApi(recipe_api.RecipeApi):
                     set_swarm_hashes=True, **kwargs):
     """Archives prepared tests in |build_dir| to isolate server.
 
-    Works only if Chromium was compiled with test_isolation_mode=='prepare'. See
-    set_isolate_environment(). In that mode src/tools/isolate_driver.py is
-    invoked by ninja during compilation to produce *.isolated.gen.json files
-    that describe how to archive tests.
+    src/tools/isolate_driver.py is invoked by ninja during compilation
+    to produce *.isolated.gen.json files that describe how to archive tests.
 
     This step then uses *.isolated.gen.json files to actually performs the
     archival. By archiving all tests at once it is able to reduce the total

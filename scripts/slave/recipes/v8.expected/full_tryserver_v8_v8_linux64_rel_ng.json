@@ -146,7 +146,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "dcheck_always_on=1 fastbuild=1 gomadir='[CACHE]/cipd/goma' has_valgrind=1 target_arch=x64 test_isolation_mode=prepare use_goma=1 v8_target_arch=x64",
+      "GYP_DEFINES": "dcheck_always_on=1 fastbuild=1 gomadir='[CACHE]/cipd/goma' has_valgrind=1 target_arch=x64 use_goma=1 v8_target_arch=x64",
       "GYP_GENERATORS": "ninja",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },

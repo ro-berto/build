@@ -201,7 +201,7 @@
     "cwd": "[BUILDER_CACHE]/Linux_ChromeOS_MSan_Tests/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "GYP_DEFINES": "clang=1 component=static_library gomadir='[CACHE]/cipd/goma' msan=1 target_arch=x64 test_isolation_mode=prepare use_goma=1",
+      "GYP_DEFINES": "clang=1 component=static_library gomadir='[CACHE]/cipd/goma' msan=1 target_arch=x64 use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"

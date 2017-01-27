@@ -97,7 +97,6 @@ class WebRTCApi(recipe_api.RecipeApi):
   def configure_swarming(self):
     self.c.use_isolate = self.bot_config.get('use_isolate')
     if self.c.use_isolate:
-      self.m.isolate.set_isolate_environment(self.m.chromium.c)
       if self.c.TEST_SUITE == 'webrtc':
         self._isolated_targets = (self.NORMAL_TESTS.keys())
       elif self.c.TEST_SUITE == 'android':

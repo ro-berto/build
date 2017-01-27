@@ -3,7 +3,6 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'chromium',
   'isolate',
   'recipe_engine/json',
   'recipe_engine/path',
@@ -20,10 +19,6 @@ def RunSteps(api):
   # Code coverage for isolate_server property.
   api.isolate.isolate_server = 'https://isolateserver-dev.appspot.com'
   assert api.isolate.isolate_server == 'https://isolateserver-dev.appspot.com'
-
-  # Code coverage for set_isolate_environment.
-  api.chromium.set_config('chromium')
-  api.isolate.set_isolate_environment(api.chromium.c)
 
   # That would read a list of files to search for, generated in GenTests.
   step_result = api.step('read test spec', ['cat'], stdout=api.json.output())

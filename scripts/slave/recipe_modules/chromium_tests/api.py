@@ -172,7 +172,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.m.gclient.c.revisions[dep['name']] = dep['rev_str'] % component_rev
 
   def set_up_swarming(self, bot_config):
-    self.m.isolate.set_isolate_environment(self.m.chromium.c)
     self.m.swarming.check_client_version()
     for key, value in bot_config.get('swarming_dimensions', {}).iteritems():
       self.m.swarming.set_default_dimension(key, value)

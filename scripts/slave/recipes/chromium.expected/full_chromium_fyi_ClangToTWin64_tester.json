@@ -151,7 +151,7 @@
     "cwd": "[BUILDER_CACHE]\\ClangToTWin64_tester\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "GYP_DEFINES": "component=static_library target_arch=x64 test_isolation_mode=prepare",
+      "GYP_DEFINES": "component=static_library target_arch=x64",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"

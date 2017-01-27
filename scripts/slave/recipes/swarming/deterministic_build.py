@@ -161,10 +161,6 @@ def RunSteps(api, buildername):
     ConfigureAndroidBuilder(api, recipe_config)
     api.chromium_android.init_and_sync()
 
-  if enable_isolate:
-    # Enable test isolation. Modifies GYP_DEFINES used in 'runhooks' below.
-    api.isolate.set_isolate_environment(api.chromium.c)
-
   # Since disk lacks in Mac, we need to remove files before build.
   api.shutil.rmtree(str(api.chromium.output_dir).rstrip('\\/') + '.1')
   api.shutil.rmtree(str(api.chromium.output_dir).rstrip('\\/') + '.2')

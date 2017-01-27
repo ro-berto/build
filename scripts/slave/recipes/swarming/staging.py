@@ -72,9 +72,6 @@ def RunSteps(api):
   api.gclient.c.solutions[0].custom_vars['swarming_revision'] = ''
   api.gclient.c.revisions['src/tools/swarming_client'] = 'HEAD'
 
-  # Enable test isolation. Modifies GYP_DEFINES used in 'runhooks' below.
-  api.isolate.set_isolate_environment(api.chromium.c)
-
   api.chromium.cleanup_temp()
   # Checkout chromium + deps (including 'master' of swarming_client).
   api.gclient.checkout()
