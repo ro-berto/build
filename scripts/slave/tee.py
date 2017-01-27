@@ -32,10 +32,13 @@ def main():
     for f in outfiles:
       f.write(buf)
 
-  pipe.wait()
+  return_code = pipe.wait()
 
   for f in outfiles:
     f.close()
+
+  return return_code
+
 
 if __name__ == '__main__':
   sys.exit(main())
