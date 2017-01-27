@@ -229,6 +229,51 @@ def IsCompilerProxyKilledByFatalError():
   return False
 
 
+def MakeGomaExitStatusCounter(goma_stats_file, goma_crash_report,
+                              builder='unknown', master='unknown',
+                              slave='unknown', clobber=''):
+  """Make Goma exit status counter. This counter indicates compiler_proxy
+     has finished without problem, crashed, or killed. This counter will
+     be used to alert to goma team.
+
+  Args:
+    goma_stats_file: path to goma stats file if any
+    goma_crash_report: path to goma crash report file if any
+    builder: builder name
+    master: master name
+    slave: slave name
+    clobber: non false if clobber build
+  """
+
+  try:
+    counter = {
+        'name': 'goma/status',
+        'value': 1,
+        'builder': builder,
+        'master': master,
+        'slave': slave,
+        'clobber': 1 if clobber else 0,
+        'os': chromium_utils.PlatformName(),
+    }
+    if goma_stats_file and os.path.exists(goma_stats_file):
+      counter['status'] = 'success'
+    elif goma_crash_report and os.path.exists(goma_crash_report):
+      counter['status'] = 'crashed'
+    elif IsCompilerProxyKilledByFatalError():
+      counter['status'] = 'killed'
+    else:
+      counter['status'] = 'unknown'
+
+    start_time = GetCompilerProxyStartTime()
+    if start_time:
+      counter['start_time'] = int(time.mktime(start_time.timetuple()))
+
+    return counter
+  except Exception as ex:
+    print('error while generating status counter: %s' % ex)
+    return None
+
+
 def SendGomaStats(goma_stats_file, goma_crash_report, build_data_dir):
   """Send GomaStats monitoring event.
 

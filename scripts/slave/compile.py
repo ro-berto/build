@@ -83,6 +83,7 @@ def StopGomaClientAndUploadInfo(options, env, exit_status):
   goma_ctl_cmd = [sys.executable,
                   os.path.join(options.goma_dir, 'goma_ctl.py')]
 
+  tsmon_counters = []
   if options.goma_jsonstatus:
     chromium_utils.RunCommand(
         goma_ctl_cmd + ['jsonstatus', options.goma_jsonstatus], env=env)
@@ -94,7 +95,7 @@ def StopGomaClientAndUploadInfo(options, env, exit_status):
         slave=options.buildbot_slavename,
         clobber=options.buildbot_clobber)
     if counter:
-      goma_utils.SendCountersToTsMon([counter])
+      tsmon_counters.append(counter)
 
   # If goma compiler_proxy crashes, there could be crash dump.
   if options.build_data_dir:
@@ -114,9 +115,23 @@ def StopGomaClientAndUploadInfo(options, env, exit_status):
 
   # Upload GomaStats to make it monitored.
   if env.get('GOMA_DUMP_STATS_FILE'):
+    # MakeGomaExitStatusCounter should be callbed before
+    # goma_utils.SendGomaStats, since SendGomaStats removes stats file.
+    counter = goma_utils.MakeGomaExitStatusCounter(
+        env['GOMA_DUMP_STATS_FILE'],
+        options.build_data_dir,
+        builder=options.buildbot_buildername,
+        master=options.buildbot_mastername,
+        slave=options.buildbot_slavename,
+        clobber=options.buildbot_clobber)
+    if counter:
+      tsmon_counters.append(counter)
     goma_utils.SendGomaStats(env['GOMA_DUMP_STATS_FILE'],
                              env.get('GOMACTL_CRASH_REPORT_ID_FILE'),
                              options.build_data_dir)
+
+  if tsmon_counters:
+    goma_utils.SendCountersToTsMon(tsmon_counters)
 
 # TODO(tikuta): move to goma_utils.py
 def goma_setup(options, env):

@@ -70,6 +70,7 @@ def main():
                       help='buildbot clobber')
 
   args = parser.parse_args()
+  tsmon_counters = []
 
   override_gsutil = None
   if args.gsutil_py_path:
@@ -95,6 +96,17 @@ def main():
     )
 
   if args.goma_stats_file:
+    # MakeGomaExitStatusCounter should be callbed before
+    # goma_utils.SendGomaStats, since SendGomaStats removes stats file.
+    counter = goma_utils.MakeGomaExitStatusCounter(
+        args.goma_stats_file,
+        args.build_data_dir,
+        builder=args.buildbot_buildername,
+        master=args.buildbot_mastername,
+        slave=args.buildbot_slavename,
+        clobber=args.buildbot_clobber)
+    if counter:
+      tsmon_counters.append(counter)
     goma_utils.SendGomaStats(args.goma_stats_file,
                              args.goma_crash_report_id_file,
                              args.build_data_dir)
@@ -113,7 +125,10 @@ def main():
         slave=args.buildbot_slavename,
         clobber=args.buildbot_clobber)
     if counter:
-      goma_utils.SendCountersToTsMon([counter])
+      tsmon_counters.append(counter)
+
+  if tsmon_counters:
+    goma_utils.SendCountersToTsMon(tsmon_counters)
 
   return 0
 
