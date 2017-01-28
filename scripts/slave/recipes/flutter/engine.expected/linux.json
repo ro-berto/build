@@ -87,6 +87,7 @@
   },
   {
     "cmd": [
+      "python",
       "[START_DIR]/src/flutter/tools/gn",
       "--unoptimized"
     ],
@@ -120,6 +121,7 @@
   },
   {
     "cmd": [
+      "python",
       "[START_DIR]/src/flutter/tools/gn",
       "--unoptimized"
     ],
@@ -208,6 +210,7 @@
   },
   {
     "cmd": [
+      "python",
       "[START_DIR]/src/flutter/tools/gn",
       "--android"
     ],
@@ -349,6 +352,7 @@
   },
   {
     "cmd": [
+      "python",
       "[START_DIR]/src/flutter/tools/gn",
       "--android",
       "--runtime-mode=profile"
@@ -533,6 +537,7 @@
   },
   {
     "cmd": [
+      "python",
       "[START_DIR]/src/flutter/tools/gn",
       "--android",
       "--runtime-mode=release"
@@ -771,6 +776,7 @@
   },
   {
     "cmd": [
+      "python",
       "[START_DIR]/src/flutter/tools/gn",
       "--android",
       "--android-cpu=x64"
@@ -901,6 +907,7 @@
   },
   {
     "cmd": [
+      "python",
       "[START_DIR]/src/flutter/tools/gn",
       "--android",
       "--android-cpu=x86"

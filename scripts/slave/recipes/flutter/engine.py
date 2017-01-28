@@ -35,7 +35,7 @@ def Build(api, config, *targets):
 
 def RunGN(api, *args):
   checkout = api.path['start_dir'].join('src')
-  gn_cmd = [checkout.join('flutter/tools/gn')]
+  gn_cmd = ['python', checkout.join('flutter/tools/gn')]
   gn_cmd.extend(args)
   api.step('gn %s' % ' '.join(args), gn_cmd)
 

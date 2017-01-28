@@ -87,6 +87,7 @@
   },
   {
     "cmd": [
+      "python",
       "[START_DIR]/src/flutter/tools/gn",
       "--runtime-mode",
       "debug",
@@ -99,6 +100,7 @@
   },
   {
     "cmd": [
+      "python",
       "[START_DIR]/src/flutter/tools/gn",
       "--runtime-mode",
       "profile",
@@ -111,6 +113,7 @@
   },
   {
     "cmd": [
+      "python",
       "[START_DIR]/src/flutter/tools/gn",
       "--runtime-mode",
       "release",
@@ -320,6 +323,7 @@
   },
   {
     "cmd": [
+      "python",
       "[START_DIR]/src/flutter/tools/gn",
       "--ios",
       "--runtime-mode",
@@ -332,6 +336,7 @@
   },
   {
     "cmd": [
+      "python",
       "[START_DIR]/src/flutter/tools/gn",
       "--ios",
       "--runtime-mode",
@@ -344,6 +349,7 @@
   },
   {
     "cmd": [
+      "python",
       "[START_DIR]/src/flutter/tools/gn",
       "--ios",
       "--runtime-mode",
@@ -356,6 +362,7 @@
   },
   {
     "cmd": [
+      "python",
       "[START_DIR]/src/flutter/tools/gn",
       "--ios",
       "--runtime-mode",

@@ -87,6 +87,7 @@
   },
   {
     "cmd": [
+      "python",
       "[START_DIR]\\src\\flutter/tools/gn",
       "--runtime-mode",
       "profile"
@@ -98,6 +99,7 @@
   },
   {
     "cmd": [
+      "python",
       "[START_DIR]\\src\\flutter/tools/gn",
       "--runtime-mode",
       "release"
