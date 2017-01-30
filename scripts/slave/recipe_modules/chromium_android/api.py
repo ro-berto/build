@@ -1066,7 +1066,7 @@ class AndroidApi(recipe_api.RecipeApi):
     if num_retries is not None:
       args.extend(['--num-retries', str(num_retries)])
     if device_flags:
-      args.extend(['--device-flags', device_flags])
+      args.extend(['--device-flags-file', device_flags])
     if test_apk:
       args.extend(['--test-apk', test_apk])
     if apk_under_test:

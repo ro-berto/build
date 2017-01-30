@@ -1057,7 +1057,7 @@
       "-E",
       "FlakyTest",
       "--screenshot",
-      "--device-flags",
+      "--device-flags-file",
       "device_flags_file",
       "--test-apk",
       "[START_DIR]/src/out/Release/apks/AndroidWebViewTest.apk",
