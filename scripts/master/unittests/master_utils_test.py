@@ -10,9 +10,10 @@ import unittest
 
 import test_env  # pylint: disable=W0611,W0403
 
+from buildbot.buildslave import BuildSlave
 from buildbot.process.properties import Properties
 from master import master_utils
-
+from master.autoreboot_buildslave import AutoRebootBuildSlave
 
 def remove_slave(slaves, name):
   for i, s in enumerate(slaves):
@@ -31,6 +32,40 @@ class MasterUtilsTest(unittest.TestCase):
                                          (3, 'c'),
                                          ], 2)
     self.assertEquals([['a', 'b'], ['c']], partitions)
+
+  def testAutoSetupSlaves(self):
+    def B(name, slavenames, auto_reboot):
+      return {
+        'name': name,
+        'slavenames': slavenames,
+        'auto_reboot' : auto_reboot,
+      }
+    builders = [
+      # Bot sharing two slaves.
+      B('B1', ['S1', 'S2'], True),
+      B('B2', ['S3', 'S4'], False),
+      # Slave sharing two bots.
+      B('B3', ['S5'], True),
+      B('B4', ['S5'], False),
+      # Slave sharing two bots (inverse auto-reboot).
+      B('B5', ['S6'], False),
+      B('B6', ['S6'], True),
+      # Two builders heterogeneously sharing one slave.
+      B('B7', ['S7'], True),
+      B('B8', ['S7', 'S8'], False),
+    ]
+    slaves = dict(
+      (slave.slavename, slave)
+      for slave in master_utils.AutoSetupSlaves(builders, 'pwd')
+    )
+    self.assertTrue(isinstance(slaves['S1'], AutoRebootBuildSlave))
+    self.assertTrue(isinstance(slaves['S2'], AutoRebootBuildSlave))
+    self.assertFalse(isinstance(slaves['S3'], AutoRebootBuildSlave))
+    self.assertFalse(isinstance(slaves['S4'], AutoRebootBuildSlave))
+    self.assertTrue(isinstance(slaves['S5'], AutoRebootBuildSlave))
+    self.assertTrue(isinstance(slaves['S6'], AutoRebootBuildSlave))
+    self.assertTrue(isinstance(slaves['S7'], AutoRebootBuildSlave))
+    self.assertFalse(isinstance(slaves['S8'], AutoRebootBuildSlave))
 
 
 class MockBuilder(object):

@@ -96,7 +96,14 @@ def AutoSetupSlaves(builders, bot_password, max_builds=1,
         preferred_builder = preferred_builder_dict.get(slavename)
         if preferred_builder:
           properties['preferred_builder'] = preferred_builder
-      slaves_dict[slavename] = (auto_reboot, notify_on_missing, properties)
+      # If a prior builder has configured this same slave, we treat
+      # auto_reboot and notify_on_missing as the disjunction of what all
+      # builders configure for that slave. Note, however, that if multiple
+      # builders configure properties for the same slave, the last one wins.
+      slaves_dict[slavename] = (
+          slaves_dict.get(slavename, [None])[0] or auto_reboot,
+          slaves_dict.get(slavename, [None, None])[1] or notify_on_missing,
+          properties)
 
   slaves = []
   for (slavename,
