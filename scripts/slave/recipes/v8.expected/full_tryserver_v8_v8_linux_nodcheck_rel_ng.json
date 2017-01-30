@@ -519,7 +519,7 @@
         "builder_name": "v8_linux_nodcheck_rel_ng_triggered",
         "properties": {
           "category": "cq",
-          "issue": 12853011,
+          "issue": "12853011",
           "master": "tryserver.v8",
           "parent_build_environment": {
             "GYP_DEFINES": "target_arch=x64 cool_flag=a=1"

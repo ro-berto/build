@@ -426,6 +426,18 @@ def GenTests(api):
         'Check', api.v8.output_json(unmarked_slow_test=True))
   )
 
+  # Test gerrit tryjobs.
+  yield (
+    api.v8.test(
+        'tryserver.v8',
+        'v8_linux_rel_ng',
+        'gerrit',
+        requester='commit-bot@chromium.org',
+        gerrit_project='v8/v8',
+        blamelist=['dude@chromium.org'],
+    )
+  )
+
   yield (
     api.v8.test(
         'client.v8',

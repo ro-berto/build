@@ -1099,18 +1099,20 @@ class V8Api(recipe_api.RecipeApi):
       if self.m.tryserver.is_tryserver:
         properties.update(
           category=self.m.properties.get('category', 'manual_ts'),
-          issue=self.m.properties['issue'],
           master=str(self.m.properties['master']),
-          patch_project=str(self.m.properties['patch_project']),
-          patch_storage=str(self.m.properties['patch_storage']),
-          patchset=str(self.m.properties['patchset']),
           reason=str(self.m.properties.get('reason', 'ManualTS')),
           requester=str(self.m.properties['requester']),
           # On tryservers, set revision to the same as on the current bot,
           # as CQ expects builders and testers to match the revision field.
           revision=str(self.m.properties.get('revision', 'HEAD')),
-          rietveld=str(self.m.properties['rietveld']),
         )
+        for p in ['issue', 'patch_gerrit_url', 'patch_issue', 'patch_project',
+                  'patch_ref', 'patch_repository_url', 'patch_set',
+                  'patch_storage', 'patchset', 'rietveld']:
+          try:
+            properties[p] = str(self.m.properties[p])
+          except KeyError:
+            pass
       else:
         # On non-tryservers, we can set the revision to whatever the
         # triggering builder checked out.
