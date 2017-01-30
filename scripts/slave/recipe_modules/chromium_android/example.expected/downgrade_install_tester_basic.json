@@ -1094,7 +1094,6 @@
       "--additional-apk",
       "Additional.apk",
       "--release",
-      "--official-build",
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],

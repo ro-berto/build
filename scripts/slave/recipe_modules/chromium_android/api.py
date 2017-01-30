@@ -1026,7 +1026,6 @@ class AndroidApi(recipe_api.RecipeApi):
                                 annotation=None, except_annotation=None,
                                 screenshot=False, verbose=False, tool=None,
                                 apk_package=None,
-                                official_build=False,
                                 json_results_file=None,
                                 timeout_scale=None, strict_mode=None,
                                 suffix=None, num_retries=None,
@@ -1079,8 +1078,6 @@ class AndroidApi(recipe_api.RecipeApi):
       args.insert(0, 'instrumentation')
       if self.m.chromium.c.BUILD_CONFIG == 'Release':
         args.append('--release')
-      if official_build:
-        args.extend(['--official-build'])
 
     step_name = '%s%s' % (
         annotation or name, ' (%s)' % suffix if suffix else '')

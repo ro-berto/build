@@ -222,7 +222,6 @@ def RunSteps(api, buildername):
       annotation='SmallTest',
       except_annotation='FlakyTest',
       screenshot=True,
-      official_build=True,
       timeout_scale=config.get('timeout_scale'),
       strict_mode=config.get('strict_mode'),
       additional_apks=['Additional.apk'],

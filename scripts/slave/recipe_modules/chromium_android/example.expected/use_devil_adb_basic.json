@@ -1082,7 +1082,6 @@
       "--additional-apk",
       "Additional.apk",
       "--release",
-      "--official-build",
       "--adb-path",
       "[START_DIR]/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb"
     ],
