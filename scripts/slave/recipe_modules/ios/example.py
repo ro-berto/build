@@ -306,7 +306,7 @@ def GenTests(api):
   )
 
   yield (
-    api.test('clobber')
+    api.test('clobber_checkout')
     + api.platform('mac', 64)
     + api.properties(
       buildername='ios',
@@ -319,6 +319,29 @@ def GenTests(api):
       'xcode version': '6.1.1',
       'configuration': 'Debug',
       'sdk': 'iphonesimulator8.1',
+      'tests': [
+      ],
+    })
+    + api.step_data(
+        'bootstrap swarming.swarming.py --version',
+        stdout=api.raw_io.output('1.2.3'),
+    )
+  )
+
+  yield (
+    api.test('clobber_build')
+    + api.platform('mac', 64)
+    + api.properties(
+      buildername='ios',
+      buildnumber='0',
+      mastername='chromium.fake',
+      slavename='fake-vm',
+    )
+    + api.ios.make_test_build_config({
+      'xcode version': '6.1.1',
+      'configuration': 'Debug',
+      'sdk': 'iphonesimulator8.1',
+      'clobber': True,
       'tests': [
       ],
     })

@@ -52,6 +52,11 @@ class iOSApi(recipe_api.RecipeApi):
     if checkout_dir:
       kwargs.setdefault('cwd', checkout_dir)
 
+    # Support for legacy buildbot clobber. If the "clobber" property is
+    # present at all with any value, clobber the whole checkout.
+    if 'clobber' in self.m.properties:
+      self.m.file.rmcontents('checkout', self.m.path['start_dir'])
+
     return self.m.bot_update.ensure_checkout(**kwargs)
 
   def parse_tests(self, tests, include_dir):
@@ -170,6 +175,7 @@ class iOSApi(recipe_api.RecipeApi):
     # we can iterate over them without having to check if they are in the dict
     # at all.
     self.__config.setdefault('additional_compile_targets', [])
+    self.__config.setdefault('clobber', False)
     self.__config.setdefault('compiler flags', [])
     self.__config.setdefault('env', {})
     self.__config.setdefault('gn_args', [])
@@ -238,6 +244,10 @@ class iOSApi(recipe_api.RecipeApi):
       'simulator': 'iphonesimulator',
       'device': 'iphoneos',
     }[self.platform])
+    cwd = self.m.path['checkout'].join('out', build_sub_path)
+
+    if self.__config['clobber']:
+      self.m.file.rmcontents('out', cwd)
 
     # runhooks modifies env, so pass a copy.
     self.m.gclient.runhooks(name='runhooks' + suffix, env=env.copy())
@@ -311,7 +321,6 @@ class iOSApi(recipe_api.RecipeApi):
       compilation_targets.extend(tests)
       compilation_targets.extend(self.__config['additional_compile_targets'])
 
-    cwd = self.m.path['checkout'].join('out', build_sub_path)
     cmd = ['ninja', '-C', cwd]
     cmd.extend(self.__config['compiler flags'])
 
