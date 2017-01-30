@@ -2506,7 +2506,7 @@ BUILDERS = {
         'parent_buildername': 'v8_linux_arm_rel_ng',
         'enable_swarming': True,
         'tests': [
-          V8Testing_3,
+          V8Testing_4,
           V8TestingExtra_2,
           Test262,
           Test262Extra_2,
