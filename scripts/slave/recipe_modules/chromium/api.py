@@ -276,6 +276,13 @@ class ChromiumApi(recipe_api.RecipeApi):
       goma_env['GOMA_HERMETIC'] = self.c.compile_py.goma_hermetic
     if self.c.compile_py.goma_enable_remote_link:
       goma_env['GOMA_ENABLE_REMOTE_LINK'] = 'true'
+    if self.c.compile_py.goma_enable_localoutputcache:
+      # Use per-slave cache. LocalOutputCache could use a lot of disks.
+      # To run GC for older caches, we should share the same build
+      # among builders.
+      goma_env['GOMA_LOCAL_OUTPUT_CACHE_DIR'] = (
+          self.m.path.join(self.m.goma.default_cache_path_per_slave,
+                           "localoutputcache"))
     if self.c.compile_py.goma_store_local_run_output:
       goma_env['GOMA_STORE_LOCAL_RUN_OUTPUT'] = 'true'
     if self.c.compile_py.goma_max_active_fail_fallback_tasks:

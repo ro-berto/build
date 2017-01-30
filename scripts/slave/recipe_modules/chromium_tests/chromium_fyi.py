@@ -1247,7 +1247,8 @@ SPEC = {
     },
     'Chromium Linux Goma Canary LocalOutputCache': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['clobber', 'goma_canary', 'mb'],
+      'chromium_apply_config': ['clobber', 'goma_canary',
+                                'goma_localoutputcache', 'mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',

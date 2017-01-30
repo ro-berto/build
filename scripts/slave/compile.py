@@ -188,6 +188,9 @@ def goma_setup(options, env):
     env['GOMA_HERMETIC'] = options.goma_hermetic
   if options.goma_enable_remote_link:
     env['GOMA_ENABLE_REMOTE_LINK'] = options.goma_enable_remote_link
+  if options.goma_enable_localoutputcache:
+    env['GOMA_LOCAL_OUTPUT_CACHE_DIR'] = (
+        os.path.join(options.goma_cache_dir, 'localoutputcache'))
   if options.goma_store_local_run_output:
     env['GOMA_STORE_LOCAL_RUN_OUTPUT'] = options.goma_store_local_run_output
 
@@ -420,6 +423,8 @@ def get_parsed_options():
                            help='Set goma hermetic mode')
   option_parser.add_option('--goma-enable-remote-link', default=None,
                            help='Enable goma remote link.')
+  option_parser.add_option('--goma-enable-localoutputcache', default=None,
+                           help='Enable goma LocalOutputCache.')
   option_parser.add_option('--goma-store-local-run-output', default=None,
                            help='Store local run output to goma servers.')
   option_parser.add_option('--goma-fail-fast', action='store_true')

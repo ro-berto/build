@@ -44,6 +44,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       goma_store_local_run_output = Single(bool, empty_val=False, required=False),
       goma_failfast = Single(bool, empty_val=False, required=False),
       goma_max_active_fail_fallback_tasks = Single(int, empty_val=None, required=False),
+      goma_enable_localoutputcache = Single(bool, empty_val=False, required=False),
       xcode_sdk = Single(basestring, required=False),
       ninja_confirm_noop = Single(bool, empty_val=False, required=False),
       set_build_data_dir = Single(bool, empty_val=False, required=False),
@@ -265,6 +266,10 @@ def goma_hermetic_fallback(c):
 def goma_linktest(c):
   c.compile_py.goma_enable_remote_link = True
   c.compile_py.goma_store_local_run_output = True
+
+@config_ctx()
+def goma_localoutputcache(c):
+  c.compile_py.goma_enable_localoutputcache = True
 
 @config_ctx()
 def ninja_confirm_noop(c):

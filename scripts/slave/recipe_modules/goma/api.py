@@ -52,15 +52,19 @@ class GomaApi(recipe_api.RecipeApi):
     return self._jsonstatus
 
   @property
+  def default_cache_path_per_slave(self):
+    try:
+      # Legacy Buildbot cache path:
+      return self.m.path['goma_cache']
+    except KeyError:
+      # New more generic cache path
+      return self.m.path['cache'].join('goma')
+
+  @property
   def default_cache_path(self):
     safe_buildername = re.sub(r'[^a-zA-Z0-9]', '_',
                               self.m.properties['buildername'])
-    try:
-      # Legacy Buildbot cache path:
-      return self.m.path['goma_cache'].join(safe_buildername)
-    except KeyError:
-      # New more generic cache path
-      return self.m.path['cache'].join('goma', safe_buildername)
+    return self.default_cache_path_per_slave.join(safe_buildername)
 
   @property
   def recommended_goma_jobs(self):
