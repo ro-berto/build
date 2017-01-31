@@ -1106,9 +1106,9 @@ class V8Api(recipe_api.RecipeApi):
           # as CQ expects builders and testers to match the revision field.
           revision=str(self.m.properties.get('revision', 'HEAD')),
         )
-        for p in ['issue', 'patch_gerrit_url', 'patch_issue', 'patch_project',
-                  'patch_ref', 'patch_repository_url', 'patch_set',
-                  'patch_storage', 'patchset', 'rietveld']:
+        for p in ['issue', 'patch_gerrit_url', 'patch_git_url', 'patch_issue',
+                  'patch_project', 'patch_ref', 'patch_set', 'patch_storage',
+                  'patchset', 'rietveld']:
           try:
             properties[p] = str(self.m.properties[p])
           except KeyError:
