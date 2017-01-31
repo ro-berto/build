@@ -303,6 +303,8 @@ def _exec_recipe(rt, opts, stream, basedir, tdir, properties):
   except logdog_bootstrap.NotBootstrapped as e:
     LOGGER.info('Not using LogDog. Invoking `recipes.py` directly: %s', e)
     recipe_return_code, _ = _run_command(recipe_cmd, dry_run=opts.dry_run)
+  except Exception:
+    LOGGER.exception('Exception running LogDog bootstrap.')
   finally:
     if engine_flags.get('use_result_proto'):
       with open(recipe_result_path, 'r') as f:
