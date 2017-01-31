@@ -308,34 +308,6 @@
     "name": "upload_ninja_log (2)"
   },
   {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
-      "--show-path",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\zip_build.py",
-      "--target",
-      "Release",
-      "--gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "--staging-dir",
-      "[CACHE]\\chrome_staging",
-      "--src-dir",
-      "[START_DIR]\\src",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "--build-url",
-      "gs://chromium-fyi-archive/win_pgo_builds",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"win_pgo\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium.win\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"chromium_pgo\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"win_pgo\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium.win\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"chromium_pgo\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
-    ],
-    "name": "package build"
-  },
-  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0

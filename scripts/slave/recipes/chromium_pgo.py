@@ -61,10 +61,6 @@ PGO_BUILDERS = freeze({
 def RunSteps(api):
   _, bot_config = api.chromium.configure_bot(PGO_BUILDERS, [])
   api.pgo.compile_pgo(bot_config)
-  api.archive.zip_and_upload_build(
-      'package build',
-      api.chromium.c.build_config_fs,
-      'gs://chromium-fyi-archive/win_pgo_builds')
 
 
 def GenTests(api):
