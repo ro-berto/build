@@ -75,7 +75,7 @@ SPEC = freeze({
   # - platform: The platform for which the code is compiled.
   # - sync_generated_files: Whether to sync generated files into a git repo.
   'builders': {
-    'Chromium Linux Codesearch': {
+    'codesearch-gen-chromium-linux': {
       'compile_targets': [
         'all',
       ],
@@ -85,7 +85,7 @@ SPEC = freeze({
       'sync_generated_files': True,
       'corpus': 'chromium-linux',
     },
-    'ChromiumOS Codesearch': {
+    'codesearch-gen-chromium-chromiumos': {
       # TODO(emso): Get the below compile targets (also for the staging builder)
       # from the chromium_tests recipe module.
       # Compile targets used by the 'Linux ChromiumOS Full' builder (2016-12-16)
@@ -128,7 +128,7 @@ SPEC = freeze({
       'platform': 'chromeos',
       'corpus': 'chromium-chromeos',
     },
-    'Chromium Android Codesearch': {
+    'codesearch-gen-chromium-android': {
       'compile_targets': [
         'all',
       ],
@@ -431,29 +431,29 @@ def GenTests(api):
       test += api.step_data('generate compilation database for linux',
                             stdout=api.raw_io.output('some compilation data'))
     test += api.properties.generic(buildername=buildername,
-                                   mastername='chromium.infra.cron')
+                                   mastername='chromium.infra.codesearch')
 
     yield test
 
   yield (
     api.test(
-        'full_%s_fail' % _sanitize_nonalpha('ChromiumOS Codesearch')) +
+        'full_%s_fail' % _sanitize_nonalpha('codesearch-gen-chromium-chromiumos')) +
     api.step_data('generate compilation database for chromeos',
                   stdout=api.raw_io.output('some compilation data')) +
     api.step_data('generate compilation database for linux',
                   stdout=api.raw_io.output('some compilation data')) +
     api.step_data('run translation_unit clang tool', retcode=2) +
-    api.properties.generic(buildername='ChromiumOS Codesearch',
-                           mastername='chromium.infra.cron')
+    api.properties.generic(buildername='codesearch-gen-chromium-chromiumos',
+                           mastername='chromium.infra.codesearch')
   )
 
   yield (
     api.test(
         'full_%s_gen_compile_fail' %
-        _sanitize_nonalpha('ChromiumOS Codesearch')) +
+        _sanitize_nonalpha('codesearch-gen-chromium-chromiumos')) +
     api.step_data('generate compilation database for chromeos',
                   stdout=api.raw_io.output('some compilation data'),
                   retcode=1) +
-    api.properties.generic(buildername='ChromiumOS Codesearch',
-                           mastername='chromium.infra.cron')
+    api.properties.generic(buildername='codesearch-gen-chromium-chromiumos',
+                           mastername='chromium.infra.codesearch')
   )

@@ -223,7 +223,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[CACHE]/goma/Chromium_Android_Codesearch",
+      "[CACHE]/goma/codesearch_gen_chromium_android",
       "511"
     ],
     "name": "preprocess_for_goma.makedirs goma cache directory",
@@ -388,9 +388,9 @@
       "--ninja-log-compiler",
       "goma",
       "--buildbot-buildername",
-      "Chromium Android Codesearch",
+      "codesearch-gen-chromium-android",
       "--buildbot-mastername",
-      "chromium.infra.cron",
+      "chromium.infra.codesearch",
       "--buildbot-slavename",
       "TestSlavename"
     ],
@@ -444,7 +444,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[CACHE]/goma/Chromium_Android_Codesearch",
+      "[CACHE]/goma/codesearch_gen_chromium_android",
       "511"
     ],
     "name": "preprocess_for_goma.makedirs goma cache directory (2)",
@@ -471,7 +471,7 @@
     ],
     "env": {
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/Chromium_Android_Codesearch",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/codesearch_gen_chromium_android",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -612,9 +612,9 @@
       "--ninja-log-compiler",
       "goma-clang",
       "--buildbot-buildername",
-      "Chromium Android Codesearch",
+      "codesearch-gen-chromium-android",
       "--buildbot-mastername",
-      "chromium.infra.cron",
+      "chromium.infra.codesearch",
       "--buildbot-slavename",
       "TestSlavename"
     ],
@@ -849,7 +849,7 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/sync_generated_files_codesearch.py",
       "--message",
-      "Generated files from \"Chromium Android Codesearch\" build 571, revision f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "Generated files from \"codesearch-gen-chromium-android\" build 571, revision f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "src/out",
       "[START_DIR]/generated"
     ],

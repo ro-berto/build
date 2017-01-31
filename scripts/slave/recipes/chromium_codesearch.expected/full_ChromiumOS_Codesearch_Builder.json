@@ -421,7 +421,7 @@
       "--buildbot-buildername",
       "ChromiumOS Codesearch Builder",
       "--buildbot-mastername",
-      "chromium.infra.cron",
+      "chromium.infra.codesearch",
       "--buildbot-slavename",
       "TestSlavename"
     ],
@@ -676,7 +676,7 @@
       "--buildbot-buildername",
       "ChromiumOS Codesearch Builder",
       "--buildbot-mastername",
-      "chromium.infra.cron",
+      "chromium.infra.codesearch",
       "--buildbot-slavename",
       "TestSlavename"
     ],

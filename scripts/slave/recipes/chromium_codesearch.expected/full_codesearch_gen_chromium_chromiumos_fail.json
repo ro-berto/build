@@ -223,7 +223,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[CACHE]/goma/ChromiumOS_Codesearch",
+      "[CACHE]/goma/codesearch_gen_chromium_chromiumos",
       "511"
     ],
     "name": "preprocess_for_goma.makedirs goma cache directory",
@@ -419,9 +419,9 @@
       "--ninja-log-compiler",
       "goma",
       "--buildbot-buildername",
-      "ChromiumOS Codesearch",
+      "codesearch-gen-chromium-chromiumos",
       "--buildbot-mastername",
-      "chromium.infra.cron",
+      "chromium.infra.codesearch",
       "--buildbot-slavename",
       "TestSlavename"
     ],
@@ -475,7 +475,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[CACHE]/goma/ChromiumOS_Codesearch",
+      "[CACHE]/goma/codesearch_gen_chromium_chromiumos",
       "511"
     ],
     "name": "preprocess_for_goma.makedirs goma cache directory (2)",
@@ -502,7 +502,7 @@
     ],
     "env": {
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/ChromiumOS_Codesearch",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/codesearch_gen_chromium_chromiumos",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -674,9 +674,9 @@
       "--ninja-log-compiler",
       "goma-clang",
       "--buildbot-buildername",
-      "ChromiumOS Codesearch",
+      "codesearch-gen-chromium-chromiumos",
       "--buildbot-mastername",
-      "chromium.infra.cron",
+      "chromium.infra.codesearch",
       "--buildbot-slavename",
       "TestSlavename"
     ],
@@ -726,7 +726,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[CACHE]/goma/ChromiumOS_Codesearch",
+      "[CACHE]/goma/codesearch_gen_chromium_chromiumos",
       "511"
     ],
     "name": "preprocess_for_goma.makedirs goma cache directory (3)",
@@ -922,9 +922,9 @@
       "--ninja-log-compiler",
       "goma",
       "--buildbot-buildername",
-      "ChromiumOS Codesearch",
+      "codesearch-gen-chromium-chromiumos",
       "--buildbot-mastername",
-      "chromium.infra.cron",
+      "chromium.infra.codesearch",
       "--buildbot-slavename",
       "TestSlavename"
     ],
@@ -981,7 +981,12 @@
       "[START_DIR]/src/out/Debug",
       "--all"
     ],
-    "name": "run translation_unit clang tool"
+    "name": "run translation_unit clang tool",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 2",
+      "@@@STEP_TEXT@Step('run translation_unit clang tool') failed with return_code 2@@@",
+      "@@@STEP_WARNINGS@@@"
+    ]
   },
   {
     "cmd": [
