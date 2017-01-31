@@ -69,14 +69,14 @@ Platform = collections.namedtuple('Platform', (
 # An infra_platform cascading configuration for the supported architectures.
 #
 # TODO(dnj): Use platform/arch-generic Butler/Annotee configs once tested. e.g.,
-# 'butler': 'infra/tools/luci/logdog/butler/${platform}-${arch}'
-# 'annotee': 'infra/tools/luci/logdog/annotee/${platform}-${arch}'
 _PLATFORM_CONFIG = {
   # All systems.
   (): {
     'service_host': 'services-dot-luci-logdog.appspot.com',
     'viewer_host': 'luci-logdog.appspot.com',
     'max_buffer_age': '30s',
+    'butler': 'infra/tools/luci/logdog/butler/${platform}-${arch}',
+    'annotee': 'infra/tools/luci/logdog/annotee/${platform}-${arch}',
   },
 
   # Linux
@@ -87,22 +87,6 @@ _PLATFORM_CONFIG = {
     'butler_relpath': 'logdog_butler',
     'annotee_relpath': 'logdog_annotee',
   },
-  ('linux', 'x86'): {
-    'butler': 'infra/tools/luci/logdog/butler/linux-386',
-    'annotee': 'infra/tools/luci/logdog/annotee/linux-386',
-  },
-  ('linux', 'x86_64'): {
-    'butler': 'infra/tools/luci/logdog/butler/linux-amd64',
-    'annotee': 'infra/tools/luci/logdog/annotee/linux-amd64',
-  },
-  ('linux', 'armv6l'): {
-    'butler': 'infra/tools/luci/logdog/butler/linux-armv6l',
-    'annotee': 'infra/tools/luci/logdog/annotee/linux-armv6l',
-  },
-  ('linux', 'arm64'): {
-    'butler': 'infra/tools/luci/logdog/butler/linux-arm64',
-    'annotee': 'infra/tools/luci/logdog/annotee/linux-arm64',
-  },
 
   # Mac
   ('mac',): {
@@ -112,14 +96,6 @@ _PLATFORM_CONFIG = {
     'butler_relpath': 'logdog_butler',
     'annotee_relpath': 'logdog_annotee',
   },
-  ('mac', 'x86'): {
-    'butler': 'infra/tools/luci/logdog/butler/mac-386',
-    'annotee': 'infra/tools/luci/logdog/annotee/mac-386',
-  },
-  ('mac', 'x86_64'): {
-    'butler': 'infra/tools/luci/logdog/butler/mac-amd64',
-    'annotee': 'infra/tools/luci/logdog/annotee/mac-amd64',
-  },
 
   # Windows
   ('win',): {
@@ -128,14 +104,6 @@ _PLATFORM_CONFIG = {
     'streamserver': 'net.pipe',
     'butler_relpath': 'logdog_butler.exe',
     'annotee_relpath': 'logdog_annotee.exe',
-  },
-  ('win', 'x86'): {
-    'butler': 'infra/tools/luci/logdog/butler/windows-386',
-    'annotee': 'infra/tools/luci/logdog/annotee/windows-386',
-  },
-  ('win', 'x86_64'): {
-    'butler': 'infra/tools/luci/logdog/butler/windows-amd64',
-    'annotee': 'infra/tools/luci/logdog/annotee/windows-amd64',
   },
 }
 
@@ -495,20 +463,8 @@ def bootstrap(rt, opts, basedir, tempdir, properties, cmd):
     return v
 
   # Install our Butler/Annotee packages from CIPD.
-  #
-  # TODO(dnj): Remove this after canarying. Try out ${platform} and ${arch}
-  # resolution in CIPD.
-  cipd_version = None
-  if params.cipd_tag == _CANARY_CIPD_TAG:
-    plat = plat._replace(
-        butler='infra/tools/luci/logdog/butler/${platform}-${arch}',
-        annotee='infra/tools/luci/logdog/annotee/${platform}-${arch}',
-    )
-    cipd_version = _CANARY_CIPD_TAG
-
-
   cipd_path = os.path.join(basedir, '.recipe_cipd')
-  butler, annotee = _install_cipd(cipd_path, cipd_version,
+  butler, annotee = _install_cipd(cipd_path, None,
       # butler
       cipd.CipdBinary(
           package=cipd.CipdPackage(name=plat.butler, version=params.cipd_tag),

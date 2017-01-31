@@ -20,18 +20,15 @@ CIPD_BACKEND_URL = 'https://chrome-infra-packages.appspot.com'
 
 # ./cipd resolve \
 #     infra/tools/cipd/ \
-#     -version=git_revision:05844bd9d1200cba8449b936b76e25eb90eabe25
+#     -version=git_revision:ac753ee37abd753a9a511210d3df362d003211f0
 CLIENT_VERSIONS = {
-  'linux-386': '43ac05874d4ee0cebe69f88399d9f06d67916e22',
-  'linux-amd64': 'f4d4c54b6dbcf53c8e76983699a42dc85b8d6ce5',
-  'mac-amd64': '4e6c21bf61dfee7b6a785a8d77765083f0850913',
-  'windows-386': '725c7864ca7d8548b3f340358db003caeba6a463',
-  'windows-amd64': '1de0929ebf5702dd15e06018d5741c7e6d194d59',
-
-  # For ARM, we are using a later version of CIPD from:
-  #      -version=git_revision:ac753ee37abd753a9a511210d3df362d003211f0
+  'linux-386': '486264612ec0ad488b5a4ee022892450797b52ac',
+  'linux-amd64': '1be98ff08b61ce4a901cece0a227f4b5cfc12e9d',
   'linux-arm64': '52052a6d2194901b7ac6444a02e1c5d8fef43e50',
   'linux-armv6l': '7e5c3a9cc6ccbfe585407e39bdec352a17e54804',
+  'mac-amd64': '6de26293b09ed68cc4b8f48f61f3a6265a1aca9c',
+  'windows-386': '4dad98ea0f8e7af324532ee2571c14237e2fb76b',
+  'windows-amd64': '96af3f67d017a6285d491471f39d3d983a2a7011',
 }
 
 
