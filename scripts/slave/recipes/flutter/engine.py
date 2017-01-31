@@ -265,11 +265,11 @@ def BuildIOS(api):
 
 
 def BuildWindows(api):
-  RunGN(api, '--runtime-mode', 'profile')
-  RunGN(api, '--runtime-mode', 'release')
+  RunGN(api, '--runtime-mode', 'profile', '--android')
+  RunGN(api, '--runtime-mode', 'release', '--android')
 
-  Build(api, 'host_profile', 'gen_snapshot')
-  Build(api, 'host_release', 'gen_snapshot')
+  Build(api, 'android_profile', 'gen_snapshot')
+  Build(api, 'android_release', 'gen_snapshot')
 
   UploadArtifacts(api, "android-arm-profile" , [
     'out/host_profile/gen_snapshot.exe',

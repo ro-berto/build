@@ -90,48 +90,50 @@
       "python",
       "[START_DIR]\\src\\flutter/tools/gn",
       "--runtime-mode",
-      "profile"
+      "profile",
+      "--android"
     ],
     "env": {
       "PATH": "[START_DIR]\\src\\third_party\\dart-sdk\\dart-sdk\\bin;%(PATH)s"
     },
-    "name": "gn --runtime-mode profile"
+    "name": "gn --runtime-mode profile --android"
   },
   {
     "cmd": [
       "python",
       "[START_DIR]\\src\\flutter/tools/gn",
       "--runtime-mode",
-      "release"
+      "release",
+      "--android"
     ],
     "env": {
       "PATH": "[START_DIR]\\src\\third_party\\dart-sdk\\dart-sdk\\bin;%(PATH)s"
     },
-    "name": "gn --runtime-mode release"
+    "name": "gn --runtime-mode release --android"
   },
   {
     "cmd": [
       "ninja",
       "-C",
-      "[START_DIR]\\src\\out/host_profile",
+      "[START_DIR]\\src\\out/android_profile",
       "gen_snapshot"
     ],
     "env": {
       "PATH": "[START_DIR]\\src\\third_party\\dart-sdk\\dart-sdk\\bin;%(PATH)s"
     },
-    "name": "build host_profile gen_snapshot"
+    "name": "build android_profile gen_snapshot"
   },
   {
     "cmd": [
       "ninja",
       "-C",
-      "[START_DIR]\\src\\out/host_release",
+      "[START_DIR]\\src\\out/android_release",
       "gen_snapshot"
     ],
     "env": {
       "PATH": "[START_DIR]\\src\\third_party\\dart-sdk\\dart-sdk\\bin;%(PATH)s"
     },
-    "name": "build host_release gen_snapshot"
+    "name": "build android_release gen_snapshot"
   },
   {
     "cmd": [
