@@ -33,7 +33,7 @@ class BootstrapError(Exception):
 
 # CIPD tag for LogDog Butler/Annotee to use.
 _STABLE_CIPD_TAG = 'git_revision:49027b0891cf037e2e26cddbefc3969bccdfcd6e'
-_CANARY_CIPD_TAG = 'git_revision:ac753ee37abd753a9a511210d3df362d003211f0'
+_CANARY_CIPD_TAG = 'git_revision:49027b0891cf037e2e26cddbefc3969bccdfcd6e'
 
 _CIPD_TAG_MAP = {
     '$stable': _STABLE_CIPD_TAG,
@@ -67,10 +67,6 @@ Platform = collections.namedtuple('Platform', (
 
 
 # An infra_platform cascading configuration for the supported architectures.
-#
-# TODO(dnj): Use platform/arch-generic Butler/Annotee configs once tested. e.g.,
-# 'butler': 'infra/tools/luci/logdog/butler/${platform}-${arch}'
-# 'annotee': 'infra/tools/luci/logdog/annotee/${platform}-${arch}'
 _PLATFORM_CONFIG = {
   # All systems.
   (): {
@@ -87,21 +83,13 @@ _PLATFORM_CONFIG = {
     'butler_relpath': 'logdog_butler',
     'annotee_relpath': 'logdog_annotee',
   },
-  ('linux', 'x86'): {
+  ('linux', 32): {
     'butler': 'infra/tools/luci/logdog/butler/linux-386',
     'annotee': 'infra/tools/luci/logdog/annotee/linux-386',
   },
-  ('linux', 'x86_64'): {
+  ('linux', 64): {
     'butler': 'infra/tools/luci/logdog/butler/linux-amd64',
     'annotee': 'infra/tools/luci/logdog/annotee/linux-amd64',
-  },
-  ('linux', 'armv6l'): {
-    'butler': 'infra/tools/luci/logdog/butler/linux-armv6l',
-    'annotee': 'infra/tools/luci/logdog/annotee/linux-armv6l',
-  },
-  ('linux', 'arm64'): {
-    'butler': 'infra/tools/luci/logdog/butler/linux-arm64',
-    'annotee': 'infra/tools/luci/logdog/annotee/linux-arm64',
   },
 
   # Mac
@@ -112,11 +100,7 @@ _PLATFORM_CONFIG = {
     'butler_relpath': 'logdog_butler',
     'annotee_relpath': 'logdog_annotee',
   },
-  ('mac', 'x86'): {
-    'butler': 'infra/tools/luci/logdog/butler/mac-386',
-    'annotee': 'infra/tools/luci/logdog/annotee/mac-386',
-  },
-  ('mac', 'x86_64'): {
+  ('mac', 64): {
     'butler': 'infra/tools/luci/logdog/butler/mac-amd64',
     'annotee': 'infra/tools/luci/logdog/annotee/mac-amd64',
   },
@@ -129,11 +113,11 @@ _PLATFORM_CONFIG = {
     'butler_relpath': 'logdog_butler.exe',
     'annotee_relpath': 'logdog_annotee.exe',
   },
-  ('win', 'x86'): {
+  ('win', 32): {
     'butler': 'infra/tools/luci/logdog/butler/windows-386',
     'annotee': 'infra/tools/luci/logdog/annotee/windows-386',
   },
-  ('win', 'x86_64'): {
+  ('win', 64): {
     'butler': 'infra/tools/luci/logdog/butler/windows-amd64',
     'annotee': 'infra/tools/luci/logdog/annotee/windows-amd64',
   },
@@ -350,7 +334,7 @@ def _get_service_account_json(opts, credential_path):
                        'Tried: %s' % (credential_path,))
 
 
-def _install_cipd(path, cipd_version, *binaries):
+def _install_cipd(path, *binaries):
   """Returns (list): The paths to the binaries.
 
   This method bootstraps CIPD in "path", installing the packages specified
@@ -375,9 +359,6 @@ def _install_cipd(path, cipd_version, *binaries):
       '--dest-directory', path,
       '--json-output', packages_path,
   ] + (['--verbose'] * verbosity)
-  if cipd_version:
-    cmd += ['--cipd-version', cipd_version]
-
   for b in binaries:
     cmd += ['-P', '%s@%s' % (b.package.name, b.package.version)]
     pmap[b.package.name] = os.path.join(path, b.relpath)
@@ -495,20 +476,8 @@ def bootstrap(rt, opts, basedir, tempdir, properties, cmd):
     return v
 
   # Install our Butler/Annotee packages from CIPD.
-  #
-  # TODO(dnj): Remove this after canarying. Try out ${platform} and ${arch}
-  # resolution in CIPD.
-  cipd_version = None
-  if params.cipd_tag == _CANARY_CIPD_TAG:
-    plat = plat._replace(
-        butler='infra/tools/luci/logdog/butler/${platform}-${arch}',
-        annotee='infra/tools/luci/logdog/annotee/${platform}-${arch}',
-    )
-    cipd_version = _CANARY_CIPD_TAG
-
-
   cipd_path = os.path.join(basedir, '.recipe_cipd')
-  butler, annotee = _install_cipd(cipd_path, cipd_version,
+  butler, annotee = _install_cipd(cipd_path,
       # butler
       cipd.CipdBinary(
           package=cipd.CipdPackage(name=plat.butler, version=params.cipd_tag),

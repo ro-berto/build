@@ -22,6 +22,7 @@ from common import annotator
 from common import chromium_utils
 from common import env
 from slave import cipd
+from slave import infra_platform
 from slave import logdog_bootstrap
 from slave import monitoring_utils
 from slave import robust_tempdir
@@ -237,8 +238,6 @@ def main(argv, stream):
     except logdog_bootstrap.NotBootstrapped as e:
       LOGGER.info('Not using LogDog. Invoking `recipes.py` directly.')
       recipe_return_code = _call(recipe_cmd)
-    except Exception:
-      LOGGER.exception('Exception running LogDog bootstrap.')
     finally:
       # Try to open recipe result JSON. Any failure will result in an exception
       # and an infra failure.
