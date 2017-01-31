@@ -374,14 +374,15 @@ class iOSApi(recipe_api.RecipeApi):
         name='upload %s' % tgz,
     )
 
-  def upload(self):
+  def upload(self, base_path=None):
     """Uploads built artifacts as instructed by this bot's build config."""
     assert self.__config
 
-    base_path = '%s/%s' % (
-        self.m.properties['buildername'],
-        str(self.m.properties['buildnumber'] or 0),
-    )
+    if not base_path:
+      base_path = '%s/%s' % (
+          self.m.properties['buildername'],
+          str(self.m.properties['buildnumber'] or 0),
+      )
 
     for artifact in self.__config['upload']:
       name = str(artifact['artifact'])

@@ -140,6 +140,11 @@
       "@@@STEP_LOG_LINE@json.output@      \"os\": \"7.1\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"upload\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"artifact\": \"Chrome.app\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"xcode version\": \"6.1.1\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -477,6 +482,23 @@
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[START_DIR]/src/out/Debug-iphonesimulator/Chrome.app",
+      "gs://mock-gcs-bucket/fixed-path/Chrome.app"
+    ],
+    "name": "gsutil upload Chrome.app",
+    "~followup_annotations": [
+      "@@@STEP_LINK@Chrome.app@https://storage.cloud.google.com/mock-gcs-bucket/fixed-path/Chrome.app@@@"
     ]
   },
   {
