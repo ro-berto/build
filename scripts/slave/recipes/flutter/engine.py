@@ -181,6 +181,12 @@ def TestObservatory(api):
   api.step('test observatory and service protocol', test_cmd, cwd=checkout)
 
 
+def TestEngine(api):
+  checkout = api.path['start_dir'].join('src')
+  test_cmd = [checkout.join('flutter/testing/run_tests.sh')]
+  api.step('engine unit tests', test_cmd, cwd=checkout)
+
+
 def BuildMac(api):
   RunGN(api, '--runtime-mode', 'debug', '--unoptimized')
   RunGN(api, '--runtime-mode', 'profile', '--android')
@@ -307,6 +313,7 @@ def RunSteps(api):
       AnalyzeDartUI(api)
       BuildLinux(api)
       TestObservatory(api)
+      TestEngine(api)
       BuildLinuxAndroidArm(api)
       BuildLinuxAndroidx86(api)
 

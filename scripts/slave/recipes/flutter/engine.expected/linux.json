@@ -210,6 +210,16 @@
   },
   {
     "cmd": [
+      "[START_DIR]/src/flutter/testing/run_tests.sh"
+    ],
+    "cwd": "[START_DIR]/src",
+    "env": {
+      "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
+    },
+    "name": "engine unit tests"
+  },
+  {
+    "cmd": [
       "python",
       "[START_DIR]/src/flutter/tools/gn",
       "--android"
