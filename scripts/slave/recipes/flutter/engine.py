@@ -272,11 +272,11 @@ def BuildWindows(api):
   Build(api, 'android_release', 'gen_snapshot')
 
   UploadArtifacts(api, "android-arm-profile" , [
-    'out/host_profile/gen_snapshot.exe',
+    'out/android_profile/gen_snapshot.exe',
   ], archive_name='windows-x64.zip')
 
   UploadArtifacts(api, "android-arm-release" , [
-    'out/host_release/gen_snapshot.exe',
+    'out/android_release/gen_snapshot.exe',
   ], archive_name='windows-x64.zip')
 
 
