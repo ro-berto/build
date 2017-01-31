@@ -27,11 +27,17 @@ CLIENT_VERSIONS = {
   'mac-amd64': '4e6c21bf61dfee7b6a785a8d77765083f0850913',
   'windows-386': '725c7864ca7d8548b3f340358db003caeba6a463',
   'windows-amd64': '1de0929ebf5702dd15e06018d5741c7e6d194d59',
+
+  # For ARM, we are using a later version of CIPD from:
+  #      -version=git_revision:ac753ee37abd753a9a511210d3df362d003211f0
+  'linux-arm64': '52052a6d2194901b7ac6444a02e1c5d8fef43e50',
+  'linux-armv6l': '7e5c3a9cc6ccbfe585407e39bdec352a17e54804',
 }
 
 
 class CipdBootstrapError(Exception):
   """Raised by install_cipd_client on fatal error."""
+
 
 def install_cipd_client(path, package, version):
   """Installs CIPD client to <path>/cipd.

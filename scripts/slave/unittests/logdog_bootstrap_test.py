@@ -79,7 +79,7 @@ class LogDogBootstrapTest(unittest.TestCase):
     gce.Authenticator.is_gce.return_value = False
 
     # Pretend we're 64-bit Linux by default.
-    infra_platform.get.return_value = ('linux', 64)
+    infra_platform.get.return_value = ('linux', 'x86_64', 64)
 
   def tearDown(self):
     self.rt.close()
@@ -230,7 +230,7 @@ class LogDogBootstrapTest(unittest.TestCase):
   @mock.patch('slave.robust_tempdir.RobustTempdir.tempdir')
   def test_bootstrap_command_windows(self, tempdir, get_params, service_account,
                                      install_cipd, isfile):
-    infra_platform.get.return_value = ('win', 64)
+    infra_platform.get.return_value = ('win', 'x86_64', 64)
 
     recipe_cmd = ['run_recipe.py', 'recipe_params...']
 
@@ -356,7 +356,7 @@ class LogDogBootstrapTest(unittest.TestCase):
     self.assertIsNone(service_account_json)
 
   def test_cipd_install(self):
-    pkgs = ldbs._install_cipd(self.basedir,
+    pkgs = ldbs._install_cipd(self.basedir, 'version:foobarbaz',
         cipd.CipdBinary(cipd.CipdPackage('infra/foo', 'v0'), 'foo'),
         cipd.CipdBinary(cipd.CipdPackage('infra/bar', 'v1'), 'baz'),
         )
@@ -367,6 +367,7 @@ class LogDogBootstrapTest(unittest.TestCase):
        os.path.join(env.Build, 'scripts', 'slave', 'cipd.py'),
        '--dest-directory', self.basedir,
        '--json-output', os.path.join(self.basedir, 'packages.json'),
+       '--cipd-version', 'version:foobarbaz',
        '-P', 'infra/foo@v0',
        '-P', 'infra/bar@v1',
     ])
