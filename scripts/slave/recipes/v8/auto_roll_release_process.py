@@ -122,7 +122,7 @@ def ClusterfuzzHasIssues(api):
       'check clusterfuzz',
       api.path['checkout'].join(
           'tools', 'release', 'check_clusterfuzz.py'),
-      ['--key-file', api.path['start_dir'].join('.cf_key'),
+      ['--key-file=/creds/generic/generic-v8-autoroller_cf_key',
        '--results-file', api.json.output(add_json_log=False)],
       # Note: Output is suppressed for security reasons.
       stdout=api.raw_io.output('out'),

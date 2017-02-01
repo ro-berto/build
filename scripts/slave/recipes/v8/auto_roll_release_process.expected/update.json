@@ -212,8 +212,7 @@
       "python",
       "-u",
       "[START_DIR]/v8/tools/release/check_clusterfuzz.py",
-      "--key-file",
-      "[START_DIR]/.cf_key",
+      "--key-file=/creds/generic/generic-v8-autoroller_cf_key",
       "--results-file",
       "/path/to/tmp/json"
     ],
