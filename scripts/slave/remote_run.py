@@ -34,18 +34,25 @@ LOGGER = logging.getLogger('remote_run')
 # CIPD_PINS is a mapping of master name to pinned recipe engine CIPD package
 # version. If no pin is found, the CIPD pin for "None" will be used.
 _CIPD_PINS = {
-  # Default recipe engine pin.
+  # None is the default CIPD pin, and is used if nothing else matches. It MUST
+  # be defined.
   None: 'latest',
 }
+
+def _get_cipd_pin(mastername):
+  return _CIPD_PINS.get(mastername, _CIPD_PINS[None])
 
 # ENGINE_FLAGS is a mapping of master name to a engine flags. This can be used
 # to test new recipe engine flags on a select few masters.
 _ENGINE_FLAGS = {
+  # None is the default set of engine flags, and is used if nothing else
+  # matches. It MUST be defined.
   None: {
     'engine_flags': {
       'use_result_proto': True,
     }
   },
+
   'chromium.fyi': {
     'engine_flags': {
       'use_result_proto': True,
@@ -57,6 +64,9 @@ _ENGINE_FLAGS = {
     }
   },
 }
+
+def _get_engine_flags(mastername):
+  return  _ENGINE_FLAGS.get(mastername, _ENGINE_FLAGS[None])
 
 
 def _call(cmd, **kwargs):
@@ -176,22 +186,13 @@ def main(argv, stream):
         LOGGER.exception('Buildbot workdir cleanup failed: %s', e)
 
     mastername = properties.get('mastername')
-    # Should we use a CIPD pin?
-    cipd_pin = None
-    if mastername:
-      cipd_pin = _CIPD_PINS.get(mastername)
-    if not cipd_pin:
-      cipd_pin = _CIPD_PINS[None]
 
+    cipd_pin = _get_cipd_pin(mastername)
     cipd_path = os.path.join(basedir, '.remote_run_cipd')
     _install_cipd_packages(
         cipd_path, cipd.CipdPackage('infra/recipes-py', cipd_pin))
 
-    engine_flags = {}
-    if mastername:
-      engine_flags = _ENGINE_FLAGS.get(mastername)
-    if not engine_flags:
-      engine_flags = _ENGINE_FLAGS.get(None, {})
+    engine_flags = _get_engine_flags(mastername)
 
     engine_args = []
     if engine_flags:
@@ -226,6 +227,10 @@ def main(argv, stream):
     # If we bootstrap through logdog, the recipe command line gets written
     # to a temporary file and does not appear in the log.
     LOGGER.info('Recipe command line: %r', recipe_cmd)
+
+    # Default to return code != 0 is for the benefit of buildbot, which uses
+    # return code to decide if a step failed or not.
+    recipe_return_code = 1
     try:
       bs = logdog_bootstrap.bootstrap(rt, args, basedir, tempdir, properties,
                                       recipe_cmd)
@@ -237,27 +242,20 @@ def main(argv, stream):
     except logdog_bootstrap.NotBootstrapped as e:
       LOGGER.info('Not using LogDog. Invoking `recipes.py` directly.')
       recipe_return_code = _call(recipe_cmd)
-    except Exception:
-      LOGGER.exception('Exception running LogDog bootstrap.')
-    finally:
-      # Try to open recipe result JSON. Any failure will result in an exception
-      # and an infra failure.
-      with open(recipe_result_path) as f:
-        return_value = json.load(f)
 
-      if engine_flags.get('use_result_proto'):
-        if return_value.get('failure'):
-          f = return_value['failure']
+    # Try to open recipe result JSON. Any failure will result in an exception
+    # and an infra failure.
+    with open(recipe_result_path) as f:
+      return_value = json.load(f)
 
-          # If we aren't a step failure, we assume it was an exception.
-          if not f.get('step_failure'):
-            # The recipe engine used to return -1, which got interpreted as 255
-            # by os.exit in python, since process exit codes are a single byte.
-            recipe_return_code = 255
-          else:
-            # return code != 0 is for the benefit of buildbot, which uses return
-            # code to decide if a step failed or not.
-            recipe_return_code = 1
+    if engine_flags.get('use_result_proto'):
+      # If we failed, but aren't a step failure, we assume it was an
+      # exception.
+      f = return_value.get('failure')
+      if f is not None and not f.get('step_failure'):
+        # The recipe engine used to return -1, which got interpreted as 255
+        # by os.exit in python, since process exit codes are a single byte.
+        recipe_return_code = 255
 
     return recipe_return_code
 
