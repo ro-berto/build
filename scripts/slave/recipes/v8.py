@@ -32,10 +32,11 @@ def RunSteps(api):
     api.swarming_client.checkout()
 
     # Simulate a v8 update on slim swarming testers. The revision
-    # property is mandatory.
+    # property is mandatory. The commit position is required by gatekeeper.
     api.step.active_result.presentation.properties['got_revision'] = (
         api.properties['revision'])
-
+    api.step.active_result.presentation.properties['got_revision_cp'] = (
+        api.properties.get('parent_got_revision_cp'))
     v8.set_up_swarming()
   else:
     # Make sure we don't run a non-pure swarming tester on a subdir slave.

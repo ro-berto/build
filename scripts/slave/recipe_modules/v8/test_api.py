@@ -388,7 +388,9 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     )
     if parent_buildername:
       test += self.m.properties(
+          # TODO(machenbach): Turn that into a git hash.
           parent_got_revision='54321',
+          parent_got_revision_cp='refs/heads/master@{#20123}',
           parent_build_environment={
             'useful': 'envvars', 'from': 'the', 'parent': 'bot'},
       )
