@@ -85,7 +85,7 @@
         "gsutil upload",
         "taskkill"
       ],
-      "status_template": "Tree is closed (Automatic: \"%(unsatisfied)s\" on %(build_url)s \"%(builder_name)s\" from %(revision)s: %(blamelist)s)"
+      "status_template": "closed (%(build_url)s from %(revision)s)"
     },
     "v8_compile": {
       "closing_optional": [
@@ -102,7 +102,7 @@
         "gsutil upload",
         "taskkill"
       ],
-      "status_template": "Tree is closed (Automatic: \"%(unsatisfied)s\" on %(build_url)s \"%(builder_name)s\" from %(revision)s: %(blamelist)s)"
+      "status_template": "closed (%(build_url)s from %(revision)s)"
     }
   }
 }
