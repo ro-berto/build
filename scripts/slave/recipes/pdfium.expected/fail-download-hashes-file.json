@@ -5,7 +5,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'pdfium', 'url': 'https://pdfium.googlesource.com/pdfium.git'}]",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'pdfium', 'url': 'https://pdfium.googlesource.com/pdfium.git'}]\ntarget_os = ['android']",
       "--patch_root",
       "pdfium",
       "--revision_mapping_file",
@@ -72,7 +72,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::cipd]/resources/bootstrap.py",
       "--platform",
-      "mac-amd64",
+      "linux-amd64",
       "--dest-directory",
       "[START_DIR]/cipd",
       "--json-output",
@@ -96,7 +96,7 @@
       "--root",
       "[CACHE]/cipd/goma",
       "--list",
-      "infra/tools/cloudtail/mac-amd64 goma_recipe_module\ninfra_internal/goma/client/mac-amd64 release",
+      "infra/tools/cloudtail/linux-amd64 goma_recipe_module\ninfra_internal/goma/client/linux-amd64 release",
       "--json-output",
       "/path/to/tmp/json",
       "--service-account-json",
@@ -109,11 +109,11 @@
       "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-goma_recipe_modu\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/cloudtail/mac-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/cloudtail/linux-amd64\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/mac-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/linux-amd64\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -128,7 +128,7 @@
       "--root=[START_DIR]/pdfium",
       "gen",
       "//out/debug_v8",
-      "--args=is_debug=true is_component_build=false pdf_enable_v8=true pdf_enable_xfa=false pdf_use_skia=false pdf_is_standalone=true use_goma=true goma_dir=\"[CACHE]/cipd/goma\""
+      "--args=is_debug=true is_component_build=false pdf_enable_v8=true pdf_enable_xfa=false pdf_use_skia=false pdf_is_standalone=true use_goma=true goma_dir=\"[CACHE]/cipd/goma\" use_sysroot=false target_os=\"android\""
     ],
     "cwd": "[START_DIR]/pdfium",
     "name": "gn gen"
@@ -156,7 +156,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[CACHE]/goma/mac",
+      "[CACHE]/goma/android",
       "511"
     ],
     "name": "preprocess_for_goma.makedirs goma cache directory",
@@ -313,7 +313,7 @@
       "--ninja-log-compiler",
       "unknown",
       "--buildbot-buildername",
-      "mac",
+      "android",
       "--buildbot-mastername",
       "client.pdfium",
       "--buildbot-slavename",
@@ -384,6 +384,7 @@
     "cwd": "[START_DIR]/pdfium",
     "name": "get uninteresting hashes",
     "~followup_annotations": [
+      "step returned non-zero exit code: 1",
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import contextlib@@@",
       "@@@STEP_LOG_LINE@python.inline@import math@@@",
@@ -414,7 +415,8 @@
       "@@@STEP_LOG_LINE@python.inline@    waittime = WAIT_BASE * math.pow(2, retry)@@@",
       "@@@STEP_LOG_LINE@python.inline@    print 'Retry in %d seconds.' % waittime@@@",
       "@@@STEP_LOG_LINE@python.inline@    time.sleep(waittime)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
+      "@@@STEP_LOG_END@python.inline@@@",
+      "@@@STEP_EXCEPTION@@@"
     ]
   },
   {
@@ -425,9 +427,9 @@
       "--build-dir",
       "out/debug_v8",
       "--gold_properties",
-      "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder mac build_number 1234",
+      "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder android build_number 1234",
       "--gold_key",
-      "debug true is_standalone true os mac skia false v8 true xfa false",
+      "debug true is_standalone true os android skia false target_os \"android\" v8 true xfa false",
       "--gold_output_dir",
       "[START_DIR]/pdfium/out/debug_v8/gold_output"
     ],
@@ -473,11 +475,11 @@
       "-z",
       "json,log",
       "[START_DIR]/pdfium/out/debug_v8/gold_output/dm.json",
-      "gs://skia-pdfium-gm/dm-json-v1/2012/05/14/12/d69d97171c17fdb12a52f78847e2ee2f0594eff1/mac/1337000001/dm.json"
+      "gs://skia-pdfium-gm/dm-json-v1/2012/05/14/12/d69d97171c17fdb12a52f78847e2ee2f0594eff1/android/1337000001/dm.json"
     ],
     "name": "gsutil upload JSON",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/skia-pdfium-gm/dm-json-v1/2012/05/14/12/d69d97171c17fdb12a52f78847e2ee2f0594eff1/mac/1337000001/dm.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/skia-pdfium-gm/dm-json-v1/2012/05/14/12/d69d97171c17fdb12a52f78847e2ee2f0594eff1/android/1337000001/dm.json@@@"
     ]
   },
   {

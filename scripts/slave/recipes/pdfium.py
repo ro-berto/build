@@ -168,6 +168,12 @@ def _RunTests(api, memory_tool, v8, out_dir, build_config, revision):
     '--gold_key', gold_key,
     '--gold_output_dir', gold_output_dir,
   ])
+
+  ignore_hashes_file = get_gold_ignore_hashes(api, out_dir)
+  if ignore_hashes_file:
+    script_args.extend(['--gold_ignore_hashes',
+                        ignore_hashes_file]) # pragma: no cover
+
   corpus_tests_path = str(api.path['checkout'].join('testing', 'tools',
                                                     'run_corpus_tests.py'))
   api.python('corpus tests', corpus_tests_path, script_args,
@@ -189,8 +195,7 @@ def RunSteps(api, memory_tool, skia, xfa, v8, target_cpu, clang, rel, skip_test,
   if skip_test:
     return
 
-  with api.step.defer_results():
-    _RunTests(api, memory_tool, v8, out_dir, build_config, revision)
+  _RunTests(api, memory_tool, v8, out_dir, build_config, revision)
 
 def get_gold_params(api, build_config, revision):
   """Get the parameters to be passed to the testing call to
@@ -261,6 +266,61 @@ def gold_build_config(args):
           build_config[k] = v
   return build_config
 
+def get_gold_ignore_hashes(api, out_dir):
+  """Downloads a list of MD5 hashes from Gold and
+  writes them to a file. That file is then used by the
+  test runner in the pdfium repository to ignore already
+  known hashes.
+  """
+  host_hashes_file = api.path['checkout'].join('out',
+                                               out_dir,
+                                               'ignore_hashes.txt')
+  try:
+    api.m.python.inline(
+      'get uninteresting hashes',
+      program="""
+      import contextlib
+      import math
+      import socket
+      import sys
+      import time
+      import urllib2
+
+      HASHES_URL = 'https://pdfium-gold.skia.org/_/hashes'
+      RETRIES = 5
+      TIMEOUT = 60
+      WAIT_BASE = 15
+
+      socket.setdefaulttimeout(TIMEOUT)
+      for retry in range(RETRIES):
+        try:
+          with contextlib.closing(
+              urllib2.urlopen(HASHES_URL, timeout=TIMEOUT)) as w:
+            hashes = w.read()
+            with open(sys.argv[1], 'w') as f:
+              f.write(hashes)
+              break
+        except Exception as e:
+          print 'Failed to get uninteresting hashes from %s:' % HASHES_URL
+          print e
+          if retry == RETRIES:
+            raise
+          waittime = WAIT_BASE * math.pow(2, retry)
+          print 'Retry in %d seconds.' % waittime
+          time.sleep(waittime)
+      """,
+      args=[host_hashes_file],
+      cwd=api.path['checkout'],
+      infra_step=True)
+  except api.step.StepFailure:
+    # Swallow the exception. The step will still show up as
+    # failed, but processing will continue.
+    pass
+
+  if api.path.exists(host_hashes_file):
+    return host_hashes_file
+  return None
+
 def upload_dm_results(api, results_dir, revision):
   """ Uploads results of the tests to Gold.
   This assumes that results_dir contains a JSON file
@@ -276,7 +336,7 @@ def upload_dm_results(api, results_dir, revision):
       'find images',
       img_glob,
       test_data=['someimage.png'],
-      infra_step=True).get_result()
+      infra_step=True)
 
   if len(files_to_upload) > 0:
     gs_cp(api, 'images', img_glob, 'dm-images-v1')
@@ -567,4 +627,30 @@ def GenTests(api):
                      target_os='android',
                      buildnumber='1234',
                      skip_test=True)
+  )
+
+  yield (
+    api.test('success-download-hashes-file') +
+    api.platform('linux', 64) +
+    api.properties(v8=False,
+                   mastername='client.pdfium',
+                   buildername='android',
+                   slavename='test_slave',
+                   target_os='android',
+                   buildnumber='1234') +
+    api.path.exists(
+      api.path['checkout'].join('out', 'debug', 'ignore_hashes.txt')
+    )
+  )
+
+  yield (
+    api.test('fail-download-hashes-file') +
+    api.platform('linux', 64) +
+    api.properties(mastername='client.pdfium',
+                   buildername='android',
+                   slavename='test_slave',
+                   target_os='android',
+                   buildnumber='1234') +
+    api.step_data(
+          'get uninteresting hashes', retcode=1)
   )
