@@ -70,7 +70,6 @@ ANDROID_GN_ARGS = BASE_GN_ARGS + [
 SPEC = freeze({
   # The builders have the following parameters:
   # - compile_targets: the compile targets.
-  # - environment: The environment of the bot (prod / staging).
   # - package_filename: The prefix of the name of the source archive.
   # - platform: The platform for which the code is compiled.
   # - sync_generated_files: Whether to sync generated files into a git repo.
@@ -79,14 +78,13 @@ SPEC = freeze({
       'compile_targets': [
         'all',
       ],
-      'environment': 'prod',
       'package_filename': 'chromium-src',
       'platform': 'linux',
       'sync_generated_files': True,
       'corpus': 'chromium-linux',
     },
     'codesearch-gen-chromium-chromiumos': {
-      # TODO(emso): Get the below compile targets (also for the staging builder)
+      # TODO(emso): Get the below compile targets.
       # from the chromium_tests recipe module.
       # Compile targets used by the 'Linux ChromiumOS Full' builder (2016-12-16)
       'compile_targets': [
@@ -123,7 +121,6 @@ SPEC = freeze({
         'url_unittests',
         'views_unittests',
       ],
-      'environment': 'prod',
       'package_filename': 'chromiumos-src',
       'platform': 'chromeos',
       'corpus': 'chromium-chromeos',
@@ -132,69 +129,9 @@ SPEC = freeze({
       'compile_targets': [
         'all',
       ],
-      'environment': 'prod',
       'package_filename': 'chromium-android-src',
       'platform': 'android',
       'sync_generated_files': True,
-      'corpus': 'chromium-android',
-    },
-    'Chromium Linux Codesearch Builder': {
-      'compile_targets': [
-        'all',
-      ],
-      'environment': 'staging',
-      'package_filename': 'chromium-src',
-      'platform': 'linux',
-      'corpus': 'chromium-linux',
-    },
-    'ChromiumOS Codesearch Builder': {
-      # Compile targets used by the 'Linux ChromiumOS Full' builder (2016-12-16)
-      'compile_targets': [
-        'app_list_unittests',
-        'aura_builder',
-        'base_unittests',
-        'browser_tests',
-        'cacheinvalidation_unittests',
-        'chromeos_unittests',
-        'components_unittests',
-        'compositor_unittests',
-        'content_browsertests',
-        'content_unittests',
-        'crypto_unittests',
-        'dbus_unittests',
-        'device_unittests',
-        'gcm_unit_tests',
-        'google_apis_unittests',
-        'gpu_unittests',
-        'interactive_ui_tests',
-        'ipc_tests',
-        'jingle_unittests',
-        'media_unittests',
-        'message_center_unittests',
-        'nacl_loader_unittests',
-        'net_unittests',
-        'ppapi_unittests',
-        'printing_unittests',
-        'remoting_unittests',
-        'sandbox_linux_unittests',
-        'sql_unittests',
-        'ui_base_unittests',
-        'unit_tests',
-        'url_unittests',
-        'views_unittests',
-      ],
-      'environment': 'staging',
-      'package_filename': 'chromiumos-src',
-      'platform': 'chromeos',
-      'corpus': 'chromium-chromeos',
-    },
-    'Chromium Android Codesearch Builder': {
-      'compile_targets': [
-        'all',
-      ],
-      'environment': 'staging',
-      'package_filename': 'chromium-android-src',
-      'platform': 'android',
       'corpus': 'chromium-android',
     },
   },
@@ -284,10 +221,6 @@ def RunSteps(api):
     # error is that Codesearch gets stale.
     pass
 
-  environment = bot_config.get('environment', 'prod')
-  if environment == 'staging':
-    return
-
   # Copy the created output to the correct directory. When running the clang
   # tool, it is assumed by the scripts that the compilation database is in the
   # out/Debug directory, and named 'compile_commands.json'.
@@ -364,7 +297,7 @@ def RunSteps(api):
       name='upload grok index pack',
       source=debug_path.join(index_pack_grok_name),
       bucket=BUCKET_NAME,
-      dest='%s/%s' % (environment, index_pack_grok_name_with_revision)
+      dest='prod/%s' % index_pack_grok_name_with_revision
   )
 
   # Upload the kythe index pack
@@ -372,7 +305,7 @@ def RunSteps(api):
       name='upload kythe index pack',
       source=debug_path.join(index_pack_kythe_name),
       bucket=BUCKET_NAME,
-      dest='%s/%s' % (environment, index_pack_kythe_name_with_revision)
+      dest='prod/%s' % index_pack_kythe_name_with_revision
   )
 
   # Package the source code.
@@ -390,7 +323,7 @@ def RunSteps(api):
       name='upload source tarball',
       source=api.path['start_dir'].join(tarball_name),
       bucket=BUCKET_NAME,
-      dest='%s/%s' % (environment, tarball_name_with_revision)
+      dest='prod/%s' % tarball_name_with_revision
   )
 
   if bot_config.get('sync_generated_files', False):
@@ -427,7 +360,7 @@ def GenTests(api):
     test = api.test('full_%s' % (_sanitize_nonalpha(buildername)))
     test += api.step_data('generate compilation database for %s' % platform,
                           stdout=api.raw_io.output('some compilation data'))
-    if platform == 'chromeos' and config.get('environment') == 'prod':
+    if platform == 'chromeos':
       test += api.step_data('generate compilation database for linux',
                             stdout=api.raw_io.output('some compilation data'))
     test += api.properties.generic(buildername=buildername,
