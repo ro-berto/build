@@ -57,7 +57,6 @@ TEST_DIRS = (
     'courgette/testdata',
     'media/test/data',
     'native_client/src/trusted/service_runtime/testdata',
-    'net/data',
 )
 
 
