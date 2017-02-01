@@ -27,7 +27,6 @@ def main():
       '--prune-empty-dirs',
 
       # Exclude some common binary files.
-      '--cvs-exclude',
       '--exclude=*.bin',
       '--exclude=*.cache',
       '--exclude=*.pak',
