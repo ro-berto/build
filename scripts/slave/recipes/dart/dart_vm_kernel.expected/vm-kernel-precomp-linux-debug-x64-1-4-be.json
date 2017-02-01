@@ -70,6 +70,7 @@
       "-mdebug",
       "--arch=x64",
       "runtime",
+      "runtime_kernel",
       "dart_bootstrap",
       "dart_precompiled_runtime"
     ],
