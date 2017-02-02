@@ -335,7 +335,7 @@ def upload_dm_results(api, results_dir, revision):
   files_to_upload = api.file.glob(
       'find images',
       img_glob,
-      test_data=['someimage.png'],
+      test_data=[api.path['start_dir'].join('someimage.png')],
       infra_step=True)
 
   if len(files_to_upload) > 0:

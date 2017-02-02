@@ -72,7 +72,7 @@ def RunSteps(api):
     files = api.file.glob(
         'glob', tmp_dir.join('*'),
         test_data=[tmp_dir.join('dummy_file')])
-    assert files == [str(tmp_dir.join('dummy_file'))], files
+    assert files == [tmp_dir.join('dummy_file')], files
 
   finally:
     api.file.rmtree('cleanup', tmp_dir)

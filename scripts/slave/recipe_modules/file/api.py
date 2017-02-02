@@ -79,7 +79,7 @@ class FileApi(recipe_api.RecipeApi):
   def glob(self, name, pattern, test_data=None, **kwargs):
     """Performs glob search on a directory.
 
-    Returns list of files found.
+    Returns list of Path objects for all files found.
     """
     step_test_data = None
     if test_data is not None:
@@ -98,7 +98,7 @@ class FileApi(recipe_api.RecipeApi):
         add_python_log=False,
         **kwargs
     )
-    return step_result.raw_io.output.splitlines()
+    return map(self.m.path.abs_to_path, step_result.raw_io.output.splitlines())
 
   def remove(self, name, path, **kwargs):
     """Remove the given file."""
