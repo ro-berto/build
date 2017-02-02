@@ -71,7 +71,7 @@ def RunSteps(api):
   api.chromium_tests.prepare_checkout(bot_config)
 
   # Download existing map
-  original_map_file = api.raw_io.output()
+  original_map_file = api.path['start_dir'].join('original_map.json')
   api.gsutil.download('chromium-owners', _MAP_FILENAME,
                       original_map_file)
 
@@ -81,7 +81,7 @@ def RunSteps(api):
 
   # Run the script that does the actual work.
   try:
-    modified_map_file = api.raw_io.output()
+    modified_map_file = api.path['start_dir'].join('modified_map.json')
     command_path = api.path['checkout'].join(
         'tools', 'checkteamtags', 'extract_components.py')
     command_parts = [command_path, '-o', modified_map_file]
