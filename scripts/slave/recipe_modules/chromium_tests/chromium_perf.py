@@ -187,9 +187,6 @@ _AddTestSpec('Android One Perf', 'android-one', 'android',
 _AddTestSpec('Android Nexus5X Perf', 'android-nexus5X', 'android',
              num_device_shards=7, num_host_shards=3,
              parent_buildername='Android arm64 Compile')
-_AddTestSpec('Android Nexus9 Perf', 'android-nexus9', 'android',
-             num_device_shards=7, num_host_shards=3,
-             parent_buildername='Android arm64 Compile')
 
 
 _AddIsolatedTestSpec('Win Zenbook Perf', 'win-zenbook', 'win')
