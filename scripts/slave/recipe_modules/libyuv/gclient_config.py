@@ -27,5 +27,5 @@ def libyuv_ios(c):
 
 @CONFIG_CTX(includes=['libyuv'])
 def libyuv_valgrind(c):
-  c.solutions[0].custom_deps['src/chromium/src/third_party/valgrind'] = \
+  c.solutions[0].custom_deps['src/third_party/valgrind'] = \
       ChromiumGitURL(c, 'chromium', 'deps', 'valgrind', 'binaries')

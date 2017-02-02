@@ -9,5 +9,4 @@ from recipe_engine.config_types import Path
 
 @CONFIG_CTX(includes=['base_config'])
 def libyuv(c):
-  c.test_runner = c.CHECKOUT_PATH.join(
-      'util', 'android', 'test_runner.py')
+  pass

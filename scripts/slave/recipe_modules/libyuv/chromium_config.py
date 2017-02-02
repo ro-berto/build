@@ -19,7 +19,7 @@ def libyuv(c):
     c.compile_py.compiler = 'goma-clang'
 
   c.runtests.memory_tests_runner = c.CHECKOUT_PATH.join(
-      'tools', 'valgrind-libyuv', 'libyuv_tests',
+      'tools_libyuv', 'valgrind', 'libyuv_tests',
       platform_ext={'win': '.bat', 'mac': '.sh', 'linux': '.sh'})
 
 @CONFIG_CTX(includes=['chromium_clang'])
