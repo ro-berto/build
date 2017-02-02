@@ -205,6 +205,14 @@
       "slavebuilddir": "android_chromium_variable_archive",
       "slave_pools": ["ccompute_optional_bots"],
     },
+    "android_chromium_variable_deflake": {
+      "builder_timeout_s": 36000,  # 60 * 600
+      "recipe": "findit/chromium/flake",
+      "use_remote_run": True,
+      "scheduler": None,
+      "slavebuilddir": "android",
+      "slave_pools": ["ccompute_optional_bots_2"],
+    },
     "android_optional_gpu_tests_rel": {
       "builder_timeout_s": 10800,  # 60 * 180
       "recipe": "chromium_trybot",
@@ -395,6 +403,16 @@
         "slave132-c4",
         "slave133-c4",
         "slave134-c4",
+      ],
+    },
+    "ccompute_optional_bots_2": {
+      "slave_data": {
+        "os": "linux",
+        "version": "trusty",
+        "bits": 64,
+      },
+      "slaves": [
+        "slave1398-c4",
       ],
     },
     "ccompute_bots_cq": {
