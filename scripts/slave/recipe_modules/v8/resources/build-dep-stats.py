@@ -13,6 +13,7 @@ import argparse
 import json
 import numpy
 import os
+import re
 import subprocess
 import sys
 
@@ -23,6 +24,8 @@ def parse_args():
                       help='ninja build directory')
   parser.add_argument('-o', '--output', type=str,
                       help='Output file (default: stdout)')
+  parser.add_argument('-x', '--exclude', type=str, action='append',
+                      help='Add an exclude pattern (regex)')
   parser.add_argument('-v', '--verbose', action='store_true',
                       help='Print much more information')
   return parser.parse_args()
@@ -116,16 +119,23 @@ def get_stats(nodes):
   }
 
 
+def filter_excludes(nodes):
+  patterns = [re.compile(x) for x in args.exclude or []]
+  return [n for n in nodes if not any(r.search(n.label) for r in patterns)]
+
+
 def main():
   ninja_deps = get_ninja_deps()
   g = parse_ninja_deps(ninja_deps)
 
-  data = get_stats(g.nodes.values())
+  nodes = filter_excludes(g.nodes.values())
+
+  data = get_stats(nodes)
 
   get_ext = lambda n: os.path.splitext(n.label)[1][1:]
 
-  extensions = sorted(set(map(get_ext, g.nodes.values())))
-  get_ext_nodes = lambda e: filter(lambda n: get_ext(n) == e, g.nodes.values())
+  extensions = sorted(set(map(get_ext, nodes)))
+  get_ext_nodes = lambda e: filter(lambda n: get_ext(n) == e, nodes)
   data['by_extension'] = {e: get_stats(get_ext_nodes(e)) for e in extensions}
 
   print 'Top 500 header files:'
