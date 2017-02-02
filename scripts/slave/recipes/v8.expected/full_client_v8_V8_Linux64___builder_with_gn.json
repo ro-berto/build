@@ -485,6 +485,8 @@
       "RECIPE_MODULE[build::v8]/resources/build-dep-stats.py",
       "-C",
       "[START_DIR]/v8/out/Release",
+      "-x",
+      "/third_party/",
       "-o",
       "/path/to/tmp/json"
     ],

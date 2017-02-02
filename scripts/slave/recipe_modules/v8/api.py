@@ -512,6 +512,7 @@ class V8Api(recipe_api.RecipeApi):
           args=[
             '-C', self.m.chromium.c.build_dir.join(
                 self.m.chromium.c.build_config_fs),
+            '-x', '/third_party/',
             '-o', self.m.json.output(),
           ],
           step_test_data=lambda: self.test_api.example_build_dependencies(),
