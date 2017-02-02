@@ -368,7 +368,7 @@
       "[START_DIR]/v8/out/Release",
       "-j",
       "50",
-      "d8"
+      "v8_clusterfuzz"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -465,7 +465,7 @@
       "--ninja-log-outdir",
       "[START_DIR]/v8/out/Release",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/v8/out/Release', '-j', 50, 'd8']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/v8/out/Release', '-j', 50, 'v8_clusterfuzz']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",
