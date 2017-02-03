@@ -51,9 +51,6 @@ class PerfTryJobApi(recipe_api.RecipeApi):
     perf_config = self._get_perf_config(api, affected_files)
     if perf_config:
       self._run_perf_job(perf_config, bot_update_step, bot_db)
-    elif (not perf_config and
-          self.m.properties.get('requester') == 'commit-bot@chromium.org'):
-      self.run_cq_job(bot_update_step, bot_db, affected_files)
     else:
       self.m.halt('Could not load config file. Double check your changes to '
                   'config files for syntax errors.')
@@ -115,65 +112,6 @@ class PerfTryJobApi(recipe_api.RecipeApi):
       self.m.perf_dashboard.set_default_config()
       self.m.perf_dashboard.post_bisect_results(
           bisect_results, halt_on_failure=True)
-
-  def run_cq_job(self, update_step, bot_db, files_in_patch):
-    """Runs benchmarks affected by a CL on CQ."""
-    buildername = self.m.properties['buildername']
-    affected_benchmarks = self._get_affected_benchmarks(files_in_patch)
-    if not affected_benchmarks:
-      step_result = self.m.step('Results', [])
-      step_result.presentation.step_text = (
-          'There are no modifications to Telemetry benchmarks,'
-          ' aborting the try job.')
-      return
-    revision_hash = self.m.properties.get('parent_got_revision')
-    update_step = self._checkout_revision(update_step, bot_db, revision_hash)
-    if update_step.presentation.properties:
-      revision_hash = update_step.presentation.properties['got_revision']
-    revision = build_state.BuildState(self, revision_hash, True)
-    revision.request_build()
-    revision.wait_for()
-    revision.download_build(update_step, bot_db)
-
-    if self.m.chromium.c.TARGET_PLATFORM == 'android':
-      self.m.chromium_android.adb_install_apk('ChromePublic.apk')
-
-    tests = self.m.chromium.list_perf_tests(_get_browser(buildername), 1)
-
-    tests = dict((k, v) for k, v in tests.json.output['steps'].iteritems()
-                 if _is_benchmark_match(k, affected_benchmarks))
-
-    if not tests:
-      step_result = self.m.step('Results', [])
-      step_result.presentation.step_text = (
-          'No matching Telemetry benchmark to run for the given patch,'
-          ' aborting the CQ try job.')
-      return
-
-    with self.m.step.defer_results():
-      for test_name, test in sorted(tests.iteritems()):
-        test_name = str(test_name)
-        annotate = self.m.chromium.get_annotate_by_test_name(test_name)
-        cmd = test['cmd'].split()
-        self.m.chromium.runtest(
-            cmd[1] if len(cmd) > 1 else cmd[0],
-            args=cmd[2:],
-            name=test_name,
-            annotate=annotate,
-            python_mode=True,
-            xvfb=True,
-            chartjson_file=True)
-
-  def _get_affected_benchmarks(self, files_in_patch):
-    """Gets list of modified benchmark files under tools/perf/benchmarks."""
-    modified_benchmarks = []
-    for affected_file in files_in_patch:
-      if (affected_file.startswith(PERF_BENCHMARKS_PATH) or
-          affected_file.startswith(PERF_MEASUREMENTS_PATH)):
-        benchmark = self.m.path.basename(
-            self.m.path.splitext(affected_file)[0])
-        modified_benchmarks.append(benchmark)
-    return modified_benchmarks
 
   def _checkout_revision(self, update_step, bot_db, revision=None):
     """Checkouts specific revisions and updates bot_update step."""
@@ -530,26 +468,6 @@ def _validate_perf_config(config_contents, required_parameters):
   return True
 
 
-def _get_browser(buildername):
-  """Gets the browser type to be used in the run benchmark command."""
-  if 'android' in buildername:
-    return 'android-chromium'  # pragma: no cover
-  elif 'x64' in buildername:
-    return 'release_x64'  # pragma: no cover
-
-  return 'release'
-
-
-def _is_benchmark_match(benchmark, affected_benchmarks):
-  # TODO(prasadv): We should make more robust logic to determine if a
-  # which benchmark to run on CQ. Right now it just compares the file name
-  # with the benchmark name, which isn't necessarily correct. crbug.com/510925.
-  for b in affected_benchmarks:
-    if benchmark.startswith(b):
-      return True
-  return False
-
-
 def _pretty_table(data):
   results = []
   for row in data:
@@ -580,6 +498,7 @@ def _prepend_src_to_path_in_command(test_cfg):
       v = 'src/tools/perf/run_benchmark'
     command_to_run.append(v)
   test_cfg.update({'command': ' '.join(command_to_run)})
+
 
 def _output_format(command):
   """Determine the output format for a given command."""
