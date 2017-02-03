@@ -129,7 +129,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "component=shared_library fastbuild=1 gomadir='[CACHE]\\cipd\\goma' target_arch=x64 use_goma=1",
+      "GYP_DEFINES": "component=shared_library gomadir='[CACHE]\\cipd\\goma' target_arch=x64 use_goma=1",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -142,7 +142,7 @@
       "--root=[START_DIR]\\src",
       "gen",
       "//out/Debug_x64",
-      "--args=symbol_level=2 is_debug=true target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]\\cipd\\goma\""
+      "--args=is_debug=true target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]\\cipd\\goma\""
     ],
     "cwd": "[START_DIR]\\src",
     "name": "gn"

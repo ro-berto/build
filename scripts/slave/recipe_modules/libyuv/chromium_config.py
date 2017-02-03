@@ -9,9 +9,14 @@ CONFIG_CTX = DEPS['chromium'].CONFIG_CTX
 from recipe_engine.config_types import Path
 
 
-@CONFIG_CTX(includes=['chromium'])
+@CONFIG_CTX(includes=['ninja', 'default_compiler'])
 def libyuv(c):
   _libyuv_common(c)
+
+  # Workaround to avoid getting goma-clang change since we can no longer use
+  # the 'chromium' config above (see libyuv:677).
+  if c.compile_py.compiler == 'clang':
+    c.compile_py.compiler = 'goma-clang'
 
   c.runtests.memory_tests_runner = c.CHECKOUT_PATH.join(
       'tools', 'valgrind-libyuv', 'libyuv_tests',

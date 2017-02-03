@@ -48,7 +48,13 @@ class LibyuvApi(recipe_api.RecipeApi):
     self.m.chromium.apply_config('gn')
 
     if self.m.tryserver.is_tryserver:
-      self.m.chromium.apply_config('trybot_flavor')
+      if self.m.platform.is_win:
+        # Windows builds are currently failing due to crbug.com/659439 when
+        # fastbuild is enabled since it implies symbol_level=2. So we can only
+        # enable dcheck for those.
+        self.m.chromium.apply_config('dcheck')
+      else:
+        self.m.chromium.apply_config('trybot_flavor')
 
   @property
   def should_build(self):
