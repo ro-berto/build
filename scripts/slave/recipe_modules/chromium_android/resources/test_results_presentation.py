@@ -4,12 +4,13 @@
 # found in the LICENSE file.
 
 import argparse
-import collections
 import itertools
 import json
+import logging
 import os
 import sys
 
+# Load jinja2.
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.abspath(os.path.join(
     CURRENT_DIR, '..', '..', '..', '..', '..'))
@@ -20,25 +21,31 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     loader = jinja2.FileSystemLoader(os.path.dirname(__file__)),
     autoescape = True)
 
-
+# Get result details from json path and then convert results to html.
 def result_details(json_path, cs_base_url, master_name):
-  """Get result details from json path and then convert results to html."""
   with open(json_path) as json_file:
     json_object = json.loads(json_file.read())
     results_list = []
     if not 'per_iteration_data' in json_object:
       return 'Error: json file missing per_iteration_data.'
-    results_dict = collections.defaultdict(list)
+    test_results_dict = {}
     for testsuite_run in json_object['per_iteration_data']:
       for test, test_runs in testsuite_run.iteritems():
-        results_dict[test].append(test_runs)
-    return results_to_html(results_dict, cs_base_url, master_name)
-
+        test_results_dict[test] = [
+            {
+                'name': test,
+                'status': tr['status'],
+                'duration': tr['elapsed_time_ms'],
+                'output_snippet': tr['output_snippet'],
+                'tombstones': (tr['tombstones_url']
+                    if 'tombstones_url' in tr else ''),
+                'logcat': tr['logcat_url'] if 'logcat_url' in tr else '',
+            } for tr in test_runs]
+    return results_to_html(test_results_dict, cs_base_url, master_name)
 
 def code_search(test, cs_base_url):
   search = test.replace('#', '.')
   return '%s/?q=%s&type=cs' % (cs_base_url, search)
-
 
 def status_class(status):
   status = status.lower()
@@ -46,47 +53,48 @@ def status_class(status):
     return 'failure %s' % status
   return status
 
-
 def create_logs(result):
   link = []
-  for name, link in result.get('links', {}).iteritems():
-    link.append({
-      'data': name,
-      'link': link,
-      'target': '_blank',
-    })
-
+  if result['logcat']:
+    logcat = {}
+    logcat['data'] = 'logcat'
+    logcat['link'] = result['logcat']
+    logcat['target'] = '_blank'
+    link.append(logcat)
+  if result['tombstones'] and result['status'] == 'CRASH':
+    tombstones = {}
+    tombstones['data'] = 'tombstones'
+    tombstones['link'] = result['tombstones']
+    tombstones['target'] = '_blank'
+    link.append(tombstones)
   if link:
     return {'link': link, 'class': 'center'}
   else:
     return {'data': '(no logs)', 'class': 'center'}
 
-
 def create_test_row_data(results_dict, cs_base_url):
-  """Format test data for injecting into HTML table."""
-
   tests_list = []
-  for test_name, test_results in results_dict.iteritems():
+  for test in results_dict:
     test_runs = []
-    for index, result in enumerate(test_results):
+    for index, result in enumerate(results_dict[test]):
       if index == 0:
         test_run = [
-            {'link': [{'data': test_name,
-                       'link': code_search(test_name, cs_base_url),
+            {'link': [{'data': result['name'],
+                       'link': code_search(result['name'], cs_base_url),
                        'target': '_blank'}],
              'rowspan': len(results_dict[test]),
              'first_row_of_the_block': True,
-             'class': 'left ' + test_name,
+             'class': 'left ' + result['name'],
             }]
       else:
         test_run = []
       # class: The class of html element.
       # link: href link of the element.
-      # target: The page to open link (new tab or same page).
+      # target: The openning page, whether existing or new, of link.
       test_run.extend([
           {'data': result['status'],
            'class': 'center ' + status_class(result['status'])},
-          {'data': result['elapsed_time_ms'], 'class': 'center'},
+          {'data': result['duration'], 'class': 'center'},
           create_logs(result),
           {'data': result['output_snippet'],
            'class': 'left', 'is_pre': True}
@@ -95,13 +103,11 @@ def create_test_row_data(results_dict, cs_base_url):
     tests_list.append(test_runs)
   return tests_list
 
-
 def create_suite_row_data(results_dict):
-  """Format test suite data for injecting into HTML table."""
-
+  # Summary of all suites.
   # class: The class of html element.
   # link: href link of the element.
-  # target: The page to open link (new tab or same page).
+  # target: The openning page, whether existing or new, of link.
   suites_summary = [{'link': [{'data': 'TOTAL',
                                'link': ('?suite=%s' % 'TOTAL'),
                                'target': '_self'}],
@@ -118,14 +124,14 @@ def create_suite_row_data(results_dict):
   ALL_COUNT = 3
   TIME = 4
 
-  for test_name, test_results in results_dict.iteritems():
-    # TODO(mikecase): This logic doesn't work if there are multiple test runs.
-    # That is, if 'per_iteration_data' has multiple entries.
+  for result_name in results_dict:
     # Since we only care about the result of the last test run.
-    result = test_results[-1]
+    result = results_dict[result_name][-1]
 
-    suite_name = (test_name.split('#')[0] if '#' in test_name
-                  else test_name.split('.')[0])
+    # Constructing suite_row_dict and suites_summary
+    test_case_path = result['name']
+    suite_name = (test_case_path.split('#')[0] if '#' in test_case_path
+                  else test_case_path.split('.')[0])
     if suite_name in suite_row_dict:
       suite_row = suite_row_dict[suite_name]
     else:
@@ -147,8 +153,8 @@ def create_suite_row_data(results_dict):
     elif result['status'] != 'SKIPPED':
       suite_row[FAIL_COUNT]['data'] += 1
       suites_summary[FAIL_COUNT]['data'] += 1
-    suite_row[TIME]['data'] += result['elapsed_time_ms']
-    suites_summary[TIME]['data'] += result['elapsed_time_ms']
+    suite_row[TIME]['data'] += result['duration']
+    suites_summary[TIME]['data'] += result['duration']
 
   for suite in suite_row_dict.values():
     if suite[FAIL_COUNT]['data'] > 0:
@@ -161,18 +167,16 @@ def create_suite_row_data(results_dict):
     suites_summary[FAIL_COUNT]['class'] += ' success'
   return [[suite_row] for suite_row in suite_row_dict.values()], suites_summary
 
-
-def results_to_html(results_dict, cs_base_url, master_name):
-  """Convert list of test results into html format."""
-
-  test_row_blocks = create_test_row_data(results_dict, cs_base_url)
-  suite_row_blocks, suites_summary = create_suite_row_data(results_dict)
+# Convert list of test results into html format.
+def results_to_html(results, cs_base_url, master_name):
+  test_row_blocks = create_test_row_data(results, cs_base_url)
+  suite_row_blocks, suites_summary = create_suite_row_data(results)
 
   test_table_values = {
     'table_id' : 'test-table',
     'table_headers' : [('text', 'test_name'),
                        ('flaky', 'status'),
-                       ('number', 'elapsed_time_ms'),
+                       ('number', 'duration'),
                        ('text', 'logs'),
                        ('text', 'output_snippet'),
                       ],
@@ -197,8 +201,8 @@ def results_to_html(results_dict, cs_base_url, master_name):
       {'tb_values': [suite_table_values, test_table_values],
        'master_name': master_name})
 
-
 def main():
+  logging.basicConfig(level=logging.INFO)
   parser = argparse.ArgumentParser()
   parser.add_argument('--json-file', help='Path of json file.', required=True)
   parser.add_argument('--cs-base-url', help='Base url for code search.',
@@ -211,8 +215,7 @@ def main():
                                         args.master_name)
     print result_html_string.encode('UTF-8')
   else:
-    raise IOError('--json-file %s not found.' % args.json_file)
-
+    raise Exception('Json file of result details is not found.')
 
 if __name__ == '__main__':
   sys.exit(main())
