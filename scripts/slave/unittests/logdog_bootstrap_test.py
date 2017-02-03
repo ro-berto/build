@@ -366,7 +366,6 @@ class LogDogBootstrapTest(unittest.TestCase):
       sys.executable,
        os.path.join(env.Build, 'scripts', 'slave', 'cipd.py'),
        '--dest-directory', self.basedir,
-       '--json-output', os.path.join(self.basedir, 'packages.json'),
        '--cipd-version', 'version:foobarbaz',
        '-P', 'infra/foo@v0',
        '-P', 'infra/bar@v1',

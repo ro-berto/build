@@ -335,13 +335,11 @@ def _install_cipd(path, cipd_version, *binaries):
   if level <= logging.DEBUG:
     verbosity += 1
 
-  packages_path = os.path.join(path, 'packages.json')
   pmap = {}
   cmd = [
       sys.executable,
       os.path.join(env.Build, 'scripts', 'slave', 'cipd.py'),
       '--dest-directory', path,
-      '--json-output', packages_path,
   ] + (['--verbose'] * verbosity)
   if cipd_version:
     cmd += ['--cipd-version', cipd_version]
