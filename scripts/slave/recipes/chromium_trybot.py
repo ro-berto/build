@@ -263,28 +263,6 @@ def GenTests(api):
   )
 
   yield (
-    api.test('swarming_test_too_many_failures') +
-    props(extra_swarmed_tests=['gl_tests']) +
-    api.platform.name('linux') +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
-            'Linux Tests': {
-                'gtest_tests': [
-                    {
-                      'test': 'gl_tests',
-                      'swarming': {'can_use_on_swarming_builders': True},
-                      'max_failures': 0,
-                    },
-                ],
-            },
-        })
-    ) +
-    suppress_analyze() +
-    api.override_step_data('gl_tests (with patch)', canned_test(passing=False))
-  )
-
-  yield (
     api.test('compile_failure_without_patch_deapply_fn') +
     props() +
     api.platform.name('linux') +
