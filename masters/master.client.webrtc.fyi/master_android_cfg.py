@@ -25,12 +25,14 @@ def Update(c):
                             branch='master',
                             treeStableTimer=0,
                             builderNames=[
+          'Android Archive',
           'Android (swarming)',
           'Android ASan (swarming)',
       ]),
   ])
 
   specs = [
+    {'name': 'Android Archive', 'recipe': 'webrtc/android_archive'},
     {'name': 'Android (swarming)'},
     {'name': 'Android ASan (swarming)'},
   ]
@@ -38,7 +40,7 @@ def Update(c):
   c['builders'].extend([
       {
         'name': spec['name'],
-        'factory': m_remote_run('webrtc/standalone'),
+        'factory': m_remote_run(spec.get('recipe', 'webrtc/standalone')),
         'notify_on_missing': True,
         'category': 'android',
         'slavebuilddir': spec.get('slavebuilddir', 'android'),
