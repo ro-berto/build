@@ -73,6 +73,8 @@ SPEC = freeze({
   # - package_filename: The prefix of the name of the source archive.
   # - platform: The platform for which the code is compiled.
   # - sync_generated_files: Whether to sync generated files into a git repo.
+  # - corpus: Kythe corpus to generate index packs under.
+  # - gen_repo_branch: Which branch in the generated files repo to sync to.
   'builders': {
     'codesearch-gen-chromium-linux': {
       'compile_targets': [
@@ -81,6 +83,7 @@ SPEC = freeze({
       'package_filename': 'chromium-src',
       'platform': 'linux',
       'sync_generated_files': True,
+      'gen_repo_branch': 'master',
       'corpus': 'chromium-linux',
     },
     'codesearch-gen-chromium-chromiumos': {
@@ -123,6 +126,8 @@ SPEC = freeze({
       ],
       'package_filename': 'chromiumos-src',
       'platform': 'chromeos',
+      'sync_generated_files': True,
+      'gen_repo_branch': 'chromiumos',
       'corpus': 'chromium-chromeos',
     },
     'codesearch-gen-chromium-android': {
@@ -132,6 +137,7 @@ SPEC = freeze({
       'package_filename': 'chromium-android-src',
       'platform': 'android',
       'sync_generated_files': True,
+      'gen_repo_branch': 'android',
       'corpus': 'chromium-android',
     },
   },
@@ -330,7 +336,9 @@ def RunSteps(api):
     # Check out the generated files repo.
     generated_repo_dir = api.path['start_dir'].join('generated')
     api.git.checkout(
-        GENERATED_REPO, ref='master', dir_path=generated_repo_dir,
+        GENERATED_REPO,
+        ref=bot_config.get('gen_repo_branch', 'master'),
+        dir_path=generated_repo_dir,
         submodules=False)
     api.git('config', 'user.email', GENERATED_AUTHOR_EMAIL,
             cwd=generated_repo_dir)
@@ -346,6 +354,8 @@ def RunSteps(api):
                     api.properties.get('buildername'),
                     api.properties.get('buildnumber'),
                     api.chromium.build_properties.get('got_revision')),
+                '--dest-branch',
+                bot_config.get('gen_repo_branch', 'master'),
                 'src/out',
                 generated_repo_dir])
 

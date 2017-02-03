@@ -781,7 +781,7 @@
       "retry",
       "fetch",
       "origin",
-      "master"
+      "android"
     ],
     "cwd": "[START_DIR]/generated",
     "env": {
@@ -850,6 +850,8 @@
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/sync_generated_files_codesearch.py",
       "--message",
       "Generated files from \"codesearch-gen-chromium-android\" build 571, revision f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "--dest-branch",
+      "android",
       "src/out",
       "[START_DIR]/generated"
     ],

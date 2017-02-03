@@ -11,6 +11,9 @@ import sys
 def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('--message', help='commit message', required=True)
+  parser.add_argument('--dest-branch',
+                      help='git branch in the destination repo to sync to',
+                      default='master')
   parser.add_argument('source', help='directory to copy files from')
   parser.add_argument('dest', help='git checkout to copy files to')
   opts = parser.parse_args()
@@ -50,7 +53,8 @@ def main():
     return 0
 
   check_call(['git', 'commit', '-m', opts.message], cwd=opts.dest)
-  check_call(['git', 'push', 'origin', 'HEAD:master'], cwd=opts.dest)
+  check_call(['git', 'push', 'origin', 'HEAD:%s' % opts.dest_branch],
+              cwd=opts.dest)
 
 
 def check_call(cmd, cwd=None):
