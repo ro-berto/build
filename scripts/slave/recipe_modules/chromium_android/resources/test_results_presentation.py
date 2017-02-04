@@ -31,7 +31,7 @@ def result_details(json_path, cs_base_url, master_name):
     results_dict = collections.defaultdict(list)
     for testsuite_run in json_object['per_iteration_data']:
       for test, test_runs in testsuite_run.iteritems():
-        results_dict[test].append(test_runs)
+        results_dict[test].extend(test_runs)
     return results_to_html(results_dict, cs_base_url, master_name)
 
 
