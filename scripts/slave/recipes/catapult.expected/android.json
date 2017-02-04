@@ -88,11 +88,11 @@
     "cmd": [
       "[START_DIR]/cipd/cipd",
       "ensure",
-      "--root",
+      "-root",
       "[START_DIR]/google_appengine",
-      "--list",
+      "-ensure-file",
       "infra/gae_sdk/python/all latest",
-      "--json-output",
+      "-json-output",
       "/path/to/tmp/json"
     ],
     "name": "ensure_installed",

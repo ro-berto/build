@@ -155,13 +155,13 @@
     "cmd": [
       "[START_DIR]/cipd/cipd",
       "ensure",
-      "--root",
+      "-root",
       "[CACHE]/cipd/goma",
-      "--list",
+      "-ensure-file",
       "infra/tools/cloudtail/linux-amd64 goma_recipe_module\ninfra_internal/goma/client/linux-amd64 release",
-      "--json-output",
+      "-json-output",
       "/path/to/tmp/json",
-      "--service-account-json",
+      "-service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
     "name": "ensure_goma.ensure_installed",

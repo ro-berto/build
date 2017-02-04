@@ -25,11 +25,11 @@
     "cmd": [
       "[START_DIR]/cipd/cipd",
       "ensure",
-      "--root",
+      "-root",
       "RECIPE_PACKAGE_REPO[build]/gae_sdk/go_mac",
-      "--list",
+      "-ensure-file",
       "infra/gae_sdk/go/mac-amd64 latest",
-      "--json-output",
+      "-json-output",
       "/path/to/tmp/json"
     ],
     "name": "ensure_installed",
@@ -49,11 +49,11 @@
     "cmd": [
       "[START_DIR]/cipd/cipd",
       "ensure",
-      "--root",
+      "-root",
       "RECIPE_PACKAGE_REPO[build]/gae_sdk/python_mac",
-      "--list",
+      "-ensure-file",
       "infra/gae_sdk/python/all latest",
-      "--json-output",
+      "-json-output",
       "/path/to/tmp/json"
     ],
     "name": "ensure_installed (2)",
