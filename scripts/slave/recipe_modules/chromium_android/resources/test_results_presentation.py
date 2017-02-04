@@ -48,16 +48,16 @@ def status_class(status):
 
 
 def create_logs(result):
-  link = []
+  link_list = []
   for name, link in result.get('links', {}).iteritems():
-    link.append({
+    link_list.append({
       'data': name,
       'link': link,
       'target': '_blank',
     })
 
-  if link:
-    return {'link': link, 'class': 'center'}
+  if link_list:
+    return {'link': link_list, 'class': 'center'}
   else:
     return {'data': '(no logs)', 'class': 'center'}
 
