@@ -725,8 +725,8 @@ BUILDERS = freeze({
         'bot_type': 'builder',
         'testing': {'platform': 'linux'},
         'triggers': [
-          'Android32 Tests (J Nexus4)',
           'Android32 Tests (K Nexus5)',
+          'Android32 Tests (L Nexus4)',
           'Android32 Tests (L Nexus5)',
           'Android32 Tests (L Nexus6)',
           'Android32 Tests (L Nexus7.2)',
@@ -747,7 +747,7 @@ BUILDERS = freeze({
           'Android64 Tests (L Nexus9)',
         ],
       },
-      'Android32 Tests (J Nexus4)': {
+      'Android32 Tests (L Nexus4)': {
         'recipe_config': 'webrtc_android_perf',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -756,7 +756,7 @@ BUILDERS = freeze({
           'TARGET_BITS': 32,
         },
         'webrtc_config_kwargs': {
-          'PERF_ID': 'webrtc-android-tests-nexus4-jellybean',
+          'PERF_ID': 'webrtc-android-tests-nexus4-lollipop',
         },
         'bot_type': 'tester',
         'parent_buildername': 'Android32 Builder',
