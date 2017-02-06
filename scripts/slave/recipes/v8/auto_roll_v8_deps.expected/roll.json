@@ -310,8 +310,7 @@
       "--bypass-hooks",
       "--email",
       "v8-autoroll@chromium.org",
-      "--send-mail",
-      "--gerrit"
+      "--send-mail"
     ],
     "cwd": "[START_DIR]/v8",
     "name": "git cl"
