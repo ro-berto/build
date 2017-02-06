@@ -251,7 +251,7 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [BUILDER_CACHE]/mac/src/testing/buildbot/chromium.gpu.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Optional Mac Retina Release\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Optional Mac Retina Release (NVIDIA)\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      \"base_unittests\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",

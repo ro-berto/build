@@ -554,7 +554,7 @@ SPEC = {
       'enable_swarming': True,
       'checkout_dir': 'mac',
     },
-    'Mac 10.10 Release (Intel)': {
+    'Mac Release (Intel)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -570,7 +570,7 @@ SPEC = {
       'enable_swarming': True,
       'serialize_tests': True,
     },
-    'Mac 10.10 Debug (Intel)': {
+    'Mac Debug (Intel)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -586,7 +586,7 @@ SPEC = {
       'enable_swarming': True,
       'serialize_tests': True,
     },
-    'Mac 10.10 Release (AMD)': {
+    'Mac Pro Release (AMD)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -604,7 +604,7 @@ SPEC = {
       # in order to keep up with the faster cycle time of the tests.
       'enable_swarming': False,
     },
-    'Mac 10.10 Debug (AMD)': {
+    'Mac Pro Debug (AMD)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -622,7 +622,7 @@ SPEC = {
       # in order to keep up with the faster cycle time of the tests.
       'enable_swarming': False,
     },
-    'Mac Retina Release': {
+    'Mac Retina Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -638,7 +638,7 @@ SPEC = {
       'enable_swarming': True,
       'serialize_tests': True,
     },
-    'Mac Retina Debug': {
+    'Mac Retina Debug (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -654,7 +654,7 @@ SPEC = {
       'enable_swarming': True,
       'serialize_tests': True,
     },
-    'Mac 10.10 Retina Release (AMD)': {
+    'Mac Retina Release (AMD)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -670,7 +670,7 @@ SPEC = {
       'enable_swarming': True,
       'serialize_tests': True,
     },
-    'Mac 10.10 Retina Debug (AMD)': {
+    'Mac Retina Debug (AMD)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -686,7 +686,7 @@ SPEC = {
       'enable_swarming': True,
       'serialize_tests': True,
     },
-    'Mac 10.11 Retina Release (AMD)': {
+    'Mac Experimental Retina Release (AMD)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -934,7 +934,7 @@ SPEC = {
       },
       'enable_swarming': True,
     },
-    'Optional Mac 10.10 Release (Intel)': {
+    'Optional Mac Release (Intel)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -949,7 +949,7 @@ SPEC = {
       },
       'enable_swarming': True,
     },
-    'Optional Mac Retina Release': {
+    'Optional Mac Retina Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -964,7 +964,7 @@ SPEC = {
       },
       'enable_swarming': True,
     },
-    'Optional Mac 10.10 Retina Release (AMD)': {
+    'Optional Mac Retina Release (AMD)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',

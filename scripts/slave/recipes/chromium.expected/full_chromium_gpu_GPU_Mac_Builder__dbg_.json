@@ -242,7 +242,7 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [BUILDER_CACHE]/GPU_Mac_Builder__dbg_/src/testing/buildbot/chromium.gpu.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Mac 10.10 Debug (Intel)\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Mac Debug (Intel)\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
@@ -252,7 +252,7 @@
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Mac 10.10 Retina Debug (AMD)\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Mac Retina Debug (AMD)\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
@@ -661,7 +661,7 @@
     "name": "trigger",
     "trigger_specs": [
       {
-        "builder_name": "Mac 10.10 Debug (Intel)",
+        "builder_name": "Mac Debug (Intel)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
           "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
@@ -681,7 +681,7 @@
         }
       },
       {
-        "builder_name": "Mac 10.10 Retina Debug (AMD)",
+        "builder_name": "Mac Retina Debug (AMD)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
           "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
@@ -702,7 +702,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Mac 10.10 Debug (Intel)<br />Mac 10.10 Retina Debug (AMD)@@@"
+      "@@@STEP_TEXT@Mac Debug (Intel)<br />Mac Retina Debug (AMD)@@@"
     ]
   },
   {

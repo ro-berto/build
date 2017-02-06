@@ -747,7 +747,7 @@ def GenTests(api):
     api.override_step_data(
         'read test spec (chromium.gpu.fyi.json)',
         api.json.output({
-            'Optional Mac Retina Release': {
+            'Optional Mac Retina Release (NVIDIA)': {
                 'gtest_tests': ['base_unittests'],
             },
         })

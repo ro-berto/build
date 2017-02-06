@@ -189,17 +189,17 @@ TRYBOTS = freeze({
           {
             'mastername': 'chromium.gpu.fyi',
             'buildername': 'GPU Mac Builder',
-            'tester': 'Mac 10.10 Release (Intel)',
+            'tester': 'Mac Release (Intel)',
           },
           {
             'mastername': 'chromium.gpu.fyi',
             'buildername': 'GPU Mac Builder',
-            'tester': 'Mac Retina Release',
+            'tester': 'Mac Retina Release (NVIDIA)',
           },
           {
             'mastername': 'chromium.gpu.fyi',
             'buildername': 'GPU Mac Builder',
-            'tester': 'Mac 10.10 Retina Release (AMD)',
+            'tester': 'Mac Retina Release (AMD)',
           },
         ],
       },
@@ -447,12 +447,12 @@ TRYBOTS = freeze({
           {
             'mastername': 'chromium.gpu',
             'buildername': 'GPU Mac Builder',
-            'tester': 'Mac 10.10 Release (Intel)',
+            'tester': 'Mac Release (Intel)',
           },
           {
             'mastername': 'chromium.gpu',
             'buildername': 'GPU Mac Builder',
-            'tester': 'Mac 10.10 Retina Release (AMD)',
+            'tester': 'Mac Retina Release (AMD)',
           },
         ],
       },
@@ -485,17 +485,17 @@ TRYBOTS = freeze({
           {
             'mastername': 'chromium.gpu.fyi',
             'buildername': 'GPU Mac Builder',
-            'tester': 'Optional Mac 10.10 Release (Intel)',
+            'tester': 'Optional Mac Release (Intel)',
           },
           {
             'mastername': 'chromium.gpu.fyi',
             'buildername': 'GPU Mac Builder',
-            'tester': 'Optional Mac Retina Release',
+            'tester': 'Optional Mac Retina Release (NVIDIA)',
           },
           {
             'mastername': 'chromium.gpu.fyi',
             'buildername': 'GPU Mac Builder',
-            'tester': 'Optional Mac 10.10 Retina Release (AMD)',
+            'tester': 'Optional Mac Retina Release (AMD)',
           },
         ],
       },

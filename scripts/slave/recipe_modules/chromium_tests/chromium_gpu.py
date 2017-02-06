@@ -196,7 +196,7 @@ SPEC = {
       },
       'enable_swarming': True,
     },
-    'Mac 10.10 Release (Intel)': {
+    'Mac Release (Intel)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -211,7 +211,7 @@ SPEC = {
       },
       'enable_swarming': True,
     },
-    'Mac 10.10 Debug (Intel)': {
+    'Mac Debug (Intel)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -226,7 +226,7 @@ SPEC = {
       },
       'enable_swarming': True,
     },
-    'Mac 10.10 Retina Release (AMD)': {
+    'Mac Retina Release (AMD)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -241,7 +241,7 @@ SPEC = {
       },
       'enable_swarming': True,
     },
-    'Mac 10.10 Retina Debug (AMD)': {
+    'Mac Retina Debug (AMD)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',

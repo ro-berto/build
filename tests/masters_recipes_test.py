@@ -48,8 +48,8 @@ SUPPRESSIONS = {
         'GPU Mac Builder (dbg)',
         'GPU Win Builder (dbg)',
         'Linux Debug (NVIDIA)',
-        'Mac 10.10 Debug (Intel)',
-        'Mac 10.10 Retina Debug (AMD)',
+        'Mac Debug (Intel)',
+        'Mac Retina Debug (AMD)',
         'Win7 Debug (NVIDIA)',
     ],
     'master.chromium.mac': [

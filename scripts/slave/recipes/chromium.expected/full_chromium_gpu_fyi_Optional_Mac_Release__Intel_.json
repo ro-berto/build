@@ -4,7 +4,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[BUILDER_CACHE]/Mac_10_10_Retina_Debug__AMD_",
+      "[BUILDER_CACHE]/Optional_Mac_Release__Intel_",
       "511"
     ],
     "name": "makedirs checkout path",
@@ -40,7 +40,7 @@
       "src@1111111",
       "--output_manifest"
     ],
-    "cwd": "[BUILDER_CACHE]/Mac_10_10_Retina_Debug__AMD_",
+    "cwd": "[BUILDER_CACHE]/Optional_Mac_Release__Intel_",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -182,7 +182,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Mac_10_10_Retina_Debug__AMD_/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Optional_Mac_Release__Intel_/src/tools/swarming_client/swarming.py",
       "--version"
     ],
     "name": "swarming.py --version",
@@ -198,11 +198,11 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/Mac_10_10_Retina_Debug__AMD_/src",
+    "cwd": "[BUILDER_CACHE]/Optional_Mac_Release__Intel_/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "GYP_DEFINES": "clang=1 component=shared_library gomadir='[CACHE]/cipd/goma' target_arch=x64 use_goma=1",
+      "GYP_DEFINES": "clang=1 component=static_library gomadir='[CACHE]/cipd/goma' target_arch=x64 use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -211,17 +211,17 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Mac_10_10_Retina_Debug__AMD_/src/testing/scripts/get_compile_targets.py",
+      "[BUILDER_CACHE]/Optional_Mac_Release__Intel_/src/testing/scripts/get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
-      "Debug",
+      "Release",
       "--use-src-side-runtest-py",
       "--paths",
-      "{\"checkout\": \"[BUILDER_CACHE]/Mac_10_10_Retina_Debug__AMD_/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
+      "{\"checkout\": \"[BUILDER_CACHE]/Optional_Mac_Release__Intel_/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"Mac 10.10 Retina Debug (AMD)\", \"buildnumber\": 571, \"mastername\": \"chromium.gpu\", \"slavename\": \"TestSlavename\", \"target_platform\": \"mac\"}"
+      "{\"buildername\": \"Optional Mac Release (Intel)\", \"buildnumber\": 571, \"mastername\": \"chromium.gpu.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"mac\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -234,14 +234,14 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/Mac_10_10_Retina_Debug__AMD_/src/testing/buildbot/chromium.gpu.json",
+      "[BUILDER_CACHE]/Optional_Mac_Release__Intel_/src/testing/buildbot/chromium.gpu.fyi.json",
       "/path/to/tmp/json"
     ],
-    "name": "read test spec (chromium.gpu.json)",
+    "name": "read test spec (chromium.gpu.fyi.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [BUILDER_CACHE]/Mac_10_10_Retina_Debug__AMD_/src/testing/buildbot/chromium.gpu.json@@@",
+      "@@@STEP_TEXT@path: [BUILDER_CACHE]/Optional_Mac_Release__Intel_/src/testing/buildbot/chromium.gpu.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Mac 10.10 Retina Debug (AMD)\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Optional Mac Release (Intel)\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
@@ -271,7 +271,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[BUILDER_CACHE]/Mac_10_10_Retina_Debug__AMD_/src/out/Debug"
+      "[BUILDER_CACHE]/Optional_Mac_Release__Intel_/src/out/Release"
     ],
     "name": "rmtree build directory",
     "~followup_annotations": [
@@ -296,15 +296,15 @@
       "--gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--target",
-      "Debug",
+      "Release",
       "--src-dir",
-      "[BUILDER_CACHE]/Mac_10_10_Retina_Debug__AMD_/src",
+      "[BUILDER_CACHE]/Optional_Mac_Release__Intel_/src",
       "--slave-utils-gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--build-archive-url",
       "gs://test-domain/test-archive.zip",
       "--master-name",
-      "chromium.gpu",
+      "chromium.gpu.fyi",
       "--build-number",
       "571"
     ],
@@ -316,11 +316,11 @@
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
       "--build-dir",
-      "[BUILDER_CACHE]/Mac_10_10_Retina_Debug__AMD_/src/out/Debug",
+      "[BUILDER_CACHE]/Optional_Mac_Release__Intel_/src/out/Release",
       "--output-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]/Mac_10_10_Retina_Debug__AMD_",
+    "cwd": "[BUILDER_CACHE]/Optional_Mac_Release__Intel_",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -339,7 +339,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Mac_10_10_Retina_Debug__AMD_/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Optional_Mac_Release__Intel_/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -350,7 +350,7 @@
       "--shards",
       "1",
       "--task-name",
-      "browser_tests/Mac-10.9/ffffffffff/Mac 10.10 Retina Debug (AMD)/571",
+      "browser_tests/Mac-10.9/ffffffffff/Optional Mac Release (Intel)/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -372,13 +372,13 @@
       "pool",
       "Chrome",
       "--tag",
-      "buildername:Mac 10.10 Retina Debug (AMD)",
+      "buildername:Optional Mac Release (Intel)",
       "--tag",
       "buildnumber:571",
       "--tag",
       "data:ffffffffffffffffffffffffffffffffffffffff",
       "--tag",
-      "master:chromium.gpu",
+      "master:chromium.gpu.fyi",
       "--tag",
       "name:browser_tests",
       "--tag",
@@ -398,7 +398,7 @@
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
-    "cwd": "[BUILDER_CACHE]/Mac_10_10_Retina_Debug__AMD_",
+    "cwd": "[BUILDER_CACHE]/Optional_Mac_Release__Intel_",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -407,9 +407,9 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac-10.9'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"browser_tests/Mac-10.9/ffffffffff/Mac 10.10 Retina Debug (AMD)/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"browser_tests/Mac-10.9/ffffffffff/Optional Mac Release (Intel)/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"browser_tests/Mac-10.9/ffffffffff/Mac 10.10 Retina Debug (AMD)/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"browser_tests/Mac-10.9/ffffffffff/Optional Mac Release (Intel)/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -429,7 +429,7 @@
       "python",
       "RECIPE_MODULE[build::swarming]/resources/collect_gtest_task.py",
       "--swarming-client-dir",
-      "[BUILDER_CACHE]/Mac_10_10_Retina_Debug__AMD_/src/tools/swarming_client",
+      "[BUILDER_CACHE]/Optional_Mac_Release__Intel_/src/tools/swarming_client",
       "--temp-root-dir",
       "[TMP_BASE]",
       "--merged-test-output",
@@ -441,9 +441,9 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"browser_tests/Mac-10.9/ffffffffff/Mac 10.10 Retina Debug (AMD)/571\", \"tasks\": {\"browser_tests/Mac-10.9/ffffffffff/Mac 10.10 Retina Debug (AMD)/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"browser_tests/Mac-10.9/ffffffffff/Optional Mac Release (Intel)/571\", \"tasks\": {\"browser_tests/Mac-10.9/ffffffffff/Optional Mac Release (Intel)/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
-    "cwd": "[BUILDER_CACHE]/Mac_10_10_Retina_Debug__AMD_",
+    "cwd": "[BUILDER_CACHE]/Optional_Mac_Release__Intel_",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -464,8 +464,8 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": \"Mac 10.10 Retina Debug (AMD)\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": \"chromium.gpu\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": \"Optional Mac Release (Intel)\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": \"chromium.gpu.fyi\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
@@ -479,9 +479,9 @@
       "--input-json",
       "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"outputs_ref\": {\"view_url\": \"blah\"}}]}}",
       "--master-name",
-      "chromium.gpu",
+      "chromium.gpu.fyi",
       "--builder-name",
-      "Mac 10.10 Retina Debug (AMD)",
+      "Optional Mac Release (Intel)",
       "--build-number",
       "571",
       "--test-type",
@@ -491,7 +491,7 @@
       "--chrome-revision",
       "170242"
     ],
-    "cwd": "[BUILDER_CACHE]/Mac_10_10_Retina_Debug__AMD_",
+    "cwd": "[BUILDER_CACHE]/Optional_Mac_Release__Intel_",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
