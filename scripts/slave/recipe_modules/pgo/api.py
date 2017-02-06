@@ -92,6 +92,37 @@ class PGOApi(recipe_api.RecipeApi):
         phase=2)
     self.m.chromium.compile(name='Compile: Optimization phase.')
 
+  def _merge_pgc_files(self):
+    """
+    Calls the script responsible of merging the PGC files.
+
+    If this script is missing then this will be done automatically by the
+    compiler during the final compile step.
+    """
+    merge_script = self.m.path['checkout'].join('build', 'win',
+                                                'merge_pgc_files.py')
+    if not self.m.path.exists(merge_script):
+      return
+
+    target_arch = self.m.chromium.c.gyp_env.GYP_DEFINES['target_arch']
+    target_cpu = {'ia32': 'x86'}.get(target_arch) or target_arch
+    base_args = [
+        '--checkout-dir', self.m.path['checkout'],
+        '--target-cpu', target_cpu,
+        '--build-dir', self.m.chromium.output_dir,
+    ]
+
+    for f in self.m.file.glob('list PGD files',
+                              self.m.chromium.output_dir.join('*.pgd'),
+                              test_data=[
+                                  self.m.chromium.output_dir.join('test1.pgd'),
+                                  self.m.chromium.output_dir.join('test2.pgd'),
+                              ]):
+      binary_name = self.m.path.splitext(self.m.path.basename(f))[0]
+      args = base_args + ['--binary-name', binary_name]
+      self.m.python('Merge the pgc files for %s.' % binary_name,
+                    merge_script, args)
+
   def compile_pgo(self, bot_config):
     """
     Do a PGO build. This takes care of building an instrumented image, profiling
@@ -117,6 +148,9 @@ class PGOApi(recipe_api.RecipeApi):
 
     # Second step: profiling of the instrumented build.
     self._run_pgo_benchmarks()
+
+    # Merge the pgc files.
+    self._merge_pgc_files()
 
     # Third step: Compilation of the optimized build, this will use the
     #     profile data files produced by the previous step.

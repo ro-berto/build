@@ -8,6 +8,7 @@
 DEPS = [
   'chromium',
   'pgo',
+  'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
 ]
@@ -39,6 +40,9 @@ TEST_BUILDERS = freeze({
 def RunSteps(api):
   _, bot_config = api.chromium.configure_bot(TEST_BUILDERS, [])
   api.pgo.compile_pgo(bot_config)
+  api.path.mock_add_paths(api.path.join(api.path['checkout'].join(
+      'build', 'win', 'merge_pgc_files.py')))
+  api.pgo._merge_pgc_files()
 
 
 def GenTests(api):
