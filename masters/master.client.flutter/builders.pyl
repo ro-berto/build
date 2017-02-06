@@ -19,13 +19,12 @@
       "slave_pools": ["mac"],
       "builder_timeout_s": 7200, # 2 hours max
     },
-    # TODO(goderbauer): activate when scripts have been ported to windows
-    # "Windows": {
-    #   "recipe": "flutter/flutter",
-    #   "scheduler": "flutter_commits",
-    #   "slave_pools": ["windows"],
-    #   "builder_timeout_s": 7200, # 2 hours max
-    # },
+    "Windows": {
+      "recipe": "flutter/flutter",
+      "scheduler": "flutter_commits",
+      "slave_pools": ["windows"],
+      "builder_timeout_s": 7200, # 2 hours max
+    },
     "Linux Engine": {
       "recipe": "flutter/engine",
       "scheduler": "engine_commits",

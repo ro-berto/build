@@ -106,7 +106,9 @@
   },
   {
     "cmd": [
-      "[START_DIR]/flutter/dev/bots/download_android_tools.py"
+      "[START_DIR]/flutter/dev/bots/download_android_tools.py",
+      "-t",
+      "sdk"
     ],
     "name": "download android tools"
   },
