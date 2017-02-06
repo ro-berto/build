@@ -417,27 +417,7 @@ m/cloudstorage/b/chromium-telemetry/o/html-results/results-without
           api.raw_io.stream_output('tools/run-perf-test.cfg')) +
       api.override_step_data('load config', api.json.output(config_json)))
 
-  yield (
-      api.test('perf_cq_run_benchmark') +
-      api.properties.tryserver(
-          path_config='kitchen',
-          mastername='tryserver.chromium.perf',
-          buildername='linux_perf_bisect',
-          patch_storage='rietveld',
-          patchset='20001',
-          issue='12345',
-          is_test=True,
-          rietveld="https://codereview.chromium.org") +
-      api.properties(requester='commit-bot@chromium.org') +
-      api.override_step_data(
-          'git diff to analyze patch',
-          api.raw_io.stream_output('tools/perf/benchmarks/blink_perf.py')) +
-      api.step_data('buildbucket.put',
-          stdout=api.json.output(buildbucket_put_response)) +
-      api.step_data('buildbucket.get',
-          stdout=api.json.output(buildbucket_get_response)))
-
-  yield (api.test('perf_cq_no_changes') +
+  yield (api.test('perf_tryjob_no_config') +
       api.properties.tryserver(
           path_config='kitchen',
           mastername='tryserver.chromium.perf',
@@ -451,23 +431,3 @@ m/cloudstorage/b/chromium-telemetry/o/html-results/results-without
       api.override_step_data(
           'git diff to analyze patch',
           api.raw_io.stream_output('tools/no_benchmark_file')))
-
-  yield (api.test('perf_cq_no_benchmark_to_run') +
-      api.properties.tryserver(
-          path_config='kitchen',
-          mastername='tryserver.chromium.perf',
-          buildername='linux_perf_bisect',
-          patch_storage='rietveld',
-          patchset='20001',
-          issue='12345',
-          is_test=True,
-          rietveld="https://codereview.chromium.org") +
-      api.properties(requester='commit-bot@chromium.org') +
-      api.override_step_data(
-          'git diff to analyze patch',
-          api.raw_io.stream_output('tools/perf/benchmarks/sunspider.py')) +
-      api.step_data('buildbucket.put',
-          stdout=api.json.output(buildbucket_put_response)) +
-      api.step_data('buildbucket.get',
-          stdout=api.json.output(buildbucket_get_response)))
-
