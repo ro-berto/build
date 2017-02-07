@@ -25,13 +25,26 @@ def RunSteps(api):
   api.gclient.runhooks()
 
   goma_dir = api.goma.ensure_goma()
-  build_script = api.path['checkout'].join('tools-webrtc', 'android',
-                                           'build_aar.py')
-  api.python('build', build_script,
-             args=['--use-goma',
-                   '--verbose',
-                   '--extra-gn-args', 'goma_dir=\"%s\"' % goma_dir],
-             cwd=api.path['checkout'])
+  api.goma.start()
+  ninja_log_exit_status = 1
+  try:
+    build_script = api.path['checkout'].join('tools-webrtc', 'android',
+                                             'build_aar.py')
+    step_result = api.python(
+        'build',
+        build_script,
+        args=['--use-goma',
+              '--verbose',
+              '--extra-gn-args', 'goma_dir=\"%s\"' % goma_dir],
+        cwd=api.path['checkout'],
+    )
+    ninja_log_exit_status = step_result.retcode
+  except api.step.StepFailure as e:
+    ninja_log_exit_status = e.retcode
+    raise e
+  finally:
+    api.goma.stop(ninja_log_compiler='goma',
+                  ninja_log_exit_status=ninja_log_exit_status)
 
   if not api.tryserver.is_tryserver:
     api.gsutil.upload(
