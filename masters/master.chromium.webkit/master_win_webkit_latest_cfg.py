@@ -38,7 +38,7 @@ rel_archive = master_config.GetGSUtilUrl('chromium-build-transfer',
 #
 B('WebKit Win Builder', 'f_webkit_win_rel',
   scheduler='global_scheduler', builddir='webkit-win-latest-rel',
-  auto_reboot=False)
+  auto_reboot=True)
 F('f_webkit_win_rel', m_remote_run('chromium'))
 
 #
@@ -53,7 +53,7 @@ F('f_webkit_rel_tests', m_remote_run('chromium'))
 #
 B('WebKit Win x64 Builder', 'f_webkit_win_rel_x64',
   scheduler='global_scheduler', builddir='webkit-win-latest-rel-x64',
-  auto_reboot=False)
+  auto_reboot=True)
 F('f_webkit_win_rel_x64', m_remote_run('chromium'))
 
 
@@ -65,7 +65,7 @@ F('f_webkit_win_rel_x64', m_remote_run('chromium'))
 # Win Dbg Builder
 #
 B('WebKit Win Builder (dbg)', 'f_webkit_win_dbg', scheduler='global_scheduler',
-  builddir='webkit-win-latest-dbg', auto_reboot=False)
+  builddir='webkit-win-latest-dbg', auto_reboot=True)
 F('f_webkit_win_dbg', m_remote_run('chromium'))
 
 #
@@ -79,7 +79,7 @@ F('f_webkit_dbg_tests', m_remote_run('chromium'))
 #
 B('WebKit Win x64 Builder (dbg)', 'f_webkit_win_dbg_x64',
   scheduler='global_scheduler', builddir='webkit-win-latest-dbg-x64',
-  auto_reboot=False)
+  auto_reboot=True)
 F('f_webkit_win_dbg_x64', m_remote_run('chromium'))
 
 def Update(_config, _active_master, c):
