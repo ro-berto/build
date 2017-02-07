@@ -175,13 +175,17 @@ _AddBuildSpec( \
 
 # 32 bit android
 _AddTestSpec('Android Nexus5 Perf', 'android-nexus5', 'android',
-             target_bits=32, num_device_shards=7, num_host_shards=3)
+             target_bits=32, num_device_shards=7, num_host_shards=3,
+             parent_buildername='Android Compile')
 _AddTestSpec('Android Nexus6 Perf', 'android-nexus6', 'android',
-             target_bits=32, num_device_shards=7, num_host_shards=3)
+             target_bits=32, num_device_shards=7, num_host_shards=3,
+             parent_buildername='Android Compile')
 _AddTestSpec('Android Nexus7v2 Perf', 'android-nexus7v2', 'android',
-             target_bits=32, num_device_shards=7, num_host_shards=3)
+             target_bits=32, num_device_shards=7, num_host_shards=3,
+             parent_buildername='Android Compile')
 _AddTestSpec('Android One Perf', 'android-one', 'android',
-             target_bits=32, num_device_shards=7, num_host_shards=3)
+             target_bits=32, num_device_shards=7, num_host_shards=3,
+             parent_buildername='Android Compile')
 
 # 64 bit android
 _AddTestSpec('Android Nexus5X Perf', 'android-nexus5X', 'android',
