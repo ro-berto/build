@@ -7,6 +7,7 @@ DEPS = [
   'depot_tools/bot_update',
   'depot_tools/gclient',
   'depot_tools/tryserver',
+  'goma',
   'gsutil',
   'recipe_engine/path',
   'recipe_engine/properties',
@@ -23,9 +24,13 @@ def RunSteps(api):
   api.webrtc.checkout()
   api.gclient.runhooks()
 
+  goma_dir = api.goma.ensure_goma()
   build_script = api.path['checkout'].join('tools-webrtc', 'android',
                                            'build_aar.py')
-  api.python('build', build_script, args=['--use-goma', '--verbose'],
+  api.python('build', build_script,
+             args=['--use-goma',
+                   '--verbose',
+                   '--extra-gn-args', 'goma_dir=\"%s\"' % goma_dir],
              cwd=api.path['checkout'])
 
   if not api.tryserver.is_tryserver:
