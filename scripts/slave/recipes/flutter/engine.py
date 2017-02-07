@@ -280,6 +280,21 @@ def BuildWindows(api):
   ], archive_name='windows-x64.zip')
 
 
+def BuildJavadoc(api):
+  checkout = api.path['start_dir'].join('src')
+  with MakeTempDir(api, 'BuildJavadoc') as temp_dir:
+    javadoc_cmd = [checkout.join('flutter/tools/gen_javadoc.py'),
+                   '--out-dir', temp_dir]
+    api.step('build javadoc', javadoc_cmd, cwd=checkout)
+    api.zip.directory('archive javadoc', temp_dir,
+                      checkout.join('out/android_javadoc.zip'))
+
+  api.gsutil.upload(checkout.join('out/android_javadoc.zip'),
+                    BUCKET_NAME,
+                    GetCloudPath(api, 'android-javadoc.zip'),
+                    name='upload javadoc')
+
+
 def GetCheckout(api):
   src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
@@ -316,6 +331,7 @@ def RunSteps(api):
       TestEngine(api)
       BuildLinuxAndroidArm(api)
       BuildLinuxAndroidx86(api)
+      BuildJavadoc(api)
 
     if api.platform.is_mac:
       BuildMac(api)
