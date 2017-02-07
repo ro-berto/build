@@ -463,10 +463,7 @@
         ],
 
         "excluded_builders" : [
-            "Android Galaxy S5 Perf (1)",
-            "Android Galaxy S5 Perf (2)",
-            "Android Galaxy S5 Perf (3)",
-            "Mac HDD Perf"
+            "Mac Mini 8GB 10.12 Perf"
         ],
 
         "builders": {
