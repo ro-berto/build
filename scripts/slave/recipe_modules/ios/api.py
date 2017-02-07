@@ -29,15 +29,24 @@ class iOSApi(recipe_api.RecipeApi):
   @property
   def configuration(self):
     assert self.__config is not None
-    return self.__config['configuration']
+    if 'is_debug=true' in self.__config['gn_args']:
+      return 'Debug'
+    if 'is_debug=false' in self.__config['gn_args']:
+      return 'Release'
+    raise self.m.step.StepFailure('Missing required gn_arg: is_debug')
 
   @property
   def platform(self):
     assert self.__config is not None
-    if self.__config['sdk'].startswith('iphoneos'):
+    if 'target_cpu="arm"' in self.__config['gn_args']:
       return 'device'
-    elif self.__config['sdk'].startswith('iphonesimulator'):
+    if 'target_cpu="arm64"' in self.__config['gn_args']:
+      return 'device'
+    if 'target_cpu="x86"' in self.__config['gn_args']:
       return 'simulator'
+    if 'target_cpu="x64"' in self.__config['gn_args']:
+      return 'simulator'
+    raise self.m.step.StepFailure('Missing required gn_arg: target_cpu')
 
   @property
   def use_goma(self):

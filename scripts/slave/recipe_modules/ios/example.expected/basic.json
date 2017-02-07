@@ -109,11 +109,11 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"bucket\": \"mock-gcs-bucket\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Debug\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"gn_args\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"is_debug=true\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"target_cpu=\\\"x64\\\"\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"use_goma=true\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"sdk\": \"iphonesimulator8.1\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"app\": \"fake test 1\", @@@",
@@ -262,12 +262,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "use_goma=true\ngoma_dir=\"[CACHE]/cipd/goma\"\n",
+      "is_debug=true\ntarget_cpu=\"x64\"\nuse_goma=true\ngoma_dir=\"[CACHE]/cipd/goma\"\n",
       "[START_DIR]/src/out/Debug-iphonesimulator/args.gn"
     ],
     "name": "write args.gn",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br />use_goma=true<br />goma_dir=\"[CACHE]/cipd/goma\"@@@"
+      "@@@STEP_TEXT@<br />is_debug=true<br />target_cpu=\"x64\"<br />use_goma=true<br />goma_dir=\"[CACHE]/cipd/goma\"@@@"
     ]
   },
   {

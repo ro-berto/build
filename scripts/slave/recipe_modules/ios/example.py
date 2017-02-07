@@ -31,11 +31,11 @@ def GenTests(api):
     )
     + api.ios.make_test_build_config({
       'gn_args': [
+        'is_debug=true',
+        'target_cpu="x64"',
         'use_goma=true',
       ],
       'xcode version': '6.1.1',
-      'configuration': 'Debug',
-      'sdk': 'iphonesimulator8.1',
       'bucket': 'mock-gcs-bucket',
       'upload': [
         {
@@ -90,8 +90,10 @@ def GenTests(api):
     )
     + api.ios.make_test_build_config({
       'xcode version': '6.1.1',
-      'configuration': 'Release',
-      'sdk': 'iphoneos8.1',
+      'gn_args': [
+        'is_debug=false',
+        'target_cpu="arm64"',
+      ],
       'tests': [
         {
           'app': 'fake test 1',
@@ -140,8 +142,10 @@ def GenTests(api):
     )
     + api.ios.make_test_build_config({
       'xcode version': '6.1.1',
-      'configuration': 'Debug',
-      'sdk': 'iphonesimulator8.1',
+      'gn_args': [
+        'is_debug=true',
+        'target_cpu="x86"',
+      ],
       'tests': [
         {
           'app': 'fake test',
@@ -177,8 +181,10 @@ def GenTests(api):
     )
     + api.ios.make_test_build_config({
       'xcode version': '6.1.1',
-      'configuration': 'Debug',
-      'sdk': 'iphonesimulator8.1',
+      'gn_args': [
+        'is_debug=true',
+        'target_cpu="x86"',
+      ],
       'tests': [
         {
           'app': 'fake test',
@@ -214,8 +220,10 @@ def GenTests(api):
     )
     + api.ios.make_test_build_config({
       'xcode version': '6.1.1',
-      'configuration': 'Debug',
-      'sdk': 'iphonesimulator8.1',
+      'gn_args': [
+        'is_debug=true',
+        'target_cpu="x86"',
+      ],
       'tests': [
         {
           'app': 'fake test',
@@ -250,8 +258,10 @@ def GenTests(api):
     )
     + api.ios.make_test_build_config({
       'xcode version': '6.1.1',
-      'configuration': 'Debug',
-      'sdk': 'iphonesimulator8.1',
+      'gn_args': [
+        'is_debug=true',
+        'target_cpu="x86"',
+      ],
       'tests': [
         {
           'app': 'fake test',
@@ -286,8 +296,10 @@ def GenTests(api):
     )
     + api.ios.make_test_build_config({
       'xcode version': '6.1.1',
-      'configuration': 'Debug',
-      'sdk': 'iphonesimulator8.1',
+      'gn_args': [
+        'is_debug=true',
+        'target_cpu="x86"',
+      ],
       'tests': [
         {
           'app': 'fake test',
@@ -312,6 +324,44 @@ def GenTests(api):
   )
 
   yield (
+    api.test('is_debug_missing')
+    + api.platform('mac', 64)
+    + api.properties(
+      buildername='ios',
+      buildnumber='0',
+      mastername='chromium.fake',
+      slavename='fake-vm',
+    )
+    + api.ios.make_test_build_config({
+      'xcode version': '6.1.1',
+      'gn_args': [
+        'target_cpu="x86"',
+      ],
+      'tests': [
+      ],
+    })
+  )
+
+  yield (
+    api.test('target_cpu_missing')
+    + api.platform('mac', 64)
+    + api.properties(
+      buildername='ios',
+      buildnumber='0',
+      mastername='chromium.fake',
+      slavename='fake-vm',
+    )
+    + api.ios.make_test_build_config({
+      'xcode version': '6.1.1',
+      'gn_args': [
+        'is_debug=true',
+      ],
+      'tests': [
+      ],
+    })
+  )
+
+  yield (
     api.test('clobber_checkout')
     + api.platform('mac', 64)
     + api.properties(
@@ -323,8 +373,10 @@ def GenTests(api):
     )
     + api.ios.make_test_build_config({
       'xcode version': '6.1.1',
-      'configuration': 'Debug',
-      'sdk': 'iphonesimulator8.1',
+      'gn_args': [
+        'is_debug=true',
+        'target_cpu="x86"',
+      ],
       'tests': [
       ],
     })
@@ -345,8 +397,10 @@ def GenTests(api):
     )
     + api.ios.make_test_build_config({
       'xcode version': '6.1.1',
-      'configuration': 'Debug',
-      'sdk': 'iphonesimulator8.1',
+      'gn_args': [
+        'is_debug=true',
+        'target_cpu="x86"',
+      ],
       'clobber': True,
       'tests': [
       ],

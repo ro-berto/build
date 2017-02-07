@@ -108,8 +108,10 @@
     "name": "read build config",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Release\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"sdk\": \"iphoneos8.1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"gn_args\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"is_debug=false\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"target_cpu=\\\"arm64\\\"\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"app\": \"fake test 1\", @@@",
@@ -168,12 +170,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "\n",
+      "is_debug=false\ntarget_cpu=\"arm64\"\n",
       "[START_DIR]/src/out/Release-iphoneos/args.gn"
     ],
     "name": "write args.gn",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br />@@@"
+      "@@@STEP_TEXT@<br />is_debug=false<br />target_cpu=\"arm64\"@@@"
     ]
   },
   {

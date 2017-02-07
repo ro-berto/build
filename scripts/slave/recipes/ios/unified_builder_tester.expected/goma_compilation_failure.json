@@ -108,11 +108,11 @@
     "name": "read build config",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Debug\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"gn_args\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"is_debug=false\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"target_cpu=\\\"arm\\\"\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"use_goma=true\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"sdk\": \"iphonesimulator8.1\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"app\": \"fake test\", @@@",
@@ -212,7 +212,7 @@
       "[START_DIR]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/cipd/goma",
-      "//out/Debug-iphonesimulator"
+      "//out/Release-iphoneos"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
@@ -286,12 +286,12 @@
     "cmd": [
       "ninja",
       "-C",
-      "[START_DIR]/src/out/Debug-iphonesimulator",
+      "[START_DIR]/src/out/Release-iphoneos",
       "-j",
       "50",
       "fake test"
     ],
-    "cwd": "[START_DIR]/src/out/Debug-iphonesimulator",
+    "cwd": "[START_DIR]/src/out/Release-iphoneos",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "LANDMINES_VERBOSE": "1"
@@ -390,9 +390,9 @@
       "--json-status",
       "[CACHE]/cipd/goma/jsonstatus",
       "--ninja-log-outdir",
-      "[START_DIR]/src/out/Debug-iphonesimulator",
+      "[START_DIR]/src/out/Release-iphoneos",
       "--ninja-log-command",
-      "['ninja', '-C', Path('checkout', 'out','Debug-iphonesimulator'), '-j', '50', 'fake test']",
+      "['ninja', '-C', Path('checkout', 'out','Release-iphoneos'), '-j', '50', 'fake test']",
       "--ninja-log-exit-status",
       "1",
       "--ninja-log-compiler",
