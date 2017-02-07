@@ -127,6 +127,8 @@ def run_perf_test(api, test_config, **kwargs):
       command = _set_output_dir(command, str(temp_dir))
       chartjson_path = temp_dir.join('results-chart.json')
       valueset_path = temp_dir.join('results-valueset.json')
+      if '{OUTPUT_FILE}' in command and chartjson_path:  # pragma: no cover
+        command = command.replace('{OUTPUT_FILE', chartjson_path)
 
     step_name = "Performance Test%s %d of %d" % (
         ' (%s)' % kwargs['name'] if 'name' in kwargs else '', i + 1, repeat_count)
