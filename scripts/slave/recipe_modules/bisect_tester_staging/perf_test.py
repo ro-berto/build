@@ -4,6 +4,7 @@
 
 import os
 import re
+import shlex
 import time
 import uuid
 
@@ -186,7 +187,7 @@ def _rebase_path(api, file_path):
   return file_path
 
 def _run_command(api, command, step_name, **kwargs):
-  command_parts = command.split()
+  command_parts = shlex.split(command, posix=not api.m.platform.is_win)
   stdout_proxy = api.m.raw_io.output_text(name='stdout_proxy')
   stderr = api.m.raw_io.output_text()
 
