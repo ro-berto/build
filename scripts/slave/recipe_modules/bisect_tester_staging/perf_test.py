@@ -128,6 +128,7 @@ def run_perf_test(api, test_config, **kwargs):
       valueset_path = temp_dir.join('results-valueset.json')
       if '{OUTPUT_FILE}' in command and chartjson_path:  # pragma: no cover
         command = command.replace('{OUTPUT_FILE}', str(chartjson_path))
+        command = command.decode('string_escape')
       else:
         command = _set_output_dir(command, str(temp_dir))
 
