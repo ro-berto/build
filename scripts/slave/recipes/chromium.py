@@ -559,6 +559,58 @@ def GenTests(api):
   )
 
   yield (
+    api.test('dynamic_swarmed_sharded_passed_isolated_script_perf_test_no_chartjson') +
+    api.properties.generic(mastername='chromium.perf.fyi',
+                           buildername='Win 10 Low-End Perf Tests',
+                           parent_buildername='Win Builder FYI',
+                           got_revision_cp='refs/heads/master@{#291141}',
+                           buildnumber='1234',
+                           version='v23523',
+                           git_revision='asdfawe2342',
+                           got_webrtc_revision='asdfas',
+                           got_v8_revision='asdfadsfa4e3w') +
+
+    api.properties(
+      swarm_hashes={
+      'telemetry_perf_tests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+      }, **{'perf-id': 'testid', 'results-url': 'http://test-results-url'}) +
+    api.platform('win', 64) +
+    api.override_step_data(
+        'read test spec (chromium.perf.fyi.json)',
+        api.json.output({
+            'Win 10 Low-End Perf Tests': {
+                'isolated_scripts': [
+                    {
+                        'isolate_name': 'telemetry_perf_tests',
+                        'name': 'benchmark',
+                        'swarming': {
+                            'can_use_on_swarming_builders': True,
+                            'shards': 2,
+                            'dimension_sets': [
+                                {
+                                    'gpu': '8086:22b1',
+                                    'id': "build187-b4",
+                                    'os': "Windows-10-10586",
+                                    'pool': "Chrome-perf",
+                                },
+                            ],
+                          'io_timeout': 900,
+                        },
+                    },
+                ],
+            },
+        })
+    ) +
+    api.override_step_data(
+        'benchmark on Intel GPU on Windows on Windows-10-10586',
+        api.test_utils.canned_isolated_script_output(
+            passing=True, is_win=True, swarming=True,
+            shards=2, isolated_script_passing=True, valid=True,
+            output_chartjson=False),
+        retcode=0)
+  )
+
+  yield (
     api.test(
         'dynamic_swarmed_sharded_passed_isolated_script_perf_test_disabled') +
     api.properties.generic(mastername='chromium.perf.fyi',
@@ -1716,3 +1768,111 @@ def GenTests(api):
         path_config='kitchen') +
     api.override_step_data('ensure_goma.ensure_installed', retcode=1)
   )
+
+  json_results = {
+    'interrupted': False,
+    'version': 3,
+    'path_delimiter': '/',
+    'seconds_since_epoch': 0,
+    'tests': {},
+    'num_failures_by_type': {},
+    'links': {'custom_link': 'http://example.com'}
+  }
+
+  yield (
+    api.test('isolated_script_test_custom_merge_script') +
+    api.properties.generic(mastername='chromium.linux',
+                           buildername='Linux Tests',
+                           parent_buildername='Linux Builder') +
+    api.platform('linux', 64) +
+    api.properties(swarm_hashes={
+      'fake_test': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    }) +
+    api.step_data('fake_test', api.json.output(json_results)) +
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'isolated_scripts': [
+                    {
+                      'isolate_name': 'fake_test',
+                      'name': 'fake_test',
+                      'merge': {
+                        'script': '//fake_merge_script.py',
+                      },
+                      'swarming': {
+                        'can_use_on_swarming_builders': True,
+                      },
+                    },
+                ],
+            },
+        })
+    ) +
+    api.post_process(post_process.Filter('fake_test'))
+  )
+
+  yield (
+    api.test('isolated_script_test_bad_custom_merge_script') +
+    api.properties.generic(mastername='chromium.linux',
+                           buildername='Linux Tests',
+                           parent_buildername='Linux Builder') +
+    api.platform('linux', 64) +
+    api.properties(swarm_hashes={
+      'fake_test': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    }) +
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'isolated_scripts': [
+                    {
+                      'isolate_name': 'fake_test',
+                      'name': 'fake_test',
+                      'merge': {
+                        'script': 'bad_fake_merge_script.py',
+                      },
+                      'swarming': {
+                        'can_use_on_swarming_builders': True,
+                      },
+                    },
+                ],
+            },
+        })
+    )
+  )
+
+  yield (
+    api.test('isolated_script_test_custom_merge_script_with_args') +
+    api.properties.generic(mastername='chromium.linux',
+                           buildername='Linux Tests',
+                           parent_buildername='Linux Builder') +
+    api.platform('linux', 64) +
+    api.properties(swarm_hashes={
+      'fake_test': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    }) +
+    api.step_data('fake_test', api.json.output(json_results)) +
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'isolated_scripts': [
+                    {
+                      'isolate_name': 'fake_test',
+                      'name': 'fake_test',
+                      'merge': {
+                        'script': '//fake_merge_script.py',
+                        'args': [
+                          '--foo', 'foo_value',
+                        ],
+                      },
+                      'swarming': {
+                        'can_use_on_swarming_builders': True,
+                      },
+                    },
+                ],
+            },
+        })
+    ) +
+    api.post_process(post_process.Filter('fake_test'))
+  )
+

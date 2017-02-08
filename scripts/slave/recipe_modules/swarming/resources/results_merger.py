@@ -5,7 +5,7 @@
 import copy
 
 # These fields must appear in the test result output
-REQUIRED = { 
+REQUIRED = {
     'interrupted',
     'num_failures_by_type',
     'seconds_since_epoch',
