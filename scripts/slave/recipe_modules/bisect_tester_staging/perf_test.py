@@ -134,8 +134,7 @@ def run_perf_test(api, test_config, **kwargs):
         command = _set_output_dir(command, str(temp_dir))
 
       if '{ADB_PATH}' in command:
-        command = command.replace('{ADB_PATH}',
-            '{OUTPUT_FILE}', api.m.chromium_android.adb_path())
+        command = command.replace('{ADB_PATH}', str(api.m.adb.adb_path()))
 
     step_name = "Performance Test%s %d of %d" % (
         ' (%s)' % kwargs['name'] if 'name' in kwargs else '', i + 1, repeat_count)

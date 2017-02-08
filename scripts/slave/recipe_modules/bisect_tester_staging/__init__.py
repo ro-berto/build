@@ -1,6 +1,6 @@
 DEPS = [
+    'adb',
     'chromium',
-    'chromium_android',
     'file',
     'gsutil',
     'recipe_engine/json',

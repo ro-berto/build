@@ -317,6 +317,7 @@ def GenTests(api):
               'command':
                   ('./src/build/android/test_runner.py perf '
                     '--print-step "resource_sizes MonochromePublic.apk" '
+                    '--adb-path {ADB_PATH}'
                     '--verbose --output-chartjson-data={OUTPUT_FILE}'),
               'good_revision': '314015',
               'bad_revision': '314017',
