@@ -169,36 +169,10 @@
       "--write-debug-log",
       "--write-test-outcome-log",
       "--append_logs",
-      "--use-public-packages",
       "pkgbuild"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "get dependencies - public"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/sdk/tools/test.py",
-      "--mode=release",
-      "--arch=x64",
-      "--use-sdk",
-      "--compiler=none",
-      "--runtime=vm",
-      "--checked",
-      "--progress=buildbot",
-      "-v",
-      "--report",
-      "--time",
-      "--failure-summary",
-      "--write-debug-log",
-      "--write-test-outcome-log",
-      "--append_logs",
-      "--use-repository-packages",
-      "pkgbuild"
-    ],
-    "cwd": "[START_DIR]/sdk",
-    "name": "get dependencies - repo"
+    "name": "pub get dependencies"
   },
   {
     "cmd": [

@@ -80,6 +80,27 @@
       "python",
       "-u",
       "[START_DIR]/sdk/tools/test.py",
+      "pkg/front_end",
+      "-rvm",
+      "-cnone",
+      "--checked",
+      "-mdebug",
+      "--arch=x64",
+      "--progress=line",
+      "--report",
+      "--time",
+      "--failure-summary",
+      "--write-debug-log",
+      "--write-test-outcome-log"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "name": "front-end tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/sdk/tools/test.py",
       "-mdebug",
       "--arch=x64",
       "--progress=line",

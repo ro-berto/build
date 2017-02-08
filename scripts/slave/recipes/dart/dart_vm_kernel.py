@@ -101,6 +101,13 @@ def RunSteps(api):
     if b.get('archive_core_dumps', False):
       test_args.append('--copy-coredumps')
     test_args.extend(shard_args)
+    if 'precomp' not in buildername:
+      front_end_args = ['pkg/front_end', '-rvm', '-cnone', '--checked']
+      front_end_args.extend(test_args)
+      api.python('front-end tests',
+                 api.path['checkout'].join('tools', 'test.py'),
+                 args=front_end_args,
+                 cwd=api.path['checkout'])
     test_args.extend(b.get('test_args', []))
     api.python('vm tests',
                api.path['checkout'].join('tools', 'test.py'),
