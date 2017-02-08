@@ -106,6 +106,8 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
       "[START_DIR]/flutter/dev/bots/download_android_tools.py",
       "-t",
       "sdk"

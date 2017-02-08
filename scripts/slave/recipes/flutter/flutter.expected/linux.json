@@ -106,6 +106,8 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
       "[START_DIR]/flutter/dev/bots/download_android_tools.py",
       "-t",
       "sdk"
@@ -114,7 +116,8 @@
   },
   {
     "cmd": [
-      "dev/bots/setup.sh"
+      "flutter",
+      "update-packages"
     ],
     "cwd": "[START_DIR]/flutter",
     "env": {
@@ -122,11 +125,12 @@
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[START_DIR]/.pub-cache"
     },
-    "name": "setup.sh"
+    "name": "download dependencies"
   },
   {
     "cmd": [
-      "dev/bots/test.sh"
+      "dart",
+      "dev/bots/test.dart"
     ],
     "cwd": "[START_DIR]/flutter",
     "env": {
@@ -134,7 +138,7 @@
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
       "PUB_CACHE": "[START_DIR]/.pub-cache"
     },
-    "name": "test.sh"
+    "name": "test.dart"
   },
   {
     "cmd": [

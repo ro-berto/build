@@ -124,8 +124,8 @@ def RunSteps(api):
       recursive=True, set_got_revision=True)
   checkout = api.path['checkout']
 
-  api.step('download android tools',
-      [checkout.join('dev', 'bots', 'download_android_tools.py'), '-t', 'sdk'])
+  api.python('download android tools',
+      checkout.join('dev', 'bots', 'download_android_tools.py'), ['-t', 'sdk'])
 
   dart_bin = checkout.join('bin', 'cache', 'dart-sdk', 'bin')
   flutter_bin = checkout.join('bin')
@@ -146,10 +146,8 @@ def RunSteps(api):
     if api.platform.is_mac:
       SetupXcode(api)
 
-    if not api.platform.is_win:
-      # TODO(goderbauer): remove check when tests run on Windows
-      api.step('setup.sh', ['dev/bots/setup.sh'], cwd=checkout)
-      api.step('test.sh', ['dev/bots/test.sh'], cwd=checkout)
+    api.step('download dependencies', ['flutter', 'update-packages'], cwd=checkout)
+    api.step('test.dart', ['dart', 'dev/bots/test.dart'], cwd=checkout)
 
     BuildExamples(api, git_hash)
 
