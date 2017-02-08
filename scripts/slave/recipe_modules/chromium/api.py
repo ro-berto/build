@@ -627,14 +627,9 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     goma_dir = self.m.goma.ensure_goma(canary=canary)
 
-    if goma_dir:
-      # TODO(phajdan.jr): goma_dir should always be non-empty.
-      self.c.gyp_env.GYP_DEFINES['gomadir'] = goma_dir
-      self.c.gyp_env.GYP_DEFINES['use_goma'] = 1
-      self.c.compile_py.goma_dir = goma_dir
-    else:
-      self.c.gyp_env.GYP_DEFINES['use_goma'] = 0
-      self.c.compile_py.compiler = no_goma_compiler
+    self.c.gyp_env.GYP_DEFINES['gomadir'] = goma_dir
+    self.c.gyp_env.GYP_DEFINES['use_goma'] = 1
+    self.c.compile_py.goma_dir = goma_dir
 
   def clobber_if_needed(self):
     """Add an explicit clobber step if requested."""
