@@ -759,7 +759,8 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     if use_goma:
       goma_dir = self.c.compile_py.goma_dir
-      if not goma_dir:
+      # TODO(phajdan.jr): remove this weird goma fallback or cover it
+      if not goma_dir:  # pragma: no cover
         # This method defaults to use_goma=True, which doesn't necessarily
         # match build-side configuration. However, MB is configured
         # src-side, and so it might be actually using goma.
