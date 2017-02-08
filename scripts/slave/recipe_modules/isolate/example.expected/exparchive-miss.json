@@ -104,11 +104,13 @@
     ],
     "name": "find isolated tests",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"test_exparchive\": \"[dummy hash for test_exparchive]\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"test_exparchive\": \"[dummy hash for test_exparchive]\"}@@@"
+      "@@@STEP_LOG_LINE@missing.isolates@Failed to find *.isolated files:@@@",
+      "@@@STEP_LOG_LINE@missing.isolates@test_exparchive@@@",
+      "@@@STEP_LOG_END@missing.isolates@@@",
+      "@@@STEP_FAILURE@@@",
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{}@@@"
     ]
   },
   {
@@ -130,7 +132,7 @@
     "name": "isolate test_exparchive",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"test_exparchive\": \"[dummy hash for test_exparchive]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_exparchive\": null@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -151,7 +153,12 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"test_exparchive\": \"[dummy hash for test_exparchive]\"}@@@"
+      "@@@STEP_LOG_LINE@failed to isolate@Failed to isolate following targets:@@@",
+      "@@@STEP_LOG_LINE@failed to isolate@test_exparchive@@@",
+      "@@@STEP_LOG_LINE@failed to isolate@@@@",
+      "@@@STEP_LOG_LINE@failed to isolate@See logs for more information.@@@",
+      "@@@STEP_LOG_END@failed to isolate@@@",
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{}@@@"
     ]
   },
   {

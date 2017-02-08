@@ -87,7 +87,8 @@
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"test_exparchive\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test1_exparchive\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test2_exparchive\"@@@",
       "@@@STEP_LOG_LINE@json.output@]@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -105,10 +106,14 @@
     "name": "find isolated tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"test_exparchive\": \"[dummy hash for test_exparchive]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test1_exparchive\": \"[dummy hash for test1_exparchive]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"test_exparchive\": \"[dummy hash for test_exparchive]\"}@@@"
+      "@@@STEP_LOG_LINE@missing.isolates@Failed to find *.isolated files:@@@",
+      "@@@STEP_LOG_LINE@missing.isolates@test2_exparchive@@@",
+      "@@@STEP_LOG_END@missing.isolates@@@",
+      "@@@STEP_FAILURE@@@",
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"test1_exparchive\": \"[dummy hash for test1_exparchive]\"}@@@"
     ]
   },
   {
@@ -123,14 +128,38 @@
       "--isolate-server",
       "https://isolateserver-dev.appspot.com",
       "--isolate",
-      "RECIPE_PACKAGE_REPO[build]/test_exparchive.isolate",
+      "RECIPE_PACKAGE_REPO[build]/test1_exparchive.isolate",
       "--isolated",
-      "RECIPE_PACKAGE_REPO[build]/test_exparchive.isolated"
+      "RECIPE_PACKAGE_REPO[build]/test1_exparchive.isolated"
     ],
-    "name": "isolate test_exparchive",
+    "name": "isolate test1_exparchive",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"test_exparchive\": \"[dummy hash for test_exparchive]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test1_exparchive\": \"[dummy hash for test1_exparchive]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::isolate]/resources/isolate.py",
+      "[START_DIR]/swarming.client",
+      "exparchive",
+      "--dump-json",
+      "/path/to/tmp/json",
+      "--isolate-server",
+      "https://isolateserver-dev.appspot.com",
+      "--isolate",
+      "RECIPE_PACKAGE_REPO[build]/test2_exparchive.isolate",
+      "--isolated",
+      "RECIPE_PACKAGE_REPO[build]/test2_exparchive.isolated"
+    ],
+    "name": "isolate test2_exparchive",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test2_exparchive\": null@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -151,7 +180,12 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"test_exparchive\": \"[dummy hash for test_exparchive]\"}@@@"
+      "@@@STEP_LOG_LINE@failed to isolate@Failed to isolate following targets:@@@",
+      "@@@STEP_LOG_LINE@failed to isolate@test2_exparchive@@@",
+      "@@@STEP_LOG_LINE@failed to isolate@@@@",
+      "@@@STEP_LOG_LINE@failed to isolate@See logs for more information.@@@",
+      "@@@STEP_LOG_END@failed to isolate@@@",
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"test1_exparchive\": \"[dummy hash for test1_exparchive]\"}@@@"
     ]
   },
   {

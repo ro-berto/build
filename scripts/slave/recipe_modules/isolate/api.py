@@ -85,7 +85,8 @@ class IsolateApi(recipe_api.RecipeApi):
       step_result.presentation.status = self.m.step.WARNING
 
   def isolate_tests(self, build_dir, targets=None, verbose=False,
-                    set_swarm_hashes=True, **kwargs):
+                    set_swarm_hashes=True, always_use_exparchive=False,
+                    **kwargs):
     """Archives prepared tests in |build_dir| to isolate server.
 
     src/tools/isolate_driver.py is invoked by ninja during compilation
@@ -100,6 +101,9 @@ class IsolateApi(recipe_api.RecipeApi):
     build property (also accessible as 'isolated_tests' property). This implies
     this step can currently only be run once per recipe.
     """
+    # TODO(tansell): Make all steps in this function nested under one overall
+    # 'isolate tests' master step.
+
     # TODO(vadimsh): Always require |targets| to be passed explicitly. Currently
     # chromium_trybot, blink_trybot and swarming/canary recipes rely on targets
     # autodiscovery. The code path in chromium_trybot that needs it is being
@@ -110,8 +114,8 @@ class IsolateApi(recipe_api.RecipeApi):
           'find isolated targets',
           build_dir.join('*.isolated.gen.json'),
           test_data=[
-            build_dir.join('dummy_target_%d.isolated.gen.json' % i)
-            for i in (1, 2)
+              build_dir.join('dummy_target_%d.isolated.gen.json' % i)
+              for i in (1, 2)
           ])
       targets = []
       for p in paths:
@@ -126,58 +130,84 @@ class IsolateApi(recipe_api.RecipeApi):
     batch_targets = []
     exparchive_targets = []
     for t in targets:
-      if t.endswith('_exparchive'):
+      if t.endswith('_exparchive') or always_use_exparchive:
         exparchive_targets.append(t)
       else:
         batch_targets.append(t)
+
+    isolate_steps = []
     try:
       args = [
           self.m.swarming_client.path,
           'exparchive',
           '--dump-json', self.m.json.output(),
           '--isolate-server', self._isolate_server,
-        ] + (['--verbose'] if verbose else [])
+      ] + (['--verbose'] if verbose else [])
       for target in exparchive_targets:
-        self.m.python(
-          'isolate %s' % target,
-          self.resource('isolate.py'),
-          args + [
-            '--isolate', build_dir.join('%s.isolate' % target),
-            '--isolated', build_dir.join('%s.isolated' % target),
-          ],
-          step_test_data=lambda: self.test_api.output_json([target]),
-          **kwargs)
+        isolate_steps.append(
+            self.m.python(
+                'isolate %s' % target,
+                self.resource('isolate.py'),
+                args + [
+                    '--isolate', build_dir.join('%s.isolate' % target),
+                    '--isolated', build_dir.join('%s.isolated' % target),
+                ],
+                step_test_data=lambda: self.test_api.output_json([target]),
+                **kwargs))
 
       # TODO(vadimsh): Differentiate between bad *.isolate and upload errors.
       # Raise InfraFailure on upload errors.
       args = [
-        self.m.swarming_client.path,
-        'batcharchive',
-        '--dump-json', self.m.json.output(),
-        '--isolate-server', self._isolate_server,
+          self.m.swarming_client.path,
+          'batcharchive',
+          '--dump-json', self.m.json.output(),
+          '--isolate-server', self._isolate_server,
       ] + (['--verbose'] if verbose else []) +  [
-        build_dir.join('%s.isolated.gen.json' % t) for t in batch_targets
+          build_dir.join('%s.isolated.gen.json' % t) for t in batch_targets
       ]
-      return self.m.python('isolate tests', self.resource('isolate.py'), args,
-                    step_test_data=lambda: (self.test_api.output_json(targets)),
-                    **kwargs)
+      isolate_steps.append(
+          self.m.python(
+              'isolate tests', self.resource('isolate.py'), args,
+              step_test_data=lambda: self.test_api.output_json(batch_targets),
+              **kwargs))
+
+      # TODO(tansell): Change this to return a dummy "isolate results" or the
+      # top level master step.
+      return isolate_steps[-1]
     finally:
       step_result = self.m.step.active_result
-      self._isolated_tests = step_result.json.output
-      if self._isolated_tests:
-        presentation = step_result.presentation
-        if set_swarm_hashes:
-          presentation.properties['swarm_hashes'] = self._isolated_tests
-        missing = sorted(
-            t for t, h in self._isolated_tests.iteritems() if not h)
-        if missing:
-          step_result.presentation.logs['failed to isolate'] = (
+      swarm_hashes = {}
+      for step in isolate_steps:
+        if not step.json.output:
+          continue
+
+        for k, v in step.json.output.iteritems():
+          # TODO(tansell): Raise an error here when it can't clobber an
+          # existing error. This code is currently inside a finally block,
+          # meaning it could be executed when an existing error is occurring.
+          # See https://chromium-review.googlesource.com/c/437024/
+          #assert k not in swarm_hashes or swarm_hashes[k] == v, (
+          #    "Duplicate hash for target %s was found at step %s."
+          #    "Existing hash: %s, New hash: %s") % (
+          #        k, step, swarm_hashes[k], v)
+          swarm_hashes[k] = v
+
+      if swarm_hashes:
+        self._isolated_tests = swarm_hashes
+
+      if set_swarm_hashes:
+        step_result.presentation.properties['swarm_hashes'] = swarm_hashes
+
+      missing = sorted(
+          t for t, h in self._isolated_tests.iteritems() if not h)
+      if missing:
+        step_result.presentation.logs['failed to isolate'] = (
             ['Failed to isolate following targets:'] +
             missing +
             ['', 'See logs for more information.']
-          )
-          for k in missing:
-            self._isolated_tests.pop(k)
+        )
+        for k in missing:
+          self._isolated_tests.pop(k)
 
   @property
   def isolated_tests(self):

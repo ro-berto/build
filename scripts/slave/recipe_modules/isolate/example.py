@@ -38,33 +38,87 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  def make_test(name, expected_targets, discovered_targets):
-    missing = set(expected_targets or []) - set(discovered_targets or [])
+  def make_test(
+          name,
+          expected_batcharchive_targets,
+          expected_exparchive_targets,
+          discovered_targets):
+
+    if expected_batcharchive_targets or expected_exparchive_targets:
+      all_expected_targets = (
+          (expected_batcharchive_targets or []) +
+          (expected_exparchive_targets or []))
+    else:
+      all_expected_targets = None
+
+    missing = set(all_expected_targets or []) - set(discovered_targets or [])
     output = (
         api.test(name) +
         api.step_data(
-            'read test spec', stdout=api.json.output(expected_targets)) +
+            'read test spec',
+            stdout=api.json.output(all_expected_targets)) +
         api.override_step_data(
-            'find isolated tests', api.isolate.output_json(discovered_targets))
+            'find isolated tests',
+            api.isolate.output_json(discovered_targets))
     )
+
     # See comment around 'if expected_targets is not None' above.
-    if expected_targets is not None:
+    if all_expected_targets:
+      for target in sorted(expected_exparchive_targets):
+        output += api.override_step_data(
+            'isolate %s' % target,
+            api.isolate.output_json([target], missing))
+
       output += api.override_step_data(
           'isolate tests',
-          api.isolate.output_json(expected_targets, missing))
+          api.isolate.output_json(expected_batcharchive_targets, missing))
+
     return output
 
   # Expected targets == found targets.
-  yield make_test('basic', ['test1', 'test2'], ['test1', 'test2'])
+  yield make_test(
+      'basic', ['test1', 'test2'], [], ['test1', 'test2'])
   # No expectations, just discovering what's there returned by default mock.
-  yield make_test('discover', None, None)
+  yield make_test(
+      'discover', None, None, None)
   # Found more than expected.
-  yield make_test('extra', ['test1', 'test2'], ['test1', 'test2', 'extra_test'])
+  yield make_test(
+      'extra', ['test1', 'test2'], [], ['test1', 'test2', 'extra_test'])
   # Didn't find something.
   yield (
-      make_test('missing', ['test1', 'test2'], ['test1']) +
+      make_test('missing', ['test1', 'test2'], [], ['test1']) +
       api.properties.generic(buildername='Windows Swarm Test'))
   # No expectations, and nothing has been found, produces warning.
-  yield make_test('none', None, [])
-  # Test the `exparchive` special case.
-  yield make_test('exparchive', ['test_exparchive'], [])
+  yield make_test('none', None, None, [])
+  # Test the `exparchive` cases
+  # Only exparchive
+  yield make_test(
+      'exparchive', [], ['test_exparchive'], ['test_exparchive'])
+  yield make_test(
+      'exparchive-miss', [], ['test_exparchive'], [])
+  yield make_test(
+      'exparchive-multi',
+      [],
+      ['test1_exparchive', 'test2_exparchive'],
+      ['test1_exparchive', 'test2_exparchive'])
+  yield make_test(
+      'exparchive-multi-miss',
+      [],
+      ['test1_exparchive', 'test2_exparchive'],
+      ['test1_exparchive'])
+  # Mixed
+  yield make_test(
+      'exparchive-batch',
+      ['test1', 'test2'],
+      ['test_exparchive'],
+      ['test1', 'test2', 'test_exparchive'])
+  yield make_test(
+      'exparchive-batch-bmiss',
+      ['test1', 'test2'],
+      ['test_exparchive'],
+      ['test1', 'test_exparchive'])
+  yield make_test(
+      'exparchive-batch-emiss',
+      ['test1', 'test2'],
+      ['test_exparchive'],
+      ['test1', 'test2'])
