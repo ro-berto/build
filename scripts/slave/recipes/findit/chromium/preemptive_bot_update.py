@@ -81,7 +81,7 @@ def RunSteps(api):
   step_result = api.git(
       'log', '-1', '--pretty=format:%ct', 'refs/remotes/origin/master',
       cwd=checkout_dir,
-      stdout=api.raw_io.output(),
+      stdout=api.raw_io.output_text(),
       step_test_data=lambda: api.raw_io.test_api.stream_output('1333700000'))
   last_commit_ts = float(step_result.stdout)
   checkout_age_seconds = api.time.time() - last_commit_ts

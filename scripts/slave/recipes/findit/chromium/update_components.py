@@ -86,7 +86,7 @@ def RunSteps(api):
         'tools', 'checkteamtags', 'extract_components.py')
     command_parts = [command_path, '-o', modified_map_file]
     api.step('Run component extraction script', command_parts,
-             stdout=api.raw_io.output())
+             stdout=api.raw_io.output_text())
   except api.step.StepFailure as sf:
     api.step.active_result.presentation.logs['extract_components errors'] = (
         sf.result.stdout.splitlines())
@@ -169,7 +169,7 @@ def GenTests(api):
       + api.override_step_data(
           'Run component extraction script',
           retcode=1,
-          stdout=api.raw_io.output('Dummy script error'))
+          stdout=api.raw_io.output_text('Dummy script error'))
       + api.properties.tryserver(
           mastername='chromium.linux',
           buildername='Linux Builder'))

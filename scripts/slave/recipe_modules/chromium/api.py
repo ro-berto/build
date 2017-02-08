@@ -9,7 +9,7 @@ from recipe_engine import util as recipe_util
 
 class TestLauncherFilterFileInputPlaceholder(recipe_util.InputPlaceholder):
   def __init__(self, api, tests):
-    self.raw = api.m.raw_io.input('\n'.join(tests))
+    self.raw = api.m.raw_io.input_text('\n'.join(tests))
     super(TestLauncherFilterFileInputPlaceholder, self).__init__()
 
   def render(self, test):
@@ -183,7 +183,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     step_result = self.m.step(
         (name or 'compile') + ' confirm no-op',
         ninja_command_explain, env=ninja_env,
-        stdout=self.m.raw_io.output(),
+        stdout=self.m.raw_io.output_text(),
         step_test_data=(
             lambda: self.m.raw_io.test_api.stream_output(
                 ninja_no_work
@@ -777,7 +777,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       sorted_isolated_targets = sorted(set(isolated_targets))
       # TODO(dpranke): Change the MB flag to '--isolate-targets-file', maybe?
       data = '\n'.join(sorted_isolated_targets) + '\n'
-      args += ['--swarming-targets-file', self.m.raw_io.input(data)]
+      args += ['--swarming-targets-file', self.m.raw_io.input_text(data)]
 
     if android_version_code:
       args += ['--android-version-code=%s' % android_version_code]

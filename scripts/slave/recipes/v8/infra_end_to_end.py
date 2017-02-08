@@ -82,7 +82,7 @@ def RunSteps(api):
             api.json.input(test['properties'])
           ],
           ok_ret=test['ok_ret'],
-          stdout=api.raw_io.output(),
+          stdout=api.raw_io.output_text(),
       )
     finally:
       result = api.step.active_result

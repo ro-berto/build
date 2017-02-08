@@ -39,7 +39,7 @@ class ServiceAccountApi(recipe_api.RecipeApi):
     try:
       # TODO: authutil is to be deployed using cipd.
       step_result = self.m.step(
-          'get access token', cmd, stdout=self.m.raw_io.output(),
+          'get access token', cmd, stdout=self.m.raw_io.output_text(),
           step_test_data=lambda: self.m.raw_io.test_api.stream_output(
               'abc124', stream='stdout'))
     except self.m.step.StepFailure as ex:

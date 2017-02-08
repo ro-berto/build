@@ -217,7 +217,7 @@ class RevisionState(object):
     name = 'Checking DEPS for ' + self.commit_hash
     step_result = api.m.git(
         'show', '--name-only', '--pretty=format:',
-        self.commit_hash, cwd=cwd, stdout=api.m.raw_io.output(), name=name,
+        self.commit_hash, cwd=cwd, stdout=api.m.raw_io.output_text(), name=name,
         step_test_data=lambda: api._test_data['deps_change'][self.commit_hash]
     )
     if 'DEPS' in step_result.stdout.splitlines():  # pragma: no cover
@@ -270,7 +270,7 @@ class RevisionState(object):
           'fetch file %s:%s' % (self.commit_hash, depot_config.DEPS_FILENAME),
           api.resource('fetch_file.py'),
           [depot_config.DEPS_FILENAME, '--commit', self.commit_hash],
-          stdout=api.m.raw_io.output(),
+          stdout=api.m.raw_io.output_text(),
           step_test_data=lambda: api._test_data['deps'][self.commit_hash]
       )
       deps_file_contents = step_result.stdout

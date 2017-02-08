@@ -126,7 +126,7 @@ def RunSteps(api):
   # Set got_revision.
   test_data = lambda: api.raw_io.test_api.stream_output('abc123')
   rev_parse = git(api, 'rev-parse', 'HEAD',
-                  cwd=infra_dir, stdout=api.raw_io.output(),
+                  cwd=infra_dir, stdout=api.raw_io.output_text(),
                   step_test_data=test_data)
   rev_parse.presentation.properties['got_revision'] = rev_parse.stdout.strip()
 

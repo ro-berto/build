@@ -12,7 +12,7 @@ class LuciConfigTestApi(recipe_test_api.RecipeTestApi):
   def get_project_config(self, project, config, content):
     return self.step_data(
         "Get project %r config %r" % (project, config),
-        self.m.raw_io.output(
+        self.m.raw_io.output_text(
             json.dumps({
               "content": base64.b64encode(content),
               "content_hash": "v1:814564d6e6507ad7de56de8c76548a31633ce3e4",
@@ -23,7 +23,7 @@ class LuciConfigTestApi(recipe_test_api.RecipeTestApi):
             })))
 
   def get_projects(self, projects):
-    return self.step_data('Get luci-config projects', self.m.raw_io.output(
+    return self.step_data('Get luci-config projects', self.m.raw_io.output_text(
         json.dumps({
             'projects': [{
                'repo_type': 'GITILES',

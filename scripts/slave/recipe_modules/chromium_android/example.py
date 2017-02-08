@@ -346,12 +346,12 @@ def GenTests(api):
   yield (api.test('device_file_format_mismatch') +
          properties_for('tester') +
          api.override_step_data('fix_device_file_format.read_device_file',
-             api.raw_io.output('["device1", "device2"]')))
+             api.raw_io.output_text('["device1", "device2"]')))
 
   yield (api.test('tombstones_m53') +
          properties_for('tester') +
          api.override_step_data('get version (2)',
-             api.raw_io.output('MAJOR=53\nMINOR=0\nBUILD=2800\nPATCH=0\n')))
+             api.raw_io.output_text('MAJOR=53\nMINOR=0\nBUILD=2800\nPATCH=0\n')))
 
   yield (api.test('telemetry_browser_tests_failures') +
          properties_for('telemetry_browser_tests_tester') +

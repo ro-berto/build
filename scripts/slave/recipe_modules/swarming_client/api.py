@@ -85,7 +85,7 @@ class SwarmingClientApi(recipe_api.RecipeApi):
           name='%s --version' % script,
           script=self.path.join(script),
           args=['--version'],
-          stdout=self.m.raw_io.output(),
+          stdout=self.m.raw_io.output_text(),
           step_test_data=step_test_data_cb)
       finally:
         step_result = self.m.step.active_result

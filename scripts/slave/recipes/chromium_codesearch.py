@@ -171,7 +171,7 @@ def GenerateCompilationDatabase(api, debug_path, targets, platform):
   ninja_log_exit_status = 1
   try:
     step_result = api.step('generate compilation database for %s' % platform,
-                           command, stdout=api.raw_io.output())
+                           command, stdout=api.raw_io.output_text())
     ninja_log_exit_status = step_result.retcode
   except api.step.StepFailure as e:
     ninja_log_exit_status = e.retcode
@@ -231,7 +231,7 @@ def RunSteps(api):
   # tool, it is assumed by the scripts that the compilation database is in the
   # out/Debug directory, and named 'compile_commands.json'.
   api.step('copy compilation database',
-           ['cp', api.raw_io.input(data=result.stdout),
+           ['cp', api.raw_io.input_text(data=result.stdout),
             debug_path.join('compile_commands.json')])
 
   if platform == 'chromeos':
@@ -240,7 +240,7 @@ def RunSteps(api):
                api.package_repo_resource('scripts', 'slave', 'chromium',
                                       'filter_compilations.py'),
                ['--compdb-input', debug_path.join('compile_commands.json'),
-                '--compdb-filter', api.raw_io.input(data=result.stdout),
+                '--compdb-filter', api.raw_io.input_text(data=result.stdout),
                 '--compdb-output', debug_path.join('compile_commands.json')])
   # Compile the clang tool
   script_path = api.path.sep.join(['tools', 'clang', 'scripts', 'update.py'])
@@ -369,10 +369,10 @@ def GenTests(api):
     platform = config.get('platform')
     test = api.test('full_%s' % (_sanitize_nonalpha(buildername)))
     test += api.step_data('generate compilation database for %s' % platform,
-                          stdout=api.raw_io.output('some compilation data'))
+                          stdout=api.raw_io.output_text('some compilation data'))
     if platform == 'chromeos':
       test += api.step_data('generate compilation database for linux',
-                            stdout=api.raw_io.output('some compilation data'))
+                            stdout=api.raw_io.output_text('some compilation data'))
     test += api.properties.generic(buildername=buildername,
                                    mastername='chromium.infra.codesearch')
 
@@ -382,9 +382,9 @@ def GenTests(api):
     api.test(
         'full_%s_fail' % _sanitize_nonalpha('codesearch-gen-chromium-chromiumos')) +
     api.step_data('generate compilation database for chromeos',
-                  stdout=api.raw_io.output('some compilation data')) +
+                  stdout=api.raw_io.output_text('some compilation data')) +
     api.step_data('generate compilation database for linux',
-                  stdout=api.raw_io.output('some compilation data')) +
+                  stdout=api.raw_io.output_text('some compilation data')) +
     api.step_data('run translation_unit clang tool', retcode=2) +
     api.properties.generic(buildername='codesearch-gen-chromium-chromiumos',
                            mastername='chromium.infra.codesearch')
@@ -395,7 +395,7 @@ def GenTests(api):
         'full_%s_gen_compile_fail' %
         _sanitize_nonalpha('codesearch-gen-chromium-chromiumos')) +
     api.step_data('generate compilation database for chromeos',
-                  stdout=api.raw_io.output('some compilation data'),
+                  stdout=api.raw_io.output_text('some compilation data'),
                   retcode=1) +
     api.properties.generic(buildername='codesearch-gen-chromium-chromiumos',
                            mastername='chromium.infra.codesearch')

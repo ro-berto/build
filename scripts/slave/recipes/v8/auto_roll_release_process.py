@@ -41,7 +41,7 @@ def GetRef(api, repo, ref):
       'show-ref', '-s', ref,
       name='git show-ref %s' % ref,
       cwd=api.path['checkout'],
-      stdout=api.raw_io.output(),
+      stdout=api.raw_io.output_text(),
   )
   result = step_result.stdout.strip()
   step_result.presentation.logs['ref'] = [result]
@@ -107,7 +107,7 @@ def GetLKGR(api):
       api.package_repo_resource('scripts', 'tools', 'runit.py'),
       [api.package_repo_resource('scripts', 'tools', 'pycurl.py'),
        '%s/lkgr' % STATUS_URL],
-      stdout=api.raw_io.output(),
+      stdout=api.raw_io.output_text(),
   )
   lkgr = step_result.stdout.strip()
   step_result.presentation.logs['logs'] = [
@@ -125,8 +125,8 @@ def ClusterfuzzHasIssues(api):
       ['--key-file=/creds/generic/generic-v8-autoroller_cf_key',
        '--results-file', api.json.output(add_json_log=False)],
       # Note: Output is suppressed for security reasons.
-      stdout=api.raw_io.output('out'),
-      stderr=api.raw_io.output('err'),
+      stdout=api.raw_io.output_text('out'),
+      stderr=api.raw_io.output_text('err'),
       step_test_data=step_test_data,
   )
   results = step_result.json.output
@@ -223,7 +223,7 @@ def GenTests(api):
         ) +
         api.override_step_data(
             'check timestamp',
-            api.raw_io.output(current_date),
+            api.raw_io.output_text(current_date),
         ) +
         api.time.seed(int(float(new_date))) +
         api.time.step(2) +

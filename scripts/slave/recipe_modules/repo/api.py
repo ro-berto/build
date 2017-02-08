@@ -72,7 +72,7 @@ class RepoApi(recipe_api.RecipeApi):
         path (str): The relative path to the project's checkout.
         name (str): The name of the project in the manifst.
     """
-    kwargs['stdout'] = self.m.raw_io.output()
+    kwargs['stdout'] = self.m.raw_io.output_text()
     kwargs.setdefault('name', 'repo list')
     step_result = self(['list'], **kwargs)
 

@@ -71,7 +71,7 @@ def GenTests(api):
     })
     + api.step_data(
         'bootstrap swarming.swarming.py --version',
-        stdout=api.raw_io.output('1.2.3'),
+        stdout=api.raw_io.output_text('1.2.3'),
     )
     + api.path.exists(
         api.path['tmp_base'].join('0_tmp_2', '0'),
@@ -119,7 +119,7 @@ def GenTests(api):
     })
     + api.step_data(
         'bootstrap swarming.swarming.py --version',
-        stdout=api.raw_io.output('1.2.3'),
+        stdout=api.raw_io.output_text('1.2.3'),
     )
     + api.step_data(
         'isolate.generate 0.isolate.gen.json',
@@ -156,7 +156,7 @@ def GenTests(api):
     })
     + api.step_data(
         'bootstrap swarming.swarming.py --version',
-        stdout=api.raw_io.output('1.2.3'),
+        stdout=api.raw_io.output_text('1.2.3'),
     )
     + api.override_step_data(
         'fake test (fake device iOS 8.1)',
@@ -195,7 +195,7 @@ def GenTests(api):
     })
     + api.step_data(
         'bootstrap swarming.swarming.py --version',
-        stdout=api.raw_io.output('1.2.3'),
+        stdout=api.raw_io.output_text('1.2.3'),
     )
     + api.override_step_data(
         'fake test (fake device iOS 8.1)',
@@ -234,7 +234,7 @@ def GenTests(api):
     })
     + api.step_data(
         'bootstrap swarming.swarming.py --version',
-        stdout=api.raw_io.output('1.2.3'),
+        stdout=api.raw_io.output_text('1.2.3'),
     )
     + api.override_step_data(
         'fake test (fake device iOS 8.1)',
@@ -272,7 +272,7 @@ def GenTests(api):
     })
     + api.step_data(
         'bootstrap swarming.swarming.py --version',
-        stdout=api.raw_io.output('1.2.3'),
+        stdout=api.raw_io.output_text('1.2.3'),
     )
     + api.override_step_data(
         'fake test (fake device iOS 8.1)',
@@ -310,7 +310,7 @@ def GenTests(api):
     })
     + api.step_data(
         'bootstrap swarming.swarming.py --version',
-        stdout=api.raw_io.output('1.2.3'),
+        stdout=api.raw_io.output_text('1.2.3'),
     )
     + api.override_step_data(
         'fake test (fake device iOS 8.1)',
@@ -382,7 +382,7 @@ def GenTests(api):
     })
     + api.step_data(
         'bootstrap swarming.swarming.py --version',
-        stdout=api.raw_io.output('1.2.3'),
+        stdout=api.raw_io.output_text('1.2.3'),
     )
   )
 
@@ -407,6 +407,6 @@ def GenTests(api):
     })
     + api.step_data(
         'bootstrap swarming.swarming.py --version',
-        stdout=api.raw_io.output('1.2.3'),
+        stdout=api.raw_io.output_text('1.2.3'),
     )
   )

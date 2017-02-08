@@ -64,7 +64,7 @@ def GenTests(api):
         branch='refs/heads/master',
         hash_to_resolve=valid_hash) +
       api.step_data('resolving hash ' + valid_hash,
-                    stdout=api.raw_io.output(VALID_CP)))
+                    stdout=api.raw_io.output_text(VALID_CP)))
 
   yield (
       api.test('invalid_bad_format') +

@@ -42,7 +42,7 @@ def GenTests(api):
     yield (api.test(buildername) +
            props() +
            api.step_data('get access token',
-                         stdout=api.raw_io.output('MockTokenValueThing')) +
+                         stdout=api.raw_io.output_text('MockTokenValueThing')) +
            api.platform(*platform))
     yield (api.test('%s_no_authutil' % buildername) +
            props() +
@@ -51,11 +51,11 @@ def GenTests(api):
     yield (api.test(buildername + '_with_scopes') +
            props(scopes=['fake-scope']) +
            api.step_data('get access token',
-                         stdout=api.raw_io.output('MockTokenValueThing')) +
+                         stdout=api.raw_io.output_text('MockTokenValueThing')) +
            api.platform(*platform))
     yield (api.test(buildername + '_with_lifetime_sec') +
            props(lifetime_sec=60) +
            api.step_data('get access token',
-                         stdout=api.raw_io.output('MockTokenValueThing')) +
+                         stdout=api.raw_io.output_text('MockTokenValueThing')) +
            api.platform(*platform))
 

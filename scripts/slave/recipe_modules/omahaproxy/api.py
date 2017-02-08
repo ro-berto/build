@@ -28,7 +28,7 @@ class OmahaproxyApi(recipe_api.RecipeApi):
         mac,beta,36.0.1985.49,2014-06-04 17:40:47.808350"""
     raw_history = self.m.url.fetch(
         'https://omahaproxy.appspot.com/history',
-        step_test_data=lambda: self.m.raw_io.test_api.output(TEST_DATA))
+        step_test_data=lambda: self.m.raw_io.test_api.output_text(TEST_DATA))
     csv_reader = csv.reader(cStringIO.StringIO(raw_history))
     data = list(csv_reader)
     header = data[0]

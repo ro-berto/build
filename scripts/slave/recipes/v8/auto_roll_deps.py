@@ -71,7 +71,7 @@ def RunSteps(api):
         api.package_repo_resource('scripts', 'tools', 'runit.py'),
         [api.package_repo_resource('scripts', 'tools', 'pycurl.py'),
          'https://v8-roll.appspot.com/status'],
-        stdout=api.raw_io.output(),
+        stdout=api.raw_io.output_text(),
         step_test_data=lambda: api.raw_io.test_api.stream_output(
             '1', stream='stdout')
     )
@@ -96,7 +96,7 @@ def RunSteps(api):
     result = api.url.fetch(
         search_url,
         'check active roll',
-        step_test_data=lambda: api.raw_io.test_api.output('{"results": []}')
+        step_test_data=lambda: api.raw_io.test_api.output_text('{"results": []}')
     )
     results = api.json.loads(result)['results']
 
@@ -136,7 +136,7 @@ def RunSteps(api):
     # Get the deps file used by the auto roller.
     local_deps = api.git(
         'cat-file', 'blob', 'HEAD:DEPS',
-        stdout=api.raw_io.output(),
+        stdout=api.raw_io.output_text(),
         step_test_data= lambda: api.raw_io.test_api.stream_output(
             TEST_DEPS_FILE % 'deadbeef'),
     ).stdout
@@ -196,14 +196,14 @@ def GenTests(api):
   yield (api.test('active_roll') +
       api.properties.generic(mastername='client.v8') +
       api.override_step_data(
-          'check active roll', api.raw_io.output(
+          'check active roll', api.raw_io.output_text(
               '{"results": [{"subject": "Update V8 to foo",' +
               ' "issue": 123456, "commit": true}]}'))
     )
   yield (api.test('stale_roll') +
       api.properties.generic(mastername='client.v8') +
       api.override_step_data(
-          'check active roll', api.raw_io.output(
+          'check active roll', api.raw_io.output_text(
               '{"results": [{"subject": "Update V8 to foo",' +
               ' "issue": 123456, "commit": false}]}'))
     )

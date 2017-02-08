@@ -108,5 +108,5 @@ class LegionApi(recipe_api.RecipeApi):
         'Running test for %s' % config['name'],
         self.legion_path,
         cmd,
-        stdout=self.m.raw_io.output())
+        stdout=self.m.raw_io.output_text())
     return step_result.stdout

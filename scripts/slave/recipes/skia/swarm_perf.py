@@ -41,19 +41,19 @@ def GenTests(api):
     test_data = (
         api.step_data(
             'get EXTERNAL_STORAGE dir',
-            stdout=api.raw_io.output('/storage/emulated/legacy')) +
+            stdout=api.raw_io.output_text('/storage/emulated/legacy')) +
         api.step_data(
             'adb root',
-            stdout=api.raw_io.output('restarting adbd as root')) +
+            stdout=api.raw_io.output_text('restarting adbd as root')) +
         api.step_data(
             'read SKP_VERSION',
-            stdout=api.raw_io.output('42')) +
+            stdout=api.raw_io.output_text('42')) +
         api.step_data(
             'read SK_IMAGE_VERSION',
-            stdout=api.raw_io.output('42')) +
+            stdout=api.raw_io.output_text('42')) +
         api.step_data(
             'exists skia_perf',
-            stdout=api.raw_io.output('')) +
+            stdout=api.raw_io.output_text('')) +
         api.step_data(
             'which adb',
             retcode=1)

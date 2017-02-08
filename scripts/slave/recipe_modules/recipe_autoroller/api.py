@@ -211,7 +211,7 @@ class RecipeAutorollerApi(recipe_api.RecipeApi):
     self.m.git('commit', '-a', '-m', 'roll recipes.cfg', cwd=workdir)
     diff_result = self.m.git(
         'show', '--format=%b',
-        stdout=self.m.raw_io.output(),
+        stdout=self.m.raw_io.output_text(),
         cwd=workdir,
         step_test_data=lambda: self.m.raw_io.test_api.stream_output(
             '-some line\n+some other line\n'))
@@ -224,8 +224,8 @@ class RecipeAutorollerApi(recipe_api.RecipeApi):
     rebase = False
     cat_result = self.m.gsutil.cat(
         'gs://recipe-roller-cl-uploads/%s' % cfg_digest,
-        stdout=self.m.raw_io.output(),
-        stderr=self.m.raw_io.output(),
+        stdout=self.m.raw_io.output_text(),
+        stderr=self.m.raw_io.output_text(),
         ok_ret=(0,1))
 
     if cat_result.retcode:
@@ -263,7 +263,7 @@ class RecipeAutorollerApi(recipe_api.RecipeApi):
       self.m.git('cl', 'upload', *upload_args, name='git cl upload', cwd=workdir)
       issue_result = self.m.git(
           'cl', 'issue',
-          name='git cl issue', stdout=self.m.raw_io.output(),
+          name='git cl issue', stdout=self.m.raw_io.output_text(),
           cwd=workdir,
           step_test_data=lambda: self.m.raw_io.test_api.stream_output(
               'Issue number: '

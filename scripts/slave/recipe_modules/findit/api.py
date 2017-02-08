@@ -39,7 +39,7 @@ class FinditApi(recipe_api.RecipeApi):
     previous_revision = '%s~1' % revision
     step_result = self.m.git('diff', revision + '~1', revision, '--name-only',
                              name='git diff to analyze commit',
-                             stdout=self.m.raw_io.output(),
+                             stdout=self.m.raw_io.output_text(),
                              cwd=cwd,
                              step_test_data=lambda:
                                  self.m.raw_io.test_api.stream_output('foo.cc'))
@@ -76,7 +76,7 @@ class FinditApi(recipe_api.RecipeApi):
     step_result = self.m.git('log', '--format=%H',
                              '%s..%s' % (start_revision, end_revision),
                              name='git commits in range',
-                             stdout=self.m.raw_io.output(),
+                             stdout=self.m.raw_io.output_text(),
                              cwd=cwd,
                              step_test_data=lambda:
                                  self.m.raw_io.test_api.stream_output('r1'))

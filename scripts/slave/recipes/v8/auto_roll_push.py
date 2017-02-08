@@ -24,7 +24,7 @@ def RunSteps(api):
       api.package_repo_resource('scripts', 'tools', 'runit.py'),
       [api.package_repo_resource('scripts', 'tools', 'pycurl.py'),
        'https://v8-roll.appspot.com/status'],
-      stdout=api.raw_io.output(),
+      stdout=api.raw_io.output_text(),
       step_test_data=lambda: api.raw_io.test_api.stream_output(
           '1', stream='stdout')
     )

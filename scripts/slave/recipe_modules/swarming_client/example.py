@@ -28,4 +28,4 @@ def GenTests(api):
       api.test('basic') +
       api.step_data(
           'swarming.py --version',
-          stdout=api.raw_io.output('0.4.4')))
+          stdout=api.raw_io.output_text('0.4.4')))

@@ -49,7 +49,7 @@ def gn_refs(api, step_name, args):
            'refs',
            str(api.chromium.output_dir),
           ] + args,
-          stdout=api.raw_io.output())
+          stdout=api.raw_io.output_text())
   return step_result.stdout.split()
 
 
@@ -97,7 +97,7 @@ def GenTests(api):
   for test in api.chromium.gen_tests_for_builders(BUILDERS):
     yield (test +
            api.step_data('calculate all_fuzzers',
-               stdout=api.raw_io.output('target1 target2 target3')) +
+               stdout=api.raw_io.output_text('target1 target2 target3')) +
            api.step_data('calculate no_clusterfuzz',
-               stdout=api.raw_io.output('target1'))
+               stdout=api.raw_io.output_text('target1'))
            )

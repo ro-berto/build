@@ -75,7 +75,7 @@ def RunSteps(api, libvpx_git_url, buildername):
       libvpx_git_url, dir_path=libvpx_root, recursive=True)
 
   # The dashboards need a number to assign to this build for ordering purposes.
-  step_result = api.git('number', cwd=libvpx_root, stdout=api.raw_io.output())
+  step_result = api.git('number', cwd=libvpx_root, stdout=api.raw_io.output_text())
   libvpx_revision_number = step_result.stdout
 
   api.step(
@@ -124,7 +124,7 @@ def RunSteps(api, libvpx_git_url, buildername):
               time.sleep(60)
           print "done"
           sys.exit(p.returncode)
-      """, args=[api.raw_io.output(), adb, 'shell',
+      """, args=[api.raw_io.output_text(), adb, 'shell',
           'LD_LIBRARY_PATH=' + DEVICE_ROOT,
           'LIBVPX_TEST_DATA_PATH=' + DEVICE_ROOT, DEVICE_ROOT +
           '/vpx_test', '--gtest_filter=-*Large*'])
@@ -133,7 +133,7 @@ def RunSteps(api, libvpx_git_url, buildername):
       'scrape_logs',
       libvpx_root.join('test', 'android', 'scrape_gtest_log.py'),
       args=['--output-json', api.json.output()],
-      stdin=api.raw_io.input(step_result.raw_io.output))
+      stdin=api.raw_io.input_text(step_result.raw_io.output_text))
 
   data = step_result.json.output
   # Data is json array in the format as follows:
@@ -190,9 +190,9 @@ def GenTests(api):
         libvpx_git_url='https://chromium.googlesource.com/webm/libvpx',
         slavename='libvpx-bot', buildername='Nexus 5 Builder',
         mastername='client.libvpx', buildnumber='75') +
-    api.step_data('git number', stdout=api.raw_io.output('42')) +
+    api.step_data('git number', stdout=api.raw_io.output_text('42')) +
     api.step_data('adb_wrap',
-        api.raw_io.output("This is text with json inside normally")) +
+        api.raw_io.output_text("This is text with json inside normally")) +
     api.step_data('scrape_logs', api.json.output(
             [
                 {

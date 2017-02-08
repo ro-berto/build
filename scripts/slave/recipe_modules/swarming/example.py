@@ -82,7 +82,7 @@ def RunSteps(api, platforms, show_isolated_out_in_collect_step,
           '--isolate-server', api.isolate.isolate_server,
           '--config-variable', 'OS', platform,
           '--verbose',
-        ], stdout=api.raw_io.output())
+        ], stdout=api.raw_io.output_text())
     # TODO(vadimsh): Pass result from isolate.py though --output-json option.
     isolated_hash = step_result.stdout.split()[0].strip()
 
@@ -137,20 +137,20 @@ def GenTests(api):
       api.test('basic') +
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
+          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
       api.step_data(
           'archive for linux',
-          stdout=api.raw_io.output('hash_for_linux hello_world.isolated')) +
+          stdout=api.raw_io.output_text('hash_for_linux hello_world.isolated')) +
       api.step_data(
           'archive for mac',
-          stdout=api.raw_io.output('hash_for_mac hello_world.isolated')) +
+          stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')) +
       api.properties(platforms=('win', 'linux', 'mac')))
 
   yield (
       api.test('trybot') +
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
+          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
       api.properties(
           rietveld='https://codereview.chromium.org',
           issue='123',
@@ -160,7 +160,7 @@ def GenTests(api):
       api.test('show_shards_in_collect_step') +
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
+          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
       api.properties(
           rietveld='https://codereview.chromium.org',
           issue='123',
@@ -171,7 +171,7 @@ def GenTests(api):
       api.test('show_isolated_out_in_collect_step') +
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
+          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
       api.properties(
           rietveld='https://codereview.chromium.org',
           issue='123',
@@ -206,13 +206,13 @@ def GenTests(api):
       api.test('swarming_expired_old') +
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
+          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
       api.step_data('hello_world on Windows-7-SP1', api.json.output(data)))
   yield (
       api.test('isolated_script_expired_old') +
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
+          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
       api.step_data(
           'hello_world on Windows-7-SP1',
           api.raw_io.output_dir({'summary.json': json.dumps(data)})) +
@@ -223,13 +223,13 @@ def GenTests(api):
       api.test('swarming_expired_new') +
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
+          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
       api.step_data('hello_world on Windows-7-SP1', api.json.output(data)))
   yield (
       api.test('isolated_script_expired_new') +
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
+          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
       api.step_data(
           'hello_world on Windows-7-SP1',
           api.raw_io.output_dir({'summary.json': json.dumps(data)})) +
@@ -240,13 +240,13 @@ def GenTests(api):
       api.test('swarming_timeout_old') +
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
+          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
       api.step_data('hello_world on Windows-7-SP1', api.json.output(data)))
   yield (
       api.test('isolated_script_timeout_old') +
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
+          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
       api.step_data(
           'hello_world on Windows-7-SP1',
           api.raw_io.output_dir({'summary.json': json.dumps(data)})) +
@@ -257,13 +257,13 @@ def GenTests(api):
       api.test('swarming_timeout_new') +
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
+          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
       api.step_data('hello_world on Windows-7-SP1', api.json.output(data)))
   yield (
       api.test('isolated_script_timeout_new') +
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
+          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
       api.step_data(
           'hello_world on Windows-7-SP1',
           api.raw_io.output_dir({'summary.json': json.dumps(data)})) +

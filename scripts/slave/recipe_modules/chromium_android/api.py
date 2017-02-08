@@ -189,7 +189,7 @@ class AndroidApi(recipe_api.RecipeApi):
     return self.m.step(
         'git_number',
         [self.m.depot_tools.package_repo_resource('git_number.py')],
-        stdout = self.m.raw_io.output(),
+        stdout = self.m.raw_io.output_text(),
         step_test_data=(
           lambda:
             self.m.raw_io.test_api.stream_output('3000\n')
@@ -699,7 +699,7 @@ class AndroidApi(recipe_api.RecipeApi):
     ]
     clang_version_step = self.m.step('get_clang_version',
         clang_version_cmd,
-        stdout=self.m.raw_io.output(),
+        stdout=self.m.raw_io.output_text(),
         step_test_data=(
             lambda: self.m.raw_io.test_api.stream_output('1.1.1')))
     clang_version = clang_version_step.stdout.strip()
@@ -1124,7 +1124,7 @@ class AndroidApi(recipe_api.RecipeApi):
         '%s: generate result details' % step_name,
         self.resource('test_results_presentation.py'),
         args=presentation_args,
-        stdout=self.m.raw_io.output(),
+        stdout=self.m.raw_io.output_text(),
         step_test_data=(
             lambda: self.m.raw_io.test_api.stream_output(
                 '<!DOCTYPE html><html></html>')))
@@ -1132,7 +1132,7 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def _upload_render_test_failures(self, render_results_dir):
     """Uploads render test results. Generates HTML file displaying results."""
-    args = ['--output-html-file', self.m.raw_io.output(),
+    args = ['--output-html-file', self.m.raw_io.output_text(),
             '--buildername', self.m.properties['buildername'],
             '--build-number', self.m.properties['buildnumber'],
             '--render-results-dir', render_results_dir]
@@ -1142,10 +1142,10 @@ class AndroidApi(recipe_api.RecipeApi):
             'build', 'android', 'render_tests',
             'process_render_test_results.py'),
         args=args,
-        step_test_data=lambda: self.m.raw_io.test_api.output(
+        step_test_data=lambda: self.m.raw_io.test_api.output_text(
             '<!DOCTYPE html><html></html>'))
     step_result.presentation.logs['render results'] = (
-        step_result.raw_io.output.splitlines())
+        step_result.raw_io.output_text.splitlines())
 
   def logcat_dump(self, gs_bucket=None):
     if gs_bucket:
@@ -1644,7 +1644,7 @@ class AndroidApi(recipe_api.RecipeApi):
     for changed_file in changed_files:
       blame = self.m.git(
           'blame', '-l', '-s', changed_file,
-          stdout=self.m.raw_io.output(),
+          stdout=self.m.raw_io.output_text(),
           name='Finding lines changed in modified file %s' % changed_file,
           step_test_data=(
               lambda: self.m.raw_io.test_api.stream_output(
@@ -1671,7 +1671,7 @@ class AndroidApi(recipe_api.RecipeApi):
     """
     diff = self.m.git(
         'diff', '--staged', '--name-only', '--diff-filter', diff_filter,
-        stdout=self.m.raw_io.output(),
+        stdout=self.m.raw_io.output_text(),
         name='Finding changed files matching diff filter: %s' % diff_filter,
         step_test_data=(
             lambda: self.m.raw_io.test_api.stream_output(

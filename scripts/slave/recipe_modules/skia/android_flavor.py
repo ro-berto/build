@@ -76,7 +76,7 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
       path_to_adb = self._skia_api.m.step(
           'which adb',
           cmd=['which', 'adb'],
-          stdout=self._skia_api.m.raw_io.output(),
+          stdout=self._skia_api.m.raw_io.output_text(),
           infra_step=True).stdout.rstrip()
     except self._skia_api.m.step.StepFailure:
       path_to_adb = self._skia_api.m.path.join(self._android_sdk_root,
@@ -132,7 +132,7 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
         serial=self.serial,
         cmd=['shell', 'if', '[', '-e', path, '];',
              'then', 'echo', exists_str + ';', 'fi'],
-        stdout=self._skia_api.m.raw_io.output(),
+        stdout=self._skia_api.m.raw_io.output_text(),
         infra_step=True
     ).stdout
 
@@ -203,7 +203,7 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
       output = self._adb(name='adb root',
                          serial=self.serial,
                          cmd=['root'],
-                         stdout=self._skia_api.m.raw_io.output(),
+                         stdout=self._skia_api.m.raw_io.output_text(),
                          infra_step=True).stdout.rstrip()
       if ('restarting adbd as root' in output or
           'adbd is already running as root' in output):
@@ -284,7 +284,7 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
     return self._adb(name='read %s' % self._skia_api.m.path.basename(path),
                      serial=self.serial,
                      cmd=['shell', 'cat', path],
-                     stdout=self._skia_api.m.raw_io.output(),
+                     stdout=self._skia_api.m.raw_io.output_text(),
                      infra_step=True).stdout.rstrip()
 
   def remove_file_on_device(self, path, *args, **kwargs):
@@ -302,7 +302,7 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
         name='get EXTERNAL_STORAGE dir',
         serial=self.serial,
         cmd=['shell', 'echo', '$EXTERNAL_STORAGE'],
-        stdout=self._skia_api.m.raw_io.output(),
+        stdout=self._skia_api.m.raw_io.output_text(),
         infra_step=True,
     ).stdout.rstrip()
     prefix = self.device_path_join(device_scratch_dir, 'skiabot', 'skia_')

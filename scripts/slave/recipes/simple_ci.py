@@ -47,7 +47,7 @@ def RunSteps(api, repo_url, refspec,  patch_storage, patch_repository_url,
       'read tests',
       # Multiplatform "cat"
       "with open('infra/config/ci.cfg') as f: print f.read()",
-           stdout=api.raw_io.output(),
+           stdout=api.raw_io.output_text(),
            step_test_data=(lambda:
              api.raw_io.test_api.stream_output(
                './a.sh\npython b.py\npython c.py args')))

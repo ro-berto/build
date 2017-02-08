@@ -775,24 +775,24 @@ def test_for_bot(api, builder, mastername, slavename, testname=None,
       'RecreateSKPs' not in builder):
     test += api.step_data(
         'upload new .isolated file for compile_skia',
-        stdout=api.raw_io.output('def456 XYZ.isolated'))
+        stdout=api.raw_io.output_text('def456 XYZ.isolated'))
   if 'Test' in builder:
     test += api.step_data(
         'upload new .isolated file for test_skia',
-        stdout=api.raw_io.output('def456 XYZ.isolated'))
+        stdout=api.raw_io.output_text('def456 XYZ.isolated'))
   if ('Test' in builder and 'Debug' in builder) or 'Perf' in builder or (
       'Valgrind' in builder and 'Test' in builder):
     test += api.step_data(
         'upload new .isolated file for perf_skia',
-        stdout=api.raw_io.output('def456 XYZ.isolated'))
+        stdout=api.raw_io.output_text('def456 XYZ.isolated'))
   if 'Housekeeper' in builder and 'RecreateSKPs' not in builder:
     test += api.step_data(
         'upload new .isolated file for housekeeper_skia',
-        stdout=api.raw_io.output('def456 XYZ.isolated'))
+        stdout=api.raw_io.output_text('def456 XYZ.isolated'))
   if 'Infra' in builder:
     test += api.step_data(
         'upload new .isolated file for infra_skia',
-        stdout=api.raw_io.output('def456 XYZ.isolated'))
+        stdout=api.raw_io.output_text('def456 XYZ.isolated'))
   if 'Win' in builder:
     if not legacy_win_toolchain:
       paths.append(api.path['start_dir'].join(
@@ -809,7 +809,7 @@ def test_for_bot(api, builder, mastername, slavename, testname=None,
   if 'RecreateSKPs' in builder:
     test += api.step_data(
         'upload new .isolated file for RecreateSKPs_skia',
-        stdout=api.raw_io.output('def456 XYZ.isolated'))
+        stdout=api.raw_io.output_text('def456 XYZ.isolated'))
 
   test += api.path.exists(*paths)
 
@@ -841,7 +841,7 @@ def GenTests(api):
   test = test_for_bot(api, builder, master, slave, 'legacy_android_sdk',
                       legacy_android_sdk=True)
   test += api.step_data('Read android_sdk_hash',
-                        stdout=api.raw_io.output('<android_sdk_hash>'))
+                        stdout=api.raw_io.output_text('<android_sdk_hash>'))
   yield test
 
   test = test_for_bot(api, builder, master, slave, 'Missing_android_sdk_hash',
@@ -899,6 +899,6 @@ def GenTests(api):
         gerrit_url='https://skia-review.googlesource.com/',
     ) +
     api.step_data('upload new .isolated file for compile_skia',
-                  stdout=api.raw_io.output('def456 XYZ.isolated'))
+                  stdout=api.raw_io.output_text('def456 XYZ.isolated'))
   )
   yield test

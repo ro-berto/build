@@ -17,5 +17,5 @@ class BuildbucketTestApi(recipe_test_api.RecipeTestApi):
 
     return self.step_data(
         'buildbucket.get',
-        stdout=self.m.raw_io.output(json.dumps(buildbucket_output)))
+        stdout=self.m.raw_io.output_text(json.dumps(buildbucket_output)))
 

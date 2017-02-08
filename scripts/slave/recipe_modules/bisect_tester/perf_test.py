@@ -183,18 +183,18 @@ def _rebase_path(api, file_path):
 
 def _run_command(api, command, step_name, **kwargs):
   command_parts = command.split()
-  stdout_proxy = api.m.raw_io.output(name='stdout_proxy')
-  stderr = api.m.raw_io.output()
+  stdout_proxy = api.m.raw_io.output_text(name='stdout_proxy')
+  stderr = api.m.raw_io.output_text()
 
   inner_kwargs = {}
   if 'step_test_data' in kwargs:
     inner_kwargs['step_test_data'] = (
         lambda: kwargs['step_test_data']() +
-                api.m.raw_io.test_api.output('benchmark text',
+                api.m.raw_io.test_api.output_text('benchmark text',
                                              name='stdout_proxy'))
   else:
     inner_kwargs['step_test_data'] = (
-        lambda: api.m.raw_io.test_api.output('', name='stdout_proxy'))
+        lambda: api.m.raw_io.test_api.output_text('', name='stdout_proxy'))
   # TODO(prasadv): Remove this once bisect runs are no longer running
   # against revisions from February 2016 or earlier.
   if 'android-chrome' in command:  # pragma: no cover
@@ -227,13 +227,13 @@ def _run_command(api, command, step_name, **kwargs):
         stderr=stderr,
         **inner_kwargs)
     step_result.presentation.logs['Captured Output'] = (
-        step_result.raw_io.outputs.get('stdout_proxy', '')).splitlines()
+        step_result.raw_io.output_texts.get('stdout_proxy', '')).splitlines()
   except api.m.step.StepFailure as sf:
     sf.result.presentation.status = api.m.step.WARNING
     sf.result.presentation.logs['Failure Output'] = (
-        sf.result.raw_io.outputs.get('stdout_proxy')).splitlines()
+        sf.result.raw_io.output_texts.get('stdout_proxy')).splitlines()
     if sf.result.stderr:  # pragma: no cover
       sf.result.presentation.logs['stderr'] = (
         sf.result.stderr).splitlines()
-    return sf.result.raw_io.outputs.get('stdout_proxy'), sf.result.stderr, sf.result.retcode
-  return step_result.raw_io.outputs.get('stdout_proxy'), step_result.stderr, step_result.retcode
+    return sf.result.raw_io.output_texts.get('stdout_proxy'), sf.result.stderr, sf.result.retcode
+  return step_result.raw_io.output_texts.get('stdout_proxy'), step_result.stderr, step_result.retcode

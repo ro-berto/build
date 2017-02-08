@@ -29,7 +29,7 @@ class UrlApi(recipe_api.RecipeApi):
     fetch_result = self.fetch_to_file(
         url, None, step_name=step_name, attempts=attempts, headers=headers,
         **kwargs)
-    return fetch_result.raw_io.output
+    return fetch_result.raw_io.output_text
 
   def fetch_to_file(self, url, path, step_name=None, attempts=None,
                     headers=None, **kwargs):
@@ -50,7 +50,7 @@ class UrlApi(recipe_api.RecipeApi):
       step_name = 'fetch %s' % url
     args = [
         url,
-        '--outfile', self.m.raw_io.output(leak_to=path),
+        '--outfile', self.m.raw_io.output_text(leak_to=path),
     ]
 
     if headers:

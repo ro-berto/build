@@ -1308,7 +1308,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     step_result.presentation.logs['chartjson_info'] = \
         ['Info: Setting up arguments for perf dashboard']
 
-    results_file = api.raw_io.input(data=json.dumps(results))
+    results_file = api.raw_io.input_text(data=json.dumps(results))
     # Produces a step that uploads results to dashboard
     args = [
         '--results-file', results_file,
@@ -1923,7 +1923,7 @@ class BlinkTest(Test):
       args.extend(self._extra_args)
     if suffix == 'without patch':
       test_list = "\n".join(self.failures(api, 'with patch'))
-      args.extend(['--test-list', api.raw_io.input(test_list),
+      args.extend(['--test-list', api.raw_io.input_text(test_list),
                    '--skipped', 'always'])
 
     try:

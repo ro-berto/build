@@ -71,7 +71,7 @@ def RunSteps(api):
            '--as=output',
            '//webrtc/test/fuzzers:webrtc_fuzzer_main',
           ],
-          stdout=api.raw_io.output())
+          stdout=api.raw_io.output_text())
 
   targets = step_result.stdout.split()
   api.step.active_result.presentation.logs['targets'] = targets
@@ -82,5 +82,5 @@ def GenTests(api):
   for test in api.chromium.gen_tests_for_builders(BUILDERS):
     yield (test +
            api.step_data('calculate targets',
-               stdout=api.raw_io.output('target1 target2 target3'))
+               stdout=api.raw_io.output_text('target1 target2 target3'))
            )

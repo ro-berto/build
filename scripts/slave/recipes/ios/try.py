@@ -77,7 +77,7 @@ def GenTests(api):
     })
     + api.step_data(
         'bootstrap swarming.swarming.py --version',
-        stdout=api.raw_io.output('1.2.3'),
+        stdout=api.raw_io.output_text('1.2.3'),
     )
     + suppress_analyze()
   )
@@ -106,7 +106,7 @@ def GenTests(api):
     })
     + api.step_data(
         'bootstrap swarming.swarming.py --version',
-        stdout=api.raw_io.output('1.2.3'),
+        stdout=api.raw_io.output_text('1.2.3'),
     )
     + suppress_analyze()
   )
@@ -140,7 +140,7 @@ def GenTests(api):
     })
     + api.step_data(
         'bootstrap swarming.swarming.py --version',
-        stdout=api.raw_io.output('1.2.3'),
+        stdout=api.raw_io.output_text('1.2.3'),
     )
   )
 
@@ -175,7 +175,7 @@ def GenTests(api):
     })
     + api.step_data(
         'bootstrap swarming.swarming.py --version',
-        stdout=api.raw_io.output('1.2.3'),
+        stdout=api.raw_io.output_text('1.2.3'),
     )
     + suppress_analyze()
   )
@@ -212,7 +212,7 @@ def GenTests(api):
     })
     + api.step_data(
         'bootstrap swarming.swarming.py --version',
-        stdout=api.raw_io.output('1.2.3'),
+        stdout=api.raw_io.output_text('1.2.3'),
     )
     + suppress_analyze()
   )
@@ -314,7 +314,7 @@ def GenTests(api):
     })
     + api.step_data(
         'bootstrap swarming.swarming.py --version',
-        stdout=api.raw_io.output('1.2.3'),
+        stdout=api.raw_io.output_text('1.2.3'),
     )
     + suppress_analyze()
   )
@@ -380,7 +380,7 @@ def GenTests(api):
     })
     + api.step_data(
         'bootstrap swarming.swarming.py --version',
-        stdout=api.raw_io.output('1.2.3'),
+        stdout=api.raw_io.output_text('1.2.3'),
     )
   )
 

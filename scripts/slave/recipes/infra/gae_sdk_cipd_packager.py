@@ -92,7 +92,7 @@ class _PackageBuilder(object):
     step_result = self.api.gsutil.list(
         prefix + '*.zip',
         name='Get Latest',
-        stdout=self.api.raw_io.output())
+        stdout=self.api.raw_io.output_text())
 
     latest_version = None
     for line in step_result.stdout.splitlines():

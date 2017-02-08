@@ -81,12 +81,12 @@ class GomaApi(recipe_api.RecipeApi):
       self.package_repo_resource('scripts', 'tools', 'runit.py'),
       args=[
           '--show-path', 'python', self.resource('utils.py'), 'jobs',
-          '--file-path', self.m.raw_io.output()
+          '--file-path', self.m.raw_io.output_text()
       ],
       step_test_data=(
-          lambda: self.m.raw_io.test_api.output('50'))
+          lambda: self.m.raw_io.test_api.output_text('50'))
     )
-    self._goma_jobs = int(step_result.raw_io.output)
+    self._goma_jobs = int(step_result.raw_io.output_text)
 
     return self._goma_jobs
 
@@ -161,10 +161,10 @@ class GomaApi(recipe_api.RecipeApi):
             '--cloudtail-path', self.cloudtail_path,
             '--cloudtail-service-account-json',
             self.cloudtail_service_account_json_path,
-            '--pid-file', self.m.raw_io.output(
+            '--pid-file', self.m.raw_io.output_text(
                 leak_to=self.cloudtail_pid_file)],
       step_test_data=(
-          lambda: self.m.raw_io.test_api.output('12345')),
+          lambda: self.m.raw_io.test_api.output_text('12345')),
       infra_step=True)
 
   def _run_jsonstatus(self):

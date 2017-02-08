@@ -199,19 +199,19 @@ class V8Api(recipe_api.RecipeApi):
     step_result = self.m.python(
         'Download patch',
         self.package_repo_resource('scripts', 'tools', 'pycurl.py'),
-        [url, '--outfile', self.m.raw_io.output()],
-        step_test_data=lambda: self.m.raw_io.test_api.output('some patch'),
+        [url, '--outfile', self.m.raw_io.output_text()],
+        step_test_data=lambda: self.m.raw_io.test_api.output_text('some patch'),
     )
     return self.m.python(
         name='Calculate patch base',
         script=self.resource('calculate_patch_base.py'),
         args=[
-          self.m.raw_io.input(step_result.raw_io.output),
+          self.m.raw_io.input_text(step_result.raw_io.output_text),
           self.m.path['checkout'],
-          self.m.raw_io.output(),
+          self.m.raw_io.output_text(),
         ],
-        step_test_data=lambda: self.m.raw_io.test_api.output('[fitting hsh]'),
-    ).raw_io.output
+        step_test_data=lambda: self.m.raw_io.test_api.output_text('[fitting hsh]'),
+    ).raw_io.output_text
 
   def set_up_swarming(self):
     if self.bot_config.get('enable_swarming'):
@@ -298,9 +298,9 @@ class V8Api(recipe_api.RecipeApi):
           script=self.resource('patch_mb_config.py'),
           args=[
             self.m.path['checkout'].join('infra', 'mb', 'mb_config.pyl'),
-            self.m.raw_io.output(),
+            self.m.raw_io.output_text(),
           ],
-          step_test_data=lambda: self.m.raw_io.test_api.output('[mb config]'),
+          step_test_data=lambda: self.m.raw_io.test_api.output_text('[mb config]'),
           ok_ret='any',
       )
       use_goma = (self.m.chromium.c.compile_py.compiler and
@@ -310,7 +310,7 @@ class V8Api(recipe_api.RecipeApi):
           self.m.properties['buildername'],
           name='generate_build_files with gn (fyi)',
           use_goma=use_goma,
-          mb_config_path=self.m.raw_io.input(step_result.raw_io.output),
+          mb_config_path=self.m.raw_io.input_text(step_result.raw_io.output_text),
           build_dir=gn_build_dir,
           ok_ret='any',
       )
@@ -488,7 +488,7 @@ class V8Api(recipe_api.RecipeApi):
             mb_config_path=self.m.path['checkout'].join(
                 'infra', 'mb', 'mb_config.pyl'),
             gyp_script=self.m.path.join('gypfiles', 'gyp_v8'),
-            stdout=self.m.raw_io.output(),
+            stdout=self.m.raw_io.output_text(),
             step_test_data=step_test_data,
         )
       finally:
@@ -1237,7 +1237,7 @@ class V8Api(recipe_api.RecipeApi):
           name='check build %s' % r[:8],
           # Allow failures, as the tool will formally fail for any absent file.
           ok_ret='any',
-          stdout=self.m.raw_io.output(),
+          stdout=self.m.raw_io.output_text(),
           step_test_data=lambda: self.test_api.example_available_builds(r),
       )
       if r in step_result.stdout.strip():

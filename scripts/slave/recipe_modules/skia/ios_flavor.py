@@ -150,7 +150,7 @@ class iOSFlavorUtils(default_flavor.DefaultFlavorUtils):
         name='read %s' % self._skia_api.m.path.basename(path),
         cmd=[self.ios_bin.join('ios_cat_file'), path],
         env=self.default_env,
-        stdout=self._skia_api.m.raw_io.output(),
+        stdout=self._skia_api.m.raw_io.output_text(),
         infra_step=True)
     return ret.stdout.rstrip() if ret.stdout else ret.stdout
 

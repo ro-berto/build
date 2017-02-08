@@ -138,11 +138,11 @@ m/cloudstorage/b/chromium-telemetry/o/html-results/results-without
             stdout=api.json.output(buildbucket_get_response)) +
          api.step_data(
             'Running WITH patch.Performance Test (With Patch) 1 of 1',
-            api.raw_io.output(
+            api.raw_io.output_text(
                 str(results_with_patch), name='stdout_proxy')) +
          api.step_data(
             'Running WITHOUT patch.Performance Test (Without Patch) 1 of 1',
-            api.raw_io.output(
+            api.raw_io.output_text(
                 str(results_without_patch), name='stdout_proxy')) +
          api.step_data(
             'Notify dashboard.Post bisect results',
@@ -184,10 +184,10 @@ m/cloudstorage/b/chromium-telemetry/o/html-results/results-without
             stdout=api.json.output(buildbucket_get_response)) +
          api.step_data(
             'Running WITH patch.Performance Test (With Patch) 1 of 1',
-            stdout=api.raw_io.output(str(results_without_patch))) +
+            stdout=api.raw_io.output_text(str(results_without_patch))) +
          api.step_data(
             'Running WITHOUT patch.Performance Test (Without Patch) 1 of 1',
-            stdout=api.raw_io.output(str(results_with_patch))) +
+            stdout=api.raw_io.output_text(str(results_with_patch))) +
          api.step_data(
             'Notify dashboard.Post bisect results',
             api.json.output({'status_code': 200})))
@@ -229,11 +229,11 @@ m/cloudstorage/b/chromium-telemetry/o/html-results/results-without
           stdout=api.json.output(buildbucket_get_response)) +
       api.step_data(
           'Running WITH patch.Performance Test (With Patch) 1 of 1',
-          api.raw_io.output(
+          api.raw_io.output_text(
               str(results_with_patch), name='stdout_proxy')) +
       api.step_data(
           'Running WITHOUT patch.Performance Test (Without Patch) 1 of 1',
-          api.raw_io.output(
+          api.raw_io.output_text(
               str(results_without_patch), name='stdout_proxy')) +
       api.step_data(
             'Notify dashboard.Post bisect results',
@@ -270,11 +270,11 @@ m/cloudstorage/b/chromium-telemetry/o/html-results/results-without
           stdout=api.json.output(buildbucket_get_response)) +
       api.step_data(
           'Running WITH patch.Performance Test (With Patch) 1 of 1',
-          api.raw_io.output(
+          api.raw_io.output_text(
               str(results_with_patch), name='stdout_proxy')) +
       api.step_data(
           'Running WITHOUT patch.Performance Test (Without Patch) 1 of 1',
-          api.raw_io.output(
+          api.raw_io.output_text(
               str(results_with_patch), name='stdout_proxy')) +
       api.step_data(
           'Notify dashboard.Post bisect results',
@@ -313,11 +313,11 @@ m/cloudstorage/b/chromium-telemetry/o/html-results/results-without
           stdout=api.json.output(buildbucket_get_response)) +
       api.step_data(
           'Running WITH patch.Performance Test (With Patch) 1 of 1',
-          api.raw_io.output(
+          api.raw_io.output_text(
               str(results_with_patch), name='stdout_proxy')) +
       api.step_data(
           'Running WITHOUT patch.Performance Test (Without Patch) 1 of 1',
-          api.raw_io.output(
+          api.raw_io.output_text(
               str(results_without_patch), name='stdout_proxy')) +
       api.step_data(
           'Notify dashboard.Post bisect results',
@@ -373,11 +373,11 @@ m/cloudstorage/b/chromium-telemetry/o/html-results/results-without
       api.override_step_data('load config', api.json.output(config_json)) +
       api.step_data(
           'resolving commit_pos ' + config_json['good_revision'],
-          stdout=api.raw_io.output(
+          stdout=api.raw_io.output_text(
               'hash:d49c331def2a3bbf3ddd0096eb51551155')) +
       api.step_data(
           'resolving commit_pos ' + config_json['bad_revision'],
-          stdout=api.raw_io.output(
+          stdout=api.raw_io.output_text(
               'hash:bad49c331def2a3bbf3ddd0096eb51551155')) +
       api.step_data('Running WITHOUT patch.gsutil exists', retcode=1) +
       api.step_data(
@@ -389,11 +389,11 @@ m/cloudstorage/b/chromium-telemetry/o/html-results/results-without
       api.step_data(
           'Running WITHOUT patch.Performance Test ' +
           '(d49c331def2a3bbf3ddd0096eb51551155) 1 of 1',
-          api.raw_io.output(str(results_without_patch), name='stdout_proxy')) +
+          api.raw_io.output_text(str(results_without_patch), name='stdout_proxy')) +
       api.step_data(
           'Running WITH patch.Performance Test ' +
           '(bad49c331def2a3bbf3ddd0096eb51551155) 1 of 1',
-          api.raw_io.output(str(results_with_patch), name='stdout_proxy')) +
+          api.raw_io.output_text(str(results_with_patch), name='stdout_proxy')) +
       api.step_data(
           'Notify dashboard.Post bisect results',
           api.json.output({'status_code': 200})))

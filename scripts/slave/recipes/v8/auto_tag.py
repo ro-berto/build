@@ -110,7 +110,7 @@ def Git(api, *args, **kwargs):
   return api.git(
       *args,
       cwd=api.path['checkout'],
-      stdout=api.raw_io.output(),
+      stdout=api.raw_io.output_text(),
       **kwargs
   ).stdout
 

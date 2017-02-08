@@ -427,7 +427,7 @@ def win_builder_steps(api):
                            ["cmd.exe", "/C", "dir", "/O-D", "/B",
                             "DrMemory-Windows-*0x" + build_properties[
                                 "got_revision"][:7] + ".zip"],
-                           stdout=api.raw_io.output(),
+                           stdout=api.raw_io.output_text(),
                            cwd=api.path["start_dir"])
     # There can be multiple if we've done test builds so grab the first
     # line (we sorted by date with /O-D):
@@ -538,7 +538,7 @@ def GenTests(api):
     )
     + api.platform('win', 32)
     + api.step_data("Find package basename",
-      stdout=api.raw_io.output("DrMemory-Windows-1.2.3-0x1234567.zip"))
+      stdout=api.raw_io.output_text("DrMemory-Windows-1.2.3-0x1234567.zip"))
   )
 
   yield (api.test('builder_not_in_dispatch_directory')

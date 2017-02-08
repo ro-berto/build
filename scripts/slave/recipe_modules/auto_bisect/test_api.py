@@ -167,7 +167,7 @@ index 029be3b..2b3ea0a 100644
       data = v.get('stdout', 'text from actual benchmark, (ignored)')
       retcode = v.get('retcode', 0)
       return (self.m.raw_io.stream_output(data=data, retcode=retcode) +
-              self.m.raw_io.output(data=data))
+              self.m.raw_io.output_text(data=data))
 
     result = {'default': self.m.raw_io.stream_output('mock output', retcode=0)}
     for item in items:

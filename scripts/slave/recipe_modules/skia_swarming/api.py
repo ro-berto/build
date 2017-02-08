@@ -177,7 +177,7 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
                       script=isolateserver,
                       args=['archive', '--isolate-server',
                             self.m.isolate.isolate_server, isolated_file],
-                      stdout=self.m.raw_io.output())
+                      stdout=self.m.raw_io.output_text())
     return shlex.split(r.stdout)[0]
 
   def trigger_swarming_tasks(

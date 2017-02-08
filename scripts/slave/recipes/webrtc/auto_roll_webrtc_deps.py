@@ -26,7 +26,7 @@ def RunSteps(api):
         'check roll status',
         api.package_repo_resource('scripts', 'tools', 'pycurl.py'),
         args=['https://webrtc-roll-cr-rev-status.appspot.com/status'],
-        stdout=api.raw_io.output(),
+        stdout=api.raw_io.output_text(),
         step_test_data=lambda: api.raw_io.test_api.stream_output(
             '1', stream='stdout')
   )

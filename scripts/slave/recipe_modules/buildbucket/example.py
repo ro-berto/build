@@ -127,20 +127,20 @@ def GenTests(api):
   yield (api.test('basic') +
          api.step_data(
              'buildbucket.put',
-             stdout=api.raw_io.output(mock_buildbucket_multi_response)) +
+             stdout=api.raw_io.output_text(mock_buildbucket_multi_response)) +
          api.step_data(
              'buildbucket.get',
-             stdout=api.raw_io.output(mock_buildbucket_single_response)) +
+             stdout=api.raw_io.output_text(mock_buildbucket_single_response)) +
          api.properties(
              buildbucket={'build': {'tags': [
                  'buildset:patch/rietveld/cr.chromium.org/123/10001']}}))
   yield (api.test('basic_win') +
          api.step_data(
              'buildbucket.put',
-             stdout=api.raw_io.output(mock_buildbucket_multi_response)) +
+             stdout=api.raw_io.output_text(mock_buildbucket_multi_response)) +
          api.step_data(
              'buildbucket.get',
-             stdout=api.raw_io.output(mock_buildbucket_single_response)) +
+             stdout=api.raw_io.output_text(mock_buildbucket_single_response)) +
          api.platform('win', 32) +
          api.properties(
              buildbucket={'build': {'tags': [

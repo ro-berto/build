@@ -51,7 +51,7 @@ def GetDEPS(api, name, repo):
       'get %s deps' % name,
       ['revinfo', '--deps', 'all', '--spec', spec],
       cwd=api.path['start_dir'],
-      stdout=api.raw_io.output(),
+      stdout=api.raw_io.output_text(),
   )
 
   # Transform into dict. Skip the solution prefix in keys (e.g. src/).
@@ -145,7 +145,7 @@ def RunSteps(api):
       step_result = api.git(
         'ls-remote', v8_repo, 'HEAD',
         name='look up %s' % name.replace('/', '_'),
-        stdout=api.raw_io.output(),
+        stdout=api.raw_io.output_text(),
       )
       new_rev = step_result.stdout.strip().split('\t')[0]
       step_result.presentation.step_text = new_rev
@@ -168,7 +168,7 @@ def RunSteps(api):
   # Check for a difference. If no deps changed, the diff is empty.
   step_result = api.git(
       'diff',
-      stdout=api.raw_io.output(),
+      stdout=api.raw_io.output_text(),
       cwd=api.path['checkout'],
   )
   diff = step_result.stdout.strip()
@@ -180,7 +180,7 @@ def RunSteps(api):
     for message in commit_message:
       args.extend(['-m', message])
     args.extend(['-m', 'TBR=%s' % ','.join(AUTO_REVIEWERS)])
-    kwargs = {'stdout': api.raw_io.output(), 'cwd': api.path['checkout']}
+    kwargs = {'stdout': api.raw_io.output_text(), 'cwd': api.path['checkout']}
     api.git(*args, **kwargs)
     api.git(
         'cl', 'upload', '-f', '--use-commit-queue', '--bypass-hooks',

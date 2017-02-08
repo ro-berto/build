@@ -342,7 +342,7 @@ def GenTests(api):
 
     return api.buildbucket.step_data(
         'buildbucket.get',
-        stdout=api.raw_io.output(json.dumps(buildbucket_output)))
+        stdout=api.raw_io.output_text(json.dumps(buildbucket_output)))
 
   yield (
       api.test('compile_specified_targets') +
