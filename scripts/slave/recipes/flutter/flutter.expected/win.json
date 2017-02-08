@@ -129,7 +129,7 @@
   },
   {
     "cmd": [
-      "flutter",
+      "flutter.bat",
       "update-packages"
     ],
     "cwd": "[START_DIR]\\flutter",
@@ -142,7 +142,7 @@
   },
   {
     "cmd": [
-      "dart",
+      "dart.exe",
       "dev/bots/test.dart"
     ],
     "cwd": "[START_DIR]\\flutter",

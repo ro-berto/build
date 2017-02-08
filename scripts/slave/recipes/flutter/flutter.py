@@ -146,8 +146,11 @@ def RunSteps(api):
     if api.platform.is_mac:
       SetupXcode(api)
 
-    api.step('download dependencies', ['flutter', 'update-packages'], cwd=checkout)
-    api.step('test.dart', ['dart', 'dev/bots/test.dart'], cwd=checkout)
+    flutterExecutable = 'flutter' if not api.platform.is_win else 'flutter.bat'
+    dartExecutable = 'dart' if not api.platform.is_win else 'dart.exe'
+
+    api.step('download dependencies', [flutterExecutable, 'update-packages'], cwd=checkout)
+    api.step('test.dart', [dartExecutable, 'dev/bots/test.dart'], cwd=checkout)
 
     BuildExamples(api, git_hash)
 
