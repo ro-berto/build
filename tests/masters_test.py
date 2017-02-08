@@ -273,6 +273,7 @@ def main(argv):
       'master.client.v8.ports': 'V8Ports',
       'master.client.wasm.llvm': 'WasmLlvm',
       'master.client.webrtc': 'WebRTC',
+      'master.client.webrtc.branches': 'WebRTCBranches',
       'master.client.webrtc.fyi': 'WebRTCFYI',
       'master.client.webrtc.perf': 'WebRTCPerf',
       'master.tryserver.chromium.android': 'TryserverChromiumAndroid',
