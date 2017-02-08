@@ -127,11 +127,15 @@ def run_perf_test(api, test_config, **kwargs):
     if use_chartjson or use_valueset:  # pragma: no cover
       chartjson_path = temp_dir.join('results-chart.json')
       valueset_path = temp_dir.join('results-valueset.json')
-      if '{OUTPUT_FILE}' in command and chartjson_path:  # pragma: no cover
+      if '{OUTPUT_FILE}' in command:  # pragma: no cover
         command = command.replace('{OUTPUT_FILE}', str(chartjson_path))
         command = command.decode('string_escape')
       else:
         command = _set_output_dir(command, str(temp_dir))
+
+      if '{ADB_PATH}' in command:
+        command = command.replace('{ADB_PATH}',
+            '{OUTPUT_FILE}', api.m.chromium_android.adb_path())
 
     step_name = "Performance Test%s %d of %d" % (
         ' (%s)' % kwargs['name'] if 'name' in kwargs else '', i + 1, repeat_count)
