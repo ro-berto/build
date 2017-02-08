@@ -87,7 +87,6 @@ class PackageIndexTest(unittest.TestCase):
     self.assertEquals(required_input['info']['path'], filename)
     self.assertEquals(required_input['v_name']['path'], filename)
     self.assertEquals(required_input['v_name']['corpus'], corpus)
-    self.assertEquals(required_input['v_name']['language'], 'c++')
 
   def testGenerateDataFiles(self):
     self.index_pack._GenerateDataFiles()
@@ -198,8 +197,6 @@ class PackageIndexTest(unittest.TestCase):
 
         self.assertEquals(compilation_unit_dictionary['v_name']['corpus'],
                           corpus)
-        self.assertEquals(compilation_unit_dictionary['v_name']['language'],
-                          'c++')
         self.assertEquals(compilation_unit_dictionary['source_file'],
                           [self.test_cc_file.name])
         self.assertEquals(compilation_unit_dictionary['revision'],

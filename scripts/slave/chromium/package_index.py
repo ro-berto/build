@@ -152,7 +152,6 @@ class IndexPack(object):
       'argument': <list of compilation parameters>,
       'v_name': {
         'corpus': <a corpus such as chromium-linux>,
-        'language': 'c++',
       },
       'revision': <the hash of the commit containing the files being indexed>,
       'required_input': [
@@ -161,7 +160,6 @@ class IndexPack(object):
             'corpus': <a corpus such as chromium-linux>,
             'path': '<path to the source file relative to the root and with
                       relativizing particles ('.', '..') removed>
-            'language': 'c++',
           },
           'info': {
             'path': <path to the source file>,
@@ -249,7 +247,6 @@ class IndexPack(object):
             required_input['v_name'] = {
                 'corpus': self.corpus,
                 'path': normalized_fname,
-                'language': 'c++',
             }
             required_input['info'] = {
                 'path': fname,
@@ -267,7 +264,6 @@ class IndexPack(object):
         unit_dictionary['output_key'] = output_file
         unit_dictionary['v_name'] = {
             'corpus': self.corpus,
-            'language': 'c++',
         }
         unit_dictionary['revision'] = self.revision
 
@@ -297,6 +293,7 @@ class IndexPack(object):
       unit_file_compressed += gzip_compress.flush()
       with open(unit_file_path, 'wb') as unit_file:
         unit_file.write(unit_file_compressed)
+      print 'Wrote compilation unit file %s' % unit_file_path
 
   def GenerateIndexPack(self):
     """Generates the index pack.
