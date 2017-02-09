@@ -169,6 +169,30 @@
       "--write-debug-log",
       "--write-test-outcome-log",
       "--append_logs",
+      "pkg_tested"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "name": "third_party/pkg_tested unit tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/sdk/tools/test.py",
+      "--mode=release",
+      "--arch=x64",
+      "--use-sdk",
+      "--compiler=none",
+      "--runtime=vm",
+      "--checked",
+      "--progress=buildbot",
+      "-v",
+      "--report",
+      "--time",
+      "--failure-summary",
+      "--write-debug-log",
+      "--write-test-outcome-log",
+      "--append_logs",
       "pkgbuild"
     ],
     "cwd": "[START_DIR]/sdk",

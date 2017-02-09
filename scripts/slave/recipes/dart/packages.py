@@ -154,6 +154,8 @@ def RunSteps(api):
       test_specs = [
         {'name': 'package unit tests',
          'tests': ['pkg']},
+        {'name': 'third_party/pkg_tested unit tests',
+         'tests': ['pkg_tested']},
         {'name': 'pub get dependencies',
          'tests': ['pkgbuild']},
       ]
