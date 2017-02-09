@@ -15,11 +15,21 @@ import os
 from buildbot.master import BuildMaster
 from infra_libs import ts_mon
 from twisted.application import service
+from twisted.python import log
+
+
+class TwistedLogHandler(logging.Handler):
+  def emit(self, record):
+    log.msg(self.format(record))
+
+
+def setup_logging():
+  # Redirect Python logging messages to the twistd.log file.
+  logging.basicConfig(level=logging.INFO)
+  logging.root.addHandler(TwistedLogHandler())
 
 
 def setup_timeseries_monitoring():
-  logging.basicConfig(level=logging.INFO)
-
   parser = argparse.ArgumentParser()
   ts_mon.add_argparse_options(parser)
   parser.set_defaults(
@@ -35,6 +45,7 @@ def setup_timeseries_monitoring():
   ts_mon.process_argparse_options(args)
 
 
+setup_logging()
 application = service.Application('buildmaster')
 BuildMaster(os.getcwd(), 'master.cfg').setServiceParent(application)
 setup_timeseries_monitoring()
