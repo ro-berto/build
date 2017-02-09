@@ -70,6 +70,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       LLVM_FORCE_HEAD_REVISION = Single(basestring, required=False),
       GOMA_STUBBY_PROXY_IP_ADDRESS = Single(basestring, required=False),
       FORCE_MAC_TOOLCHAIN = Single(int, required=False),
+      FORCE_MAC_TOOLCHAIN_REVISION_OVERRIDE = Single(basestring, required=False),
     ),
     project_generator = ConfigGroup(
       tool = Single(basestring, empty_val='gyp'),
@@ -237,6 +238,10 @@ def ninja(c):
 @config_ctx()
 def force_mac_toolchain_off(c):
   c.env.FORCE_MAC_TOOLCHAIN = 0
+
+@config_ctx()
+def force_mac_toolchain_override(c):
+  c.env.FORCE_MAC_TOOLCHAIN_REVISION_OVERRIDE = '8C1002-2'
 
 @config_ctx()
 def msvs2015(c):
