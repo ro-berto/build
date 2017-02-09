@@ -256,6 +256,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[START_DIR]/src",
     "name": "preprocess_for_goma"
   },
   {
@@ -266,6 +267,7 @@
       "[CACHE]/goma/Linux_deterministic__dbg_",
       "511"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "preprocess_for_goma.makedirs goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -288,6 +290,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "restart"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]/goma/Linux_deterministic__dbg_",
@@ -312,6 +315,7 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -328,6 +332,7 @@
       "50",
       "all"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -335,6 +340,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma"
   },
   {
@@ -344,6 +350,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "jsonstatus"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -372,6 +379,7 @@
       "{\"notice\": [{\"infra_status\": {\"num_user_error\": 0, \"ping_status_code\": 200}}]}",
       "[CACHE]/cipd/goma/jsonstatus"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.write_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -384,6 +392,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "stat"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -399,6 +408,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "stop"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -435,6 +445,7 @@
       "--buildbot-slavename",
       "TestSlavename"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -449,6 +460,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -581,6 +593,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[START_DIR]/src",
     "name": "preprocess_for_goma (2)"
   },
   {
@@ -591,6 +604,7 @@
       "[CACHE]/goma/Linux_deterministic__dbg_",
       "511"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "preprocess_for_goma.makedirs goma cache directory (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -613,6 +627,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "restart"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]/goma/Linux_deterministic__dbg_",
@@ -637,6 +652,7 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "preprocess_for_goma.start cloudtail (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -653,6 +669,7 @@
       "50",
       "all"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -660,6 +677,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma (2)"
   },
   {
@@ -669,6 +687,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "jsonstatus"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -697,6 +716,7 @@
       "{\"notice\": [{\"infra_status\": {\"num_user_error\": 0, \"ping_status_code\": 200}}]}",
       "[CACHE]/cipd/goma/jsonstatus"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.write_jsonstatus (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -709,6 +729,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "stat"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -724,6 +745,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "stop"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -760,6 +782,7 @@
       "--buildbot-slavename",
       "TestSlavename"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.upload_log (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -774,6 +797,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.stop cloudtail (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"

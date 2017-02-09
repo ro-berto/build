@@ -285,6 +285,7 @@
       "[BUILDER_CACHE]\\ClangToTWin_dll_\\src\\out\\Release",
       "all"
     ],
+    "cwd": "[BUILDER_CACHE]\\ClangToTWin_dll_\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "LLVM_FORCE_HEAD_REVISION": "YES"

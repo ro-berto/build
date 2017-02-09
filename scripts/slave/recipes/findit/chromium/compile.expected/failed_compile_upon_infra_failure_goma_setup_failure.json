@@ -612,6 +612,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[BUILDER_CACHE]/linux/src",
     "name": "test r1.preprocess_for_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -625,6 +626,7 @@
       "[GOMA_CACHE]/linux_variable",
       "511"
     ],
+    "cwd": "[BUILDER_CACHE]/linux/src",
     "name": "test r1.preprocess_for_goma.makedirs goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -647,6 +649,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "restart"
     ],
+    "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
       "GOMA_CACHE_DIR": "[GOMA_CACHE]/linux_variable",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
@@ -667,6 +670,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "jsonstatus"
     ],
+    "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -692,6 +696,7 @@
       "{\"notice\": [{\"compile_error\": \"COMPILER_PROXY_UNREACHABLE\"}]}",
       "[CACHE]/cipd/goma/jsonstatus"
     ],
+    "cwd": "[BUILDER_CACHE]/linux/src",
     "name": "test r1.preprocess_for_goma.write_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -704,6 +709,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "stop"
     ],
+    "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -732,6 +738,7 @@
       "--buildbot-slavename",
       "build1-a1"
     ],
+    "cwd": "[BUILDER_CACHE]/linux/src",
     "name": "test r1.preprocess_for_goma.upload_goma_start_failed_logs",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",

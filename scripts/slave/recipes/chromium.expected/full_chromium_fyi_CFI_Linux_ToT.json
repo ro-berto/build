@@ -250,6 +250,7 @@
       "[BUILDER_CACHE]/CFI_Linux_ToT/src/out/Release",
       "All"
     ],
+    "cwd": "[BUILDER_CACHE]/CFI_Linux_ToT/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "LLVM_FORCE_HEAD_REVISION": "YES"

@@ -285,6 +285,7 @@
       "[BUILDER_CACHE]\\CrWinClangLLD\\src\\out\\Release",
       "all"
     ],
+    "cwd": "[BUILDER_CACHE]\\CrWinClangLLD\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "LLVM_FORCE_HEAD_REVISION": "YES"

@@ -278,6 +278,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[START_DIR]/v8",
     "name": "preprocess_for_goma"
   },
   {
@@ -288,6 +289,7 @@
       "[CACHE]/goma/V8_Linux___shared",
       "511"
     ],
+    "cwd": "[START_DIR]/v8",
     "name": "preprocess_for_goma.makedirs goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -310,6 +312,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "restart"
     ],
+    "cwd": "[START_DIR]/v8",
     "env": {
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]/goma/V8_Linux___shared",
@@ -334,6 +337,7 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "cwd": "[START_DIR]/v8",
     "name": "preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -349,6 +353,7 @@
       "-j",
       "50"
     ],
+    "cwd": "[START_DIR]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -356,6 +361,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[START_DIR]/v8",
     "name": "postprocess_for_goma"
   },
   {
@@ -365,6 +371,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "jsonstatus"
     ],
+    "cwd": "[START_DIR]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -393,6 +400,7 @@
       "{\"notice\": [{\"infra_status\": {\"num_user_error\": 0, \"ping_status_code\": 200}}]}",
       "[CACHE]/cipd/goma/jsonstatus"
     ],
+    "cwd": "[START_DIR]/v8",
     "name": "postprocess_for_goma.write_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -405,6 +413,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "stat"
     ],
+    "cwd": "[START_DIR]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -420,6 +429,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "stop"
     ],
+    "cwd": "[START_DIR]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -456,6 +466,7 @@
       "--buildbot-slavename",
       "TestSlavename"
     ],
+    "cwd": "[START_DIR]/v8",
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -470,6 +481,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "cwd": "[START_DIR]/v8",
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1418,6 +1430,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[START_DIR]/v8",
     "name": "Bisect a0.preprocess_for_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1431,6 +1444,7 @@
       "[CACHE]/goma/V8_Linux___shared",
       "511"
     ],
+    "cwd": "[START_DIR]/v8",
     "name": "Bisect a0.preprocess_for_goma.makedirs goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -1453,6 +1467,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "restart"
     ],
+    "cwd": "[START_DIR]/v8",
     "env": {
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]/goma/V8_Linux___shared",
@@ -1477,6 +1492,7 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "cwd": "[START_DIR]/v8",
     "name": "Bisect a0.preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -1493,6 +1509,7 @@
       "50",
       "d8"
     ],
+    "cwd": "[START_DIR]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1503,6 +1520,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[START_DIR]/v8",
     "name": "Bisect a0.postprocess_for_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1515,6 +1533,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "jsonstatus"
     ],
+    "cwd": "[START_DIR]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1543,6 +1562,7 @@
       "{\"notice\": [{\"infra_status\": {\"num_user_error\": 0, \"ping_status_code\": 200}}]}",
       "[CACHE]/cipd/goma/jsonstatus"
     ],
+    "cwd": "[START_DIR]/v8",
     "name": "Bisect a0.postprocess_for_goma.write_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -1555,6 +1575,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "stat"
     ],
+    "cwd": "[START_DIR]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1570,6 +1591,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "stop"
     ],
+    "cwd": "[START_DIR]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1606,6 +1628,7 @@
       "--buildbot-slavename",
       "TestSlavename"
     ],
+    "cwd": "[START_DIR]/v8",
     "name": "Bisect a0.postprocess_for_goma.upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -1620,6 +1643,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "cwd": "[START_DIR]/v8",
     "name": "Bisect a0.postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -2062,6 +2086,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[START_DIR]/v8",
     "name": "Bisect a2.preprocess_for_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2075,6 +2100,7 @@
       "[CACHE]/goma/V8_Linux___shared",
       "511"
     ],
+    "cwd": "[START_DIR]/v8",
     "name": "Bisect a2.preprocess_for_goma.makedirs goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -2097,6 +2123,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "restart"
     ],
+    "cwd": "[START_DIR]/v8",
     "env": {
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]/goma/V8_Linux___shared",
@@ -2121,6 +2148,7 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "cwd": "[START_DIR]/v8",
     "name": "Bisect a2.preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -2137,6 +2165,7 @@
       "50",
       "d8"
     ],
+    "cwd": "[START_DIR]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -2147,6 +2176,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[START_DIR]/v8",
     "name": "Bisect a2.postprocess_for_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2159,6 +2189,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "jsonstatus"
     ],
+    "cwd": "[START_DIR]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -2187,6 +2218,7 @@
       "{\"notice\": [{\"infra_status\": {\"num_user_error\": 0, \"ping_status_code\": 200}}]}",
       "[CACHE]/cipd/goma/jsonstatus"
     ],
+    "cwd": "[START_DIR]/v8",
     "name": "Bisect a2.postprocess_for_goma.write_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -2199,6 +2231,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "stat"
     ],
+    "cwd": "[START_DIR]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -2214,6 +2247,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "stop"
     ],
+    "cwd": "[START_DIR]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -2250,6 +2284,7 @@
       "--buildbot-slavename",
       "TestSlavename"
     ],
+    "cwd": "[START_DIR]/v8",
     "name": "Bisect a2.postprocess_for_goma.upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -2264,6 +2299,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "cwd": "[START_DIR]/v8",
     "name": "Bisect a2.postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -2739,6 +2775,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[START_DIR]/v8",
     "name": "Bisect a1.preprocess_for_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2752,6 +2789,7 @@
       "[CACHE]/goma/V8_Linux___shared",
       "511"
     ],
+    "cwd": "[START_DIR]/v8",
     "name": "Bisect a1.preprocess_for_goma.makedirs goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -2774,6 +2812,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "restart"
     ],
+    "cwd": "[START_DIR]/v8",
     "env": {
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]/goma/V8_Linux___shared",
@@ -2798,6 +2837,7 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "cwd": "[START_DIR]/v8",
     "name": "Bisect a1.preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -2814,6 +2854,7 @@
       "50",
       "d8"
     ],
+    "cwd": "[START_DIR]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -2824,6 +2865,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[START_DIR]/v8",
     "name": "Bisect a1.postprocess_for_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2836,6 +2878,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "jsonstatus"
     ],
+    "cwd": "[START_DIR]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -2864,6 +2907,7 @@
       "{\"notice\": [{\"infra_status\": {\"num_user_error\": 0, \"ping_status_code\": 200}}]}",
       "[CACHE]/cipd/goma/jsonstatus"
     ],
+    "cwd": "[START_DIR]/v8",
     "name": "Bisect a1.postprocess_for_goma.write_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -2876,6 +2920,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "stat"
     ],
+    "cwd": "[START_DIR]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -2891,6 +2936,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "stop"
     ],
+    "cwd": "[START_DIR]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -2927,6 +2973,7 @@
       "--buildbot-slavename",
       "TestSlavename"
     ],
+    "cwd": "[START_DIR]/v8",
     "name": "Bisect a1.postprocess_for_goma.upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -2941,6 +2988,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "cwd": "[START_DIR]/v8",
     "name": "Bisect a1.postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"

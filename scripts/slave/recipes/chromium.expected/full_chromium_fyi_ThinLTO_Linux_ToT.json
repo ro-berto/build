@@ -248,6 +248,7 @@
       "-C",
       "[BUILDER_CACHE]/ThinLTO_Linux_ToT/src/out/Release"
     ],
+    "cwd": "[BUILDER_CACHE]/ThinLTO_Linux_ToT/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "LLVM_FORCE_HEAD_REVISION": "YES"

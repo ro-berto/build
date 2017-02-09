@@ -255,6 +255,7 @@
       "[BUILDER_CACHE]\\Chromium_Win_SyzyASAN\\src\\out\\Release",
       "chromium_builder_asan"
     ],
+    "cwd": "[BUILDER_CACHE]\\Chromium_Win_SyzyASAN\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },

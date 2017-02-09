@@ -164,6 +164,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[START_DIR]/src",
     "name": "preprocess_for_goma"
   },
   {
@@ -174,6 +175,7 @@
       "[CACHE]/goma/Android32__more_configs_",
       "511"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "preprocess_for_goma.makedirs goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -196,6 +198,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "restart"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]/goma/Android32__more_configs_",
@@ -221,6 +224,7 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -236,6 +240,7 @@
       "-j",
       "50"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
@@ -244,6 +249,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma"
   },
   {
@@ -253,6 +259,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "jsonstatus"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -281,6 +288,7 @@
       "{\"notice\": [{\"infra_status\": {\"num_user_error\": 0, \"ping_status_code\": 200}}]}",
       "[CACHE]/cipd/goma/jsonstatus"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.write_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -293,6 +301,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "stat"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -308,6 +317,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "stop"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -344,6 +354,7 @@
       "--buildbot-slavename",
       "TestSlavename"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -358,6 +369,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -381,6 +393,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[START_DIR]/src",
     "name": "preprocess_for_goma (2)"
   },
   {
@@ -391,6 +404,7 @@
       "[CACHE]/goma/Android32__more_configs_",
       "511"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "preprocess_for_goma.makedirs goma cache directory (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -413,6 +427,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "restart"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]/goma/Android32__more_configs_",
@@ -438,6 +453,7 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "preprocess_for_goma.start cloudtail (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -453,6 +469,7 @@
       "-j",
       "50"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
@@ -461,6 +478,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma (2)"
   },
   {
@@ -470,6 +488,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "jsonstatus"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -498,6 +517,7 @@
       "{\"notice\": [{\"infra_status\": {\"num_user_error\": 0, \"ping_status_code\": 200}}]}",
       "[CACHE]/cipd/goma/jsonstatus"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.write_jsonstatus (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -510,6 +530,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "stat"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -525,6 +546,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "stop"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -561,6 +583,7 @@
       "--buildbot-slavename",
       "TestSlavename"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.upload_log (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -575,6 +598,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.stop cloudtail (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -598,6 +622,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[START_DIR]/src",
     "name": "preprocess_for_goma (3)"
   },
   {
@@ -608,6 +633,7 @@
       "[CACHE]/goma/Android32__more_configs_",
       "511"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "preprocess_for_goma.makedirs goma cache directory (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -630,6 +656,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "restart"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]/goma/Android32__more_configs_",
@@ -655,6 +682,7 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "preprocess_for_goma.start cloudtail (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -670,6 +698,7 @@
       "-j",
       "50"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
@@ -678,6 +707,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma (3)"
   },
   {
@@ -687,6 +717,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "jsonstatus"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -715,6 +746,7 @@
       "{\"notice\": [{\"infra_status\": {\"num_user_error\": 0, \"ping_status_code\": 200}}]}",
       "[CACHE]/cipd/goma/jsonstatus"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.write_jsonstatus (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -727,6 +759,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "stat"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -742,6 +775,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "stop"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -778,6 +812,7 @@
       "--buildbot-slavename",
       "TestSlavename"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.upload_log (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -792,6 +827,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.stop cloudtail (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -815,6 +851,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[START_DIR]/src",
     "name": "preprocess_for_goma (4)"
   },
   {
@@ -825,6 +862,7 @@
       "[CACHE]/goma/Android32__more_configs_",
       "511"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "preprocess_for_goma.makedirs goma cache directory (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -847,6 +885,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "restart"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]/goma/Android32__more_configs_",
@@ -872,6 +911,7 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "preprocess_for_goma.start cloudtail (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -887,6 +927,7 @@
       "-j",
       "50"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
@@ -895,6 +936,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma (4)"
   },
   {
@@ -904,6 +946,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "jsonstatus"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -932,6 +975,7 @@
       "{\"notice\": [{\"infra_status\": {\"num_user_error\": 0, \"ping_status_code\": 200}}]}",
       "[CACHE]/cipd/goma/jsonstatus"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.write_jsonstatus (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -944,6 +988,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "stat"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -959,6 +1004,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "stop"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -995,6 +1041,7 @@
       "--buildbot-slavename",
       "TestSlavename"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.upload_log (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1009,6 +1056,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.stop cloudtail (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1032,6 +1080,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[START_DIR]/src",
     "name": "preprocess_for_goma (5)"
   },
   {
@@ -1042,6 +1091,7 @@
       "[CACHE]/goma/Android32__more_configs_",
       "511"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "preprocess_for_goma.makedirs goma cache directory (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1064,6 +1114,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "restart"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]/goma/Android32__more_configs_",
@@ -1089,6 +1140,7 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "preprocess_for_goma.start cloudtail (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1104,6 +1156,7 @@
       "-j",
       "50"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
@@ -1112,6 +1165,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma (5)"
   },
   {
@@ -1121,6 +1175,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "jsonstatus"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1149,6 +1204,7 @@
       "{\"notice\": [{\"infra_status\": {\"num_user_error\": 0, \"ping_status_code\": 200}}]}",
       "[CACHE]/cipd/goma/jsonstatus"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.write_jsonstatus (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1161,6 +1217,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "stat"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1176,6 +1233,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "stop"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1212,6 +1270,7 @@
       "--buildbot-slavename",
       "TestSlavename"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.upload_log (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1226,6 +1285,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.stop cloudtail (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1249,6 +1309,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[START_DIR]/src",
     "name": "preprocess_for_goma (6)"
   },
   {
@@ -1259,6 +1320,7 @@
       "[CACHE]/goma/Android32__more_configs_",
       "511"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "preprocess_for_goma.makedirs goma cache directory (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1281,6 +1343,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "restart"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]/goma/Android32__more_configs_",
@@ -1306,6 +1369,7 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "preprocess_for_goma.start cloudtail (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1321,6 +1385,7 @@
       "-j",
       "50"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
@@ -1329,6 +1394,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma (6)"
   },
   {
@@ -1338,6 +1404,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "jsonstatus"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1366,6 +1433,7 @@
       "{\"notice\": [{\"infra_status\": {\"num_user_error\": 0, \"ping_status_code\": 200}}]}",
       "[CACHE]/cipd/goma/jsonstatus"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.write_jsonstatus (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1378,6 +1446,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "stat"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1393,6 +1462,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "stop"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1429,6 +1499,7 @@
       "--buildbot-slavename",
       "TestSlavename"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.upload_log (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1443,6 +1514,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.stop cloudtail (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"

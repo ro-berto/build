@@ -314,6 +314,7 @@
       "[BUILDER_CACHE]/ClangToTAndroid_x64/src/out/Release",
       "all"
     ],
+    "cwd": "[BUILDER_CACHE]/ClangToTAndroid_x64/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "LLVM_FORCE_HEAD_REVISION": "YES",

@@ -306,6 +306,7 @@
       "browser_tests_run",
       "chromium_builder_asan"
     ],
+    "cwd": "[BUILDER_CACHE]\\CrWinAsan_dll_\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "LLVM_FORCE_HEAD_REVISION": "YES"

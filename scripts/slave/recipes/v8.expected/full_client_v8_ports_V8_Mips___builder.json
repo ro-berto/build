@@ -187,6 +187,7 @@
       "-C",
       "[START_DIR]/v8/out/Release"
     ],
+    "cwd": "[START_DIR]/v8",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },

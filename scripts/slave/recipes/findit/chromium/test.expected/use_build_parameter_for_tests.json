@@ -643,6 +643,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "name": "test r2.preprocess_for_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -656,6 +657,7 @@
       "[GOMA_CACHE]/mac_chromium_variable",
       "511"
     ],
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "name": "test r2.preprocess_for_goma.makedirs goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -678,6 +680,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "restart"
     ],
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_CACHE_DIR": "[GOMA_CACHE]/mac_chromium_variable",
@@ -703,6 +706,7 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "name": "test r2.preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -720,6 +724,7 @@
       "gl_tests",
       "gl_tests_run"
     ],
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -744,6 +749,7 @@
       "explain",
       "-n"
     ],
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -756,6 +762,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "name": "test r2.postprocess_for_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -768,6 +775,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "jsonstatus"
     ],
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -796,6 +804,7 @@
       "{\"notice\": [{\"infra_status\": {\"num_user_error\": 0, \"ping_status_code\": 200}}]}",
       "[CACHE]/cipd/goma/jsonstatus"
     ],
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "name": "test r2.postprocess_for_goma.write_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -808,6 +817,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "stat"
     ],
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -823,6 +833,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "stop"
     ],
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -859,6 +870,7 @@
       "--buildbot-slavename",
       "build1-a1"
     ],
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "name": "test r2.postprocess_for_goma.upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -873,6 +885,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "name": "test r2.postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -1425,6 +1438,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "name": "test r3.preprocess_for_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1438,6 +1452,7 @@
       "[GOMA_CACHE]/mac_chromium_variable",
       "511"
     ],
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "name": "test r3.preprocess_for_goma.makedirs goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -1460,6 +1475,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "restart"
     ],
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_CACHE_DIR": "[GOMA_CACHE]/mac_chromium_variable",
@@ -1485,6 +1501,7 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "name": "test r3.preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -1502,6 +1519,7 @@
       "gl_tests",
       "gl_tests_run"
     ],
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -1526,6 +1544,7 @@
       "explain",
       "-n"
     ],
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -1538,6 +1557,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "name": "test r3.postprocess_for_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1550,6 +1570,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "jsonstatus"
     ],
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1578,6 +1599,7 @@
       "{\"notice\": [{\"infra_status\": {\"num_user_error\": 0, \"ping_status_code\": 200}}]}",
       "[CACHE]/cipd/goma/jsonstatus"
     ],
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "name": "test r3.postprocess_for_goma.write_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -1590,6 +1612,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "stat"
     ],
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1605,6 +1628,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "stop"
     ],
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1641,6 +1665,7 @@
       "--buildbot-slavename",
       "build1-a1"
     ],
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "name": "test r3.postprocess_for_goma.upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -1655,6 +1680,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "name": "test r3.postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -2207,6 +2233,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "name": "test r4.preprocess_for_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2220,6 +2247,7 @@
       "[GOMA_CACHE]/mac_chromium_variable",
       "511"
     ],
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "name": "test r4.preprocess_for_goma.makedirs goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -2242,6 +2270,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "restart"
     ],
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_CACHE_DIR": "[GOMA_CACHE]/mac_chromium_variable",
@@ -2267,6 +2296,7 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "name": "test r4.preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -2284,6 +2314,7 @@
       "gl_tests",
       "gl_tests_run"
     ],
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -2308,6 +2339,7 @@
       "explain",
       "-n"
     ],
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -2320,6 +2352,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "name": "test r4.postprocess_for_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2332,6 +2365,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "jsonstatus"
     ],
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -2360,6 +2394,7 @@
       "{\"notice\": [{\"infra_status\": {\"num_user_error\": 0, \"ping_status_code\": 200}}]}",
       "[CACHE]/cipd/goma/jsonstatus"
     ],
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "name": "test r4.postprocess_for_goma.write_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -2372,6 +2407,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "stat"
     ],
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -2387,6 +2423,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "stop"
     ],
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -2423,6 +2460,7 @@
       "--buildbot-slavename",
       "build1-a1"
     ],
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "name": "test r4.postprocess_for_goma.upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -2437,6 +2475,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "name": "test r4.postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"

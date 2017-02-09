@@ -256,6 +256,7 @@
       "[BUILDER_CACHE]/CFI_Linux_Full/src/out/Release",
       "All"
     ],
+    "cwd": "[BUILDER_CACHE]/CFI_Linux_Full/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },

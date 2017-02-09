@@ -271,6 +271,7 @@
       "blink_tests",
       "browser_tests"
     ],
+    "cwd": "[BUILDER_CACHE]\\Print_Preview_Win\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },

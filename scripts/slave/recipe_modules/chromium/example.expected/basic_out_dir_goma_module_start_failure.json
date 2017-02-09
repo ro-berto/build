@@ -262,6 +262,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[START_DIR]/src",
     "name": "preprocess_for_goma"
   },
   {
@@ -272,6 +273,7 @@
       "[CACHE]/goma/Android_Builder__dbg_",
       "511"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "preprocess_for_goma.makedirs goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -294,6 +296,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "restart"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_CACHE_DIR": "[CACHE]/goma/Android_Builder__dbg_",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
@@ -315,6 +318,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "jsonstatus"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -340,6 +344,7 @@
       "{\"notice\": [{\"compile_error\": \"COMPILER_PROXY_UNREACHABLE\"}]}",
       "[CACHE]/cipd/goma/jsonstatus"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "preprocess_for_goma.write_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -352,6 +357,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "stop"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -380,6 +386,7 @@
       "--buildbot-slavename",
       "build1-a1"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "preprocess_for_goma.upload_goma_start_failed_logs",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",

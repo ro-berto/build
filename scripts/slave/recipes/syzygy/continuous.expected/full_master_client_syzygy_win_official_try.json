@@ -102,6 +102,7 @@
       "[START_DIR]\\src\\out\\Release",
       "official_build"
     ],
+    "cwd": "[START_DIR]\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -119,6 +120,7 @@
       "explain",
       "-n"
     ],
+    "cwd": "[START_DIR]\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },

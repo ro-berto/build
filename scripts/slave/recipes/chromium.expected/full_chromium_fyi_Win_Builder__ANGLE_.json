@@ -297,6 +297,7 @@
       "browser_tests_run",
       "chromium_builder_tests"
     ],
+    "cwd": "[BUILDER_CACHE]\\Win_Builder__ANGLE_\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },

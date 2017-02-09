@@ -341,6 +341,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[BUILDER_CACHE]\\Win_Clang_Builder\\src",
     "name": "preprocess_for_goma"
   },
   {
@@ -351,6 +352,7 @@
       "[GOMA_CACHE]\\Win_Clang_Builder",
       "511"
     ],
+    "cwd": "[BUILDER_CACHE]\\Win_Clang_Builder\\src",
     "name": "preprocess_for_goma.makedirs goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -373,6 +375,7 @@
       "[CACHE]\\cipd\\goma\\goma_ctl.py",
       "restart"
     ],
+    "cwd": "[BUILDER_CACHE]\\Win_Clang_Builder\\src",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[ROOT]\\build_data_dir\\crash_report_id_file",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
@@ -399,6 +402,7 @@
       "--pid-file",
       "[TMP_BASE]\\cloudtail.pid"
     ],
+    "cwd": "[BUILDER_CACHE]\\Win_Clang_Builder\\src",
     "name": "preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -416,6 +420,7 @@
       "chrome",
       "chromium_builder_perf"
     ],
+    "cwd": "[BUILDER_CACHE]\\Win_Clang_Builder\\src",
     "env": {
       "CHROME_BUILD_TYPE": "_official",
       "CHROMIUM_BUILD": "_google_chrome",
@@ -425,6 +430,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[BUILDER_CACHE]\\Win_Clang_Builder\\src",
     "name": "postprocess_for_goma"
   },
   {
@@ -434,6 +440,7 @@
       "[CACHE]\\cipd\\goma\\goma_ctl.py",
       "jsonstatus"
     ],
+    "cwd": "[BUILDER_CACHE]\\Win_Clang_Builder\\src",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[ROOT]\\build_data_dir\\crash_report_id_file",
       "GOMA_DUMP_STATS_FILE": "[ROOT]\\build_data_dir\\goma_stats_proto",
@@ -464,6 +471,7 @@
       "{\"notice\": [{\"infra_status\": {\"num_user_error\": 0, \"ping_status_code\": 200}}]}",
       "[CACHE]\\cipd\\goma\\jsonstatus"
     ],
+    "cwd": "[BUILDER_CACHE]\\Win_Clang_Builder\\src",
     "name": "postprocess_for_goma.write_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -476,6 +484,7 @@
       "[CACHE]\\cipd\\goma\\goma_ctl.py",
       "stat"
     ],
+    "cwd": "[BUILDER_CACHE]\\Win_Clang_Builder\\src",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[ROOT]\\build_data_dir\\crash_report_id_file",
       "GOMA_DUMP_STATS_FILE": "[ROOT]\\build_data_dir\\goma_stats_proto",
@@ -493,6 +502,7 @@
       "[CACHE]\\cipd\\goma\\goma_ctl.py",
       "stop"
     ],
+    "cwd": "[BUILDER_CACHE]\\Win_Clang_Builder\\src",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[ROOT]\\build_data_dir\\crash_report_id_file",
       "GOMA_DUMP_STATS_FILE": "[ROOT]\\build_data_dir\\goma_stats_proto",
@@ -537,6 +547,7 @@
       "--buildbot-slavename",
       "TestSlavename"
     ],
+    "cwd": "[BUILDER_CACHE]\\Win_Clang_Builder\\src",
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -551,6 +562,7 @@
       "--killed-pid-file",
       "[TMP_BASE]\\cloudtail.pid"
     ],
+    "cwd": "[BUILDER_CACHE]\\Win_Clang_Builder\\src",
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"

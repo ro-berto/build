@@ -304,6 +304,7 @@
       "[BUILDER_CACHE]\\ClangToTWin64\\src\\out\\Release_x64",
       "all"
     ],
+    "cwd": "[BUILDER_CACHE]\\ClangToTWin64\\src",
     "env": {
       "CHROME_BUILD_TYPE": "_official",
       "CHROMIUM_BUILD": "_google_chrome",

@@ -83,6 +83,7 @@
       "[START_DIR]\\src\\out\\Debug_x64",
       "syzyasan_rtl_unittests"
     ],
+    "cwd": "[START_DIR]\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -100,6 +101,7 @@
       "explain",
       "-n"
     ],
+    "cwd": "[START_DIR]\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },

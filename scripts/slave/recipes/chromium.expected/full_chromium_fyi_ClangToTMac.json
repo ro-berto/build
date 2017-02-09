@@ -280,6 +280,7 @@
       "[BUILDER_CACHE]/ClangToTMac/src/out/Release",
       "all"
     ],
+    "cwd": "[BUILDER_CACHE]/ClangToTMac/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
