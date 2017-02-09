@@ -423,6 +423,39 @@
     "name": "webrtc_perf_tests"
   },
   {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--test-platform",
+      "android",
+      "--xvfb",
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Android64 Tests (L Nexus9)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.perf\", \"parent_buildername\": \"Android64 Builder\", \"parent_got_revision\": \"12345\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--build-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Android64 Tests (L Nexus9)\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.perf\", \"parent_buildername\": \"Android64 Builder\", \"parent_got_revision\": \"12345\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "--annotate=graphing",
+      "--results-url=https://chromeperf.appspot.com",
+      "--perf-dashboard-id=video_quality_loopback_test",
+      "--perf-id=webrtc-android-tests-nexus9",
+      "--perf-config",
+      "{\"a_default_rev\": \"r_webrtc_git\", \"r_webrtc_git\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"}",
+      "--test-type=video_quality_loopback_test",
+      "--step-name=video_quality_loopback_test",
+      "--builder-name=Android64 Tests (L Nexus9)",
+      "--slave-name=slavename",
+      "--build-number=1337",
+      "--run-python-script",
+      "--revision=170242",
+      "[BUILDER_CACHE]/Android64_Tests__L_Nexus9_/src/webrtc/examples/androidtests/video_quality_loopback_test.py"
+    ],
+    "cwd": "[BUILDER_CACHE]/Android64_Tests__L_Nexus9_",
+    "name": "video_quality_loopback_test"
+  },
+  {
     "cmd": [
       "python",
       "-u",
