@@ -108,16 +108,22 @@ class MonitoringStatusReceiver(StatusReceiverMultiService):
     self.loop.start(60, now=False)
 
   def stopService(self):
+    log.msg('MonitoringStatusReceiver: stopping looping call')
     self.loop.stop()
+    log.msg('MonitoringStatusReceiver: stopping thread pool')
     self.thread_pool.stop()
+    log.msg('MonitoringStatusReceiver: stopped')
     return StatusReceiverMultiService.stopService(self)
 
   @defer.inlineCallbacks
   def updateMetricsAndFlush(self):
     try:
+      log.msg('Updating monitoring metrics')
       yield self.updateMetrics()
     finally:
+      log.msg('Flushing monitoring metrics')
       self.thread_pool.callInThread(self._flush_and_log_exceptions)
+      log.msg('Finished flushing monitoring metrics')
 
   @defer.inlineCallbacks
   def updateMetrics(self):

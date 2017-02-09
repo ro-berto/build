@@ -17,6 +17,7 @@ from zope.interface import implements, Interface, Attribute
 
 from twisted.python.reflect import namedAny
 from twisted.python import components
+from twisted.python import log
 from twisted.internet import defer
 from twisted.persisted import sob
 from twisted.plugin import IPlugin
@@ -282,8 +283,16 @@ class MultiService(Service):
         services = list(self)
         services.reverse()
         for service in services:
-            l.append(defer.maybeDeferred(service.stopService))
+            l.append(self._stopOneService(service))
         return defer.DeferredList(l)
+
+    @defer.inlineCallbacks
+    def _stopOneService(self, service):
+        try:
+            log.msg('stopping service %s' % service)
+            yield defer.maybeDeferred(service.stopService)
+        finally:
+            log.msg('stopped service %s' % service)
 
     def getServiceNamed(self, name):
         return self.namedServices[name]

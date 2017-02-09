@@ -404,6 +404,7 @@ class _ThreePhaseEvent(object):
             callable, args, kwargs = self.before.pop(0)
             self.finishedBefore.append((callable, args, kwargs))
             try:
+                log.msg('calling before trigger: %s' % callable)
                 result = callable(*args, **kwargs)
             except:
                 log.err()
@@ -423,9 +424,11 @@ class _ThreePhaseEvent(object):
             while phase:
                 callable, args, kwargs = phase.pop(0)
                 try:
+                    log.msg('calling during/after trigger: %s' % callable)
                     callable(*args, **kwargs)
                 except:
                     log.err()
+        log.msg('finished firing system event')
 
 
 
@@ -625,6 +628,7 @@ class ReactorBase(object):
         """
         event = self._eventTriggers.get(eventType)
         if event is not None:
+            log.msg('firing system event %s' % eventType)
             event.fireEvent()
 
 
