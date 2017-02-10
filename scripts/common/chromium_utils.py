@@ -1955,7 +1955,7 @@ def ParseBuildersFileContents(path, contents):
   builders.setdefault('pubsub_service_account_file', None)
   pubsub_topic = None
   if builders['pubsub_service_account_file']:
-    pubsub_topic = 'projects/luci-milo/topics/internal-buildbot'
+    pubsub_topic = 'projects/luci-milo/topics/private-buildbot'
     if repodir == 'build':
       pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
   builders.setdefault('pubsub_topic', pubsub_topic)
