@@ -15,6 +15,7 @@ DEPS = [
   'recipe_engine/step',
   'swarming',
   'swarming_client',
+  'test_utils',
 ]
 
 from recipe_engine.recipe_api import Property
@@ -267,4 +268,23 @@ def GenTests(api):
       api.step_data(
           'hello_world on Windows-7-SP1',
           api.raw_io.output_dir({'summary.json': json.dumps(data)})) +
+      api.properties(isolated_script_task=True))
+
+  big_output_dir = {'summary.json': json.dumps(data)}
+  for i, shard_data in enumerate(
+        api.test_utils.generate_simplified_json_results(4, True, True)):
+    big_output_dir['%s/output.json' % i] = json.dumps(shard_data)
+  # Will cause unicode decode error if tried to decode.
+  big_output_dir['0/binary.png'] = '\x00\x00\x89'
+  big_output_dir['0/invalid.txt'] = '\x00\x00\x89'
+  # Large tet file
+  big_output_dir['0/big_text.txt'] = 'lots of text\n' * 2000
+  yield (
+      api.test('isolated_large_outdir') +
+      api.step_data(
+          'archive for win',
+          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
+      api.step_data(
+          'hello_world on Windows-7-SP1',
+          api.raw_io.output_dir(big_output_dir)) +
       api.properties(isolated_script_task=True))

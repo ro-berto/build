@@ -2,9 +2,11 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import logging
 import datetime
 import functools
+import hashlib
+import logging
+import os.path
 
 from recipe_engine import recipe_api
 
@@ -12,6 +14,50 @@ from . import results_merger
 
 # Minimally supported version of swarming.py script (reported by --version).
 MINIMAL_SWARMING_VERSION = (0, 8, 6)
+
+
+def safe(f, *args, **kw):
+  try:
+    f(*args, **kw)
+    return True
+  except Exception:
+    return False
+
+
+def filter_outdir(dumps, output_dir, text_files=('.txt', '.json', ''),
+                msize=1024):
+  """Create a summary of contents of a raw_io.output_dir."""
+  outdir_json = {}
+  for filename in sorted(output_dir):
+    _, ext = os.path.splitext(filename)
+
+    contents = output_dir[filename]
+
+    # If a text file is small enough, just dump it
+    if ext in text_files and len(contents) < msize and safe(dumps, contents):
+      output = contents
+
+    # Otherwise, just output some details
+    else:
+      output = {
+          'sha1': hashlib.sha1(contents).hexdigest(),
+          'size': len(contents),
+      }
+      if ext in text_files:
+        hsize = int(msize/2)
+        output['type'] = 'text'
+        if safe(dumps, contents[:hsize]):
+          # Space in the name so it sorts a[ :x],a[-x:]
+          output['contents[ :%s]' % hsize] = contents[:hsize]
+        if safe(dumps, contents[-hsize:]):
+          output['contents[-%s:]' % hsize] = contents[-hsize:]
+      else:
+        output['type'] = 'binary'
+
+    outdir_json[filename] = output
+
+  return outdir_json
+
 
 def text_for_task(task):
   lines = []
@@ -844,8 +890,12 @@ class SwarmingApi(recipe_api.RecipeApi):
       # it is being allowed to propagate after the results have been parsed.
       try:
         step_result = self.m.step.active_result
-        outdir_json = self.m.json.dumps(step_result.raw_io.output_dir, indent=2)
+
+        outdir = filter_outdir(
+            self.m.json.dumps, step_result.raw_io.output_dir)
+        outdir_json = self.m.json.dumps(outdir, indent=2)
         step_result.presentation.logs['outdir_json'] = outdir_json.splitlines()
+
         step_result.presentation.step_text = text_for_task(task)
 
         # Check if it's an internal failure. 'summary.json' is saved in the
