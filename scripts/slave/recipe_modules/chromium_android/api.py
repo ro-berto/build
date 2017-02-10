@@ -387,7 +387,8 @@ class AndroidApi(recipe_api.RecipeApi):
             'read_device_file', self.known_devices_file,
             test_data='device1\ndevice2\ndevice3')
         try:
-          devices = json.loads(file_contents)
+          devices = [entry.encode('utf-8')
+                     for entry in json.loads(file_contents)]
           self.m.step.active_result.presentation.step_text += (
               'file format is json, reverting')
           old_format = '\n'.join(devices)
