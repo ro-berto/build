@@ -391,8 +391,9 @@ class AndroidApi(recipe_api.RecipeApi):
           self.m.step.active_result.presentation.step_text += (
               'file format is json, reverting')
           old_format = '\n'.join(devices)
+          # TODO(iannucci): is it correct to just cast old_format to str?
           self.m.file.write(
-              'revert_device_file', self.known_devices_file, old_format)
+              'revert_device_file', self.known_devices_file, str(old_format))
         except ValueError:
           # File wasn't json, so no need to revert.
           self.m.step.active_result.presentation.step_text += (
