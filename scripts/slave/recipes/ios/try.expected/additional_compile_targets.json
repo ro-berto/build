@@ -281,6 +281,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[BUILDER_CACHE]/ios_simulator/src",
     "name": "bootstrap swarming"
   },
   {
@@ -293,6 +294,7 @@
       "--url",
       "https://chromium.googlesource.com/external/swarming.client.git"
     ],
+    "cwd": "[BUILDER_CACHE]/ios_simulator/src",
     "name": "bootstrap swarming.git setup (swarming_client)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -389,6 +391,7 @@
       "[START_DIR]/swarming.client/swarming.py",
       "--version"
     ],
+    "cwd": "[BUILDER_CACHE]/ios_simulator/src",
     "name": "bootstrap swarming.swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -398,6 +401,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[BUILDER_CACHE]/ios_simulator/src",
     "name": "isolate"
   },
   {
@@ -408,6 +412,7 @@
       "{\n  \"conditions\": [\n    [\n      \"OS == \\\"ios\\\"\", \n      {\n        \"variables\": {\n          \"command\": [\n            \"src/ios/build/bots/scripts/run.py\", \n            \"--app\", \n            \"<(app_path)\", \n            \"--args-json\", \n            \"{\\\"test_args\\\": <(test_args), \\\"xctest\\\": <(xctest)}\", \n            \"--out-dir\", \n            \"${ISOLATED_OUTDIR}\", \n            \"--xcode-version\", \n            \"<(xcode_version)\", \n            \"--iossim\", \n            \"src/out/Debug-iphonesimulator/iossim\", \n            \"--platform\", \n            \"<(platform)\", \n            \"--version\", \n            \"<(version)\"\n          ], \n          \"files\": [\n            \"<(app_path)/\", \n            \"src/ios/build/bots/scripts/\", \n            \"src/out/Debug-iphonesimulator/iossim\"\n          ]\n        }\n      }\n    ]\n  ]\n}",
       "[START_DIR]/template.isolate"
     ],
+    "cwd": "[BUILDER_CACHE]/ios_simulator/src",
     "name": "isolate.generate template.isolate",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -449,6 +454,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[BUILDER_CACHE]/ios_simulator/src",
     "name": "trigger"
   },
   {

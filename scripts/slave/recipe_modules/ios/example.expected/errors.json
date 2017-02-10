@@ -211,6 +211,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[START_DIR]/src",
     "name": "bootstrap swarming"
   },
   {
@@ -223,6 +224,7 @@
       "--url",
       "https://chromium.googlesource.com/external/swarming.client.git"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "bootstrap swarming.git setup (swarming_client)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -319,6 +321,7 @@
       "[START_DIR]/swarming.client/swarming.py",
       "--version"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "bootstrap swarming.swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -328,6 +331,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[START_DIR]/src",
     "name": "isolate"
   },
   {
@@ -338,6 +342,7 @@
       "{\n  \"conditions\": [\n    [\n      \"OS == \\\"ios\\\"\", \n      {\n        \"variables\": {\n          \"command\": [\n            \"src/ios/build/bots/scripts/run.py\", \n            \"--app\", \n            \"<(app_path)\", \n            \"--args-json\", \n            \"{\\\"test_args\\\": <(test_args), \\\"xctest\\\": <(xctest)}\", \n            \"--out-dir\", \n            \"${ISOLATED_OUTDIR}\", \n            \"--xcode-version\", \n            \"<(xcode_version)\"\n          ], \n          \"files\": [\n            \"<(app_path)/\", \n            \"src/ios/build/bots/scripts/\"\n          ]\n        }\n      }\n    ]\n  ]\n}",
       "[START_DIR]/template.isolate"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "isolate.generate template.isolate",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -378,6 +383,7 @@
       "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/fake test 1.app\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"6.1.1\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--isolate\", \n    \"[START_DIR]/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_1/0.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/fake test 1.app\"\n  ], \n  \"dir\": \"[START_DIR]\", \n  \"version\": 1\n}",
       "[TMP_BASE]/isolate_tmp_1/0.isolate.gen.json"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "isolate.generate 0.isolate.gen.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -393,6 +399,7 @@
       "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/fake test 2.app\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"6.1.1\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--isolate\", \n    \"[START_DIR]/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_1/1.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/fake test 2.app\"\n  ], \n  \"dir\": \"[START_DIR]\", \n  \"version\": 1\n}",
       "[TMP_BASE]/isolate_tmp_1/1.isolate.gen.json"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "isolate.generate 1.isolate.gen.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -436,6 +443,7 @@
       "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/fake test 3.app\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"6.1.1\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--isolate\", \n    \"[START_DIR]/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_1/2.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/fake test 3.app\"\n  ], \n  \"dir\": \"[START_DIR]\", \n  \"version\": 1\n}",
       "[TMP_BASE]/isolate_tmp_1/2.isolate.gen.json"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "isolate.generate 2.isolate.gen.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -479,6 +487,7 @@
       "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/fake test 4.app\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"6.1.1\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--isolate\", \n    \"[START_DIR]/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_1/3.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/fake test 4.app\"\n  ], \n  \"dir\": \"[START_DIR]\", \n  \"version\": 1\n}",
       "[TMP_BASE]/isolate_tmp_1/3.isolate.gen.json"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "isolate.generate 3.isolate.gen.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -526,6 +535,7 @@
       "[TMP_BASE]/isolate_tmp_1/2.isolate.gen.json",
       "[TMP_BASE]/isolate_tmp_1/3.isolate.gen.json"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "isolate.archive",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -539,6 +549,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[START_DIR]/src",
     "name": "trigger"
   },
   {
@@ -608,6 +619,7 @@
       "test:fake test 2",
       "fake-hash-1"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "trigger.[trigger] fake test 2 (iPad Air iOS 8.1) on iOS-8.1",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -628,6 +640,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[START_DIR]/src",
     "name": "trigger.[trigger] fake test 3 (fake device iOS 8.1)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -706,6 +719,7 @@
       "test:fake test 4",
       "fake-hash-3"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "trigger.[trigger] fake test 4 (iPhone 5s iOS 8.1) on iOS-8.1",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -743,6 +757,7 @@
       "--task-output-dir",
       "[TMP_BASE]/1_tmp_2"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "fake test 2 (iPad Air iOS 8.1) on iOS-8.1",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'iOS-8.1'<br>swarming pending 71s@@@",
@@ -790,6 +805,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[START_DIR]/src",
     "name": "fake test 3 (fake device iOS 8.1)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Failed to trigger the test.@@@",
@@ -798,6 +814,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[START_DIR]/src",
     "name": "fake test 4 (iPhone 5s iOS 8.1)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Failed to trigger the test.@@@",

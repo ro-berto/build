@@ -293,6 +293,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[BUILDER_CACHE]/ios/src",
     "name": "bootstrap swarming"
   },
   {
@@ -305,6 +306,7 @@
       "--url",
       "https://chromium.googlesource.com/external/swarming.client.git"
     ],
+    "cwd": "[BUILDER_CACHE]/ios/src",
     "name": "bootstrap swarming.git setup (swarming_client)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -401,6 +403,7 @@
       "[START_DIR]/swarming.client/swarming.py",
       "--version"
     ],
+    "cwd": "[BUILDER_CACHE]/ios/src",
     "name": "bootstrap swarming.swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -410,6 +413,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[BUILDER_CACHE]/ios/src",
     "name": "isolate"
   },
   {
@@ -420,6 +424,7 @@
       "{\n  \"conditions\": [\n    [\n      \"OS == \\\"ios\\\"\", \n      {\n        \"variables\": {\n          \"command\": [\n            \"src/ios/build/bots/scripts/run.py\", \n            \"--app\", \n            \"<(app_path)\", \n            \"--args-json\", \n            \"{\\\"test_args\\\": <(test_args), \\\"xctest\\\": <(xctest)}\", \n            \"--out-dir\", \n            \"${ISOLATED_OUTDIR}\", \n            \"--xcode-version\", \n            \"<(xcode_version)\", \n            \"--iossim\", \n            \"src/out/Debug-iphonesimulator/iossim\", \n            \"--platform\", \n            \"<(platform)\", \n            \"--version\", \n            \"<(version)\"\n          ], \n          \"files\": [\n            \"<(app_path)/\", \n            \"src/ios/build/bots/scripts/\", \n            \"src/out/Debug-iphonesimulator/iossim\"\n          ]\n        }\n      }\n    ]\n  ]\n}",
       "[START_DIR]/template.isolate"
     ],
+    "cwd": "[BUILDER_CACHE]/ios/src",
     "name": "isolate.generate template.isolate",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -467,6 +472,7 @@
       "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake tests.app\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"fake xcode version\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--isolate\", \n    \"[START_DIR]/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_1/0.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake tests.app\", \n    \"--config-variable\", \n    \"platform\", \n    \"fake device\", \n    \"--config-variable\", \n    \"version\", \n    \"8.1\"\n  ], \n  \"dir\": \"[START_DIR]\", \n  \"version\": 1\n}",
       "[TMP_BASE]/isolate_tmp_1/0.isolate.gen.json"
     ],
+    "cwd": "[BUILDER_CACHE]/ios/src",
     "name": "isolate.generate 0.isolate.gen.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -518,6 +524,7 @@
       "https://isolateserver.appspot.com",
       "[TMP_BASE]/isolate_tmp_1/0.isolate.gen.json"
     ],
+    "cwd": "[BUILDER_CACHE]/ios/src",
     "name": "isolate.archive",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -529,6 +536,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[BUILDER_CACHE]/ios/src",
     "name": "trigger"
   },
   {
@@ -594,6 +602,7 @@
       "test:fake tests",
       "fake-hash-0"
     ],
+    "cwd": "[BUILDER_CACHE]/ios/src",
     "name": "trigger.[trigger] fake tests (fake device iOS 8.1)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -629,6 +638,7 @@
       "--task-output-dir",
       "[TMP_BASE]/0_tmp_2"
     ],
+    "cwd": "[BUILDER_CACHE]/ios/src",
     "name": "fake tests (fake device iOS 8.1)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac'<br>swarming pending 71s@@@",

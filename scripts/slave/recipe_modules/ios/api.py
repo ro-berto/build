@@ -636,118 +636,119 @@ class iOSApi(recipe_api.RecipeApi):
     test_failures = []
     infra_failures = []
 
-    with self.m.step.nest('bootstrap swarming'):
-      self.bootstrap_swarming()
+    with self.m.step.context({'cwd': self.m.path['checkout']}):
+      with self.m.step.nest('bootstrap swarming'):
+        self.bootstrap_swarming()
 
-    with self.m.step.nest('isolate'):
-      tasks, failures, skipped = self.isolate(scripts_dir=scripts_dir)
-      infra_failures.extend(failures)
+      with self.m.step.nest('isolate'):
+        tasks, failures, skipped = self.isolate(scripts_dir=scripts_dir)
+        infra_failures.extend(failures)
 
-    if skipped:
-      with self.m.step.nest('skipped'):
-        for step_name in skipped:
-          # Create a dummy step to indicate we skipped this test.
-          step_result = self.m.step('[skipped] %s' % step_name, [])
-          step_result.presentation.step_text = (
-            'This test was skipped because it was not affected.'
-          )
+      if skipped:
+        with self.m.step.nest('skipped'):
+          for step_name in skipped:
+            # Create a dummy step to indicate we skipped this test.
+            step_result = self.m.step('[skipped] %s' % step_name, [])
+            step_result.presentation.step_text = (
+              'This test was skipped because it was not affected.'
+            )
 
-    with self.m.step.nest('trigger'):
-      failures = self.trigger(tasks)
-      infra_failures.extend(failures)
+      with self.m.step.nest('trigger'):
+        failures = self.trigger(tasks)
+        infra_failures.extend(failures)
 
-    for task in tasks:
-      if not task.task:
-        # We failed to isolate or trigger this test.
-        # Create a dummy step for it and mark it as failed.
-        step_result = self.m.step(task.step_name, [])
-        step_result.presentation.status = self.m.step.EXCEPTION
-        step_result.presentation.step_text = 'Failed to trigger the test.'
-        infra_failures.append(task.step_name)
-        continue
-
-      try:
-        step_result = self.m.swarming.collect_task(task.task)
-      except self.m.step.StepFailure as f:
-        step_result = f.result
-
-      # We only run one shard, so the results we're interested in will
-      # always be shard 0.
-      swarming_summary = step_result.json.output['shards'][0]
-      state = swarming_summary['state']
-      exit_code = (swarming_summary.get('exit_codes') or [None])[0]
-
-      # Link to isolate file browser for files emitted by the test.
-      if swarming_summary.get('isolated_out', {}).get('view_url'):
-        step_result.presentation.links['test data'] = (
-            swarming_summary['isolated_out']['view_url'])
-
-      # Interpret the result and set the display appropriately.
-      if state == self.m.swarming.State.COMPLETED and exit_code is not None:
-        # Task completed and we got an exit code from the iOS test runner.
-        if exit_code == 1:
-          step_result.presentation.status = self.m.step.FAILURE
-          test_failures.append(task.step_name)
-        elif exit_code == 2:
-          # The iOS test runner exits 2 to indicate an infrastructure failure.
+      for task in tasks:
+        if not task.task:
+          # We failed to isolate or trigger this test.
+          # Create a dummy step for it and mark it as failed.
+          step_result = self.m.step(task.step_name, [])
           step_result.presentation.status = self.m.step.EXCEPTION
+          step_result.presentation.step_text = 'Failed to trigger the test.'
           infra_failures.append(task.step_name)
-      elif state == self.m.swarming.State.TIMED_OUT:
-        # The task was killed for taking too long. This is a test failure
-        # because the test itself hung.
-        step_result.presentation.status = self.m.step.FAILURE
-        step_result.presentation.step_text = 'Test timed out.'
-        test_failures.append(task.step_name)
-      elif state == self.m.swarming.State.EXPIRED:
-        # No Swarming bot accepted the task in time.
-        step_result.presentation.status = self.m.step.EXCEPTION
-        step_result.presentation.step_text = (
-          'No suitable Swarming bot found in time.'
-        )
-        infra_failures.append(task.step_name)
-      else:
-        step_result.presentation.status = self.m.step.EXCEPTION
-        step_result.presentation.step_text = (
-          'Unexpected infrastructure failure.'
-        )
-        infra_failures.append(task.step_name)
+          continue
 
-      # Add any iOS test runner results to the display.
-      test_summary = self.m.path.join(
-        task.task.task_output_dir, '0', 'summary.json')
-      if self.m.path.exists(test_summary): # pragma: no cover
-        with open(test_summary) as f:
-          test_summary_json = self.m.json.loads(f.read())
-        step_result.presentation.logs['test_summary.json'] = self.m.json.dumps(
-          test_summary_json, indent=2).splitlines()
-        step_result.presentation.logs.update(test_summary_json.get('logs', {}))
-        step_result.presentation.links.update(
-          test_summary_json.get('links', {}))
-        if test_summary_json.get('step_text'):
-          step_result.presentation.step_text = '%s<br />%s' % (
-            step_result.presentation.step_text, test_summary_json['step_text'])
+        try:
+          step_result = self.m.swarming.collect_task(task.task)
+        except self.m.step.StepFailure as f:
+          step_result = f.result
 
-      # Upload test results JSON to the flakiness dashboard.
-      if self.m.bot_update.last_returned_properties:
-        test_results = self.m.path.join(
-          task.task.task_output_dir, '0', 'full_results.json')
-        if self.m.path.exists(test_results):
-          self.m.test_results.upload(
-            test_results,
-            task.test['app'],
-            self.m.bot_update.last_returned_properties.get(
-              'got_revision_cp', 'x@{#0}'),
-            builder_name_suffix='%s-%s' % (
-              task.test['device type'], task.test['os']),
-            test_results_server='test-results.appspot.com',
+        # We only run one shard, so the results we're interested in will
+        # always be shard 0.
+        swarming_summary = step_result.json.output['shards'][0]
+        state = swarming_summary['state']
+        exit_code = (swarming_summary.get('exit_codes') or [None])[0]
+
+        # Link to isolate file browser for files emitted by the test.
+        if swarming_summary.get('isolated_out', {}).get('view_url'):
+          step_result.presentation.links['test data'] = (
+              swarming_summary['isolated_out']['view_url'])
+
+        # Interpret the result and set the display appropriately.
+        if state == self.m.swarming.State.COMPLETED and exit_code is not None:
+          # Task completed and we got an exit code from the iOS test runner.
+          if exit_code == 1:
+            step_result.presentation.status = self.m.step.FAILURE
+            test_failures.append(task.step_name)
+          elif exit_code == 2:
+            # The iOS test runner exits 2 to indicate an infrastructure failure.
+            step_result.presentation.status = self.m.step.EXCEPTION
+            infra_failures.append(task.step_name)
+        elif state == self.m.swarming.State.TIMED_OUT:
+          # The task was killed for taking too long. This is a test failure
+          # because the test itself hung.
+          step_result.presentation.status = self.m.step.FAILURE
+          step_result.presentation.step_text = 'Test timed out.'
+          test_failures.append(task.step_name)
+        elif state == self.m.swarming.State.EXPIRED:
+          # No Swarming bot accepted the task in time.
+          step_result.presentation.status = self.m.step.EXCEPTION
+          step_result.presentation.step_text = (
+            'No suitable Swarming bot found in time.'
           )
+          infra_failures.append(task.step_name)
+        else:
+          step_result.presentation.status = self.m.step.EXCEPTION
+          step_result.presentation.step_text = (
+            'Unexpected infrastructure failure.'
+          )
+          infra_failures.append(task.step_name)
 
-    if test_failures:
-      raise self.m.step.StepFailure(
-        'Failed %s.' % ', '.join(sorted(set(test_failures + infra_failures))))
-    elif infra_failures:
-      raise self.m.step.InfraFailure(
-        'Failed %s.' % ', '.join(sorted(set(infra_failures))))
+        # Add any iOS test runner results to the display.
+        test_summary = self.m.path.join(
+          task.task.task_output_dir, '0', 'summary.json')
+        if self.m.path.exists(test_summary): # pragma: no cover
+          with open(test_summary) as f:
+            test_summary_json = self.m.json.loads(f.read())
+          step_result.presentation.logs['test_summary.json'] = self.m.json.dumps(
+            test_summary_json, indent=2).splitlines()
+          step_result.presentation.logs.update(test_summary_json.get('logs', {}))
+          step_result.presentation.links.update(
+            test_summary_json.get('links', {}))
+          if test_summary_json.get('step_text'):
+            step_result.presentation.step_text = '%s<br />%s' % (
+              step_result.presentation.step_text, test_summary_json['step_text'])
+
+        # Upload test results JSON to the flakiness dashboard.
+        if self.m.bot_update.last_returned_properties:
+          test_results = self.m.path.join(
+            task.task.task_output_dir, '0', 'full_results.json')
+          if self.m.path.exists(test_results):
+            self.m.test_results.upload(
+              test_results,
+              task.test['app'],
+              self.m.bot_update.last_returned_properties.get(
+                'got_revision_cp', 'x@{#0}'),
+              builder_name_suffix='%s-%s' % (
+                task.test['device type'], task.test['os']),
+              test_results_server='test-results.appspot.com',
+            )
+
+      if test_failures:
+        raise self.m.step.StepFailure(
+          'Failed %s.' % ', '.join(sorted(set(test_failures + infra_failures))))
+      elif infra_failures:
+        raise self.m.step.InfraFailure(
+          'Failed %s.' % ', '.join(sorted(set(infra_failures))))
 
   @property
   def most_recent_app_dir(self):
