@@ -418,10 +418,13 @@ class iOSApi(recipe_api.RecipeApi):
     self.m.swarming_client.checkout('stable')
     self.m.swarming_client.query_script_version('swarming.py')
 
-  def isolate(self, scripts_dir='src/ios/build/bots/scripts'):
-    """Isolates the tests specified in this bot's build config."""
-    assert self.__config
+  @staticmethod
+  def get_step_name(test):
+    return str('%s (%s iOS %s)' % (
+        test['app'], test['device type'], test['os']))
 
+  def isolate_test(self, test, tmp_dir, isolate_template):
+    """Isolates a single test."""
     class Task(object):
       def __init__(self, isolate_gen_file, step_name, test):
         self.isolate_gen_file = isolate_gen_file
@@ -430,6 +433,51 @@ class iOSApi(recipe_api.RecipeApi):
         self.task = None
         self.test = copy.deepcopy(test)
         self.tmp_dir = None
+
+    app_path = self.m.path.join(
+      self.most_recent_app_dir,
+      '%s.app' % test['app'],
+    )
+    isolate_gen_file = tmp_dir.join('%s.isolate.gen.json' % test['id'])
+    task_step_name = self.get_step_name(test)
+
+    args = [
+      '--config-variable', 'OS', 'ios',
+      '--config-variable', 'app_path', app_path,
+      '--config-variable', 'test_args', self.m.json.dumps(
+          test.get('test args') or []),
+      '--config-variable', 'xcode_version', test.get(
+        'xcode version', self.__config['xcode version']),
+      '--config-variable', 'xctest', (
+        'true' if test.get('xctest') else 'false'),
+      '--isolate', isolate_template,
+      '--isolated', tmp_dir.join('%s.isolated' % test['id']),
+      '--path-variable', 'app_path', app_path,
+    ]
+    if self.platform == 'simulator':
+      args.extend([
+        '--config-variable', 'platform', test['device type'],
+        '--config-variable', 'version', test['os'],
+      ])
+    isolate_gen_file_contents = self.m.json.dumps({
+      'args': args,
+      'dir': self.m.path['start_dir'],
+      'version': 1,
+    }, indent=2)
+    step_result = self.m.file.write(
+      'generate %s.isolate.gen.json' % test['id'],
+      isolate_gen_file,
+      isolate_gen_file_contents,
+    )
+    step_result.presentation.logs['%s.isolate.gen.json' % test['id']] = (
+      isolate_gen_file_contents.splitlines())
+    step_result.presentation.step_text = task_step_name
+
+    return Task(isolate_gen_file, task_step_name, test)
+
+  def isolate(self, scripts_dir='src/ios/build/bots/scripts'):
+    """Isolates the tests specified in this bot's build config."""
+    assert self.__config
 
     tasks = []
     failures = []
@@ -483,56 +531,14 @@ class iOSApi(recipe_api.RecipeApi):
     tmp_dir = self.m.path.mkdtemp('isolate')
 
     for test in self.__config['tests']:
-      step_name = str('%s (%s iOS %s)' % (
-        test['app'], test['device type'], test['os']))
-
       if test.get('skip'):
-        skipped.append(step_name)
+        skipped.append(self.get_step_name(test))
         continue
-
-      app_path = self.m.path.join(
-        self.most_recent_app_dir,
-        '%s.app' % test['app'],
-      )
-      isolate_gen_file = tmp_dir.join('%s.isolate.gen.json' % test['id'])
-
       try:
-        args = [
-          '--config-variable', 'OS', 'ios',
-          '--config-variable', 'app_path', app_path,
-          '--config-variable', 'test_args', self.m.json.dumps(
-              test.get('test args') or []),
-          '--config-variable', 'xcode_version', test.get(
-            'xcode version', self.__config['xcode version']),
-          '--config-variable', 'xctest', (
-            'true' if test.get('xctest') else 'false'),
-          '--isolate', isolate_template,
-          '--isolated', tmp_dir.join('%s.isolated' % test['id']),
-          '--path-variable', 'app_path', app_path,
-        ]
-        if self.platform == 'simulator':
-          args.extend([
-            '--config-variable', 'platform', test['device type'],
-            '--config-variable', 'version', test['os'],
-          ])
-        isolate_gen_file_contents = self.m.json.dumps({
-          'args': args,
-          'dir': self.m.path['start_dir'],
-          'version': 1,
-        }, indent=2)
-        step_result = self.m.file.write(
-          'generate %s.isolate.gen.json' % test['id'],
-          isolate_gen_file,
-          isolate_gen_file_contents,
-        )
-        step_result.presentation.logs['%s.isolate.gen.json' % test['id']] = (
-          isolate_gen_file_contents.splitlines())
-        step_result.presentation.step_text = step_name
-
-        tasks.append(Task(isolate_gen_file, step_name, test))
+        tasks.append(self.isolate_test(test, tmp_dir, isolate_template))
       except self.m.step.StepFailure as f:
         f.result.presentation.status = self.m.step.EXCEPTION
-        failures.append(step_name)
+        failures.append(self.get_step_name(test))
 
     if not tasks:
       return tasks, failures, skipped
