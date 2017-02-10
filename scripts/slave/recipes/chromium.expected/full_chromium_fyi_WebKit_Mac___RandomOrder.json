@@ -708,7 +708,8 @@
       "--builder-name",
       "WebKit Mac - RandomOrder",
       "--step-name",
-      "webkit_tests"
+      "webkit_tests",
+      "--fully-parallel"
     ],
     "cwd": "[BUILDER_CACHE]/WebKit_Mac___RandomOrder",
     "env": {

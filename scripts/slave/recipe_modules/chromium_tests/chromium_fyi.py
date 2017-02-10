@@ -202,7 +202,9 @@ SPEC = {
         'blink_tests',
       ],
       'tests': [
-        steps.BlinkTest(),
+        steps.BlinkTest(extra_args=[
+          '--fully-parallel',
+        ]),
       ],
       'test_results_config': 'staging_server',
       'testing': {
@@ -222,7 +224,9 @@ SPEC = {
         'blink_tests',
       ],
       'tests': [
-        steps.BlinkTest(),
+        steps.BlinkTest(extra_args=[
+          '--fully-parallel',
+        ]),
       ],
       'testing': {
           'platform': 'mac',
@@ -242,9 +246,7 @@ SPEC = {
       ],
       'tests': [
         steps.BlinkTest(extra_args=[
-          # TODO(jeffcarp): This is still necessary until Windows
-          # is also moved to random order.
-          '--order=random',
+          '--fully-parallel',
         ]),
       ],
       'testing': {

@@ -679,7 +679,8 @@
       "--builder-name",
       "WebKit Linux - RandomOrder",
       "--step-name",
-      "webkit_tests"
+      "webkit_tests",
+      "--fully-parallel"
     ],
     "cwd": "[BUILDER_CACHE]/WebKit_Linux___RandomOrder",
     "env": {
