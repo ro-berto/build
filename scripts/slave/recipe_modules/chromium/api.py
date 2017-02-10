@@ -192,7 +192,10 @@ class ChromiumApi(recipe_api.RecipeApi):
                 ninja_no_work
             )))
 
-    if ninja_no_work not in step_result.stdout: # pragma: no cover
+    if ninja_no_work not in step_result.stdout:
+      step_result.presentation.status = self.m.step.FAILURE
+      step_result.presentation.step_text = (
+          "This should have been a no-op, but it wasn't.")
       raise self.m.step.StepFailure(
           """Failing build because ninja reported work to do.
           This means that after completing a compile, another was run and

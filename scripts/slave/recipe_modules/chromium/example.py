@@ -8,6 +8,7 @@ DEPS = [
   'recipe_engine/json',
   'recipe_engine/platform',
   'recipe_engine/properties',
+  'recipe_engine/raw_io',
 ]
 
 
@@ -17,6 +18,7 @@ def RunSteps(api):
   use_goma_module = api.properties.get('use_goma_module', False)
   out_dir = api.properties.get('out_dir', None)
   failfast = api.properties.get('failfast', False);
+  ninja_confirm_noop = api.properties.get('ninja_confirm_noop', False)
 
   bot_config = api.chromium_tests.create_bot_config_object(
       mastername, buildername)
@@ -24,6 +26,9 @@ def RunSteps(api):
 
   if failfast:
     api.chromium.apply_config('goma_failfast')
+
+  if ninja_confirm_noop:
+    api.chromium.apply_config('ninja_confirm_noop')
 
   update_step, bot_db = api.chromium_tests.prepare_checkout(bot_config)
 
@@ -104,6 +109,20 @@ def GenTests(api):
              out_dir='/tmp',
              use_goma_module=False,
          ) + api.step_data('compile', retcode=1))
+
+  yield (api.test('basic_out_dir_ninja_no_op_failure') +
+         api.properties(
+             mastername='chromium.linux',
+             buildername='Android Builder (dbg)',
+             slavename='build1-a1',
+             buildnumber='77457',
+             out_dir='/tmp',
+             use_goma_module=True,
+             ninja_confirm_noop=True,
+         ) + api.override_step_data(
+             'compile confirm no-op',
+             stdout=api.raw_io.output(
+                 "ninja explain: chrome is dirty\n")))
 
   yield (api.test('basic_out_dir_goma_module_start_failure') +
          api.properties(
