@@ -136,6 +136,9 @@ def layout_test(options, args):
   if options.enable_leak_detection:
     command.append('--enable-leak-detection')
 
+  if options.fully_parallel:
+    command.append('--fully-parallel')
+
   # The list of tests is given as arguments.
   if options.options:
     command.extend(options.options.split(' '))
@@ -277,6 +280,8 @@ def main():
                            help='Read list of tests to run from file.')
   option_parser.add_option('--enable-leak-detection', action='store_true',
                            default=False, help='Enable the leak detection')
+  option_parser.add_option('--fully-parallel', action='store_true',
+                           default=False, help='Run all tests in parallel')
   options, args = option_parser.parse_args()
   options.build_dir = build_directory.GetBuildOutputDirectory()
 
