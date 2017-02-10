@@ -776,7 +776,7 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/build/android/pylib/results/presentation/test_results_presentation.py",
+      "RECIPE_MODULE[build::chromium_android]/resources/test_results_presentation.py",
       "--json-file",
       "{}",
       "--master-name",
@@ -810,7 +810,7 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/build/android/pylib/results/presentation/test_results_presentation.py",
+      "RECIPE_MODULE[build::chromium_android]/resources/test_results_presentation.py",
       "--json-file",
       "{}",
       "--master-name",
@@ -844,7 +844,7 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/build/android/pylib/results/presentation/test_results_presentation.py",
+      "RECIPE_MODULE[build::chromium_android]/resources/test_results_presentation.py",
       "--json-file",
       "{}",
       "--master-name",
@@ -878,7 +878,7 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/build/android/pylib/results/presentation/test_results_presentation.py",
+      "RECIPE_MODULE[build::chromium_android]/resources/test_results_presentation.py",
       "--json-file",
       "{}",
       "--master-name",

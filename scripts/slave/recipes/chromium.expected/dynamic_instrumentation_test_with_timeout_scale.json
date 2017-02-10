@@ -584,7 +584,7 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/build/android/pylib/results/presentation/test_results_presentation.py",
+      "RECIPE_MODULE[build::chromium_android]/resources/test_results_presentation.py",
       "--json-file",
       "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"FAILURE\"}]}]}",
       "--master-name",
