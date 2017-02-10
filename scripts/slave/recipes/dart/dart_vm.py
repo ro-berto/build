@@ -70,6 +70,7 @@ for arch in ['simmips', 'simarm', 'simarm64']:
       'target_arch': arch,
       'env': {},
       'checked': True,
+      'archive_core_dumps': True,
     }
 
 for arch in ['simdbc64']:
@@ -130,6 +131,7 @@ for mode in ['debug', 'release', 'product']:
       'checked': True,
       'test_args': ['--hot-reload',
                     '--builder-tag=no_ipv6'],
+      'archive_core_dumps': True,
     }
     builders['vm-linux-%s-%s-reload-rollback' % (mode, arch)] = {
       'mode': mode,
@@ -138,6 +140,7 @@ for mode in ['debug', 'release', 'product']:
       'checked': True,
       'test_args': ['--hot-reload-rollback',
                     '--builder-tag=no_ipv6'],
+      'archive_core_dumps': True,
     }
 
 
