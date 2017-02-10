@@ -13,6 +13,7 @@ DEPS = [
   'gsutil',
   'recipe_engine/path',
   'recipe_engine/properties',
+  'recipe_engine/python',
   'recipe_engine/step',
   'webrtc',
   'zip',
@@ -26,12 +27,13 @@ def RunSteps(api):
   api.gclient.runhooks()
 
   build_script = api.path['checkout'].join('tools-webrtc', 'ios',
-                                           'build_ios_libs.sh')
+                                           'build_ios_libs.py')
   if not api.tryserver.is_tryserver:
     api.step('cleanup', [build_script, '-c'], cwd=api.path['checkout'])
 
-  api.step('build', [build_script, '-r', api.webrtc.revision_number, '-e'],
-           cwd=api.path['checkout'])
+  api.python('build', build_script,
+             args=['-r', api.webrtc.revision_number, '-e'],
+             cwd=api.path['checkout'])
 
   if not api.tryserver.is_tryserver:
     output_dir = api.path['checkout'].join('out_ios_libs')
