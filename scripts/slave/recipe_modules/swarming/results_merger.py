@@ -22,6 +22,7 @@ OPTIONAL_MATCHING = (
     'layout_tests_dir',
     'path_delimiter',
     'pixel_tests_enabled',
+    'random_order_seed',
     )
 
 # These fields are optional and will be summed together
