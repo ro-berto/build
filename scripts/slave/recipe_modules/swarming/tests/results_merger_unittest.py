@@ -18,7 +18,7 @@ sys.path.insert(
 import test_env
 
 # For results_merger.
-sys.path.insert(0, os.path.join(THIS_DIR, '..', 'resources'))
+sys.path.insert(0, os.path.join(THIS_DIR, '..'))
 import results_merger
 
 

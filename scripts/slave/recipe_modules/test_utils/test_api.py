@@ -247,8 +247,7 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
 
       jsonish_summary = {'shards': jsonish_shards}
       files_dict['summary.json'] = json.dumps(jsonish_summary)
-      return (self.m.raw_io.output_dir(files_dict)
-              + self.m.json.output(per_shard_results[0]))
+      return self.m.raw_io.output_dir(files_dict)
     else:
       return self.m.json.output(per_shard_results[0])
 

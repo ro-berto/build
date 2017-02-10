@@ -24,12 +24,10 @@ PROPERTIES = {
   'show_isolated_out_in_collect_step': Property(default=True),
   'show_shards_in_collect_step': Property(default=False),
   'isolated_script_task': Property(default=False),
-  'merge': Property(default=None),
 }
 
 def RunSteps(api, platforms, show_isolated_out_in_collect_step,
-             show_shards_in_collect_step, isolated_script_task,
-             merge):
+             show_shards_in_collect_step, isolated_script_task):
   # Checkout swarming client.
   api.swarming_client.checkout('master')
 
@@ -94,8 +92,7 @@ def RunSteps(api, platforms, show_isolated_out_in_collect_step,
     if isolated_script_task:
       task = api.swarming.isolated_script_task(
           'hello_world', isolated_hash,
-          task_output_dir=temp_dir.join('task_output_dir'),
-          merge=merge)
+          task_output_dir=temp_dir.join('task_output_dir'))
     else:
       task = api.swarming.task('hello_world', isolated_hash,
                               task_output_dir=temp_dir.join('task_output_dir'))
@@ -271,36 +268,3 @@ def GenTests(api):
           'hello_world on Windows-7-SP1',
           api.raw_io.output_dir({'summary.json': json.dumps(data)})) +
       api.properties(isolated_script_task=True))
-
-  summary_data = {
-    'shards': [
-      {
-        'state': 0x70, # COMPLETED
-        'internal_failure': False,
-        'exit_code': '0',
-      }
-    ]
-  }
-  json_results = {
-    'interrupted': False,
-    'version': 3,
-    'path_delimiter': '/',
-    'seconds_since_epoch': 0,
-    'tests': {},
-    'num_failures_by_type': {},
-    'links': {'custom_link': 'http://example.com'}
-  }
-  yield (
-      api.test('isolated_script_with_custom_merge') +
-      api.step_data(
-          'archive for win',
-          stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
-      api.step_data(
-          'hello_world on Windows-7-SP1',
-          api.raw_io.output_dir({'summary.json': json.dumps(summary_data)}),
-          api.json.output(json_results)) +
-      api.properties(
-          isolated_script_task=True,
-          merge={
-            'script': '//fake_custom_merge_script.py',
-          }))

@@ -6,7 +6,6 @@ import datetime
 import json
 import re
 import string
-import textwrap
 
 from recipe_engine.types import freeze
 
@@ -1185,14 +1184,12 @@ def is_json_results_format(results):
 
 
 class SwarmingIsolatedScriptTest(SwarmingTest):
-
   def __init__(self, name, args=None, target_name=None, shards=1,
                dimensions=None, tags=None, extra_suffix=None, priority=None,
                expiration=None, hard_timeout=None, upload_test_results=True,
                override_compile_targets=None, perf_id=None,
                results_url=None, perf_dashboard_id=None, io_timeout=None,
-               waterfall_mastername=None, waterfall_buildername=None,
-               merge=None):
+               waterfall_mastername=None, waterfall_buildername=None):
     super(SwarmingIsolatedScriptTest, self).__init__(
         name, dimensions, tags, target_name, extra_suffix, priority, expiration,
         hard_timeout, io_timeout, waterfall_mastername=waterfall_mastername,
@@ -1205,7 +1202,6 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     self._results_url = results_url
     self._perf_dashboard_id = perf_dashboard_id
     self._isolated_script_results = {}
-    self._merge = merge
 
   @property
   def target_name(self):
@@ -1231,8 +1227,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     # TODO(nednguyen): make this configurable in isolated_scripts's spec.
     return api.swarming.isolated_script_task(
         title=self._step_name(suffix), isolated_hash=isolated_hash,
-        shards=self._shards, idempotent=False, merge=self._merge,
-        build_properties=api.chromium.build_properties, extra_args=args)
+        shards=self._shards, idempotent=False, extra_args=args)
 
   def validate_simplified_results(self, results):
     return results['valid'], results['failures']
@@ -1387,24 +1382,6 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
     # TODO(nednguyen, kbr): Remove this once all the GYP builds are converted
     # to GN.
     override_compile_targets = spec.get('override_compile_targets', None)
-    merge = spec.get('merge', {})
-    if merge:
-      merge_script = merge.get('script')
-      if merge_script:
-        if merge_script.startswith('//'):
-          merge['script'] = api.path['checkout'].join(
-              merge_script[2:].replace('/', api.path.sep))
-        else:
-          api.python.failing_step(
-              'isolated_scripts spec format error',
-              textwrap.wrap(textwrap.dedent("""\
-                  The isolated_scripts target "%s" contains a custom merge_script "%s"
-                  that doesn't match the expected format. Custom merge_script entries
-                  should be a path relative to the top-level chromium src directory and
-                  should start with "//".
-                  """ % (name, merge_script))),
-              as_log='details')
-
     swarming_dimensions = swarming_dimensions or {}
     if use_swarming:
       if swarming_dimension_sets:
@@ -1422,8 +1399,7 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
               results_url=results_url, perf_dashboard_id=perf_dashboard_id,
               io_timeout=swarming_io_timeout,
               waterfall_mastername=mastername,
-              waterfall_buildername=buildername,
-              merge=merge)
+              waterfall_buildername=buildername)
       else:
         yield SwarmingIsolatedScriptTest(
             name=name, args=args, target_name=target_name,
@@ -1433,8 +1409,7 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
             hard_timeout=swarming_hard_timeout, perf_id=perf_id,
             results_url=results_url, perf_dashboard_id=perf_dashboard_id,
             io_timeout=swarming_io_timeout,
-            waterfall_mastername=mastername, waterfall_buildername=buildername,
-            merge=merge)
+            waterfall_mastername=mastername, waterfall_buildername=buildername)
     else:
       yield LocalIsolatedScriptTest(
           name=name, args=args, target_name=target_name,
