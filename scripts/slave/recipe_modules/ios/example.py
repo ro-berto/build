@@ -41,6 +41,10 @@ def GenTests(api):
         {
           'artifact': 'Chrome.app',
         },
+        {
+          'artifact': 'Chrome.app.arm.breakpad',
+          'symupload': True,
+        },
       ],
       'tests': [
         {

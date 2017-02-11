@@ -143,6 +143,10 @@
       "@@@STEP_LOG_LINE@json.output@  \"upload\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"artifact\": \"Chrome.app\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"artifact\": \"Chrome.app.arm.breakpad\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"symupload\": true@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"xcode version\": \"6.1.1\"@@@",
@@ -500,6 +504,14 @@
     "~followup_annotations": [
       "@@@STEP_LINK@Chrome.app@https://storage.cloud.google.com/mock-gcs-bucket/fixed-path/Chrome.app@@@"
     ]
+  },
+  {
+    "cmd": [
+      "[START_DIR]/src/out/Debug-iphonesimulator/symupload",
+      "[START_DIR]/src/out/Debug-iphonesimulator/Chrome.app.arm.breakpad",
+      "https://client2.google.com/cr/symbol"
+    ],
+    "name": "symupload Chrome.app.arm.breakpad"
   },
   {
     "cmd": [],

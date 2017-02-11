@@ -353,6 +353,20 @@ class iOSApi(recipe_api.RecipeApi):
             ninja_log_command=cmd,
             ninja_log_exit_status=exit_status)
 
+  def symupload(self, artifact):
+    """Uploads the given symbols file.
+
+    Args:
+      artifact: Name of the artifact to upload. Will be found relative to the
+        out directory, so must have already been compiled.
+    """
+    cmd = [
+        self.m.path['start_dir'].join(self.most_recent_app_dir, 'symupload'),
+        self.m.path['start_dir'].join(self.most_recent_app_dir, artifact),
+        'https://client2.google.com/cr/symbol',
+    ]
+    self.m.step('symupload %s' % artifact, cmd)
+
   def upload_tgz(self, artifact, bucket, path):
     """Tar gzips and uploads the given artifact to Google Storage.
 
@@ -395,7 +409,9 @@ class iOSApi(recipe_api.RecipeApi):
 
     for artifact in self.__config['upload']:
       name = str(artifact['artifact'])
-      if artifact.get('compress'):
+      if artifact.get('symupload'):
+        self.symupload(name)
+      elif artifact.get('compress'):
         with self.m.step.nest('upload %s' % name):
           self.upload_tgz(
               name,
