@@ -46,28 +46,28 @@ def GetCloudPath(api, git_hash, path):
 #     api.file.rmtree('temp dir', temp_dir)
 
 
-def BuildExamples(api, git_hash):
+def BuildExamples(api, git_hash, flutter_executable):
   def BuildAndArchive(api, app_dir, apk_name):
     app_path = api.path['checkout'].join(app_dir)
     api.step('flutter build apk %s' % api.path.basename(app_dir),
-        ['flutter', '-v', 'build', 'apk'], cwd=app_path)
+        [flutter_executable, '-v', 'build', 'apk'], cwd=app_path)
 
     if api.platform.is_mac:
       app_name = api.path.basename(app_dir)
       # Disable codesigning since this bot has no developer cert.
       api.step(
         'flutter build ios %s' % app_name,
-        ['flutter', '-v', 'build', 'ios', '--no-codesign'],
+        [flutter_executable, '-v', 'build', 'ios', '--no-codesign'],
         cwd=app_path,
       )
       api.step(
         'flutter build ios debug %s' % app_name,
-        ['flutter', '-v', 'build', 'ios', '--no-codesign', '--debug'],
+        [flutter_executable, '-v', 'build', 'ios', '--no-codesign', '--debug'],
         cwd=app_path,
       )
       api.step(
         'flutter build ios simulator %s' % app_name,
-        ['flutter', '-v', 'build', 'ios', '--simulator'],
+        [flutter_executable, '-v', 'build', 'ios', '--simulator'],
         cwd=app_path,
       )
 
@@ -146,13 +146,13 @@ def RunSteps(api):
     if api.platform.is_mac:
       SetupXcode(api)
 
-    flutterExecutable = 'flutter' if not api.platform.is_win else 'flutter.bat'
-    dartExecutable = 'dart' if not api.platform.is_win else 'dart.exe'
+    flutter_executable = 'flutter' if not api.platform.is_win else 'flutter.bat'
+    dart_executable = 'dart' if not api.platform.is_win else 'dart.exe'
 
-    api.step('download dependencies', [flutterExecutable, 'update-packages'], cwd=checkout)
-    api.step('test.dart', [dartExecutable, 'dev/bots/test.dart'], cwd=checkout)
+    api.step('download dependencies', [flutter_executable, 'update-packages'], cwd=checkout)
+    api.step('test.dart', [dart_executable, 'dev/bots/test.dart'], cwd=checkout)
 
-    BuildExamples(api, git_hash)
+    BuildExamples(api, git_hash, flutter_executable)
 
     # TODO(yjbanov): we do not yet have Android devices hooked up, nor do we
     # support the Android emulator. For now, only run on iOS Simulator.

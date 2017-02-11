@@ -155,7 +155,7 @@
   },
   {
     "cmd": [
-      "flutter",
+      "flutter.bat",
       "-v",
       "build",
       "apk"
@@ -170,7 +170,7 @@
   },
   {
     "cmd": [
-      "flutter",
+      "flutter.bat",
       "-v",
       "build",
       "apk"
