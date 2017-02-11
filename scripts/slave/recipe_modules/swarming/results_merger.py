@@ -19,10 +19,13 @@ OPTIONAL_MATCHING = (
     'chromium_revision',
     'has_pretty_patch',
     'has_wdiff',
-    'layout_tests_dir',
     'path_delimiter',
     'pixel_tests_enabled',
     'random_order_seed',
+    )
+
+OPTIONAL_IGNORED = (
+    'layout_tests_dir',
     )
 
 # These fields are optional and will be summed together
@@ -148,6 +151,14 @@ def _merge_json_test_result_format(shard_results_list):
         merge(optional_key, lambda src, dst: src)
       else:
         merge(optional_key, ensure_match)
+
+    # Optional values ignored
+    for optional_key in OPTIONAL_IGNORED:
+      if optional_key in result_json:
+        merged_results[optional_key] = result_json.pop(
+            # pragma: no cover (covered by
+            # results_merger_unittest).
+            optional_key)
 
     # Sum optional value counts
     for count_key in OPTIONAL_COUNTS:

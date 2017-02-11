@@ -47,7 +47,8 @@ GOOD_JSON_TEST_RESULT_0 = {
   'num_failures_by_type': {
      'FAIL': 0,
      'PASS': 2
-  }
+  },
+  'layout_tests_dir': 'abc'
 }
 
 GOOD_JSON_TEST_RESULT_1 = {
@@ -71,7 +72,8 @@ GOOD_JSON_TEST_RESULT_1 = {
   'num_failures_by_type': {
      'FAIL': 0,
      'PASS': 2
-  }
+  },
+  'layout_tests_dir': '123'
 }
 
 GOOD_JSON_TEST_RESULT_2 = {
@@ -141,7 +143,8 @@ GOOD_JSON_TEST_RESULT_MERGED = {
   'num_failures_by_type': {
     'FAIL': 1,
     'PASS': 5
-  }
+  },
+  'layout_tests_dir': '123'
 }
 
 
