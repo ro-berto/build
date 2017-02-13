@@ -27,7 +27,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]\ntarget_os = ['android']",
+      "cache_dir = '[GIT_CACHE]'\nhooks = [\"{'action': ['python', 'src/build/android/update_deps/update_third_party_deps.py', 'download', '-b', 'chrome-vr-test-apks/vr_services', '-l', 'third_party/gvr-android-sdk/test-apks/vr_services'], 'pattern': '.', 'name': 'vr_services_apks'}\", \"{'action': ['python', 'src/build/android/update_deps/update_third_party_deps.py', 'download', '-b', 'chrome-vr-test-apks/daydream_home', '-l', 'third_party/gvr-android-sdk/test-apks/daydream_home'], 'pattern': '.', 'name': 'daydream_home_apks'}\"]\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]\ntarget_os = ['android']",
       "--patch_root",
       "src",
       "--revision_mapping_file",

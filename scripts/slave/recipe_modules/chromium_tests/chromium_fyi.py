@@ -2168,7 +2168,10 @@ SPEC = {
     'Android VR Tests': {
       'chromium_config': 'android',
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
+      'gclient_apply_config': [
+        'android',
+        'android_vr_apks',
+      ],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_PLATFORM': 'android',
