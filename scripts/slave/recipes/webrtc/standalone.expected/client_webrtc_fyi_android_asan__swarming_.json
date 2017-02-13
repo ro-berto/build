@@ -633,6 +633,7 @@
       "--idempotent",
       "[dummy hash for audio_decoder_unittests]",
       "--",
+      "--timeout=900",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Android_ASan__swarming_",
@@ -716,6 +717,7 @@
       "--idempotent",
       "[dummy hash for common_audio_unittests]",
       "--",
+      "--timeout=900",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Android_ASan__swarming_",
@@ -799,6 +801,7 @@
       "--idempotent",
       "[dummy hash for common_video_unittests]",
       "--",
+      "--timeout=900",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Android_ASan__swarming_",
@@ -882,6 +885,7 @@
       "--idempotent",
       "[dummy hash for modules_tests]",
       "--",
+      "--timeout=900",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Android_ASan__swarming_",
@@ -965,6 +969,7 @@
       "--idempotent",
       "[dummy hash for modules_unittests]",
       "--",
+      "--timeout=900",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Android_ASan__swarming_",
@@ -1048,6 +1053,7 @@
       "--idempotent",
       "[dummy hash for peerconnection_unittests]",
       "--",
+      "--timeout=900",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Android_ASan__swarming_",
@@ -1131,6 +1137,7 @@
       "--idempotent",
       "[dummy hash for rtc_stats_unittests]",
       "--",
+      "--timeout=900",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Android_ASan__swarming_",
@@ -1214,6 +1221,7 @@
       "--idempotent",
       "[dummy hash for rtc_unittests]",
       "--",
+      "--timeout=900",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Android_ASan__swarming_",
@@ -1297,6 +1305,7 @@
       "--idempotent",
       "[dummy hash for system_wrappers_unittests]",
       "--",
+      "--timeout=900",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Android_ASan__swarming_",
@@ -1380,6 +1389,7 @@
       "--idempotent",
       "[dummy hash for test_support_unittests]",
       "--",
+      "--timeout=900",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Android_ASan__swarming_",
@@ -1463,6 +1473,7 @@
       "--idempotent",
       "[dummy hash for tools_unittests]",
       "--",
+      "--timeout=900",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Android_ASan__swarming_",
@@ -1546,6 +1557,7 @@
       "--idempotent",
       "[dummy hash for video_engine_tests]",
       "--",
+      "--timeout=900",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Android_ASan__swarming_",
@@ -1629,6 +1641,7 @@
       "--idempotent",
       "[dummy hash for voice_engine_unittests]",
       "--",
+      "--timeout=900",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Android_ASan__swarming_",
@@ -1712,6 +1725,7 @@
       "--idempotent",
       "[dummy hash for webrtc_nonparallel_tests]",
       "--",
+      "--timeout=900",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Android_ASan__swarming_",
@@ -1795,6 +1809,7 @@
       "--idempotent",
       "[dummy hash for AppRTCMobileTest]",
       "--",
+      "--timeout=900",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Android_ASan__swarming_",
@@ -1878,6 +1893,7 @@
       "--idempotent",
       "[dummy hash for libjingle_peerconnection_android_unittest]",
       "--",
+      "--timeout=900",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Android_ASan__swarming_",

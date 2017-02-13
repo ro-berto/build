@@ -66,7 +66,7 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
     if enable_swarming:
       SwarmingTest = api.m.chromium_tests.steps.SwarmingIsolatedScriptTest
       for test, extra_args in sorted(NORMAL_TESTS.items()):
-        tests.append(SwarmingTest(test, **extra_args))
+        tests.append(SwarmingTest(test, args=['--timeout=900'], **extra_args))
     else:
       for test in sorted(api.NORMAL_TESTS):
         parallel = test != 'webrtc_nonparallel_tests'
@@ -111,7 +111,8 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
     for test in (ANDROID_DEVICE_TESTS +
                  ANDROID_INSTRUMENTATION_TESTS):
       tests.append(GTestTest(test, enable_swarming=enable_swarming,
-                             override_isolate_target=test))
+                             override_isolate_target=test,
+                             args=['--timeout=900']))
     for test in ANDROID_JUNIT_TESTS:
       if api.mastername == 'client.webrtc.fyi':
         tests.append(GTestTest(test, enable_swarming=enable_swarming,

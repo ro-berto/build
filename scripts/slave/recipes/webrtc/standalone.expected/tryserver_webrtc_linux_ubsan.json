@@ -650,6 +650,7 @@
       "stepname:audio_decoder_unittests on Ubuntu-14.04",
       "[dummy hash for audio_decoder_unittests]",
       "--",
+      "--timeout=900",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
@@ -733,6 +734,7 @@
       "stepname:common_audio_unittests on Ubuntu-14.04",
       "[dummy hash for common_audio_unittests]",
       "--",
+      "--timeout=900",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
@@ -816,6 +818,7 @@
       "stepname:common_video_unittests on Ubuntu-14.04",
       "[dummy hash for common_video_unittests]",
       "--",
+      "--timeout=900",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
@@ -899,6 +902,7 @@
       "stepname:modules_tests on Ubuntu-14.04",
       "[dummy hash for modules_tests]",
       "--",
+      "--timeout=900",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
@@ -988,6 +992,7 @@
       "stepname:modules_unittests on Ubuntu-14.04",
       "[dummy hash for modules_unittests]",
       "--",
+      "--timeout=900",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
@@ -1101,6 +1106,7 @@
       "stepname:peerconnection_unittests on Ubuntu-14.04",
       "[dummy hash for peerconnection_unittests]",
       "--",
+      "--timeout=900",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
@@ -1202,6 +1208,7 @@
       "stepname:rtc_media_unittests on Ubuntu-14.04",
       "[dummy hash for rtc_media_unittests]",
       "--",
+      "--timeout=900",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
@@ -1285,6 +1292,7 @@
       "stepname:rtc_pc_unittests on Ubuntu-14.04",
       "[dummy hash for rtc_pc_unittests]",
       "--",
+      "--timeout=900",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
@@ -1368,6 +1376,7 @@
       "stepname:rtc_stats_unittests on Ubuntu-14.04",
       "[dummy hash for rtc_stats_unittests]",
       "--",
+      "--timeout=900",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
@@ -1451,6 +1460,7 @@
       "stepname:rtc_unittests on Ubuntu-14.04",
       "[dummy hash for rtc_unittests]",
       "--",
+      "--timeout=900",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
@@ -1564,6 +1574,7 @@
       "stepname:system_wrappers_unittests on Ubuntu-14.04",
       "[dummy hash for system_wrappers_unittests]",
       "--",
+      "--timeout=900",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
@@ -1647,6 +1658,7 @@
       "stepname:test_support_unittests on Ubuntu-14.04",
       "[dummy hash for test_support_unittests]",
       "--",
+      "--timeout=900",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
@@ -1730,6 +1742,7 @@
       "stepname:tools_unittests on Ubuntu-14.04",
       "[dummy hash for tools_unittests]",
       "--",
+      "--timeout=900",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
@@ -1813,6 +1826,7 @@
       "stepname:video_engine_tests on Ubuntu-14.04",
       "[dummy hash for video_engine_tests]",
       "--",
+      "--timeout=900",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
@@ -1914,6 +1928,7 @@
       "stepname:voice_engine_unittests on Ubuntu-14.04",
       "[dummy hash for voice_engine_unittests]",
       "--",
+      "--timeout=900",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
@@ -1997,6 +2012,7 @@
       "stepname:webrtc_nonparallel_tests on Ubuntu-14.04",
       "[dummy hash for webrtc_nonparallel_tests]",
       "--",
+      "--timeout=900",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
