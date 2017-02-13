@@ -468,6 +468,7 @@ BUILDERS = {
         'tests': [
           V8Testing,
           V8TestingExtra,
+          OptimizeForSize,
           Test262Variants_3,
           Test262Extra_2,
           Mozilla,
