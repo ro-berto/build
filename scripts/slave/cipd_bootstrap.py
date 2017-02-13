@@ -20,15 +20,18 @@ CIPD_BACKEND_URL = 'https://chrome-infra-packages.appspot.com'
 
 # ./cipd resolve \
 #     infra/tools/cipd/ \
-#     -version=git_revision:ac753ee37abd753a9a511210d3df362d003211f0
+#     -version=git_revision:642ccc920c3acf79fde01791aeef185a86cbae46
 CLIENT_VERSIONS = {
-  'linux-386': '486264612ec0ad488b5a4ee022892450797b52ac',
-  'linux-amd64': '1be98ff08b61ce4a901cece0a227f4b5cfc12e9d',
-  'linux-arm64': '52052a6d2194901b7ac6444a02e1c5d8fef43e50',
-  'linux-armv6l': '7e5c3a9cc6ccbfe585407e39bdec352a17e54804',
-  'mac-amd64': '6de26293b09ed68cc4b8f48f61f3a6265a1aca9c',
-  'windows-386': '4dad98ea0f8e7af324532ee2571c14237e2fb76b',
-  'windows-amd64': '96af3f67d017a6285d491471f39d3d983a2a7011',
+  'android-amd64': '5b2023c00cb4737c6f646a6cb185f0dd53d330fe',
+  'android-armv6l': 'ddba656b550dd2fdc7f98c2d74462301f5fb69ac',
+  'linux-386': 'e4b3ca169af0df01f928cd0a1b7041492a0d43bb',
+  'linux-amd64': 'f875d8ddb616978e6356e2ef22ba31dcae58421c',
+  'linux-arm64': 'e5708a1d272a168180f8f55088d2f1db7e621118',
+  'linux-armv6l': '69ff071ead840751bbe8ef2dc624bf533768bbdb',
+  'linux-mips64': '82968a4492653bb35d13af4c3b536b34aee2d221',
+  'mac-amd64': '691cad978fe96e0d510ae140dc82dcf2b698572a',
+  'windows-386': '02ebb02d56b6e5414f2987d161c0e9cc67dac97f',
+  'windows-amd64': 'a2c132a8dc09965095141ef5305811da0e741905',
 }
 
 # CIPD version used when "canary" is True.
