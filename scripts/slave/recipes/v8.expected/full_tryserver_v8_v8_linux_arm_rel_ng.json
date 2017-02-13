@@ -508,7 +508,6 @@
       "[START_DIR]/v8/out/Release/bot_default.isolated.gen.json",
       "[START_DIR]/v8/out/Release/mjsunit.isolated.gen.json",
       "[START_DIR]/v8/out/Release/mozilla.isolated.gen.json",
-      "[START_DIR]/v8/out/Release/simdjs.isolated.gen.json",
       "[START_DIR]/v8/out/Release/test262.isolated.gen.json"
     ],
     "name": "isolate tests",
@@ -517,7 +516,6 @@
       "@@@STEP_LOG_LINE@json.output@  \"bot_default\": \"[dummy hash for bot_default]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"mjsunit\": \"[dummy hash for mjsunit]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"mozilla\": \"[dummy hash for mozilla]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"simdjs\": \"[dummy hash for simdjs]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"test262\": \"[dummy hash for test262]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -550,7 +548,6 @@
             "bot_default": "[dummy hash for bot_default]",
             "mjsunit": "[dummy hash for mjsunit]",
             "mozilla": "[dummy hash for mozilla]",
-            "simdjs": "[dummy hash for simdjs]",
             "test262": "[dummy hash for test262]"
           }
         }

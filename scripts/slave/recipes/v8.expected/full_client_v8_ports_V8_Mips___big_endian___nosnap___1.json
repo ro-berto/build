@@ -166,50 +166,6 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/v8/tools/run-tests.py",
-      "--progress=verbose",
-      "--mode",
-      "Release",
-      "--arch",
-      "mips",
-      "--outdir",
-      "out",
-      "--buildbot",
-      "--timeout=200",
-      "--random-seed=-358114921",
-      "simdjs",
-      "--download-data",
-      "--no-snap",
-      "--noi18n",
-      "--rerun-failures-count=2",
-      "--shard-count=2",
-      "--shard-run=1",
-      "--json-test-results",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[START_DIR]/v8",
-    "name": "SimdJs - all",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
-      "@@@STEP_LOG_LINE@durations@00:00:101 mjsunit/Cool.Test2@@@",
-      "@@@STEP_LOG_LINE@durations@@@@",
-      "@@@STEP_LOG_LINE@durations@Details:@@@",
-      "@@@STEP_LOG_LINE@durations@@@@",
-      "@@@STEP_LOG_LINE@durations@Test: mjsunit/Cool.Test@@@",
-      "@@@STEP_LOG_LINE@durations@Flags: -f@@@",
-      "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test@@@",
-      "@@@STEP_LOG_LINE@durations@Duration: 01:01:002@@@",
-      "@@@STEP_LOG_LINE@durations@Test: mjsunit/Cool.Test2@@@",
-      "@@@STEP_LOG_LINE@durations@Flags: -f -g@@@",
-      "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test2@@@",
-      "@@@STEP_LOG_LINE@durations@Duration: 00:00:101@@@",
-      "@@@STEP_LOG_END@durations@@@"
-    ]
-  },
-  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0

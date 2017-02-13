@@ -500,15 +500,13 @@
       "https://isolateserver.appspot.com",
       "--verbose",
       "[START_DIR]/v8/out/Debug/bot_default.isolated.gen.json",
-      "[START_DIR]/v8/out/Debug/mozilla.isolated.gen.json",
-      "[START_DIR]/v8/out/Debug/simdjs.isolated.gen.json"
+      "[START_DIR]/v8/out/Debug/mozilla.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"bot_default\": \"[dummy hash for bot_default]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"mozilla\": \"[dummy hash for mozilla]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"simdjs\": \"[dummy hash for simdjs]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"mozilla\": \"[dummy hash for mozilla]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -524,7 +522,7 @@
       "cp",
       "-a",
       "public-read",
-      "{\"bot_default\": \"[dummy hash for bot_default]\", \"mozilla\": \"[dummy hash for mozilla]\", \"simdjs\": \"[dummy hash for simdjs]\"}",
+      "{\"bot_default\": \"[dummy hash for bot_default]\", \"mozilla\": \"[dummy hash for mozilla]\"}",
       "gs://chromium-v8/v8-linux-nosnap-dbg/full-build-linux_f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json"
     ],
     "name": "gsutil upload",
@@ -576,8 +574,7 @@
           "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "swarm_hashes": {
             "bot_default": "[dummy hash for bot_default]",
-            "mozilla": "[dummy hash for mozilla]",
-            "simdjs": "[dummy hash for simdjs]"
+            "mozilla": "[dummy hash for mozilla]"
           }
         }
       }

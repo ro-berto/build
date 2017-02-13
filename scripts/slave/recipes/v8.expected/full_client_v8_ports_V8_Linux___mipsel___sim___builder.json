@@ -500,14 +500,12 @@
       "https://isolateserver.appspot.com",
       "--verbose",
       "[START_DIR]/v8/out/Release/bot_default.isolated.gen.json",
-      "[START_DIR]/v8/out/Release/simdjs.isolated.gen.json",
       "[START_DIR]/v8/out/Release/test262.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"bot_default\": \"[dummy hash for bot_default]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"simdjs\": \"[dummy hash for simdjs]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"test262\": \"[dummy hash for test262]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -524,7 +522,7 @@
       "cp",
       "-a",
       "public-read",
-      "{\"bot_default\": \"[dummy hash for bot_default]\", \"simdjs\": \"[dummy hash for simdjs]\", \"test262\": \"[dummy hash for test262]\"}",
+      "{\"bot_default\": \"[dummy hash for bot_default]\", \"test262\": \"[dummy hash for test262]\"}",
       "gs://chromium-v8/v8-mipsel-sim-rel/full-build-linux_f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json"
     ],
     "name": "gsutil upload",
@@ -576,7 +574,6 @@
           "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "swarm_hashes": {
             "bot_default": "[dummy hash for bot_default]",
-            "simdjs": "[dummy hash for simdjs]",
             "test262": "[dummy hash for test262]"
           }
         }

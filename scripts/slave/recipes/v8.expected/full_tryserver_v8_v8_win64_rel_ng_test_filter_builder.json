@@ -24,8 +24,7 @@
           "revision": "12345",
           "rietveld": "https://codereview.chromium.org",
           "swarm_hashes": {
-            "bot_default": "[dummy hash for bot_default]",
-            "simdjs": "[dummy hash for simdjs]"
+            "bot_default": "[dummy hash for bot_default]"
           },
           "testfilter": [
             "mjsunit/regression/*",

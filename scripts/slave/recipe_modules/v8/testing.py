@@ -120,11 +120,6 @@ TEST_CONFIGS = freeze({
     'test_args': ['--extra-flags=--optimize-for-size'],
     'variants': V8Variant('default'),
   },
-  'simdjs': {
-    'name': 'SimdJs - all',
-    'tests': ['simdjs'],
-    'test_args': ['--download-data'],
-  },
   'simpleleak': {
     'tool': 'run-valgrind',
     'isolated_target': 'run-valgrind',

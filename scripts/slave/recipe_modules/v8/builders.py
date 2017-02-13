@@ -37,7 +37,6 @@ Mozilla = TestStepConfig('mozilla')
 Mozilla_2 = TestStepConfig('mozilla', shards=2)
 OptimizeForSize = TestStepConfig('optimize_for_size')
 Presubmit = TestStepConfig('presubmit')
-SimdJs = TestStepConfig('simdjs')
 SimpleLeak = TestStepConfig('simpleleak')
 Test262 = TestStepConfig('test262')
 Test262_2 = TestStepConfig('test262', shards=2)
@@ -172,7 +171,6 @@ BUILDERS = {
           V8TestingExtra,
           OptimizeForSize,
           Benchmarks,
-          SimdJs,
           Test262Variants_2,
           Test262Extra_2,
           Mozilla,
@@ -185,15 +183,15 @@ BUILDERS = {
         ) + with_test_args(
             'nosse3',
             ['--extra-flags', '--noenable-sse3 --noenable-avx'],
-            [V8Testing, Mozilla, SimdJs],
+            [V8Testing, Mozilla],
         ) + with_test_args(
             'nosse4',
             ['--extra-flags', '--noenable-sse4-1 --noenable-avx'],
-            [V8Testing, Mozilla, SimdJs],
+            [V8Testing, Mozilla],
         ) + with_test_args(
             'deadcode',
             ['--extra-flags=--dead-code-elimination'],
-            [V8Testing, Test262, Mozilla, SimdJs],
+            [V8Testing, Test262, Mozilla],
         ),
         'testing': {'platform': 'linux'},
         'enable_swarming': True,
@@ -213,7 +211,6 @@ BUILDERS = {
           OptimizeForSize,
           Test262Variants_2,
           Mozilla,
-          SimdJs,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -233,7 +230,6 @@ BUILDERS = {
           Test262Variants_3,
           Test262Extra_2,
           Mozilla,
-          SimdJs,
           MjsunitSPFrameAccess,
         ] + with_test_args(
             'isolates',
@@ -242,15 +238,15 @@ BUILDERS = {
         ) + with_test_args(
             'nosse3',
             ['--extra-flags', '--noenable-sse3 --noenable-avx'],
-            [V8Testing, Test262, Mozilla, SimdJs],
+            [V8Testing, Test262, Mozilla],
         ) + with_test_args(
             'nosse4',
             ['--extra-flags', '--noenable-sse4-1 --noenable-avx'],
-            [V8Testing, Test262, Mozilla, SimdJs],
+            [V8Testing, Test262, Mozilla],
         ) + with_test_args(
             'code serializer',
             ['--extra-flags', '--serialize-toplevel --cache=code'],
-            [Mjsunit, Mozilla, Test262, Benchmarks, SimdJs],
+            [Mjsunit, Mozilla, Test262, Benchmarks],
             V8Variant('default'),
         ),
         'testing': {'platform': 'linux'},
@@ -264,7 +260,7 @@ BUILDERS = {
         'enable_swarming': True,
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
-        'tests': [V8Testing, Benchmarks, Mozilla, SimdJs],
+        'tests': [V8Testing, Benchmarks, Mozilla],
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
           'pool': 'V8-AVX2',
@@ -281,7 +277,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing, Test262, Mozilla, SimdJs],
+        'tests': [V8Testing, Test262, Mozilla],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - nosnap': {
@@ -296,7 +292,6 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing_3,
-          SimdJs,
           Test262,
           Mozilla,
         ],
@@ -313,7 +308,7 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - nosnap debug builder',
         'build_gs_archive': 'linux_nosnap_dbg_archive',
         'enable_swarming': True,
-        'tests': [V8Testing_5, Mozilla, SimdJs],
+        'tests': [V8Testing_5, Mozilla],
         'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
         'swarming_properties': {
@@ -340,7 +335,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': [V8Testing, Mozilla, Test262, SimdJs],
+        'tests': [V8Testing, Mozilla, Test262],
         'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
       },
@@ -429,7 +424,6 @@ BUILDERS = {
           Test262Variants_2,
           Test262Extra_2,
           Mozilla,
-          SimdJs,
           MjsunitSPFrameAccess,
           SimpleLeak,
         ],
@@ -448,7 +442,6 @@ BUILDERS = {
           V8Testing,
           Benchmarks,
           Mozilla,
-          SimdJs,
         ],
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
@@ -472,7 +465,6 @@ BUILDERS = {
           Test262Variants_3,
           Test262Extra_2,
           Mozilla,
-          SimdJs,
           MjsunitSPFrameAccess,
           SimpleLeak,
         ],
@@ -491,7 +483,6 @@ BUILDERS = {
           V8Testing,
           Benchmarks,
           Mozilla,
-          SimdJs,
         ],
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
@@ -670,7 +661,6 @@ BUILDERS = {
         'tests': [
           V8Testing,
           V8TestingExtra,
-          SimdJs,
           Test262,
           Mozilla,
         ],
@@ -695,7 +685,6 @@ BUILDERS = {
         'tests': [
           V8Testing_2,
           V8TestingExtra_2,
-          SimdJs,
           Test262,
           Mozilla,
         ],
@@ -730,7 +719,6 @@ BUILDERS = {
           V8TestingExtra,
           Test262,
           Mozilla,
-          SimdJs,
         ],
         'swarming_dimensions': {
           'os': 'Mac-10.9',
@@ -752,7 +740,6 @@ BUILDERS = {
           V8TestingExtra_2,
           Test262,
           Mozilla,
-          SimdJs,
         ],
         'swarming_dimensions': {
           'os': 'Mac-10.9',
@@ -774,7 +761,6 @@ BUILDERS = {
           V8TestingExtra,
           Test262,
           Mozilla,
-          SimdJs,
         ],
         'swarming_dimensions': {
           'os': 'Mac-10.9',
@@ -796,7 +782,6 @@ BUILDERS = {
           V8TestingExtra_2,
           Test262,
           Mozilla,
-          SimdJs,
         ],
         'swarming_dimensions': {
           'os': 'Mac-10.9',
@@ -1096,7 +1081,6 @@ BUILDERS = {
           Benchmarks,
           Test262,
           Mozilla,
-          SimdJs,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -1251,7 +1235,6 @@ BUILDERS = {
           V8Testing,
           Benchmarks,
           OptimizeForSize,
-          SimdJs,
         ],
         'enable_swarming': True,
         'swarming_properties': {
@@ -1275,7 +1258,6 @@ BUILDERS = {
         'tests': [
           V8Testing_2,
           OptimizeForSize,
-          SimdJs,
         ],
         'variants': V8NoExhaustiveVariants(),
         'enable_swarming': True,
@@ -1325,16 +1307,15 @@ BUILDERS = {
           Test262,
           Test262Extra_2,
           Mozilla,
-          SimdJs,
           MjsunitSPFrameAccess,
         ] + with_test_args(
             'armv8-a',
             ['--extra-flags', '--enable-armv8'],
-            [V8Testing_3, Test262, Mozilla, SimdJs],
+            [V8Testing_3, Test262, Mozilla],
         ) + with_test_args(
             'novfp3',
             ['--novfp3'],
-            [V8Testing_3, Test262, Mozilla, SimdJs],
+            [V8Testing_3, Test262, Mozilla],
         ),
         'testing': {'platform': 'linux'},
       },
@@ -1352,16 +1333,15 @@ BUILDERS = {
           Test262,
           Test262Extra_2,
           Mozilla,
-          SimdJs,
           MjsunitSPFrameAccess,
         ] + with_test_args(
             'armv8-a',
             ['--extra-flags', '--enable-armv8'],
-            [V8Testing_3, Test262, Mozilla, SimdJs],
+            [V8Testing_3, Test262, Mozilla],
         ) + with_test_args(
             'novfp3',
             ['--novfp3'],
-            [V8Testing_3, Test262, Mozilla, SimdJs],
+            [V8Testing_3, Test262, Mozilla],
             V8NoExhaustiveVariants(),
         ),
         'testing': {'platform': 'linux'},
@@ -1398,7 +1378,6 @@ BUILDERS = {
           Test262,
           Test262Extra_2,
           Mozilla,
-          SimdJs,
           MjsunitSPFrameAccess,
         ],
         'testing': {'platform': 'linux'},
@@ -1418,7 +1397,6 @@ BUILDERS = {
           Test262,
           Test262Extra_2,
           Mozilla,
-          SimdJs,
           MjsunitSPFrameAccess,
         ],
         'testing': {'platform': 'linux'},
@@ -1491,7 +1469,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Mips - builder',
         'build_gs_archive': 'mips_rel_archive',
-        'tests': [V8Testing, SimdJs],
+        'tests': [V8Testing],
         'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
       },
@@ -1507,7 +1485,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Mips - builder',
         'build_gs_archive': 'mips_rel_archive',
-        'tests': [V8Testing, SimdJs],
+        'tests': [V8Testing],
         'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
       },
@@ -1547,7 +1525,7 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - mipsel - sim - builder',
         'build_gs_archive': 'mipsel_sim_rel_archive',
         'enable_swarming': True,
-        'tests': [V8Testing_2, Test262, SimdJs],
+        'tests': [V8Testing_2, Test262],
         'testing': {'platform': 'linux'},
       },
 ####### Category: PPC
@@ -1676,7 +1654,6 @@ BUILDERS = {
           Test262Extra_2,
           Mozilla,
           Benchmarks,
-          SimdJs,
           MjsunitSPFrameAccess,
           GCMole,
         ],
@@ -1719,7 +1696,6 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing_2,
-          SimdJs,
         ],
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
@@ -1758,7 +1734,6 @@ BUILDERS = {
           Test262Extra_2,
           Mozilla,
           Benchmarks,
-          SimdJs,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -1791,7 +1766,6 @@ BUILDERS = {
           Test262,
           Mozilla,
           Benchmarks,
-          SimdJs,
           MjsunitSPFrameAccess,
         ],
         'testing': {'platform': 'linux'},
@@ -1824,7 +1798,6 @@ BUILDERS = {
           V8Testing_2,
           Test262,
           Mozilla,
-          SimdJs,
         ],
         'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
@@ -1910,7 +1883,6 @@ BUILDERS = {
           OptimizeForSize,
           Test262Variants_4,
           Test262Extra_2,
-          SimdJs,
           MjsunitSPFrameAccess,
           SimpleLeak,
         ],
@@ -1994,7 +1966,6 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing,
-          SimdJs,
         ],
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
@@ -2013,7 +1984,6 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing_2,
-          SimdJs,
         ],
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
@@ -2156,7 +2126,6 @@ BUILDERS = {
           V8Testing_3,
           OptimizeForSize,
           Test262Variants_6,
-          SimdJs,
           MjsunitSPFrameAccess,
         ],
         'testing': {'platform': 'linux'},
@@ -2314,7 +2283,7 @@ BUILDERS = {
           'os': 'Windows-7-SP1',
           'cpu': 'x86-64',
         },
-        'tests': [V8Testing, V8TestingExtra, SimdJs],
+        'tests': [V8Testing, V8TestingExtra],
         'testing': {'platform': 'linux'},
       },
       'v8_win64_dbg': {
@@ -2336,7 +2305,6 @@ BUILDERS = {
         'tests': [
           V8Testing_2,
           V8TestingExtra_2,
-          SimdJs,
           Mozilla,
         ],
         'testing': {'platform': 'win'},
@@ -2373,7 +2341,6 @@ BUILDERS = {
           V8TestingExtra,
           Test262,
           Mozilla,
-          SimdJs,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -2391,7 +2358,6 @@ BUILDERS = {
           V8TestingExtra_2,
           Test262,
           Mozilla,
-          SimdJs,
         ],
         'swarming_dimensions': {
           'os': 'Mac-10.9',
@@ -2413,7 +2379,6 @@ BUILDERS = {
           V8TestingExtra,
           Test262,
           Mozilla,
-          SimdJs,
         ],
         'swarming_dimensions': {
           'os': 'Mac-10.9',
@@ -2435,7 +2400,6 @@ BUILDERS = {
           V8TestingExtra_2,
           Test262,
           Mozilla,
-          SimdJs,
         ],
         'swarming_dimensions': {
           'os': 'Mac-10.9',
@@ -2512,7 +2476,6 @@ BUILDERS = {
           Test262,
           Test262Extra_2,
           Mozilla,
-          SimdJs,
           MjsunitSPFrameAccess,
         ],
         'testing': {'platform': 'linux'},
@@ -2532,7 +2495,6 @@ BUILDERS = {
           Test262,
           Test262Extra_2,
           Mozilla,
-          SimdJs,
           MjsunitSPFrameAccess,
         ],
         'testing': {'platform': 'linux'},
@@ -2547,7 +2509,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing_3, Test262, Mozilla, SimdJs],
+        'tests': [V8Testing_3, Test262, Mozilla],
         'testing': {'platform': 'linux'},
       },
       'v8_linux_arm_armv8a_dbg': {
@@ -2560,7 +2522,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing_3, Test262, Mozilla, SimdJs],
+        'tests': [V8Testing_3, Test262, Mozilla],
         'testing': {'platform': 'linux'},
       },
       'v8_linux_arm64_rel_ng': {
@@ -2593,7 +2555,6 @@ BUILDERS = {
           Test262,
           Test262Extra_2,
           Mozilla,
-          SimdJs,
           MjsunitSPFrameAccess,
         ],
         'testing': {'platform': 'linux'},
@@ -2613,7 +2574,6 @@ BUILDERS = {
           Test262,
           Test262Extra_2,
           Mozilla,
-          SimdJs,
           MjsunitSPFrameAccess,
         ],
         'testing': {'platform': 'linux'},

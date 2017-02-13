@@ -503,7 +503,6 @@
       "[START_DIR]/v8/out/Debug/bot_default.isolated.gen.json",
       "[START_DIR]/v8/out/Debug/mjsunit.isolated.gen.json",
       "[START_DIR]/v8/out/Debug/mozilla.isolated.gen.json",
-      "[START_DIR]/v8/out/Debug/simdjs.isolated.gen.json",
       "[START_DIR]/v8/out/Debug/test262.isolated.gen.json",
       "[START_DIR]/v8/out/Debug/webkit.isolated.gen.json"
     ],
@@ -514,7 +513,6 @@
       "@@@STEP_LOG_LINE@json.output@  \"bot_default\": \"[dummy hash for bot_default]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"mjsunit\": \"[dummy hash for mjsunit]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"mozilla\": \"[dummy hash for mozilla]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"simdjs\": \"[dummy hash for simdjs]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"test262\": \"[dummy hash for test262]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"webkit\": \"[dummy hash for webkit]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -532,7 +530,7 @@
       "cp",
       "-a",
       "public-read",
-      "{\"benchmarks\": \"[dummy hash for benchmarks]\", \"bot_default\": \"[dummy hash for bot_default]\", \"mjsunit\": \"[dummy hash for mjsunit]\", \"mozilla\": \"[dummy hash for mozilla]\", \"simdjs\": \"[dummy hash for simdjs]\", \"test262\": \"[dummy hash for test262]\", \"webkit\": \"[dummy hash for webkit]\"}",
+      "{\"benchmarks\": \"[dummy hash for benchmarks]\", \"bot_default\": \"[dummy hash for bot_default]\", \"mjsunit\": \"[dummy hash for mjsunit]\", \"mozilla\": \"[dummy hash for mozilla]\", \"test262\": \"[dummy hash for test262]\", \"webkit\": \"[dummy hash for webkit]\"}",
       "gs://chromium-v8/v8-linux-dbg/full-build-linux_f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json"
     ],
     "name": "gsutil upload",
@@ -587,7 +585,6 @@
             "bot_default": "[dummy hash for bot_default]",
             "mjsunit": "[dummy hash for mjsunit]",
             "mozilla": "[dummy hash for mozilla]",
-            "simdjs": "[dummy hash for simdjs]",
             "test262": "[dummy hash for test262]",
             "webkit": "[dummy hash for webkit]"
           }
@@ -608,7 +605,6 @@
             "bot_default": "[dummy hash for bot_default]",
             "mjsunit": "[dummy hash for mjsunit]",
             "mozilla": "[dummy hash for mozilla]",
-            "simdjs": "[dummy hash for simdjs]",
             "test262": "[dummy hash for test262]",
             "webkit": "[dummy hash for webkit]"
           }
@@ -629,7 +625,6 @@
             "bot_default": "[dummy hash for bot_default]",
             "mjsunit": "[dummy hash for mjsunit]",
             "mozilla": "[dummy hash for mozilla]",
-            "simdjs": "[dummy hash for simdjs]",
             "test262": "[dummy hash for test262]",
             "webkit": "[dummy hash for webkit]"
           }

@@ -503,7 +503,6 @@
       "[START_DIR]/v8/out/Debug/bot_default.isolated.gen.json",
       "[START_DIR]/v8/out/Debug/mjsunit.isolated.gen.json",
       "[START_DIR]/v8/out/Debug/optimize_for_size.isolated.gen.json",
-      "[START_DIR]/v8/out/Debug/simdjs.isolated.gen.json",
       "[START_DIR]/v8/out/Debug/webkit.isolated.gen.json"
     ],
     "name": "isolate tests",
@@ -512,7 +511,6 @@
       "@@@STEP_LOG_LINE@json.output@  \"bot_default\": \"[dummy hash for bot_default]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"mjsunit\": \"[dummy hash for mjsunit]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"optimize_for_size\": \"[dummy hash for optimize_for_size]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"simdjs\": \"[dummy hash for simdjs]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"webkit\": \"[dummy hash for webkit]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -529,7 +527,7 @@
       "cp",
       "-a",
       "public-read",
-      "{\"bot_default\": \"[dummy hash for bot_default]\", \"mjsunit\": \"[dummy hash for mjsunit]\", \"optimize_for_size\": \"[dummy hash for optimize_for_size]\", \"simdjs\": \"[dummy hash for simdjs]\", \"webkit\": \"[dummy hash for webkit]\"}",
+      "{\"bot_default\": \"[dummy hash for bot_default]\", \"mjsunit\": \"[dummy hash for mjsunit]\", \"optimize_for_size\": \"[dummy hash for optimize_for_size]\", \"webkit\": \"[dummy hash for webkit]\"}",
       "gs://chromium-v8/v8-arm-dbg/full-build-linux_f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json"
     ],
     "name": "gsutil upload",
@@ -583,7 +581,6 @@
             "bot_default": "[dummy hash for bot_default]",
             "mjsunit": "[dummy hash for mjsunit]",
             "optimize_for_size": "[dummy hash for optimize_for_size]",
-            "simdjs": "[dummy hash for simdjs]",
             "webkit": "[dummy hash for webkit]"
           }
         }
@@ -602,7 +599,6 @@
             "bot_default": "[dummy hash for bot_default]",
             "mjsunit": "[dummy hash for mjsunit]",
             "optimize_for_size": "[dummy hash for optimize_for_size]",
-            "simdjs": "[dummy hash for simdjs]",
             "webkit": "[dummy hash for webkit]"
           }
         }
