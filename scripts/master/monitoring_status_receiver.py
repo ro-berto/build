@@ -9,7 +9,7 @@ import time
 import buildbot.status.results
 
 from buildbot.status.base import StatusReceiverMultiService
-from twisted.internet import defer, reactor, task
+from twisted.internet import defer, reactor, task, threads
 from twisted.python import log, threadpool
 
 from infra_libs import ts_mon
@@ -122,7 +122,8 @@ class MonitoringStatusReceiver(StatusReceiverMultiService):
       yield self.updateMetrics()
     finally:
       log.msg('Flushing monitoring metrics')
-      self.thread_pool.callInThread(self._flush_and_log_exceptions)
+      yield threads.deferToThreadPool(
+          reactor, self.thread_pool, self._flush_and_log_exceptions)
       log.msg('Finished flushing monitoring metrics')
 
   @defer.inlineCallbacks
