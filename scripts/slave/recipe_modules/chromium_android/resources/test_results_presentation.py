@@ -86,7 +86,7 @@ def logs_cell(result):
         target=LinkTarget.NEW_TAB))
 
   if link_list:
-    return links_cell(links)
+    return links_cell(link_list)
   else:
     return cell('(no logs)')
 
