@@ -10,7 +10,6 @@ DEPS = [
   'depot_tools/gclient',
   'depot_tools/tryserver',
   'file',
-  'goma',
   'gsutil',
   'recipe_engine/path',
   'recipe_engine/properties',
@@ -27,31 +26,14 @@ def RunSteps(api):
   api.webrtc.checkout()
   api.gclient.runhooks()
 
-  goma_dir = api.goma.ensure_goma()
-  api.goma.start()
-  ninja_log_exit_status = 1
+  build_script = api.path['checkout'].join('tools-webrtc', 'ios',
+                                           'build_ios_libs.py')
+  if not api.tryserver.is_tryserver:
+    api.step('cleanup', [build_script, '-c'], cwd=api.path['checkout'])
 
-  try:
-    build_script = api.path['checkout'].join('tools-webrtc', 'ios',
-                                             'build_ios_libs.py')
-    if not api.tryserver.is_tryserver:
-      api.step('cleanup', [build_script, '-c'], cwd=api.path['checkout'])
-
-      step_result = api.python(
-          'build',
-          build_script,
-          args=['-r', api.webrtc.revision_number,
-                '-e',
-                '--use-goma',
-                '--extra-gn-args=\"goma_dir=%s\"' % goma_dir],
-          cwd=api.path['checkout']
-      )
-      ninja_log_exit_status = step_result.retcode
-  except api.step.StepFailure as e:
-    ninja_log_exit_status = e.retcode
-  finally:
-    api.goma.stop(ninja_log_compiler='goma',
-                  ninja_log_exit_status=ninja_log_exit_status)
+  api.python('build', build_script,
+             args=['-r', api.webrtc.revision_number, '-e'],
+             cwd=api.path['checkout'])
 
   if not api.tryserver.is_tryserver:
     output_dir = api.path['checkout'].join('out_ios_libs')
