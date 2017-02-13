@@ -31,6 +31,9 @@ CLIENT_VERSIONS = {
   'windows-amd64': '96af3f67d017a6285d491471f39d3d983a2a7011',
 }
 
+# CIPD version used when "canary" is True.
+CANARY_VERSION = 'git_revision:642ccc920c3acf79fde01791aeef185a86cbae46'
+
 
 class CipdBootstrapError(Exception):
   """Raised by install_cipd_client on fatal error."""
@@ -193,11 +196,15 @@ def main(args):
   parser.add_argument('--json-output', default=None)
   parser.add_argument('--version', default=None)
   parser.add_argument('--platform', required=True)
+  parser.add_argument('--canary', action='store_true')
   parser.add_argument('--dest-directory', required=True)
   opts = parser.parse_args(args)
 
   package = "infra/tools/cipd/%s" % opts.platform
-  version = opts.version or CLIENT_VERSIONS[opts.platform]
+  version = opts.version
+  if not version:
+    version = ((CLIENT_VERSIONS[opts.platform])
+               if not opts.canary else CANARY_VERSION)
 
   try:
     exe_path, instance_id = install_cipd_client(opts.dest_directory,

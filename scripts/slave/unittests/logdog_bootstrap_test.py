@@ -73,7 +73,7 @@ class LogDogBootstrapTest(unittest.TestCase):
     self.base = ldbs.Params(
         project='alpha', cipd_tag=ldbs._STABLE_CIPD_TAG, api=self.stable_api,
         mastername='default', buildername='builder', buildnumber=24601,
-        logdog_only=False)
+        logdog_only=False, cipd_canary=False)
 
     # Control whether we think we're a GCE instnace.
     gce.Authenticator.is_gce.return_value = False
@@ -180,7 +180,7 @@ class LogDogBootstrapTest(unittest.TestCase):
     get_params.return_value = ldbs.Params(
         project='myproject', cipd_tag='stable', api=self.stable_api,
         mastername='mastername', buildername='buildername', buildnumber=1337,
-        logdog_only=False)
+        logdog_only=False, cipd_canary=False)
     install_cipd.return_value = (butler_path, annotee_path)
     service_account.return_value = 'creds.json'
     isfile.return_value = True
@@ -238,7 +238,8 @@ class LogDogBootstrapTest(unittest.TestCase):
     get_params.return_value = ldbs.Params(
         project='myproject', cipd_tag='stable',
         api=self.latest_api, mastername='mastername',
-        buildername='buildername', buildnumber=1337, logdog_only=True)
+        buildername='buildername', buildnumber=1337, logdog_only=True,
+        cipd_canary=True)
     install_cipd.return_value = ('logdog_butler.exe', 'logdog_annotee.exe')
     service_account.return_value = 'creds.json'
     isfile.return_value = True
@@ -356,7 +357,7 @@ class LogDogBootstrapTest(unittest.TestCase):
     self.assertIsNone(service_account_json)
 
   def test_cipd_install(self):
-    pkgs = ldbs._install_cipd(self.basedir, 'version:foobarbaz',
+    pkgs = ldbs._install_cipd(self.basedir, False,
         cipd.CipdBinary(cipd.CipdPackage('infra/foo', 'v0'), 'foo'),
         cipd.CipdBinary(cipd.CipdPackage('infra/bar', 'v1'), 'baz'),
         )
@@ -366,7 +367,22 @@ class LogDogBootstrapTest(unittest.TestCase):
       sys.executable,
        os.path.join(env.Build, 'scripts', 'slave', 'cipd.py'),
        '--dest-directory', self.basedir,
-       '--cipd-version', 'version:foobarbaz',
+       '-P', 'infra/foo@v0',
+       '-P', 'infra/bar@v1',
+    ])
+
+  def test_cipd_install_canary(self):
+    pkgs = ldbs._install_cipd(self.basedir, True,
+        cipd.CipdBinary(cipd.CipdPackage('infra/foo', 'v0'), 'foo'),
+        cipd.CipdBinary(cipd.CipdPackage('infra/bar', 'v1'), 'baz'),
+        )
+    self.assertEqual(pkgs, (self._bp('foo'), self._bp('baz')))
+
+    ldbs._check_call.assert_called_once_with([
+      sys.executable,
+       os.path.join(env.Build, 'scripts', 'slave', 'cipd.py'),
+       '--dest-directory', self.basedir,
+       '--canary',
        '-P', 'infra/foo@v0',
        '-P', 'infra/bar@v1',
     ])

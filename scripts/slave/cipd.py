@@ -34,7 +34,7 @@ CipdPackage = collections.namedtuple('CipdPackage', ('name', 'version'))
 CipdBinary = collections.namedtuple('CipdBinary', ('package', 'relpath'))
 
 
-def bootstrap(path, cipd_version=None):
+def bootstrap(path, canary=False):
   bootstrap_path = os.path.join(
       common.env.Build, 'scripts', 'slave', 'cipd_bootstrap.py')
 
@@ -45,6 +45,7 @@ def bootstrap(path, cipd_version=None):
         'x86': '386',
         'x86_64': 'amd64',
         'armv6l': 'armv6l',
+        'mips64': 'mips64',
       }[machine]
   )
   json_output = os.path.join(path, 'cipd_bootstrap.json')
@@ -56,8 +57,8 @@ def bootstrap(path, cipd_version=None):
     '--dest-directory', path,
     '--json-output', json_output,
   ]
-  if cipd_version:
-    cmd += ['--version', cipd_version]
+  if canary:
+    cmd += ['--canary']
 
   LOGGER.debug('Installing CIPD client: %s', cmd)
   subprocess.check_call(cmd)
@@ -113,9 +114,9 @@ def main(argv):
                       help='Output package results to a JSON file.')
   parser.add_argument('--service-account-json',
                       help='If specified, use this service account JSON.')
-  parser.add_argument('--cipd-version',
-                      help='If specified, use this CIPD version instead of the '
-                           'default.')
+  parser.add_argument('--canary', action='store_true',
+                      help='If true, use the canary CIPD client version in '
+                           'cipd_bootstrap.py.')
   opts = parser.parse_args(argv[1:])
 
   # Verbosity.
@@ -132,7 +133,7 @@ def main(argv):
     os.makedirs(opts.dest_directory)
 
   LOGGER.debug('Bootstrapping CIPD client...')
-  client = bootstrap(opts.dest_directory, cipd_version=opts.cipd_version)
+  client = bootstrap(opts.dest_directory, canary=opts.canary)
 
   if LOGGER.isEnabledFor(logging.INFO):
     LOGGER.info('CIPD client [%s] ensuring %d package(s)...',
