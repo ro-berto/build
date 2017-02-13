@@ -18,7 +18,7 @@ sys.path.insert(
 import test_env
 
 # For results_merger.
-sys.path.insert(0, os.path.join(THIS_DIR, '..'))
+sys.path.insert(0, os.path.join(THIS_DIR, '..', 'resources'))
 import results_merger
 
 
@@ -262,6 +262,11 @@ class MergingTest(unittest.TestCase):  # pragma: no cover
             extend(GOOD_JSON_TEST_RESULT_2, {'fixable': 3}),
             ]),
         extend(GOOD_JSON_TEST_RESULT_MERGED, {'fixable': 6}))
+
+  def test_merge_nothing(self):
+    self.assertEquals(
+        results_merger.merge_test_results([]),
+        {})
 
 # TODO(tansell): Make this test fail properly, currently fails with an
 # AttributeError.

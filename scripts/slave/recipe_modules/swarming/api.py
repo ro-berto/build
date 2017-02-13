@@ -9,8 +9,7 @@ import logging
 import os.path
 
 from recipe_engine import recipe_api
-
-from . import results_merger
+from recipe_engine import util as recipe_util
 
 # Minimally supported version of swarming.py script (reported by --version).
 MINIMAL_SWARMING_VERSION = (0, 8, 6)
@@ -409,7 +408,8 @@ class SwarmingApi(recipe_api.RecipeApi):
     }[platform]
 
   def task(self, title, isolated_hash, shards=1, task_output_dir=None,
-           extra_args=None, idempotent=None, cipd_packages=None):
+           extra_args=None, idempotent=None, cipd_packages=None,
+           build_properties=None, merge=None):
     """Returns a new SwarmingTask instance to run an isolated executable on
     Swarming.
 
@@ -441,6 +441,22 @@ class SwarmingApi(recipe_api.RecipeApi):
                   eg. "infra/tools/authutil/${platform}"
               version: Version of the package, either a package instance ID,
                   ref, or tag key/value pair.
+      build_properties: An optional dict containing various build properties.
+          These are typically but not necessarily the properties emitted by
+          bot_update.
+      merge: An optional dict containing:
+          "merge": path to a script to call to post process and merge the
+              collected outputs from the tasks. The script should take one
+              named (but required) parameter, '-o' (for output), that represents
+              the path that the merged results should be written to, and accept
+              N additional paths to result files to merge. The merged results
+              should be in the JSON Results File Format
+              (https://www.chromium.org/developers/the-json-test-results-format)
+              and may optionally contain a top level "links" field that
+              may contain a dict mapping link text to URLs, for a set of
+              links that will be included in the buildbot output.
+          "args": an optional list of additional arguments to pass to the
+              above script.
     """
     if idempotent is None:
       idempotent = self.default_idempotent
@@ -461,7 +477,9 @@ class SwarmingApi(recipe_api.RecipeApi):
         extra_args=extra_args,
         collect_step=self._default_collect_step,
         task_output_dir=task_output_dir,
-        cipd_packages=cipd_packages)
+        cipd_packages=cipd_packages,
+        build_properties=build_properties,
+        merge=merge)
 
   def gtest_task(self, title, isolated_hash, test_launcher_summary_output=None,
                  extra_args=None, cipd_packages=None, **kwargs):
@@ -515,9 +533,8 @@ class SwarmingApi(recipe_api.RecipeApi):
     "isolated_scripts" entries in Chromium's src/testing/buildbot/*.json.
 
     Swarming recipe module knows how collect JSON file with test execution
-    summary produced by isolated script tests launcher. Since isolated script
-    tests do not support sharding, no merging of the results is performed.
-    Parsed JSON summary is returned from the collect step.
+    summary produced by isolated script tests launcher. A custom script
+    can be passed to merge the collected results and post-process them.
 
     For meaning of the rest of the arguments see 'task' method.
     """
@@ -673,6 +690,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         'Trying to collect a task that was not triggered: %s' %
         task.task_name)
     self._pending_tasks.remove(task.task_name)
+
     try:
       return task.collect_step(task, **kwargs)
     finally:
@@ -811,7 +829,7 @@ class SwarmingApi(recipe_api.RecipeApi):
             link_name = 'shard #%d isolated out' % index
             p.links[link_name] = outputs_ref['view_url']
 
-  def _merge_isolated_script_chartjson_ouput_shards(self, task, step_result):
+  def _merge_isolated_script_chartjson_output_shards(self, task, step_result):
     # Taken from third_party/catapult/telemetry/telemetry/internal/results/
     # chart_json_output_formatter.py, the json entries are as follows:
     # result_dict = {
@@ -850,36 +868,48 @@ class SwarmingApi(recipe_api.RecipeApi):
             merged_results[key][add_key] = chartjson_results_json[key][add_key]
     return merged_results
 
-  def _merge_isolated_script_shards(self, task, step_result):
-    shard_results_list = []
-    for i in xrange(task.shards):
-      path = self.m.path.join(str(i), 'output.json')
-      if path not in step_result.raw_io.output_dir:
-        raise Exception('no results from shard #%d' % i)
-      results_raw = step_result.raw_io.output_dir[path]
-      try:
-        results_json = self.m.json.loads(results_raw)
-        shard_results_list.append(results_json)
-      except Exception as e:
-        raise Exception('error decoding JSON results from shard #%d' % i)
-    return results_merger.merge_test_results(shard_results_list)
-
   def _isolated_script_collect_step(self, task, **kwargs):
     """Collects results for a step that is *not* a googletest, like telemetry.
     """
     step_test_data = kwargs.pop('step_test_data', None)
     if not step_test_data:
       step_test_data = self.m.test_utils.test_api.canned_isolated_script_output(
-          passing=True, is_win=self.m.platform.is_win, swarming=True)
+          passing=True, is_win=self.m.platform.is_win, swarming=True,
+          use_json_test_format=True)
 
-    args=self.get_collect_cmd_args(task)
-    args.extend(['--task-output-dir', self.m.raw_io.output_dir()])
+    collect_cmd = [
+      'python',
+      self.m.swarming_client.path.join('swarming.py')
+    ]
+    collect_cmd.extend(self.get_collect_cmd_args(task))
+
+    task_args = [
+      '-o', self.m.json.output(),
+      '--task-output-dir', self.m.raw_io.output_dir()
+    ]
+    if task.build_properties:
+      task_args.extend([
+          '--build-properties', self.m.json.dumps(task.build_properties),
+      ])
+
+    merge_script = (task.merge.get('script')
+                    or self.resource('standard_isolated_script_merge.py'))
+    merge_args = (task.merge.get('args') or [])
+
+    task_args.extend([
+        '--merge-script', merge_script,
+        '--merge-additional-args', self.m.json.dumps(merge_args),
+    ])
+
+    task_args.append('--')
+    task_args.extend(collect_cmd)
 
     try:
       return self.m.python(
           name=self.get_step_name('', task),
-          script=self.m.swarming_client.path.join('swarming.py'),
-          args=args, step_test_data=lambda: step_test_data,
+          script=self.resource('collect_isolated_script_task.py'),
+          args=task_args,
+          step_test_data=lambda: step_test_data,
           **kwargs)
     finally:
       # Regardless of the outcome of the test (pass or fail), we try to parse
@@ -905,12 +935,14 @@ class SwarmingApi(recipe_api.RecipeApi):
 
         self._handle_summary_json(task, summary_json, step_result)
 
-        step_result.isolated_script_results = \
-          self._merge_isolated_script_shards(task, step_result)
+        step_result.isolated_script_results = step_result.json.output
+        links = (step_result.isolated_script_results or {}).get('links', {})
+        for k, v in links.iteritems():
+          step_result.presentation.links[k] = v
 
         # Obtain chartjson results if present
         step_result.isolated_script_chartjson_results = \
-          self._merge_isolated_script_chartjson_ouput_shards(task, step_result)
+          self._merge_isolated_script_chartjson_output_shards(task, step_result)
 
       except Exception as e:
         self.m.step.active_result.presentation.logs['no_results_exc'] = [str(e)]
@@ -1065,7 +1097,8 @@ class SwarmingTask(object):
   def __init__(self, title, isolated_hash, dimensions, env, priority,
                shards, buildername, buildnumber, expiration, user, io_timeout,
                hard_timeout, idempotent, extra_args, collect_step,
-               task_output_dir, cipd_packages=None):
+               task_output_dir, cipd_packages=None, build_properties=None,
+               merge=None):
     """Configuration of a swarming task.
 
     Args:
@@ -1110,10 +1143,19 @@ class SwarmingTask(object):
       extra_args: list of command line arguments to pass to isolated tasks.
       task_output_dir: if defined, the directory where task results are placed
           during the collect step.
+      build_properties: An optional dict containing various build properties.
+          These are typically but not necessarily the properties emitted by
+          bot_update.
+      merge: An optional dict containing:
+          "script": path to a script to call to post process and merge the
+              collected outputs from the tasks.
+          "args": an optional list of additional arguments to pass to the
+              above script.
     """
     self._trigger_output = None
-    self.buildnumber = buildnumber
+    self.build_properties = build_properties
     self.buildername = buildername
+    self.buildnumber = buildnumber
     self.cipd_packages = cipd_packages
     self.collect_step = collect_step
     self.dimensions = dimensions.copy()
@@ -1124,6 +1166,7 @@ class SwarmingTask(object):
     self.idempotent = idempotent
     self.io_timeout = io_timeout
     self.isolated_hash = isolated_hash
+    self.merge = merge or {}
     self.priority = priority
     self.shards = shards
     self.tags = set()

@@ -5,7 +5,7 @@
 import copy
 
 # These fields must appear in the test result output
-REQUIRED = { 
+REQUIRED = {
     'interrupted',
     'num_failures_by_type',
     'seconds_since_epoch',
@@ -56,6 +56,9 @@ def merge_test_results(shard_results_list):
     a dictionary that represent the merged results. Its format follow the same
     format of all results in |shard_results_list|.
   """
+  if not shard_results_list:
+    return {}
+
   if 'seconds_since_epoch' in shard_results_list[0]:
     return _merge_json_test_result_format(shard_results_list)
   else:
