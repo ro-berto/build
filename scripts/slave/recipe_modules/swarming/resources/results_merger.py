@@ -3,6 +3,8 @@
 # found in the LICENSE file.
 
 import copy
+import json
+import sys
 
 # These fields must appear in the test result output
 REQUIRED = {
@@ -245,3 +247,20 @@ def merge_value(source, dest, key, merge_func):
   """
   dest[key] = merge_func(source[key], dest[key])
   del source[key]
+
+
+def main(files):
+  if len(files) < 2:
+    sys.stderr.write("Not enough JSON files to merge.\n")
+    return 1
+  sys.stderr.write('Starting with %s\n' % files[0])
+  result = json.load(open(files[0]))
+  for f in files[1:]:
+    sys.stderr.write('Merging %s\n' % f)
+    result = merge_test_results([result, json.load(open(f))])
+  print json.dumps(result)
+  return 0
+
+
+if __name__ == "__main__":
+  sys.exit(main(sys.argv[1:]))
