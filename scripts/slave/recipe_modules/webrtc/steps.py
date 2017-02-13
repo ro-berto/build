@@ -106,12 +106,6 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
   elif test_suite == 'android_perf' and api.c.PERF_ID:
     # TODO(kjellander): Fix the Android ASan bot so we can have an assert here.
     tests.append(AndroidPerfTest('webrtc_perf_tests', revision=revision))
-    test_path = api.m.path['checkout'].join(
-        'webrtc', 'examples', 'androidtests', 'video_quality_loopback_test.py')
-    tests.append(WebRTCTest(str(test_path), name='video_quality_loopback_test',
-                            revision=revision, perf_test=True,
-                            perf_dashboard_id='video_quality_loopback_test',
-                            args=['out/%s' % api.m.chromium.c.build_config_fs]))
   elif test_suite == 'android':
     GTestTest = api.m.chromium_tests.steps.GTestTest
     for test in (ANDROID_DEVICE_TESTS +
