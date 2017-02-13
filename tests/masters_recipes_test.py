@@ -52,6 +52,9 @@ SUPPRESSIONS = {
         'Mac Retina Debug (AMD)',
         'Win7 Debug (NVIDIA)',
     ],
+    'master.chromium.linux': [
+        'linux_chromium_clobber_deterministic',
+    ],
     'master.chromium.mac': [
         'ios-device',
         'ios-device-xcode-clang',
