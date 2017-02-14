@@ -302,6 +302,9 @@ class ChromiumApi(recipe_api.RecipeApi):
     else:
       goma_env['GOMA_ALLOWED_NETWORK_ERROR_DURATION'] = '1800'
 
+    if self.c.compile_py.goma_no_multi_exec:
+      goma_env['GOMA_MULTI_EXEC_IN_CALL'] = 1
+
     if self.c.TARGET_CROS_BOARD:
       # Wrap 'compile' through 'cros chrome-sdk'
       kwargs['wrapper'] = self.get_cros_chrome_sdk_wrapper()
