@@ -32,7 +32,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MockOptions = collections.namedtuple('MockOptions',
     ('logdog_butler_path', 'logdog_annotee_path', 'logdog_verbose',
      'logdog_service_account_json', 'logdog_service_host',
-     'logdog_viewer_host'))
+     'logdog_viewer_host', 'logdog_disable'))
 
 
 class LogDogBootstrapTest(unittest.TestCase):
@@ -58,7 +58,8 @@ class LogDogBootstrapTest(unittest.TestCase):
         logdog_verbose=False,
         logdog_service_account_json=None,
         logdog_service_host=None,
-        logdog_viewer_host=None)
+        logdog_viewer_host=None,
+        logdog_disable=False)
     self.properties = {
       'mastername': 'default',
       'buildername': 'builder',
@@ -397,11 +398,24 @@ class LogDogBootstrapTest(unittest.TestCase):
         cipd.CipdBinary(cipd.CipdPackage('infra/bar', 'v1'), 'baz'),
     )
 
-  def test_will_not_bootstrap_if_recursive(self):
+  @mock.patch('slave.logdog_bootstrap._get_params')
+  def test_will_not_bootstrap_if_recursive(self, get_params):
+    get_params.side_effect = Exception('Tried to bootstrap')
     os.environ['LOGDOG_STREAM_PREFIX'] = 'foo'
+
     with self.assertRaises(ldbs.NotBootstrapped):
       ldbs.bootstrap(self.rt, self.opts, self.basedir, self.tdir,
                     self.properties, [])
+
+  @mock.patch('slave.logdog_bootstrap._get_params')
+  @mock.patch('slave.robust_tempdir.RobustTempdir.tempdir')
+  def test_will_not_bootstrap_if_disabled(self, tempdir, get_params):
+    get_params.side_effect = Exception('Tried to bootstrap')
+    opts = self.opts._replace(logdog_disable=True)
+
+    with self.assertRaises(ldbs.NotBootstrapped):
+      ldbs.bootstrap(self.rt, opts, self.basedir, self.tdir,
+                     self.properties, [])
 
 
 class TestPublicParams(unittest.TestCase):

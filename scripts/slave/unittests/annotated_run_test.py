@@ -30,7 +30,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 MockOptions = collections.namedtuple('MockOptions',
-    ('dry_run',))
+    ('dry_run', 'logdog_disable'))
 
 
 class AnnotatedRunTest(unittest.TestCase):
@@ -101,7 +101,8 @@ class AnnotatedRunExecTest(unittest.TestCase):
     self.basedir = self.rt.tempdir()
     self.tdir = self.rt.tempdir()
     self.opts = MockOptions(
-        dry_run=False)
+        dry_run=False,
+        logdog_disable=False)
     self.properties = {
       'recipe': 'example/recipe',
       'mastername': 'master.random',

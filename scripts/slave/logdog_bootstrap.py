@@ -437,6 +437,9 @@ def bootstrap(rt, opts, basedir, tempdir, properties, cmd):
     BootstrapError: if there was an error bootstrapping the recipe runner
         through LogDog.
   """
+  if opts.logdog_disable:
+    raise NotBootstrapped('LogDog explicitly disabled (--disable-logdog).')
+
   # If we have LOGDOG_STREAM_PREFIX defined, we are already bootstrapped. Don't
   # start a new instance.
   #
@@ -620,6 +623,8 @@ def add_arguments(parser):
   parser.add_argument('--logdog-verbose',
       action='count', default=0,
       help='Increase LogDog verbosity. This can be specified multiple times.')
+  parser.add_argument('--logdog-disable', action='store_true',
+      help='Disable LogDog bootstrapping, even if otherwise configured.')
   parser.add_argument('--logdog-butler-path',
       help='Path to the LogDog Butler. If empty, one will be probed/downloaded '
            'from CIPD.')

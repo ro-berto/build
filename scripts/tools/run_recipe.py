@@ -122,6 +122,7 @@ def main(args):
 
   cmd = ['python', '-u', RUNIT, 'python', '-u', ANNOTATED_RUN,
          '--keep-stdin',  # so that pdb works for local execution
+         '--logdog-disable',
          '--factory-properties', json.dumps(properties),
          '--build-properties', json.dumps(properties)]
 
