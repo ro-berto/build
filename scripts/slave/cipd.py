@@ -38,22 +38,12 @@ def bootstrap(path, canary=False):
   bootstrap_path = os.path.join(
       common.env.Build, 'scripts', 'slave', 'cipd_bootstrap.py')
 
-  plat, machine, _ = slave.infra_platform.get()
-  plat = '%s-%s' % (
-      plat.replace('win', 'windows'),
-      {
-        'x86': '386',
-        'x86_64': 'amd64',
-        'armv6l': 'armv6l',
-        'mips64': 'mips64',
-      }[machine]
-  )
   json_output = os.path.join(path, 'cipd_bootstrap.json')
 
   cmd = [
     sys.executable,
     bootstrap_path,
-    '--platform', plat,
+    '--platform', slave.infra_platform.cipd_platform_arch(),
     '--dest-directory', path,
     '--json-output', json_output,
   ]

@@ -69,6 +69,47 @@ def get():
   return plat, machine, bits
 
 
+def exe_suffix():
+  """Returns either '' or '.exe' depending on the platform."""
+  plat, _, _ = get()
+  return '.exe' if plat == 'win' else ''
+
+
+def cipd_platform():
+  """Returns the equivalent of `cipd ensure`'s ${platform}.
+
+  Example: 'windows', 'mac', 'linux'
+  '"""
+  os_name, _, _ = get()
+  return _cipd_platform(os_name)
+
+
+def _cipd_platform(os_name):
+  return os_name.replace('win', 'windows')
+
+
+def cipd_arch():
+  """Returns the equivalent of `cipd ensure`'s ${arch}.
+
+  Example: 'amd64', '386'
+  """
+  _, machine, _ = get()
+  return _cipd_arch(machine)
+
+
+def _cipd_arch(machine):
+  return {
+    'x86': '386',
+    'x86_64': 'amd64',
+  }.get(machine, machine)
+
+
+def cipd_platform_arch():
+  """Return the equivalent of `cipd ensure`'s ${platform}-${arch}."""
+  os_name, machine, _ = get()
+  return "%s-%s" % (_cipd_platform(os_name), _cipd_arch(machine))
+
+
 def cascade_config(config, plat=None):
   """Returns (dict): The constructed configuration dictionary.
 
