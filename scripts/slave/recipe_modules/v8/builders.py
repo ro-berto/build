@@ -292,7 +292,7 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing_3,
-          Test262,
+          Test262_2,
           Mozilla,
         ],
         'variants': V8NoExhaustiveVariants(),
