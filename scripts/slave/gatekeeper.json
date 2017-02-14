@@ -141,6 +141,18 @@
         }
       }
     ],
+    "https://build.chromium.org/p/chromium.android.fyi": [
+      {
+        "builders": {
+          "Memory Infra Tester": {
+            "tree_notify": [
+              "chrome-memory-sheriffs+bots@google.com"
+            ],
+            "forgiving_optional": [ "*" ]
+          }
+        }
+      }
+    ],
     "https://build.chromium.org/p/chromium.chrome": [
       {
         "categories": [
