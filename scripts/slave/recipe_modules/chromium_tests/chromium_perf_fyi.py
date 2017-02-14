@@ -40,10 +40,11 @@ def chromium_perf_clang(c):
 
 def _AddBuildSpec(name, perf_id, platform, config_name='chromium_perf',
                   target_bits=64, enable_swarming=False,
-                  extra_compile_targets=None):
+                  extra_compile_targets=None, force_exparchive=False):
   SPEC['builders'][name] = chromium_perf.BuildSpec(
       config_name, perf_id, platform, target_bits, enable_swarming,
-      extra_compile_targets=extra_compile_targets)
+      extra_compile_targets=extra_compile_targets,
+      force_exparchive=force_exparchive)
 
 
 def _AddTestSpec(name, perf_id, platform, num_device_shards=1,
@@ -87,7 +88,8 @@ _AddTestSpec('Android Power Nexus 5X Perf', 'fyi-android-power-nexus-5x',
 _AddIsolatedTestSpec('Android Swarming N5X Tester', 'fyi-android-swarming-n5x',
                      'android', parent_buildername='Android Builder FYI')
 
-_AddBuildSpec('Win Builder FYI', 'win', 'win', enable_swarming=True)
+_AddBuildSpec('Win Builder FYI', 'win', 'win', enable_swarming=True,
+              force_exparchive=True)
 _AddIsolatedTestSpec('Win 10 Low-End Perf Tests', 'win-10-low-end', 'win',
                      parent_buildername='Win Builder FYI')
 _AddIsolatedTestSpec('Win 10 4 Core Low-End Perf Tests',
