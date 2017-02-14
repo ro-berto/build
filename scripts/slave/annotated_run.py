@@ -237,19 +237,6 @@ def get_args(argv):
   return parser.parse_args(argv)
 
 
-def clean_old_recipe_engine():
-  """Clean stale pycs from the old location of recipe_engine.
-
-  This function should only be needed for a little while after the recipe
-  packages rollout (2015-09-16).
-  """
-  for (dirpath, _, filenames) in os.walk(
-      os.path.join(env.Build, 'third_party', 'recipe_engine')):
-    for filename in filenames:
-      if filename.endswith('.pyc'):
-        os.remove(os.path.join(dirpath, filename))
-
-
 def _exec_recipe(rt, opts, stream, basedir, tdir, properties):
   # Find out if the recipe we intend to run is in build_internal's recipes. If
   # so, use recipes.py from there, otherwise use the one from build.
@@ -329,8 +316,6 @@ def main(argv):
   else:
     level = logging.DEBUG
   logging.getLogger().setLevel(level)
-
-  clean_old_recipe_engine()
 
   # Enter our runtime environment.
   basedir = _builder_dir()
