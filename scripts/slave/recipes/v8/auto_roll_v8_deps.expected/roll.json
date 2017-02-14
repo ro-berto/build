@@ -310,7 +310,6 @@
       "--bypass-hooks",
       "--email",
       "v8-autoroll@chromium.org",
-      "--send-mail",
       "--gerrit"
     ],
     "cwd": "[START_DIR]/v8",
