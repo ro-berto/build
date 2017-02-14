@@ -391,7 +391,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:browser_tests on Ubuntu-14.04",
+      "stepname:browser_tests",
       "--idempotent",
       "ffffffffffffffffffffffffffffffffffffffff",
       "--",
@@ -402,7 +402,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "[trigger] browser_tests on Ubuntu-14.04",
+    "name": "[trigger] browser_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -446,7 +446,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "browser_tests on Ubuntu-14.04",
+    "name": "browser_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@step_metadata@{@@@",
@@ -457,7 +457,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-14.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"browser_tests on Ubuntu-14.04\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"browser_tests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
@@ -483,7 +483,7 @@
       "--build-number",
       "571",
       "--test-type",
-      "browser_tests on Ubuntu-14.04",
+      "browser_tests",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
@@ -493,7 +493,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "Upload to test-results [browser_tests on Ubuntu-14.04]"
+    "name": "Upload to test-results [browser_tests]"
   },
   {
     "name": "$result",

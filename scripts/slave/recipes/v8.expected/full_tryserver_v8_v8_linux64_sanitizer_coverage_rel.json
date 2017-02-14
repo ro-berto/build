@@ -687,7 +687,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Check on Ubuntu-14.04",
+      "stepname:Check",
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
@@ -713,7 +713,7 @@
       "--sancov-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "name": "[trigger] Check on Ubuntu-14.04",
+    "name": "[trigger] Check",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -803,7 +803,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:OptimizeForSize on Ubuntu-14.04",
+      "stepname:OptimizeForSize",
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
@@ -830,7 +830,7 @@
       "--sancov-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "name": "[trigger] OptimizeForSize on Ubuntu-14.04",
+    "name": "[trigger] OptimizeForSize",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -908,7 +908,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Test262 on Ubuntu-14.04",
+      "stepname:Test262",
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
@@ -935,7 +935,7 @@
       "--sancov-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "name": "[trigger] Test262 on Ubuntu-14.04",
+    "name": "[trigger] Test262",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1043,7 +1043,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Mjsunit - sp frame access on Ubuntu-14.04",
+      "stepname:Mjsunit - sp frame access",
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
@@ -1070,7 +1070,7 @@
       "--sancov-dir",
       "${ISOLATED_OUTDIR}"
     ],
-    "name": "[trigger] Mjsunit - sp frame access on Ubuntu-14.04",
+    "name": "[trigger] Mjsunit - sp frame access",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",

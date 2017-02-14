@@ -153,13 +153,13 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Static-Initializers on Ubuntu-14.04",
+      "stepname:Static-Initializers",
       "--idempotent",
       "[dummy hash for check-static-initializers]",
       "--",
       "out/Release/d8"
     ],
-    "name": "[trigger] Static-Initializers on Ubuntu-14.04",
+    "name": "[trigger] Static-Initializers",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -233,7 +233,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Check on Ubuntu-14.04",
+      "stepname:Check",
       "--idempotent",
       "[dummy hash for bot_default]",
       "--",
@@ -254,7 +254,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Check on Ubuntu-14.04",
+    "name": "[trigger] Check",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -328,7 +328,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Check - extra on Ubuntu-14.04",
+      "stepname:Check - extra",
       "--idempotent",
       "[dummy hash for bot_default]",
       "--",
@@ -349,7 +349,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Check - extra on Ubuntu-14.04",
+    "name": "[trigger] Check - extra",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -423,7 +423,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:OptimizeForSize on Ubuntu-14.04",
+      "stepname:OptimizeForSize",
       "--idempotent",
       "[dummy hash for optimize_for_size]",
       "--",
@@ -445,7 +445,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] OptimizeForSize on Ubuntu-14.04",
+    "name": "[trigger] OptimizeForSize",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -519,7 +519,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Benchmarks on Ubuntu-14.04",
+      "stepname:Benchmarks",
       "--idempotent",
       "[dummy hash for benchmarks]",
       "--",
@@ -541,7 +541,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Benchmarks on Ubuntu-14.04",
+    "name": "[trigger] Benchmarks",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -615,7 +615,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Test262 on Ubuntu-14.04",
+      "stepname:Test262",
       "--idempotent",
       "[dummy hash for test262]",
       "--",
@@ -637,7 +637,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Test262 on Ubuntu-14.04",
+    "name": "[trigger] Test262",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -717,7 +717,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Test262 - extra on Ubuntu-14.04",
+      "stepname:Test262 - extra",
       "--idempotent",
       "[dummy hash for test262]",
       "--",
@@ -739,7 +739,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Test262 - extra on Ubuntu-14.04",
+    "name": "[trigger] Test262 - extra",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -819,7 +819,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Mozilla on Ubuntu-14.04",
+      "stepname:Mozilla",
       "--idempotent",
       "[dummy hash for mozilla]",
       "--",
@@ -840,7 +840,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Mozilla on Ubuntu-14.04",
+    "name": "[trigger] Mozilla",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -914,7 +914,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Mjsunit - sp frame access on Ubuntu-14.04",
+      "stepname:Mjsunit - sp frame access",
       "--idempotent",
       "[dummy hash for mjsunit]",
       "--",
@@ -936,7 +936,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Mjsunit - sp frame access on Ubuntu-14.04",
+    "name": "[trigger] Mjsunit - sp frame access",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1010,13 +1010,13 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:GCMole ia32 on Ubuntu-14.04",
+      "stepname:GCMole ia32",
       "--idempotent",
       "[dummy hash for run-gcmole]",
       "--",
       "ia32"
     ],
-    "name": "[trigger] GCMole ia32 on Ubuntu-14.04",
+    "name": "[trigger] GCMole ia32",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1090,13 +1090,13 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:GCMole x64 on Ubuntu-14.04",
+      "stepname:GCMole x64",
       "--idempotent",
       "[dummy hash for run-gcmole]",
       "--",
       "x64"
     ],
-    "name": "[trigger] GCMole x64 on Ubuntu-14.04",
+    "name": "[trigger] GCMole x64",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1170,13 +1170,13 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:GCMole arm on Ubuntu-14.04",
+      "stepname:GCMole arm",
       "--idempotent",
       "[dummy hash for run-gcmole]",
       "--",
       "arm"
     ],
-    "name": "[trigger] GCMole arm on Ubuntu-14.04",
+    "name": "[trigger] GCMole arm",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1250,13 +1250,13 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:GCMole arm64 on Ubuntu-14.04",
+      "stepname:GCMole arm64",
       "--idempotent",
       "[dummy hash for run-gcmole]",
       "--",
       "arm64"
     ],
-    "name": "[trigger] GCMole arm64 on Ubuntu-14.04",
+    "name": "[trigger] GCMole arm64",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1330,7 +1330,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Check - isolates on Ubuntu-14.04",
+      "stepname:Check - isolates",
       "--idempotent",
       "[dummy hash for bot_default]",
       "--",
@@ -1352,7 +1352,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Check - isolates on Ubuntu-14.04",
+    "name": "[trigger] Check - isolates",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1426,7 +1426,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Check - nosse3 on Ubuntu-14.04",
+      "stepname:Check - nosse3",
       "--idempotent",
       "[dummy hash for bot_default]",
       "--",
@@ -1449,7 +1449,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Check - nosse3 on Ubuntu-14.04",
+    "name": "[trigger] Check - nosse3",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1523,7 +1523,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Mozilla - nosse3 on Ubuntu-14.04",
+      "stepname:Mozilla - nosse3",
       "--idempotent",
       "[dummy hash for mozilla]",
       "--",
@@ -1546,7 +1546,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Mozilla - nosse3 on Ubuntu-14.04",
+    "name": "[trigger] Mozilla - nosse3",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1620,7 +1620,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Check - nosse4 on Ubuntu-14.04",
+      "stepname:Check - nosse4",
       "--idempotent",
       "[dummy hash for bot_default]",
       "--",
@@ -1643,7 +1643,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Check - nosse4 on Ubuntu-14.04",
+    "name": "[trigger] Check - nosse4",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1717,7 +1717,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Mozilla - nosse4 on Ubuntu-14.04",
+      "stepname:Mozilla - nosse4",
       "--idempotent",
       "[dummy hash for mozilla]",
       "--",
@@ -1740,7 +1740,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Mozilla - nosse4 on Ubuntu-14.04",
+    "name": "[trigger] Mozilla - nosse4",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1814,7 +1814,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Check - deadcode on Ubuntu-14.04",
+      "stepname:Check - deadcode",
       "--idempotent",
       "[dummy hash for bot_default]",
       "--",
@@ -1836,7 +1836,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Check - deadcode on Ubuntu-14.04",
+    "name": "[trigger] Check - deadcode",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1910,7 +1910,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Test262 - no variants - deadcode on Ubuntu-14.04",
+      "stepname:Test262 - no variants - deadcode",
       "--idempotent",
       "[dummy hash for test262]",
       "--",
@@ -1933,7 +1933,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Test262 - no variants - deadcode on Ubuntu-14.04",
+    "name": "[trigger] Test262 - no variants - deadcode",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2007,7 +2007,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Mozilla - deadcode on Ubuntu-14.04",
+      "stepname:Mozilla - deadcode",
       "--idempotent",
       "[dummy hash for mozilla]",
       "--",
@@ -2029,7 +2029,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Mozilla - deadcode on Ubuntu-14.04",
+    "name": "[trigger] Mozilla - deadcode",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2061,7 +2061,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "name": "Static-Initializers on Ubuntu-14.04",
+    "name": "Static-Initializers",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2434,7 +2434,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "name": "GCMole ia32 on Ubuntu-14.04",
+    "name": "GCMole ia32",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2493,7 +2493,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "name": "GCMole x64 on Ubuntu-14.04",
+    "name": "GCMole x64",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2552,7 +2552,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "name": "GCMole arm on Ubuntu-14.04",
+    "name": "GCMole arm",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2611,7 +2611,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "name": "GCMole arm64 on Ubuntu-14.04",
+    "name": "GCMole arm64",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",

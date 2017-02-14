@@ -328,7 +328,7 @@
       "--shards",
       "1",
       "--task-name",
-      "telemetry_gpu_unittests/Ubuntu-12.04/eeeeeeeeee/Linux Tests/571",
+      "telemetry_gpu_unittests/Ubuntu-14.04/eeeeeeeeee/Linux Tests/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -345,7 +345,7 @@
       "none",
       "--dimension",
       "os",
-      "Ubuntu-12.04",
+      "Ubuntu-14.04",
       "--dimension",
       "pool",
       "Chrome",
@@ -360,7 +360,7 @@
       "--tag",
       "name:telemetry_gpu_unittests",
       "--tag",
-      "os:Ubuntu-12.04",
+      "os:Ubuntu-14.04",
       "--tag",
       "project:chromium",
       "--tag",
@@ -381,11 +381,11 @@
     },
     "name": "[trigger] telemetry_gpu_unittests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'@@@",
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"telemetry_gpu_unittests/Ubuntu-12.04/eeeeeeeeee/Linux Tests/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"telemetry_gpu_unittests/Ubuntu-14.04/eeeeeeeeee/Linux Tests/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"telemetry_gpu_unittests/Ubuntu-12.04/eeeeeeeeee/Linux Tests/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"telemetry_gpu_unittests/Ubuntu-14.04/eeeeeeeeee/Linux Tests/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -420,7 +420,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"telemetry_gpu_unittests/Ubuntu-12.04/eeeeeeeeee/Linux Tests/571\", \"tasks\": {\"telemetry_gpu_unittests/Ubuntu-12.04/eeeeeeeeee/Linux Tests/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"telemetry_gpu_unittests/Ubuntu-14.04/eeeeeeeeee/Linux Tests/571\", \"tasks\": {\"telemetry_gpu_unittests/Ubuntu-14.04/eeeeeeeeee/Linux Tests/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -428,7 +428,7 @@
     "name": "telemetry_gpu_unittests",
     "~followup_annotations": [
       "step returned non-zero exit code: 255",
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-12.04'<br/>failures:<br/>test1.Test1<br/>test2.Test2<br/>@@@",
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br/>failures:<br/>test1.Test1<br/>test2.Test2<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"failures\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"test1.Test1\", @@@",
@@ -452,7 +452,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"cpu\": \"x86-64\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"gpu\": \"none\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-12.04\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-14.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"telemetry_gpu_unittests\", @@@",

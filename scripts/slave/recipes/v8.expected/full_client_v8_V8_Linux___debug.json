@@ -153,7 +153,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Check on Ubuntu-14.04",
+      "stepname:Check",
       "--idempotent",
       "[dummy hash for bot_default]",
       "--",
@@ -174,7 +174,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Check on Ubuntu-14.04",
+    "name": "[trigger] Check",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -248,7 +248,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Check - extra on Ubuntu-14.04",
+      "stepname:Check - extra",
       "--idempotent",
       "[dummy hash for bot_default]",
       "--",
@@ -269,7 +269,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Check - extra on Ubuntu-14.04",
+    "name": "[trigger] Check - extra",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -349,7 +349,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Benchmarks on Ubuntu-14.04",
+      "stepname:Benchmarks",
       "--idempotent",
       "[dummy hash for benchmarks]",
       "--",
@@ -371,7 +371,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Benchmarks on Ubuntu-14.04",
+    "name": "[trigger] Benchmarks",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -445,7 +445,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Test262 on Ubuntu-14.04",
+      "stepname:Test262",
       "--idempotent",
       "[dummy hash for test262]",
       "--",
@@ -467,7 +467,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Test262 on Ubuntu-14.04",
+    "name": "[trigger] Test262",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -553,7 +553,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Test262 - extra on Ubuntu-14.04",
+      "stepname:Test262 - extra",
       "--idempotent",
       "[dummy hash for test262]",
       "--",
@@ -575,7 +575,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Test262 - extra on Ubuntu-14.04",
+    "name": "[trigger] Test262 - extra",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -655,7 +655,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Mozilla on Ubuntu-14.04",
+      "stepname:Mozilla",
       "--idempotent",
       "[dummy hash for mozilla]",
       "--",
@@ -676,7 +676,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Mozilla on Ubuntu-14.04",
+    "name": "[trigger] Mozilla",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -750,7 +750,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Mjsunit - sp frame access on Ubuntu-14.04",
+      "stepname:Mjsunit - sp frame access",
       "--idempotent",
       "[dummy hash for mjsunit]",
       "--",
@@ -772,7 +772,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Mjsunit - sp frame access on Ubuntu-14.04",
+    "name": "[trigger] Mjsunit - sp frame access",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -846,7 +846,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Check - isolates on Ubuntu-14.04",
+      "stepname:Check - isolates",
       "--idempotent",
       "[dummy hash for bot_default]",
       "--",
@@ -868,7 +868,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Check - isolates on Ubuntu-14.04",
+    "name": "[trigger] Check - isolates",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -948,7 +948,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Check - nosse3 on Ubuntu-14.04",
+      "stepname:Check - nosse3",
       "--idempotent",
       "[dummy hash for bot_default]",
       "--",
@@ -971,7 +971,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Check - nosse3 on Ubuntu-14.04",
+    "name": "[trigger] Check - nosse3",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1045,7 +1045,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Test262 - no variants - nosse3 on Ubuntu-14.04",
+      "stepname:Test262 - no variants - nosse3",
       "--idempotent",
       "[dummy hash for test262]",
       "--",
@@ -1069,7 +1069,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Test262 - no variants - nosse3 on Ubuntu-14.04",
+    "name": "[trigger] Test262 - no variants - nosse3",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1143,7 +1143,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Mozilla - nosse3 on Ubuntu-14.04",
+      "stepname:Mozilla - nosse3",
       "--idempotent",
       "[dummy hash for mozilla]",
       "--",
@@ -1166,7 +1166,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Mozilla - nosse3 on Ubuntu-14.04",
+    "name": "[trigger] Mozilla - nosse3",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1240,7 +1240,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Check - nosse4 on Ubuntu-14.04",
+      "stepname:Check - nosse4",
       "--idempotent",
       "[dummy hash for bot_default]",
       "--",
@@ -1263,7 +1263,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Check - nosse4 on Ubuntu-14.04",
+    "name": "[trigger] Check - nosse4",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1337,7 +1337,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Test262 - no variants - nosse4 on Ubuntu-14.04",
+      "stepname:Test262 - no variants - nosse4",
       "--idempotent",
       "[dummy hash for test262]",
       "--",
@@ -1361,7 +1361,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Test262 - no variants - nosse4 on Ubuntu-14.04",
+    "name": "[trigger] Test262 - no variants - nosse4",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1435,7 +1435,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Mozilla - nosse4 on Ubuntu-14.04",
+      "stepname:Mozilla - nosse4",
       "--idempotent",
       "[dummy hash for mozilla]",
       "--",
@@ -1458,7 +1458,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Mozilla - nosse4 on Ubuntu-14.04",
+    "name": "[trigger] Mozilla - nosse4",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1532,7 +1532,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Mjsunit - code serializer on Ubuntu-14.04",
+      "stepname:Mjsunit - code serializer",
       "--idempotent",
       "[dummy hash for mjsunit]",
       "--",
@@ -1555,7 +1555,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Mjsunit - code serializer on Ubuntu-14.04",
+    "name": "[trigger] Mjsunit - code serializer",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1629,7 +1629,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Mozilla - code serializer on Ubuntu-14.04",
+      "stepname:Mozilla - code serializer",
       "--idempotent",
       "[dummy hash for mozilla]",
       "--",
@@ -1652,7 +1652,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Mozilla - code serializer on Ubuntu-14.04",
+    "name": "[trigger] Mozilla - code serializer",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1726,7 +1726,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Test262 - no variants - code serializer on Ubuntu-14.04",
+      "stepname:Test262 - no variants - code serializer",
       "--idempotent",
       "[dummy hash for test262]",
       "--",
@@ -1750,7 +1750,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Test262 - no variants - code serializer on Ubuntu-14.04",
+    "name": "[trigger] Test262 - no variants - code serializer",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1824,7 +1824,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Benchmarks - code serializer on Ubuntu-14.04",
+      "stepname:Benchmarks - code serializer",
       "--idempotent",
       "[dummy hash for benchmarks]",
       "--",
@@ -1848,7 +1848,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Benchmarks - code serializer on Ubuntu-14.04",
+    "name": "[trigger] Benchmarks - code serializer",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
