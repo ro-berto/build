@@ -205,7 +205,8 @@ def _run_command(api, command, step_name, **kwargs):
         lambda: api.m.raw_io.test_api.output_text('', name='stdout_proxy'))
   # TODO(prasadv): Remove this once bisect runs are no longer running
   # against revisions from February 2016 or earlier.
-  if 'android-chrome' in command:  # pragma: no cover
+  # pragma: no cover
+  if 'android-chrome' in command or 'resource_sizes' in command:
     inner_kwargs['env'] = {'CHROMIUM_OUTPUT_DIR': api.m.chromium.output_dir}
 
   # By default, we assume that the test to run is an executable binary. In the
