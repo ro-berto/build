@@ -1124,7 +1124,9 @@ class AndroidApi(recipe_api.RecipeApi):
       presentation_args.extend(['--cs-base-url', cs_base_url])
     result_details = self.m.python(
         '%s: generate result details' % step_name,
-        self.resource('test_results_presentation.py'),
+        script=self.m.path['checkout'].join(
+            'build', 'android', 'pylib', 'results', 'presentation',
+            'test_results_presentation.py'),
         args=presentation_args,
         stdout=self.m.raw_io.output_text(),
         step_test_data=(
