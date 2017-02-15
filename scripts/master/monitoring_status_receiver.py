@@ -136,6 +136,12 @@ class MonitoringStatusReceiver(StatusReceiverMultiService):
     pool_waiting.set(len(pool.waiters), fields={'master': ''})
     pool_working.set(len(pool.working), fields={'master': ''})
     reactor_queue.set(len(reactor.threadCallQueue))
+    # Log a few current items in the queue for debugging.
+    log.msg('Reactor queue: len=%d [%s, ...]' % (
+        len(reactor.threadCallQueue),
+        ', '.join(getattr(f, 'func_name', 'unknown')
+                  for f, _, _ in reactor.threadCallQueue[:10]),
+    ))
 
     builder_names = set()
     for builder_name in self.status.getBuilderNames():
