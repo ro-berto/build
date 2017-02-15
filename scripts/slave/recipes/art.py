@@ -77,9 +77,6 @@ def setup_host_x86(api, debug, bitness, concurrent_collector=False):
                         '/usr/lib/jvm/java-8-openjdk-amd64/bin/' +
                         api.path.pathsep + '%(PATH)s',
             'ART_TEST_RUN_TEST_2ND_ARCH': 'false',
-            'ART_TEST_INTERPRETER': 'true',
-            'ART_TEST_JIT': 'true',
-            'ART_TEST_OPTIMIZING': 'true',
             'ART_TEST_FULL': 'false',
             'ART_TEST_KEEP_GOING': 'true' }
 
@@ -170,9 +167,6 @@ def setup_target(api,
          'JACK_REPOSITORY': str(build_top_dir.join('prebuilts', 'sdk', 'tools',
                                                    'jacks')),
          'ART_TEST_RUN_TEST_2ND_ARCH': 'false',
-         'ART_TEST_INTERPRETER': 'true',
-         'ART_TEST_JIT': 'true',
-         'ART_TEST_OPTIMIZING': 'true',
          'ART_TEST_FULL': 'false',
          'ART_TEST_ANDROID_ROOT': android_root,
          'USE_DEX2OAT_DEBUG': 'false',
