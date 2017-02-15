@@ -77,10 +77,11 @@
   },
   {
     "cmd": [
-      "make",
+      "./art/test/testrunner/testrunner.py",
       "-j8",
-      "test-art-host-run-test-optimizing",
-      "dist"
+      "--optimizing",
+      "--host",
+      "--verbose"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -108,10 +109,11 @@
   },
   {
     "cmd": [
-      "make",
+      "./art/test/testrunner/testrunner.py",
       "-j5",
-      "test-art-host-run-test-interpreter",
-      "dist"
+      "--interpreter",
+      "--host",
+      "--verbose"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -138,10 +140,11 @@
   },
   {
     "cmd": [
-      "make",
+      "./art/test/testrunner/testrunner.py",
       "-j8",
-      "test-art-host-run-test-jit",
-      "dist"
+      "--jit",
+      "--host",
+      "--verbose"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",

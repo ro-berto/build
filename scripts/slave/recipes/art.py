@@ -107,16 +107,24 @@ def setup_host_x86(api, debug, bitness, concurrent_collector=False):
 
     optimizing_env = env.copy()
     optimizing_env.update({ 'ART_TEST_RUN_TEST_DEBUGGABLE': 'true' })
-    api.step('test optimizing', ['make', '-j8',
-      'test-art-host-run-test-optimizing', 'dist'], env=optimizing_env)
+    api.step('test optimizing', ['./art/test/testrunner/testrunner.py',
+                                 '-j8',
+                                 '--optimizing',
+                                 '--host',
+                                 '--verbose'], env=optimizing_env)
     # Use a lower -j number for interpreter, some tests take a long time
     # to run on it.
-    api.step('test interpreter', ['make', '-j5',
-      'test-art-host-run-test-interpreter', 'dist'], env=env)
+    api.step('test interpreter', ['./art/test/testrunner/testrunner.py',
+                                  '-j5',
+                                  '--interpreter',
+                                  '--host',
+                                  '--verbose'], env=env)
 
-    api.step('test jit', ['make', '-j8', 'test-art-host-run-test-jit',
-                          'dist'],
-             env=env)
+    api.step('test jit', ['./art/test/testrunner/testrunner.py',
+                          '-j8',
+                          '--jit',
+                          '--host',
+                          '--verbose'], env=env)
 
     libcore_command = [art_tools.join('run-libcore-tests.sh'),
                        '--mode=host',
@@ -236,18 +244,25 @@ def setup_target(api,
 
     optimizing_env = test_env.copy()
     optimizing_env.update({ 'ART_TEST_RUN_TEST_DEBUGGABLE': 'true' })
-    api.step('test optimizing', ['make', '-j%d' % (make_jobs),
-      'test-art-target-run-test-optimizing', 'dist'], env=optimizing_env)
+    api.step('test optimizing', ['./art/test/testrunner/testrunner.py',
+                                 '-j%d' % (make_jobs),
+                                 '--optimizing',
+                                 '--target',
+                                 '--verbose'], env=optimizing_env)
     test_logging(api, 'test optimizing')
 
-    api.step('test interpreter', ['make', '-j%d' % (make_jobs),
-                                  'test-art-target-run-test-interpreter',
-                                  'dist'],
-             env=test_env)
+    api.step('test interpreter', ['./art/test/testrunner/testrunner.py',
+                                  '-j%d' % (make_jobs),
+                                  '--interpreter',
+                                  '--target',
+                                  '--verbose'], env=test_env)
     test_logging(api, 'test interpreter')
 
-    api.step('test jit', ['make', '-j%d' % (make_jobs),
-      'test-art-target-run-test-jit', 'dist'], env=test_env)
+    api.step('test jit', ['./art/test/testrunner/testrunner.py',
+                          '-j%d' % (make_jobs),
+                          '--jit',
+                          '--target',
+                          '--verbose'], env=test_env)
     test_logging(api, 'test jit')
 
     libcore_command = [art_tools.join('run-libcore-tests.sh'),
