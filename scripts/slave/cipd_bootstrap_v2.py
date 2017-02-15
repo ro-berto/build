@@ -16,6 +16,22 @@ from slave import infra_platform
 CLIENT_NAME = 'cipd' + infra_platform.exe_suffix()
 
 
+DEFAULT_CIPD_VERSION = 'git_revision:508f70d14492573c37760381060bbb5fc7904bfd'
+STAGING_CIPD_VERSION = 'git_revision:508f70d14492573c37760381060bbb5fc7904bfd'
+
+STAGING = 'staging'
+CANARY = 'canary'
+
+# maps mastername (e.g. chromium.infra) as seen in the buildbot 'mastername'
+# property to STAGING or CANARY.
+#
+# STAGING will get the STAGING_CIPD_VERSION, and CANARY will get 'latest'.
+# 'mastername' values not in this map will get DEFAULT_CIPD_VERSION.
+MASTER_VERSION = {
+  'chromium.infra': STAGING,
+}
+
+
 def _update_client(path, version):
   """Ensures that the client in the provided path is at the given version.
 
@@ -170,3 +186,36 @@ def ensure_cipd_client(path, version):
     LOGGER.exception('caught exception in ensure_cipd_client')
     sys.exit('Failed to ensure cipd client')
   _add_to_path(path)
+
+
+def high_level_ensure_cipd_client(b_dir, mastername):
+  """Ensures that <b_dir>/cipd_client/ contains the cipd (or cipd.exe) client.
+
+  Will use mastername to determine which version of the client to ensure. See
+  MASTER_VERSION in this module to see how the version lookup works.
+
+  Unlike ensure_cipd_client, all exceptions (including SystemExit) are caught
+  and logged.
+
+  Returns True iff the client is usable and was put in $PATH.
+  """
+  LOGGER.info('bootstrapping CIPD')
+
+  cipd_dir = os.path.join(os.path.abspath(b_dir), 'cipd_client')
+  cipd_version = DEFAULT_CIPD_VERSION
+  selected = MASTER_VERSION.get(mastername)
+  if selected == STAGING:
+    LOGGER.info("using staging revision")
+    cipd_version = STAGING_CIPD_VERSION
+  elif selected == CANARY:
+    LOGGER.info("using canary revision (latest)")
+    cipd_version = 'latest'
+
+  try:
+    ensure_cipd_client(cipd_dir, cipd_version)
+    return True
+  except Exception:
+    LOGGER.exception('Caught Exception in high_level_ensure_cipd_client')
+  except SystemExit:
+    LOGGER.exception('Caught SystemExit in high_level_ensure_cipd_client')
+  return False
