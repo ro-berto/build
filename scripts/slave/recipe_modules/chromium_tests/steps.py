@@ -644,10 +644,19 @@ def generate_script(api, chromium_tests_api, mastername, buildername, test_spec,
 
 
 class DynamicPerfTests(Test):
+  # Note: SystemWebViewShell.apk may not be required. Might be able to remove.
+  WEBVIEW_REQUIRED_APKS = ['SystemWebView.apk', 'SystemWebViewShell.apk']
+
   def __init__(self, perf_id, platform, target_bits, max_battery_temp=350,
                num_device_shards=1, num_host_shards=1, shard_index=0,
                override_browser_name=None, enable_platform_mode=False,
-               pass_adb_path=True, num_retries=0):
+               pass_adb_path=True, num_retries=0, replace_webview=False):
+    """
+
+    Args:
+      replace_webview: If this test replaces (and tests) the system webview,
+      rather than chrome itself.
+    """
     self._perf_id = perf_id
     self._platform = platform
     self._target_bits = target_bits
@@ -659,6 +668,7 @@ class DynamicPerfTests(Test):
     self._num_retries = num_retries
     self._pass_adb_path = pass_adb_path
     self._shard_index = shard_index
+    self._replace_webview = replace_webview
 
     if override_browser_name:
       # TODO(phajdan.jr): restore coverage after moving to chromium/src .
@@ -707,6 +717,11 @@ class DynamicPerfTests(Test):
     return tests
 
   def _run_sharded(self, api, tests):
+    if self._replace_webview:
+      for apk in self.WEBVIEW_REQUIRED_APKS:
+        api.chromium_android.adb_install_apk(
+            api.chromium.output_dir.join('apks', apk))
+
     api.chromium_android.run_sharded_perf_tests(
       config=api.json.input(data=tests),
       perf_id=self._perf_id,

@@ -3,9 +3,31 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_",
+      "511"
+    ],
+    "name": "makedirs checkout path",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': False, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}, {'custom_deps': {'src/chrome/test/data/firefox2_profile/searchplugins': None, 'src/chrome/test/data/firefox2_searchplugins': None, 'src/chrome/test/data/firefox3_profile/searchplugins': None, 'src/chrome/test/data/firefox3_searchplugins': None, 'src/chrome/test/data/osdd': None, 'src/chrome/test/data/perf/frame_rate/private': None, 'src/chrome/test/data/plugin': None, 'src/chrome/test/data/ssl/certs': None, 'src/data/autodiscovery': None, 'src/data/esctf': None, 'src/data/mach_ports': None, 'src/data/memory_test': None, 'src/data/mozilla_js_tests': None, 'src/data/selenium_core': None, 'src/data/tab_switching': None, 'src/tools/grit/grit/test/data': None, 'src/webkit/data/bmp_decoder': None, 'src/webkit/data/ico_decoder': None, 'src/webkit/data/test_shell/plugins': None, 'src/webkit/data/xbm_decoder': None}, 'deps_file': '.DEPS.git', 'managed': False, 'name': 'src-internal', 'url': 'https://chrome-internal.googlesource.com/chrome/src-internal.git'}]\ntarget_os = ['android']",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}, {'custom_deps': {'src/chrome/test/data/firefox2_profile/searchplugins': None, 'src/chrome/test/data/firefox2_searchplugins': None, 'src/chrome/test/data/firefox3_profile/searchplugins': None, 'src/chrome/test/data/firefox3_searchplugins': None, 'src/chrome/test/data/osdd': None, 'src/chrome/test/data/perf/frame_rate/private': None, 'src/chrome/test/data/plugin': None, 'src/chrome/test/data/ssl/certs': None, 'src/data/autodiscovery': None, 'src/data/esctf': None, 'src/data/mach_ports': None, 'src/data/memory_test': None, 'src/data/mozilla_js_tests': None, 'src/data/page_cycler': None, 'src/data/selenium_core': None, 'src/data/tab_switching': None, 'src/tools/grit/grit/test/data': None, 'src/webkit/data/bmp_decoder': None, 'src/webkit/data/ico_decoder': None, 'src/webkit/data/test_shell/plugins': None, 'src/webkit/data/xbm_decoder': None}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src-internal', 'url': 'https://chrome-internal.googlesource.com/chrome/src-internal.git'}]\ntarget_os = ['android']",
       "--patch_root",
       "src",
       "--revision_mapping_file",
@@ -15,9 +37,10 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@deadbeef",
+      "src@1111111",
       "--output_manifest"
     ],
+    "cwd": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -27,7 +50,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src\": \"deadbeef\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"1111111\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
@@ -98,17 +121,60 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "ensure_goma"
+  },
+  {
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[START_DIR]/src/testing/buildbot/chromium.perf.json",
+      "RECIPE_MODULE[depot_tools::cipd]/resources/bootstrap.py",
+      "--platform",
+      "linux-386",
+      "--dest-directory",
+      "[START_DIR]/cipd",
+      "--json-output",
       "/path/to/tmp/json"
     ],
-    "name": "read test spec (chromium.perf.json)",
+    "name": "ensure_goma.install cipd",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [START_DIR]/src/testing/buildbot/chromium.perf.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[START_DIR]/cipd/cipd\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[START_DIR]/cipd/cipd",
+      "ensure",
+      "-root",
+      "[CACHE]/cipd/goma",
+      "-ensure-file",
+      "infra/tools/cloudtail/linux-386 goma_recipe_module\ninfra_internal/goma/client/linux-386 release",
+      "-json-output",
+      "/path/to/tmp/json",
+      "-service-account-json",
+      "/creds/service_accounts/service-account-goma-client.json"
+    ],
+    "name": "ensure_goma.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-goma_recipe_modu\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/cloudtail/linux-386\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/linux-386\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
@@ -116,16 +182,46 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/testing/scripts/get_compile_targets.py",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/tools/swarming_client/swarming.py",
+      "--version"
+    ],
+    "name": "swarming.py --version",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@0.8.6@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
+      "runhooks"
+    ],
+    "cwd": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "GYP_CHROMIUM_NO_ACTION": "1",
+      "GYP_CROSSCOMPILE": "1",
+      "GYP_DEFINES": "OS=android branding=Chrome buildtype=Official component=static_library fastbuild=1 gomadir='[CACHE]/cipd/goma' target_arch=arm use_goma=1",
+      "PATH": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+    },
+    "name": "gclient runhooks"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/testing/scripts/get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
       "Release",
       "--paths",
-      "{\"checkout\": \"[START_DIR]/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
+      "{\"checkout\": \"[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"Android Nexus5X WebView Perf (3)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"perf-id\": \"android-webview-nexus5X\", \"results-url\": \"https://chromeperf.appspot.com\", \"slavename\": \"slavename\", \"target_platform\": \"android\"}"
+      "{\"buildername\": \"Android Nexus6 WebView Perf (3)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"perf-id\": \"android-webview-nexus6\", \"results-url\": \"https://chromeperf.appspot.com\", \"slavename\": \"TestSlavename\", \"target_platform\": \"android\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -137,11 +233,37 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/testing/buildbot/chromium.perf.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "read test spec (chromium.perf.json)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@path: [BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/testing/buildbot/chromium.perf.json@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
+    ],
+    "name": "cleanup_temp"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport shutil, sys, os\nshutil.rmtree(sys.argv[1], True)\nshutil.rmtree(sys.argv[2], True)\ntry:\n  os.remove(sys.argv[3])\nexcept OSError:\n  pass\nfor base, _dirs, files in os.walk(sys.argv[4]):\n  for f in files:\n    if f.endswith('.pyc'):\n      os.remove(os.path.join(base, f))\n",
-      "[START_DIR]/src/out/Release/debug_info_dumps",
-      "[START_DIR]/src/out/Release/test_logs",
-      "[START_DIR]/src/out/build_product.zip",
-      "[START_DIR]/src"
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/out/Release/debug_info_dumps",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/out/Release/test_logs",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/out/build_product.zip",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src"
     ],
     "name": "clean local files",
     "~followup_annotations": [
@@ -162,11 +284,68 @@
   },
   {
     "cmd": [
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/build/tree_truth.sh",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src",
+      "src"
+    ],
+    "name": "tree truth steps"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/out/Release"
+    ],
+    "name": "rmtree build directory",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/extract_build.py",
+      "--gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--target",
+      "Release",
+      "--src-dir",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--build-archive-url",
+      "gs://test-domain/test-archive.zip",
+      "--master-name",
+      "chromium.perf",
+      "--build-number",
+      "571"
+    ],
+    "name": "extract build"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "\nimport sys\nsys.path.append(sys.argv[1])\nfrom devil import devil_env\ndevil_env.config.Initialize()\ndevil_env.config.PrefetchPaths(dependencies=['adb'])\n",
-      "[START_DIR]/src/third_party/catapult/devil"
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/catapult/devil"
     ],
+    "cwd": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/build/android:%(PATH)s"
+    },
     "name": "initialize devil",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -182,49 +361,30 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "--force-version",
-      "4.7",
-      "----",
-      "cp",
-      "gs://chrome-perf/Android arm64 Builder/full-build-linux_deadbeef.zip",
-      "[START_DIR]/src/out/build_product.zip"
-    ],
-    "name": "gsutil download_build_product"
-  },
-  {
-    "cmd": [
-      "unzip",
-      "-o",
-      "[START_DIR]/src/out/build_product.zip"
-    ],
-    "cwd": "[START_DIR]/src",
-    "name": "unzip_build_product"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/src/build/symlink.py",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/build/symlink.py",
       "-f",
-      "[START_DIR]/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
       "~/adb"
     ],
+    "cwd": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/build/android:%(PATH)s"
+    },
     "name": "create adb symlink"
   },
   {
     "cmd": [
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
       "--",
-      "[START_DIR]/src/build/android/adb_logcat_monitor.py",
-      "[START_DIR]/src/out/logcat",
-      "[START_DIR]/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb"
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/build/android/adb_logcat_monitor.py",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/out/logcat",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb"
     ],
+    "cwd": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/build/android:%(PATH)s"
     },
     "name": "spawn_logcat_monitor"
   },
@@ -238,12 +398,17 @@
       "--pid-file-path",
       "/tmp/device_monitor.pid",
       "--",
-      "[START_DIR]/src/third_party/catapult/devil/devil/android/tools/device_monitor.py",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/catapult/devil/devil/android/tools/device_monitor.py",
       "--adb-path",
-      "[START_DIR]/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
       "--blacklist-file",
-      "[START_DIR]/src/out/bad_devices.json"
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/out/bad_devices.json"
     ],
+    "cwd": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/build/android:%(PATH)s"
+    },
     "name": "spawn_device_monitor"
   },
   {
@@ -253,29 +418,31 @@
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/android/authorize_adb_devices.py",
       "--verbose",
       "--adb-path",
-      "[START_DIR]/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb"
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb"
     ],
+    "cwd": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/build/android:%(PATH)s"
     },
     "name": "authorize_adb_devices"
   },
   {
     "cmd": [
-      "[START_DIR]/src/third_party/catapult/devil/devil/android/tools/device_recovery.py",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/catapult/devil/devil/android/tools/device_recovery.py",
       "--blacklist-file",
-      "[START_DIR]/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/out/bad_devices.json",
       "--known-devices-file",
       "[HOME]/.android/known_devices.json",
       "--adb-path",
-      "[START_DIR]/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
       "-v",
       "--enable-usb-reset"
     ],
+    "cwd": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/build/android:%(PATH)s"
     },
     "name": "device_recovery"
   },
@@ -283,11 +450,11 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/build/android/provision_devices.py",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/build/android/provision_devices.py",
       "--adb-path",
-      "[START_DIR]/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
       "--blacklist-file",
-      "[START_DIR]/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/out/bad_devices.json",
       "--output-device-blacklist",
       "/path/to/tmp/json",
       "-t",
@@ -300,31 +467,33 @@
       "350",
       "--remove-system-webview"
     ],
+    "cwd": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/build/android:%(PATH)s"
     },
     "name": "provision_devices"
   },
   {
     "cmd": [
-      "[START_DIR]/src/third_party/catapult/devil/devil/android/tools/device_status.py",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/catapult/devil/devil/android/tools/device_status.py",
       "--json-output",
       "/path/to/tmp/json",
       "--blacklist-file",
-      "[START_DIR]/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/out/bad_devices.json",
       "--known-devices-file",
       "[HOME]/.android/known_devices.json",
       "--buildbot-path",
       "/home/chrome-bot/.adb_device_info",
       "--adb-path",
-      "[START_DIR]/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
       "-v",
       "--overwrite-known-devices-files"
     ],
+    "cwd": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/build/android:%(PATH)s"
     },
     "name": "device_status",
     "~followup_annotations": [
@@ -426,128 +595,10 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[START_DIR]/src/chrome/VERSION",
-      "/path/to/tmp/"
-    ],
-    "name": "get version"
-  },
-  {
-    "cmd": [
-      "[START_DIR]/src/build/android/adb_install_apk.py",
-      "SystemWebView.apk",
-      "-v",
-      "--blacklist-file",
-      "[START_DIR]/src/out/bad_devices.json",
-      "--adb-path",
-      "[START_DIR]/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
-      "--release"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
-    },
-    "name": "install SystemWebView.apk"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[START_DIR]/src/chrome/VERSION",
-      "/path/to/tmp/"
-    ],
-    "name": "get version (2)"
-  },
-  {
-    "cmd": [
-      "[START_DIR]/src/build/android/adb_install_apk.py",
-      "SystemWebViewShell.apk",
-      "-v",
-      "--blacklist-file",
-      "[START_DIR]/src/out/bad_devices.json",
-      "--adb-path",
-      "[START_DIR]/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
-      "--release"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
-    },
-    "name": "install SystemWebViewShell.apk"
-  },
-  {
-    "cmd": [
-      "[START_DIR]/src/testing/scripts/host_info.py",
-      "--build-config-fs",
-      "Release",
-      "--paths",
-      "{\"checkout\": \"[START_DIR]/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
-      "--properties",
-      "{\"buildername\": \"Android Nexus5X WebView Perf (3)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"perf-id\": \"android-webview-nexus5X\", \"results-url\": \"https://chromeperf.appspot.com\", \"slavename\": \"slavename\", \"target_platform\": \"android\"}",
-      "--args",
-      "[\"--known-devices-file\", \"[HOME]/.android/known_devices.json\"]",
-      "run",
-      "--output",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
-    },
-    "name": "Host Info",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"_host_info\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"devices\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"adb_status\": \"device\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"battery\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"AC powered\": \"false\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"Max charging current\": \"500000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"USB powered\": \"true\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"Wireless powered\": \"false\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"health\": \"2\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"level\": \"100\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"present\": \"true\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"scale\": \"100\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"status\": \"5\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"technology\": \"Li-ion\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"temperature\": \"240\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"voltage\": \"4302\"@@@",
-      "@@@STEP_LOG_LINE@json.output@        }, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"blacklisted\": null, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"imei_slice\": \"\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"ro.build.fingerprint\": \"fingerprint\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"ro.build.id\": \"MDB08Q\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"ro.build.product\": \"bullhead\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"serial\": \"00d0d567893340f4\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"usb_status\": true, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"wifi_ip\": \"\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ], @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"free_disk_space\": \"free_disk_space\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"num_cpus\": \"num_cpus\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"os_release\": \"os_release\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"os_system\": \"os_system\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"processor\": \"processor\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"python_path\": \"python_path\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"python_version\": \"python_version\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"failures\": [], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"valid\": true@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/src/tools/perf/run_benchmark",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/tools/perf/run_benchmark",
       "list",
       "--browser",
-      "android-webview",
+      "android-chromium",
       "--json-output",
       "/path/to/tmp/json",
       "--num-shards",
@@ -555,6 +606,11 @@
       "--device",
       "07a00ca4"
     ],
+    "cwd": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/build/android:%(PATH)s"
+    },
     "name": "List Perf Tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -593,14 +649,80 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/build/android/test_runner.py",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/chrome/VERSION",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/build/android:%(PATH)s"
+    },
+    "name": "get version"
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/build/android/adb_install_apk.py",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/out/Release/apks/SystemWebView.apk",
+      "-v",
+      "--blacklist-file",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/out/bad_devices.json",
+      "--adb-path",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
+      "--release"
+    ],
+    "cwd": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/build/android:%(PATH)s"
+    },
+    "name": "install SystemWebView.apk"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/chrome/VERSION",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/build/android:%(PATH)s"
+    },
+    "name": "get version (2)"
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/build/android/adb_install_apk.py",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/out/Release/apks/SystemWebViewShell.apk",
+      "-v",
+      "--blacklist-file",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/out/bad_devices.json",
+      "--adb-path",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
+      "--release"
+    ],
+    "cwd": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/build/android:%(PATH)s"
+    },
+    "name": "install SystemWebViewShell.apk"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/build/android/test_runner.py",
       "perf",
       "--release",
       "--verbose",
       "--steps",
       "{\"steps\": {}, \"version\": 2}",
       "--blacklist-file",
-      "[START_DIR]/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/out/bad_devices.json",
       "--num-retries",
       "0",
       "--collect-chartjson-data",
@@ -612,13 +734,13 @@
       "--trace-output",
       "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.html",
       "--adb-path",
-      "[START_DIR]/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb"
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src",
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/out/Release",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/build/android:%(PATH)s"
     },
     "name": "Sharded Perf Tests"
   },
@@ -632,11 +754,16 @@
       "----",
       "cp",
       "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.html",
-      "gs://chromium-testrunner-trace/Android Nexus5X WebView Perf (3)/trace_571.html"
+      "gs://chromium-testrunner-trace/Android Nexus6 WebView Perf (3)/trace_571.html"
     ],
+    "cwd": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/build/android:%(PATH)s"
+    },
     "name": "gsutil Upload Test Trace",
     "~followup_annotations": [
-      "@@@STEP_LINK@Test Trace@https://storage.cloud.google.com/chromium-testrunner-trace/Android Nexus5X WebView Perf (3)/trace_571.html@@@"
+      "@@@STEP_LINK@Test Trace@https://storage.cloud.google.com/chromium-testrunner-trace/Android Nexus6 WebView Perf (3)/trace_571.html@@@"
     ]
   },
   {
@@ -646,27 +773,33 @@
       "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
       "[TMP_BASE]/test_runner_trace_tmp_1"
     ],
+    "cwd": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/build/android:%(PATH)s"
+    },
     "name": "rmtree [TMP_BASE]/test_runner_trace_tmp_1"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/build/android/test_runner.py",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/build/android/test_runner.py",
       "perf",
       "--steps",
       "{\"steps\": {}, \"version\": 2}",
       "--output-json-list",
       "/path/to/tmp/json",
       "--blacklist-file",
-      "[START_DIR]/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/out/bad_devices.json",
       "--adb-path",
-      "[START_DIR]/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb"
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb"
     ],
+    "cwd": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_",
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/out/Release",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/build/android:%(PATH)s"
     },
     "name": "get perf test list",
     "~followup_annotations": [
@@ -701,37 +834,38 @@
       "android",
       "--no-xvfb",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Nexus5X WebView Perf (3)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_buildername\": \"parent_buildername\", \"parent_buildnumber\": \"1729\", \"parent_revision\": \"deadbeef\", \"path_config\": \"kitchen\", \"recipe\": \"android/perf\", \"repo_name\": \"src\", \"repo_url\": \"https://chromium.googlesource.com/chromium/src.git\", \"revision\": \"deadbeef\", \"slavename\": \"slavename\", \"target\": \"Release\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"Android Nexus6 WebView Perf (3)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Android Builder\", \"parent_got_revision\": \"1111111\", \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Nexus5X WebView Perf (3)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_buildername\": \"parent_buildername\", \"parent_buildnumber\": \"1729\", \"parent_revision\": \"deadbeef\", \"path_config\": \"kitchen\", \"recipe\": \"android/perf\", \"repo_name\": \"src\", \"repo_url\": \"https://chromium.googlesource.com/chromium/src.git\", \"revision\": \"deadbeef\", \"slavename\": \"slavename\", \"target\": \"Release\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"Android Nexus6 WebView Perf (3)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Android Builder\", \"parent_got_revision\": \"1111111\", \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=page_cycler.foo",
-      "--perf-id=android-webview-nexus5X",
+      "--perf-id=android-webview-nexus6",
       "--test-type=page_cycler.foo",
       "--step-name=page_cycler.foo",
       "--chartjson-file",
       "/path/to/tmp/json",
-      "--builder-name=Android Nexus5X WebView Perf (3)",
-      "--slave-name=slavename",
+      "--builder-name=Android Nexus6 WebView Perf (3)",
+      "--slave-name=TestSlavename",
       "--build-number=571",
       "--run-python-script",
-      "[START_DIR]/src/build/android/test_runner.py",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/build/android/test_runner.py",
       "perf",
       "--print-step",
       "page_cycler.foo",
       "--verbose",
       "--adb-path",
-      "[START_DIR]/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
       "--blacklist-file",
-      "[START_DIR]/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/out/bad_devices.json",
       "--output-json-data",
       "/path/to/tmp/json"
     ],
+    "cwd": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_",
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/out/Release",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/build/android:%(PATH)s"
     },
     "name": "page_cycler.foo",
     "~followup_annotations": [
@@ -795,37 +929,38 @@
       "android",
       "--no-xvfb",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Nexus5X WebView Perf (3)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_buildername\": \"parent_buildername\", \"parent_buildnumber\": \"1729\", \"parent_revision\": \"deadbeef\", \"path_config\": \"kitchen\", \"recipe\": \"android/perf\", \"repo_name\": \"src\", \"repo_url\": \"https://chromium.googlesource.com/chromium/src.git\", \"revision\": \"deadbeef\", \"slavename\": \"slavename\", \"target\": \"Release\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"Android Nexus6 WebView Perf (3)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Android Builder\", \"parent_got_revision\": \"1111111\", \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Nexus5X WebView Perf (3)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_buildername\": \"parent_buildername\", \"parent_buildnumber\": \"1729\", \"parent_revision\": \"deadbeef\", \"path_config\": \"kitchen\", \"recipe\": \"android/perf\", \"repo_name\": \"src\", \"repo_url\": \"https://chromium.googlesource.com/chromium/src.git\", \"revision\": \"deadbeef\", \"slavename\": \"slavename\", \"target\": \"Release\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"Android Nexus6 WebView Perf (3)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Android Builder\", \"parent_got_revision\": \"1111111\", \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=perf_test.foo",
-      "--perf-id=android-webview-nexus5X",
+      "--perf-id=android-webview-nexus6",
       "--test-type=perf_test.foo",
       "--step-name=perf_test.foo",
       "--chartjson-file",
       "/path/to/tmp/json",
-      "--builder-name=Android Nexus5X WebView Perf (3)",
-      "--slave-name=slavename",
+      "--builder-name=Android Nexus6 WebView Perf (3)",
+      "--slave-name=TestSlavename",
       "--build-number=571",
       "--run-python-script",
-      "[START_DIR]/src/build/android/test_runner.py",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/build/android/test_runner.py",
       "perf",
       "--print-step",
       "perf_test.foo",
       "--verbose",
       "--adb-path",
-      "[START_DIR]/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
       "--blacklist-file",
-      "[START_DIR]/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/out/bad_devices.json",
       "--output-json-data",
       "/path/to/tmp/json"
     ],
+    "cwd": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_",
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/out/Release",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/build/android:%(PATH)s"
     },
     "name": "perf_test.foo",
     "~followup_annotations": [
@@ -889,37 +1024,38 @@
       "android",
       "--no-xvfb",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Nexus5X WebView Perf (3)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_buildername\": \"parent_buildername\", \"parent_buildnumber\": \"1729\", \"parent_revision\": \"deadbeef\", \"path_config\": \"kitchen\", \"recipe\": \"android/perf\", \"repo_name\": \"src\", \"repo_url\": \"https://chromium.googlesource.com/chromium/src.git\", \"revision\": \"deadbeef\", \"slavename\": \"slavename\", \"target\": \"Release\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"Android Nexus6 WebView Perf (3)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Android Builder\", \"parent_got_revision\": \"1111111\", \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Android Nexus5X WebView Perf (3)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_buildername\": \"parent_buildername\", \"parent_buildnumber\": \"1729\", \"parent_revision\": \"deadbeef\", \"path_config\": \"kitchen\", \"recipe\": \"android/perf\", \"repo_name\": \"src\", \"repo_url\": \"https://chromium.googlesource.com/chromium/src.git\", \"revision\": \"deadbeef\", \"slavename\": \"slavename\", \"target\": \"Release\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"Android Nexus6 WebView Perf (3)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Android Builder\", \"parent_got_revision\": \"1111111\", \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=perf_test.foo.reference",
-      "--perf-id=android-webview-nexus5X",
+      "--perf-id=android-webview-nexus6",
       "--test-type=perf_test.foo.reference",
       "--step-name=perf_test.foo.reference",
       "--chartjson-file",
       "/path/to/tmp/json",
-      "--builder-name=Android Nexus5X WebView Perf (3)",
-      "--slave-name=slavename",
+      "--builder-name=Android Nexus6 WebView Perf (3)",
+      "--slave-name=TestSlavename",
       "--build-number=571",
       "--run-python-script",
-      "[START_DIR]/src/build/android/test_runner.py",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/build/android/test_runner.py",
       "perf",
       "--print-step",
       "perf_test.foo.reference",
       "--verbose",
       "--adb-path",
-      "[START_DIR]/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
       "--blacklist-file",
-      "[START_DIR]/src/out/bad_devices.json",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/out/bad_devices.json",
       "--output-json-data",
       "/path/to/tmp/json"
     ],
+    "cwd": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_",
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/out/Release",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/build/android:%(PATH)s"
     },
     "name": "perf_test.foo.reference",
     "~followup_annotations": [
@@ -981,17 +1117,27 @@
       "--pid-file-path",
       "/tmp/device_monitor.pid"
     ],
+    "cwd": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/build/android:%(PATH)s"
+    },
     "name": "shutdown_device_monitor"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/build/android/adb_logcat_printer.py",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/build/android/adb_logcat_printer.py",
       "--output-path",
-      "[START_DIR]/src/out/Release/full_log",
-      "[START_DIR]/src/out/logcat"
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/out/Release/full_log",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/out/logcat"
     ],
+    "cwd": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/build/android:%(PATH)s"
+    },
     "name": "logcat_dump"
   },
   {
@@ -1007,26 +1153,32 @@
       "GSUtil:parallel_composite_upload_threshold=50M",
       "----",
       "cp",
-      "[START_DIR]/src/out/Release/full_log",
-      "gs://chromium-android/logcat_dumps/Android Nexus5X WebView Perf (3)/571"
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/out/Release/full_log",
+      "gs://chromium-android/logcat_dumps/Android Nexus6 WebView Perf (3)/571"
     ],
+    "cwd": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/build/android:%(PATH)s"
+    },
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/Android Nexus5X WebView Perf (3)/571@@@"
+      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/Android Nexus6 WebView Perf (3)/571@@@"
     ]
   },
   {
     "cmd": [
-      "[START_DIR]/src/third_party/android_platform/development/scripts/stack",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/android_platform/development/scripts/stack",
       "--arch",
-      "arm64",
+      "arm",
       "--more-info",
-      "[START_DIR]/src/out/Release/full_log"
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/out/Release/full_log"
     ],
+    "cwd": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_",
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/out/Release",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/build/android:%(PATH)s"
     },
     "name": "stack_tool_with_logcat_dump"
   },
@@ -1035,22 +1187,28 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[START_DIR]/src/chrome/VERSION",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/chrome/VERSION",
       "/path/to/tmp/"
     ],
+    "cwd": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/build/android:%(PATH)s"
+    },
     "name": "get version (3)"
   },
   {
     "cmd": [
-      "[START_DIR]/src/build/android/tombstones.py",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/build/android/tombstones.py",
       "-a",
       "-s",
       "-w"
     ],
+    "cwd": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_",
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/out/Release",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/build/android:%(PATH)s"
     },
     "name": "stack_tool_for_tombstones"
   },
@@ -1059,8 +1217,13 @@
       "python",
       "-u",
       "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
-      "[START_DIR]/src/out/Release/test_logs/*.log"
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/out/Release/test_logs/*.log"
     ],
+    "cwd": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/build/android:%(PATH)s"
+    },
     "name": "test_report",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -1075,54 +1238,21 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/src/components/crash/content/tools/generate_breakpad_symbols.py",
-      "--symbols-dir",
-      "[TMP_BASE]/symbols_tmp_2",
-      "--build-dir",
-      "[START_DIR]/src/out/Release",
-      "--binary",
-      "[START_DIR]/src/out/Release/lib.unstripped/libchrome.so"
+      "echo",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/out/Release"
     ],
-    "name": "generate breakpad symbols for libchrome.so"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/src/components/crash/content/tools/generate_breakpad_symbols.py",
-      "--symbols-dir",
-      "[TMP_BASE]/symbols_tmp_2",
-      "--build-dir",
-      "[START_DIR]/src/out/Release",
-      "--binary",
-      "[START_DIR]/src/out/Release/lib.unstripped/libwebviewchromium.so"
-    ],
-    "name": "generate breakpad symbols for libwebviewchromium.so"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/src/build/android/stacktrace/stackwalker.py",
-      "--stackwalker-binary-path",
-      "[START_DIR]/src/out/Release/microdump_stackwalk",
-      "--stack-trace-path",
-      "[START_DIR]/src/out/Release/full_log",
-      "--symbols-path",
-      "[TMP_BASE]/symbols_tmp_2"
-    ],
-    "name": "symbolized breakpad crashes"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
-      "[TMP_BASE]/symbols_tmp_2"
-    ],
-    "name": "rmtree [TMP_BASE]/symbols_tmp_2"
+    "cwd": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/build/android:%(PATH)s"
+    },
+    "name": "no microdump stackwalk",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@info@This bot appears to not have the microdump_stackwalk binary.@@@",
+      "@@@STEP_LOG_LINE@info@This is needed by the bot to run stack walking logic for androidbuilds.@@@",
+      "@@@STEP_LOG_LINE@info@No action is needed at this time; contact martiniss@ for any questions or issues@@@",
+      "@@@STEP_LOG_END@info@@@"
+    ]
   },
   {
     "name": "$result",

@@ -90,7 +90,7 @@ def BuildSpec(
 
 
 def TestSpec(config_name, perf_id, platform, target_bits,
-             parent_buildername=None, tests=None):
+             parent_buildername=None, tests=None, remove_system_webview=None):
   spec = _BaseSpec(
       bot_type='tester',
       config_name=config_name,
@@ -101,6 +101,8 @@ def TestSpec(config_name, perf_id, platform, target_bits,
 
   if not parent_buildername:
     parent_buildername = builders[platform][target_bits]
+  if remove_system_webview is not None:
+    spec['remove_system_webview'] = remove_system_webview
   spec['parent_buildername'] = parent_buildername
   spec['perf-id'] = perf_id
   spec['results-url'] = 'https://chromeperf.appspot.com'
@@ -138,15 +140,17 @@ def _AddBuildSpec(
 
 def _AddTestSpec(name, perf_id, platform, target_bits=64,
                  num_host_shards=1, num_device_shards=1,
-                 parent_buildername=None):
+                 parent_buildername=None, replace_webview=False):
   for shard_index in xrange(num_host_shards):
     builder_name = '%s (%d)' % (name, shard_index + 1)
     tests = [steps.DynamicPerfTests(
         perf_id, platform, target_bits, num_device_shards=num_device_shards,
-        num_host_shards=num_host_shards, shard_index=shard_index)]
+        num_host_shards=num_host_shards, shard_index=shard_index,
+        replace_webview=replace_webview)]
     SPEC['builders'][builder_name] = TestSpec(
         'chromium_perf', perf_id, platform, target_bits, tests=tests,
-        parent_buildername=parent_buildername)
+        parent_buildername=parent_buildername,
+        remove_system_webview=replace_webview)
 
 
 _AddBuildSpec('Android Builder', 'android', target_bits=32)
@@ -195,6 +199,14 @@ _AddTestSpec('Android One Perf', 'android-one', 'android',
 _AddTestSpec('Android Nexus5X Perf', 'android-nexus5X', 'android',
              num_device_shards=7, num_host_shards=3,
              parent_buildername='Android arm64 Compile')
+
+# Webview
+_AddTestSpec('Android Nexus5X WebView Perf', 'android-webview-nexus5X',
+             'android', num_device_shards=7, num_host_shards=3,
+             replace_webview=True)
+_AddTestSpec('Android Nexus6 WebView Perf', 'android-webview-nexus6',
+             'android', num_device_shards=7, num_host_shards=3,
+             target_bits=32, replace_webview=True)
 
 
 _AddIsolatedTestSpec('Win Zenbook Perf', 'win-zenbook', 'win')
