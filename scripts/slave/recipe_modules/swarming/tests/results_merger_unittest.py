@@ -168,6 +168,17 @@ def remove(initial, keys):
 class MergingTest(unittest.TestCase):  # pragma: no cover
   maxDiff = None  # Show full diff if assertion fail
 
+  def test_merge_tries(self):
+    self.assertEquals(
+        {'a': 'A', 'b': {'c': 'C'}},
+        results_merger.merge_tries(
+            {'a': 'A', 'b': {}}, {'b': {'c': 'C'}}))
+
+  def test_merge_tries_unmergable(self):
+    with self.assertRaisesRegexp(results_merger.MergeException, "a:b"):
+        results_merger.merge_tries(
+            {'a': {'b': 'A'}}, {'a': {'b': 'C'}})
+
   def test_merge_json_test_results_nop(self):
     good_json_results = (
         GOOD_JSON_TEST_RESULT_0,

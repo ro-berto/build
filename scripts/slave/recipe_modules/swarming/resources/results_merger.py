@@ -189,15 +189,22 @@ def merge_tries(source, dest):
       source: A result json test trie.
       dest: A json test trie merge destination.
   """
-  curr_result_nodes_queue = [source]
-  dest_results_nodes_queue = [dest]
-  while curr_result_nodes_queue:
-    curr_node = curr_result_nodes_queue.pop()
-    dest_node = dest_results_nodes_queue.pop()
+  # merge_tries merges source into dest by performing a lock-step depth-first
+  # traversal of dest and source.
+  # pending_nodes contains a list of all sub-tries which have been reached but
+  # need further merging.
+  # Each element consists of a trie prefix, and a sub-trie from each of dest
+  # and source which is reached via that prefix.
+  pending_nodes = [('', dest, source)]
+  while pending_nodes:
+    prefix, dest_node, curr_node = pending_nodes.pop()
     for k, v in curr_node.iteritems():
       if k in dest_node:
-        curr_result_nodes_queue.append(v)
-        dest_results_nodes_queue.append(dest_node[k])
+        if not isinstance(v, dict):
+          raise MergeException(
+              "%s:%s: %r not mergable, curr_node: %r\ndest_node: %r" % (
+                  prefix, k, v, curr_node, dest_node))
+        pending_nodes.append(("%s:%s" % (prefix, k), dest_node[k], v))
       else:
         dest_node[k] = v
   return dest
@@ -245,7 +252,12 @@ def merge_value(source, dest, key, merge_func):
   Raises:
     MergeException if the values can not be merged.
   """
-  dest[key] = merge_func(source[key], dest[key])
+  try:
+    dest[key] = merge_func(source[key], dest[key])
+  except MergeException as e:
+    e.message = "MergeFailure for %s\n%s" % (key, e.message)
+    e.args = tuple([e.message] + list(e.args[1:]))
+    raise
   del source[key]
 
 
