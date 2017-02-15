@@ -148,22 +148,22 @@ def RunSteps(api):
       monitoring_state = 'inconsistent'
       return
 
-    result = api.python(
-        'roll deps',
-        api.path['checkout'].join(
-            'v8', 'tools', 'release', 'auto_roll.py'),
-        ['--chromium', api.path['checkout'],
-         '--author', 'v8-autoroll@chromium.org',
-         '--reviewer',
-         'hablich@chromium.org,machenbach@chromium.org,'
-         'littledan@chromium.org,vogelheim@chromium.org',
-         '--roll',
-         '--json-output', api.json.output(),
-         '--work-dir', api.path['start_dir'].join('workdir')],
-        cwd=api.path['checkout'].join('v8'),
-        step_test_data=lambda: api.json.test_api.output(
-            {'monitoring_state': 'success'}),
-    )
+    with api.step.context({'cwd': api.path['checkout'].join('v8')}):
+      result = api.python(
+          'roll deps',
+          api.path['checkout'].join(
+              'v8', 'tools', 'release', 'auto_roll.py'),
+          ['--chromium', api.path['checkout'],
+           '--author', 'v8-autoroll@chromium.org',
+           '--reviewer',
+           'hablich@chromium.org,machenbach@chromium.org,'
+           'littledan@chromium.org,vogelheim@chromium.org',
+           '--roll',
+           '--json-output', api.json.output(),
+           '--work-dir', api.path['start_dir'].join('workdir')],
+          step_test_data=lambda: api.json.test_api.output(
+              {'monitoring_state': 'success'}),
+      )
     monitoring_state = result.json.output['monitoring_state']
   finally:
     counter_config = {

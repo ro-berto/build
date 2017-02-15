@@ -100,8 +100,8 @@ def RunSteps(api):
   for repo in (skia, src):
     api.skia.update_repo(api.path['start_dir'], repo)
 
-  update_step = api.bot_update.ensure_checkout(gclient_config=gclient_cfg,
-                                               cwd=api.path['start_dir'])
+  with api.step.context({'cwd': api.path['start_dir']}):
+    update_step = api.bot_update.ensure_checkout(gclient_config=gclient_cfg)
   skia_hash = update_step.presentation.properties['got_revision']
 
   # Checkout Swarming scripts.
@@ -117,9 +117,9 @@ def RunSteps(api):
   api.skia_swarming.setup_go_isolate(chromium_checkout.join('tools', 'luci-go'))
 
   # Build the tool.
-  api.step('build %s' % build_target,
-           ['make', build_target, 'BUILDTYPE=%s' % configuration],
-           cwd=api.path['checkout'])
+  with api.step.context({'cwd': api.path['checkout']}):
+    api.step('build %s' % build_target,
+             ['make', build_target, 'BUILDTYPE=%s' % configuration])
 
   skps_chromium_build = api.properties.get(
       'skps_chromium_build', DEFAULT_SKPS_CHROMIUM_BUILD)

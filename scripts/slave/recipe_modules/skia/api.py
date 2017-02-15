@@ -271,26 +271,24 @@ class SkiaApi(recipe_api.RecipeApi):
   def update_repo(self, parent_dir, repo):
     """Update an existing repo. This is safe to call without gen_steps."""
     repo_path = parent_dir.join(repo.name)
-    if self.m.path.exists(repo_path):
-      if self.m.platform.is_win:
-        git = 'git.bat'  # pragma: nocover
-      else:
-        git = 'git'
+    if not self.m.path.exists(repo_path):
+      return
+    if self.m.platform.is_win:
+      git = 'git.bat'  # pragma: nocover
+    else:
+      git = 'git'
+    with self.m.step.context({'cwd': repo_path}):
       self.m.step('git remote set-url',
                   cmd=[git, 'remote', 'set-url', 'origin', repo.url],
-                  cwd=repo_path,
                   infra_step=True)
       self.m.step('git fetch',
                   cmd=[git, 'fetch'],
-                  cwd=repo_path,
                   infra_step=True)
       self.m.step('git reset',
                   cmd=[git, 'reset', '--hard', repo.revision],
-                  cwd=repo_path,
                   infra_step=True)
       self.m.step('git clean',
                   cmd=[git, 'clean', '-d', '-f'],
-                  cwd=repo_path,
                   infra_step=True)
 
   def checkout_steps(self):
@@ -349,15 +347,15 @@ class SkiaApi(recipe_api.RecipeApi):
     checkout_kwargs = {}
     checkout_kwargs['env'] = self.default_env
 
-    update_step = self.m.bot_update.ensure_checkout(
-        gclient_config=gclient_cfg,
-        cwd=self.checkout_root,
-        **checkout_kwargs)
+    with self.m.step.context({'cwd': self.checkout_root}):
+      update_step = self.m.bot_update.ensure_checkout(
+          gclient_config=gclient_cfg,
+          **checkout_kwargs)
 
-    self.got_revision = update_step.presentation.properties['got_revision']
+      self.got_revision = update_step.presentation.properties['got_revision']
 
-    if self._need_chromium_checkout:
-      self.m.gclient.runhooks(cwd=self.checkout_root, env=self.gclient_env)
+      if self._need_chromium_checkout:
+        self.m.gclient.runhooks(env=self.gclient_env)
 
   def copy_build_products(self, src, dst):
     """Copy whitelisted build products from src to dst."""
@@ -658,13 +656,13 @@ print json.dumps({'ccache': ccache})
 
   def json_from_file(self, filename, cwd, builder_name, test_data):
     """Execute the given script to obtain JSON data."""
-    return self.m.python(
-        'exec %s' % self.m.path.basename(filename),
-        filename,
-        args=[self.m.json.output(), builder_name],
-        step_test_data=lambda: self.m.json.test_api.output(test_data),
-        cwd=cwd,
-        infra_step=True).json.output
+    with self.m.step.context({'cwd': cwd}):
+      return self.m.python(
+          'exec %s' % self.m.path.basename(filename),
+          filename,
+          args=[self.m.json.output(), builder_name],
+          step_test_data=lambda: self.m.json.test_api.output(test_data),
+          infra_step=True).json.output
 
   def test_steps(self):
     """Run the DM test."""
@@ -692,45 +690,45 @@ print json.dumps({'ccache': ccache})
       host_hashes_file = self.tmp_dir.join(hash_filename)
       hashes_file = self.flavor.device_path_join(
           self.device_dirs.tmp_dir, hash_filename)
-      self.run(
-          self.m.python.inline,
-          'get uninteresting hashes',
-          program="""
-          import contextlib
-          import math
-          import socket
-          import sys
-          import time
-          import urllib2
+      with self.m.step.context({'cwd': self.skia_dir}):
+        self.run(
+            self.m.python.inline,
+            'get uninteresting hashes',
+            program="""
+            import contextlib
+            import math
+            import socket
+            import sys
+            import time
+            import urllib2
 
-          HASHES_URL = 'https://gold.skia.org/_/hashes'
-          RETRIES = 5
-          TIMEOUT = 60
-          WAIT_BASE = 15
+            HASHES_URL = 'https://gold.skia.org/_/hashes'
+            RETRIES = 5
+            TIMEOUT = 60
+            WAIT_BASE = 15
 
-          socket.setdefaulttimeout(TIMEOUT)
-          for retry in range(RETRIES):
-            try:
-              with contextlib.closing(
-                  urllib2.urlopen(HASHES_URL, timeout=TIMEOUT)) as w:
-                hashes = w.read()
-                with open(sys.argv[1], 'w') as f:
-                  f.write(hashes)
-                  break
-            except Exception as e:
-              print 'Failed to get uninteresting hashes from %s:' % HASHES_URL
-              print e
-              if retry == RETRIES:
-                raise
-              waittime = WAIT_BASE * math.pow(2, retry)
-              print 'Retry in %d seconds.' % waittime
-              time.sleep(waittime)
-          """,
-          args=[host_hashes_file],
-          cwd=self.skia_dir,
-          abort_on_failure=False,
-          fail_build_on_failure=False,
-          infra_step=True)
+            socket.setdefaulttimeout(TIMEOUT)
+            for retry in range(RETRIES):
+              try:
+                with contextlib.closing(
+                    urllib2.urlopen(HASHES_URL, timeout=TIMEOUT)) as w:
+                  hashes = w.read()
+                  with open(sys.argv[1], 'w') as f:
+                    f.write(hashes)
+                    break
+              except Exception as e:
+                print 'Failed to get uninteresting hashes from %s:' % HASHES_URL
+                print e
+                if retry == RETRIES:
+                  raise
+                waittime = WAIT_BASE * math.pow(2, retry)
+                print 'Retry in %d seconds.' % waittime
+                time.sleep(waittime)
+            """,
+            args=[host_hashes_file],
+            abort_on_failure=False,
+            fail_build_on_failure=False,
+            infra_step=True)
 
       if self.m.path.exists(host_hashes_file):
         self.flavor.copy_file_to_device(host_hashes_file, hashes_file)

@@ -30,14 +30,14 @@ def RunSteps(api):
   try:
     build_script = api.path['checkout'].join('tools-webrtc', 'android',
                                              'build_aar.py')
-    step_result = api.python(
-        'build',
-        build_script,
-        args=['--use-goma',
-              '--verbose',
-              '--extra-gn-args', 'goma_dir=\"%s\"' % goma_dir],
-        cwd=api.path['checkout'],
-    )
+    with api.step.context({'cwd': api.path['checkout']}):
+      step_result = api.python(
+          'build',
+          build_script,
+          args=['--use-goma',
+                '--verbose',
+                '--extra-gn-args', 'goma_dir=\"%s\"' % goma_dir],
+      )
     ninja_log_exit_status = step_result.retcode
   except api.step.StepFailure as e:
     ninja_log_exit_status = e.retcode

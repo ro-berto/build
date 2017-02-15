@@ -156,54 +156,50 @@ def RunSteps(api):
 
   # buildbot sets 'clobber' to the empty string which is falsey, check with 'in'
   if 'clobber' in api.properties:
-    api.python('clobber',
-               api.path['tools'].join('clean_output_directory.py'),
-               cwd=api.path['checkout'])
+    with api.step.context({'cwd': api.path['checkout']}):
+      api.python('clobber',
+                 api.path['tools'].join('clean_output_directory.py'))
 
   api.gclient.runhooks(env=b['env'].copy())  # Modifies its env argument.
 
-  api.python('taskkill before building',
-             api.path['checkout'].join('tools', 'task_kill.py'),
-             args=['--kill_browsers=True'],
-             cwd=api.path['checkout'])
+  with api.step.context({'cwd': api.path['checkout']}):
+    api.python('taskkill before building',
+               api.path['checkout'].join('tools', 'task_kill.py'),
+               args=['--kill_browsers=True'])
 
-  build_args = ['-m%s' % b['mode'], '--arch=%s' % b['target_arch'], 'runtime']
-  build_args.extend(b.get('build_args', []))
-  api.python('build dart',
-             api.path['checkout'].join('tools', 'build.py'),
-             args=build_args,
-             cwd=api.path['checkout'],
-             env=b['env'])
-
-  with api.step.defer_results():
-    test_args = ['-m%s' % b['mode'],
-                 '--arch=%s' % b['target_arch'],
-                 '--progress=line',
-                 '--report',
-                 '--time',
-                 '--failure-summary',
-                 '--write-debug-log',
-                 '--write-test-outcome-log']
-    if b.get('archive_core_dumps', False):
-      test_args.append('--copy-coredumps')
-    test_args.extend(b.get('test_args', []))
-    api.python('vm tests',
-               api.path['checkout'].join('tools', 'test.py'),
-               args=test_args,
-               cwd=api.path['checkout'],
+    build_args = ['-m%s' % b['mode'], '--arch=%s' % b['target_arch'], 'runtime']
+    build_args.extend(b.get('build_args', []))
+    api.python('build dart',
+               api.path['checkout'].join('tools', 'build.py'),
+               args=build_args,
                env=b['env'])
-    if b.get('checked', False):
-      test_args.append('--checked')
-      api.python('checked vm tests',
+
+    with api.step.defer_results():
+      test_args = ['-m%s' % b['mode'],
+                   '--arch=%s' % b['target_arch'],
+                   '--progress=line',
+                   '--report',
+                   '--time',
+                   '--failure-summary',
+                   '--write-debug-log',
+                   '--write-test-outcome-log']
+      if b.get('archive_core_dumps', False):
+        test_args.append('--copy-coredumps')
+      test_args.extend(b.get('test_args', []))
+      api.python('vm tests',
                  api.path['checkout'].join('tools', 'test.py'),
                  args=test_args,
-                 cwd=api.path['checkout'],
                  env=b['env'])
+      if b.get('checked', False):
+        test_args.append('--checked')
+        api.python('checked vm tests',
+                   api.path['checkout'].join('tools', 'test.py'),
+                   args=test_args,
+                   env=b['env'])
 
-    api.python('taskkill after testing',
-               api.path['checkout'].join('tools', 'task_kill.py'),
-               args=['--kill_browsers=True'],
-               cwd=api.path['checkout'])
+      api.python('taskkill after testing',
+                 api.path['checkout'].join('tools', 'task_kill.py'),
+                 args=['--kill_browsers=True'])
 
 def GenTests(api):
    yield (

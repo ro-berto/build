@@ -37,12 +37,13 @@ class FinditApi(recipe_api.RecipeApi):
     cwd = self.m.path['checkout'].join(repo_dir)
 
     previous_revision = '%s~1' % revision
-    step_result = self.m.git('diff', revision + '~1', revision, '--name-only',
-                             name='git diff to analyze commit',
-                             stdout=self.m.raw_io.output_text(),
-                             cwd=cwd,
-                             step_test_data=lambda:
-                                 self.m.raw_io.test_api.stream_output('foo.cc'))
+    with self.m.step.context({'cwd': cwd}):
+      step_result = self.m.git(
+          'diff', revision + '~1', revision, '--name-only',
+          name='git diff to analyze commit',
+          stdout=self.m.raw_io.output_text(),
+          step_test_data=lambda:
+              self.m.raw_io.test_api.stream_output('foo.cc'))
 
     paths = step_result.stdout.split()
     if repo_dir:
@@ -73,13 +74,13 @@ class FinditApi(recipe_api.RecipeApi):
     repo_dir = self._calculate_repo_dir(solution_name)
     cwd = self.m.path['checkout'].join(repo_dir)
 
-    step_result = self.m.git('log', '--format=%H',
-                             '%s..%s' % (start_revision, end_revision),
-                             name='git commits in range',
-                             stdout=self.m.raw_io.output_text(),
-                             cwd=cwd,
-                             step_test_data=lambda:
-                                 self.m.raw_io.test_api.stream_output('r1'))
+    with self.m.step.context({'cwd': cwd}):
+      step_result = self.m.git('log', '--format=%H',
+                               '%s..%s' % (start_revision, end_revision),
+                               name='git commits in range',
+                               stdout=self.m.raw_io.output_text(),
+                               step_test_data=lambda:
+                                   self.m.raw_io.test_api.stream_output('r1'))
 
     revisions = step_result.stdout.split()
     revisions.reverse()

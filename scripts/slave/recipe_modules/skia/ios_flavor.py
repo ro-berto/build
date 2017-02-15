@@ -36,8 +36,9 @@ class iOSFlavorUtils(default_flavor.DefaultFlavorUtils):
   def compile(self, target):
     """Build the given target."""
     cmd = [self.ios_bin.join('ios_ninja')]
-    self._skia_api.run(self._skia_api.m.step, 'build iOSShell', cmd=cmd,
-                       cwd=self._skia_api.m.path['checkout'])
+    with self._skia_api.m.step.context({
+        'cwd': self._skia_api.m.path['checkout']}):
+      self._skia_api.run(self._skia_api.m.step, 'build iOSShell', cmd=cmd)
 
   def device_path_join(self, *args):
     """Like os.path.join(), but for paths on a connected iOS device."""

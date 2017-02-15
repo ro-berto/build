@@ -35,16 +35,16 @@ def RunSteps(api):
   else:
     step_result.presentation.step_text = "Pushing activated"
 
-  api.python(
-      'push candidate',
-      api.path['checkout'].join(
-          'tools', 'release', 'auto_push.py'),
-      ['--author', 'v8-autoroll@chromium.org',
-       '--reviewer', 'v8-autoroll@chromium.org',
-       '--push',
-       '--work-dir', api.path['start_dir'].join('workdir')],
-      cwd=api.path['checkout'],
-    )
+  with api.step.context({'cwd': api.path['checkout']}):
+    api.python(
+        'push candidate',
+        api.path['checkout'].join(
+            'tools', 'release', 'auto_push.py'),
+        ['--author', 'v8-autoroll@chromium.org',
+         '--reviewer', 'v8-autoroll@chromium.org',
+         '--push',
+         '--work-dir', api.path['start_dir'].join('workdir')],
+      )
 
 
 def GenTests(api):

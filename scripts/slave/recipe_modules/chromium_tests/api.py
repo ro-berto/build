@@ -698,13 +698,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         bot_update_json['properties'][rev_property])
     self._resolve_fixed_revisions(bot_update_json)
 
-    kwargs = {}
+    context = {}
     if self.m.chromium_checkout.working_dir:
-      kwargs['cwd'] = self.m.chromium_checkout.working_dir
+      context['cwd'] = self.m.chromium_checkout.working_dir
 
-    self.m.bot_update.ensure_checkout(
-        patch=False, update_presentation=False, **kwargs)
-    self.m.chromium.runhooks(name='runhooks (without patch)')
+    with self.m.step.context(context):
+      self.m.bot_update.ensure_checkout(patch=False, update_presentation=False)
+    with self.m.step.context({'cwd': self.m.path['checkout']}):
+      self.m.chromium.runhooks(name='runhooks (without patch)')
 
   def run_tests_on_tryserver(self, bot_config, tests, bot_update_step,
                              affected_files, mb_mastername=None,

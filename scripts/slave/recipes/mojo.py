@@ -59,11 +59,11 @@ def _BuildSteps(api, buildername, is_debug, is_official):
 
   if goma_dir:
     env['GOMA_DIR'] = goma_dir
-  api.python('mojob gn',
-             mojob_path,
-             args=['gn', build_type] + args + gn_args,
-             cwd=api.path['checkout'],
-             env=env)
+  with api.step.context({'cwd': api.path['checkout']}):
+    api.python('mojob gn',
+               mojob_path,
+               args=['gn', build_type] + args + gn_args,
+               env=env)
   api.python('mojob build',
              mojob_path,
              args=['build', build_type] + args,
@@ -177,7 +177,8 @@ def _TestSteps(api):
     for entry in test_list:
       name = str(entry['name'])  # api.step() wants a non-Unicode string.
       command = entry['command']
-      api.step(name, command, cwd=api.path['checkout'])
+      with api.step.context({'cwd': api.path['checkout']}):
+        api.step(name, command)
 
 
 def _UploadShellAndApps(api, buildername):

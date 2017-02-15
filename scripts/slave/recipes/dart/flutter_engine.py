@@ -30,8 +30,8 @@ def AnalyzeDartUI(api):
   Build(api, 'host_debug_unopt', 'generate_dart_ui')
 
   checkout = api.path['start_dir'].join('src')
-  api.step('analyze dart_ui', ['/bin/sh', 'flutter/travis/analyze.sh'],
-           cwd=checkout)
+  with api.step.context({'cwd': checkout}):
+    api.step('analyze dart_ui', ['/bin/sh', 'flutter/travis/analyze.sh'])
 
 def BuildLinuxAndroidx86(api):
   for x86_variant in ['x64', 'x86']:
@@ -61,7 +61,8 @@ def TestObservatory(api):
       'flutter/shell/testing/observatory/empty_main.dart')
   test_path = checkout.join('flutter/shell/testing/observatory/test.dart')
   test_cmd = ['dart', test_path, sky_shell_path, empty_main_path]
-  api.step('test observatory and service protocol', test_cmd, cwd=checkout)
+  with api.step.context({'cwd': checkout}):
+    api.step('test observatory and service protocol', test_cmd)
 
 def GetCheckout(api):
   src_cfg = api.gclient.make_config()

@@ -47,12 +47,12 @@ def GetDEPS(api, name, repo):
 
   # Read local deps information. Each deps has one line in the format:
   # path/to/deps: repo@revision
-  step_result = api.gclient(
-      'get %s deps' % name,
-      ['revinfo', '--deps', 'all', '--spec', spec],
-      cwd=api.path['start_dir'],
-      stdout=api.raw_io.output_text(),
-  )
+  with api.step.context({'cwd': api.path['start_dir']}):
+    step_result = api.gclient(
+        'get %s deps' % name,
+        ['revinfo', '--deps', 'all', '--spec', spec],
+        stdout=api.raw_io.output_text(),
+    )
 
   # Transform into dict. Skip the solution prefix in keys (e.g. src/).
   deps = {}
@@ -99,23 +99,11 @@ def RunSteps(api):
   api.bot_update.ensure_checkout(no_shallow=True)
 
   # Enforce a clean state.
-  api.git(
-      'checkout', '-f', 'origin/master',
-      cwd=api.path['checkout'],
-  )
-  api.git(
-      'branch', '-D', 'roll',
-      ok_ret='any',
-      cwd=api.path['checkout'],
-  )
-  api.git(
-      'clean', '-ffd',
-      cwd=api.path['checkout'],
-  )
-  api.git(
-      'new-branch', 'roll',
-      cwd=api.path['checkout'],
-  )
+  with api.step.context({'cwd': api.path['checkout']}):
+    api.git('checkout', '-f', 'origin/master')
+    api.git('branch', '-D', 'roll', ok_ret='any')
+    api.git('clean', '-ffd')
+    api.git('new-branch', 'roll')
 
   # Get chromium's and v8's deps information.
   cr_deps = GetDEPS(
@@ -152,12 +140,12 @@ def RunSteps(api):
 
     # Check if an update is necessary.
     if v8_rev != new_rev:
-      step_result = api.step(
-          'roll dependency %s' % name.replace('/', '_'),
-          ['roll-dep-svn', '--no-verify-revision', 'v8/%s' % name, new_rev],
-          ok_ret='any',
-          cwd=api.path['checkout'],
-      )
+      with api.step.context({'cwd': api.path['checkout']}):
+        step_result = api.step(
+            'roll dependency %s' % name.replace('/', '_'),
+            ['roll-dep-svn', '--no-verify-revision', 'v8/%s' % name, new_rev],
+            ok_ret='any',
+        )
       if step_result.retcode == 0:
         repo = v8_repo[:-len('.git')] if v8_repo.endswith('.git') else v8_repo
         commit_message.append(LOG_TEMPLATE % (
@@ -166,11 +154,8 @@ def RunSteps(api):
         step_result.presentation.status = api.step.WARNING
 
   # Check for a difference. If no deps changed, the diff is empty.
-  step_result = api.git(
-      'diff',
-      stdout=api.raw_io.output_text(),
-      cwd=api.path['checkout'],
-  )
+  with api.step.context({'cwd': api.path['checkout']}):
+    step_result = api.git('diff', stdout=api.raw_io.output_text())
   diff = step_result.stdout.strip()
   step_result.presentation.logs['diff'] = diff.splitlines()
 
@@ -180,13 +165,13 @@ def RunSteps(api):
     for message in commit_message:
       args.extend(['-m', message])
     args.extend(['-m', 'TBR=%s' % ','.join(AUTO_REVIEWERS)])
-    kwargs = {'stdout': api.raw_io.output_text(), 'cwd': api.path['checkout']}
-    api.git(*args, **kwargs)
-    api.git(
-        'cl', 'upload', '-f', '--use-commit-queue', '--bypass-hooks',
-        '--email', 'v8-autoroll@chromium.org', '--gerrit',
-        cwd=api.path['checkout'],
-    )
+    kwargs = {'stdout': api.raw_io.output_text()}
+    with api.step.context({'cwd': api.path['checkout']}):
+      api.git(*args, **kwargs)
+      api.git(
+          'cl', 'upload', '-f', '--use-commit-queue', '--bypass-hooks',
+          '--email', 'v8-autoroll@chromium.org', '--gerrit',
+      )
 
 
 def GenTests(api):

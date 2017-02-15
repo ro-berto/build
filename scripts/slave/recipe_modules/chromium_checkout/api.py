@@ -47,7 +47,11 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
         self.m.properties.get('patch_project'))
     if not cwd and self.working_dir:
       cwd = self.working_dir.join(patch_root)
-    files = self.m.tryserver.get_files_affected_by_patch(patch_root, cwd=cwd)
+    context = {}
+    if cwd:
+      context['cwd'] = cwd
+    with self.m.step.context(context):
+      files = self.m.tryserver.get_files_affected_by_patch(patch_root)
     for i, path in enumerate(files):
       path = str(path)
       assert path.startswith(relative_to)
@@ -60,17 +64,17 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
     if self.m.platform.is_win:
       self.m.chromium.taskkill()
 
-    kwargs = {}
+    context = {}
     self._working_dir = self.get_checkout_dir(bot_config)
     if self._working_dir:
-      kwargs['cwd'] = self._working_dir
+      context['cwd'] = self._working_dir
 
     # Bot Update re-uses the gclient configs.
-    update_step = self.m.bot_update.ensure_checkout(
-        patch_root=bot_config.get('patch_root'),
-        root_solution_revision=root_solution_revision,
-        clobber=bot_config.get('clobber', False),
-        **kwargs)
+    with self.m.step.context(context):
+      update_step = self.m.bot_update.ensure_checkout(
+          patch_root=bot_config.get('patch_root'),
+          root_solution_revision=root_solution_revision,
+          clobber=bot_config.get('clobber', False))
     assert update_step.json.output['did_run']
     # HACK(dnj): Remove after 'crbug.com/398105' has landed
     self.m.chromium.set_build_properties(update_step.json.output['properties'])

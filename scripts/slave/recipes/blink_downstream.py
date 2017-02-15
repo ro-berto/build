@@ -141,14 +141,13 @@ def RunSteps(api):
 
   # Run all steps in the checkout dir (consistent with chromium_tests).
   with api.step.context(context):
-    # TODO(phajdan.jr): remove redundant **context below once we fix things
-    # to behave the same without it.
-    step_result = api.bot_update.ensure_checkout(**context)
+    step_result = api.bot_update.ensure_checkout()
 
     api.chromium.ensure_goma()
 
     api.chromium.c.project_generator.tool = 'mb'
-    api.chromium.runhooks()
+    with api.step.context({'cwd': api.path['checkout']}):
+      api.chromium.runhooks()
 
     api.chromium_tests.run_mb_and_compile(
         ['blink_tests'], [],

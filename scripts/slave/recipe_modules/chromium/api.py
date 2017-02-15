@@ -694,8 +694,6 @@ class ChromiumApi(recipe_api.RecipeApi):
     if not gn_path:
       gn_path = self.m.depot_tools.gn_py_path
 
-    kwargs.setdefault('cwd', self.m.path['checkout'])
-
     gn_args = list(self.c.gn_args)
 
     # TODO(dpranke): Figure out if we should use the '_x64' thing to
@@ -742,10 +740,12 @@ class ChromiumApi(recipe_api.RecipeApi):
         build_dir,
         '--args=%s' % ' '.join(gn_args),
     ]
-    if str(gn_path).endswith('.py'):
-      self.m.python(name='gn', script=gn_path, args=step_args, **kwargs)
-    else:
-      self.m.step(name='gn', cmd=[gn_path] + step_args, **kwargs)
+    with self.m.step.context({
+        'cwd': kwargs.get('cwd', self.m.path['checkout'])}):
+      if str(gn_path).endswith('.py'):
+        self.m.python(name='gn', script=gn_path, args=step_args, **kwargs)
+      else:
+        self.m.step(name='gn', cmd=[gn_path] + step_args, **kwargs)
 
   def run_mb(self, mastername, buildername, use_goma=True, mb_path=None,
              mb_config_path=None, isolated_targets=None, name=None,
@@ -809,7 +809,6 @@ class ChromiumApi(recipe_api.RecipeApi):
       'env': {
         'GOMA_SERVICE_ACCOUNT_JSON_FILE': self.m.goma.service_account_json_path,
       },
-      'cwd': self.m.path['checkout'],
     }
     step_kwargs['env'].update(kwargs.pop('env', {}))
 
@@ -828,7 +827,9 @@ class ChromiumApi(recipe_api.RecipeApi):
       step_kwargs['wrapper'] = self.get_cros_chrome_sdk_wrapper(clean=True)
 
     step_kwargs.update(kwargs)
-    self.m.python(**step_kwargs)
+    with self.m.step.context({
+        'cwd': kwargs.get('cwd', self.m.path['checkout'])}):
+      self.m.python(**step_kwargs)
 
     # Comes after self.m.python so the log appears in the correct step result.
     result = self.m.step.active_result

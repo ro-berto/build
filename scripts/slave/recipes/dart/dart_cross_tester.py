@@ -39,43 +39,38 @@ def RunSteps(api):
   buildername = buildername.replace('-recipe', '')
   b = builders[buildername]
 
-  api.python('clobber',
-             api.path['tools'].join('clean_output_directory.py'),
-             cwd=api.path['checkout'], ok_ret='any')
-  api.gclient.runhooks(env={'DART_USE_GYP': '1'})
-
-  tarball = tarball_name(b['target_arch'], b['mode'], revision)
-  uri = "%s/%s" % (GCS_BUCKET, tarball)
-  api.gsutil(['cp', uri, tarball],
-             name='download tarball',
-             cwd=api.path['checkout'])
-  api.step('untar tarball', ['tar', '-xjf', tarball], cwd=api.path['checkout'])
-
-  with api.step.defer_results():
-    test_args = ['--mode=%s' % b['mode'],
-                 '--arch=%s' % b['target_arch'],
-                 '--progress=line',
-                 '--report',
-                 '--time',
-                 '--failure-summary',
-                 '--write-debug-log',
-                 '--write-test-outcome-log']
-    test_args.extend(b.get('test_args', []))
-    api.python('vm tests',
-               api.path['tools'].join('test.py'),
-               args=test_args,
-               cwd=api.path['checkout'])
-    test_args.extend(['--checked', '--append_logs'])
-    api.python('checked vm tests',
-               api.path['tools'].join('test.py'),
-               args=test_args,
-               cwd=api.path['checkout'])
-    api.step('delete tarball',
-             ['rm', tarball],
-             cwd=api.path['checkout'])
+  with api.step.context({'cwd': api.path['checkout']}):
     api.python('clobber',
                api.path['tools'].join('clean_output_directory.py'),
-               cwd=api.path['checkout'])
+               ok_ret='any')
+  api.gclient.runhooks(env={'DART_USE_GYP': '1'})
+
+  with api.step.context({'cwd': api.path['checkout']}):
+    tarball = tarball_name(b['target_arch'], b['mode'], revision)
+    uri = "%s/%s" % (GCS_BUCKET, tarball)
+    api.gsutil(['cp', uri, tarball], name='download tarball')
+    api.step('untar tarball', ['tar', '-xjf', tarball])
+
+    with api.step.defer_results():
+      test_args = ['--mode=%s' % b['mode'],
+                   '--arch=%s' % b['target_arch'],
+                   '--progress=line',
+                   '--report',
+                   '--time',
+                   '--failure-summary',
+                   '--write-debug-log',
+                   '--write-test-outcome-log']
+      test_args.extend(b.get('test_args', []))
+      api.python('vm tests',
+                 api.path['tools'].join('test.py'),
+                 args=test_args)
+      test_args.extend(['--checked', '--append_logs'])
+      api.python('checked vm tests',
+                 api.path['tools'].join('test.py'),
+                 args=test_args)
+      api.step('delete tarball', ['rm', tarball])
+      api.python('clobber',
+                 api.path['tools'].join('clean_output_directory.py'))
 
 
 def GenTests(api):

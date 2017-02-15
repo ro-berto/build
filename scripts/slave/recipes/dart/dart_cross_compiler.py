@@ -51,28 +51,26 @@ def RunSteps(api):
   b = builders[buildername]
 
   if b.get('clobber', False):
+    with api.step.context({'cwd': api.path['checkout']}):
       api.python('clobber',
-                 api.path['tools'].join('clean_output_directory.py'),
-                 cwd=api.path['checkout'])
+                 api.path['tools'].join('clean_output_directory.py'))
 
   api.gclient.runhooks()
 
-  build_args = ['-m%s' % b['mode'], '--arch=%s' % b['target_arch'], 'runtime']
-  api.python('build dart',
-             api.path['checkout'].join('tools', 'build.py'),
-             args=build_args,
-             cwd=api.path['checkout'])
-  tarball = tarball_name(b['target_arch'], b['mode'], revision)
-  api.step('create tarball',
-           ['tar', '-cjf', tarball, '--exclude=**/obj',
-             '--exclude=**/obj.host', '--exclude=**/obj.target',
-             '--exclude=**/*analyzer*', 'out/'],
-           cwd=api.path['checkout'])
+  with api.step.context({'cwd': api.path['checkout']}):
+    build_args = ['-m%s' % b['mode'], '--arch=%s' % b['target_arch'], 'runtime']
+    api.python('build dart',
+               api.path['checkout'].join('tools', 'build.py'),
+               args=build_args)
+    tarball = tarball_name(b['target_arch'], b['mode'], revision)
+    api.step('create tarball',
+             ['tar', '-cjf', tarball, '--exclude=**/obj',
+               '--exclude=**/obj.host', '--exclude=**/obj.target',
+               '--exclude=**/*analyzer*', 'out/'])
 
-  uri = "%s/%s" % (GCS_BUCKET, tarball)
-  api.gsutil(['cp', '-a', 'public-read', tarball, uri],
-             name='upoad tarball',
-             cwd=api.path['checkout'])
+    uri = "%s/%s" % (GCS_BUCKET, tarball)
+    api.gsutil(['cp', '-a', 'public-read', tarball, uri],
+               name='upoad tarball')
 
   # Trigger slaves
   target_builder = buildername.replace('cross-', 'target-')

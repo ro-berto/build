@@ -11,6 +11,7 @@ DEPS = [
   'recipe_engine/properties',
   'recipe_engine/python',
   'recipe_engine/raw_io',
+  'recipe_engine/step',
   'webrtc',
 ]
 
@@ -40,28 +41,19 @@ def RunSteps(api):
   api.webrtc.checkout()
   api.gclient.runhooks()
 
-  # Enforce a clean state, and discard any local commits from previous runs.
-  api.git(
-      'checkout', '-f', 'master',
-      cwd=api.path['checkout'],
-  )
-  api.git(
-      'pull', 'origin', 'master',
-      cwd=api.path['checkout'],
-  )
-  api.git(
-      'clean', '-ffd',
-      cwd=api.path['checkout'],
-  )
+  with api.step.context({'cwd': api.path['checkout']}):
+    # Enforce a clean state, and discard any local commits from previous runs.
+    api.git('checkout', '-f', 'master')
+    api.git('pull', 'origin', 'master')
+    api.git('clean', '-ffd')
 
-  # Run the roll script. It will take care of branch creation, modifying DEPS,
-  # uploading etc. It will also delete any previous roll branch.
-  api.python(
-      'autoroll DEPS',
-      api.path['checkout'].join('tools-webrtc', 'autoroller', 'roll_deps.py'),
-      ['--clean', '--verbose'],
-      cwd=api.path['checkout'],
-  )
+    # Run the roll script. It will take care of branch creation, modifying DEPS,
+    # uploading etc. It will also delete any previous roll branch.
+    api.python(
+        'autoroll DEPS',
+        api.path['checkout'].join('tools-webrtc', 'autoroller', 'roll_deps.py'),
+        ['--clean', '--verbose'],
+    )
 
 
 def GenTests(api):

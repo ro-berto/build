@@ -753,9 +753,10 @@ class Bisector(object):
     """
     # TODO(robertocn): Investigate what causes the states mentioned in the
     # docstring in the first place.
-    self.api.m.git('update-ref', 'refs/heads/master',
-                   'refs/remotes/origin/master')
-    self.api.m.git('checkout', 'master', cwd=self.api.m.path['checkout'])
+    with self.api.m.step.context({'cwd': self.api.m.path['checkout']}):
+      self.api.m.git('update-ref', 'refs/heads/master',
+                     'refs/remotes/origin/master')
+      self.api.m.git('checkout', 'master')
 
   def is_return_code_mode(self):
     """Checks whether this is a bisect on the test's exit code."""

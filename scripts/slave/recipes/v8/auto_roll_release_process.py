@@ -31,32 +31,24 @@ TIME_LIMIT_SEC = TIME_LIMIT_HOURS * SEC_TO_HOURS
 
 
 def GetRef(api, repo, ref):
-  # Fetch ref from remote.
-  api.git(
-      'fetch', repo, '+%s:%s' % (ref, ref),
-      cwd=api.path['checkout'],
-  )
-  # Read ref locally.
-  step_result = api.git(
-      'show-ref', '-s', ref,
-      name='git show-ref %s' % ref,
-      cwd=api.path['checkout'],
-      stdout=api.raw_io.output_text(),
-  )
-  result = step_result.stdout.strip()
-  step_result.presentation.logs['ref'] = [result]
-  return result
+  with api.step.context({'cwd': api.path['checkout']}):
+    # Fetch ref from remote.
+    api.git('fetch', repo, '+%s:%s' % (ref, ref))
+    # Read ref locally.
+    step_result = api.git(
+        'show-ref', '-s', ref,
+        name='git show-ref %s' % ref,
+        stdout=api.raw_io.output_text(),
+    )
+    result = step_result.stdout.strip()
+    step_result.presentation.logs['ref'] = [result]
+    return result
 
 
 def PushRef(api, repo, ref, hsh):
-  api.git(
-      'update-ref', ref, hsh,
-      cwd=api.path['checkout'],
-  )
-  api.git(
-      'push', repo, '%s:%s' % (ref, ref),
-      cwd=api.path['checkout'],
-  )
+  with api.step.context({'cwd': api.path['checkout']}):
+    api.git('update-ref', ref, hsh)
+    api.git('push', repo, '%s:%s' % (ref, ref))
 
   # Upload log for debugging.
   ref_log_file_name = ref.replace('/', '_') + '.log'

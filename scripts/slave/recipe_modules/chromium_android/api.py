@@ -186,17 +186,17 @@ class AndroidApi(recipe_api.RecipeApi):
                 allow_subannotations=False)
 
   def git_number(self, **kwargs):
-    return self.m.step(
-        'git_number',
-        [self.m.depot_tools.package_repo_resource('git_number.py')],
-        stdout = self.m.raw_io.output_text(),
-        step_test_data=(
-          lambda:
-            self.m.raw_io.test_api.stream_output('3000\n')
-        ),
-        cwd=self.m.path['checkout'],
-        infra_step=True,
-        **kwargs)
+    with self.m.step.context({'cwd': self.m.path['checkout']}):
+      return self.m.step(
+          'git_number',
+          [self.m.depot_tools.package_repo_resource('git_number.py')],
+          stdout = self.m.raw_io.output_text(),
+          step_test_data=(
+            lambda:
+              self.m.raw_io.test_api.stream_output('3000\n')
+          ),
+          infra_step=True,
+          **kwargs)
 
   def resource_sizes(self, apk_path, chartjson_file=False,
                      upload_archives_to_bucket=None, perf_id=None):
@@ -226,13 +226,13 @@ class AndroidApi(recipe_api.RecipeApi):
     """Uploads android apks for functional bisects."""
     archive_name = 'build_product.zip'
     zipfile = self.m.path['checkout'].join('out', archive_name)
-    self.make_zip_archive(
-      'package_apks_for_bisect',
-      archive_name,
-      files=['apks'],
-      preserve_paths=False,
-      cwd=self.m.path['checkout']
-    )
+    with self.m.step.context({'cwd': self.m.path['checkout']}):
+      self.make_zip_archive(
+        'package_apks_for_bisect',
+        archive_name,
+        files=['apks'],
+        preserve_paths=False,
+      )
     # Get the commit postion for the revision to be used in archive name,
     # if not found use the git hash.
     try:
@@ -253,12 +253,12 @@ class AndroidApi(recipe_api.RecipeApi):
 
     zipfile = self.m.path['checkout'].join('out', archive_name)
 
-    self.make_zip_archive(
-      'zip_build_product',
-      archive_name,
-      preserve_paths=True,
-      cwd=self.m.path['checkout']
-    )
+    with self.m.step.context({'cwd': self.m.path['checkout']}):
+      self.make_zip_archive(
+        'zip_build_product',
+        archive_name,
+        preserve_paths=True,
+      )
 
     self.m.gsutil.upload(
         name='upload_build_product',
@@ -277,12 +277,12 @@ class AndroidApi(recipe_api.RecipeApi):
         version='4.7',
     )
     extract_path = extract_path or self.m.path['checkout']
-    self.m.step(
-      'unzip_build_product',
-      ['unzip', '-o', zipfile],
-      cwd=extract_path,
-      infra_step=True,
-    )
+    with self.m.step.context({'cwd': extract_path}):
+      self.m.step(
+        'unzip_build_product',
+        ['unzip', '-o', zipfile],
+        infra_step=True,
+      )
 
   def zip_and_upload_build(self, bucket):
     # TODO(luqui): Unify make_zip_archive and upload_build with this
@@ -771,12 +771,12 @@ class AndroidApi(recipe_api.RecipeApi):
     if test_trace:
       args.extend(['--trace-output', test_trace])
 
-    self.test_runner(
-        'Sharded Perf Tests',
-        args,
-        cwd=self.m.path['checkout'],
-        env=self.m.chromium.get_env(),
-        **kwargs)
+    with self.m.step.context({'cwd': self.m.path['checkout']}):
+      self.test_runner(
+          'Sharded Perf Tests',
+          args,
+          env=self.m.chromium.get_env(),
+          **kwargs)
 
   def run_sharded_perf_tests(self, config, flaky_config=None, perf_id=None,
                              test_type_transform=lambda x: x,
@@ -1370,7 +1370,8 @@ class AndroidApi(recipe_api.RecipeApi):
       try:
         self.common_tests_setup_steps(
             perf_setup=True, remove_system_webview=True)
-        api.chromium.runhooks()
+        with api.step.context({'cwd': api.path['checkout']}):
+          api.chromium.runhooks()
 
         yield
       finally:
@@ -1559,45 +1560,45 @@ class AndroidApi(recipe_api.RecipeApi):
     Generates a JSON file containing incremental coverage stats. Requires
     |file_changes_path| to contain a file with a valid JSON object.
     """
-    step_result = self.m.python(
-        'Incremental coverage report',
-        self.m.path.join('build', 'android', 'emma_coverage_stats.py'),
-        cwd=self.m.path['checkout'],
-        args=['-v',
-              '--out', self.m.json.output(),
-              '--emma-dir', self.coverage_dir.join('coverage_html'),
-              '--lines-for-coverage', self.file_changes_path],
-        step_test_data=lambda: self.m.json.test_api.output({
-          'files': {
-            'sample file 1': {
-              'absolute': {
-                'covered': 70,
+    with self.m.step.context({'cwd': self.m.path['checkout']}):
+      step_result = self.m.python(
+          'Incremental coverage report',
+          self.m.path.join('build', 'android', 'emma_coverage_stats.py'),
+          args=['-v',
+                '--out', self.m.json.output(),
+                '--emma-dir', self.coverage_dir.join('coverage_html'),
+                '--lines-for-coverage', self.file_changes_path],
+          step_test_data=lambda: self.m.json.test_api.output({
+            'files': {
+              'sample file 1': {
+                'absolute': {
+                  'covered': 70,
+                  'total': 100,
+                },
+                'incremental': {
+                  'covered': 30,
+                  'total': 50,
+                },
+              },
+              'sample file 2': {
+                'absolute': {
+                  'covered': 50,
+                  'total': 100,
+                },
+                'incremental': {
+                  'covered': 50,
+                  'total': 50,
+                },
+              },
+            },
+            'patch': {
+              'incremental': {
+                'covered': 80,
                 'total': 100,
               },
-              'incremental': {
-                'covered': 30,
-                'total': 50,
-              },
             },
-            'sample file 2': {
-              'absolute': {
-                'covered': 50,
-                'total': 100,
-              },
-              'incremental': {
-                'covered': 50,
-                'total': 50,
-              },
-            },
-          },
-          'patch': {
-            'incremental': {
-              'covered': 80,
-              'total': 100,
-            },
-          },
-        })
-    )
+          })
+      )
 
     if step_result.json.output:
       covered_lines = step_result.json.output['patch']['incremental']['covered']
@@ -1646,14 +1647,15 @@ class AndroidApi(recipe_api.RecipeApi):
 
     changed_files = self.staged_files_matching_filter('M')
     for changed_file in changed_files:
-      blame = self.m.git(
-          'blame', '-l', '-s', changed_file,
-          stdout=self.m.raw_io.output_text(),
-          name='Finding lines changed in modified file %s' % changed_file,
-          step_test_data=(
-              lambda: self.m.raw_io.test_api.stream_output(
-                  'int n = 0;\nn++;\nfor (int i = 0; i < n; i++) {'))
-      )
+      with self.m.step.context({'cwd': self.m.path['checkout']}):
+        blame = self.m.git(
+            'blame', '-l', '-s', changed_file,
+            stdout=self.m.raw_io.output_text(),
+            name='Finding lines changed in modified file %s' % changed_file,
+            step_test_data=(
+                lambda: self.m.raw_io.test_api.stream_output(
+                    'int n = 0;\nn++;\nfor (int i = 0; i < n; i++) {'))
+        )
       blame_lines = blame.stdout.splitlines()
       file_changes[changed_file] = [i + 1 for i, line in enumerate(blame_lines)
                                     if line.startswith(blame_cached_revision)]
@@ -1673,14 +1675,15 @@ class AndroidApi(recipe_api.RecipeApi):
     Returns:
       A list of file paths (strings) matching the provided |diff-filter|.
     """
-    diff = self.m.git(
-        'diff', '--staged', '--name-only', '--diff-filter', diff_filter,
-        stdout=self.m.raw_io.output_text(),
-        name='Finding changed files matching diff filter: %s' % diff_filter,
-        step_test_data=(
-            lambda: self.m.raw_io.test_api.stream_output(
-                'fake/file1.java\nfake/file2.java;\nfake/file3.java'))
-    )
+    with self.m.step.context({'cwd': self.m.path['checkout']}):
+      diff = self.m.git(
+          'diff', '--staged', '--name-only', '--diff-filter', diff_filter,
+          stdout=self.m.raw_io.output_text(),
+          name='Finding changed files matching diff filter: %s' % diff_filter,
+          step_test_data=(
+              lambda: self.m.raw_io.test_api.stream_output(
+                  'fake/file1.java\nfake/file2.java;\nfake/file3.java'))
+      )
     return diff.stdout.splitlines()
 
   @contextlib.contextmanager

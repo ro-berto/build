@@ -98,16 +98,15 @@ def RunSteps(api):
 
   src_dir = api.skia.checkout_root.join('src')
 
-  # Call build/gyp_chromium
-  api.step('gyp_chromium',
-           ['build/gyp_chromium'],
-           env={'CPPFLAGS': '-DSK_ALLOW_CROSSPROCESS_PICTUREIMAGEFILTERS=1',
-                'GYP_GENERATORS': 'ninja'},
-           cwd=src_dir)
-  # Build Chrome.
-  api.step('Build Chrome',
-           ['ninja', '-C', 'out/Release', 'chrome'],
-           cwd=src_dir)
+  with api.step.context({'cwd': src_dir}):
+    # Call build/gyp_chromium
+    api.step('gyp_chromium',
+             ['build/gyp_chromium'],
+             env={'CPPFLAGS': '-DSK_ALLOW_CROSSPROCESS_PICTUREIMAGEFILTERS=1',
+                  'GYP_GENERATORS': 'ninja'})
+    # Build Chrome.
+    api.step('Build Chrome',
+             ['ninja', '-C', 'out/Release', 'chrome'])
 
   # Download boto file (needed by recreate_skps.py) to tmp dir.
   boto_file = api.path['start_dir'].join('tmp', '.boto')
@@ -159,10 +158,10 @@ with open(dest_path, 'w') as f:
          '--target_dir', output_dir]
   if 'Canary' not in api.properties['buildername']:
     cmd.append('--upload_to_partner_bucket')
-  api.step('Recreate SKPs',
-           cmd=cmd,
-           cwd=api.skia.skia_dir,
-           env=recreate_skps_env)
+  with api.step.context({'cwd': api.skia.skia_dir}):
+    api.step('Recreate SKPs',
+             cmd=cmd,
+             env=recreate_skps_env)
 
   # Upload the SKPs.
   if 'Canary' not in api.properties['buildername']:
@@ -171,10 +170,8 @@ with open(dest_path, 'w') as f:
               'scripts', 'slave', 'skia', 'upload_skps.py'),
            '--target_dir', output_dir]
     with depot_tools_auth(api, UPDATE_SKPS_KEY):
-      api.step('Upload SKPs',
-               cmd=cmd,
-               cwd=api.skia.skia_dir,
-               env=env)
+      with api.step.context({'cwd': api.skia.skia_dir}):
+        api.step('Upload SKPs', cmd=cmd, env=env)
 
 
 def GenTests(api):

@@ -31,10 +31,10 @@ def RunTests(api, test_args, test_specs):
     else:
       args.append('--append_logs')
     args.extend(test_spec['tests'])
-    api.python(test_spec['name'],
-               api.path['checkout'].join('tools', 'test.py'),
-               args=args,
-               cwd=api.path['checkout'])
+    with api.step.context({'cwd': api.path['checkout']}):
+      api.python(test_spec['name'],
+                 api.path['checkout'].join('tools', 'test.py'),
+                 args=args)
 
 def sdk_url(channel, platform, arch, mode, revision):
   platforms = {
@@ -70,17 +70,17 @@ def RunSteps(api):
 
   api.gclient.runhooks()
 
-  api.python('taskkill before building',
-             api.path['checkout'].join('tools', 'task_kill.py'),
-             args=['--kill_browsers=True'],
-             cwd=api.path['checkout'],
-             ok_ret='any'
-             )
+  with api.step.context({'cwd': api.path['checkout']}):
+    api.python('taskkill before building',
+               api.path['checkout'].join('tools', 'task_kill.py'),
+               args=['--kill_browsers=True'],
+               ok_ret='any'
+               )
   with api.step.defer_results():
     zipfile = api.path.abspath(api.path['checkout'].join('sdk.zip'))
     url = sdk_url(channel, api.platform.name, 'x64', mode, revision)
-    api.gsutil(['cp', url, zipfile], name='Download sdk',
-               cwd=api.path['checkout'])
+    with api.step.context({'cwd': api.path['checkout']}):
+      api.gsutil(['cp', url, zipfile], name='Download sdk')
     build_dir = api.path['checkout'].join(build_directories[api.platform.name])
     build_dir = api.path.abspath(build_dir)
     api.file.makedirs('Create build directory', build_dir)
@@ -161,18 +161,17 @@ def RunSteps(api):
       ]
     RunTests(api, test_args, test_specs)
 
-    # TODO(whesse): Add archive coredumps step from dart_factory.py.
-    api.python('taskkill after testing',
-               api.path['checkout'].join('tools', 'task_kill.py'),
-               args=['--kill_browsers=True'],
-               cwd=api.path['checkout'],
-               ok_ret='any')
-    # TODO(whesse): Upload the logs to cloud storage, put a link to them
-    # in the step presentation.
-    if system in ['linux', 'mac10.11']:
-      api.step('debug log',
-               ['cat', '.debug.log'],
-               cwd=api.path['checkout'])
+    with api.step.context({'cwd': api.path['checkout']}):
+      # TODO(whesse): Add archive coredumps step from dart_factory.py.
+      api.python('taskkill after testing',
+                 api.path['checkout'].join('tools', 'task_kill.py'),
+                 args=['--kill_browsers=True'],
+                 ok_ret='any')
+      # TODO(whesse): Upload the logs to cloud storage, put a link to them
+      # in the step presentation.
+      if system in ['linux', 'mac10.11']:
+        api.step('debug log',
+                 ['cat', '.debug.log'])
 
 def GenTests(api):
    yield (

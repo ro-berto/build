@@ -138,9 +138,10 @@ def swarm_dimensions(builder_spec):
 
 def fix_filemodes(api, path):
   """Set all filemodes to 644 or 755 in the given directory path."""
-  api.python.inline(
-      name='fix filemodes',
-      program='''import os
+  with api.step.context({'cwd': path}):
+    api.python.inline(
+        name='fix filemodes',
+        program='''import os
 for r, _, files in os.walk(os.getcwd()):
   for fname in files:
     f = os.path.join(r, fname)
@@ -149,8 +150,7 @@ for r, _, files in os.walk(os.getcwd()):
         os.chmod(f, 0755)
       else:
         os.chmod(f, 0644)
-''',
-      cwd=path)
+''')
 
 
 def isolate_recipes(api):
@@ -264,9 +264,8 @@ def checkout_steps(api):
 
   api.skia.update_repo(api.path['start_dir'], repo)
 
-  update_step = api.bot_update.ensure_checkout(
-      gclient_config=gclient_cfg,
-      cwd=api.path['start_dir'])
+  with api.step.context({'cwd': api.path['start_dir']}):
+    update_step = api.bot_update.ensure_checkout(gclient_config=gclient_cfg)
 
   got_revision = update_step.presentation.properties['got_revision']
 
@@ -466,13 +465,13 @@ def perf_steps_collect(api, task, upload_perf_results, got_revision,
                    perf_data_dir, got_revision, gsutil_path]
     if is_trybot:
       upload_args.append(api.properties['issue'])
-    api.python(
-             'Upload perf results',
-             script=api.skia.resource('upload_bench_results.py'),
-             args=upload_args,
-             cwd=api.path['checkout'],
-             env=api.skia.gsutil_env('chromium-skia-gm.boto'),
-             infra_step=True)
+    with api.step.context({'cwd': api.path['checkout']}):
+      api.python(
+               'Upload perf results',
+               script=api.skia.resource('upload_bench_results.py'),
+               args=upload_args,
+               env=api.skia.gsutil_env('chromium-skia-gm.boto'),
+               infra_step=True)
 
 
 def test_steps_trigger(api, builder_spec, got_revision, infrabots_dir,
@@ -512,20 +511,20 @@ def test_steps_collect(api, task, upload_dm_results, got_revision, is_trybot,
     api.file.copytree('dm_dir', dm_src, dm_dir, infra_step=True)
 
     # Upload them to Google Storage.
-    api.python(
-        'Upload DM Results',
-        script=api.skia.resource('upload_dm_results.py'),
-        args=[
-          dm_dir,
-          got_revision,
-          api.properties['buildername'],
-          api.properties['buildnumber'],
-          api.properties['issue'] if is_trybot else '',
-          api.path['start_dir'].join('skia', 'common', 'py', 'utils'),
-        ],
-        cwd=api.path['checkout'],
-        env=api.skia.gsutil_env('chromium-skia-gm.boto'),
-        infra_step=True)
+    with api.step.context({'cwd': api.path['checkout']}):
+      api.python(
+          'Upload DM Results',
+          script=api.skia.resource('upload_dm_results.py'),
+          args=[
+            dm_dir,
+            got_revision,
+            api.properties['buildername'],
+            api.properties['buildnumber'],
+            api.properties['issue'] if is_trybot else '',
+            api.path['start_dir'].join('skia', 'common', 'py', 'utils'),
+          ],
+          env=api.skia.gsutil_env('chromium-skia-gm.boto'),
+          infra_step=True)
 
   if builder_cfg['configuration']  == 'Coverage':
     upload_coverage_results(api, task, got_revision, is_trybot)
@@ -573,13 +572,13 @@ def upload_coverage_results(api, task, got_revision, is_trybot):
                  results_dir, got_revision, gsutil_path]
   if is_trybot:
     upload_args.append(api.properties['issue'])
-  api.python(
-      'upload nanobench coverage results',
-      script=api.skia.resource('upload_bench_results.py'),
-      args=upload_args,
-      cwd=api.path['checkout'],
-      env=api.skia.gsutil_env('chromium-skia-gm.boto'),
-      infra_step=True)
+  with api.step.context({'cwd': api.path['checkout']}):
+    api.python(
+        'upload nanobench coverage results',
+        script=api.skia.resource('upload_bench_results.py'),
+        args=upload_args,
+        env=api.skia.gsutil_env('chromium-skia-gm.boto'),
+        infra_step=True)
 
   # Transform the coverage_by_line_${git_hash}.json file received from
   # swarming bot into a coverage_by_line_${git_hash}_${timestamp}.json file.

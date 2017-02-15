@@ -2165,12 +2165,12 @@ class FindAnnotatedTest(Test):
           '-v']
       args.extend(
           ['--test-apks'] + [i for i in FindAnnotatedTest._TEST_APKS.values()])
-      api.python(
-          'run find_annotated_tests.py',
-          api.path['checkout'].join(
-              'tools', 'android', 'find_annotated_tests.py'),
-          cwd=api.path['checkout'],
-          args=args)
+      with api.step.context({'cwd': api.path['checkout']}):
+        api.python(
+            'run find_annotated_tests.py',
+            api.path['checkout'].join(
+                'tools', 'android', 'find_annotated_tests.py'),
+            args=args)
       api.gsutil.upload(
           temp_output_dir.join(
               '%s-android-chrome.json' % timestamp_string),

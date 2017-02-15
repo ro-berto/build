@@ -364,15 +364,15 @@ class V8Test(BaseTest):
       '--json-test-results',
       self.api.json.output(add_json_log=False),
     ]
-    self.api.python(
-      test['name'] + self.test_step_config.suffix,
-      self.api.path['checkout'].join('tools', 'run-tests.py'),
-      full_args,
-      cwd=self.api.path['checkout'],
-      env=env,
-      step_test_data=lambda: self.v8.test_api.output_json(),
-      **kwargs
-    )
+    with self.api.step.context({'cwd': self.api.path['checkout']}):
+      self.api.python(
+        test['name'] + self.test_step_config.suffix,
+        self.api.path['checkout'].join('tools', 'run-tests.py'),
+        full_args,
+        env=env,
+        step_test_data=lambda: self.v8.test_api.output_json(),
+        **kwargs
+      )
     return self.post_run(test)
 
   def post_run(self, test, coverage_context=NULL_COVERAGE):
@@ -541,11 +541,11 @@ class V8SwarmingTest(V8Test):
 
 class V8Presubmit(BaseTest):
   def run(self, **kwargs):
-    self.api.python(
-      'Presubmit',
-      self.api.path['checkout'].join('tools', 'presubmit.py'),
-      cwd=self.api.path['checkout'],
-    )
+    with self.api.step.context({'cwd': self.api.path['checkout']}):
+      self.api.python(
+        'Presubmit',
+        self.api.path['checkout'].join('tools', 'presubmit.py'),
+      )
     return TestResults.empty()
 
 

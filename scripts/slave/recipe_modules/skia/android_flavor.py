@@ -117,8 +117,10 @@ class AndroidFlavorUtils(default_flavor.DefaultFlavorUtils):
       cmd.append('--gcc')
     if 'Vulkan' in self._skia_api.builder_name:
       cmd.append('--vulkan')
-    self._skia_api.run(self._skia_api.m.step, 'build %s' % target, cmd=cmd,
-                       env=env, cwd=self._skia_api.m.path['checkout'])
+    with self._skia_api.m.step.context({
+        'cwd': self._skia_api.m.path['checkout']}):
+      self._skia_api.run(self._skia_api.m.step, 'build %s' % target, cmd=cmd,
+                         env=env)
 
   def device_path_join(self, *args):
     """Like os.path.join(), but for paths on a connected Android device."""

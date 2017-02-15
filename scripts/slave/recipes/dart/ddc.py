@@ -35,29 +35,26 @@ def RunSteps(api):
 
   api.gclient.runhooks()
 
-  with api.step.defer_results():
-    api.python('taskkill before building',
-               api.path['checkout'].join('tools', 'task_kill.py'),
-               args=['--kill_browsers=True'],
-               cwd=api.path['checkout'],
-               ok_ret='any')
-    build_args = ['-mrelease', 'dart2js_bot']
-    api.python('build dart',
-               api.path['checkout'].join('tools', 'build.py'),
-               args=build_args,
-               cwd=api.path['checkout'])
+  with api.step.context({'cwd': api.path['checkout']}):
+    with api.step.defer_results():
+      api.python('taskkill before building',
+                 api.path['checkout'].join('tools', 'task_kill.py'),
+                 args=['--kill_browsers=True'],
+                 ok_ret='any')
+      build_args = ['-mrelease', 'dart2js_bot']
+      api.python('build dart',
+                 api.path['checkout'].join('tools', 'build.py'),
+                 args=build_args)
 
-  with api.step.defer_results():
-    api.python('ddc tests',
-               api.path['checkout'].join('tools', 'bots', 'ddc_tests.py'),
-               args=[],
-               cwd=api.path['checkout'])
+    with api.step.defer_results():
+      api.python('ddc tests',
+                 api.path['checkout'].join('tools', 'bots', 'ddc_tests.py'),
+                 args=[])
 
-    api.python('taskkill after testing',
-               api.path['checkout'].join('tools', 'task_kill.py'),
-               args=['--kill_browsers=True'],
-               cwd=api.path['checkout'],
-               ok_ret='any')
+      api.python('taskkill after testing',
+                 api.path['checkout'].join('tools', 'task_kill.py'),
+                 args=['--kill_browsers=True'],
+                 ok_ret='any')
 
 def GenTests(api):
    yield (

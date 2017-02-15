@@ -27,33 +27,32 @@ def RunSteps(api):
   api.bot_update.ensure_checkout()
   api.gclient.runhooks()
 
-  extra_build_args = api.properties.get('build_args', [])
-  mode = api.properties.get('mode', 'release')
-  target_arch = api.properties.get('target_arch', 'x64')
-  build_targets = api.properties.get('build_targets', ['runtime', 'create_sdk'])
-  build_args = ['-m%s' % mode, '--arch=%s' % target_arch]
-  build_args.extend(extra_build_args)
-  build_args.extend(build_targets)
-  api.python('build dart',
-             api.path['checkout'].join('tools', 'build.py'),
-             args=build_args,
-             cwd=api.path['checkout'])
+  with api.step.context({'cwd': api.path['checkout']}):
+    extra_build_args = api.properties.get('build_args', [])
+    mode = api.properties.get('mode', 'release')
+    target_arch = api.properties.get('target_arch', 'x64')
+    build_targets = api.properties.get('build_targets', ['runtime', 'create_sdk'])
+    build_args = ['-m%s' % mode, '--arch=%s' % target_arch]
+    build_args.extend(extra_build_args)
+    build_args.extend(build_targets)
+    api.python('build dart',
+               api.path['checkout'].join('tools', 'build.py'),
+               args=build_args)
 
-  with api.step.defer_results():
-    extra_test_args = api.properties.get('test_args', [])
-    test_args = ['-m%s' % mode,
-                 '--arch=%s' % target_arch,
-                 '--progress=line',
-                 '--report',
-                 '--time',
-                 '--failure-summary',
-                 '--write-debug-log',
-                 '--write-test-outcome-log']
-    test_args.extend(extra_test_args)
-    api.python('test vm',
-               api.path['checkout'].join('tools', 'test.py'),
-               args=test_args,
-               cwd=api.path['checkout'])
+    with api.step.defer_results():
+      extra_test_args = api.properties.get('test_args', [])
+      test_args = ['-m%s' % mode,
+                   '--arch=%s' % target_arch,
+                   '--progress=line',
+                   '--report',
+                   '--time',
+                   '--failure-summary',
+                   '--write-debug-log',
+                   '--write-test-outcome-log']
+      test_args.extend(extra_test_args)
+      api.python('test vm',
+                 api.path['checkout'].join('tools', 'test.py'),
+                 args=test_args)
 
 def GenTests(api):
    yield (

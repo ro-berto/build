@@ -41,30 +41,27 @@ def RunSteps(api):
   api.path['checkout'] = api.path['start_dir'].join('src')
 
   with api.step.defer_results():
-    api.python(
-      'taskkill before building',
-      api.path['checkout'].join('dart', 'tools', 'task_kill.py'),
-      args=['--kill_browsers=True'],
-      cwd=api.path['checkout'],
-      ok_ret='any')
-    api.python(
-      'build dartium',
-      api.path['checkout'].join('dart', 'tools', 'dartium', 'build.py'),
-      args=['--mode=Release'],
-      cwd=api.path['checkout'],
-      env={'GYP_GENERATORS': 'ninja',
-           'GYP_DEFINES': ' '.join(gyp_defines)})
-    api.python(
-      'annotated steps',
-      api.path['checkout'].join(
-        'dart', 'tools', 'dartium', 'buildbot_annotated_steps.py'),
-      cwd=api.path['checkout'])
-    api.python(
-      'taskkill after building',
-      api.path['checkout'].join('dart', 'tools', 'task_kill.py'),
-      args=['--kill_browsers=True'],
-      cwd=api.path['checkout'],
-      ok_ret='any')
+    with api.step.context({'cwd': api.path['checkout']}):
+      api.python(
+        'taskkill before building',
+        api.path['checkout'].join('dart', 'tools', 'task_kill.py'),
+        args=['--kill_browsers=True'],
+        ok_ret='any')
+      api.python(
+        'build dartium',
+        api.path['checkout'].join('dart', 'tools', 'dartium', 'build.py'),
+        args=['--mode=Release'],
+        env={'GYP_GENERATORS': 'ninja',
+             'GYP_DEFINES': ' '.join(gyp_defines)})
+      api.python(
+        'annotated steps',
+        api.path['checkout'].join(
+          'dart', 'tools', 'dartium', 'buildbot_annotated_steps.py'))
+      api.python(
+        'taskkill after building',
+        api.path['checkout'].join('dart', 'tools', 'task_kill.py'),
+        args=['--kill_browsers=True'],
+        ok_ret='any')
 
     if '-inc-' not in builder_name:
       build_dir = api.path.abspath(api.path['checkout'].join('out'))

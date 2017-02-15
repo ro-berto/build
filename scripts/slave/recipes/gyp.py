@@ -9,6 +9,7 @@ DEPS = [
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/python',
+  'recipe_engine/step',
 ]
 
 
@@ -17,9 +18,9 @@ def RunSteps(api):
 
   api.bot_update.ensure_checkout()
 
-  api.python('run tests',
-             api.path['checkout'].join('gyptest.py'), ['-a'],
-             cwd=api.path['checkout'])
+  with api.step.context({'cwd': api.path['checkout']}):
+    api.python('run tests',
+               api.path['checkout'].join('gyptest.py'), ['-a'])
 
 
 def GenTests(api):

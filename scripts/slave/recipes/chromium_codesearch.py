@@ -157,8 +157,8 @@ def GenerateCompilationDatabase(api, debug_path, targets, platform):
   args.extend(['use_goma=true',
                'goma_dir="%s"' % api.goma.goma_dir])
   command = [gn_path, 'gen', debug_path, '--args=%s' % ' '.join(args)]
-  api.step('generate build files for %s' % platform, command,
-           cwd=api.path['checkout'])
+  with api.step.context({'cwd': api.path['checkout']}):
+    api.step('generate build files for %s' % platform, command)
   command = ['ninja', '-C', debug_path] + list(targets)
   # Add the parameters for creating the compilation database.
   command += ['-t', 'compdb', 'cc', 'cxx', 'objc', 'objcxx']
@@ -244,10 +244,10 @@ def RunSteps(api):
                 '--compdb-output', debug_path.join('compile_commands.json')])
   # Compile the clang tool
   script_path = api.path.sep.join(['tools', 'clang', 'scripts', 'update.py'])
-  api.step('compile translation_unit clang tool',
-           [script_path, '--force-local-build', '--without-android',
-            '--extra-tools', 'translation_unit'],
-           cwd=api.path['checkout'])
+  with api.step.context({'cwd': api.path['checkout']}):
+    api.step('compile translation_unit clang tool',
+             [script_path, '--force-local-build', '--without-android',
+              '--extra-tools', 'translation_unit'])
 
   # Run the clang tool
   args = [api.path['checkout'].join('third_party', 'llvm-build',
@@ -340,10 +340,9 @@ def RunSteps(api):
         ref=bot_config.get('gen_repo_branch', 'master'),
         dir_path=generated_repo_dir,
         submodules=False)
-    api.git('config', 'user.email', GENERATED_AUTHOR_EMAIL,
-            cwd=generated_repo_dir)
-    api.git('config', 'user.name', GENERATED_AUTHOR_NAME,
-            cwd=generated_repo_dir)
+    with api.step.context({'cwd': generated_repo_dir}):
+      api.git('config', 'user.email', GENERATED_AUTHOR_EMAIL)
+      api.git('config', 'user.name', GENERATED_AUTHOR_NAME)
 
     # Sync the generated files into this checkout.
     api.python('sync generated files',

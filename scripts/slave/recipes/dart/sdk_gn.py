@@ -34,29 +34,26 @@ def RunSteps(api):
 
   api.gclient.runhooks()
 
-  with api.step.defer_results():
-    api.python('taskkill before building',
-               api.path['checkout'].join('tools', 'task_kill.py'),
-               args=['--kill_browsers=True'],
-               cwd=api.path['checkout'],
-               ok_ret='any')
-    build_args = ['-mrelease', 'runtime', 'create_sdk']
-    api.python('gn build dart',
-               api.path['checkout'].join('tools', 'bots', 'gn_build.py'),
-               args=build_args,
-               cwd=api.path['checkout'])
+  with api.step.context({'cwd': api.path['checkout']}):
+    with api.step.defer_results():
+      api.python('taskkill before building',
+                 api.path['checkout'].join('tools', 'task_kill.py'),
+                 args=['--kill_browsers=True'],
+                 ok_ret='any')
+      build_args = ['-mrelease', 'runtime', 'create_sdk']
+      api.python('gn build dart',
+                 api.path['checkout'].join('tools', 'bots', 'gn_build.py'),
+                 args=build_args)
 
-  with api.step.defer_results():
-    api.python('gn build tests',
-               api.path['checkout'].join('tools', 'bots', 'gn_tests.py'),
-               args=['-mrelease'],
-               cwd=api.path['checkout'])
+    with api.step.defer_results():
+      api.python('gn build tests',
+                 api.path['checkout'].join('tools', 'bots', 'gn_tests.py'),
+                 args=['-mrelease'])
 
-    api.python('taskkill after testing',
-               api.path['checkout'].join('tools', 'task_kill.py'),
-               args=['--kill_browsers=True'],
-               cwd=api.path['checkout'],
-               ok_ret='any')
+      api.python('taskkill after testing',
+                 api.path['checkout'].join('tools', 'task_kill.py'),
+                 args=['--kill_browsers=True'],
+                 ok_ret='any')
 
 def GenTests(api):
    yield (

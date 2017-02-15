@@ -136,14 +136,16 @@ class DefaultFlavorUtils(object):
     else:
       make_cmd = ['make']
     cmd = make_cmd + [target]
-    try:
-      self._skia_api.run(self._skia_api.m.step, 'build %s' % target, cmd=cmd,
-                         env=env, cwd=self._skia_api.m.path['checkout'])
-    except:
-      if self._skia_api.m.platform.is_win:
-        # The linker occasionally crashes on Windows. Try again.
+    with self._skia_api.m.step.context(
+        {'cwd': self._skia_api.m.path['checkout']}):
+      try:
         self._skia_api.run(self._skia_api.m.step, 'build %s' % target, cmd=cmd,
-                           env=env, cwd=self._skia_api.m.path['checkout'])
+                           env=env)
+      except:
+        if self._skia_api.m.platform.is_win:
+          # The linker occasionally crashes on Windows. Try again.
+          self._skia_api.run(self._skia_api.m.step, 'build %s' % target, cmd=cmd,
+                             env=env)
     if 'CommandBuffer' in self._skia_api.builder_name:
       self._skia_api._run_once(self.build_command_buffer)
 

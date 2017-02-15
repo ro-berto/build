@@ -74,11 +74,11 @@ def _AnnotatedStepsSteps(api, got_revision):
     api.goma.start()
   exit_status = -1
   try:
-    api.python('annotated steps',
-               api.path['checkout'].join('buildbot', 'buildbot_selector.py'),
-               allow_subannotations=True,
-               cwd = api.path['checkout'],
-               env = env)
+    with api.step.context({'cwd': api.path['checkout']}):
+      api.python('annotated steps',
+                 api.path['checkout'].join('buildbot', 'buildbot_selector.py'),
+                 allow_subannotations=True,
+                 env = env)
     exit_status = 0
   except api.step.StepFailure as e:
     exit_status = e.retcode

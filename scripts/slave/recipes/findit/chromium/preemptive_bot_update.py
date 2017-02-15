@@ -78,11 +78,11 @@ def RunSteps(api):
   checkout_dir = base_dir.join(api.gclient.c.solutions[0].name)
 
   # Most recent commit in local checkout
-  step_result = api.git(
-      'log', '-1', '--pretty=format:%ct', 'refs/remotes/origin/master',
-      cwd=checkout_dir,
-      stdout=api.raw_io.output_text(),
-      step_test_data=lambda: api.raw_io.test_api.stream_output('1333700000'))
+  with api.step.context({'cwd': checkout_dir}):
+    step_result = api.git(
+        'log', '-1', '--pretty=format:%ct', 'refs/remotes/origin/master',
+        stdout=api.raw_io.output_text(),
+        step_test_data=lambda: api.raw_io.test_api.stream_output('1333700000'))
   last_commit_ts = float(step_result.stdout)
   checkout_age_seconds = api.time.time() - last_commit_ts
   step_result.presentation.logs[

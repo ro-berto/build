@@ -39,28 +39,27 @@ ARCHIVE_LINK = ('https://storage.googleapis.com'
 
 
 def _build_and_test(api, suffix=''):
-  api.step(
-    'configure node.js%s' % suffix,
-    [api.path['start_dir'].join('node.js', 'configure')],
-    cwd=api.path['start_dir'].join('node.js'),
-  )
+  with api.step.context({'cwd': api.path['start_dir'].join('node.js')}):
+    api.step(
+      'configure node.js%s' % suffix,
+      [api.path['start_dir'].join('node.js', 'configure')],
+    )
 
-  api.step(
-    'build and test node.js%s' % suffix,
-    ['make', '-j8', 'test-ci'],
-    cwd=api.path['start_dir'].join('node.js'),
-  )
+    api.step(
+      'build and test node.js%s' % suffix,
+      ['make', '-j8', 'test-ci'],
+    )
 
 def _build_and_upload(api):
-  api.step(
-    'configure node.js - install',
-    [
-      api.path['start_dir'].join('node.js', 'configure'),
-      '--prefix=/',
-      '--tag=v8-build-%s' % api.v8.revision,
-    ],
-    cwd=api.path['start_dir'].join('node.js'),
-  )
+  with api.step.context({'cwd': api.path['start_dir'].join('node.js')}):
+    api.step(
+      'configure node.js - install',
+      [
+        api.path['start_dir'].join('node.js', 'configure'),
+        '--prefix=/',
+        '--tag=v8-build-%s' % api.v8.revision,
+      ],
+    )
 
   archive_dir = api.path['start_dir'].join('archive-build')
   archive_name = ('node-linux-rel-%s-%s.zip' %
@@ -71,11 +70,11 @@ def _build_and_upload(api):
   api.file.makedirs('install directory', archive_dir)
 
   # Build and install.
-  api.step(
-    'build and install node.js',
-    ['make', '-j8', 'install', 'DESTDIR=%s' % archive_dir],
-    cwd=api.path['start_dir'].join('node.js'),
-  )
+  with api.step.context({'cwd': api.path['start_dir'].join('node.js')}):
+    api.step(
+      'build and install node.js',
+      ['make', '-j8', 'install', 'DESTDIR=%s' % archive_dir],
+    )
 
   # Zip build.
   package = api.zip.make_package(archive_dir, zip_file)

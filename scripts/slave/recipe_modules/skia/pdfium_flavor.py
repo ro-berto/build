@@ -16,22 +16,21 @@ class PDFiumFlavorUtils(default_flavor.DefaultFlavorUtils):
     """Build PDFium with Skia."""
     pdfium_dir = self._skia_api.checkout_root.join('pdfium')
 
-    # Runhook to generate the gn binary in buildtools.
-    self._skia_api.run(
-        self._skia_api.m.step,
-        'runhook',
-        cmd=['gclient', 'runhook', 'gn_linux64'],
-        cwd=pdfium_dir)
+    with self._skia_api.m.step.context({'cwd': pdfium_dir}):
+      # Runhook to generate the gn binary in buildtools.
+      self._skia_api.run(
+          self._skia_api.m.step,
+          'runhook',
+          cmd=['gclient', 'runhook', 'gn_linux64'])
 
-    # Setup gn args.
-    gn_args = ['pdf_use_skia=true', 'pdf_is_standalone=true',
-               'clang_use_chrome_plugins=false']
-    self._skia_api.run(
-        self._skia_api.m.step,
-        'gn_gen',
-        cmd=['gn', 'gen', 'out/skia', '--args=%s' % ' '.join(gn_args)],
-        cwd=pdfium_dir,
-        env={'CHROMIUM_BUILDTOOLS_PATH': str(pdfium_dir.join('buildtools'))})
+      # Setup gn args.
+      gn_args = ['pdf_use_skia=true', 'pdf_is_standalone=true',
+                 'clang_use_chrome_plugins=false']
+      self._skia_api.run(
+          self._skia_api.m.step,
+          'gn_gen',
+          cmd=['gn', 'gen', 'out/skia', '--args=%s' % ' '.join(gn_args)],
+          env={'CHROMIUM_BUILDTOOLS_PATH': str(pdfium_dir.join('buildtools'))})
 
     # Modify DEPS file to contain the current Skia revision.
     skia_revision = self._skia_api.got_revision
@@ -49,16 +48,15 @@ class PDFiumFlavorUtils(default_flavor.DefaultFlavorUtils):
     self._skia_api.m.file.write('write PDFium DEPs', deps_file,
                                 patched_contents, infra_step=True)
 
-    # gclient sync after updating DEPS.
-    self._skia_api.run(
-        self._skia_api.m.step,
-        'sync_pdfium',
-        cmd=['gclient', 'sync'],
-        cwd=pdfium_dir)
+    with self._skia_api.m.step.context({'cwd': pdfium_dir}):
+      # gclient sync after updating DEPS.
+      self._skia_api.run(
+          self._skia_api.m.step,
+          'sync_pdfium',
+          cmd=['gclient', 'sync'])
 
-    # Build PDFium.
-    self._skia_api.run(
-        self._skia_api.m.step,
-        'build_pdfium',
-        cmd=['ninja', '-C', 'out/skia', '-j100'],
-        cwd=pdfium_dir)
+      # Build PDFium.
+      self._skia_api.run(
+          self._skia_api.m.step,
+          'build_pdfium',
+          cmd=['ninja', '-C', 'out/skia', '-j100'])

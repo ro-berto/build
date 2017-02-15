@@ -177,45 +177,49 @@ class FilterApi(recipe_api.RecipeApi):
     else:
       kwargs.setdefault('env', {})
 
+    context = {}
+
     # If building for CrOS, execute through the "chrome_sdk" wrapper. This will
     # override GYP environment variables, so we'll refrain from defining them
     # to avoid confusing output.
     if cros_board:
       kwargs['wrapper'] = self.m.chromium.get_cros_chrome_sdk_wrapper()
-      kwargs.setdefault('cwd', self.m.path['checkout'])
+      context['cwd'] = self.m.step.get_from_context(
+          'cwd', self.m.path['checkout'])
     elif not use_mb:
       kwargs['env'].update(self.m.chromium.c.gyp_env.as_jsonish())
     kwargs['env']['GOMA_SERVICE_ACCOUNT_JSON_FILE'] = \
         self.m.goma.service_account_json_path
 
-    if use_mb:
-      mb_mastername = mb_mastername or self.m.properties['mastername']
-      mb_buildername = mb_buildername or self.m.properties['buildername']
-      step_result = self.m.python(
-          'analyze',
-          self.m.path['checkout'].join('tools', 'mb', 'mb.py'),
-          args=['analyze',
-                '-m',
-                mb_mastername,
-                '-b',
-                mb_buildername,
-                '-v',
-                build_output_dir,
-                self.m.json.input(analyze_input),
-                self.m.json.output()],
-          step_test_data=lambda: self.m.json.test_api.output(
-            test_output),
-          **kwargs)
-    else:
-      step_result = self.m.python(
-          'analyze',
-          self.m.path['checkout'].join('build', 'gyp_chromium'),
-          args=['--analyzer',
-                self.m.json.input(analyze_input),
-                self.m.json.output()],
-          step_test_data=lambda: self.m.json.test_api.output(
-            test_output),
-          **kwargs)
+    with self.m.step.context(context):
+      if use_mb:
+        mb_mastername = mb_mastername or self.m.properties['mastername']
+        mb_buildername = mb_buildername or self.m.properties['buildername']
+        step_result = self.m.python(
+            'analyze',
+            self.m.path['checkout'].join('tools', 'mb', 'mb.py'),
+            args=['analyze',
+                  '-m',
+                  mb_mastername,
+                  '-b',
+                  mb_buildername,
+                  '-v',
+                  build_output_dir,
+                  self.m.json.input(analyze_input),
+                  self.m.json.output()],
+            step_test_data=lambda: self.m.json.test_api.output(
+              test_output),
+            **kwargs)
+      else:
+        step_result = self.m.python(
+            'analyze',
+            self.m.path['checkout'].join('build', 'gyp_chromium'),
+            args=['--analyzer',
+                  self.m.json.input(analyze_input),
+                  self.m.json.output()],
+            step_test_data=lambda: self.m.json.test_api.output(
+              test_output),
+            **kwargs)
 
     try:
       if 'error' in step_result.json.output:

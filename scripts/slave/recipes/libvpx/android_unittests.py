@@ -75,7 +75,8 @@ def RunSteps(api, libvpx_git_url, buildername):
       libvpx_git_url, dir_path=libvpx_root, recursive=True)
 
   # The dashboards need a number to assign to this build for ordering purposes.
-  step_result = api.git('number', cwd=libvpx_root, stdout=api.raw_io.output_text())
+  with api.step.context({'cwd': libvpx_root}):
+    step_result = api.git('number', stdout=api.raw_io.output_text())
   libvpx_revision_number = step_result.stdout
 
   api.step(

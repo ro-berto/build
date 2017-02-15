@@ -124,9 +124,10 @@ class WebRTCApi(recipe_api.RecipeApi):
         self.m.swarming.set_default_dimension(key, value)
 
   def checkout(self, **kwargs):
+    context = {}
     self._working_dir = self.m.chromium_checkout.get_checkout_dir({})
     if self._working_dir:
-      kwargs.setdefault('cwd', self._working_dir)
+      context['cwd'] = self.m.step.get_from_context('cwd', self._working_dir)
     else:
       self._working_dir = self.m.path['start_dir']
 
@@ -141,12 +142,13 @@ class WebRTCApi(recipe_api.RecipeApi):
     # TODO(kjellander): Remove as soon crbug.com/677823 is resolved.
     if (self.m.tryserver.is_tryserver and
         'src' in  self.m.file.listdir('checkout root', self._working_dir)):
-      self.m.git('reset', '--hard',
-                 name='reset checkout [crbug.com/677823]',
-                 cwd=self._working_dir.join('src'),
-                 infra_step=True)
+      with self.m.step.context({'cwd': self._working_dir.join('src')}):
+        self.m.git('reset', '--hard',
+                   name='reset checkout [crbug.com/677823]',
+                   infra_step=True)
 
-    update_step = self.m.bot_update.ensure_checkout(**kwargs)
+    with self.m.step.context(context):
+      update_step = self.m.bot_update.ensure_checkout(**kwargs)
     assert update_step.json.output['did_run']
 
     # Whatever step is run right before this line needs to emit got_revision.

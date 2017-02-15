@@ -252,13 +252,13 @@ class IsolateApi(recipe_api.RecipeApi):
     # Turn the failures during this step into warnings, it's a best effort step
     # that shouldn't break the build for now.
     try:
-      self.m.python('remove_build_metadata',
-                    self.m.path.join(self.m.path['checkout'],
-                                     'tools',
-                                     'determinism',
-                                     'remove_build_metadata.py'),
-                    args=args,
-                    cwd=self.m.path['start_dir'])
+      with self.m.step.context({'cwd': self.m.path['start_dir']}):
+        self.m.python('remove_build_metadata',
+                      self.m.path.join(self.m.path['checkout'],
+                                       'tools',
+                                       'determinism',
+                                       'remove_build_metadata.py'),
+                      args=args)
     except self.m.step.StepFailure:
       step_result = self.m.step.active_result
       step_result.presentation.status = self.m.step.WARNING
@@ -301,18 +301,18 @@ class IsolateApi(recipe_api.RecipeApi):
         '--json-output', self.m.json.output(),
     ]
     try:
-      step_result = self.m.python(
-          'compare_build_artifacts',
-          self.m.path.join(self.m.path['checkout'],
-                           'tools',
-                           'determinism',
-                           'compare_build_artifacts.py'),
-          args=args,
-          cwd=self.m.path['start_dir'],
-          step_test_data=(lambda: self.m.json.test_api.output({
-              'expected_diffs': ['flatc'],
-              'unexpected_diffs': ['base_unittest'],
-          })))
+      with self.m.step.context({'cwd': self.m.path['start_dir']}):
+        step_result = self.m.python(
+            'compare_build_artifacts',
+            self.m.path.join(self.m.path['checkout'],
+                             'tools',
+                             'determinism',
+                             'compare_build_artifacts.py'),
+            args=args,
+            step_test_data=(lambda: self.m.json.test_api.output({
+                'expected_diffs': ['flatc'],
+                'unexpected_diffs': ['base_unittest'],
+            })))
       self.archive_differences(first_dir, second_dir, step_result.json.output)
     except self.m.step.StepFailure as e:
       step_result = self.m.step.active_result

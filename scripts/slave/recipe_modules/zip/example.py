@@ -35,7 +35,8 @@ def RunSteps(api):
   api.zip.unzip('unzipping', temp.join('output.zip'), temp.join('output'),
                 quiet=True)
   # List unzipped content.
-  api.step('listing', ['find'], cwd=temp.join('output'))
+  with api.step.context({'cwd': temp.join('output')}):
+    api.step('listing', ['find'])
   # Clean up.
   api.file.rmtree('cleanup', temp)
 

@@ -156,10 +156,8 @@ class GSUtilApi(recipe_api.RecipeApi):
             '--dst', destination,
             '--poll-interval', str(poll_interval),
             '--timeout', str(timeout)]
-    return self.m.python(name,
-                         gsutil_download_path,
-                         args,
-                         cwd=self.m.path['start_dir'])
+    with self.m.step.context({'cwd': self.m.path['start_dir']}):
+      return self.m.python(name, gsutil_download_path, args)
 
   def download_latest_file(self, base_url, partial_name, destination,
                            name='Download latest file from GS'):
@@ -176,10 +174,8 @@ class GSUtilApi(recipe_api.RecipeApi):
     args = ['--url', base_url,
             '--dst', destination,
             '--partial-name', partial_name]
-    return self.m.python(name,
-                         gsutil_download_path,
-                         args,
-                         cwd=self.m.path['start_dir'])
+    with self.m.step.context({'cwd': self.m.path['start_dir']}):
+      return self.m.python(name, gsutil_download_path, args)
 
   def _generate_metadata_args(self, metadata):
     result = []

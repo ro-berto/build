@@ -22,9 +22,10 @@ def linux_dr_steps(api):
   result = api.bot_update.ensure_checkout()
   build_properties.update(result.json.output.get("properties", {}))
   # pre-commit suite step
-  api.step("pre-commit suite", ['perl',
-    api.path["checkout"].join("suite", "runsuite_wrapper.pl")],
-    cwd=api.path["start_dir"], ok_ret="all")
+  with api.step.context({'cwd': api.path['start_dir']}):
+    api.step("pre-commit suite", ['perl',
+      api.path["checkout"].join("suite", "runsuite_wrapper.pl")],
+      ok_ret="all")
   # upload dynamorio docs step
   api.gsutil.upload(api.path["start_dir"].join("install", "docs", "html"),
       "chromium-dynamorio", "dr_docs/", ["-r"], multithreaded=True)
@@ -43,15 +44,17 @@ def win_7_dr_steps(api):
   result = api.bot_update.ensure_checkout()
   build_properties.update(result.json.output.get("properties", {}))
   # unpack tools step; generic ShellCommand converted
-  api.step("unpack tools", [api.path["checkout"].join('tools', 'buildbot',
-    'bot_tools', 'unpack.bat')], env={},
-      cwd=api.path["checkout"].join('tools', 'buildbot', 'bot_tools'))
+  with api.step.context({
+      'cwd': api.path['checkout'].join('tools', 'buildbot', 'bot_tools')}):
+    api.step("unpack tools", [api.path["checkout"].join('tools', 'buildbot',
+      'bot_tools', 'unpack.bat')], env={})
   # build_env step
-  api.step("pre-commit suite", [api.package_repo_resource("scripts", "slave",
-    "drmemory", "build_env.bat"), 'perl',
-    api.path["checkout"].join("suite", "runsuite_wrapper.pl")],
-    env={"BOTTOOLS": api.path["checkout"].join("tools", "buildbot",
-      "bot_tools")}, cwd=api.path["start_dir"])
+  with api.step.context({'cwd': api.path['start_dir']}):
+    api.step("pre-commit suite", [api.package_repo_resource("scripts", "slave",
+      "drmemory", "build_env.bat"), 'perl',
+      api.path["checkout"].join("suite", "runsuite_wrapper.pl")],
+      env={"BOTTOOLS": api.path["checkout"].join("tools", "buildbot",
+        "bot_tools")})
 
 
 def linux_dr_package_steps(api):
@@ -89,16 +92,18 @@ def win_8_dr_steps(api):
   result = api.bot_update.ensure_checkout()
   build_properties.update(result.json.output.get("properties", {}))
   # unpack tools step; generic ShellCommand converted
-  api.step("unpack tools", [api.path["checkout"].join('tools', 'buildbot',
-    'bot_tools', 'unpack.bat')], env={},
-      cwd=api.path["checkout"].join('tools', 'buildbot', 'bot_tools'))
+  with api.step.context({
+      'cwd': api.path['checkout'].join('tools', 'buildbot', 'bot_tools')}):
+    api.step("unpack tools", [api.path["checkout"].join('tools', 'buildbot',
+      'bot_tools', 'unpack.bat')], env={})
   # build_env step
-  api.step("pre-commit suite",
-      [api.package_repo_resource("scripts", "slave", "drmemory", "build_env.bat"),
-        'perl',
-        api.path["checkout"].join("suite", "runsuite_wrapper.pl")],
-      env={"BOTTOOLS": api.path["checkout"].join("tools", "buildbot",
-        "bot_tools")}, cwd=api.path["start_dir"])
+  with api.step.context({'cwd': api.path['start_dir']}):
+    api.step("pre-commit suite",
+        [api.package_repo_resource("scripts", "slave", "drmemory", "build_env.bat"),
+          'perl',
+          api.path["checkout"].join("suite", "runsuite_wrapper.pl")],
+        env={"BOTTOOLS": api.path["checkout"].join("tools", "buildbot",
+          "bot_tools")})
 
 
 def win_7_dr_nightly_steps(api):
@@ -114,16 +119,18 @@ def win_7_dr_nightly_steps(api):
   result = api.bot_update.ensure_checkout()
   build_properties.update(result.json.output.get("properties", {}))
   # unpack tools step; generic ShellCommand converted
-  api.step("unpack tools", [api.path["checkout"].join('tools', 'buildbot',
-    'bot_tools', 'unpack.bat')], env={},
-      cwd=api.path["checkout"].join('tools', 'buildbot', 'bot_tools'))
+  with api.step.context({
+      'cwd': api.path['checkout'].join('tools', 'buildbot', 'bot_tools')}):
+    api.step("unpack tools", [api.path["checkout"].join('tools', 'buildbot',
+      'bot_tools', 'unpack.bat')], env={})
   # dynamorio win nightly suite step
-  api.step("nightly suite", [api.package_repo_resource("scripts", "slave",
-    "drmemory", "build_env.bat"), 'perl',
-    'dynamorio/suite/runsuite_wrapper.pl', 'nightly', 'long',
-    'site=X64.Windows7.VS2010.BuildBot'],
-    env={"BOTTOOLS": api.path["checkout"].join("tools", "buildbot",
-      "bot_tools")}, cwd=api.path["start_dir"])
+  with api.step.context({'cwd': api.path['start_dir']}):
+    api.step("nightly suite", [api.package_repo_resource("scripts", "slave",
+      "drmemory", "build_env.bat"), 'perl',
+      'dynamorio/suite/runsuite_wrapper.pl', 'nightly', 'long',
+      'site=X64.Windows7.VS2010.BuildBot'],
+      env={"BOTTOOLS": api.path["checkout"].join("tools", "buildbot",
+        "bot_tools")})
 
 
 def win_8_dr_nightly_steps(api):
@@ -139,16 +146,18 @@ def win_8_dr_nightly_steps(api):
   result = api.bot_update.ensure_checkout()
   build_properties.update(result.json.output.get("properties", {}))
   # unpack tools step; generic ShellCommand converted
-  api.step("unpack tools", [api.path["checkout"].join('tools', 'buildbot',
-    'bot_tools', 'unpack.bat')], env={},
-      cwd=api.path["checkout"].join('tools', 'buildbot', 'bot_tools'))
+  with api.step.context({
+      'cwd': api.path['checkout'].join('tools', 'buildbot', 'bot_tools')}):
+    api.step("unpack tools", [api.path["checkout"].join('tools', 'buildbot',
+      'bot_tools', 'unpack.bat')], env={})
   # dynamorio win nightly suite step
-  api.step("nightly suite", [api.package_repo_resource("scripts", "slave",
-    "drmemory", "build_env.bat"), 'perl',
-    'dynamorio/suite/runsuite_wrapper.pl', 'nightly', 'long',
-    'site=X64.Windows8.VS2010.BuildBot'],
-    env={"BOTTOOLS": api.path["checkout"].join("tools", "buildbot",
-      "bot_tools")}, cwd=api.path["start_dir"])
+  with api.step.context({'cwd': api.path['start_dir']}):
+    api.step("nightly suite", [api.package_repo_resource("scripts", "slave",
+      "drmemory", "build_env.bat"), 'perl',
+      'dynamorio/suite/runsuite_wrapper.pl', 'nightly', 'long',
+      'site=X64.Windows8.VS2010.BuildBot'],
+      env={"BOTTOOLS": api.path["checkout"].join("tools", "buildbot",
+        "bot_tools")})
 
 
 def win_dr_package_steps(api):
@@ -163,10 +172,11 @@ def win_dr_package_steps(api):
   api.gclient.c = src_cfg
   result = api.bot_update.ensure_checkout()
   build_properties.update(result.json.output.get("properties", {}))
-  # unpack tools step; generic ShellCommand converted
-  api.step("unpack tools", [api.path["checkout"].join('tools', 'buildbot',
-    'bot_tools', 'unpack.bat')], env={},
-      cwd=api.path["checkout"].join('tools', 'buildbot', 'bot_tools'))
+  with api.step.context({
+      'cwd': api.path['checkout'].join('tools', 'buildbot', 'bot_tools')}):
+    # unpack tools step; generic ShellCommand converted
+    api.step("unpack tools", [api.path["checkout"].join('tools', 'buildbot',
+      'bot_tools', 'unpack.bat')], env={})
   # get buildnumber step; no longer needed
   # Package DynamoRIO step
   api.step("Package DynamoRIO", [api.package_repo_resource("scripts", "slave",

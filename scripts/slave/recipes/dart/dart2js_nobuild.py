@@ -44,16 +44,16 @@ def RunTests(api, test_args, test_specs, use_xvfb=False):
       args.append('--append_logs')
     args.extend(test_spec['tests'])
 
-    if use_xvfb:
-      xvfb_cmd = ['xvfb-run', '-a', '--server-args=-screen 0 1024x768x24']
-      xvfb_cmd.extend(['python', '-u', './tools/test.py'])
-      xvfb_cmd.extend(args)
-      api.step(test_spec['name'], xvfb_cmd, cwd=api.path['checkout'])
-    else:
-      api.python(test_spec['name'],
-                 api.path['checkout'].join('tools', 'test.py'),
-                 args=args,
-                 cwd=api.path['checkout'])
+    with api.step.context({'cwd': api.path['checkout']}):
+      if use_xvfb:
+        xvfb_cmd = ['xvfb-run', '-a', '--server-args=-screen 0 1024x768x24']
+        xvfb_cmd.extend(['python', '-u', './tools/test.py'])
+        xvfb_cmd.extend(args)
+        api.step(test_spec['name'], xvfb_cmd)
+      else:
+        api.python(test_spec['name'],
+                   api.path['checkout'].join('tools', 'test.py'),
+                   args=args)
 
 def sdk_url(channel, platform, arch, mode, revision):
   platforms = {
@@ -99,15 +99,14 @@ def RunSteps(api):
   api.gclient.runhooks()
 
   with api.step.defer_results():
-    api.python('taskkill before building',
-               api.path['checkout'].join('tools', 'task_kill.py'),
-               args=['--kill_browsers=True'],
-               cwd=api.path['checkout'],
-               ok_ret='any')
-    zipfile = api.path.abspath(api.path['checkout'].join('sdk.zip'))
-    url = sdk_url(channel, api.platform.name, 'x64', 'release', revision)
-    api.gsutil(['cp', url, zipfile], name='Download sdk',
-               cwd=api.path['checkout'])
+    with api.step.context({'cwd': api.path['checkout']}):
+      api.python('taskkill before building',
+                 api.path['checkout'].join('tools', 'task_kill.py'),
+                 args=['--kill_browsers=True'],
+                 ok_ret='any')
+      zipfile = api.path.abspath(api.path['checkout'].join('sdk.zip'))
+      url = sdk_url(channel, api.platform.name, 'x64', 'release', revision)
+      api.gsutil(['cp', url, zipfile], name='Download sdk')
     build_dir = api.path['checkout'].join(build_directories[api.platform.name])
     build_dir = api.path.abspath(build_dir)
     api.file.makedirs('Create build directory', build_dir)
@@ -118,16 +117,16 @@ def RunSteps(api):
     # Special hard-coded steps with compiler=none, run on selected runtimes
     if runtime == 'jsshell' and system == 'linux' and sharded:
       IsFirstTestStep = False
-      api.python('dart2js unit tests',
-                 api.path['checkout'].join('tools', 'test.py'),
-                 args=["--mode=release", "--compiler=none", "--runtime=vm",
-                       "--arch=x64", "--time", "--use-sdk", "--report",
-                       "--write-debug-log", "--write-test-outcome-log",
-                       "--progress=buildbot", "-v",
-                       "--reset-browser-configuration",
-                       "--shards=%s" % num_shards, "--shard=%s" % shard,
-                       "--checked", "dart2js"],
-                 cwd=api.path['checkout'])
+      with api.step.context({'cwd': api.path['checkout']}):
+        api.python('dart2js unit tests',
+                   api.path['checkout'].join('tools', 'test.py'),
+                   args=["--mode=release", "--compiler=none", "--runtime=vm",
+                         "--arch=x64", "--time", "--use-sdk", "--report",
+                         "--write-debug-log", "--write-test-outcome-log",
+                         "--progress=buildbot", "-v",
+                         "--reset-browser-configuration",
+                         "--shards=%s" % num_shards, "--shard=%s" % shard,
+                         "--checked", "dart2js"])
 
     # Standard test steps, run on all runtimes.
     runtimes = multiple_runtimes.get(runtime, [runtime])
@@ -187,18 +186,17 @@ def RunSteps(api):
           spec['name'] = spec['name'].replace(' tests', ' checked tests')
         RunTests(api, test_args, test_specs, use_xvfb=needs_xvfb)
 
-    # TODO(whesse): Add archive coredumps step from dart_factory.py.
-    api.python('taskkill after testing',
-               api.path['checkout'].join('tools', 'task_kill.py'),
-               args=['--kill_browsers=True'],
-               cwd=api.path['checkout'],
-               ok_ret='any')
-    # TODO(whesse): Upload the logs to cloud storage, put a link to them
-    # in the step presentation.
-    if system in ['linux', 'mac10.11']:
-      api.step('debug log',
-               ['cat', '.debug.log'],
-               cwd=api.path['checkout'])
+    with api.step.context({'cwd': api.path['checkout']}):
+      # TODO(whesse): Add archive coredumps step from dart_factory.py.
+      api.python('taskkill after testing',
+                 api.path['checkout'].join('tools', 'task_kill.py'),
+                 args=['--kill_browsers=True'],
+                 ok_ret='any')
+      # TODO(whesse): Upload the logs to cloud storage, put a link to them
+      # in the step presentation.
+      if system in ['linux', 'mac10.11']:
+        api.step('debug log',
+                 ['cat', '.debug.log'])
 
 def GenTests(api):
    yield (

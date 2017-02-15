@@ -29,8 +29,8 @@ class XSanFlavorUtils(default_flavor.DefaultFlavorUtils):
   def compile(self, target):
     cmd = [self._skia_api.skia_dir.join('tools', 'xsan_build'),
            self._sanitizer, target]
-    self._skia_api.run(self._skia_api.m.step, 'build %s' % target, cmd=cmd,
-                       cwd=self._skia_api.skia_dir)
+    with self._skia_api.m.step.context({'cwd': self._skia_api.skia_dir}):
+      self._skia_api.run(self._skia_api.m.step, 'build %s' % target, cmd=cmd)
 
   def copy_extra_build_products(self, swarming_out_dir):
     # Include msan_out if MSAN.

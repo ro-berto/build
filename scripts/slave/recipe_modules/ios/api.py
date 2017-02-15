@@ -57,16 +57,18 @@ class iOSApi(recipe_api.RecipeApi):
     """Checks out Chromium."""
     self.m.gclient.set_config('ios')
 
+    context = {}
     checkout_dir = self.m.chromium_checkout.get_checkout_dir({})
     if checkout_dir:
-      kwargs.setdefault('cwd', checkout_dir)
+      context['cwd'] = kwargs.get('cwd', checkout_dir)
 
     # Support for legacy buildbot clobber. If the "clobber" property is
     # present at all with any value, clobber the whole checkout.
     if 'clobber' in self.m.properties:
       self.m.file.rmcontents('checkout', self.m.path['start_dir'])
 
-    return self.m.bot_update.ensure_checkout(**kwargs)
+    with self.m.step.context(context):
+      return self.m.bot_update.ensure_checkout(**kwargs)
 
   def parse_tests(self, tests, include_dir):
     """Parses the tests dict, reading necessary includes.
@@ -259,7 +261,8 @@ class iOSApi(recipe_api.RecipeApi):
       self.m.file.rmcontents('out', cwd)
 
     # runhooks modifies env, so pass a copy.
-    self.m.gclient.runhooks(name='runhooks' + suffix, env=env.copy())
+    with self.m.step.context({'cwd': self.m.path['checkout']}):
+      self.m.gclient.runhooks(name='runhooks' + suffix, env=env.copy())
 
     if setup_gn:
       cmd = [
@@ -295,19 +298,21 @@ class iOSApi(recipe_api.RecipeApi):
       )
       step_result.presentation.step_text = (
         '<br />%s' % '<br />'.join(self.__config['gn_args']))
-      self.m.step('generate build files (gn)' + suffix, [
-        self.m.path['checkout'].join('buildtools', 'mac', 'gn'),
-        'gen',
-        '--check',
-        '//out/%s' % build_sub_path,
-      ], cwd=self.m.path['checkout'].join('out', build_sub_path), env=env)
+      with self.m.step.context({
+          'cwd': self.m.path['checkout'].join('out', build_sub_path)}):
+        self.m.step('generate build files (gn)' + suffix, [
+          self.m.path['checkout'].join('buildtools', 'mac', 'gn'),
+          'gen',
+          '--check',
+          '//out/%s' % build_sub_path,
+        ], env=env)
 
     # The same test may be configured to run on multiple platforms.
     tests = sorted(set(test['app'] for test in self.__config['tests']))
 
     if analyze:
-      affected_files = self.m.chromium_checkout.get_files_affected_by_patch(
-          cwd=self.m.path['checkout'])
+      with self.m.step.context({'cwd': self.m.path['checkout']}):
+        affected_files = self.m.chromium_checkout.get_files_affected_by_patch()
 
       test_targets, compilation_targets = (
         self.m.filter.analyze(
@@ -340,7 +345,8 @@ class iOSApi(recipe_api.RecipeApi):
     cmd.extend(sorted(compilation_targets))
     exit_status = -1
     try:
-      self.m.step('compile' + suffix, cmd, cwd=cwd, env=env)
+      with self.m.step.context({'cwd': cwd}):
+        self.m.step('compile' + suffix, cmd, env=env)
       exit_status = 0
     except self.m.step.StepFailure as e:
       exit_status = e.retcode
@@ -388,7 +394,8 @@ class iOSApi(recipe_api.RecipeApi):
         '--verbose',
         artifact,
     ]
-    self.m.step('tar %s' % tgz, cmd, cwd=cwd)
+    with self.m.step.context({'cwd': cwd}):
+      self.m.step('tar %s' % tgz, cmd)
     self.m.gsutil.upload(
         archive,
         bucket,

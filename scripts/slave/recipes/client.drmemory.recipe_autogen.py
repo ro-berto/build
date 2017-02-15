@@ -108,12 +108,12 @@ def win_8_x64_drm_steps(api):
     # clear tools directory step; null converted
     # update tools step; null converted
     # unpack tools step; generic ShellCommand converted
-    api.step("unpack tools",
-             [api.path["start_dir"].join('tools', 'buildbot', 'bot_tools',
-               'unpack.bat')],
-             env={},
-             cwd=api.path[
-                 "start_dir"].join('tools', 'buildbot', 'bot_tools'))
+    with api.step.context({
+        'cwd': api.path['start_dir'].join('tools', 'buildbot', 'bot_tools')}):
+      api.step("unpack tools",
+               [api.path["start_dir"].join('tools', 'buildbot', 'bot_tools',
+                 'unpack.bat')],
+               env={})
     # windows Dr. Memory ctest step
     api.step("Dr. Memory ctest",
              [api.package_repo_resource("scripts", "slave", "drmemory",
@@ -257,12 +257,12 @@ def win_7_x64_drm_steps(api):
     # clear tools directory step; null converted
     # update tools step; null converted
     # unpack tools step; generic ShellCommand converted
-    api.step("unpack tools",
-             [api.path["start_dir"].join('tools', 'buildbot', 'bot_tools',
-               'unpack.bat')],
-             env={},
-             cwd=api.path[
-                 "start_dir"].join('tools', 'buildbot', 'bot_tools'))
+    with api.step.context({
+        'cwd': api.path['start_dir'].join('tools', 'buildbot', 'bot_tools')}):
+      api.step("unpack tools",
+               [api.path["start_dir"].join('tools', 'buildbot', 'bot_tools',
+                 'unpack.bat')],
+               env={})
     # windows Dr. Memory ctest step
     api.step("Dr. Memory ctest",
              [api.package_repo_resource("scripts", "slave", "drmemory",
@@ -406,29 +406,28 @@ def win_builder_steps(api):
     # clear tools directory step; null converted
     # update tools step; null converted
     # unpack tools step; generic ShellCommand converted
-    api.step("unpack tools",
-             [api.path["start_dir"].join('tools', 'buildbot', 'bot_tools',
-               'unpack.bat')],
-             env={},
-             cwd=api.path[
-                 "start_dir"].join('tools', 'buildbot', 'bot_tools'))
+    with api.step.context({
+        'cwd': api.path['start_dir'].join('tools', 'buildbot', 'bot_tools')}):
+      api.step("unpack tools",
+               [api.path["start_dir"].join('tools', 'buildbot', 'bot_tools',
+                 'unpack.bat')],
+               env={})
     # get buildnumber step; no longer needed
-    # Package dynamorio step
-    api.step("Package Dr. Memory",
-             [api.package_repo_resource("scripts", "slave", "drmemory",
-                                     "build_env.bat"), 'ctest', '-VV', '-S',
-              str(api.path["checkout"].join("package.cmake")) + ",build=0x" +
-              build_properties["got_revision"][:7] + ";drmem_only"],
-             env={"BOTTOOLS": api.path["start_dir"].join("tools", "buildbot",
-                                                           "bot_tools")},
-             cwd=api.path["start_dir"])
-    # Find package basename step
-    step_result = api.step("Find package basename",
-                           ["cmd.exe", "/C", "dir", "/O-D", "/B",
-                            "DrMemory-Windows-*0x" + build_properties[
-                                "got_revision"][:7] + ".zip"],
-                           stdout=api.raw_io.output_text(),
-                           cwd=api.path["start_dir"])
+    with api.step.context({'cwd': api.path['start_dir']}):
+      # Package dynamorio step
+      api.step("Package Dr. Memory",
+               [api.package_repo_resource("scripts", "slave", "drmemory",
+                                       "build_env.bat"), 'ctest', '-VV', '-S',
+                str(api.path["checkout"].join("package.cmake")) + ",build=0x" +
+                build_properties["got_revision"][:7] + ";drmem_only"],
+               env={"BOTTOOLS": api.path["start_dir"].join("tools", "buildbot",
+                                                             "bot_tools")})
+      # Find package basename step
+      step_result = api.step("Find package basename",
+                             ["cmd.exe", "/C", "dir", "/O-D", "/B",
+                              "DrMemory-Windows-*0x" + build_properties[
+                                  "got_revision"][:7] + ".zip"],
+                             stdout=api.raw_io.output_text())
     # There can be multiple if we've done test builds so grab the first
     # line (we sorted by date with /O-D):
     basename = step_result.stdout.split()[0][:-4]
@@ -438,26 +437,26 @@ def win_builder_steps(api):
         ok_ret=(0,1))
     # Create sfx archive step
     lastdir = api.path.basename(api.path["start_dir"])
-    api.step("create sfx archive",
-             [api.package_repo_resource("scripts", "slave", "drmemory",
-                                     "build_env.bat"), "7z", "a", "-sfx",
-              basename + "-sfx.exe",
-              # To get the archive to contain paths relative to the
-              # ...\\ZIP\\basename\\ dir we pass ..\\lastdir:
-              api.path.join(
-                '..', lastdir, 'build_drmemory-debug-32', '_CPack_Packages',
-                'Windows', 'ZIP', basename, '*')],
-             cwd=api.path["start_dir"],
-             env={"BOTTOOLS": api.path["start_dir"].join("tools", "buildbot",
-                                                           "bot_tools")})
+    with api.step.context({'cwd': api.path['start_dir']}):
+      api.step("create sfx archive",
+               [api.package_repo_resource("scripts", "slave", "drmemory",
+                                       "build_env.bat"), "7z", "a", "-sfx",
+                basename + "-sfx.exe",
+                # To get the archive to contain paths relative to the
+                # ...\\ZIP\\basename\\ dir we pass ..\\lastdir:
+                api.path.join(
+                  '..', lastdir, 'build_drmemory-debug-32', '_CPack_Packages',
+                  'Windows', 'ZIP', basename, '*')],
+               env={"BOTTOOLS": api.path["start_dir"].join("tools", "buildbot",
+                                                             "bot_tools")})
     # upload latest build step
     api.file.copy("copy locally",
         api.path["start_dir"].join(basename + "-sfx.exe"),
         api.path["start_dir"].join("drmemory-windows-latest-sfx.exe"))
-    api.gsutil.upload("drmemory-windows-latest-sfx.exe",
-                      "chromium-drmemory-builds",
-                      "",
-                      cwd=api.path["start_dir"])
+    with api.step.context({'cwd': api.path['start_dir']}):
+      api.gsutil.upload("drmemory-windows-latest-sfx.exe",
+                        "chromium-drmemory-builds",
+                        "")
     # upload drmemory build step
     api.gsutil.upload("DrMemory-Windows-*" + build_properties["got_revision"][
                       :7] + ".zip", "chromium-drmemory-builds", "builds/")

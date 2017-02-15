@@ -66,7 +66,8 @@ class GitCloneBundlerApi(recipe_api.RecipeApi):
     bundle_path = self.bundle_dir.join('%s.bundle' % (self._hashname(gs_path),))
 
     # Create a new bundle.
-    self.m.git.bundle_create(bundle_path, name=s('create bundle'), cwd=git_path)
+    with self.m.step.context({'cwd': git_path}):
+      self.m.git.bundle_create(bundle_path, name=s('create bundle'))
 
     # Upload the bundle to Google Storage.
     result = self.m.gsutil.upload(
@@ -128,8 +129,9 @@ class GitCloneBundlerApi(recipe_api.RecipeApi):
 
     # Initialize the 'repo' checkout.
     self.m.file.makedirs('repo', checkout_root)
-    self.m.repo.init(repo_manifest_url, cwd=checkout_root)
-    self.m.repo.sync('--no-clone-bundle', cwd=checkout_root)
+    with self.m.step.context({'cwd': checkout_root}):
+      self.m.repo.init(repo_manifest_url)
+      self.m.repo.sync('--no-clone-bundle')
 
     # The repository list produces absolute paths, so we want to convert our
     # 'checkout_root' to an absolute path for relative path calculation.
@@ -137,7 +139,9 @@ class GitCloneBundlerApi(recipe_api.RecipeApi):
     errors = []
     bundle_map = {}
     visited = set()
-    for path, name in self.m.repo.list(cwd=checkout_root):
+    with self.m.step.context({'cwd': checkout_root}):
+      list_results = self.m.repo.list()
+    for path, name in list_results:
       if name in visited:
         continue
       visited.add(name)
@@ -151,9 +155,10 @@ class GitCloneBundlerApi(recipe_api.RecipeApi):
         upload_url = self._bundle(repo_path, gs_bucket, gs_path, refs, name,
                                   unauthenticated_url)
         if remote_name:
-          git_url = self.m.git.get_remote_url(
-              name='lookup Git remote (%s)' % (name,), remote_name=remote_name,
-              cwd=repo_path)
+          with self.m.step.context({'cwd': repo_path}):
+            git_url = self.m.git.get_remote_url(
+                name='lookup Git remote (%s)' % (name,),
+                remote_name=remote_name)
           bundle_map[git_url] = upload_url
       except self.m.step.StepFailure as e:
         result = self.m.step.active_result

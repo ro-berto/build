@@ -89,8 +89,8 @@ def AnalyzeDartUI(api):
   Build(api, 'host_debug_unopt', 'generate_dart_ui')
 
   checkout = api.path['start_dir'].join('src')
-  api.step('analyze dart_ui', ['/bin/sh', 'flutter/travis/analyze.sh'],
-           cwd=checkout)
+  with api.step.context({'cwd': checkout}):
+    api.step('analyze dart_ui', ['/bin/sh', 'flutter/travis/analyze.sh'])
 
 
 def BuildLinuxAndroidx86(api):
@@ -178,13 +178,15 @@ def TestObservatory(api):
       checkout.join('flutter/shell/testing/observatory/empty_main.dart')
   test_path = checkout.join('flutter/shell/testing/observatory/test.dart')
   test_cmd = ['dart', test_path, sky_shell_path, empty_main_path]
-  api.step('test observatory and service protocol', test_cmd, cwd=checkout)
+  with api.step.context({'cwd': checkout}):
+    api.step('test observatory and service protocol', test_cmd)
 
 
 def TestEngine(api):
   checkout = api.path['start_dir'].join('src')
   test_cmd = [checkout.join('flutter/testing/run_tests.sh')]
-  api.step('engine unit tests', test_cmd, cwd=checkout)
+  with api.step.context({'cwd': checkout}):
+    api.step('engine unit tests', test_cmd)
 
 
 def BuildMac(api):
@@ -225,8 +227,9 @@ def PackageIOSVariant(api, label, device_out, sim_out, bucket_name):
     '--simulator-out-dir',
     api.path.join(out_dir, sim_out),
   ]
-  api.step('Create iOS %s Flutter.framework' % label,
-    create_ios_framework_cmd, cwd=checkout)
+  with api.step.context({'cwd': checkout}):
+    api.step('Create iOS %s Flutter.framework' % label,
+      create_ios_framework_cmd)
 
   # Zip Flutter.framework and upload it to cloud storage:
   api.zip.directory('Archive Flutter.framework for %s' % label,
@@ -285,7 +288,8 @@ def BuildJavadoc(api):
   with MakeTempDir(api, 'BuildJavadoc') as temp_dir:
     javadoc_cmd = [checkout.join('flutter/tools/gen_javadoc.py'),
                    '--out-dir', temp_dir]
-    api.step('build javadoc', javadoc_cmd, cwd=checkout)
+    with api.step.context({'cwd': checkout}):
+      api.step('build javadoc', javadoc_cmd)
     api.zip.directory('archive javadoc', temp_dir,
                       checkout.join('out/android_javadoc.zip'))
 

@@ -21,16 +21,16 @@ def RunSteps(api):
   api.gclient.apply_config('v8')
   api.bot_update.ensure_checkout(
       no_shallow=True, with_branch_heads=True)
-  api.step(
-      'V8Releases',
-      [api.path['start_dir'].join(
-           'v8', 'tools', 'release', 'releases.py'),
-       '-c', api.path['checkout'],
-       '--json', api.path['start_dir'].join('v8-releases-update.json'),
-       '--branch', 'recent',
-       '--work-dir', api.path['start_dir'].join('workdir')],
-      cwd=api.path['start_dir'].join('v8'),
-    )
+  with api.step.context({'cwd': api.path['start_dir'].join('v8')}):
+    api.step(
+        'V8Releases',
+        [api.path['start_dir'].join(
+             'v8', 'tools', 'release', 'releases.py'),
+         '-c', api.path['checkout'],
+         '--json', api.path['start_dir'].join('v8-releases-update.json'),
+         '--branch', 'recent',
+         '--work-dir', api.path['start_dir'].join('workdir')],
+      )
   api.gsutil.upload(api.path['start_dir'].join('v8-releases-update.json'),
                     'chromium-v8-auto-roll',
                     api.path.join('v8rel', 'v8-releases-update.json'))

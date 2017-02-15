@@ -90,29 +90,20 @@ class V8Version(object):
 
 def InitClean(api):
   """Ensures a clean state of the git checkout."""
-  api.git(
-      'checkout', '-f', 'FETCH_HEAD',
-      cwd=api.path['checkout'],
-  )
-  api.git(
-      'branch', '-D', 'work',
-      ok_ret='any',
-      cwd=api.path['checkout'],
-  )
-  api.git(
-      'clean', '-ffd',
-      cwd=api.path['checkout'],
-  )
+  with api.step.context({'cwd': api.path['checkout']}):
+    api.git('checkout', '-f', 'FETCH_HEAD')
+    api.git('branch', '-D', 'work', ok_ret='any')
+    api.git('clean', '-ffd')
 
 
 def Git(api, *args, **kwargs):
   """Convenience wrapper."""
-  return api.git(
-      *args,
-      cwd=api.path['checkout'],
-      stdout=api.raw_io.output_text(),
-      **kwargs
-  ).stdout
+  with api.step.context({'cwd': api.path['checkout']}):
+    return api.git(
+        *args,
+        stdout=api.raw_io.output_text(),
+        **kwargs
+    ).stdout
 
 
 def GetVersionContent(api, ref, desc):
@@ -137,10 +128,8 @@ def GetCommitForRef(api, repo, ref):
 
 
 def PushRef(api, repo, ref, hsh):
-  api.git(
-      'push', repo, '+%s:%s' % (hsh, ref),
-      cwd=api.path['checkout'],
-  )
+  with api.step.context({'cwd': api.path['checkout']}):
+    api.git('push', repo, '+%s:%s' % (hsh, ref))
 
 
 def LogStep(api, text):
@@ -160,18 +149,16 @@ def IncrementVersion(api, ref, latest_version, latest_version_file):
   """
 
   # Create a fresh work branch.
-  api.git(
-      'new-branch', 'work', '--upstream', ref,
-      cwd=api.path['checkout'],
-  )
-  api.git(
-      'config', 'user.name', 'V8 Autoroll',
-      cwd=api.path['checkout'], name='git config user.name',
-  )
-  api.git(
-      'config', 'user.email', 'v8-autoroll@chromium.org',
-      cwd=api.path['checkout'], name='git config user.email',
-  )
+  with api.step.context({'cwd': api.path['checkout']}):
+    api.git('new-branch', 'work', '--upstream', ref)
+    api.git(
+        'config', 'user.name', 'V8 Autoroll',
+        name='git config user.name',
+    )
+    api.git(
+        'config', 'user.email', 'v8-autoroll@chromium.org',
+        name='git config user.email',
+    )
 
   # Increment patch level and update file content.
   latest_version = latest_version.with_incremented_patch()
@@ -186,24 +173,20 @@ def IncrementVersion(api, ref, latest_version, latest_version_file):
   )
 
   # Commit and push changes.
-  api.git(
-      'commit', '-am', 'Version %s' % latest_version,
-      cwd=api.path['checkout'],
-  )
+  with api.step.context({'cwd': api.path['checkout']}):
+    api.git('commit', '-am', 'Version %s' % latest_version)
 
   if api.properties.get('dry_run'):
     api.step('Dry-run commit', cmd=None)
     return
 
-  api.git(
-      'cl', 'land', '-f', '--bypass-hooks',
-      cwd=api.path['checkout'],
-  )
+  with api.step.context({'cwd': api.path['checkout']}):
+    api.git('cl', 'land', '-f', '--bypass-hooks')
 
   # Function to check if commit has landed.
   def has_landed():
-    api.git('fetch', REPO, 'refs/branch-heads/*:refs/remotes/branch-heads/*',
-            cwd=api.path['checkout'])
+    with api.step.context({'cwd': api.path['checkout']}):
+      api.git('fetch', REPO, 'refs/branch-heads/*:refs/remotes/branch-heads/*')
     real_latest_version = V8Version.from_version_file(
         GetVersionContent(api, ref, 'committed'))
     return real_latest_version == latest_version
@@ -277,14 +260,9 @@ def RunSteps(api):
     if api.properties.get('dry_run'):
       api.step('Dry-run tag %s' % head_version, cmd=None)
     else:
-      api.git(
-          'tag', str(head_version), head,
-          cwd=api.path['checkout'],
-      )
-      api.git(
-          'push', repo, str(head_version),
-          cwd=api.path['checkout'],
-      )
+      with api.step.context({'cwd': api.path['checkout']}):
+        api.git('tag', str(head_version), head)
+        api.git('push', repo, str(head_version))
 
   # Get the branch's current lkgr ref and update to HEAD.
   current_lkgr = GetCommitForRef(api, repo, lkgr_ref)

@@ -19,10 +19,11 @@ class CoverageFlavorUtils(default_flavor.DefaultFlavorUtils):
     compile_target = 'dm'
     build_cmd = [self._skia_api.skia_dir.join('tools', 'llvm_coverage_build'),
                  compile_target]
-    self._skia_api.run(self._skia_api.m.step,
-                       'build %s' % compile_target,
-                       cmd=build_cmd,
-                       cwd=self._skia_api.m.path['checkout'])
+    with self._skia_api.m.step.context({
+        'cwd': self._skia_api.m.path['checkout']}):
+      self._skia_api.run(self._skia_api.m.step,
+                         'build %s' % compile_target,
+                         cmd=build_cmd)
 
     # Slice out the 'key' and 'properties' arguments to be reused.
     key = []
@@ -48,8 +49,9 @@ class CoverageFlavorUtils(default_flavor.DefaultFlavorUtils):
         'python',
         self._skia_api.skia_dir.join('tools', 'llvm_coverage_run.py'),
     ] + cmd + ['--outResultsFile', report_file]
-    self._skia_api.run(self._skia_api.m.step, name=name, cmd=args,
-                       cwd=self._skia_api.m.path['checkout'], **kwargs)
+    with self._skia_api.m.step.context({
+        'cwd': self._skia_api.m.path['checkout']}):
+      self._skia_api.run(self._skia_api.m.step, name=name, cmd=args, **kwargs)
 
     # Generate nanobench-style JSON output from the coverage report.
     nanobench_json = results_dir.join('nanobench_%s.json' % (
@@ -64,10 +66,12 @@ class CoverageFlavorUtils(default_flavor.DefaultFlavorUtils):
         '--linebyline', line_by_line]
     args.extend(key)
     args.extend(properties)
-    self._skia_api.run(
-        self._skia_api.m.step,
-        'Generate Coverage Data',
-        cmd=args, cwd=self._skia_api.m.path['checkout'])
+    with self._skia_api.m.step.context({
+        'cwd': self._skia_api.m.path['checkout']}):
+      self._skia_api.run(
+          self._skia_api.m.step,
+          'Generate Coverage Data',
+          cmd=args)
 
     # Copy files from results_dir into swarming_out_dir.
     for r in self._skia_api.m.file.listdir('results_dir', results_dir):

@@ -44,11 +44,12 @@ class CommitPositionApi(recipe_api.RecipeApi):
     except ValueError:
       raise self.m.step.StepFailure('Invalid commit position (%s).'
                                     % (commit_pos,))
-    step_result = self.m.git('log', '--format=hash:%H', '--grep',
-                             self.COMMIT_POS_STR % int_pos, '-1',
-                             'origin/master',
-                             stdout=self.m.raw_io.output_text(),
-                             name='resolving commit_pos ' + str(commit_pos))
+    with self.m.step.context({'cwd': self.m.path['checkout']}):
+      step_result = self.m.git('log', '--format=hash:%H', '--grep',
+                               self.COMMIT_POS_STR % int_pos, '-1',
+                               'origin/master',
+                               stdout=self.m.raw_io.output_text(),
+                               name='resolving commit_pos ' + str(commit_pos))
     try:
       result_line = [line for line in step_result.stdout.splitlines()
                      if line.startswith('hash:')][0]
@@ -67,9 +68,10 @@ class CommitPositionApi(recipe_api.RecipeApi):
       sha = str(sha)  # Unicode would break the step when passed in the name
     except (AssertionError, ValueError):
       raise self.m.step.StepFailure('Invalid commit hash: ' + sha)
-    step_result = self.m.git('footers', '--position', sha,
-                             stdout=self.m.raw_io.output_text(),
-                             name='resolving hash ' + sha)
+    with self.m.step.context({'cwd': self.m.path['checkout']}):
+      step_result = self.m.git('footers', '--position', sha,
+                               stdout=self.m.raw_io.output_text(),
+                               name='resolving hash ' + sha)
     try:
       result = int(self.parse_revision(str(step_result.stdout)))
     except ValueError:

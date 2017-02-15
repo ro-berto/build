@@ -102,10 +102,10 @@ def _GNGenBuilds(api, memory_tool, skia, xfa, v8, target_cpu, clang, rel,
   if target_cpu == 'x86':
     args.append('target_cpu="x86"')
 
-  api.python('gn gen', gn_cmd,
-             ['--root=' + str(checkout), 'gen', '//out/' + out_dir,
-              '--args=' + ' '.join(args)],
-             cwd=checkout)
+  with api.step.context({'cwd': checkout}):
+    api.python('gn gen', gn_cmd,
+               ['--root=' + str(checkout), 'gen', '//out/' + out_dir,
+                '--args=' + ' '.join(args)])
 
   # convert the arguments to key values pairs for gold usage.
   return gold_build_config(args)
@@ -137,28 +137,28 @@ def _RunTests(api, memory_tool, v8, out_dir, build_config, revision):
                                                  'pdfium_unittests'))
   if api.platform.is_win:
     unittests_path += '.exe'
-  api.step('unittests', [unittests_path], cwd=api.path['checkout'], env=env)
+  with api.step.context({'cwd': api.path['checkout']}):
+    api.step('unittests', [unittests_path], env=env)
 
   embeddertests_path = str(api.path['checkout'].join('out', out_dir,
                                                      'pdfium_embeddertests'))
   if api.platform.is_win:
     embeddertests_path += '.exe'
-  api.step('embeddertests', [embeddertests_path],
-           cwd=api.path['checkout'],
-           env=env)
+  with api.step.context({'cwd': api.path['checkout']}):
+    api.step('embeddertests', [embeddertests_path], env=env)
 
   script_args = ['--build-dir', api.path.join('out', out_dir)]
 
   if v8:
     javascript_path = str(api.path['checkout'].join('testing', 'tools',
                                                     'run_javascript_tests.py'))
-    api.python('javascript tests', javascript_path, script_args,
-               cwd=api.path['checkout'], env=env)
+    with api.step.context({'cwd': api.path['checkout']}):
+      api.python('javascript tests', javascript_path, script_args, env=env)
 
   pixel_tests_path = str(api.path['checkout'].join('testing', 'tools',
                                                    'run_pixel_tests.py'))
-  api.python('pixel tests', pixel_tests_path, script_args,
-             cwd=api.path['checkout'], env=env)
+  with api.step.context({'cwd': api.path['checkout']}):
+    api.python('pixel tests', pixel_tests_path, script_args, env=env)
 
   # Add the arguments needed to upload the resulting images.
   gold_output_dir = api.path['checkout'].join('out', out_dir, 'gold_output')
@@ -176,8 +176,8 @@ def _RunTests(api, memory_tool, v8, out_dir, build_config, revision):
 
   corpus_tests_path = str(api.path['checkout'].join('testing', 'tools',
                                                     'run_corpus_tests.py'))
-  api.python('corpus tests', corpus_tests_path, script_args,
-             cwd=api.path['checkout'], env=env)
+  with api.step.context({'cwd': api.path['checkout']}):
+    api.python('corpus tests', corpus_tests_path, script_args, env=env)
   upload_dm_results(api, gold_output_dir, revision)
 
 
@@ -276,42 +276,42 @@ def get_gold_ignore_hashes(api, out_dir):
                                                out_dir,
                                                'ignore_hashes.txt')
   try:
-    api.m.python.inline(
-      'get uninteresting hashes',
-      program="""
-      import contextlib
-      import math
-      import socket
-      import sys
-      import time
-      import urllib2
+    with api.step.context({'cwd': api.path['checkout']}):
+      api.m.python.inline(
+        'get uninteresting hashes',
+        program="""
+        import contextlib
+        import math
+        import socket
+        import sys
+        import time
+        import urllib2
 
-      HASHES_URL = 'https://pdfium-gold.skia.org/_/hashes'
-      RETRIES = 5
-      TIMEOUT = 60
-      WAIT_BASE = 15
+        HASHES_URL = 'https://pdfium-gold.skia.org/_/hashes'
+        RETRIES = 5
+        TIMEOUT = 60
+        WAIT_BASE = 15
 
-      socket.setdefaulttimeout(TIMEOUT)
-      for retry in range(RETRIES):
-        try:
-          with contextlib.closing(
-              urllib2.urlopen(HASHES_URL, timeout=TIMEOUT)) as w:
-            hashes = w.read()
-            with open(sys.argv[1], 'w') as f:
-              f.write(hashes)
-              break
-        except Exception as e:
-          print 'Failed to get uninteresting hashes from %s:' % HASHES_URL
-          print e
-          if retry == RETRIES:
-            raise
-          waittime = WAIT_BASE * math.pow(2, retry)
-          print 'Retry in %d seconds.' % waittime
-          time.sleep(waittime)
-      """,
-      args=[host_hashes_file],
-      cwd=api.path['checkout'],
-      infra_step=True)
+        socket.setdefaulttimeout(TIMEOUT)
+        for retry in range(RETRIES):
+          try:
+            with contextlib.closing(
+                urllib2.urlopen(HASHES_URL, timeout=TIMEOUT)) as w:
+              hashes = w.read()
+              with open(sys.argv[1], 'w') as f:
+                f.write(hashes)
+                break
+          except Exception as e:
+            print 'Failed to get uninteresting hashes from %s:' % HASHES_URL
+            print e
+            if retry == RETRIES:
+              raise
+            waittime = WAIT_BASE * math.pow(2, retry)
+            print 'Retry in %d seconds.' % waittime
+            time.sleep(waittime)
+        """,
+        args=[host_hashes_file],
+        infra_step=True)
   except api.step.StepFailure:
     # Swallow the exception. The step will still show up as
     # failed, but processing will continue.

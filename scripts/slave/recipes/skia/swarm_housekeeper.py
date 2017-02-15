@@ -32,38 +32,37 @@ def RunSteps(api):
 
   cwd = api.path['checkout']
 
-  api.skia.run(
-    api.step,
-    'android platform self-tests',
-    cmd=['python',
-         cwd.join('platform_tools', 'android', 'tests', 'run_all.py')],
-    cwd=cwd,
-    abort_on_failure=False)
-
-  # TODO(borenet): Detect static initializers?
-
-  gsutil_path = api.depot_tools.gsutil_py_path
-  if not api.skia.is_trybot:
+  with api.step.context({'cwd': cwd}):
     api.skia.run(
       api.step,
-      'generate and upload doxygen',
-      cmd=['python', api.skia.resource('generate_and_upload_doxygen.py'),
-           gsutil_path],
-      cwd=cwd,
+      'android platform self-tests',
+      cmd=['python',
+           cwd.join('platform_tools', 'android', 'tests', 'run_all.py')],
       abort_on_failure=False)
 
-  cmd = ['python', api.skia.resource('run_binary_size_analysis.py'),
-         '--library', api.skia.skia_out.join('Release', 'lib', 'libskia.so'),
-         '--githash', api.properties['revision'],
-         '--gsutil_path', gsutil_path]
-  if api.skia.is_trybot:
-    cmd.extend(['--issue_number', str(api.skia.m.properties['issue'])])
-  api.skia.run(
-    api.step,
-    'generate and upload binary size data',
-    cmd=cmd,
-    cwd=cwd,
-    abort_on_failure=False)
+    # TODO(borenet): Detect static initializers?
+
+    gsutil_path = api.depot_tools.gsutil_py_path
+    if not api.skia.is_trybot:
+      api.skia.run(
+        api.step,
+        'generate and upload doxygen',
+        cmd=['python', api.skia.resource('generate_and_upload_doxygen.py'),
+             gsutil_path],
+        abort_on_failure=False)
+
+    cmd = ['python', api.skia.resource('run_binary_size_analysis.py'),
+           '--library', api.skia.skia_out.join('Release', 'lib', 'libskia.so'),
+           '--githash', api.properties['revision'],
+           '--gsutil_path', gsutil_path]
+    if api.skia.is_trybot:
+      cmd.extend(['--issue_number', str(api.skia.m.properties['issue'])])
+    api.skia.run(
+      api.step,
+      'generate and upload binary size data',
+      cmd=cmd,
+      abort_on_failure=False)
+
 
 def GenTests(api):
   for mastername, slaves in TEST_BUILDERS.iteritems():

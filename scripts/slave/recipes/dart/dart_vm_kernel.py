@@ -69,54 +69,51 @@ def RunSteps(api):
 
   b = builders[buildername]
 
-  if b.get('clobber', False):
-      api.python('clobber',
-                 api.path['tools'].join('clean_output_directory.py'),
-                 cwd=api.path['checkout'])
+  with api.step.context({'cwd': api.path['checkout']}):
+    if b.get('clobber', False):
+        api.python('clobber',
+                   api.path['tools'].join('clean_output_directory.py'))
 
   api.gclient.runhooks()
 
-  api.python('taskkill before building',
-             api.path['checkout'].join('tools', 'task_kill.py'),
-             args=['--kill_browsers=True'],
-             cwd=api.path['checkout'],
-             ok_ret='any')
-
-  build_args = ['-m%s' % b['mode'], '--arch=%s' % b['target_arch'], 'runtime']
-  build_args.extend(b.get('build_args', []))
-  api.python('build dart',
-             api.path['checkout'].join('tools', 'build.py'),
-             args=build_args,
-             cwd=api.path['checkout'])
-
-  with api.step.defer_results():
-    test_args = ['-m%s' % b['mode'],
-                 '--arch=%s' % b['target_arch'],
-                 '--progress=line',
-                 '--report',
-                 '--time',
-                 '--failure-summary',
-                 '--write-debug-log',
-                 '--write-test-outcome-log']
-    if b.get('archive_core_dumps', False):
-      test_args.append('--copy-coredumps')
-    test_args.extend(shard_args)
-    if 'precomp' not in buildername:
-      front_end_args = ['pkg/front_end', '-rvm', '-cnone', '--checked']
-      front_end_args.extend(test_args)
-      api.python('front-end tests',
-                 api.path['checkout'].join('tools', 'test.py'),
-                 args=front_end_args,
-                 cwd=api.path['checkout'])
-    test_args.extend(b.get('test_args', []))
-    api.python('vm tests',
-               api.path['checkout'].join('tools', 'test.py'),
-               args=test_args,
-               cwd=api.path['checkout'])
-    api.python('taskkill after testing',
+  with api.step.context({'cwd': api.path['checkout']}):
+    api.python('taskkill before building',
                api.path['checkout'].join('tools', 'task_kill.py'),
                args=['--kill_browsers=True'],
-               cwd=api.path['checkout'])
+               ok_ret='any')
+
+    build_args = ['-m%s' % b['mode'], '--arch=%s' % b['target_arch'], 'runtime']
+    build_args.extend(b.get('build_args', []))
+    api.python('build dart',
+               api.path['checkout'].join('tools', 'build.py'),
+               args=build_args)
+
+    with api.step.defer_results():
+      test_args = ['-m%s' % b['mode'],
+                   '--arch=%s' % b['target_arch'],
+                   '--progress=line',
+                   '--report',
+                   '--time',
+                   '--failure-summary',
+                   '--write-debug-log',
+                   '--write-test-outcome-log']
+      if b.get('archive_core_dumps', False):
+        test_args.append('--copy-coredumps')
+      test_args.extend(shard_args)
+      if 'precomp' not in buildername:
+        front_end_args = ['pkg/front_end', '-rvm', '-cnone', '--checked']
+        front_end_args.extend(test_args)
+        api.python('front-end tests',
+                   api.path['checkout'].join('tools', 'test.py'),
+                   args=front_end_args)
+      test_args.extend(b.get('test_args', []))
+      api.python('vm tests',
+                 api.path['checkout'].join('tools', 'test.py'),
+                 args=test_args)
+      api.python('taskkill after testing',
+                 api.path['checkout'].join('tools', 'task_kill.py'),
+                 args=['--kill_browsers=True'])
+
 
 def GenTests(api):
    yield (

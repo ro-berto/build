@@ -202,10 +202,12 @@ class AutoBisectStagingApi(recipe_api.RecipeApi):
         skip_download=skip_download, **kwargs)
 
   def ensure_checkout(self, *args, **kwargs):
+    context = {}
     if self.working_dir:
-      kwargs.setdefault('cwd', self.working_dir)
+      context['cwd'] = self.m.step.get_from_context('cwd', self.working_dir)
 
-    return self.m.bot_update.ensure_checkout(*args, **kwargs)
+    with self.m.step.context(context):
+      return self.m.bot_update.ensure_checkout(*args, **kwargs)
 
   def _SyncRevisionToTest(self, test_config_params):
     if not self.internal_bisect:
@@ -370,7 +372,8 @@ class AutoBisectStagingApi(recipe_api.RecipeApi):
       context['cwd'] = self.working_dir
 
     with api.step.context(context):
-      affected_files = self.m.tryserver.get_files_affected_by_patch()
+      with api.step.context({'cwd': api.path['checkout']}):
+        affected_files = self.m.tryserver.get_files_affected_by_patch()
       with self.build_context_mgr(self.m):
         if BISECT_CONFIG_FILE in affected_files:
           api.step('***LEGACY BISECT HAS BEEN DEPRECATED***', [])

@@ -215,11 +215,12 @@ class RevisionState(object):
     cwd = working_dir.join(
         depot_config.DEPOT_DEPS_NAME[self.depot_name]['src'])
     name = 'Checking DEPS for ' + self.commit_hash
-    step_result = api.m.git(
-        'show', '--name-only', '--pretty=format:',
-        self.commit_hash, cwd=cwd, stdout=api.m.raw_io.output_text(), name=name,
-        step_test_data=lambda: api._test_data['deps_change'][self.commit_hash]
-    )
+    with api.m.step.context({'cwd': cwd}):
+      step_result = api.m.git(
+          'show', '--name-only', '--pretty=format:',
+          self.commit_hash, stdout=api.m.raw_io.output_text(), name=name,
+          step_test_data=lambda: api._test_data['deps_change'][self.commit_hash]
+      )
     if 'DEPS' in step_result.stdout.splitlines():  # pragma: no cover
       return True
     return False  # pragma: no cover
