@@ -95,7 +95,7 @@ SPEC = {
       'bot_type': 'builder',
       'testing': {'platform': 'mac'},
       'enable_swarming': True,
-      'checkout_dir': 'mac_ng',
+      'checkout_dir': 'mac',
     },
     'Mac ASan 64 Tests (1)': {
       'chromium_config': 'chromium_mac_asan',

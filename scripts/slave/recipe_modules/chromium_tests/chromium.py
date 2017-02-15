@@ -79,7 +79,7 @@ SPEC = {
       'archive_build': True,
       'gs_bucket': 'chromium-browser-snapshots',
       'gs_acl': 'public-read',
-      'checkout_dir': 'mac_ng',
+      'checkout_dir': 'mac',
       'testing': {
         'platform': 'mac',
       },

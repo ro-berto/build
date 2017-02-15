@@ -4,7 +4,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[BUILDER_CACHE]/mac_ng",
+      "[BUILDER_CACHE]/mac",
       "511"
     ],
     "name": "makedirs checkout path",
@@ -46,7 +46,7 @@
       "src@HEAD",
       "--output_manifest"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_ng",
+    "cwd": "[BUILDER_CACHE]/mac",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -188,7 +188,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/mac_ng/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/mac/src/tools/swarming_client/swarming.py",
       "--version"
     ],
     "name": "swarming.py --version",
@@ -202,7 +202,7 @@
       "python",
       "-u",
       "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
-      "[BUILDER_CACHE]/mac_ng/src/out/Release"
+      "[BUILDER_CACHE]/mac/src/out/Release"
     ],
     "name": "rmtree clobber",
     "~followup_annotations": [
@@ -223,7 +223,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_ng/src",
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -237,14 +237,14 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/mac_ng/src/testing/scripts/get_compile_targets.py",
+      "[BUILDER_CACHE]/mac/src/testing/scripts/get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
       "Release",
       "--paths",
-      "{\"checkout\": \"[BUILDER_CACHE]/mac_ng/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
+      "{\"checkout\": \"[BUILDER_CACHE]/mac/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
       "{\"buildername\": \"mac_chromium_archive_rel_ng\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.mac\", \"slavename\": \"TestSlavename\", \"target_platform\": \"mac\"}"
     ],
@@ -259,12 +259,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/mac_ng/src/testing/buildbot/chromium.json",
+      "[BUILDER_CACHE]/mac/src/testing/buildbot/chromium.json",
       "/path/to/tmp/json"
     ],
     "name": "read test spec (chromium.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [BUILDER_CACHE]/mac_ng/src/testing/buildbot/chromium.json@@@",
+      "@@@STEP_TEXT@path: [BUILDER_CACHE]/mac/src/testing/buildbot/chromium.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -276,7 +276,7 @@
       "--cached",
       "--name-only"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_ng/src",
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "name": "git diff to analyze patch",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -290,7 +290,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/mac_ng/src/testing/buildbot/trybot_analyze_config.json",
+      "[BUILDER_CACHE]/mac/src/testing/buildbot/trybot_analyze_config.json",
       "/path/to/tmp/json"
     ],
     "name": "read filter exclusion spec",
@@ -351,19 +351,19 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/mac_ng/src/tools/mb/mb.py",
+      "[BUILDER_CACHE]/mac/src/tools/mb/mb.py",
       "gen",
       "-m",
       "tryserver.chromium.mac",
       "-b",
       "mac_chromium_archive_rel_ng",
       "--config-file",
-      "[BUILDER_CACHE]/mac_ng/src/tools/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/mac/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/cipd/goma",
       "//out/Release"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_ng/src",
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -377,7 +377,7 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
       "--src-dir",
-      "[BUILDER_CACHE]/mac_ng/src",
+      "[BUILDER_CACHE]/mac/src",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -409,7 +409,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/mac_ng/src",
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "name": "preprocess_for_goma"
   },
   {
@@ -420,7 +420,7 @@
       "[GOMA_CACHE]/mac_chromium_archive_rel_ng",
       "511"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_ng/src",
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "name": "preprocess_for_goma.makedirs goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -443,7 +443,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "restart"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_ng/src",
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_CACHE_DIR": "[GOMA_CACHE]/mac_chromium_archive_rel_ng",
@@ -470,7 +470,7 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_ng/src",
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "name": "preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -482,12 +482,12 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/mac_ng/src/out/Release",
+      "[BUILDER_CACHE]/mac/src/out/Release",
       "-j",
       "50",
       "all"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_ng/src",
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -500,7 +500,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/mac_ng/src/out/Release",
+      "[BUILDER_CACHE]/mac/src/out/Release",
       "-j",
       "50",
       "all",
@@ -508,7 +508,7 @@
       "explain",
       "-n"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_ng/src",
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -518,7 +518,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/mac_ng/src",
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "name": "postprocess_for_goma"
   },
   {
@@ -528,7 +528,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "jsonstatus"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_ng/src",
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -557,7 +557,7 @@
       "{\"notice\": [{\"infra_status\": {\"num_user_error\": 0, \"ping_status_code\": 200}}]}",
       "[CACHE]/cipd/goma/jsonstatus"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_ng/src",
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "name": "postprocess_for_goma.write_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -570,7 +570,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "stat"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_ng/src",
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -586,7 +586,7 @@
       "[CACHE]/cipd/goma/goma_ctl.py",
       "stop"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_ng/src",
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -609,9 +609,9 @@
       "--json-status",
       "[CACHE]/cipd/goma/jsonstatus",
       "--ninja-log-outdir",
-      "[BUILDER_CACHE]/mac_ng/src/out/Release",
+      "[BUILDER_CACHE]/mac/src/out/Release",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/mac_ng/src/out/Release', '-j', 50, 'all']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/mac/src/out/Release', '-j', 50, 'all']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",
@@ -623,7 +623,7 @@
       "--buildbot-slavename",
       "TestSlavename"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_ng/src",
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -638,7 +638,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_ng/src",
+    "cwd": "[BUILDER_CACHE]/mac/src",
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
