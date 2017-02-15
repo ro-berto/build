@@ -42,7 +42,7 @@ for platform in ['linux']:
                         'dart_bootstrap',
                         'dart_precompiled_runtime']),
         'test_args': ['-cdartkp', '-rdart_precompiled'] + general_test_args,
-        'archive_core_dumps': (platform == 'linux'),
+        'archive_core_dumps': (platform == 'linux' or platform == 'win'),
       }
 
 def RunSteps(api):
