@@ -242,6 +242,19 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/ios_api_framework/src/tools-webrtc/ios/build_ios_libs.py",
+      "-r",
+      "170242",
+      "-e",
+      "--use-goma",
+      "--extra-gn-args=goma_dir=\"[CACHE]/cipd/goma\""
+    ],
+    "name": "build"
+  },
+  {
     "cmd": [],
     "name": "postprocess_for_goma"
   },
@@ -329,7 +342,7 @@
       "--json-status",
       "[CACHE]/cipd/goma/jsonstatus",
       "--ninja-log-exit-status",
-      "1",
+      "0",
       "--ninja-log-compiler",
       "goma",
       "--buildbot-buildername",

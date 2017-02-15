@@ -38,15 +38,15 @@ def RunSteps(api):
       with api.step.context({'cwd': api.path['checkout']}):
         api.step('cleanup', [build_script, '-c'])
 
-        step_result = api.python(
-            'build',
-            build_script,
-            args=['-r', api.webrtc.revision_number,
-                  '-e',
-                  '--use-goma',
-                  '--extra-gn-args=goma_dir=\"%s\"' % goma_dir],
-        )
-        ninja_log_exit_status = step_result.retcode
+    step_result = api.python(
+        'build',
+        build_script,
+        args=['-r', api.webrtc.revision_number,
+              '-e',
+              '--use-goma',
+              '--extra-gn-args=goma_dir=\"%s\"' % goma_dir],
+    )
+    ninja_log_exit_status = step_result.retcode
   except api.step.StepFailure as e:
     ninja_log_exit_status = e.retcode
   finally:

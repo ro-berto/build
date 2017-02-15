@@ -231,7 +231,6 @@
       "--use-goma",
       "--extra-gn-args=goma_dir=\"[CACHE]/cipd/goma\""
     ],
-    "cwd": "[BUILDER_CACHE]/iOS_API_Framework_Builder/src",
     "name": "build",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
