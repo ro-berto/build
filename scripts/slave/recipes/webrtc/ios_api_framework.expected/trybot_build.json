@@ -250,7 +250,8 @@
       "170242",
       "-e",
       "--use-goma",
-      "--extra-gn-args=goma_dir=\"[CACHE]/cipd/goma\""
+      "--extra-gn-args=goma_dir=\"[CACHE]/cipd/goma\"",
+      "--verbose"
     ],
     "name": "build"
   },

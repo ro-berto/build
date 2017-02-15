@@ -35,8 +35,7 @@ def RunSteps(api):
     build_script = api.path['checkout'].join('tools-webrtc', 'ios',
                                              'build_ios_libs.py')
     if not api.tryserver.is_tryserver:
-      with api.step.context({'cwd': api.path['checkout']}):
-        api.step('cleanup', [build_script, '-c'])
+      api.step('cleanup', [build_script, '-c'])
 
     step_result = api.python(
         'build',
@@ -44,7 +43,8 @@ def RunSteps(api):
         args=['-r', api.webrtc.revision_number,
               '-e',
               '--use-goma',
-              '--extra-gn-args=goma_dir=\"%s\"' % goma_dir],
+              '--extra-gn-args=goma_dir=\"%s\"' % goma_dir,
+              '--verbose'],
     )
     ninja_log_exit_status = step_result.retcode
   except api.step.StepFailure as e:
