@@ -617,25 +617,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::isolate]\\resources\\isolate.py",
-      "[BUILDER_CACHE]\\Win_Builder_FYI\\src\\tools\\swarming_client",
-      "batcharchive",
-      "--dump-json",
-      "/path/to/tmp/json",
-      "--isolate-server",
-      "https://isolateserver.appspot.com",
-      "--verbose"
-    ],
-    "name": "isolate tests",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[build::perf_dashboard]\\resources\\post_json.py",
       "https://pinpoint-dot-chromeperf.appspot.com/isolated",
       "-i",

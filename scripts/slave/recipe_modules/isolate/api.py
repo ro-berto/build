@@ -155,21 +155,22 @@ class IsolateApi(recipe_api.RecipeApi):
                 step_test_data=lambda: self.test_api.output_json([target]),
                 **kwargs))
 
-      # TODO(vadimsh): Differentiate between bad *.isolate and upload errors.
-      # Raise InfraFailure on upload errors.
-      args = [
-          self.m.swarming_client.path,
-          'batcharchive',
-          '--dump-json', self.m.json.output(),
-          '--isolate-server', self._isolate_server,
-      ] + (['--verbose'] if verbose else []) +  [
-          build_dir.join('%s.isolated.gen.json' % t) for t in batch_targets
-      ]
-      isolate_steps.append(
-          self.m.python(
-              'isolate tests', self.resource('isolate.py'), args,
-              step_test_data=lambda: self.test_api.output_json(batch_targets),
-              **kwargs))
+      if batch_targets:
+        # TODO(vadimsh): Differentiate between bad *.isolate and upload errors.
+        # Raise InfraFailure on upload errors.
+        args = [
+            self.m.swarming_client.path,
+            'batcharchive',
+            '--dump-json', self.m.json.output(),
+            '--isolate-server', self._isolate_server,
+        ] + (['--verbose'] if verbose else []) +  [
+            build_dir.join('%s.isolated.gen.json' % t) for t in batch_targets
+        ]
+        isolate_steps.append(
+            self.m.python(
+                'isolate tests', self.resource('isolate.py'), args,
+                step_test_data=lambda: self.test_api.output_json(batch_targets),
+                **kwargs))
 
       # TODO(tansell): Change this to return a dummy "isolate results" or the
       # top level master step.
@@ -179,7 +180,7 @@ class IsolateApi(recipe_api.RecipeApi):
       swarm_hashes = {}
       for step in isolate_steps:
         if not step.json.output:
-          continue
+          continue  # pragma: no cover
 
         for k, v in step.json.output.iteritems():
           # TODO(tansell): Raise an error here when it can't clobber an

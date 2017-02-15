@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from recipe_engine.recipe_api import Property
+
 DEPS = [
   'isolate',
   'recipe_engine/json',
@@ -11,8 +13,13 @@ DEPS = [
   'swarming_client',
 ]
 
+PROPERTIES = {
+  'always_use_exparchive': Property(
+    kind=bool, help="Force usage of exparchive.", default=False),
+}
 
-def RunSteps(api):
+
+def RunSteps(api, always_use_exparchive):
   # 'isolate_tests' step needs swarming checkout.
   api.swarming_client.checkout('master')
 
@@ -34,7 +41,8 @@ def RunSteps(api):
   # of isolated targets in build directory, so skip if 'expected_targets' is
   # None.
   if expected_targets is not None:
-    api.isolate.isolate_tests(build_path, expected_targets)
+    api.isolate.isolate_tests(
+        build_path, expected_targets, always_use_exparchive=always_use_exparchive)
 
 
 def GenTests(api):
@@ -69,9 +77,10 @@ def GenTests(api):
             'isolate %s' % target,
             api.isolate.output_json([target], missing))
 
-      output += api.override_step_data(
-          'isolate tests',
-          api.isolate.output_json(expected_batcharchive_targets, missing))
+      if expected_batcharchive_targets:
+        output += api.override_step_data(
+            'isolate tests',
+            api.isolate.output_json(expected_batcharchive_targets, missing))
 
     return output
 
@@ -122,3 +131,10 @@ def GenTests(api):
       ['test1', 'test2'],
       ['test_exparchive'],
       ['test1', 'test2'])
+  # Use force-exparchive
+  yield make_test(
+      'always-use-exparchive',
+      [],
+      ['test_exparchive', 'test1', 'test2'],
+      ['test_exparchive', 'test1', 'test2']) + api.properties(
+          always_use_exparchive=True)
