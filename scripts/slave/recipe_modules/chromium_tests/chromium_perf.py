@@ -118,7 +118,7 @@ def _AddIsolatedTestSpec(name, perf_id, platform, target_bits=64):
 
 def _AddBuildSpec(
   name, platform, target_bits=64, add_to_bisect=False, enable_swarming=False,
-  extra_compile_targets=None):
+  extra_compile_targets=None, force_exparchive=False):
   if target_bits == 64:
     perf_id = platform
   else:
@@ -126,7 +126,8 @@ def _AddBuildSpec(
 
   SPEC['builders'][name] = BuildSpec(
       'chromium_perf', perf_id, platform, target_bits, enable_swarming,
-      extra_compile_targets=extra_compile_targets)
+      extra_compile_targets=extra_compile_targets,
+      force_exparchive=force_exparchive)
 
   # TODO(martiniss): re-enable assertion once android has switched to the
   # chromium recipe
@@ -176,7 +177,9 @@ _AddBuildSpec('Android arm64 Compile', 'android',
 _AddBuildSpec('Win Builder', 'win', target_bits=32, enable_swarming=True)
 _AddBuildSpec( \
   'Win x64 Builder', 'win', add_to_bisect=True, enable_swarming=True)
-_AddBuildSpec('Mac Builder', 'mac', add_to_bisect=True, enable_swarming=True)
+_AddBuildSpec( \
+  'Mac Builder', 'mac', add_to_bisect=True, enable_swarming=True,
+  force_exparchive=True)
 _AddBuildSpec( \
   'Linux Builder', 'linux', add_to_bisect=True, enable_swarming=True)
 

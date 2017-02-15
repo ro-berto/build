@@ -643,15 +643,18 @@
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
       "[BUILDER_CACHE]/Mac_Builder/src/tools/swarming_client",
-      "batcharchive",
+      "exparchive",
       "--dump-json",
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[BUILDER_CACHE]/Mac_Builder/src/out/Release/browser_tests.isolated.gen.json"
+      "--isolate",
+      "[BUILDER_CACHE]/Mac_Builder/src/out/Release/browser_tests.isolate",
+      "--isolated",
+      "[BUILDER_CACHE]/Mac_Builder/src/out/Release/browser_tests.isolated"
     ],
-    "name": "isolate tests",
+    "name": "isolate browser_tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"browser_tests\": \"[dummy hash for browser_tests]\"@@@",
