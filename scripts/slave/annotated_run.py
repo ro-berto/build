@@ -32,9 +32,6 @@ LOGGER = logging.getLogger('annotated_run')
 BUILD_DIR = os.getcwd()
 # /b/build/slave/<slavename>/
 BUILDER_DIR = os.path.dirname(BUILD_DIR)
-# /b
-B_DIR = os.path.dirname(os.path.dirname(os.path.dirname(BUILDER_DIR)))
-
 
 # ENGINE_FLAGS is a mapping of master name to a engine flags. This can be used
 # to test new recipe engine flags on a select few masters.
@@ -336,12 +333,6 @@ def main(argv):
     properties = get_recipe_properties(
         stream, tdir, opts.build_properties, use_factory_properties_from_disk)
     LOGGER.debug('Loaded properties: %s', properties)
-
-    # put client in /b/cipd_client. Do import here to avoid ImportErrors
-    # tanking the update_scripts mechanism.
-    from slave import cipd_bootstrap_v2
-    cipd_bootstrap_v2.high_level_ensure_cipd_client(
-      B_DIR, properties.get('mastername'))
 
     # Setup monitoring directory and send a monitoring event.
     build_data_dir = _ensure_directory(tdir, 'build_data')

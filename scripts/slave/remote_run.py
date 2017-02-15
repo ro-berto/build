@@ -157,12 +157,6 @@ def main(argv, stream):
     with open(properties_file, 'w') as f:
       json.dump(properties, f)
 
-    # put client in /b/cipd_client. Do import here to avoid ImportErrors
-    # tanking the update_scripts mechanism.
-    from slave import cipd_bootstrap_v2
-    cipd_bootstrap_v2.high_level_ensure_cipd_client(
-      basedir, properties.get('mastername'))
-
     monitoring_utils.write_build_monitoring_event(build_data_dir, properties)
 
     # Make switching to remote_run easier: we do not use buildbot workdir,
