@@ -1261,14 +1261,14 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
              for res in tests[t]['actual'].split()))
     return True, failures
 
-  def upload_json_format_results(self, api, results):
+  def upload_json_format_results(self, api, results, suffix):
     chrome_revision_cp = api.bot_update.last_returned_properties.get(
         'got_revision_cp', 'x@{#0}')
     chrome_revision = str(api.commit_position.parse_revision(
         chrome_revision_cp))
     api.test_results.upload(
       api.json.input(results), chrome_revision=chrome_revision,
-      test_type=self.name,
+      test_type=self._step_name(suffix),
       test_results_server='test-results.appspot.com')
 
   def validate_task_results(self, api, step_result):
@@ -1299,7 +1299,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     finally:
       results = self._isolated_script_results
       if self._upload_test_results and is_json_results_format(results):
-        self.upload_json_format_results(api, results)
+        self.upload_json_format_results(api, results, suffix)
 
   def _output_chartjson_results_if_present(self, api, step_result):
     results = \
