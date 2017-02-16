@@ -126,6 +126,17 @@ class MonitoringStatusReceiver(StatusReceiverMultiService):
           reactor, self.thread_pool, self._flush_and_log_exceptions)
       log.msg('Finished flushing monitoring metrics')
 
+  @staticmethod
+  def callbackInfo(f, args, kwargs):
+    # Return useful information (as a human readable string) about an item
+    # in the reactor call queue.
+    # First: Check if this is a deferred callback.
+    d = getattr(f, 'im_self', None)
+    if d:
+      return repr(d)
+    # Otherwise, just return the __code__ information of the callable.
+    return str(getattr(f, '__code__', 'Unknown'))
+
   @defer.inlineCallbacks
   def updateMetrics(self):
     uptime.set(time.time() - SERVER_STARTED, fields={'master': ''})
@@ -139,8 +150,8 @@ class MonitoringStatusReceiver(StatusReceiverMultiService):
     # Log a few current items in the queue for debugging.
     log.msg('Reactor queue: len=%d [%s, ...]' % (
         len(reactor.threadCallQueue),
-        ', '.join(str(getattr(f, '__code__', 'Unknown'))
-                  for f, _, _ in reactor.threadCallQueue[:10]),
+        ', '.join(self.callbackInfo(f, args, kwargs)
+                  for f, args, kwargs in reactor.threadCallQueue[:10])[:200],
     ))
 
     builder_names = set()
