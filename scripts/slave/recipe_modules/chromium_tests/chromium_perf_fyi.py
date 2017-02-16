@@ -13,7 +13,8 @@ GCLIENT_CONFIG_CTX = DEPS['gclient'].CONFIG_CTX
 SPEC = {
   'builders': {
     'Battor Agent Linux': {
-      'chromium_config': 'chromium_perf',
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
