@@ -133,6 +133,16 @@ class MonitoringStatusReceiver(StatusReceiverMultiService):
     # First: Check if this is a deferred callback.
     d = getattr(f, 'im_self', None)
     if d:
+      if isinstance(d, defer.Deferred):
+        if d.callbacks:
+          # Callbacks contains a list of (success), (errback) callback tuples.
+          callback, _ = d.callbacks[0]
+          # Each callback tuple contains a function, args, kwargs.
+          # We just need the function.
+          cf, _, _ = callback
+          # Print out the code location for the first callback of the
+          # deferred chain.
+          return '<Deferred of %s>' % getattr(cf, '__code__', 'Unknown')
       return repr(d)
     # Otherwise, just return the __code__ information of the callable.
     return str(getattr(f, '__code__', 'Unknown'))
@@ -151,7 +161,7 @@ class MonitoringStatusReceiver(StatusReceiverMultiService):
     log.msg('Reactor queue: len=%d [%s, ...]' % (
         len(reactor.threadCallQueue),
         ', '.join(self.callbackInfo(f, args, kwargs)
-                  for f, args, kwargs in reactor.threadCallQueue[:10])[:200],
+                  for f, args, kwargs in reactor.threadCallQueue[:10])[:300],
     ))
 
     builder_names = set()
