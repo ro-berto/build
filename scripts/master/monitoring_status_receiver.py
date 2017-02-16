@@ -139,8 +139,8 @@ class MonitoringStatusReceiver(StatusReceiverMultiService):
     # Log a few current items in the queue for debugging.
     log.msg('Reactor queue: len=%d [%s, ...]' % (
         len(reactor.threadCallQueue),
-        ', '.join(getattr(f, 'func_name', 'unknown')
-                  for f, _, _ in reactor.threadCallQueue[:10]),
+        ', '.join(str(args[0]) if args else 'unknown'
+                  for _, args, _ in reactor.threadCallQueue[:10]),
     ))
 
     builder_names = set()
