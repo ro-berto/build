@@ -4,6 +4,7 @@
 
 import logging
 import os
+import shutil
 import subprocess
 import sys
 import time
@@ -14,6 +15,28 @@ import requests
 from slave import infra_platform
 
 CLIENT_NAME = 'cipd' + infra_platform.exe_suffix()
+
+
+BINARY_FILE = 0
+# copied from
+#   https://github.com/luci/recipes-py/blob/master/recipe_engine/step_runner.py
+if sys.platform == "win32":
+  BINARY_FILE = os.O_BINARY
+  # Windows has a bad habit of opening a dialog when a console program
+  # crashes, rather than just letting it crash.  Therefore, when a
+  # program crashes on Windows, we don't find out until the build times out.
+  # This code prevents the dialog from appearing, so that we find out
+  # immediately and don't waste time waiting for a human to close the dialog.
+  import ctypes
+  # SetErrorMode(
+  #   SEM_FAILCRITICALERRORS|
+  #   SEM_NOGPFAULTERRORBOX|
+  #   SEM_NOOPENFILEERRORBOX
+  # ).
+  #
+  # For more information, see:
+  # https://msdn.microsoft.com/en-us/library/windows/desktop/ms680621.aspx
+  ctypes.windll.kernel32.SetErrorMode(0x0001|0x0002|0x8000)
 
 
 def _update_client(path, version):
@@ -90,7 +113,7 @@ def _fresh_download(client_path, version):
   chunk_size = 64 * 1024  # 64KB
   if r.headers.get('transfer-encoding', '').lower() == 'chunked':
     chunk_size = None  # this lets requests use the server's chunk sizes
-  fd = os.open(tmp_client, os.O_TRUNC|os.O_WRONLY|os.O_CREAT, 0777)
+  fd = os.open(tmp_client, os.O_TRUNC|os.O_WRONLY|os.O_CREAT|BINARY_FILE, 0777)
   try:
     for data in r.iter_content(chunk_size):
       os.write(fd, data)
@@ -106,7 +129,7 @@ def _fresh_download(client_path, version):
 
   for i in range(7):
     try:
-      os.rename(tmp_client, client_path)
+      shutil.move(tmp_client, client_path)
       return
     except OSError as ex:
       if i == 6:
