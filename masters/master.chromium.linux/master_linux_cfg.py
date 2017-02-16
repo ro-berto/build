@@ -37,7 +37,7 @@ def Update(_config, active_master, c):
           'Linux Builder Trusty (dbg)(32)',
           'Linux Builder Trusty (dbg)',
           'Cast Linux Trusty',
-          'Linux Deterministic',
+          'linux_chromium_clobber_deterministic',
       ]),
   ])
   specs = [
@@ -56,6 +56,7 @@ def Update(_config, active_master, c):
     {'name': 'Linux Builder Trusty (dbg)(32)'},
     {'name': 'Linux Tests Trusty (dbg)(1)'},
     {'name': 'Cast Linux Trusty'},
+    {'name': 'linux_chromium_clobber_deterministic'},
   ]
 
   c['builders'].extend([
@@ -66,9 +67,3 @@ def Update(_config, active_master, c):
         'category': '4linux',
       } for spec in specs
   ])
-  c['builders'].append({
-      'name': 'Linux Deterministic',
-      'factory': m_remote_run('swarming/deterministic_build'),
-      'notify_on_missing': True,
-      'category': '4linux',
-  })
