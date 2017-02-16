@@ -675,7 +675,7 @@
       "WebKit Win - RandomOrder",
       "--step-name",
       "webkit_tests",
-      "--fully-parallel",
+      "--seed=4",
       "--master-name",
       "chromium.fyi",
       "--debug-rwt-logging"

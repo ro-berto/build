@@ -203,7 +203,7 @@ SPEC = {
       ],
       'tests': [
         steps.BlinkTest(extra_args=[
-          '--fully-parallel',
+          '--seed=4',
         ]),
       ],
       'test_results_config': 'staging_server',
@@ -225,7 +225,7 @@ SPEC = {
       ],
       'tests': [
         steps.BlinkTest(extra_args=[
-          '--fully-parallel',
+          '--seed=4',
         ]),
       ],
       'testing': {
@@ -246,7 +246,7 @@ SPEC = {
       ],
       'tests': [
         steps.BlinkTest(extra_args=[
-          '--fully-parallel',
+          '--seed=4',
         ]),
       ],
       'testing': {
