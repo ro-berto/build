@@ -142,6 +142,19 @@
   },
   {
     "cmd": [
+      "flutter.bat",
+      "doctor"
+    ],
+    "cwd": "[START_DIR]\\flutter",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]\\flutter\\dev\\bots\\android_tools",
+      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;%(PATH)s",
+      "PUB_CACHE": "[START_DIR]\\.pub-cache"
+    },
+    "name": "flutter doctor"
+  },
+  {
+    "cmd": [
       "dart.exe",
       "dev/bots/test.dart"
     ],

@@ -149,6 +149,7 @@ def RunSteps(api):
 
     with api.step.context({'cwd': checkout}):
       api.step('download dependencies', [flutter_executable, 'update-packages'])
+      api.step('flutter doctor', [flutter_executable, 'doctor'])
       api.step('test.dart', [dart_executable, 'dev/bots/test.dart'])
 
     BuildExamples(api, git_hash, flutter_executable)
