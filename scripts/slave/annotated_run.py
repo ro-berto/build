@@ -353,6 +353,10 @@ def main(argv):
     # environment.
     properties['path_config'] = properties.get('path_config', 'buildbot')
 
+    properties['bot_id'] = properties['slavename']
+    properties['builder_id'] = 'master.%s:%s' % (
+      properties['mastername'], properties['buildername'])
+
     # Write our annotated_run.py monitoring event.
     monitoring_utils.write_build_monitoring_event(build_data_dir, properties)
 

@@ -152,6 +152,9 @@ def main(argv, stream):
     # Unless it is explicitly specified by a builder, use paths for buildbot
     # environment.
     properties['path_config'] = properties.get('path_config', 'buildbot')
+    properties['bot_id'] = properties['slavename']
+    properties['builder_id'] = 'master.%s:%s' % (
+      properties['mastername'], properties['buildername'])
     LOGGER.info('Using properties: %r', properties)
     properties_file = os.path.join(tempdir, 'remote_run_properties.json')
     with open(properties_file, 'w') as f:

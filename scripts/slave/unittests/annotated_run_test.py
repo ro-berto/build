@@ -36,6 +36,9 @@ MockOptions = collections.namedtuple('MockOptions',
 class AnnotatedRunTest(unittest.TestCase):
   def test_example(self):
     build_properties = {
+      'mastername': 'tryserver.chromium.linux',
+      'buildername': 'builder',
+      'slavename': 'bot42-m1',
       'recipe': 'annotated_run_test',
       'true_prop': True,
       'num_prop': 123,
@@ -104,8 +107,9 @@ class AnnotatedRunExecTest(unittest.TestCase):
         dry_run=False,
         logdog_disable=False)
     self.properties = {
+      'slavename': 'bot42-m1',
       'recipe': 'example/recipe',
-      'mastername': 'master.random',
+      'mastername': 'tryserver.chromium.linux',
       'buildername': 'builder',
     }
     self.rpy_path = os.path.join(env.Build, 'scripts', 'slave', 'recipes.py')
