@@ -174,14 +174,18 @@ _AddBuildSpec('Android arm64 Compile', 'android',
                                      'push_apps_to_background_apk',
                                      'system_webview_apk',
                                      'system_webview_shell_apk',])
-_AddBuildSpec('Win Builder', 'win', target_bits=32, enable_swarming=True)
-_AddBuildSpec( \
-  'Win x64 Builder', 'win', add_to_bisect=True, enable_swarming=True)
-_AddBuildSpec( \
+_AddBuildSpec(
+  'Win Builder', 'win', target_bits=32, enable_swarming=True,
+  force_exparchive=True)
+_AddBuildSpec(
+  'Win x64 Builder', 'win', add_to_bisect=True, enable_swarming=True,
+  force_exparchive=True)
+_AddBuildSpec(
   'Mac Builder', 'mac', add_to_bisect=True, enable_swarming=True,
   force_exparchive=True)
-_AddBuildSpec( \
-  'Linux Builder', 'linux', add_to_bisect=True, enable_swarming=True)
+_AddBuildSpec(
+  'Linux Builder', 'linux', add_to_bisect=True, enable_swarming=True,
+  force_exparchive=True)
 
 
 # 32 bit android
