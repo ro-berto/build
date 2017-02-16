@@ -4,6 +4,7 @@
 
 import collections
 import itertools
+import os
 import time
 
 import buildbot.status.results
@@ -105,6 +106,7 @@ class MonitoringStatusReceiver(StatusReceiverMultiService):
     self.status.subscribe(self)
 
     self.thread_pool.start()
+    log.msg('MonitoringStatusReceiver: starting looping call')
     self.loop.start(60, now=False)
 
   def stopService(self):
@@ -134,21 +136,27 @@ class MonitoringStatusReceiver(StatusReceiverMultiService):
     d = getattr(f, 'im_self', None)
     if d:
       if isinstance(d, defer.Deferred):
-        if d.callbacks:
-          # Callbacks contains a list of (success), (errback) callback tuples.
-          callback, _ = d.callbacks[0]
-          # Each callback tuple contains a function, args, kwargs.
-          # We just need the function.
-          cf, _, _ = callback
-          # Print out the code location for the first callback of the
-          # deferred chain.
-          return '<Deferred of %s>' % getattr(cf, '__code__', 'Unknown')
+        callchain = []
+        for filename, line, func_name, _ in d._creator:
+          # Only log things that led to this callchain from the buildbot
+          # directory.
+          if ('buildbot_8_4p1' in filename
+              or os.path.join('scripts', 'master') in filename):
+            shortname = os.path.basename(filename)
+            callchain.append('%s:%d:%s' % (shortname, line, func_name))
+        return str(callchain)
       return repr(d)
     # Otherwise, just return the __code__ information of the callable.
     return str(getattr(f, '__code__', 'Unknown'))
 
   @defer.inlineCallbacks
   def updateMetrics(self):
+    # Log a few current items in the queue for debugging.
+    log.msg('Reactor queue: len=%d ==Items:\n  %s' % (
+        len(reactor.threadCallQueue),
+        '\n  '.join(self.callbackInfo(f, args, kwargs)
+                  for f, args, kwargs in reactor.threadCallQueue[:20]),
+    ))
     uptime.set(time.time() - SERVER_STARTED, fields={'master': ''})
     accepting_builds.set(bool(self.status.master.botmaster.brd.running),
                          fields={'master': ''})
@@ -157,12 +165,6 @@ class MonitoringStatusReceiver(StatusReceiverMultiService):
     pool_waiting.set(len(pool.waiters), fields={'master': ''})
     pool_working.set(len(pool.working), fields={'master': ''})
     reactor_queue.set(len(reactor.threadCallQueue))
-    # Log a few current items in the queue for debugging.
-    log.msg('Reactor queue: len=%d [%s, ...]' % (
-        len(reactor.threadCallQueue),
-        ', '.join(self.callbackInfo(f, args, kwargs)
-                  for f, args, kwargs in reactor.threadCallQueue[:10])[:300],
-    ))
 
     builder_names = set()
     for builder_name in self.status.getBuilderNames():

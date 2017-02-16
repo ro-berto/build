@@ -266,6 +266,7 @@ class Deferred:
         if self.debug:
             self._debugInfo = DebugInfo()
             self._debugInfo.creator = traceback.format_stack()[:-1]
+        self._creator = traceback.extract_stack()[:-1]
 
 
     def addCallbacks(self, callback, errback=None,
