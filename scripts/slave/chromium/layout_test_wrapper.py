@@ -98,10 +98,12 @@ def layout_test(options, args):
     command.extend(['--batch-size', options.batch_size])
   if options.order:
     command.extend(['--order', options.order])
+  if options.shard_index:
+    command.extend(['--shard-index', str(options.shard_index)])
+  if options.total_shards:
+    command.extend(['--total-shards', str(options.total_shards)])
   if options.seed:
-    command.extend(['--seed', options.seed])
-  if options.run_part:
-    command.extend(['--run-part', options.run_part])
+    command.extend(['--seed', str(options.seed)])
   if options.builder_name:
     command.extend(['--builder-name', options.builder_name])
   if options.build_number:
@@ -221,10 +223,14 @@ def main():
                            help=('Seed to use for random test order. '
                                  'Only applicable in combination with '
                                  '--order=random.'))
-  option_parser.add_option('--run-part',
-                           default=None,
-                           help=('Run a specified part (n:l), the nth of lth'
-                                 ', of the layout tests'))
+  option_parser.add_option("--total-shards", type='int', default=None,
+      help=('Total number of shards being used for this test run. '
+            'Must be used with --shard-index. '
+            '(The user of this script is responsible for spawning '
+            'all of the shards.)'))
+  option_parser.add_option("--shard-index", type='int', default=None,
+      help=('Shard index [0..total_shards) of this test run. '
+            'Must be used with --total-shards.'))
   option_parser.add_option('--builder-name',
                            default=None,
                            help='The name of the builder running this script.')
