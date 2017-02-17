@@ -217,10 +217,7 @@ def high_level_ensure_cipd_client(b_dir, mastername):
   Will use mastername to determine which version of the client to ensure. See
   MASTER_VERSION in this module to see how the version lookup works.
 
-  Unlike ensure_cipd_client, all exceptions (including SystemExit) are caught
-  and logged.
-
-  Returns True iff the client is usable and was put in $PATH.
+  Raises an exception if this fails.
   """
   LOGGER.info('bootstrapping CIPD')
 
@@ -234,11 +231,4 @@ def high_level_ensure_cipd_client(b_dir, mastername):
     LOGGER.info("using canary revision (latest)")
     cipd_version = 'latest'
 
-  try:
-    ensure_cipd_client(cipd_dir, cipd_version)
-    return True
-  except Exception:
-    LOGGER.exception('Caught Exception in high_level_ensure_cipd_client')
-  except SystemExit:
-    LOGGER.exception('Caught SystemExit in high_level_ensure_cipd_client')
-  return False
+  ensure_cipd_client(cipd_dir, cipd_version)
