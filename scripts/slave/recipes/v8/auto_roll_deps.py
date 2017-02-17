@@ -157,7 +157,7 @@ def RunSteps(api):
            '--author', 'v8-autoroll@chromium.org',
            '--reviewer',
            'hablich@chromium.org,machenbach@chromium.org,'
-           'littledan@chromium.org,vogelheim@chromium.org',
+           'kozyatinskiy@chromium.org,vogelheim@chromium.org',
            '--roll',
            '--json-output', api.json.output(),
            '--work-dir', api.path['start_dir'].join('workdir')],

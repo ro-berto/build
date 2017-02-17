@@ -186,7 +186,7 @@
       "--author",
       "v8-autoroll@chromium.org",
       "--reviewer",
-      "hablich@chromium.org,machenbach@chromium.org,littledan@chromium.org,vogelheim@chromium.org",
+      "hablich@chromium.org,machenbach@chromium.org,kozyatinskiy@chromium.org,vogelheim@chromium.org",
       "--roll",
       "--json-output",
       "/path/to/tmp/json",
