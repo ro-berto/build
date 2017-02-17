@@ -167,36 +167,6 @@
     "name": "test.dart"
   },
   {
-    "cmd": [
-      "flutter.bat",
-      "-v",
-      "build",
-      "apk"
-    ],
-    "cwd": "[START_DIR]\\flutter\\examples/stocks",
-    "env": {
-      "ANDROID_HOME": "[START_DIR]\\flutter\\dev\\bots\\android_tools",
-      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;%(PATH)s",
-      "PUB_CACHE": "[START_DIR]\\.pub-cache"
-    },
-    "name": "flutter build apk stocks"
-  },
-  {
-    "cmd": [
-      "flutter.bat",
-      "-v",
-      "build",
-      "apk"
-    ],
-    "cwd": "[START_DIR]\\flutter\\examples/flutter_gallery",
-    "env": {
-      "ANDROID_HOME": "[START_DIR]\\flutter\\dev\\bots\\android_tools",
-      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;%(PATH)s",
-      "PUB_CACHE": "[START_DIR]\\.pub-cache"
-    },
-    "name": "flutter build apk flutter_gallery"
-  },
-  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0
