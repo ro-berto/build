@@ -702,9 +702,10 @@ class iOSApi(recipe_api.RecipeApi):
         exit_code = (swarming_summary.get('exit_codes') or [None])[0]
 
         # Link to isolate file browser for files emitted by the test.
-        if swarming_summary.get('isolated_out', {}).get('view_url'):
-          step_result.presentation.links['test data'] = (
-              swarming_summary['isolated_out']['view_url'])
+        if swarming_summary.get('isolated_out'):
+          if swarming_summary['isolated_out'].get('view_url'):
+            step_result.presentation.links['test data'] = (
+                swarming_summary['isolated_out']['view_url'])
 
         # Interpret the result and set the display appropriately.
         if state == self.m.swarming.State.COMPLETED and exit_code is not None:
