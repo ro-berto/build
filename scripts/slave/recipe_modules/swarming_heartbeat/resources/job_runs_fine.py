@@ -86,7 +86,7 @@ def main():
     pool = 'Chrome'
 
   dimensions_to_test = (
-    {'os': 'Linux', 'pool': pool},
+    {'os': 'Ubuntu', 'pool': pool},
     {'os': 'Mac', 'pool': pool},
     {'os': 'Windows', 'pool': pool},
   )
