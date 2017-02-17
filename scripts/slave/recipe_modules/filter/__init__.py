@@ -16,3 +16,7 @@ DEPS = [
   'recipe_engine/step',
   'depot_tools/tryserver',
 ]
+
+
+# TODO(phajdan.jr): provide coverage (http://crbug.com/693058).
+DISABLE_STRICT_COVERAGE = True
