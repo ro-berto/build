@@ -42,6 +42,8 @@
     ],
     "cwd": "[BUILDER_CACHE]/Android_Nexus5X_WebView_Perf__3_",
     "env": {
+      "GIT_HTTP_LOW_SPEED_LIMIT ": "1000",
+      "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "bot_update",

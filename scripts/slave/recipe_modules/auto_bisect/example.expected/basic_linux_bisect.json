@@ -19,6 +19,8 @@
       "--output_manifest"
     ],
     "env": {
+      "GIT_HTTP_LOW_SPEED_LIMIT ": "1000",
+      "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "bot_update",
@@ -1086,6 +1088,8 @@
     ],
     "cwd": "[START_DIR]",
     "env": {
+      "GIT_HTTP_LOW_SPEED_LIMIT ": "1000",
+      "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "Gathering reference values.bot_update",
@@ -1859,6 +1863,8 @@
     ],
     "cwd": "[START_DIR]",
     "env": {
+      "GIT_HTTP_LOW_SPEED_LIMIT ": "1000",
+      "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "Gathering reference values.bot_update (2)",
@@ -2792,6 +2798,8 @@
     ],
     "cwd": "[START_DIR]",
     "env": {
+      "GIT_HTTP_LOW_SPEED_LIMIT ": "1000",
+      "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "Bisecting revision.bot_update",
@@ -3999,6 +4007,8 @@
     ],
     "cwd": "[START_DIR]",
     "env": {
+      "GIT_HTTP_LOW_SPEED_LIMIT ": "1000",
+      "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "Bisecting revision.bot_update (2)",
@@ -4526,6 +4536,8 @@
     ],
     "cwd": "[START_DIR]",
     "env": {
+      "GIT_HTTP_LOW_SPEED_LIMIT ": "1000",
+      "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "Bisecting revision.bot_update (3)",
@@ -5053,6 +5065,8 @@
     ],
     "cwd": "[START_DIR]",
     "env": {
+      "GIT_HTTP_LOW_SPEED_LIMIT ": "1000",
+      "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "Bisecting revision.bot_update (4)",
@@ -5782,6 +5796,8 @@
     ],
     "cwd": "[START_DIR]",
     "env": {
+      "GIT_HTTP_LOW_SPEED_LIMIT ": "1000",
+      "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "Bisecting revision.bot_update (5)",
@@ -6511,6 +6527,8 @@
     ],
     "cwd": "[START_DIR]",
     "env": {
+      "GIT_HTTP_LOW_SPEED_LIMIT ": "1000",
+      "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "Bisecting revision.bot_update (6)",
@@ -7240,6 +7258,8 @@
     ],
     "cwd": "[START_DIR]",
     "env": {
+      "GIT_HTTP_LOW_SPEED_LIMIT ": "1000",
+      "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "Bisecting revision.bot_update (7)",

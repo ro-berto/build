@@ -106,6 +106,8 @@
     ],
     "cwd": "[BUILDER_CACHE]/android_webview_nexus6_aosp_perf_bisect",
     "env": {
+      "GIT_HTTP_LOW_SPEED_LIMIT ": "1000",
+      "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "bot_update",
@@ -850,6 +852,8 @@
     ],
     "cwd": "[BUILDER_CACHE]/android_webview_nexus6_aosp_perf_bisect",
     "env": {
+      "GIT_HTTP_LOW_SPEED_LIMIT ": "1000",
+      "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "De-applying patch.bot_update (without patch)",
@@ -1307,6 +1311,8 @@
     ],
     "cwd": "[BUILDER_CACHE]/android_webview_nexus6_aosp_perf_bisect",
     "env": {
+      "GIT_HTTP_LOW_SPEED_LIMIT ": "1000",
+      "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "bot_update (2)",

@@ -43,6 +43,8 @@
     "cwd": "[CUSTOM_/_B_WORK]",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GIT_HTTP_LOW_SPEED_LIMIT ": "1000",
+      "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]",
       "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts"
     },
@@ -142,6 +144,8 @@
       "CC": "/usr/bin/clang",
       "CHROME_HEADLESS": "1",
       "CXX": "/usr/bin/clang++",
+      "GIT_HTTP_LOW_SPEED_LIMIT ": "1000",
+      "GIT_HTTP_LOW_SPEED_TIME": "300",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_warnings_as_errors=0",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]",
       "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
@@ -184,6 +188,8 @@
       "CC": "/usr/bin/clang",
       "CHROME_HEADLESS": "1",
       "CXX": "/usr/bin/clang++",
+      "GIT_HTTP_LOW_SPEED_LIMIT ": "1000",
+      "GIT_HTTP_LOW_SPEED_TIME": "300",
       "GYP_DEFINES": "skia_arch_type=arm skia_clang_build=1 skia_warnings_as_errors=0",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]",
       "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",

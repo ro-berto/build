@@ -42,6 +42,8 @@
     ],
     "cwd": "[BUILDER_CACHE]/mac",
     "env": {
+      "GIT_HTTP_LOW_SPEED_LIMIT ": "1000",
+      "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "bot_update",
@@ -313,6 +315,8 @@
     ],
     "cwd": "[BUILDER_CACHE]/mac",
     "env": {
+      "GIT_HTTP_LOW_SPEED_LIMIT ": "1000",
+      "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "test r4.bot_update",
@@ -1127,6 +1131,8 @@
     ],
     "cwd": "[BUILDER_CACHE]/mac",
     "env": {
+      "GIT_HTTP_LOW_SPEED_LIMIT ": "1000",
+      "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "test r5.bot_update",
@@ -1924,6 +1930,8 @@
     ],
     "cwd": "[BUILDER_CACHE]/mac",
     "env": {
+      "GIT_HTTP_LOW_SPEED_LIMIT ": "1000",
+      "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "test r6.bot_update",
@@ -2721,6 +2729,8 @@
     ],
     "cwd": "[BUILDER_CACHE]/mac",
     "env": {
+      "GIT_HTTP_LOW_SPEED_LIMIT ": "1000",
+      "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "test r2.bot_update",
@@ -3516,6 +3526,8 @@
     ],
     "cwd": "[BUILDER_CACHE]/mac",
     "env": {
+      "GIT_HTTP_LOW_SPEED_LIMIT ": "1000",
+      "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "test r3.bot_update",
