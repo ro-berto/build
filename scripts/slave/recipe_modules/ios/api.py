@@ -233,7 +233,6 @@ class iOSApi(recipe_api.RecipeApi):
     Args:
       analyze: Whether to use the gyp_chromium analyzer to only build affected
         targets and filter out unaffected tests.
-      allow_analyzer: Allows use of analyze.
       default_gn_args_path: Path to default gn args file to import with
         setup-gn.py.
       mb_path: Custom path to MB. Uses the default if unspecified.
