@@ -53,7 +53,7 @@ def GenTests(api):
     ))
 
   yield (
-    api.test('linux failed') +
+    api.test('linux_fail') +
     api.properties(
       mastername = 'client.wasm.llvm',
       buildername = 'linux',
