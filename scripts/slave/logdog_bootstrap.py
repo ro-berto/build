@@ -113,7 +113,7 @@ _PLATFORM_CONFIG = {
 # Loaded by '_get_params'.
 Params = collections.namedtuple('Params', (
     'project', 'cipd_tag', 'api', 'mastername', 'buildername', 'buildnumber',
-    'logdog_only', 'cipd_canary',
+    'logdog_only',
 ))
 
 
@@ -225,7 +225,6 @@ def _get_params(properties):
     'enabled': True,
     'cipd_tag': '$stable',
     'logdog_only': False,
-    'cipd_canary': False,
   }
   for bn in (buildername, '*'):
     bn_map = master_config.get(bn)
@@ -254,7 +253,6 @@ def _get_params(properties):
       buildername=buildername,
       buildnumber=buildnumber,
       logdog_only=builder_map['logdog_only'],
-      cipd_canary=builder_map['cipd_canary'],
   )
 
 
@@ -320,11 +318,10 @@ def _get_service_account_json(opts, credential_path):
                        'Tried: %s' % (credential_path,))
 
 
-def _install_cipd(path, canary, *binaries):
+def _install_cipd(path, *binaries):
   """Returns (list): The paths to the binaries.
 
-  This method bootstraps CIPD in "path", installing the packages specified
-  by "binaries".
+  This method installs the packages specified by "binaries" in path.
 
   Args:
     path (str): The CIPD installation root.
@@ -343,8 +340,6 @@ def _install_cipd(path, canary, *binaries):
       os.path.join(env.Build, 'scripts', 'slave', 'cipd.py'),
       '--dest-directory', path,
   ] + (['--verbose'] * verbosity)
-  if canary:
-    cmd += ['--canary']
 
   for b in binaries:
     cmd += ['-P', '%s@%s' % (b.package.name, b.package.version)]
@@ -467,7 +462,7 @@ def bootstrap(rt, opts, basedir, tempdir, properties, cmd):
 
   # Install our Butler/Annotee packages from CIPD.
   cipd_path = os.path.join(basedir, '.recipe_cipd')
-  butler, annotee = _install_cipd(cipd_path, params.cipd_canary,
+  butler, annotee = _install_cipd(cipd_path,
       # butler
       cipd.CipdBinary(
           package=cipd.CipdPackage(name=plat.butler, version=params.cipd_tag),

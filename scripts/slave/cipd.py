@@ -34,30 +34,7 @@ CipdPackage = collections.namedtuple('CipdPackage', ('name', 'version'))
 CipdBinary = collections.namedtuple('CipdBinary', ('package', 'relpath'))
 
 
-def bootstrap(path, canary=False):
-  bootstrap_path = os.path.join(
-      common.env.Build, 'scripts', 'slave', 'cipd_bootstrap.py')
-
-  json_output = os.path.join(path, 'cipd_bootstrap.json')
-
-  cmd = [
-    sys.executable,
-    bootstrap_path,
-    '--platform', slave.infra_platform.cipd_platform_arch(),
-    '--dest-directory', path,
-    '--json-output', json_output,
-  ]
-  if canary:
-    cmd += ['--canary']
-
-  LOGGER.debug('Installing CIPD client: %s', cmd)
-  subprocess.check_call(cmd)
-
-  with open(json_output, 'r') as fd:
-    return json.load(fd)['executable']
-
-
-def cipd_ensure(client, path, packages, service_account_json=None,
+def cipd_ensure(path, packages, service_account_json=None,
                 json_output=None):
   manifest_path = os.path.join(path, 'cipd_manifest.txt')
   with open(manifest_path, 'w') as fd:
@@ -67,9 +44,9 @@ def cipd_ensure(client, path, packages, service_account_json=None,
       fd.write('%s %s\n' % (pkg.name, pkg.version))
 
   cmd = [
-      client,
+      'cipd'+slave.infra_platform.exe_suffix(),
       'ensure',
-      '-list', manifest_path,
+      '-ensure-file', manifest_path,
       '-root', path,
   ]
   if service_account_json:
@@ -104,9 +81,6 @@ def main(argv):
                       help='Output package results to a JSON file.')
   parser.add_argument('--service-account-json',
                       help='If specified, use this service account JSON.')
-  parser.add_argument('--canary', action='store_true',
-                      help='If true, use the canary CIPD client version in '
-                           'cipd_bootstrap.py.')
   opts = parser.parse_args(argv[1:])
 
   # Verbosity.
@@ -122,16 +96,12 @@ def main(argv):
     LOGGER.info('Creating destination directory: %s', opts.dest_directory)
     os.makedirs(opts.dest_directory)
 
-  LOGGER.debug('Bootstrapping CIPD client...')
-  client = bootstrap(opts.dest_directory, canary=opts.canary)
-
   if LOGGER.isEnabledFor(logging.INFO):
-    LOGGER.info('CIPD client [%s] ensuring %d package(s)...',
-        client, len(opts.package))
+    LOGGER.info('CIPD ensuring %d package(s)...', len(opts.package))
     for pkg in opts.package:
       LOGGER.info('Loading package: %s @ %s', pkg.name, pkg.version)
 
-  cipd_ensure(client, opts.dest_directory, opts.package,
+  cipd_ensure(opts.dest_directory, opts.package,
               service_account_json=opts.service_account_json,
               json_output=opts.json_output)
   return 0

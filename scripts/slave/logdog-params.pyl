@@ -49,7 +49,6 @@
       '*': {
         'cipd_tag': '$canary',
         'logdog_only': True,
-        'cipd_canary': True,
       },
     },
     'chromium.infra.cron': {},
