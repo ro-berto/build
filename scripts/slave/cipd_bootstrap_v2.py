@@ -214,6 +214,8 @@ def ensure_cipd_client(path, version):
 def high_level_ensure_cipd_client(b_dir, mastername):
   """Ensures that <b_dir>/cipd_client/ contains the cipd (or cipd.exe) client.
 
+  Also sets the $CIPD_CACHE_DIR envvar to <b_dir>/c/cipd.
+
   Will use mastername to determine which version of the client to ensure. See
   MASTER_VERSION in this module to see how the version lookup works.
 
@@ -231,4 +233,5 @@ def high_level_ensure_cipd_client(b_dir, mastername):
     LOGGER.info("using canary revision (latest)")
     cipd_version = 'latest'
 
+  os.environ['CIPD_CACHE_DIR'] = os.path.join(b_dir, 'c', 'cipd')
   ensure_cipd_client(cipd_dir, cipd_version)
