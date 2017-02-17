@@ -64,7 +64,7 @@ def RunSteps(api):
     controller = api.legion.create_controller(
         name=name,
         path=api.path['checkout'].join(*config['controller_path']),
-        os='Linux',
+        os='Ubuntu',
         config_vars=config['config_vars'],
         controller_vars=config['controller_vars']
     )
