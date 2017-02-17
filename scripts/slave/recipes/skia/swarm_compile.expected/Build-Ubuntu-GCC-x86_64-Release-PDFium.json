@@ -45,7 +45,7 @@
     "cwd": "[CUSTOM_/_B_WORK]",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GIT_HTTP_LOW_SPEED_LIMIT ": "1000",
+      "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]",
       "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts"
@@ -131,7 +131,7 @@
     "env": {
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
-      "GIT_HTTP_LOW_SPEED_LIMIT ": "1000",
+      "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_warnings_as_errors=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]",
@@ -152,7 +152,7 @@
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
       "CHROMIUM_BUILDTOOLS_PATH": "[CUSTOM_/_B_WORK]/pdfium/buildtools",
-      "GIT_HTTP_LOW_SPEED_LIMIT ": "1000",
+      "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_warnings_as_errors=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]",
@@ -190,7 +190,7 @@
     "env": {
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
-      "GIT_HTTP_LOW_SPEED_LIMIT ": "1000",
+      "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_warnings_as_errors=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]",
@@ -210,7 +210,7 @@
     "env": {
       "BUILDTYPE": "Release",
       "CHROME_HEADLESS": "1",
-      "GIT_HTTP_LOW_SPEED_LIMIT ": "1000",
+      "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "GYP_DEFINES": "skia_arch_type=x86_64 skia_warnings_as_errors=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]",
