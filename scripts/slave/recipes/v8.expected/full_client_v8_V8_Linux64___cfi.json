@@ -493,120 +493,25 @@
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
       "[START_DIR]/v8/tools/swarming_client",
-      "exparchive",
+      "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "--isolate",
-      "[START_DIR]/v8/out/Release/benchmarks.isolate",
-      "--isolated",
-      "[START_DIR]/v8/out/Release/benchmarks.isolated"
+      "[START_DIR]/v8/out/Release/benchmarks.isolated.gen.json",
+      "[START_DIR]/v8/out/Release/bot_default.isolated.gen.json",
+      "[START_DIR]/v8/out/Release/mozilla.isolated.gen.json",
+      "[START_DIR]/v8/out/Release/optimize_for_size.isolated.gen.json",
+      "[START_DIR]/v8/out/Release/test262.isolated.gen.json"
     ],
-    "name": "isolate benchmarks",
+    "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"benchmarks\": \"[dummy hash for benchmarks]\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[START_DIR]/v8/tools/swarming_client",
-      "exparchive",
-      "--dump-json",
-      "/path/to/tmp/json",
-      "--isolate-server",
-      "https://isolateserver.appspot.com",
-      "--verbose",
-      "--isolate",
-      "[START_DIR]/v8/out/Release/bot_default.isolate",
-      "--isolated",
-      "[START_DIR]/v8/out/Release/bot_default.isolated"
-    ],
-    "name": "isolate bot_default",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"bot_default\": \"[dummy hash for bot_default]\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[START_DIR]/v8/tools/swarming_client",
-      "exparchive",
-      "--dump-json",
-      "/path/to/tmp/json",
-      "--isolate-server",
-      "https://isolateserver.appspot.com",
-      "--verbose",
-      "--isolate",
-      "[START_DIR]/v8/out/Release/mozilla.isolate",
-      "--isolated",
-      "[START_DIR]/v8/out/Release/mozilla.isolated"
-    ],
-    "name": "isolate mozilla",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"mozilla\": \"[dummy hash for mozilla]\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[START_DIR]/v8/tools/swarming_client",
-      "exparchive",
-      "--dump-json",
-      "/path/to/tmp/json",
-      "--isolate-server",
-      "https://isolateserver.appspot.com",
-      "--verbose",
-      "--isolate",
-      "[START_DIR]/v8/out/Release/optimize_for_size.isolate",
-      "--isolated",
-      "[START_DIR]/v8/out/Release/optimize_for_size.isolated"
-    ],
-    "name": "isolate optimize_for_size",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"optimize_for_size\": \"[dummy hash for optimize_for_size]\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[START_DIR]/v8/tools/swarming_client",
-      "exparchive",
-      "--dump-json",
-      "/path/to/tmp/json",
-      "--isolate-server",
-      "https://isolateserver.appspot.com",
-      "--verbose",
-      "--isolate",
-      "[START_DIR]/v8/out/Release/test262.isolate",
-      "--isolated",
-      "[START_DIR]/v8/out/Release/test262.isolated"
-    ],
-    "name": "isolate test262",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"benchmarks\": \"[dummy hash for benchmarks]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"bot_default\": \"[dummy hash for bot_default]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"mozilla\": \"[dummy hash for mozilla]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"optimize_for_size\": \"[dummy hash for optimize_for_size]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"test262\": \"[dummy hash for test262]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"

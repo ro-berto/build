@@ -394,20 +394,12 @@ class V8Api(recipe_api.RecipeApi):
       if self.bot_config.get('triggers_proxy', False):
         tests_to_isolate.append('perf')
 
-      # TODO(machenbach): We are currently dogfooding this new feature. It
-      # should get switched on for more builders and ultimately by default.
-      always_use_exparchive = False
-      if (self.m.properties['mastername'] == 'client.v8' and
-          self.m.properties['buildername'] == 'V8 Linux64 - cfi'):
-        always_use_exparchive = True
-
       if tests_to_isolate:
         self.m.isolate.isolate_tests(
             self.m.chromium.output_dir,
             targets=sorted(list(set(tests_to_isolate))),
             verbose=True,
             set_swarm_hashes=False,
-            always_use_exparchive=always_use_exparchive,
         )
         if self.should_upload_build:
           self.upload_isolated_json()
