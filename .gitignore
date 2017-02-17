@@ -48,6 +48,8 @@ twistd.pid
 /site_config/.bot_password
 /site_config/.boto
 /site_config/.boto.puppet-bak
+/site_config/.rietveld_client_email
+/site_config/.rietveld_secret_key
 /slave/*/
 /slave/info/*
 !/slave/cert/
