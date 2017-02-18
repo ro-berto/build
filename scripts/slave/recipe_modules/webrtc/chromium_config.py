@@ -17,7 +17,8 @@ def webrtc_default(c):
 def webrtc_android_perf(c):
   if c.BUILD_CONFIG != 'Release':
     raise BadConf('Perf bots must use Release configs!') # pragma: no cover
-  c.compile_py.default_targets = ['webrtc_perf_tests']
+  c.compile_py.default_targets = ['webrtc_perf_tests',
+                                  'AppRTCMobileTestStubbedVideoIO']
 
 @CONFIG_CTX(includes=['webrtc_default'])
 def webrtc_desktop_perf(c):
