@@ -59,7 +59,6 @@ def RunSteps(api, platform):
 
   # The dashboard unit tests depend on Python modules in the App Engine SDK,
   # and the unit test runner script assumes that the SDK is in PYTHONPATH.
-  api.cipd.install_client()
   sdk_path = api.path['start_dir'].join('google_appengine')
   api.gae_sdk.fetch(api.gae_sdk.PLAT_PYTHON, sdk_path)
   app_engine_sdk_path = api.path.pathsep.join([

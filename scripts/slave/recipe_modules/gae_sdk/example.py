@@ -12,8 +12,6 @@ DEPS = [
 
 
 def RunSteps(api):
-  api.cipd.install_client()
-
   for plat in api.gae_sdk.platforms:
     out = api.gae_sdk.package_repo_resource(
         'gae_sdk', '%s_%s' % (plat, api.platform.name))

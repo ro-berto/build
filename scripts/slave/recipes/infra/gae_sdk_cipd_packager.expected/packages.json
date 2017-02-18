@@ -1,27 +1,5 @@
 [
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::cipd]/resources/bootstrap.py",
-      "--platform",
-      "linux-amd64",
-      "--dest-directory",
-      "[START_DIR]/cipd",
-      "--json-output",
-      "/path/to/tmp/json"
-    ],
-    "name": "install cipd",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@cipd instance_id: 40-chars-fake-of-the-package-instance_id@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"executable\": \"[START_DIR]/cipd/cipd\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"instance_id\": \"40-chars-fake-of-the-package-instance_id\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
     "cmd": [],
     "name": "Sync go/linux-386"
   },
@@ -45,7 +23,7 @@
   },
   {
     "cmd": [
-      "[START_DIR]/cipd/cipd",
+      "cipd",
       "search",
       "infra/gae_sdk/go/linux-386",
       "-tag",
@@ -109,7 +87,7 @@
   },
   {
     "cmd": [
-      "[START_DIR]/cipd/cipd",
+      "cipd",
       "search",
       "infra/gae_sdk/go/linux-amd64",
       "-tag",
@@ -159,7 +137,7 @@
   },
   {
     "cmd": [
-      "[START_DIR]/cipd/cipd",
+      "cipd",
       "pkg-build",
       "-in",
       "[TMP_BASE]/gae_sdk_tmp_2/unpack/go_appengine",
@@ -186,7 +164,7 @@
   },
   {
     "cmd": [
-      "[START_DIR]/cipd/cipd",
+      "cipd",
       "pkg-register",
       "[TMP_BASE]/gae_sdk_package_tmp_1/gae_sdk_go_linux-amd64.pkg",
       "-json-output",
@@ -234,7 +212,7 @@
   },
   {
     "cmd": [
-      "[START_DIR]/cipd/cipd",
+      "cipd",
       "search",
       "infra/gae_sdk/go/mac-amd64",
       "-tag",
@@ -298,7 +276,7 @@
   },
   {
     "cmd": [
-      "[START_DIR]/cipd/cipd",
+      "cipd",
       "search",
       "infra/gae_sdk/python/all",
       "-tag",
@@ -348,7 +326,7 @@
   },
   {
     "cmd": [
-      "[START_DIR]/cipd/cipd",
+      "cipd",
       "pkg-build",
       "-in",
       "[TMP_BASE]/gae_sdk_tmp_3/unpack/google_appengine",
@@ -375,7 +353,7 @@
   },
   {
     "cmd": [
-      "[START_DIR]/cipd/cipd",
+      "cipd",
       "pkg-register",
       "[TMP_BASE]/gae_sdk_package_tmp_1/gae_sdk_python_all.pkg",
       "-json-output",

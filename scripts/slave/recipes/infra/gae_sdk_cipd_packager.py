@@ -25,8 +25,6 @@ _CIPD_CREDENTIAL_PATH = ('/creds/service_accounts/'
 def RunSteps(api):
   pb = _PackageBuilder(api)
 
-  # Make sure the CIPD client is installed.
-  api.cipd.install_client()
   api.cipd.set_service_account_credentials(_CIPD_CREDENTIAL_PATH)
 
   # Iterate over all of the GAE SDK packages and build any that don't exist.
