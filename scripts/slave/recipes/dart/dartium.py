@@ -15,7 +15,7 @@ DEPS = [
 
 def RunSteps(api):
   builder_name = api.properties.get('buildername')
-  gyp_defines = ['component=static_library', 'linux_strip_binary']
+  gyp_defines = ['component=static_library', 'linux_strip_binary=1']
   if '-win-' in builder_name:
     gyp_defines.append('fastbuild=1')
   if '-ia32-' in builder_name:

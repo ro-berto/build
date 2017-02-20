@@ -50,7 +50,7 @@
     ],
     "cwd": "[START_DIR]\\src/dart",
     "env": {
-      "GYP_DEFINES": "component=static_library linux_strip_binary fastbuild=1 target_arch=ia32",
+      "GYP_DEFINES": "component=static_library linux_strip_binary=1 fastbuild=1 target_arch=ia32",
       "GYP_GENERATORS": "ninja",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -75,7 +75,7 @@
     ],
     "cwd": "[START_DIR]\\src",
     "env": {
-      "GYP_DEFINES": "component=static_library linux_strip_binary fastbuild=1 target_arch=ia32",
+      "GYP_DEFINES": "component=static_library linux_strip_binary=1 fastbuild=1 target_arch=ia32",
       "GYP_GENERATORS": "ninja"
     },
     "name": "build dartium"
