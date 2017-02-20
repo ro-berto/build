@@ -142,6 +142,10 @@ def walk_and_filter(dir_path, platform_name):
       if os.path.islink(os.path.join(root, d)):
         result.append(os.path.join(relative_root, d))
 
+        # There is no need to walk through symlinks pointing to directories,
+        # as every link will be copied prior to creating an archive.
+        dirnames.remove(d)
+
     # Filter out unneeded files.
     for filename in filenames:
       # Filter files by filename pattern.

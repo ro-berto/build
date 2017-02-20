@@ -665,11 +665,16 @@ def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
     dirname, basename = os.path.split(needed_file)
     try:
       if os.path.isdir(src_path):
+        dst_path = os.path.join(archive_dir, needed_file)
         if WIN_LINK_FUNC:
-          WIN_LINK_FUNC(src_path, os.path.join(archive_dir, needed_file))
+          WIN_LINK_FUNC(src_path, dst_path)
         else:
-          shutil.copytree(src_path, os.path.join(archive_dir, needed_file),
-                          symlinks=True)
+          if os.path.islink(src_path):
+            # Need to re-create symlink at dst_path to preserve build structure.
+            # Otherwise shutil.copytree copies whole dir (crbug.com/693624#c35).
+            os.symlink(os.readlink(src_path), dst_path)
+          else:
+            shutil.copytree(src_path, dst_path, symlinks=True)
       elif dirname != '' and basename != '':
         dest_dir = os.path.join(archive_dir, dirname)
         MaybeMakeDirectory(dest_dir)
