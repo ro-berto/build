@@ -154,7 +154,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/cipd/goma",
+      "[CACHE]/goma_client",
       "-ensure-file",
       "infra/tools/cloudtail/mac-amd64 goma_recipe_module\ninfra_internal/goma/client/mac-amd64 candidate",
       "-json-output",
@@ -208,7 +208,7 @@
       "--config-file",
       "[BUILDER_CACHE]/ios/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[CACHE]/cipd/goma",
+      "[CACHE]/goma_client",
       "//out/Release-iphoneos"
     ],
     "cwd": "[BUILDER_CACHE]/ios/src",
@@ -250,7 +250,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
+      "[CACHE]/goma_client/goma_ctl.py",
       "restart"
     ],
     "env": {
@@ -268,7 +268,7 @@
       "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
       "start",
       "--cloudtail-path",
-      "[CACHE]/cipd/goma/cloudtail",
+      "[CACHE]/goma_client/cloudtail",
       "--cloudtail-service-account-json",
       "/creds/service_accounts/service-account-goma-cloudtail.json",
       "--pid-file",
@@ -302,7 +302,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
+      "[CACHE]/goma_client/goma_ctl.py",
       "jsonstatus"
     ],
     "env": {
@@ -331,7 +331,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "{\"notice\": [{\"infra_status\": {\"num_user_error\": 0, \"ping_status_code\": 200}}]}",
-      "[CACHE]/cipd/goma/jsonstatus"
+      "[CACHE]/goma_client/jsonstatus"
     ],
     "name": "postprocess_for_goma.write_jsonstatus",
     "~followup_annotations": [
@@ -342,7 +342,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
+      "[CACHE]/goma_client/goma_ctl.py",
       "stat"
     ],
     "env": {
@@ -357,7 +357,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
+      "[CACHE]/goma_client/goma_ctl.py",
       "stop"
     ],
     "env": {
@@ -380,7 +380,7 @@
       "--gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--json-status",
-      "[CACHE]/cipd/goma/jsonstatus",
+      "[CACHE]/goma_client/jsonstatus",
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/ios/src/out/Release-iphoneos",
       "--ninja-log-command",

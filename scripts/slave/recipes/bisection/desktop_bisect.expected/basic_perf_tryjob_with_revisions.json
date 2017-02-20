@@ -137,7 +137,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/cipd/goma",
+      "[CACHE]/goma_client",
       "-ensure-file",
       "infra/tools/cloudtail/linux-amd64 goma_recipe_module\ninfra_internal/goma/client/linux-amd64 release",
       "-json-output",
@@ -187,7 +187,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library gomadir='[CACHE]/cipd/goma' target_arch=x64 use_goma=1",
+      "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library gomadir='[CACHE]/goma_client' target_arch=x64 use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks (with patch)"
@@ -430,7 +430,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library gomadir='[CACHE]/cipd/goma' target_arch=x64 use_goma=1",
+      "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library gomadir='[CACHE]/goma_client' target_arch=x64 use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "Running WITH patch.gclient runhooks on bad49c331def2a3bbf3ddd0096eb51551155",
@@ -719,7 +719,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library gomadir='[CACHE]/cipd/goma' target_arch=x64 use_goma=1",
+      "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library gomadir='[CACHE]/goma_client' target_arch=x64 use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "Running WITHOUT patch.gclient runhooks on d49c331def2a3bbf3ddd0096eb51551155",

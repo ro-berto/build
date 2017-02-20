@@ -108,7 +108,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/cipd/goma",
+      "[CACHE]/goma_client",
       "-ensure-file",
       "infra/tools/cloudtail/linux-amd64 goma_recipe_module\ninfra_internal/goma/client/linux-amd64 release",
       "-json-output",
@@ -145,7 +145,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "clang=1 clang_use_chrome_plugins=0 component=static_library gomadir='[CACHE]/cipd/goma' proprietary_codecs=1 target_arch=x64 use_goma=1",
+      "GYP_DEFINES": "clang=1 clang_use_chrome_plugins=0 component=static_library gomadir='[CACHE]/goma_client' proprietary_codecs=1 target_arch=x64 use_goma=1",
       "LLVM_FORCE_HEAD_REVISION": "YES",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -241,7 +241,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
+      "[CACHE]/goma_client/goma_ctl.py",
       "restart"
     ],
     "cwd": "[START_DIR]/src",
@@ -264,7 +264,7 @@
       "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
       "start",
       "--cloudtail-path",
-      "[CACHE]/cipd/goma/cloudtail",
+      "[CACHE]/goma_client/cloudtail",
       "--cloudtail-service-account-json",
       "/creds/service_accounts/service-account-goma-cloudtail.json",
       "--pid-file",
@@ -303,7 +303,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
+      "[CACHE]/goma_client/goma_ctl.py",
       "jsonstatus"
     ],
     "cwd": "[START_DIR]/src",
@@ -333,7 +333,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "{\"notice\": [{\"infra_status\": {\"num_user_error\": 0, \"ping_status_code\": 200}}]}",
-      "[CACHE]/cipd/goma/jsonstatus"
+      "[CACHE]/goma_client/jsonstatus"
     ],
     "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.write_jsonstatus",
@@ -345,7 +345,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
+      "[CACHE]/goma_client/goma_ctl.py",
       "stat"
     ],
     "cwd": "[START_DIR]/src",
@@ -361,7 +361,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
+      "[CACHE]/goma_client/goma_ctl.py",
       "stop"
     ],
     "cwd": "[START_DIR]/src",
@@ -385,7 +385,7 @@
       "--gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--json-status",
-      "[CACHE]/cipd/goma/jsonstatus",
+      "[CACHE]/goma_client/jsonstatus",
       "--ninja-log-outdir",
       "[START_DIR]/src/out/Release",
       "--ninja-log-command",

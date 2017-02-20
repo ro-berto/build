@@ -137,7 +137,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/cipd/goma",
+      "[CACHE]/goma_client",
       "-ensure-file",
       "infra/tools/cloudtail/linux-amd64 goma_recipe_module\ninfra_internal/goma/client/linux-amd64 release",
       "-json-output",
@@ -207,7 +207,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[CACHE]/cipd/goma' linux_dump_symbols=0 target_arch=arm test_isolation_mode=noop use_goma=1",
+      "GYP_DEFINES": "OS=android component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[CACHE]/goma_client' linux_dump_symbols=0 target_arch=arm test_isolation_mode=noop use_goma=1",
       "PATH": "[BUILDER_CACHE]/android_archive_rel_ng/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_archive_rel_ng/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks (with patch)"
@@ -374,7 +374,7 @@
       "--config-file",
       "[BUILDER_CACHE]/android_archive_rel_ng/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[CACHE]/cipd/goma",
+      "[CACHE]/goma_client",
       "//out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/android_archive_rel_ng/src",
@@ -430,7 +430,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
+      "[CACHE]/goma_client/goma_ctl.py",
       "restart"
     ],
     "cwd": "[BUILDER_CACHE]/android_archive_rel_ng/src",
@@ -454,7 +454,7 @@
       "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
       "start",
       "--cloudtail-path",
-      "[CACHE]/cipd/goma/cloudtail",
+      "[CACHE]/goma_client/cloudtail",
       "--cloudtail-service-account-json",
       "/creds/service_accounts/service-account-goma-cloudtail.json",
       "--pid-file",
@@ -493,7 +493,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
+      "[CACHE]/goma_client/goma_ctl.py",
       "jsonstatus"
     ],
     "cwd": "[BUILDER_CACHE]/android_archive_rel_ng/src",
@@ -523,7 +523,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "{\"notice\": [{\"infra_status\": {\"num_user_error\": 0, \"ping_status_code\": 200}}]}",
-      "[CACHE]/cipd/goma/jsonstatus"
+      "[CACHE]/goma_client/jsonstatus"
     ],
     "cwd": "[BUILDER_CACHE]/android_archive_rel_ng/src",
     "name": "postprocess_for_goma.write_jsonstatus",
@@ -535,7 +535,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
+      "[CACHE]/goma_client/goma_ctl.py",
       "stat"
     ],
     "cwd": "[BUILDER_CACHE]/android_archive_rel_ng/src",
@@ -551,7 +551,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
+      "[CACHE]/goma_client/goma_ctl.py",
       "stop"
     ],
     "cwd": "[BUILDER_CACHE]/android_archive_rel_ng/src",
@@ -575,7 +575,7 @@
       "--gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--json-status",
-      "[CACHE]/cipd/goma/jsonstatus",
+      "[CACHE]/goma_client/jsonstatus",
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/android_archive_rel_ng/src/out/Release",
       "--ninja-log-command",

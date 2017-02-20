@@ -73,7 +73,7 @@
       "cipd.exe",
       "ensure",
       "-root",
-      "[CACHE]\\cipd\\goma",
+      "[CACHE]\\goma_client",
       "-ensure-file",
       "infra/tools/cloudtail/windows-amd64 goma_recipe_module\ninfra_internal/goma/client/windows-amd64 release",
       "-json-output",
@@ -107,7 +107,7 @@
       "--root=[START_DIR]\\pdfium",
       "gen",
       "//out/debug",
-      "--args=is_debug=true is_component_build=false pdf_enable_v8=false pdf_enable_xfa=false pdf_use_skia=false pdf_is_standalone=true use_goma=true goma_dir=\"[CACHE]\\cipd\\goma\" symbol_level=1"
+      "--args=is_debug=true is_component_build=false pdf_enable_v8=false pdf_enable_xfa=false pdf_use_skia=false pdf_is_standalone=true use_goma=true goma_dir=\"[CACHE]\\goma_client\" symbol_level=1"
     ],
     "cwd": "[START_DIR]\\pdfium",
     "name": "gn gen"
@@ -157,7 +157,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\cipd\\goma\\goma_ctl.py",
+      "[CACHE]\\goma_client\\goma_ctl.py",
       "restart"
     ],
     "env": {
@@ -175,7 +175,7 @@
       "RECIPE_MODULE[build::goma]\\resources\\cloudtail_utils.py",
       "start",
       "--cloudtail-path",
-      "[CACHE]\\cipd\\goma\\cloudtail",
+      "[CACHE]\\goma_client\\cloudtail",
       "--cloudtail-service-account-json",
       "C:\\creds\\service_accounts\\service-account-goma-cloudtail.json",
       "--pid-file",
@@ -204,7 +204,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\cipd\\goma\\goma_ctl.py",
+      "[CACHE]\\goma_client\\goma_ctl.py",
       "jsonstatus"
     ],
     "env": {
@@ -233,7 +233,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "{\"notice\": [{\"infra_status\": {\"num_user_error\": 0, \"ping_status_code\": 200}}]}",
-      "[CACHE]\\cipd\\goma\\jsonstatus"
+      "[CACHE]\\goma_client\\jsonstatus"
     ],
     "name": "postprocess_for_goma.write_jsonstatus",
     "~followup_annotations": [
@@ -244,7 +244,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\cipd\\goma\\goma_ctl.py",
+      "[CACHE]\\goma_client\\goma_ctl.py",
       "stat"
     ],
     "env": {
@@ -259,7 +259,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\cipd\\goma\\goma_ctl.py",
+      "[CACHE]\\goma_client\\goma_ctl.py",
       "stop"
     ],
     "env": {
@@ -282,7 +282,7 @@
       "--gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
       "--json-status",
-      "[CACHE]\\cipd\\goma\\jsonstatus",
+      "[CACHE]\\goma_client\\jsonstatus",
       "--ninja-log-outdir",
       "[START_DIR]\\pdfium\\out\\debug",
       "--ninja-log-command",

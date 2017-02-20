@@ -139,7 +139,7 @@
       "cipd.exe",
       "ensure",
       "-root",
-      "[CACHE]\\cipd\\goma",
+      "[CACHE]\\goma_client",
       "-ensure-file",
       "infra/tools/cloudtail/windows-386 goma_recipe_module\ninfra_internal/goma/client/windows-amd64 release",
       "-json-output",
@@ -208,7 +208,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "asan=1 clang=1 component=static_library enable_ipc_fuzzer=1 fastbuild=0 gomadir='[CACHE]\\cipd\\goma' sanitizer_coverage=edge target_arch=ia32 use_goma=1 v8_enable_verify_heap=1",
+      "GYP_DEFINES": "asan=1 clang=1 component=static_library enable_ipc_fuzzer=1 fastbuild=0 gomadir='[CACHE]\\goma_client' sanitizer_coverage=edge target_arch=ia32 use_goma=1 v8_enable_verify_heap=1",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -237,7 +237,7 @@
       "--config-file",
       "[BUILDER_CACHE]\\Win_ASan_Release_Coverage\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
-      "[CACHE]\\cipd\\goma",
+      "[CACHE]\\goma_client",
       "//out/Release"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_ASan_Release_Coverage\\src",
@@ -315,7 +315,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\cipd\\goma\\goma_ctl.py",
+      "[CACHE]\\goma_client\\goma_ctl.py",
       "restart"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_ASan_Release_Coverage\\src",
@@ -339,7 +339,7 @@
       "RECIPE_MODULE[build::goma]\\resources\\cloudtail_utils.py",
       "start",
       "--cloudtail-path",
-      "[CACHE]\\cipd\\goma\\cloudtail",
+      "[CACHE]\\goma_client\\cloudtail",
       "--cloudtail-service-account-json",
       "C:\\creds\\service_accounts\\service-account-goma-cloudtail.json",
       "--pid-file",
@@ -377,7 +377,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\cipd\\goma\\goma_ctl.py",
+      "[CACHE]\\goma_client\\goma_ctl.py",
       "jsonstatus"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_ASan_Release_Coverage\\src",
@@ -409,7 +409,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "{\"notice\": [{\"infra_status\": {\"num_user_error\": 0, \"ping_status_code\": 200}}]}",
-      "[CACHE]\\cipd\\goma\\jsonstatus"
+      "[CACHE]\\goma_client\\jsonstatus"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_ASan_Release_Coverage\\src",
     "name": "postprocess_for_goma.write_jsonstatus",
@@ -421,7 +421,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\cipd\\goma\\goma_ctl.py",
+      "[CACHE]\\goma_client\\goma_ctl.py",
       "stat"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_ASan_Release_Coverage\\src",
@@ -439,7 +439,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\cipd\\goma\\goma_ctl.py",
+      "[CACHE]\\goma_client\\goma_ctl.py",
       "stop"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_ASan_Release_Coverage\\src",
@@ -465,7 +465,7 @@
       "--gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
       "--json-status",
-      "[CACHE]\\cipd\\goma\\jsonstatus",
+      "[CACHE]\\goma_client\\jsonstatus",
       "--ninja-log-outdir",
       "[BUILDER_CACHE]\\Win_ASan_Release_Coverage\\src\\out\\Release",
       "--ninja-log-command",

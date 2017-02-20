@@ -116,7 +116,7 @@
       "cipd.exe",
       "ensure",
       "-root",
-      "[CACHE]\\cipd\\goma",
+      "[CACHE]\\goma_client",
       "-ensure-file",
       "infra/tools/cloudtail/windows-amd64 goma_recipe_module\ninfra_internal/goma/client/windows-amd64 release",
       "-json-output",
@@ -165,7 +165,7 @@
     "cwd": "[START_DIR]\\src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "GYP_DEFINES": "component=static_library fastbuild=1 gomadir='[CACHE]\\cipd\\goma' target_arch=ia32 use_goma=1",
+      "GYP_DEFINES": "component=static_library fastbuild=1 gomadir='[CACHE]\\goma_client' target_arch=ia32 use_goma=1",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"

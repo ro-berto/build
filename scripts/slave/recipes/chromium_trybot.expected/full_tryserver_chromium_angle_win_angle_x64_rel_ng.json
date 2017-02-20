@@ -148,7 +148,7 @@
       "cipd.exe",
       "ensure",
       "-root",
-      "[CACHE]\\cipd\\goma",
+      "[CACHE]\\goma_client",
       "-ensure-file",
       "infra/tools/cloudtail/windows-amd64 goma_recipe_module\ninfra_internal/goma/client/windows-amd64 release",
       "-json-output",
@@ -198,7 +198,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "build_angle_deqp_tests=1 component=static_library dcheck_always_on=1 fastbuild=1 ffmpeg_branding=Chrome gomadir='[CACHE]\\cipd\\goma' internal_gles2_conform_tests=1 proprietary_codecs=1 target_arch=x64 use_goma=1",
+      "GYP_DEFINES": "build_angle_deqp_tests=1 component=static_library dcheck_always_on=1 fastbuild=1 ffmpeg_branding=Chrome gomadir='[CACHE]\\goma_client' internal_gles2_conform_tests=1 proprietary_codecs=1 target_arch=x64 use_goma=1",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks (with patch)"

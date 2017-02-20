@@ -131,7 +131,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/cipd/goma",
+      "[CACHE]/goma_client",
       "-ensure-file",
       "infra/tools/cloudtail/mac-amd64 goma_recipe_module\ninfra_internal/goma/client/mac-amd64 release",
       "-json-output",
@@ -182,7 +182,7 @@
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "clang=1 component=static_library ffmpeg_branding=Chrome gomadir='[CACHE]/cipd/goma' proprietary_codecs=1 target_arch=x64 use_goma=1",
+      "GYP_DEFINES": "clang=1 component=static_library ffmpeg_branding=Chrome gomadir='[CACHE]/goma_client' proprietary_codecs=1 target_arch=x64 use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -380,7 +380,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/cipd/goma",
+      "[CACHE]/goma_client",
       "-ensure-file",
       "infra/tools/cloudtail/mac-amd64 goma_recipe_module\ninfra_internal/goma/client/mac-amd64 release",
       "-json-output",
@@ -418,7 +418,7 @@
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "clang=1 component=static_library ffmpeg_branding=Chrome gomadir='[CACHE]/cipd/goma' proprietary_codecs=1 target_arch=x64 use_goma=1",
+      "GYP_DEFINES": "clang=1 component=static_library ffmpeg_branding=Chrome gomadir='[CACHE]/goma_client' proprietary_codecs=1 target_arch=x64 use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "test r1.gclient runhooks",
@@ -517,7 +517,7 @@
       "--config-file",
       "[BUILDER_CACHE]/mac/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[CACHE]/cipd/goma",
+      "[CACHE]/goma_client",
       "--swarming-targets-file",
       "gl_tests\n",
       "//out/Release"
@@ -611,7 +611,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
+      "[CACHE]/goma_client/goma_ctl.py",
       "restart"
     ],
     "cwd": "[BUILDER_CACHE]/mac/src",
@@ -633,7 +633,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
+      "[CACHE]/goma_client/goma_ctl.py",
       "jsonstatus"
     ],
     "cwd": "[BUILDER_CACHE]/mac/src",
@@ -662,7 +662,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "{\"notice\": [{\"infra_status\": {\"ping_status_code\": 408}}]}",
-      "[CACHE]/cipd/goma/jsonstatus"
+      "[CACHE]/goma_client/jsonstatus"
     ],
     "cwd": "[BUILDER_CACHE]/mac/src",
     "name": "test r1.preprocess_for_goma.write_jsonstatus",
@@ -674,7 +674,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
+      "[CACHE]/goma_client/goma_ctl.py",
       "stop"
     ],
     "cwd": "[BUILDER_CACHE]/mac/src",
@@ -698,7 +698,7 @@
       "--gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--json-status",
-      "[CACHE]/cipd/goma/jsonstatus",
+      "[CACHE]/goma_client/jsonstatus",
       "--buildbot-buildername",
       "mac_chromium_variable",
       "--buildbot-mastername",

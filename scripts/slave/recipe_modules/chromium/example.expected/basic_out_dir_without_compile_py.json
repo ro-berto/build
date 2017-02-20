@@ -108,7 +108,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/cipd/goma",
+      "[CACHE]/goma_client",
       "-ensure-file",
       "infra/tools/cloudtail/linux-amd64 goma_recipe_module\ninfra_internal/goma/client/linux-amd64 release",
       "-json-output",
@@ -159,7 +159,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 ffmpeg_branding=Chrome gomadir='[CACHE]/cipd/goma' proprietary_codecs=1 target_arch=arm use_goma=1",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 ffmpeg_branding=Chrome gomadir='[CACHE]/goma_client' proprietary_codecs=1 target_arch=arm use_goma=1",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -214,7 +214,7 @@
       "--config-file",
       "[START_DIR]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[CACHE]/cipd/goma",
+      "[CACHE]/goma_client",
       "--android-version-code=3",
       "--android-version-name=example",
       "//out/Debug"

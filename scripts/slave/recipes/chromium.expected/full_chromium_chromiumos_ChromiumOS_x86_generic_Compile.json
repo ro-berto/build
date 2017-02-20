@@ -131,7 +131,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/cipd/goma",
+      "[CACHE]/goma_client",
       "-ensure-file",
       "infra/tools/cloudtail/linux-amd64 goma_recipe_module\ninfra_internal/goma/client/linux-amd64 release",
       "-json-output",
@@ -179,7 +179,7 @@
       "--use-external-config",
       "--clear-sdk-cache",
       "--gomadir",
-      "[CACHE]/cipd/goma",
+      "[CACHE]/goma_client",
       "--nostart-goma",
       "--",
       "python",
@@ -252,7 +252,7 @@
       "--use-external-config",
       "--clear-sdk-cache",
       "--gomadir",
-      "[CACHE]/cipd/goma",
+      "[CACHE]/goma_client",
       "--nostart-goma",
       "--",
       "python",
@@ -266,7 +266,7 @@
       "--config-file",
       "[BUILDER_CACHE]/ChromiumOS_x86_generic_Compile/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[CACHE]/cipd/goma",
+      "[CACHE]/goma_client",
       "//out_x86-generic/Release"
     ],
     "cwd": "[BUILDER_CACHE]/ChromiumOS_x86_generic_Compile/src",
@@ -322,7 +322,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
+      "[CACHE]/goma_client/goma_ctl.py",
       "restart"
     ],
     "cwd": "[BUILDER_CACHE]/ChromiumOS_x86_generic_Compile/src",
@@ -346,7 +346,7 @@
       "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
       "start",
       "--cloudtail-path",
-      "[CACHE]/cipd/goma/cloudtail",
+      "[CACHE]/goma_client/cloudtail",
       "--cloudtail-service-account-json",
       "/creds/service_accounts/service-account-goma-cloudtail.json",
       "--pid-file",
@@ -366,7 +366,7 @@
       "--nocolor",
       "--use-external-config",
       "--gomadir",
-      "[CACHE]/cipd/goma",
+      "[CACHE]/goma_client",
       "--nostart-goma",
       "--",
       "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
@@ -414,7 +414,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
+      "[CACHE]/goma_client/goma_ctl.py",
       "jsonstatus"
     ],
     "cwd": "[BUILDER_CACHE]/ChromiumOS_x86_generic_Compile/src",
@@ -446,7 +446,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "{\"notice\": [{\"infra_status\": {\"num_user_error\": 0, \"ping_status_code\": 200}}]}",
-      "[CACHE]/cipd/goma/jsonstatus"
+      "[CACHE]/goma_client/jsonstatus"
     ],
     "cwd": "[BUILDER_CACHE]/ChromiumOS_x86_generic_Compile/src",
     "name": "postprocess_for_goma.write_jsonstatus",
@@ -458,7 +458,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
+      "[CACHE]/goma_client/goma_ctl.py",
       "stat"
     ],
     "cwd": "[BUILDER_CACHE]/ChromiumOS_x86_generic_Compile/src",
@@ -476,7 +476,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
+      "[CACHE]/goma_client/goma_ctl.py",
       "stop"
     ],
     "cwd": "[BUILDER_CACHE]/ChromiumOS_x86_generic_Compile/src",
@@ -502,7 +502,7 @@
       "--gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--json-status",
-      "[CACHE]/cipd/goma/jsonstatus",
+      "[CACHE]/goma_client/jsonstatus",
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/ChromiumOS_x86_generic_Compile/src/out_x86-generic/Release",
       "--ninja-log-command",

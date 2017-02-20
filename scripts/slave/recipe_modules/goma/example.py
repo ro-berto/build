@@ -6,6 +6,7 @@ import re
 
 DEPS = [
   'goma',
+  'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/step',
@@ -46,3 +47,10 @@ def GenTests(api):
   yield (api.test('linux_compile_failed') + api.platform.name('linux') +
          api.step_data('ninja', retcode=1) +
          api.properties.generic(**properties))
+
+  yield (api.test('old_cache_dir') + api.properties.generic(**properties) +
+         api.path.exists(api.path['cache'].join('cipd', 'goma')))
+
+  yield (api.test('old_cache_dir_fail') + api.properties.generic(**properties) +
+         api.path.exists(api.path['cache'].join('cipd', 'goma')) +
+         api.step_data('ensure_goma.clean old goma dir', retcode=1))

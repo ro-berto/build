@@ -61,7 +61,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/cipd/goma",
+      "[CACHE]/goma_client",
       "-ensure-file",
       "infra/tools/cloudtail/linux-386 goma_recipe_module\ninfra_internal/goma/client/linux-386 release",
       "-json-output",
@@ -98,7 +98,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "gomadir='[CACHE]/cipd/goma' target_arch=ia32 use_goma=1 v8_enable_verify_predictable=1 v8_target_arch=ia32",
+      "GYP_DEFINES": "gomadir='[CACHE]/goma_client' target_arch=ia32 use_goma=1 v8_enable_verify_predictable=1 v8_target_arch=ia32",
       "GYP_GENERATORS": "ninja",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -128,7 +128,7 @@
       "--config-file",
       "[START_DIR]/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
-      "[CACHE]/cipd/goma",
+      "[CACHE]/goma_client",
       "--gyp-script=gypfiles/gyp_v8",
       "//out/Release"
     ],
@@ -190,7 +190,7 @@
       "--config-file",
       "[mb config]",
       "--goma-dir",
-      "[CACHE]/cipd/goma",
+      "[CACHE]/goma_client",
       "[START_DIR]/v8/out/gn"
     ],
     "cwd": "[START_DIR]/v8",
@@ -267,7 +267,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
+      "[CACHE]/goma_client/goma_ctl.py",
       "restart"
     ],
     "cwd": "[START_DIR]/v8",
@@ -289,7 +289,7 @@
       "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
       "start",
       "--cloudtail-path",
-      "[CACHE]/cipd/goma/cloudtail",
+      "[CACHE]/goma_client/cloudtail",
       "--cloudtail-service-account-json",
       "/creds/service_accounts/service-account-goma-cloudtail.json",
       "--pid-file",
@@ -326,7 +326,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
+      "[CACHE]/goma_client/goma_ctl.py",
       "jsonstatus"
     ],
     "cwd": "[START_DIR]/v8",
@@ -356,7 +356,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "{\"notice\": [{\"infra_status\": {\"num_user_error\": 0, \"ping_status_code\": 200}}]}",
-      "[CACHE]/cipd/goma/jsonstatus"
+      "[CACHE]/goma_client/jsonstatus"
     ],
     "cwd": "[START_DIR]/v8",
     "name": "postprocess_for_goma.write_jsonstatus",
@@ -368,7 +368,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
+      "[CACHE]/goma_client/goma_ctl.py",
       "stat"
     ],
     "cwd": "[START_DIR]/v8",
@@ -384,7 +384,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
+      "[CACHE]/goma_client/goma_ctl.py",
       "stop"
     ],
     "cwd": "[START_DIR]/v8",
@@ -408,7 +408,7 @@
       "--gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--json-status",
-      "[CACHE]/cipd/goma/jsonstatus",
+      "[CACHE]/goma_client/jsonstatus",
       "--ninja-log-outdir",
       "[START_DIR]/v8/out/Release",
       "--ninja-log-command",
@@ -793,7 +793,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/cipd/goma",
+      "[CACHE]/goma_client",
       "-ensure-file",
       "infra/tools/cloudtail/linux-386 goma_recipe_module\ninfra_internal/goma/client/linux-386 release",
       "-json-output",
@@ -830,7 +830,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "gomadir='[CACHE]/cipd/goma' target_arch=ia32 use_goma=1 v8_enable_verify_predictable=1 v8_target_arch=ia32",
+      "GYP_DEFINES": "gomadir='[CACHE]/goma_client' target_arch=ia32 use_goma=1 v8_enable_verify_predictable=1 v8_target_arch=ia32",
       "GYP_GENERATORS": "ninja",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -852,7 +852,7 @@
       "--config-file",
       "[START_DIR]/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
-      "[CACHE]/cipd/goma",
+      "[CACHE]/goma_client",
       "--gyp-script=gypfiles/gyp_v8",
       "//out/Release"
     ],
@@ -919,7 +919,7 @@
       "--config-file",
       "[mb config]",
       "--goma-dir",
-      "[CACHE]/cipd/goma",
+      "[CACHE]/goma_client",
       "[START_DIR]/v8/out/gn"
     ],
     "cwd": "[START_DIR]/v8",
@@ -994,7 +994,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
+      "[CACHE]/goma_client/goma_ctl.py",
       "restart"
     ],
     "cwd": "[START_DIR]/v8",
@@ -1016,7 +1016,7 @@
       "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
       "start",
       "--cloudtail-path",
-      "[CACHE]/cipd/goma/cloudtail",
+      "[CACHE]/goma_client/cloudtail",
       "--cloudtail-service-account-json",
       "/creds/service_accounts/service-account-goma-cloudtail.json",
       "--pid-file",
@@ -1060,7 +1060,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
+      "[CACHE]/goma_client/goma_ctl.py",
       "jsonstatus"
     ],
     "cwd": "[START_DIR]/v8",
@@ -1090,7 +1090,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "{\"notice\": [{\"infra_status\": {\"num_user_error\": 0, \"ping_status_code\": 200}}]}",
-      "[CACHE]/cipd/goma/jsonstatus"
+      "[CACHE]/goma_client/jsonstatus"
     ],
     "cwd": "[START_DIR]/v8",
     "name": "Bisect a0.postprocess_for_goma.write_jsonstatus",
@@ -1102,7 +1102,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
+      "[CACHE]/goma_client/goma_ctl.py",
       "stat"
     ],
     "cwd": "[START_DIR]/v8",
@@ -1118,7 +1118,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
+      "[CACHE]/goma_client/goma_ctl.py",
       "stop"
     ],
     "cwd": "[START_DIR]/v8",
@@ -1142,7 +1142,7 @@
       "--gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--json-status",
-      "[CACHE]/cipd/goma/jsonstatus",
+      "[CACHE]/goma_client/jsonstatus",
       "--ninja-log-outdir",
       "[START_DIR]/v8/out/Release",
       "--ninja-log-command",
@@ -1299,7 +1299,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/cipd/goma",
+      "[CACHE]/goma_client",
       "-ensure-file",
       "infra/tools/cloudtail/linux-386 goma_recipe_module\ninfra_internal/goma/client/linux-386 release",
       "-json-output",
@@ -1336,7 +1336,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "gomadir='[CACHE]/cipd/goma' target_arch=ia32 use_goma=1 v8_enable_verify_predictable=1 v8_target_arch=ia32",
+      "GYP_DEFINES": "gomadir='[CACHE]/goma_client' target_arch=ia32 use_goma=1 v8_enable_verify_predictable=1 v8_target_arch=ia32",
       "GYP_GENERATORS": "ninja",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -1358,7 +1358,7 @@
       "--config-file",
       "[START_DIR]/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
-      "[CACHE]/cipd/goma",
+      "[CACHE]/goma_client",
       "--gyp-script=gypfiles/gyp_v8",
       "//out/Release"
     ],
@@ -1425,7 +1425,7 @@
       "--config-file",
       "[mb config]",
       "--goma-dir",
-      "[CACHE]/cipd/goma",
+      "[CACHE]/goma_client",
       "[START_DIR]/v8/out/gn"
     ],
     "cwd": "[START_DIR]/v8",
@@ -1500,7 +1500,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
+      "[CACHE]/goma_client/goma_ctl.py",
       "restart"
     ],
     "cwd": "[START_DIR]/v8",
@@ -1522,7 +1522,7 @@
       "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
       "start",
       "--cloudtail-path",
-      "[CACHE]/cipd/goma/cloudtail",
+      "[CACHE]/goma_client/cloudtail",
       "--cloudtail-service-account-json",
       "/creds/service_accounts/service-account-goma-cloudtail.json",
       "--pid-file",
@@ -1566,7 +1566,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
+      "[CACHE]/goma_client/goma_ctl.py",
       "jsonstatus"
     ],
     "cwd": "[START_DIR]/v8",
@@ -1596,7 +1596,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "{\"notice\": [{\"infra_status\": {\"num_user_error\": 0, \"ping_status_code\": 200}}]}",
-      "[CACHE]/cipd/goma/jsonstatus"
+      "[CACHE]/goma_client/jsonstatus"
     ],
     "cwd": "[START_DIR]/v8",
     "name": "Bisect a2.postprocess_for_goma.write_jsonstatus",
@@ -1608,7 +1608,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
+      "[CACHE]/goma_client/goma_ctl.py",
       "stat"
     ],
     "cwd": "[START_DIR]/v8",
@@ -1624,7 +1624,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
+      "[CACHE]/goma_client/goma_ctl.py",
       "stop"
     ],
     "cwd": "[START_DIR]/v8",
@@ -1648,7 +1648,7 @@
       "--gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--json-status",
-      "[CACHE]/cipd/goma/jsonstatus",
+      "[CACHE]/goma_client/jsonstatus",
       "--ninja-log-outdir",
       "[START_DIR]/v8/out/Release",
       "--ninja-log-command",
@@ -1838,7 +1838,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/cipd/goma",
+      "[CACHE]/goma_client",
       "-ensure-file",
       "infra/tools/cloudtail/linux-386 goma_recipe_module\ninfra_internal/goma/client/linux-386 release",
       "-json-output",
@@ -1875,7 +1875,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "gomadir='[CACHE]/cipd/goma' target_arch=ia32 use_goma=1 v8_enable_verify_predictable=1 v8_target_arch=ia32",
+      "GYP_DEFINES": "gomadir='[CACHE]/goma_client' target_arch=ia32 use_goma=1 v8_enable_verify_predictable=1 v8_target_arch=ia32",
       "GYP_GENERATORS": "ninja",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -1897,7 +1897,7 @@
       "--config-file",
       "[START_DIR]/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
-      "[CACHE]/cipd/goma",
+      "[CACHE]/goma_client",
       "--gyp-script=gypfiles/gyp_v8",
       "//out/Release"
     ],
@@ -1964,7 +1964,7 @@
       "--config-file",
       "[mb config]",
       "--goma-dir",
-      "[CACHE]/cipd/goma",
+      "[CACHE]/goma_client",
       "[START_DIR]/v8/out/gn"
     ],
     "cwd": "[START_DIR]/v8",
@@ -2039,7 +2039,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
+      "[CACHE]/goma_client/goma_ctl.py",
       "restart"
     ],
     "cwd": "[START_DIR]/v8",
@@ -2061,7 +2061,7 @@
       "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
       "start",
       "--cloudtail-path",
-      "[CACHE]/cipd/goma/cloudtail",
+      "[CACHE]/goma_client/cloudtail",
       "--cloudtail-service-account-json",
       "/creds/service_accounts/service-account-goma-cloudtail.json",
       "--pid-file",
@@ -2105,7 +2105,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
+      "[CACHE]/goma_client/goma_ctl.py",
       "jsonstatus"
     ],
     "cwd": "[START_DIR]/v8",
@@ -2135,7 +2135,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "{\"notice\": [{\"infra_status\": {\"num_user_error\": 0, \"ping_status_code\": 200}}]}",
-      "[CACHE]/cipd/goma/jsonstatus"
+      "[CACHE]/goma_client/jsonstatus"
     ],
     "cwd": "[START_DIR]/v8",
     "name": "Bisect a1.postprocess_for_goma.write_jsonstatus",
@@ -2147,7 +2147,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
+      "[CACHE]/goma_client/goma_ctl.py",
       "stat"
     ],
     "cwd": "[START_DIR]/v8",
@@ -2163,7 +2163,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
+      "[CACHE]/goma_client/goma_ctl.py",
       "stop"
     ],
     "cwd": "[START_DIR]/v8",
@@ -2187,7 +2187,7 @@
       "--gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--json-status",
-      "[CACHE]/cipd/goma/jsonstatus",
+      "[CACHE]/goma_client/jsonstatus",
       "--ninja-log-outdir",
       "[START_DIR]/v8/out/Release",
       "--ninja-log-command",

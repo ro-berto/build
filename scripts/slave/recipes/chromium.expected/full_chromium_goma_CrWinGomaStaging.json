@@ -139,7 +139,7 @@
       "cipd.exe",
       "ensure",
       "-root",
-      "[CACHE]\\cipd\\goma",
+      "[CACHE]\\goma_client",
       "-ensure-file",
       "infra/tools/cloudtail/windows-amd64 goma_recipe_module\ninfra_internal/goma/client/windows-amd64 release",
       "-json-output",
@@ -209,7 +209,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GOMA_STUBBY_PROXY_IP_ADDRESS": "sandbox.google.com",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "component=static_library fastbuild=1 gomadir='[CACHE]\\cipd\\goma' target_arch=x64 use_goma=1",
+      "GYP_DEFINES": "component=static_library fastbuild=1 gomadir='[CACHE]\\goma_client' target_arch=x64 use_goma=1",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -274,7 +274,7 @@
       "--config-file",
       "[BUILDER_CACHE]\\CrWinGomaStaging\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
-      "[CACHE]\\cipd\\goma",
+      "[CACHE]\\goma_client",
       "//out/Release_x64"
     ],
     "cwd": "[BUILDER_CACHE]\\CrWinGomaStaging\\src",
@@ -330,7 +330,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\cipd\\goma\\goma_ctl.py",
+      "[CACHE]\\goma_client\\goma_ctl.py",
       "restart"
     ],
     "cwd": "[BUILDER_CACHE]\\CrWinGomaStaging\\src",
@@ -355,7 +355,7 @@
       "RECIPE_MODULE[build::goma]\\resources\\cloudtail_utils.py",
       "start",
       "--cloudtail-path",
-      "[CACHE]\\cipd\\goma\\cloudtail",
+      "[CACHE]\\goma_client\\cloudtail",
       "--cloudtail-service-account-json",
       "C:\\creds\\service_accounts\\service-account-goma-cloudtail.json",
       "--pid-file",
@@ -396,7 +396,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\cipd\\goma\\goma_ctl.py",
+      "[CACHE]\\goma_client\\goma_ctl.py",
       "jsonstatus"
     ],
     "cwd": "[BUILDER_CACHE]\\CrWinGomaStaging\\src",
@@ -428,7 +428,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "{\"notice\": [{\"infra_status\": {\"num_user_error\": 0, \"ping_status_code\": 200}}]}",
-      "[CACHE]\\cipd\\goma\\jsonstatus"
+      "[CACHE]\\goma_client\\jsonstatus"
     ],
     "cwd": "[BUILDER_CACHE]\\CrWinGomaStaging\\src",
     "name": "postprocess_for_goma.write_jsonstatus",
@@ -440,7 +440,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\cipd\\goma\\goma_ctl.py",
+      "[CACHE]\\goma_client\\goma_ctl.py",
       "stat"
     ],
     "cwd": "[BUILDER_CACHE]\\CrWinGomaStaging\\src",
@@ -458,7 +458,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\cipd\\goma\\goma_ctl.py",
+      "[CACHE]\\goma_client\\goma_ctl.py",
       "stop"
     ],
     "cwd": "[BUILDER_CACHE]\\CrWinGomaStaging\\src",
@@ -484,7 +484,7 @@
       "--gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
       "--json-status",
-      "[CACHE]\\cipd\\goma\\jsonstatus",
+      "[CACHE]\\goma_client\\jsonstatus",
       "--ninja-log-outdir",
       "[BUILDER_CACHE]\\CrWinGomaStaging\\src\\out\\Release_x64",
       "--ninja-log-command",

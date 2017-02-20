@@ -63,7 +63,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/cipd/goma",
+      "[CACHE]/goma_client",
       "-ensure-file",
       "infra/tools/cloudtail/linux-amd64 goma_recipe_module\ninfra_internal/goma/client/linux-amd64 release",
       "-json-output",
@@ -100,7 +100,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
-      "GOMA_DIR": "[CACHE]/cipd/goma",
+      "GOMA_DIR": "[CACHE]/goma_client",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "mojob gn"
@@ -115,7 +115,7 @@
       "--android"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]/cipd/goma",
+      "GOMA_DIR": "[CACHE]/goma_client",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "mojob build"

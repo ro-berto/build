@@ -108,7 +108,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/cipd/goma",
+      "[CACHE]/goma_client",
       "-ensure-file",
       "infra/tools/cloudtail/mac-amd64 goma_recipe_module\ninfra_internal/goma/client/mac-amd64 release",
       "-json-output",
@@ -159,7 +159,7 @@
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "branding=Chrome buildtype=Official clang=1 component=static_library gomadir='[CACHE]/cipd/goma' target_arch=x64 use_goma=1",
+      "GYP_DEFINES": "branding=Chrome buildtype=Official clang=1 component=static_library gomadir='[CACHE]/goma_client' target_arch=x64 use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"

@@ -131,7 +131,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/cipd/goma",
+      "[CACHE]/goma_client",
       "-ensure-file",
       "infra/tools/cloudtail/linux-amd64 goma_recipe_module\ninfra_internal/goma/client/linux-amd64 candidate",
       "-json-output",
@@ -181,7 +181,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "component=static_library gomadir='[CACHE]/cipd/goma' target_arch=x64 use_goma=1",
+      "GYP_DEFINES": "component=static_library gomadir='[CACHE]/goma_client' target_arch=x64 use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -246,7 +246,7 @@
       "--config-file",
       "[BUILDER_CACHE]/Chromium_Linux_Precise_Goma_LinkTest/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[CACHE]/cipd/goma",
+      "[CACHE]/goma_client",
       "//out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/Chromium_Linux_Precise_Goma_LinkTest/src",
@@ -302,7 +302,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
+      "[CACHE]/goma_client/goma_ctl.py",
       "restart"
     ],
     "cwd": "[BUILDER_CACHE]/Chromium_Linux_Precise_Goma_LinkTest/src",
@@ -329,7 +329,7 @@
       "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
       "start",
       "--cloudtail-path",
-      "[CACHE]/cipd/goma/cloudtail",
+      "[CACHE]/goma_client/cloudtail",
       "--cloudtail-service-account-json",
       "/creds/service_accounts/service-account-goma-cloudtail.json",
       "--pid-file",
@@ -369,7 +369,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
+      "[CACHE]/goma_client/goma_ctl.py",
       "jsonstatus"
     ],
     "cwd": "[BUILDER_CACHE]/Chromium_Linux_Precise_Goma_LinkTest/src",
@@ -401,7 +401,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "{\"notice\": [{\"infra_status\": {\"num_user_error\": 0, \"ping_status_code\": 200}}]}",
-      "[CACHE]/cipd/goma/jsonstatus"
+      "[CACHE]/goma_client/jsonstatus"
     ],
     "cwd": "[BUILDER_CACHE]/Chromium_Linux_Precise_Goma_LinkTest/src",
     "name": "postprocess_for_goma.write_jsonstatus",
@@ -413,7 +413,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
+      "[CACHE]/goma_client/goma_ctl.py",
       "stat"
     ],
     "cwd": "[BUILDER_CACHE]/Chromium_Linux_Precise_Goma_LinkTest/src",
@@ -431,7 +431,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/cipd/goma/goma_ctl.py",
+      "[CACHE]/goma_client/goma_ctl.py",
       "stop"
     ],
     "cwd": "[BUILDER_CACHE]/Chromium_Linux_Precise_Goma_LinkTest/src",
@@ -457,7 +457,7 @@
       "--gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--json-status",
-      "[CACHE]/cipd/goma/jsonstatus",
+      "[CACHE]/goma_client/jsonstatus",
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/Chromium_Linux_Precise_Goma_LinkTest/src/out/Release",
       "--ninja-log-command",
