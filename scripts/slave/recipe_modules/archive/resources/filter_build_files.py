@@ -123,18 +123,24 @@ EXCLUDED_FILES_PATTERN = {
 def walk_and_filter(dir_path, platform_name):
   result = []
 
-  for root, dirnames, filenames in os.walk(dir_path):
+  for root, dirnames, filenames in os.walk(dir_path, followlinks=True):
     relative_root = os.path.relpath(root, dir_path)
 
     # Clear relative_root to avoid top-level paths looking like './path'.
     if relative_root == '.':
       relative_root = ''
 
-    # Filter out unneeded directories.
+    # Filter out unneeded directories and archive symlinks.
     for d in list(dirnames):
       if (not relative_root and d in EXCLUDED_TOP_LEVEL_DIRS[platform_name] or
           d in EXCLUDED_SUBDIRS[platform_name]):
         dirnames.remove(d)
+        continue
+      # We want to archive symlinks pointing to directories (crbug.com/693624).
+      # Symlinks pointing to directories should be passed explicitly to `zip`.
+      # Otherwise, the build archive for Mac doesn't have a proper structure.
+      if os.path.islink(os.path.join(root, d)):
+        result.append(os.path.join(relative_root, d))
 
     # Filter out unneeded files.
     for filename in filenames:
