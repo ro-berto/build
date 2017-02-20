@@ -521,7 +521,7 @@ def GenTests(api):
     api.properties(
       swarm_hashes={
       'telemetry_perf_tests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
-      }, **{'perf-id': 'testid', 'results-url': 'http://test-results-url'}) +
+      }, **{'perf-id': 'testid', 'results-url': 'https://test-results-url'}) +
     api.platform('win', 64) +
     api.override_step_data(
         'read test spec (chromium.perf.fyi.json)',
@@ -626,7 +626,7 @@ def GenTests(api):
     api.properties(
       swarm_hashes={
       'telemetry_perf_tests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
-      }, **{'perf-id': 'testid', 'results-url': 'http://test-results-url'}) +
+      }, **{'perf-id': 'testid', 'results-url': 'https://test-results-url'}) +
     api.platform('win', 64) +
     api.override_step_data(
         'read test spec (chromium.perf.fyi.json)',
@@ -681,7 +681,7 @@ def GenTests(api):
     api.properties(
       swarm_hashes={
       'telemetry_perf_tests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
-      }, **{'perf-id': 'testid', 'results-url': 'http://test-results-url'}) +
+      }, **{'perf-id': 'testid', 'results-url': 'https://test-results-url'}) +
     api.platform('win', 64) +
     api.override_step_data(
         'read test spec (chromium.perf.fyi.json)',

@@ -123,7 +123,7 @@ class TestObserver(buildstep.LogLineObserver):
 class WebKitCommand(shell.ShellCommand):
   """Buildbot command that knows how to display layout test output."""
 
-  _LAYOUT_TEST_DASHBOARD_BASE = ("http://test-results.appspot.com"
+  _LAYOUT_TEST_DASHBOARD_BASE = ("https://test-results.appspot.com"
     "/dashboards/flakiness_dashboard.html")
 
   def __init__(self, **kwargs):
