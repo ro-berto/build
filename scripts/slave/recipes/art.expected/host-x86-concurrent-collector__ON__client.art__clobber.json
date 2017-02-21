@@ -89,6 +89,8 @@
       "./art/test/testrunner/testrunner.py",
       "-j8",
       "--optimizing",
+      "--debuggable",
+      "--ndebuggable",
       "--host",
       "--verbose"
     ],
@@ -98,7 +100,6 @@
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
-      "ART_TEST_RUN_TEST_DEBUGGABLE": "true",
       "ART_USE_READ_BARRIER": "true",
       "HOST_PREFER_32_BIT": "true",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",

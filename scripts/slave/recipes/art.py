@@ -102,13 +102,13 @@ def setup_host_x86(api, debug, bitness, concurrent_collector=False):
         ['make', '-j8', 'test-art-host-gtest%d' % bitness],
         env=env)
 
-    optimizing_env = env.copy()
-    optimizing_env.update({ 'ART_TEST_RUN_TEST_DEBUGGABLE': 'true' })
     api.step('test optimizing', ['./art/test/testrunner/testrunner.py',
                                  '-j8',
                                  '--optimizing',
+                                 '--debuggable',
+                                 '--ndebuggable',
                                  '--host',
-                                 '--verbose'], env=optimizing_env)
+                                 '--verbose'], env=env)
     # Use a lower -j number for interpreter, some tests take a long time
     # to run on it.
     api.step('test interpreter', ['./art/test/testrunner/testrunner.py',
@@ -236,13 +236,13 @@ def setup_target(api,
       'test-art-target-gtest%d' % bitness], env=test_env)
     test_logging(api, 'test gtest')
 
-    optimizing_env = test_env.copy()
-    optimizing_env.update({ 'ART_TEST_RUN_TEST_DEBUGGABLE': 'true' })
     api.step('test optimizing', ['./art/test/testrunner/testrunner.py',
                                  '-j%d' % (make_jobs),
                                  '--optimizing',
+                                 '--debuggable',
+                                 '--ndebuggable',
                                  '--target',
-                                 '--verbose'], env=optimizing_env)
+                                 '--verbose'], env=test_env)
     test_logging(api, 'test optimizing')
 
     api.step('test interpreter', ['./art/test/testrunner/testrunner.py',

@@ -257,6 +257,8 @@
       "./art/test/testrunner/testrunner.py",
       "-j4",
       "--optimizing",
+      "--debuggable",
+      "--ndebuggable",
       "--target",
       "--verbose"
     ],
@@ -272,7 +274,6 @@
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_NO_SYNC": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
-      "ART_TEST_RUN_TEST_DEBUGGABLE": "true",
       "ART_USE_READ_BARRIER": "false",
       "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
