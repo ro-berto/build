@@ -649,7 +649,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--force-version",
@@ -942,7 +942,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
@@ -1092,7 +1092,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--force-version",
@@ -1502,7 +1502,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::gsutil]/resources/gsutil_wrapper.py",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--force-version",

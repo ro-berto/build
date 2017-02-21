@@ -1,7 +1,7 @@
 DEPS = [
     'chromium',
     'file',
-    'gsutil',
+    'depot_tools/gsutil',
     'recipe_engine/json',
     'math_utils',
     'recipe_engine/path',

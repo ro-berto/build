@@ -16,7 +16,7 @@ import re
 DEPS = [
     'chromium_tests',
     'depot_tools/git',
-    'gsutil',
+    'depot_tools/gsutil',
     'recipe_engine/json',
     'recipe_engine/raw_io',
     'recipe_engine/path',

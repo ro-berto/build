@@ -9,7 +9,7 @@ DEPS = [
   'depot_tools/bot_update',
   'depot_tools/depot_tools',
   'file',
-  'gsutil',
+  'depot_tools/gsutil',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',

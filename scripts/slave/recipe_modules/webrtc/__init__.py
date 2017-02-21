@@ -8,7 +8,7 @@ DEPS = [
   'chromium_tests',
   'commit_position',
   'file',
-  'gsutil',
+  'depot_tools/gsutil',
   'depot_tools/gclient',
   'depot_tools/git',
   'isolate',

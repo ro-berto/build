@@ -8,7 +8,7 @@ DEPS = [
   'build/file',
   'build/filter',
   'build/goma',
-  'build/gsutil',
+  'depot_tools/gsutil',
   'build/isolate',
   'build/swarming',
   'build/swarming_client',

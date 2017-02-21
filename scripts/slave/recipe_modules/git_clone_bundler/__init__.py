@@ -1,7 +1,7 @@
 DEPS = [
     'file',
     'depot_tools/git',
-    'gsutil',
+    'depot_tools/gsutil',
     'recipe_engine/path',
     'repo',
     'recipe_engine/step',

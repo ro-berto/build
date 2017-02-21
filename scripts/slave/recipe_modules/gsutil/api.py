@@ -40,14 +40,14 @@ class GSUtilApi(recipe_api.RecipeApi):
     if version:
       cmd_prefix.extend(['--force-version', version])
 
-    if parallel_upload:
+    if parallel_upload:  # pragma: no cover
       cmd_prefix.extend([
           '-o',
           'GSUtil:parallel_composite_upload_threshold=50M'
       ])
 
     if multithreaded:
-      cmd_prefix.extend(['-m'])
+      cmd_prefix.extend(['-m'])  # pragma: no cover
 
     if use_retry_wrapper:
       # The -- argument for the wrapped gsutil.py is escaped as ---- as python
@@ -56,7 +56,7 @@ class GSUtilApi(recipe_api.RecipeApi):
       # Note, that 2.7.6 doesn't have this problem, but it doesn't hurt.
       cmd_prefix.append('----')
     else:
-      cmd_prefix.append('--')
+      cmd_prefix.append('--')  # pragma: no cover
 
     return self.m.python(full_name, gsutil_path, cmd_prefix + cmd,
                          infra_step=True, **kwargs)

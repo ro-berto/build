@@ -10,7 +10,7 @@ DEPS = [
     'depot_tools/git',
     'depot_tools/tryserver',
     'file',
-    'gsutil',
+    'depot_tools/gsutil',
     'halt',
     'math_utils',
     'perf_dashboard',

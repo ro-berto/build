@@ -15,7 +15,7 @@ DEPS = [
   'file',
   'filter',
   'goma',
-  'gsutil',
+  'depot_tools/gsutil',
   'isolate',
   'perf_dashboard',
   'recipe_engine/json',

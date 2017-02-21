@@ -13,7 +13,7 @@ DEPS = [
   'depot_tools/git',
   'depot_tools/tryserver',
   'file',
-  'gsutil',
+  'depot_tools/gsutil',
   'recipe_engine/generator_script',
   'recipe_engine/json',
   'recipe_engine/path',

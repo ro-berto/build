@@ -16,7 +16,7 @@ DEPS = [
     'file',
     'gitiles',
     'goma',
-    'gsutil',
+    'depot_tools/gsutil',
     'halt',
     'math_utils',
     'perf_dashboard',

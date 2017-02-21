@@ -9,7 +9,7 @@ import re
 DEPS = [
   'depot_tools/cipd',
   'gae_sdk',
-  'gsutil',
+  'depot_tools/gsutil',
   'recipe_engine/path',
   'recipe_engine/python',
   'recipe_engine/raw_io',

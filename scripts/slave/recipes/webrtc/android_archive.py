@@ -8,7 +8,7 @@ DEPS = [
   'depot_tools/gclient',
   'depot_tools/tryserver',
   'goma',
-  'gsutil',
+  'depot_tools/gsutil',
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/python',

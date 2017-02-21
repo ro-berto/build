@@ -6,7 +6,7 @@ DEPS = [
   'file',
   'depot_tools/gclient',
   'gitiles',
-  'gsutil',
+  'depot_tools/gsutil',
   'isolate',
   'perf_dashboard',
   'recipe_engine/json',
