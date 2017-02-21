@@ -14,6 +14,8 @@ DEPS = [
   'recipe_engine/properties',
   'recipe_engine/step',
   'recipe_engine/python',
+  'url',
+  'zip',
 ]
 
 BUCKET_NAME = 'flutter_infra'
@@ -72,7 +74,8 @@ def BuildExamples(api, git_hash, flutter_executable):
     # This is linux just to have only one bot archive at once.
     if api.platform.is_linux:
       cloud_path = GetCloudPath(api, git_hash, 'examples/%s' % apk_name)
-      api.gsutil.upload(app_path.join('build/app.apk'), BUCKET_NAME, cloud_path,
+      apk_path = app_path.join('android', 'app', 'build', 'outputs', 'apk', 'app.apk')
+      api.gsutil.upload(apk_path, BUCKET_NAME, cloud_path,
           link_name=apk_name, name='upload %s' % apk_name)
 
   # TODO(eseidel): We should not have to hard-code the desired apk name here.
@@ -125,14 +128,28 @@ def RunSteps(api):
   api.python('download android tools',
       checkout.join('dev', 'bots', 'download_android_tools.py'), ['-t', 'sdk'])
 
+  api.url.fetch_to_file(
+      'https://services.gradle.org/distributions/gradle-2.14.1-bin.zip',
+      checkout.join('dev', 'bots', 'gradle-2.14.1-bin.zip'),
+      step_name='download gradle')
+  api.zip.unzip(
+      'unzip gradle',
+      checkout.join('dev', 'bots', 'gradle-2.14.1-bin.zip'),
+      checkout.join('dev', 'bots', 'gradle'))
+  update_android_cmd = (
+      'echo y | %s update sdk --no-ui --all --filter build-tools-24.0.1,android-25,extra-android-m2repository' %
+      checkout.join('dev', 'bots', 'android_tools', 'sdk', 'tools', 'android'))
+  api.step('update android tools', ['sh', '-c', update_android_cmd])
+
   dart_bin = checkout.join('bin', 'cache', 'dart-sdk', 'bin')
   flutter_bin = checkout.join('bin')
+  gradle_bin = checkout.join('dev', 'bots', 'gradle', 'gradle-2.14.1', 'bin')
   # TODO(eseidel): This is named exactly '.pub-cache' as a hack around
   # a regexp in flutter_tools analyze.dart which is in turn a hack around:
   # https://github.com/dart-lang/sdk/issues/25722
   pub_cache = api.path['start_dir'].join('.pub-cache')
   env = {
-    'PATH': api.path.pathsep.join((str(flutter_bin), str(dart_bin),
+    'PATH': api.path.pathsep.join((str(flutter_bin), str(dart_bin), str(gradle_bin),
         '%(PATH)s')),
     # Setup our own pub_cache to not affect other slaves on this machine.
     'PUB_CACHE': pub_cache,

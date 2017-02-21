@@ -118,13 +118,41 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/pycurl.py",
+      "https://services.gradle.org/distributions/gradle-2.14.1-bin.zip",
+      "--outfile",
+      "[START_DIR]/flutter/dev/bots/gradle-2.14.1-bin.zip"
+    ],
+    "name": "download gradle"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::zip]/resources/unzip.py"
+    ],
+    "name": "unzip gradle",
+    "stdin": "{\"output\": \"[START_DIR]/flutter/dev/bots/gradle\", \"quiet\": false, \"zip_file\": \"[START_DIR]/flutter/dev/bots/gradle-2.14.1-bin.zip\"}"
+  },
+  {
+    "cmd": [
+      "sh",
+      "-c",
+      "echo y | [START_DIR]/flutter/dev/bots/android_tools/sdk/tools/android update sdk --no-ui --all --filter build-tools-24.0.1,android-25,extra-android-m2repository"
+    ],
+    "name": "update android tools"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/ios/find_xcode.py",
       "--json-file",
       "/path/to/tmp/json"
     ],
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:%(PATH)s",
       "PUB_CACHE": "[START_DIR]/.pub-cache"
     },
     "name": "enumerate_xcode_installations",
@@ -149,7 +177,7 @@
     ],
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:%(PATH)s",
       "PUB_CACHE": "[START_DIR]/.pub-cache"
     },
     "name": "set_xcode_version",
@@ -166,7 +194,7 @@
     "cwd": "[START_DIR]/flutter",
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:%(PATH)s",
       "PUB_CACHE": "[START_DIR]/.pub-cache"
     },
     "name": "download dependencies"
@@ -179,7 +207,7 @@
     "cwd": "[START_DIR]/flutter",
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:%(PATH)s",
       "PUB_CACHE": "[START_DIR]/.pub-cache"
     },
     "name": "flutter doctor"
@@ -192,7 +220,7 @@
     "cwd": "[START_DIR]/flutter",
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:%(PATH)s",
       "PUB_CACHE": "[START_DIR]/.pub-cache"
     },
     "name": "test.dart"
@@ -207,7 +235,7 @@
     "cwd": "[START_DIR]/flutter/examples/stocks",
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:%(PATH)s",
       "PUB_CACHE": "[START_DIR]/.pub-cache"
     },
     "name": "flutter build apk stocks"
@@ -223,7 +251,7 @@
     "cwd": "[START_DIR]/flutter/examples/stocks",
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:%(PATH)s",
       "PUB_CACHE": "[START_DIR]/.pub-cache"
     },
     "name": "flutter build ios stocks"
@@ -240,7 +268,7 @@
     "cwd": "[START_DIR]/flutter/examples/stocks",
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:%(PATH)s",
       "PUB_CACHE": "[START_DIR]/.pub-cache"
     },
     "name": "flutter build ios debug stocks"
@@ -256,7 +284,7 @@
     "cwd": "[START_DIR]/flutter/examples/stocks",
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:%(PATH)s",
       "PUB_CACHE": "[START_DIR]/.pub-cache"
     },
     "name": "flutter build ios simulator stocks"
@@ -271,7 +299,7 @@
     "cwd": "[START_DIR]/flutter/examples/flutter_gallery",
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:%(PATH)s",
       "PUB_CACHE": "[START_DIR]/.pub-cache"
     },
     "name": "flutter build apk flutter_gallery"
@@ -287,7 +315,7 @@
     "cwd": "[START_DIR]/flutter/examples/flutter_gallery",
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:%(PATH)s",
       "PUB_CACHE": "[START_DIR]/.pub-cache"
     },
     "name": "flutter build ios flutter_gallery"
@@ -304,7 +332,7 @@
     "cwd": "[START_DIR]/flutter/examples/flutter_gallery",
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:%(PATH)s",
       "PUB_CACHE": "[START_DIR]/.pub-cache"
     },
     "name": "flutter build ios debug flutter_gallery"
@@ -320,7 +348,7 @@
     "cwd": "[START_DIR]/flutter/examples/flutter_gallery",
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:%(PATH)s",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:%(PATH)s",
       "PUB_CACHE": "[START_DIR]/.pub-cache"
     },
     "name": "flutter build ios simulator flutter_gallery"
