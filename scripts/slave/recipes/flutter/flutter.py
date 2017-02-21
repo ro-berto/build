@@ -114,6 +114,22 @@ def SetupXcode(api):
   RunFindXcode(api, 'set_xcode_version', target_version=activate_version)
 
 
+def InstallGradle(api, checkout):
+  api.url.fetch_to_file(
+      'https://services.gradle.org/distributions/gradle-2.14.1-bin.zip',
+      checkout.join('dev', 'bots', 'gradle-2.14.1-bin.zip'),
+      step_name='download gradle')
+  api.zip.unzip(
+      'unzip gradle',
+      checkout.join('dev', 'bots', 'gradle-2.14.1-bin.zip'),
+      checkout.join('dev', 'bots', 'gradle'))
+  update_android_cmd = ['cmd.exe', '/C'] if api.platform.is_win else ['sh', '-c']
+  update_android_cmd.append(
+      'echo y | %s update sdk --no-ui --all --filter build-tools-24.0.1,android-25,extra-android-m2repository' %
+      checkout.join('dev', 'bots', 'android_tools', 'sdk', 'tools', 'android'))
+  api.step('update android tools', update_android_cmd)
+
+
 def RunSteps(api):
   # buildbot sets 'clobber' to the empty string which is falsey, check with 'in'
   if 'clobber' in api.properties:
@@ -128,18 +144,7 @@ def RunSteps(api):
   api.python('download android tools',
       checkout.join('dev', 'bots', 'download_android_tools.py'), ['-t', 'sdk'])
 
-  api.url.fetch_to_file(
-      'https://services.gradle.org/distributions/gradle-2.14.1-bin.zip',
-      checkout.join('dev', 'bots', 'gradle-2.14.1-bin.zip'),
-      step_name='download gradle')
-  api.zip.unzip(
-      'unzip gradle',
-      checkout.join('dev', 'bots', 'gradle-2.14.1-bin.zip'),
-      checkout.join('dev', 'bots', 'gradle'))
-  update_android_cmd = (
-      'echo y | %s update sdk --no-ui --all --filter build-tools-24.0.1,android-25,extra-android-m2repository' %
-      checkout.join('dev', 'bots', 'android_tools', 'sdk', 'tools', 'android'))
-  api.step('update android tools', ['sh', '-c', update_android_cmd])
+  InstallGradle(api, checkout)
 
   dart_bin = checkout.join('bin', 'cache', 'dart-sdk', 'bin')
   flutter_bin = checkout.join('bin')
