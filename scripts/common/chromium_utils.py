@@ -663,6 +663,9 @@ def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
     # them over maintaining the relative directories, where applicable.
     src_path = os.path.join(file_relative_dir, needed_file)
     dirname, basename = os.path.split(needed_file)
+    dest_dir = os.path.join(archive_dir, dirname)
+    if dest_dir != archive_dir:
+      MaybeMakeDirectory(dest_dir)
     try:
       if os.path.isdir(src_path):
         dst_path = os.path.join(archive_dir, needed_file)
@@ -675,17 +678,10 @@ def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
             os.symlink(os.readlink(src_path), dst_path)
           else:
             shutil.copytree(src_path, dst_path, symlinks=True)
-      elif dirname != '' and basename != '':
-        dest_dir = os.path.join(archive_dir, dirname)
-        MaybeMakeDirectory(dest_dir)
+      else:
         CopyFileToDir(src_path, dest_dir, basename, link_ok=True)
         if not IsWindows() and basename in strip_files:
           cmd = ['strip', os.path.join(dest_dir, basename)]
-          RunCommand(cmd)
-      else:
-        CopyFileToDir(src_path, archive_dir, basename, link_ok=True)
-        if not IsWindows() and basename in strip_files:
-          cmd = ['strip', os.path.join(archive_dir, basename)]
           RunCommand(cmd)
     except PathNotFound:
       if raise_error:

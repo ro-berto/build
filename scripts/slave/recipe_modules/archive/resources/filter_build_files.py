@@ -130,12 +130,13 @@ def walk_and_filter(dir_path, platform_name):
     if relative_root == '.':
       relative_root = ''
 
-    # Filter out unneeded directories and archive symlinks.
     for d in list(dirnames):
+      # Filter out unneeded directories.
       if (not relative_root and d in EXCLUDED_TOP_LEVEL_DIRS[platform_name] or
           d in EXCLUDED_SUBDIRS[platform_name]):
         dirnames.remove(d)
         continue
+
       # We want to archive symlinks pointing to directories (crbug.com/693624).
       # Symlinks pointing to directories should be passed explicitly to `zip`.
       # Otherwise, the build archive for Mac doesn't have a proper structure.
