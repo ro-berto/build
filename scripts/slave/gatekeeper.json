@@ -822,6 +822,19 @@
           }
         }
       }
+    ],
+    "https://build.chromium.org/p/tryserver.chromium.linux": [
+      {
+        "close_tree": false,
+        "tree_notify": [
+          "chromium-component-mapping@google.com"
+        ],
+        "builders": {
+          "linux_chromium_component_updater": {
+            "forgiving_optional": ["*"]
+          }
+        }
+      }
     ]
   },
 
