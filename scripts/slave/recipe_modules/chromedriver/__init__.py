@@ -4,6 +4,7 @@
 
 DEPS = [
     'chromium',
+    'chromium_gsutil',
     'file',
     'gsutil',
     'zip',

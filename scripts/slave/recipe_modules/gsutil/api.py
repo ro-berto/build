@@ -135,18 +135,6 @@ class GSUtilApi(recipe_api.RecipeApi):
     name = kwargs.pop('name', 'remove')
     self(cmd, name, **kwargs)
 
-  # TODO(phajdan.jr): remove download_with_polling (http://crbug.com/694590).
-  def download_with_polling(self, url, destination, poll_interval, timeout,
-                            name='Download GS file with polling'):
-    return self.m.chromium_gsutil.download_with_polling(
-        url, destination, poll_interval, timeout, name)
-
-  # TODO(phajdan.jr): remove download_latest_file (http://crbug.com/694590).
-  def download_latest_file(self, base_url, partial_name, destination,
-                           name='Download latest file from GS'):
-    return self.m.chromium_gsutil.download_latest_file(
-        base_url, partial_name, destination, name)
-
   def _generate_metadata_args(self, metadata):
     result = []
     if metadata:

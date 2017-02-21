@@ -54,13 +54,6 @@ def RunSteps(api):
                                   name='signed url')
   api.gsutil.remove_url('gs://%s/%s' % (bucket, new_cloud_file))
 
-  api.gsutil.download_with_polling('gs://chromium-recipe-test/foo/bar',
-                                   'local/path/for/download',
-                                   15,
-                                   600)
-  api.gsutil.download_latest_file('gs://chromium-recipe-test/foo',
-                                  'gs://chromium-recipe-test/foo/b',
-                                  'local/path/for/download')
   api.gsutil.list('gs://chromium-recipe-test/foo')
   api.gsutil.cat('gs://chromium-recipe-test/foo/bar')
   api.gsutil.copy(bucket, cloud_file, bucket, new_cloud_file)

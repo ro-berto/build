@@ -26,7 +26,7 @@ class ChromedriverApi(recipe_api.RecipeApi):
     with self.m.step.nest('Download Prebuilts'):
       with self.m.tempfile.temp_dir('prebuilt') as prebuilt_dir:
         unzip_dir = prebuilt_dir.join('unzipped')
-        self.m.gsutil.download_latest_file(
+        self.m.chromium_gsutil.download_latest_file(
             base_url='gs://%s' % GS_PREBUILTS_URL,
             partial_name='gs://%s/r' % GS_PREBUILTS_URL,
             destination=prebuilt_dir,
