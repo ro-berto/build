@@ -2170,7 +2170,6 @@ SPEC = {
       'gclient_config': 'chromium',
       'gclient_apply_config': [
         'android',
-        'android_vr_apks',
       ],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -2184,6 +2183,7 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
+      'enable_swarming': True,
     },
     'Linux remote_run Builder': {
       'chromium_config': 'chromium',
