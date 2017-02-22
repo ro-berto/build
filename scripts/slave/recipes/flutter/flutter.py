@@ -161,6 +161,10 @@ def RunSteps(api):
     'ANDROID_HOME': checkout.join('dev', 'bots', 'android_tools'),
   }
 
+  if api.platform.is_win:
+    # TODO(goderbauer): remove workaround for https://bugs.chromium.org/p/chromium/issues/detail?id=695138
+    env['PATH'] = api.path.pathsep.join((env['PATH'], 'C:\\Program Files\\Java\\jdk1.8.0_121\\bin'))
+
   # The context adds dart-sdk tools to PATH sets PUB_CACHE.
   with api.step.context({'env': env}):
     if api.platform.is_mac:
@@ -174,9 +178,7 @@ def RunSteps(api):
       api.step('flutter doctor', [flutter_executable, 'doctor'])
       api.step('test.dart', [dart_executable, 'dev/bots/test.dart'])
 
-    # TODO(goderbauer): enable on Windows when we have JDK8 on the Windows bot
-    if not api.platform.is_win:
-      BuildExamples(api, git_hash, flutter_executable)
+    BuildExamples(api, git_hash, flutter_executable)
 
     # TODO(yjbanov): we do not yet have Android devices hooked up, nor do we
     # support the Android emulator. For now, only run on iOS Simulator.
