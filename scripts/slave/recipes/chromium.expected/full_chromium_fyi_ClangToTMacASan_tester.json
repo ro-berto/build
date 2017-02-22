@@ -199,7 +199,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/ClangToTMacASan_tester/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"test_bot\", \"buildername\": \"ClangToTMacASan tester\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"target_platform\": \"mac\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"ClangToTMacASan tester\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"slavename\": \"test_bot\", \"target_platform\": \"mac\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [

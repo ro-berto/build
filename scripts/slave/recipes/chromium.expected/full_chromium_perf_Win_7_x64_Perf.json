@@ -207,7 +207,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]\\\\Win_7_x64_Perf\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"test_bot\", \"buildername\": \"Win 7 x64 Perf\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"perf-id\": \"chromium-rel-win7-x64-dual\", \"results-url\": \"https://chromeperf.appspot.com\", \"target_platform\": \"win\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"Win 7 x64 Perf\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"perf-id\": \"chromium-rel-win7-x64-dual\", \"results-url\": \"https://chromeperf.appspot.com\", \"slavename\": \"test_bot\", \"target_platform\": \"win\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [

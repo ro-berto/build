@@ -209,7 +209,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/ChromiumOS_amd64_generic_Compile/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"test_bot\", \"buildername\": \"ChromiumOS amd64-generic Compile\", \"buildnumber\": 571, \"mastername\": \"chromium.chromiumos\", \"target_platform\": \"chromeos\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"ChromiumOS amd64-generic Compile\", \"buildnumber\": 571, \"mastername\": \"chromium.chromiumos\", \"slavename\": \"test_bot\", \"target_platform\": \"chromeos\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [

@@ -208,7 +208,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]\\\\win\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"build1-a1\", \"buildername\": \"win_chromium_variable\", \"buildnumber\": 1, \"mastername\": \"tryserver.chromium.win\", \"target_platform\": \"win\"}"
+      "{\"bot_id\": \"build1-a1\", \"buildername\": \"win_chromium_variable\", \"buildnumber\": 1, \"mastername\": \"tryserver.chromium.win\", \"slavename\": \"build1-a1\", \"target_platform\": \"win\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -468,7 +468,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]\\\\win\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"build1-a1\", \"buildername\": \"win_chromium_variable\", \"buildnumber\": 1, \"mastername\": \"tryserver.chromium.win\", \"target_platform\": \"win\"}"
+      "{\"bot_id\": \"build1-a1\", \"buildername\": \"win_chromium_variable\", \"buildnumber\": 1, \"mastername\": \"tryserver.chromium.win\", \"slavename\": \"build1-a1\", \"target_platform\": \"win\"}"
     ],
     "name": "test r1.get compile targets for scripts",
     "~followup_annotations": [
@@ -513,7 +513,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]\\\\win\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"build1-a1\", \"buildername\": \"win_chromium_variable\", \"buildnumber\": 1, \"mastername\": \"tryserver.chromium.win\", \"target_platform\": \"win\"}",
+      "{\"bot_id\": \"build1-a1\", \"buildername\": \"win_chromium_variable\", \"buildnumber\": 1, \"mastername\": \"tryserver.chromium.win\", \"slavename\": \"build1-a1\", \"target_platform\": \"win\"}",
       "run",
       "--output",
       "/path/to/tmp/json"

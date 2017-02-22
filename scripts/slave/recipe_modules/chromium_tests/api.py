@@ -811,6 +811,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     for name in ('buildername', 'bot_id', 'buildnumber', 'mastername'):
       properties[name] = self.m.properties[name]
+    properties['slavename'] = properties['bot_id']
 
     # Optional properties
     for name in ('perf-id', 'results-url'):

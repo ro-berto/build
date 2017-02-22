@@ -199,7 +199,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/Android_Tests__trial__dbg_/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"test_bot\", \"buildername\": \"Android Tests (trial)(dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.android.fyi\", \"target_platform\": \"android\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"Android Tests (trial)(dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.android.fyi\", \"slavename\": \"test_bot\", \"target_platform\": \"android\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [

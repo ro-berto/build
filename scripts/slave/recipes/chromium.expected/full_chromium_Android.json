@@ -219,7 +219,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/Android/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"test_bot\", \"buildername\": \"Android\", \"buildnumber\": 571, \"mastername\": \"chromium\", \"target_platform\": \"android\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"Android\", \"buildnumber\": 571, \"mastername\": \"chromium\", \"slavename\": \"test_bot\", \"target_platform\": \"android\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [

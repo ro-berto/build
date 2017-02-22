@@ -199,7 +199,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/Linux_remote_run_Builder/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"build1-a1\", \"buildername\": \"Linux remote_run Builder\", \"buildnumber\": \"77457\", \"mastername\": \"chromium.fyi\", \"target_platform\": \"linux\"}"
+      "{\"bot_id\": \"build1-a1\", \"buildername\": \"Linux remote_run Builder\", \"buildnumber\": \"77457\", \"mastername\": \"chromium.fyi\", \"slavename\": \"build1-a1\", \"target_platform\": \"linux\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [

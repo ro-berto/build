@@ -220,7 +220,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/Chromium_Mac_Goma_Staging/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"test_bot\", \"buildername\": \"Chromium Mac Goma Staging\", \"buildnumber\": 571, \"mastername\": \"chromium.goma\", \"target_platform\": \"mac\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"Chromium Mac Goma Staging\", \"buildnumber\": 571, \"mastername\": \"chromium.goma\", \"slavename\": \"test_bot\", \"target_platform\": \"mac\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
