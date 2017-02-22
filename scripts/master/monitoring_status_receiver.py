@@ -50,12 +50,12 @@ total = ts_mon.GaugeMetric('buildbot/master/builders/total_slaves',
 reactor_queue = ts_mon.GaugeMetric('buildbot/master/reactor/queue',
     'Number of items in the reactor queue.',
     None)
-reactor_queue_created = ts_mon.GaugeMetric(
+reactor_queue_created = ts_mon.FloatMetric(
     'buildbot/master/reactor/queue_age_created',
     'Age of oldest item in the reactor queue by creation.',
     None,
     units=ts_mon.MetricsDataUnits.MILLISECONDS)
-reactor_queue_modified = ts_mon.GaugeMetric(
+reactor_queue_modified = ts_mon.FloatMetric(
     'buildbot/master/reactor/queue_age_modified',
     'Age of oldest item in the reactor queue by last modified.',
     None,
