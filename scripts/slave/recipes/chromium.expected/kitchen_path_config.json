@@ -526,9 +526,9 @@
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--factory-properties",
-      "{\"bot_id\": \"build1-a1\", \"buildername\": \"Linux remote_run Builder\", \"buildnumber\": \"77457\", \"mastername\": \"chromium.fyi\", \"path_config\": \"kitchen\", \"recipe\": \"chromium\"}",
+      "{\"bot_id\": \"build1-a1\", \"buildername\": \"Linux remote_run Builder\", \"buildnumber\": \"77457\", \"mastername\": \"chromium.fyi\", \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"build1-a1\"}",
       "--build-properties",
-      "{\"bot_id\": \"build1-a1\", \"buildername\": \"Linux remote_run Builder\", \"buildnumber\": \"77457\", \"mastername\": \"chromium.fyi\", \"path_config\": \"kitchen\", \"recipe\": \"chromium\"}"
+      "{\"bot_id\": \"build1-a1\", \"buildername\": \"Linux remote_run Builder\", \"buildnumber\": \"77457\", \"mastername\": \"chromium.fyi\", \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"build1-a1\"}"
     ],
     "name": "package build"
   },
