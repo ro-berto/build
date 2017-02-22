@@ -642,9 +642,9 @@
       "--gs-acl",
       "public-read",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"WebKit Mac Builder\", \"buildnumber\": 571, \"gs_acl\": \"public-read\", \"mastername\": \"chromium.webkit\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"WebKit Mac Builder\", \"buildnumber\": 571, \"gs_acl\": \"public-read\", \"mastername\": \"chromium.webkit\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"WebKit Mac Builder\", \"buildnumber\": 571, \"gs_acl\": \"public-read\", \"mastername\": \"chromium.webkit\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"WebKit Mac Builder\", \"buildnumber\": 571, \"gs_acl\": \"public-read\", \"mastername\": \"chromium.webkit\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "name": "package build"
   },

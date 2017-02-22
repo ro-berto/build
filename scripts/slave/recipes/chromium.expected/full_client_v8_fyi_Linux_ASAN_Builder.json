@@ -543,9 +543,9 @@
       "--build_revision",
       "801ada225ddc271c132c3a35f03975671d43e399",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"Linux ASAN Builder\", \"buildnumber\": 571, \"mastername\": \"client.v8.fyi\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"revision\": \"22135\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"Linux ASAN Builder\", \"buildnumber\": 571, \"mastername\": \"client.v8.fyi\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"revision\": \"22135\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"Linux ASAN Builder\", \"buildnumber\": 571, \"mastername\": \"client.v8.fyi\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"revision\": \"22135\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"Linux ASAN Builder\", \"buildnumber\": 571, \"mastername\": \"client.v8.fyi\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"revision\": \"22135\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "name": "package build"
   },
