@@ -130,11 +130,16 @@ class MonitoringStatusReceiver(StatusReceiverMultiService):
     try:
       log.msg('Updating monitoring metrics')
       yield self.updateMetrics()
-    finally:
+    except Exception as ex:
+      log.err(ex, 'Updating monitoring metrics failed')
+
+    try:
       log.msg('Flushing monitoring metrics')
       yield threads.deferToThreadPool(
           reactor, self.thread_pool, self._flush_and_log_exceptions)
       log.msg('Finished flushing monitoring metrics')
+    except Exception as ex:
+      log.err(ex, 'Flushing monitoring metrics failed')
 
   @staticmethod
   def callbackInfo(f, args, kwargs):
@@ -181,8 +186,8 @@ class MonitoringStatusReceiver(StatusReceiverMultiService):
     for f, _, _ in reactor.threadCallQueue:
       d = getattr(f, 'im_self', None)
       if d:
-        created = max(created, now - f._created)
-        modified = max(modified, now - f._modified)
+        created = max(created, now - d._created)
+        modified = max(modified, now - d._modified)
     reactor_queue_created.set(created)
     reactor_queue_modified.set(modified)
 
