@@ -12,7 +12,7 @@ DEPS = [
 ]
 
 # To run, pass these options into properties:
-# slavename="multivm-windows-release",
+# bot_id="multivm-windows-release",
 # buildername="multivm-windows-perf-be",
 # mastername="client.dart.fyi", buildnumber=75
 
@@ -58,7 +58,7 @@ def GenTests(api):
   for platform in ('linux', 'win', 'mac'):
     yield (api.test(platform) +
            api.platform.name(platform) +
-           api.properties(slavename='multivm-windows-release',
+           api.properties(bot_id='multivm-windows-release',
                           buildername='multivm-windows-perf-be',
                           buildnumber=75,
                           mastername='client.dart.fyi') +

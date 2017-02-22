@@ -209,7 +209,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/linux/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"linux_chromium_rel_ng\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.linux\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"linux_chromium_rel_ng\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.linux\", \"target_platform\": \"linux\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -589,7 +589,7 @@
       "--buildbot-mastername",
       "tryserver.chromium.linux",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[BUILDER_CACHE]/linux/src",
     "name": "postprocess_for_goma.upload_log",
@@ -631,7 +631,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/linux/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"linux_chromium_rel_ng\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.linux\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}",
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"linux_chromium_rel_ng\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.linux\", \"target_platform\": \"linux\"}",
       "run",
       "--output",
       "/path/to/tmp/json"
@@ -660,7 +660,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/linux/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"linux_chromium_rel_ng\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.linux\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}",
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"linux_chromium_rel_ng\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.linux\", \"target_platform\": \"linux\"}",
       "run",
       "--output",
       "/path/to/tmp/json"
@@ -692,7 +692,7 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"branch\": \"\", \"build_config\": \"Release\", \"buildername\": \"linux_chromium_rel_ng\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium.linux\", \"patch_project\": \"v8\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"chromium_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": null, \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=webkit_tests (with patch)",
       "--builder-name=linux_chromium_rel_ng",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=571",
       "--run-python-script",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/layout_test_wrapper.py",

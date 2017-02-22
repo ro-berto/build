@@ -371,7 +371,7 @@
       "--buildbot-mastername",
       "chromium.infra.codesearch",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [
@@ -605,7 +605,7 @@
       "--buildbot-mastername",
       "chromium.infra.codesearch",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.upload_log (2)",

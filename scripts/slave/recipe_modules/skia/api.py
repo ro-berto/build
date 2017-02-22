@@ -150,7 +150,7 @@ class SkiaApi(recipe_api.RecipeApi):
 
     self.builder_name = self.m.properties['buildername']
     self.master_name = self.m.properties['mastername']
-    self.slave_name = self.m.properties['slavename']
+    self.slave_name = self.m.properties['bot_id']
 
     self.slave_dir = self.m.path['start_dir']
     self.checkout_root = self.slave_dir

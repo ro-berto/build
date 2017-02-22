@@ -219,7 +219,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/Chromium_Mac_10_9_Goma_Canary__clobber_/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"Chromium Mac 10.9 Goma Canary (clobber)\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"mac\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"Chromium Mac 10.9 Goma Canary (clobber)\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"target_platform\": \"mac\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -522,7 +522,7 @@
       "--buildbot-mastername",
       "chromium.fyi",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[BUILDER_CACHE]/Chromium_Mac_10_9_Goma_Canary__clobber_/src",
     "name": "postprocess_for_goma.upload_log",
@@ -563,7 +563,7 @@
       "--test-launcher-summary-output",
       "/path/to/tmp/json",
       "--builder-name=Chromium Mac 10.9 Goma Canary (clobber)",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=571",
       "base_unittests"
     ],
@@ -619,7 +619,7 @@
       "--test-launcher-summary-output",
       "/path/to/tmp/json",
       "--builder-name=Chromium Mac 10.9 Goma Canary (clobber)",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=571",
       "content_unittests"
     ],

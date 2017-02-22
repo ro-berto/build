@@ -51,7 +51,7 @@ def GenTests(api):
     'buildername': 'Test',
     # chromite module uses path['root'] which exists only in Buildbot.
     'path_config': 'buildbot',
-    'slavename': 'test',
+    'bot_id': 'test',
   }
 
   #

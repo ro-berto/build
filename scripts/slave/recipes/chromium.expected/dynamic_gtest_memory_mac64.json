@@ -177,7 +177,7 @@
       "--paths",
       "{\"checkout\": \"[START_DIR]/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"Mac ASan 64 Tests (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.memory\", \"slavename\": \"TestSlavename\", \"target_platform\": \"mac\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"Mac ASan 64 Tests (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.memory\", \"target_platform\": \"mac\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -285,7 +285,7 @@
       "-o",
       "gtest-results/browser_tests",
       "--builder-name=Mac ASan 64 Tests (1)",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=571",
       "--enable-asan",
       "browser_tests",

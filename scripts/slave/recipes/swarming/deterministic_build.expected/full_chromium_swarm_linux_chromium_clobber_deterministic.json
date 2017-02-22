@@ -422,7 +422,7 @@
       "--buildbot-mastername",
       "chromium.swarm",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.upload_log",
@@ -759,7 +759,7 @@
       "--buildbot-mastername",
       "chromium.swarm",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.upload_log (2)",

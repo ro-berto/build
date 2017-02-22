@@ -401,7 +401,7 @@
       "--buildbot-mastername",
       "tryserver.chromium.linux",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.upload_log",
@@ -445,7 +445,7 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"branch\": \"\", \"buildername\": \"linux_chromium_gn_upload\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium.linux\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"chromium_gn_upload\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=gn_unittests",
       "--builder-name=linux_chromium_gn_upload",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=571",
       "gn_unittests"
     ],

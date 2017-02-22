@@ -105,8 +105,8 @@
       "recipe=skia/swarm_trigger",
       "mastername=client.skia",
       "buildnumber=5",
-      "slavename=skiabot-linux-compile-000",
       "path_config=kitchen",
+      "bot_id=skiabot-linux-compile-000",
       "revision=abc123"
     ],
     "name": "run recipe"

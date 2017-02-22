@@ -448,7 +448,7 @@ def GenTests(api):
               api.properties(
                 mastername=mastername,
                 buildername=buildername,
-                slavename='TestSlave',
+                bot_id='TestSlave',
                 # Buildbot uses clobber='' to mean clobber, however
                 # api.properties(clobber=None) will set clobber=None!
                 # so we have to not even mention it to avoid our
@@ -460,7 +460,7 @@ def GenTests(api):
       api.properties(
         mastername='client.art',
         buildername='host-x86-ndebug',
-        slavename='TestSlave',
+        bot_id='TestSlave',
       ) +
       api.step_data('test jdwp aot', retcode=1))
   yield (
@@ -468,7 +468,7 @@ def GenTests(api):
       api.properties(
         mastername='client.art',
         buildername='hammerhead-ndebug',
-        slavename='TestSlave',
+        bot_id='TestSlave',
       )
       + api.step_data('setup device', retcode=1))
   yield (
@@ -476,7 +476,7 @@ def GenTests(api):
       api.properties(
         mastername='client.art',
         buildername='hammerhead-ndebug',
-        slavename='TestSlave',
+        bot_id='TestSlave',
       ) +
       api.step_data('test jdwp aot', retcode=1))
   yield (
@@ -484,7 +484,7 @@ def GenTests(api):
       api.properties(
         mastername='client.art',
         buildername='hammerhead-ndebug',
-        slavename='TestSlave',
+        bot_id='TestSlave',
       ) +
       api.step_data('device cleanup', retcode=1))
   yield (
@@ -492,7 +492,7 @@ def GenTests(api):
       api.properties(
         mastername='client.art',
         buildername='aosp-builder-cms',
-        slavename='TestSlave',
+        bot_id='TestSlave',
       ) +
       api.step_data('build x86', retcode=1))
 #  These tests *should* exist, but can't be included as they cause the recipe
@@ -503,7 +503,7 @@ def GenTests(api):
 #      api.properties(
 #        mastername='client.art.does_not_exist',
 #        buildername='aosp-builder-cms',
-#        slavename='TestSlave',
+#        bot_id='TestSlave',
 #      )
 #    )
 #  yield (
@@ -511,6 +511,6 @@ def GenTests(api):
 #      api.properties(
 #        mastername='client.art',
 #        buildername='builder_does_not_exist',
-#        slavename='TestSlave',
+#        bot_id='TestSlave',
 #      )
 #    )

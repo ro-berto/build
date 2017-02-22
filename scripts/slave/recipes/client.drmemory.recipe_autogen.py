@@ -486,7 +486,7 @@ def GenTests(api):
        revision='123456789abcdef',
        got_revision='123456789abcdef',
        buildnumber=42,
-       slavename='TestSlave',
+       bot_id='TestSlave',
      )
   )
 
@@ -497,7 +497,7 @@ def GenTests(api):
       revision='123456789abcdef',
       got_revision='123456789abcdef',
       buildnumber=42,
-      slavename='TestSlave',
+      bot_id='TestSlave',
     )
     + api.platform('linux', 64)
   )
@@ -509,7 +509,7 @@ def GenTests(api):
       revision='123456789abcdef',
       got_revision='123456789abcdef',
       buildnumber=42,
-      slavename='TestSlave',
+      bot_id='TestSlave',
     )
     + api.platform('win', 64)
   )
@@ -521,7 +521,7 @@ def GenTests(api):
       revision='123456789abcdef',
       got_revision='123456789abcdef',
       buildnumber=42,
-      slavename='TestSlave',
+      bot_id='TestSlave',
     )
     + api.platform('win', 64)
   )
@@ -533,7 +533,7 @@ def GenTests(api):
       revision='123456789abcdef',
       got_revision='123456789abcdef',
       buildnumber=42,
-      slavename='TestSlave',
+      bot_id='TestSlave',
     )
     + api.platform('win', 32)
     + api.step_data("Find package basename",
@@ -544,6 +544,6 @@ def GenTests(api):
     + api.properties(
       mastername='client.drmemory',
       buildername='nonexistent_builder',
-      slavename='TestSlave',
+      bot_id='TestSlave',
     )
   )

@@ -204,7 +204,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/Android_Release__Nexus_9_/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"Android Release (Nexus 9)\", \"buildnumber\": 571, \"mastername\": \"chromium.gpu.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"android\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"Android Release (Nexus 9)\", \"buildnumber\": 571, \"mastername\": \"chromium.gpu.fyi\", \"target_platform\": \"android\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -513,7 +513,7 @@
       "--buildbot-mastername",
       "chromium.gpu.fyi",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[BUILDER_CACHE]/Android_Release__Nexus_9_/src",
     "name": "postprocess_for_goma.upload_log",

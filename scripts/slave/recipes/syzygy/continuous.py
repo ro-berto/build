@@ -10,7 +10,7 @@ To be tested using a command-line like:
       revision=0e9f25b1098271be2b096fd1c095d6d907cf86f7
       mastername=master.client.syzygy
       "buildername=Syzygy Debug"
-      slavename=fake_slave
+      bot_id=fake_slave
       buildnumber=1
 
 Places resulting output in build/slave/fake_slave.

@@ -318,25 +318,25 @@ def GenTests(api):
   yield (api.test('Linux32') +
     api.properties(mastername='chromium.chromedriver') +
     api.properties(buildername='Linux32') +
-    api.properties(slavename='TestSlave')
+    api.properties(bot_id='TestSlave')
         )
   yield (api.test('Mac_10_6') +
     api.properties(mastername='chromium.chromedriver') +
     api.properties(buildername='Mac 10.6') +
-    api.properties(slavename='TestSlave')
+    api.properties(bot_id='TestSlave')
         )
   yield (api.test('Win7') +
     api.properties(mastername='chromium.chromedriver') +
     api.properties(buildername='Win7') +
-    api.properties(slavename='TestSlave')
+    api.properties(bot_id='TestSlave')
         )
   yield (api.test('Linux') +
     api.properties(mastername='chromium.chromedriver') +
     api.properties(buildername='Linux') +
-    api.properties(slavename='TestSlave')
+    api.properties(bot_id='TestSlave')
         )
   yield (api.test('builder_not_in_dispatch_directory') +
     api.properties(mastername='chromium.chromedriver') +
     api.properties(buildername='nonexistent_builder') +
-    api.properties(slavename='TestSlave')
+    api.properties(bot_id='TestSlave')
         )

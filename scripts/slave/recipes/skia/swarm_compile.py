@@ -46,13 +46,13 @@ def RunSteps(api):
 
 def GenTests(api):
   for mastername, slaves in TEST_BUILDERS.iteritems():
-    for slavename, builders_by_slave in slaves.iteritems():
+    for bot_id, builders_by_slave in slaves.iteritems():
       for builder in builders_by_slave:
         test = (
           api.test(builder) +
           api.properties(buildername=builder,
                          mastername=mastername,
-                         slavename=slavename,
+                         bot_id=bot_id,
                          buildnumber=5,
                          revision='abc123',
                          path_config='kitchen',
@@ -82,13 +82,13 @@ def GenTests(api):
         yield test
 
   mastername = 'client.skia.compile'
-  slavename = 'skiabot-win-compile-000'
+  bot_id = 'skiabot-win-compile-000'
   buildername = 'Build-Win-MSVC-x86-Debug'
   yield (
       api.test('win_retry_failed_compile') +
       api.properties(buildername=buildername,
                      mastername=mastername,
-                     slavename=slavename,
+                     bot_id=bot_id,
                      buildnumber=5,
                      revision='abc123',
                      path_config='kitchen',
@@ -105,7 +105,7 @@ def GenTests(api):
       api.test('big_issue_number') +
       api.properties(buildername=buildername,
                      mastername=mastername,
-                     slavename=slavename,
+                     bot_id=bot_id,
                      buildnumber=5,
                      revision='abc123',
                      path_config='kitchen',

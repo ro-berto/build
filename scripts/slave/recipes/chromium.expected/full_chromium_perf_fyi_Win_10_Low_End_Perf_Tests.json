@@ -207,7 +207,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]\\\\Win_10_Low_End_Perf_Tests\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"Win 10 Low-End Perf Tests\", \"buildnumber\": 571, \"mastername\": \"chromium.perf.fyi\", \"perf-id\": \"win-10-low-end\", \"results-url\": \"https://chromeperf.appspot.com\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"Win 10 Low-End Perf Tests\", \"buildnumber\": 571, \"mastername\": \"chromium.perf.fyi\", \"perf-id\": \"win-10-low-end\", \"results-url\": \"https://chromeperf.appspot.com\", \"target_platform\": \"win\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -375,7 +375,7 @@
       "--tag",
       "purpose:post-commit",
       "--tag",
-      "slavename:TestSlavename",
+      "slavename:test_bot",
       "--tag",
       "stepname:browser_tests",
       "--idempotent",

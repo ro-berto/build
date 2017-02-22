@@ -351,4 +351,4 @@ def GenTests(api):
     yield (api.test(platform) + api.platform(platform, 64)
         + api.properties(mastername='client.flutter',
               buildername='%s Engine' % platform.capitalize(),
-              slavename='fake-m1', clobber=''))
+              bot_id='fake-m1', clobber=''))

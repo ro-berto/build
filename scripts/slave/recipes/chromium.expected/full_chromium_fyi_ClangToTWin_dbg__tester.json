@@ -171,7 +171,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]\\\\ClangToTWin_dbg__tester\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"ClangToTWin(dbg) tester\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"ClangToTWin(dbg) tester\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"target_platform\": \"win\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -339,7 +339,7 @@
       "--tag",
       "purpose:post-commit",
       "--tag",
-      "slavename:TestSlavename",
+      "slavename:test_bot",
       "--tag",
       "stepname:browser_tests",
       "--idempotent",

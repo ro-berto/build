@@ -71,13 +71,13 @@ def GenTests(api):
     return test_data
 
   for mastername, slaves in TEST_BUILDERS.iteritems():
-    for slavename, builders_by_slave in slaves.iteritems():
+    for bot_id, builders_by_slave in slaves.iteritems():
       for builder in builders_by_slave:
         test = (
           api.test(builder) +
           api.properties(buildername=builder,
                          mastername=mastername,
-                         slavename=slavename,
+                         bot_id=bot_id,
                          buildnumber=5,
                          revision='abc123',
                          path_config='kitchen',
@@ -110,7 +110,7 @@ def GenTests(api):
     api.test('failed_dm') +
     api.properties(buildername=builder,
                    mastername='client.skia',
-                   slavename='skiabot-linux-swarm-000',
+                   bot_id='skiabot-linux-swarm-000',
                    buildnumber=6,
                    revision='abc123',
                    path_config='kitchen',
@@ -131,7 +131,7 @@ def GenTests(api):
     api.test('failed_get_hashes') +
     api.properties(buildername=builder,
                    mastername='client.skia',
-                   slavename='skiabot-linux-swarm-000',
+                   bot_id='skiabot-linux-swarm-000',
                    buildnumber=6,
                    revision='abc123',
                    path_config='kitchen',
@@ -156,7 +156,7 @@ def GenTests(api):
     api.test('download_and_push_skps') +
     api.properties(buildername=builder,
                    mastername='client.skia',
-                   slavename='skiabot-linux-swarm-000',
+                   bot_id='skiabot-linux-swarm-000',
                    buildnumber=6,
                    revision='abc123',
                    path_config='kitchen',
@@ -183,7 +183,7 @@ def GenTests(api):
     api.test('missing_SKP_VERSION_device') +
     api.properties(buildername=builder,
                    mastername='client.skia',
-                   slavename='skiabot-linux-swarm-000',
+                   bot_id='skiabot-linux-swarm-000',
                    buildnumber=6,
                    revision='abc123',
                    path_config='kitchen',
@@ -210,7 +210,7 @@ def GenTests(api):
     api.test('download_and_push_skimage') +
     api.properties(buildername=builder,
                    mastername='client.skia',
-                   slavename='skiabot-linux-swarm-000',
+                   bot_id='skiabot-linux-swarm-000',
                    buildnumber=6,
                    revision='abc123',
                    path_config='kitchen',
@@ -237,7 +237,7 @@ def GenTests(api):
     api.test('missing_SK_IMAGE_VERSION_device') +
     api.properties(buildername=builder,
                    mastername='client.skia',
-                   slavename='skiabot-linux-swarm-000',
+                   bot_id='skiabot-linux-swarm-000',
                    buildnumber=6,
                    revision='abc123',
                    path_config='kitchen',
@@ -264,7 +264,7 @@ def GenTests(api):
     api.test('adb_in_path') +
     api.properties(buildername=builder,
                    mastername='client.skia',
-                   slavename='skiabot-linux-swarm-000',
+                   bot_id='skiabot-linux-swarm-000',
                    buildnumber=6,
                    revision='abc123',
                    path_config='kitchen',
@@ -289,7 +289,7 @@ def GenTests(api):
     api.test('big_issue_number') +
     api.properties(buildername=builder,
                      mastername='client.skia.compile',
-                     slavename='skiabot-linux-swarm-000',
+                     bot_id='skiabot-linux-swarm-000',
                      buildnumber=5,
                      revision='abc123',
                      path_config='kitchen',
@@ -313,7 +313,7 @@ def GenTests(api):
     api.test('legacy_skimage_version') +
     api.properties(buildername=builder,
                    mastername='client.skia',
-                   slavename='skiabot-linux-swarm-000',
+                   bot_id='skiabot-linux-swarm-000',
                    buildnumber=6,
                    revision='abc123',
                    path_config='kitchen',
@@ -330,7 +330,7 @@ def GenTests(api):
     api.test('legacy_skp_version') +
     api.properties(buildername=builder,
                    mastername='client.skia',
-                   slavename='skiabot-linux-swarm-000',
+                   bot_id='skiabot-linux-swarm-000',
                    buildnumber=6,
                    revision='abc123',
                    path_config='kitchen',

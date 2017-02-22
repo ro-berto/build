@@ -48,7 +48,7 @@ def GenTests(api):
     api.properties(
       mastername = 'client.wasm.llvm',
       buildername = 'linux',
-      slavename = 'TestSlavename',
+      bot_id = 'TestBot',
       revision = 'abcd',
     ))
 
@@ -57,6 +57,6 @@ def GenTests(api):
     api.properties(
       mastername = 'client.wasm.llvm',
       buildername = 'linux',
-      slavename = 'TestSlavename',
+      bot_id = 'TestBot',
       revision = 'abcd',
     ) + api.step_data('annotated steps', retcode=1))

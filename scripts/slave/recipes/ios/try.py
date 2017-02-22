@@ -57,7 +57,7 @@ def GenTests(api):
       mastername='tryserver.fake',
       patchset=1,
       rietveld='fake://rietveld.url',
-      slavename='fake-vm',
+      bot_id='fake-vm',
       path_config='kitchen',
     )
     + api.ios.make_test_build_config({
@@ -92,7 +92,7 @@ def GenTests(api):
       mastername='tryserver.fake',
       patchset=1,
       rietveld='fake://rietveld.url',
-      slavename='fake-vm',
+      bot_id='fake-vm',
       path_config='kitchen',
     )
     + api.ios.make_test_build_config({
@@ -121,7 +121,7 @@ def GenTests(api):
       mastername='tryserver.fake',
       patchset=1,
       rietveld='fake://rietveld.url',
-      slavename='fake-vm',
+      bot_id='fake-vm',
       path_config='kitchen',
     )
     + api.ios.make_test_build_config({
@@ -156,7 +156,7 @@ def GenTests(api):
       patchset=1,
       patch_project='icu',
       rietveld='fake://rietveld.url',
-      slavename='fake-vm',
+      bot_id='fake-vm',
       path_config='kitchen',
     )
     + api.ios.make_test_build_config({
@@ -190,7 +190,7 @@ def GenTests(api):
       mastername='tryserver.fake',
       patchset=1,
       rietveld='fake://rietveld.url',
-      slavename='fake-vm',
+      bot_id='fake-vm',
       path_config='kitchen',
     )
     + api.ios.make_test_build_config({
@@ -227,7 +227,7 @@ def GenTests(api):
       mastername='tryserver.fake',
       patchset=1,
       rietveld='fake://rietveld.url',
-      slavename='fake-vm',
+      bot_id='fake-vm',
       path_config='kitchen',
     )
     + api.ios.make_test_build_config({
@@ -258,7 +258,7 @@ def GenTests(api):
       mastername='tryserver.fake',
       patchset=1,
       rietveld='fake://rietveld.url',
-      slavename='fake-vm',
+      bot_id='fake-vm',
       path_config='kitchen',
     )
     + api.ios.make_test_build_config({
@@ -290,7 +290,7 @@ def GenTests(api):
       mastername='tryserver.fake',
       patchset=1,
       rietveld='fake://rietveld.url',
-      slavename='fake-vm',
+      bot_id='fake-vm',
       path_config='kitchen',
     )
     + api.ios.make_test_build_config({
@@ -329,7 +329,7 @@ def GenTests(api):
       mastername='tryserver.fake',
       patchset=1,
       rietveld='fake://rietveld.url',
-      slavename='fake-vm',
+      bot_id='fake-vm',
       path_config='kitchen',
     )
     + api.ios.make_test_build_config({
@@ -365,7 +365,7 @@ def GenTests(api):
       mastername='tryserver.fake',
       patchset=1,
       rietveld='fake://rietveld.url',
-      slavename='fake-vm',
+      bot_id='fake-vm',
       path_config='kitchen',
     )
     + api.ios.make_test_build_config({

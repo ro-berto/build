@@ -47,7 +47,7 @@ def GenTests(api):
   yield api.test('basic_out_dir') + api.properties(
       mastername='chromium.linux',
       buildername='Android Builder (dbg)',
-      slavename='build1-a1',
+      bot_id='build1-a1',
       buildnumber='77457',
       out_dir='/tmp',
   )
@@ -55,7 +55,7 @@ def GenTests(api):
   yield api.test('basic_out_dir_without_compile_py') + api.properties(
       mastername='chromium.linux',
       buildername='Android Builder (dbg)',
-      slavename='build1-a1',
+      bot_id='build1-a1',
       buildnumber='77457',
       out_dir='/tmp',
   )
@@ -63,7 +63,7 @@ def GenTests(api):
   yield api.test('basic_out_dir_with_goma_module') + api.properties(
       mastername='chromium.linux',
       buildername='Android Builder (dbg)',
-      slavename='build1-a1',
+      bot_id='build1-a1',
       buildnumber='77457',
       use_goma_module=True,
       out_dir='/tmp',
@@ -72,7 +72,7 @@ def GenTests(api):
   yield api.test('basic_no_out_dir_with_goma_module') + api.properties(
       mastername='chromium.linux',
       buildername='Android Builder (dbg)',
-      slavename='build1-a1',
+      bot_id='build1-a1',
       buildnumber='77457',
       use_goma_module=True,
   )
@@ -81,7 +81,7 @@ def GenTests(api):
          api.properties(
              mastername='chromium.linux',
              buildername='Android Builder (dbg)',
-             slavename='build1-a1',
+             bot_id='build1-a1',
              buildnumber='77457',
              out_dir='/tmp',
              use_goma_module=True,
@@ -104,7 +104,7 @@ def GenTests(api):
          api.properties(
              mastername='chromium.linux',
              buildername='Android Builder (dbg)',
-             slavename='build1-a1',
+             bot_id='build1-a1',
              buildnumber='77457',
              out_dir='/tmp',
              use_goma_module=False,
@@ -114,7 +114,7 @@ def GenTests(api):
          api.properties(
              mastername='chromium.linux',
              buildername='Android Builder (dbg)',
-             slavename='build1-a1',
+             bot_id='build1-a1',
              buildnumber='77457',
              out_dir='/tmp',
              use_goma_module=True,
@@ -128,7 +128,7 @@ def GenTests(api):
          api.properties(
              mastername='chromium.linux',
              buildername='Android Builder (dbg)',
-             slavename='build1-a1',
+             bot_id='build1-a1',
              buildnumber='77457',
              out_dir='/tmp',
              use_goma_module=True,
@@ -148,7 +148,7 @@ def GenTests(api):
          api.properties(
              mastername='chromium.linux',
              buildername='Android Builder (dbg)',
-             slavename='build1-a1',
+             bot_id='build1-a1',
              buildnumber='77457',
              out_dir='/tmp',
              use_goma_module=True,

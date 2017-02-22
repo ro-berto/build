@@ -205,7 +205,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/linux_perf_bisect/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"results-url\": \"https://chromeperf.appspot.com\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"results-url\": \"https://chromeperf.appspot.com\", \"target_platform\": \"linux\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -547,7 +547,7 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"branch\": \"\", \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"is_test\": true, \"issue\": \"12345\", \"mastername\": \"tryserver.chromium.perf\", \"patch_project\": \"chromium\", \"patch_storage\": \"rietveld\", \"patchset\": \"20001\", \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"bisection/desktop_bisect_staging\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=Performance Test (bad49c331def2a3bbf3ddd0096eb51551155) 1 of 1",
       "--builder-name=linux_perf_bisect",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=571",
       "--run-python-script",
       "[BUILDER_CACHE]/linux_perf_bisect/src/tools/perf/run_benchmark",
@@ -941,7 +941,7 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"branch\": \"\", \"buildername\": \"linux_perf_bisect\", \"buildnumber\": 571, \"is_test\": true, \"issue\": \"12345\", \"mastername\": \"tryserver.chromium.perf\", \"patch_project\": \"chromium\", \"patch_storage\": \"rietveld\", \"patchset\": \"20001\", \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"bisection/desktop_bisect_staging\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=Performance Test (d49c331def2a3bbf3ddd0096eb51551155) 1 of 1",
       "--builder-name=linux_perf_bisect",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=571",
       "--run-python-script",
       "[BUILDER_CACHE]/linux_perf_bisect/src/tools/perf/run_benchmark",

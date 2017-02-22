@@ -207,7 +207,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]\\\\Win7_Release__NVIDIA_GeForce_730_\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"Win7 Release (NVIDIA GeForce 730)\", \"buildnumber\": 571, \"mastername\": \"chromium.gpu.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"Win7 Release (NVIDIA GeForce 730)\", \"buildnumber\": 571, \"mastername\": \"chromium.gpu.fyi\", \"target_platform\": \"win\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [

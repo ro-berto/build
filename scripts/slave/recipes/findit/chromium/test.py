@@ -222,7 +222,7 @@ def GenTests(api):
         'path_config': 'kitchen',
         'mastername': 'tryserver.chromium.%s' % platform_name,
         'buildername': '%s_chromium_variable' % platform_name,
-        'slavename': 'build1-a1',
+        'bot_id': 'build1-a1',
         'buildnumber': 1,
         'target_mastername': 'chromium.%s' % platform_name,
         'target_testername': tester_name,

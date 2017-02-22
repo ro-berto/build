@@ -477,7 +477,7 @@
       "--buildbot-mastername",
       "chromium.lkgr",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[BUILDER_CACHE]/UBSan_Release/src",
     "name": "postprocess_for_goma.upload_log",

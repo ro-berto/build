@@ -352,7 +352,7 @@
       "--buildbot-mastername",
       "client.libyuv",
       "--buildbot-slavename",
-      "slavename"
+      "bot_id"
     ],
     "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.upload_log",

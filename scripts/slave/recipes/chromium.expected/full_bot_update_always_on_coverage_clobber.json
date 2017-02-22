@@ -199,7 +199,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/coverage_clobber/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"coverage_clobber\", \"buildnumber\": 571, \"mastername\": \"bot_update.always_on\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"coverage_clobber\", \"buildnumber\": 571, \"mastername\": \"bot_update.always_on\", \"target_platform\": \"linux\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [

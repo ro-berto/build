@@ -176,13 +176,13 @@ with open(dest_path, 'w') as f:
 
 def GenTests(api):
   for mastername, slaves in TEST_BUILDERS.iteritems():
-    for slavename, builders_by_slave in slaves.iteritems():
+    for bot_id, builders_by_slave in slaves.iteritems():
       for builder in builders_by_slave:
         test = (
             api.test(builder) +
             api.properties(buildername=builder,
                            mastername=mastername,
-                           slavename=slavename,
+                           bot_id=bot_id,
                            revision='abc123',
                            buildnumber=2,
                            path_config='kitchen',

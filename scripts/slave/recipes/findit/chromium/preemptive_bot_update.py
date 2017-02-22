@@ -97,7 +97,7 @@ def GenTests(api):
       api.properties(**{
           'mastername': 'tryserver.chromium.linux',
           'buildername': 'linux_chromium_variable',
-          'slavename': 'build1-a1',
+          'bot_id': 'build1-a1',
           'buildnumber': '1',
       })
   )
@@ -106,7 +106,7 @@ def GenTests(api):
       api.properties(**{
           'mastername': 'tryserver.chromium.win',
           'buildername': 'windows_chromium_variable',
-          'slavename': 'build1-a1',
+          'bot_id': 'build1-a1',
           'buildnumber': '1',
       })
   )
@@ -115,7 +115,7 @@ def GenTests(api):
       api.properties(**{
           'mastername': 'tryserver.chromium.mac',
           'buildername': 'mac_chromium_variable',
-          'slavename': 'build1-a1',
+          'bot_id': 'build1-a1',
           'buildnumber': '1',
       })
   )

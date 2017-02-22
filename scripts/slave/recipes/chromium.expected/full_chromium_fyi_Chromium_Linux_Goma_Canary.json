@@ -199,7 +199,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/Chromium_Linux_Goma_Canary/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"Chromium Linux Goma Canary\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"Chromium Linux Goma Canary\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"target_platform\": \"linux\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -475,7 +475,7 @@
       "--buildbot-mastername",
       "chromium.fyi",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[BUILDER_CACHE]/Chromium_Linux_Goma_Canary/src",
     "name": "postprocess_for_goma.upload_log",
@@ -517,7 +517,7 @@
       "--test-launcher-summary-output",
       "/path/to/tmp/json",
       "--builder-name=Chromium Linux Goma Canary",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=571",
       "base_unittests"
     ],
@@ -572,7 +572,7 @@
       "--test-launcher-summary-output",
       "/path/to/tmp/json",
       "--builder-name=Chromium Linux Goma Canary",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=571",
       "content_unittests"
     ],

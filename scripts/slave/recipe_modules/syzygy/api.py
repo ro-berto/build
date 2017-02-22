@@ -150,7 +150,7 @@ PATCH=1
     This invokes a dummy step on the test slave as killing all instances of
     Chrome seriously impairs development.
     """
-    if self.m.properties['slavename'] == 'fake_slave':
+    if self.m.properties['bot_id'] == 'fake_slave':
       return self.m.python.inline('taskkill', 'print "dummy taskkill"')
     return self.m.chromium.taskkill()
 
@@ -235,7 +235,7 @@ PATCH=1
     assert self.m.chromium.c.BUILD_CONFIG == 'Coverage'
     cov_dir = self.m.chromium.output_dir.join('cov')
     archive_path = 'builds/coverage/%s' % self.revision
-    if self.m.properties['slavename'] == 'fake_slave':
+    if self.m.properties['bot_id'] == 'fake_slave':
       archive_path = 'test/' + archive_path
     report_url = '%s/%s/index.html' % (self._SYZYGY_ARCHIVE_URL, archive_path)
     step = self._gen_step_gs_util_cp_dir(
@@ -251,7 +251,7 @@ PATCH=1
     assert self.m.chromium.c.BUILD_CONFIG == 'Release' and self.c.official_build
     bin_dir = self.m.chromium.output_dir.join('archive')
     archive_path = 'builds/official/%s' % self.revision
-    if self.m.properties['slavename'] == 'fake_slave':
+    if self.m.properties['bot_id'] == 'fake_slave':
       archive_path = 'test/' + archive_path
     bin_url = '%s/index.html?path=%s/' % (
         self._SYZYGY_ARCHIVE_URL, archive_path)

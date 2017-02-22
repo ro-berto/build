@@ -32,7 +32,7 @@ def GenTests(api):
   properties = {
       'buildername': 'test_builder',
       'mastername': 'test_master',
-      'slavename': 'test_slave',
+      'bot_id': 'test_slave',
       'clobber': '1',
       'build_command': ['ninja', '-j', '80', '-C', 'out/Release'],
       'ninja_log_outdir': 'out/Release',

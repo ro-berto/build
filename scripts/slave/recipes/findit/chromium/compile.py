@@ -316,7 +316,7 @@ def GenTests(api):
         'path_config': 'kitchen',
         'mastername': 'tryserver.chromium.linux',
         'buildername': 'linux_variable',
-        'slavename': 'build1-a1',
+        'bot_id': 'build1-a1',
         'buildnumber': '1',
         'target_mastername': 'chromium.linux',
         'target_buildername': 'Linux Builder',

@@ -331,7 +331,7 @@
       "--buildbot-mastername",
       "client.webrtc",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.upload_log",
@@ -560,7 +560,7 @@
       "--buildbot-mastername",
       "client.webrtc",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.upload_log (2)",
@@ -789,7 +789,7 @@
       "--buildbot-mastername",
       "client.webrtc",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.upload_log (3)",
@@ -1018,7 +1018,7 @@
       "--buildbot-mastername",
       "client.webrtc",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.upload_log (4)",
@@ -1247,7 +1247,7 @@
       "--buildbot-mastername",
       "client.webrtc",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.upload_log (5)",
@@ -1476,7 +1476,7 @@
       "--buildbot-mastername",
       "client.webrtc",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.upload_log (6)",

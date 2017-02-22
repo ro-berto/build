@@ -200,7 +200,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/Cast_Linux_Trusty/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"Cast Linux Trusty\", \"buildnumber\": 571, \"mastername\": \"chromium.linux\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"Cast Linux Trusty\", \"buildnumber\": 571, \"mastername\": \"chromium.linux\", \"target_platform\": \"linux\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -516,7 +516,7 @@
       "--buildbot-mastername",
       "chromium.linux",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[BUILDER_CACHE]/Cast_Linux_Trusty/src",
     "name": "postprocess_for_goma.upload_log",

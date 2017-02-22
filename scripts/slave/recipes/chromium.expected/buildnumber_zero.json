@@ -177,7 +177,7 @@
       "--paths",
       "{\"checkout\": \"[START_DIR]/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"Linux Tests\", \"buildnumber\": 0, \"mastername\": \"chromium.linux\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"Linux Tests\", \"buildnumber\": 0, \"mastername\": \"chromium.linux\", \"target_platform\": \"linux\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -289,7 +289,7 @@
       "-o",
       "gtest-results/base_unittests",
       "--builder-name=Linux Tests",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=0",
       "base_unittests"
     ],
@@ -321,7 +321,7 @@
       "-o",
       "gtest-results/browser_tests",
       "--builder-name=Linux Tests",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=0",
       "browser_tests",
       "--test-launcher-shard-index=0",

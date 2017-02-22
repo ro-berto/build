@@ -207,7 +207,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]\\\\Win_Clang_Perf_Ref\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"Win Clang Perf Ref\", \"buildnumber\": 571, \"mastername\": \"chromium.perf.fyi\", \"perf-id\": \"chromium-win-clang-ref\", \"results-url\": \"https://chromeperf.appspot.com\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"Win Clang Perf Ref\", \"buildnumber\": 571, \"mastername\": \"chromium.perf.fyi\", \"perf-id\": \"chromium-win-clang-ref\", \"results-url\": \"https://chromeperf.appspot.com\", \"target_platform\": \"win\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -357,7 +357,7 @@
       "--chartjson-file",
       "/path/to/tmp/json",
       "--builder-name=Win Clang Perf Ref",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=571",
       "--run-python-script",
       "/path/to/run_benchmark",
@@ -396,7 +396,7 @@
       "--chartjson-file",
       "/path/to/tmp/json",
       "--builder-name=Win Clang Perf Ref",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=571",
       "--run-python-script",
       "/path/to/run_benchmark",
@@ -435,7 +435,7 @@
       "--chartjson-file",
       "/path/to/tmp/json",
       "--builder-name=Win Clang Perf Ref",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=571",
       "--run-python-script",
       "-v",
@@ -473,7 +473,7 @@
       "--chartjson-file",
       "/path/to/tmp/json",
       "--builder-name=Win Clang Perf Ref",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=571",
       "--run-python-script",
       "/path/to/run_benchmark"
@@ -509,7 +509,7 @@
       "--chartjson-file",
       "/path/to/tmp/json",
       "--builder-name=Win Clang Perf Ref",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=571",
       "--run-python-script",
       "/path/to/run_benchmark"

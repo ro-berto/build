@@ -237,7 +237,7 @@ def GenTests(api):
               parent_buildnumber='1729',
               parent_revision='deadbeef',
               revision='deadbeef',
-              slavename='slavename',
+              bot_id='bot_id',
               target='Release') +
           api.path.exists(api.path['start_dir'].join(
               'src', 'out', 'Release', 'microdump_stackwalk'))
@@ -253,7 +253,7 @@ def GenTests(api):
               parent_buildnumber='1729',
               parent_revision='deadbeef',
               revision='deadbeef',
-              slavename='slavename',
+              bot_id='bot_id',
               target='Release') +
       api.path.exists(api.path['start_dir'].join(
           'src', 'out', 'Release', 'microdump_stackwalk')) +
@@ -269,7 +269,7 @@ def GenTests(api):
           parent_buildnumber='1729',
           parent_revision='deadbeef',
           revision='deadbeef',
-          slavename='slavename',
+          bot_id='bot_id',
           target='Release') +
       api.path.exists(api.path['start_dir'].join(
           'src', 'out', 'Release', 'microdump_stackwalk')) +
@@ -287,7 +287,7 @@ def GenTests(api):
           parent_buildnumber='1729',
           parent_revision='deadbeef',
           revision='deadbeef',
-          slavename='slavename',
+          bot_id='bot_id',
           target='Release') +
       api.path.exists(api.path['start_dir'].join(
           'src', 'out', 'Release', 'microdump_stackwalk')) +
@@ -312,7 +312,7 @@ def GenTests(api):
           parent_buildnumber='1729',
           parent_revision='deadbeef',
           revision='deadbeef',
-          slavename='slavename',
+          bot_id='bot_id',
           target='Release') +
       api.path.exists(api.path['start_dir'].join(
           'src', 'out', 'Release', 'microdump_stackwalk')) +
@@ -329,7 +329,7 @@ def GenTests(api):
           parent_buildnumber='1729',
           parent_revision='deadbeef',
           revision='deadbeef',
-          slavename='slavename',
+          bot_id='bot_id',
           target='Release') +
       api.path.exists(api.path['start_dir'].join(
           'src', 'out', 'Release', 'microdump_stackwalk')) +
@@ -346,7 +346,7 @@ def GenTests(api):
               parent_buildnumber='1729',
               parent_revision='deadbeef',
               revision='deadbeef',
-              slavename='slavename',
+              bot_id='bot_id',
               target='Release') +
       api.path.exists(api.path['start_dir'].join(
           'src', 'out', 'Release', 'microdump_stackwalk')) +

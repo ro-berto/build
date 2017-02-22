@@ -91,7 +91,7 @@ def _TriggerTestsSteps(api):
   if api.properties['buildername'] in trigger_map:
     api.trigger(
         {'builder_name': trigger_map[api.properties['buildername']],
-         'properties': {'parent_slavename': api.properties['slavename']}})
+         'properties': {'parent_slavename': api.properties['bot_id']}})
 
 def RunSteps(api):
   got_revision = _CheckoutSteps(api)
@@ -106,7 +106,7 @@ def GenTests(api):
       mastername = 'client.nacl',
       buildername = 'precise_64-newlib-arm_qemu-pnacl-dbg',
       revision = 'abcd',
-      slavename = 'TestSlave',
+      bot_id = 'TestSlave',
       buildnumber = 1234,
       slavetype = 'BuilderTester',
     ))
@@ -118,7 +118,7 @@ def GenTests(api):
       mastername = 'client.nacl',
       buildername = 'precise_64-newlib-arm_qemu-pnacl-dbg',
       revision = 'abcd',
-      slavename = 'TestSlave',
+      bot_id = 'TestSlave',
       buildnumber = 1234,
       slavetype = 'BuilderTester',
     ) + api.step_data('annotated steps', retcode=1))
@@ -130,7 +130,7 @@ def GenTests(api):
       mastername = 'client.nacl',
       buildername = 'oneiric_32-newlib-arm_hw-pnacl-panda-dbg',
       revision = 'abcd',
-      slavename='TestSlave',
+      bot_id='TestSlave',
       buildnumber = 5678,
       parent_slavename = 'TestSlave',
       parent_buildername = 'precise_64-newlib-arm_qemu-pnacl-dbg',

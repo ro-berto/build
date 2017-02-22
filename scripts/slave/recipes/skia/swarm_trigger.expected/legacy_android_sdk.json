@@ -569,9 +569,9 @@
       "buildername=Build-Ubuntu-GCC-Arm7-Release-Android_Vulkan",
       "mastername=client.skia.compile",
       "buildnumber=1",
-      "slavename=skiabot-dummy-compile-slave",
       "reason=Triggered by Skia swarm_trigger Recipe",
       "swarm_out_dir=${ISOLATED_OUTDIR}",
+      "bot_id=skiabot-dummy-compile-slave",
       "revision=9046e2e693bb92a76e972b694580e5d17ad10748"
     ],
     "name": "[trigger] compile_skia on Ubuntu",

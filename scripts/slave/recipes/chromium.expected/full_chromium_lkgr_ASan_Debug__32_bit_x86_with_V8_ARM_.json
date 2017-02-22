@@ -477,7 +477,7 @@
       "--buildbot-mastername",
       "chromium.lkgr",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[BUILDER_CACHE]/ASan_Debug__32_bit_x86_with_V8_ARM_/src",
     "name": "postprocess_for_goma.upload_log",

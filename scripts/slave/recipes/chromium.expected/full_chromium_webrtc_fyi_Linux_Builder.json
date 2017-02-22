@@ -210,7 +210,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/Linux_Builder/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"Linux Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"Linux Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc.fyi\", \"target_platform\": \"linux\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -487,7 +487,7 @@
       "--buildbot-mastername",
       "chromium.webrtc.fyi",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Builder/src",
     "name": "postprocess_for_goma.upload_log",

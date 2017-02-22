@@ -200,7 +200,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/WebKit_Android__Nexus4_/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"WebKit Android (Nexus4)\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"slavename\": \"TestSlavename\", \"target_platform\": \"android\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"WebKit Android (Nexus4)\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"target_platform\": \"android\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -643,7 +643,7 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"WebKit Android (Nexus4)\", \"buildnumber\": 571, \"gs_acl\": \"public-read\", \"mastername\": \"chromium.webkit\", \"parent_build_archive_url\": \"gs://test-domain/test-archive.zip\", \"parent_buildername\": \"Android Builder\", \"parent_got_revision\": \"1111111\", \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=webkit_tests",
       "--builder-name=WebKit Android (Nexus4)",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=571",
       "--run-python-script",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/layout_test_wrapper.py",

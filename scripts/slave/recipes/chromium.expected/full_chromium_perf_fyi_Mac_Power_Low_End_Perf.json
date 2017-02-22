@@ -200,7 +200,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/Mac_Power_Low_End_Perf/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"Mac Power Low-End Perf\", \"buildnumber\": 571, \"mastername\": \"chromium.perf.fyi\", \"perf-id\": \"mac-power-low-end\", \"results-url\": \"https://chromeperf.appspot.com\", \"slavename\": \"TestSlavename\", \"target_platform\": \"mac\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"Mac Power Low-End Perf\", \"buildnumber\": 571, \"mastername\": \"chromium.perf.fyi\", \"perf-id\": \"mac-power-low-end\", \"results-url\": \"https://chromeperf.appspot.com\", \"target_platform\": \"mac\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -351,7 +351,7 @@
       "--chartjson-file",
       "/path/to/tmp/json",
       "--builder-name=Mac Power Low-End Perf",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=571",
       "--run-python-script",
       "/path/to/run_benchmark",
@@ -391,7 +391,7 @@
       "--chartjson-file",
       "/path/to/tmp/json",
       "--builder-name=Mac Power Low-End Perf",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=571",
       "--run-python-script",
       "/path/to/run_benchmark",
@@ -431,7 +431,7 @@
       "--chartjson-file",
       "/path/to/tmp/json",
       "--builder-name=Mac Power Low-End Perf",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=571",
       "--run-python-script",
       "-v",
@@ -470,7 +470,7 @@
       "--chartjson-file",
       "/path/to/tmp/json",
       "--builder-name=Mac Power Low-End Perf",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=571",
       "--run-python-script",
       "/path/to/run_benchmark"
@@ -507,7 +507,7 @@
       "--chartjson-file",
       "/path/to/tmp/json",
       "--builder-name=Mac Power Low-End Perf",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=571",
       "--run-python-script",
       "/path/to/run_benchmark"

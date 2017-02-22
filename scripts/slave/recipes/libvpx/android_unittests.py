@@ -154,7 +154,7 @@ def RunSteps(api, libvpx_git_url, buildername):
           testname,
           libvpx_revision_number,
           i["framesPerSecond"],
-          bot=api.m.properties["slavename"])
+          bot=api.m.properties["bot_id"])
       p['units'] = "fps"
       points.append(p)
 
@@ -165,7 +165,7 @@ def RunSteps(api, libvpx_git_url, buildername):
           testname,
           libvpx_revision_number,
           i["minPsnr"],
-          bot=api.m.properties["slavename"])
+          bot=api.m.properties["bot_id"])
       p['units'] = "dB"
       points.append(p)
     else:
@@ -175,7 +175,7 @@ def RunSteps(api, libvpx_git_url, buildername):
           testname,
           libvpx_revision_number,
           i["framesPerSecond"],
-          bot=api.m.properties["slavename"])
+          bot=api.m.properties["bot_id"])
       p['units'] = "fps"
       points.append(p)
 
@@ -189,7 +189,7 @@ def GenTests(api):
     api.test('basic_linux_64') +
     api.properties(
         libvpx_git_url='https://chromium.googlesource.com/webm/libvpx',
-        slavename='libvpx-bot', buildername='Nexus 5 Builder',
+        bot_id='libvpx-bot', buildername='Nexus 5 Builder',
         mastername='client.libvpx', buildnumber='75') +
     api.step_data('git number', stdout=api.raw_io.output_text('42')) +
     api.step_data('adb_wrap',

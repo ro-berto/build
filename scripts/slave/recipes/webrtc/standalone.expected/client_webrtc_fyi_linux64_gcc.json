@@ -377,7 +377,7 @@
       "--buildbot-mastername",
       "client.webrtc.fyi",
       "--buildbot-slavename",
-      "slavename"
+      "bot_id"
     ],
     "cwd": "[BUILDER_CACHE]/Linux64_GCC/src",
     "name": "postprocess_for_goma.upload_log",

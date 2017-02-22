@@ -475,9 +475,9 @@
       "buildername=Infra-PerCommit",
       "mastername=client.skia",
       "buildnumber=5",
-      "slavename=skiabot-linux-swarm-000",
       "reason=Triggered by Skia swarm_trigger Recipe",
       "swarm_out_dir=${ISOLATED_OUTDIR}",
+      "bot_id=skiabot-linux-swarm-000",
       "revision=5e03a58dc0850e5137a8ebbce29610670c756aed"
     ],
     "name": "[trigger] infra_skia on Ubuntu",

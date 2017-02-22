@@ -394,7 +394,7 @@ def GenTests(api):
       api.properties(mastername="client.pdfium",
                      buildername='windows',
                      buildnumber='1234',
-                     slavename="test_slave")
+                     bot_id="test_slave")
   )
   yield (
       api.test('linux') +
@@ -402,7 +402,7 @@ def GenTests(api):
       api.properties(mastername="client.pdfium",
                      buildername='linux',
                      buildnumber='1234',
-                     slavename="test_slave")
+                     bot_id="test_slave")
   )
   yield (
       api.test('mac') +
@@ -410,7 +410,7 @@ def GenTests(api):
       api.properties(mastername="client.pdfium",
                      buildername='mac',
                      buildnumber='1234',
-                     slavename="test_slave")
+                     bot_id="test_slave")
   )
 
   yield (
@@ -420,7 +420,7 @@ def GenTests(api):
                      mastername="client.pdfium",
                      buildername='windows_no_v8',
                      buildnumber='1234',
-                     slavename="test_slave")
+                     bot_id="test_slave")
   )
   yield (
       api.test('linux_no_v8') +
@@ -429,7 +429,7 @@ def GenTests(api):
                      mastername="client.pdfium",
                      buildername='linux_no_v8',
                      buildnumber='1234',
-                     slavename="test_slave")
+                     bot_id="test_slave")
   )
   yield (
       api.test('mac_no_v8') +
@@ -438,7 +438,7 @@ def GenTests(api):
                      mastername="client.pdfium",
                      buildername='mac_no_v8',
                      buildnumber='1234',
-                     slavename="test_slave")
+                     bot_id="test_slave")
   )
 
   yield (
@@ -450,7 +450,7 @@ def GenTests(api):
                      mastername="client.pdfium",
                      buildername='windows_skia',
                      buildnumber='1234',
-                     slavename="test_slave")
+                     bot_id="test_slave")
   )
 
   yield (
@@ -461,7 +461,7 @@ def GenTests(api):
                      mastername="client.pdfium",
                      buildername='windows_xfa_32',
                      buildnumber='1234',
-                     slavename="test_slave")
+                     bot_id="test_slave")
   )
 
   yield (
@@ -471,7 +471,7 @@ def GenTests(api):
                      mastername="client.pdfium",
                      buildername='windows_xfa',
                      buildnumber='1234',
-                     slavename="test_slave")
+                     bot_id="test_slave")
   )
 
   yield (
@@ -482,7 +482,7 @@ def GenTests(api):
                      mastername="client.pdfium",
                      buildername='windows_xfa_rel',
                      buildnumber='1234',
-                     slavename="test_slave")
+                     bot_id="test_slave")
   )
 
   yield (
@@ -494,7 +494,7 @@ def GenTests(api):
                      mastername="client.pdfium",
                      buildername='windows_xfa_clang_32',
                      buildnumber='1234',
-                     slavename="test_slave")
+                     bot_id="test_slave")
   )
 
   yield (
@@ -505,7 +505,7 @@ def GenTests(api):
                      mastername="client.pdfium",
                      buildername='windows_xfa_clang',
                      buildnumber='1234',
-                     slavename="test_slave")
+                     bot_id="test_slave")
   )
 
   yield (
@@ -517,7 +517,7 @@ def GenTests(api):
                      mastername="client.pdfium",
                      buildername='linux_skia',
                      buildnumber='1234',
-                     slavename="test_slave")
+                     bot_id="test_slave")
   )
 
   yield (
@@ -527,7 +527,7 @@ def GenTests(api):
                      mastername="client.pdfium",
                      buildername='linux_xfa',
                      buildnumber='1234',
-                     slavename="test_slave")
+                     bot_id="test_slave")
   )
 
   yield (
@@ -538,7 +538,7 @@ def GenTests(api):
                      mastername="client.pdfium",
                      buildername='linux_xfa_rel',
                      buildnumber='1234',
-                     slavename="test_slave")
+                     bot_id="test_slave")
   )
 
   yield (
@@ -550,7 +550,7 @@ def GenTests(api):
                      mastername="client.pdfium",
                      buildername='mac_skia',
                      buildnumber='1234',
-                     slavename="test_slave")
+                     bot_id="test_slave")
   )
 
   yield (
@@ -560,7 +560,7 @@ def GenTests(api):
                      mastername="client.pdfium",
                      buildername='mac_xfa',
                      buildnumber='1234',
-                     slavename="test_slave")
+                     bot_id="test_slave")
   )
 
   yield (
@@ -571,7 +571,7 @@ def GenTests(api):
                      mastername="client.pdfium",
                      buildername='mac_xfa_rel',
                      buildnumber='1234',
-                     slavename="test_slave")
+                     bot_id="test_slave")
   )
 
   yield (
@@ -581,7 +581,7 @@ def GenTests(api):
                      mastername="client.pdfium",
                      buildername='linux_asan_lsan',
                      buildnumber='1234',
-                     slavename="test_slave")
+                     bot_id="test_slave")
   )
 
   yield (
@@ -592,7 +592,7 @@ def GenTests(api):
                      mastername="client.pdfium",
                      buildername='linux_xfa_asan_lsan',
                      buildnumber='1234',
-                     slavename="test_slave")
+                     bot_id="test_slave")
   )
 
   yield (
@@ -623,7 +623,7 @@ def GenTests(api):
       api.platform('linux', 64) +
       api.properties(mastername='client.pdfium',
                      buildername='android',
-                     slavename='test_slave',
+                     bot_id='test_slave',
                      target_os='android',
                      buildnumber='1234',
                      skip_test=True)
@@ -635,7 +635,7 @@ def GenTests(api):
     api.properties(v8=False,
                    mastername='client.pdfium',
                    buildername='android',
-                   slavename='test_slave',
+                   bot_id='test_slave',
                    target_os='android',
                    buildnumber='1234') +
     api.path.exists(
@@ -648,7 +648,7 @@ def GenTests(api):
     api.platform('linux', 64) +
     api.properties(mastername='client.pdfium',
                    buildername='android',
-                   slavename='test_slave',
+                   bot_id='test_slave',
                    target_os='android',
                    buildnumber='1234') +
     api.step_data(

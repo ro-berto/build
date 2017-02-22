@@ -441,7 +441,7 @@
       "--buildbot-mastername",
       "chromium.fyi",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.upload_log",

@@ -300,7 +300,7 @@
       "--buildbot-mastername",
       "client.webrtc.fyi",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [

@@ -809,7 +809,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     master_dict = self.builders.get(mastername, {})
     bot_config = master_dict.get('builders', {}).get(buildername, {})
 
-    for name in ('buildername', 'slavename', 'buildnumber', 'mastername'):
+    for name in ('buildername', 'bot_id', 'buildnumber', 'mastername'):
       properties[name] = self.m.properties[name]
 
     # Optional properties

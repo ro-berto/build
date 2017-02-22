@@ -26,5 +26,5 @@ def GenTests(api):
     api.test('basic') +
     api.properties(mastername='master.tryserver.client.custom_tabs_client',
                    buildername='linux',
-                   slavename='linux_slave')
+                   bot_id='linux_slave')
   )

@@ -203,7 +203,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/Mac_Release__Intel_/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"Mac Release (Intel)\", \"buildnumber\": 571, \"mastername\": \"client.v8.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"mac\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"Mac Release (Intel)\", \"buildnumber\": 571, \"mastername\": \"client.v8.fyi\", \"target_platform\": \"mac\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -555,7 +555,7 @@
       "--buildbot-mastername",
       "client.v8.fyi",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[BUILDER_CACHE]/Mac_Release__Intel_/src",
     "name": "postprocess_for_goma.upload_log",

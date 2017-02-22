@@ -206,7 +206,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/android_blink_rel/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"android_blink_rel\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.android\", \"slavename\": \"TestSlavename\", \"target_platform\": \"android\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"android_blink_rel\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.android\", \"target_platform\": \"android\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -581,7 +581,7 @@
       "--buildbot-mastername",
       "tryserver.chromium.android",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[BUILDER_CACHE]/android_blink_rel/src",
     "name": "postprocess_for_goma.upload_log",
@@ -942,7 +942,7 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"branch\": \"\", \"build_config\": \"Release\", \"buildername\": \"android_blink_rel\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium.android\", \"patch_project\": \"chromium\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"chromium_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": null, \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=webkit_tests (with patch)",
       "--builder-name=android_blink_rel",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=571",
       "--run-python-script",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/layout_test_wrapper.py",

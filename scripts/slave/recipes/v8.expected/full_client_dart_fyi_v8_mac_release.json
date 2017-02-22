@@ -452,7 +452,7 @@
       "--buildbot-mastername",
       "client.dart.fyi",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[START_DIR]/v8",
     "name": "postprocess_for_goma.upload_log",

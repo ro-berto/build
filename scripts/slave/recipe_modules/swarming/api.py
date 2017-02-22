@@ -615,8 +615,8 @@ class SwarmingApi(recipe_api.RecipeApi):
       tags.add('buildnumber:%s' % task.buildnumber)
     if task.dimensions.get('os'):
       tags.add('os:' + task.dimensions['os'])
-    if self.m.properties.get('slavename'):
-      tags.add('slavename:%s' % self.m.properties['slavename'])
+    if self.m.properties.get('bot_id'):
+      tags.add('slavename:%s' % self.m.properties['bot_id'])
     tags.add('stepname:%s' % self.get_step_name('', task))
     rietveld = self.m.properties.get('rietveld')
     issue = self.m.properties.get('issue')

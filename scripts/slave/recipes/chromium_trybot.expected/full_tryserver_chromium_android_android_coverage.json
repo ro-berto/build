@@ -206,7 +206,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/android/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"android_coverage\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.android\", \"slavename\": \"TestSlavename\", \"target_platform\": \"android\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"android_coverage\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.android\", \"target_platform\": \"android\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -586,7 +586,7 @@
       "--buildbot-mastername",
       "tryserver.chromium.android",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[BUILDER_CACHE]/android/src",
     "name": "postprocess_for_goma.upload_log",
@@ -1735,7 +1735,7 @@
       "--buildbot-mastername",
       "tryserver.chromium.android",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[BUILDER_CACHE]/android",
     "env": {

@@ -149,7 +149,7 @@ def RunSteps(api):
         env=env)
 
   # Run tests.
-  buildslave = api.properties['slavename']
+  buildslave = api.properties['bot_id']
   m = re.search('^[a-zA-Z-]*(\d+)$', buildslave)
   karma_port = '9876'
   if m and len(m.groups()) > 0:
@@ -165,12 +165,12 @@ def GenTests(api):
       api.test('Infra-PerCommit') +
       api.path.exists(api.path['start_dir'].join('go', 'src', INFRA_GO,
                                                    '.git')) +
-      api.properties(slavename='skiabot-linux-infra-001',
+      api.properties(bot_id='skiabot-linux-infra-001',
                      path_config='kitchen')
   )
   yield (
       api.test('Infra-PerCommit_initialcheckout') +
-      api.properties(slavename='skiabot-linux-infra-001',
+      api.properties(bot_id='skiabot-linux-infra-001',
                      path_config='kitchen')
   )
   yield (
@@ -180,7 +180,7 @@ def GenTests(api):
                      issue=1234,
                      patchset=1,
                      revision=REF_HEAD,
-                     slavename='skiabot-linux-infra-001',
+                     bot_id='skiabot-linux-infra-001',
                      path_config='kitchen')
   )
   yield (
@@ -188,7 +188,7 @@ def GenTests(api):
       api.properties(
           patch_storage='gerrit',
           revision=REF_HEAD,
-          slavename='skiabot-linux-infra-001',
+          bot_id='skiabot-linux-infra-001',
           path_config='kitchen') +
       api.properties.tryserver(
           gerrit_project='skia',

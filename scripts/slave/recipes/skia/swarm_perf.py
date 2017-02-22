@@ -61,13 +61,13 @@ def GenTests(api):
     return test_data
 
   for mastername, slaves in TEST_BUILDERS.iteritems():
-    for slavename, builders_by_slave in slaves.iteritems():
+    for bot_id, builders_by_slave in slaves.iteritems():
       for builder in builders_by_slave:
         test = (
           api.test(builder) +
           api.properties(buildername=builder,
                          mastername=mastername,
-                         slavename=slavename,
+                         bot_id=bot_id,
                          buildnumber=5,
                          revision='abc123',
                          path_config='kitchen',
@@ -99,7 +99,7 @@ def GenTests(api):
     api.test('big_issue_number') +
     api.properties(buildername=builder,
                    mastername='client.skia.compile',
-                   slavename='skiabot-linux-swarm-000',
+                   bot_id='skiabot-linux-swarm-000',
                    buildnumber=5,
                    revision='abc123',
                    path_config='kitchen',

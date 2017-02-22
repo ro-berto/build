@@ -261,7 +261,7 @@
       "--buildbot-mastername",
       "client.wasm.llvm",
       "--buildbot-slavename",
-      "TestSlavename"
+      "TestBot"
     ],
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [

@@ -101,7 +101,7 @@ def GenTests(api):
       api.test('%s_basic' % sanitize('Android ChromeDriver Tests (dbg)')) +
       api.properties.generic(
           buildername='Android ChromeDriver Tests (dbg)',
-          slavename='slavename',
+          bot_id='bot_id',
           mastername='chromium.fyi') +
       api.properties(
           parent_build_archive_url='gs://test-domain/test-archive.zip',
@@ -113,7 +113,7 @@ def GenTests(api):
           '%s_test_failure' % sanitize('Android ChromeDriver Tests (dbg)')) +
       api.properties.generic(
           buildername='Android ChromeDriver Tests (dbg)',
-          slavename='slavename',
+          bot_id='bot_id',
           mastername='chromium.fyi') +
       api.properties(
           parent_build_archive_url='gs://test-domain/test-archive.zip',

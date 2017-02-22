@@ -345,10 +345,16 @@ class GomaApi(recipe_api.RecipeApi):
       ])
 
     # Set buildbot info used in goma_utils.MakeGomaStatusCounter etc.
-    for key in ['buildername', 'mastername', 'slavename', 'clobber']:
-      if key in self.m.properties:
+    keys = [
+      ('buildername', 'buildername'),
+      ('mastername', 'mastername'),
+      ('bot_id', 'slavename'),
+      ('clobber', 'clobber'),
+    ]
+    for prop_name, flag_suffix in keys:
+      if prop_name in self.m.properties:
         args.extend([
-            '--buildbot-%s' % key, self.m.properties[key]
+            '--buildbot-%s' % flag_suffix, self.m.properties[prop_name]
         ])
 
     self.m.python(

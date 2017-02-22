@@ -41,7 +41,7 @@ def RunSteps(api):
   else:
     # Make sure we don't run a non-pure swarming tester on a subdir slave.
     # Subdir slaves have the name pattern 'slaveN-c3#M'.
-    assert '#' not in api.properties.get('slavename', ''), (
+    assert '#' not in api.properties.get('bot_id', ''), (
         'Can only use pure swarming testers on subdir slaves.')
 
     if api.platform.is_win:

@@ -74,5 +74,5 @@ def GenTests(api):
 
   # Use 'fake_slave' as a slave name to ensure that we get coverage of the
   # alternate code paths in Coverage and Official specific commands builds.
-  yield api.syzygy.generate_test(api, 'Syzygy Coverage', slavename='fake_slave')
-  yield api.syzygy.generate_test(api, 'Syzygy Official', slavename='fake_slave')
+  yield api.syzygy.generate_test(api, 'Syzygy Coverage', bot_id='fake_slave')
+  yield api.syzygy.generate_test(api, 'Syzygy Official', bot_id='fake_slave')

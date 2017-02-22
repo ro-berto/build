@@ -449,7 +449,7 @@
       "--buildbot-mastername",
       "tryserver.v8",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[START_DIR]/v8",
     "name": "postprocess_for_goma.upload_log",
@@ -555,7 +555,7 @@
       "--tag",
       "rietveld:https://codereview.chromium.org/12853011/#ps1",
       "--tag",
-      "slavename:TestSlavename",
+      "slavename:test_bot",
       "--tag",
       "stepname:Mjsunit on Ubuntu-14.04",
       "--idempotent",
@@ -682,7 +682,7 @@
       "--tag",
       "rietveld:https://codereview.chromium.org/12853011/#ps1",
       "--tag",
-      "slavename:TestSlavename",
+      "slavename:test_bot",
       "--tag",
       "stepname:Webkit on Ubuntu-14.04",
       "--idempotent",

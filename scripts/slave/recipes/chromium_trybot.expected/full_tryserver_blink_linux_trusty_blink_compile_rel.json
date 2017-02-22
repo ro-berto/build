@@ -205,7 +205,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/linux_layout/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"linux_trusty_blink_compile_rel\", \"buildnumber\": 571, \"mastername\": \"tryserver.blink\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"linux_trusty_blink_compile_rel\", \"buildnumber\": 571, \"mastername\": \"tryserver.blink\", \"target_platform\": \"linux\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -554,7 +554,7 @@
       "--buildbot-mastername",
       "tryserver.blink",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[BUILDER_CACHE]/linux_layout/src",
     "name": "postprocess_for_goma.upload_log",

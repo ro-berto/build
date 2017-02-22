@@ -256,7 +256,7 @@ def GenTests(api):
       api.test(buildername) +
       host_platform +
       api.properties.generic(mastername='client.boringssl',
-                             buildername=buildername, slavename='slavename') +
+                             buildername=buildername, bot_id='bot_id') +
       api.override_step_data('unit tests',
                              api.test_utils.canned_test_output(True)) +
       api.override_step_data('ssl tests',
@@ -267,7 +267,7 @@ def GenTests(api):
     api.test('failed_unit_tests') +
     api.platform('linux', 64) +
     api.properties.generic(mastername='client.boringssl', buildername='linux',
-                           slavename='slavename') +
+                           bot_id='bot_id') +
     api.override_step_data('unit tests',
                            api.test_utils.canned_test_output(False)) +
     api.override_step_data('ssl tests',
@@ -278,7 +278,7 @@ def GenTests(api):
     api.test('failed_ssl_tests') +
     api.platform('linux', 64) +
     api.properties.generic(mastername='client.boringssl', buildername='linux',
-                           slavename='slavename') +
+                           bot_id='bot_id') +
     api.override_step_data('unit tests',
                            api.test_utils.canned_test_output(True)) +
     api.override_step_data('ssl tests',
@@ -292,5 +292,5 @@ def GenTests(api):
         gerrit_project='boringssl',
         gerrit_url='https://boringssl-review.googlesource.com',
         mastername='actually-no-master', buildername='linux',
-        slavename='swarming-slave')
+        bot_id='swarming-slave')
   )

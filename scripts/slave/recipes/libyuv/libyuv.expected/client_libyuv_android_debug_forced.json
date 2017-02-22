@@ -331,7 +331,7 @@
       "--buildbot-mastername",
       "client.libyuv",
       "--buildbot-slavename",
-      "slavename"
+      "bot_id"
     ],
     "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.upload_log",
@@ -378,9 +378,9 @@
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Android Debug\", \"buildnumber\": 1337, \"mastername\": \"client.libyuv\", \"recipe\": \"libyuv/libyuv\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Debug\", \"bot_id\": \"bot_id\", \"buildername\": \"Android Debug\", \"buildnumber\": 1337, \"mastername\": \"client.libyuv\", \"recipe\": \"libyuv/libyuv\"}",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Android Debug\", \"buildnumber\": 1337, \"mastername\": \"client.libyuv\", \"recipe\": \"libyuv/libyuv\", \"slavename\": \"slavename\"}"
+      "{\"BUILD_CONFIG\": \"Debug\", \"bot_id\": \"bot_id\", \"buildername\": \"Android Debug\", \"buildnumber\": 1337, \"mastername\": \"client.libyuv\", \"recipe\": \"libyuv/libyuv\"}"
     ],
     "name": "package build"
   },

@@ -201,7 +201,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/mac/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"mac_chromium_variable\", \"buildnumber\": 1, \"mastername\": \"tryserver.chromium.mac\", \"slavename\": \"build1-a1\", \"target_platform\": \"mac\"}"
+      "{\"bot_id\": \"build1-a1\", \"buildername\": \"mac_chromium_variable\", \"buildnumber\": 1, \"mastername\": \"tryserver.chromium.mac\", \"target_platform\": \"mac\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -425,7 +425,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/mac/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"mac_chromium_variable\", \"buildnumber\": 1, \"mastername\": \"tryserver.chromium.mac\", \"slavename\": \"build1-a1\", \"target_platform\": \"mac\"}"
+      "{\"bot_id\": \"build1-a1\", \"buildername\": \"mac_chromium_variable\", \"buildnumber\": 1, \"mastername\": \"tryserver.chromium.mac\", \"target_platform\": \"mac\"}"
     ],
     "name": "test r0.get compile targets for scripts",
     "~followup_annotations": [

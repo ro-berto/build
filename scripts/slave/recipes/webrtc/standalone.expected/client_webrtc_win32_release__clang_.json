@@ -399,7 +399,7 @@
       "--buildbot-mastername",
       "client.webrtc",
       "--buildbot-slavename",
-      "slavename"
+      "bot_id"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_\\src",
     "name": "postprocess_for_goma.upload_log",

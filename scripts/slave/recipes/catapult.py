@@ -71,7 +71,7 @@ def GenTests(api):
     api.test('basic') +
     api.properties(mastername='master.client.catapult',
                    buildername='windows',
-                   slavename='windows_slave') +
+                   bot_id='windows_slave') +
     api.generator_script(
       'build_steps.py',
       {'name': 'Dashboard Tests', 'cmd': ['run_py_tests', '--no-hooks']},
@@ -82,7 +82,7 @@ def GenTests(api):
     api.test('android') +
     api.properties(mastername='master.client.catapult',
                    buildername='android',
-                   slavename='android_slave',
+                   bot_id='android_slave',
                    platform='android') +
     api.generator_script(
         'build_steps.py',

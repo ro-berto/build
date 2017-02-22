@@ -378,7 +378,7 @@
       "--buildbot-mastername",
       "client.webrtc",
       "--buildbot-slavename",
-      "slavename"
+      "bot_id"
     ],
     "cwd": "[BUILDER_CACHE]/Linux32_ARM/src",
     "name": "postprocess_for_goma.upload_log",

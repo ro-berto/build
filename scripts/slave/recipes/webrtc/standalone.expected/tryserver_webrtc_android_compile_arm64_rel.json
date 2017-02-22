@@ -429,7 +429,7 @@
       "--buildbot-mastername",
       "tryserver.webrtc",
       "--buildbot-slavename",
-      "slavename"
+      "bot_id"
     ],
     "cwd": "[BUILDER_CACHE]/android_compile_arm64_rel/src",
     "name": "postprocess_for_goma.upload_log",

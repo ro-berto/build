@@ -208,7 +208,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/linux_layout/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"v8_linux_blink_rel\", \"buildnumber\": 571, \"mastername\": \"tryserver.v8\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"v8_linux_blink_rel\", \"buildnumber\": 571, \"mastername\": \"tryserver.v8\", \"target_platform\": \"linux\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -558,7 +558,7 @@
       "--buildbot-mastername",
       "tryserver.v8",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[BUILDER_CACHE]/linux_layout/src",
     "name": "postprocess_for_goma.upload_log",
@@ -603,7 +603,7 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"branch\": \"\", \"build_config\": \"Release\", \"buildername\": \"v8_linux_blink_rel\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.v8\", \"patch_project\": \"v8\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"chromium_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": null, \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=webkit_tests (with patch)",
       "--builder-name=v8_linux_blink_rel",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=571",
       "--run-python-script",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/layout_test_wrapper.py",
@@ -1021,7 +1021,7 @@
       "--buildbot-mastername",
       "tryserver.v8",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[BUILDER_CACHE]/linux_layout",
     "env": {
@@ -1064,7 +1064,7 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"branch\": \"\", \"build_config\": \"Release\", \"buildername\": \"v8_linux_blink_rel\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.v8\", \"patch_project\": \"v8\", \"patchset\": 1, \"path_config\": \"kitchen\", \"project\": \"chrome\", \"recipe\": \"chromium_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": null, \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=webkit_tests (without patch)",
       "--builder-name=v8_linux_blink_rel",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=571",
       "--run-python-script",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/layout_test_wrapper.py",

@@ -17,15 +17,15 @@ class SyzygyTestApi(recipe_test_api.RecipeTestApi):
     return {'mastername': 'master.client.syzygy',
             # A known good revision that builds and passes all unittests.
             'revision': '0e9f25b1098271be2b096fd1c095d6d907cf86f7',
-            'slavename': 'vm331-m3'}
+            'bot_id': 'vm331-m3'}
 
-  def generate_test(self, api, buildername, slavename=None):
+  def generate_test(self, api, buildername, bot_id=None):
     """Returns a test object for the given builder."""
     props = self.test_properties()
     mastername = props['mastername']
     props['buildername'] = buildername
-    if slavename:
-      props['slavename'] = slavename
+    if bot_id:
+      props['bot_id'] = bot_id
     test = (
         api.test('full_%s_%s' % (self.sanitize_non_alpha(mastername),
                                  self.sanitize_non_alpha(buildername))) +

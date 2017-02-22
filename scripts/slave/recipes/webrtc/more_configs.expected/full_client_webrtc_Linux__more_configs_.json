@@ -328,7 +328,7 @@
       "--buildbot-mastername",
       "client.webrtc",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.upload_log",
@@ -555,7 +555,7 @@
       "--buildbot-mastername",
       "client.webrtc",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.upload_log (2)",
@@ -782,7 +782,7 @@
       "--buildbot-mastername",
       "client.webrtc",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.upload_log (3)",
@@ -1009,7 +1009,7 @@
       "--buildbot-mastername",
       "client.webrtc",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.upload_log (4)",
@@ -1236,7 +1236,7 @@
       "--buildbot-mastername",
       "client.webrtc",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.upload_log (5)",
@@ -1463,7 +1463,7 @@
       "--buildbot-mastername",
       "client.webrtc",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.upload_log (6)",
@@ -1501,7 +1501,7 @@
       "--test-type=peerconnection_unittests",
       "--step-name=peerconnection_unittests",
       "--builder-name=Linux (more configs)",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=571",
       "--run-python-script",
       "[START_DIR]/src/third_party/gtest-parallel/gtest-parallel",

@@ -201,7 +201,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/GPU_Mac_Builder__dbg_/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"GPU Mac Builder (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.gpu\", \"slavename\": \"TestSlavename\", \"target_platform\": \"mac\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"GPU Mac Builder (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.gpu\", \"target_platform\": \"mac\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -563,7 +563,7 @@
       "--buildbot-mastername",
       "chromium.gpu",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[BUILDER_CACHE]/GPU_Mac_Builder__dbg_/src",
     "name": "postprocess_for_goma.upload_log",

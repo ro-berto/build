@@ -404,7 +404,7 @@
       "--buildbot-mastername",
       "client.v8.fyi",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___ignition",
     "name": "postprocess_for_goma.upload_log",
@@ -441,7 +441,7 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"V8-Blink Linux 64 - ignition\", \"buildnumber\": 571, \"mastername\": \"client.v8.fyi\", \"path_config\": \"kitchen\", \"recipe\": \"blink_downstream\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=webkit_unit_tests",
       "--builder-name=V8-Blink Linux 64 - ignition",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=571",
       "webkit_unit_tests"
     ],
@@ -462,7 +462,7 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"V8-Blink Linux 64 - ignition\", \"buildnumber\": 571, \"mastername\": \"client.v8.fyi\", \"path_config\": \"kitchen\", \"recipe\": \"blink_downstream\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=webkit_tests (with patch)",
       "--builder-name=V8-Blink Linux 64 - ignition",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=571",
       "--run-python-script",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/layout_test_wrapper.py",

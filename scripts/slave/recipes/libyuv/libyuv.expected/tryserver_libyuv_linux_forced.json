@@ -334,7 +334,7 @@
       "--buildbot-mastername",
       "tryserver.libyuv",
       "--buildbot-slavename",
-      "slavename"
+      "bot_id"
     ],
     "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.upload_log",
@@ -366,12 +366,12 @@
       "Debug",
       "--no-xvfb",
       "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"linux\", \"buildnumber\": 1337, \"issue\": \"123456789\", \"mastername\": \"tryserver.libyuv\", \"patchset\": \"1\", \"recipe\": \"libyuv/libyuv\", \"rietveld\": \"https://rietveld.example.com\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Debug\", \"bot_id\": \"bot_id\", \"buildername\": \"linux\", \"buildnumber\": 1337, \"issue\": \"123456789\", \"mastername\": \"tryserver.libyuv\", \"patchset\": \"1\", \"recipe\": \"libyuv/libyuv\", \"rietveld\": \"https://rietveld.example.com\"}",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"linux\", \"buildnumber\": 1337, \"issue\": \"123456789\", \"mastername\": \"tryserver.libyuv\", \"patchset\": \"1\", \"recipe\": \"libyuv/libyuv\", \"rietveld\": \"https://rietveld.example.com\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Debug\", \"bot_id\": \"bot_id\", \"buildername\": \"linux\", \"buildnumber\": 1337, \"issue\": \"123456789\", \"mastername\": \"tryserver.libyuv\", \"patchset\": \"1\", \"recipe\": \"libyuv/libyuv\", \"rietveld\": \"https://rietveld.example.com\"}",
       "--step-name=libyuv_unittest",
       "--builder-name=linux",
-      "--slave-name=slavename",
+      "--slave-name=bot_id",
       "--build-number=1337",
       "libyuv_unittest"
     ],

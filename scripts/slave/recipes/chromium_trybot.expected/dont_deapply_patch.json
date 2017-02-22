@@ -210,7 +210,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/mac/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"mac_optional_gpu_tests_rel\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.mac\", \"slavename\": \"TestSlavename\", \"target_platform\": \"mac\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"mac_optional_gpu_tests_rel\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.mac\", \"target_platform\": \"mac\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -593,7 +593,7 @@
       "--buildbot-mastername",
       "tryserver.chromium.mac",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[BUILDER_CACHE]/mac/src",
     "name": "postprocess_for_goma.upload_log",
@@ -646,7 +646,7 @@
       "-o",
       "gtest-results/base_unittests",
       "--builder-name=mac_optional_gpu_tests_rel",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=571",
       "base_unittests"
     ],

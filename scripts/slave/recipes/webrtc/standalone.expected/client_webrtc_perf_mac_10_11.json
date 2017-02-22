@@ -402,7 +402,7 @@
       "--buildbot-mastername",
       "client.webrtc.perf",
       "--buildbot-slavename",
-      "slavename"
+      "bot_id"
     ],
     "cwd": "[BUILDER_CACHE]/Mac_10_11/src",
     "name": "postprocess_for_goma.upload_log",
@@ -434,9 +434,9 @@
       "--target",
       "Release",
       "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac 10.11\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.perf\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"buildername\": \"Mac 10.11\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.perf\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\"}",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac 10.11\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.perf\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"buildername\": \"Mac 10.11\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.perf\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=webrtc_perf_tests",
@@ -446,7 +446,7 @@
       "--test-type=webrtc_perf_tests",
       "--step-name=webrtc_perf_tests",
       "--builder-name=Mac 10.11",
-      "--slave-name=slavename",
+      "--slave-name=bot_id",
       "--build-number=1337",
       "--revision=170242",
       "webrtc_perf_tests"

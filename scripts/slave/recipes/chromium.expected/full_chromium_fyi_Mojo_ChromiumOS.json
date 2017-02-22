@@ -200,7 +200,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/Mojo_ChromiumOS/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"Mojo ChromiumOS\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"chromeos\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"Mojo ChromiumOS\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"target_platform\": \"chromeos\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -502,7 +502,7 @@
       "--buildbot-mastername",
       "chromium.fyi",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[BUILDER_CACHE]/Mojo_ChromiumOS/src",
     "name": "postprocess_for_goma.upload_log",

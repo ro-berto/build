@@ -50,5 +50,5 @@ def GenTests(api):
     api.properties(mastername = 'client.nacl.ports') +\
     api.properties(buildername = 'linux-glibc-0') +\
     api.properties(revision = 'abcd') +\
-    api.properties(slavename = 'TestSlave') +\
+    api.properties(bot_id = 'TestSlave') +\
     api.properties(slavetype = 'BuilderTester')

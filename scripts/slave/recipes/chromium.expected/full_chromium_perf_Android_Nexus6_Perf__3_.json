@@ -200,7 +200,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/Android_Nexus6_Perf__3_/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"Android Nexus6 Perf (3)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"perf-id\": \"android-nexus6\", \"results-url\": \"https://chromeperf.appspot.com\", \"slavename\": \"TestSlavename\", \"target_platform\": \"android\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"Android Nexus6 Perf (3)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"perf-id\": \"android-nexus6\", \"results-url\": \"https://chromeperf.appspot.com\", \"target_platform\": \"android\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -758,7 +758,7 @@
       "--chartjson-file",
       "/path/to/tmp/json",
       "--builder-name=Android Nexus6 Perf (3)",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=571",
       "--run-python-script",
       "[BUILDER_CACHE]/Android_Nexus6_Perf__3_/src/build/android/test_runner.py",
@@ -853,7 +853,7 @@
       "--chartjson-file",
       "/path/to/tmp/json",
       "--builder-name=Android Nexus6 Perf (3)",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=571",
       "--run-python-script",
       "[BUILDER_CACHE]/Android_Nexus6_Perf__3_/src/build/android/test_runner.py",
@@ -948,7 +948,7 @@
       "--chartjson-file",
       "/path/to/tmp/json",
       "--builder-name=Android Nexus6 Perf (3)",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=571",
       "--run-python-script",
       "[BUILDER_CACHE]/Android_Nexus6_Perf__3_/src/build/android/test_runner.py",

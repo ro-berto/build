@@ -328,7 +328,7 @@
       "--buildbot-mastername",
       "client.libyuv",
       "--buildbot-slavename",
-      "slavename"
+      "bot_id"
     ],
     "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.upload_log",
@@ -360,12 +360,12 @@
       "Debug",
       "--no-xvfb",
       "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Linux32 Debug\", \"buildnumber\": 1337, \"mastername\": \"client.libyuv\", \"recipe\": \"libyuv/libyuv\", \"revision\": \"deadbeef\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Debug\", \"bot_id\": \"bot_id\", \"buildername\": \"Linux32 Debug\", \"buildnumber\": 1337, \"mastername\": \"client.libyuv\", \"recipe\": \"libyuv/libyuv\", \"revision\": \"deadbeef\"}",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"buildername\": \"Linux32 Debug\", \"buildnumber\": 1337, \"mastername\": \"client.libyuv\", \"recipe\": \"libyuv/libyuv\", \"revision\": \"deadbeef\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Debug\", \"bot_id\": \"bot_id\", \"buildername\": \"Linux32 Debug\", \"buildnumber\": 1337, \"mastername\": \"client.libyuv\", \"recipe\": \"libyuv/libyuv\", \"revision\": \"deadbeef\"}",
       "--step-name=libyuv_unittest",
       "--builder-name=Linux32 Debug",
-      "--slave-name=slavename",
+      "--slave-name=bot_id",
       "--build-number=1337",
       "libyuv_unittest"
     ],

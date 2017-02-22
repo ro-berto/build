@@ -78,7 +78,7 @@ def GenTests(api):
                             _sanitize_nonalpha(buildername), suffix)) +
       api.properties(mastername=mastername,
                      buildername=buildername,
-                     slavename='slavename',
+                     bot_id='bot_id',
                      path_config='kitchen',
                      BUILD_CONFIG=chromium_kwargs['BUILD_CONFIG']) +
       api.platform(bot_config['testing']['platform'],

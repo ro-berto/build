@@ -553,9 +553,9 @@
       "buildername=Housekeeper-Nightly-RecreateSKPs_Canary",
       "mastername=client.skia",
       "buildnumber=5",
-      "slavename=skiabot-linux-swarm-000",
       "reason=Triggered by Skia swarm_trigger Recipe",
       "swarm_out_dir=${ISOLATED_OUTDIR}",
+      "bot_id=skiabot-linux-swarm-000",
       "revision=9046e2e693bb92a76e972b694580e5d17ad10748"
     ],
     "name": "[trigger] RecreateSKPs_skia on Ubuntu",

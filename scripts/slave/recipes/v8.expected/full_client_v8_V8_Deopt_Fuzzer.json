@@ -151,7 +151,7 @@
       "--tag",
       "purpose:post-commit",
       "--tag",
-      "slavename:TestSlavename",
+      "slavename:test_bot",
       "--tag",
       "stepname:Deopt Fuzz on Ubuntu-14.04",
       "--idempotent",

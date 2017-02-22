@@ -219,7 +219,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/Google_Chrome_Mac/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"Google Chrome Mac\", \"buildnumber\": 571, \"mastername\": \"chromium.chrome\", \"slavename\": \"TestSlavename\", \"target_platform\": \"mac\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"Google Chrome Mac\", \"buildnumber\": 571, \"mastername\": \"chromium.chrome\", \"target_platform\": \"mac\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -521,7 +521,7 @@
       "--buildbot-mastername",
       "chromium.chrome",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[BUILDER_CACHE]/Google_Chrome_Mac/src",
     "name": "postprocess_for_goma.upload_log",
@@ -559,7 +559,7 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"Google Chrome Mac\", \"buildnumber\": 571, \"mastername\": \"chromium.chrome\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--test-type=sizes",
       "--builder-name=Google Chrome Mac",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=571",
       "--run-python-script",
       "--annotate=graphing",

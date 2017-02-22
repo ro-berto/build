@@ -206,7 +206,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/linux/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"linux_chromium_compile_dbg_32_ng\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.linux\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"linux_chromium_compile_dbg_32_ng\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.linux\", \"target_platform\": \"linux\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -558,7 +558,7 @@
       "--buildbot-mastername",
       "tryserver.chromium.linux",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[BUILDER_CACHE]/linux/src",
     "name": "postprocess_for_goma.upload_log",

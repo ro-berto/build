@@ -111,7 +111,7 @@ def _DeviceCheckStep(api):
   except api.step.InfraFailure as f:
     params = {
       'summary': ('Device Offline on %s %s' %
-                   (api.properties['mastername'], api.properties['slavename'])),
+                   (api.properties['mastername'], api.properties['bot_id'])),
       'comment': ('Buildbot: %s\n(Please do not change any labels)' %
                    api.properties['buildername']),
       'labels': 'Restrict-View-Google,OS-Android,Infra-Client,Infra-Labs',

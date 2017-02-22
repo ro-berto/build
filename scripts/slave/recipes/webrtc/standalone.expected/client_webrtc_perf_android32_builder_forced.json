@@ -392,7 +392,7 @@
       "--buildbot-mastername",
       "client.webrtc.perf",
       "--buildbot-slavename",
-      "slavename"
+      "bot_id"
     ],
     "cwd": "[BUILDER_CACHE]/Android32_Builder/src",
     "name": "postprocess_for_goma.upload_log",
@@ -439,9 +439,9 @@
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Android32 Builder\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.perf\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"buildername\": \"Android32 Builder\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.perf\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\"}",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Android32 Builder\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.perf\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"slavename\": \"slavename\"}"
+      "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"buildername\": \"Android32 Builder\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.perf\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\"}"
     ],
     "name": "package build"
   },

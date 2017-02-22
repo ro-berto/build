@@ -350,7 +350,7 @@
       "--buildbot-mastername",
       "client.libyuv",
       "--buildbot-slavename",
-      "slavename"
+      "bot_id"
     ],
     "cwd": "[START_DIR]\\src",
     "name": "postprocess_for_goma.upload_log",
@@ -381,12 +381,12 @@
       "--target",
       "Release",
       "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Win32 Release (Clang)\", \"buildnumber\": 1337, \"mastername\": \"client.libyuv\", \"recipe\": \"libyuv/libyuv\", \"revision\": \"deadbeef\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"buildername\": \"Win32 Release (Clang)\", \"buildnumber\": 1337, \"mastername\": \"client.libyuv\", \"recipe\": \"libyuv/libyuv\", \"revision\": \"deadbeef\"}",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Win32 Release (Clang)\", \"buildnumber\": 1337, \"mastername\": \"client.libyuv\", \"recipe\": \"libyuv/libyuv\", \"revision\": \"deadbeef\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"buildername\": \"Win32 Release (Clang)\", \"buildnumber\": 1337, \"mastername\": \"client.libyuv\", \"recipe\": \"libyuv/libyuv\", \"revision\": \"deadbeef\"}",
       "--step-name=libyuv_unittest",
       "--builder-name=Win32 Release (Clang)",
-      "--slave-name=slavename",
+      "--slave-name=bot_id",
       "--build-number=1337",
       "libyuv_unittest.exe"
     ],

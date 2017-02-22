@@ -71,7 +71,7 @@ def GenTests(api):
       api.test('%s_basic' % sanitize('Android ChromeDriver')) +
       api.properties.generic(
           buildername='Android ChromeDriver Tests Example',
-          slavename='slavename') +
+          bot_id='bot_id') +
       api.properties(
           parent_build_archive_url='gs://test-domain/test-archive.zip',
           got_revision_cp='refs/heads/master@{#3333333333}'))
@@ -80,7 +80,7 @@ def GenTests(api):
       api.test('%s_test_failure' % sanitize('Android ChromeDriver')) +
       api.properties.generic(
           buildername='Android ChromeDriver Tests Example',
-          slavename='slavename') +
+          bot_id='bot_id') +
       api.properties(
           parent_build_archive_url='gs://test-domain/test-archive.zip',
           got_revision_cp='refs/heads/master@{#3333333333}') +
@@ -90,7 +90,7 @@ def GenTests(api):
       api.test('%s_commit_already_in_logs' % sanitize('Android ChromeDriver')) +
       api.properties.generic(
           buildername='Android ChromeDriver Tests Example',
-          slavename='slavename') +
+          bot_id='bot_id') +
       api.properties(
           parent_build_archive_url='gs://test-domain/test-archive.zip',
           got_revision_cp='refs/heads/master@{#3333333333}') +
@@ -101,7 +101,7 @@ def GenTests(api):
       api.test('%s_download_logs_failure' % sanitize('Android ChromeDriver')) +
       api.properties.generic(
           buildername='Android ChromeDriver Tests Example',
-          slavename='slavename') +
+          bot_id='bot_id') +
       api.properties(
           parent_build_archive_url='gs://test-domain/test-archive.zip',
           got_revision_cp='refs/heads/master@{#3333333333}') +
@@ -112,7 +112,7 @@ def GenTests(api):
       api.test('%s_unexpected_prebuilt' % sanitize('Android ChromeDriver')) +
       api.properties.generic(
           buildername='Android ChromeDriver Tests Example',
-          slavename='slavename') +
+          bot_id='bot_id') +
       api.properties(
           parent_build_archive_url='gs://test-domain/test-archive.zip',
           got_revision_cp='refs/heads/master@{#3333333333}') +

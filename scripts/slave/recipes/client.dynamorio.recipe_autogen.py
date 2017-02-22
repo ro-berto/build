@@ -232,54 +232,54 @@ def GenTests(api):
     api.properties(buildername='linux-dr') +
     api.properties(revision='123456789abcdef') +
     api.properties(got_revision='123456789abcdef') +
-    api.properties(slavename='TestSlave')
+    api.properties(bot_id='TestSlave')
         )
   yield (api.test('win_7_dr') +
     api.properties(mastername='client.dynamorio') +
     api.properties(buildername='win-7-dr') +
     api.properties(revision='123456789abcdef') +
-    api.properties(slavename='TestSlave')
+    api.properties(bot_id='TestSlave')
         )
   yield (api.test('linux_dr_package') +
     api.properties(mastername='client.dynamorio') +
     api.properties(buildername='linux-dr-package') +
     api.properties(revision='123456789abcdef') +
     api.properties(got_revision='123456789abcdef') +
-    api.properties(slavename='TestSlave')
+    api.properties(bot_id='TestSlave')
         )
   yield (api.test('win_8_dr') +
     api.properties(mastername='client.dynamorio') +
     api.properties(buildername='win-8-dr') +
     api.properties(revision='123456789abcdef') +
-    api.properties(slavename='TestSlave')
+    api.properties(bot_id='TestSlave')
         )
   yield (api.test('win_7_dr_nightly') +
     api.properties(mastername='client.dynamorio') +
     api.properties(buildername='win-7-dr-nightly') +
     api.properties(revision='123456789abcdef') +
-    api.properties(slavename='TestSlave')
+    api.properties(bot_id='TestSlave')
         )
   yield (api.test('win_8_dr_nightly') +
     api.properties(mastername='client.dynamorio') +
     api.properties(buildername='win-8-dr-nightly') +
     api.properties(revision='123456789abcdef') +
-    api.properties(slavename='TestSlave')
+    api.properties(bot_id='TestSlave')
         )
   yield (api.test('win_dr_package') +
     api.properties(mastername='client.dynamorio') +
     api.properties(buildername='win-dr-package') +
     api.properties(revision='123456789abcdef') +
     api.properties(got_revision='123456789abcdef') +
-    api.properties(slavename='TestSlave')
+    api.properties(bot_id='TestSlave')
         )
   yield (api.test('linux_dr_nightly') +
     api.properties(mastername='client.dynamorio') +
     api.properties(buildername='linux-dr-nightly') +
     api.properties(revision='123456789abcdef') +
-    api.properties(slavename='TestSlave')
+    api.properties(bot_id='TestSlave')
         )
   yield (api.test('builder_not_in_dispatch_directory') +
     api.properties(mastername='client.dynamorio') +
     api.properties(buildername='nonexistent_builder') +
-    api.properties(slavename='TestSlave')
+    api.properties(bot_id='TestSlave')
         )

@@ -209,7 +209,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/Linux_Tester/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"Linux Tester\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"Linux Tester\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc.fyi\", \"target_platform\": \"linux\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -311,7 +311,7 @@
       "--test-launcher-summary-output",
       "/path/to/tmp/json",
       "--builder-name=Linux Tester",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=571",
       "content_browsertests",
       "--gtest_filter=WebRtc*",
@@ -349,7 +349,7 @@
       "--test-launcher-summary-output",
       "/path/to/tmp/json",
       "--builder-name=Linux Tester",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=571",
       "browser_tests",
       "--gtest_filter=WebRtc*:Webrtc*:TabCapture*:*MediaStream*",
@@ -384,7 +384,7 @@
       "--test-launcher-summary-output",
       "/path/to/tmp/json",
       "--builder-name=Linux Tester",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=571",
       "capture_unittests",
       "--enable-logging",
@@ -417,7 +417,7 @@
       "--test-launcher-summary-output",
       "/path/to/tmp/json",
       "--builder-name=Linux Tester",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=571",
       "content_unittests"
     ],
@@ -446,7 +446,7 @@
       "--test-launcher-summary-output",
       "/path/to/tmp/json",
       "--builder-name=Linux Tester",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=571",
       "remoting_unittests",
       "--gtest_filter=Webrtc*"

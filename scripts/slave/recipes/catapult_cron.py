@@ -33,5 +33,5 @@ def GenTests(api):
     api.test('basic') +
     api.properties(mastername='master.client.catapult',
                    buildername='linux',
-                   slavename='linux_slave')
+                   bot_id='linux_slave')
   )

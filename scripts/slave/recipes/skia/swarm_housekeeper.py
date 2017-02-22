@@ -66,13 +66,13 @@ def RunSteps(api):
 
 def GenTests(api):
   for mastername, slaves in TEST_BUILDERS.iteritems():
-    for slavename, builders_by_slave in slaves.iteritems():
+    for bot_id, builders_by_slave in slaves.iteritems():
       for buildername in builders_by_slave:
         test = (
           api.test(buildername) +
           api.properties(buildername=buildername,
                          mastername=mastername,
-                         slavename=slavename,
+                         bot_id=bot_id,
                          buildnumber=5,
                          revision='abc123',
                          path_config='kitchen',

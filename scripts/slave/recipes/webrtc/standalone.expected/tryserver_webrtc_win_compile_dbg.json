@@ -425,7 +425,7 @@
       "--buildbot-mastername",
       "tryserver.webrtc",
       "--buildbot-slavename",
-      "slavename"
+      "bot_id"
     ],
     "cwd": "[BUILDER_CACHE]\\win_compile_dbg\\src",
     "name": "postprocess_for_goma.upload_log",

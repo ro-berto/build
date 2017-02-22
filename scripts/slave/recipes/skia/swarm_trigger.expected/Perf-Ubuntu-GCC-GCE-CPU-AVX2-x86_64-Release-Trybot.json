@@ -609,10 +609,10 @@
       "buildername=Build-Ubuntu-GCC-x86_64-Release-Trybot",
       "mastername=client.skia.compile",
       "buildnumber=1",
-      "slavename=skiabot-dummy-compile-slave",
       "reason=Triggered by Skia swarm_trigger Recipe",
       "swarm_out_dir=${ISOLATED_OUTDIR}",
       "patchset=1",
+      "bot_id=skiabot-dummy-compile-slave",
       "issue=500",
       "revision=9046e2e693bb92a76e972b694580e5d17ad10748"
     ],
@@ -876,10 +876,10 @@
       "buildername=Perf-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Trybot",
       "mastername=client.skia",
       "buildnumber=5",
-      "slavename=skiabot-linux-swarm-000",
       "reason=Triggered by Skia swarm_trigger Recipe",
       "swarm_out_dir=${ISOLATED_OUTDIR}",
       "patchset=1",
+      "bot_id=skiabot-linux-swarm-000",
       "issue=500",
       "revision=9046e2e693bb92a76e972b694580e5d17ad10748"
     ],

@@ -355,7 +355,7 @@
       "--buildbot-mastername",
       "client.libyuv",
       "--buildbot-slavename",
-      "slavename"
+      "bot_id"
     ],
     "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.upload_log",
@@ -386,12 +386,12 @@
       "--target",
       "Release",
       "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac Asan\", \"buildnumber\": 1337, \"mastername\": \"client.libyuv\", \"recipe\": \"libyuv/libyuv\", \"revision\": \"deadbeef\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"buildername\": \"Mac Asan\", \"buildnumber\": 1337, \"mastername\": \"client.libyuv\", \"recipe\": \"libyuv/libyuv\", \"revision\": \"deadbeef\"}",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"buildername\": \"Mac Asan\", \"buildnumber\": 1337, \"mastername\": \"client.libyuv\", \"recipe\": \"libyuv/libyuv\", \"revision\": \"deadbeef\", \"slavename\": \"slavename\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"buildername\": \"Mac Asan\", \"buildnumber\": 1337, \"mastername\": \"client.libyuv\", \"recipe\": \"libyuv/libyuv\", \"revision\": \"deadbeef\"}",
       "--step-name=libyuv_unittest",
       "--builder-name=Mac Asan",
-      "--slave-name=slavename",
+      "--slave-name=bot_id",
       "--build-number=1337",
       "--enable-asan",
       "libyuv_unittest"

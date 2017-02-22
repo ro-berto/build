@@ -443,7 +443,7 @@
       "--buildbot-mastername",
       "client.v8.ports",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[START_DIR]/v8",
     "name": "postprocess_for_goma.upload_log",
@@ -545,7 +545,7 @@
       "--tag",
       "purpose:post-commit",
       "--tag",
-      "slavename:TestSlavename",
+      "slavename:test_bot",
       "--tag",
       "stepname:Mjsunit on Ubuntu-14.04",
       "--idempotent",
@@ -659,7 +659,7 @@
       "--tag",
       "purpose:post-commit",
       "--tag",
-      "slavename:TestSlavename",
+      "slavename:test_bot",
       "--tag",
       "stepname:Webkit on Ubuntu-14.04",
       "--idempotent",

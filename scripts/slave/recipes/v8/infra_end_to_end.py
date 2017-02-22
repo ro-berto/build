@@ -34,7 +34,7 @@ TESTS = [
       'parent_got_swarming_client_revision':
           'df99a00d96fae932bae824dccba13156bf7eddd0',
       'buildnumber': 5472,
-      'slavename': 'slave4-c3',
+      'bot_id': 'slave4-c3',
       'swarm_hashes': {
         'bot_default': '3726ca899b099c077b9551f7163c05ea0f160a7b',
         'mozilla': 'ba5f8a4aeee89b1fe88c764416ee9875584a10d3',

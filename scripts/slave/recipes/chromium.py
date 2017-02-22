@@ -1753,7 +1753,7 @@ def GenTests(api):
     api.properties(
         mastername='chromium.fyi',
         buildername='Linux remote_run Builder',
-        slavename='build1-a1',
+        bot_id='build1-a1',
         buildnumber='77457',
         path_config='kitchen')
   )
@@ -1763,7 +1763,7 @@ def GenTests(api):
     api.properties(
         mastername='chromium.fyi',
         buildername='Linux remote_run Builder',
-        slavename='build1-a1',
+        bot_id='build1-a1',
         buildnumber='77457',
         path_config='kitchen') +
     api.override_step_data('ensure_goma.ensure_installed', retcode=1)

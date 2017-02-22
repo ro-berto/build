@@ -199,7 +199,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/Linux_ChromiumOS_Tests__dbg__1_/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"Linux ChromiumOS Tests (dbg)(1)\", \"buildnumber\": 571, \"mastername\": \"chromium.chromiumos\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"Linux ChromiumOS Tests (dbg)(1)\", \"buildnumber\": 571, \"mastername\": \"chromium.chromiumos\", \"target_platform\": \"linux\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -367,7 +367,7 @@
       "--tag",
       "purpose:post-commit",
       "--tag",
-      "slavename:TestSlavename",
+      "slavename:test_bot",
       "--tag",
       "stepname:browser_tests",
       "--idempotent",

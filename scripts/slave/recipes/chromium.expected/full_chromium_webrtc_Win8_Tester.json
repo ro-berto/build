@@ -214,7 +214,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]\\\\Win8_Tester\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"Win8 Tester\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"Win8 Tester\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc\", \"target_platform\": \"win\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -315,7 +315,7 @@
       "--test-launcher-summary-output",
       "/path/to/tmp/json",
       "--builder-name=Win8 Tester",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=571",
       "content_browsertests.exe",
       "--gtest_filter=WebRtc*",
@@ -352,7 +352,7 @@
       "--test-launcher-summary-output",
       "/path/to/tmp/json",
       "--builder-name=Win8 Tester",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=571",
       "browser_tests.exe",
       "--gtest_filter=WebRtc*:Webrtc*:TabCapture*:*MediaStream*",
@@ -386,7 +386,7 @@
       "--test-launcher-summary-output",
       "/path/to/tmp/json",
       "--builder-name=Win8 Tester",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=571",
       "capture_unittests.exe",
       "--enable-logging",
@@ -418,7 +418,7 @@
       "--test-launcher-summary-output",
       "/path/to/tmp/json",
       "--builder-name=Win8 Tester",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=571",
       "content_unittests.exe"
     ],
@@ -446,7 +446,7 @@
       "--test-launcher-summary-output",
       "/path/to/tmp/json",
       "--builder-name=Win8 Tester",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=571",
       "remoting_unittests.exe",
       "--gtest_filter=Webrtc*"

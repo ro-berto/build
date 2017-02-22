@@ -210,7 +210,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/Android_Tests__dbg___K_Nexus5_/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"Android Tests (dbg) (K Nexus5)\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc.fyi\", \"slavename\": \"TestSlavename\", \"target_platform\": \"android\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"Android Tests (dbg) (K Nexus5)\", \"buildnumber\": 571, \"mastername\": \"chromium.webrtc.fyi\", \"target_platform\": \"android\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [

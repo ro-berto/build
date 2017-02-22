@@ -135,7 +135,7 @@ class PGOApi(recipe_api.RecipeApi):
       self.m.gclient.c.solutions[0].deps_file = (
         self.m.gclient.c.solutions[0].deps_file % bot_config['bucket'])
 
-    if self.m.properties.get('slavename') != 'fake_slave':
+    if self.m.properties.get('bot_id') != 'fake_slave':
       self.m.chromium.taskkill()
 
     self.m.bot_update.ensure_checkout()

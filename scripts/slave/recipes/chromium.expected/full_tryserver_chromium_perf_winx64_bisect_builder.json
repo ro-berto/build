@@ -207,7 +207,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]\\\\winx64_bisect_builder\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"winx64_bisect_builder\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"slavename\": \"TestSlavename\", \"target_platform\": \"win\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"winx64_bisect_builder\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"target_platform\": \"win\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -485,7 +485,7 @@
       "--buildbot-mastername",
       "tryserver.chromium.perf",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[BUILDER_CACHE]\\winx64_bisect_builder\\src",
     "name": "postprocess_for_goma.upload_log",
@@ -551,7 +551,7 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"build_data_dir\": \"[ROOT]\\\\build_data_dir\", \"buildername\": \"winx64_bisect_builder\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--test-type=sizes",
       "--builder-name=winx64_bisect_builder",
-      "--slave-name=TestSlavename",
+      "--slave-name=test_bot",
       "--build-number=571",
       "--run-python-script",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\chromium\\sizes.py",

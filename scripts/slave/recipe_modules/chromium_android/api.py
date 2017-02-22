@@ -574,7 +574,7 @@ class AndroidApi(recipe_api.RecipeApi):
     except self.m.step.InfraFailure as f:
       params = {
         'summary': ('Device Offline on %s %s' %
-          (self.m.properties['mastername'], self.m.properties['slavename'])),
+          (self.m.properties['mastername'], self.m.properties['bot_id'])),
         'comment': ('Buildbot: %s\n(Please do not change any labels)' %
           self.m.properties['buildername']),
         'labels': 'Restrict-View-Google,OS-Android,Infra,Infra-Labs',

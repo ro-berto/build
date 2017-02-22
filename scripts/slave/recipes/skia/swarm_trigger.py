@@ -190,7 +190,7 @@ def trigger_task(api, task_name, builder, master, slave, buildnumber,
     'buildnumber': buildnumber,
     'reason': 'Triggered by Skia swarm_trigger Recipe',
     'revision': got_revision,
-    'slavename': slave,
+    'bot_id': slave,
     'swarm_out_dir': '${ISOLATED_OUTDIR}',
   }
   builder_cfg = builder_spec['builder_cfg']
@@ -248,7 +248,7 @@ def checkout_steps(api):
   gclient_cfg = api.gclient.make_config(
       CACHE_DIR=(
           '/home/default/storage/skia-repo/buildbot/%s/cache' %
-          api.properties['slavename']))
+          api.properties['bot_id']))
   repo = gclient_cfg.solutions.add()
   repo.managed = False
   repo.revision = api.properties.get('revision') or 'origin/master'
@@ -279,7 +279,7 @@ def housekeeper_swarm(api, builder_spec, got_revision, infrabots_dir,
       'housekeeper',
       api.properties['buildername'],
       api.properties['mastername'],
-      api.properties['slavename'],
+      api.properties['bot_id'],
       api.properties['buildnumber'],
       builder_spec,
       got_revision,
@@ -297,7 +297,7 @@ def recreate_skps_swarm(api, builder_spec, got_revision, infrabots_dir,
       'RecreateSKPs',
       api.properties['buildername'],
       api.properties['mastername'],
-      api.properties['slavename'],
+      api.properties['bot_id'],
       api.properties['buildnumber'],
       builder_spec,
       got_revision,
@@ -321,7 +321,7 @@ def infra_swarm(api, got_revision, infrabots_dir, extra_isolate_hashes):
       'infra',
       api.properties['buildername'],
       api.properties['mastername'],
-      api.properties['slavename'],
+      api.properties['bot_id'],
       api.properties['buildnumber'],
       builder_spec,
       got_revision,
@@ -425,7 +425,7 @@ def perf_steps_trigger(api, builder_spec, got_revision, infrabots_dir,
       'perf',
       api.properties['buildername'],
       api.properties['mastername'],
-      api.properties['slavename'],
+      api.properties['bot_id'],
       api.properties['buildnumber'],
       builder_spec,
       got_revision,
@@ -484,7 +484,7 @@ def test_steps_trigger(api, builder_spec, got_revision, infrabots_dir,
       'test',
       api.properties['buildername'],
       api.properties['mastername'],
-      api.properties['slavename'],
+      api.properties['bot_id'],
       api.properties['buildnumber'],
       builder_spec,
       got_revision,
@@ -742,7 +742,7 @@ def RunSteps(api):
                        got_revision, is_trybot)
 
 
-def test_for_bot(api, builder, mastername, slavename, testname=None,
+def test_for_bot(api, builder, mastername, bot_id, testname=None,
                  legacy_android_sdk=False, legacy_win_toolchain=False,
                  legacy_skimage_version=False, legacy_win_vulkan_sdk=False,
                  legacy_skp_version=False):
@@ -752,7 +752,7 @@ def test_for_bot(api, builder, mastername, slavename, testname=None,
     api.test(testname) +
     api.properties(buildername=builder,
                    mastername=mastername,
-                   slavename=slavename,
+                   bot_id=bot_id,
                    buildnumber=5,
                    path_config='kitchen',
                    revision='abc123')
@@ -817,9 +817,9 @@ def test_for_bot(api, builder, mastername, slavename, testname=None,
 
 def GenTests(api):
   for mastername, slaves in TEST_BUILDERS.iteritems():
-    for slavename, builders_by_slave in slaves.iteritems():
+    for bot_id, builders_by_slave in slaves.iteritems():
       for builder in builders_by_slave:
-        yield test_for_bot(api, builder, mastername, slavename)
+        yield test_for_bot(api, builder, mastername, bot_id)
 
   builder = 'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug'
   master = 'client.skia'
@@ -870,7 +870,7 @@ def GenTests(api):
     api.test('recipe_in_skia_repo') +
     api.properties(buildername=builder,
                    mastername=master,
-                   slavename=slave,
+                   bot_id=slave,
                    buildnumber=5,
                    path_config='kitchen',
                    revision='abc123') +
@@ -886,7 +886,7 @@ def GenTests(api):
     api.test('recipe_with_gerrit_patch') +
     api.properties(buildername='Build-Ubuntu-GCC-x86_64-Release-Trybot',
                    mastername=master,
-                   slavename=slave,
+                   bot_id=slave,
                    buildnumber=5,
                    path_config='kitchen',
                    revision='abc123',

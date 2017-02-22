@@ -218,7 +218,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/linux_clobber/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"buildername\": \"Linux x64\", \"buildnumber\": 571, \"mastername\": \"chromium\", \"slavename\": \"TestSlavename\", \"target_platform\": \"linux\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"Linux x64\", \"buildnumber\": 571, \"mastername\": \"chromium\", \"target_platform\": \"linux\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -515,7 +515,7 @@
       "--buildbot-mastername",
       "chromium",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[BUILDER_CACHE]/linux_clobber/src",
     "name": "postprocess_for_goma.upload_log",

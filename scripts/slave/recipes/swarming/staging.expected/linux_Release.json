@@ -395,7 +395,7 @@
       "--buildbot-mastername",
       "chromium.testing.master",
       "--buildbot-slavename",
-      "TestSlavename"
+      "test_bot"
     ],
     "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.upload_log",
@@ -520,7 +520,7 @@
       "--tag",
       "purpose:staging",
       "--tag",
-      "slavename:TestSlavename",
+      "slavename:test_bot",
       "--tag",
       "stepname:dummy_target_1 on Ubuntu",
       "--verbose",
@@ -605,7 +605,7 @@
       "--tag",
       "purpose:staging",
       "--tag",
-      "slavename:TestSlavename",
+      "slavename:test_bot",
       "--tag",
       "stepname:dummy_target_2 on Ubuntu",
       "--verbose",
