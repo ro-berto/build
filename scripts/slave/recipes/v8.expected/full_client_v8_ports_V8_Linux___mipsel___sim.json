@@ -153,7 +153,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Check",
+      "stepname:Check on Ubuntu-14.04",
       "--idempotent",
       "[dummy hash for bot_default]",
       "--",
@@ -174,7 +174,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Check",
+    "name": "[trigger] Check on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -254,7 +254,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Test262 - no variants",
+      "stepname:Test262 - no variants on Ubuntu-14.04",
       "--idempotent",
       "[dummy hash for test262]",
       "--",
@@ -276,7 +276,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Test262 - no variants",
+    "name": "[trigger] Test262 - no variants on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",

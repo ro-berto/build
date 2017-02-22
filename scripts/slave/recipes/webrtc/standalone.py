@@ -108,7 +108,7 @@ def GenTests(api):
     if (chromium_kwargs.get('TARGET_PLATFORM') != 'android' and
         bot_config.get('enable_swarming', False)):
       os_suffix = ' on %s' % bot_config['swarming_dimensions']['os']
-      if 'Windows' in os_suffix or os_suffix == ' on Ubuntu-14.04':
+      if 'Windows' in os_suffix:
         os_suffix = ''
       for test_name in NORMAL_TESTS:
         test += api.override_step_data(test_name + os_suffix,
@@ -131,7 +131,7 @@ def GenTests(api):
   yield generate_builder(mastername, buildername, revision=None,
                          suffix='_forced')
   yield generate_builder(mastername, buildername, revision='12345',
-                         failing_test='rtc_unittests',
+                         failing_test='rtc_unittests on Ubuntu-14.04',
                          suffix='_failing_test')
 
   mastername = 'client.webrtc.perf'

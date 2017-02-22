@@ -604,7 +604,7 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:audio_decoder_unittests",
+      "stepname:audio_decoder_unittests on Ubuntu-14.04",
       "[dummy hash for audio_decoder_unittests]",
       "--",
       "--timeout=900",
@@ -612,7 +612,7 @@
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/linux_memcheck",
-    "name": "[trigger] audio_decoder_unittests",
+    "name": "[trigger] audio_decoder_unittests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -688,7 +688,7 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:common_audio_unittests",
+      "stepname:common_audio_unittests on Ubuntu-14.04",
       "[dummy hash for common_audio_unittests]",
       "--",
       "--timeout=900",
@@ -696,7 +696,7 @@
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/linux_memcheck",
-    "name": "[trigger] common_audio_unittests",
+    "name": "[trigger] common_audio_unittests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -772,7 +772,7 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:common_video_unittests",
+      "stepname:common_video_unittests on Ubuntu-14.04",
       "[dummy hash for common_video_unittests]",
       "--",
       "--timeout=900",
@@ -780,7 +780,7 @@
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/linux_memcheck",
-    "name": "[trigger] common_video_unittests",
+    "name": "[trigger] common_video_unittests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -856,7 +856,7 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:modules_tests",
+      "stepname:modules_tests on Ubuntu-14.04",
       "[dummy hash for modules_tests]",
       "--",
       "--timeout=900",
@@ -864,7 +864,7 @@
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/linux_memcheck",
-    "name": "[trigger] modules_tests",
+    "name": "[trigger] modules_tests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -946,7 +946,7 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:modules_unittests",
+      "stepname:modules_unittests on Ubuntu-14.04",
       "[dummy hash for modules_unittests]",
       "--",
       "--timeout=900",
@@ -954,7 +954,7 @@
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/linux_memcheck",
-    "name": "[trigger] modules_unittests",
+    "name": "[trigger] modules_unittests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1060,7 +1060,7 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:peerconnection_unittests",
+      "stepname:peerconnection_unittests on Ubuntu-14.04",
       "[dummy hash for peerconnection_unittests]",
       "--",
       "--timeout=900",
@@ -1068,7 +1068,7 @@
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/linux_memcheck",
-    "name": "[trigger] peerconnection_unittests",
+    "name": "[trigger] peerconnection_unittests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1162,7 +1162,7 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:rtc_media_unittests",
+      "stepname:rtc_media_unittests on Ubuntu-14.04",
       "[dummy hash for rtc_media_unittests]",
       "--",
       "--timeout=900",
@@ -1170,7 +1170,7 @@
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/linux_memcheck",
-    "name": "[trigger] rtc_media_unittests",
+    "name": "[trigger] rtc_media_unittests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1246,7 +1246,7 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:rtc_pc_unittests",
+      "stepname:rtc_pc_unittests on Ubuntu-14.04",
       "[dummy hash for rtc_pc_unittests]",
       "--",
       "--timeout=900",
@@ -1254,7 +1254,7 @@
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/linux_memcheck",
-    "name": "[trigger] rtc_pc_unittests",
+    "name": "[trigger] rtc_pc_unittests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1330,7 +1330,7 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:rtc_stats_unittests",
+      "stepname:rtc_stats_unittests on Ubuntu-14.04",
       "[dummy hash for rtc_stats_unittests]",
       "--",
       "--timeout=900",
@@ -1338,7 +1338,7 @@
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/linux_memcheck",
-    "name": "[trigger] rtc_stats_unittests",
+    "name": "[trigger] rtc_stats_unittests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1414,7 +1414,7 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:rtc_unittests",
+      "stepname:rtc_unittests on Ubuntu-14.04",
       "[dummy hash for rtc_unittests]",
       "--",
       "--timeout=900",
@@ -1422,7 +1422,7 @@
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/linux_memcheck",
-    "name": "[trigger] rtc_unittests",
+    "name": "[trigger] rtc_unittests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1528,7 +1528,7 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:system_wrappers_unittests",
+      "stepname:system_wrappers_unittests on Ubuntu-14.04",
       "[dummy hash for system_wrappers_unittests]",
       "--",
       "--timeout=900",
@@ -1536,7 +1536,7 @@
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/linux_memcheck",
-    "name": "[trigger] system_wrappers_unittests",
+    "name": "[trigger] system_wrappers_unittests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1612,7 +1612,7 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:test_support_unittests",
+      "stepname:test_support_unittests on Ubuntu-14.04",
       "[dummy hash for test_support_unittests]",
       "--",
       "--timeout=900",
@@ -1620,7 +1620,7 @@
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/linux_memcheck",
-    "name": "[trigger] test_support_unittests",
+    "name": "[trigger] test_support_unittests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1696,7 +1696,7 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:tools_unittests",
+      "stepname:tools_unittests on Ubuntu-14.04",
       "[dummy hash for tools_unittests]",
       "--",
       "--timeout=900",
@@ -1704,7 +1704,7 @@
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/linux_memcheck",
-    "name": "[trigger] tools_unittests",
+    "name": "[trigger] tools_unittests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1780,7 +1780,7 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:video_engine_tests",
+      "stepname:video_engine_tests on Ubuntu-14.04",
       "[dummy hash for video_engine_tests]",
       "--",
       "--timeout=900",
@@ -1788,7 +1788,7 @@
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/linux_memcheck",
-    "name": "[trigger] video_engine_tests",
+    "name": "[trigger] video_engine_tests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1882,7 +1882,7 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:voice_engine_unittests",
+      "stepname:voice_engine_unittests on Ubuntu-14.04",
       "[dummy hash for voice_engine_unittests]",
       "--",
       "--timeout=900",
@@ -1890,7 +1890,7 @@
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/linux_memcheck",
-    "name": "[trigger] voice_engine_unittests",
+    "name": "[trigger] voice_engine_unittests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1966,7 +1966,7 @@
       "--tag",
       "slavename:slavename",
       "--tag",
-      "stepname:webrtc_nonparallel_tests",
+      "stepname:webrtc_nonparallel_tests on Ubuntu-14.04",
       "[dummy hash for webrtc_nonparallel_tests]",
       "--",
       "--timeout=900",
@@ -1974,7 +1974,7 @@
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/linux_memcheck",
-    "name": "[trigger] webrtc_nonparallel_tests",
+    "name": "[trigger] webrtc_nonparallel_tests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2016,7 +2016,7 @@
       "{\"base_task_name\": \"audio_decoder_unittests/Ubuntu-14.04/[dummy has/linux_memcheck/1337\", \"tasks\": {\"audio_decoder_unittests/Ubuntu-14.04/[dummy has/linux_memcheck/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "cwd": "[BUILDER_CACHE]/linux_memcheck",
-    "name": "audio_decoder_unittests",
+    "name": "audio_decoder_unittests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2061,7 +2061,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-14.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"audio_decoder_unittests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"audio_decoder_unittests on Ubuntu-14.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
@@ -2121,7 +2121,7 @@
       "{\"base_task_name\": \"common_audio_unittests/Ubuntu-14.04/[dummy has/linux_memcheck/1337\", \"tasks\": {\"common_audio_unittests/Ubuntu-14.04/[dummy has/linux_memcheck/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "cwd": "[BUILDER_CACHE]/linux_memcheck",
-    "name": "common_audio_unittests",
+    "name": "common_audio_unittests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2166,7 +2166,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-14.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"common_audio_unittests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"common_audio_unittests on Ubuntu-14.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
@@ -2226,7 +2226,7 @@
       "{\"base_task_name\": \"common_video_unittests/Ubuntu-14.04/[dummy has/linux_memcheck/1337\", \"tasks\": {\"common_video_unittests/Ubuntu-14.04/[dummy has/linux_memcheck/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "cwd": "[BUILDER_CACHE]/linux_memcheck",
-    "name": "common_video_unittests",
+    "name": "common_video_unittests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2271,7 +2271,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-14.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"common_video_unittests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"common_video_unittests on Ubuntu-14.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
@@ -2331,7 +2331,7 @@
       "{\"base_task_name\": \"modules_tests/Ubuntu-14.04/[dummy has/linux_memcheck/1337\", \"tasks\": {\"modules_tests/Ubuntu-14.04/[dummy has/linux_memcheck/1337:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"modules_tests/Ubuntu-14.04/[dummy has/linux_memcheck/1337:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}}}"
     ],
     "cwd": "[BUILDER_CACHE]/linux_memcheck",
-    "name": "modules_tests",
+    "name": "modules_tests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2377,7 +2377,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-14.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"modules_tests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"modules_tests on Ubuntu-14.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"10000\", @@@",
@@ -2439,7 +2439,7 @@
       "{\"base_task_name\": \"modules_unittests/Ubuntu-14.04/[dummy has/linux_memcheck/1337\", \"tasks\": {\"modules_unittests/Ubuntu-14.04/[dummy has/linux_memcheck/1337:6:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"modules_unittests/Ubuntu-14.04/[dummy has/linux_memcheck/1337:6:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"modules_unittests/Ubuntu-14.04/[dummy has/linux_memcheck/1337:6:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}, \"modules_unittests/Ubuntu-14.04/[dummy has/linux_memcheck/1337:6:3\": {\"shard_index\": 3, \"task_id\": \"10300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10300\"}, \"modules_unittests/Ubuntu-14.04/[dummy has/linux_memcheck/1337:6:4\": {\"shard_index\": 4, \"task_id\": \"10400\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10400\"}, \"modules_unittests/Ubuntu-14.04/[dummy has/linux_memcheck/1337:6:5\": {\"shard_index\": 5, \"task_id\": \"10500\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10500\"}}}"
     ],
     "cwd": "[BUILDER_CACHE]/linux_memcheck",
-    "name": "modules_unittests",
+    "name": "modules_unittests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2489,7 +2489,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-14.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"modules_unittests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"modules_unittests on Ubuntu-14.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"10400\", @@@",
@@ -2559,7 +2559,7 @@
       "{\"base_task_name\": \"peerconnection_unittests/Ubuntu-14.04/[dummy has/linux_memcheck/1337\", \"tasks\": {\"peerconnection_unittests/Ubuntu-14.04/[dummy has/linux_memcheck/1337:4:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"peerconnection_unittests/Ubuntu-14.04/[dummy has/linux_memcheck/1337:4:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"peerconnection_unittests/Ubuntu-14.04/[dummy has/linux_memcheck/1337:4:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}, \"peerconnection_unittests/Ubuntu-14.04/[dummy has/linux_memcheck/1337:4:3\": {\"shard_index\": 3, \"task_id\": \"10300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10300\"}}}"
     ],
     "cwd": "[BUILDER_CACHE]/linux_memcheck",
-    "name": "peerconnection_unittests",
+    "name": "peerconnection_unittests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2607,7 +2607,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-14.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"peerconnection_unittests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"peerconnection_unittests on Ubuntu-14.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"10000\", @@@",
@@ -2673,7 +2673,7 @@
       "{\"base_task_name\": \"rtc_media_unittests/Ubuntu-14.04/[dummy has/linux_memcheck/1337\", \"tasks\": {\"rtc_media_unittests/Ubuntu-14.04/[dummy has/linux_memcheck/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "cwd": "[BUILDER_CACHE]/linux_memcheck",
-    "name": "rtc_media_unittests",
+    "name": "rtc_media_unittests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2718,7 +2718,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-14.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"rtc_media_unittests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"rtc_media_unittests on Ubuntu-14.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
@@ -2778,7 +2778,7 @@
       "{\"base_task_name\": \"rtc_pc_unittests/Ubuntu-14.04/[dummy has/linux_memcheck/1337\", \"tasks\": {\"rtc_pc_unittests/Ubuntu-14.04/[dummy has/linux_memcheck/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "cwd": "[BUILDER_CACHE]/linux_memcheck",
-    "name": "rtc_pc_unittests",
+    "name": "rtc_pc_unittests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2823,7 +2823,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-14.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"rtc_pc_unittests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"rtc_pc_unittests on Ubuntu-14.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
@@ -2883,7 +2883,7 @@
       "{\"base_task_name\": \"rtc_stats_unittests/Ubuntu-14.04/[dummy has/linux_memcheck/1337\", \"tasks\": {\"rtc_stats_unittests/Ubuntu-14.04/[dummy has/linux_memcheck/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "cwd": "[BUILDER_CACHE]/linux_memcheck",
-    "name": "rtc_stats_unittests",
+    "name": "rtc_stats_unittests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2928,7 +2928,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-14.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"rtc_stats_unittests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"rtc_stats_unittests on Ubuntu-14.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
@@ -2988,7 +2988,7 @@
       "{\"base_task_name\": \"rtc_unittests/Ubuntu-14.04/[dummy has/linux_memcheck/1337\", \"tasks\": {\"rtc_unittests/Ubuntu-14.04/[dummy has/linux_memcheck/1337:6:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"rtc_unittests/Ubuntu-14.04/[dummy has/linux_memcheck/1337:6:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"rtc_unittests/Ubuntu-14.04/[dummy has/linux_memcheck/1337:6:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}, \"rtc_unittests/Ubuntu-14.04/[dummy has/linux_memcheck/1337:6:3\": {\"shard_index\": 3, \"task_id\": \"10300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10300\"}, \"rtc_unittests/Ubuntu-14.04/[dummy has/linux_memcheck/1337:6:4\": {\"shard_index\": 4, \"task_id\": \"10400\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10400\"}, \"rtc_unittests/Ubuntu-14.04/[dummy has/linux_memcheck/1337:6:5\": {\"shard_index\": 5, \"task_id\": \"10500\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10500\"}}}"
     ],
     "cwd": "[BUILDER_CACHE]/linux_memcheck",
-    "name": "rtc_unittests",
+    "name": "rtc_unittests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -3038,7 +3038,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-14.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"rtc_unittests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"rtc_unittests on Ubuntu-14.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"10200\", @@@",
@@ -3108,7 +3108,7 @@
       "{\"base_task_name\": \"system_wrappers_unittests/Ubuntu-14.04/[dummy has/linux_memcheck/1337\", \"tasks\": {\"system_wrappers_unittests/Ubuntu-14.04/[dummy has/linux_memcheck/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "cwd": "[BUILDER_CACHE]/linux_memcheck",
-    "name": "system_wrappers_unittests",
+    "name": "system_wrappers_unittests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -3153,7 +3153,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-14.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"system_wrappers_unittests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"system_wrappers_unittests on Ubuntu-14.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
@@ -3213,7 +3213,7 @@
       "{\"base_task_name\": \"test_support_unittests/Ubuntu-14.04/[dummy has/linux_memcheck/1337\", \"tasks\": {\"test_support_unittests/Ubuntu-14.04/[dummy has/linux_memcheck/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "cwd": "[BUILDER_CACHE]/linux_memcheck",
-    "name": "test_support_unittests",
+    "name": "test_support_unittests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -3258,7 +3258,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-14.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"test_support_unittests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"test_support_unittests on Ubuntu-14.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
@@ -3318,7 +3318,7 @@
       "{\"base_task_name\": \"tools_unittests/Ubuntu-14.04/[dummy has/linux_memcheck/1337\", \"tasks\": {\"tools_unittests/Ubuntu-14.04/[dummy has/linux_memcheck/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "cwd": "[BUILDER_CACHE]/linux_memcheck",
-    "name": "tools_unittests",
+    "name": "tools_unittests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -3363,7 +3363,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-14.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"tools_unittests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"tools_unittests on Ubuntu-14.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
@@ -3423,7 +3423,7 @@
       "{\"base_task_name\": \"video_engine_tests/Ubuntu-14.04/[dummy has/linux_memcheck/1337\", \"tasks\": {\"video_engine_tests/Ubuntu-14.04/[dummy has/linux_memcheck/1337:4:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"video_engine_tests/Ubuntu-14.04/[dummy has/linux_memcheck/1337:4:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"video_engine_tests/Ubuntu-14.04/[dummy has/linux_memcheck/1337:4:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}, \"video_engine_tests/Ubuntu-14.04/[dummy has/linux_memcheck/1337:4:3\": {\"shard_index\": 3, \"task_id\": \"10300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10300\"}}}"
     ],
     "cwd": "[BUILDER_CACHE]/linux_memcheck",
-    "name": "video_engine_tests",
+    "name": "video_engine_tests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -3471,7 +3471,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-14.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"video_engine_tests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"video_engine_tests on Ubuntu-14.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"10200\", @@@",
@@ -3537,7 +3537,7 @@
       "{\"base_task_name\": \"voice_engine_unittests/Ubuntu-14.04/[dummy has/linux_memcheck/1337\", \"tasks\": {\"voice_engine_unittests/Ubuntu-14.04/[dummy has/linux_memcheck/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "cwd": "[BUILDER_CACHE]/linux_memcheck",
-    "name": "voice_engine_unittests",
+    "name": "voice_engine_unittests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -3582,7 +3582,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-14.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"voice_engine_unittests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"voice_engine_unittests on Ubuntu-14.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
@@ -3642,7 +3642,7 @@
       "{\"base_task_name\": \"webrtc_nonparallel_tests/Ubuntu-14.04/[dummy has/linux_memcheck/1337\", \"tasks\": {\"webrtc_nonparallel_tests/Ubuntu-14.04/[dummy has/linux_memcheck/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "cwd": "[BUILDER_CACHE]/linux_memcheck",
-    "name": "webrtc_nonparallel_tests",
+    "name": "webrtc_nonparallel_tests on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -3687,7 +3687,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-14.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"webrtc_nonparallel_tests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"webrtc_nonparallel_tests on Ubuntu-14.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",

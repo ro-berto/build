@@ -157,7 +157,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Check",
+      "stepname:Check on Ubuntu-14.04",
       "--idempotent",
       "--user",
       "dude@chromium.org",
@@ -181,7 +181,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Check",
+    "name": "[trigger] Check on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -259,7 +259,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Check - extra",
+      "stepname:Check - extra on Ubuntu-14.04",
       "--idempotent",
       "--user",
       "dude@chromium.org",
@@ -283,7 +283,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Check - extra",
+    "name": "[trigger] Check - extra on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -361,7 +361,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:OptimizeForSize",
+      "stepname:OptimizeForSize on Ubuntu-14.04",
       "--idempotent",
       "--user",
       "dude@chromium.org",
@@ -386,7 +386,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] OptimizeForSize",
+    "name": "[trigger] OptimizeForSize on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -464,7 +464,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Test262",
+      "stepname:Test262 on Ubuntu-14.04",
       "--idempotent",
       "--user",
       "dude@chromium.org",
@@ -489,7 +489,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Test262",
+    "name": "[trigger] Test262 on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -585,7 +585,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Test262 - extra",
+      "stepname:Test262 - extra on Ubuntu-14.04",
       "--idempotent",
       "--user",
       "dude@chromium.org",
@@ -610,7 +610,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Test262 - extra",
+    "name": "[trigger] Test262 - extra on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -694,7 +694,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Mozilla",
+      "stepname:Mozilla on Ubuntu-14.04",
       "--idempotent",
       "--user",
       "dude@chromium.org",
@@ -718,7 +718,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Mozilla",
+    "name": "[trigger] Mozilla on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -796,7 +796,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Benchmarks",
+      "stepname:Benchmarks on Ubuntu-14.04",
       "--idempotent",
       "--user",
       "dude@chromium.org",
@@ -821,7 +821,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Benchmarks",
+    "name": "[trigger] Benchmarks on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -899,7 +899,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Mjsunit - sp frame access",
+      "stepname:Mjsunit - sp frame access on Ubuntu-14.04",
       "--idempotent",
       "--user",
       "dude@chromium.org",
@@ -924,7 +924,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Mjsunit - sp frame access",
+    "name": "[trigger] Mjsunit - sp frame access on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1002,7 +1002,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:GCMole ia32",
+      "stepname:GCMole ia32 on Ubuntu-14.04",
       "--idempotent",
       "--user",
       "dude@chromium.org",
@@ -1010,7 +1010,7 @@
       "--",
       "ia32"
     ],
-    "name": "[trigger] GCMole ia32",
+    "name": "[trigger] GCMole ia32 on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1088,7 +1088,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:GCMole x64",
+      "stepname:GCMole x64 on Ubuntu-14.04",
       "--idempotent",
       "--user",
       "dude@chromium.org",
@@ -1096,7 +1096,7 @@
       "--",
       "x64"
     ],
-    "name": "[trigger] GCMole x64",
+    "name": "[trigger] GCMole x64 on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1174,7 +1174,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:GCMole arm",
+      "stepname:GCMole arm on Ubuntu-14.04",
       "--idempotent",
       "--user",
       "dude@chromium.org",
@@ -1182,7 +1182,7 @@
       "--",
       "arm"
     ],
-    "name": "[trigger] GCMole arm",
+    "name": "[trigger] GCMole arm on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1260,7 +1260,7 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:GCMole arm64",
+      "stepname:GCMole arm64 on Ubuntu-14.04",
       "--idempotent",
       "--user",
       "dude@chromium.org",
@@ -1268,7 +1268,7 @@
       "--",
       "arm64"
     ],
-    "name": "[trigger] GCMole arm64",
+    "name": "[trigger] GCMole arm64 on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1612,7 +1612,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "name": "GCMole ia32",
+    "name": "GCMole ia32 on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1671,7 +1671,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "name": "GCMole x64",
+    "name": "GCMole x64 on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1730,7 +1730,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "name": "GCMole arm",
+    "name": "GCMole arm on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1789,7 +1789,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "name": "GCMole arm64",
+    "name": "GCMole arm64 on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",

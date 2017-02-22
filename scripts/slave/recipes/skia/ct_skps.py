@@ -385,7 +385,7 @@ def GenTests(api):
 
   yield(
     api.test('CT_DM_1m_SKPs_slave3_failure') +
-    api.step_data('ct-dm-3', retcode=1) +
+    api.step_data('ct-dm-3 on Ubuntu-14.04', retcode=1) +
     api.properties(
         buildername='Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-CT_DM_1m_SKPs',
         ct_num_slaves=ct_num_slaves,
@@ -396,8 +396,8 @@ def GenTests(api):
 
   yield(
     api.test('CT_DM_1m_SKPs_2slaves_failure') +
-    api.step_data('ct-dm-1', retcode=1) +
-    api.step_data('ct-dm-3', retcode=1) +
+    api.step_data('ct-dm-1 on Ubuntu-14.04', retcode=1) +
+    api.step_data('ct-dm-3 on Ubuntu-14.04', retcode=1) +
     api.properties(
         buildername='Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-CT_DM_1m_SKPs',
         ct_num_slaves=ct_num_slaves,

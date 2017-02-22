@@ -153,14 +153,14 @@
       "--tag",
       "slavename:TestSlavename",
       "--tag",
-      "stepname:Fuzz",
+      "stepname:Fuzz on Ubuntu-14.04",
       "--idempotent",
       "[dummy hash for jsfunfuzz]",
       "--",
       "out/Debug/d8",
       "${ISOLATED_OUTDIR}/fuzz-results-54321.tar.bz2"
     ],
-    "name": "[trigger] Fuzz",
+    "name": "[trigger] Fuzz on Ubuntu-14.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -194,7 +194,7 @@
       "--task-output-dir",
       "[TMP_BASE]/swarming_output_tmp_1"
     ],
-    "name": "Fuzz",
+    "name": "Fuzz on Ubuntu-14.04",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
