@@ -8,9 +8,11 @@ import time
 from infra_libs import ts_mon
 
 queries = ts_mon.CounterMetric('buildbot/master/db/queries',
-    description='Number of database queries made, by success/failure status.')
+    'Number of database queries made, by success/failure status.',
+    [ts_mon.StringField('op'), ts_mon.StringField('status')])
 durations = ts_mon.CumulativeDistributionMetric('buildbot/master/db/durations',
-    description='Time taken to make a database request.',
+    'Time taken to make a database request.',
+    [ts_mon.StringField('op')],
     units=ts_mon.MetricsDataUnits.MILLISECONDS)
 
 

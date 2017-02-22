@@ -23,38 +23,66 @@ from common import chromium_utils
 
 from infra_libs import ts_mon
 
-step_durations  = ts_mon.CumulativeDistributionMetric(
+step_field_spec = [
+    ts_mon.StringField('builder'),
+    ts_mon.StringField('master'),
+    ts_mon.StringField('project_id'),
+    ts_mon.StringField('result'),
+    ts_mon.StringField('slave'),
+    ts_mon.StringField('step_name'),
+    ts_mon.StringField('subproject_tag'),
+]
+
+step_durations = ts_mon.CumulativeDistributionMetric(
     'buildbot/master/builders/steps/durations',
-    description='Time (in seconds) from step start to step end',
+    'Time (in seconds) from step start to step end',
+    step_field_spec,
     units=ts_mon.MetricsDataUnits.SECONDS)
 
-step_counts  = ts_mon.CounterMetric(
+step_counts = ts_mon.CounterMetric(
     'buildbot/master/builders/steps/count',
-    description='Count of step results, per builder and step')
+    'Count of step results, per builder and step',
+    step_field_spec)
+
+field_spec = [
+    ts_mon.StringField('builder'),
+    ts_mon.StringField('master'),
+    ts_mon.StringField('project_id'),
+    ts_mon.StringField('result'),
+    ts_mon.StringField('slave'),
+    ts_mon.StringField('subproject_id'),
+]
 
 result_count = ts_mon.CounterMetric('buildbot/master/builders/results/count',
-    description='Number of items consumed from ts_mon.log by mastermon')
+    'Number of items consumed from ts_mon.log by mastermon',
+    field_spec)
 # A custom bucketer with 12% resolution in the range of 1..10**5,
 # better suited for build cycle times.
 bucketer = ts_mon.GeometricBucketer(
     growth_factor=10**0.05, num_finite_buckets=100)
 cycle_times = ts_mon.CumulativeDistributionMetric(
-    'buildbot/master/builders/builds/durations', bucketer=bucketer,
-    description='Durations (in seconds) that slaves spent actively doing '
-                'work towards builds for each builder')
+    'buildbot/master/builders/builds/durations',
+    'Durations (in seconds) that slaves spent actively doing work towards '
+    'builds for each builder',
+    field_spec,
+    bucketer=bucketer)
 pending_times = ts_mon.CumulativeDistributionMetric(
-    'buildbot/master/builders/builds/pending_durations', bucketer=bucketer,
-    description='Durations (in seconds) that the master spent waiting for '
-                'slaves to become available for each builder')
+    'buildbot/master/builders/builds/pending_durations',
+    'Durations (in seconds) that the master spent waiting for slaves to become '
+    'available for each builder',
+    field_spec,
+    bucketer=bucketer)
 total_times = ts_mon.CumulativeDistributionMetric(
-    'buildbot/master/builders/builds/total_durations', bucketer=bucketer,
-    description='Total duration (in seconds) that builds took to complete '
-                'for each builder')
+    'buildbot/master/builders/builds/total_durations',
+    'Total duration (in seconds) that builds took to complete for each builder',
+    field_spec,
+    bucketer=bucketer)
 
 pre_test_times = ts_mon.CumulativeDistributionMetric(
-    'buildbot/master/builders/builds/pre_test_durations', bucketer=bucketer,
-    description='Durations (in seconds) that builds spent before their '
-                '"before_tests" step')
+    'buildbot/master/builders/builds/pre_test_durations',
+    'Durations (in seconds) that builds spent before their "before_tests" step',
+    field_spec,
+    bucketer=bucketer)
 
 
 class StatusEventLogger(StatusReceiverMultiService):

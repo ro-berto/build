@@ -16,44 +16,60 @@ from twisted.python import log, threadpool
 from infra_libs import ts_mon
 
 uptime = ts_mon.FloatMetric('buildbot/master/uptime',
-    description='Time (in seconds) since the master was started')
+    'Time (in seconds) since the master was started',
+    [ts_mon.StringField('master')])
 accepting_builds = ts_mon.BooleanMetric('buildbot/master/accepting_builds',
-    description='Whether the master\'s BuildRequestDistributor is running')
+    'Whether the master\'s BuildRequestDistributor is running',
+    [ts_mon.StringField('master')])
 
 connected = ts_mon.GaugeMetric('buildbot/master/builders/connected_slaves',
-    description='Number of slaves currently connected, per builder')
+    'Number of slaves currently connected, per builder',
+    [ts_mon.StringField('master'), ts_mon.StringField('builder')])
 current_builds = ts_mon.GaugeMetric('buildbot/master/builders/current_builds',
-    description='Number of builds currently running, per builder')
+    'Number of builds currently running, per builder',
+    [ts_mon.StringField('master'), ts_mon.StringField('builder')])
 pending_builds = ts_mon.GaugeMetric('buildbot/master/builders/pending_builds',
-    description='Number of builds pending, per builder')
+    'Number of builds pending, per builder',
+    [ts_mon.StringField('master'), ts_mon.StringField('builder')])
 last_build_status = ts_mon.StringMetric('buildbot/master/builders/last_result',
-    description='The build result of the last completed build.')
+    'The build result of the last completed build.',
+    [ts_mon.StringField('master'), ts_mon.StringField('builder')])
 consecutive_failures = ts_mon.GaugeMetric(
     'buildbot/master/builders/consecutive_failures',
-    description='The number of consecutive failures until now.')
+    'The number of consecutive failures until now.', [
+        ts_mon.StringField('master'),
+        ts_mon.StringField('builder'),
+        ts_mon.StringField('failure_type')])
 state = ts_mon.StringMetric('buildbot/master/builders/state',
-    description='State of this builder - building, idle, or offline')
+    'State of this builder - building, idle, or offline',
+    [ts_mon.StringField('master'), ts_mon.StringField('builder')])
 total = ts_mon.GaugeMetric('buildbot/master/builders/total_slaves',
-    description='Number of slaves configured on this builder - connected or '
-                'not')
+    'Number of slaves configured on this builder - connected or not',
+    [ts_mon.StringField('master'), ts_mon.StringField('builder')])
 
 reactor_queue = ts_mon.GaugeMetric('buildbot/master/reactor/queue',
-    description='Number of items in the reactor queue.')
+    'Number of items in the reactor queue.',
+    None)
 reactor_queue_created = ts_mon.GaugeMetric(
     'buildbot/master/reactor/queue_age_created',
-    description='Age of oldest item in the reactor queue by creation.',
+    'Age of oldest item in the reactor queue by creation.',
+    None,
     units=ts_mon.MetricsDataUnits.MILLISECONDS)
 reactor_queue_modified = ts_mon.GaugeMetric(
     'buildbot/master/reactor/queue_age_modified',
-    description='Age of oldest item in the reactor queue by last modified.',
+    'Age of oldest item in the reactor queue by last modified.',
+    None,
     units=ts_mon.MetricsDataUnits.MILLISECONDS)
 
 pool_queue = ts_mon.GaugeMetric('buildbot/master/thread_pool/queue',
-    description='Number of runnables queued in the database thread pool')
+    'Number of runnables queued in the database thread pool',
+    [ts_mon.StringField('master')])
 pool_waiting = ts_mon.GaugeMetric('buildbot/master/thread_pool/waiting',
-    description='Number of idle workers for the database thread pool')
+    'Number of idle workers for the database thread pool',
+    [ts_mon.StringField('master')])
 pool_working = ts_mon.GaugeMetric('buildbot/master/thread_pool/working',
-    description='Number of running workers for the database thread pool')
+    'Number of running workers for the database thread pool',
+    [ts_mon.StringField('master')])
 
 SERVER_STARTED = time.time()
 
