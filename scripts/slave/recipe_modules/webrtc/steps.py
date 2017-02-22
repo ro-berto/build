@@ -90,9 +90,6 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
         BaremetalTest('voe_auto_test', revision=revision, args=['--automated']),
         BaremetalTest('video_capture_tests', revision=revision),
     ])
-    if api.m.tryserver.is_tryserver:
-      tests.append(BaremetalTest('webrtc_perf_tests', revision=revision,
-           args=['--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/']))
   elif test_suite == 'desktop_perf':
     assert api.c.PERF_ID
     if api.m.platform.is_linux:
@@ -121,10 +118,6 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
                                override_isolate_target=test))
       else:
         tests.append(AndroidJunitTest(test))
-    if api.m.tryserver.is_tryserver:
-      tests.append(BaremetalTest('webrtc_perf_tests', revision=revision,
-          args=['--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/']))
-
 
   return tests
 
