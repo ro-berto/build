@@ -8,10 +8,6 @@
   "service_account_file": "service-account-chromium-tryserver.json",
   "buildbucket_bucket": "master.tryserver.chromium.android",
 
-  "default_properties": {
-    "$recipe_engine": {"mode_flags": {"use_subprocess42": True}}
-  },
-
   "default_remote_run_properties": {
     "path_config": "kitchen",
   },

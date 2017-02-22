@@ -9,10 +9,6 @@
   # Enable compression for any stdio log file larger than 10 MB.
   "logCompressionLimit": 10485760,
 
-  "default_properties": {
-    "$recipe_engine": {"mode_flags": {"use_subprocess42": True}}
-  },
-
   "default_remote_run_properties": {
     "path_config": "kitchen",
   },
