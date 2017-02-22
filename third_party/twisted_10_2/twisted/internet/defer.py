@@ -16,6 +16,7 @@ Maintainer: Glyph Lefkowitz
     at the Deferred which is chained to the Deferred which has this marker.
 """
 
+import time
 import traceback
 import warnings
 from sys import exc_info
@@ -267,6 +268,8 @@ class Deferred:
             self._debugInfo = DebugInfo()
             self._debugInfo.creator = traceback.format_stack()[:-1]
         self._creator = traceback.extract_stack()[:-1]
+        self._modified = time.time() * 1000
+        self._created = self._modified
 
 
     def addCallbacks(self, callback, errback=None,
@@ -494,6 +497,7 @@ class Deferred:
         if self._runningCallbacks:
             # Don't recursively run callbacks
             return
+        self._modified = time.time() * 1000
 
         # Keep track of all the Deferreds encountered while propagating results
         # up a chain.  The way a Deferred gets onto this stack is by having

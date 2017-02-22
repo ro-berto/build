@@ -39,6 +39,14 @@ total = ts_mon.GaugeMetric('buildbot/master/builders/total_slaves',
 
 reactor_queue = ts_mon.GaugeMetric('buildbot/master/reactor/queue',
     description='Number of items in the reactor queue.')
+reactor_queue_created = ts_mon.GaugeMetric(
+    'buildbot/master/reactor/queue_age_created',
+    description='Age of oldest item in the reactor queue by creation.',
+    units=ts_mon.MetricsDataUnits.MILLISECONDS)
+reactor_queue_modified = ts_mon.GaugeMetric(
+    'buildbot/master/reactor/queue_age_modified',
+    description='Age of oldest item in the reactor queue by last modified.',
+    units=ts_mon.MetricsDataUnits.MILLISECONDS)
 
 pool_queue = ts_mon.GaugeMetric('buildbot/master/thread_pool/queue',
     description='Number of runnables queued in the database thread pool')
@@ -165,6 +173,18 @@ class MonitoringStatusReceiver(StatusReceiverMultiService):
     pool_waiting.set(len(pool.waiters), fields={'master': ''})
     pool_working.set(len(pool.working), fields={'master': ''})
     reactor_queue.set(len(reactor.threadCallQueue))
+
+    # Iterate through the reactor queue to figure out the oldest deferred.
+    created = 0.0
+    modified = 0.0
+    now = time.time() * 1000
+    for f, _, _ in reactor.threadCallQueue:
+      d = getattr(f, 'im_self', None)
+      if d:
+        created = max(created, now - f._created)
+        modified = max(modified, now - f._modified)
+    reactor_queue_created.set(created)
+    reactor_queue_modified.set(modified)
 
     builder_names = set()
     for builder_name in self.status.getBuilderNames():
