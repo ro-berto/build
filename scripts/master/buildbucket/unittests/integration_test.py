@@ -621,6 +621,37 @@ class IntegratorTest(unittest.TestCase):
       self.assertFalse(build.id in self.integrator._leases)
       self.assertFalse(self.buildbucket.api.fail.called)
 
+  def test_do_until_stopped(self):
+    called = [0]
+    def slow():
+      called[0] += 1
+      d = defer.Deferred()
+      reactor.callLater(0.1, reactor.stop)  # stop reactor after 0.1s
+      reactor.callLater(10, d.callback)  # resolve d after 10s
+      return d
+
+    with self.create_integrator():
+      self.integrator._do_until_stopped(
+          datetime.timedelta(microseconds=1), slow)
+      reactor.callLater(1, reactor.crash)  # crash reactor if hangs
+      reactor.run()
+      self.assertEquals(called[0], 1)
+
+  def test_do_until_stopped_continues_on_error(self):
+    called = [0]
+    def faulty():
+      called[0] += 1
+      if called[0] > 1:
+        reactor.stop()
+      raise Exception()
+
+    with self.create_integrator():
+      self.integrator._do_until_stopped(
+          datetime.timedelta(microseconds=1), faulty)
+      reactor.callLater(1, reactor.crash)  # crash reactor if hangs
+      reactor.run()
+      self.assertGreater(called[0], 1)
+
 
 if __name__ == '__main__':
   logging.basicConfig(

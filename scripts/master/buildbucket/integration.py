@@ -541,11 +541,16 @@ class BuildBucketIntegrator(object):
     def loop_iteration():
       if not self.started:
         return
-      try:
-        fn()
-      finally:
+      d = defer.maybeDeferred(fn)
+
+      def onError(failure):
+        self.log(str(failure))
+      d.addErrback(onError)
+
+      def onCompleted(result):
         if self.started:
           reactor.callLater(interval.total_seconds(), loop_iteration)
+      d.addCallback(onCompleted)
     loop_iteration()
 
   def _stop_build(self, build, reason):

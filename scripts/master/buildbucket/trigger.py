@@ -110,10 +110,10 @@ def get_triggering_service(active_master):
     _master_triggering_service_map[active_master] = d
 
   result = defer.Deferred()
-  def udpate_result(service):
+  def update_result(service):
     result.callback(service)
     return service
-  d.addCallback(udpate_result)
+  d.addCallback(update_result)
   d.addErrback(result.errback)
   return result
 
