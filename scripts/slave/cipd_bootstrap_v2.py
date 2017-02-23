@@ -13,6 +13,7 @@ LOGGER = logging.getLogger(__name__)
 
 import requests
 from slave import infra_platform
+from slave import cipd
 
 CLIENT_NAME = 'cipd' + infra_platform.exe_suffix()
 
@@ -53,6 +54,15 @@ if sys.platform == "win32":
   # For more information, see:
   # https://msdn.microsoft.com/en-us/library/windows/desktop/ms680621.aspx
   ctypes.windll.kernel32.SetErrorMode(0x0001|0x0002|0x8000)
+
+
+def all_cipd_packages():
+  """Returns (list): All referenced CIPD packages."""
+  package_name = 'infra/tools/cipd/${platform}-${arch}'
+  return (
+      cipd.CipdPackage(name=package_name, version=DEFAULT_CIPD_VERSION),
+      cipd.CipdPackage(name=package_name, version=STAGING_CIPD_VERSION),
+  )
 
 
 def _update_client(path, version):

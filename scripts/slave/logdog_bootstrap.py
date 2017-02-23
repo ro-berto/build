@@ -131,6 +131,15 @@ def _get_platform():
   return Platform(**infra_platform.cascade_config(_PLATFORM_CONFIG))
 
 
+def all_cipd_packages():
+  """Generator which yields all referenced CIPD packages."""
+  # All CIPD packages are in top-level platform config.
+  pcfg = infra_platform.cascade_config(_PLATFORM_CONFIG, plat=())
+  for name in (pcfg['butler'], pcfg['annotee']):
+    for version in (_STABLE_CIPD_TAG, _CANARY_CIPD_TAG):
+      yield cipd.CipdPackage(name=name, version=version)
+
+
 def _load_params_dict(mastername):
   """Returns (dict or None): The parameters for the specified master.
 

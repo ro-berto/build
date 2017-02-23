@@ -110,6 +110,24 @@ def cipd_platform_arch():
   return "%s-%s" % (_cipd_platform(os_name), _cipd_arch(machine))
 
 
+def cipd_all_targets():
+  """Returns an iterable of (platform, arch) tuples for all supported buildslave
+  platforms that we expect CIPD packages to exist for.
+
+  This is used for CIPD presubmit validation.
+  """
+  return (
+      ('linux', '386'),
+      ('linux', 'amd64'),
+      ('linux', 'arm64'),
+      ('linux', 'armv6l'),
+      ('linux', 'mips64'),
+      ('mac', 'amd64'),
+      ('windows', '386'),
+      ('windows', 'amd64'),
+  )
+
+
 def cascade_config(config, plat=None):
   """Returns (dict): The constructed configuration dictionary.
 

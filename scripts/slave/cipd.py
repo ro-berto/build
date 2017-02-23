@@ -14,7 +14,6 @@ import logging
 import os
 import subprocess
 import sys
-import tempfile
 
 # Install Infra build environment.
 BUILD_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(
@@ -69,7 +68,7 @@ def parse_cipd_package(v):
 
 def main(argv):
   parser = argparse.ArgumentParser()
-  parser.add_argument('-v', '--verbose', action='count',
+  parser.add_argument('-v', '--verbose', action='count', default=0,
                       help='Increase logging. Can be specified multiple times.')
   parser.add_argument('-P', '--package', metavar='PACKAGE@VERSION',
                       action='append', default=[], required=True,

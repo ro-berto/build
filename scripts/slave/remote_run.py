@@ -31,6 +31,9 @@ from slave import update_scripts
 LOGGER = logging.getLogger('remote_run')
 
 
+# The name of the recipe engine CIPD package.
+_RECIPES_PY_CIPD_PACKAGE = 'infra/recipes-py'
+
 # CIPD_PINS is a mapping of master name to pinned recipe engine CIPD package
 # version. If no pin is found, the CIPD pin for "None" will be used.
 _CIPD_PINS = {
@@ -41,6 +44,14 @@ _CIPD_PINS = {
 
 def _get_cipd_pin(mastername):
   return _CIPD_PINS.get(mastername, _CIPD_PINS[None])
+
+
+def all_cipd_packages():
+  """Generator which yields all referenced CIPD packages."""
+  # All CIPD packages are in top-level platform config.
+  for pin in _CIPD_PINS.values():
+    yield cipd.CipdPackage(name=_RECIPES_PY_CIPD_PACKAGE, version=pin)
+
 
 # ENGINE_FLAGS is a mapping of master name to a engine flags. This can be used
 # to test new recipe engine flags on a select few masters.
@@ -199,7 +210,7 @@ def main(argv, stream):
     cipd_pin = _get_cipd_pin(mastername)
     cipd_path = os.path.join(basedir, '.remote_run_cipd')
     _install_cipd_packages(
-        cipd_path, cipd.CipdPackage('infra/recipes-py', cipd_pin))
+        cipd_path, cipd.CipdPackage(_RECIPES_PY_CIPD_PACKAGE, cipd_pin))
 
     engine_flags = _get_engine_flags(mastername)
 
