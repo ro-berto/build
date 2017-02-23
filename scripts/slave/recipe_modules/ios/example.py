@@ -72,7 +72,31 @@ def GenTests(api):
           'os': '7.1',
         },
       ],
+      'triggered bots': [
+          'fake child 1',
+          'fake child 2',
+      ],
     })
+    + api.ios.make_test_build_configs_for_children([
+      {
+        'tests': [
+          {
+            'app': 'fake child test 1',
+            'device type': 'fake child device 1',
+            'os': '8.1',
+          },
+        ],
+      },
+      {
+        'tests': [
+          {
+            'include': 'fake include.json',
+            'device type': 'fake child device 2',
+            'os': '9.0',
+          },
+        ],
+      },
+    ])
     + api.step_data(
         'bootstrap swarming.swarming.py --version',
         stdout=api.raw_io.output_text('1.2.3'),

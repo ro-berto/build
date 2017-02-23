@@ -21,3 +21,11 @@ class iOSTestApi(recipe_test_api.RecipeTestApi):
 
   def make_test_build_config_for_parent(self, config):
     return self.parent_build_config(config)
+
+  @recipe_test_api.mod_test_data
+  @staticmethod
+  def child_build_configs(configs):
+    return deepcopy(configs)
+
+  def make_test_build_configs_for_children(self, configs):
+    return self.child_build_configs(configs)

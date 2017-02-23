@@ -20,6 +20,7 @@ class iOSApi(recipe_api.RecipeApi):
   def __init__(self, *args, **kwargs):
     super(iOSApi, self).__init__(*args, **kwargs)
     self.__config = None
+    self._include_cache = {}
 
   @property
   def bucket(self):
@@ -70,7 +71,7 @@ class iOSApi(recipe_api.RecipeApi):
     with self.m.step.context(context):
       return self.m.bot_update.ensure_checkout(**kwargs)
 
-  def parse_tests(self, tests, include_dir):
+  def parse_tests(self, tests, include_dir, start_index=0):
     """Parses the tests dict, reading necessary includes.
 
     Args:
@@ -84,7 +85,6 @@ class iOSApi(recipe_api.RecipeApi):
     # The value of an "include" key is the name of a set of tests to include,
     # which can be found as a .json file in include_dir. Read the contents
     # lazily as needed into includes.
-    includes = {}
 
     # expanded_tests_list will be the list of test dicts, with
     # any "include" replaced with the tests from that include.
@@ -92,7 +92,7 @@ class iOSApi(recipe_api.RecipeApi):
 
     # Generate a unique ID we can use to refer to each test, since the config
     # may specify to run the exact same test multiple times.
-    i = 0
+    i = start_index
 
     for element in tests:
       if element.get('include'):
@@ -100,8 +100,8 @@ class iOSApi(recipe_api.RecipeApi):
         include = str(element.pop('include'))
 
         # Lazily read the include if we haven't already.
-        if include not in includes:
-          includes[include] = self.m.json.read(
+        if include not in self._include_cache:
+          self._include_cache[include] = self.m.json.read(
             'include %s' % include,
             include_dir.join(include),
             step_test_data=lambda: self.m.json.test_api.output({
@@ -118,7 +118,7 @@ class iOSApi(recipe_api.RecipeApi):
 
         # Now take each test dict from the include, update it with the
         # extra keys (e.g. device, OS), and append to the list of tests.
-        for included_test in includes[include]['tests']:
+        for included_test in self._include_cache[include]['tests']:
           expanded_tests_list.append(copy.deepcopy(included_test))
           expanded_tests_list[-1].update(element)
           expanded_tests_list[-1]['id'] = str(i)
@@ -198,6 +198,20 @@ class iOSApi(recipe_api.RecipeApi):
 
     self.__config['tests'] = self.parse_tests(
         self.__config['tests'], include_dir)
+    next_index = len(self.__config['tests'])
+    self.__config['triggered tests'] = {}
+    for i, bot in enumerate(self.__config['triggered bots']):
+      bot = str(bot)
+      child_config = self.m.json.read(
+        'read build config (%s)' % bot,
+        build_config_dir.join('%s.json' % bot),
+        step_test_data=lambda: self.m.json.test_api.output(
+          self._test_data['child_build_configs'][i],
+        ),
+      ).json.output
+      self.__config['triggered tests'][bot] = self.parse_tests(
+        child_config.get('tests', []), include_dir, start_index=next_index)
+      next_index += len(self.__config['triggered tests'][bot])
 
     cfg = self.m.chromium.make_config()
 
@@ -558,6 +572,11 @@ class iOSApi(recipe_api.RecipeApi):
 
     for test in self.__config['tests']:
       tasks.append(self.isolate_test(test, tmp_dir, isolate_template))
+      tasks[-1]['buildername'] = self.m.properties['buildername']
+    for bot, tests in self.__config['triggered tests'].iteritems():
+      for test in tests:
+        tasks.append(self.isolate_test(test, tmp_dir, isolate_template))
+        tasks[-1]['buildername'] = bot
 
     gen_files = []
     for task in tasks:
@@ -593,6 +612,8 @@ class iOSApi(recipe_api.RecipeApi):
     """Triggers the given Swarming tasks."""
     for task in tasks:
       if not task['isolated hash']: # pragma: no cover
+        continue
+      if task['buildername'] != self.m.properties['buildername']:
         continue
 
       task['tmp_dir'] = self.m.path.mkdtemp(task['test']['id'])
@@ -670,6 +691,10 @@ class iOSApi(recipe_api.RecipeApi):
         self.trigger(tasks)
 
       for task in tasks:
+        if task['buildername'] != self.m.properties['buildername']:
+          # This task isn't for this builder to collect.
+          continue
+
         if task['skip']:
           # Create a dummy step to indicate we skipped this test.
           step_result = self.m.step('[skipped] %s' % task['step name'], [])
