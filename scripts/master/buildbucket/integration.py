@@ -10,7 +10,7 @@ import logging
 
 from buildbot.util import deferredLocked
 from master.buildbucket import changestore
-from twisted.internet import defer, reactor
+from twisted.internet import defer, reactor, task
 from twisted.internet.defer import inlineCallbacks, returnValue
 
 from . import common
@@ -538,20 +538,25 @@ class BuildBucketIntegrator(object):
       yield self.buildbucket_service.api.cancel(id=build_id)
 
   def _do_until_stopped(self, interval, fn):
+    loop = None
+
     def loop_iteration():
       if not self.started:
+        if loop and loop.running:
+          loop.stop()
         return
+
       d = defer.maybeDeferred(fn)
 
+      # Do not stop the loop if f fails. Log the failure instead.
       def onError(failure):
         self.log(str(failure))
       d.addErrback(onError)
 
-      def onCompleted(result):
-        if self.started:
-          reactor.callLater(interval.total_seconds(), loop_iteration)
-      d.addCallback(onCompleted)
-    loop_iteration()
+      return d
+
+    loop = task.LoopingCall(loop_iteration)
+    return loop.start(interval.total_seconds())
 
   def _stop_build(self, build, reason):
     if build.isFinished():
