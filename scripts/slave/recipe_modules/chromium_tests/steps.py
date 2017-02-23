@@ -1169,39 +1169,46 @@ class LocalIsolatedScriptTest(Test):
           args,
           step_test_data=step_test_data)
     finally:
+      # TODO(kbr, nedn): the logic of processing the output here is very similar
+      # to that of SwarmingIsolatedScriptTest. They probably should be shared
+      # between the two.
       self._test_runs[suffix] = api.step.active_result
-      if self.has_valid_results(api, suffix):
+      results = self._test_runs[suffix].json.output
+      if is_json_results_format(results):
+        valid, failures = validate_json_test_results(api, results)
+      elif results:
+        valid, failures = validate_simplified_results(results)
+
+      if valid:
         self._test_runs[suffix].presentation.step_text += (
             api.test_utils.format_step_text([
-              ['failures:', self.failures(api, suffix)]
+              ['failures:', failures]
             ]))
       elif api.step.active_result.retcode == 0:
         # This failure won't be caught automatically. Need to manually
         # raise it as a step failure.
         api.step.active_result.presentation.status = api.step.FAILURE
         raise api.step.StepFailure('Test results were invalid')
-
     return self._test_runs[suffix]
 
-  def has_valid_results(self, api, suffix):
-    try:
-      # Make sure the JSON includes all necessary data.
-      self.failures(api, suffix)
-
-      return self._test_runs[suffix].json.output['valid']
-    except Exception:  # pragma: no cover
-      self._test_runs[suffix].presentation.logs[
-          'exception_during_checking_json_local_isolated'] = (
-              traceback.format_exc().splitlines())
-
-      return False
-
-  def failures(self, api, suffix):
-    return self._test_runs[suffix].json.output['failures']
 
 
 def is_json_results_format(results):
   return results.get('version', 0) == 3
+
+
+def validate_simplified_results(results):
+  return results['valid'], results['failures']
+
+
+def validate_json_test_results(api, results):
+  test_results = api.test_utils.create_results_from_json(results)
+  tests = test_results.tests
+  failures = list(
+    t for t in tests
+    if all(res not in tests[t]['expected'].split()
+           for res in tests[t]['actual'].split()))
+  return True, failures
 
 
 class SwarmingIsolatedScriptTest(SwarmingTest):
@@ -1254,17 +1261,6 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
         shards=self._shards, idempotent=False, merge=self._merge,
         build_properties=api.chromium.build_properties, extra_args=args)
 
-  def validate_simplified_results(self, results):
-    return results['valid'], results['failures']
-
-  def validate_json_test_results(self, api, results):
-    test_results = api.test_utils.create_results_from_json(results)
-    tests = test_results.tests
-    failures = list(
-      t for t in tests
-      if all(res not in tests[t]['expected'].split()
-             for res in tests[t]['actual'].split()))
-    return True, failures
 
   def upload_json_format_results(self, api, results, suffix):
     chrome_revision_cp = api.bot_update.last_returned_properties.get(
@@ -1282,9 +1278,9 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     failures = []
 
     if is_json_results_format(results):
-      valid, failures = self.validate_json_test_results(api, results)
+      valid, failures = validate_json_test_results(api, results)
     elif results:
-      valid, failures = self.validate_simplified_results(results)
+      valid, failures = validate_simplified_results(results)
 
     if not failures and step_result.retcode != 0:
       failures = ['%s (entire test suite)' % self.name]
