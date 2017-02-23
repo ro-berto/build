@@ -743,6 +743,15 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[START_DIR]/src",
+    "name": "fake test 1 (fake device iOS 8.1)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Failed to isolate the test.@@@",
+      "@@@STEP_EXCEPTION@@@"
+    ]
+  },
+  {
     "cmd": [
       "python",
       "-u",

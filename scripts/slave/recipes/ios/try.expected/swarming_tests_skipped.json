@@ -460,21 +460,15 @@
   {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]/ios_simulator_swarming/src",
-    "name": "skipped"
+    "name": "trigger"
   },
   {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]/ios_simulator_swarming/src",
-    "name": "skipped.[skipped] fake test (fake device iOS 8.1)",
+    "name": "[skipped] fake test (fake device iOS 8.1)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@This test was skipped because it was not affected.@@@"
     ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[BUILDER_CACHE]/ios_simulator_swarming/src",
-    "name": "trigger"
   },
   {
     "name": "$result",

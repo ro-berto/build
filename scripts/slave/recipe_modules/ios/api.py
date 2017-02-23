@@ -447,21 +447,23 @@ class iOSApi(recipe_api.RecipeApi):
 
   def isolate_test(self, test, tmp_dir, isolate_template):
     """Isolates a single test."""
-    class Task(object):
-      def __init__(self, isolate_gen_file, step_name, test):
-        self.isolate_gen_file = isolate_gen_file
-        self.isolated_hash = None
-        self.step_name = step_name
-        self.task = None
-        self.test = copy.deepcopy(test)
-        self.tmp_dir = None
+    task = {
+        'isolate.gen': None,
+        'isolated hash': None,
+        'skip': 'skip' in test,
+        'step name': self.get_step_name(test),
+        'task': None,
+        'test': copy.deepcopy(test),
+        'tmp dir': None,
+    }
+    if task['skip']:
+      return task
 
     app_path = self.m.path.join(
       self.most_recent_app_dir,
       '%s.app' % test['app'],
     )
-    isolate_gen_file = tmp_dir.join('%s.isolate.gen.json' % test['id'])
-    task_step_name = self.get_step_name(test)
+    task['isolate.gen'] = tmp_dir.join('%s.isolate.gen.json' % test['id'])
 
     args = [
       '--config-variable', 'OS', 'ios',
@@ -486,24 +488,26 @@ class iOSApi(recipe_api.RecipeApi):
       'dir': self.m.path['start_dir'],
       'version': 1,
     }, indent=2)
-    step_result = self.m.file.write(
-      'generate %s.isolate.gen.json' % test['id'],
-      isolate_gen_file,
-      isolate_gen_file_contents,
-    )
-    step_result.presentation.logs['%s.isolate.gen.json' % test['id']] = (
-      isolate_gen_file_contents.splitlines())
-    step_result.presentation.step_text = task_step_name
+    try:
+      step_result = self.m.file.write(
+        'generate %s.isolate.gen.json' % test['id'],
+        task['isolate.gen'],
+        isolate_gen_file_contents,
+      )
+      step_result.presentation.logs['%s.isolate.gen.json' % test['id']] = (
+        isolate_gen_file_contents.splitlines())
+      step_result.presentation.step_text = task['step name']
+    except self.m.step.StepFailure as f:
+      f.result.presentation.status = self.m.step.EXCEPTION
+      task['isolate.gen'] = None
 
-    return Task(isolate_gen_file, task_step_name, test)
+    return task
 
   def isolate(self, scripts_dir='src/ios/build/bots/scripts'):
     """Isolates the tests specified in this bot's build config."""
     assert self.__config
 
     tasks = []
-    failures = []
-    skipped = []
 
     cmd = [
       '%s/run.py' % scripts_dir,
@@ -553,17 +557,14 @@ class iOSApi(recipe_api.RecipeApi):
     tmp_dir = self.m.path.mkdtemp('isolate')
 
     for test in self.__config['tests']:
-      if test.get('skip'):
-        skipped.append(self.get_step_name(test))
-        continue
-      try:
-        tasks.append(self.isolate_test(test, tmp_dir, isolate_template))
-      except self.m.step.StepFailure as f:
-        f.result.presentation.status = self.m.step.EXCEPTION
-        failures.append(self.get_step_name(test))
+      tasks.append(self.isolate_test(test, tmp_dir, isolate_template))
 
-    if not tasks:
-      return tasks, failures, skipped
+    gen_files = []
+    for task in tasks:
+      if task['isolate.gen'] and not task['skip']:
+        gen_files.append(task['isolate.gen'])
+    if not gen_files:
+      return tasks
 
     cmd = [
       self.m.swarming_client.path.join('isolate.py'),
@@ -571,52 +572,52 @@ class iOSApi(recipe_api.RecipeApi):
       '--dump-json', self.m.json.output(),
       '--isolate-server', self.m.isolate.isolate_server,
     ]
-    for task in tasks:
-      cmd.append(task.isolate_gen_file)
+    cmd.extend(gen_files)
     step_result = self.m.step(
       'archive',
       cmd,
       infra_step=True,
       step_test_data=lambda: self.m.json.test_api.output({
-        task.test['id']: 'fake-hash-%s' % task.test['id']
+        task['test']['id']: 'fake-hash-%s' % task['test']['id']
         for task in tasks
+        if task['isolate.gen'] and not task['skip']
       }),
     )
     for task in tasks:
-      if task.test['id'] in step_result.json.output:
-        task.isolated_hash = step_result.json.output[task.test['id']]
+      if task['test']['id'] in step_result.json.output:
+        task['isolated hash'] = step_result.json.output[task['test']['id']]
 
-    return tasks, failures, skipped
+    return tasks
 
   def trigger(self, tasks):
     """Triggers the given Swarming tasks."""
-    failures = []
-
     for task in tasks:
-      if not task.isolated_hash: # pragma: no cover
+      if not task['isolated hash']: # pragma: no cover
         continue
 
-      task.tmp_dir = self.m.path.mkdtemp(task.test['id'])
+      task['tmp_dir'] = self.m.path.mkdtemp(task['test']['id'])
       swarming_task = self.m.swarming.task(
-        task.step_name, task.isolated_hash, task_output_dir=task.tmp_dir)
+        task['step name'],
+        task['isolated hash'],
+        task_output_dir=task['tmp_dir'],
+      )
 
       swarming_task.dimensions = {
         'pool': 'Chrome',
-        'xcode_version': task.test.get(
+        'xcode_version': task['test'].get(
           'xcode version', self.__config['xcode version'])
       }
       if self.platform == 'simulator':
         swarming_task.dimensions['os'] = 'Mac'
       elif self.platform == 'device':
-        swarming_task.dimensions['os'] = 'iOS-%s' % str(task.test['os'])
+        swarming_task.dimensions['os'] = 'iOS-%s' % str(task['test']['os'])
         swarming_task.dimensions['device_status'] = 'available'
         swarming_task.dimensions['device'] = self.PRODUCT_TYPES.get(
-          task.test['device type'])
+          task['test']['device type'])
         if not swarming_task.dimensions['device']:
-          failures.append(task.step_name)
           # Create a dummy step so we can annotate it to explain what
           # went wrong.
-          step_result = self.m.step('[trigger] %s' % task.step_name, [])
+          step_result = self.m.step('[trigger] %s' % task['step name'], [])
           step_result.presentation.status = self.m.step.EXCEPTION
           step_result.presentation.logs['supported devices'] = sorted(
             self.PRODUCT_TYPES.keys())
@@ -627,70 +628,70 @@ class iOSApi(recipe_api.RecipeApi):
       spec = [
         self.m.properties['mastername'],
         self.m.properties['buildername'],
-        task.test['app'],
+        task['test']['app'],
         self.platform,
-        task.test['device type'],
-        task.test['os'],
+        task['test']['device type'],
+        task['test']['os'],
         swarming_task.dimensions['xcode_version'],
       ]
       # e.g.
       # chromium.mac:ios-simulator:base_unittests:simulator:iPad Air:10.0:8.0
       swarming_task.tags.add('spec_name:%s' % str(':'.join(spec)))
 
-      swarming_task.tags.add('device_type:%s' % str(task.test['device type']))
-      swarming_task.tags.add('ios_version:%s' % str(task.test['os']))
+      swarming_task.tags.add(
+          'device_type:%s' % str(task['test']['device type']))
+      swarming_task.tags.add('ios_version:%s' % str(task['test']['os']))
       swarming_task.tags.add('platform:%s' % self.platform)
-      swarming_task.tags.add('test:%s' % str(task.test['app']))
+      swarming_task.tags.add('test:%s' % str(task['test']['app']))
 
       try:
         self.m.swarming.trigger_task(swarming_task)
-        task.task = swarming_task
+        task['task'] = swarming_task
       except self.m.step.StepFailure as f:
         f.result.presentation.status = self.m.step.EXCEPTION
-        failures.append(task.step_name)
 
-    return failures
+    return tasks
 
   def test_swarming(self, scripts_dir='src/ios/build/bots/scripts'):
     """Runs tests on Swarming as instructed by this bot's build config."""
     assert self.__config
 
-    test_failures = []
-    infra_failures = []
+    failures = set()
+    infra_failure = False
 
     with self.m.step.context({'cwd': self.m.path['checkout']}):
       with self.m.step.nest('bootstrap swarming'):
         self.bootstrap_swarming()
 
       with self.m.step.nest('isolate'):
-        tasks, failures, skipped = self.isolate(scripts_dir=scripts_dir)
-        infra_failures.extend(failures)
-
-      if skipped:
-        with self.m.step.nest('skipped'):
-          for step_name in skipped:
-            # Create a dummy step to indicate we skipped this test.
-            step_result = self.m.step('[skipped] %s' % step_name, [])
-            step_result.presentation.step_text = (
-              'This test was skipped because it was not affected.'
-            )
+        tasks = self.isolate(scripts_dir=scripts_dir)
 
       with self.m.step.nest('trigger'):
-        failures = self.trigger(tasks)
-        infra_failures.extend(failures)
+        self.trigger(tasks)
 
       for task in tasks:
-        if not task.task:
-          # We failed to isolate or trigger this test.
+        if task['skip']:
+          # Create a dummy step to indicate we skipped this test.
+          step_result = self.m.step('[skipped] %s' % task['step name'], [])
+          step_result.presentation.step_text = (
+              'This test was skipped because it was not affected.')
+          continue
+
+        if not task['task']:
+          # We failed to trigger this test.
           # Create a dummy step for it and mark it as failed.
-          step_result = self.m.step(task.step_name, [])
+          step_result = self.m.step(task['step name'], [])
           step_result.presentation.status = self.m.step.EXCEPTION
-          step_result.presentation.step_text = 'Failed to trigger the test.'
-          infra_failures.append(task.step_name)
+          if not task['isolate.gen']:
+            step_result.presentation.step_text = 'Failed to isolate the test.'
+          else:
+            step_result.presentation.step_text = 'Failed to trigger the test.'
+          failures.add(task['step name'])
+          infra_failure = True
           continue
 
         try:
-          step_result = self.m.swarming.collect_task(task.task)
+          step_result = self.m.swarming.collect_task(task['task'])
         except self.m.step.StepFailure as f:
           step_result = f.result
 
@@ -711,34 +712,37 @@ class iOSApi(recipe_api.RecipeApi):
           # Task completed and we got an exit code from the iOS test runner.
           if exit_code == 1:
             step_result.presentation.status = self.m.step.FAILURE
-            test_failures.append(task.step_name)
+            failures.add(task['step name'])
           elif exit_code == 2:
             # The iOS test runner exits 2 to indicate an infrastructure failure.
             step_result.presentation.status = self.m.step.EXCEPTION
-            infra_failures.append(task.step_name)
+            failures.add(task['step name'])
+            infra_failure = True
         elif state == self.m.swarming.State.TIMED_OUT:
           # The task was killed for taking too long. This is a test failure
           # because the test itself hung.
           step_result.presentation.status = self.m.step.FAILURE
           step_result.presentation.step_text = 'Test timed out.'
-          test_failures.append(task.step_name)
+          failures.add(task['step name'])
         elif state == self.m.swarming.State.EXPIRED:
           # No Swarming bot accepted the task in time.
           step_result.presentation.status = self.m.step.EXCEPTION
           step_result.presentation.step_text = (
             'No suitable Swarming bot found in time.'
           )
-          infra_failures.append(task.step_name)
+          failures.add(task['step name'])
+          infra_failure = True
         else:
           step_result.presentation.status = self.m.step.EXCEPTION
           step_result.presentation.step_text = (
             'Unexpected infrastructure failure.'
           )
-          infra_failures.append(task.step_name)
+          failures.add(task['step name'])
+          infra_failure = True
 
         # Add any iOS test runner results to the display.
         test_summary = self.m.path.join(
-          task.task.task_output_dir, '0', 'summary.json')
+          task['task'].task_output_dir, '0', 'summary.json')
         if self.m.path.exists(test_summary): # pragma: no cover
           with open(test_summary) as f:
             test_summary_json = self.m.json.loads(f.read())
@@ -754,24 +758,23 @@ class iOSApi(recipe_api.RecipeApi):
         # Upload test results JSON to the flakiness dashboard.
         if self.m.bot_update.last_returned_properties:
           test_results = self.m.path.join(
-            task.task.task_output_dir, '0', 'full_results.json')
+            task['task'].task_output_dir, '0', 'full_results.json')
           if self.m.path.exists(test_results):
             self.m.test_results.upload(
               test_results,
-              task.test['app'],
+              task['test']['app'],
               self.m.bot_update.last_returned_properties.get(
                 'got_revision_cp', 'x@{#0}'),
               builder_name_suffix='%s-%s' % (
-                task.test['device type'], task.test['os']),
+                task['test']['device type'], task['test']['os']),
               test_results_server='test-results.appspot.com',
             )
 
-      if test_failures:
-        raise self.m.step.StepFailure(
-          'Failed %s.' % ', '.join(sorted(set(test_failures + infra_failures))))
-      elif infra_failures:
-        raise self.m.step.InfraFailure(
-          'Failed %s.' % ', '.join(sorted(set(infra_failures))))
+      if failures:
+        failure = self.m.step.StepFailure
+        if infra_failure:
+          failure = self.m.step.InfraFailure
+        raise failure('Failed %s.' % ', '.join(sorted(failures)))
 
   @property
   def most_recent_app_dir(self):
