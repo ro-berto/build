@@ -1191,9 +1191,8 @@ class LocalIsolatedScriptTest(Test):
       return self._test_runs[suffix].json.output['valid']
     except Exception:  # pragma: no cover
       self._test_runs[suffix].presentation.logs[
-          'exception_during_checking_json_local_isolated'] = [
-              traceback.format_exc().splitlines()
-          ]
+          'exception_during_checking_json_local_isolated'] = (
+              traceback.format_exc().splitlines())
 
       return False
 
