@@ -40,6 +40,10 @@ def Update(_config, active_master, c):
           'linux_chromium_clobber_deterministic',
       ]),
   ])
+
+  # name (str): required, must match string in schedulers above
+  # recipe (str): optional (default: 'chromium'), the recipe to use for
+  #   this builder.
   specs = [
     {'name': 'Linux Builder'},
     {'name': 'Linux Tests'},
@@ -56,13 +60,15 @@ def Update(_config, active_master, c):
     {'name': 'Linux Builder Trusty (dbg)(32)'},
     {'name': 'Linux Tests Trusty (dbg)(1)'},
     {'name': 'Cast Linux Trusty'},
-    {'name': 'linux_chromium_clobber_deterministic'},
+
+    {'name': 'linux_chromium_clobber_deterministic',
+     'recipe': 'swarming/deterministic_build'},
   ]
 
   c['builders'].extend([
       {
         'name': spec['name'],
-        'factory': m_remote_run('chromium'),
+        'factory': m_remote_run(spec.get('recipe', 'chromium')),
         'notify_on_missing': True,
         'category': '4linux',
       } for spec in specs
