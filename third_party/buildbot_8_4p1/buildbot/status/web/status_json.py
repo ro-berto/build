@@ -391,14 +391,15 @@ class BuilderPendingBuildsJsonResource(JsonResource):
         JsonResource.__init__(self, status)
         self.builder_status = builder_status
 
+    @defer.inlineCallbacks
     def asDict(self, request):
         # buildbot.status.builder.BuilderStatus
-        d = self.builder_status.getPendingBuildRequestStatuses()
-        def to_dict(statuses):
-            return defer.gatherResults(
-                [ b.asDict_async() for b in statuses ])
-        d.addCallback(to_dict)
-        return d
+        statuses = yield self.builder_status.getPendingBuildRequestStatuses()
+        result = []
+        for status in statuses:
+            b = yield status.asDict_async()
+            result.append(b)
+        defer.returnValue(result)
 
 
 class BuilderJsonResource(JsonResource):
@@ -636,20 +637,17 @@ class ChangesJsonResource(JsonResource):
             return child
         return JsonResource.getChild(self, path, request)
 
-    @defer.deferredGenerator
+    @defer.inlineCallbacks
     def asDict(self, request):
         """Don't throw an exception when there is no child."""
         max = int(RequestArg(request, 'max', 100))
-        d = self.status.master.db.changes.getRecentChanges(max)
-        def reify(chdicts):
-            return defer.gatherResults(
-                [changes.Change.fromChdict(self.status.master, chdict)
-                 for chdict in chdicts])
-        d.addCallback(reify)
-        wfd = defer.waitForDeferred(d)
-        yield wfd
-        chobjs = wfd.getResult()
-        yield dict([(change.number, change.asDict()) for change in chobjs])
+        chdicts = yield self.status.master.db.changes.getRecentChanges(max)
+        chobjs = []
+        for chdict in chdicts:
+            b = yield changes.Change.fromChdict(self.status.master, chdict)
+            chobjs.append(b)
+        defer.returnValue({
+                change.number: change.asDict() for change in chobjs})
 
 
 class ChangeSourcesJsonResource(JsonResource):
@@ -853,7 +851,7 @@ class BuildStateJsonResource(JsonResource):
             return 0
         return max(0, value)
 
-    @defer.deferredGenerator
+    @defer.inlineCallbacks
     def asDict(self, request):
         builders = request.args.get('builder', ())
         build_fields = request.args.get('build_field', ())
@@ -871,20 +869,17 @@ class BuildStateJsonResource(JsonResource):
                              if builder_regex.match(b)]
 
         # Collect child endpoint data.
-        wfd = defer.waitForDeferred(
-                defer.maybeDeferred(JsonResource.asDict, self, request))
-        yield wfd
-        response = wfd.getResult()
+        response = yield defer.maybeDeferred(JsonResource.asDict, self, request)
 
         # Collect builder data.
-        wfd = defer.waitForDeferred(
-                defer.gatherResults(
-                    [self._getBuilderData(self.status.getBuilder(builder_name),
-                                          current_builds, completed_builds,
-                                          pending_builds, build_fields)
-                     for builder_name in builder_names]))
-        yield wfd
-        response['builders'] = wfd.getResult()
+        builders = []
+        for builder_name in builder_names:
+            data = yield self._getBuilderData(
+                    self.status.getBuilder(builder_name), current_builds,
+                    completed_builds, pending_builds, build_fields)
+            builders.append(data)
+
+        response['builders'] = builders
 
         # Add slave data.
         if slaves:
@@ -894,9 +889,9 @@ class BuildStateJsonResource(JsonResource):
         response['timestamp'] = now()
         response['accepting_builds'] = bool(
                 self.status.master.botmaster.brd.running)
-        yield response
+        defer.returnValue(response)
 
-    @defer.deferredGenerator
+    @defer.inlineCallbacks
     def _getBuilderData(self, builder, current_builds, completed_builds,
                         pending_builds, build_fields):
         # Load the builder dictionary. We use the synchronous path, since the
@@ -922,16 +917,16 @@ class BuildStateJsonResource(JsonResource):
                     self._loadPendingBuildData(builder))
 
         # Collect a set of build data dictionaries to combine.
-        wfd = defer.waitForDeferred(
-                defer.gatherResults(tasks))
-        yield wfd
-        build_data_entries = wfd.getResult()
+        build_data_entries = []
+        for task in tasks:
+            result = yield task
+            build_data_entries.append(result)
 
         # Construct our build data from the various task entries.
         build_state = response.setdefault('buildState', {})
         for build_data_entry in build_data_entries:
             build_state.update(build_data_entry)
-        yield response
+        defer.returnValue(response)
 
     def _loadBuildData(self, builder, current_builds, completed_builds,
                        build_fields):
@@ -986,22 +981,16 @@ class BuildStateJsonResource(JsonResource):
                                     for number in build_numbers)
         return build_state
 
+    @defer.inlineCallbacks
     def _loadPendingBuildData(self, builder):
-        d = builder.getPendingBuildRequestStatuses()
+        statuses = yield builder.getPendingBuildRequestStatuses()
 
-        def cb_load_status(statuses):
-            statuses.sort(key=lambda s: s.getSubmitTime())
-            return defer.gatherResults([status.asDict_async()
-                                        for status in statuses])
-        d.addCallback(cb_load_status)
-
-        def cb_collect(status_dicts):
-            return {
-                    'pending': status_dicts,
-            }
-        d.addCallback(cb_collect)
-
-        return d
+        statuses.sort(key=lambda s: s.getSubmitTime())
+        loaded = []
+        for status in statuses:
+            b = yield status.asDict_async()
+            loaded.append(b)
+        defer.returnValue({'pending': loaded})
 
     def _getAllSlavesData(self):
         return dict((slavename, self._getSlaveData(slavename))
