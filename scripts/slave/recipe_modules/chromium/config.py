@@ -322,10 +322,10 @@ def goma(c):
   if c.TARGET_PLATFORM == 'win' and c.compile_py.compiler != 'goma-clang':
     fastbuild(c)
 
-  if c.TARGET_PLATFORM == 'mac':
+  if c.TARGET_PLATFORM == 'mac' or c.TARGET_PLATFORM == 'win':
     # crbug.com/667536
     # Disable multi exec cause qps increase in goma server backend.
-    # To increase qps gradually, mac is chosen.
+    # To increase qps gradually, mac and win are chosen.
     c.compile_py.goma_no_multi_exec = True
 
 @config_ctx()
