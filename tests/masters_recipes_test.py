@@ -53,7 +53,7 @@ SUPPRESSIONS = {
         'Win7 Debug (NVIDIA)',
     ],
     'master.chromium.linux': [
-        'linux_chromium_clobber_deterministic',
+        'Deterministic Linux',
     ],
     'master.chromium.mac': [
         'ios-device',

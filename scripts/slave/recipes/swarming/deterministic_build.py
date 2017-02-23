@@ -93,6 +93,13 @@ DETERMINISTIC_BUILDERS = freeze({
     'platform': 'linux',
     'targets': ['all'],
   },
+  # runs in chromium.linux.
+  'Deterministic Linux': {
+    'chromium_config': 'chromium',
+    'gclient_config': 'chromium',
+    'platform': 'linux',
+    'targets': ['all'],
+  },
 })
 
 
