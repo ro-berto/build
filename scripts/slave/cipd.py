@@ -29,9 +29,6 @@ LOGGER = logging.getLogger('cipd')
 # Used to contain a CIPD package specification.
 CipdPackage = collections.namedtuple('CipdPackage', ('name', 'version'))
 
-# A CIPD binary description - relative path of the binary within the package.
-CipdBinary = collections.namedtuple('CipdBinary', ('package', 'relpath'))
-
 
 def cipd_ensure(path, packages, service_account_json=None,
                 json_output=None):

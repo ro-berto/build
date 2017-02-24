@@ -5,6 +5,7 @@
 """Implements LogDog Bootstrapping support.
 """
 
+import argparse
 import collections
 import json
 import logging
@@ -31,9 +32,17 @@ class BootstrapError(Exception):
   pass
 
 
+# Path to the "cipd.py" library.
+_CIPD_PY_PATH = os.path.join(env.Build, 'scripts', 'slave', 'cipd.py')
+
+
 # CIPD tag for LogDog Butler/Annotee to use.
+#
+# Verify full package set with:
+# $ cipd resolve infra/tools/luci/logdog/butler/ -version ${TAG}
+# $ cipd resolve infra/tools/luci/logdog/annotee/ -version ${TAG}
 _STABLE_CIPD_TAG = 'git_revision:ada1252fb35e94140e1a74d21ba0b92b30330f97'
-_CANARY_CIPD_TAG = 'git_revision:ada1252fb35e94140e1a74d21ba0b92b30330f97'
+_CANARY_CIPD_TAG = 'git_revision:8554e948f85f727636b39940302b370463b3352b'
 
 _CIPD_TAG_MAP = {
     '$stable': _STABLE_CIPD_TAG,
@@ -50,7 +59,7 @@ _CIPD_TAG_MAP = {
 # removed from this code.
 _CIPD_TAG_API_MAP = {
     _STABLE_CIPD_TAG: 3,
-    _CANARY_CIPD_TAG: 3,
+    _CANARY_CIPD_TAG: 4,
 }
 
 # Platform is the set of platform-specific LogDog bootstrapping
@@ -61,19 +70,16 @@ _CIPD_TAG_API_MAP = {
 #
 # Loaded by '_get_platform'.
 Platform = collections.namedtuple('Platform', (
-    'service_host', 'viewer_host', 'max_buffer_age',
-    'butler', 'butler_relpath', 'annotee', 'annotee_relpath',
-    'credential_path', 'streamserver'))
+    'host', 'output_service', 'max_buffer_age',
+    'butler', 'annotee', 'credential_path', 'streamserver'))
 
 
 # An infra_platform cascading configuration for the supported architectures.
-#
-# TODO(dnj): Use platform/arch-generic Butler/Annotee configs once tested. e.g.,
 _PLATFORM_CONFIG = {
   # All systems.
   (): {
-    'service_host': 'services-dot-luci-logdog.appspot.com',
-    'viewer_host': 'luci-logdog.appspot.com',
+    'host': 'luci-logdog.appspot.com',
+    'output_service': 'services',
     'max_buffer_age': '30s',
     'butler': 'infra/tools/luci/logdog/butler/${platform}-${arch}',
     'annotee': 'infra/tools/luci/logdog/annotee/${platform}-${arch}',
@@ -84,8 +90,6 @@ _PLATFORM_CONFIG = {
     'credential_path': ('/creds/service_accounts/'
                         'service-account-luci-logdog-publisher.json'),
     'streamserver': 'unix',
-    'butler_relpath': 'logdog_butler',
-    'annotee_relpath': 'logdog_annotee',
   },
 
   # Mac
@@ -93,8 +97,6 @@ _PLATFORM_CONFIG = {
     'credential_path': ('/creds/service_accounts/'
                         'service-account-luci-logdog-publisher.json'),
     'streamserver': 'unix',
-    'butler_relpath': 'logdog_butler',
-    'annotee_relpath': 'logdog_annotee',
   },
 
   # Windows
@@ -102,8 +104,6 @@ _PLATFORM_CONFIG = {
     'credential_path': ('c:\\creds\\service_accounts\\'
                         'service-account-luci-logdog-publisher.json'),
     'streamserver': 'net.pipe',
-    'butler_relpath': 'logdog_butler.exe',
-    'annotee_relpath': 'logdog_annotee.exe',
   },
 }
 
@@ -114,6 +114,13 @@ _PLATFORM_CONFIG = {
 Params = collections.namedtuple('Params', (
     'project', 'cipd_tag', 'api', 'mastername', 'buildername', 'buildnumber',
     'logdog_only',
+))
+
+
+# LogDog bootstrapping configuration.
+Config = collections.namedtuple('Config', (
+    'params', 'plat', 'host', 'output_service', 'prefix', 'tags',
+    'logdog_only', 'service_account_path',
 ))
 
 
@@ -318,7 +325,7 @@ def _get_service_account_json(opts, credential_path):
 
   if gce.Authenticator.is_gce():
     LOGGER.info('Running on GCE. No credentials necessary.')
-    return None
+    return ':gce' # Special value saying "use GCE metadata".
 
   if os.path.isfile(credential_path):
     return credential_path
@@ -327,14 +334,15 @@ def _get_service_account_json(opts, credential_path):
                        'Tried: %s' % (credential_path,))
 
 
-def _install_cipd(path, *binaries):
-  """Returns (list): The paths to the binaries.
+def _install_cipd_packages(path, *packages):
+  """Installs the packages specified by "packages" in path.
 
-  This method installs the packages specified by "binaries" in path.
+  TODO(dnj): Maybe switch this over to direct "cipd ensure" call and read
+  manifest from STDIN? Can delete "cipd.py"?
 
   Args:
     path (str): The CIPD installation root.
-    binaries (CipdBinary): The set of CIPD binaries to install.
+    packages (CipdPackage): The set of CIPD packages to install.
   """
   verbosity = 0
   level = logging.getLogger().level
@@ -343,25 +351,20 @@ def _install_cipd(path, *binaries):
   if level <= logging.DEBUG:
     verbosity += 1
 
-  pmap = {}
   cmd = [
       sys.executable,
-      os.path.join(env.Build, 'scripts', 'slave', 'cipd.py'),
+      _CIPD_PY_PATH,
       '--dest-directory', path,
   ] + (['--verbose'] * verbosity)
 
-  for b in binaries:
-    cmd += ['-P', '%s@%s' % (b.package.name, b.package.version)]
-    pmap[b.package.name] = os.path.join(path, b.relpath)
+  for pkg in packages:
+    cmd += ['-P', '%s@%s' % (pkg.name, pkg.version)]
 
   try:
     _check_call(cmd)
   except subprocess.CalledProcessError:
-    LOGGER.exception('Failed to install LogDog CIPD packages: %s', binaries)
+    LOGGER.exception('Failed to install LogDog CIPD packages: %s', packages)
     raise BootstrapError('Failed to install CIPD packages.')
-
-  # Resolve installed binaries.
-  return tuple(pmap[b.package.name] for b in binaries)
 
 
 def _build_prefix(params):
@@ -398,6 +401,22 @@ def _build_prefix(params):
   return prefix, tags
 
 
+def _make_butler_output(opts, cfg, implicit_host):
+  """Returns a Butler output string.
+
+  TODO(dnj): Remove "implicit_host" after v4 conversion.
+  """
+  if opts.logdog_debug_out_file:
+    return 'file,path="%s"' % (opts.logdog_debug_out_file,)
+
+  output = ['logdog']
+  if not implicit_host:
+    output.append('host="%s"' % (cfg.host,))
+  if cfg.output_service:
+    output.append('service="%s"' % (cfg.output_service,))
+  return ','.join(output)
+
+
 def _prune_arg(l, key, extra=0):
   """Removes list entry "key" and "extra" additional entries, if present.
 
@@ -408,10 +427,63 @@ def _prune_arg(l, key, extra=0):
   """
   try:
     idx = l.index(key)
+    args = l[idx:idx+extra+1]
     del(l[idx:idx+extra+1])
-    return True
+    return args
   except ValueError:
-    return False
+    return None
+
+
+def get_config(opts, properties):
+  """Returns (Config): the LogDog bootstrap configuration.
+
+  This probes the supplied options and properties and resolves the full
+  bootstrap configuration from them.
+
+  Raises:
+    NotBootstrapped: If the environment is not configured to be bootstrapped.
+  """
+  if opts.logdog_disable:
+    raise NotBootstrapped('LogDog explicitly disabled (--disable-logdog).')
+
+  # If we have LOGDOG_STREAM_PREFIX defined, we are already bootstrapped. Don't
+  # start a new instance.
+  #
+  # LOGDOG_STREAM_PREFIX is set by the Butler when it bootstraps a process, so
+  # it should be set for all child processes of the initial bootstrap.
+  if os.environ.get('LOGDOG_STREAM_PREFIX') is not None:
+    raise NotBootstrapped(
+       'LOGDOG_STREAM_PREFIX in enviornment, refusing to nest bootstraps.')
+
+  # Load our bootstrap parameters based on our master/builder.
+  params = _get_params(properties)
+
+  # Get our platform configuration. This will fail if any fields are missing.
+  plat = _get_platform()
+
+  # Determine LogDog prefix.
+  prefix, tags = _build_prefix(params)
+
+  host = opts.logdog_host or plat.host
+  if not host:
+    raise BootstrapError('No host is defined')
+
+  # Generate our service account path.
+  service_account_path = _get_service_account_json(opts, plat.credential_path)
+
+  logdog_only = ((opts.logdog_only) if opts.logdog_only is not None else
+                 (params.logdog_only))
+
+  return Config(
+      params=params,
+      plat=plat,
+      host=host,
+      output_service=opts.logdog_output_service or plat.output_service,
+      prefix=prefix,
+      tags=tags,
+      logdog_only=logdog_only,
+      service_account_path=service_account_path,
+  )
 
 
 def bootstrap(rt, opts, basedir, tempdir, properties, cmd):
@@ -441,27 +513,28 @@ def bootstrap(rt, opts, basedir, tempdir, properties, cmd):
     BootstrapError: if there was an error bootstrapping the recipe runner
         through LogDog.
   """
-  if opts.logdog_disable:
-    raise NotBootstrapped('LogDog explicitly disabled (--disable-logdog).')
-
-  # If we have LOGDOG_STREAM_PREFIX defined, we are already bootstrapped. Don't
-  # start a new instance.
-  #
-  # LOGDOG_STREAM_PREFIX is set by the Butler when it bootstraps a process, so
-  # it should be set for all child processes of the initial bootstrap.
-  if os.environ.get('LOGDOG_STREAM_PREFIX', None) is not None:
-    raise NotBootstrapped(
-       'LOGDOG_STREAM_PREFIX in enviornment, refusing to nest bootstraps.')
-
-  # Load our bootstrap parameters based on our master/builder.
-  params = _get_params(properties)
-
-  # Get our platform configuration. This will fail if any fields are missing.
-  plat = _get_platform()
+  # Load bootstrap configuration (may raise NotBootstrapped).
+  cfg = get_config(opts, properties)
 
   # Determine LogDog prefix.
-  prefix, tags = _build_prefix(params)
-  LOGGER.debug('Using log stream prefix: [%s]', prefix)
+  LOGGER.debug('Using log stream prefix: [%s]', cfg.prefix)
+
+  # Install our Butler/Annotee packages from CIPD.
+  cipd_path = os.path.join(basedir, '.recipe_cipd')
+  _install_cipd_packages(cipd_path,
+      # butler
+      cipd.CipdPackage(
+          name=cfg.plat.butler,
+          version=cfg.params.cipd_tag),
+
+      # annotee
+      cipd.CipdPackage(
+          name=cfg.plat.annotee,
+          version=cfg.params.cipd_tag),
+  )
+
+  def cipd_bin(base):
+    return os.path.join(cipd_path, base + infra_platform.exe_suffix())
 
   def var(title, v, dflt):
     v = v or dflt
@@ -469,33 +542,13 @@ def bootstrap(rt, opts, basedir, tempdir, properties, cmd):
       raise NotBootstrapped('No value for [%s]' % (title,))
     return v
 
-  # Install our Butler/Annotee packages from CIPD.
-  cipd_path = os.path.join(basedir, '.recipe_cipd')
-  butler, annotee = _install_cipd(cipd_path,
-      # butler
-      cipd.CipdBinary(
-          package=cipd.CipdPackage(name=plat.butler, version=params.cipd_tag),
-          relpath=plat.butler_relpath,
-      ),
-
-      # annotee
-      cipd.CipdBinary(
-          package=cipd.CipdPackage(name=plat.annotee, version=params.cipd_tag),
-          relpath=plat.annotee_relpath,
-      ),
-  )
-
-  butler = var('butler', opts.logdog_butler_path, butler)
+  butler = var('butler', opts.logdog_butler_path, cipd_bin('logdog_butler'))
   if not os.path.isfile(butler):
     raise NotBootstrapped('Invalid Butler path: %s' % (butler,))
 
-  annotee = var('annotee', opts.logdog_annotee_path, annotee)
+  annotee = var('annotee', opts.logdog_annotee_path, cipd_bin('logdog_annotee'))
   if not os.path.isfile(annotee):
     raise NotBootstrapped('Invalid Annotee path: %s' % (annotee,))
-
-  service_host = var('service host', opts.logdog_service_host,
-                     plat.service_host)
-  viewer_host = var('viewer host', opts.logdog_viewer_host, plat.viewer_host)
 
   # Determine LogDog verbosity.
   if opts.logdog_verbose == 0:
@@ -505,10 +558,8 @@ def bootstrap(rt, opts, basedir, tempdir, properties, cmd):
   else:
     log_level = 'debug'
 
-  service_account_json = _get_service_account_json(opts, plat.credential_path)
-
   # Generate our Butler stream server URI.
-  streamserver_uri = _get_streamserver_uri(rt, plat.streamserver)
+  streamserver_uri = _get_streamserver_uri(rt, cfg.plat.streamserver)
 
   # If we are using file sentinel-based bootstrap error detection, enable.
   bootstrap_result_path = os.path.join(tempdir, 'bootstrap_result.json')
@@ -526,25 +577,24 @@ def bootstrap(rt, opts, basedir, tempdir, properties, cmd):
   butler_args = [
       butler,
       '-log-level', log_level,
-      '-project', params.project,
-      '-prefix', prefix,
-      '-output', 'logdog,host="%s"' % (service_host,),
-      '-coordinator-host', viewer_host,
+      '-project', cfg.params.project,
+      '-prefix', cfg.prefix,
+      '-coordinator-host', cfg.host,
+      '-output', _make_butler_output(opts, cfg, True),
   ]
-  for k, v in tags.iteritems():
+  for k, v in cfg.tags.iteritems():
     if v:
       k = '%s=%s' % (k, v)
     butler_args += ['-tag', k]
-  if service_account_json:
-    butler_args += ['-service-account-json', service_account_json]
-  if plat.max_buffer_age:
-    butler_args += ['-output-max-buffer-age', plat.max_buffer_age]
-  if params.logdog_only:
+  if cfg.service_account_path:
+    butler_args += ['-service-account-json', cfg.service_account_path]
+  if cfg.plat.max_buffer_age:
+    butler_args += ['-output-max-buffer-age', cfg.plat.max_buffer_age]
+  if cfg.logdog_only:
     butler_args += ['-io-keepalive-stderr', '5m']
 
   # Butler: subcommand run.
-  butler_args += [
-      'run',
+  butler_run_args = [
       '-stdout', 'tee=stdout',
       '-stderr', 'tee=stderr',
       '-streamserver-uri', streamserver_uri,
@@ -554,12 +604,9 @@ def bootstrap(rt, opts, basedir, tempdir, properties, cmd):
   annotee_args = [
       annotee,
       '-log-level', log_level,
-      '-project', params.project,
-      '-butler-stream-server', streamserver_uri,
-      '-logdog-host', viewer_host,
       '-name-base', 'recipes',
       '-print-summary',
-      '-tee', ('annotations' if params.logdog_only else 'annotations,text'),
+      '-tee', ('annotations' if cfg.logdog_only else 'annotations,text'),
       '-json-args-path', cmd_json,
       '-result-path', bootstrap_result_path,
   ]
@@ -571,20 +618,70 @@ def bootstrap(rt, opts, basedir, tempdir, properties, cmd):
   # functions are added.
   start_api = cur_api = max(_CIPD_TAG_API_MAP.itervalues())
 
-  # Assert that we've hit the target "params.api".
-  assert cur_api == params.api, 'Failed to transform API %s => %s' % (
-      start_api, params.api)
+  if cfg.params.api != cur_api and cur_api == 4:
+    # Butler: specify full module name in output.
+    # Replace ":gce" service account with no service account.
+    _prune_arg(butler_args, '-output', extra=1)
+    host_prefix = ('' if not cfg.output_service
+                   else '%s-dot-' % (cfg.output_service,))
+    output_cfg = cfg._replace(
+        host=(host_prefix + cfg.host),
+        output_service=None)
+    service_account = _prune_arg(butler_args, '-service-account-json', extra=1)
+    butler_args += [
+        '-output', _make_butler_output(opts, output_cfg, False),
+    ]
+    if service_account[-1] != ':gce':
+      butler_args += service_account
 
-  cmd = butler_args + ['--'] + annotee_args
-  return BootstrapState(cmd, bootstrap_result_path, params.project, prefix)
+    # Annotee: Add "-logdog-host", "-project", and "-streamserver-uri".
+    annotee_args += [
+        '-project', cfg.params.project,
+        '-butler-stream-server', streamserver_uri,
+        '-logdog-host', cfg.host,
+    ]
+    cur_api = 3
+
+  # Assert that we've hit the target "params.api".
+  assert cur_api == cfg.params.api, 'Failed to transform API %s => %s' % (
+      start_api, cfg.params.api)
+
+  cmd = butler_args + ['run'] + butler_run_args + ['--'] + annotee_args
+  return BootstrapState(cfg, cmd, bootstrap_result_path)
+
+
+def get_annotation_url(cfg):
+  """Returns (str): LogDog stream URL for the configured annotation stream.
+
+  Args:
+    cfg (Config): The bootstrap config.
+  """
+  return 'logdog://%(host)s/%(project)s/%(prefix)s/+/recipes/annotations' % {
+      'host': cfg.host,
+      'project': cfg.params.project,
+      'prefix': cfg.prefix,
+  }
+
+
+def annotate(cfg, stream):
+  """Writes LogDog bootstrap annotations to an annotation stream.
+
+  Args:
+    stream (annotator.StructuredAnnotationStream): The annotation stream to
+        write to.
+  """
+  annotation_url = get_annotation_url(cfg)
+  with stream.step('LogDog Bootstrap') as st:
+    st.set_build_property('logdog_project', json.dumps(cfg.params.project))
+    st.set_build_property('logdog_prefix', json.dumps(cfg.prefix))
+    st.set_build_property('logdog_annotation_url', json.dumps(annotation_url))
 
 
 class BootstrapState(object):
-  def __init__(self, cmd, bootstrap_result_path, project, prefix):
+  def __init__(self, cfg, cmd, bootstrap_result_path):
+    self._cfg = cfg
     self._cmd = cmd
     self._bootstrap_result_path = bootstrap_result_path
-    self._project = project
-    self._prefix = prefix
 
   @property
   def cmd(self):
@@ -618,9 +715,18 @@ class BootstrapState(object):
       stream (annotator.StructuredAnnotationStream): The annotation stream to
           write to.
     """
-    with stream.step('LogDog Bootstrap') as st:
-      st.set_build_property('logdog_project', json.dumps(self._project))
-      st.set_build_property('logdog_prefix', json.dumps(self._prefix))
+    annotate(self._cfg, stream)
+
+
+def _argparse_type_trinary(v):
+  v = v.lower()
+  if v == '':
+    return None
+  if v in ('true', 't', 'yes', 'y', '1'):
+    return True
+  if v in ('false', 'f', 'no', 'n', '0'):
+    return False
+  raise argparse.ArgumentTypeError('%r is not a valid trinary value' % (v,))
 
 
 def add_arguments(parser):
@@ -638,7 +744,13 @@ def add_arguments(parser):
   parser.add_argument('--logdog-service-account-json',
       help='Path to the service account JSON. If one is not provided, the '
            'local system credentials will be used.')
-  parser.add_argument('--logdog-service-host',
-      help='Override the LogDog service host, used by Butler for registration.')
-  parser.add_argument('--logdog-viewer-host',
-      help='Override the LogDog viewer host, used by Annotee to build URLs.')
+  parser.add_argument('--logdog-host',
+      help='Override the LogDog host.')
+  parser.add_argument('--logdog-output-service',
+      help='If specified, use <service>-dot-<host> for output service '
+           'configuration.')
+  parser.add_argument('--logdog-only', type=_argparse_type_trinary,
+      help='Override output only to LogDog. Can be True/False to force.')
+  parser.add_argument('--logdog-debug-out-file',
+      help='(Debug) Write logs to this text protobuf file instead of a live '
+           'service.')

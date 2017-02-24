@@ -142,6 +142,10 @@ class AnnotatedRunExecTest(unittest.TestCase):
     patcher.start()
     return patcher
 
+  @staticmethod
+  def _default_namedtuple(typ, default=None):
+    return typ(**{f: default for f in typ._fields})
+
   def _assertRecipeProperties(self, value):
     # Double-translate "value", since JSON converts strings to unicode.
     value = json.loads(json.dumps(value))
@@ -168,9 +172,15 @@ class AnnotatedRunExecTest(unittest.TestCase):
   @mock.patch('slave.logdog_bootstrap.bootstrap')
   @mock.patch('slave.logdog_bootstrap.BootstrapState.get_result')
   def test_exec_with_logdog_bootstrap(self, bs_result, bootstrap):
+    cfg = self._default_namedtuple(logdog_bootstrap.Config)._replace(
+        params=self._default_namedtuple(logdog_bootstrap.Params)._replace(
+          project="project",
+        ),
+        prefix="prefix",
+        host="example.com",
+    )
     bootstrap.return_value = logdog_bootstrap.BootstrapState(
-        ['logdog_bootstrap'] + self.recipe_args, '/path/to/result.json',
-        'project', 'prefix')
+        cfg, ['logdog_bootstrap'] + self.recipe_args, '/path/to/result.json')
     bootstrap.return_value.get_result.return_value = 13
     annotated_run._run_command.return_value = (13, '')
     self._writeRecipeResult({})
@@ -192,6 +202,8 @@ class AnnotatedRunExecTest(unittest.TestCase):
             '@@@STEP_STARTED@@@',
             '@@@SET_BUILD_PROPERTY@logdog_project@"project"@@@',
             '@@@SET_BUILD_PROPERTY@logdog_prefix@"prefix"@@@',
+            ('@@@SET_BUILD_PROPERTY@logdog_annotation_url@'
+             '"logdog://example.com/project/prefix/+/recipes/annotations"@@@'),
             '@@@STEP_CURSOR LogDog Bootstrap@@@',
             '@@@STEP_CLOSED@@@',
         ]

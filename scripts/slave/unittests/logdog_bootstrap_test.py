@@ -29,10 +29,10 @@ from slave import robust_tempdir
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-MockOptions = collections.namedtuple('MockOptions',
-    ('logdog_butler_path', 'logdog_annotee_path', 'logdog_verbose',
-     'logdog_service_account_json', 'logdog_service_host',
-     'logdog_viewer_host', 'logdog_disable'))
+MockOptions = collections.namedtuple('MockOptions', (
+    'logdog_verbose', 'logdog_disable', 'logdog_butler_path',
+    'logdog_annotee_path', 'logdog_service_account_json', 'logdog_host',
+    'logdog_output_service', 'logdog_only', 'logdog_debug_out_file'))
 
 
 class LogDogBootstrapTest(unittest.TestCase):
@@ -53,13 +53,15 @@ class LogDogBootstrapTest(unittest.TestCase):
     self.basedir = self.rt.tempdir()
     self.tdir = self.rt.tempdir()
     self.opts = MockOptions(
-        logdog_annotee_path=None,
-        logdog_butler_path=None,
         logdog_verbose=False,
+        logdog_disable=False,
+        logdog_butler_path=None,
+        logdog_annotee_path=None,
         logdog_service_account_json=None,
-        logdog_service_host=None,
-        logdog_viewer_host=None,
-        logdog_disable=False)
+        logdog_host=None,
+        logdog_output_service=None,
+        logdog_only=None,
+        logdog_debug_out_file=None)
     self.properties = {
       'mastername': 'default',
       'buildername': 'builder',
@@ -167,14 +169,10 @@ class LogDogBootstrapTest(unittest.TestCase):
 
 
   @mock.patch('os.path.isfile')
-  @mock.patch('slave.logdog_bootstrap._install_cipd')
-  @mock.patch('slave.logdog_bootstrap._get_service_account_json')
   @mock.patch('slave.logdog_bootstrap._get_params')
   @mock.patch('slave.robust_tempdir.RobustTempdir.tempdir')
-  def test_bootstrap_command_linux(self, tempdir, get_params, service_account,
-                                   install_cipd, isfile):
-    butler_path = self._bp('.recipe_logdog_cipd', 'logdog_butler')
-    annotee_path = self._bp('.recipe_logdog_cipd', 'logdog_annotee')
+  def test_bootstrap_command_linux(self, tempdir, get_params, isfile):
+    gce.Authenticator.is_gce.return_value = True
     recipe_cmd = ['run_recipe.py', 'recipe_params...']
 
     tempdir.return_value = 'foo'
@@ -182,22 +180,158 @@ class LogDogBootstrapTest(unittest.TestCase):
         project='myproject', cipd_tag='stable', api=self.stable_api,
         mastername='mastername', buildername='buildername', buildnumber=1337,
         logdog_only=False)
-    install_cipd.return_value = (butler_path, annotee_path)
-    service_account.return_value = 'creds.json'
     isfile.return_value = True
 
     streamserver_uri = 'unix:%s' % (os.path.join('foo', 'butler.sock'),)
 
     bs = ldbs.bootstrap(self.rt, self.opts, self.basedir, self.tdir,
                         self.properties, recipe_cmd)
+
+    # Check CIPD installation.
+    ldbs._check_call.assert_called_once_with([
+        sys.executable, ldbs._CIPD_PY_PATH,
+      '--dest-directory', self._bp('.recipe_cipd'),
+      '-P', 'infra/tools/luci/logdog/butler/${platform}-${arch}@stable',
+      '-P', 'infra/tools/luci/logdog/annotee/${platform}-${arch}@stable',
+    ])
+
+    # Check bootstrap command.
     self.assertEqual(
         bs.cmd,
-        [butler_path,
+        [os.path.join(self.basedir, '.recipe_cipd', 'logdog_butler'),
             '-log-level', 'warning',
             '-project', 'myproject',
             '-prefix', 'bb/mastername/buildername/1337',
-            '-output', 'logdog,host="services-dot-luci-logdog.appspot.com"',
             '-coordinator-host', 'luci-logdog.appspot.com',
+            '-tag', 'buildbot.master=mastername',
+            '-tag', 'buildbot.builder=buildername',
+            '-tag', 'buildbot.buildnumber=1337',
+            '-output-max-buffer-age', '30s',
+            '-output', 'logdog,host="services-dot-luci-logdog.appspot.com"',
+            'run',
+            '-stdout', 'tee=stdout',
+            '-stderr', 'tee=stderr',
+            '-streamserver-uri', streamserver_uri,
+            '--',
+            os.path.join(self.basedir, '.recipe_cipd', 'logdog_annotee'),
+                '-log-level', 'warning',
+                '-name-base', 'recipes',
+                '-print-summary',
+                '-tee', 'annotations,text',
+                '-json-args-path', self._tp('logdog_annotee_cmd.json'),
+                '-result-path', self._tp('bootstrap_result.json'),
+                '-project', 'myproject',
+                '-butler-stream-server', streamserver_uri,
+                '-logdog-host', 'luci-logdog.appspot.com',
+        ])
+
+    self._assertAnnoteeCommand(recipe_cmd)
+
+  @mock.patch('os.path.isfile')
+  @mock.patch('slave.logdog_bootstrap._get_service_account_json')
+  @mock.patch('slave.logdog_bootstrap._get_params')
+  @mock.patch('slave.robust_tempdir.RobustTempdir.tempdir')
+  def test_bootstrap_command_win(self, tempdir, get_params, service_account,
+                                 isfile):
+    infra_platform.get.return_value = ('win', 'x86_64', 64)
+
+    recipe_cmd = ['run_recipe.py', 'recipe_params...']
+
+    tempdir.return_value = 'foo'
+    get_params.return_value = ldbs.Params(
+        project='myproject', cipd_tag='stable',
+        api=self.stable_api, mastername='mastername',
+        buildername='buildername', buildnumber=1337, logdog_only=True)
+    service_account.return_value = 'creds.json'
+    isfile.return_value = True
+
+    streamserver_uri = 'net.pipe:LUCILogDogButler'
+
+    bs = ldbs.bootstrap(self.rt, self.opts, self.basedir, self.tdir,
+                        self.properties, recipe_cmd)
+
+    # Check CIPD installation.
+    ldbs._check_call.assert_called_once_with([
+        sys.executable, ldbs._CIPD_PY_PATH,
+      '--dest-directory', self._bp('.recipe_cipd'),
+      '-P', 'infra/tools/luci/logdog/butler/${platform}-${arch}@stable',
+      '-P', 'infra/tools/luci/logdog/annotee/${platform}-${arch}@stable',
+    ])
+
+    # Check bootstrap command.
+    self.assertEqual(
+        bs.cmd,
+        [os.path.join(self.basedir, '.recipe_cipd', 'logdog_butler.exe'),
+            '-log-level', 'warning',
+            '-project', 'myproject',
+            '-prefix', 'bb/mastername/buildername/1337',
+            '-coordinator-host', 'luci-logdog.appspot.com',
+            '-tag', 'buildbot.master=mastername',
+            '-tag', 'buildbot.builder=buildername',
+            '-tag', 'buildbot.buildnumber=1337',
+            '-output-max-buffer-age', '30s',
+            '-io-keepalive-stderr', '5m',
+            '-output', ('logdog,host="services-dot-luci-logdog.appspot.com"'),
+            '-service-account-json', 'creds.json',
+            'run',
+            '-stdout', 'tee=stdout',
+            '-stderr', 'tee=stderr',
+            '-streamserver-uri', streamserver_uri,
+            '--',
+            os.path.join(self.basedir, '.recipe_cipd', 'logdog_annotee.exe'),
+                '-log-level', 'warning',
+                '-name-base', 'recipes',
+                '-print-summary',
+                '-tee', 'annotations',
+                '-json-args-path', self._tp('logdog_annotee_cmd.json'),
+                '-result-path', self._tp('bootstrap_result.json'),
+                '-project', 'myproject',
+                '-butler-stream-server', streamserver_uri,
+                '-logdog-host', 'luci-logdog.appspot.com',
+        ])
+
+    service_account.assert_called_once_with(
+        self.opts, ldbs._PLATFORM_CONFIG[('win',)]['credential_path'])
+    self._assertAnnoteeCommand(recipe_cmd)
+
+  @mock.patch('os.path.isfile')
+  @mock.patch('slave.logdog_bootstrap._get_service_account_json')
+  @mock.patch('slave.logdog_bootstrap._get_params')
+  @mock.patch('slave.robust_tempdir.RobustTempdir.tempdir')
+  def test_bootstrap_command_mac_canary(self, tempdir, get_params,
+                                        service_account, isfile):
+    infra_platform.get.return_value = ('mac', 'x86_64', 64)
+
+    recipe_cmd = ['run_recipe.py', 'recipe_params...']
+
+    tempdir.return_value = 'foo'
+    get_params.return_value = ldbs.Params(
+        project='myproject', cipd_tag='canary',
+        api=self.latest_api, mastername='mastername',
+        buildername='buildername', buildnumber=1337, logdog_only=False)
+    service_account.return_value = 'creds.json'
+    isfile.return_value = True
+
+    bs = ldbs.bootstrap(self.rt, self.opts, self.basedir, self.tdir,
+                        self.properties, recipe_cmd)
+
+    # Check CIPD installation.
+    ldbs._check_call.assert_called_once_with([
+        sys.executable, ldbs._CIPD_PY_PATH,
+      '--dest-directory', self._bp('.recipe_cipd'),
+      '-P', 'infra/tools/luci/logdog/butler/${platform}-${arch}@canary',
+      '-P', 'infra/tools/luci/logdog/annotee/${platform}-${arch}@canary',
+    ])
+
+    # Check bootstrap command.
+    self.assertEqual(
+        bs.cmd,
+        [os.path.join(self.basedir, '.recipe_cipd', 'logdog_butler'),
+            '-log-level', 'warning',
+            '-project', 'myproject',
+            '-prefix', 'bb/mastername/buildername/1337',
+            '-coordinator-host', 'luci-logdog.appspot.com',
+            '-output', ('logdog,service="services"'),
             '-tag', 'buildbot.master=mastername',
             '-tag', 'buildbot.builder=buildername',
             '-tag', 'buildbot.buildnumber=1337',
@@ -206,13 +340,10 @@ class LogDogBootstrapTest(unittest.TestCase):
             'run',
             '-stdout', 'tee=stdout',
             '-stderr', 'tee=stderr',
-            '-streamserver-uri', streamserver_uri,
+            '-streamserver-uri', 'unix:foo/butler.sock',
             '--',
-            annotee_path,
+            os.path.join(self.basedir, '.recipe_cipd', 'logdog_annotee'),
                 '-log-level', 'warning',
-                '-project', 'myproject',
-                '-butler-stream-server', streamserver_uri,
-                '-logdog-host', 'luci-logdog.appspot.com',
                 '-name-base', 'recipes',
                 '-print-summary',
                 '-tee', 'annotations,text',
@@ -221,41 +352,47 @@ class LogDogBootstrapTest(unittest.TestCase):
         ])
 
     service_account.assert_called_once_with(
-        self.opts, ldbs._PLATFORM_CONFIG[('linux',)]['credential_path'])
+        self.opts, ldbs._PLATFORM_CONFIG[('mac',)]['credential_path'])
     self._assertAnnoteeCommand(recipe_cmd)
 
   @mock.patch('os.path.isfile')
-  @mock.patch('slave.logdog_bootstrap._install_cipd')
   @mock.patch('slave.logdog_bootstrap._get_service_account_json')
   @mock.patch('slave.logdog_bootstrap._get_params')
   @mock.patch('slave.robust_tempdir.RobustTempdir.tempdir')
-  def test_bootstrap_command_windows(self, tempdir, get_params, service_account,
-                                     install_cipd, isfile):
+  def test_bootstrap_command_win_canary(self, tempdir, get_params,
+                                        service_account, isfile):
     infra_platform.get.return_value = ('win', 'x86_64', 64)
 
     recipe_cmd = ['run_recipe.py', 'recipe_params...']
 
     tempdir.return_value = 'foo'
     get_params.return_value = ldbs.Params(
-        project='myproject', cipd_tag='stable',
+        project='myproject', cipd_tag='canary',
         api=self.latest_api, mastername='mastername',
         buildername='buildername', buildnumber=1337, logdog_only=True)
-    install_cipd.return_value = ('logdog_butler.exe', 'logdog_annotee.exe')
     service_account.return_value = 'creds.json'
     isfile.return_value = True
 
-    streamserver_uri = 'net.pipe:LUCILogDogButler'
-
     bs = ldbs.bootstrap(self.rt, self.opts, self.basedir, self.tdir,
                         self.properties, recipe_cmd)
+
+    # Check CIPD installation.
+    ldbs._check_call.assert_called_once_with([
+        sys.executable, ldbs._CIPD_PY_PATH,
+      '--dest-directory', self._bp('.recipe_cipd'),
+      '-P', 'infra/tools/luci/logdog/butler/${platform}-${arch}@canary',
+      '-P', 'infra/tools/luci/logdog/annotee/${platform}-${arch}@canary',
+    ])
+
+    # Check bootstrap command.
     self.assertEqual(
         bs.cmd,
-        ['logdog_butler.exe',
+        [os.path.join(self.basedir, '.recipe_cipd', 'logdog_butler.exe'),
             '-log-level', 'warning',
             '-project', 'myproject',
             '-prefix', 'bb/mastername/buildername/1337',
-            '-output', 'logdog,host="services-dot-luci-logdog.appspot.com"',
             '-coordinator-host', 'luci-logdog.appspot.com',
+            '-output', ('logdog,service="services"'),
             '-tag', 'buildbot.master=mastername',
             '-tag', 'buildbot.builder=buildername',
             '-tag', 'buildbot.buildnumber=1337',
@@ -265,13 +402,10 @@ class LogDogBootstrapTest(unittest.TestCase):
             'run',
             '-stdout', 'tee=stdout',
             '-stderr', 'tee=stderr',
-            '-streamserver-uri', streamserver_uri,
+            '-streamserver-uri', 'net.pipe:LUCILogDogButler',
             '--',
-            'logdog_annotee.exe',
+            os.path.join(self.basedir, '.recipe_cipd', 'logdog_annotee.exe'),
                 '-log-level', 'warning',
-                '-project', 'myproject',
-                '-butler-stream-server', streamserver_uri,
-                '-logdog-host', 'luci-logdog.appspot.com',
                 '-name-base', 'recipes',
                 '-print-summary',
                 '-tee', 'annotations',
@@ -284,19 +418,14 @@ class LogDogBootstrapTest(unittest.TestCase):
     self._assertAnnoteeCommand(recipe_cmd)
 
   @mock.patch('os.path.isfile')
-  @mock.patch('slave.logdog_bootstrap._install_cipd')
   @mock.patch('slave.logdog_bootstrap._get_service_account_json')
   @mock.patch('slave.logdog_bootstrap._get_params')
   @mock.patch('slave.robust_tempdir.RobustTempdir.tempdir')
   def test_registered_apis_work(self, tempdir, get_params, service_account,
-                                install_cipd, isfile):
+                                isfile):
     tempdir.return_value = 'foo'
     isfile.return_value = True
-    butler_path = self._bp('.recipe_logdog_cipd', 'logdog_butler')
-    annotee_path = self._bp('.recipe_logdog_cipd', 'logdog_annotee')
     service_account.return_value = 'creds.json'
-
-    install_cipd.return_value = (butler_path, annotee_path)
 
     for api in sorted(ldbs._CIPD_TAG_API_MAP.values()):
       get_params.return_value = self.base._replace(api=api)
@@ -306,17 +435,17 @@ class LogDogBootstrapTest(unittest.TestCase):
   def test_get_bootstrap_result(self):
     mo = mock.mock_open(read_data='{"return_code": 1337}')
     with mock.patch('slave.logdog_bootstrap.open', mo, create=True):
-      bs = ldbs.BootstrapState([], '/foo/bar', 'project', 'prefix')
+      bs = ldbs.BootstrapState(None, [], '/foo/bar')
       self.assertEqual(bs.get_result(), 1337)
 
     mo = mock.mock_open(read_data='!!! NOT JSON? !!!')
     with mock.patch('slave.logdog_bootstrap.open', mo, create=True):
-      bs = ldbs.BootstrapState([], '/foo/bar', 'project', 'prefix')
+      bs = ldbs.BootstrapState(None, [], '/foo/bar')
       self.assertRaises(ldbs.BootstrapError, bs.get_result)
 
     mo = mock.mock_open(read_data='{"invalid": "json"}')
     with mock.patch('slave.logdog_bootstrap.open', mo, create=True):
-      bs = ldbs.BootstrapState([], '/foo/bar', 'project', 'prefix')
+      bs = ldbs.BootstrapState(None, [], '/foo/bar')
       self.assertRaises(ldbs.BootstrapError, bs.get_result)
 
     mo = mock.mock_open()
@@ -327,7 +456,17 @@ class LogDogBootstrapTest(unittest.TestCase):
   def test_bootstrap_annotations(self):
     sio = StringIO.StringIO()
     stream = annotator.StructuredAnnotationStream(stream=sio)
-    bs = ldbs.BootstrapState([], '/foo/bar', 'project', 'foo/bar/baz')
+    cfg = ldbs.Config(
+        params=self.base,
+        plat=None,
+        host='example.com',
+        output_service=None,
+        prefix='foo/bar',
+        tags=None,
+        logdog_only=False,
+        service_account_path=None,
+    )
+    bs = ldbs.BootstrapState(cfg, [], '/foo/bar')
     bs.annotate(stream)
 
     lines = [l for l in sio.getvalue().splitlines() if l]
@@ -335,8 +474,10 @@ class LogDogBootstrapTest(unittest.TestCase):
         '@@@SEED_STEP LogDog Bootstrap@@@',
         '@@@STEP_CURSOR LogDog Bootstrap@@@',
         '@@@STEP_STARTED@@@',
-        '@@@SET_BUILD_PROPERTY@logdog_project@"project"@@@',
-        '@@@SET_BUILD_PROPERTY@logdog_prefix@"foo/bar/baz"@@@',
+        '@@@SET_BUILD_PROPERTY@logdog_project@"alpha"@@@',
+        '@@@SET_BUILD_PROPERTY@logdog_prefix@"foo/bar"@@@',
+        ('@@@SET_BUILD_PROPERTY@logdog_annotation_url@'
+         '"logdog://example.com/alpha/foo/bar/+/recipes/annotations"@@@'),
         '@@@STEP_CURSOR LogDog Bootstrap@@@',
         '@@@STEP_CLOSED@@@',
     ])
@@ -354,29 +495,13 @@ class LogDogBootstrapTest(unittest.TestCase):
 
     service_account_json = ldbs._get_service_account_json(
         self.opts, ('foo', 'bar'))
-    self.assertIsNone(service_account_json)
+    self.assertEqual(service_account_json, ':gce')
 
   def test_cipd_install(self):
-    pkgs = ldbs._install_cipd(self.basedir,
-        cipd.CipdBinary(cipd.CipdPackage('infra/foo', 'v0'), 'foo'),
-        cipd.CipdBinary(cipd.CipdPackage('infra/bar', 'v1'), 'baz'),
+    ldbs._install_cipd_packages(self.basedir,
+        cipd.CipdPackage('infra/foo', 'v0'),
+        cipd.CipdPackage('infra/bar', 'v1'),
         )
-    self.assertEqual(pkgs, (self._bp('foo'), self._bp('baz')))
-
-    ldbs._check_call.assert_called_once_with([
-      sys.executable,
-       os.path.join(env.Build, 'scripts', 'slave', 'cipd.py'),
-       '--dest-directory', self.basedir,
-       '-P', 'infra/foo@v0',
-       '-P', 'infra/bar@v1',
-    ])
-
-  def test_cipd_install_canary(self):
-    pkgs = ldbs._install_cipd(self.basedir,
-        cipd.CipdBinary(cipd.CipdPackage('infra/foo', 'v0'), 'foo'),
-        cipd.CipdBinary(cipd.CipdPackage('infra/bar', 'v1'), 'baz'),
-        )
-    self.assertEqual(pkgs, (self._bp('foo'), self._bp('baz')))
 
     ldbs._check_call.assert_called_once_with([
       sys.executable,
@@ -390,10 +515,10 @@ class LogDogBootstrapTest(unittest.TestCase):
     ldbs._check_call.side_effect = subprocess.CalledProcessError(0, [], '')
 
     self.assertRaises(ldbs.BootstrapError,
-        ldbs._install_cipd,
+        ldbs._install_cipd_packages,
         self.basedir,
-        cipd.CipdBinary(cipd.CipdPackage('infra/foo', 'v0'), 'foo'),
-        cipd.CipdBinary(cipd.CipdPackage('infra/bar', 'v1'), 'baz'),
+        cipd.CipdPackage('infra/foo', 'v0'),
+        cipd.CipdPackage('infra/bar', 'v1'),
     )
 
   @mock.patch('slave.logdog_bootstrap._get_params')
@@ -406,8 +531,7 @@ class LogDogBootstrapTest(unittest.TestCase):
                     self.properties, [])
 
   @mock.patch('slave.logdog_bootstrap._get_params')
-  @mock.patch('slave.robust_tempdir.RobustTempdir.tempdir')
-  def test_will_not_bootstrap_if_disabled(self, tempdir, get_params):
+  def test_will_not_bootstrap_if_disabled(self, get_params):
     get_params.side_effect = Exception('Tried to bootstrap')
     opts = self.opts._replace(logdog_disable=True)
 
