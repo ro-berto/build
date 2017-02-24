@@ -1200,6 +1200,20 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[{\"buildername\": \"ios\", \"isolate.gen\": \"[TMP_BASE]/isolate_tmp_1/0.isolate.gen.json\", \"isolated hash\": \"fake-hash-0\", \"skip\": false, \"step name\": \"fake test 1 (fake device 1 iOS 8.1)\", \"task\": null, \"test\": {\"app\": \"fake test 1\", \"device type\": \"fake device 1\", \"id\": \"0\", \"os\": \"8.1\", \"test args\": [\"--fake-arg-1\", \"--fake-arg-2\"]}, \"tmp dir\": null}, {\"buildername\": \"ios\", \"isolate.gen\": \"[TMP_BASE]/isolate_tmp_1/1.isolate.gen.json\", \"isolated hash\": \"fake-hash-1\", \"skip\": false, \"step name\": \"fake included test 1 (fake device 1 iOS 8.1)\", \"task\": null, \"test\": {\"app\": \"fake included test 1\", \"device type\": \"fake device 1\", \"id\": \"1\", \"os\": \"8.1\"}, \"tmp dir\": null}, {\"buildername\": \"ios\", \"isolate.gen\": \"[TMP_BASE]/isolate_tmp_1/2.isolate.gen.json\", \"isolated hash\": \"fake-hash-2\", \"skip\": false, \"step name\": \"fake included test 2 (fake device 1 iOS 8.1)\", \"task\": null, \"test\": {\"app\": \"fake included test 2\", \"device type\": \"fake device 1\", \"id\": \"2\", \"os\": \"8.1\"}, \"tmp dir\": null}, {\"buildername\": \"ios\", \"isolate.gen\": \"[TMP_BASE]/isolate_tmp_1/3.isolate.gen.json\", \"isolated hash\": \"fake-hash-3\", \"skip\": false, \"step name\": \"fake test 2 (fake device 2 iOS 7.1)\", \"task\": null, \"test\": {\"app\": \"fake test 2\", \"device type\": \"fake device 2\", \"id\": \"3\", \"os\": \"7.1\"}, \"tmp dir\": null}, {\"buildername\": \"ios\", \"isolate.gen\": \"[TMP_BASE]/isolate_tmp_1/4.isolate.gen.json\", \"isolated hash\": \"fake-hash-4\", \"skip\": false, \"step name\": \"fake included test 1 (fake device 2 iOS 7.1)\", \"task\": null, \"test\": {\"app\": \"fake included test 1\", \"device type\": \"fake device 2\", \"id\": \"4\", \"os\": \"7.1\"}, \"tmp dir\": null}, {\"buildername\": \"ios\", \"isolate.gen\": \"[TMP_BASE]/isolate_tmp_1/5.isolate.gen.json\", \"isolated hash\": \"fake-hash-5\", \"skip\": false, \"step name\": \"fake included test 2 (fake device 2 iOS 7.1)\", \"task\": null, \"test\": {\"app\": \"fake included test 2\", \"device type\": \"fake device 2\", \"id\": \"5\", \"os\": \"7.1\"}, \"tmp dir\": null}, {\"buildername\": \"fake child 1\", \"isolate.gen\": \"[TMP_BASE]/isolate_tmp_1/6.isolate.gen.json\", \"isolated hash\": \"fake-hash-6\", \"skip\": false, \"step name\": \"fake child test 1 (fake child device 1 iOS 8.1)\", \"task\": null, \"test\": {\"app\": \"fake child test 1\", \"device type\": \"fake child device 1\", \"id\": \"6\", \"os\": \"8.1\"}, \"tmp dir\": null}, {\"buildername\": \"fake child 2\", \"isolate.gen\": \"[TMP_BASE]/isolate_tmp_1/7.isolate.gen.json\", \"isolated hash\": \"fake-hash-7\", \"skip\": false, \"step name\": \"fake included test 1 (fake child device 2 iOS 9.0)\", \"task\": null, \"test\": {\"app\": \"fake included test 1\", \"device type\": \"fake child device 2\", \"id\": \"7\", \"os\": \"9.0\"}, \"tmp dir\": null}, {\"buildername\": \"fake child 2\", \"isolate.gen\": \"[TMP_BASE]/isolate_tmp_1/8.isolate.gen.json\", \"isolated hash\": \"fake-hash-8\", \"skip\": false, \"step name\": \"fake included test 2 (fake child device 2 iOS 9.0)\", \"task\": null, \"test\": {\"app\": \"fake included test 2\", \"device type\": \"fake child device 2\", \"id\": \"8\", \"os\": \"9.0\"}, \"tmp dir\": null}]",
+      "[START_DIR]/isolated_tasks.json"
+    ],
+    "cwd": "[START_DIR]/src",
+    "name": "isolate.generate isolated_tasks.json",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
     "cmd": [],
     "cwd": "[START_DIR]/src",
     "name": "trigger"

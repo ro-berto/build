@@ -686,6 +686,12 @@ class iOSApi(recipe_api.RecipeApi):
 
       with self.m.step.nest('isolate'):
         tasks = self.isolate(scripts_dir=scripts_dir)
+        if self.__config['triggered bots']:
+          self.m.file.write(
+              'generate isolated_tasks.json',
+              self.m.path['start_dir'].join('isolated_tasks.json'),
+              self.m.json.dumps(tasks),
+          )
 
       with self.m.step.nest('trigger'):
         self.trigger(tasks)
