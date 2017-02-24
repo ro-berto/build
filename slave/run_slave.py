@@ -435,11 +435,12 @@ def main():
         'BUILDBOT_ARCHIVE_FORCE_SSH',
         'CHROME_HEADLESS',
         'CHROMIUM_BUILD',
+        'CLASSPATH',
         'COMMONPROGRAMFILES',
         'COMMONPROGRAMFILES(X86)',
         'COMMONPROGRAMW6432',
-        'COMSPEC',
         'COMPUTERNAME',
+        'COMSPEC',
         'DBUS_SESSION_BUS_ADDRESS',
         'DEPOT_TOOLS_GIT_BLEEDING',
         'DXSDK_DIR',
@@ -447,6 +448,9 @@ def main():
         'HOME',
         'HOMEDRIVE',
         'HOMEPATH',
+        'JAVA_HOME',
+        'JDK_HOME',
+        'JRE_HOME',
         'LOCALAPPDATA',
         'NUMBER_OF_PROCESSORS',
         'OS',
@@ -466,8 +470,8 @@ def main():
         'TESTING_MASTER_HOST',
         'TESTING_SLAVENAME',
         'TMP',
-        'USERNAME',
         'USERDOMAIN',
+        'USERNAME',
         'USERPROFILE',
         'VS100COMNTOOLS',
         'VS110COMNTOOLS',
@@ -501,6 +505,8 @@ def main():
     tools = os.path.join(ROOT_DIR, 'build_internal', 'tools')
     if os.path.isdir(tools):
       slave_path.append(os.path.abspath(tools))
+    if 'JAVA_HOME' in os.environ:
+      slave_path.append(os.path.join(os.environ['JAVA_HOME'], 'bin'))
     os.environ['PATH'] = os.pathsep.join(slave_path)
     os.environ['LOGNAME'] = os.environ['USERNAME']
 
@@ -511,6 +517,7 @@ def main():
         'CHROME_ALLOCATOR',
         'CHROME_HEADLESS',
         'CHROME_VALGRIND_NUMCPUS',
+        'CLASSPATH',
         'DISPLAY',
         'DISTCC_DIR',
         'GIT_USER_AGENT',
@@ -519,6 +526,9 @@ def main():
         'HTTP_PROXY',
         'http_proxy',
         'HTTPS_PROXY',
+        'JAVA_HOME',
+        'JDK_HOME',
+        'JRE_HOME',
         'LANG',
         'LOGNAME',
         'PAGER',
@@ -552,6 +562,8 @@ def main():
         os.path.dirname(sys.executable),
         '/usr/bin', '/bin', '/usr/sbin', '/sbin', '/usr/local/bin'
     ]
+    if 'JAVA_HOME' in os.environ:
+      slave_path.append(os.path.join(os.environ['JAVA_HOME'], 'bin'))
     os.environ['PATH'] = os.pathsep.join(slave_path)
 
   else:
