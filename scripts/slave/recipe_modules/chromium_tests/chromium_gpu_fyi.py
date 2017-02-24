@@ -494,6 +494,24 @@ SPEC = {
       # in order to keep up with the faster cycle time of the tests.
       'enable_swarming': False,
     },
+    'Linux GPU TSAN Release': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder_tester',
+      'compile_targets': [
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+      'enable_swarming': True,
+      'serialize_tests': True,
+    },
     'Linux Release (AMD R7 240)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop'],

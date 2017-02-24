@@ -399,6 +399,16 @@
       "builder_timeout_s": 21600,
       "category": "2Linux",
     },
+    "Linux GPU TSAN Release": {
+      "recipe": "chromium",
+      "use_remote_run": True,
+      "scheduler": None,
+      # It's crucial to merge build requests on the testers.
+      "mergeRequests": True,
+      "slave_pools": ["linux_gpu_tsan_rel"],
+      "builder_timeout_s": 21600,
+      "category": "2Linux",
+    },
 
     "Android Release (Nexus 5)": {
       "recipe": "chromium",
@@ -794,6 +804,14 @@
         "version": "trusty",
       },
       "slaves": ["build157-b1"],
+    },
+    "linux_gpu_tsan_rel": {
+      "slave_data": {
+        "bits": 64,
+        "os": "linux",
+        "version": "trusty",
+      },
+      "slaves": ["slave206-c1"],
     },
 
     "android_rel_nexus_5": {
