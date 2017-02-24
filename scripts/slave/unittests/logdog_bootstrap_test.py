@@ -171,7 +171,7 @@ class LogDogBootstrapTest(unittest.TestCase):
   @mock.patch('os.path.isfile')
   @mock.patch('slave.logdog_bootstrap._get_params')
   @mock.patch('slave.robust_tempdir.RobustTempdir.tempdir')
-  def test_bootstrap_command_linux(self, tempdir, get_params, isfile):
+  def test_bootstrap_command_linux_stable(self, tempdir, get_params, isfile):
     gce.Authenticator.is_gce.return_value = True
     recipe_cmd = ['run_recipe.py', 'recipe_params...']
 
@@ -203,11 +203,12 @@ class LogDogBootstrapTest(unittest.TestCase):
             '-project', 'myproject',
             '-prefix', 'bb/mastername/buildername/1337',
             '-coordinator-host', 'luci-logdog.appspot.com',
+            '-output', 'logdog,service="services"',
             '-tag', 'buildbot.master=mastername',
             '-tag', 'buildbot.builder=buildername',
             '-tag', 'buildbot.buildnumber=1337',
+            '-service-account-json', ':gce',
             '-output-max-buffer-age', '30s',
-            '-output', 'logdog,host="services-dot-luci-logdog.appspot.com"',
             'run',
             '-stdout', 'tee=stdout',
             '-stderr', 'tee=stderr',
@@ -220,9 +221,6 @@ class LogDogBootstrapTest(unittest.TestCase):
                 '-tee', 'annotations,text',
                 '-json-args-path', self._tp('logdog_annotee_cmd.json'),
                 '-result-path', self._tp('bootstrap_result.json'),
-                '-project', 'myproject',
-                '-butler-stream-server', streamserver_uri,
-                '-logdog-host', 'luci-logdog.appspot.com',
         ])
 
     self._assertAnnoteeCommand(recipe_cmd)
@@ -231,8 +229,8 @@ class LogDogBootstrapTest(unittest.TestCase):
   @mock.patch('slave.logdog_bootstrap._get_service_account_json')
   @mock.patch('slave.logdog_bootstrap._get_params')
   @mock.patch('slave.robust_tempdir.RobustTempdir.tempdir')
-  def test_bootstrap_command_win(self, tempdir, get_params, service_account,
-                                 isfile):
+  def test_bootstrap_command_win_stable(self, tempdir, get_params,
+                                        service_account, isfile):
     infra_platform.get.return_value = ('win', 'x86_64', 64)
 
     recipe_cmd = ['run_recipe.py', 'recipe_params...']
@@ -266,13 +264,13 @@ class LogDogBootstrapTest(unittest.TestCase):
             '-project', 'myproject',
             '-prefix', 'bb/mastername/buildername/1337',
             '-coordinator-host', 'luci-logdog.appspot.com',
+            '-output', 'logdog,service="services"',
             '-tag', 'buildbot.master=mastername',
             '-tag', 'buildbot.builder=buildername',
             '-tag', 'buildbot.buildnumber=1337',
+            '-service-account-json', 'creds.json',
             '-output-max-buffer-age', '30s',
             '-io-keepalive-stderr', '5m',
-            '-output', ('logdog,host="services-dot-luci-logdog.appspot.com"'),
-            '-service-account-json', 'creds.json',
             'run',
             '-stdout', 'tee=stdout',
             '-stderr', 'tee=stderr',
@@ -285,9 +283,6 @@ class LogDogBootstrapTest(unittest.TestCase):
                 '-tee', 'annotations',
                 '-json-args-path', self._tp('logdog_annotee_cmd.json'),
                 '-result-path', self._tp('bootstrap_result.json'),
-                '-project', 'myproject',
-                '-butler-stream-server', streamserver_uri,
-                '-logdog-host', 'luci-logdog.appspot.com',
         ])
 
     service_account.assert_called_once_with(

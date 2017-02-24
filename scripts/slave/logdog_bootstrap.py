@@ -41,7 +41,7 @@ _CIPD_PY_PATH = os.path.join(env.Build, 'scripts', 'slave', 'cipd.py')
 # Verify full package set with:
 # $ cipd resolve infra/tools/luci/logdog/butler/ -version ${TAG}
 # $ cipd resolve infra/tools/luci/logdog/annotee/ -version ${TAG}
-_STABLE_CIPD_TAG = 'git_revision:ada1252fb35e94140e1a74d21ba0b92b30330f97'
+_STABLE_CIPD_TAG = 'git_revision:8554e948f85f727636b39940302b370463b3352b'
 _CANARY_CIPD_TAG = 'git_revision:8554e948f85f727636b39940302b370463b3352b'
 
 _CIPD_TAG_MAP = {
@@ -58,7 +58,7 @@ _CIPD_TAG_MAP = {
 # As CIPD tags rotate, old API versions and their respective logic can be
 # removed from this code.
 _CIPD_TAG_API_MAP = {
-    _STABLE_CIPD_TAG: 3,
+    _STABLE_CIPD_TAG: 4,
     _CANARY_CIPD_TAG: 4,
 }
 
@@ -401,17 +401,13 @@ def _build_prefix(params):
   return prefix, tags
 
 
-def _make_butler_output(opts, cfg, implicit_host):
+def _make_butler_output(opts, cfg):
   """Returns a Butler output string.
-
-  TODO(dnj): Remove "implicit_host" after v4 conversion.
   """
   if opts.logdog_debug_out_file:
     return 'file,path="%s"' % (opts.logdog_debug_out_file,)
 
   output = ['logdog']
-  if not implicit_host:
-    output.append('host="%s"' % (cfg.host,))
   if cfg.output_service:
     output.append('service="%s"' % (cfg.output_service,))
   return ','.join(output)
@@ -580,7 +576,7 @@ def bootstrap(rt, opts, basedir, tempdir, properties, cmd):
       '-project', cfg.params.project,
       '-prefix', cfg.prefix,
       '-coordinator-host', cfg.host,
-      '-output', _make_butler_output(opts, cfg, True),
+      '-output', _make_butler_output(opts, cfg),
   ]
   for k, v in cfg.tags.iteritems():
     if v:
@@ -617,30 +613,6 @@ def bootstrap(rt, opts, basedir, tempdir, properties, cmd):
   # NOTE: Please update the above comment as new API versions and translation
   # functions are added.
   start_api = cur_api = max(_CIPD_TAG_API_MAP.itervalues())
-
-  if cfg.params.api != cur_api and cur_api == 4:
-    # Butler: specify full module name in output.
-    # Replace ":gce" service account with no service account.
-    _prune_arg(butler_args, '-output', extra=1)
-    host_prefix = ('' if not cfg.output_service
-                   else '%s-dot-' % (cfg.output_service,))
-    output_cfg = cfg._replace(
-        host=(host_prefix + cfg.host),
-        output_service=None)
-    service_account = _prune_arg(butler_args, '-service-account-json', extra=1)
-    butler_args += [
-        '-output', _make_butler_output(opts, output_cfg, False),
-    ]
-    if service_account[-1] != ':gce':
-      butler_args += service_account
-
-    # Annotee: Add "-logdog-host", "-project", and "-streamserver-uri".
-    annotee_args += [
-        '-project', cfg.params.project,
-        '-butler-stream-server', streamserver_uri,
-        '-logdog-host', cfg.host,
-    ]
-    cur_api = 3
 
   # Assert that we've hit the target "params.api".
   assert cur_api == cfg.params.api, 'Failed to transform API %s => %s' % (
