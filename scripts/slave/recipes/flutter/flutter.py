@@ -161,10 +161,6 @@ def RunSteps(api):
     'ANDROID_HOME': checkout.join('dev', 'bots', 'android_tools'),
   }
 
-  if api.platform.is_win:
-    # TODO(goderbauer): remove workaround for https://bugs.chromium.org/p/chromium/issues/detail?id=695138
-    env['PATH'] = api.path.pathsep.join((env['PATH'], 'C:\\Program Files\\Java\\jdk1.8.0_121\\bin'))
-
   # The context adds dart-sdk tools to PATH sets PUB_CACHE.
   with api.step.context({'env': env}):
     if api.platform.is_mac:
