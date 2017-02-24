@@ -31,6 +31,7 @@ CANARY = 'canary'
 # 'mastername' values not in this map will get DEFAULT_CIPD_VERSION.
 MASTER_VERSION = {
   'chromium.infra': STAGING,
+  'chromium.infra.cron': STAGING,
 }
 
 
