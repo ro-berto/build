@@ -397,6 +397,10 @@ def official(c):
   c.compile_py.mode = 'official'
 
 @config_ctx(deps=['compiler'])
+def analysis(c):
+  c.gn_args.append('use_clang_static_analyzer=true')
+
+@config_ctx(deps=['compiler'])
 def asan(c):
   if 'clang' not in c.compile_py.compiler:  # pragma: no cover
     raise BadConf('asan requires clang')

@@ -2255,5 +2255,24 @@ SPEC = {
       'testing': { 'platform': 'win', },
       'enable_swarming': True,
     },
+
+    'Linux Clang Analyzer': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb', 'analysis'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'compile_targets': [
+        'all',
+      ],
+      'bot_type': 'builder_tester',
+      'test_results_config': 'staging_server',
+      'testing': {
+        'platform': 'linux',
+      },
+      'enable_swarming': True,
+    },
   },
 }
