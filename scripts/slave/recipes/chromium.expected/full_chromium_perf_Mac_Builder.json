@@ -628,6 +628,8 @@
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
+      "--eventlog-endpoint",
+      "prod",
       "--verbose",
       "--isolate",
       "[BUILDER_CACHE]/Mac_Builder/src/out/Release/browser_tests.isolate",

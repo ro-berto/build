@@ -629,6 +629,8 @@
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
+      "--eventlog-endpoint",
+      "prod",
       "--verbose",
       "--isolate",
       "[BUILDER_CACHE]\\Win_x64_Builder\\src\\out\\Release_x64\\browser_tests.isolate",

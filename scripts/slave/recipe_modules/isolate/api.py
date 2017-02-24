@@ -142,7 +142,9 @@ class IsolateApi(recipe_api.RecipeApi):
           'exparchive',
           '--dump-json', self.m.json.output(),
           '--isolate-server', self._isolate_server,
+          '--eventlog-endpoint', 'prod',
       ] + (['--verbose'] if verbose else [])
+
       for target in exparchive_targets:
         isolate_steps.append(
             self.m.python(
