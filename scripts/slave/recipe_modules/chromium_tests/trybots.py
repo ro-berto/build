@@ -381,6 +381,10 @@ TRYBOTS = freeze({
         'mastername': 'chromium.fyi',
         'buildername': 'WebKit Linux slimming_paint_v2 Dummy Builder',
       }),
+      'linux_chromium_analysis': simple_bot({
+        'mastername': 'chromium.fyi',
+        'buildername': 'Linux Clang Analyzer',
+      }),
       # Optional GPU bots.
       'linux_optional_gpu_tests_rel': {
         'bot_ids': [
