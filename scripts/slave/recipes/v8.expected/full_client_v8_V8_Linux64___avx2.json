@@ -153,7 +153,7 @@
       "--tag",
       "slavename:test_bot",
       "--tag",
-      "stepname:Check on Ubuntu-14.04",
+      "stepname:Check",
       "--idempotent",
       "[dummy hash for bot_default]",
       "--",
@@ -174,7 +174,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Check on Ubuntu-14.04",
+    "name": "[trigger] Check",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -248,7 +248,7 @@
       "--tag",
       "slavename:test_bot",
       "--tag",
-      "stepname:Benchmarks on Ubuntu-14.04",
+      "stepname:Benchmarks",
       "--idempotent",
       "[dummy hash for benchmarks]",
       "--",
@@ -270,7 +270,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Benchmarks on Ubuntu-14.04",
+    "name": "[trigger] Benchmarks",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -344,7 +344,7 @@
       "--tag",
       "slavename:test_bot",
       "--tag",
-      "stepname:Mozilla on Ubuntu-14.04",
+      "stepname:Mozilla",
       "--idempotent",
       "[dummy hash for mozilla]",
       "--",
@@ -365,7 +365,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Mozilla on Ubuntu-14.04",
+    "name": "[trigger] Mozilla",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",

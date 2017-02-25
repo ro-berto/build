@@ -545,7 +545,7 @@
       "--tag",
       "slavename:test_bot",
       "--tag",
-      "stepname:Check on Ubuntu-14.04",
+      "stepname:Check",
       "--idempotent",
       "[dummy hash for bot_default]",
       "--",
@@ -566,7 +566,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Check on Ubuntu-14.04",
+    "name": "[trigger] Check",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1727,7 +1727,7 @@
       "--tag",
       "slavename:test_bot",
       "--tag",
-      "stepname:Retry on Ubuntu-14.04",
+      "stepname:Retry",
       "--idempotent",
       "[dummy hash for bot_default]",
       "--",
@@ -1749,7 +1749,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "Bisect a0.[trigger] Retry on Ubuntu-14.04",
+    "name": "Bisect a0.[trigger] Retry",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
@@ -2356,7 +2356,7 @@
       "--tag",
       "slavename:test_bot",
       "--tag",
-      "stepname:Retry on Ubuntu-14.04",
+      "stepname:Retry",
       "--idempotent",
       "[dummy hash for bot_default]",
       "--",
@@ -2378,7 +2378,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "Bisect a2.[trigger] Retry on Ubuntu-14.04",
+    "name": "Bisect a2.[trigger] Retry",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",

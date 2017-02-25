@@ -157,7 +157,7 @@
       "--tag",
       "slavename:test_bot",
       "--tag",
-      "stepname:Check on Ubuntu-14.04",
+      "stepname:Check",
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
@@ -181,7 +181,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Check on Ubuntu-14.04",
+    "name": "[trigger] Check",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",

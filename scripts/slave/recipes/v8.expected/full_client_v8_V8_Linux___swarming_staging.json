@@ -553,13 +553,13 @@
       "--tag",
       "slavename:test_bot",
       "--tag",
-      "stepname:Static-Initializers on Ubuntu-14.04",
+      "stepname:Static-Initializers",
       "--idempotent",
       "[dummy hash for check-static-initializers]",
       "--",
       "out/Release/d8"
     ],
-    "name": "[trigger] Static-Initializers on Ubuntu-14.04",
+    "name": "[trigger] Static-Initializers",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -633,7 +633,7 @@
       "--tag",
       "slavename:test_bot",
       "--tag",
-      "stepname:Check on Ubuntu-14.04",
+      "stepname:Check",
       "--idempotent",
       "[dummy hash for bot_default]",
       "--",
@@ -654,7 +654,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Check on Ubuntu-14.04",
+    "name": "[trigger] Check",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -728,7 +728,7 @@
       "--tag",
       "slavename:test_bot",
       "--tag",
-      "stepname:OptimizeForSize on Ubuntu-14.04",
+      "stepname:OptimizeForSize",
       "--idempotent",
       "[dummy hash for optimize_for_size]",
       "--",
@@ -750,7 +750,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] OptimizeForSize on Ubuntu-14.04",
+    "name": "[trigger] OptimizeForSize",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -824,7 +824,7 @@
       "--tag",
       "slavename:test_bot",
       "--tag",
-      "stepname:Test262 on Ubuntu-14.04",
+      "stepname:Test262",
       "--idempotent",
       "[dummy hash for test262]",
       "--",
@@ -846,7 +846,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Test262 on Ubuntu-14.04",
+    "name": "[trigger] Test262",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -926,7 +926,7 @@
       "--tag",
       "slavename:test_bot",
       "--tag",
-      "stepname:Mozilla on Ubuntu-14.04",
+      "stepname:Mozilla",
       "--idempotent",
       "[dummy hash for mozilla]",
       "--",
@@ -947,7 +947,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Mozilla on Ubuntu-14.04",
+    "name": "[trigger] Mozilla",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -979,7 +979,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "name": "Static-Initializers on Ubuntu-14.04",
+    "name": "Static-Initializers",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",

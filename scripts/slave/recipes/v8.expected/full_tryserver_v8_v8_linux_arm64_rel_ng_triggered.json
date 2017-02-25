@@ -157,7 +157,7 @@
       "--tag",
       "slavename:test_bot",
       "--tag",
-      "stepname:Check on Ubuntu-14.04",
+      "stepname:Check",
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
@@ -181,7 +181,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Check on Ubuntu-14.04",
+    "name": "[trigger] Check",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -277,7 +277,7 @@
       "--tag",
       "slavename:test_bot",
       "--tag",
-      "stepname:Check - extra on Ubuntu-14.04",
+      "stepname:Check - extra",
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
@@ -301,7 +301,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Check - extra on Ubuntu-14.04",
+    "name": "[trigger] Check - extra",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -385,7 +385,7 @@
       "--tag",
       "slavename:test_bot",
       "--tag",
-      "stepname:Test262 - no variants on Ubuntu-14.04",
+      "stepname:Test262 - no variants",
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
@@ -410,7 +410,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Test262 - no variants on Ubuntu-14.04",
+    "name": "[trigger] Test262 - no variants",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -488,7 +488,7 @@
       "--tag",
       "slavename:test_bot",
       "--tag",
-      "stepname:Test262 - extra on Ubuntu-14.04",
+      "stepname:Test262 - extra",
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
@@ -513,7 +513,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Test262 - extra on Ubuntu-14.04",
+    "name": "[trigger] Test262 - extra",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -597,7 +597,7 @@
       "--tag",
       "slavename:test_bot",
       "--tag",
-      "stepname:Mozilla on Ubuntu-14.04",
+      "stepname:Mozilla",
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
@@ -621,7 +621,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Mozilla on Ubuntu-14.04",
+    "name": "[trigger] Mozilla",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -699,7 +699,7 @@
       "--tag",
       "slavename:test_bot",
       "--tag",
-      "stepname:Mjsunit - sp frame access on Ubuntu-14.04",
+      "stepname:Mjsunit - sp frame access",
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
@@ -724,7 +724,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Mjsunit - sp frame access on Ubuntu-14.04",
+    "name": "[trigger] Mjsunit - sp frame access",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",

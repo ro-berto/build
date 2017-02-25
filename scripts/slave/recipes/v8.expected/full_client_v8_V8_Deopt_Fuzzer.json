@@ -153,7 +153,7 @@
       "--tag",
       "slavename:test_bot",
       "--tag",
-      "stepname:Deopt Fuzz on Ubuntu-14.04",
+      "stepname:Deopt Fuzz",
       "--idempotent",
       "[dummy hash for run-deopt-fuzzer]",
       "--",
@@ -167,7 +167,7 @@
       "--coverage=0.4",
       "--distribution-mode=smooth"
     ],
-    "name": "[trigger] Deopt Fuzz on Ubuntu-14.04",
+    "name": "[trigger] Deopt Fuzz",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -199,7 +199,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "name": "Deopt Fuzz on Ubuntu-14.04",
+    "name": "Deopt Fuzz",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",

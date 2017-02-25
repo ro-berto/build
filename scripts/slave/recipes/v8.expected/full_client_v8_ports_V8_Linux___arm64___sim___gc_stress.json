@@ -547,7 +547,7 @@
       "--tag",
       "slavename:test_bot",
       "--tag",
-      "stepname:Mjsunit on Ubuntu-14.04",
+      "stepname:Mjsunit",
       "--idempotent",
       "[dummy hash for mjsunit]",
       "--",
@@ -569,7 +569,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Mjsunit on Ubuntu-14.04",
+    "name": "[trigger] Mjsunit",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -661,7 +661,7 @@
       "--tag",
       "slavename:test_bot",
       "--tag",
-      "stepname:Webkit on Ubuntu-14.04",
+      "stepname:Webkit",
       "--idempotent",
       "[dummy hash for webkit]",
       "--",
@@ -683,7 +683,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Webkit on Ubuntu-14.04",
+    "name": "[trigger] Webkit",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
