@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import re
+
 from master.factory import annotator_commands
 from master.factory import commands
 from master.factory.build_factory import BuildFactory
@@ -23,7 +25,7 @@ def RemoteRunFactory(active_master, repository, recipe,
   |recipe| is the name of the recipe to run.
 
   |revision| is the revision to use for repo checkout (by default we use latest
-  revision).
+  revision). Must be a commit hash or a fully-qualified ref.
 
   |factory_properties| is a dictionary of default build properties.
 
@@ -41,8 +43,9 @@ def RemoteRunFactory(active_master, repository, recipe,
   |use_gitiles| enables a Gitiles-specific way to fetch the repo; it's more
   efficient for large repos.
   """
-  if not revision:
-    revision = 'master' if use_gitiles else 'origin/master'
+  revision = revision or 'refs/heads/master'
+  if isinstance(revision, basestring):
+    assert re.match('^([a-z0-9]{40}|refs/.+)$', revision)
 
   factory_properties = factory_properties or {}
 
