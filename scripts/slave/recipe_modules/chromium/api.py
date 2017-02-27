@@ -623,8 +623,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       # investigate the compiler_proxy start-up failure reason,
       # let me stop starting compiler_proxy. (crbug.com/639432)
       wrapper += ['--nostart-goma']
-    if self.c.gyp_env.GYP_DEFINES.get('fastbuild', 0) == 1:
-      wrapper += ['--fastbuild']
+    # NOTE: --fastbuild is no longer supported in 'cros chrome-sdk'.
     wrapper += ['--']
     return wrapper
 
