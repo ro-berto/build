@@ -2202,7 +2202,7 @@ BUILDERS = {
           'os': 'Windows-7-SP1',
           'cpu': 'x86-64',
         },
-        'tests': [V8Testing, V8TestingExtra],
+        'tests': [V8Testing, V8TestingExtra, Test262],
         'testing': {'platform': 'linux'},
       },
       'v8_win_nosnap_shared_rel_ng': {
@@ -2283,7 +2283,7 @@ BUILDERS = {
           'os': 'Windows-7-SP1',
           'cpu': 'x86-64',
         },
-        'tests': [V8Testing, V8TestingExtra],
+        'tests': [V8Testing, V8TestingExtra, Test262],
         'testing': {'platform': 'linux'},
       },
       'v8_win64_dbg': {
@@ -2305,6 +2305,7 @@ BUILDERS = {
         'tests': [
           V8Testing_2,
           V8TestingExtra_2,
+          Test262_2,
           Mozilla,
         ],
         'testing': {'platform': 'win'},

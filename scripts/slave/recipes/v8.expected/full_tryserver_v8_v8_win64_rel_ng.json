@@ -493,12 +493,14 @@
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[START_DIR]\\v8\\out\\Release_x64\\bot_default.isolated.gen.json"
+      "[START_DIR]\\v8\\out\\Release_x64\\bot_default.isolated.gen.json",
+      "[START_DIR]\\v8\\out\\Release_x64\\test262.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"bot_default\": \"[dummy hash for bot_default]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"bot_default\": \"[dummy hash for bot_default]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test262\": \"[dummy hash for test262]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -527,7 +529,8 @@
           "revision": "12345",
           "rietveld": "https://codereview.chromium.org",
           "swarm_hashes": {
-            "bot_default": "[dummy hash for bot_default]"
+            "bot_default": "[dummy hash for bot_default]",
+            "test262": "[dummy hash for test262]"
           }
         }
       }
