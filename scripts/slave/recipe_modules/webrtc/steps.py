@@ -83,11 +83,6 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
   elif test_suite == 'webrtc_baremetal':
     api.virtual_webcam_check()  # Needed for video_capture_tests below.
 
-    # This test currently fails on Trusty Linux due to pulseaudio issues. See
-    # http://crbug.com/589101
-    if api.m.platform.is_mac or api.m.platform.is_win:
-      tests.append(BaremetalTest('audio_device_tests', revision=revision))
-
     tests.extend([
         BaremetalTest('voe_auto_test', revision=revision, args=['--automated']),
         BaremetalTest('video_capture_tests', revision=revision),
