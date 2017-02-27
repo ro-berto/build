@@ -29,11 +29,14 @@ general_test_args = ['co19', 'language', 'kernel']
 for platform in ['linux']:
   for arch in ['x64']:
     for mode in ['debug', 'release']:
+      extra_args = []
+      if mode == 'debug':
+        extra_args = ['--vm-options=--no-enable-malloc-hooks']
       builders['vm-kernel-%s-%s-%s' % (platform, mode, arch)] = {
         'mode': mode,
         'target_arch': arch,
         'build_args': ['runtime_kernel'],
-        'test_args': ['-cdartk', '-rvm'] + general_test_args,
+        'test_args': ['-cdartk', '-rvm'] + extra_args + general_test_args,
       }
       builders['vm-kernel-precomp-%s-%s-%s' % (platform, mode, arch)] = {
         'mode': mode,
@@ -41,7 +44,8 @@ for platform in ['linux']:
         'build_args': (['runtime_kernel',
                         'dart_bootstrap',
                         'dart_precompiled_runtime']),
-        'test_args': ['-cdartkp', '-rdart_precompiled'] + general_test_args,
+        'test_args': ['-cdartkp', '-rdart_precompiled'] + extra_args +
+            general_test_args,
         'archive_core_dumps': (platform == 'linux' or platform == 'win'),
       }
 

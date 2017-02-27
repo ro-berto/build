@@ -113,6 +113,7 @@
       "--write-test-outcome-log",
       "-cdartk",
       "-rvm",
+      "--vm-options=--no-enable-malloc-hooks",
       "co19",
       "language",
       "kernel"

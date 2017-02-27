@@ -97,6 +97,7 @@
       "--shards=4",
       "-cdartkp",
       "-rdart_precompiled",
+      "--vm-options=--no-enable-malloc-hooks",
       "co19",
       "language",
       "kernel"
