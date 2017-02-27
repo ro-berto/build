@@ -55,7 +55,7 @@
       "slave_pools": ["ccompute_bots_cq"],
     },
     "android_clang_dbg_recipe": {
-      "builder_timeout_s": 6900,  # 60 * 115
+      "builder_timeout_s": 9000,  # 60 * 150
       "recipe": "chromium_trybot",
       "use_remote_run": True,
       "scheduler": None,
