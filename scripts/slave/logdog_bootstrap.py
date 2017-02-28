@@ -319,6 +319,9 @@ def _get_service_account_json(opts, credential_path):
   Raises:
     |BootstrapError| if no credentials could be found.
   """
+  if opts.logdog_debug_out_file:
+    return None
+
   path = opts.logdog_service_account_json
   if path:
     return path
