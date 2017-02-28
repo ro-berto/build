@@ -19,7 +19,7 @@ CLIENT_NAME = 'cipd' + infra_platform.exe_suffix()
 
 
 DEFAULT_CIPD_VERSION = 'git_revision:a22c452038ad21e6d246461813fa1c952ae668c3'
-STAGING_CIPD_VERSION = 'git_revision:a22c452038ad21e6d246461813fa1c952ae668c3'
+STAGING_CIPD_VERSION = 'git_revision:c38fc10544be8b1003ad9db7e1d61f6a7672da14'
 
 STAGING = 'staging'
 CANARY = 'canary'
@@ -58,7 +58,8 @@ if sys.platform == "win32":
 
 def all_cipd_packages():
   """Returns (list): All referenced CIPD packages."""
-  package_name = 'infra/tools/cipd/${platform}-${arch}'
+  # TODO(iannucci): remove hack
+  package_name = 'infra/tools/cipd/'+infra_platform.cipd_platform()
   return (
       cipd.CipdPackage(name=package_name, version=DEFAULT_CIPD_VERSION),
       cipd.CipdPackage(name=package_name, version=STAGING_CIPD_VERSION),
@@ -128,7 +129,7 @@ def _fresh_download(client_path, version):
   LOGGER.info('Bootstrapping fresh %s', client_path)
   r = requests.get('https://chrome-infra-packages.appspot.com/client', params={
     'version': version,
-    'platform': infra_platform.cipd_platform_arch(),
+    'platform': infra_platform.cipd_platform(),
   }, stream=True)
 
   # use fixed tmp file to avoid cleanup issues.

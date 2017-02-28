@@ -81,8 +81,8 @@ _PLATFORM_CONFIG = {
     'host': 'luci-logdog.appspot.com',
     'output_service': 'services',
     'max_buffer_age': '30s',
-    'butler': 'infra/tools/luci/logdog/butler/${platform}-${arch}',
-    'annotee': 'infra/tools/luci/logdog/annotee/${platform}-${arch}',
+    'butler': 'infra/tools/luci/logdog/butler/${platform}',
+    'annotee': 'infra/tools/luci/logdog/annotee/${platform}',
   },
 
   # Linux
@@ -144,7 +144,10 @@ def all_cipd_packages():
   pcfg = infra_platform.cascade_config(_PLATFORM_CONFIG, plat=())
   for name in (pcfg['butler'], pcfg['annotee']):
     for version in (_STABLE_CIPD_TAG, _CANARY_CIPD_TAG):
-      yield cipd.CipdPackage(name=name, version=version)
+      # TODO(iannucci): remove infra_platform hack.
+      yield cipd.CipdPackage(
+        name=name.replace('${platform}', infra_platform.cipd_platform()),
+        version=version)
 
 
 def _load_params_dict(mastername):
@@ -358,7 +361,9 @@ def _install_cipd_packages(path, *packages):
   ] + (['--verbose'] * verbosity)
 
   for pkg in packages:
-    cmd += ['-P', '%s@%s' % (pkg.name, pkg.version)]
+    # TODO(iannucci): remove this once release cipd is updated.
+    name = pkg.name.replace('${platform}', infra_platform.cipd_platform())
+    cmd += ['-P', '%s@%s' % (name, pkg.version)]
 
   try:
     _check_call(cmd)

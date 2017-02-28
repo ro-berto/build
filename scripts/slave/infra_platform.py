@@ -75,16 +75,16 @@ def exe_suffix():
   return '.exe' if plat == 'win' else ''
 
 
-def cipd_platform():
-  """Returns the equivalent of `cipd ensure`'s ${platform}.
+def cipd_os():
+  """Returns the equivalent of `cipd ensure`'s ${os}.
 
   Example: 'windows', 'mac', 'linux'
   '"""
   os_name, _, _ = get()
-  return _cipd_platform(os_name)
+  return _cipd_os(os_name)
 
 
-def _cipd_platform(os_name):
+def _cipd_os(os_name):
   return os_name.replace('win', 'windows')
 
 
@@ -104,10 +104,10 @@ def _cipd_arch(machine):
   }.get(machine, machine)
 
 
-def cipd_platform_arch():
-  """Return the equivalent of `cipd ensure`'s ${platform}-${arch}."""
+def cipd_platform():
+  """Return the equivalent of `cipd ensure`'s ${platform}."""
   os_name, machine, _ = get()
-  return "%s-%s" % (_cipd_platform(os_name), _cipd_arch(machine))
+  return "%s-%s" % (_cipd_os(os_name), _cipd_arch(machine))
 
 
 def cipd_all_targets():

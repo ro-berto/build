@@ -191,8 +191,8 @@ class LogDogBootstrapTest(unittest.TestCase):
     ldbs._check_call.assert_called_once_with([
         sys.executable, ldbs._CIPD_PY_PATH,
       '--dest-directory', self._bp('.recipe_cipd'),
-      '-P', 'infra/tools/luci/logdog/butler/${platform}-${arch}@stable',
-      '-P', 'infra/tools/luci/logdog/annotee/${platform}-${arch}@stable',
+      '-P', 'infra/tools/luci/logdog/butler/linux-amd64@stable',
+      '-P', 'infra/tools/luci/logdog/annotee/linux-amd64@stable',
     ])
 
     # Check bootstrap command.
@@ -252,8 +252,8 @@ class LogDogBootstrapTest(unittest.TestCase):
     ldbs._check_call.assert_called_once_with([
         sys.executable, ldbs._CIPD_PY_PATH,
       '--dest-directory', self._bp('.recipe_cipd'),
-      '-P', 'infra/tools/luci/logdog/butler/${platform}-${arch}@stable',
-      '-P', 'infra/tools/luci/logdog/annotee/${platform}-${arch}@stable',
+      '-P', 'infra/tools/luci/logdog/butler/windows-amd64@stable',
+      '-P', 'infra/tools/luci/logdog/annotee/windows-amd64@stable',
     ])
 
     # Check bootstrap command.
@@ -314,8 +314,8 @@ class LogDogBootstrapTest(unittest.TestCase):
     ldbs._check_call.assert_called_once_with([
         sys.executable, ldbs._CIPD_PY_PATH,
       '--dest-directory', self._bp('.recipe_cipd'),
-      '-P', 'infra/tools/luci/logdog/butler/${platform}-${arch}@canary',
-      '-P', 'infra/tools/luci/logdog/annotee/${platform}-${arch}@canary',
+      '-P', 'infra/tools/luci/logdog/butler/mac-amd64@canary',
+      '-P', 'infra/tools/luci/logdog/annotee/mac-amd64@canary',
     ])
 
     # Check bootstrap command.
@@ -375,8 +375,8 @@ class LogDogBootstrapTest(unittest.TestCase):
     ldbs._check_call.assert_called_once_with([
         sys.executable, ldbs._CIPD_PY_PATH,
       '--dest-directory', self._bp('.recipe_cipd'),
-      '-P', 'infra/tools/luci/logdog/butler/${platform}-${arch}@canary',
-      '-P', 'infra/tools/luci/logdog/annotee/${platform}-${arch}@canary',
+      '-P', 'infra/tools/luci/logdog/butler/windows-amd64@canary',
+      '-P', 'infra/tools/luci/logdog/annotee/windows-amd64@canary',
     ])
 
     # Check bootstrap command.
