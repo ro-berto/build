@@ -18,7 +18,7 @@ from slave import cipd
 CLIENT_NAME = 'cipd' + infra_platform.exe_suffix()
 
 
-DEFAULT_CIPD_VERSION = 'git_revision:a22c452038ad21e6d246461813fa1c952ae668c3'
+DEFAULT_CIPD_VERSION = 'git_revision:c38fc10544be8b1003ad9db7e1d61f6a7672da14'
 STAGING_CIPD_VERSION = 'git_revision:c38fc10544be8b1003ad9db7e1d61f6a7672da14'
 
 STAGING = 'staging'
@@ -58,8 +58,7 @@ if sys.platform == "win32":
 
 def all_cipd_packages():
   """Returns (list): All referenced CIPD packages."""
-  # TODO(iannucci): remove hack
-  package_name = 'infra/tools/cipd/'+infra_platform.cipd_platform()
+  package_name = 'infra/tools/cipd/${platform}'
   return (
       cipd.CipdPackage(name=package_name, version=DEFAULT_CIPD_VERSION),
       cipd.CipdPackage(name=package_name, version=STAGING_CIPD_VERSION),

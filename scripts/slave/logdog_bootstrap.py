@@ -144,10 +144,7 @@ def all_cipd_packages():
   pcfg = infra_platform.cascade_config(_PLATFORM_CONFIG, plat=())
   for name in (pcfg['butler'], pcfg['annotee']):
     for version in (_STABLE_CIPD_TAG, _CANARY_CIPD_TAG):
-      # TODO(iannucci): remove infra_platform hack.
-      yield cipd.CipdPackage(
-        name=name.replace('${platform}', infra_platform.cipd_platform()),
-        version=version)
+      yield cipd.CipdPackage(name=name, version=version)
 
 
 def _load_params_dict(mastername):
@@ -361,9 +358,7 @@ def _install_cipd_packages(path, *packages):
   ] + (['--verbose'] * verbosity)
 
   for pkg in packages:
-    # TODO(iannucci): remove this once release cipd is updated.
-    name = pkg.name.replace('${platform}', infra_platform.cipd_platform())
-    cmd += ['-P', '%s@%s' % (name, pkg.version)]
+    cmd += ['-P', '%s@%s' % (pkg.name, pkg.version)]
 
   try:
     _check_call(cmd)

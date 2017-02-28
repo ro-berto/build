@@ -77,9 +77,9 @@ def run_presubmit(basedir):
   # Validate the set of packages.
   all_packages = set()
   for base_pkg in packages:
-    for plat, arch in slave.infra_platform.cipd_all_targets():
+    for os_name, arch in slave.infra_platform.cipd_all_targets():
       pkg = base_pkg._replace(name=string.Template(base_pkg.name).substitute(
-          platform=plat, arch=arch))
+          os=os_name, arch=arch, platform='%s-%s' % (os_name, arch)))
       all_packages.add(pkg)
 
   # Fire up a thread pool to execute our resolutions in parallel.
