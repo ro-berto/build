@@ -63,17 +63,22 @@ def RunSteps(api):
 
 
 def GenTests(api):
+  # Only test a single clobber case.
+  test = 'crashpad_mac_dbg'
+  yield(api.test(test + '_clobber') +
+        api.properties.generic(buildername=test, clobber=True))
+
+  # Every other test is a trybot.
   tests = [
-      'crashpad_mac_dbg',
-      'crashpad_mac_rel',
-      'crashpad_win_x64_dbg',
+      test,
+      'crashpad_try_mac_rel',
+      'crashpad_try_win_x64_dbg',
       'crashpad_win_x64_rel',
       'crashpad_win_x86_dbg',
-      'crashpad_win_x86_rel',
-      'crashpad_win_x86_wow64_dbg',
+      'crashpad_try_win_x86_rel',
+      'crashpad_try_win_x86_wow64_dbg',
       'crashpad_win_x86_wow64_rel',
   ]
   for t in tests:
     yield(api.test(t) + api.properties.generic(buildername=t))
-    yield(api.test(t + '_clobber') +
-          api.properties.generic(buildername=t, clobber=True))
+

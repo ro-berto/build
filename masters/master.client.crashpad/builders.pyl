@@ -7,7 +7,8 @@
 
   "builders": {
     "crashpad_mac_dbg": {
-      "recipe": "crashpad/continuous",
+      "category": "continuous",
+      "recipe": "crashpad/build",
       "scheduler": "crashpad_commits",
       "slave_pools": ["mac10.9"],
 
@@ -17,7 +18,8 @@
       },
     },
     "crashpad_mac_rel": {
-      "recipe": "crashpad/continuous",
+      "category": "continuous",
+      "recipe": "crashpad/build",
       "scheduler": "crashpad_commits",
       "slave_pools": ["mac10.9"],
 
@@ -27,9 +29,10 @@
       },
     },
     "crashpad_win_x64_dbg": {
-      "recipe": "crashpad/continuous",
+      "category": "continuous",
+      "recipe": "crashpad/build",
       "scheduler": "crashpad_commits",
-      "slave_pools": ["win7"],
+      "slave_pools": ["win7-64"],
 
       "auto_reboot": False,
       "properties": {
@@ -37,9 +40,10 @@
       },
     },
     "crashpad_win_x64_rel": {
-      "recipe": "crashpad/continuous",
+      "category": "continuous",
+      "recipe": "crashpad/build",
       "scheduler": "crashpad_commits",
-      "slave_pools": ["win7"],
+      "slave_pools": ["win7-64"],
 
       "auto_reboot": False,
       "properties": {
@@ -47,9 +51,10 @@
       },
     },
     "crashpad_win_x86_wow64_dbg": {
-      "recipe": "crashpad/continuous",
+      "category": "continuous",
+      "recipe": "crashpad/build",
       "scheduler": "crashpad_commits",
-      "slave_pools": ["win7"],
+      "slave_pools": ["win7-64"],
 
       "auto_reboot": False,
       "properties": {
@@ -57,9 +62,10 @@
       },
     },
     "crashpad_win_x86_wow64_rel": {
-      "recipe": "crashpad/continuous",
+      "category": "continuous",
+      "recipe": "crashpad/build",
       "scheduler": "crashpad_commits",
-      "slave_pools": ["win7"],
+      "slave_pools": ["win7-64"],
 
       "auto_reboot": False,
       "properties": {
@@ -67,9 +73,10 @@
       },
     },
     "crashpad_win_x86_dbg": {
-      "recipe": "crashpad/continuous",
+      "category": "continuous",
+      "recipe": "crashpad/build",
       "scheduler": "crashpad_commits",
-      "slave_pools": ["winxp"],
+      "slave_pools": ["win7-32"],
 
       "auto_reboot": False,
       "properties": {
@@ -77,9 +84,100 @@
       },
     },
     "crashpad_win_x86_rel": {
-      "recipe": "crashpad/continuous",
+      "category": "continuous",
+      "recipe": "crashpad/build",
       "scheduler": "crashpad_commits",
-      "slave_pools": ["winxp"],
+      "slave_pools": ["win7-32"],
+
+      "auto_reboot": False,
+      "properties": {
+        "config": "Release",
+      },
+    },
+
+    # Trybots.
+    "crashpad_try_mac_dbg": {
+      "category": "trybots",
+      "recipe": "crashpad/build",
+      "scheduler": None,
+      "slave_pools": ["mac10.9"],
+
+      "auto_reboot": False,
+      "properties": {
+        "config": "Debug",
+      },
+    },
+    "crashpad_try_mac_rel": {
+      "category": "trybots",
+      "recipe": "crashpad/build",
+      "scheduler": None,
+      "slave_pools": ["mac10.9"],
+
+      "auto_reboot": False,
+      "properties": {
+        "config": "Release",
+      },
+    },
+    "crashpad_try_win_x64_dbg": {
+      "category": "trybots",
+      "recipe": "crashpad/build",
+      "scheduler": None,
+      "slave_pools": ["win7-64"],
+
+      "auto_reboot": False,
+      "properties": {
+        "config": "Debug",
+      },
+    },
+    "crashpad_try_win_x64_rel": {
+      "category": "trybots",
+      "recipe": "crashpad/build",
+      "scheduler": None,
+      "slave_pools": ["win7-64"],
+
+      "auto_reboot": False,
+      "properties": {
+        "config": "Release",
+      },
+    },
+    "crashpad_try_win_x86_wow64_dbg": {
+      "category": "trybots",
+      "recipe": "crashpad/build",
+      "scheduler": None,
+      "slave_pools": ["win7-64"],
+
+      "auto_reboot": False,
+      "properties": {
+        "config": "Debug",
+      },
+    },
+    "crashpad_try_win_x86_wow64_rel": {
+      "category": "trybots",
+      "recipe": "crashpad/build",
+      "scheduler": None,
+      "slave_pools": ["win7-64"],
+
+      "auto_reboot": False,
+      "properties": {
+        "config": "Release",
+      },
+    },
+    "crashpad_try_win_x86_dbg": {
+      "category": "trybots",
+      "recipe": "crashpad/build",
+      "scheduler": None,
+      "slave_pools": ["win7-32"],
+
+      "auto_reboot": False,
+      "properties": {
+        "config": "Debug",
+      },
+    },
+    "crashpad_try_win_x86_rel": {
+      "category": "trybots",
+      "recipe": "crashpad/build",
+      "scheduler": None,
+      "slave_pools": ["win7-32"],
 
       "auto_reboot": False,
       "properties": {
@@ -102,23 +200,23 @@
         "os":  "mac",
         "version": "10.9.5",
       },
-      "slaves": ["vm665-m3"],
+      "slaves": ["vm665-m3", "vm191-m4"],
     },
-    "win7": {
+    "win7-64": {
       "slave_data": {
         "bits": 64,
         "os":  "win",
         "version": "win7",
       },
-      "slaves": ["vm254-m3"],
+      "slaves": ["vm254-m3", "vm714-m4"],
     },
-    "winxp": {
+    "win7-32": {
       "slave_data": {
         "bits": 32,
         "os":  "win",
-        "version": "winxp",
+        "version": "win7",
       },
-      "slaves": ["vm5-m3"],
+      "slaves": ["vm5-m3", "vm678-m4"],
     },
   },
 }
