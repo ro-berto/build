@@ -460,6 +460,7 @@ def main():
         'PROCESSOR_ARCHITEW6432',
         'PROCESSOR_IDENTIFIER',
         'PROGRAMFILES',
+        'PROGRAMFILES(X86)',
         'PROGRAMW6432',
         'PYTHONPATH',
         'PYTHONUNBUFFERED',
