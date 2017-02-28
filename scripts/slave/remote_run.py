@@ -40,23 +40,31 @@ _CANARY_MASTERS = set((
 
 # The name of the recipe engine CIPD package.
 _RECIPES_PY_CIPD_PACKAGE = 'infra/recipes-py'
+# The name of the Kitchen CIPD package.
+_KITCHEN_CIPD_PACKAGE = 'infra/tools/luci/kitchen/${platform}'
 
 # _CIPD_PINS is a mapping of master name to pinned CIPD package version to use
 # for that master.
-CipdPins = collections.namedtuple('CipdPins', ('recipes'))
+#
+# If "kitchen" pin is empty, use the traditional "recipes.py" invocation path.
+# Otherwise, use Kitchen.
+# TODO(dnj): Remove this logic when Kitchen is always enabled.
+CipdPins = collections.namedtuple('CipdPins', ('recipes', 'kitchen'))
 
 # Stable CIPD pin set.
 _STABLE_CIPD_PINS = CipdPins(
-      recipes='git_revision:f9018a9957d36e4149083cb3a6a0fdca619c9706')
+      recipes='git_revision:f9018a9957d36e4149083cb3a6a0fdca619c9706',
+      kitchen='')
 
 # Canary CIPD pin set.
 _CANARY_CIPD_PINS = CipdPins(
-      recipes='git_revision:f9018a9957d36e4149083cb3a6a0fdca619c9706')
+      recipes='git_revision:f9018a9957d36e4149083cb3a6a0fdca619c9706',
+      kitchen='')
 
 
-def _get_cipd_pins(mastername):
-  return (_CANARY_CIPD_PINS if mastername in _CANARY_MASTERS else
-          _STABLE_CIPD_PINS)
+def _get_cipd_pins(args, mastername):
+  return (_CANARY_CIPD_PINS if args.canary or (mastername in _CANARY_MASTERS)
+          else _STABLE_CIPD_PINS)
 
 
 def all_cipd_packages():
@@ -64,6 +72,8 @@ def all_cipd_packages():
   # All CIPD packages are in top-level platform config.
   for pins in (_STABLE_CIPD_PINS, _CANARY_CIPD_PINS):
     yield cipd.CipdPackage(name=_RECIPES_PY_CIPD_PACKAGE, version=pins.recipes)
+    if pins.kitchen: # TODO(dnj): Remove me when everything runs on Kitchen.
+      yield cipd.CipdPackage(name=_KITCHEN_CIPD_PACKAGE, version=pins.kitchen)
 
 
 # ENGINE_FLAGS is a mapping of master name to a engine flags. This can be used
@@ -128,6 +138,94 @@ def _install_cipd_packages(path, *packages):
         proc.returncode,))
 
 
+def _remote_run_with_kitchen(args, stream, pins, properties, tempdir, basedir):
+  # Write our build properties to a JSON file.
+  properties_file = os.path.join(tempdir, 'remote_run_properties.json')
+  with open(properties_file, 'w') as f:
+    json.dump(properties, f)
+
+  # Create our directory structure.
+  recipe_temp_dir = os.path.join(tempdir, 't')
+  os.makedirs(recipe_temp_dir)
+
+  # Use CIPD to download Kitchen to a root within the temporary directory.
+  cipd_root = os.path.join(basedir, '.remote_run_cipd')
+  recipes_pkg = cipd.CipdPackage(
+      name=_RECIPES_PY_CIPD_PACKAGE,
+      version=pins.recipes)
+  kitchen_pkg = cipd.CipdPackage(
+      name=_KITCHEN_CIPD_PACKAGE,
+      version=pins.kitchen)
+
+  _install_cipd_packages(cipd_root, kitchen_pkg, recipes_pkg)
+
+  kitchen_bin = os.path.join(cipd_root, 'kitchen' + infra_platform.exe_suffix())
+
+  kitchen_cmd = [
+      kitchen_bin,
+      '-log-level', ('debug' if LOGGER.isEnabledFor(logging.DEBUG) else 'info'),
+  ]
+
+  recipe_result_path = os.path.join(tempdir, 'recipe_result.json')
+  kitchen_cmd += [
+      'cook',
+      '-mode', 'buildbot',
+      '-recipe-engine-path', cipd_root,
+      '-output-result-json', recipe_result_path,
+      '-properties-file', properties_file,
+      '-recipe', args.recipe or properties.get('recipe'),
+      '-repository', args.repository,
+      '-temp-dir', recipe_temp_dir,
+      '-checkout-dir', os.path.join(tempdir, 'rw'),
+      '-workdir', os.path.join(tempdir, 'w'),
+  ]
+  if args.use_gitiles:
+    kitchen_cmd += ['-allow-gitiles']
+  if args.revision:
+    kitchen_cmd += ['-revision', args.revision]
+
+  # Using LogDog?
+  try:
+    # Load bootstrap configuration (may raise NotBootstrapped).
+    cfg = logdog_bootstrap.get_config(args, properties)
+    annotation_url = logdog_bootstrap.get_annotation_url(cfg)
+
+    if cfg.logdog_only:
+      kitchen_cmd += ['-logdog-only']
+
+    kitchen_cmd += [
+        '-logdog-annotation-url', annotation_url,
+    ]
+
+    # (Debug) Use Kitchen output file if in debug mode.
+    if args.logdog_debug_out_file:
+      kitchen_cmd += ['-logdog-debug-out-file', args.logdog_debug_out_file]
+
+    logdog_bootstrap.annotate(cfg, stream)
+  except logdog_bootstrap.NotBootstrapped as e:
+    LOGGER.info('Not configured to use LogDog: %s', e)
+
+  # Invoke Kitchen, capture its return code.
+  recipe_return_code = _call(kitchen_cmd)
+
+  # Try to open recipe result JSON. Any failure will result in an exception
+  # and an infra failure.
+  #
+  # On success, it may be JSON "null", so use an empty dict.
+  with open(recipe_result_path) as f:
+    return_value = json.load(f) or {}
+
+  # If we failed, but aren't a step failure, we assume it was an
+  # exception.
+  f = return_value.get('failure')
+  if f is not None and not f.get('step_failure'):
+    # The recipe engine used to return -1, which got interpreted as 255
+    # by os.exit in python, since process exit codes are a single byte.
+    recipe_return_code = 255
+
+  return recipe_return_code
+
+
 def _exec_recipe(args, rt, stream, basedir):
   tempdir = rt.tempdir(basedir)
   LOGGER.info('Using temporary directory: [%s].', tempdir)
@@ -138,21 +236,36 @@ def _exec_recipe(args, rt, stream, basedir):
   # Construct our properties.
   properties = copy.copy(args.factory_properties)
   properties.update(args.build_properties)
+
+  # Determine our pins.
+  mastername = properties.get('mastername')
+  pins = _get_cipd_pins(args, mastername)
+  if args.kitchen:
+    pins = pins._replace(kitchen=args.kitchen)
+  legacy_remote_run = not pins.kitchen
+
+  # Augment our input properties...
   properties['build_data_dir'] = build_data_dir
   properties['builder_id'] = 'master.%s:%s' % (
-    properties['mastername'], properties['buildername'])
+    mastername, properties['buildername'])
 
-  # path_config property defines what paths a build uses for checkout, git
-  # cache, goma cache, etc.
-  # Unless it is explicitly specified by a builder, use paths for buildbot
-  # environment.
-  properties['path_config'] = properties.get('path_config', 'buildbot')
-  properties['bot_id'] = properties['slavename']
+  if legacy_remote_run:
+    # path_config property defines what paths a build uses for checkout, git
+    # cache, goma cache, etc.
+    # Unless it is explicitly specified by a builder, use paths for buildbot
+    # environment.
+    properties['path_config'] = properties.get('path_config', 'buildbot')
+    properties['bot_id'] = properties['slavename']
+  else:
+    # If we're using Kitchen, our "path_config" must be empty or "kitchen".
+    path_config = properties.pop('path_config', None)
+    if path_config and path_config != 'kitchen':
+      raise ValueError("Users of 'remote_run.py' MUST specify either 'kitchen' "
+                       "or no 'path_config', not [%s]." % (path_config,))
+
   LOGGER.info('Using properties: %r', properties)
 
   monitoring_utils.write_build_monitoring_event(build_data_dir, properties)
-
-  mastername = properties.get('mastername')
 
   # Ensure that the CIPD client is installed and available on PATH.
   from slave import cipd_bootstrap_v2
@@ -185,8 +298,17 @@ def _exec_recipe(args, rt, stream, basedir):
       # on optional cleanup.
       LOGGER.exception('Buildbot workdir cleanup failed: %s', e)
 
-  pins = _get_cipd_pins(mastername)
+  # (Canary) Use Kitchen if configured.
+  # TODO(dnj): Make this the only path once we move to Kitchen.
+  if not legacy_remote_run:
+    return _remote_run_with_kitchen(args, stream, pins, properties, tempdir,
+        basedir)
 
+  ##
+  # Classic Remote Run
+  #
+  # TODO(dnj): Delete this in favor of Kitchen.
+  ##
   properties_file = os.path.join(tempdir, 'remote_run_properties.json')
   with open(properties_file, 'w') as f:
     json.dump(properties, f)
@@ -281,6 +403,10 @@ def main(argv, stream):
       help='factory properties in b64 gz JSON format')
   parser.add_argument('--leak', action='store_true',
       help='Refrain from cleaning up generated artifacts.')
+  parser.add_argument('--canary', action='store_true',
+      help='Force use of canary configuration.')
+  parser.add_argument('--kitchen', metavar='CIPD_VERSION',
+      help='Force use of Kitchen bootstrapping at this revision.')
   parser.add_argument('--verbose', action='store_true')
   parser.add_argument(
       '--use-gitiles', action='store_true',

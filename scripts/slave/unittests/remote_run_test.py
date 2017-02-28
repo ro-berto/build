@@ -34,7 +34,8 @@ BASE_DIR = os.path.join(env.Build, 'scripts', 'slave')
 
 MockOptions = collections.namedtuple('MockOptions', (
   'dry_run', 'factory_properties', 'build_properties', 'logdog_disable',
-  'repository', 'revision', 'use_gitiles', 'recipe', 'logdog_debug_out_file',
+  'kitchen', 'repository', 'revision', 'use_gitiles', 'recipe',
+  'logdog_debug_out_file',
 ))
 
 
@@ -42,6 +43,8 @@ class RemoteRunTest(unittest.TestCase):
 
   class TestException(Exception):
     pass
+
+  REMOTE_REPO = 'https://chromium.googlesource.com/chromium/tools/build.git'
 
   def setUp(self):
     # Because we modify system-level globals (yay!)
@@ -61,15 +64,41 @@ class RemoteRunTest(unittest.TestCase):
       'dict_prop': {'foo': 'bar'},
     }
 
-    repo = 'https://chromium.googlesource.com/chromium/tools/build.git'
     script_path = os.path.join(BASE_DIR, 'remote_run.py')
     prop_gz = base64.b64encode(zlib.compress(json.dumps(build_properties)))
     exit_code = subprocess.call([
         sys.executable, script_path,
         '--build-properties-gz=%s' % (prop_gz,),
         '--recipe', 'remote_run_test',
-        '--repository', repo,
+        '--repository', self.REMOTE_REPO,
         ])
+    self.assertEqual(exit_code, 0)
+
+  def test_example_canary(self):
+    build_properties = {
+      'mastername': 'tryserver.chromium.linux',
+      'buildername': 'builder',
+      'slavename': 'bot42-m1',
+      'true_prop': True,
+      'num_prop': 123,
+      'string_prop': '321',
+      'dict_prop': {'foo': 'bar'},
+    }
+
+    # Emulate BuildBot enviornment.
+    proc_env = os.environ.copy()
+    proc_env['BUILDBOT_SLAVENAME'] = build_properties['slavename']
+
+    script_path = os.path.join(BASE_DIR, 'remote_run.py')
+    prop_gz = base64.b64encode(zlib.compress(json.dumps(build_properties)))
+    exit_code = subprocess.call([
+        sys.executable, script_path,
+        '--build-properties-gz=%s' % (prop_gz,),
+        '--recipe', 'remote_run_test',
+        '--repository', self.REMOTE_REPO,
+        '--canary',
+        ],
+        env=proc_env)
     self.assertEqual(exit_code, 0)
 
   @mock.patch('slave.remote_run._call')
@@ -125,6 +154,7 @@ class RemoteRunExecTest(unittest.TestCase):
           'mastername': 'tryserver.chromium.linux',
           'buildername': 'builder',
         },
+        kitchen=None,
         repository='https://example.com/repo.git',
         revision=None,
         use_gitiles=True,
@@ -142,6 +172,22 @@ class RemoteRunExecTest(unittest.TestCase):
         '--use-gitiles',
     ]
 
+    self.kitchen_args = [
+        self._bp('.remote_run_cipd', 'kitchen'),
+        '-log-level', 'info',
+        'cook',
+        '-mode', 'buildbot',
+        '-recipe-engine-path', self._bp('.remote_run_cipd'),
+        '-output-result-json', self._tp('recipe_result.json'),
+        '-properties-file', self._tp('remote_run_properties.json'),
+        '-recipe', self.opts.recipe,
+        '-repository', self.opts.repository,
+        '-temp-dir', self._tp('t'),
+        '-checkout-dir', self._tp('rw'),
+        '-workdir', self._tp('w'),
+        '-allow-gitiles',
+    ]
+
     self.recipe_args = [
         '--operational-args-path', self._tp('engine_flags.json'),
         '--verbose', 'run',
@@ -156,7 +202,7 @@ class RemoteRunExecTest(unittest.TestCase):
 
     # Easily-configurable CIPD pins.
     self.cipd_pins = remote_run._STABLE_CIPD_PINS
-    remote_run._get_cipd_pins = lambda _mastername: self.cipd_pins
+    remote_run._get_cipd_pins = lambda _args, _mastername: self.cipd_pins
 
     # Written via '_write_recipe_result'.
     self.recipe_result = None
@@ -195,9 +241,11 @@ class RemoteRunExecTest(unittest.TestCase):
               side_effect=logdog_bootstrap.NotBootstrapped())
   @mock.patch('slave.remote_run._install_cipd_packages')
   @mock.patch('slave.robust_tempdir.RobustTempdir.tempdir')
-  def test_canary_exec_without_logdog(self, rt_tempdir, _install_cipd_packages,
+  def test_kitchen_exec_without_logdog(self, rt_tempdir, _install_cipd_packages,
                                       _logdog_bootstrap):
-    self.cipd_pins = remote_run._CANARY_CIPD_PINS
+    # Force Kitchen enable.
+    self.cipd_pins = remote_run._CANARY_CIPD_PINS._replace(kitchen='enable')
+
     remote_run._call.return_value = 0
     rt_tempdir.side_effect = [self.tempdir, self.build_data_dir]
     self._write_recipe_result()
@@ -205,8 +253,7 @@ class RemoteRunExecTest(unittest.TestCase):
     rv = remote_run._exec_recipe(self.opts, self.rt, self.stream, self.basedir)
     self.assertEqual(rv, 0)
 
-    args = self.recipe_remote_args + ['--'] + self.recipe_args
-    remote_run._call.assert_called_once_with(args)
+    remote_run._call.assert_called_once_with(self.kitchen_args)
 
   @mock.patch('slave.logdog_bootstrap.bootstrap')
   @mock.patch('slave.logdog_bootstrap.BootstrapState.get_result')
@@ -250,15 +297,15 @@ class RemoteRunExecTest(unittest.TestCase):
         ]
     )
 
-  @mock.patch('slave.logdog_bootstrap.bootstrap')
+  @mock.patch('slave.logdog_bootstrap.get_config')
   @mock.patch('slave.logdog_bootstrap.BootstrapState.get_result')
   @mock.patch('slave.remote_run._install_cipd_packages')
   @mock.patch('slave.robust_tempdir.RobustTempdir.tempdir')
-  def test_canary_exec_with_logdog(self, rt_tempdir, _install_cipd_packages,
-                                   _logdog_bootstrap_result, bootstrap):
-    self.cipd_pins = remote_run._CANARY_CIPD_PINS
+  def test_kitchen_exec_with_logdog(self, rt_tempdir, _install_cipd_packages,
+                                   _logdog_bootstrap_result, get_config):
+    # Force Kitchen enable.
+    self.cipd_pins = remote_run._CANARY_CIPD_PINS._replace(kitchen='enable')
 
-    args = self.recipe_remote_args + ['--'] + self.recipe_args
     cfg = self._default_namedtuple(logdog_bootstrap.Config)._replace(
         params=self._default_namedtuple(logdog_bootstrap.Params)._replace(
           project="project",
@@ -266,9 +313,7 @@ class RemoteRunExecTest(unittest.TestCase):
         prefix="prefix",
         host="example.com",
     )
-    bootstrap.return_value = logdog_bootstrap.BootstrapState(
-        cfg, ['logdog_bootstrap'] + args, '/path/to/result.json')
-    bootstrap.return_value.get_result.return_value = 0
+    get_config.return_value = cfg
 
     remote_run._call.return_value = 0
     rt_tempdir.side_effect = [self.tempdir, self.build_data_dir]
@@ -277,7 +322,11 @@ class RemoteRunExecTest(unittest.TestCase):
     rv = remote_run._exec_recipe(self.opts, self.rt, self.stream, self.basedir)
     self.assertEqual(rv, 0)
 
-    remote_run._call.assert_called_once_with(bootstrap.return_value.cmd)
+    kitchen_args = self.kitchen_args + [
+        '-logdog-annotation-url', logdog_bootstrap.get_annotation_url(cfg),
+    ]
+
+    remote_run._call.assert_called_once_with(kitchen_args)
     self.assertEqual(
         [l for l in self.stream_output.getvalue().splitlines() if l],
         [
