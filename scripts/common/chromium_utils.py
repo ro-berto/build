@@ -752,16 +752,17 @@ def ExtractZip(filename, output_dir, verbose=True):
   # handle links and file bits (executable), which is much
   # easier then trying to do that with ZipInfo options.
   #
-  # The Mac Version of unzip unfortunately does not support Zip64, whereas
-  # the python module does, so we have to fallback to the python zip module
-  # on Mac if the filesize is greater than 4GB.
-  #
   # On Windows, try to use 7z if it is installed, otherwise fall back to python
   # zip module and pray we don't have files larger than 512MB to unzip.
   unzip_cmd = None
-  if ((IsMac() and os.path.getsize(filename) < 4 * 1024 * 1024 * 1024)
-      or IsLinux()):
+  if IsLinux():
     unzip_cmd = ['unzip', '-o']
+  elif IsMac():
+    # The Mac version of unzip does not have LARGE_FILE_SUPPORT until
+    # macOS 10.12, so use ditto instead. The Python ZipFile fallback
+    # used on Windows does not support symbolic links, which makes it
+    # unsuitable for Mac builds.
+    unzip_cmd = ['ditto', '-x', '-k']
   elif IsWindows() and os.path.exists('C:\\Program Files\\7-Zip\\7z.exe'):
     unzip_cmd = ['C:\\Program Files\\7-Zip\\7z.exe', 'x', '-y']
 
@@ -771,12 +772,15 @@ def ExtractZip(filename, output_dir, verbose=True):
     saved_dir = os.getcwd()
     os.chdir(output_dir)
     command = unzip_cmd + [filepath]
+    # When using ditto, a destination is required.
+    if command[0] == 'ditto':
+      command += ['.']
     result = RunCommand(command)
     os.chdir(saved_dir)
     if result:
       raise ExternalError('unzip failed: %s => %s' % (str(command), result))
   else:
-    assert IsWindows() or IsMac()
+    assert IsWindows()
     zf = zipfile.ZipFile(filename)
     # TODO(hinoka): This can be multiprocessed.
     for name in zf.namelist():
