@@ -336,7 +336,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "name": "zip archive",
-    "stdin": "{\"entries\": [{\"path\": \"[BUILDER_CACHE]/iOS_API_Framework_Builder/src/out_ios_libs/WebRTC.framework\", \"type\": \"dir\"}, {\"path\": \"[BUILDER_CACHE]/iOS_API_Framework_Builder/src/out_ios_libs/WebRTC.dSYM\", \"type\": \"dir\"}], \"output\": \"[START_DIR]/webrtc_ios_api_framework.zip\", \"root\": \"[BUILDER_CACHE]/iOS_API_Framework_Builder/src/out_ios_libs\"}"
+    "stdin": "{\"entries\": [{\"path\": \"[BUILDER_CACHE]/iOS_API_Framework_Builder/src/out_ios_libs/WebRTC.framework\", \"type\": \"dir\"}], \"output\": \"[START_DIR]/webrtc_ios_api_framework.zip\", \"root\": \"[BUILDER_CACHE]/iOS_API_Framework_Builder/src/out_ios_libs\"}"
   },
   {
     "cmd": [
