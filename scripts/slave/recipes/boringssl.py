@@ -83,8 +83,7 @@ def _GetTargetCMakeArgs(buildername, checkout, ninja_path):
     args['CMAKE_C_COMPILER'] = bot_utils.join('llvm-build', 'bin', 'clang')
     args['CMAKE_CXX_COMPILER'] = bot_utils.join('llvm-build', 'bin', 'clang++')
   if _HasToken(buildername, 'asan'):
-    _AppendFlags(args, 'CMAKE_CXX_FLAGS', '-fsanitize=address')
-    _AppendFlags(args, 'CMAKE_C_FLAGS', '-fsanitize=address')
+    args['ASAN'] = '1'
   if _HasToken(buildername, 'small'):
     _AppendFlags(args, 'CMAKE_CXX_FLAGS', '-DOPENSSL_SMALL=1')
     _AppendFlags(args, 'CMAKE_C_FLAGS', '-DOPENSSL_SMALL=1')
@@ -115,6 +114,7 @@ def _GetTargetMSVCPrefix(buildername, bot_utils):
 def _GetTargetEnv(buildername, bot_utils):
   env = {}
   if _HasToken(buildername, 'asan'):
+    env['ASAN_OPTIONS'] = 'detect_stack_use_after_return=1'
     env['ASAN_SYMBOLIZER_PATH'] = bot_utils.join('llvm-build', 'bin',
                                                  'llvm-symbolizer')
   return env
