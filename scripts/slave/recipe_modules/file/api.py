@@ -11,6 +11,18 @@ class FileApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
     super(FileApi, self).__init__(**kwargs)
 
+  def _run_fileutil(self, name, fileutil_args, **kwargs):
+    # Failure to perform filesystem operations is considered an infrastructure
+    # failure.
+    kwargs = kwargs.copy()
+    kwargs.setdefault('infra_step', True)
+
+    self.m.python(
+        name,
+        self.resource('fileutil.py'),
+        args=fileutil_args,
+        **kwargs)
+
   def copy(self, name, source, dest, step_test_data=None, **kwargs):
     """Copy a file."""
     return self.m.python.inline(
@@ -151,27 +163,14 @@ class FileApi(recipe_api.RecipeApi):
     )
     self.m.path.mock_add_paths(path)
 
-  # NOTE: this will not work in client repositories; it depends on path
-  # assumptions to import common. See https://crbug.com/584783
   def rmtree(self, name, path, **kwargs):
     """Wrapper for chromium_utils.RemoveDirectory."""
     self.m.path.assert_absolute(path)
-    self.m.python.inline(
-      'rmtree ' + name,
-      """
-      import os, sys
-      from common import chromium_utils # Error? See https://crbug.com/584783.
+    self._run_fileutil(
+        'rmtree ' + name,
+        ['rmtree', path],
+        **kwargs)
 
-
-      if os.path.exists(sys.argv[1]):
-        chromium_utils.RemoveDirectory(sys.argv[1])
-      """,
-      args=[path],
-      **kwargs
-    )
-
-  # NOTE: this will not work in client repositories; it depends on path
-  # assumptions to import common. See https://crbug.com/584783
   def rmcontents(self, name, path, **kwargs):
     """
     Similar to rmtree, but removes only contents not the directory.
@@ -182,38 +181,17 @@ class FileApi(recipe_api.RecipeApi):
     a call that doesn't delete the directory itself.
     """
     self.m.path.assert_absolute(path)
-    self.m.python.inline(
-      'rmcontents ' + name,
-      """
-      import os, sys
-      from common import chromium_utils # Error? See https://crbug.com/584783.
+    self._run_fileutil(
+        'rmcontents ' + name,
+        ['rmcontents', path],
+        **kwargs)
 
-      path = sys.argv[1]
-      if os.path.exists(path):
-        for p in (os.path.join(path, x) for x in os.listdir(path)):
-          if os.path.isdir(p):
-            chromium_utils.RemoveDirectory(p)
-          else:
-            os.unlink(p)
-      """,
-      args=[path],
-      **kwargs
-    )
-
-  # NOTE: this will not work in client repositories; it depends on path
-  # assumptions to import common. See https://crbug.com/584783
   def rmwildcard(self, pattern, path, **kwargs):
     """
     Removes all files in the subtree of path matching the glob pattern.
     """
     self.m.path.assert_absolute(path)
-    self.m.python.inline(
-      'rmwildcard %s in %s' % (pattern, path),
-      """
-      import sys
-      from common import chromium_utils # Error? See https://crbug.com/584783.
-
-      chromium_utils.RemoveFilesWildcards(sys.argv[1], root=sys.argv[2])
-      """,
-      args=[pattern,path],
-      **kwargs)
+    self._run_fileutil(
+        'rmwildcard %s in %s' % (pattern, path),
+        ['rmwildcard', path, pattern],
+        **kwargs)

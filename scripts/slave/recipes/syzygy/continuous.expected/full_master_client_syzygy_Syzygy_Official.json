@@ -64,20 +64,11 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport os, sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\n\nif os.path.exists(sys.argv[1]):\n  chromium_utils.RemoveDirectory(sys.argv[1])\n",
+      "RECIPE_MODULE[build::file]\\resources\\fileutil.py",
+      "rmtree",
       "[START_DIR]\\src\\out\\Release"
     ],
-    "name": "rmtree clobber",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  chromium_utils.RemoveDirectory(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
+    "name": "rmtree clobber"
   },
   {
     "cmd": [
@@ -152,19 +143,12 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport sys\nfrom common import chromium_utils # Error? See https://crbug.com/584783.\n\nchromium_utils.RemoveFilesWildcards(sys.argv[1], root=sys.argv[2])\n",
-      "metrics.csv",
-      "[START_DIR]\\src\\out\\Release"
+      "RECIPE_MODULE[build::file]\\resources\\fileutil.py",
+      "rmwildcard",
+      "[START_DIR]\\src\\out\\Release",
+      "metrics.csv"
     ],
-    "name": "rmwildcard metrics.csv in [START_DIR]\\src\\out\\Release",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@from common import chromium_utils # Error? See https://crbug.com/584783.@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@chromium_utils.RemoveFilesWildcards(sys.argv[1], root=sys.argv[2])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
+    "name": "rmwildcard metrics.csv in [START_DIR]\\src\\out\\Release"
   },
   {
     "cmd": [
