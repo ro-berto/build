@@ -370,7 +370,7 @@ _CONFIG_MAP = {
         'debug': True,
       },
       'hammerhead-concurrent-collector': {
-        'serial': '84B7N15B03000347',
+        'serial': '84B7N15B03000329',
         'device': 'hammerhead',
         'debug': True,
         'concurrent_collector': True,
