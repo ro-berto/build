@@ -196,6 +196,40 @@
     "cmd": [
       "python",
       "-u",
+      "[START_DIR]/src/tools/mb/mb.py",
+      "gen",
+      "-m",
+      "chromium.testing.master",
+      "-b",
+      "TestBuilder",
+      "--config-file",
+      "[START_DIR]/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[CACHE]/goma_client",
+      "--swarming-targets-file",
+      "base_unittests\nbrowser_tests\ncontent_browsertests\ncontent_unittests\ninteractive_ui_tests\nnet_unittests\nunit_tests\n",
+      "//out/Debug"
+    ],
+    "cwd": "[START_DIR]/src",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "generate_build_files",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@base_unittests@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@browser_tests@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@content_browsertests@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@content_unittests@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@interactive_ui_tests@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@net_unittests@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@unit_tests@@@",
+      "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "python",
@@ -282,7 +316,15 @@
       "[START_DIR]/src/out/Debug",
       "-j",
       "50",
-      "chromium_swarm_tests"
+      "base_unittests",
+      "content_browsertests",
+      "content_unittests",
+      "net_unittests",
+      "unit_tests",
+      "browser_tests",
+      "interactive_ui_tests",
+      "browser_tests",
+      "interactive_ui_tests"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
@@ -385,7 +427,7 @@
       "--ninja-log-outdir",
       "[START_DIR]/src/out/Debug",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/Debug', '-j', 50, 'chromium_swarm_tests']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/Debug', '-j', 50, 'base_unittests', 'content_browsertests', 'content_unittests', 'net_unittests', 'unit_tests', 'browser_tests', 'interactive_ui_tests', 'browser_tests', 'interactive_ui_tests']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",
@@ -670,28 +712,6 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
-      "--input-json",
-      "{\"missing_shards\": [1], \"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"FAILURE\"}]}]}",
-      "--master-name",
-      "chromium.testing.master",
-      "--builder-name",
-      "TestBuilder",
-      "--build-number",
-      "571",
-      "--test-type",
-      "dummy_target_1",
-      "--test-results-server",
-      "test-results-test.appspot.com",
-      "--chrome-revision",
-      "0"
-    ],
-    "name": "Upload to test-results [dummy_target_1]"
-  },
-  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -722,30 +742,8 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
-      "--input-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}]}], \"swarming_summary\": {\"shards\": [{\"outputs_ref\": {\"view_url\": \"blah\"}}]}}",
-      "--master-name",
-      "chromium.testing.master",
-      "--builder-name",
-      "TestBuilder",
-      "--build-number",
-      "571",
-      "--test-type",
-      "dummy_target_2",
-      "--test-results-server",
-      "test-results-test.appspot.com",
-      "--chrome-revision",
-      "0"
-    ],
-    "name": "Upload to test-results [dummy_target_2]"
-  },
-  {
     "name": "$result",
-    "reason": "1 out of 4 aggregated steps failed. Failures: Step('dummy_target_1 on Ubuntu') failed with return_code 1",
+    "reason": "1 out of 2 aggregated steps failed. Failures: Step('dummy_target_1 on Ubuntu') failed with return_code 1",
     "recipe_result": null,
     "status_code": 1
   }

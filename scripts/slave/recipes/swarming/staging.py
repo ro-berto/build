@@ -12,6 +12,8 @@ full roll out.
 Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 """
 
+from recipe_engine.recipe_api import Property
+
 DEPS = [
   'depot_tools/bot_update',
   'chromium',
@@ -31,7 +33,15 @@ DEPS = [
 ]
 
 
-def RunSteps(api):
+PROPERTIES = {
+    'buildername': Property(default=''),
+    'mastername': Property(default=''),
+    'configuration': Property(default='Release'),
+    'platform': Property(default='linux'),
+}
+
+
+def RunSteps(api, buildername, mastername, configuration, platform):
   # Configure isolate & swarming modules to use staging instances.
   api.isolate.isolate_server = 'https://isolateserver-dev.appspot.com'
   api.swarming.swarming_server = 'https://chromium-swarm-dev.appspot.com'
@@ -51,23 +61,16 @@ def RunSteps(api):
   api.swarming.default_idempotent = True
 
   # We are building simplest Chromium flavor possible.
-  if api.properties.get('platform') == 'android':
-    api.chromium.set_config(
-        'android', BUILD_CONFIG=api.properties.get('configuration', 'Release'),
-        TARGET_ARCH='arm', TARGET_BITS=32)
-
-    # Only one android bot, bump the expiration higher.
-    # TODO(stip/maruel): add default_expiration property to api.swarming? Add
-    # expiration to api.swarming.task()?
-    api.swarming._default_expiration = 5*60*60
-  else:
-    api.chromium.set_config(
-        'chromium', BUILD_CONFIG=api.properties.get('configuration', 'Release'))
+  chromium_config = 'chromium'
+  if platform == 'android':
+    chromium_config = 'android'
+  api.chromium.set_config(
+      chromium_config, BUILD_CONFIG=configuration)
 
   # We are checking out Chromium with swarming_client dep unpinned and pointing
   # to ToT of swarming_client repo, see recipe_modules/gclient/config.py.
   api.gclient.set_config('chromium')
-  if api.properties.get('platform') == 'android':
+  if platform == 'android':
     api.gclient.apply_config('android')
   api.gclient.c.solutions[0].custom_vars['swarming_revision'] = ''
   api.gclient.c.revisions['src/tools/swarming_client'] = 'HEAD'
@@ -79,41 +82,45 @@ def RunSteps(api):
   # Ensure swarming_client version is fresh enough.
   api.swarming.check_client_version()
 
-  targets = ['chromium_swarm_tests']
-  if api.properties.get('platform') == 'android':
-    targets = [
-        'android_webview_test_apk_run',
-        'android_webview_unittests_apk_run',
-        'base_unittests_apk_run',
-        'breakpad_unittests_apk_run',
-        'chrome_public_test_apk_run',
-        'chrome_sync_shell_test_apk_run',
-        'components_browsertests_apk_run',
-        'components_unittests_apk_run',
-        'content_browsertests_apk_run',
-        'content_shell_test_apk_run',
-        'content_unittests_apk_run',
-        'device_unittests_apk_run',
-        'events_unittests_apk_run',
-        'gl_tests_apk_run',
-        'gl_unittests_apk_run',
-        'gpu_unittests_apk_run',
-        'ipc_tests_apk_run',
-        'media_unittests_apk_run',
-        'net_unittests_apk_run',
-        'sandbox_linux_unittests_android_run',
-        'sql_unittests_apk_run',
-        'ui_android_unittests_apk_run',
-        'ui_base_unittests_apk_run',
-        'ui_touch_selection_unittests_apk_run',
-        'unit_tests_apk_run',
+  # Representative subset of chromium tests to run.
+  # TODO(bpastene): Use src-side testing specs instead (if possible.)
+  compile_targets = [
+      'base_unittests',
+      'content_browsertests',
+      'content_unittests',
+      'net_unittests',
+      'unit_tests',
+  ]
+  isolate_targets = compile_targets
+  if platform != 'android':
+    # Desktop-only tests.
+    additional_targets = [
+        'browser_tests',
+        'interactive_ui_tests',
     ]
+  else:
+    # Android GTests need '_apk_run' appended to their compile target, but not
+    # isolate target.
+    # TODO(bpastene): Remove _apk_run once unit_tests is disambiguated.
+    compile_targets = [t + '_apk_run' for t in compile_targets]
+
+    # Android-only instrumentation tests. (They don't have the '_apk_run'
+    # difference.)
+    additional_targets = [
+        'android_webview_test_apk',
+        'chrome_public_test_apk',
+    ]
+  compile_targets.extend(additional_targets)
+  isolate_targets.extend(additional_targets)
 
   # Build all supported tests.
   api.chromium.ensure_goma()
   api.chromium.runhooks()
   api.isolate.clean_isolated_files(api.chromium.output_dir)
-  api.chromium.compile(targets=targets, use_goma_module=True)
+  api.chromium.run_mb(
+      mastername, buildername,
+      use_goma=True, isolated_targets=isolate_targets)
+  api.chromium.compile(targets=compile_targets, use_goma_module=True)
   api.isolate.remove_build_metadata()
 
   # Will search for *.isolated.gen.json files in the build directory and isolate
@@ -123,41 +130,21 @@ def RunSteps(api):
       verbose=True,
       env={'SWARMING_PROFILE': '1'})
 
-  if api.properties.get('platform') == 'android':
-    tasks = [
-      api.swarming.task(
-          test,
-          isolated_hash)
-      for test, isolated_hash in sorted(api.isolate.isolated_tests.iteritems())
-    ]
+  # Make swarming tasks that run isolated tests.
+  tasks = [
+    api.swarming.gtest_task(
+        test,
+        isolated_hash,
+        shards=2,
+        test_launcher_summary_output=api.test_utils.gtest_results(
+            add_json_log=False))
+    for test, isolated_hash in sorted(api.isolate.isolated_tests.iteritems())
+  ]
+  if platform == 'android':
     for task in tasks:
       task.dimensions['os'] = 'Android'
-      slow_tests = [
-        'android_webview_test_apk_run',
-        'chrome_public_test_apk',
-        'chrome_sync_shell_test_apk',
-        'content_browsertests_apk',
-        'content_shell_test_apk_run',
-        'gl_tests_apk',
-        'net_unittests_apk',
-        'unit_tests_apk',
-      ]
-      if task.title in slow_tests:
-        # TODO(stip): Eventually scale based on size of test.
-        task.dimensions['android_devices'] = '6'
       del task.dimensions['cpu']
       del task.dimensions['gpu']
-  else:
-    # Make swarming tasks that run isolated tests.
-    tasks = [
-      api.swarming.gtest_task(
-          test,
-          isolated_hash,
-          shards=2,
-          test_launcher_summary_output=api.test_utils.gtest_results(
-              add_json_log=False))
-      for test, isolated_hash in sorted(api.isolate.isolated_tests.iteritems())
-    ]
 
   for task in tasks:
     api.swarming.trigger_task(task)
@@ -167,37 +154,8 @@ def RunSteps(api):
     for task in tasks:
       api.swarming.collect_task(task)
 
-      if not api.properties.get('platform') == 'android':
-        # TODO(estaab): Move this into the swarming recipe_module behind a flag
-        # after testing on staging.
-        step_result = api.step.active_result
-        gtest_results = getattr(step_result.test_utils, 'gtest_results', None)
-        if gtest_results and gtest_results.raw:
-          # This is a potentially large json file (on the order of 10s of MiB)
-          # but swarming/api.py is already parsing it to get failed shards so we
-          # reuse it here.
-          parsed_gtest_data = gtest_results.raw
-          chrome_revision_cp = api.bot_update.last_returned_properties.get(
-              'got_revision_cp', 'x@{#0}')
-          chrome_revision = str(api.commit_position.parse_revision(
-              chrome_revision_cp))
-          api.test_results.upload(
-              api.json.input(parsed_gtest_data),
-              chrome_revision=chrome_revision,
-              test_type=task.title,
-              test_results_server='test-results-test.appspot.com')
-
 
 def GenTests(api):
-  for platform in ('linux', 'win', 'mac'):
-    for configuration in ('Debug', 'Release'):
-      yield (
-        api.test('%s_%s' % (platform, configuration)) +
-        api.platform.name(platform) +
-        api.properties.scheduled() +
-        api.properties(configuration=configuration)
-      )
-
   # One 'collect' fails due to a missing shard and failing test, should not
   # prevent the second 'collect' from running.
   yield (
