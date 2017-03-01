@@ -1142,7 +1142,7 @@
   {
     "cmd": [
       "echo",
-      "[BUILDER_CACHE]/Android_One_Perf__3_/out/Release"
+      "[BUILDER_CACHE]/Android_One_Perf__3_/src/out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/Android_One_Perf__3_",
     "env": {

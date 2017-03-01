@@ -824,7 +824,7 @@
   {
     "cmd": [
       "echo",
-      "[BUILDER_CACHE]/Android_Remoting_Tests/out/Release"
+      "[BUILDER_CACHE]/Android_Remoting_Tests/src/out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/Android_Remoting_Tests",
     "env": {

@@ -940,7 +940,7 @@
   {
     "cmd": [
       "echo",
-      "[BUILDER_CACHE]/Android_Asan_Builder_Tests__dbg_/out/Debug"
+      "[BUILDER_CACHE]/Android_Asan_Builder_Tests__dbg_/src/out/Debug"
     ],
     "cwd": "[BUILDER_CACHE]/Android_Asan_Builder_Tests__dbg_",
     "env": {

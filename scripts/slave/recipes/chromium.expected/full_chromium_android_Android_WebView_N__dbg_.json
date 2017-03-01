@@ -723,7 +723,7 @@
   {
     "cmd": [
       "echo",
-      "[BUILDER_CACHE]/Android_WebView_N__dbg_/out/Debug"
+      "[BUILDER_CACHE]/Android_WebView_N__dbg_/src/out/Debug"
     ],
     "cwd": "[BUILDER_CACHE]/Android_WebView_N__dbg_",
     "env": {

@@ -832,7 +832,7 @@
   {
     "cmd": [
       "echo",
-      "[BUILDER_CACHE]/WebKit_Android__Nexus4_/out/Release"
+      "[BUILDER_CACHE]/WebKit_Android__Nexus4_/src/out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/WebKit_Android__Nexus4_",
     "env": {

@@ -1209,7 +1209,7 @@
   {
     "cmd": [
       "echo",
-      "[BUILDER_CACHE]/Android_Nexus5X_WebView_Perf__2_/out/Release"
+      "[BUILDER_CACHE]/Android_Nexus5X_WebView_Perf__2_/src/out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/Android_Nexus5X_WebView_Perf__2_",
     "env": {

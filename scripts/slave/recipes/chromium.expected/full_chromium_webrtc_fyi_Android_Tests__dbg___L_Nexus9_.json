@@ -741,7 +741,7 @@
   {
     "cmd": [
       "echo",
-      "[BUILDER_CACHE]/Android_Tests__dbg___L_Nexus9_/out/Debug"
+      "[BUILDER_CACHE]/Android_Tests__dbg___L_Nexus9_/src/out/Debug"
     ],
     "cwd": "[BUILDER_CACHE]/Android_Tests__dbg___L_Nexus9_",
     "env": {

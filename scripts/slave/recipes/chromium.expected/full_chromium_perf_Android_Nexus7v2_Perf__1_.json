@@ -1142,7 +1142,7 @@
   {
     "cmd": [
       "echo",
-      "[BUILDER_CACHE]/Android_Nexus7v2_Perf__1_/out/Release"
+      "[BUILDER_CACHE]/Android_Nexus7v2_Perf__1_/src/out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/Android_Nexus7v2_Perf__1_",
     "env": {

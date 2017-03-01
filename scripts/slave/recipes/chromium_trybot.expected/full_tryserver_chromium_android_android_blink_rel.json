@@ -1140,7 +1140,7 @@
   {
     "cmd": [
       "echo",
-      "[BUILDER_CACHE]/android_blink_rel/out/Release"
+      "[BUILDER_CACHE]/android_blink_rel/src/out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/android_blink_rel",
     "env": {

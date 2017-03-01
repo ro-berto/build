@@ -2248,7 +2248,7 @@
   {
     "cmd": [
       "echo",
-      "[BUILDER_CACHE]/android/out/Debug"
+      "[BUILDER_CACHE]/android/src/out/Debug"
     ],
     "cwd": "[BUILDER_CACHE]/android",
     "env": {
