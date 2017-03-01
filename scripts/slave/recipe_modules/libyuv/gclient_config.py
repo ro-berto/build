@@ -10,11 +10,10 @@ ChromiumGitURL = DEPS['gclient'].config.ChromiumGitURL
 @CONFIG_CTX()
 def libyuv(c):
   s = c.solutions.add()
-  s.name = 'src'
+  s.name = 'libyuv'
   s.url = ChromiumGitURL(c, 'libyuv', 'libyuv')
   s.deps_file = 'DEPS'
-  s.custom_vars['root_dir'] = 'src'
-  c.got_revision_mapping['src'] = 'got_revision'
+  c.got_revision_mapping['libyuv'] = 'got_revision'
 
 @CONFIG_CTX(includes=['libyuv', 'android'])
 def libyuv_android(c):
