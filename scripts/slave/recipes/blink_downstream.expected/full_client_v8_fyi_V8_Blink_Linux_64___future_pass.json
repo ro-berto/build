@@ -4,7 +4,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64___ignition",
+      "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
       "511"
     ],
     "name": "makedirs checkout path",
@@ -42,7 +42,7 @@
       "src/v8@20123",
       "--output_manifest"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___ignition",
+    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
@@ -127,7 +127,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___ignition",
+    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
     "name": "ensure_goma"
   },
   {
@@ -143,7 +143,7 @@
       "-service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___ignition",
+    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -169,7 +169,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___ignition/src",
+    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
@@ -182,19 +182,19 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64___ignition/src/tools/mb/mb.py",
+      "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src/tools/mb/mb.py",
       "gen",
       "-m",
       "client.v8.fyi",
       "-b",
-      "V8-Blink Linux 64 - ignition",
+      "V8-Blink Linux 64 - future",
       "--config-file",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64___ignition/src/tools/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma_client",
       "//out/Release"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___ignition/src",
+    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -212,12 +212,12 @@
       "--file-path",
       "/path/to/tmp/"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___ignition",
+    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
     "name": "calculate the number of recommended jobs"
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___ignition",
+    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
     "name": "preprocess_for_goma"
   },
   {
@@ -225,10 +225,10 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[GOMA_CACHE]/V8_Blink_Linux_64___ignition",
+      "[GOMA_CACHE]/V8_Blink_Linux_64___future",
       "511"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___ignition",
+    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
     "name": "preprocess_for_goma.makedirs goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -251,10 +251,10 @@
       "[CACHE]/goma_client/goma_ctl.py",
       "restart"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___ignition",
+    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
     "env": {
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]/V8_Blink_Linux_64___ignition",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/V8_Blink_Linux_64___future",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -276,7 +276,7 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___ignition",
+    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
     "name": "preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -288,12 +288,12 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64___ignition/src/out/Release",
+      "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src/out/Release",
       "-j",
       "50",
       "blink_tests"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___ignition",
+    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -301,7 +301,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___ignition",
+    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
     "name": "postprocess_for_goma"
   },
   {
@@ -311,7 +311,7 @@
       "[CACHE]/goma_client/goma_ctl.py",
       "jsonstatus"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___ignition",
+    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -340,7 +340,7 @@
       "{\"notice\": [{\"infra_status\": {\"num_user_error\": 0, \"ping_status_code\": 200}}]}",
       "[CACHE]/goma_client/jsonstatus"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___ignition",
+    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
     "name": "postprocess_for_goma.write_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -353,7 +353,7 @@
       "[CACHE]/goma_client/goma_ctl.py",
       "stat"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___ignition",
+    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -369,7 +369,7 @@
       "[CACHE]/goma_client/goma_ctl.py",
       "stop"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___ignition",
+    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -392,21 +392,21 @@
       "--json-status",
       "[CACHE]/goma_client/jsonstatus",
       "--ninja-log-outdir",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64___ignition/src/out/Release",
+      "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src/out/Release",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/V8_Blink_Linux_64___ignition/src/out/Release', '-j', 50, 'blink_tests']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/V8_Blink_Linux_64___future/src/out/Release', '-j', 50, 'blink_tests']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",
       "goma",
       "--buildbot-buildername",
-      "V8-Blink Linux 64 - ignition",
+      "V8-Blink Linux 64 - future",
       "--buildbot-mastername",
       "client.v8.fyi",
       "--buildbot-slavename",
       "test_bot"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___ignition",
+    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -421,7 +421,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___ignition",
+    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -436,16 +436,16 @@
       "Release",
       "--xvfb",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"V8-Blink Linux 64 - ignition\", \"buildnumber\": 571, \"mastername\": \"client.v8.fyi\", \"path_config\": \"kitchen\", \"recipe\": \"blink_downstream\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"V8-Blink Linux 64 - future\", \"buildnumber\": 571, \"mastername\": \"client.v8.fyi\", \"path_config\": \"kitchen\", \"recipe\": \"blink_downstream\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"V8-Blink Linux 64 - ignition\", \"buildnumber\": 571, \"mastername\": \"client.v8.fyi\", \"path_config\": \"kitchen\", \"recipe\": \"blink_downstream\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"V8-Blink Linux 64 - future\", \"buildnumber\": 571, \"mastername\": \"client.v8.fyi\", \"path_config\": \"kitchen\", \"recipe\": \"blink_downstream\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=webkit_unit_tests",
-      "--builder-name=V8-Blink Linux 64 - ignition",
+      "--builder-name=V8-Blink Linux 64 - future",
       "--slave-name=test_bot",
       "--build-number=571",
       "webkit_unit_tests"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___ignition",
+    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
     "name": "webkit_unit_tests"
   },
   {
@@ -457,11 +457,11 @@
       "Release",
       "--no-xvfb",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"V8-Blink Linux 64 - ignition\", \"buildnumber\": 571, \"mastername\": \"client.v8.fyi\", \"path_config\": \"kitchen\", \"recipe\": \"blink_downstream\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"V8-Blink Linux 64 - future\", \"buildnumber\": 571, \"mastername\": \"client.v8.fyi\", \"path_config\": \"kitchen\", \"recipe\": \"blink_downstream\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"V8-Blink Linux 64 - ignition\", \"buildnumber\": 571, \"mastername\": \"client.v8.fyi\", \"path_config\": \"kitchen\", \"recipe\": \"blink_downstream\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"V8-Blink Linux 64 - future\", \"buildnumber\": 571, \"mastername\": \"client.v8.fyi\", \"path_config\": \"kitchen\", \"recipe\": \"blink_downstream\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=webkit_tests (with patch)",
-      "--builder-name=V8-Blink Linux 64 - ignition",
+      "--builder-name=V8-Blink Linux 64 - future",
       "--slave-name=test_bot",
       "--build-number=571",
       "--run-python-script",
@@ -471,7 +471,7 @@
       "-o",
       "[START_DIR]/layout-test-results",
       "--build-dir",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64___ignition/src/out",
+      "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src/out",
       "--json-test-results",
       "/path/to/tmp/json",
       "--test-results-server",
@@ -479,18 +479,18 @@
       "--build-number",
       "571",
       "--builder-name",
-      "V8-Blink Linux 64 - ignition",
+      "V8-Blink Linux 64 - future",
       "--step-name",
       "webkit_tests (with patch)",
       "--no-pixel-tests",
       "--additional-expectations",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64___ignition/src/v8/tools/blink_tests/TestExpectations",
+      "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src/v8/tools/blink_tests/TestExpectations",
       "--additional-expectations",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64___ignition/src/v8/tools/blink_tests/TestExpectationsFuture",
+      "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src/v8/tools/blink_tests/TestExpectationsFuture",
       "--additional-driver-flag",
       "--js-flags=--future"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___ignition",
+    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
     "name": "webkit_tests (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Total executed: 9001<br/>@@@"
@@ -504,11 +504,11 @@
       "--results-dir",
       "[START_DIR]/layout-test-results",
       "--build-dir",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64___ignition/src/out",
+      "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src/out",
       "--build-number",
       "571",
       "--builder-name",
-      "V8-Blink Linux 64 - ignition",
+      "V8-Blink Linux 64 - future",
       "--gs-bucket",
       "gs://chromium-layout-test-archives",
       "--staging-dir",
@@ -516,11 +516,11 @@
       "--slave-utils-gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___ignition",
+    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
     "name": "archive_webkit_tests_results",
     "~followup_annotations": [
-      "@@@STEP_LINK@layout_test_results@https://storage.googleapis.com/chromium-layout-test-archives/V8-Blink_Linux_64_-_ignition/571/layout-test-results/results.html@@@",
-      "@@@STEP_LINK@(zip)@https://storage.googleapis.com/chromium-layout-test-archives/V8-Blink_Linux_64_-_ignition/571/layout-test-results.zip@@@"
+      "@@@STEP_LINK@layout_test_results@https://storage.googleapis.com/chromium-layout-test-archives/V8-Blink_Linux_64_-_future/571/layout-test-results/results.html@@@",
+      "@@@STEP_LINK@(zip)@https://storage.googleapis.com/chromium-layout-test-archives/V8-Blink_Linux_64_-_future/571/layout-test-results.zip@@@"
     ]
   },
   {

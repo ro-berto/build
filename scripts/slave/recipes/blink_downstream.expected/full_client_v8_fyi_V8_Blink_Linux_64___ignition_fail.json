@@ -486,9 +486,9 @@
       "--additional-expectations",
       "[BUILDER_CACHE]/V8_Blink_Linux_64___ignition/src/v8/tools/blink_tests/TestExpectations",
       "--additional-expectations",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64___ignition/src/v8/tools/blink_tests/TestExpectationsIgnition",
+      "[BUILDER_CACHE]/V8_Blink_Linux_64___ignition/src/v8/tools/blink_tests/TestExpectationsFuture",
       "--additional-driver-flag",
-      "--js-flags=--ignition"
+      "--js-flags=--future"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___ignition",
     "name": "webkit_tests (with patch)",

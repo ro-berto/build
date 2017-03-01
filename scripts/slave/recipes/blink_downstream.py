@@ -73,6 +73,8 @@ BUILDERS = freeze({
       'V8-Blink Win': V8Builder('Release', 32, 'win'),
       'V8-Blink Mac': V8Builder('Release', 64, 'mac'),
       'V8-Blink Linux 64': V8Builder('Release', 64, 'linux'),
+      'V8-Blink Linux 64 - future': V8Builder('Release', 64, 'linux'),
+      # TODO(machenbach): Remove this after master restart.
       'V8-Blink Linux 64 - ignition': V8Builder('Release', 64, 'linux'),
       'V8-Blink Linux 64 (dbg)': V8Builder('Debug', 64, 'linux'),
     },
@@ -80,15 +82,15 @@ BUILDERS = freeze({
 })
 
 
-def determine_new_ignition_failures(caller_api, extra_args):
+def determine_new_future_failures(caller_api, extra_args):
   tests = [
     caller_api.chromium_tests.steps.BlinkTest(
         extra_args=extra_args + [
           '--additional-expectations',
           caller_api.path['checkout'].join(
-              'v8', 'tools', 'blink_tests', 'TestExpectationsIgnition'),
+              'v8', 'tools', 'blink_tests', 'TestExpectationsFuture'),
           '--additional-driver-flag',
-          '--js-flags=--ignition',
+          '--js-flags=--future',
         ],
     ),
   ]
@@ -99,8 +101,8 @@ def determine_new_ignition_failures(caller_api, extra_args):
 
   try:
     # HACK(machenbach): Blink tests store state about failing tests. In order
-    # to rerun without ignition, we need to remove the extra args from the
-    # existing test object. TODO(machenbach): Remove this once ignition ships.
+    # to rerun without future, we need to remove the extra args from the
+    # existing test object.
     failing_tests[0]._extra_args = extra_args
     caller_api.test_utils.run_tests(caller_api, failing_tests, 'without patch')
   finally:
@@ -184,8 +186,8 @@ def RunSteps(api):
       api.chromium_tests.steps.BlinkTest(extra_args=extra_args),
     ]
 
-    if 'ignition' in buildername:
-      determine_new_ignition_failures(api, extra_args)
+    if 'ignition' in buildername or 'future' in buildername:
+      determine_new_future_failures(api, extra_args)
     else:
       api.test_utils.determine_new_failures(api, tests, component_pinned_fn)
 
