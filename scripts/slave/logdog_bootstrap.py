@@ -42,7 +42,7 @@ _CIPD_PY_PATH = os.path.join(env.Build, 'scripts', 'slave', 'cipd.py')
 # $ cipd resolve infra/tools/luci/logdog/butler/ -version ${TAG}
 # $ cipd resolve infra/tools/luci/logdog/annotee/ -version ${TAG}
 _STABLE_CIPD_TAG = 'git_revision:48c513e1b786f8d87333bdaf6b3a9790bd360552'
-_CANARY_CIPD_TAG = 'git_revision:48c513e1b786f8d87333bdaf6b3a9790bd360552'
+_CANARY_CIPD_TAG = 'git_revision:2181ba71ed1b5f0a67023eb0a79c205a6ba40840'
 
 _CIPD_TAG_MAP = {
     '$stable': _STABLE_CIPD_TAG,
