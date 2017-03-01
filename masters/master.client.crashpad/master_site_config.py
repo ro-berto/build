@@ -16,10 +16,10 @@ class ClientCrashpad(Master.Master3):
   project_name = 'ClientCrashpad'
   master_port = 20300
   slave_port = 30300
-  master_port_alt = 40300
+  master_port_alt = 25300
   buildbot_url = 'https://build.chromium.org/p/client.crashpad/'
   buildbucket_bucket = 'master.client.crashpad'
-  service_account_file = 'service-account-chromium-tryserver.json'
+  service_account_file = 'service-account-crashpad.json'
   # To enable outbound pubsub event streaming.
   pubsub_service_account_file = 'service-account-luci-milo.json'
   pubsub_topic = 'projects/luci-milo/topics/public-buildbot'

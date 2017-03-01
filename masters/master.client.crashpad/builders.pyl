@@ -1,12 +1,12 @@
 {
   "master_base_class": "Master3",
   "master_port": 20300,
-  "master_port_alt": 40300,
+  "master_port_alt": 25300,
   "slave_port": 30300,
   "templates": ["templates", "../master.chromium/templates"],
 
   "buildbucket_bucket": "master.client.crashpad",
-  "service_account_file": "service-account-chromium-tryserver.json",
+  "service_account_file": "service-account-crashpad.json",
   "pubsub_service_account_file": "service-account-luci-milo.json",
 
   "builders": {
