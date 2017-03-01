@@ -546,6 +546,7 @@ def main():
         'TESTING_MASTER',
         'TESTING_MASTER_HOST',
         'TESTING_SLAVENAME',
+        'TMPDIR',
         'USER',
         'USERNAME',
     ]
