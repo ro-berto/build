@@ -6,6 +6,8 @@
   "templates": ["templates", "../master.chromium/templates"],
 
   "buildbucket_bucket": "master.client.crashpad",
+  "service_account_file": "service-account-chromium-tryserver.json",
+  "pubsub_service_account_file": "service-account-luci-milo.json",
 
   "builders": {
     "crashpad_mac_dbg": {
