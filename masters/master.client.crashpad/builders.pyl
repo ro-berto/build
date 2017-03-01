@@ -5,6 +5,8 @@
   "slave_port": 30300,
   "templates": ["templates", "../master.chromium/templates"],
 
+  "buildbucket_bucket": "master.client.crashpad",
+
   "builders": {
     "crashpad_mac_dbg": {
       "category": "continuous",
