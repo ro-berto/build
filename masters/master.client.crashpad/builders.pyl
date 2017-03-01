@@ -200,7 +200,7 @@
         "os":  "mac",
         "version": "10.9.5",
       },
-      "slaves": ["vm665-m3", "vm191-m4"],
+      "slaves": ["vm665-m3"],
     },
     "win7-64": {
       "slave_data": {
@@ -208,7 +208,7 @@
         "os":  "win",
         "version": "win7",
       },
-      "slaves": ["vm254-m3", "vm714-m4"],
+      "slaves": ["vm254-m3"],
     },
     "win7-32": {
       "slave_data": {
@@ -216,7 +216,7 @@
         "os":  "win",
         "version": "win7",
       },
-      "slaves": ["vm5-m3", "vm678-m4"],
+      "slaves": ["vm5-m3"],
     },
   },
 }
