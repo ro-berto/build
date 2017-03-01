@@ -145,6 +145,8 @@ def RunSteps(api, buildername, mastername, configuration, platform):
       task.dimensions['os'] = 'Android'
       del task.dimensions['cpu']
       del task.dimensions['gpu']
+      # TODO(crbug.com/692200): Make android sharding actually work.
+      task.hard_timeout = 2 * 60 * 60
 
   for task in tasks:
     api.swarming.trigger_task(task)
