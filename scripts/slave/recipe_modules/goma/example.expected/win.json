@@ -5,7 +5,7 @@
   },
   {
     "cmd": [
-      "cipd.exe",
+      "cipd",
       "ensure",
       "-root",
       "[CACHE]\\goma_client",
