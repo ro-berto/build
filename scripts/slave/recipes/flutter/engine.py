@@ -268,11 +268,19 @@ def BuildIOS(api):
 
 
 def BuildWindows(api):
+  RunGN(api, '--runtime-mode', 'debug', '--unoptimized')
   RunGN(api, '--runtime-mode', 'profile', '--android')
   RunGN(api, '--runtime-mode', 'release', '--android')
 
+  Build(api, 'host_debug_unopt', 'flutter/lib/snapshot:generate_snapshot_bin')
   Build(api, 'android_profile', 'gen_snapshot')
   Build(api, 'android_release', 'gen_snapshot')
+
+  UploadArtifacts(api, 'windows-x64', [
+    'out/host_debug_unopt/gen_snapshot.exe',
+    'out/host_debug_unopt/gen/flutter/lib/snapshot/isolate_snapshot.bin',
+    'out/host_debug_unopt/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
+  ])
 
   UploadArtifacts(api, "android-arm-profile" , [
     'out/android_profile/gen_snapshot.exe',
