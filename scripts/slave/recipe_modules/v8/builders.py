@@ -224,7 +224,7 @@ BUILDERS = {
         'build_gs_archive': 'linux_dbg_archive',
         'enable_swarming': True,
         'tests': [
-          V8Testing,
+          V8Testing_2,
           V8TestingExtra_2,
           Benchmarks,
           Test262Variants_3,
@@ -238,11 +238,11 @@ BUILDERS = {
         ) + with_test_args(
             'nosse3',
             ['--extra-flags', '--noenable-sse3 --noenable-avx'],
-            [V8Testing, Test262, Mozilla],
+            [V8Testing_2, Test262, Mozilla],
         ) + with_test_args(
             'nosse4',
             ['--extra-flags', '--noenable-sse4-1 --noenable-avx'],
-            [V8Testing, Test262, Mozilla],
+            [V8Testing_2, Test262, Mozilla],
         ) + with_test_args(
             'code serializer',
             ['--extra-flags', '--serialize-toplevel --cache=code'],
@@ -459,7 +459,7 @@ BUILDERS = {
         'build_gs_archive': 'linux64_dbg_archive',
         'enable_swarming': True,
         'tests': [
-          V8Testing,
+          V8Testing_2,
           V8TestingExtra,
           OptimizeForSize,
           Test262Variants_3,
@@ -1061,7 +1061,7 @@ BUILDERS = {
         'tests': [
           V8Testing_4,
           V8TestingExtra_2,
-          Test262,
+          Test262_2,
         ],
         'testing': {'platform': 'linux'},
       },
