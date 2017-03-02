@@ -59,7 +59,7 @@ _STABLE_CIPD_PINS = CipdPins(
 # Canary CIPD pin set.
 _CANARY_CIPD_PINS = CipdPins(
       recipes='git_revision:f9018a9957d36e4149083cb3a6a0fdca619c9706',
-      kitchen='')
+      kitchen='git_revision:57ad97640d5bd1e59e82253c353ec7153f6d9b45')
 
 
 def _get_cipd_pins(args, mastername):
@@ -178,10 +178,23 @@ def _remote_run_with_kitchen(args, stream, pins, properties, tempdir, basedir):
       '-temp-dir', recipe_temp_dir,
       '-checkout-dir', os.path.join(tempdir, 'rw'),
       '-workdir', os.path.join(tempdir, 'w'),
+      '-python-path', BUILD_ROOT, # (Wrongly) expected by some recipes :(
   ]
-  if args.use_gitiles:
-    kitchen_cmd += ['-allow-gitiles']
-  if args.revision:
+
+  # Master "remote_run" factory has been changed to pass "refs/heads/master" as
+  # a default instead of "origin/master". However, this is a master-side change,
+  # and requires a master restart. Rather than restarting all masters, we will
+  # just pretend the change took effect here.
+  #
+  # No "-revision" means "latest", which is the same as "origin/master"'s
+  # meaning.
+  #
+  # See: https://chromium-review.googlesource.com/c/446895/
+  # See: crbug.com/696704
+  #
+  # TODO(dnj,nodir): Delete this once we're confident that all masters have been
+  # restarted to take effect.
+  if args.revision and (args.revision != 'origin/master'):
     kitchen_cmd += ['-revision', args.revision]
 
   # Using LogDog?

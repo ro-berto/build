@@ -185,7 +185,7 @@ class RemoteRunExecTest(unittest.TestCase):
         '-temp-dir', self._tp('t'),
         '-checkout-dir', self._tp('rw'),
         '-workdir', self._tp('w'),
-        '-allow-gitiles',
+        '-python-path', remote_run.BUILD_ROOT,
     ]
 
     self.recipe_args = [
@@ -250,10 +250,14 @@ class RemoteRunExecTest(unittest.TestCase):
     rt_tempdir.side_effect = [self.tempdir, self.build_data_dir]
     self._write_recipe_result()
 
-    rv = remote_run._exec_recipe(self.opts, self.rt, self.stream, self.basedir)
+    opts = self.opts._replace(revision='refs/heads/somebranch')
+    rv = remote_run._exec_recipe(opts, self.rt, self.stream, self.basedir)
     self.assertEqual(rv, 0)
 
-    remote_run._call.assert_called_once_with(self.kitchen_args)
+    kitchen_args = self.kitchen_args + [
+        '-revision', 'refs/heads/somebranch',
+    ]
+    remote_run._call.assert_called_once_with(kitchen_args)
 
   @mock.patch('slave.logdog_bootstrap.bootstrap')
   @mock.patch('slave.logdog_bootstrap.BootstrapState.get_result')
@@ -319,7 +323,8 @@ class RemoteRunExecTest(unittest.TestCase):
     rt_tempdir.side_effect = [self.tempdir, self.build_data_dir]
     self._write_recipe_result()
 
-    rv = remote_run._exec_recipe(self.opts, self.rt, self.stream, self.basedir)
+    opts = self.opts._replace(revision='origin/master')
+    rv = remote_run._exec_recipe(opts, self.rt, self.stream, self.basedir)
     self.assertEqual(rv, 0)
 
     kitchen_args = self.kitchen_args + [
