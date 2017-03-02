@@ -205,8 +205,15 @@ def _remote_run_with_kitchen(args, stream, pins, properties, tempdir, basedir):
       '-temp-dir', recipe_temp_dir,
       '-checkout-dir', os.path.join(tempdir, 'rw'),
       '-workdir', os.path.join(tempdir, 'w'),
-      '-python-path', BUILD_ROOT, # (Wrongly) expected by some recipes :(
   ]
+
+  # Add additional system Python paths. Ideally, none of these would be
+  # required, since our remote checkout should be self-sufficient. Each of these
+  # should be viewed as a hermetic breach.
+  for python_path in [
+      os.path.join(BUILD_ROOT, 'scripts'),
+      ]:
+    kitchen_cmd += ['-python-path', python_path]
 
   # Master "remote_run" factory has been changed to pass "refs/heads/master" as
   # a default instead of "origin/master". However, this is a master-side change,
