@@ -164,8 +164,10 @@ def ConditionalChecks(input_api, output_api):
   conditional_tests = {
       'tests/masters_test.py': [
           r'^masters/.*',
-          r'^scripts/master/.*',
           r'^scripts/common/.*',
+          r'^scripts/master/.*',
+          r'^third_party/buildbot_8_4p1/.*',
+          r'^third_party/twisted_10_2/.*',
       ],
       'tests/bot_update_test.py': [
           r'^scripts/slave/bot_update.py$',
