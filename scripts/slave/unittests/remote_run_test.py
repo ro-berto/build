@@ -35,7 +35,7 @@ BASE_DIR = os.path.join(env.Build, 'scripts', 'slave')
 MockOptions = collections.namedtuple('MockOptions', (
   'dry_run', 'factory_properties', 'build_properties', 'logdog_disable',
   'kitchen', 'repository', 'revision', 'use_gitiles', 'recipe',
-  'logdog_debug_out_file',
+  'logdog_debug_out_file', 'canary',
 ))
 
 
@@ -162,6 +162,7 @@ class RemoteRunExecTest(unittest.TestCase):
         use_gitiles=True,
         recipe='example/recipe',
         logdog_debug_out_file=None,
+        canary=None,
     )
     self.rpy_path = os.path.join(env.Build, 'scripts', 'slave', 'recipes.py')
 

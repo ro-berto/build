@@ -66,8 +66,8 @@ _CANARY_CIPD_PINS = CipdPins(
       kitchen='git_revision:57ad97640d5bd1e59e82253c353ec7153f6d9b45')
 
 
-def _get_cipd_pins(args, mastername):
-  return (_CANARY_CIPD_PINS if args.canary or (mastername in _CANARY_MASTERS)
+def _get_cipd_pins(mastername, force_canary):
+  return (_CANARY_CIPD_PINS if force_canary or (mastername in _CANARY_MASTERS)
           else _STABLE_CIPD_PINS)
 
 
@@ -279,7 +279,8 @@ def _exec_recipe(args, rt, stream, basedir):
 
   # Determine our pins.
   mastername = properties.get('mastername')
-  pins = _get_cipd_pins(args, mastername)
+  pins = _get_cipd_pins(mastername,
+                        args.canary or 'remote_run_canary' in properties)
   if args.kitchen:
     pins = pins._replace(kitchen=args.kitchen)
   legacy_remote_run = not pins.kitchen
