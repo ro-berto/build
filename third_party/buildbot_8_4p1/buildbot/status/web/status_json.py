@@ -51,6 +51,9 @@ SERVER_STARTED = get_timeblock()
 _IS_INT = re.compile('^[-+]?\d+$')
 
 
+NO_DELAY_ENDPOINTS = ('/json/var', '/json/clock')
+
+
 FLAGS = """\
   - as_text
     - By default, application/json is used. Setting as_text=1 change the type
@@ -142,7 +145,7 @@ def FilterOut(data):
 
 def sleep(secs):
     d = defer.Deferred()
-    reactor.callLater(secs, d.callback)
+    reactor.callLater(secs, d.callback, None)
     return d
 
 
@@ -194,9 +197,12 @@ class JsonResource(resource.Resource):
             'user-agent', ['unknown'])[0]
         twlog.msg('Received request for %s from %s, id: %s' %
                   (request.uri, userAgent, id(request)))
-        # Artifically delay things by 5 seconds.
-        d = sleep(5)
-        d.addCallback(self.content, request)
+        if request.uri in NO_DELAY_ENDPOINTS:
+            d = defer.maybeDeferred(lambda : self.content(request))
+        else:
+            # Artifically delay things by 5 seconds.
+            d = sleep(5)
+            d.addCallback(lambda _: self.content(request))
         def handle(data):
             if isinstance(data, unicode):
                 data = data.encode("utf-8")
