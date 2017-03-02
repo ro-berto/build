@@ -25,6 +25,7 @@ import re
 from twisted.internet import defer, reactor
 from twisted.python import log as twlog
 from twisted.web import html, resource, server
+from twisted.web.resource import ErrorPage, NoResource
 
 from buildbot.changes import changes
 from buildbot.status.builder import SUCCESS, WARNINGS, FAILURE
@@ -49,6 +50,9 @@ SERVER_STARTED = get_timeblock()
 
 
 _IS_INT = re.compile('^[-+]?\d+$')
+
+
+_DISABLE_JSON_DELAY = os.environ.get('BUILDBOT_MASTER_IS_DEV') is not None
 
 
 FLAGS = """\
@@ -140,6 +144,15 @@ def FilterOut(data):
         return data
 
 
+def sleep(delay_secs):
+    if delay_secs <= 0:
+        return defer.succeed(None)
+
+    d = defer.Deferred()
+    reactor.callLater(delay_secs, d.callback, None)
+    return d
+
+
 class JsonResource(resource.Resource):
     """Base class for json data."""
 
@@ -148,6 +161,16 @@ class JsonResource(resource.Resource):
     help = None
     pageTitle = None
     level = 0
+
+    delayExempt = False
+    _DELAY_PERIODS = {
+            datetime.datetime(2017, 3, 1): 5,
+            datetime.datetime(2017, 3, 8): 15,
+            datetime.datetime(2017, 3, 14): NoResource(
+                message=('This JSON resource has been automatically <a href="'
+                         'https://groups.google.com/a/google.com/forum/#!topic/'
+                         'chrome-infra/p0ErbKzj-80">deprecated</a>.')),
+    }
 
     def __init__(self, status):
         """Adds transparent lazy-child initialization."""
@@ -190,6 +213,10 @@ class JsonResource(resource.Resource):
                   (request.uri, userAgent, id(request)))
         d = defer.maybeDeferred(lambda : self.content(request))
         def handle(data):
+            if isinstance(data, ErrorPage):
+                data = data.render(request)
+                return data
+
             if isinstance(data, unicode):
                 data = data.encode("utf-8")
             request.setHeader("Access-Control-Allow-Origin", "*")
@@ -253,6 +280,16 @@ class JsonResource(resource.Resource):
                     request.prepath.append(pathElement)
                     child = child.getChildWithDefault(pathElement, request)
 
+                # Introduce a delay to discourage endpoint usage.
+                wfd = defer.waitForDeferred(
+                        defer.maybeDeferred(lambda :
+                            child.maybeIntroduceDelay()))
+                yield wfd
+                delay_result = wfd.getResult()
+                if isinstance(delay_result, ErrorPage):
+                    yield delay_result
+                    return
+
                 # some asDict methods return a Deferred, so handle that
                 # properly
                 if hasattr(child, 'asDict'):
@@ -270,6 +307,17 @@ class JsonResource(resource.Resource):
                 request.prepath = prepath
                 request.postpath = postpath
         else:
+            # If the child is not exempt from delays, then introduce a delay
+            # to discourage endpoint usage.
+            wfd = defer.waitForDeferred(
+                    defer.maybeDeferred(lambda :
+                        self.maybeIntroduceDelay()))
+            yield wfd
+            delay_result = wfd.getResult()
+            if isinstance(delay_result, ErrorPage):
+                yield delay_result
+                return
+
             wfd = defer.waitForDeferred(
                     defer.maybeDeferred(lambda :
                         self.asDict(request)))
@@ -305,6 +353,20 @@ class JsonResource(resource.Resource):
                 data[name] = wfd.getResult()
             # else silently pass over non-json resources.
         yield data
+
+    def maybeIntroduceDelay(self):
+        if _DISABLE_JSON_DELAY or self.delayExempt:
+            return None
+
+        # Calculate the amount of time to delay.
+        now = datetime.datetime.now()
+        delay = 0
+        for threshold, period_delay in sorted(self._DELAY_PERIODS.iteritems()):
+            if now >= threshold:
+                delay = period_delay
+        if isinstance(delay, ErrorPage):
+            return delay
+        return sleep(delay)
 
 
 def ToHtml(text):
@@ -983,6 +1045,7 @@ class BuildStateJsonResource(JsonResource):
 
     @defer.inlineCallbacks
     def _loadPendingBuildData(self, builder):
+        yield sleep(0.1)  # Short delay to discourage loading pending builds.
         statuses = yield builder.getPendingBuildRequestStatuses()
 
         statuses.sort(key=lambda s: s.getSubmitTime())
@@ -1009,6 +1072,7 @@ class BuildStateJsonResource(JsonResource):
 class MasterClockResource(JsonResource):
     help = """Show current time, boot time and uptime of the master."""
     pageTitle = 'MasterClock'
+    delayExempt = True
 
     def asDict(self, _request):
         # The only reason we include local time is because the buildbot UI
@@ -1026,6 +1090,7 @@ class MasterClockResource(JsonResource):
 class AcceptingBuildsResource(JsonResource):
     help = """Show whether the master is scheduling new builds."""
     pageTitle = 'AcceptingBuilds'
+    delayExempt = True
 
     def asDict(self, _request):
         return {
@@ -1036,6 +1101,7 @@ class AcceptingBuildsResource(JsonResource):
 class VarzResource(JsonResource):
     help = 'Minimal set of metrics that are scraped frequently for monitoring.'
     pageTitle = 'Varz'
+    delayExempt = True
 
     @defer.deferredGenerator
     def asDict(self, request):

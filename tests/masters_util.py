@@ -88,6 +88,10 @@ def start_master(master, path, dry_run=False):
   """
   try:
     env = os.environ.copy()
+
+    # Note that this is a development master.
+    env['BUILDBOT_MASTER_IS_DEV'] = '1'
+
     if dry_run:
       # Ask ChromiumGitPoller not to pull git repos.
       env['NO_REVISION_AUDIT'] = '0'
