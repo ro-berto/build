@@ -33,5 +33,20 @@ SPEC = {
       'enable_swarming': True,
       'checkout_dir': 'linux',
     },
+    'Linux - Future (dbg)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder_tester',
+      'testing': {
+        'platform': 'linux',
+      },
+      'enable_swarming': True,
+      'checkout_dir': 'linux',
+    },
   },
 }
