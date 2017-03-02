@@ -140,6 +140,12 @@ def FilterOut(data):
         return data
 
 
+def sleep(secs):
+    d = defer.Deferred()
+    reactor.callLater(secs, d.callback)
+    return d
+
+
 class JsonResource(resource.Resource):
     """Base class for json data."""
 
@@ -188,7 +194,9 @@ class JsonResource(resource.Resource):
             'user-agent', ['unknown'])[0]
         twlog.msg('Received request for %s from %s, id: %s' %
                   (request.uri, userAgent, id(request)))
-        d = defer.maybeDeferred(lambda : self.content(request))
+        # Artifically delay things by 5 seconds.
+        d = sleep(5)
+        d.addCallback(self.content, request)
         def handle(data):
             if isinstance(data, unicode):
                 data = data.encode("utf-8")
@@ -394,6 +402,7 @@ class BuilderPendingBuildsJsonResource(JsonResource):
     @defer.inlineCallbacks
     def asDict(self, request):
         # buildbot.status.builder.BuilderStatus
+        yield sleep(0.1)  # Short delay to discourage loading pending builds.
         statuses = yield self.builder_status.getPendingBuildRequestStatuses()
         result = []
         for status in statuses:
@@ -472,16 +481,21 @@ class BuildJsonResource(JsonResource):
 """
     pageTitle = 'Build'
 
-    def __init__(self, status, build_status):
+    def __init__(self, status, d_build_status):
         JsonResource.__init__(self, status)
-        self.build_status = build_status
+        self.d_build_status = d_build_status
+        self.build_status = None
         self.putChild('source_stamp',
                       SourceStampJsonResource(status,
                                               build_status.getSourceStamp()))
         self.putChild('steps', BuildStepsJsonResource(status, build_status))
 
+    @defer.inlineCallbacks
     def asDict(self, request):
-        return self.build_status.asDict()
+        if not self.build_status:
+            yield sleep(0.1)  # Short delay to discourage fetching many builds.
+            self.build_status = yield self.d_build_status
+        defer.returnValue(self.build_status.asDict())
 
 
 class AllBuildsJsonResource(JsonResource):
@@ -496,11 +510,9 @@ class AllBuildsJsonResource(JsonResource):
     def getChild(self, path, request):
         # Dynamic childs.
         if isinstance(path, int) or _IS_INT.match(path):
-            build_status = self.builder_status.getBuild(int(path))
-            if build_status:
-                # Don't cache BuildJsonResource; that would defeat the cache-ing
-                # mechanism in place for BuildStatus objects (in BuilderStatus).
-                return BuildJsonResource(self.status, build_status)
+            d_build_status = defer.Deferred()
+            d_build_status.addCallback(self.builder_status.getBuild, int(path))
+            return BuildJsonResource(self.status, d_build_status)
         return JsonResource.getChild(self, path, request)
 
     def asDict(self, request):
@@ -983,6 +995,7 @@ class BuildStateJsonResource(JsonResource):
 
     @defer.inlineCallbacks
     def _loadPendingBuildData(self, builder):
+        yield sleep(0.1)  # Short delay to discourage loading pending builds.
         statuses = yield builder.getPendingBuildRequestStatuses()
 
         statuses.sort(key=lambda s: s.getSubmitTime())
