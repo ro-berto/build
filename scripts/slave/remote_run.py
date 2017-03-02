@@ -59,7 +59,7 @@ _STABLE_CIPD_PINS = CipdPins(
 # Canary CIPD pin set.
 _CANARY_CIPD_PINS = CipdPins(
       recipes='git_revision:f9018a9957d36e4149083cb3a6a0fdca619c9706',
-      kitchen='')
+      kitchen='git_revision:57ad97640d5bd1e59e82253c353ec7153f6d9b45')
 
 
 def _get_cipd_pins(args, mastername):
@@ -178,9 +178,8 @@ def _remote_run_with_kitchen(args, stream, pins, properties, tempdir, basedir):
       '-temp-dir', recipe_temp_dir,
       '-checkout-dir', os.path.join(tempdir, 'rw'),
       '-workdir', os.path.join(tempdir, 'w'),
+      '-python-path', BUILD_ROOT, # (Wrongly) expected by some recipes :(
   ]
-  if args.use_gitiles:
-    kitchen_cmd += ['-allow-gitiles']
   if args.revision:
     kitchen_cmd += ['-revision', args.revision]
 

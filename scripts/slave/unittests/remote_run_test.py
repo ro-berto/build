@@ -185,7 +185,7 @@ class RemoteRunExecTest(unittest.TestCase):
         '-temp-dir', self._tp('t'),
         '-checkout-dir', self._tp('rw'),
         '-workdir', self._tp('w'),
-        '-allow-gitiles',
+        '-python-path', remote_run.BUILD_ROOT,
     ]
 
     self.recipe_args = [
