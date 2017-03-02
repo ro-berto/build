@@ -416,7 +416,7 @@
       "-C",
       "[BUILDER_CACHE]\\CrWinClangGoma\\src\\out\\Release",
       "-j",
-      "50",
+      "150",
       "all"
     ],
     "cwd": "[BUILDER_CACHE]\\CrWinClangGoma\\src",
@@ -528,7 +528,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]\\CrWinClangGoma\\src\\out\\Release",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]\\\\CrWinClangGoma\\\\src\\\\out\\\\Release', '-j', 50, 'all']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]\\\\CrWinClangGoma\\\\src\\\\out\\\\Release', '-j', 150, 'all']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",

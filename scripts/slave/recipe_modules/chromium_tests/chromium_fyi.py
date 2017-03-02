@@ -1194,7 +1194,7 @@ SPEC = {
     'CrWinClangGoma': {
       'chromium_config': 'chromium_win_clang_official',
       'gclient_config': 'chromium',
-      'chromium_apply_config': ['goma_canary', 'mb'],
+      'chromium_apply_config': ['goma_canary', 'mb', 'goma_high_parallel'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,

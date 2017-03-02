@@ -330,7 +330,11 @@ class ChromiumApi(recipe_api.RecipeApi):
       # Set -j just before 'with self.m.goma.build_with_goma('
       # for ninja_log_command being set correctly if starting goma
       # fails.
-      command += ['-j', self.m.goma.recommended_goma_jobs]
+      if self.c.compile_py.goma_high_parallel:
+        # This flag is set for experiment.
+        command += ['-j', 3 * self.m.goma.recommended_goma_jobs]
+      else:
+        command += ['-j', self.m.goma.recommended_goma_jobs]
 
     if targets is not None:
       # Add build targets to command ('All', 'chrome' etc).

@@ -49,6 +49,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       xcode_sdk = Single(basestring, required=False),
       ninja_confirm_noop = Single(bool, empty_val=False, required=False),
       set_build_data_dir = Single(bool, empty_val=False, required=False),
+      goma_high_parallel = Single(bool, empty_val=False, required=False),
     ),
     runtest_py = ConfigGroup(
       src_side = Single(bool),
@@ -252,6 +253,10 @@ def msvs2015(c):
 @config_ctx()
 def goma_failfast(c):
   c.compile_py.goma_failfast = True
+
+@config_ctx()
+def goma_high_parallel(c):
+  c.compile_py.goma_high_parallel = True
 
 @config_ctx()
 def goma_canary(c):
