@@ -2167,6 +2167,7 @@ SPEC = {
     },
     'Android VR Tests': {
       'chromium_config': 'android',
+      'chromium_apply_config': ['download_vr_test_apks'],
       'gclient_config': 'chromium',
       'gclient_apply_config': [
         'android',

@@ -55,6 +55,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       src_side = Single(bool),
     ),
     gyp_env = ConfigGroup(
+      DOWNLOAD_VR_TEST_APKS = Single(int, required=False),
       GYP_CROSSCOMPILE = Single(int, jsonish_fn=str, required=False),
       GYP_CHROMIUM_NO_ACTION = Single(int, jsonish_fn=str, required=False),
       GYP_DEFINES = Dict(equal_fn, ' '.join, (basestring,int,Path)),
@@ -817,3 +818,7 @@ def internal_gles2_conform_tests(c):
 @config_ctx()
 def build_angle_deqp_tests(c):
   c.gyp_env.GYP_DEFINES['build_angle_deqp_tests'] = 1
+
+@config_ctx()
+def download_vr_test_apks(c):
+  c.gyp_env.DOWNLOAD_VR_TEST_APKS = 1
