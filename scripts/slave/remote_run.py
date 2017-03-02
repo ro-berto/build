@@ -30,6 +30,10 @@ from slave import robust_tempdir
 from slave import update_scripts
 
 
+# BuildBot root directory: /b
+BUILDBOT_ROOT = os.path.abspath(os.path.dirname(BUILD_ROOT))
+
+
 LOGGER = logging.getLogger('remote_run')
 
 # Masters in this list will use the canary path.
@@ -138,11 +142,33 @@ def _install_cipd_packages(path, *packages):
         proc.returncode,))
 
 
+def _rename_or_delete(src, dst):
+  if not os.path.isdir(src):
+    return
+  if os.path.isdir(dst):
+    LOGGER.info('Removing legacy [%s] in favor of [%s]', src, dst)
+    chromium_utils.RemoveDirectory(src)
+  else:
+    LOGGER.info('Moving [%s] => [%s]', src, dst)
+    chromium_utils.MoveFile(src, dst)
+
+
 def _remote_run_with_kitchen(args, stream, pins, properties, tempdir, basedir):
   # Write our build properties to a JSON file.
   properties_file = os.path.join(tempdir, 'remote_run_properties.json')
   with open(properties_file, 'w') as f:
     json.dump(properties, f)
+
+  # "/b/c" as a cache directory.
+  cache_dir = os.path.join(BUILDBOT_ROOT, 'c')
+  try:
+    # Kitchen-style paths use a Git cache directory named 'git'. However,
+    # traditional paths use 'git_cache'. We will try and convert these paths
+    # and, failing that, delete the original one.
+    _rename_or_delete(os.path.join(cache_dir, 'git_cache'),
+                      os.path.join(cache_dir, 'git'))
+  except Exception as e:
+    LOGGER.error('Failed to update Git cache paths: %s', e)
 
   # Create our directory structure.
   recipe_temp_dir = os.path.join(tempdir, 't')
@@ -175,6 +201,7 @@ def _remote_run_with_kitchen(args, stream, pins, properties, tempdir, basedir):
       '-properties-file', properties_file,
       '-recipe', args.recipe or properties.get('recipe'),
       '-repository', args.repository,
+      '-cache-dir', cache_dir,
       '-temp-dir', recipe_temp_dir,
       '-checkout-dir', os.path.join(tempdir, 'rw'),
       '-workdir', os.path.join(tempdir, 'w'),

@@ -133,6 +133,8 @@ class RemoteRunExecTest(unittest.TestCase):
         mock.patch('slave.cipd_bootstrap_v2.high_level_ensure_cipd_client'),
         mock.patch('slave.monitoring_utils.write_build_monitoring_event'),
         mock.patch('os.path.exists'),
+        mock.patch('common.chromium_utils.RemoveDirectory'),
+        mock.patch('common.chromium_utils.MoveFile'),
         ))
     self.addCleanup(mock.patch.stopall)
 
@@ -182,6 +184,7 @@ class RemoteRunExecTest(unittest.TestCase):
         '-properties-file', self._tp('remote_run_properties.json'),
         '-recipe', self.opts.recipe,
         '-repository', self.opts.repository,
+        '-cache-dir', os.path.join(remote_run.BUILDBOT_ROOT, 'c'),
         '-temp-dir', self._tp('t'),
         '-checkout-dir', self._tp('rw'),
         '-workdir', self._tp('w'),
