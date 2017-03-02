@@ -37,7 +37,9 @@ step_durations = ts_mon.CumulativeDistributionMetric(
     'buildbot/master/builders/steps/durations',
     'Time (in seconds) from step start to step end',
     step_field_spec,
-    units=ts_mon.MetricsDataUnits.SECONDS)
+    units=ts_mon.MetricsDataUnits.SECONDS,
+    # Use fixed-width bucketer up to 2.7 hours with 10-second precision.
+    bucketer=ts_mon.FixedWidthBucketer(10, 1000))
 
 step_counts = ts_mon.CounterMetric(
     'buildbot/master/builders/steps/count',
