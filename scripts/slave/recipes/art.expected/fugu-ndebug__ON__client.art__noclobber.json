@@ -85,7 +85,9 @@
       "-rf",
       "/data/local/tmp",
       "/data/art-test",
-      "/data/nativetest"
+      "/data/nativetest",
+      "/data/nativetest64",
+      "/data/misc/trace/*"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",

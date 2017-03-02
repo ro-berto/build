@@ -40,7 +40,8 @@ _TARGET_DEVICE_MAP = {
     }
 
 _ANDROID_CLEAN_DIRS = ['/data/local/tmp', '/data/art-test',
-                       '/data/nativetest']
+                       '/data/nativetest', '/data/nativetest64',
+                       '/data/misc/trace/*']
 
 def checkout(api):
   api.repo.init('https://android.googlesource.com/platform/manifest',
