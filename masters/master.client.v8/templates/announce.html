@@ -47,6 +47,7 @@
   }
 
   branches_url = "https://build.chromium.org/p/client.v8.branches/horizontal_one_box_per_builder"
+  chromium_url = "https://build.chromium.org/p/client.v8.chromium/horizontal_one_box_per_builder"
   fyi_url = "https://build.chromium.org/p/client.v8.fyi/horizontal_one_box_per_builder"
   ports_url = "https://build.chromium.org/p/client.v8.ports/horizontal_one_box_per_builder"
 </script>
@@ -93,6 +94,9 @@
               </a> |
               <a id="master_v8_fyi" href="../client.v8.fyi">
                 client.v8.fyi
+              </a> |
+              <a id="master_v8_chromium" href="../client.v8.chromium">
+                client.v8.chromium
               </a> |
               <a id="master_v8_branches" href="../client.v8.branches">
                 client.v8.branches
@@ -156,19 +160,41 @@
                 <b>Branches: </b>
               </a>
             </td>
-            <td width="95%">
-              <script language="javascript">
-                iframe_properties = [
-                  'width="100%"',
-                  'height="15"',
-                  'frameborder="0"',
-                  'scrolling="no"',
-                ].join(' ');
-                document.write(iFrame(iframe_properties, branches_url))
-              </script>
+            <td width="95%" style="padding-top: 0px; padding-bottom: 0px;">
+              <table valign="top" width="100%" style="text-align: left; border-spacing: 0px 0px;">
+                <tr style="margin-top: 0px; margin-left: 0px;">
+                  <td width="85%" style="text-align: left;">
+                    <script language="javascript">
+                      iframe_properties = [
+                        'width="100%"',
+                        'height="15"',
+                        'frameborder="0"',
+                        'scrolling="no"',
+                      ].join(' ');
+                      document.write(iFrame(iframe_properties, branches_url))
+                    </script>
+                  </td>
+                  <td width="5%" style="text-align: left;">
+                    <a id="master_v8_chromium_label" href="../client.v8.chromium">
+                      <b>Chromium: </b>
+                    </a>
+                  </td>
+                  <td width="10%" style="text-align: left;">
+                    <script language="javascript">
+                      iframe_properties = [
+                        'width="100%"',
+                        'height="15"',
+                        'frameborder="0"',
+                        'scrolling="no"',
+                      ].join(' ');
+                      document.write(iFrame(iframe_properties, chromium_url))
+                    </script>
+                  </td>
+                </tr>
+              </table>
             </td>
           </tr>
-        </table>  
+        </table>
       </td>
       <td width="1%" />
     </tr>
