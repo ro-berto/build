@@ -377,6 +377,7 @@
       "GOMA_CACHE_DIR": "[GOMA_CACHE]/Android_Builder__dbg_",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_STATS_FILE": "[ROOT]/build_data_dir/goma_stats_proto",
+      "GOMA_MULTI_EXEC_IN_CALL": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
