@@ -70,7 +70,11 @@
     'chromium.linux': {},
     'chromium.win': {},
 
-    'chromium.fyi': {},
+    'chromium.fyi': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
     'chromium.gpu': {},
     'chromium.webrtc': {},
     'chromium.webrtc.fyi': {},
