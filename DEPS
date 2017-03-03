@@ -19,9 +19,6 @@ deps = {
   'build/third_party/infra_libs':
     'https://chromium.googlesource.com/infra/infra/packages/infra_libs.git'
     '@d2fb7b516a0cae6e0a127e4e002fc3955110b6f3',
-  'build/third_party/lighttpd':
-    'https://chromium.googlesource.com/chromium/deps/lighttpd.git'
-    '@9dfa55d15937a688a92cbf2b7a8621b0927d06eb',
   'build/third_party/pyasn1':
     'https://chromium.googlesource.com/external/github.com/etingof/pyasn1.git'
     '@4181b2379eeae3d6fd9f4f76d0e6ae3789ed56e7',

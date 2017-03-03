@@ -58,7 +58,6 @@ twistd.pid
 /third_party/gsutil
 /third_party/httplib2
 /third_party/infra_libs
-/third_party/lighttpd
 /third_party/oauth2client
 /third_party/psutils
 /third_party/pyasn1
