@@ -357,6 +357,17 @@ def _exec_recipe(args, rt, stream, basedir):
   #
   # TODO(dnj): Delete this in favor of Kitchen.
   ##
+
+  cache_dir = os.path.join(BUILDBOT_ROOT, 'c')
+  try:
+    # Kitchen-style paths use a Git cache directory named 'git'. However,
+    # traditional paths use 'git_cache'. If we deployed a Kitchen-style cache
+    # on this bot, convert it back to a non-Kitchen cache.
+    _rename_or_delete(os.path.join(cache_dir, 'git'),
+                      os.path.join(cache_dir, 'git_cache'))
+  except Exception as e:
+    LOGGER.error('Failed to revert Git cache paths: %s', e)
+
   properties_file = os.path.join(tempdir, 'remote_run_properties.json')
   with open(properties_file, 'w') as f:
     json.dump(properties, f)
