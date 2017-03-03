@@ -99,7 +99,8 @@ def RunSteps(api):
                    '--time',
                    '--failure-summary',
                    '--write-debug-log',
-                   '--write-test-outcome-log']
+                   '--write-test-outcome-log',
+                   '--copy-coredumps']
       test_specs = [
         {'name': 'analyze tests',
          'tests': []},

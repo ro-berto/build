@@ -135,7 +135,8 @@
       "--time",
       "--failure-summary",
       "--write-debug-log",
-      "--write-test-outcome-log"
+      "--write-test-outcome-log",
+      "--copy-coredumps"
     ],
     "cwd": "[START_DIR]\\sdk",
     "name": "analyze tests"
@@ -156,6 +157,7 @@
       "--failure-summary",
       "--write-debug-log",
       "--write-test-outcome-log",
+      "--copy-coredumps",
       "--append_logs",
       "pkg"
     ],
@@ -178,6 +180,7 @@
       "--failure-summary",
       "--write-debug-log",
       "--write-test-outcome-log",
+      "--copy-coredumps",
       "--append_logs",
       "--checked"
     ],
@@ -200,6 +203,7 @@
       "--failure-summary",
       "--write-debug-log",
       "--write-test-outcome-log",
+      "--copy-coredumps",
       "--append_logs",
       "--checked",
       "pkg"
