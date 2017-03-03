@@ -456,6 +456,14 @@
       "builder_timeout_s": 21600,
       "category": "3Android",
     },
+    "Android Release (NVIDIA Shield)": {
+      "recipe": "chromium",
+      "use_remote_run": True,
+      "scheduler": "chromium_commits",
+      "slave_pools": ["android_rel_nvidia_shield"],
+      "builder_timeout_s": 21600,
+      "category": "3Android",
+    },
 
     "Linux ChromiumOS Builder": {
       "recipe": "chromium",
@@ -859,6 +867,14 @@
         "version": "trusty",
       },
       "slaves": ["build90-b1"],
+    },
+    "android_rel_nvidia_shield": {
+      "slave_data": {
+        "bits": 64,
+        "os": "linux",
+        "version": "trusty",
+      },
+      "slaves": ["build162-b1"],
     },
 
     "linux_chromiumos_builder": {
