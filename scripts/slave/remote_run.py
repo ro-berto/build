@@ -40,6 +40,10 @@ LOGGER = logging.getLogger('remote_run')
 _CANARY_MASTERS = set((
   'chromium.infra',
   'chromium.infra.cron',
+  'internal.infra',
+  'internal.infra.cron',
+
+  'chromium.fyi',
 ))
 
 # The name of the recipe engine CIPD package.
