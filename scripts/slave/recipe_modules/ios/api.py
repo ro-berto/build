@@ -528,6 +528,7 @@ class iOSApi(recipe_api.RecipeApi):
       '--app', '<(app_path)',
       '--args-json', '{"test_args": <(test_args), "xctest": <(xctest)}',
       '--out-dir', '${ISOLATED_OUTDIR}',
+      '--retries', '3',
       '--xcode-version', '<(xcode_version)',
     ]
     files = [
