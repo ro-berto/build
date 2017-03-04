@@ -147,6 +147,7 @@ class RemoteRunExecTest(unittest.TestCase):
     self.basedir = self.rt.tempdir()
     self.tempdir = self.rt.tempdir()
     self.build_data_dir = self.rt.tempdir()
+    self.envvar_dir = self.rt.tempdir()
     self.opts = MockOptions(
         dry_run=False,
         logdog_disable=False,
@@ -232,7 +233,8 @@ class RemoteRunExecTest(unittest.TestCase):
   def test_exec_without_logdog(self, rt_tempdir, _install_cipd_packages,
                                _logdog_bootstrap):
     remote_run._call.return_value = 0
-    rt_tempdir.side_effect = [self.tempdir, self.build_data_dir]
+    rt_tempdir.side_effect = [self.tempdir, self.build_data_dir,
+                              self.envvar_dir]
     self._write_recipe_result()
 
     rv = remote_run._exec_recipe(self.opts, self.rt, self.stream, self.basedir)
@@ -251,7 +253,8 @@ class RemoteRunExecTest(unittest.TestCase):
     self.cipd_pins = remote_run._CANARY_CIPD_PINS._replace(kitchen='enable')
 
     remote_run._call.return_value = 0
-    rt_tempdir.side_effect = [self.tempdir, self.build_data_dir]
+    rt_tempdir.side_effect = [self.tempdir, self.build_data_dir,
+                              self.envvar_dir]
     self._write_recipe_result()
 
     opts = self.opts._replace(revision='refs/heads/somebranch')
@@ -283,7 +286,8 @@ class RemoteRunExecTest(unittest.TestCase):
     bootstrap.return_value.get_result.return_value = 0
 
     remote_run._call.return_value = 0
-    rt_tempdir.side_effect = [self.tempdir, self.build_data_dir]
+    rt_tempdir.side_effect = [self.tempdir, self.build_data_dir,
+                              self.envvar_dir]
     self._write_recipe_result()
 
     rv = remote_run._exec_recipe(self.opts, self.rt, self.stream, self.basedir)
@@ -326,7 +330,8 @@ class RemoteRunExecTest(unittest.TestCase):
     bootstrap.return_value.get_result.return_value = 0
 
     remote_run._call.return_value = 0
-    rt_tempdir.side_effect = [self.tempdir, self.build_data_dir]
+    rt_tempdir.side_effect = [self.tempdir, self.build_data_dir,
+                              self.envvar_dir]
     self._write_recipe_result()
 
     rv = remote_run._exec_recipe(self.opts, self.rt, self.stream, self.basedir)
@@ -367,7 +372,8 @@ class RemoteRunExecTest(unittest.TestCase):
     get_config.return_value = cfg
 
     remote_run._call.return_value = 0
-    rt_tempdir.side_effect = [self.tempdir, self.build_data_dir]
+    rt_tempdir.side_effect = [self.tempdir, self.build_data_dir,
+                              self.envvar_dir]
     self._write_recipe_result()
 
     opts = self.opts._replace(revision='origin/master')
