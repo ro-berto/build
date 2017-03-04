@@ -67,7 +67,7 @@ _STABLE_CIPD_PINS = CipdPins(
 # Canary CIPD pin set.
 _CANARY_CIPD_PINS = CipdPins(
       recipes='git_revision:f9018a9957d36e4149083cb3a6a0fdca619c9706',
-      kitchen='git_revision:57ad97640d5bd1e59e82253c353ec7153f6d9b45')
+      kitchen='git_revision:56d3b24ea5166d8fd859a3e42c5f12c87268201c')
 
 
 def _get_cipd_pins(mastername, force_canary):
@@ -268,10 +268,12 @@ def _remote_run_with_kitchen(args, stream, pins, properties, tempdir, basedir):
 
   # If we failed, but aren't a step failure, we assume it was an
   # exception.
-  f = return_value.get('failure')
-  if f is not None and not f.get('step_failure'):
-    # The recipe engine used to return -1, which got interpreted as 255
-    # by os.exit in python, since process exit codes are a single byte.
+  f = return_value.get('failure', {})
+  if any(f.get(typ) for typ in ('timeout', 'step_data')):
+    # Return an infra failure for these failure types.
+    #
+    # The recipe engine used to return -1, which got interpreted as 255 by
+    # os.exit in python, since process exit codes are a single byte.
     recipe_return_code = 255
 
   return recipe_return_code
