@@ -649,7 +649,10 @@ def annotate(cfg, stream):
   with stream.step('LogDog Bootstrap') as st:
     st.set_build_property('logdog_project', json.dumps(cfg.params.project))
     st.set_build_property('logdog_prefix', json.dumps(cfg.prefix))
-    st.set_build_property('logdog_annotation_url', json.dumps(annotation_url))
+    if cfg.logdog_only:
+      st.set_build_property('log_location', json.dumps(annotation_url))
+    else:
+      st.set_build_property('logdog_annotation_url', json.dumps(annotation_url))
 
 
 class BootstrapState(object):

@@ -305,6 +305,49 @@ class RemoteRunExecTest(unittest.TestCase):
         ]
     )
 
+  @mock.patch('slave.logdog_bootstrap.bootstrap')
+  @mock.patch('slave.logdog_bootstrap.BootstrapState.get_result')
+  @mock.patch('slave.remote_run._install_cipd_packages')
+  @mock.patch('slave.robust_tempdir.RobustTempdir.tempdir')
+  def test_exec_with_logdog_only(self, rt_tempdir, _install_cipd_packages,
+                                 _logdog_bootstrap_result, bootstrap):
+
+    args = self.recipe_remote_args + ['--'] + self.recipe_args
+    cfg = self._default_namedtuple(logdog_bootstrap.Config)._replace(
+        params=self._default_namedtuple(logdog_bootstrap.Params)._replace(
+          project="project",
+        ),
+        prefix="prefix",
+        host="example.com",
+        logdog_only=True,
+    )
+    bootstrap.return_value = logdog_bootstrap.BootstrapState(
+        cfg, ['logdog_bootstrap'] + args, '/path/to/result.json')
+    bootstrap.return_value.get_result.return_value = 0
+
+    remote_run._call.return_value = 0
+    rt_tempdir.side_effect = [self.tempdir, self.build_data_dir]
+    self._write_recipe_result()
+
+    rv = remote_run._exec_recipe(self.opts, self.rt, self.stream, self.basedir)
+    self.assertEqual(rv, 0)
+
+    remote_run._call.assert_called_once_with(bootstrap.return_value.cmd)
+    self.assertEqual(
+        [l for l in self.stream_output.getvalue().splitlines() if l],
+        [
+            '@@@SEED_STEP LogDog Bootstrap@@@',
+            '@@@STEP_CURSOR LogDog Bootstrap@@@',
+            '@@@STEP_STARTED@@@',
+            '@@@SET_BUILD_PROPERTY@logdog_project@"project"@@@',
+            '@@@SET_BUILD_PROPERTY@logdog_prefix@"prefix"@@@',
+            ('@@@SET_BUILD_PROPERTY@log_location@'
+             '"logdog://example.com/project/prefix/+/recipes/annotations"@@@'),
+            '@@@STEP_CURSOR LogDog Bootstrap@@@',
+            '@@@STEP_CLOSED@@@',
+        ]
+    )
+
   @mock.patch('slave.logdog_bootstrap.get_config')
   @mock.patch('slave.logdog_bootstrap.BootstrapState.get_result')
   @mock.patch('slave.remote_run._install_cipd_packages')

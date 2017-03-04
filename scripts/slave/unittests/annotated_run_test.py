@@ -210,6 +210,47 @@ class AnnotatedRunExecTest(unittest.TestCase):
     )
 
   @mock.patch('slave.logdog_bootstrap.bootstrap')
+  @mock.patch('slave.logdog_bootstrap.BootstrapState.get_result')
+  def test_exec_with_logdog_bootstrap_logdog_only(self, bs_result, bootstrap):
+    cfg = self._default_namedtuple(logdog_bootstrap.Config)._replace(
+        params=self._default_namedtuple(logdog_bootstrap.Params)._replace(
+          project="project",
+        ),
+        prefix="prefix",
+        host="example.com",
+        logdog_only=True,
+    )
+    bootstrap.return_value = logdog_bootstrap.BootstrapState(
+        cfg, ['logdog_bootstrap'] + self.recipe_args, '/path/to/result.json')
+    bootstrap.return_value.get_result.return_value = 13
+    annotated_run._run_command.return_value = (13, '')
+    self._writeRecipeResult({})
+
+    rv = annotated_run._exec_recipe(
+        self.rt, self.opts, self.stream, self.basedir, self.tdir,
+        self.properties)
+
+    self.assertEqual(rv, 13)
+    annotated_run._run_command.assert_called_once_with(
+        ['logdog_bootstrap'] + self.recipe_args, dry_run=False)
+    self._assertRecipeProperties(self.properties)
+
+    self.assertEqual(
+        [l for l in self.stream_output.getvalue().splitlines() if l],
+        [
+            '@@@SEED_STEP LogDog Bootstrap@@@',
+            '@@@STEP_CURSOR LogDog Bootstrap@@@',
+            '@@@STEP_STARTED@@@',
+            '@@@SET_BUILD_PROPERTY@logdog_project@"project"@@@',
+            '@@@SET_BUILD_PROPERTY@logdog_prefix@"prefix"@@@',
+            ('@@@SET_BUILD_PROPERTY@log_location@'
+             '"logdog://example.com/project/prefix/+/recipes/annotations"@@@'),
+            '@@@STEP_CURSOR LogDog Bootstrap@@@',
+            '@@@STEP_CLOSED@@@',
+        ]
+    )
+
+  @mock.patch('slave.logdog_bootstrap.bootstrap')
   def test_exec_with_logdog_bootstrap_fail_raises(self, bootstrap):
     bootstrap.side_effect = logdog_bootstrap.BootstrapError('Bootstrap failed')
 
