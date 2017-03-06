@@ -2,7 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import contextlib
 import logging
 import os
 import sys
@@ -43,9 +42,6 @@ class RobustTempdir(object):
     self._tempdirs = []
     self._prefix = prefix
     self._leak = leak
-    self._set_env = False
-    self._old_tempdir = None
-    self._old_envvars = None
 
   def cleanup(self, base=None):
     """Explicitly remove ALL temporary directories under "<base>/<prefix>".
@@ -83,23 +79,6 @@ class RobustTempdir(object):
     tdir = tempfile.mkdtemp(dir=basedir)
     return tdir
 
-  def set_env_tempdir(self, base=None):
-    """Creates a temporary directory as tempdir() above, but sets the value
-    as the $TMPDIR and $TEMP environment variables. This may only be called
-    once per RobustTempdir, and its effects will be reversed when leaving the
-    RobustTempdir scope."""
-    if self._set_env:
-      raise ValueError("may only call set_env_tempdir once per RobustTempdir.")
-    self._set_env = True
-    self._old_tempdir = tempfile.tempdir
-    self._old_envvars = {k: os.environ.get(k) for k in ('TMPDIR', 'TEMP')}
-
-    tdir = self.tempdir(base)
-    tempfile.tempdir = tdir
-    os.environ['TEMP'] = tdir
-    os.environ['TMPDIR'] = tdir
-    LOGGER.info('Using $TMPDIR+$TEMP: [%s].', tdir)
-
   def __enter__(self):
     return self
 
@@ -107,14 +86,6 @@ class RobustTempdir(object):
     self.close()
 
   def close(self):
-    if self._set_env:
-      tempfile.tempdir = self._old_tempdir
-      for k, v in self._old_envvars.iteritems():
-        if v is None:
-          os.environ.pop(k, None)
-        else:
-          os.environ[k] = v
-
     if self._leak:
       LOGGER.warning('Leaking temporary paths: %s', self._tempdirs)
     else:
