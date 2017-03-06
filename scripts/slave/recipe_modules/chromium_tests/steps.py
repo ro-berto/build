@@ -762,6 +762,64 @@ class DynamicPerfTests(Test):
   def compile_targets(_):
     return []
 
+class ResultsHandler(object):
+  def upload_results(self, api, results, step_name):  # pragma: no cover
+    """Uploads test results to the Test Results Server.
+
+    Args:
+      api: Recipe API object.
+      results: Results returned by the step.
+      step_name: Name of the step that produced results.
+    """
+    raise NotImplementedError()
+
+
+  def validate_results(self, api, results):  # pragma: no cover
+    """Validates test results and returns a list of failures.
+
+    Args:
+      api: Recipe API object.
+      results: Results returned by the step.
+
+    Returns:
+      (valid, failures), where valid is True when results are valid, and
+      failures is a list of strings (typically names of failed tests).
+    """
+    raise NotImplementedError()
+
+
+class JSONResultsHandler(ResultsHandler):
+  @staticmethod
+  def _is_json_format_results(results):
+    return results.get('version', 0) == 3
+
+  def upload_results(self, api, results, step_name):
+    # We only support uploading JSON Format test results.
+    if not self._is_json_format_results(results):
+      return
+
+    chrome_revision_cp = api.bot_update.last_returned_properties.get(
+        'got_revision_cp', 'x@{#0}')
+    chrome_revision = str(api.commit_position.parse_revision(
+        chrome_revision_cp))
+    api.test_results.upload(
+      api.json.input(results), chrome_revision=chrome_revision,
+      test_type=step_name, test_results_server='test-results.appspot.com')
+
+  def validate_results(self, api, results):
+    if self._is_json_format_results(results):
+      test_results = api.test_utils.create_results_from_json(results)
+      tests = test_results.tests
+      failures = list(
+        t for t in tests
+        if all(res not in tests[t]['expected'].split()
+               for res in tests[t]['actual'].split()))
+      return True, failures
+    elif results:
+      return results['valid'], results['failures']
+    else:
+      return False, []
+
 
 class SwarmingTest(Test):
   PRIORITY_ADJUSTMENTS = {
@@ -1124,6 +1182,7 @@ class LocalIsolatedScriptTest(Test):
     self._target_name = target_name
     self._runtest_kwargs = runtest_kwargs
     self._override_compile_targets = override_compile_targets
+    self.results_handler = JSONResultsHandler()
 
   @property
   def name(self):
@@ -1174,10 +1233,7 @@ class LocalIsolatedScriptTest(Test):
       # between the two.
       self._test_runs[suffix] = api.step.active_result
       results = self._test_runs[suffix].json.output
-      if is_json_results_format(results):
-        valid, failures = validate_json_test_results(api, results)
-      elif results:
-        valid, failures = validate_simplified_results(results)
+      valid, failures = self.results_handler.validate_results(api, results)
 
       if valid:
         self._test_runs[suffix].presentation.step_text += (
@@ -1190,25 +1246,6 @@ class LocalIsolatedScriptTest(Test):
         api.step.active_result.presentation.status = api.step.FAILURE
         raise api.step.StepFailure('Test results were invalid')
     return self._test_runs[suffix]
-
-
-
-def is_json_results_format(results):
-  return results.get('version', 0) == 3
-
-
-def validate_simplified_results(results):
-  return results['valid'], results['failures']
-
-
-def validate_json_test_results(api, results):
-  test_results = api.test_utils.create_results_from_json(results)
-  tests = test_results.tests
-  failures = list(
-    t for t in tests
-    if all(res not in tests[t]['expected'].split()
-           for res in tests[t]['actual'].split()))
-  return True, failures
 
 
 class SwarmingIsolatedScriptTest(SwarmingTest):
@@ -1233,6 +1270,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     self._perf_dashboard_id = perf_dashboard_id
     self._isolated_script_results = {}
     self._merge = merge
+    self.results_handler = JSONResultsHandler()
 
   @property
   def target_name(self):
@@ -1261,27 +1299,9 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
         shards=self._shards, idempotent=False, merge=self._merge,
         build_properties=api.chromium.build_properties, extra_args=args)
 
-
-  def upload_json_format_results(self, api, results, suffix):
-    chrome_revision_cp = api.bot_update.last_returned_properties.get(
-        'got_revision_cp', 'x@{#0}')
-    chrome_revision = str(api.commit_position.parse_revision(
-        chrome_revision_cp))
-    api.test_results.upload(
-      api.json.input(results), chrome_revision=chrome_revision,
-      test_type=self._step_name(suffix),
-      test_results_server='test-results.appspot.com')
-
   def validate_task_results(self, api, step_result):
     results = getattr(step_result, 'isolated_script_results', None) or {}
-    valid = False
-    failures = []
-
-    if is_json_results_format(results):
-      valid, failures = validate_json_test_results(api, results)
-    elif results:
-      valid, failures = validate_simplified_results(results)
-
+    valid, failures = self.results_handler.validate_results(api, results)
     if not failures and step_result.retcode != 0:
       failures = ['%s (entire test suite)' % self.name]
       valid = False
@@ -1299,8 +1319,9 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
       super(SwarmingIsolatedScriptTest, self).post_run(api, suffix)
     finally:
       results = self._isolated_script_results
-      if self._upload_test_results and is_json_results_format(results):
-        self.upload_json_format_results(api, results, suffix)
+      if self._upload_test_results:
+        self.results_handler.upload_results(
+            api, results, self._step_name(suffix))
 
   def _output_chartjson_results_if_present(self, api, step_result):
     results = \
