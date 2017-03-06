@@ -286,6 +286,8 @@ def _exec_recipe(args, rt, stream, basedir):
   build_data_dir = rt.tempdir(basedir)
   LOGGER.info('Using build data directory: [%s].', build_data_dir)
 
+  rt.set_env_tempdir(basedir)
+
   # Construct our properties.
   properties = copy.copy(args.factory_properties)
   properties.update(args.build_properties)

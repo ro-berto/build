@@ -320,12 +320,18 @@ def main(argv):
     level = logging.DEBUG
   logging.getLogger().setLevel(level)
 
-  # Enter our runtime environment.
   basedir = _builder_dir()
-  with robust_tempdir.RobustTempdir(
-      prefix='.recipe_runtime', leak=opts.leak) as rt:
+
+  # clean up old RobustTempdir location.
+  with robust_tempdir.RobustTempdir(prefix='.recipe_runtime') as rt:
+    rt.cleanup(basedir)
+
+  # Enter our runtime environment.
+  with robust_tempdir.RobustTempdir(prefix='rr', leak=opts.leak) as rt:
     tdir = rt.tempdir(base=basedir)
     LOGGER.debug('Using temporary directory: [%s].', tdir)
+
+    rt.set_env_tempdir(B_DIR)
 
     # Load factory properties and configuration.
     # TODO(crbug.com/551165): remove flag "factory_properties".
