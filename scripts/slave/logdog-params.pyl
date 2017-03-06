@@ -64,21 +64,66 @@
     'tryserver.chromium.win': {},
 
     # Chromium continuous waterfalls.
-    'chromium': {},
-    'chromium.android': {},
-    'chromium.mac': {},
-    'chromium.linux': {},
-    'chromium.win': {},
+    'chromium': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'chromium.android': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'chromium.mac': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'chromium.linux': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'chromium.win': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
 
     'chromium.fyi': {
       '*': {
         'logdog_only': True,
       },
     },
-    'chromium.gpu': {},
+    'chromium.gpu': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'chromium.gpu.fyi': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'chromium.webkit': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+
+    'chromium.memory': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'chromium.memory.full': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+
     'chromium.webrtc': {},
     'chromium.webrtc.fyi': {},
-    'chromium.webkit': {},
 
     'chromium.gatekeeper': {},
 
