@@ -83,6 +83,8 @@ class RobustTempdir(object):
     tdir = tempfile.mkdtemp(dir=basedir)
     return tdir
 
+  ENV_VARS = ('TMPDIR', 'TEMP', 'TMP')
+
   def set_env_tempdir(self, base=None):
     """Creates a temporary directory as tempdir() above, but sets the value
     as the $TMPDIR and $TEMP environment variables. This may only be called
@@ -92,13 +94,13 @@ class RobustTempdir(object):
       raise ValueError("may only call set_env_tempdir once per RobustTempdir.")
     self._set_env = True
     self._old_tempdir = tempfile.tempdir
-    self._old_envvars = {k: os.environ.get(k) for k in ('TMPDIR', 'TEMP')}
+    self._old_envvars = {k: os.environ.get(k) for k in self.ENV_VARS}
 
     tdir = self.tempdir(base)
     tempfile.tempdir = tdir
-    os.environ['TEMP'] = tdir
-    os.environ['TMPDIR'] = tdir
-    LOGGER.info('Using $TMPDIR+$TEMP: [%s].', tdir)
+    for v in self.ENV_VARS:
+      os.environ[v] = tdir
+    LOGGER.info('Using %s: [%s].', '+'.join('$'+v for v in self.ENV_VARS), tdir)
 
   def __enter__(self):
     return self
