@@ -1226,14 +1226,17 @@ class AndroidApi(recipe_api.RecipeApi):
     logcat = build_dir.join('full_log')
 
     microdump_stackwalk_path = build_dir.join('microdump_stackwalk')
-    if not self.m.path.exists(microdump_stackwalk_path):
-      result = self.m.step('no microdump stackwalk', ['echo', build_dir])
+    required_binaries = binary_paths + [microdump_stackwalk_path]
+    if not all(map(self.m.path.exists, required_binaries)):
+      result = self.m.step(
+          'skipping stackwalker step',
+          ['echo', 'Missing: %s' % ' '.join(
+              [str(b) for b in required_binaries
+               if not self.m.path.exists(b)])])
       result.presentation.logs['info'] = [
-          'This bot appears to not have the microdump_stackwalk binary.',
-          'This is needed by the bot to run stack walking logic for android'
-          'builds.',
-          'No action is needed at this time; contact martiniss@ for any'
-          ' questions or issues',
+          'This bot appears to not have some of the binaries required to run ',
+          'stackwalker. No action is needed at this time; contact martiniss@ ',
+          'for any questions or issues'
       ]
       return
 

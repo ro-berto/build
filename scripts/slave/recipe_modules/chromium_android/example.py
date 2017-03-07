@@ -116,6 +116,9 @@ BUILDERS = freeze({
     },
     'use_devil_adb': {
       'android_apply_config': ['use_devil_adb'],
+    },
+    'stackwalker': {
+      'run_stackwalker': True,
     }
 })
 
@@ -258,6 +261,18 @@ def RunSteps(api, buildername):
   api.chromium_android.stack_tool_steps()
   if config.get('coverage', False):
     api.chromium_android.coverage_report()
+
+  if config.get('run_stackwalker'):
+    breakpad_binary = api.path['checkout'].join(
+        'out', api.chromium.c.BUILD_CONFIG, 'lib.unstripped', 'libchrome.so')
+    microdump_stackwalk_binary = api.path['checkout'].join(
+        'out', api.chromium.c.BUILD_CONFIG, 'microdump_stackwalk')
+    api.path.mock_add_paths(breakpad_binary)
+    api.path.mock_add_paths(microdump_stackwalk_binary)
+    api.chromium_android.stackwalker(
+        root_chromium_dir=api.path['checkout'],
+        binary_paths=[breakpad_binary])
+
 
   if failure:
     raise failure

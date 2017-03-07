@@ -1077,54 +1077,16 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/src/components/crash/content/tools/generate_breakpad_symbols.py",
-      "--symbols-dir",
-      "[TMP_BASE]/symbols_tmp_2",
-      "--build-dir",
-      "[START_DIR]/src/out/Release",
-      "--binary",
-      "[START_DIR]/src/out/Release/lib.unstripped/libchrome.so"
+      "echo",
+      "Missing: [START_DIR]/src/out/Release/lib.unstripped/libchrome.so [START_DIR]/src/out/Release/lib.unstripped/libwebviewchromium.so"
     ],
-    "name": "generate breakpad symbols for libchrome.so"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/src/components/crash/content/tools/generate_breakpad_symbols.py",
-      "--symbols-dir",
-      "[TMP_BASE]/symbols_tmp_2",
-      "--build-dir",
-      "[START_DIR]/src/out/Release",
-      "--binary",
-      "[START_DIR]/src/out/Release/lib.unstripped/libwebviewchromium.so"
-    ],
-    "name": "generate breakpad symbols for libwebviewchromium.so"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/src/build/android/stacktrace/stackwalker.py",
-      "--stackwalker-binary-path",
-      "[START_DIR]/src/out/Release/microdump_stackwalk",
-      "--stack-trace-path",
-      "[START_DIR]/src/out/Release/full_log",
-      "--symbols-path",
-      "[TMP_BASE]/symbols_tmp_2"
-    ],
-    "name": "symbolized breakpad crashes"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
-      "[TMP_BASE]/symbols_tmp_2"
-    ],
-    "name": "rmtree [TMP_BASE]/symbols_tmp_2"
+    "name": "skipping stackwalker step",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@info@This bot appears to not have some of the binaries required to run @@@",
+      "@@@STEP_LOG_LINE@info@stackwalker. No action is needed at this time; contact martiniss@ @@@",
+      "@@@STEP_LOG_LINE@info@for any questions or issues@@@",
+      "@@@STEP_LOG_END@info@@@"
+    ]
   },
   {
     "name": "$result",
