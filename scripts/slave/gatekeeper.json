@@ -251,18 +251,6 @@
     ],
     "https://build.chromium.org/p/chromium.infra.cron": [
       {
-        "excluded_builders": [
-          "lkgr-tag-pusher",
-          "builder_alerts",
-          "publish_tarball",
-          "rebaseline-o-matic",
-          "Chromium Linux Codesearch",
-          "ChromiumOS Codesearch",
-          "git-hash-metrics",
-          "w3c-test-autoroller"
-        ]
-      },
-      {
         "close_tree": false,
         "tree_notify": [
           "chrome-troopers+alerts-staging@google.com"

@@ -63,9 +63,6 @@
       "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/chromium.gpu\": [@@@",
       "@@@STEP_LOG_LINE@json.output@        \"*\"@@@",
       "@@@STEP_LOG_LINE@json.output@      ], @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/chromium.infra.cron\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"*\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      ], @@@",
       "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/chromium.linux\": [@@@",
       "@@@STEP_LOG_LINE@json.output@        \"*\"@@@",
       "@@@STEP_LOG_LINE@json.output@      ], @@@",
@@ -537,12 +534,11 @@
       "https://build.chromium.org/p/chromium.gpu",
       "https://build.chromium.org/p/chromium.linux",
       "https://build.chromium.org/p/chromium.mac",
-      "https://build.chromium.org/p/chromium.infra.cron",
+      "https://build.chromium.org/p/chromium.memory",
       "https://build.chromium.org/p/chromium.android:Android N5X Swarm Builder",
       "https://build.chromium.org/p/chromium.chrome",
       "https://build.chromium.org/p/chromium.webkit",
       "https://build.chromium.org/p/chromium.win",
-      "https://build.chromium.org/p/chromium.memory",
       "https://build.chromium.org/p/chromium.chromiumos"
     ],
     "name": "gatekeeper: chromium"
