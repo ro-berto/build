@@ -9,13 +9,13 @@
     python json_results_generator_unittest.py
 """
 
+import json
 import unittest
 
 from slave.gtest.json_results_generator import generate_test_timings_trie
 from slave.gtest.json_results_generator import JSONResultsGenerator
 from slave.gtest.test_result import TestResult
 from slave.gtest.test_result import canonical_name
-import simplejson
 
 
 class JSONGeneratorTest(unittest.TestCase):
@@ -114,7 +114,7 @@ class JSONGeneratorTest(unittest.TestCase):
       }
     }
 
-    self.assertEqual(simplejson.dumps(trie), simplejson.dumps(expected_trie))
+    self.assertEqual(json.dumps(trie), json.dumps(expected_trie))
 
 
 if __name__ == '__main__':

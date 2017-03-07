@@ -22,9 +22,9 @@
 """
 
 import glob
+import json
 import optparse
 import os
-import simplejson
 import sys
 
 from common import archive_utils
@@ -258,7 +258,7 @@ class StagerBase(object):
     print 'Saving revision to %s' % self.revisions_path
     Write(
         self.revisions_path,
-        simplejson.dumps({
+        json.dumps({
             'chromium_revision': self._chromium_revision,
             'v8_revision': self._v8_revision,
             'v8_revision_git': self._v8_revision_git,
@@ -284,7 +284,7 @@ class StagerBase(object):
         # TODO(markhuang): remove this block after all builders are updated
         line = line.replace('\'', '"')
 
-        revisions_dict = simplejson.loads(line)
+        revisions_dict = json.loads(line)
         if revisions_dict:
           self.last_chromium_revision = revisions_dict['chromium_revision']
           self.last_v8_revision = revisions_dict['v8_revision']

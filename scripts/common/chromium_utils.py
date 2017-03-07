@@ -12,6 +12,7 @@ import copy
 import errno
 import fnmatch
 import glob
+import json
 import math
 import multiprocessing
 import os
@@ -28,11 +29,6 @@ import traceback
 import urllib
 import zipfile
 import zlib
-
-try:
-  import json  # pylint: disable=F0401
-except ImportError:
-  import simplejson as json
 
 from common import env
 

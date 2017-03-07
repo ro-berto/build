@@ -10,11 +10,11 @@ them to the specified results server.
 from __future__ import with_statement
 
 import codecs
+import json
 import logging
 import os
 import time
 
-import simplejson
 from slave.gtest.test_result import TestResult
 from slave.gtest.test_results_uploader import TestResultsUploader
 
@@ -140,11 +140,11 @@ class JSONResultsGenerator(object):
     self._file_writer = file_writer
 
   def generate_json_output(self):
-    json = self.get_full_results_json()
-    if json:
+    data = self.get_full_results_json()
+    if data:
       file_path = os.path.join(self._results_directory,
                                self.FULL_RESULTS_FILENAME)
-      self._write_json(json, file_path)
+      self._write_json(data, file_path)
 
   def generate_times_ms_file(self):
     times = generate_test_timings_trie(self._test_results_map.values())
@@ -246,7 +246,7 @@ class JSONResultsGenerator(object):
 
   def _write_json(self, json_object, file_path):
     # Specify separators in order to get compact encoding.
-    json_data = simplejson.dumps(json_object, separators=(',', ':'))
+    json_data = json.dumps(json_object, separators=(',', ':'))
     json_string = json_data
     if self._file_writer:
       self._file_writer(file_path, json_string)

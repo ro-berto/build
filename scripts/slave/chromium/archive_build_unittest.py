@@ -3,10 +3,10 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import json
 import os
 import os.path
 import shutil
-import simplejson
 import tempfile
 import unittest
 import sys
@@ -229,7 +229,7 @@ class ArchiveTest(unittest.TestCase):
     self.assertTrue(os.path.exists(self.stager.revisions_path))
     self.assertEquals(None, self.stager.GetLastBuildRevision())
     fp = open(self.stager.revisions_path)
-    revisions_dict = simplejson.loads(fp.read())
+    revisions_dict = json.loads(fp.read())
     self.assertEquals(self.stager.last_chromium_revision,
                       revisions_dict['chromium_revision'])
     self.assertEquals(self.stager.last_webkit_revision,
