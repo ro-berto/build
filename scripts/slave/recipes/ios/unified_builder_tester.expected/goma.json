@@ -544,7 +544,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n  \"conditions\": [\n    [\n      \"OS == \\\"ios\\\"\", \n      {\n        \"variables\": {\n          \"command\": [\n            \"src/ios/build/bots/scripts/run.py\", \n            \"--app\", \n            \"<(app_path)\", \n            \"--args-json\", \n            \"{\\\"test_args\\\": <(test_args), \\\"xctest\\\": <(xctest)}\", \n            \"--out-dir\", \n            \"${ISOLATED_OUTDIR}\", \n            \"--retries\", \n            \"3\", \n            \"--xcode-version\", \n            \"<(xcode_version)\"\n          ], \n          \"files\": [\n            \"<(app_path)/\", \n            \"src/ios/build/bots/scripts/\"\n          ]\n        }\n      }\n    ]\n  ]\n}",
+      "{\n  \"conditions\": [\n    [\n      \"OS == \\\"ios\\\"\", \n      {\n        \"variables\": {\n          \"command\": [\n            \"src/ios/build/bots/scripts/run.py\", \n            \"--app\", \n            \"<(app_path)\", \n            \"--args-json\", \n            \"{\\\"test_args\\\": <(test_args), \\\"xctest\\\": <(xctest)}\", \n            \"--out-dir\", \n            \"${ISOLATED_OUTDIR}\", \n            \"--xcode-version\", \n            \"<(xcode_version)\"\n          ], \n          \"files\": [\n            \"<(app_path)/\", \n            \"src/ios/build/bots/scripts/\"\n          ]\n        }\n      }\n    ]\n  ]\n}",
       "[START_DIR]/template.isolate"
     ],
     "cwd": "[BUILDER_CACHE]/ios/src",
@@ -565,8 +565,6 @@
       "@@@STEP_LOG_LINE@template.isolate@            \"{\\\"test_args\\\": <(test_args), \\\"xctest\\\": <(xctest)}\", @@@",
       "@@@STEP_LOG_LINE@template.isolate@            \"--out-dir\", @@@",
       "@@@STEP_LOG_LINE@template.isolate@            \"${ISOLATED_OUTDIR}\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@            \"--retries\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@            \"3\", @@@",
       "@@@STEP_LOG_LINE@template.isolate@            \"--xcode-version\", @@@",
       "@@@STEP_LOG_LINE@template.isolate@            \"<(xcode_version)\"@@@",
       "@@@STEP_LOG_LINE@template.isolate@          ], @@@",
