@@ -59,6 +59,10 @@ TRYBOTS = freeze({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Mac10.11 (retina)',
       }),
+      'mac10.12_blink_rel': simple_bot({
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Mac10.12',
+      }),
       'win7_blink_dbg': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Win7 (dbg)',
