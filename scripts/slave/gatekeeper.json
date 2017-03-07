@@ -368,23 +368,6 @@
     "https://build.chromium.org/p/chromium.lkgr": [
       {
         "tree_notify": [
-          "jschuh@chromium.org",
-          "scottmg@chromium.org",
-          "wfh@chromium.org"
-        ],
-
-        "builders": {
-          "Win x64": {
-            "categories": [
-              "chromium_archive_build",
-              "chromium_compile",
-              "chromium_windows"
-            ]
-          }
-        }
-      },
-      {
-        "tree_notify": [
           "chrome-security-sheriff@grotations.appspotmail.com"
         ],
 
