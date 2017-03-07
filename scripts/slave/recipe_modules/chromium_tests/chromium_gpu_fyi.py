@@ -921,6 +921,25 @@ SPEC = {
       'enable_swarming': True,
     },
 
+    'Linux ChromiumOS Ozone (Intel)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'Linux ChromiumOS Ozone Builder',
+      'testing': {
+        'platform': 'linux',
+      },
+      # Swarming is deliberately NOT enabled on this one-off configuration.
+      # Multiple copies of the machines have to be deployed into swarming
+      # in order to keep up with the faster cycle time of the tests.
+      'enable_swarming': False,
+    },
+
     # The following machines don't actually exist. They are specified
     # here only in order to allow the associated src-side JSON entries
     # to be read, and the "optional" GPU tryservers to be specified in
@@ -1030,9 +1049,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder',
-      'compile_targets': [
-        'aura_builder',
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -1054,9 +1070,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder',
-      'compile_targets': [
-        'aura_builder',
-      ],
       'testing': {
         'platform': 'linux',
       },

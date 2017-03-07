@@ -481,6 +481,16 @@
       "builder_timeout_s": 7200,
       "category": "4ChromiumOS",
     },
+    "Linux ChromiumOS Ozone (Intel)": {
+      "recipe": "chromium",
+      "use_remote_run": True,
+      "scheduler": None,
+      # It's crucial to merge build requests on the testers.
+      "mergeRequests": True,
+      "slave_pools": ["linux_chromiumos_ozone_intel"],
+      "builder_timeout_s": 21600,
+      "category": "4ChromiumOS",
+    },
   },
 
   "schedulers": {
@@ -818,6 +828,14 @@
         "version": "trusty",
       },
       "slaves": ["slave206-c1"],
+    },
+    "linux_chromiumos_ozone_intel": {
+      "slave_data": {
+        "bits": 64,
+        "os": "linux",
+        "version": "yakkety",
+      },
+      "slaves": ["build158-b1"],
     },
 
     "android_rel_nexus_5": {
