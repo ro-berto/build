@@ -153,10 +153,10 @@ class DeferredResource(object):
     if retry_attempt_count is None:
       retry_attempt_count = DEFAULT_RETRY_ATTEMPT_COUNT
     assert isinstance(retry_attempt_count, int)
-    if http_client_name is None:
-      http_client_name = 'deferred_resource'
+    assert http_client_name
 
-    self._pool = _pool or self._create_thread_pool(max_concurrent_requests)
+    self._pool = _pool or self._create_thread_pool(
+        max_concurrent_requests, http_client_name)
     self._resource = resource
     self.credentials = credentials
     self.retry_wait_seconds = retry_wait_seconds
@@ -170,13 +170,16 @@ class DeferredResource(object):
     self.http_client_name = http_client_name
 
   @classmethod
-  def _create_thread_pool(cls, max_concurrent_requests):
-    return DaemonThreadPool(minthreads=1, maxthreads=max_concurrent_requests)
+  def _create_thread_pool(cls, max_concurrent_requests, name):
+    return DaemonThreadPool(
+        minthreads=1, maxthreads=max_concurrent_requests, name=name)
 
   @classmethod
   def _create_async(
-      cls, resource_factory, max_concurrent_requests=1, _pool=None, **kwargs):
-    _pool = _pool or cls._create_thread_pool(max_concurrent_requests)
+      cls, resource_factory, max_concurrent_requests=1, _pool=None,
+      http_client_name=None, **kwargs):
+    _pool = _pool or cls._create_thread_pool(
+        max_concurrent_requests, http_client_name)
     result = defer.Deferred()
 
     def create_sync():
@@ -185,7 +188,8 @@ class DeferredResource(object):
       try:
         assert resource_factory, 'resource_factory is not specified'
         res = resource_factory()
-        def_res = cls(res, _pool=_pool, **kwargs)
+        def_res = cls(res, _pool=_pool, http_client_name=http_client_name,
+                      **kwargs)
         reactor.callFromThread(result.callback, def_res)
       except Exception as ex:
         reactor.callFromThread(result.errback, ex)
@@ -202,7 +206,7 @@ class DeferredResource(object):
       developerKey=None, model=None,
       requestBuilder=apiclient.http.HttpRequest,
       retry_wait_seconds=None, retry_attempt_count=None, verbose=False,
-      log_prefix='', timeout=None):
+      log_prefix='', timeout=None, http_client_name=None):
     """Asynchronously builds a DeferredResource for a discoverable API.
 
     Asynchronously builds a resource by calling apiclient.discovery.build and
@@ -234,6 +238,8 @@ class DeferredResource(object):
         then Python's default timeout for sockets will be used. See
         for example the docs of socket.setdefaulttimeout():
         http://docs.python.org/library/socket.html#socket.setdefaulttimeout
+      http_client_name (str): an identifier for the HTTP requests made by this
+        resource. Included with monitoring metrics.
 
     Returns:
       A DeferredResource as Deferred.
@@ -258,6 +264,7 @@ class DeferredResource(object):
         verbose=verbose,
         log_prefix=log_prefix,
         timeout=timeout,
+        http_client_name=http_client_name,
     )
 
   def log(self, message):
