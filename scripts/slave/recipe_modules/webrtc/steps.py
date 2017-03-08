@@ -62,11 +62,17 @@ ANDROID_JUNIT_TESTS = (
   'android_junit_tests',
 )
 
+ANDROID_EXPERIMENTAL_TESTS = (
+  'AppRTCMobileTestSTubbedIO',
+)
+
+
 def generate_tests(api, test_suite, revision, enable_swarming=False):
   tests = []
+  GTestTest = api.m.chromium_tests.steps.GTestTest
+  SwarmingTest = api.m.chromium_tests.steps.SwarmingIsolatedScriptTest
   if test_suite == 'webrtc':
     if enable_swarming:
-      SwarmingTest = api.m.chromium_tests.steps.SwarmingIsolatedScriptTest
       for test, extra_args in sorted(NORMAL_TESTS.items()):
         tests.append(SwarmingTest(test, args=['--timeout=900'], **extra_args))
     else:
@@ -104,7 +110,6 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
     # TODO(kjellander): Fix the Android ASan bot so we can have an assert here.
     tests.append(AndroidPerfTest('webrtc_perf_tests', revision=revision))
   elif test_suite == 'android':
-    GTestTest = api.m.chromium_tests.steps.GTestTest
     for test in (ANDROID_DEVICE_TESTS +
                  ANDROID_INSTRUMENTATION_TESTS):
       tests.append(GTestTest(test, enable_swarming=enable_swarming,
@@ -115,6 +120,10 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
                                override_isolate_target=test))
       else:
         tests.append(AndroidJunitTest(test))
+  elif test_suite == 'android_experimental':
+    for test in ANDROID_EXPERIMENTAL_TESTS:
+      tests.append(GTestTest(test, enable_swarming=enable_swarming,
+                             override_isolate_target=test))
 
   return tests
 

@@ -24,6 +24,7 @@ class WebRTCApi(recipe_api.RecipeApi):
   ANDROID_DEVICE_TESTS = steps.ANDROID_DEVICE_TESTS
   ANDROID_INSTRUMENTATION_TESTS = steps.ANDROID_INSTRUMENTATION_TESTS
   ANDROID_JUNIT_TESTS = steps.ANDROID_JUNIT_TESTS
+  ANDROID_EXPERIMENTAL_TESTS = steps.ANDROID_EXPERIMENTAL_TESTS
 
   PERF_CONFIG = {'a_default_rev': 'r_webrtc_git'}
   DASHBOARD_UPLOAD_URL = 'https://chromeperf.appspot.com'
@@ -103,6 +104,8 @@ class WebRTCApi(recipe_api.RecipeApi):
         self._isolated_targets = (self.ANDROID_DEVICE_TESTS +
                                   self.ANDROID_INSTRUMENTATION_TESTS +
                                   self.ANDROID_JUNIT_TESTS)
+      elif self.c.TEST_SUITE == 'android_experimental':
+        self._isolated_targets = self.ANDROID_EXPERIMENTAL_TESTS
       self._isolated_targets = sorted(self._isolated_targets)
       if not self._isolated_targets: # pragma: no cover
         raise self.m.step.StepFailure('Isolation and swarming are only '
