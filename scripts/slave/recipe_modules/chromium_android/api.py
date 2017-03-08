@@ -625,6 +625,9 @@ class AndroidApi(recipe_api.RecipeApi):
       args.append('--disable-system-chrome')
     if remove_system_webview:
       args.append('--remove-system-webview')
+    if self.c and self.c.remove_system_apps:
+      args.append('--remove-system-apps')
+      args.extend(self.c.remove_system_apps)
     if self.c and self.c.chrome_specific_wipe:
       args.append('--chrome-specific-wipe')
     if emulators:

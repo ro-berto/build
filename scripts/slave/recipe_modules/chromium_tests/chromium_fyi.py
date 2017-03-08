@@ -2179,6 +2179,10 @@ SPEC = {
       'bot_type': 'tester',
       'parent_buildername': 'Android Builder (dbg)',
       'android_config': 'main_builder_mb',
+      'android_apply_config': [
+        'use_devil_provision',
+        'remove_system_vrcore',
+      ],
       'root_devices': True,
       'test_results_config': 'staging_server',
       'testing': {

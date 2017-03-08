@@ -45,6 +45,7 @@ def BaseConfig(CHECKOUT_PATH, INTERNAL=False, REPO_NAME=None, REPO_URL=None,
     # TODO(jbudorick): Remove this once everything has switched to devil
     # provisioning.
     use_devil_provision = Single(bool, required=False, empty_val=False),
+    remove_system_apps = List(inner_type=basestring),
   )
 
 
@@ -250,3 +251,7 @@ def use_devil_adb(c):
 @config_ctx()
 def use_devil_provision(c):
   c.use_devil_provision = True
+
+@config_ctx(includes=['use_devil_provision'])
+def remove_system_vrcore(c):
+  c.remove_system_apps.append('GoogleVrCore')
