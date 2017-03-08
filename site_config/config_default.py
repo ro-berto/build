@@ -183,6 +183,13 @@ class Master(object):
     last_good_url = base_app_url + '/lkgr'
     last_good_blink_url = 'http://blink-status.appspot.com/lkgr'
 
+  class Master1a(Base):
+    """Chromium.perf master."""
+    master_host = 'master1a.golo.chromium.org'
+    master_port_base = 11
+    tree_closing_notification_recipients = []
+    from_address = 'buildbot@chromium.org'
+
   class Master2a(Base):
     """Chromeos master A."""
     master_host = 'master2a.golo.chromium.org'

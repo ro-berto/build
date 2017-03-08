@@ -6,7 +6,7 @@
 
 from config_bootstrap import Master
 
-class ChromiumPerf(Master.Master1):
+class ChromiumPerf(Master.Master1a):
   project_name = 'Chromium Perf'
   master_port = 8013
   slave_port = 8113
