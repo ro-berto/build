@@ -55,6 +55,7 @@ twistd.pid
 !/slave/cert/
 /tags
 /third_party/google_api_python_client
+/third_party/gsutil
 /third_party/httplib2
 /third_party/infra_libs
 /third_party/oauth2client

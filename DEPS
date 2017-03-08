@@ -10,6 +10,12 @@ deps = {
     'https://chromium.googlesource.com/chromium/src/chrome/test/data/reliability.git',
   'build/scripts/tools/deps2git':
     'https://chromium.googlesource.com/chromium/tools/deps2git.git',
+  'build/third_party/gsutil':
+    'https://chromium.googlesource.com/external/gsutil/src.git'
+    '@5cba434b828da428a906c8197a23c9ae120d2636',
+  'build/third_party/gsutil/boto':
+    'https://chromium.googlesource.com/external/boto.git'
+    '@98fc59a5896f4ea990a4d527548204fed8f06c64',
   'build/third_party/infra_libs':
     'https://chromium.googlesource.com/infra/infra/packages/infra_libs.git'
     '@3eddb1684ce9a315b14d7ec8f40e9f616cf50fa6',
