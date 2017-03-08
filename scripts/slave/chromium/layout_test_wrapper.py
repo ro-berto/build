@@ -13,6 +13,8 @@ To pass additional options to run-webkit-tests without having them interpreted
 as options for this script, include them in an '--options="..."' argument. In
 addition, a list of one or more tests or test directories, specified relative
 to the main webkit test directory, may be passed on the command line.
+
+TODO(qyearsley): Remove all usage of this script, see crbug.com/695700.
 """
 
 import json
@@ -30,19 +32,8 @@ def layout_test(options, args):
   """Parse options and call run-webkit-tests, using Python from the tree."""
   build_dir = os.path.abspath(options.build_dir)
 
-  dumprendertree_exe = 'DumpRenderTree.exe'
-  if options.driver_name:
-    dumprendertree_exe = '%s.exe' % options.driver_name
-
-  # Disable the page heap in case it got left enabled by some previous process.
-  try:
-    slave_utils.SetPageHeap(build_dir, dumprendertree_exe, False)
-  except chromium_utils.PathNotFound:
-    # If we don't have gflags.exe, report it but don't worry about it.
-    print 'Warning: Couldn\'t disable page heap, if it was already enabled.'
-
-  blink_scripts_dir = chromium_utils.FindUpward(build_dir,
-    'third_party', 'WebKit', 'Tools', 'Scripts')
+  blink_scripts_dir = chromium_utils.FindUpward(
+    build_dir, 'third_party', 'WebKit', 'Tools', 'Scripts')
   run_blink_tests = os.path.join(blink_scripts_dir, 'run-webkit-tests')
 
   command = [run_blink_tests,
@@ -111,14 +102,8 @@ def layout_test(options, args):
   command.extend(['--master-name', slave_utils.GetActiveMaster() or ''])
   if options.step_name:
     command.extend(['--step-name', options.step_name])
-  # On Windows, look for the target in an exact location.
-  if sys.platform == 'win32':
-    command.extend(['--build-directory', build_dir])
   if options.test_results_server:
     command.extend(['--test-results-server', options.test_results_server])
-
-  if options.enable_pageheap:
-    command.append('--time-out-ms=120000')
 
   if options.time_out_ms:
     command.extend(['--time-out-ms', options.time_out_ms])
@@ -151,15 +136,9 @@ def layout_test(options, args):
   slave_utils.RemoveChromeTemporaryFiles()
 
   try:
-    if options.enable_pageheap:
-      slave_utils.SetPageHeap(build_dir, dumprendertree_exe, True)
-    # Run the the tests
-    return slave_utils.RunPythonCommandInBuildDir(build_dir, options.target,
-                                                  command)
+    return slave_utils.RunPythonCommandInBuildDir(
+        build_dir, options.target, command)
   finally:
-    if options.enable_pageheap:
-      slave_utils.SetPageHeap(build_dir, dumprendertree_exe, False)
-
     if options.json_test_results:
       results_dir = options.results_directory
       results_json = os.path.join(results_dir, "failing_results.json")
@@ -190,6 +169,8 @@ def layout_test(options, args):
 
 
 def main():
+  assert sys.platform != 'win32', 'This script should not be run on Windows.'
+
   option_parser = optparse.OptionParser()
   option_parser.add_option('-o', '--results-directory', default='',
                            help='output results directory')
@@ -205,8 +186,6 @@ def main():
   option_parser.add_option('--no-pixel-tests', action='store_true',
                            default=False,
                            help='disable pixel-to-pixel PNG comparisons')
-  option_parser.add_option('--enable-pageheap', action='store_true',
-                           default=False, help='Enable page heap checking')
   option_parser.add_option('--batch-size',
                            default=None,
                            help=('Run a the tests in batches (n), after every '
@@ -291,9 +270,6 @@ def main():
   options, args = option_parser.parse_args()
   options.build_dir = build_directory.GetBuildOutputDirectory()
 
-  # Disable pageheap checking except on Windows.
-  if sys.platform != 'win32':
-    options.enable_pageheap = False
   return layout_test(options, args)
 
 if '__main__' == __name__:
