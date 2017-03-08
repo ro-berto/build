@@ -23,8 +23,6 @@ from twisted.python import log, context, failure
 from twisted.python.deprecate import deprecatedModuleAttribute
 from twisted.python.versions import Version
 
-from infra_libs import ts_mon
-
 WorkerStop = object()
 
 
@@ -46,38 +44,6 @@ class ThreadPool:
 
     threadFactory = threading.Thread
     currentThread = staticmethod(threading.currentThread)
-
-    _fieldSpec = [
-        ts_mon.StringField('name'),
-    ]
-    _queueMetric = ts_mon.GaugeMetric(
-        'twisted/thread_pool/queue',
-        'Number of runnables queued in a twisted thread pool',
-        _fieldSpec)
-    _waitingMetric = ts_mon.GaugeMetric(
-        'twisted/thread_pool/waiting',
-        'Number of idle workers for a twisted thread pool',
-        _fieldSpec)
-    _workingMetric = ts_mon.GaugeMetric(
-        'twisted/thread_pool/working',
-        'Number of running workers for a twisted thread pool',
-        _fieldSpec)
-
-    _runningThreadPools = []
-
-    @classmethod
-    def _setGlobalMetrics(cls):
-        for tp in cls._runningThreadPools:
-            if tp.name:
-                fields = {'name': tp.name}
-                cls._queueMetric.set(tp.q.qsize(), fields)
-                cls._waitingMetric.set(len(tp.waiters), fields)
-                cls._workingMetric.set(len(tp.working), fields)
-
-    ts_mon.register_global_metrics([
-        _queueMetric, _waitingMetric, _workingMetric])
-    ts_mon.register_global_metrics_callback('ThreadPool',
-        lambda: ThreadPool._setGlobalMetrics())
 
     def __init__(self, minthreads=5, maxthreads=20, name=None):
         """
@@ -105,7 +71,6 @@ class ThreadPool:
         self.started = True
         # Start some threads.
         self.adjustPoolsize()
-        self._runningThreadPools.append(self)
 
     def startAWorker(self):
         self.workers += 1
@@ -281,11 +246,6 @@ class ThreadPool:
         # FIXME: threads that have died before calling stop() are not joined.
         for thread in threads:
             thread.join()
-
-        try:
-            self._runningThreadPools.remove(self)
-        except ValueError:
-            pass
 
     def adjustPoolsize(self, minthreads=None, maxthreads=None):
         if minthreads is None:

@@ -14,12 +14,9 @@ import test_env  # pylint: disable=W0611,W0403
 from master.deferred_resource import DeferredResource
 from mock import NonCallableMock, Mock, call
 from twisted.internet import reactor
-from twisted.python.threadpool import ThreadPool
 
 import apiclient
 import httplib2
-
-from infra_libs import ts_mon
 
 
 def run_deferred(deferred, timeout=1, print_traceback=True):
@@ -77,7 +74,6 @@ class DeferredResourceTest(unittest.TestCase):
         resource=self.resource,
         credentials=credentials,
         retry_wait_seconds=0.1, # Run tests fast.
-        http_client_name='unittest',
     )
     with self.deferred_resource:
       yield
@@ -135,7 +131,7 @@ class DeferredResourceTest(unittest.TestCase):
   def test_async_create(self):
     res = fake_resource()
     def_res = run_deferred(
-        DeferredResource._create_async(lambda: res, http_client_name='unittest')
+        DeferredResource._create_async(lambda: res)
     )
     try:
       self.assertTrue(isinstance(def_res, DeferredResource))
@@ -144,54 +140,17 @@ class DeferredResourceTest(unittest.TestCase):
       def_res.stop()
 
   def test_async_create_with_bad_request_factory(self):
-    pool = DeferredResource._create_thread_pool(1, 'unittest')
+    pool = DeferredResource._create_thread_pool(1)
     try:
       with self.assertRaises(self.BadFactoryError):
         run_deferred(
             DeferredResource._create_async(
-                self.bad_factory, _pool=pool, http_client_name='unittest'),
+                self.bad_factory, _pool=pool),
             print_traceback=False
         )
       self.assertFalse(pool.threads)
     finally:
       pool.stop()
-
-
-class ThreadPoolTest(unittest.TestCase):
-  """Test for the monitoring code we added to twistd's ThreadPool."""
-
-  def setUp(self):
-    ts_mon.reset_for_unittest()
-    ThreadPool._runningThreadPools = []
-
-  def test_start_stop(self):
-    tp = ThreadPool(name='foo')
-    self.assertEqual([], ThreadPool._runningThreadPools)
-    tp.start()
-    self.assertEqual([tp], ThreadPool._runningThreadPools)
-    tp.stop()
-    self.assertEqual([], ThreadPool._runningThreadPools)
-
-  def test_working_metric(self):
-    tp = ThreadPool(name='foo', minthreads=1)
-    tp.start()
-    tp.callInThread(ThreadPool._setGlobalMetrics)
-    tp.stop()
-
-    fields = {'name': 'foo'}
-    self.assertEqual(1, ThreadPool._queueMetric.get(fields))
-    self.assertEqual(0, ThreadPool._waitingMetric.get(fields))
-    self.assertEqual(1, ThreadPool._workingMetric.get(fields))
-
-  def test_no_name_no_metrics(self):
-    tp = ThreadPool(minthreads=1)
-    tp.start()
-    tp.callInThread(ThreadPool._setGlobalMetrics)
-    tp.stop()
-
-    fields = {'name': ''}
-    self.assertEqual(None, ThreadPool._queueMetric.get(fields))
-
 
 if __name__ == '__main__':
   unittest.main()

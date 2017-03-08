@@ -61,6 +61,16 @@ reactor_queue_modified = ts_mon.FloatMetric(
     None,
     units=ts_mon.MetricsDataUnits.MILLISECONDS)
 
+pool_queue = ts_mon.GaugeMetric('buildbot/master/thread_pool/queue',
+    'Number of runnables queued in the database thread pool',
+    [ts_mon.StringField('master')])
+pool_waiting = ts_mon.GaugeMetric('buildbot/master/thread_pool/waiting',
+    'Number of idle workers for the database thread pool',
+    [ts_mon.StringField('master')])
+pool_working = ts_mon.GaugeMetric('buildbot/master/thread_pool/working',
+    'Number of running workers for the database thread pool',
+    [ts_mon.StringField('master')])
+
 SERVER_STARTED = time.time()
 
 
@@ -111,7 +121,7 @@ class MonitoringStatusReceiver(StatusReceiverMultiService):
   def __init__(self):
     StatusReceiverMultiService.__init__(self)
     self.status = None
-    self.thread_pool = threadpool.ThreadPool(1, 1, 'MonitoringStatusReceiver')
+    self.thread_pool = threadpool.ThreadPool(1, 1)
     self.loop = task.LoopingCall(self.updateMetricsAndFlush)
 
   def startService(self):
@@ -179,6 +189,10 @@ class MonitoringStatusReceiver(StatusReceiverMultiService):
     uptime.set(time.time() - SERVER_STARTED, fields={'master': ''})
     accepting_builds.set(bool(self.status.master.botmaster.brd.running),
                          fields={'master': ''})
+    pool = self.status.master.db.pool
+    pool_queue.set(pool.q.qsize(), fields={'master': ''})
+    pool_waiting.set(len(pool.waiters), fields={'master': ''})
+    pool_working.set(len(pool.working), fields={'master': ''})
     reactor_queue.set(len(reactor.threadCallQueue))
 
     # Iterate through the reactor queue to figure out the oldest deferred.
