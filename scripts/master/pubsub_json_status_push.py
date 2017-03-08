@@ -338,7 +338,7 @@ class StatusPush(StatusReceiverMultiService):
     send_builds = []
     for i, build in enumerate(builds):
       success, result = loaded_builds[i]
-      if not success:
+      if not (success and result):
         log.err('Failed to load build for [%s]: %s' % (build, result))
         continue
 
@@ -436,7 +436,8 @@ class StatusPush(StatusReceiverMultiService):
     """
     builder = self._status.getBuilder(b.builder_name)
     build = builder.getBuild(b.build_number)
-    return defer.succeed((b, build.asDict()))
+    # If we can't load the build, then return None to signify failure.
+    return defer.succeed((b, build.asDict() if build else None))
 
   @staticmethod
   def _get_build_request(_key, pb_request_status):
