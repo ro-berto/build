@@ -431,7 +431,9 @@
       "isac_fix_test",
       "32000",
       "[BUILDER_CACHE]/Linux_Trusty/src/resources/speech_and_misc_wb.pcm",
-      "isac_speech_and_misc_wb.pcm"
+      "isac_speech_and_misc_wb.pcm",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Trusty",
     "name": "isac_fix_test"
@@ -461,7 +463,9 @@
       "--slave-name=bot_id",
       "--build-number=1337",
       "--revision=170242",
-      "webrtc_perf_tests"
+      "webrtc_perf_tests",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Trusty",
     "name": "webrtc_perf_tests"

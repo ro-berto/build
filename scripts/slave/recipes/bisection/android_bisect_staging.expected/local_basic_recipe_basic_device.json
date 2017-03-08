@@ -1158,7 +1158,9 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -1267,7 +1269,9 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -1376,7 +1380,9 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -1485,7 +1491,9 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -1594,7 +1602,9 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -1703,7 +1713,9 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -2044,7 +2056,9 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -2153,7 +2167,9 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -2262,7 +2278,9 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -2371,7 +2389,9 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -2480,7 +2500,9 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -2589,7 +2611,9 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -2964,7 +2988,9 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -3073,7 +3099,9 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -3182,7 +3210,9 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -3553,7 +3583,9 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -3662,7 +3694,9 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -3771,7 +3805,9 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -4142,7 +4178,9 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -4251,7 +4289,9 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -4360,7 +4400,9 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -4469,7 +4511,9 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -4578,7 +4622,9 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -4949,7 +4995,9 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -5058,7 +5106,9 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -5167,7 +5217,9 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -5276,7 +5328,9 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -5385,7 +5439,9 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -5756,7 +5812,9 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -5865,7 +5923,9 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -5974,7 +6034,9 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -6083,7 +6145,9 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -6192,7 +6256,9 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -6301,7 +6367,9 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -6410,7 +6478,9 @@
       "page_cycler_v2.intl_ar_fa_he",
       "--device",
       "2222",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",

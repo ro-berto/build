@@ -280,7 +280,9 @@
       "--build-number=571",
       "--enable-asan",
       "browser_tests",
-      "--test-launcher-print-test-stdio=always"
+      "--test-launcher-print-test-stdio=always",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",

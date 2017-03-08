@@ -639,7 +639,9 @@
       "webkit_tests",
       "--additional-expectations",
       "src/third_party/WebKit/LayoutTests/LeakExpectations",
-      "--options=--enable-leak-detection"
+      "--options=--enable-leak-detection",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "cwd": "[BUILDER_CACHE]/WebKit_Linux_Trusty_Leak",
     "env": {

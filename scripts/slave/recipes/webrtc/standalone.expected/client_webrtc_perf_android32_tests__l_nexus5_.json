@@ -410,7 +410,9 @@
       "--run-python-script",
       "--revision=170242",
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/Release/bin/run_webrtc_perf_tests",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_",
     "name": "webrtc_perf_tests"

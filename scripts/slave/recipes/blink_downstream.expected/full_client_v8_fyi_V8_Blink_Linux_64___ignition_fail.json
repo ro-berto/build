@@ -444,7 +444,9 @@
       "--builder-name=V8-Blink Linux 64 - ignition",
       "--slave-name=test_bot",
       "--build-number=571",
-      "webkit_unit_tests"
+      "webkit_unit_tests",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___ignition",
     "name": "webkit_unit_tests"
@@ -489,7 +491,9 @@
       "--additional-expectations",
       "[BUILDER_CACHE]/V8_Blink_Linux_64___ignition/src/v8/tools/blink_tests/TestExpectationsFuture",
       "--additional-driver-flag",
-      "--js-flags=--future"
+      "--js-flags=--future",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___ignition",
     "name": "webkit_tests (with patch)",
@@ -566,7 +570,9 @@
       "--test-list",
       "bad/totally-bad-probably.html\ntricky/totally-maybe-not-awesome.html",
       "--skipped",
-      "always"
+      "always",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___ignition",
     "name": "webkit_tests (without patch)",

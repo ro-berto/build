@@ -602,7 +602,9 @@
       "--builder-name=linux_chromium_chromeos_rel_ng",
       "--slave-name=test_bot",
       "--build-number=571",
-      "base_unittests"
+      "base_unittests",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"

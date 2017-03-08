@@ -374,7 +374,9 @@
       "--builder-name=linux_gcc",
       "--slave-name=bot_id",
       "--build-number=1337",
-      "libyuv_unittest"
+      "libyuv_unittest",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "name": "libyuv_unittest"
   },

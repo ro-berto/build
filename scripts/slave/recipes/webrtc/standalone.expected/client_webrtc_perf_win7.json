@@ -427,7 +427,9 @@
       "--slave-name=bot_id",
       "--build-number=1337",
       "--revision=170242",
-      "webrtc_perf_tests.exe"
+      "webrtc_perf_tests.exe",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
     ],
     "cwd": "[BUILDER_CACHE]\\Win7",
     "name": "webrtc_perf_tests"

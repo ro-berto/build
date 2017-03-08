@@ -711,7 +711,9 @@
       "[START_DIR]/src/out/bad_devices.json",
       "--enable-platform-mode",
       "--output-json-data",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -806,7 +808,9 @@
       "[START_DIR]/src/out/bad_devices.json",
       "--enable-platform-mode",
       "--output-json-data",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -901,7 +905,9 @@
       "[START_DIR]/src/out/bad_devices.json",
       "--enable-platform-mode",
       "--output-json-data",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",

@@ -1230,7 +1230,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -1307,7 +1309,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -1384,7 +1388,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -1461,7 +1467,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -1538,7 +1546,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -1615,7 +1625,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -1854,7 +1866,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -1931,7 +1945,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -2008,7 +2024,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -2085,7 +2103,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -2162,7 +2182,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -2239,7 +2261,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -2638,7 +2662,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -2715,7 +2741,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -2792,7 +2820,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -2869,7 +2899,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -2946,7 +2978,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -3023,7 +3057,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -3174,7 +3210,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -3251,7 +3289,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -3328,7 +3368,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -3624,7 +3666,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -3701,7 +3745,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -3778,7 +3824,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -4074,7 +4122,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -4151,7 +4201,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -4228,7 +4280,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -4524,7 +4578,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -4601,7 +4657,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -4678,7 +4736,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -4755,7 +4815,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -4832,7 +4894,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -5128,7 +5192,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -5205,7 +5271,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -5282,7 +5350,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -5359,7 +5429,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -5436,7 +5508,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -5732,7 +5806,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -5809,7 +5885,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -5886,7 +5964,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -5963,7 +6043,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -6040,7 +6122,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -6336,7 +6420,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -6413,7 +6499,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -6490,7 +6578,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -6567,7 +6657,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -6644,7 +6736,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -6721,7 +6815,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -6798,7 +6894,9 @@
       "--build-number=571",
       "[START_DIR]/src/out/Release/cc_perftests",
       "--test-launcher-print-test-stdio=always",
-      "--verbose"
+      "--verbose",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"

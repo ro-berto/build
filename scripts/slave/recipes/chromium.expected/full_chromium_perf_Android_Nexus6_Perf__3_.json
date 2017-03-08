@@ -762,7 +762,9 @@
       "--blacklist-file",
       "[BUILDER_CACHE]/Android_Nexus6_Perf__3_/src/out/bad_devices.json",
       "--output-json-data",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "cwd": "[BUILDER_CACHE]/Android_Nexus6_Perf__3_",
     "env": {
@@ -857,7 +859,9 @@
       "--blacklist-file",
       "[BUILDER_CACHE]/Android_Nexus6_Perf__3_/src/out/bad_devices.json",
       "--output-json-data",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "cwd": "[BUILDER_CACHE]/Android_Nexus6_Perf__3_",
     "env": {
@@ -952,7 +956,9 @@
       "--blacklist-file",
       "[BUILDER_CACHE]/Android_Nexus6_Perf__3_/src/out/bad_devices.json",
       "--output-json-data",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "cwd": "[BUILDER_CACHE]/Android_Nexus6_Perf__3_",
     "env": {

@@ -1237,7 +1237,9 @@
       "resource_sizes MonochromePublic.apk",
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
-      "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json"
+      "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -1339,7 +1341,9 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
       "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -1441,7 +1445,9 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
       "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -1543,7 +1549,9 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
       "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -1645,7 +1653,9 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
       "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -1747,7 +1757,9 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
       "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -2010,7 +2022,9 @@
       "resource_sizes MonochromePublic.apk",
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
-      "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json"
+      "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -2112,7 +2126,9 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
       "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -2214,7 +2230,9 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
       "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -2316,7 +2334,9 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
       "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -2418,7 +2438,9 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
       "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -2520,7 +2542,9 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
       "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -2943,7 +2967,9 @@
       "resource_sizes MonochromePublic.apk",
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
-      "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json"
+      "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -3045,7 +3071,9 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
       "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -3147,7 +3175,9 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
       "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -3249,7 +3279,9 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
       "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -3351,7 +3383,9 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
       "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -3453,7 +3487,9 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
       "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -3628,7 +3664,9 @@
       "resource_sizes MonochromePublic.apk",
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
-      "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json"
+      "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -3730,7 +3768,9 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
       "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -3832,7 +3872,9 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
       "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -4152,7 +4194,9 @@
       "resource_sizes MonochromePublic.apk",
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
-      "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json"
+      "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -4254,7 +4298,9 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
       "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -4356,7 +4402,9 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
       "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -4676,7 +4724,9 @@
       "resource_sizes MonochromePublic.apk",
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
-      "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json"
+      "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -4778,7 +4828,9 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
       "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -4880,7 +4932,9 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
       "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -5200,7 +5254,9 @@
       "resource_sizes MonochromePublic.apk",
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
-      "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json"
+      "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -5302,7 +5358,9 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
       "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -5404,7 +5462,9 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
       "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -5506,7 +5566,9 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
       "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -5608,7 +5670,9 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
       "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -5928,7 +5992,9 @@
       "resource_sizes MonochromePublic.apk",
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
-      "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json"
+      "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -6030,7 +6096,9 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
       "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -6132,7 +6200,9 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
       "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -6234,7 +6304,9 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
       "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -6336,7 +6408,9 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
       "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -6656,7 +6730,9 @@
       "resource_sizes MonochromePublic.apk",
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
-      "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json"
+      "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -6758,7 +6834,9 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
       "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -6860,7 +6938,9 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
       "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -6962,7 +7042,9 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
       "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -7064,7 +7146,9 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
       "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -7384,7 +7468,9 @@
       "resource_sizes MonochromePublic.apk",
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
-      "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json"
+      "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -7486,7 +7572,9 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
       "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -7588,7 +7676,9 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
       "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -7690,7 +7780,9 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
       "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -7792,7 +7884,9 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
       "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -7894,7 +7988,9 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
       "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -7996,7 +8092,9 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb--verbose",
       "--output-chartjson-data=[START_DIR]/bisect_results/dummy/results-chart.json",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",

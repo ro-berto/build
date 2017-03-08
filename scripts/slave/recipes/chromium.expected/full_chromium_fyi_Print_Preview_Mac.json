@@ -312,7 +312,9 @@
       "--write-full-results-to",
       "/path/to/tmp/json",
       "--platform",
-      "browser_test.mac"
+      "browser_test.mac",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "cwd": "[BUILDER_CACHE]/Print_Preview_Mac",
     "env": {

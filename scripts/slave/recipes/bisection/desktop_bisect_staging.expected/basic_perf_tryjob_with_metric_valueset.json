@@ -505,7 +505,9 @@
       "--reset-results",
       "--upload-results",
       "--results-label=Patch",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "Running WITH patch.Performance Test (With Patch) 1 of 1",
@@ -884,7 +886,9 @@
       "--upload-bucket=public",
       "--upload-results",
       "--results-label=TOT",
-      "--output-dir=[START_DIR]/bisect_results/dummy"
+      "--output-dir=[START_DIR]/bisect_results/dummy",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "Running WITHOUT patch.Performance Test (Without Patch) 1 of 1",

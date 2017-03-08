@@ -420,7 +420,9 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\audio_decoder_unittests"
+      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\audio_decoder_unittests",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
     ],
     "cwd": "[BUILDER_CACHE]\\Win64_Debug__Win10_",
     "name": "audio_decoder_unittests"
@@ -444,7 +446,9 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\common_audio_unittests"
+      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\common_audio_unittests",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
     ],
     "cwd": "[BUILDER_CACHE]\\Win64_Debug__Win10_",
     "name": "common_audio_unittests"
@@ -468,7 +472,9 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\common_video_unittests"
+      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\common_video_unittests",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
     ],
     "cwd": "[BUILDER_CACHE]\\Win64_Debug__Win10_",
     "name": "common_video_unittests"
@@ -492,7 +498,9 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\modules_tests"
+      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\modules_tests",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
     ],
     "cwd": "[BUILDER_CACHE]\\Win64_Debug__Win10_",
     "name": "modules_tests"
@@ -516,7 +524,9 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\modules_unittests"
+      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\modules_unittests",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
     ],
     "cwd": "[BUILDER_CACHE]\\Win64_Debug__Win10_",
     "name": "modules_unittests"
@@ -540,7 +550,9 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\ortc_unittests"
+      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\ortc_unittests",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
     ],
     "cwd": "[BUILDER_CACHE]\\Win64_Debug__Win10_",
     "name": "ortc_unittests"
@@ -564,7 +576,9 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\peerconnection_unittests"
+      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\peerconnection_unittests",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
     ],
     "cwd": "[BUILDER_CACHE]\\Win64_Debug__Win10_",
     "name": "peerconnection_unittests"
@@ -588,7 +602,9 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\rtc_media_unittests"
+      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\rtc_media_unittests",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
     ],
     "cwd": "[BUILDER_CACHE]\\Win64_Debug__Win10_",
     "name": "rtc_media_unittests"
@@ -612,7 +628,9 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\rtc_pc_unittests"
+      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\rtc_pc_unittests",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
     ],
     "cwd": "[BUILDER_CACHE]\\Win64_Debug__Win10_",
     "name": "rtc_pc_unittests"
@@ -636,7 +654,9 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\rtc_stats_unittests"
+      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\rtc_stats_unittests",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
     ],
     "cwd": "[BUILDER_CACHE]\\Win64_Debug__Win10_",
     "name": "rtc_stats_unittests"
@@ -660,7 +680,9 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\rtc_unittests"
+      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\rtc_unittests",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
     ],
     "cwd": "[BUILDER_CACHE]\\Win64_Debug__Win10_",
     "name": "rtc_unittests"
@@ -684,7 +706,9 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\system_wrappers_unittests"
+      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\system_wrappers_unittests",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
     ],
     "cwd": "[BUILDER_CACHE]\\Win64_Debug__Win10_",
     "name": "system_wrappers_unittests"
@@ -708,7 +732,9 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\test_support_unittests"
+      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\test_support_unittests",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
     ],
     "cwd": "[BUILDER_CACHE]\\Win64_Debug__Win10_",
     "name": "test_support_unittests"
@@ -732,7 +758,9 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\tools_unittests"
+      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\tools_unittests",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
     ],
     "cwd": "[BUILDER_CACHE]\\Win64_Debug__Win10_",
     "name": "tools_unittests"
@@ -756,7 +784,9 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\video_engine_tests"
+      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\video_engine_tests",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
     ],
     "cwd": "[BUILDER_CACHE]\\Win64_Debug__Win10_",
     "name": "video_engine_tests"
@@ -780,7 +810,9 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\voice_engine_unittests"
+      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\voice_engine_unittests",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
     ],
     "cwd": "[BUILDER_CACHE]\\Win64_Debug__Win10_",
     "name": "voice_engine_unittests"
@@ -807,7 +839,9 @@
       "--slave-name=bot_id",
       "--build-number=1337",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "webrtc_nonparallel_tests.exe"
+      "webrtc_nonparallel_tests.exe",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
     ],
     "cwd": "[BUILDER_CACHE]\\Win64_Debug__Win10_",
     "name": "webrtc_nonparallel_tests"
@@ -832,7 +866,9 @@
       "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\third_party\\gtest-parallel\\gtest-parallel",
       "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\modules_tests",
       "--gtest_filter=ScreenCapturerIntegrationTest.*",
-      "--gtest_also_run_disabled_tests"
+      "--gtest_also_run_disabled_tests",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
     ],
     "cwd": "[BUILDER_CACHE]\\Win64_Debug__Win10_",
     "name": "modules_tests (screen capture disabled tests)"

@@ -663,7 +663,9 @@
       "--additional-driver-flag",
       "--enable-blink-features=TraceWrappables",
       "--additional-driver-flag",
-      "--js-flags=--incremental-marking-wrappers"
+      "--js-flags=--incremental-marking-wrappers",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "cwd": "[BUILDER_CACHE]/WebKit_Linux___TraceWrappables",
     "env": {
