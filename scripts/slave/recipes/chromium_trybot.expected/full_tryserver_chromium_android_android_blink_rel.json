@@ -968,6 +968,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/android_blink_rel",
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_blink_rel/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_blink_rel/src/build/android:%(PATH)s"
     },

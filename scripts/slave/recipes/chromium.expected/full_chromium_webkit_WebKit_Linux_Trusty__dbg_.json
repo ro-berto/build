@@ -640,6 +640,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux_layout",
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "webkit_tests",

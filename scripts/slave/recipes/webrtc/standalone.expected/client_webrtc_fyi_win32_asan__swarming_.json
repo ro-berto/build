@@ -2088,6 +2088,9 @@
       "--gtest_also_run_disabled_tests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_ASan__swarming_",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "modules_tests (screen capture disabled tests)"
   },
   {

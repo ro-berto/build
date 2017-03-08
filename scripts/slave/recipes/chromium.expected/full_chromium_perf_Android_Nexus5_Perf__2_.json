@@ -766,6 +766,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/Android_Nexus5_Perf__2_",
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/Android_Nexus5_Perf__2_/src/out/Release",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/Android_Nexus5_Perf__2_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Nexus5_Perf__2_/src/build/android:%(PATH)s"
@@ -861,6 +862,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/Android_Nexus5_Perf__2_",
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/Android_Nexus5_Perf__2_/src/out/Release",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/Android_Nexus5_Perf__2_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Nexus5_Perf__2_/src/build/android:%(PATH)s"
@@ -956,6 +958,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/Android_Nexus5_Perf__2_",
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/Android_Nexus5_Perf__2_/src/out/Release",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/Android_Nexus5_Perf__2_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Nexus5_Perf__2_/src/build/android:%(PATH)s"

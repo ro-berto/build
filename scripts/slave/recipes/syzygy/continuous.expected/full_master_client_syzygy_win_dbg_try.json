@@ -171,6 +171,9 @@
       "--test-launcher-timeout=300000",
       "--gtest_print_time"
     ],
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "bar_unittests"
   },
   {
@@ -194,6 +197,9 @@
       "--test-launcher-timeout=300000",
       "--gtest_print_time"
     ],
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "baz_unittests"
   },
   {
@@ -217,6 +223,9 @@
       "--test-launcher-timeout=300000",
       "--gtest_print_time"
     ],
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "foo_unittests"
   },
   {

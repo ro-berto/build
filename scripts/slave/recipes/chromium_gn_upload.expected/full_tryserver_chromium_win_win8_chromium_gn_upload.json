@@ -440,6 +440,9 @@
       "--build-number=571",
       "gn_unittests.exe"
     ],
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "gn_unittests"
   },
   {

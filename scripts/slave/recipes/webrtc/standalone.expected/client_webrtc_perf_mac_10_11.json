@@ -452,6 +452,9 @@
       "webrtc_perf_tests"
     ],
     "cwd": "[BUILDER_CACHE]/Mac_10_11",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+    },
     "name": "webrtc_perf_tests"
   },
   {

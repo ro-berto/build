@@ -481,6 +481,9 @@
       "--automated"
     ],
     "cwd": "[BUILDER_CACHE]\\win_baremetal",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "voe_auto_test"
   },
   {
@@ -505,6 +508,9 @@
       "video_capture_tests.exe"
     ],
     "cwd": "[BUILDER_CACHE]\\win_baremetal",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "video_capture_tests"
   },
   {

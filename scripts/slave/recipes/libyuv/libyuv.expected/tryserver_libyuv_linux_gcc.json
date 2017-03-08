@@ -376,6 +376,9 @@
       "--build-number=1337",
       "libyuv_unittest"
     ],
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+    },
     "name": "libyuv_unittest"
   },
   {

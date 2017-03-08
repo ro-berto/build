@@ -527,6 +527,8 @@ class ChromiumApi(recipe_api.RecipeApi):
     full_args.extend(self.c.runtests.test_args)
     full_args.extend(args)
 
+    self.m.build.add_slave_utils_kwargs(kwargs)
+
     runtest_path = self.package_repo_resource('scripts', 'slave', 'runtest.py')
     if self.c.runtest_py.src_side and not disable_src_side_runtest_py:
       runtest_path = self.m.path['checkout'].join(

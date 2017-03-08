@@ -458,6 +458,9 @@
       "--automated"
     ],
     "cwd": "[BUILDER_CACHE]/Mac64_Release__large_tests_",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+    },
     "name": "voe_auto_test"
   },
   {
@@ -485,6 +488,9 @@
       "video_capture_tests"
     ],
     "cwd": "[BUILDER_CACHE]/Mac64_Release__large_tests_",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+    },
     "name": "video_capture_tests"
   },
   {

@@ -447,6 +447,9 @@
       "webkit_unit_tests"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+    },
     "name": "webkit_unit_tests"
   },
   {
@@ -488,6 +491,9 @@
       "[BUILDER_CACHE]/V8_Blink_Linux_64/src/v8/tools/blink_tests/TestExpectations"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+    },
     "name": "webkit_tests (with patch)",
     "~followup_annotations": [
       "step returned non-zero exit code: 130",

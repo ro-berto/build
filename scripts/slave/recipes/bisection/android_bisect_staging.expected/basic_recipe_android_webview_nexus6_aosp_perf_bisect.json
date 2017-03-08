@@ -627,6 +627,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_webview_nexus6_aosp_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_webview_nexus6_aosp_perf_bisect/src/build/android:%(PATH)s"
     },
@@ -713,6 +714,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_webview_nexus6_aosp_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_webview_nexus6_aosp_perf_bisect/src/build/android:%(PATH)s"
     },

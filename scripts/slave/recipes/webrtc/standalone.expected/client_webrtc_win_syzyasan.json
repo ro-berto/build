@@ -435,6 +435,9 @@
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\audio_decoder_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "audio_decoder_unittests"
   },
   {
@@ -459,6 +462,9 @@
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\common_audio_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "common_audio_unittests"
   },
   {
@@ -483,6 +489,9 @@
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\common_video_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "common_video_unittests"
   },
   {
@@ -507,6 +516,9 @@
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\modules_tests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "modules_tests"
   },
   {
@@ -531,6 +543,9 @@
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\modules_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "modules_unittests"
   },
   {
@@ -555,6 +570,9 @@
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\ortc_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "ortc_unittests"
   },
   {
@@ -579,6 +597,9 @@
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\peerconnection_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "peerconnection_unittests"
   },
   {
@@ -603,6 +624,9 @@
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\rtc_media_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "rtc_media_unittests"
   },
   {
@@ -627,6 +651,9 @@
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\rtc_pc_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "rtc_pc_unittests"
   },
   {
@@ -651,6 +678,9 @@
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\rtc_stats_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "rtc_stats_unittests"
   },
   {
@@ -675,6 +705,9 @@
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\rtc_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "rtc_unittests"
   },
   {
@@ -699,6 +732,9 @@
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\system_wrappers_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "system_wrappers_unittests"
   },
   {
@@ -723,6 +759,9 @@
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\test_support_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "test_support_unittests"
   },
   {
@@ -747,6 +786,9 @@
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\tools_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "tools_unittests"
   },
   {
@@ -771,6 +813,9 @@
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\video_engine_tests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "video_engine_tests"
   },
   {
@@ -795,6 +840,9 @@
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\voice_engine_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "voice_engine_unittests"
   },
   {
@@ -822,6 +870,9 @@
       "webrtc_nonparallel_tests.exe"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "webrtc_nonparallel_tests"
   },
   {

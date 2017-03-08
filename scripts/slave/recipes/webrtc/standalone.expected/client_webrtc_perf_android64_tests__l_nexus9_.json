@@ -413,6 +413,9 @@
       "--verbose"
     ],
     "cwd": "[BUILDER_CACHE]/Android64_Tests__L_Nexus9_",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+    },
     "name": "webrtc_perf_tests"
   },
   {

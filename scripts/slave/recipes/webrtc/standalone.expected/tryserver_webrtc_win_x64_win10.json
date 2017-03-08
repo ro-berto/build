@@ -471,6 +471,9 @@
       "[BUILDER_CACHE]\\win_x64_win10\\src\\out\\Debug_x64\\audio_decoder_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\win_x64_win10",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "audio_decoder_unittests"
   },
   {
@@ -495,6 +498,9 @@
       "[BUILDER_CACHE]\\win_x64_win10\\src\\out\\Debug_x64\\common_audio_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\win_x64_win10",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "common_audio_unittests"
   },
   {
@@ -519,6 +525,9 @@
       "[BUILDER_CACHE]\\win_x64_win10\\src\\out\\Debug_x64\\common_video_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\win_x64_win10",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "common_video_unittests"
   },
   {
@@ -543,6 +552,9 @@
       "[BUILDER_CACHE]\\win_x64_win10\\src\\out\\Debug_x64\\modules_tests"
     ],
     "cwd": "[BUILDER_CACHE]\\win_x64_win10",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "modules_tests"
   },
   {
@@ -567,6 +579,9 @@
       "[BUILDER_CACHE]\\win_x64_win10\\src\\out\\Debug_x64\\modules_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\win_x64_win10",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "modules_unittests"
   },
   {
@@ -591,6 +606,9 @@
       "[BUILDER_CACHE]\\win_x64_win10\\src\\out\\Debug_x64\\ortc_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\win_x64_win10",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "ortc_unittests"
   },
   {
@@ -615,6 +633,9 @@
       "[BUILDER_CACHE]\\win_x64_win10\\src\\out\\Debug_x64\\peerconnection_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\win_x64_win10",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "peerconnection_unittests"
   },
   {
@@ -639,6 +660,9 @@
       "[BUILDER_CACHE]\\win_x64_win10\\src\\out\\Debug_x64\\rtc_media_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\win_x64_win10",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "rtc_media_unittests"
   },
   {
@@ -663,6 +687,9 @@
       "[BUILDER_CACHE]\\win_x64_win10\\src\\out\\Debug_x64\\rtc_pc_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\win_x64_win10",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "rtc_pc_unittests"
   },
   {
@@ -687,6 +714,9 @@
       "[BUILDER_CACHE]\\win_x64_win10\\src\\out\\Debug_x64\\rtc_stats_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\win_x64_win10",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "rtc_stats_unittests"
   },
   {
@@ -711,6 +741,9 @@
       "[BUILDER_CACHE]\\win_x64_win10\\src\\out\\Debug_x64\\rtc_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\win_x64_win10",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "rtc_unittests"
   },
   {
@@ -735,6 +768,9 @@
       "[BUILDER_CACHE]\\win_x64_win10\\src\\out\\Debug_x64\\system_wrappers_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\win_x64_win10",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "system_wrappers_unittests"
   },
   {
@@ -759,6 +795,9 @@
       "[BUILDER_CACHE]\\win_x64_win10\\src\\out\\Debug_x64\\test_support_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\win_x64_win10",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "test_support_unittests"
   },
   {
@@ -783,6 +822,9 @@
       "[BUILDER_CACHE]\\win_x64_win10\\src\\out\\Debug_x64\\tools_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\win_x64_win10",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "tools_unittests"
   },
   {
@@ -807,6 +849,9 @@
       "[BUILDER_CACHE]\\win_x64_win10\\src\\out\\Debug_x64\\video_engine_tests"
     ],
     "cwd": "[BUILDER_CACHE]\\win_x64_win10",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "video_engine_tests"
   },
   {
@@ -831,6 +876,9 @@
       "[BUILDER_CACHE]\\win_x64_win10\\src\\out\\Debug_x64\\voice_engine_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\win_x64_win10",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "voice_engine_unittests"
   },
   {
@@ -855,6 +903,9 @@
       "webrtc_nonparallel_tests.exe"
     ],
     "cwd": "[BUILDER_CACHE]\\win_x64_win10",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "webrtc_nonparallel_tests"
   },
   {

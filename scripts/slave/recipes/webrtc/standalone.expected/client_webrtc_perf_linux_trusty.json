@@ -434,6 +434,9 @@
       "isac_speech_and_misc_wb.pcm"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Trusty",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+    },
     "name": "isac_fix_test"
   },
   {
@@ -464,6 +467,9 @@
       "webrtc_perf_tests"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Trusty",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+    },
     "name": "webrtc_perf_tests"
   },
   {

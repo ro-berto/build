@@ -645,6 +645,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Gathering reference values.Performance Test 1 of 6",
@@ -746,6 +747,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Gathering reference values.Performance Test 2 of 6",
@@ -847,6 +849,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Gathering reference values.Performance Test 3 of 6",
@@ -948,6 +951,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Gathering reference values.Performance Test 4 of 6",
@@ -1049,6 +1053,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Gathering reference values.Performance Test 5 of 6",
@@ -1150,6 +1155,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Gathering reference values.Performance Test 6 of 6",
@@ -1413,6 +1419,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Gathering reference values.Performance Test 1 of 6 (2)",
@@ -1514,6 +1521,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Gathering reference values.Performance Test 2 of 6 (2)",
@@ -1615,6 +1623,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Gathering reference values.Performance Test 3 of 6 (2)",
@@ -1716,6 +1725,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Gathering reference values.Performance Test 4 of 6 (2)",
@@ -1817,6 +1827,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Gathering reference values.Performance Test 5 of 6 (2)",
@@ -1918,6 +1929,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Gathering reference values.Performance Test 6 of 6 (2)",
@@ -2342,6 +2354,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisecting revision.Performance Test 1 of 6",
@@ -2443,6 +2456,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisecting revision.Performance Test 2 of 6",
@@ -2544,6 +2558,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisecting revision.Performance Test 3 of 6",
@@ -2645,6 +2660,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisecting revision.Performance Test 4 of 6",
@@ -2746,6 +2762,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisecting revision.Performance Test 5 of 6",
@@ -2847,6 +2864,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisecting revision.Performance Test 6 of 6",
@@ -3017,6 +3035,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisecting revision.Performance Test 1 of 3",
@@ -3118,6 +3137,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisecting revision.Performance Test 2 of 3",
@@ -3219,6 +3239,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisecting revision.Performance Test 3 of 3",
@@ -3534,6 +3555,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisecting revision.Performance Test 1 of 3 (2)",
@@ -3635,6 +3657,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisecting revision.Performance Test 2 of 3 (2)",
@@ -3736,6 +3759,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisecting revision.Performance Test 3 of 3 (2)",
@@ -4051,6 +4075,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisecting revision.Performance Test 1 of 3 (3)",
@@ -4152,6 +4177,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisecting revision.Performance Test 2 of 3 (3)",
@@ -4253,6 +4279,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisecting revision.Performance Test 3 of 3 (3)",
@@ -4568,6 +4595,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisecting revision.Performance Test 1 of 5",
@@ -4669,6 +4697,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisecting revision.Performance Test 2 of 5",
@@ -4770,6 +4799,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisecting revision.Performance Test 3 of 5",
@@ -4871,6 +4901,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisecting revision.Performance Test 4 of 5",
@@ -4972,6 +5003,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisecting revision.Performance Test 5 of 5",
@@ -5287,6 +5319,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisecting revision.Performance Test 1 of 5 (2)",
@@ -5388,6 +5421,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisecting revision.Performance Test 2 of 5 (2)",
@@ -5489,6 +5523,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisecting revision.Performance Test 3 of 5 (2)",
@@ -5590,6 +5625,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisecting revision.Performance Test 4 of 5 (2)",
@@ -5691,6 +5727,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisecting revision.Performance Test 5 of 5 (2)",
@@ -6006,6 +6043,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisecting revision.Performance Test 1 of 5 (3)",
@@ -6107,6 +6145,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisecting revision.Performance Test 2 of 5 (3)",
@@ -6208,6 +6247,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisecting revision.Performance Test 3 of 5 (3)",
@@ -6309,6 +6349,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisecting revision.Performance Test 4 of 5 (3)",
@@ -6410,6 +6451,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisecting revision.Performance Test 5 of 5 (3)",
@@ -6725,6 +6767,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisecting revision.Performance Test 1 of 7",
@@ -6826,6 +6869,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisecting revision.Performance Test 2 of 7",
@@ -6927,6 +6971,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisecting revision.Performance Test 3 of 7",
@@ -7028,6 +7073,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisecting revision.Performance Test 4 of 7",
@@ -7129,6 +7175,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisecting revision.Performance Test 5 of 7",
@@ -7230,6 +7277,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisecting revision.Performance Test 6 of 7",
@@ -7331,6 +7379,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisecting revision.Performance Test 7 of 7",

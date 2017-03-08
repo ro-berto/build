@@ -447,6 +447,9 @@
       "webkit_unit_tests"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+    },
     "name": "webkit_unit_tests"
   },
   {
@@ -492,6 +495,9 @@
       "--js-flags=--future"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+    },
     "name": "webkit_tests (with patch)",
     "~followup_annotations": [
       "step returned non-zero exit code: 5",
@@ -569,6 +575,9 @@
       "always"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+    },
     "name": "webkit_tests (without patch)",
     "~followup_annotations": [
       "step returned non-zero exit code: 5",

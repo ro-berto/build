@@ -430,6 +430,9 @@
       "webrtc_perf_tests.exe"
     ],
     "cwd": "[BUILDER_CACHE]\\Win7",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "webrtc_perf_tests"
   },
   {

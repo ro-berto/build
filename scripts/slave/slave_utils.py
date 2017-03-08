@@ -31,7 +31,7 @@ GIT_SVN_ID_RE = re.compile(r'^git-svn-id: .*@([0-9]+) .*$')
 GIT_CR_POS_RE = re.compile(r'^Cr-Commit-Position: refs/heads/master@{#(\d+)}$')
 
 # Global variables set by command-line arguments (AddArgs, AddOpts).
-_ARGS_GSUTIL_PY_PATH = None
+_ARGS_GSUTIL_PY_PATH = os.environ.get('BUILD_SLAVE_UTILS_GSUTIL_PY_PATH')
 
 
 # Local errors.

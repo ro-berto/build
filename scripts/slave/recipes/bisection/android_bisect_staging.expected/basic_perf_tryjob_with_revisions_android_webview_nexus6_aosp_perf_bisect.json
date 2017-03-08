@@ -799,6 +799,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/android_webview_nexus6_aosp_perf_bisect",
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_webview_nexus6_aosp_perf_bisect/src/out/Release"
     },
     "name": "Running WITH patch.Performance Test (bad49c331def2a3bbf3ddd0096eb51551155) 1 of 1",
@@ -1241,6 +1242,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/android_webview_nexus6_aosp_perf_bisect",
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_webview_nexus6_aosp_perf_bisect/src/out/Release"
     },
     "name": "Running WITHOUT patch.Performance Test (d49c331def2a3bbf3ddd0096eb51551155) 1 of 1",

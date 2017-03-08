@@ -555,6 +555,9 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+    },
     "name": "Running WITH patch.Performance Test (bad49c331def2a3bbf3ddd0096eb51551155) 1 of 1",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
@@ -941,6 +944,9 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+    },
     "name": "Running WITHOUT patch.Performance Test (d49c331def2a3bbf3ddd0096eb51551155) 1 of 1",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [

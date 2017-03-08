@@ -446,6 +446,9 @@
       "webkit_unit_tests.exe"
     ],
     "cwd": "[BUILDER_CACHE]\\V8_Blink_Win",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "webkit_unit_tests"
   },
   {

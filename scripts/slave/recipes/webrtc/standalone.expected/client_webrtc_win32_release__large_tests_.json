@@ -436,6 +436,9 @@
       "--automated"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Release__large_tests_",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "voe_auto_test"
   },
   {
@@ -463,6 +466,9 @@
       "video_capture_tests.exe"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Release__large_tests_",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    },
     "name": "video_capture_tests"
   },
   {
