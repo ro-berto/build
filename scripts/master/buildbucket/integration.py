@@ -81,6 +81,7 @@ class BuildBucketIntegrator(object):
     self.started = False
     self.changes = None
     self.poll_lock = defer.DeferredLock()
+    self.ensure_leases_loaded_lock = defer.DeferredLock()
     self._max_lease_count = max_lease_count
     self._leases = None
     self.heartbeat_interval = heartbeat_interval or DEFAULT_HEARTBEAT_INTERVAL
@@ -161,6 +162,12 @@ class BuildBucketIntegrator(object):
 
   @inlineCallbacks
   def _ensure_leases_loaded(self):
+    if self._leases is None:
+      yield self._ensure_leases_loaded_locked()
+
+  @deferredLocked('ensure_leases_loaded_lock')
+  @inlineCallbacks
+  def _ensure_leases_loaded_locked(self):
     if self._leases is None:
       self._leases = yield self._get_leases_from_db()
       self.log(
