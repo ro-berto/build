@@ -394,9 +394,7 @@
       "--slave-name=bot_id",
       "--build-number=1337",
       "--enable-asan",
-      "libyuv_unittest",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "libyuv_unittest"
     ],
     "name": "libyuv_unittest"
   },

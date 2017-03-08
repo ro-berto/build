@@ -1649,8 +1649,6 @@ def main():
                             help='Prints more information.')
 
   chromium_utils.AddPropertiesOptions(option_parser)
-  slave_utils_callback = slave_utils.AddOpts(option_parser)
-
   options, args = option_parser.parse_args()
 
   # Initialize logging.
@@ -1663,9 +1661,6 @@ def main():
                       datefmt='%y%m%d %H:%M:%S')
   logging.basicConfig(level=logging.DEBUG)
   logging.getLogger().addHandler(logging.StreamHandler(stream=sys.stdout))
-
-  # Initialize "slave_utils".
-  slave_utils_callback(options)
 
   if not options.perf_dashboard_id:
     options.perf_dashboard_id = options.factory_properties.get('test_name')

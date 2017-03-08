@@ -305,9 +305,7 @@
       "--gtest_filter=WebRtc*",
       "--run-manual",
       "--test-launcher-print-test-stdio=always",
-      "--test-launcher-bot-mode",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "--test-launcher-bot-mode"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Tester",
     "env": {
@@ -347,9 +345,7 @@
       "--ui-test-action-max-timeout=350000",
       "--test-launcher-jobs=1",
       "--test-launcher-bot-mode",
-      "--test-launcher-print-test-stdio=always",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "--test-launcher-print-test-stdio=always"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Tester",
     "env": {
@@ -382,9 +378,7 @@
       "--enable-logging",
       "--v=1",
       "--test-launcher-jobs=1",
-      "--test-launcher-print-test-stdio=always",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "--test-launcher-print-test-stdio=always"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Tester",
     "env": {
@@ -413,9 +407,7 @@
       "--builder-name=Linux Tester",
       "--slave-name=test_bot",
       "--build-number=571",
-      "content_unittests",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "content_unittests"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Tester",
     "env": {
@@ -445,9 +437,7 @@
       "--slave-name=test_bot",
       "--build-number=571",
       "remoting_unittests",
-      "--gtest_filter=Webrtc*",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "--gtest_filter=Webrtc*"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Tester",
     "env": {

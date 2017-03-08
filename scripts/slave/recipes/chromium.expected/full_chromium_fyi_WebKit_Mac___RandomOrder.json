@@ -689,9 +689,7 @@
       "WebKit Mac - RandomOrder",
       "--step-name",
       "webkit_tests",
-      "--seed=4",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "--seed=4"
     ],
     "cwd": "[BUILDER_CACHE]/WebKit_Mac___RandomOrder",
     "env": {

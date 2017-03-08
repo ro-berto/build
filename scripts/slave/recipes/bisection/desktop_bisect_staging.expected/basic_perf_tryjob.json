@@ -502,9 +502,7 @@
       "--upload-bucket=public",
       "--reset-results",
       "--upload-results",
-      "--results-label=Patch",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "--results-label=Patch"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "Running WITH patch.Performance Test (With Patch) 1 of 1",
@@ -863,9 +861,7 @@
       "sunspider",
       "--upload-bucket=public",
       "--upload-results",
-      "--results-label=TOT",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "--results-label=TOT"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "Running WITHOUT patch.Performance Test (Without Patch) 1 of 1",

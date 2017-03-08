@@ -760,9 +760,7 @@
       "--reset-results",
       "--upload-results",
       "--results-label=Patch",
-      "--output-dir=[START_DIR]/bisect_results/dummy",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "cwd": "[BUILDER_CACHE]/android_webview_arm64_aosp_perf_bisect",
     "env": {
@@ -1160,9 +1158,7 @@
       "--upload-bucket=public",
       "--upload-results",
       "--results-label=TOT",
-      "--output-dir=[START_DIR]/bisect_results/dummy",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "cwd": "[BUILDER_CACHE]/android_webview_arm64_aosp_perf_bisect",
     "env": {

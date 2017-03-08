@@ -1540,9 +1540,7 @@
       "--build-number=571",
       "--run-python-script",
       "[START_DIR]/src/third_party/gtest-parallel/gtest-parallel",
-      "[START_DIR]/src/out/Debug/peerconnection_unittests",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "[START_DIR]/src/out/Debug/peerconnection_unittests"
     ],
     "name": "peerconnection_unittests"
   },

@@ -2028,9 +2028,7 @@
       "[BUILDER_CACHE]\\Win__swarming_\\src\\third_party\\gtest-parallel\\gtest-parallel",
       "[BUILDER_CACHE]\\Win__swarming_\\src\\out\\Release\\modules_tests",
       "--gtest_filter=ScreenCapturerIntegrationTest.*",
-      "--gtest_also_run_disabled_tests",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+      "--gtest_also_run_disabled_tests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win__swarming_",
     "name": "modules_tests (screen capture disabled tests)"

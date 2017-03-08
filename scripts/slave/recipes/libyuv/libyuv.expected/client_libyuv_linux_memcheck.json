@@ -374,9 +374,7 @@
       "--test",
       "libyuv_unittest",
       "--tool",
-      "memcheck",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "memcheck"
     ],
     "name": "libyuv_unittest"
   },

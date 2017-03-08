@@ -608,9 +608,7 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
       "--blacklist-file",
-      "[START_DIR]/src/out/bad_devices.json",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "[START_DIR]/src/out/bad_devices.json"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -659,9 +657,7 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
       "--blacklist-file",
-      "[START_DIR]/src/out/bad_devices.json",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "[START_DIR]/src/out/bad_devices.json"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -710,9 +706,7 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
       "--blacklist-file",
-      "[START_DIR]/src/out/bad_devices.json",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "[START_DIR]/src/out/bad_devices.json"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -856,9 +850,7 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
       "--blacklist-file",
-      "[START_DIR]/src/out/bad_devices.json",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "[START_DIR]/src/out/bad_devices.json"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -907,9 +899,7 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
       "--blacklist-file",
-      "[START_DIR]/src/out/bad_devices.json",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "[START_DIR]/src/out/bad_devices.json"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -958,9 +948,7 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
       "--blacklist-file",
-      "[START_DIR]/src/out/bad_devices.json",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "[START_DIR]/src/out/bad_devices.json"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -1104,9 +1092,7 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
       "--blacklist-file",
-      "[START_DIR]/src/out/bad_devices.json",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "[START_DIR]/src/out/bad_devices.json"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -1155,9 +1141,7 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
       "--blacklist-file",
-      "[START_DIR]/src/out/bad_devices.json",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "[START_DIR]/src/out/bad_devices.json"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -1206,9 +1190,7 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
       "--blacklist-file",
-      "[START_DIR]/src/out/bad_devices.json",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "[START_DIR]/src/out/bad_devices.json"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -1352,9 +1334,7 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
       "--blacklist-file",
-      "[START_DIR]/src/out/bad_devices.json",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "[START_DIR]/src/out/bad_devices.json"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -1403,9 +1383,7 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
       "--blacklist-file",
-      "[START_DIR]/src/out/bad_devices.json",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "[START_DIR]/src/out/bad_devices.json"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -1454,9 +1432,7 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
       "--blacklist-file",
-      "[START_DIR]/src/out/bad_devices.json",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "[START_DIR]/src/out/bad_devices.json"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",

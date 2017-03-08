@@ -829,9 +829,7 @@
       "--blacklist-file",
       "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/out/bad_devices.json",
       "--output-json-data",
-      "/path/to/tmp/json",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "/path/to/tmp/json"
     ],
     "cwd": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_",
     "env": {
@@ -926,9 +924,7 @@
       "--blacklist-file",
       "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/out/bad_devices.json",
       "--output-json-data",
-      "/path/to/tmp/json",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "/path/to/tmp/json"
     ],
     "cwd": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_",
     "env": {
@@ -1023,9 +1019,7 @@
       "--blacklist-file",
       "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_/src/out/bad_devices.json",
       "--output-json-data",
-      "/path/to/tmp/json",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "/path/to/tmp/json"
     ],
     "cwd": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__3_",
     "env": {

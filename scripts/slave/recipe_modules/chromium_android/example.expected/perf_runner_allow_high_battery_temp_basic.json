@@ -1175,9 +1175,7 @@
       "--blacklist-file",
       "[START_DIR]/src/out/bad_devices.json",
       "--output-json-data",
-      "/path/to/tmp/json",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "/path/to/tmp/json"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -1268,9 +1266,7 @@
       "--get-output-dir-archive",
       "[TMP_BASE]/perf_archives_tmp_2/output_dir.zip",
       "--output-json-data",
-      "/path/to/tmp/json",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "/path/to/tmp/json"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
@@ -1376,9 +1372,7 @@
       "--blacklist-file",
       "[START_DIR]/src/out/bad_devices.json",
       "--output-json-data",
-      "/path/to/tmp/json",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "/path/to/tmp/json"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",

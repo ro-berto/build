@@ -354,9 +354,7 @@
       "/path/to/run_benchmark",
       "--a=1",
       "-v",
-      "--b=2",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+      "--b=2"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_7_Intel_GPU_Perf__Xeon_",
     "env": {
@@ -395,9 +393,7 @@
       "/path/to/run_benchmark",
       "--a=1",
       "-v",
-      "--b=2",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+      "--b=2"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_7_Intel_GPU_Perf__Xeon_",
     "env": {
@@ -435,9 +431,7 @@
       "--run-python-script",
       "-v",
       "--upload-results",
-      "blink_perf.dom",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+      "blink_perf.dom"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_7_Intel_GPU_Perf__Xeon_",
     "env": {
@@ -473,9 +467,7 @@
       "--slave-name=test_bot",
       "--build-number=571",
       "--run-python-script",
-      "/path/to/run_benchmark",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+      "/path/to/run_benchmark"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_7_Intel_GPU_Perf__Xeon_",
     "env": {
@@ -511,9 +503,7 @@
       "--slave-name=test_bot",
       "--build-number=571",
       "--run-python-script",
-      "/path/to/run_benchmark",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+      "/path/to/run_benchmark"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_7_Intel_GPU_Perf__Xeon_",
     "env": {

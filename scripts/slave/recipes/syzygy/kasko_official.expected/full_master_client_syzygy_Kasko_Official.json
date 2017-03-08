@@ -168,9 +168,7 @@
       "[START_DIR]\\src\\out\\Release\\bar_unittests.exe",
       "--single-process-tests",
       "--test-launcher-timeout=300000",
-      "--gtest_print_time",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+      "--gtest_print_time"
     ],
     "name": "bar_unittests"
   },
@@ -193,9 +191,7 @@
       "[START_DIR]\\src\\out\\Release\\baz_unittests.exe",
       "--single-process-tests",
       "--test-launcher-timeout=300000",
-      "--gtest_print_time",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+      "--gtest_print_time"
     ],
     "name": "baz_unittests"
   },
@@ -218,9 +214,7 @@
       "[START_DIR]\\src\\out\\Release\\foo_unittests.exe",
       "--single-process-tests",
       "--test-launcher-timeout=300000",
-      "--gtest_print_time",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+      "--gtest_print_time"
     ],
     "name": "foo_unittests"
   },

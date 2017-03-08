@@ -432,9 +432,7 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\audio_decoder_unittests",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+      "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\audio_decoder_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
     "name": "audio_decoder_unittests"
@@ -458,9 +456,7 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\common_audio_unittests",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+      "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\common_audio_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
     "name": "common_audio_unittests"
@@ -484,9 +480,7 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\common_video_unittests",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+      "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\common_video_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
     "name": "common_video_unittests"
@@ -510,9 +504,7 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\modules_tests",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+      "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\modules_tests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
     "name": "modules_tests"
@@ -536,9 +528,7 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\modules_unittests",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+      "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\modules_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
     "name": "modules_unittests"
@@ -562,9 +552,7 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\ortc_unittests",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+      "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\ortc_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
     "name": "ortc_unittests"
@@ -588,9 +576,7 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\peerconnection_unittests",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+      "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\peerconnection_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
     "name": "peerconnection_unittests"
@@ -614,9 +600,7 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\rtc_media_unittests",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+      "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\rtc_media_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
     "name": "rtc_media_unittests"
@@ -640,9 +624,7 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\rtc_pc_unittests",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+      "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\rtc_pc_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
     "name": "rtc_pc_unittests"
@@ -666,9 +648,7 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\rtc_stats_unittests",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+      "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\rtc_stats_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
     "name": "rtc_stats_unittests"
@@ -692,9 +672,7 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\rtc_unittests",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+      "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\rtc_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
     "name": "rtc_unittests"
@@ -718,9 +696,7 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\system_wrappers_unittests",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+      "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\system_wrappers_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
     "name": "system_wrappers_unittests"
@@ -744,9 +720,7 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\test_support_unittests",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+      "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\test_support_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
     "name": "test_support_unittests"
@@ -770,9 +744,7 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\tools_unittests",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+      "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\tools_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
     "name": "tools_unittests"
@@ -796,9 +768,7 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\video_engine_tests",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+      "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\video_engine_tests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
     "name": "video_engine_tests"
@@ -822,9 +792,7 @@
       "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "[BUILDER_CACHE]\\Win_SyzyASan\\src\\third_party\\gtest-parallel\\gtest-parallel",
-      "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\voice_engine_unittests",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+      "[BUILDER_CACHE]\\Win_SyzyASan\\src\\out\\Release\\voice_engine_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
     "name": "voice_engine_unittests"
@@ -851,9 +819,7 @@
       "--slave-name=bot_id",
       "--build-number=1337",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "webrtc_nonparallel_tests.exe",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+      "webrtc_nonparallel_tests.exe"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_SyzyASan",
     "name": "webrtc_nonparallel_tests"

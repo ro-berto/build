@@ -831,9 +831,7 @@
       "--slave-name=build1-a1",
       "--build-number=1",
       "gl_tests.exe",
-      "Test.One\nTest.Two\nTest.Three",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+      "Test.One\nTest.Two\nTest.Three"
     ],
     "cwd": "[BUILDER_CACHE]\\win",
     "env": {

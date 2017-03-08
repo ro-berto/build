@@ -537,9 +537,7 @@
       "--builder-name=CrWin7Goma(clbr)",
       "--slave-name=test_bot",
       "--build-number=571",
-      "base_unittests.exe",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+      "base_unittests.exe"
     ],
     "cwd": "[BUILDER_CACHE]\\CrWin7Goma_clbr_",
     "env": {
@@ -593,9 +591,7 @@
       "--builder-name=CrWin7Goma(clbr)",
       "--slave-name=test_bot",
       "--build-number=571",
-      "content_unittests.exe",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+      "content_unittests.exe"
     ],
     "cwd": "[BUILDER_CACHE]\\CrWin7Goma_clbr_",
     "env": {

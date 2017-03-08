@@ -636,9 +636,7 @@
       "--additional-expectations",
       "src/third_party/WebKit/LayoutTests/FlagExpectations/site-per-process",
       "--options",
-      "http/tests",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "http/tests"
     ],
     "cwd": "[BUILDER_CACHE]/linux",
     "env": {

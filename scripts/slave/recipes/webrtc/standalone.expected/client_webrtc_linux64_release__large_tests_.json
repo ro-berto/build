@@ -434,9 +434,7 @@
       "--build-number=1337",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "voe_auto_test",
-      "--automated",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "--automated"
     ],
     "cwd": "[BUILDER_CACHE]/Linux64_Release__large_tests_",
     "name": "voe_auto_test"
@@ -464,9 +462,7 @@
       "--slave-name=bot_id",
       "--build-number=1337",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "video_capture_tests",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "video_capture_tests"
     ],
     "cwd": "[BUILDER_CACHE]/Linux64_Release__large_tests_",
     "name": "video_capture_tests"

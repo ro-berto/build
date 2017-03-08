@@ -282,9 +282,7 @@
       "--builder-name=Linux Tests",
       "--slave-name=test_bot",
       "--build-number=0",
-      "base_unittests",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "base_unittests"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -318,9 +316,7 @@
       "--build-number=0",
       "browser_tests",
       "--test-launcher-shard-index=0",
-      "--test-launcher-total-shards=2",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "--test-launcher-total-shards=2"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"

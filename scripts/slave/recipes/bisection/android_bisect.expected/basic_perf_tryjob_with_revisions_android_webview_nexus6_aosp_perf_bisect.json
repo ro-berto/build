@@ -795,9 +795,7 @@
       "--reset-results",
       "--upload-results",
       "--results-label=bad49c331def2a3bbf3ddd0096eb51551155",
-      "--output-dir=[START_DIR]/bisect_results/dummy",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "cwd": "[BUILDER_CACHE]/android_webview_nexus6_aosp_perf_bisect",
     "env": {
@@ -1239,9 +1237,7 @@
       "--upload-bucket=public",
       "--upload-results",
       "--results-label=d49c331def2a3bbf3ddd0096eb51551155",
-      "--output-dir=[START_DIR]/bisect_results/dummy",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "cwd": "[BUILDER_CACHE]/android_webview_nexus6_aosp_perf_bisect",
     "env": {
