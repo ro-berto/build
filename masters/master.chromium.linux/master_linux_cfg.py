@@ -32,11 +32,6 @@ def Update(_config, active_master, c):
           'Linux Builder (dbg)(32)',
           'Linux Builder (dbg)',
           'Cast Linux',
-          # Trusty
-          'Linux Builder Trusty',
-          'Linux Builder Trusty (dbg)(32)',
-          'Linux Builder Trusty (dbg)',
-          'Cast Linux Trusty',
           'Deterministic Linux',
       ]),
   ])
@@ -52,14 +47,6 @@ def Update(_config, active_master, c):
     {'name': 'Linux Builder (dbg)'},
     {'name': 'Linux Tests (dbg)(1)'},
     {'name': 'Cast Linux'},
-    # Trusty
-    {'name': 'Linux Builder Trusty'},
-    {'name': 'Linux Tests Trusty'},
-    {'name': 'Linux Tests Trusty (dbg)(1)(32)'},
-    {'name': 'Linux Builder Trusty (dbg)'},
-    {'name': 'Linux Builder Trusty (dbg)(32)'},
-    {'name': 'Linux Tests Trusty (dbg)(1)'},
-    {'name': 'Cast Linux Trusty'},
     {'name': 'Deterministic Linux',
      'recipe': 'swarming/deterministic_build'},
   ]

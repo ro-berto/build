@@ -120,114 +120,6 @@ SPEC = {
       'enable_swarming': True,
     },
 
-    # for testing trusty
-    'Linux Builder Trusty': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'mb',
-        'ninja_confirm_noop',
-        'chrome_with_codecs'
-      ],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'builder',
-      'compile_targets': [
-        'chromium_swarm_tests',
-      ],
-      'testing': {
-        'platform': 'linux',
-      },
-      'enable_swarming': True,
-      'checkout_dir': 'linux',
-    },
-    'Linux Tests Trusty': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'Linux Builder Trusty',
-      'testing': {
-        'platform': 'linux',
-      },
-      'enable_swarming': True,
-    },
-    'Linux Builder Trusty (dbg)(32)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'builder',
-      'compile_targets': [
-        'google_apis_unittests',
-        'sync_integration_tests',
-      ],
-      'testing': {
-        'platform': 'linux',
-      },
-      'enable_swarming': True,
-      'checkout_dir': 'linux',
-      # Temporary hack because the binaries are too large to be isolated.
-      'GYP_DEFINES': {
-        'fastbuild': 2,
-      },
-    },
-    'Linux Tests Trusty (dbg)(1)(32)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'Linux Builder Trusty (dbg)(32)',
-      'testing': {
-        'platform': 'linux',
-      },
-      'enable_swarming': True,
-    },
-
-    'Linux Builder Trusty (dbg)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'builder',
-      'testing': {
-        'platform': 'linux',
-      },
-      'enable_swarming': True,
-      'checkout_dir': 'linux',
-    },
-    'Linux Tests Trusty (dbg)(1)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'Linux Builder Trusty (dbg)',
-      'testing': {
-        'platform': 'linux',
-      },
-      'enable_swarming': True,
-    },
-
     'Android Arm64 Builder (dbg)': {
       'chromium_config': 'android',
       'chromium_apply_config': ['chrome_with_codecs', 'mb'],
@@ -300,6 +192,7 @@ SPEC = {
       'enable_swarming': True,
       'checkout_dir': 'android',
     },
+
     'Android Tests': {
       'chromium_config': 'android',
       'chromium_apply_config': ['mb'],
@@ -318,21 +211,6 @@ SPEC = {
         'platform': 'linux',
       },
       'enable_swarming': True,
-    },
-    'Cast Linux Trusty': {
-      'chromium_config': 'cast_linux',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'compile_targets': [
-        'cast_shell',
-      ],
-      'testing': {
-        'platform': 'linux',
-      },
     },
 
     'Android Clang Builder (dbg)': {
