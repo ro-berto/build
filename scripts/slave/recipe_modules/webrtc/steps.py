@@ -63,7 +63,7 @@ ANDROID_JUNIT_TESTS = (
 )
 
 ANDROID_EXPERIMENTAL_TESTS = (
-  'AppRTCMobileTestSTubbedIO',
+  'AppRTCMobileTestStubbedVideoIO',
 )
 
 

@@ -242,7 +242,7 @@
       "--goma-dir",
       "[CACHE]/goma_client",
       "--swarming-targets-file",
-      "AppRTCMobileTestSTubbedIO\n",
+      "AppRTCMobileTestStubbedVideoIO\n",
       "//out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/android_experimental/src",
@@ -251,7 +251,7 @@
     },
     "name": "generate_build_files",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@AppRTCMobileTestSTubbedIO@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@AppRTCMobileTestStubbedVideoIO@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
     ]
   },
@@ -504,15 +504,15 @@
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "[BUILDER_CACHE]/android_experimental/src/out/Release/AppRTCMobileTestSTubbedIO.isolated.gen.json"
+      "[BUILDER_CACHE]/android_experimental/src/out/Release/AppRTCMobileTestStubbedVideoIO.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"AppRTCMobileTestSTubbedIO\": \"[dummy hash for AppRTCMobileTestSTubbedIO]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"AppRTCMobileTestStubbedVideoIO\": \"[dummy hash for AppRTCMobileTestStubbedVideoIO]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"AppRTCMobileTestSTubbedIO\": \"[dummy hash for AppRTCMobileTestSTubbedIO]\"}@@@"
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"AppRTCMobileTestStubbedVideoIO\": \"[dummy hash for AppRTCMobileTestStubbedVideoIO]\"}@@@"
     ]
   },
   {
@@ -530,7 +530,7 @@
       "--shards",
       "1",
       "--task-name",
-      "AppRTCMobileTestSTubbedIO/Android/[dummy has/android_experimental/1337",
+      "AppRTCMobileTestStubbedVideoIO/Android/[dummy has/android_experimental/1337",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -559,11 +559,11 @@
       "--tag",
       "buildnumber:1337",
       "--tag",
-      "data:[dummy hash for AppRTCMobileTestSTubbedIO]",
+      "data:[dummy hash for AppRTCMobileTestStubbedVideoIO]",
       "--tag",
       "master:tryserver.webrtc",
       "--tag",
-      "name:AppRTCMobileTestSTubbedIO",
+      "name:AppRTCMobileTestStubbedVideoIO",
       "--tag",
       "os:Android",
       "--tag",
@@ -577,20 +577,20 @@
       "--tag",
       "slavename:bot_id",
       "--tag",
-      "stepname:AppRTCMobileTestSTubbedIO on Android",
+      "stepname:AppRTCMobileTestStubbedVideoIO on Android",
       "--idempotent",
-      "[dummy hash for AppRTCMobileTestSTubbedIO]",
+      "[dummy hash for AppRTCMobileTestStubbedVideoIO]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[BUILDER_CACHE]/android_experimental",
-    "name": "[trigger] AppRTCMobileTestSTubbedIO on Android",
+    "name": "[trigger] AppRTCMobileTestStubbedVideoIO on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"AppRTCMobileTestSTubbedIO/Android/[dummy has/android_experimental/1337\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"AppRTCMobileTestStubbedVideoIO/Android/[dummy has/android_experimental/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"AppRTCMobileTestSTubbedIO/Android/[dummy has/android_experimental/1337\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"AppRTCMobileTestStubbedVideoIO/Android/[dummy has/android_experimental/1337\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -622,14 +622,14 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"AppRTCMobileTestSTubbedIO/Android/[dummy has/android_experimental/1337\", \"tasks\": {\"AppRTCMobileTestSTubbedIO/Android/[dummy has/android_experimental/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"AppRTCMobileTestStubbedVideoIO/Android/[dummy has/android_experimental/1337\", \"tasks\": {\"AppRTCMobileTestStubbedVideoIO/Android/[dummy has/android_experimental/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "cwd": "[BUILDER_CACHE]/android_experimental",
-    "name": "AppRTCMobileTestSTubbedIO on Android",
+    "name": "AppRTCMobileTestStubbedVideoIO on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LOG_LINE@step_metadata@{@@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"AppRTCMobileTestSTubbedIO\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"AppRTCMobileTestStubbedVideoIO\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"android_devices\": \"6\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"device_os\": \"M\", @@@",
@@ -637,7 +637,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Android\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"AppRTCMobileTestSTubbedIO on Android\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"AppRTCMobileTestStubbedVideoIO on Android\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
@@ -663,14 +663,14 @@
       "--build-number",
       "1337",
       "--test-type",
-      "AppRTCMobileTestSTubbedIO on Android",
+      "AppRTCMobileTestStubbedVideoIO on Android",
       "--test-results-server",
       "test-results.appspot.com",
       "--chrome-revision",
       "170242"
     ],
     "cwd": "[BUILDER_CACHE]/android_experimental",
-    "name": "Upload to test-results [AppRTCMobileTestSTubbedIO on Android]"
+    "name": "Upload to test-results [AppRTCMobileTestStubbedVideoIO on Android]"
   },
   {
     "name": "$result",
