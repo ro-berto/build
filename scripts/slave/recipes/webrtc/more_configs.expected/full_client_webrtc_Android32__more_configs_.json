@@ -182,7 +182,6 @@
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]/goma/Android32__more_configs_",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
-      "GOMA_MULTI_EXEC_IN_CALL": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
@@ -412,7 +411,6 @@
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]/goma/Android32__more_configs_",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
-      "GOMA_MULTI_EXEC_IN_CALL": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
@@ -642,7 +640,6 @@
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]/goma/Android32__more_configs_",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
-      "GOMA_MULTI_EXEC_IN_CALL": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
@@ -872,7 +869,6 @@
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]/goma/Android32__more_configs_",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
-      "GOMA_MULTI_EXEC_IN_CALL": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
@@ -1102,7 +1098,6 @@
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]/goma/Android32__more_configs_",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
-      "GOMA_MULTI_EXEC_IN_CALL": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
@@ -1332,7 +1327,6 @@
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]/goma/Android32__more_configs_",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
-      "GOMA_MULTI_EXEC_IN_CALL": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },

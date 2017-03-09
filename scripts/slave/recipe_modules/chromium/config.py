@@ -45,7 +45,6 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       goma_failfast = Single(bool, empty_val=False, required=False),
       goma_max_active_fail_fallback_tasks = Single(int, empty_val=None, required=False),
       goma_enable_localoutputcache = Single(bool, empty_val=False, required=False),
-      goma_no_multi_exec = Single(bool, empty_val=False, required=False),
       xcode_sdk = Single(basestring, required=False),
       ninja_confirm_noop = Single(bool, empty_val=False, required=False),
       set_build_data_dir = Single(bool, empty_val=False, required=False),
@@ -284,10 +283,6 @@ def goma_localoutputcache(c):
   c.compile_py.goma_enable_localoutputcache = True
 
 @config_ctx()
-def goma_no_multi_exec(c):
-  c.compile_py.goma_no_multi_exec = True
-
-@config_ctx()
 def ninja_confirm_noop(c):
   c.compile_py.ninja_confirm_noop = True
 
@@ -327,11 +322,6 @@ def goma(c):
 
   if c.TARGET_PLATFORM == 'win' and c.compile_py.compiler != 'goma-clang':
     fastbuild(c)
-
-  # crbug.com/667536
-  # Disable multi exec causes qps increase in goma server backend.
-  # TODO(tikuta): After releasing goma client version 123, remove this.
-  c.compile_py.goma_no_multi_exec = True
 
 @config_ctx()
 def dcheck(c, invert=False):

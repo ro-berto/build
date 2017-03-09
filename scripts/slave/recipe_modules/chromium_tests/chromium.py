@@ -14,7 +14,6 @@ SPEC = {
         'mb',
         'ninja_confirm_noop',
         'no_dump_symbols',
-        'goma_no_multi_exec',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -40,7 +39,6 @@ SPEC = {
         'mb',
         'ninja_confirm_noop',
         'no_dump_symbols',
-        'goma_no_multi_exec',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -66,7 +64,6 @@ SPEC = {
         'mb',
         'ninja_confirm_noop',
         'no_dump_symbols',
-        'goma_no_multi_exec',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -92,7 +89,6 @@ SPEC = {
         'mb',
         'ninja_confirm_noop',
         'no_dump_symbols',
-        'goma_no_multi_exec',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -114,7 +110,6 @@ SPEC = {
         'isolation_mode_noop',
         'mb',
         'no_dump_symbols',
-        'goma_no_multi_exec',
       ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],

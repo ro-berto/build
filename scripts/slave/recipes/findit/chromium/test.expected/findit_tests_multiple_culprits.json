@@ -625,7 +625,6 @@
       "GOMA_CACHE_DIR": "[GOMA_CACHE]/mac_chromium_variable",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_FAIL_FAST": "true",
-      "GOMA_MULTI_EXEC_IN_CALL": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "test r4.preprocess_for_goma.start_goma",
@@ -1402,7 +1401,6 @@
       "GOMA_CACHE_DIR": "[GOMA_CACHE]/mac_chromium_variable",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_FAIL_FAST": "true",
-      "GOMA_MULTI_EXEC_IN_CALL": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "test r5.preprocess_for_goma.start_goma",
@@ -2179,7 +2177,6 @@
       "GOMA_CACHE_DIR": "[GOMA_CACHE]/mac_chromium_variable",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_FAIL_FAST": "true",
-      "GOMA_MULTI_EXEC_IN_CALL": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "test r6.preprocess_for_goma.start_goma",
@@ -2956,7 +2953,6 @@
       "GOMA_CACHE_DIR": "[GOMA_CACHE]/mac_chromium_variable",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_FAIL_FAST": "true",
-      "GOMA_MULTI_EXEC_IN_CALL": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "test r2.preprocess_for_goma.start_goma",
@@ -3731,7 +3727,6 @@
       "GOMA_CACHE_DIR": "[GOMA_CACHE]/mac_chromium_variable",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_FAIL_FAST": "true",
-      "GOMA_MULTI_EXEC_IN_CALL": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "test r3.preprocess_for_goma.start_goma",
