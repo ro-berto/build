@@ -32,6 +32,7 @@ def Update(_config, active_master, c):
           'Linux Builder (dbg)(32)',
           'Linux Builder (dbg)',
           'Cast Linux',
+          'Cast Audio Linux',
           'Deterministic Linux',
       ]),
   ])
@@ -47,6 +48,7 @@ def Update(_config, active_master, c):
     {'name': 'Linux Builder (dbg)'},
     {'name': 'Linux Tests (dbg)(1)'},
     {'name': 'Cast Linux'},
+    {'name': 'Cast Audio Linux'},
     {'name': 'Deterministic Linux',
      'recipe': 'swarming/deterministic_build'},
   ]

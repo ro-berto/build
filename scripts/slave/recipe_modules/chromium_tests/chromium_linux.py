@@ -230,6 +230,21 @@ SPEC = {
       },
     },
 
+    'Cast Audio Linux': {
+      'chromium_config': 'cast_linux',
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'compile_targets': [
+        'cast_shell',
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+    },
     'Cast Linux': {
       'chromium_config': 'cast_linux',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop'],

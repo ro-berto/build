@@ -249,6 +249,10 @@ TRYBOTS = freeze({
         'mastername': 'chromium.linux',
         'buildername': 'Cast Linux',
       }),
+      'cast_shell_audio_linux': simple_bot({
+        'mastername': 'chromium.linux',
+        'buildername': 'Cast Audio Linux',
+      }),
       'linux_arm': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'Linux ARM',
