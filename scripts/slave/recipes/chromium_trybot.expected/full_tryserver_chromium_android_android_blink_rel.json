@@ -1142,7 +1142,7 @@
   {
     "cmd": [
       "echo",
-      "Missing: [BUILDER_CACHE]/android_blink_rel/src/out/Release/lib.unstripped/libchrome.so [BUILDER_CACHE]/android_blink_rel/src/out/Release/microdump_stackwalk"
+      "Missing: [BUILDER_CACHE]/android_blink_rel/src/out/Release/lib.unstripped/libchrome.so [BUILDER_CACHE]/android_blink_rel/src/out/Release/microdump_stackwalk [BUILDER_CACHE]/android_blink_rel/src/out/Release/dump_syms"
     ],
     "cwd": "[BUILDER_CACHE]/android_blink_rel",
     "env": {

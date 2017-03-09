@@ -268,9 +268,12 @@ def RunSteps(api, buildername):
   if config.get('run_stackwalker'):
     breakpad_binary = api.path['checkout'].join(
         'out', api.chromium.c.BUILD_CONFIG, 'lib.unstripped', 'libchrome.so')
+    dump_syms_binary = api.path['checkout'].join(
+        'out', api.chromium.c.BUILD_CONFIG, 'dump_syms')
     microdump_stackwalk_binary = api.path['checkout'].join(
         'out', api.chromium.c.BUILD_CONFIG, 'microdump_stackwalk')
     api.path.mock_add_paths(breakpad_binary)
+    api.path.mock_add_paths(dump_syms_binary)
     api.path.mock_add_paths(microdump_stackwalk_binary)
     api.chromium_android.stackwalker(
         root_chromium_dir=api.path['checkout'],

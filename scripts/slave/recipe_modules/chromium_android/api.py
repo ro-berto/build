@@ -1228,8 +1228,10 @@ class AndroidApi(recipe_api.RecipeApi):
         'out', self.m.chromium.c.BUILD_CONFIG)
     logcat = build_dir.join('full_log')
 
+    dump_syms_path = build_dir.join('dump_syms')
     microdump_stackwalk_path = build_dir.join('microdump_stackwalk')
-    required_binaries = binary_paths + [microdump_stackwalk_path]
+    required_binaries = binary_paths + [
+        microdump_stackwalk_path, dump_syms_path]
     if not all(map(self.m.path.exists, required_binaries)):
       result = self.m.step(
           'skipping stackwalker step',

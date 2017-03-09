@@ -1092,7 +1092,7 @@
   {
     "cmd": [
       "echo",
-      "Missing: [START_DIR]/src/out/Release/lib.unstripped/libchrome.so"
+      "Missing: [START_DIR]/src/out/Release/lib.unstripped/libchrome.so [START_DIR]/src/out/Release/dump_syms"
     ],
     "name": "skipping stackwalker step",
     "~followup_annotations": [
