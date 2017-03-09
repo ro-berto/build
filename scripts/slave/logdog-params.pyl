@@ -51,18 +51,43 @@
         'logdog_only': True,
       },
     },
-    'chromium.infra.cron': {},
-    'chromium.swarm': {},
+    'chromium.infra.cron': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'chromium.swarm': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
 
     # Chromium tryservers.
-    'tryserver.chromium.android': {},
-    'tryserver.chromium.mac': {},
+    'tryserver.chromium.android': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'tryserver.chromium.angle': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'tryserver.chromium.mac': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
     'tryserver.chromium.linux': {
       '*': {
         'logdog_only': True,
       },
     },
-    'tryserver.chromium.win': {},
+    'tryserver.chromium.win': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
 
     # Chromium continuous waterfalls.
     'chromium': {
@@ -71,6 +96,31 @@
       },
     },
     'chromium.android': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'chromium.android.fyi': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'chromium.chrome': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'chromium.chromedriver': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'chromium.chromiumos': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'chromium.goma': {
       '*': {
         'logdog_only': True,
       },
@@ -85,12 +135,16 @@
         'logdog_only': True,
       },
     },
+    'chromium.lkgr': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
     'chromium.win': {
       '*': {
         'logdog_only': True,
       },
     },
-
     'chromium.fyi': {
       '*': {
         'logdog_only': True,
@@ -129,7 +183,11 @@
     'chromium.gatekeeper': {},
 
     # Blink
-    'tryserver.blink': {},
+    'tryserver.blink': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
 
     # Dart
     'client.dart': {},
