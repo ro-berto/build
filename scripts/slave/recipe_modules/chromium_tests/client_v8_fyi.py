@@ -373,5 +373,32 @@ SPEC = {
       'enable_swarming': True,
       'serialize_tests': True,
     },
+    'Android Release (Nexus 5X)': {
+      'chromium_config': 'android',
+      'chromium_apply_config': [
+        'chrome_with_codecs',
+        'ninja_confirm_noop',
+      ],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': [
+        'android',
+        'v8_bleeding_edge_git',
+        'chromium_lkcr',
+        'show_v8_revision',
+      ],
+      'chromium_config_kwargs': {
+        'TARGET_PLATFORM': 'android',
+      },
+      'android_config': 'arm64_builder_rel_mb',
+      'bot_type': 'builder_tester',
+      'compile_targets': [
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+      'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
+      'enable_swarming': True,
+      'checkout_dir': 'android',
+    },
   },
 }
