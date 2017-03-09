@@ -39,7 +39,7 @@ TARGET_MAPPING = {
         ],
     },
     'tryserver.chromium.win': {
-        'windows_chromium_variable': [
+        'win_chromium_variable': [
             'chromium.win', 'Win Builder'
         ],
     },
@@ -105,7 +105,7 @@ def GenTests(api):
       api.test('win') +
       api.properties(**{
           'mastername': 'tryserver.chromium.win',
-          'buildername': 'windows_chromium_variable',
+          'buildername': 'win_chromium_variable',
           'bot_id': 'build1-a1',
           'buildnumber': '1',
       })
