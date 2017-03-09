@@ -26,6 +26,7 @@ DEPS = [
 ]
 
 _MAP_FILENAME = 'component_map.json'
+_MAP_SUBDIRS_FILENAME = 'component_map_subdirs.json'
 
 _SAMPLE_MAP = {
   "AAA-README": [
@@ -63,20 +64,15 @@ _SAMPLE_MAP = {
 }
 
 
-def RunSteps(api):
-  # Replicate the config of a vanilla linux builder.
-  bot_config = api.chromium_tests.create_bot_config_object(
-      'chromium.linux', 'Linux Builder')
-  api.chromium_tests.configure_build(bot_config)
-  api.chromium_tests.prepare_checkout(bot_config)
-
+def RunStepsForFile(api, filename, extra_arguments, step_suffix):
   # Download existing map
   original_map_file = api.path['start_dir'].join('original_map.json')
-  api.gsutil.download('chromium-owners', _MAP_FILENAME,
-                      original_map_file)
+  api.gsutil.download(
+      'chromium-owners', filename, original_map_file,
+      name='download original mapping' + step_suffix)
 
   original_map = api.json.read(
-      'Parse original mapping', original_map_file,
+      'Parse original mapping' + step_suffix, original_map_file,
       step_test_data=lambda: api.json.test_api.output(_SAMPLE_MAP)).json.output
 
   # Run the script that does the actual work.
@@ -84,20 +80,21 @@ def RunSteps(api):
     modified_map_file = api.path['start_dir'].join('modified_map.json')
     command_path = api.path['checkout'].join(
         'tools', 'checkteamtags', 'extract_components.py')
-    command_parts = [command_path, '-o', modified_map_file]
-    api.step('Run component extraction script', command_parts,
-             stdout=api.raw_io.output_text())
+    command_parts = [command_path, '-o', modified_map_file] + extra_arguments
+    api.step(
+        'Run component extraction script to generate mapping' + step_suffix,
+        command_parts, stdout=api.raw_io.output_text())
   except api.step.StepFailure as sf:
     api.step.active_result.presentation.logs['extract_components errors'] = (
         sf.result.stdout.splitlines())
     raise
 
   modified_map = api.json.read(
-      'Parse modified mapping', modified_map_file,
+      'Parse modified mapping' + step_suffix, modified_map_file,
       step_test_data=lambda: api.json.test_api.output(_SAMPLE_MAP)).json.output
 
   if original_map == modified_map:
-    api.step('No Changes', [])
+    api.step('No changes in mapping' + step_suffix, [])
     return
 
   summary = []
@@ -117,12 +114,25 @@ def RunSteps(api):
         summary.append('The key %s was removed from the %s map' % (k, map_key))
 
   if summary:
-    api.step('Summary of Changes', [])
+    api.step('Summary of changes in mapping' + step_suffix, [])
     api.step.active_result.presentation.logs['CHANGES'] = summary
 
   # Upload to GS
-  api.gsutil.upload(modified_map_file, 'chromium-owners',
-                    _MAP_FILENAME, link_name='Updated component map')
+  api.gsutil.upload(modified_map_file, 'chromium-owners', filename,
+                    link_name='Updated component map',
+                    name='upload updated mapping' + step_suffix)
+
+def RunSteps(api):
+  # Replicate the config of a vanilla linux builder.
+  bot_config = api.chromium_tests.create_bot_config_object(
+      'chromium.linux', 'Linux Builder')
+  api.chromium_tests.configure_build(bot_config)
+  api.chromium_tests.prepare_checkout(bot_config)
+
+  RunStepsForFile(api, _MAP_FILENAME, [], '')
+  RunStepsForFile(
+      api, _MAP_SUBDIRS_FILENAME, ['--include-subdirs'], ' with subdirs')
+
 
 def GenTests(api):
   yield (
@@ -137,6 +147,17 @@ def GenTests(api):
       api.test('addition')
       + api.override_step_data(
           'Parse modified mapping',
+          api.json.output(modified_map))
+      + api.properties.tryserver(
+          mastername='chromium.linux',
+          buildername='Linux Builder'))
+
+  modified_map = copy.deepcopy(_SAMPLE_MAP)
+  modified_map['dir-to-component']['media/mini/mici'] = 'Blink>WebMIDI'
+  yield (
+      api.test('addition_into_subdirs')
+      + api.override_step_data(
+          'Parse modified mapping with subdirs',
           api.json.output(modified_map))
       + api.properties.tryserver(
           mastername='chromium.linux',
@@ -167,7 +188,7 @@ def GenTests(api):
   yield (
       api.test('script_error')
       + api.override_step_data(
-          'Run component extraction script',
+          'Run component extraction script to generate mapping',
           retcode=1,
           stdout=api.raw_io.output_text('Dummy script error'))
       + api.properties.tryserver(
@@ -179,7 +200,7 @@ def GenTests(api):
   yield (
       api.test('failed_upload')
       + api.step_data(
-          'gsutil upload', retcode=1)
+          'gsutil upload updated mapping', retcode=1)
       + api.override_step_data(
           'Parse modified mapping',
           api.json.output(modified_map))

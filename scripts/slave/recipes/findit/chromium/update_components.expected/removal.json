@@ -218,7 +218,7 @@
       "gs://chromium-owners/component_map.json",
       "[START_DIR]/original_map.json"
     ],
-    "name": "gsutil download"
+    "name": "gsutil download original mapping"
   },
   {
     "cmd": [
@@ -274,7 +274,7 @@
       "-o",
       "[START_DIR]/modified_map.json"
     ],
-    "name": "Run component extraction script",
+    "name": "Run component extraction script to generate mapping",
     "stdout": "/path/to/tmp/"
   },
   {
@@ -326,7 +326,7 @@
   },
   {
     "cmd": [],
-    "name": "Summary of Changes",
+    "name": "Summary of changes in mapping",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@CHANGES@The key media/midi was removed from the dir-to-component map@@@",
       "@@@STEP_LOG_END@CHANGES@@@"
@@ -344,10 +344,134 @@
       "[START_DIR]/modified_map.json",
       "gs://chromium-owners/component_map.json"
     ],
-    "name": "gsutil upload",
+    "name": "gsutil upload updated mapping",
     "~followup_annotations": [
       "@@@STEP_LINK@Updated component map@https://storage.cloud.google.com/chromium-owners/component_map.json@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "gs://chromium-owners/component_map_subdirs.json",
+      "[START_DIR]/original_map.json"
+    ],
+    "name": "gsutil download original mapping with subdirs"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[START_DIR]/original_map.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "Parse original mapping with subdirs",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"AAA-README\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Dummy Readme\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"component-to-team\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Blink>DOM\": \"dom-dev@chromium.org\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Blink>Editing\": \"editing-dev@chromium.org\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Blink>Forms\": \"dom-dev@chromium.org\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Blink>HTML\": \"dom-dev@chromium.org\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Blink>HTML>Parser\": \"loading-dev@chromium.org\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Blink>PushAPI\": \"push-notifications-dev@chromium.org\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Blink>Scheduling\": \"scheduler-dev@chromium.org\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Blink>WebMIDI\": \"midi-dev@chromium.org\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Blink>XML\": \"dom-dev@chromium.org\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Internals>Network\": \"net-dev@chromium.org\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"dir-to-component\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"content/browser/loader\": \"Internals>Network\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"content/browser/push_messaging\": \"Blink>PushAPI\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"media/midi\": \"Blink>WebMIDI\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"third_party/WebKit\": \"Blink\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"third_party/WebKit/Source/core/dom\": \"Blink>DOM\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"third_party/WebKit/Source/core/editing\": \"Blink>Editing\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"third_party/WebKit/Source/core/html\": \"Blink>HTML\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"third_party/WebKit/Source/core/html/forms\": \"Blink>Forms\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"third_party/WebKit/Source/core/html/parser\": \"Blink>HTML>Parser\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"third_party/WebKit/Source/core/xml\": \"Blink>XML\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"third_party/WebKit/Source/modules/webmidi\": \"Blink>WebMIDI\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"third_party/WebKit/Source/platform/scheduler\": \"Blink>Scheduling\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"third_party/WebKit/Source/web/resources\": \"Blink>Forms\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"third_party/WebKit/public/platform/modules/webmidi\": \"Blink>WebMIDI\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"third_party/WebKit/public/platform/scheduler\": \"Blink>Scheduling\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[START_DIR]/src/tools/checkteamtags/extract_components.py",
+      "-o",
+      "[START_DIR]/modified_map.json",
+      "--include-subdirs"
+    ],
+    "name": "Run component extraction script to generate mapping with subdirs",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[START_DIR]/modified_map.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "Parse modified mapping with subdirs",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"AAA-README\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Dummy Readme\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"component-to-team\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Blink>DOM\": \"dom-dev@chromium.org\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Blink>Editing\": \"editing-dev@chromium.org\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Blink>Forms\": \"dom-dev@chromium.org\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Blink>HTML\": \"dom-dev@chromium.org\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Blink>HTML>Parser\": \"loading-dev@chromium.org\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Blink>PushAPI\": \"push-notifications-dev@chromium.org\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Blink>Scheduling\": \"scheduler-dev@chromium.org\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Blink>WebMIDI\": \"midi-dev@chromium.org\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Blink>XML\": \"dom-dev@chromium.org\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Internals>Network\": \"net-dev@chromium.org\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"dir-to-component\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"content/browser/loader\": \"Internals>Network\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"content/browser/push_messaging\": \"Blink>PushAPI\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"media/midi\": \"Blink>WebMIDI\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"third_party/WebKit\": \"Blink\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"third_party/WebKit/Source/core/dom\": \"Blink>DOM\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"third_party/WebKit/Source/core/editing\": \"Blink>Editing\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"third_party/WebKit/Source/core/html\": \"Blink>HTML\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"third_party/WebKit/Source/core/html/forms\": \"Blink>Forms\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"third_party/WebKit/Source/core/html/parser\": \"Blink>HTML>Parser\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"third_party/WebKit/Source/core/xml\": \"Blink>XML\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"third_party/WebKit/Source/modules/webmidi\": \"Blink>WebMIDI\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"third_party/WebKit/Source/platform/scheduler\": \"Blink>Scheduling\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"third_party/WebKit/Source/web/resources\": \"Blink>Forms\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"third_party/WebKit/public/platform/modules/webmidi\": \"Blink>WebMIDI\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"third_party/WebKit/public/platform/scheduler\": \"Blink>Scheduling\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "No changes in mapping with subdirs"
   },
   {
     "name": "$result",

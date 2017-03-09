@@ -432,6 +432,7 @@
       "@@@STEP_LOG_LINE@json.output@    \"content/browser/loader\": \"Internals>Network\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"content/browser/push_messaging\": \"Blink>PushAPI\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"media/midi\": \"Blink>WebMIDI\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"media/mini/mici\": \"Blink>WebMIDI\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"third_party/WebKit\": \"Blink\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"third_party/WebKit/Source/core/dom\": \"Blink>DOM\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"third_party/WebKit/Source/core/editing\": \"Blink>Editing\", @@@",
@@ -451,7 +452,28 @@
   },
   {
     "cmd": [],
-    "name": "No changes in mapping with subdirs"
+    "name": "Summary of changes in mapping with subdirs",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@CHANGES@The key media/mini/mici was added to the dir-to-component map@@@",
+      "@@@STEP_LOG_END@CHANGES@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[START_DIR]/modified_map.json",
+      "gs://chromium-owners/component_map_subdirs.json"
+    ],
+    "name": "gsutil upload updated mapping with subdirs",
+    "~followup_annotations": [
+      "@@@STEP_LINK@Updated component map@https://storage.cloud.google.com/chromium-owners/component_map_subdirs.json@@@"
+    ]
   },
   {
     "name": "$result",
