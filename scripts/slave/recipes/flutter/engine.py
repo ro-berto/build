@@ -242,6 +242,7 @@ def PackageIOSVariant(api, label, device_out, sim_out, bucket_name):
     'dart/runtime/bin/dart_io_entries.txt',
     'flutter/runtime/dart_vm_entry_points.txt',
     'flutter/lib/snapshot/snapshot.dart',
+    'flutter/shell/platform/darwin/ios/framework/Flutter.podspec',
     'out/%s/clang_x64/gen_snapshot' % device_out,
     'out/%s/Flutter.framework.zip' % label,
   ])
