@@ -124,6 +124,7 @@ def _MojomFiles(build_dir, suffixes):
     'gen/components',
     'gen/content/test/data',
     'gen/device',
+    'gen/gpu/ipc/common/',
     'gen/media/capture/mojo',
     'gen/media/mojo/interfaces/',
     'gen/mojo',
