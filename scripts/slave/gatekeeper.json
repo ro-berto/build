@@ -24,9 +24,6 @@
         "categories": [
           "chromium_android"
         ],
-        "excluded_builders": [
-          "Marshmallow 64 bit Tester"
-        ],
         "builders": {
           "Android Cronet ARM64 Builder": {
             "tree_notify": [
