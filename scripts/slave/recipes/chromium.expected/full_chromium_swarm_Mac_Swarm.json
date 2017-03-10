@@ -3,23 +3,44 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[BUILDER_CACHE]/Mac_Swarm",
+      "511"
+    ],
+    "name": "makedirs checkout path",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'swarming_revision': ''}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
       "--patch_root",
       "src",
       "--revision_mapping_file",
       "{\"src\": \"got_revision\", \"src/buildtools\": \"got_buildtools_revision\", \"src/native_client\": \"got_nacl_revision\", \"src/third_party/angle\": \"got_angle_revision\", \"src/third_party/webrtc\": \"got_webrtc_revision\", \"src/tools/swarming_client\": \"got_swarming_client_revision\", \"src/v8\": \"got_v8_revision\"}",
       "--git-cache-dir",
-      "[CACHE]/git",
+      "[GIT_CACHE]",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@204787",
-      "--revision",
-      "src/tools/swarming_client@HEAD",
+      "src@HEAD",
       "--output_manifest"
     ],
+    "cwd": "[BUILDER_CACHE]/Mac_Swarm",
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
@@ -31,8 +52,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src\": \"204787\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src/tools/swarming_client\": \"HEAD\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"HEAD\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
@@ -103,55 +123,6 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/src/tools/swarming_client/swarming.py",
-      "--version"
-    ],
-    "name": "swarming.py --version",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@0.8.6@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/src/testing/scripts/get_compile_targets.py",
-      "--output",
-      "/path/to/tmp/json",
-      "--",
-      "--build-config-fs",
-      "Release",
-      "--paths",
-      "{\"checkout\": \"[START_DIR]/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
-      "--properties",
-      "{\"bot_id\": \"test_bot\", \"buildername\": \"Linux Swarm\", \"buildnumber\": 571, \"mastername\": \"chromium.swarm\", \"slavename\": \"test_bot\", \"target_platform\": \"linux\"}"
-    ],
-    "name": "get compile targets for scripts",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[START_DIR]/src/testing/buildbot/chromium.swarm.json",
-      "/path/to/tmp/json"
-    ],
-    "name": "read test spec (chromium.swarm.json)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@path: [START_DIR]/src/testing/buildbot/chromium.swarm.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
     "cmd": [],
     "name": "ensure_goma"
   },
@@ -162,7 +133,7 @@
       "-root",
       "[CACHE]/goma_client",
       "-ensure-file",
-      "infra/tools/cloudtail/linux-amd64 goma_recipe_module\ninfra_internal/goma/client/linux-amd64 release",
+      "infra/tools/cloudtail/mac-amd64 goma_recipe_module\ninfra_internal/goma/client/mac-amd64 release",
       "-json-output",
       "/path/to/tmp/json",
       "-service-account-json",
@@ -175,11 +146,11 @@
       "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-goma_recipe_modu\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/cloudtail/linux-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/cloudtail/mac-amd64\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/linux-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/mac-amd64\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -190,14 +161,28 @@
     "cmd": [
       "python",
       "-u",
+      "[BUILDER_CACHE]/Mac_Swarm/src/tools/swarming_client/swarming.py",
+      "--version"
+    ],
+    "name": "swarming.py --version",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@0.8.6@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[BUILDER_CACHE]/Mac_Swarm/src",
     "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "component=static_library gomadir='[CACHE]/goma_client' target_arch=x64 use_goma=1",
+      "GYP_DEFINES": "clang=1 component=static_library gomadir='[CACHE]/goma_client' target_arch=x64 use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -206,12 +191,48 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
-      "--build-dir",
-      "[START_DIR]/src/out/Release",
-      "--clean-isolated-files"
+      "[BUILDER_CACHE]/Mac_Swarm/src/testing/scripts/get_compile_targets.py",
+      "--output",
+      "/path/to/tmp/json",
+      "--",
+      "--build-config-fs",
+      "Release",
+      "--paths",
+      "{\"checkout\": \"[BUILDER_CACHE]/Mac_Swarm/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
+      "--properties",
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"Mac Swarm\", \"buildnumber\": 571, \"mastername\": \"chromium.swarm\", \"slavename\": \"test_bot\", \"target_platform\": \"mac\"}"
     ],
-    "name": "clean isolated files"
+    "name": "get compile targets for scripts",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[BUILDER_CACHE]/Mac_Swarm/src/testing/buildbot/chromium.swarm.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "read test spec (chromium.swarm.json)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@path: [BUILDER_CACHE]/Mac_Swarm/src/testing/buildbot/chromium.swarm.json@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Mac Swarm\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true@@@",
+      "@@@STEP_LOG_LINE@json.output@        }, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"test\": \"browser_tests\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "cmd": [
@@ -228,23 +249,64 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/tools/mb/mb.py",
+      "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
+      "--build-dir",
+      "[BUILDER_CACHE]/Mac_Swarm/src/out/Release",
+      "--clean-isolated-files"
+    ],
+    "name": "clean isolated files"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/Mac_Swarm/src/tools/mb/mb.py",
       "gen",
       "-m",
       "chromium.swarm",
       "-b",
-      "Linux Swarm",
+      "Mac Swarm",
       "--config-file",
-      "[START_DIR]/src/tools/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/Mac_Swarm/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma_client",
+      "--swarming-targets-file",
+      "browser_tests\n",
       "//out/Release"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[BUILDER_CACHE]/Mac_Swarm/src",
     "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "generate_build_files"
+    "name": "generate_build_files",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@browser_tests@@@",
+      "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
+    ]
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
+      "--src-dir",
+      "[BUILDER_CACHE]/Mac_Swarm/src",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "clang_revision",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "cmd": [
@@ -262,7 +324,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[BUILDER_CACHE]/Mac_Swarm/src",
     "name": "preprocess_for_goma"
   },
   {
@@ -270,10 +332,10 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[CACHE]/goma/Linux_Swarm",
+      "[GOMA_CACHE]/Mac_Swarm",
       "511"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[BUILDER_CACHE]/Mac_Swarm/src",
     "name": "preprocess_for_goma.makedirs goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -296,11 +358,14 @@
       "[CACHE]/goma_client/goma_ctl.py",
       "restart"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[BUILDER_CACHE]/Mac_Swarm/src",
     "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[ROOT]/build_data_dir/crash_report_id_file",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/Linux_Swarm",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/Mac_Swarm",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
+      "GOMA_DUMP_STATS_FILE": "[ROOT]/build_data_dir/goma_stats_proto",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "preprocess_for_goma.start_goma",
@@ -324,7 +389,7 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[BUILDER_CACHE]/Mac_Swarm/src",
     "name": "preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -336,21 +401,22 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]/src/out/Release",
+      "[BUILDER_CACHE]/Mac_Swarm/src/out/Release",
       "-j",
       "50",
-      "All",
-      "chromium_builder_tests"
+      "browser_tests",
+      "browser_tests_run"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[BUILDER_CACHE]/Mac_Swarm/src",
     "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "compile"
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[BUILDER_CACHE]/Mac_Swarm/src",
     "name": "postprocess_for_goma"
   },
   {
@@ -360,8 +426,10 @@
       "[CACHE]/goma_client/goma_ctl.py",
       "jsonstatus"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[BUILDER_CACHE]/Mac_Swarm/src",
     "env": {
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[ROOT]/build_data_dir/crash_report_id_file",
+      "GOMA_DUMP_STATS_FILE": "[ROOT]/build_data_dir/goma_stats_proto",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_jsonstatus",
@@ -389,7 +457,7 @@
       "{\"notice\": [{\"infra_status\": {\"num_user_error\": 0, \"ping_status_code\": 200}}]}",
       "[CACHE]/goma_client/jsonstatus"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[BUILDER_CACHE]/Mac_Swarm/src",
     "name": "postprocess_for_goma.write_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -402,8 +470,10 @@
       "[CACHE]/goma_client/goma_ctl.py",
       "stat"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[BUILDER_CACHE]/Mac_Swarm/src",
     "env": {
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[ROOT]/build_data_dir/crash_report_id_file",
+      "GOMA_DUMP_STATS_FILE": "[ROOT]/build_data_dir/goma_stats_proto",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_stat",
@@ -418,8 +488,10 @@
       "[CACHE]/goma_client/goma_ctl.py",
       "stop"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[BUILDER_CACHE]/Mac_Swarm/src",
     "env": {
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[ROOT]/build_data_dir/crash_report_id_file",
+      "GOMA_DUMP_STATS_FILE": "[ROOT]/build_data_dir/goma_stats_proto",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.stop_goma",
@@ -441,21 +513,27 @@
       "--json-status",
       "[CACHE]/goma_client/jsonstatus",
       "--ninja-log-outdir",
-      "[START_DIR]/src/out/Release",
+      "[BUILDER_CACHE]/Mac_Swarm/src/out/Release",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/Release', '-j', 50, 'All', 'chromium_builder_tests']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Mac_Swarm/src/out/Release', '-j', 50, 'browser_tests', 'browser_tests_run']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",
-      "goma",
+      "goma-clang",
+      "--goma-stats-file",
+      "[ROOT]/build_data_dir/goma_stats_proto",
+      "--goma-crash-report-id-file",
+      "[ROOT]/build_data_dir/crash_report_id_file",
+      "--build-data-dir",
+      "[ROOT]/build_data_dir",
       "--buildbot-buildername",
-      "Linux Swarm",
+      "Mac Swarm",
       "--buildbot-mastername",
       "chromium.swarm",
       "--buildbot-slavename",
       "test_bot"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[BUILDER_CACHE]/Mac_Swarm/src",
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -473,7 +551,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[BUILDER_CACHE]/Mac_Swarm/src",
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -483,9 +561,9 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/tools/determinism/remove_build_metadata.py",
+      "[BUILDER_CACHE]/Mac_Swarm/src/tools/determinism/remove_build_metadata.py",
       "--build-dir",
-      "[START_DIR]/src/out/Release"
+      "[BUILDER_CACHE]/Mac_Swarm/src/out/Release"
     ],
     "cwd": "[START_DIR]",
     "name": "remove_build_metadata"
@@ -494,31 +572,40 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport glob\nimport sys\nwith open(sys.argv[1], 'w') as f:\n  f.write('\\n'.join(glob.glob(sys.argv[2])))\n",
-      "/path/to/tmp/",
-      "[START_DIR]/src/out/Release/*.isolated.gen.json"
+      "RECIPE_MODULE[build::isolate]/resources/isolate.py",
+      "[BUILDER_CACHE]/Mac_Swarm/src/tools/swarming_client",
+      "batcharchive",
+      "--dump-json",
+      "/path/to/tmp/json",
+      "--isolate-server",
+      "https://isolateserver.appspot.com",
+      "--verbose",
+      "[BUILDER_CACHE]/Mac_Swarm/src/out/Release/browser_tests.isolated.gen.json"
     ],
-    "name": "find isolated targets"
+    "name": "isolate tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"browser_tests\": \"[dummy hash for browser_tests]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[START_DIR]/src/tools/swarming_client",
-      "batcharchive",
-      "--dump-json",
-      "/path/to/tmp/json",
-      "--isolate-server",
-      "https://isolateserver-dev.appspot.com",
-      "--verbose",
-      "[START_DIR]/src/out/Release/dummy_target_1.isolated.gen.json",
-      "[START_DIR]/src/out/Release/dummy_target_2.isolated.gen.json"
+      "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
+      "--build-dir",
+      "[BUILDER_CACHE]/Mac_Swarm/src/out/Release",
+      "--output-json",
+      "/path/to/tmp/json"
     ],
+    "cwd": "[BUILDER_CACHE]/Mac_Swarm",
     "env": {
-      "SWARMING_PROFILE": "1"
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "isolate tests",
+    "name": "find isolated tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"dummy_target_1\": \"[dummy hash for dummy_target_1]\", @@@",
@@ -532,238 +619,47 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/tools/swarming_client/swarming.py",
-      "trigger",
-      "--swarming",
-      "https://chromium-swarm-dev.appspot.com",
-      "--isolate-server",
-      "https://isolateserver-dev.appspot.com",
-      "--priority",
-      "20",
-      "--shards",
-      "2",
-      "--task-name",
-      "dummy_target_1/Ubuntu/[dummy has/Linux Swarm/571",
-      "--dump-json",
-      "/path/to/tmp/json",
-      "--expiration",
-      "3600",
-      "--io-timeout",
-      "1200",
-      "--hard-timeout",
-      "3600",
-      "--dimension",
-      "cpu",
-      "x86-64",
-      "--dimension",
-      "gpu",
-      "none",
-      "--dimension",
-      "os",
-      "Ubuntu",
-      "--dimension",
-      "pool",
-      "Chrome",
-      "--tag",
-      "buildername:Linux Swarm",
-      "--tag",
-      "buildnumber:571",
-      "--tag",
-      "data:[dummy hash for dummy_target_1]",
-      "--tag",
-      "master:chromium.swarm",
-      "--tag",
-      "name:dummy_target_1",
-      "--tag",
-      "os:Ubuntu",
-      "--tag",
-      "project:chromium",
-      "--tag",
-      "purpose:staging",
-      "--tag",
-      "slavename:test_bot",
-      "--tag",
-      "stepname:dummy_target_1 on Ubuntu",
-      "--verbose",
-      "--idempotent",
-      "[dummy hash for dummy_target_1]",
-      "--",
-      "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
+      "\nimport sys\nprint '*.isolated file for target %s is missing' % sys.argv[1]\nsys.exit(1)\n",
+      "browser_tests"
     ],
-    "name": "[trigger] dummy_target_1 on Ubuntu",
+    "cwd": "[BUILDER_CACHE]/Mac_Swarm",
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "[error] browser_tests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu'@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"dummy_target_1/Ubuntu/[dummy has/Linux Swarm/571\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"dummy_target_1/Ubuntu/[dummy has/Linux Swarm/571:2:0\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10000\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"dummy_target_1/Ubuntu/[dummy has/Linux Swarm/571:2:1\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 1, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10100\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10100\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm-dev.appspot.com/user/task/10000@@@",
-      "@@@STEP_LINK@shard #1@https://chromium-swarm-dev.appspot.com/user/task/10100@@@"
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@print '*.isolated file for target %s is missing' % sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@sys.exit(1)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
     ]
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/tools/swarming_client/swarming.py",
-      "trigger",
-      "--swarming",
-      "https://chromium-swarm-dev.appspot.com",
-      "--isolate-server",
-      "https://isolateserver-dev.appspot.com",
-      "--priority",
-      "20",
-      "--shards",
-      "2",
-      "--task-name",
-      "dummy_target_2/Ubuntu/[dummy has/Linux Swarm/571",
-      "--dump-json",
-      "/path/to/tmp/json",
-      "--expiration",
-      "3600",
-      "--io-timeout",
-      "1200",
-      "--hard-timeout",
-      "3600",
-      "--dimension",
-      "cpu",
-      "x86-64",
-      "--dimension",
-      "gpu",
-      "none",
-      "--dimension",
-      "os",
-      "Ubuntu",
-      "--dimension",
-      "pool",
-      "Chrome",
-      "--tag",
-      "buildername:Linux Swarm",
-      "--tag",
-      "buildnumber:571",
-      "--tag",
-      "data:[dummy hash for dummy_target_2]",
-      "--tag",
-      "master:chromium.swarm",
-      "--tag",
-      "name:dummy_target_2",
-      "--tag",
-      "os:Ubuntu",
-      "--tag",
-      "project:chromium",
-      "--tag",
-      "purpose:staging",
-      "--tag",
-      "slavename:test_bot",
-      "--tag",
-      "stepname:dummy_target_2 on Ubuntu",
-      "--verbose",
-      "--idempotent",
-      "[dummy hash for dummy_target_2]",
-      "--",
-      "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
+      "\nimport sys\nprint '%s wasn\\'t triggered' % sys.argv[1]\nsys.exit(1)\n",
+      "browser_tests"
     ],
-    "name": "[trigger] dummy_target_2 on Ubuntu",
+    "cwd": "[BUILDER_CACHE]/Mac_Swarm",
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "[collect error] browser_tests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu'@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"dummy_target_2/Ubuntu/[dummy has/Linux Swarm/571\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"dummy_target_2/Ubuntu/[dummy has/Linux Swarm/571:2:0\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10000\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"dummy_target_2/Ubuntu/[dummy has/Linux Swarm/571:2:1\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 1, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10100\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10100\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm-dev.appspot.com/user/task/10000@@@",
-      "@@@STEP_LINK@shard #1@https://chromium-swarm-dev.appspot.com/user/task/10100@@@"
-    ]
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "python",
-      "RECIPE_MODULE[build::swarming]/resources/collect_gtest_task.py",
-      "--swarming-client-dir",
-      "[START_DIR]/src/tools/swarming_client",
-      "--temp-root-dir",
-      "[TMP_BASE]",
-      "--merged-test-output",
-      "/path/to/tmp/json",
-      "--",
-      "collect",
-      "--swarming",
-      "https://chromium-swarm-dev.appspot.com",
-      "--decorate",
-      "--print-status-updates",
-      "--verbose",
-      "--json",
-      "{\"base_task_name\": \"dummy_target_1/Ubuntu/[dummy has/Linux Swarm/571\", \"tasks\": {\"dummy_target_1/Ubuntu/[dummy has/Linux Swarm/571:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10000\"}, \"dummy_target_1/Ubuntu/[dummy has/Linux Swarm/571:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10100\"}}}"
-    ],
-    "name": "dummy_target_1 on Ubuntu",
-    "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu'<br/>failures:<br/>Test.Two<br/>@@@",
-      "@@@STEP_LINK@missing shard #1@https://chromium-swarm-dev.appspot.com/user/task/10100@@@",
-      "@@@STEP_EXCEPTION@@@"
-    ]
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "python",
-      "RECIPE_MODULE[build::swarming]/resources/collect_gtest_task.py",
-      "--swarming-client-dir",
-      "[START_DIR]/src/tools/swarming_client",
-      "--temp-root-dir",
-      "[TMP_BASE]",
-      "--merged-test-output",
-      "/path/to/tmp/json",
-      "--",
-      "collect",
-      "--swarming",
-      "https://chromium-swarm-dev.appspot.com",
-      "--decorate",
-      "--print-status-updates",
-      "--verbose",
-      "--json",
-      "{\"base_task_name\": \"dummy_target_2/Ubuntu/[dummy has/Linux Swarm/571\", \"tasks\": {\"dummy_target_2/Ubuntu/[dummy has/Linux Swarm/571:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10000\"}, \"dummy_target_2/Ubuntu/[dummy has/Linux Swarm/571:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10100\"}}}"
-    ],
-    "name": "dummy_target_2 on Ubuntu",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu'@@@",
-      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@print '%s wasn\\'t triggered' % sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@sys.exit(1)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
     ]
   },
   {
     "name": "$result",
-    "reason": "1 out of 2 aggregated steps failed. Failures: Step('dummy_target_1 on Ubuntu') failed with return_code 1",
     "recipe_result": null,
-    "status_code": 1
+    "status_code": 0
   }
 ]

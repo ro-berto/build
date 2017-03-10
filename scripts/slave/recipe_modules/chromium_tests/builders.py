@@ -20,6 +20,7 @@ from . import chromium_memory
 from . import chromium_memory_full
 from . import chromium_perf
 from . import chromium_perf_fyi
+from . import chromium_swarm
 from . import chromium_webkit
 from . import chromium_webrtc
 from . import chromium_webrtc_fyi
@@ -47,6 +48,7 @@ BUILDERS = freeze({
   'chromium.memory.full': chromium_memory_full.SPEC,
   'chromium.perf': chromium_perf.SPEC,
   'chromium.perf.fyi': chromium_perf_fyi.SPEC,
+  'chromium.swarm': chromium_swarm.SPEC,
   'chromium.webkit': chromium_webkit.SPEC,
   'chromium.webrtc': chromium_webrtc.SPEC,
   'chromium.webrtc.fyi': chromium_webrtc_fyi.SPEC,
