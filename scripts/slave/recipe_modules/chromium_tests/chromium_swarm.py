@@ -6,9 +6,8 @@ from . import steps
 
 SPEC = {
   'builders': {
-    'Android Swarm': {
+    'Android N5 Swarm': {
       'chromium_config': 'android',
-      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
@@ -17,7 +16,24 @@ SPEC = {
         'TARGET_PLATFORM': 'android',
         'TARGET_ARCH': 'arm',
       },
-      'android_config': 'main_builder',
+      'android_config': 'main_builder_mb',
+      'testing': {
+        'platform': 'linux',
+      },
+      'bot_type': 'builder_tester',
+      'enable_swarming': True,
+    },
+    'Android N5X Swarm': {
+      'chromium_config': 'android',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+        'TARGET_PLATFORM': 'android',
+        'TARGET_ARCH': 'arm',
+      },
+      'android_config': 'main_builder_mb',
       'testing': {
         'platform': 'linux',
       },
