@@ -336,7 +336,7 @@ class StatusPush(StatusReceiverMultiService):
     t_start = time.time()
     builds = sorted(updated_builds)
     if self.verbose:
-      log.msg('PusSub: Pushing status for builds: %s' % (builds,))
+      log.msg('PubSub: Pushing status for builds: %s' % (builds,))
     loaded_builds = yield defer.DeferredList([self._loadBuild(b)
                                               for b in builds])
 
