@@ -1999,9 +1999,7 @@
       "junit",
       "-s",
       "android_junit_tests",
-      "--verbose",
-      "--adb-path",
-      "[BUILDER_CACHE]/Android32__M_Nexus5X__dbg_/src/third_party/android_tools/sdk/platform-tools/adb"
+      "--verbose"
     ],
     "cwd": "[BUILDER_CACHE]/Android32__M_Nexus5X__dbg_",
     "env": {

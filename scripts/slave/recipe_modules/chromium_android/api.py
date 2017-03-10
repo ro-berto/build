@@ -1468,6 +1468,7 @@ class AndroidApi(recipe_api.RecipeApi):
         '%s%s' % (str(suite), ' (%s)' % suffix if suffix else ''),
         ['junit', '-s', suite] + args,
         env=self.m.chromium.get_env(),
+        pass_adb_path=False,
         **kwargs)
 
   def _set_webview_command_line(self, command_line_args):

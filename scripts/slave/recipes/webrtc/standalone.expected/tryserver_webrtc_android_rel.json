@@ -2043,9 +2043,7 @@
       "-s",
       "android_junit_tests",
       "--verbose",
-      "--release",
-      "--adb-path",
-      "[BUILDER_CACHE]/android_rel/src/third_party/android_tools/sdk/platform-tools/adb"
+      "--release"
     ],
     "cwd": "[BUILDER_CACHE]/android_rel",
     "env": {

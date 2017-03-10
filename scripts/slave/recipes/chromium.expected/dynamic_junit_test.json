@@ -361,9 +361,7 @@
       "--verbose",
       "--release",
       "--json-results-file",
-      "/path/to/tmp/json",
-      "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "/path/to/tmp/json"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",

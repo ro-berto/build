@@ -2042,9 +2042,7 @@
       "junit",
       "-s",
       "android_junit_tests",
-      "--verbose",
-      "--adb-path",
-      "[BUILDER_CACHE]/android_dbg/src/third_party/android_tools/sdk/platform-tools/adb"
+      "--verbose"
     ],
     "cwd": "[BUILDER_CACHE]/android_dbg",
     "env": {
