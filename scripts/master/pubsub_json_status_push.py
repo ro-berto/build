@@ -244,7 +244,14 @@ class StatusPush(StatusReceiverMultiService):
 
     # Init the client.
     self._client = PubSubClient(self.topic, self._service_account_file)
-    yield self._client.start()
+    try:
+      yield self._client.start()
+    except Exception as e:
+      # If we can't get a client started, then something has gone horribly
+      # wrong, we'll want to stop the buildbot master.
+      log.msg('PubSub: ERROR - Failed to start PubSub client %s' % e)
+      reactor.stop()
+      return
 
     # Schedule our first push.
     self._schedulePush()
