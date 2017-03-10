@@ -165,9 +165,9 @@ class GomaApi(recipe_api.RecipeApi):
 
     self.m.python(
       name='start cloudtail',
-      script=self.resource('cloudtail_utils.py'),
-      args=['start',
-            '--cloudtail-path', self.cloudtail_path,
+      script=self.package_repo_resource('scripts', 'tools', 'runit.py'),
+      args=['--show-path', 'python', self.resource('cloudtail_utils.py'),
+            'start', '--cloudtail-path', self.cloudtail_path,
             '--cloudtail-service-account-json',
             self.cloudtail_service_account_json_path,
             '--pid-file', self.m.raw_io.output_text(
@@ -205,9 +205,9 @@ class GomaApi(recipe_api.RecipeApi):
 
     self.m.python(
         name='stop cloudtail',
-        script=self.resource('cloudtail_utils.py'),
-        args=['stop',
-              '--killed-pid-file', self.cloudtail_pid_file],
+        script=self.package_repo_resource('scripts', 'tools', 'runit.py'),
+        args=['--show-path', 'python', self.resource('cloudtail_utils.py'),
+              'stop', '--killed-pid-file', self.cloudtail_pid_file],
         infra_step=True)
 
   def start(self, env=None, **kwargs):
