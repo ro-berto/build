@@ -340,7 +340,7 @@ SPEC['builders'] = {
           'src/third_party/WebKit/LayoutTests/ASANExpectations',
           # ASAN is roughly 8x slower than Release.
           '--time-out-ms', '48000',
-          '--options=--enable-sanitizer',
+          '--enable-sanitizer',
       ]),
     ],
     'testing': {
@@ -369,7 +369,7 @@ SPEC['builders'] = {
           # Because JS code is run on a simulator, the slowdown in JS-heavy
           # tests will be much higher than MSan's average of 3x.
           '--time-out-ms', '66000',
-          '--options=--enable-sanitizer',
+          '--enable-sanitizer',
       ]),
     ],
     'testing': {
@@ -449,7 +449,7 @@ SPEC['builders'] = {
       steps.BlinkTest(extra_args=[
           '--additional-expectations',
           'src/third_party/WebKit/LayoutTests/LeakExpectations',
-          '--options=--enable-leak-detection',
+          '--enable-leak-detection',
       ]),
     ],
     'testing': {
