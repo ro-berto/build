@@ -22,10 +22,15 @@ import slave.robust_tempdir
 LOGGER = logging.getLogger('cipd_presubmit')
 
 
+CIPD_CLIENT = 'cipd'
+if sys.platform == 'win32':
+  CIPD_CLIENT += '.bat'
+
+
 def resolve_package(pkg):
   LOGGER.info('Resolving CIPD package: %s %s', pkg.name, pkg.version)
 
-  cmd = ['cipd', 'resolve', pkg.name, '-version', pkg.version]
+  cmd = [CIPD_CLIENT, 'resolve', pkg.name, '-version', pkg.version]
   LOGGER.debug('Running command: %s', cmd)
   proc = subprocess.Popen(cmd,
       stdout=subprocess.PIPE, stderr=subprocess.STDOUT)

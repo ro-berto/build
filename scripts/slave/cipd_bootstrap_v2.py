@@ -56,6 +56,18 @@ if sys.platform == "win32":
   # https://msdn.microsoft.com/en-us/library/windows/desktop/ms680621.aspx
   ctypes.windll.kernel32.SetErrorMode(0x0001|0x0002|0x8000)
 
+  def _ensure_batfile(client_path):
+    base, _ = os.path.splitext(client_path)
+    with open(base+".bat", 'w') as f:
+      f.write('\n'.join([  # python turns \n into CRLF
+        '@set CIPD="%~dp0cipd.exe"',
+        '@shift',
+        '@%CIPD% %*'
+      ]))
+else:
+  def _ensure_batfile(_client_path):
+    pass
+
 
 def all_cipd_packages():
   """Returns (list): All referenced CIPD packages."""
@@ -104,6 +116,7 @@ def _selfupdate_client(client_path, version, fatal):
     cmd = [client_path, 'selfupdate' , '-version', version]
     LOGGER.info('Running %r', cmd)
     subprocess.check_call(cmd, env=new_env)
+    _ensure_batfile(client_path)
     return True
   except subprocess.CalledProcessError as ex:
     if fatal:
