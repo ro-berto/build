@@ -216,6 +216,7 @@ def _remote_run_with_kitchen(args, stream, pins, properties, tempdir, basedir):
   # should be viewed as a hermetic breach.
   for python_path in [
       os.path.join(BUILD_ROOT, 'scripts'),
+      os.path.join(BUILD_ROOT, 'site_config'),
       ]:
     kitchen_cmd += ['-python-path', python_path]
 

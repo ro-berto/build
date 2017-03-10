@@ -190,6 +190,7 @@ class RemoteRunExecTest(unittest.TestCase):
         '-checkout-dir', self._tp('rw'),
         '-workdir', self._tp('w'),
         '-python-path', os.path.join(remote_run.BUILD_ROOT, 'scripts'),
+        '-python-path', os.path.join(remote_run.BUILD_ROOT, 'site_config'),
     ]
 
     self.recipe_args = [
