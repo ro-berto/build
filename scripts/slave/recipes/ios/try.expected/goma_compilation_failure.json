@@ -210,7 +210,7 @@
       "LANDMINES_VERBOSE": "1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
-    "name": "gclient runhooks (with patch)"
+    "name": "gclient runhooks"
   },
   {
     "cmd": [
@@ -234,7 +234,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "LANDMINES_VERBOSE": "1"
     },
-    "name": "generate build files (mb) (with patch)"
+    "name": "generate build files (mb)"
   },
   {
     "cmd": [
@@ -389,7 +389,7 @@
       "FORCE_MAC_TOOLCHAIN": "1",
       "LANDMINES_VERBOSE": "1"
     },
-    "name": "compile (with patch)",
+    "name": "compile",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
       "@@@STEP_FAILURE@@@"
@@ -860,13 +860,420 @@
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail (2)",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
+    "name": "bootstrap swarming (without patch)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::git]/resources/git_setup.py",
+      "--path",
+      "[START_DIR]/swarming.client",
+      "--url",
+      "https://chromium.googlesource.com/external/swarming.client.git"
+    ],
+    "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
+    "name": "bootstrap swarming (without patch).git setup (swarming_client)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "retry",
+      "fetch",
+      "origin",
+      "stable"
+    ],
+    "cwd": "[START_DIR]/swarming.client",
+    "env": {
+      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
+    },
+    "infra_step": true,
+    "name": "bootstrap swarming (without patch).git fetch (swarming_client)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "checkout",
+      "-f",
+      "FETCH_HEAD"
+    ],
+    "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
+    "name": "bootstrap swarming (without patch).git checkout (swarming_client)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
+    "name": "bootstrap swarming (without patch).read revision",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@SET_BUILD_PROPERTY@failure_hash@\"4d6a903860330c798a14ca4fb8a3b9ea8c90b814\"@@@"
+      "@@@STEP_TEXT@<br/>checked out 'deadbeef'<br/>@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "clean",
+      "-f",
+      "-d",
+      "-x"
+    ],
+    "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
+    "name": "bootstrap swarming (without patch).git clean (swarming_client)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "submodule",
+      "sync"
+    ],
+    "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
+    "name": "bootstrap swarming (without patch).submodule sync (swarming_client)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "submodule",
+      "update",
+      "--init",
+      "--recursive"
+    ],
+    "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
+    "name": "bootstrap swarming (without patch).submodule update (swarming_client)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/swarming.client/swarming.py",
+      "--version"
+    ],
+    "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
+    "name": "bootstrap swarming (without patch).swarming.py --version",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@1.2.3@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
+    "name": "isolate (without patch)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "{'conditions': [['OS == \"ios\"', {'variables': {'files': ['<(app_path)/', 'src/ios/build/bots/scripts/', 'src/out/Debug-iphonesimulator/iossim'], 'command': ['src/ios/build/bots/scripts/run.py', '--app', '<(app_path)', '--args-json', '{\"test_args\": <(test_args), \"xctest\": <(xctest)}', '--out-dir', '${ISOLATED_OUTDIR}', '--retries', '3', '--xcode-version', '<(xcode_version)', '--iossim', 'src/out/Debug-iphonesimulator/iossim', '--platform', '<(platform)', '--version', '<(version)']}}]]}",
+      "[START_DIR]/template.isolate"
+    ],
+    "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
+    "name": "isolate (without patch).generate template.isolate",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@template.isolate@{@@@",
+      "@@@STEP_LOG_LINE@template.isolate@  \"conditions\": [@@@",
+      "@@@STEP_LOG_LINE@template.isolate@    [@@@",
+      "@@@STEP_LOG_LINE@template.isolate@      \"OS == \\\"ios\\\"\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@      {@@@",
+      "@@@STEP_LOG_LINE@template.isolate@        \"variables\": {@@@",
+      "@@@STEP_LOG_LINE@template.isolate@          \"command\": [@@@",
+      "@@@STEP_LOG_LINE@template.isolate@            \"src/ios/build/bots/scripts/run.py\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@            \"--app\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@            \"<(app_path)\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@            \"--args-json\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@            \"{\\\"test_args\\\": <(test_args), \\\"xctest\\\": <(xctest)}\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@            \"--out-dir\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@            \"${ISOLATED_OUTDIR}\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@            \"--retries\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@            \"3\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@            \"--xcode-version\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@            \"<(xcode_version)\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@            \"--iossim\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@            \"src/out/Debug-iphonesimulator/iossim\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@            \"--platform\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@            \"<(platform)\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@            \"--version\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@            \"<(version)\"@@@",
+      "@@@STEP_LOG_LINE@template.isolate@          ], @@@",
+      "@@@STEP_LOG_LINE@template.isolate@          \"files\": [@@@",
+      "@@@STEP_LOG_LINE@template.isolate@            \"<(app_path)/\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@            \"src/ios/build/bots/scripts/\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@            \"src/out/Debug-iphonesimulator/iossim\"@@@",
+      "@@@STEP_LOG_LINE@template.isolate@          ]@@@",
+      "@@@STEP_LOG_LINE@template.isolate@        }@@@",
+      "@@@STEP_LOG_LINE@template.isolate@      }@@@",
+      "@@@STEP_LOG_LINE@template.isolate@    ]@@@",
+      "@@@STEP_LOG_LINE@template.isolate@  ]@@@",
+      "@@@STEP_LOG_LINE@template.isolate@}@@@",
+      "@@@STEP_LOG_END@template.isolate@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake tests.app\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"fake xcode version\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--isolate\", \n    \"[START_DIR]/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_1/0.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake tests.app\", \n    \"--config-variable\", \n    \"platform\", \n    \"fake device\", \n    \"--config-variable\", \n    \"version\", \n    \"8.1\"\n  ], \n  \"dir\": \"[START_DIR]\", \n  \"version\": 1\n}",
+      "[TMP_BASE]/isolate_tmp_1/0.isolate.gen.json"
+    ],
+    "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
+    "name": "isolate (without patch).generate 0.isolate.gen.json",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@fake tests (fake device iOS 8.1) (without patch)@@@",
+      "@@@STEP_LOG_LINE@0.isolate.gen.json@{@@@",
+      "@@@STEP_LOG_LINE@0.isolate.gen.json@  \"args\": [@@@",
+      "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"--config-variable\", @@@",
+      "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"OS\", @@@",
+      "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"ios\", @@@",
+      "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"--config-variable\", @@@",
+      "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"app_path\", @@@",
+      "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"src/out/Debug-iphonesimulator/fake tests.app\", @@@",
+      "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"--config-variable\", @@@",
+      "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"test_args\", @@@",
+      "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"[]\", @@@",
+      "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"--config-variable\", @@@",
+      "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"xcode_version\", @@@",
+      "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"fake xcode version\", @@@",
+      "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"--config-variable\", @@@",
+      "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"xctest\", @@@",
+      "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"false\", @@@",
+      "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"--isolate\", @@@",
+      "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"[START_DIR]/template.isolate\", @@@",
+      "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"--isolated\", @@@",
+      "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"[TMP_BASE]/isolate_tmp_1/0.isolated\", @@@",
+      "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"--path-variable\", @@@",
+      "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"app_path\", @@@",
+      "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"src/out/Debug-iphonesimulator/fake tests.app\", @@@",
+      "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"--config-variable\", @@@",
+      "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"platform\", @@@",
+      "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"fake device\", @@@",
+      "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"--config-variable\", @@@",
+      "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"version\", @@@",
+      "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"8.1\"@@@",
+      "@@@STEP_LOG_LINE@0.isolate.gen.json@  ], @@@",
+      "@@@STEP_LOG_LINE@0.isolate.gen.json@  \"dir\": \"[START_DIR]\", @@@",
+      "@@@STEP_LOG_LINE@0.isolate.gen.json@  \"version\": 1@@@",
+      "@@@STEP_LOG_LINE@0.isolate.gen.json@}@@@",
+      "@@@STEP_LOG_END@0.isolate.gen.json@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/ios_simulator_gn/src/tools/luci-go/mac64/isolate",
+      "batcharchive",
+      "--dump-json",
+      "/path/to/tmp/json",
+      "--isolate-server",
+      "https://isolateserver.appspot.com",
+      "--verbose",
+      "[TMP_BASE]/isolate_tmp_1/0.isolate.gen.json"
+    ],
+    "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
+    "infra_step": true,
+    "name": "isolate (without patch).archive",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"0\": \"fake-hash-0\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
+    "name": "trigger (without patch)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/swarming.client/swarming.py",
+      "trigger",
+      "--swarming",
+      "https://chromium-swarm.appspot.com",
+      "--isolate-server",
+      "https://isolateserver.appspot.com",
+      "--priority",
+      "200",
+      "--shards",
+      "1",
+      "--task-name",
+      "fake tests (fake device iOS 8.1) (without patch)/Mac/fake-hash-/ios-simulator-gn/0",
+      "--dump-json",
+      "/path/to/tmp/json",
+      "--expiration",
+      "3600",
+      "--io-timeout",
+      "1200",
+      "--hard-timeout",
+      "3600",
+      "--dimension",
+      "os",
+      "Mac",
+      "--dimension",
+      "pool",
+      "Chrome",
+      "--dimension",
+      "xcode_version",
+      "fake xcode version",
+      "--tag",
+      "buildername:ios-simulator-gn",
+      "--tag",
+      "buildnumber:0",
+      "--tag",
+      "data:fake-hash-0",
+      "--tag",
+      "device_type:fake device",
+      "--tag",
+      "ios_version:8.1",
+      "--tag",
+      "master:tryserver.fake",
+      "--tag",
+      "name:fake",
+      "--tag",
+      "os:Mac",
+      "--tag",
+      "platform:simulator",
+      "--tag",
+      "rietveld:fake://rietveld.url/123456/#ps1",
+      "--tag",
+      "slavename:fake-vm",
+      "--tag",
+      "spec_name:tryserver.fake:ios-simulator-gn:fake tests:simulator:fake device:8.1:fake xcode version",
+      "--tag",
+      "stepname:fake tests (fake device iOS 8.1) (without patch)",
+      "--tag",
+      "test:fake tests",
+      "fake-hash-0"
+    ],
+    "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
+    "infra_step": true,
+    "name": "trigger (without patch).[trigger] fake tests (fake device iOS 8.1) (without patch)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac'@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"fake tests (fake device iOS 8.1) (without patch)/Mac/fake-hash-/ios-simulator-gn/0\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"fake tests (fake device iOS 8.1) (without patch)/Mac/fake-hash-/ios-simulator-gn/0\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/swarming.client/swarming.py",
+      "collect",
+      "--swarming",
+      "https://chromium-swarm.appspot.com",
+      "--decorate",
+      "--print-status-updates",
+      "--json",
+      "{\"base_task_name\": \"fake tests (fake device iOS 8.1) (without patch)/Mac/fake-hash-/ios-simulator-gn/0\", \"tasks\": {\"fake tests (fake device iOS 8.1) (without patch)/Mac/fake-hash-/ios-simulator-gn/0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "--task-summary-json",
+      "/path/to/tmp/json",
+      "--task-output-dir",
+      "[TMP_BASE]/0_tmp_2"
+    ],
+    "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
+    "name": "fake tests (fake device iOS 8.1) (without patch)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Mac'<br>swarming pending 71s@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@{@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"abandoned_ts\": null, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"bot_id\": \"vm30\", @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"completed_ts\": \"2014-09-25T01:42:00.123\", @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"durations\": [@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@        5.7, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@        31.5@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      ], @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"exit_codes\": [@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@        0, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@        0@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      ], @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"failure\": false, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"id\": \"148aa78d7aa0000\", @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"internal_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"isolated_out\": {@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@        \"isolated\": \"abc123\", @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@        \"isolatedserver\": \"https://isolateserver.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@        \"namespace\": \"default-gzip\", @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@        \"view_url\": \"blah\"@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      }, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"modified_ts\": \"2014-09-25 01:42:00\", @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"name\": \"heartbeat-canary-2014-09-25_01:41:55-os=Windows\", @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"outputs\": [@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@        \"Heart beat succeeded on win32.\\n\", @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@        \"Foo\"@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      ], @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"outputs_ref\": {@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@        \"view_url\": \"blah\"@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      }, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"started_ts\": \"2014-09-25T01:42:11.123\", @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"state\": 112, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"try_number\": 1, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"user\": \"unknown\"@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@    }@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@  ]@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@}@@@",
+      "@@@STEP_LOG_END@swarming.summary@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@test data@blah@@@",
+      "@@@SET_BUILD_PROPERTY@failure_hash@\"69f4c2db516d85aa3fa17ec9bd58b142179522fa\"@@@"
     ]
   },
   {
     "name": "$result",
-    "reason": "Step('compile (with patch)') failed with return_code 1",
+    "reason": "Step('compile') failed with return_code 1",
     "recipe_result": null,
     "status_code": 1
   }

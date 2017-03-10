@@ -185,7 +185,7 @@
       "LANDMINES_VERBOSE": "1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
-    "name": "gclient runhooks (with patch)"
+    "name": "gclient runhooks"
   },
   {
     "cmd": [
@@ -207,7 +207,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "LANDMINES_VERBOSE": "1"
     },
-    "name": "generate build files (mb) (with patch)"
+    "name": "generate build files (mb)"
   },
   {
     "cmd": [
@@ -293,7 +293,7 @@
       "FORCE_MAC_TOOLCHAIN": "1",
       "LANDMINES_VERBOSE": "1"
     },
-    "name": "compile (with patch)"
+    "name": "compile"
   },
   {
     "cmd": [],

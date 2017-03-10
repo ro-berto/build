@@ -19,15 +19,21 @@ def RunSteps(api):
     # Ensure try bots mirror configs from chromium.mac.
     api.ios.read_build_config(master_name='chromium.mac')
     try:
-      api.ios.build(analyze=True, suffix='with patch')
+      api.ios.build(analyze=True)
+      api.ios.test_swarming()
     except api.step.StepFailure:
       bot_update_json = bot_update_step.json.output
       api.gclient.c.revisions['src'] = str(
           bot_update_json['properties']['got_revision'])
       api.ios.checkout(patch=False, update_presentation=False)
-      api.ios.build(suffix='without patch')
+      api.ios.build(suffix=' (without patch)')
+      api.ios.test_swarming(suffix=' (without patch)')
+      # TODO(smut): Compare test failures with and without the patch.
+      # If the same test cases failed with and without the patch, we
+      # could consider the build a success because ToT itself is broken
+      # and not the patch. See the test_utils recipe module and the
+      # determine_new_failures method.
       raise
-    api.ios.test_swarming()
 
 def GenTests(api):
   def suppress_analyze():
@@ -245,7 +251,11 @@ def GenTests(api):
       ],
     })
     + suppress_analyze()
-    + api.step_data('compile (with patch)', retcode=1)
+    + api.step_data(
+        'bootstrap swarming.swarming.py --version',
+        stdout=api.raw_io.output_text('1.2.3'),
+    )
+    + api.step_data('isolate.archive', retcode=1)
   )
 
   yield (
@@ -276,7 +286,7 @@ def GenTests(api):
       ],
     })
     + suppress_analyze()
-    + api.step_data('compile (with patch)', retcode=1)
+    + api.step_data('compile', retcode=1)
     + api.step_data('compile (without patch)', retcode=1)
   )
 
@@ -351,7 +361,11 @@ def GenTests(api):
         },
       ],
     })
-    + api.step_data('compile (with patch)', retcode=1)
+    + api.step_data('compile', retcode=1)
+    + api.step_data(
+        'bootstrap swarming (without patch).swarming.py --version',
+        stdout=api.raw_io.output_text('1.2.3'),
+    )
     + suppress_analyze()
   )
 
