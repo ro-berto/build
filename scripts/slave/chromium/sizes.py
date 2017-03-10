@@ -12,6 +12,7 @@
 """
 
 import errno
+import glob
 import platform
 import optparse
 import os
@@ -323,18 +324,28 @@ def main_linux(options, args):
   return result
 
 
-def check_android_binaries(binaries, target_dir, options):
+def check_android_binaries(binaries, target_dir, options,
+                           binaries_to_print=None):
   """Common method for printing size information for Android targets.
+
+  Prints size information for each element of binaries in target_dir.
+  If binaries_to_print is specified, the name of each binary from
+  binaries is replaced with corresponding element of binaries_to_print
+  in output. Returns the first non-zero exit status of any command it
+  executes, or zero on success.
   """
   result = 0
+  if not binaries_to_print:
+    binaries_to_print = binaries
 
-  for binary in binaries:
+  for (binary, binary_to_print) in zip(binaries, binaries_to_print):
     this_result, this_sizes = check_linux_binary(target_dir, binary, options)
     if result == 0:
       result = this_result
     for name, identifier, _, value, units in this_sizes:
-      print 'RESULT %s: %s= %s %s' % (name.replace('/', '_'), identifier, value,
-                                      units)
+      output = 'RESULT %s: %s= %s %s' % (name.replace('/', '_'), identifier,
+                                         value, units)
+      print output.replace(binary, binary_to_print)
 
   return result
 
@@ -380,16 +391,14 @@ def main_android_cronet(options, args):
   """
   target_dir = os.path.join(build_directory.GetBuildOutputDirectory(),
                             options.target)
+  # Use version in binary file name, but not in printed output.
+  binaries_with_paths = glob.glob(os.path.join(target_dir,'libcronet.*.so'))
+  assert len(binaries_with_paths) == 1
+  binaries = [os.path.basename(binaries_with_paths[0])]
+  binaries_to_print = ['libcronet.so']
 
-  binaries = ['cronet_sample_apk/libs/arm64-v8a/libcronet.so',
-              'cronet_sample_apk/libs/armeabi-v7a/libcronet.so',
-              'cronet_sample_apk/libs/armeabi/libcronet.so',
-              'cronet_sample_apk/libs/mips/libcronet.so',
-              'cronet_sample_apk/libs/x86_64/libcronet.so',
-              'cronet_sample_apk/libs/x86/libcronet.so',
-              'libcronet.so']
-
-  return check_android_binaries(binaries, target_dir, options)
+  return check_android_binaries(binaries, target_dir, options,
+                                binaries_to_print)
 
 
 def main_win(options, args):
