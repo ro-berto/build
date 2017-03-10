@@ -869,8 +869,11 @@ class ChromiumApi(recipe_api.RecipeApi):
     try:
       self.m.python(
           'process_dumps',
-          self.package_repo_resource('scripts', 'slave', 'process_dumps.py'),
-          ['--target', self.c.build_config_fs],
+          self.package_repo_resource('scripts', 'tools', 'runit.py'),
+          [
+            self.package_repo_resource('scripts', 'slave', 'process_dumps.py'),
+            '--target', self.c.build_config_fs,
+          ],
           infra_step=True,
           **kwargs)
     except self.m.step.InfraFailure:
