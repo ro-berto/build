@@ -19,6 +19,8 @@ def RunSteps(api):
 
   command = list(api.properties.get('build_command'))
   env = {}
+  if api.properties.get('custom_tmp_dir'):
+    env['GOMA_TMP_DIR'] = api.properties.get('custom_tmp_dir')
 
   api.goma.build_with_goma(
       name='ninja',
@@ -54,3 +56,7 @@ def GenTests(api):
   yield (api.test('old_cache_dir_fail') + api.properties.generic(**properties) +
          api.path.exists(api.path['cache'].join('cipd', 'goma')) +
          api.step_data('ensure_goma.clean old goma dir', retcode=1))
+
+  yield (api.test('linux_set_custome_tmp_dir') + api.platform.name('linux') +
+         api.properties(custom_tmp_dir='/tmp/goma_goma_module') +
+         api.properties.generic(**properties))

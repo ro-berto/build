@@ -232,6 +232,9 @@ class GomaApi(recipe_api.RecipeApi):
       # GLOG_log_dir should not be set.
       assert env is None or 'GLOG_log_dir' not in env
 
+      if (env is not None) and ('GOMA_TMP_DIR' in env):
+        self._goma_ctl_env['GOMA_TMP_DIR'] = env['GOMA_TMP_DIR']
+
       goma_ctl_start_env = self._goma_ctl_env.copy()
 
       if env is not None:
