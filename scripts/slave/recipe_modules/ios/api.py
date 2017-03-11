@@ -591,6 +591,7 @@ class iOSApi(recipe_api.RecipeApi):
       'batcharchive',
       '--dump-json', self.m.json.output(),
       '--isolate-server', self.m.isolate.isolate_server,
+      '--verbose',
     ]
     cmd.extend(gen_files)
     step_result = self.m.step(

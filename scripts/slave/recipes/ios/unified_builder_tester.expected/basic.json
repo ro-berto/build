@@ -633,6 +633,7 @@
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
+      "--verbose",
       "[TMP_BASE]/isolate_tmp_2/0.isolate.gen.json",
       "[TMP_BASE]/isolate_tmp_2/1.isolate.gen.json",
       "[TMP_BASE]/isolate_tmp_2/2.isolate.gen.json"
