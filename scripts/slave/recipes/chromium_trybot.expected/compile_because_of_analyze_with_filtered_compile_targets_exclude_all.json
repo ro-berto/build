@@ -646,6 +646,10 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
       "[BUILDER_CACHE]/linux/src/infra/scripts/runtest_wrapper.py",
       "--",
       "--target",

@@ -479,6 +479,10 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
       "/path/to/tmp/",
       "--",
@@ -843,6 +847,10 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
       "/path/to/tmp/",
       "--",

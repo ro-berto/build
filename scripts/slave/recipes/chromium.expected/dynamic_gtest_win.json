@@ -271,6 +271,10 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "--show-path",
+      "--",
+      "python",
       "[START_DIR]\\src\\infra\\scripts\\runtest_wrapper.py",
       "--",
       "--target",
@@ -303,6 +307,10 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "--show-path",
+      "--",
+      "python",
       "[START_DIR]\\src\\infra\\scripts\\runtest_wrapper.py",
       "--",
       "--target",

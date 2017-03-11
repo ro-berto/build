@@ -539,8 +539,8 @@ class ChromiumApi(recipe_api.RecipeApi):
           'scripts', 'slave', 'tee.py')
     return self.m.python(
       step_name,
-      runtest_path,
-      full_args,
+      self.package_repo_resource('scripts', 'tools', 'runit.py'),
+      ['--show-path', '--', 'python', runtest_path] + full_args,
       **kwargs
     )
 
