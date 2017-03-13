@@ -54,7 +54,7 @@ SPEC = {
     },
     'Chromium Mac 10.11': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'force_mac_toolchain_override'],
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -67,7 +67,7 @@ SPEC = {
     },
     'Chromium Mac 10.11 Force Mac Toolchain': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
+      'chromium_apply_config': ['mb', 'force_mac_toolchain_override'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',

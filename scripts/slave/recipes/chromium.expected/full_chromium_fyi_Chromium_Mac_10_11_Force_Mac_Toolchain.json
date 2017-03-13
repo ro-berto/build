@@ -183,6 +183,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "clang=1 component=static_library gomadir='[CACHE]/goma_client' target_arch=x64 use_goma=1",
+      "MAC_TOOLCHAIN_REVISION": "8C1002-2",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -271,7 +272,8 @@
     ],
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "MAC_TOOLCHAIN_REVISION": "8C1002-2"
     },
     "name": "clang_revision",
     "~followup_annotations": [
@@ -340,7 +342,8 @@
       "GOMA_CACHE_DIR": "[GOMA_CACHE]/Chromium_Mac_10_11_Force_Mac_Toolchain",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_STATS_FILE": "[ROOT]/build_data_dir/goma_stats_proto",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "MAC_TOOLCHAIN_REVISION": "8C1002-2"
     },
     "name": "preprocess_for_goma.start_goma",
     "~followup_annotations": [
@@ -385,7 +388,8 @@
     "cwd": "[BUILDER_CACHE]/Chromium_Mac_10_11_Force_Mac_Toolchain/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "MAC_TOOLCHAIN_REVISION": "8C1002-2"
     },
     "name": "compile"
   },
