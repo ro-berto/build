@@ -537,10 +537,10 @@ class ChromiumApi(recipe_api.RecipeApi):
       full_args = [tee_stdout_file, '--', 'python', runtest_path] + full_args
       runtest_path = self.package_repo_resource(
           'scripts', 'slave', 'tee.py')
-    return self.m.python(
+    return self.m.build.python(
       step_name,
-      self.package_repo_resource('scripts', 'tools', 'runit.py'),
-      ['--show-path', '--', 'python', runtest_path] + full_args,
+      runtest_path,
+      args=full_args,
       **kwargs
     )
 
@@ -582,7 +582,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     full_args = run_tests_args + [sizes_script] + sizes_args
 
-    return self.m.python(
+    return self.m.build.python(
         'sizes', self.package_repo_resource('scripts', 'slave', 'runtest.py'),
         full_args, allow_subannotations=True, **kwargs)
 
