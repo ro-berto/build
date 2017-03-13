@@ -30,6 +30,7 @@ def RunSteps(api):
   s.deps_file = 'tools/deps/dartium.deps/DEPS'
   s.managed = False
   s.revision = api.properties.get('revision')
+  api.gclient.c.with_branch_heads = True
   api.bot_update.ensure_checkout()
 
   api.gclient.runhooks(env={'GYP_GENERATORS': 'ninja',
