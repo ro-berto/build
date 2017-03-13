@@ -43,7 +43,7 @@ _CANARY_MASTERS = set((
   'internal.infra',
   'internal.infra.cron',
 
-  'chromium.fyi',
+  'chromium.swarm',
 ))
 
 # The name of the recipe engine CIPD package.
