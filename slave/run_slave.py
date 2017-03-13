@@ -193,17 +193,13 @@ def HotPatchSlaveBuilder(is_testing):
   Bot.remote_setBuilderList = Bot.new_remote_setBuilderList
 
 
-def GetActiveMaster(slave_bootstrap, config_bootstrap, active_slavename):
-  master_name = os.environ.get(
-      'TESTING_MASTER', chromium_utils.GetActiveMaster(active_slavename))
-  if not master_name:
-    raise RuntimeError('*** Failed to detect the active master')
-  slave_bootstrap.ImportMasterConfigs(master_name)
+def GetActiveMasterClass(master_class_name, slave_bootstrap, config_bootstrap):
+  slave_bootstrap.ImportMasterConfigs(master_class_name)
   if hasattr(config_bootstrap.Master, 'active_master'):
     # pylint: disable=E1101
     return config_bootstrap.Master.active_master
-  if master_name and getattr(config_bootstrap.Master, master_name):
-    master = getattr(config_bootstrap.Master, master_name)
+  if master_class_name and getattr(config_bootstrap.Master, master_class_name):
+    master = getattr(config_bootstrap.Master, master_class_name)
     config_bootstrap.Master.active_master = master
     return master
   raise RuntimeError('*** Failed to detect the active master')
@@ -413,8 +409,14 @@ def main():
   import config_bootstrap
   active_slavename = chromium_utils.GetActiveSlavename()
   config_bootstrap.Master.active_slavename = active_slavename
-  active_master = GetActiveMaster(
-      slave.bootstrap, config_bootstrap, active_slavename)
+
+  active_master_class_name = chromium_utils.GetActiveMaster(active_slavename)
+  if not active_master_class_name:
+    raise RuntimeError('*** Failed to detect the active master')
+
+  active_master = GetActiveMasterClass(
+      active_master_class_name, slave.bootstrap, config_bootstrap)
+  active_subdir = chromium_utils.GetActiveSubdir()
 
   bb_ver, tw_ver = GetThirdPartyVersions(active_master)
   python_path.append(os.path.join(BUILD_DIR, 'third_party', bb_ver))
@@ -570,6 +572,16 @@ def main():
 
   else:
     error('Platform %s is not implemented yet' % sys.platform)
+
+  # Export the active master name in the enviornment. We do this because some
+  # scripts actually rely on this value, and it is not available otherwise.
+  #
+  # XXX: This is a BuildBot transition hack. Please do NOT use these variables.
+  # They will go away and if you use them, we're not going to fix your code; it
+  # will just break.
+  os.environ['INFRA_BUILDBOT_MASTER_CLASS_NAME'] = active_master_class_name
+  os.environ['INFRA_BUILDBOT_SLAVE_NAME'] = active_slavename
+  os.environ['INFRA_BUILDBOT_SLAVE_ACTIVE_SUBDIR'] = active_subdir or ''
 
   git_exe = 'git' + ('.bat' if sys.platform.startswith('win') else '')
   try:

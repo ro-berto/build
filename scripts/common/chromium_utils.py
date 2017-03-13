@@ -1360,6 +1360,12 @@ def GetActiveSubdir():
            'build/nested' not in any, returns None. People that have a regular
            build checkout in build/nested/subdir gonna have a bad time.
   """
+  subdir = os.getenv('INFRA_BUILDBOT_SLAVE_ACTIVE_SUBDIR')
+  if subdir is not None:
+    # Empty string in enviornment variable is cached version of None return
+    # value (see "run_slave.py").
+    return subdir or None
+
   basedir = os.path.dirname(BUILD_DIR)
   subdir_rootdir = os.path.dirname(basedir)
   rootdir = os.path.dirname(subdir_rootdir)
@@ -1371,7 +1377,9 @@ def GetActiveSubdir():
 def GetActiveSlavename():
   slavename = os.getenv('TESTING_SLAVENAME')
   if not slavename:
-    slavename = socket.getfqdn().split('.', 1)[0].lower()
+    slavename = os.getenv('INFRA_BUILDBOT_SLAVE_NAME')
+    if not slavename:
+      slavename = socket.getfqdn().split('.', 1)[0].lower()
   subdir = GetActiveSubdir()
   if subdir:
     return '%s#%s' % (slavename, subdir)
@@ -1412,6 +1420,14 @@ def GetActiveMaster(slavename=None, default=None):
   Parse all of the active masters with slaves matching the current hostname
   and optional slavename. Returns |default| if no match found.
   """
+  master_class_name = os.getenv('TESTING_MASTER')
+  if master_class_name:
+    return master_class_name
+
+  master_class_name = os.getenv('INFRA_BUILDBOT_MASTER_CLASS_NAME')
+  if master_class_name:
+    return master_class_name
+
   slavename = slavename or GetActiveSlavename()
   for slave in GetAllSlaves():
     if slavename == EntryToSlaveName(slave):
