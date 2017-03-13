@@ -32,7 +32,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MockOptions = collections.namedtuple('MockOptions', (
     'logdog_verbose', 'logdog_disable', 'logdog_butler_path',
     'logdog_annotee_path', 'logdog_service_account_json', 'logdog_host',
-    'logdog_output_service', 'logdog_only', 'logdog_debug_out_file'))
+    'logdog_only', 'logdog_debug_out_file'))
 
 
 class LogDogBootstrapTest(unittest.TestCase):
@@ -59,7 +59,6 @@ class LogDogBootstrapTest(unittest.TestCase):
         logdog_annotee_path=None,
         logdog_service_account_json=None,
         logdog_host=None,
-        logdog_output_service=None,
         logdog_only=None,
         logdog_debug_out_file=None)
     self.properties = {
@@ -203,7 +202,7 @@ class LogDogBootstrapTest(unittest.TestCase):
             '-project', 'myproject',
             '-prefix', 'bb/mastername/buildername/1337',
             '-coordinator-host', 'luci-logdog.appspot.com',
-            '-output', 'logdog,service="services"',
+            '-output', 'logdog',
             '-tag', 'buildbot.master=mastername',
             '-tag', 'buildbot.builder=buildername',
             '-tag', 'buildbot.buildnumber=1337',
@@ -264,7 +263,7 @@ class LogDogBootstrapTest(unittest.TestCase):
             '-project', 'myproject',
             '-prefix', 'bb/mastername/buildername/1337',
             '-coordinator-host', 'luci-logdog.appspot.com',
-            '-output', 'logdog,service="services"',
+            '-output', 'logdog',
             '-tag', 'buildbot.master=mastername',
             '-tag', 'buildbot.builder=buildername',
             '-tag', 'buildbot.buildnumber=1337',
@@ -326,7 +325,7 @@ class LogDogBootstrapTest(unittest.TestCase):
             '-project', 'myproject',
             '-prefix', 'bb/mastername/buildername/1337',
             '-coordinator-host', 'luci-logdog.appspot.com',
-            '-output', ('logdog,service="services"'),
+            '-output', 'logdog',
             '-tag', 'buildbot.master=mastername',
             '-tag', 'buildbot.builder=buildername',
             '-tag', 'buildbot.buildnumber=1337',
@@ -387,7 +386,7 @@ class LogDogBootstrapTest(unittest.TestCase):
             '-project', 'myproject',
             '-prefix', 'bb/mastername/buildername/1337',
             '-coordinator-host', 'luci-logdog.appspot.com',
-            '-output', ('logdog,service="services"'),
+            '-output', 'logdog',
             '-tag', 'buildbot.master=mastername',
             '-tag', 'buildbot.builder=buildername',
             '-tag', 'buildbot.buildnumber=1337',
@@ -455,7 +454,6 @@ class LogDogBootstrapTest(unittest.TestCase):
         params=self.base,
         plat=None,
         host='example.com',
-        output_service=None,
         prefix='foo/bar',
         tags=None,
         logdog_only=False,

@@ -70,8 +70,8 @@ _CIPD_TAG_API_MAP = {
 #
 # Loaded by '_get_platform'.
 Platform = collections.namedtuple('Platform', (
-    'host', 'output_service', 'max_buffer_age',
-    'butler', 'annotee', 'credential_path', 'streamserver'))
+    'host', 'max_buffer_age', 'butler', 'annotee', 'credential_path',
+    'streamserver'))
 
 
 # An infra_platform cascading configuration for the supported architectures.
@@ -79,7 +79,6 @@ _PLATFORM_CONFIG = {
   # All systems.
   (): {
     'host': 'luci-logdog.appspot.com',
-    'output_service': 'services',
     'max_buffer_age': '30s',
     'butler': 'infra/tools/luci/logdog/butler/${platform}',
     'annotee': 'infra/tools/luci/logdog/annotee/${platform}',
@@ -119,8 +118,8 @@ Params = collections.namedtuple('Params', (
 
 # LogDog bootstrapping configuration.
 Config = collections.namedtuple('Config', (
-    'params', 'plat', 'host', 'output_service', 'prefix', 'tags',
-    'logdog_only', 'service_account_path',
+    'params', 'plat', 'host', 'prefix', 'tags', 'logdog_only',
+    'service_account_path',
 ))
 
 
@@ -409,11 +408,7 @@ def _make_butler_output(opts, cfg):
   """
   if opts.logdog_debug_out_file:
     return 'file,path="%s"' % (opts.logdog_debug_out_file,)
-
-  output = ['logdog']
-  if cfg.output_service:
-    output.append('service="%s"' % (cfg.output_service,))
-  return ','.join(output)
+  return 'logdog'
 
 
 def _prune_arg(l, key, extra=0):
@@ -477,7 +472,6 @@ def get_config(opts, properties):
       params=params,
       plat=plat,
       host=host,
-      output_service=opts.logdog_output_service or plat.output_service,
       prefix=prefix,
       tags=tags,
       logdog_only=logdog_only,
