@@ -134,7 +134,16 @@
       "restart"
     ],
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "BUILDBOT_BUILDERNAME": "precise_64-newlib-arm_qemu-pnacl-dbg",
+      "BUILDBOT_GOT_REVISION": "a95eb4c044a154d692a53fdfa564ee8de7aeea5b",
+      "BUILDBOT_MASTERNAME": "client.nacl",
+      "BUILDBOT_REVISION": "abcd",
+      "BUILDBOT_SLAVE_TYPE": "BuilderTester",
+      "GOMA_DIR": "[CACHE]/goma_client",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "GOMA_TMP_DIR": "[TMP_BASE]/goma",
+      "NOCONTROL_GOMA": "1",
+      "RUNTEST": "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py"
     },
     "name": "preprocess_for_goma.start_goma",
     "~followup_annotations": [
@@ -177,7 +186,7 @@
       "BUILDBOT_REVISION": "abcd",
       "BUILDBOT_SLAVE_TYPE": "BuilderTester",
       "GOMA_DIR": "[CACHE]/goma_client",
-      "GOMA_TMP_DIR": "[TMP_BASE]",
+      "GOMA_TMP_DIR": "[TMP_BASE]/goma",
       "NOCONTROL_GOMA": "1",
       "RUNTEST": "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py"
     },
@@ -199,7 +208,8 @@
       "jsonstatus"
     ],
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "GOMA_TMP_DIR': '[TMP_BASE]/goma"
     },
     "name": "postprocess_for_goma.goma_jsonstatus",
     "stdout": "/path/to/tmp/json",
@@ -239,7 +249,8 @@
       "stat"
     ],
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "GOMA_TMP_DIR': '[TMP_BASE]/goma"
     },
     "name": "postprocess_for_goma.goma_stat",
     "~followup_annotations": [
@@ -254,7 +265,8 @@
       "stop"
     ],
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "GOMA_TMP_DIR': '[TMP_BASE]/goma"
     },
     "name": "postprocess_for_goma.stop_goma",
     "~followup_annotations": [

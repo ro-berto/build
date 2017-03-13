@@ -66,12 +66,17 @@ def _AnnotatedStepsSteps(api, got_revision):
   if api.platform.bits == 64:
     goma_dir = api.goma.ensure_goma()
   if goma_dir:
+    # HACK(yyanagisawa): make GOMA_TMP_DIR owned by build runner.
+    # Since a temporary directory environment is set in annotated steps
+    # below, we need to set GOMA_TMP_DIR to make goma client know
+    # which temporary directory they must use.
+    goma_tmp_dir = api.path.join(api.path['tmp_base'], 'goma')
     env.update({
         'GOMA_DIR': goma_dir,
-        'GOMA_TMP_DIR': api.path['tmp_base'],
+        'GOMA_TMP_DIR': goma_tmp_dir,
         'NOCONTROL_GOMA': '1',
     })
-    api.goma.start()
+    api.goma.start(env=env)
   exit_status = -1
   try:
     with api.step.context({'cwd': api.path['checkout']}):
