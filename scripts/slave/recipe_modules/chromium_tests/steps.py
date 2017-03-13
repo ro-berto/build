@@ -1371,11 +1371,14 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
       args.extend(['--version', api.properties['version']])
     if 'git_revision' in api.properties:
       args.extend(['--git-revision', api.properties['git_revision']])
-    if 'got_webrtc_revision' in api.properties:
+
+    # Chromium build properties
+    if 'got_webrtc_revision' in api.chromium.build_properties:
       args.extend(['--got-webrtc-revision',
-          api.properties['got_webrtc_revision']])
-    if 'got_v8_revision' in api.properties:
-      args.extend(['--got-v8-revision', api.properties['got_v8_revision']])
+          api.chromium.build_properties['got_webrtc_revision']])
+    if 'got_v8_revision' in api.chromium.build_properties:
+      args.extend(['--got-v8-revision',
+          api.chromium.build_properties['got_v8_revision']])
 
     step_name = '%s Dashboard Upload' % self._perf_dashboard_id
     return api.python(

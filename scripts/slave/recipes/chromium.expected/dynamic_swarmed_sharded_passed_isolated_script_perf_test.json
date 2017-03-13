@@ -481,9 +481,9 @@
       "--git-revision",
       "asdfawe2342",
       "--got-webrtc-revision",
-      "asdfas",
+      "0f90628433546e61d9268596da93418c623137f4",
       "--got-v8-revision",
-      "asdfadsfa4e3w"
+      "801ada225ddc271c132c3a35f03975671d43e399"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"

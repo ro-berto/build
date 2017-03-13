@@ -557,9 +557,7 @@ def GenTests(api):
                            got_revision_cp='refs/heads/master@{#291141}',
                            buildnumber='1234',
                            version='v23523',
-                           git_revision='asdfawe2342',
-                           got_webrtc_revision='asdfas',
-                           got_v8_revision='asdfadsfa4e3w') +
+                           git_revision='asdfawe2342') +
 
     api.properties(
       swarm_hashes={
@@ -599,9 +597,7 @@ def GenTests(api):
                            got_revision_cp='refs/heads/master@{#291141}',
                            buildnumber='1234',
                            version='v23523',
-                           git_revision='asdfawe2342',
-                           got_webrtc_revision='asdfas',
-                           got_v8_revision='asdfadsfa4e3w') +
+                           git_revision='asdfawe2342') +
 
     api.properties(
       swarm_hashes={
@@ -640,7 +636,10 @@ def GenTests(api):
             passing=True, is_win=True, swarming=True,
             shards=2, isolated_script_passing=True, valid=True,
             output_chartjson=True),
-        retcode=0)
+        retcode=0) +
+    # TODO(nednguyen): also assert the content of the benchmark dashboard upload
+    # once post_process allows to do so.
+    api.post_process(post_process.MustRun, 'benchmark Dashboard Upload')
   )
 
   yield (
@@ -651,9 +650,7 @@ def GenTests(api):
                            got_revision_cp='refs/heads/master@{#291141}',
                            buildnumber='1234',
                            version='v23523',
-                           git_revision='asdfawe2342',
-                           got_webrtc_revision='asdfas',
-                           got_v8_revision='asdfadsfa4e3w') +
+                           git_revision='asdfawe2342') +
 
     api.properties(
       swarm_hashes={
@@ -704,9 +701,7 @@ def GenTests(api):
                            got_revision_cp='refs/heads/master@{#291141}',
                            buildnumber='1234',
                            version='v23523',
-                           git_revision='asdfawe2342',
-                           got_webrtc_revision='asdfas',
-                           got_v8_revision='asdfadsfa4e3w') +
+                           git_revision='asdfawe2342') +
 
     api.properties(
       swarm_hashes={
@@ -759,9 +754,7 @@ def GenTests(api):
                            got_revision_cp='refs/heads/master@{#291141}',
                            buildnumber='1234',
                            version='v23523',
-                           git_revision='asdfawe2342',
-                           got_webrtc_revision='asdfas',
-                           got_v8_revision='asdfadsfa4e3w') +
+                           git_revision='asdfawe2342') +
 
     api.properties(
       swarm_hashes={
