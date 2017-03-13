@@ -758,8 +758,6 @@ class SwarmingApi(recipe_api.RecipeApi):
     """Produces a step that collects and processes a result of google-test task.
     """
     args = [
-      'python',
-      self.resource('collect_gtest_task.py'),
       '--swarming-client-dir', self.m.swarming_client.path,
       '--temp-root-dir', self.m.path['tmp_base'],
     ]
@@ -790,9 +788,9 @@ class SwarmingApi(recipe_api.RecipeApi):
     # Always wait for all tasks to finish even if some of them failed. Allow
     # collect_gtest_task.py to emit all necessary annotations itself.
     try:
-      return self.m.python(
+      return self.m.build.python(
           name=self.get_step_name('', task),
-          script=self.package_repo_resource('scripts', 'tools', 'runit.py'),
+          script=self.resource('collect_gtest_task.py'),
           args=args,
           allow_subannotations=True,
           step_test_data=step_test_data,

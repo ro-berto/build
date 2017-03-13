@@ -38,9 +38,6 @@ class ArchiveApi(recipe_api.RecipeApi):
     if not src_dir:
       src_dir = self.m.path['checkout']
     args = [
-        '--show-path',
-        'python',
-        self.package_repo_resource('scripts', 'slave', 'zip_build.py'),
         '--target', target,
         '--gsutil-py-path', self.m.depot_tools.gsutil_py_path,
         '--staging-dir', self.m.path['cache'].join('chrome_staging'),
@@ -92,9 +89,9 @@ class ArchiveApi(recipe_api.RecipeApi):
                  '--build-properties', properties_json])
 
     kwargs['allow_subannotations'] = True
-    self.m.python(
+    self.m.build.python(
       step_name,
-      self.package_repo_resource('scripts', 'tools', 'runit.py'),
+      self.package_repo_resource('scripts', 'slave', 'zip_build.py'),
       args,
       infra_step=True,
       **kwargs
@@ -298,9 +295,6 @@ class ArchiveApi(recipe_api.RecipeApi):
     if not src_dir:
       src_dir = self.m.path['checkout']
     args = [
-        '--show-path',
-        'python',
-        self.package_repo_resource('scripts', 'slave', 'extract_build.py'),
         '--gsutil-py-path', self.m.depot_tools.gsutil_py_path,
         '--target', target,
         '--src-dir', src_dir,
@@ -331,9 +325,9 @@ class ArchiveApi(recipe_api.RecipeApi):
     if self.m.properties.get('halt_on_missing_build'):  # pragma: no cover
       args.append('--halt-on-missing-build')
 
-    self.m.python(
+    self.m.build.python(
       step_name,
-      self.package_repo_resource('scripts', 'tools', 'runit.py'),
+      self.package_repo_resource('scripts', 'slave', 'extract_build.py'),
       args,
       infra_step=True,
       **kwargs

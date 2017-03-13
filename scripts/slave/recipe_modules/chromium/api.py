@@ -856,12 +856,9 @@ class ChromiumApi(recipe_api.RecipeApi):
       infra_step=True)
 
   def cleanup_temp(self):
-    self.m.python(
+    self.m.build.python(
       'cleanup_temp',
-      self.package_repo_resource('scripts', 'tools', 'runit.py'),
-      ['--show-path',
-       'python',
-       self.package_repo_resource('scripts', 'slave', 'cleanup_temp.py')],
+      self.package_repo_resource('scripts', 'slave', 'cleanup_temp.py'),
       infra_step=True)
 
   def process_dumps(self, **kwargs):

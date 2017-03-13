@@ -76,11 +76,11 @@ class GomaApi(recipe_api.RecipeApi):
     if self._goma_jobs:
       return self._goma_jobs
 
-    step_result = self.m.python(
+    step_result = self.m.build.python(
       'calculate the number of recommended jobs',
-      self.package_repo_resource('scripts', 'tools', 'runit.py'),
+      self.resource('utils.py'),
       args=[
-          '--show-path', 'python', self.resource('utils.py'), 'jobs',
+          'jobs',
           '--file-path', self.m.raw_io.output_text()
       ],
       step_test_data=(
@@ -163,11 +163,10 @@ class GomaApi(recipe_api.RecipeApi):
       InfraFailure if it fails to start cloudtail
     """
 
-    self.m.python(
+    self.m.build.python(
       name='start cloudtail',
-      script=self.package_repo_resource('scripts', 'tools', 'runit.py'),
-      args=['--show-path', 'python', self.resource('cloudtail_utils.py'),
-            'start', '--cloudtail-path', self.cloudtail_path,
+      script=self.resource('cloudtail_utils.py'),
+      args=['start', '--cloudtail-path', self.cloudtail_path,
             '--cloudtail-service-account-json',
             self.cloudtail_service_account_json_path,
             '--pid-file', self.m.raw_io.output_text(
@@ -203,11 +202,10 @@ class GomaApi(recipe_api.RecipeApi):
       InfraFailure if it fails to stop cloudtail
     """
 
-    self.m.python(
+    self.m.build.python(
         name='stop cloudtail',
-        script=self.package_repo_resource('scripts', 'tools', 'runit.py'),
-        args=['--show-path', 'python', self.resource('cloudtail_utils.py'),
-              'stop', '--killed-pid-file', self.cloudtail_pid_file],
+        script=self.resource('cloudtail_utils.py'),
+        args=['stop', '--killed-pid-file', self.cloudtail_pid_file],
         infra_step=True)
 
   def start(self, env=None, **kwargs):
@@ -314,10 +312,6 @@ class GomaApi(recipe_api.RecipeApi):
     """
 
     args = [
-        '--show-path',
-        'python',
-        self.package_repo_resource(
-            'scripts', 'slave', 'upload_goma_logs.py'),
         '--upload-compiler-proxy-info',
         '--gsutil-py-path', self.m.depot_tools.gsutil_py_path,
     ]
@@ -360,9 +354,10 @@ class GomaApi(recipe_api.RecipeApi):
             '--buildbot-%s' % flag_suffix, self.m.properties[prop_name]
         ])
 
-    self.m.python(
+    self.m.build.python(
       name=name or 'upload_log',
-      script=self.package_repo_resource('scripts', 'tools', 'runit.py'),
+      script=self.package_repo_resource('scripts', 'slave',
+                                        'upload_goma_logs.py'),
       args=args)
 
   def build_with_goma(self, ninja_command, name=None, ninja_log_outdir=None,

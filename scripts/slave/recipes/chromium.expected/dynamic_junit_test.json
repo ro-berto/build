@@ -215,6 +215,7 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
+      "--",
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
@@ -271,6 +272,7 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
+      "--",
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/extract_build.py",
       "--gsutil-py-path",
