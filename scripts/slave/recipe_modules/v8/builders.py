@@ -1508,7 +1508,7 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - mipsel - sim - builder',
         'build_gs_archive': 'mipsel_sim_rel_archive',
         'enable_swarming': True,
-        'tests': [V8Testing_2, Test262],
+        'tests': [V8Testing_3, Test262],
         'testing': {'platform': 'linux'},
       },
 ####### Category: PPC
