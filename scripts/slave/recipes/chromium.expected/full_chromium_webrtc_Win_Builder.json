@@ -144,7 +144,7 @@
   },
   {
     "cmd": [
-      "cipd",
+      "cipd.bat",
       "ensure",
       "-root",
       "[CACHE]\\goma_client",
