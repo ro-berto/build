@@ -169,8 +169,9 @@
     "name": "device_status",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
-      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@",
       "@@@STEP_LINK@report a bug@https://code.google.com/p/chromium/issues/entry?comment=Buildbot%3A+Mojo+Android+Builder+Tests+%28dbg%29%0A%28Please+do+not+change+any+labels%29&labels=Restrict-View-Google%2COS-Android%2CInfra-Client%2CInfra-Labs&summary=Device+Offline+on+chromium.testing.master+test_bot@@@",
       "@@@STEP_EXCEPTION@@@"
     ]

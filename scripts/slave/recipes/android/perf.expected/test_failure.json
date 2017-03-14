@@ -833,10 +833,12 @@
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@<br/>Device Affinity: 0<br/>@@@",
-      "@@@STEP_LOG_LINE@json.output (invalid)@null@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output[output_json] (invalid)@null@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@",
       "@@@STEP_LOG_END@json.output[output_json] (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output[output_json] (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output[output_json] (exception)@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
