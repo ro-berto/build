@@ -34,7 +34,8 @@ def RunSteps(api):
   api.bot_update.ensure_checkout()
 
   api.gclient.runhooks(env={'GYP_GENERATORS': 'ninja',
-                            'GYP_DEFINES': ' '.join(gyp_defines)})
+                            'GYP_DEFINES': ' '.join(gyp_defines),
+                            'GYP_MSVS_VERSION': '2013'})
   api.gclient.c.got_revision_mapping.pop('src', None)
   api.gclient.c.got_revision_mapping['src/dart'] = 'got_revision'
 

@@ -54,6 +54,7 @@
     "env": {
       "GYP_DEFINES": "component=static_library linux_strip_binary=1 target_arch=ia32",
       "GYP_GENERATORS": "ninja",
+      "GYP_MSVS_VERSION": "2013",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
