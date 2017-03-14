@@ -552,6 +552,7 @@ SPEC = {
           '--site-per-process',
           '--additional-expectations',
           'src/third_party/WebKit/LayoutTests/FlagExpectations/site-per-process',
+          '--options',
           'http/tests',
         ]),
       ],

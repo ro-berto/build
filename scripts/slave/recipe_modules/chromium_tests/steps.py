@@ -1971,28 +1971,18 @@ class BlinkTest(Test):
     step_name = self._step_name(suffix)
     args = [
         '--target', api.chromium.c.BUILD_CONFIG,
-        '--results-directory', results_dir,
+        '-o', results_dir,
         '--build-dir', api.chromium.c.build_dir,
         '--json-test-results', api.test_utils.test_results(add_json_log=False),
         '--test-results-server', 'test-results.appspot.com',
-        '--master-name', api.properties['mastername'],
         '--build-number', str(api.properties['buildnumber']),
         '--builder-name', api.properties['buildername'],
         '--step-name', step_name,
-        '--no-show-results',
-        '--full-results-html',    # For the dashboards.
-        '--clobber-old-results',  # Clobber test results before each run.
-        '--exit-after-n-failures', '5000',
-        '--exit-after-n-crashes-or-timeouts', '100',
-        '--debug-rwt-logging',
     ]
-
     if api.chromium.c.TARGET_PLATFORM == 'android':
       args.extend(['--platform', 'android'])
-
     if self._extra_args:
       args.extend(self._extra_args)
-
     if suffix == 'without patch':
       test_list = "\n".join(self.failures(api, 'with patch'))
       args.extend(['--test-list', api.raw_io.input_text(test_list),
@@ -2000,6 +1990,11 @@ class BlinkTest(Test):
 
     try:
       if api.platform.is_win:
+        args[2] = '--results-directory'
+        args += [
+            '--master-name', api.properties['mastername'],
+            '--debug-rwt-logging',
+        ]
         step_result = api.python(
           step_name,
           api.path['checkout'].join('third_party', 'WebKit', 'Tools',
