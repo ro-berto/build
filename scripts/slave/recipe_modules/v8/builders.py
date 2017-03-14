@@ -2045,13 +2045,10 @@ BUILDERS = {
         'parent_buildername': 'v8_linux64_asan_rel_ng',
         'enable_swarming': True,
         'tests': [
-          V8Testing_2,
+          V8Testing_3,
           V8TestingExtra_2,
           Test262_2,
         ],
-        # TODO(machenbach): Run with exhaustive variants as soon as bot runs
-        # on swarming.
-        'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_msan_rel': {
