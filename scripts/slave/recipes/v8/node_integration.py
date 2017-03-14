@@ -111,28 +111,15 @@ def RunSteps(api):
   except api.step.StepFailure:  # pragma: no cover
     pass
 
-  # Copy the checked-out v8.
-  api.file.rmtree('v8', api.path['start_dir'].join('node.js', 'deps', 'v8'))
-  args=[
-    # Source.
-    api.path['start_dir'].join('v8'),
-    # Destination.
-    api.path['start_dir'].join('node.js', 'deps', 'v8'),
-    # Paths to ignore.
-    '.git',
-    api.path['start_dir'].join('v8', 'buildtools'),
-    api.path['start_dir'].join('v8', 'out'),
-  ]
-  for f in api.file.listdir(
-      'third_party', api.path['start_dir'].join('v8', 'third_party')):
-    if f not in ['inspector_protocol', 'jinja2', 'markupsafe']:
-      # Keep copying inspector_protocol, jinja2 and markupsafe.
-      # TODO(machenbach): Formalize those exceptions on the v8-side.
-      args.append(api.path['start_dir'].join('v8', 'third_party', f))
+  # Update V8.
   api.python(
-      name='copy v8 tree',
-      script=api.v8.resource('copy_v8.py'),
-      args=args,
+      name='update v8',
+      script=api.path['start_dir'].join(
+          'v8', 'tools', 'release', 'update_node.py'),
+      args=[
+        api.path['start_dir'].join('v8'),
+        api.path['start_dir'].join('node.js'),
+      ],
   )
 
   # Build and test node.js with the checked-out v8.
@@ -160,13 +147,5 @@ def GenTests(api):
               buildername=buildername,
               branch='refs/heads/master',
               revision='deadbeef',
-          ) +
-          api.override_step_data(
-              'listdir third_party', api.json.output([
-                'icu',
-                'inspector_protocol',
-                'jinja2',
-                'markupsafe',
-              ],
-          ))
+          )
       )
