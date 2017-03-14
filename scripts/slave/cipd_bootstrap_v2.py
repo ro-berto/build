@@ -19,7 +19,7 @@ CLIENT_NAME = 'cipd' + infra_platform.exe_suffix()
 
 
 DEFAULT_CIPD_VERSION = 'git_revision:b1fb723fc4ce6d0b8167ecf4cac327386380d74b'
-STAGING_CIPD_VERSION = 'git_revision:b1fb723fc4ce6d0b8167ecf4cac327386380d74b'
+STAGING_CIPD_VERSION = 'git_revision:76eadcd75c5ad2638e1fc098f81748aad150c7c0'
 
 STAGING = 'staging'
 CANARY = 'canary'
