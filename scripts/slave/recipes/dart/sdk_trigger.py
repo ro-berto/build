@@ -35,6 +35,9 @@ def RunSteps(api):
     'analyzer-mac10.11-release' + postfix,
     'analyzer-win7-release' + postfix,
     'analyzer-linux-release' + postfix,
+    'analyzer-win7-release-strong' + postfix,
+    'analyzer-mac10.11-release-strong' + postfix,
+    'analyzer-linux-release-strong' + postfix,
   ]
 
   for option in ['minified', 'hostchecked']:
