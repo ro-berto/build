@@ -24,6 +24,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -75,6 +76,7 @@
       "+refs/heads/lkgr:refs/heads/lkgr"
     ],
     "cwd": "[START_DIR]/v8",
+    "infra_step": true,
     "name": "git fetch"
   },
   {
@@ -85,6 +87,7 @@
       "refs/heads/lkgr"
     ],
     "cwd": "[START_DIR]/v8",
+    "infra_step": true,
     "name": "git show-ref refs/heads/lkgr",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -107,6 +110,7 @@
       "+refs/heads/candidate:refs/heads/candidate"
     ],
     "cwd": "[START_DIR]/v8",
+    "infra_step": true,
     "name": "git fetch (2)"
   },
   {
@@ -117,6 +121,7 @@
       "refs/heads/candidate"
     ],
     "cwd": "[START_DIR]/v8",
+    "infra_step": true,
     "name": "git show-ref refs/heads/candidate",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -132,6 +137,7 @@
       "+refs/heads/roll:refs/heads/roll"
     ],
     "cwd": "[START_DIR]/v8",
+    "infra_step": true,
     "name": "git fetch (3)"
   },
   {
@@ -142,6 +148,7 @@
       "refs/heads/roll"
     ],
     "cwd": "[START_DIR]/v8",
+    "infra_step": true,
     "name": "git show-ref refs/heads/roll",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -194,6 +201,7 @@
       "0df953c9e12c1e3b0e37f2d4ef1ef8c319e095cb"
     ],
     "cwd": "[START_DIR]/v8",
+    "infra_step": true,
     "name": "git update-ref"
   },
   {
@@ -204,6 +212,7 @@
       "refs/heads/roll:refs/heads/roll"
     ],
     "cwd": "[START_DIR]/v8",
+    "infra_step": true,
     "name": "git push"
   },
   {
@@ -228,6 +237,7 @@
       "[START_DIR]/refs_heads_roll.log",
       "gs://chromium-v8-auto-roll/v8_release_process/refs_heads_roll.log"
     ],
+    "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8-auto-roll/v8_release_process/refs_heads_roll.log@@@"

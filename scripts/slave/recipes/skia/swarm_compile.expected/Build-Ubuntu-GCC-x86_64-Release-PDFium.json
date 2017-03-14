@@ -7,6 +7,7 @@
       "[CUSTOM_/_B_WORK]",
       "511"
     ],
+    "infra_step": true,
     "name": "makedirs checkout_path",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -50,6 +51,7 @@
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]",
       "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -88,6 +90,7 @@
       "Build-Ubuntu-GCC-x86_64-Release-PDFium"
     ],
     "cwd": "[CUSTOM_/_B_WORK]/skia",
+    "infra_step": true,
     "name": "exec buildbot_spec.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -169,6 +172,7 @@
       "[CUSTOM_/_B_WORK]/pdfium/DEPS",
       "/path/to/tmp/"
     ],
+    "infra_step": true,
     "name": "read PDFium DEPS"
   },
   {
@@ -179,6 +183,7 @@
       "'skia_revision': '9046e2e693bb92a76e972b694580e5d17ad10748'",
       "[CUSTOM_/_B_WORK]/pdfium/DEPS"
     ],
+    "infra_step": true,
     "name": "write PDFium DEPs"
   },
   {
@@ -227,6 +232,7 @@
       "[CUSTOM_/_B_WORK]/skia/out/Build-Ubuntu-GCC-x86_64-Release-PDFium/Release",
       "[CUSTOM_[SWARM_OUT_DIR]]/out/Release"
     ],
+    "infra_step": true,
     "name": "copy build products",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@import errno@@@",

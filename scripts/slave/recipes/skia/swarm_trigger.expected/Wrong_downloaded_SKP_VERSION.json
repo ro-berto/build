@@ -8,6 +8,7 @@
       "https://skia.googlesource.com/skia.git"
     ],
     "cwd": "[START_DIR]/skia",
+    "infra_step": true,
     "name": "git remote set-url"
   },
   {
@@ -16,6 +17,7 @@
       "fetch"
     ],
     "cwd": "[START_DIR]/skia",
+    "infra_step": true,
     "name": "git fetch"
   },
   {
@@ -26,6 +28,7 @@
       "abc123"
     ],
     "cwd": "[START_DIR]/skia",
+    "infra_step": true,
     "name": "git reset"
   },
   {
@@ -36,6 +39,7 @@
       "-f"
     ],
     "cwd": "[START_DIR]/skia",
+    "infra_step": true,
     "name": "git clean"
   },
   {
@@ -63,6 +67,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -115,6 +120,7 @@
     "env": {
       "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
     },
+    "infra_step": true,
     "name": "git fetch (swarming_client)"
   },
   {
@@ -125,6 +131,7 @@
       "FETCH_HEAD"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "git checkout (swarming_client)"
   },
   {
@@ -134,6 +141,7 @@
       "HEAD"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "read revision",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -149,6 +157,7 @@
       "-x"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "git clean (swarming_client)"
   },
   {
@@ -158,6 +167,7 @@
       "sync"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "submodule sync (swarming_client)"
   },
   {
@@ -169,6 +179,7 @@
       "--recursive"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "submodule update (swarming_client)"
   },
   {
@@ -231,6 +242,7 @@
       "rmtree",
       "[START_DIR]/luci-go"
     ],
+    "infra_step": true,
     "name": "rmtree Go binary dir"
   },
   {
@@ -254,6 +266,7 @@
       "----",
       "help"
     ],
+    "infra_step": true,
     "name": "gsutil help"
   },
   {
@@ -264,6 +277,7 @@
       "RECIPE_PACKAGE_REPO[build]/third_party/infra",
       "511"
     ],
+    "infra_step": true,
     "name": "makedirs third_party_infra",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -363,6 +377,7 @@
       "Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug"
     ],
     "cwd": "[START_DIR]/skia",
+    "infra_step": true,
     "name": "exec buildbot_spec.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -408,6 +423,7 @@
       "Build-Ubuntu-GCC-x86_64-Debug"
     ],
     "cwd": "[START_DIR]/skia",
+    "infra_step": true,
     "name": "exec buildbot_spec.py (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -597,6 +613,7 @@
       "bot_id=skiabot-dummy-compile-slave",
       "revision=9046e2e693bb92a76e972b694580e5d17ad10748"
     ],
+    "infra_step": true,
     "name": "[trigger] compile_skia on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu'@@@",
@@ -683,6 +700,7 @@
       "[START_DIR]/tmp",
       "511"
     ],
+    "infra_step": true,
     "name": "makedirs tmp_dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -705,6 +723,7 @@
       "[START_DIR]/tmp/SKP_VERSION",
       "/path/to/tmp/"
     ],
+    "infra_step": true,
     "name": "Get downloaded SKP_VERSION"
   },
   {
@@ -715,6 +734,7 @@
       "[START_DIR]/skia/SKP_VERSION",
       "/path/to/tmp/"
     ],
+    "infra_step": true,
     "name": "Get expected SKP_VERSION"
   },
   {
@@ -724,6 +744,7 @@
       "\nimport os\nimport sys\nos.remove(sys.argv[1])\n",
       "[START_DIR]/tmp/SKP_VERSION"
     ],
+    "infra_step": true,
     "name": "remove actual SKP_VERSION",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -741,6 +762,7 @@
       "rmtree",
       "[START_DIR]/skps"
     ],
+    "infra_step": true,
     "name": "rmtree skps"
   },
   {
@@ -751,6 +773,7 @@
       "[START_DIR]/skps",
       "511"
     ],
+    "infra_step": true,
     "name": "makedirs skps",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -782,6 +805,7 @@
       "AWS_CREDENTIAL_FILE": "[HOME]/chromium-skia-gm.boto",
       "BOTO_CONFIG": "[HOME]/chromium-skia-gm.boto"
     },
+    "infra_step": true,
     "name": "gsutil download skps"
   },
   {
@@ -792,6 +816,7 @@
       "42",
       "[START_DIR]/tmp/SKP_VERSION"
     ],
+    "infra_step": true,
     "name": "write SKP_VERSION"
   },
   {
@@ -802,6 +827,7 @@
       "[START_DIR]/skia/infra/bots/assets/skimage/VERSION",
       "/path/to/tmp/"
     ],
+    "infra_step": true,
     "name": "read skimage VERSION"
   },
   {
@@ -966,6 +992,7 @@
       "bot_id=skiabot-linux-test-000",
       "revision=9046e2e693bb92a76e972b694580e5d17ad10748"
     ],
+    "infra_step": true,
     "name": "[trigger] test_skia on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu'@@@",
@@ -1146,6 +1173,7 @@
       "bot_id=skiabot-linux-test-000",
       "revision=9046e2e693bb92a76e972b694580e5d17ad10748"
     ],
+    "infra_step": true,
     "name": "[trigger] perf_skia on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu'@@@",
@@ -1172,6 +1200,7 @@
       "rmtree",
       "[START_DIR]/swarming_temp_dir/outputs/test_skia"
     ],
+    "infra_step": true,
     "name": "rmtree results_dir"
   },
   {
@@ -1244,6 +1273,7 @@
       "rmtree",
       "[START_DIR]/dm"
     ],
+    "infra_step": true,
     "name": "rmtree dm_dir"
   },
   {
@@ -1255,6 +1285,7 @@
       "[START_DIR]/dm",
       "0"
     ],
+    "infra_step": true,
     "name": "dm_dir"
   },
   {
@@ -1274,6 +1305,7 @@
       "AWS_CREDENTIAL_FILE": "[HOME]/chromium-skia-gm.boto",
       "BOTO_CONFIG": "[HOME]/chromium-skia-gm.boto"
     },
+    "infra_step": true,
     "name": "Upload DM Results"
   },
   {
@@ -1284,6 +1316,7 @@
       "rmtree",
       "[START_DIR]/swarming_temp_dir/outputs/perf_skia"
     ],
+    "infra_step": true,
     "name": "rmtree results_dir (2)"
   },
   {

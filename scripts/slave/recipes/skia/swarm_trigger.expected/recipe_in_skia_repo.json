@@ -8,6 +8,7 @@
       "https://skia.googlesource.com/skia.git"
     ],
     "cwd": "[START_DIR]/skia",
+    "infra_step": true,
     "name": "git remote set-url"
   },
   {
@@ -16,6 +17,7 @@
       "fetch"
     ],
     "cwd": "[START_DIR]/skia",
+    "infra_step": true,
     "name": "git fetch"
   },
   {
@@ -26,6 +28,7 @@
       "abc123"
     ],
     "cwd": "[START_DIR]/skia",
+    "infra_step": true,
     "name": "git reset"
   },
   {
@@ -36,6 +39,7 @@
       "-f"
     ],
     "cwd": "[START_DIR]/skia",
+    "infra_step": true,
     "name": "git clean"
   },
   {
@@ -63,6 +67,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",

@@ -11,6 +11,7 @@
       "--output",
       "/path/to/tmp/json"
     ],
+    "infra_step": true,
     "name": "filter build_dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
@@ -32,6 +33,7 @@
       "[\"chrome\", \"icu.dat\", \"lib\", \"file.obj\"]",
       "[START_DIR]\\src\\out\\Release"
     ],
+    "infra_step": true,
     "name": "zipping"
   },
   {
@@ -52,6 +54,7 @@
       "[TMP_BASE]\\chrome_staging_tmp_1\\chrome-asan-win32-release-refs_heads_B1-123456.zip",
       "gs://chromium/win32-release-subdir/chrome-asan-win32-release-refs_heads_B1-123456.zip"
     ],
+    "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium/win32-release-subdir/chrome-asan-win32-release-refs_heads_B1-123456.zip@@@"

@@ -8,6 +8,7 @@
       "Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug"
     ],
     "cwd": "[START_DIR]/skia",
+    "infra_step": true,
     "name": "exec buildbot_spec.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -60,6 +61,7 @@
       "SKIA_OUT": "[START_DIR]/out",
       "XCODEBUILD": "[START_DIR]/xcodebuild"
     },
+    "infra_step": true,
     "name": "install iOSShell"
   },
   {
@@ -78,6 +80,7 @@
       "SKIA_OUT": "[START_DIR]/out",
       "XCODEBUILD": "[START_DIR]/xcodebuild"
     },
+    "infra_step": true,
     "name": "push resources to skia_resources"
   },
   {
@@ -88,6 +91,7 @@
       "[START_DIR]/skia/infra/bots/assets/skp/VERSION",
       "/path/to/tmp/"
     ],
+    "infra_step": true,
     "name": "Get downloaded SKP VERSION"
   },
   {
@@ -98,6 +102,7 @@
       "42",
       "[START_DIR]/tmp/SKP_VERSION"
     ],
+    "infra_step": true,
     "name": "write SKP_VERSION"
   },
   {
@@ -115,6 +120,7 @@
       "SKIA_OUT": "[START_DIR]/out",
       "XCODEBUILD": "[START_DIR]/xcodebuild"
     },
+    "infra_step": true,
     "name": "read SKP_VERSION",
     "stdout": "/path/to/tmp/"
   },
@@ -133,6 +139,7 @@
       "SKIA_OUT": "[START_DIR]/out",
       "XCODEBUILD": "[START_DIR]/xcodebuild"
     },
+    "infra_step": true,
     "name": "rm skiabot/skia_tmp_dir/SKP_VERSION"
   },
   {
@@ -150,6 +157,7 @@
       "SKIA_OUT": "[START_DIR]/out",
       "XCODEBUILD": "[START_DIR]/xcodebuild"
     },
+    "infra_step": true,
     "name": "rmdir skiabot/skia_skp/skps"
   },
   {
@@ -167,6 +175,7 @@
       "SKIA_OUT": "[START_DIR]/out",
       "XCODEBUILD": "[START_DIR]/xcodebuild"
     },
+    "infra_step": true,
     "name": "mkdir skiabot/skia_skp/skps"
   },
   {
@@ -185,6 +194,7 @@
       "SKIA_OUT": "[START_DIR]/out",
       "XCODEBUILD": "[START_DIR]/xcodebuild"
     },
+    "infra_step": true,
     "name": "push skp to skps"
   },
   {
@@ -203,6 +213,7 @@
       "SKIA_OUT": "[START_DIR]/out",
       "XCODEBUILD": "[START_DIR]/xcodebuild"
     },
+    "infra_step": true,
     "name": "push [START_DIR]/tmp/SKP_VERSION"
   },
   {
@@ -213,6 +224,7 @@
       "[START_DIR]/skia/infra/bots/assets/skimage/VERSION",
       "/path/to/tmp/"
     ],
+    "infra_step": true,
     "name": "Get downloaded skimage VERSION"
   },
   {
@@ -223,6 +235,7 @@
       "42",
       "[START_DIR]/tmp/SK_IMAGE_VERSION"
     ],
+    "infra_step": true,
     "name": "write SK_IMAGE_VERSION"
   },
   {
@@ -240,6 +253,7 @@
       "SKIA_OUT": "[START_DIR]/out",
       "XCODEBUILD": "[START_DIR]/xcodebuild"
     },
+    "infra_step": true,
     "name": "read SK_IMAGE_VERSION",
     "stdout": "/path/to/tmp/"
   },
@@ -258,6 +272,7 @@
       "SKIA_OUT": "[START_DIR]/out",
       "XCODEBUILD": "[START_DIR]/xcodebuild"
     },
+    "infra_step": true,
     "name": "rm skiabot/skia_tmp_dir/SK_IMAGE_VERSION"
   },
   {
@@ -275,6 +290,7 @@
       "SKIA_OUT": "[START_DIR]/out",
       "XCODEBUILD": "[START_DIR]/xcodebuild"
     },
+    "infra_step": true,
     "name": "rmdir skiabot/skia_images"
   },
   {
@@ -292,6 +308,7 @@
       "SKIA_OUT": "[START_DIR]/out",
       "XCODEBUILD": "[START_DIR]/xcodebuild"
     },
+    "infra_step": true,
     "name": "mkdir skiabot/skia_images"
   },
   {
@@ -310,6 +327,7 @@
       "SKIA_OUT": "[START_DIR]/out",
       "XCODEBUILD": "[START_DIR]/xcodebuild"
     },
+    "infra_step": true,
     "name": "push skimage to skia_images"
   },
   {
@@ -328,6 +346,7 @@
       "SKIA_OUT": "[START_DIR]/out",
       "XCODEBUILD": "[START_DIR]/xcodebuild"
     },
+    "infra_step": true,
     "name": "push [START_DIR]/tmp/SK_IMAGE_VERSION"
   },
   {
@@ -341,6 +360,7 @@
     "env": {
       "PYTHONPATH": "build/scripts"
     },
+    "infra_step": true,
     "name": "rmtree dm"
   },
   {
@@ -351,6 +371,7 @@
       "[CUSTOM_[SWARM_OUT_DIR]]/dm",
       "511"
     ],
+    "infra_step": true,
     "name": "makedirs dm",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -380,6 +401,7 @@
       "SKIA_OUT": "[START_DIR]/out",
       "XCODEBUILD": "[START_DIR]/xcodebuild"
     },
+    "infra_step": true,
     "name": "rmdir skiabot/skia_dm"
   },
   {
@@ -397,6 +419,7 @@
       "SKIA_OUT": "[START_DIR]/out",
       "XCODEBUILD": "[START_DIR]/xcodebuild"
     },
+    "infra_step": true,
     "name": "mkdir skiabot/skia_dm"
   },
   {
@@ -407,6 +430,7 @@
       "[START_DIR]/tmp",
       "511"
     ],
+    "infra_step": true,
     "name": "makedirs tmp_dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -438,6 +462,7 @@
       "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_OUT": "[START_DIR]/out"
     },
+    "infra_step": true,
     "name": "get uninteresting hashes",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -489,6 +514,7 @@
       "SKIA_OUT": "[START_DIR]/out",
       "XCODEBUILD": "[START_DIR]/xcodebuild"
     },
+    "infra_step": true,
     "name": "push [START_DIR]/tmp/uninteresting_hashes.txt"
   },
   {
@@ -564,6 +590,7 @@
       "SKIA_OUT": "[START_DIR]/out",
       "XCODEBUILD": "[START_DIR]/xcodebuild"
     },
+    "infra_step": true,
     "name": "pull skia_dm"
   },
   {
@@ -580,6 +607,7 @@
       "SKIA_OUT": "[START_DIR]/out",
       "XCODEBUILD": "[START_DIR]/xcodebuild"
     },
+    "infra_step": true,
     "name": "reboot"
   },
   {
@@ -597,6 +625,7 @@
       "SKIA_OUT": "[START_DIR]/out",
       "XCODEBUILD": "[START_DIR]/xcodebuild"
     },
+    "infra_step": true,
     "name": "wait for reboot"
   },
   {

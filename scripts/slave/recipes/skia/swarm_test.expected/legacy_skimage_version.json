@@ -8,6 +8,7 @@
       "Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug"
     ],
     "cwd": "[START_DIR]/skia",
+    "infra_step": true,
     "name": "exec buildbot_spec.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -52,6 +53,7 @@
       "[START_DIR]/skia/infra/bots/assets/skp/VERSION",
       "/path/to/tmp/"
     ],
+    "infra_step": true,
     "name": "Get downloaded SKP VERSION"
   },
   {
@@ -62,6 +64,7 @@
       "42",
       "[START_DIR]/tmp/SKP_VERSION"
     ],
+    "infra_step": true,
     "name": "write SKP_VERSION"
   },
   {
@@ -72,6 +75,7 @@
       "[START_DIR]/tmp/SK_IMAGE_VERSION",
       "/path/to/tmp/"
     ],
+    "infra_step": true,
     "name": "Get downloaded SK_IMAGE_VERSION"
   },
   {
@@ -85,6 +89,7 @@
     "env": {
       "PYTHONPATH": "build/scripts"
     },
+    "infra_step": true,
     "name": "rmtree dm"
   },
   {
@@ -95,6 +100,7 @@
       "[CUSTOM_[SWARM_OUT_DIR]]/dm",
       "511"
     ],
+    "infra_step": true,
     "name": "makedirs dm",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -117,6 +123,7 @@
       "[START_DIR]/tmp",
       "511"
     ],
+    "infra_step": true,
     "name": "makedirs tmp_dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -146,6 +153,7 @@
       "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_OUT": "[START_DIR]/out"
     },
+    "infra_step": true,
     "name": "get uninteresting hashes",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

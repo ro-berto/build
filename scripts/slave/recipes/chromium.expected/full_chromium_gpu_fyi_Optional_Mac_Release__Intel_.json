@@ -46,6 +46,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -139,6 +140,7 @@
       "-service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
+    "infra_step": true,
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -244,6 +246,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
+    "infra_step": true,
     "name": "cleanup_temp"
   },
   {
@@ -254,6 +257,7 @@
       "rmtree",
       "[BUILDER_CACHE]/Optional_Mac_Release__Intel_/src/out/Release"
     ],
+    "infra_step": true,
     "name": "rmtree build directory"
   },
   {
@@ -280,6 +284,7 @@
       "--build-number",
       "571"
     ],
+    "infra_step": true,
     "name": "extract build"
   },
   {
@@ -375,6 +380,7 @@
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
+    "infra_step": true,
     "name": "[trigger] browser_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac-10.9'@@@",

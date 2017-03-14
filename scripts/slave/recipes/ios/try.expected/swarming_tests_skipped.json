@@ -52,6 +52,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -200,6 +201,7 @@
       "--name-only"
     ],
     "cwd": "[BUILDER_CACHE]/ios_simulator_swarming/src",
+    "infra_step": true,
     "name": "git diff to analyze patch",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -317,6 +319,7 @@
     "env": {
       "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
     },
+    "infra_step": true,
     "name": "bootstrap swarming.git fetch (swarming_client)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -330,6 +333,7 @@
       "FETCH_HEAD"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "bootstrap swarming.git checkout (swarming_client)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -342,6 +346,7 @@
       "HEAD"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "bootstrap swarming.read revision",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -358,6 +363,7 @@
       "-x"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "bootstrap swarming.git clean (swarming_client)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -370,6 +376,7 @@
       "sync"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "bootstrap swarming.submodule sync (swarming_client)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -384,6 +391,7 @@
       "--recursive"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "bootstrap swarming.submodule update (swarming_client)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"

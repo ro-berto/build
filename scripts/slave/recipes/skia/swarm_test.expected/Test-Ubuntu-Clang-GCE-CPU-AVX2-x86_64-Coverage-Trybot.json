@@ -8,6 +8,7 @@
       "Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage-Trybot"
     ],
     "cwd": "[START_DIR]/skia",
+    "infra_step": true,
     "name": "exec buildbot_spec.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -54,6 +55,7 @@
       "[START_DIR]/skia/infra/bots/assets/skp/VERSION",
       "/path/to/tmp/"
     ],
+    "infra_step": true,
     "name": "Get downloaded SKP VERSION"
   },
   {
@@ -64,6 +66,7 @@
       "42",
       "[START_DIR]/tmp/SKP_VERSION"
     ],
+    "infra_step": true,
     "name": "write SKP_VERSION"
   },
   {
@@ -74,6 +77,7 @@
       "[START_DIR]/skia/infra/bots/assets/skimage/VERSION",
       "/path/to/tmp/"
     ],
+    "infra_step": true,
     "name": "Get downloaded skimage VERSION"
   },
   {
@@ -84,6 +88,7 @@
       "42",
       "[START_DIR]/tmp/SK_IMAGE_VERSION"
     ],
+    "infra_step": true,
     "name": "write SK_IMAGE_VERSION"
   },
   {
@@ -114,6 +119,7 @@
     "env": {
       "PYTHONPATH": "build/scripts"
     },
+    "infra_step": true,
     "name": "rmtree coverage_results"
   },
   {
@@ -124,6 +130,7 @@
       "[START_DIR]/out/coverage_results",
       "511"
     ],
+    "infra_step": true,
     "name": "makedirs coverage_results",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

@@ -46,6 +46,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -210,6 +211,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
+    "infra_step": true,
     "name": "cleanup_temp"
   },
   {
@@ -222,6 +224,7 @@
       "[BUILDER_CACHE]/ClangToTAndroid_x64/src/out/build_product.zip",
       "[BUILDER_CACHE]/ClangToTAndroid_x64/src"
     ],
+    "infra_step": true,
     "name": "clean local files",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

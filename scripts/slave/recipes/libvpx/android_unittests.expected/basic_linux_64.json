@@ -49,6 +49,7 @@
     "env": {
       "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
     },
+    "infra_step": true,
     "name": "git fetch"
   },
   {
@@ -59,6 +60,7 @@
       "FETCH_HEAD"
     ],
     "cwd": "[START_DIR]/android_tools",
+    "infra_step": true,
     "name": "git checkout"
   },
   {
@@ -68,6 +70,7 @@
       "HEAD"
     ],
     "cwd": "[START_DIR]/android_tools",
+    "infra_step": true,
     "name": "read revision",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -83,6 +86,7 @@
       "-x"
     ],
     "cwd": "[START_DIR]/android_tools",
+    "infra_step": true,
     "name": "git clean"
   },
   {
@@ -92,6 +96,7 @@
       "sync"
     ],
     "cwd": "[START_DIR]/android_tools",
+    "infra_step": true,
     "name": "submodule sync"
   },
   {
@@ -103,6 +108,7 @@
       "--recursive"
     ],
     "cwd": "[START_DIR]/android_tools",
+    "infra_step": true,
     "name": "submodule update"
   },
   {
@@ -130,6 +136,7 @@
     "env": {
       "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
     },
+    "infra_step": true,
     "name": "git fetch (2)"
   },
   {
@@ -140,6 +147,7 @@
       "FETCH_HEAD"
     ],
     "cwd": "[START_DIR]/libvpx",
+    "infra_step": true,
     "name": "git checkout (2)"
   },
   {
@@ -149,6 +157,7 @@
       "HEAD"
     ],
     "cwd": "[START_DIR]/libvpx",
+    "infra_step": true,
     "name": "read revision (2)",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -164,6 +173,7 @@
       "-x"
     ],
     "cwd": "[START_DIR]/libvpx",
+    "infra_step": true,
     "name": "git clean (2)"
   },
   {
@@ -173,6 +183,7 @@
       "sync"
     ],
     "cwd": "[START_DIR]/libvpx",
+    "infra_step": true,
     "name": "submodule sync (2)"
   },
   {
@@ -184,6 +195,7 @@
       "--recursive"
     ],
     "cwd": "[START_DIR]/libvpx",
+    "infra_step": true,
     "name": "submodule update (2)"
   },
   {
@@ -192,6 +204,7 @@
       "number"
     ],
     "cwd": "[START_DIR]/libvpx",
+    "infra_step": true,
     "name": "git number",
     "stdout": "/path/to/tmp/"
   },

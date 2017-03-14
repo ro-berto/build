@@ -7,6 +7,7 @@
       "rmcontents",
       "[START_DIR]"
     ],
+    "infra_step": true,
     "name": "rmcontents everything"
   },
   {
@@ -33,6 +34,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -175,6 +177,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
+    "infra_step": true,
     "name": "gsutil upload \"darwin-x64/artifacts.zip\"",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/darwin-x64/artifacts.zip@@@"
@@ -191,6 +194,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
+    "infra_step": true,
     "name": "rmtree temp dir for darwin-x64 UploadArtifacts artifacts.zip"
   },
   {
@@ -220,6 +224,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
+    "infra_step": true,
     "name": "gsutil upload \"android-arm-profile/darwin-x64.zip\"",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm-profile/darwin-x64.zip@@@"
@@ -236,6 +241,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
+    "infra_step": true,
     "name": "rmtree temp dir for android-arm-profile UploadArtifacts darwin-x64.zip"
   },
   {
@@ -265,6 +271,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
+    "infra_step": true,
     "name": "gsutil upload \"android-arm-release/darwin-x64.zip\"",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm-release/darwin-x64.zip@@@"
@@ -281,6 +288,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
+    "infra_step": true,
     "name": "rmtree temp dir for android-arm-release UploadArtifacts darwin-x64.zip"
   },
   {
@@ -435,6 +443,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
+    "infra_step": true,
     "name": "gsutil upload \"ios/artifacts.zip\"",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/ios/artifacts.zip@@@"
@@ -451,6 +460,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
+    "infra_step": true,
     "name": "rmtree temp dir for ios UploadArtifacts artifacts.zip"
   },
   {
@@ -508,6 +518,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
+    "infra_step": true,
     "name": "gsutil upload \"ios-profile/artifacts.zip\"",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/ios-profile/artifacts.zip@@@"
@@ -524,6 +535,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
+    "infra_step": true,
     "name": "rmtree temp dir for ios-profile UploadArtifacts artifacts.zip"
   },
   {
@@ -581,6 +593,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
+    "infra_step": true,
     "name": "gsutil upload \"ios-release/artifacts.zip\"",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/ios-release/artifacts.zip@@@"
@@ -597,6 +610,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
+    "infra_step": true,
     "name": "rmtree temp dir for ios-release UploadArtifacts artifacts.zip"
   },
   {

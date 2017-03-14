@@ -88,6 +88,7 @@
       "[START_DIR]",
       "*.o"
     ],
+    "infra_step": true,
     "name": "rmwildcard *.o in [START_DIR]"
   },
   {
@@ -241,6 +242,7 @@
       "rmtree",
       "[START_DIR]/copytree_example_tmp"
     ],
+    "infra_step": true,
     "name": "rmtree cleanup"
   },
   {
@@ -251,6 +253,7 @@
       "rmtree",
       "[START_DIR]/copytree_example_tmp2"
     ],
+    "infra_step": true,
     "name": "rmtree cleanup2"
   },
   {

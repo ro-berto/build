@@ -46,6 +46,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -139,6 +140,7 @@
       "-service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
+    "infra_step": true,
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -232,6 +234,7 @@
       "r0..r6"
     ],
     "cwd": "[BUILDER_CACHE]/mac/src",
+    "infra_step": true,
     "name": "git commits in range",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -296,6 +299,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "test r5.bot_update",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -393,6 +397,7 @@
       "-service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
+    "infra_step": true,
     "name": "test r5.ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -491,6 +496,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
+    "infra_step": true,
     "name": "test r5.cleanup_temp",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -629,6 +635,7 @@
       "GOMA_FAIL_FAST": "true",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
+    "infra_step": true,
     "name": "test r5.preprocess_for_goma.start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -652,6 +659,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[BUILDER_CACHE]/mac/src",
+    "infra_step": true,
     "name": "test r5.preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -836,6 +844,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[BUILDER_CACHE]/mac/src",
+    "infra_step": true,
     "name": "test r5.postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -947,6 +956,7 @@
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
+    "infra_step": true,
     "name": "test r5.[trigger] gl_tests (r5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1100,6 +1110,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "test r6.bot_update",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1197,6 +1208,7 @@
       "-service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
+    "infra_step": true,
     "name": "test r6.ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -1295,6 +1307,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
+    "infra_step": true,
     "name": "test r6.cleanup_temp",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1415,6 +1428,7 @@
       "GOMA_FAIL_FAST": "true",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
+    "infra_step": true,
     "name": "test r6.preprocess_for_goma.start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -1438,6 +1452,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[BUILDER_CACHE]/mac/src",
+    "infra_step": true,
     "name": "test r6.preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -1622,6 +1637,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[BUILDER_CACHE]/mac/src",
+    "infra_step": true,
     "name": "test r6.postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -1733,6 +1749,7 @@
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
+    "infra_step": true,
     "name": "test r6.[trigger] gl_tests (r6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1886,6 +1903,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "test r2.bot_update",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1983,6 +2001,7 @@
       "-service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
+    "infra_step": true,
     "name": "test r2.ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -2081,6 +2100,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
+    "infra_step": true,
     "name": "test r2.cleanup_temp",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2201,6 +2221,7 @@
       "GOMA_FAIL_FAST": "true",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
+    "infra_step": true,
     "name": "test r2.preprocess_for_goma.start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -2224,6 +2245,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[BUILDER_CACHE]/mac/src",
+    "infra_step": true,
     "name": "test r2.preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -2408,6 +2430,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[BUILDER_CACHE]/mac/src",
+    "infra_step": true,
     "name": "test r2.postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -2519,6 +2542,7 @@
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
+    "infra_step": true,
     "name": "test r2.[trigger] gl_tests (r2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2672,6 +2696,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "test r3.bot_update",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2769,6 +2794,7 @@
       "-service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
+    "infra_step": true,
     "name": "test r3.ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -2867,6 +2893,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
+    "infra_step": true,
     "name": "test r3.cleanup_temp",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2987,6 +3014,7 @@
       "GOMA_FAIL_FAST": "true",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
+    "infra_step": true,
     "name": "test r3.preprocess_for_goma.start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -3010,6 +3038,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[BUILDER_CACHE]/mac/src",
+    "infra_step": true,
     "name": "test r3.preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -3194,6 +3223,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[BUILDER_CACHE]/mac/src",
+    "infra_step": true,
     "name": "test r3.postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -3305,6 +3335,7 @@
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
+    "infra_step": true,
     "name": "test r3.[trigger] gl_tests (r3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",

@@ -24,6 +24,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -90,6 +91,7 @@
       "-service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
+    "infra_step": true,
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -135,6 +137,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
+    "infra_step": true,
     "name": "cleanup_temp"
   },
   {
@@ -240,6 +243,7 @@
       "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
       "[START_DIR]/v8/out/gn"
     ],
+    "infra_step": true,
     "name": "rmtree [START_DIR]/v8/out/gn"
   },
   {
@@ -300,6 +304,7 @@
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
+    "infra_step": true,
     "name": "preprocess_for_goma.start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -323,6 +328,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/v8",
+    "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -472,6 +478,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/v8",
+    "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -531,6 +538,7 @@
       "{\"benchmarks\": \"[dummy hash for benchmarks]\", \"bot_default\": \"[dummy hash for bot_default]\", \"check-static-initializers\": \"[dummy hash for check-static-initializers]\", \"mjsunit\": \"[dummy hash for mjsunit]\", \"mozilla\": \"[dummy hash for mozilla]\", \"optimize_for_size\": \"[dummy hash for optimize_for_size]\", \"perf\": \"[dummy hash for perf]\", \"run-deopt-fuzzer\": \"[dummy hash for run-deopt-fuzzer]\", \"run-gcmole\": \"[dummy hash for run-gcmole]\", \"test262\": \"[dummy hash for test262]\"}",
       "gs://chromium-v8/v8-linux-rel/full-build-linux_f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json"
     ],
+    "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/v8-linux-rel/full-build-linux_f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json@@@"
@@ -563,6 +571,7 @@
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"branch\": \"master\", \"buildername\": \"V8 Linux - builder\", \"buildnumber\": 571, \"mastername\": \"client.v8\", \"parent_buildername\": null, \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
+    "infra_step": true,
     "name": "package build"
   },
   {

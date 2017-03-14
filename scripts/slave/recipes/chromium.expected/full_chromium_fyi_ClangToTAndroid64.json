@@ -46,6 +46,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -199,6 +200,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
+    "infra_step": true,
     "name": "cleanup_temp"
   },
   {
@@ -211,6 +213,7 @@
       "[BUILDER_CACHE]/ClangToTAndroid64/src/out/build_product.zip",
       "[BUILDER_CACHE]/ClangToTAndroid64/src"
     ],
+    "infra_step": true,
     "name": "clean local files",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -345,6 +348,7 @@
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"ClangToTAndroid64\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
+    "infra_step": true,
     "name": "package build"
   },
   {

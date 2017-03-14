@@ -24,6 +24,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -90,6 +91,7 @@
       "-service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
+    "infra_step": true,
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -135,6 +137,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
+    "infra_step": true,
     "name": "cleanup_temp"
   },
   {
@@ -240,6 +243,7 @@
       "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
       "[START_DIR]/v8/out/gn"
     ],
+    "infra_step": true,
     "name": "rmtree [START_DIR]/v8/out/gn"
   },
   {
@@ -300,6 +304,7 @@
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
+    "infra_step": true,
     "name": "preprocess_for_goma.start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -323,6 +328,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/v8",
+    "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -472,6 +478,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/v8",
+    "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -583,6 +590,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
+    "infra_step": true,
     "name": "[trigger] Check",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
@@ -690,6 +698,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
+    "infra_step": true,
     "name": "[trigger] Check - extra",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
@@ -786,6 +795,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
+    "infra_step": true,
     "name": "[trigger] Test262 - no variants",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
@@ -882,6 +892,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
+    "infra_step": true,
     "name": "[trigger] Test262 - extra",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
@@ -983,6 +994,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
+    "infra_step": true,
     "name": "[trigger] Mozilla",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
@@ -1079,6 +1091,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
+    "infra_step": true,
     "name": "[trigger] Mjsunit - sp frame access",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
@@ -1176,6 +1189,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
+    "infra_step": true,
     "name": "[trigger] Check - armv8-a",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
@@ -1286,6 +1300,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
+    "infra_step": true,
     "name": "[trigger] Test262 - no variants - armv8-a",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
@@ -1383,6 +1398,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
+    "infra_step": true,
     "name": "[trigger] Mozilla - armv8-a",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
@@ -1478,6 +1494,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
+    "infra_step": true,
     "name": "[trigger] Check - novfp3",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
@@ -1587,6 +1604,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
+    "infra_step": true,
     "name": "[trigger] Test262 - no variants - novfp3",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
@@ -1682,6 +1700,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
+    "infra_step": true,
     "name": "[trigger] Mozilla - novfp3",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
@@ -1720,6 +1739,7 @@
       "--json",
       "{\"base_task_name\": \"Check/Ubuntu-14.04/[dummy has/V8 Linux - arm - sim - debug/571\", \"tasks\": {\"Check/Ubuntu-14.04/[dummy has/V8 Linux - arm - sim - debug/571:3:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"Check/Ubuntu-14.04/[dummy has/V8 Linux - arm - sim - debug/571:3:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"Check/Ubuntu-14.04/[dummy has/V8 Linux - arm - sim - debug/571:3:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}}}"
     ],
+    "infra_step": true,
     "name": "Check",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -1759,6 +1779,7 @@
       "--json",
       "{\"base_task_name\": \"Check - extra/Ubuntu-14.04/[dummy has/V8 Linux - arm - sim - debug/571\", \"tasks\": {\"Check - extra/Ubuntu-14.04/[dummy has/V8 Linux - arm - sim - debug/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
+    "infra_step": true,
     "name": "Check - extra",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -1798,6 +1819,7 @@
       "--json",
       "{\"base_task_name\": \"Test262 - no variants/Ubuntu-14.04/[dummy has/V8 Linux - arm - sim - debug/571\", \"tasks\": {\"Test262 - no variants/Ubuntu-14.04/[dummy has/V8 Linux - arm - sim - debug/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
+    "infra_step": true,
     "name": "Test262 - no variants",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -1837,6 +1859,7 @@
       "--json",
       "{\"base_task_name\": \"Test262 - extra/Ubuntu-14.04/[dummy has/V8 Linux - arm - sim - debug/571\", \"tasks\": {\"Test262 - extra/Ubuntu-14.04/[dummy has/V8 Linux - arm - sim - debug/571:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"Test262 - extra/Ubuntu-14.04/[dummy has/V8 Linux - arm - sim - debug/571:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}}}"
     ],
+    "infra_step": true,
     "name": "Test262 - extra",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -1876,6 +1899,7 @@
       "--json",
       "{\"base_task_name\": \"Mozilla/Ubuntu-14.04/[dummy has/V8 Linux - arm - sim - debug/571\", \"tasks\": {\"Mozilla/Ubuntu-14.04/[dummy has/V8 Linux - arm - sim - debug/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
+    "infra_step": true,
     "name": "Mozilla",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -1915,6 +1939,7 @@
       "--json",
       "{\"base_task_name\": \"Mjsunit - sp frame access/Ubuntu-14.04/[dummy has/V8 Linux - arm - sim - debug/571\", \"tasks\": {\"Mjsunit - sp frame access/Ubuntu-14.04/[dummy has/V8 Linux - arm - sim - debug/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
+    "infra_step": true,
     "name": "Mjsunit - sp frame access",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -1954,6 +1979,7 @@
       "--json",
       "{\"base_task_name\": \"Check - armv8-a/Ubuntu-14.04/[dummy has/V8 Linux - arm - sim - debug/571\", \"tasks\": {\"Check - armv8-a/Ubuntu-14.04/[dummy has/V8 Linux - arm - sim - debug/571:3:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"Check - armv8-a/Ubuntu-14.04/[dummy has/V8 Linux - arm - sim - debug/571:3:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"Check - armv8-a/Ubuntu-14.04/[dummy has/V8 Linux - arm - sim - debug/571:3:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}}}"
     ],
+    "infra_step": true,
     "name": "Check - armv8-a",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -1993,6 +2019,7 @@
       "--json",
       "{\"base_task_name\": \"Test262 - no variants - armv8-a/Ubuntu-14.04/[dummy has/V8 Linux - arm - sim - debug/571\", \"tasks\": {\"Test262 - no variants - armv8-a/Ubuntu-14.04/[dummy has/V8 Linux - arm - sim - debug/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
+    "infra_step": true,
     "name": "Test262 - no variants - armv8-a",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -2032,6 +2059,7 @@
       "--json",
       "{\"base_task_name\": \"Mozilla - armv8-a/Ubuntu-14.04/[dummy has/V8 Linux - arm - sim - debug/571\", \"tasks\": {\"Mozilla - armv8-a/Ubuntu-14.04/[dummy has/V8 Linux - arm - sim - debug/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
+    "infra_step": true,
     "name": "Mozilla - armv8-a",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -2071,6 +2099,7 @@
       "--json",
       "{\"base_task_name\": \"Check - novfp3/Ubuntu-14.04/[dummy has/V8 Linux - arm - sim - debug/571\", \"tasks\": {\"Check - novfp3/Ubuntu-14.04/[dummy has/V8 Linux - arm - sim - debug/571:3:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"Check - novfp3/Ubuntu-14.04/[dummy has/V8 Linux - arm - sim - debug/571:3:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"Check - novfp3/Ubuntu-14.04/[dummy has/V8 Linux - arm - sim - debug/571:3:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}}}"
     ],
+    "infra_step": true,
     "name": "Check - novfp3",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -2110,6 +2139,7 @@
       "--json",
       "{\"base_task_name\": \"Test262 - no variants - novfp3/Ubuntu-14.04/[dummy has/V8 Linux - arm - sim - debug/571\", \"tasks\": {\"Test262 - no variants - novfp3/Ubuntu-14.04/[dummy has/V8 Linux - arm - sim - debug/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
+    "infra_step": true,
     "name": "Test262 - no variants - novfp3",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -2149,6 +2179,7 @@
       "--json",
       "{\"base_task_name\": \"Mozilla - novfp3/Ubuntu-14.04/[dummy has/V8 Linux - arm - sim - debug/571\", \"tasks\": {\"Mozilla - novfp3/Ubuntu-14.04/[dummy has/V8 Linux - arm - sim - debug/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
+    "infra_step": true,
     "name": "Mozilla - novfp3",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",

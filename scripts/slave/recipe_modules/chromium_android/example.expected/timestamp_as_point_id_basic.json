@@ -6,6 +6,7 @@
       "\nimport os, sys\n\nbuild_path = sys.argv[1]\nif os.path.exists(build_path):\n  for (path, dir, files) in os.walk(build_path):\n    for cur_file in files:\n      if cur_file.endswith('index.lock'):\n        path_to_file = os.path.join(path, cur_file)\n        print 'deleting %s' % path_to_file\n        os.remove(path_to_file)\n",
       "[START_DIR]"
     ],
+    "infra_step": true,
     "name": "cleanup index.lock",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -34,6 +35,7 @@
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "gclient setup"
   },
   {
@@ -59,6 +61,7 @@
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "gclient sync",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -113,6 +116,7 @@
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "gclient recurse (git config user.name)"
   },
   {
@@ -129,6 +133,7 @@
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "gclient recurse (git config user.email)"
   },
   {
@@ -141,6 +146,7 @@
       "[START_DIR]/src/out/build_product.zip",
       "[START_DIR]/src"
     ],
+    "infra_step": true,
     "name": "clean local files",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -207,6 +213,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "Host Info",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -266,6 +273,7 @@
       "gs://build-bucket/build_product.zip",
       "[START_DIR]/src/out/build_product.zip"
     ],
+    "infra_step": true,
     "name": "gsutil download_build_product"
   },
   {
@@ -275,6 +283,7 @@
       "[START_DIR]/src/out/build_product.zip"
     ],
     "cwd": "[START_DIR]/src",
+    "infra_step": true,
     "name": "unzip_build_product"
   },
   {
@@ -282,6 +291,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/git_number.py"
     ],
     "cwd": "[START_DIR]/src",
+    "infra_step": true,
     "name": "git_number",
     "stdout": "/path/to/tmp/"
   },
@@ -335,6 +345,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "spawn_logcat_monitor"
   },
   {
@@ -350,6 +361,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "authorize_adb_devices"
   },
   {
@@ -367,6 +379,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "device_recovery"
   },
   {
@@ -387,6 +400,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "provision_devices"
   },
   {
@@ -409,6 +423,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "device_status",
     "~followup_annotations": [
       "@@@STEP_TEXT@Online devices: 1@@@",
@@ -520,6 +535,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "device_recovery (2)"
   },
   {
@@ -542,6 +558,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "device_status (2)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Online devices: 1@@@",
@@ -671,6 +688,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "device_recovery (3)"
   },
   {
@@ -693,6 +711,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "device_status (3)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Online devices: 1@@@",
@@ -809,6 +828,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "provision_devices (2)"
   },
   {
@@ -820,6 +840,7 @@
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
       "~/adb"
     ],
+    "infra_step": true,
     "name": "create adb symlink"
   },
   {
@@ -834,6 +855,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "spawn_logcat_monitor (2)"
   },
   {
@@ -852,6 +874,7 @@
       "--blacklist-file",
       "[START_DIR]/src/out/bad_devices.json"
     ],
+    "infra_step": true,
     "name": "spawn_device_monitor"
   },
   {
@@ -867,6 +890,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "authorize_adb_devices (2)"
   },
   {
@@ -884,6 +908,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "device_recovery (4)"
   },
   {
@@ -904,6 +929,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "provision_devices (3)"
   },
   {
@@ -926,6 +952,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "device_status (4)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Online devices: 1@@@",
@@ -1084,6 +1111,7 @@
       "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.html",
       "gs://chromium-testrunner-trace/timestamp_as_point_id/trace_571.html"
     ],
+    "infra_step": true,
     "name": "gsutil Upload Test Trace",
     "~followup_annotations": [
       "@@@STEP_LINK@Test Trace@https://storage.cloud.google.com/chromium-testrunner-trace/timestamp_as_point_id/trace_571.html@@@"
@@ -1096,6 +1124,7 @@
       "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
       "[TMP_BASE]/test_runner_trace_tmp_1"
     ],
+    "infra_step": true,
     "name": "rmtree [TMP_BASE]/test_runner_trace_tmp_1"
   },
   {
@@ -1343,6 +1372,7 @@
       "[TMP_BASE]/perf_archives_tmp_2/output_dir.zip",
       "gs://archives-bucket/timestamp_as_point_id/perf_test.foo/20150928T110712_build_571.zip"
     ],
+    "infra_step": true,
     "name": "gsutil upload perf_test.foo output dir archive",
     "~followup_annotations": [
       "@@@STEP_LINK@output_dir.zip@https://storage.cloud.google.com/archives-bucket/timestamp_as_point_id/perf_test.foo/20150928T110712_build_571.zip@@@"
@@ -1522,6 +1552,7 @@
       "[START_DIR]/src/build/android/adb_logcat_printer.py",
       "[START_DIR]/src/out/logcat"
     ],
+    "infra_step": true,
     "name": "logcat_dump"
   },
   {
@@ -1537,6 +1568,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "stack_tool_with_logcat_dump"
   },
   {
@@ -1561,6 +1593,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "stack_tool_for_tombstones"
   },
   {
@@ -1574,6 +1607,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "stack_tool_for_asan"
   },
   {

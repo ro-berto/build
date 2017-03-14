@@ -9,6 +9,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\cleanup_temp.py"
     ],
+    "infra_step": true,
     "name": "cleanup_temp"
   },
   {
@@ -35,6 +36,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -146,6 +148,7 @@
       "-service-account-json",
       "C:\\creds\\service_accounts\\service-account-goma-client.json"
     ],
+    "infra_step": true,
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -172,6 +175,7 @@
       "rmtree",
       "[START_DIR]\\src\\out\\Release"
     ],
+    "infra_step": true,
     "name": "rmtree clobber"
   },
   {
@@ -291,6 +295,7 @@
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
+    "infra_step": true,
     "name": "preprocess_for_goma.start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -314,6 +319,7 @@
       "[TMP_BASE]\\cloudtail.pid"
     ],
     "cwd": "[START_DIR]\\src",
+    "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -464,6 +470,7 @@
       "[TMP_BASE]\\cloudtail.pid"
     ],
     "cwd": "[START_DIR]\\src",
+    "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -546,6 +553,7 @@
       "rmtree",
       "[START_DIR]\\src\\out\\Release"
     ],
+    "infra_step": true,
     "name": "rmtree clobber (2)"
   },
   {
@@ -650,6 +658,7 @@
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
+    "infra_step": true,
     "name": "preprocess_for_goma.start_goma (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -673,6 +682,7 @@
       "[TMP_BASE]\\cloudtail.pid"
     ],
     "cwd": "[START_DIR]\\src",
+    "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -823,6 +833,7 @@
       "[TMP_BASE]\\cloudtail.pid"
     ],
     "cwd": "[START_DIR]\\src",
+    "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -949,6 +960,7 @@
       "[TMP_BASE]\\deterministic_build_tmp_1\\deterministic_build_diffs.tgz",
       "gs://chrome-determinism/Windows Clang deterministic\\571\\deterministic_build_diffs.tgz"
     ],
+    "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-determinism/Windows Clang deterministic\\571\\deterministic_build_diffs.tgz@@@"
@@ -961,6 +973,7 @@
       "RECIPE_MODULE[recipe_engine::shutil]\\resources\\rmtree.py",
       "[TMP_BASE]\\deterministic_build_tmp_1"
     ],
+    "infra_step": true,
     "name": "rmtree [TMP_BASE]\\deterministic_build_tmp_1"
   },
   {

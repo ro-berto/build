@@ -29,6 +29,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -122,6 +123,7 @@
       "-service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
+    "infra_step": true,
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -218,6 +220,7 @@
       "gs://chromium-owners/component_map.json",
       "[START_DIR]/original_map.json"
     ],
+    "infra_step": true,
     "name": "gsutil download original mapping"
   },
   {
@@ -341,6 +344,7 @@
       "gs://chromium-owners/component_map_subdirs.json",
       "[START_DIR]/original_map.json"
     ],
+    "infra_step": true,
     "name": "gsutil download original mapping with subdirs"
   },
   {

@@ -16,6 +16,7 @@
       "-service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
+    "infra_step": true,
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -82,6 +83,7 @@
       "GOMA_DUMP_STATS_FILE": "build_data_dir/goma_stats_proto",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
+    "infra_step": true,
     "name": "preprocess_for_goma.start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -104,6 +106,7 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -254,6 +257,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"

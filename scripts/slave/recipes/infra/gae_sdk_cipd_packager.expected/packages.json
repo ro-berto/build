@@ -14,6 +14,7 @@
       "ls",
       "gs://appengine-sdks/featured/go_appengine_sdk_linux_386-*.zip"
     ],
+    "infra_step": true,
     "name": "Sync go/linux-386.gsutil Get Latest",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -78,6 +79,7 @@
       "ls",
       "gs://appengine-sdks/featured/go_appengine_sdk_linux_amd64-*.zip"
     ],
+    "infra_step": true,
     "name": "Sync go/linux-amd64.gsutil Get Latest",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -118,6 +120,7 @@
       "gs://appengine-sdks/featured/go_appengine_sdk_linux_amd64-10.2.3.zip",
       "[TMP_BASE]/gae_sdk_tmp_2/go_appengine_sdk_linux_amd64-10.2.3.zip"
     ],
+    "infra_step": true,
     "name": "Sync go/linux-amd64.gsutil Download go linux-amd64",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -203,6 +206,7 @@
       "ls",
       "gs://appengine-sdks/featured/go_appengine_sdk_darwin_amd64-*.zip"
     ],
+    "infra_step": true,
     "name": "Sync go/mac-amd64.gsutil Get Latest",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -267,6 +271,7 @@
       "ls",
       "gs://appengine-sdks/featured/google_appengine_*.zip"
     ],
+    "infra_step": true,
     "name": "Sync python/all.gsutil Get Latest",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -307,6 +312,7 @@
       "gs://appengine-sdks/featured/google_appengine_10.2.3.zip",
       "[TMP_BASE]/gae_sdk_tmp_3/google_appengine_10.2.3.zip"
     ],
+    "infra_step": true,
     "name": "Sync python/all.gsutil Download python all",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"

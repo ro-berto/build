@@ -23,6 +23,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -107,6 +108,7 @@
       "rmtree",
       "[START_DIR]/src/third_party/llvm-build"
     ],
+    "infra_step": true,
     "name": "rmtree llvm-build"
   },
   {
@@ -126,6 +128,7 @@
       "-service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
+    "infra_step": true,
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -222,6 +225,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
+    "infra_step": true,
     "name": "preprocess_for_goma.start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -244,6 +248,7 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -419,6 +424,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -489,6 +495,7 @@
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
+    "infra_step": true,
     "name": "preprocess_for_goma.start_goma (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -512,6 +519,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/src",
+    "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -695,6 +703,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/src",
+    "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -755,6 +764,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
+    "infra_step": true,
     "name": "preprocess_for_goma.start_goma (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -777,6 +787,7 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -952,6 +963,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1036,6 +1048,7 @@
       "[START_DIR]/src/out/Debug/index_pack_chromeos.zip",
       "gs://chrome-codesearch/prod/index_pack_chromeos_170242.zip"
     ],
+    "infra_step": true,
     "name": "gsutil upload grok index pack",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/prod/index_pack_chromeos_170242.zip@@@"
@@ -1053,6 +1066,7 @@
       "[START_DIR]/src/out/Debug/index_pack_chromeos_kythe.zip",
       "gs://chrome-codesearch/prod/index_pack_chromeos_kythe_170242.zip"
     ],
+    "infra_step": true,
     "name": "gsutil upload kythe index pack",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/prod/index_pack_chromeos_kythe_170242.zip@@@"
@@ -1084,6 +1098,7 @@
       "[START_DIR]/chromium_src_chromeos.tar.bz2",
       "gs://chrome-codesearch/prod/chromium_src_chromeos_170242.tar.bz2"
     ],
+    "infra_step": true,
     "name": "gsutil upload source tarball",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/prod/chromium_src_chromeos_170242.tar.bz2@@@"
@@ -1113,6 +1128,7 @@
     "env": {
       "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
     },
+    "infra_step": true,
     "name": "git fetch"
   },
   {
@@ -1123,6 +1139,7 @@
       "FETCH_HEAD"
     ],
     "cwd": "[START_DIR]/generated",
+    "infra_step": true,
     "name": "git checkout"
   },
   {
@@ -1132,6 +1149,7 @@
       "HEAD"
     ],
     "cwd": "[START_DIR]/generated",
+    "infra_step": true,
     "name": "read revision",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -1147,6 +1165,7 @@
       "-x"
     ],
     "cwd": "[START_DIR]/generated",
+    "infra_step": true,
     "name": "git clean"
   },
   {
@@ -1157,6 +1176,7 @@
       "git-generated-files-sync@chromium.org"
     ],
     "cwd": "[START_DIR]/generated",
+    "infra_step": true,
     "name": "git config"
   },
   {
@@ -1167,6 +1187,7 @@
       "Automatic Generated Files Sync"
     ],
     "cwd": "[START_DIR]/generated",
+    "infra_step": true,
     "name": "git config (2)"
   },
   {

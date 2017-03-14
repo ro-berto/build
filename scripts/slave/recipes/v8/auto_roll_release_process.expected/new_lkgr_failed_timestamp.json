@@ -24,6 +24,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -75,6 +76,7 @@
       "+refs/heads/lkgr:refs/heads/lkgr"
     ],
     "cwd": "[START_DIR]/v8",
+    "infra_step": true,
     "name": "git fetch"
   },
   {
@@ -85,6 +87,7 @@
       "refs/heads/lkgr"
     ],
     "cwd": "[START_DIR]/v8",
+    "infra_step": true,
     "name": "git show-ref refs/heads/lkgr",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -100,6 +103,7 @@
       "c1a7fd0c98a80c52fcf6763850d2ee1c41cfe8d6"
     ],
     "cwd": "[START_DIR]/v8",
+    "infra_step": true,
     "name": "git update-ref"
   },
   {
@@ -110,6 +114,7 @@
       "refs/heads/lkgr:refs/heads/lkgr"
     ],
     "cwd": "[START_DIR]/v8",
+    "infra_step": true,
     "name": "git push"
   },
   {
@@ -144,6 +149,7 @@
       "[START_DIR]/refs_heads_lkgr.log",
       "gs://chromium-v8-auto-roll/v8_release_process/refs_heads_lkgr.log"
     ],
+    "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8-auto-roll/v8_release_process/refs_heads_lkgr.log@@@"
@@ -157,6 +163,7 @@
       "+refs/heads/candidate:refs/heads/candidate"
     ],
     "cwd": "[START_DIR]/v8",
+    "infra_step": true,
     "name": "git fetch (2)"
   },
   {
@@ -167,6 +174,7 @@
       "refs/heads/candidate"
     ],
     "cwd": "[START_DIR]/v8",
+    "infra_step": true,
     "name": "git show-ref refs/heads/candidate",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -182,6 +190,7 @@
       "+refs/heads/roll:refs/heads/roll"
     ],
     "cwd": "[START_DIR]/v8",
+    "infra_step": true,
     "name": "git fetch (3)"
   },
   {
@@ -192,6 +201,7 @@
       "refs/heads/roll"
     ],
     "cwd": "[START_DIR]/v8",
+    "infra_step": true,
     "name": "git show-ref refs/heads/roll",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [

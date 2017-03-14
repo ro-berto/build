@@ -23,6 +23,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -116,6 +117,7 @@
       "-service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
+    "infra_step": true,
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -144,6 +146,7 @@
       "[START_DIR]/src/out/build_product.zip",
       "[START_DIR]/src"
     ],
+    "infra_step": true,
     "name": "clean local files",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -209,6 +212,7 @@
       "--build-number",
       "571"
     ],
+    "infra_step": true,
     "name": "extract build"
   },
   {
@@ -220,6 +224,7 @@
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
       "~/adb"
     ],
+    "infra_step": true,
     "name": "create adb symlink"
   },
   {
@@ -234,6 +239,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "spawn_logcat_monitor"
   },
   {
@@ -252,6 +258,7 @@
       "--blacklist-file",
       "[START_DIR]/src/out/bad_devices.json"
     ],
+    "infra_step": true,
     "name": "spawn_device_monitor"
   },
   {
@@ -267,6 +274,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "authorize_adb_devices"
   },
   {
@@ -284,6 +292,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "device_recovery"
   },
   {
@@ -305,6 +314,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "provision_devices"
   },
   {
@@ -327,6 +337,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "device_status",
     "~followup_annotations": [
       "@@@STEP_TEXT@Online devices: 1@@@",
@@ -447,6 +458,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "install ChromeDriverWebViewShell.apk"
   },
   {
@@ -473,6 +485,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "install ChromePublic.apk"
   },
   {
@@ -552,6 +565,7 @@
       "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
       "[TMP_BASE]/prebuilt_tmp_1"
     ],
+    "infra_step": true,
     "name": "Download Prebuilts.rmtree [TMP_BASE]/prebuilt_tmp_1",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -595,6 +609,7 @@
       "[TMP_BASE]/server_log_tmp_2/python_tests_chrome_beta_571",
       "gs://chromedriver-data/server_logs/python_tests_chrome_beta_571"
     ],
+    "infra_step": true,
     "name": "python_tests chrome_beta.gsutil Upload Server Log, [TMP_BASE]/server_log_tmp_2/python_tests_chrome_beta_571",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -608,6 +623,7 @@
       "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
       "[TMP_BASE]/server_log_tmp_2"
     ],
+    "infra_step": true,
     "name": "python_tests chrome_beta.rmtree [TMP_BASE]/server_log_tmp_2",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -650,6 +666,7 @@
       "[TMP_BASE]/server_log_tmp_3/java_tests_chrome_beta_571",
       "gs://chromedriver-data/server_logs/java_tests_chrome_beta_571"
     ],
+    "infra_step": true,
     "name": "java_tests chrome_beta.gsutil Upload Server Log, [TMP_BASE]/server_log_tmp_3/java_tests_chrome_beta_571",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -663,6 +680,7 @@
       "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
       "[TMP_BASE]/server_log_tmp_3"
     ],
+    "infra_step": true,
     "name": "java_tests chrome_beta.rmtree [TMP_BASE]/server_log_tmp_3",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -706,6 +724,7 @@
       "[TMP_BASE]/server_log_tmp_4/python_tests_chrome_stable_571",
       "gs://chromedriver-data/server_logs/python_tests_chrome_stable_571"
     ],
+    "infra_step": true,
     "name": "python_tests chrome_stable.gsutil Upload Server Log, [TMP_BASE]/server_log_tmp_4/python_tests_chrome_stable_571",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -719,6 +738,7 @@
       "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
       "[TMP_BASE]/server_log_tmp_4"
     ],
+    "infra_step": true,
     "name": "python_tests chrome_stable.rmtree [TMP_BASE]/server_log_tmp_4",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -761,6 +781,7 @@
       "[TMP_BASE]/server_log_tmp_5/java_tests_chrome_stable_571",
       "gs://chromedriver-data/server_logs/java_tests_chrome_stable_571"
     ],
+    "infra_step": true,
     "name": "java_tests chrome_stable.gsutil Upload Server Log, [TMP_BASE]/server_log_tmp_5/java_tests_chrome_stable_571",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -774,6 +795,7 @@
       "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
       "[TMP_BASE]/server_log_tmp_5"
     ],
+    "infra_step": true,
     "name": "java_tests chrome_stable.rmtree [TMP_BASE]/server_log_tmp_5",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -817,6 +839,7 @@
       "[TMP_BASE]/server_log_tmp_6/python_tests_chromedriver_webview_shell_571",
       "gs://chromedriver-data/server_logs/python_tests_chromedriver_webview_shell_571"
     ],
+    "infra_step": true,
     "name": "python_tests chromedriver_webview_shell.gsutil Upload Server Log, [TMP_BASE]/server_log_tmp_6/python_tests_chromedriver_webview_shell_571",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -830,6 +853,7 @@
       "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
       "[TMP_BASE]/server_log_tmp_6"
     ],
+    "infra_step": true,
     "name": "python_tests chromedriver_webview_shell.rmtree [TMP_BASE]/server_log_tmp_6",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -872,6 +896,7 @@
       "[TMP_BASE]/server_log_tmp_7/java_tests_chromedriver_webview_shell_571",
       "gs://chromedriver-data/server_logs/java_tests_chromedriver_webview_shell_571"
     ],
+    "infra_step": true,
     "name": "java_tests chromedriver_webview_shell.gsutil Upload Server Log, [TMP_BASE]/server_log_tmp_7/java_tests_chromedriver_webview_shell_571",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -885,6 +910,7 @@
       "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
       "[TMP_BASE]/server_log_tmp_7"
     ],
+    "infra_step": true,
     "name": "java_tests chromedriver_webview_shell.rmtree [TMP_BASE]/server_log_tmp_7",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -928,6 +954,7 @@
       "[TMP_BASE]/server_log_tmp_8/python_tests_chromium_571",
       "gs://chromedriver-data/server_logs/python_tests_chromium_571"
     ],
+    "infra_step": true,
     "name": "python_tests chromium.gsutil Upload Server Log, [TMP_BASE]/server_log_tmp_8/python_tests_chromium_571",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -941,6 +968,7 @@
       "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
       "[TMP_BASE]/server_log_tmp_8"
     ],
+    "infra_step": true,
     "name": "python_tests chromium.rmtree [TMP_BASE]/server_log_tmp_8",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -983,6 +1011,7 @@
       "[TMP_BASE]/server_log_tmp_9/java_tests_chromium_571",
       "gs://chromedriver-data/server_logs/java_tests_chromium_571"
     ],
+    "infra_step": true,
     "name": "java_tests chromium.gsutil Upload Server Log, [TMP_BASE]/server_log_tmp_9/java_tests_chromium_571",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -996,6 +1025,7 @@
       "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
       "[TMP_BASE]/server_log_tmp_9"
     ],
+    "infra_step": true,
     "name": "java_tests chromium.rmtree [TMP_BASE]/server_log_tmp_9",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1017,6 +1047,7 @@
       "gs://chromedriver-data/android_log.json",
       "[TMP_BASE]/results_log_tmp_10/android_log.json"
     ],
+    "infra_step": true,
     "name": "Download Test Results Log.gsutil download results log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1042,6 +1073,7 @@
       "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
       "[TMP_BASE]/results_log_tmp_10"
     ],
+    "infra_step": true,
     "name": "Download Test Results Log.rmtree [TMP_BASE]/results_log_tmp_10",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1076,6 +1108,7 @@
       "[TMP_BASE]/results_log_tmp_11/android_log.json",
       "gs://chromedriver-data/android_log.json"
     ],
+    "infra_step": true,
     "name": "Upload Test Results Log.gsutil upload results log android_log.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1089,6 +1122,7 @@
       "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
       "[TMP_BASE]/results_log_tmp_11"
     ],
+    "infra_step": true,
     "name": "Upload Test Results Log.rmtree [TMP_BASE]/results_log_tmp_11",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1104,6 +1138,7 @@
       "--pid-file-path",
       "/tmp/device_monitor.pid"
     ],
+    "infra_step": true,
     "name": "shutdown_device_monitor"
   },
   {
@@ -1115,6 +1150,7 @@
       "[START_DIR]/src/out/Debug/full_log",
       "[START_DIR]/src/out/logcat"
     ],
+    "infra_step": true,
     "name": "logcat_dump"
   },
   {
@@ -1133,6 +1169,7 @@
       "[START_DIR]/src/out/Debug/full_log",
       "gs://chromium-android/logcat_dumps/Android ChromeDriver Tests (dbg)/571"
     ],
+    "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/Android ChromeDriver Tests (dbg)/571@@@"
@@ -1151,6 +1188,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "stack_tool_with_logcat_dump"
   },
   {
@@ -1175,6 +1213,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "stack_tool_for_tombstones"
   },
   {

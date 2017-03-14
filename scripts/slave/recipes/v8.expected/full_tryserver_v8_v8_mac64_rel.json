@@ -30,6 +30,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -96,6 +97,7 @@
       "-service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
+    "infra_step": true,
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -142,6 +144,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
+    "infra_step": true,
     "name": "cleanup_temp"
   },
   {
@@ -249,6 +252,7 @@
       "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
       "[START_DIR]/v8/out/gn"
     ],
+    "infra_step": true,
     "name": "rmtree [START_DIR]/v8/out/gn"
   },
   {
@@ -333,6 +337,7 @@
       "GOMA_FAIL_FAST": "true",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
+    "infra_step": true,
     "name": "preprocess_for_goma.start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -356,6 +361,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/v8",
+    "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -506,6 +512,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/v8",
+    "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -622,6 +629,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
+    "infra_step": true,
     "name": "[trigger] Check",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac-10.9'@@@",
@@ -724,6 +732,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
+    "infra_step": true,
     "name": "[trigger] Check - extra",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac-10.9'@@@",
@@ -827,6 +836,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
+    "infra_step": true,
     "name": "[trigger] Test262 - no variants",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac-10.9'@@@",
@@ -929,6 +939,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
+    "infra_step": true,
     "name": "[trigger] Mozilla",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac-10.9'@@@",
@@ -967,6 +978,7 @@
       "--json",
       "{\"base_task_name\": \"Check/Mac-10.9/[dummy has/v8_mac64_rel/571\", \"tasks\": {\"Check/Mac-10.9/[dummy has/v8_mac64_rel/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
+    "infra_step": true,
     "name": "Check",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -1006,6 +1018,7 @@
       "--json",
       "{\"base_task_name\": \"Check - extra/Mac-10.9/[dummy has/v8_mac64_rel/571\", \"tasks\": {\"Check - extra/Mac-10.9/[dummy has/v8_mac64_rel/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
+    "infra_step": true,
     "name": "Check - extra",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -1045,6 +1058,7 @@
       "--json",
       "{\"base_task_name\": \"Test262 - no variants/Mac-10.9/[dummy has/v8_mac64_rel/571\", \"tasks\": {\"Test262 - no variants/Mac-10.9/[dummy has/v8_mac64_rel/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
+    "infra_step": true,
     "name": "Test262 - no variants",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -1084,6 +1098,7 @@
       "--json",
       "{\"base_task_name\": \"Mozilla/Mac-10.9/[dummy has/v8_mac64_rel/571\", \"tasks\": {\"Mozilla/Mac-10.9/[dummy has/v8_mac64_rel/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
+    "infra_step": true,
     "name": "Mozilla",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",

@@ -46,6 +46,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -139,6 +140,7 @@
       "-service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
+    "infra_step": true,
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -233,6 +235,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
+    "infra_step": true,
     "name": "cleanup_temp"
   },
   {
@@ -245,6 +248,7 @@
       "[BUILDER_CACHE]/Android_One_Perf__1_/src/out/build_product.zip",
       "[BUILDER_CACHE]/Android_One_Perf__1_/src"
     ],
+    "infra_step": true,
     "name": "clean local files",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -278,6 +282,7 @@
       "rmtree",
       "[BUILDER_CACHE]/Android_One_Perf__1_/src/out/Release"
     ],
+    "infra_step": true,
     "name": "rmtree build directory"
   },
   {
@@ -304,6 +309,7 @@
       "--build-number",
       "571"
     ],
+    "infra_step": true,
     "name": "extract build"
   },
   {
@@ -343,6 +349,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/Android_One_Perf__1_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_One_Perf__1_/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "create adb symlink"
   },
   {
@@ -358,6 +365,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/Android_One_Perf__1_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_One_Perf__1_/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "spawn_logcat_monitor"
   },
   {
@@ -381,6 +389,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/Android_One_Perf__1_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_One_Perf__1_/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "spawn_device_monitor"
   },
   {
@@ -397,6 +406,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/Android_One_Perf__1_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_One_Perf__1_/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "authorize_adb_devices"
   },
   {
@@ -416,6 +426,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/Android_One_Perf__1_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_One_Perf__1_/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "device_recovery"
   },
   {
@@ -443,6 +454,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/Android_One_Perf__1_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_One_Perf__1_/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "provision_devices"
   },
   {
@@ -466,6 +478,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/Android_One_Perf__1_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_One_Perf__1_/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "device_status",
     "~followup_annotations": [
       "@@@STEP_TEXT@Online devices: 1@@@",
@@ -666,6 +679,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/Android_One_Perf__1_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_One_Perf__1_/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "gsutil Upload Test Trace",
     "~followup_annotations": [
       "@@@STEP_LINK@Test Trace@https://storage.cloud.google.com/chromium-testrunner-trace/Android One Perf (1)/trace_571.html@@@"
@@ -683,6 +697,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/Android_One_Perf__1_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_One_Perf__1_/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "rmtree [TMP_BASE]/test_runner_trace_tmp_1"
   },
   {
@@ -1042,6 +1057,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/Android_One_Perf__1_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_One_Perf__1_/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "shutdown_device_monitor"
   },
   {
@@ -1058,6 +1074,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/Android_One_Perf__1_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_One_Perf__1_/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "logcat_dump"
   },
   {
@@ -1081,6 +1098,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/Android_One_Perf__1_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_One_Perf__1_/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/Android One Perf (1)/571@@@"
@@ -1100,6 +1118,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/Android_One_Perf__1_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_One_Perf__1_/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "stack_tool_with_logcat_dump"
   },
   {
@@ -1130,6 +1149,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/Android_One_Perf__1_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_One_Perf__1_/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "stack_tool_for_tombstones"
   },
   {

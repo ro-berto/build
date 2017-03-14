@@ -8,6 +8,7 @@
       "https://skia.googlesource.com/skia.git"
     ],
     "cwd": "[START_DIR]/skia",
+    "infra_step": true,
     "name": "git remote set-url"
   },
   {
@@ -16,6 +17,7 @@
       "fetch"
     ],
     "cwd": "[START_DIR]/skia",
+    "infra_step": true,
     "name": "git fetch"
   },
   {
@@ -26,6 +28,7 @@
       "abc123"
     ],
     "cwd": "[START_DIR]/skia",
+    "infra_step": true,
     "name": "git reset"
   },
   {
@@ -36,6 +39,7 @@
       "-f"
     ],
     "cwd": "[START_DIR]/skia",
+    "infra_step": true,
     "name": "git clean"
   },
   {
@@ -63,6 +67,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -115,6 +120,7 @@
     "env": {
       "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
     },
+    "infra_step": true,
     "name": "git fetch (swarming_client)"
   },
   {
@@ -125,6 +131,7 @@
       "FETCH_HEAD"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "git checkout (swarming_client)"
   },
   {
@@ -134,6 +141,7 @@
       "HEAD"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "read revision",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -149,6 +157,7 @@
       "-x"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "git clean (swarming_client)"
   },
   {
@@ -158,6 +167,7 @@
       "sync"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "submodule sync (swarming_client)"
   },
   {
@@ -169,6 +179,7 @@
       "--recursive"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "submodule update (swarming_client)"
   },
   {
@@ -231,6 +242,7 @@
       "rmtree",
       "[START_DIR]/luci-go"
     ],
+    "infra_step": true,
     "name": "rmtree Go binary dir"
   },
   {
@@ -254,6 +266,7 @@
       "----",
       "help"
     ],
+    "infra_step": true,
     "name": "gsutil help"
   },
   {
@@ -264,6 +277,7 @@
       "RECIPE_PACKAGE_REPO[build]/third_party/infra",
       "511"
     ],
+    "infra_step": true,
     "name": "makedirs third_party_infra",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -363,6 +377,7 @@
       "Build-Win-MSVC-x86_64-Release"
     ],
     "cwd": "[START_DIR]/skia",
+    "infra_step": true,
     "name": "exec buildbot_spec.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -403,6 +418,7 @@
       "[START_DIR]/skia/infra/bots/assets/win_toolchain/VERSION",
       "/path/to/tmp/"
     ],
+    "infra_step": true,
     "name": "read win_toolchain VERSION"
   },
   {
@@ -564,6 +580,7 @@
       "bot_id=skiabot-dummy-compile-slave",
       "revision=9046e2e693bb92a76e972b694580e5d17ad10748"
     ],
+    "infra_step": true,
     "name": "[trigger] compile_skia on Windows",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows'@@@",

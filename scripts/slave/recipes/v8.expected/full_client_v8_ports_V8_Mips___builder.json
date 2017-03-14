@@ -24,6 +24,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -64,6 +65,7 @@
       "gs://chromium-v8/Codescape.GNU.Tools.Package.2015.01-7.for.MIPS.MTI.Linux.CentOS-5.x86_64.tar.gz",
       "[START_DIR]"
     ],
+    "infra_step": true,
     "name": "gsutil bootstrapping mips toolchain"
   },
   {
@@ -107,6 +109,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
+    "infra_step": true,
     "name": "cleanup_temp"
   },
   {
@@ -180,6 +183,7 @@
       "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
       "[START_DIR]/v8/out/gn"
     ],
+    "infra_step": true,
     "name": "rmtree [START_DIR]/v8/out/gn"
   },
   {
@@ -242,6 +246,7 @@
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"branch\": \"master\", \"buildername\": \"V8 Mips - builder\", \"buildnumber\": 571, \"mastername\": \"client.v8.ports\", \"parent_buildername\": null, \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
+    "infra_step": true,
     "name": "package build"
   },
   {

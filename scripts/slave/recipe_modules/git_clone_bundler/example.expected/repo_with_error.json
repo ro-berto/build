@@ -7,6 +7,7 @@
       "rmtree",
       "[START_DIR]/git_clone_bundler/bundles"
     ],
+    "infra_step": true,
     "name": "rmtree old bundles"
   },
   {
@@ -61,6 +62,7 @@
       "https://googlesource.com/manifest.xml"
     ],
     "cwd": "[START_DIR]/git_clone_bundler/repo/baa8c54f5ad38fa45e904e6bdfb6b484",
+    "infra_step": true,
     "name": "repo init"
   },
   {
@@ -70,6 +72,7 @@
       "--no-clone-bundle"
     ],
     "cwd": "[START_DIR]/git_clone_bundler/repo/baa8c54f5ad38fa45e904e6bdfb6b484",
+    "infra_step": true,
     "name": "repo sync"
   },
   {
@@ -93,6 +96,7 @@
       "--all"
     ],
     "cwd": "[START_DIR]/git_clone_bundler/repo/baa8c54f5ad38fa45e904e6bdfb6b484/path/to/foo",
+    "infra_step": true,
     "name": "create bundle (src/foo)",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
@@ -109,6 +113,7 @@
       "--all"
     ],
     "cwd": "[START_DIR]/git_clone_bundler/repo/baa8c54f5ad38fa45e904e6bdfb6b484/path/to/bar",
+    "infra_step": true,
     "name": "create bundle (src/bar)"
   },
   {
@@ -123,6 +128,7 @@
       "[START_DIR]/git_clone_bundler/bundles/4e9dd63391c5eb1884b9b449679dfa16.bundle",
       "gs://clone-dot-bundle-bucket/checkout/repository/src/bar/clone.bundle"
     ],
+    "infra_step": true,
     "name": "gsutil upload bundle (src/bar)",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil bundle@https://storage.cloud.google.com/clone-dot-bundle-bucket/checkout/repository/src/bar/clone.bundle@@@"
@@ -136,6 +142,7 @@
       "remote.origin.url"
     ],
     "cwd": "[START_DIR]/git_clone_bundler/repo/baa8c54f5ad38fa45e904e6bdfb6b484/path/to/bar",
+    "infra_step": true,
     "name": "lookup Git remote (src/bar)",
     "stdout": "/path/to/tmp/"
   },

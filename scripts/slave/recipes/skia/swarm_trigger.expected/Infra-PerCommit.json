@@ -24,6 +24,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -76,6 +77,7 @@
     "env": {
       "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
     },
+    "infra_step": true,
     "name": "git fetch (swarming_client)"
   },
   {
@@ -86,6 +88,7 @@
       "FETCH_HEAD"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "git checkout (swarming_client)"
   },
   {
@@ -95,6 +98,7 @@
       "HEAD"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "read revision",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -110,6 +114,7 @@
       "-x"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "git clean (swarming_client)"
   },
   {
@@ -119,6 +124,7 @@
       "sync"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "submodule sync (swarming_client)"
   },
   {
@@ -130,6 +136,7 @@
       "--recursive"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "submodule update (swarming_client)"
   },
   {
@@ -192,6 +199,7 @@
       "rmtree",
       "[START_DIR]/luci-go"
     ],
+    "infra_step": true,
     "name": "rmtree Go binary dir"
   },
   {
@@ -215,6 +223,7 @@
       "----",
       "help"
     ],
+    "infra_step": true,
     "name": "gsutil help"
   },
   {
@@ -225,6 +234,7 @@
       "RECIPE_PACKAGE_REPO[build]/third_party/infra",
       "511"
     ],
+    "infra_step": true,
     "name": "makedirs third_party_infra",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -471,6 +481,7 @@
       "bot_id=skiabot-linux-swarm-000",
       "revision=5e03a58dc0850e5137a8ebbce29610670c756aed"
     ],
+    "infra_step": true,
     "name": "[trigger] infra_skia on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu'@@@",

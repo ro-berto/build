@@ -5,6 +5,7 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\kill_processes.py"
     ],
+    "infra_step": true,
     "name": "taskkill"
   },
   {
@@ -31,6 +32,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -138,6 +140,7 @@
       "[START_DIR]\\src\\out\\Release_x64",
       "metrics.csv"
     ],
+    "infra_step": true,
     "name": "rmwildcard metrics.csv in [START_DIR]\\src\\out\\Release_x64"
   },
   {

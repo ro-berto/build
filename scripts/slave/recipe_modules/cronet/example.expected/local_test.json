@@ -6,6 +6,7 @@
       "\nimport os, sys\n\nbuild_path = sys.argv[1]\nif os.path.exists(build_path):\n  for (path, dir, files) in os.walk(build_path):\n    for cur_file in files:\n      if cur_file.endswith('index.lock'):\n        path_to_file = os.path.join(path, cur_file)\n        print 'deleting %s' % path_to_file\n        os.remove(path_to_file)\n",
       "[START_DIR]"
     ],
+    "infra_step": true,
     "name": "cleanup index.lock",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -46,6 +47,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -132,6 +134,7 @@
       "[START_DIR]/src/out/build_product.zip",
       "[START_DIR]/src"
     ],
+    "infra_step": true,
     "name": "clean local files",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -157,6 +160,7 @@
       "rmtree",
       "[START_DIR]/src/out/Debug"
     ],
+    "infra_step": true,
     "name": "rmtree clobber"
   },
   {
@@ -241,6 +245,7 @@
       "[START_DIR]/src/out/Debug/cronet/VERSION",
       "gs://chromium-cronet/android/51.0.2704.0/Debug/VERSION"
     ],
+    "infra_step": true,
     "name": "gsutil upload_cronet_version",
     "~followup_annotations": [
       "@@@STEP_LINK@Cronet version@https://storage.cloud.google.com/chromium-cronet/android/51.0.2704.0/Debug/VERSION@@@"
@@ -259,6 +264,7 @@
       "[START_DIR]/src/out/Debug/cronet",
       "gs://chromium-cronet/android/51.0.2704.0/Debug"
     ],
+    "infra_step": true,
     "name": "gsutil upload_cronet_package",
     "~followup_annotations": [
       "@@@STEP_LINK@Cronet package@https://storage.cloud.google.com/chromium-cronet/android/51.0.2704.0/Debug@@@"
@@ -273,6 +279,7 @@
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
       "~/adb"
     ],
+    "infra_step": true,
     "name": "create adb symlink"
   },
   {
@@ -287,6 +294,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "spawn_logcat_monitor"
   },
   {
@@ -305,6 +313,7 @@
       "--blacklist-file",
       "[START_DIR]/src/out/bad_devices.json"
     ],
+    "infra_step": true,
     "name": "spawn_device_monitor"
   },
   {
@@ -320,6 +329,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "authorize_adb_devices"
   },
   {
@@ -337,6 +347,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "device_recovery"
   },
   {
@@ -357,6 +368,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "provision_devices"
   },
   {
@@ -379,6 +391,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "device_status",
     "~followup_annotations": [
       "@@@STEP_TEXT@Online devices: 1@@@",
@@ -659,6 +672,7 @@
       "--pid-file-path",
       "/tmp/device_monitor.pid"
     ],
+    "infra_step": true,
     "name": "shutdown_device_monitor"
   },
   {
@@ -670,6 +684,7 @@
       "[START_DIR]/src/out/Debug/full_log",
       "[START_DIR]/src/out/logcat"
     ],
+    "infra_step": true,
     "name": "logcat_dump"
   },
   {
@@ -688,6 +703,7 @@
       "[START_DIR]/src/out/Debug/full_log",
       "gs://chromium-android/logcat_dumps/local_test/571"
     ],
+    "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/local_test/571@@@"
@@ -706,6 +722,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "stack_tool_with_logcat_dump"
   },
   {
@@ -730,6 +747,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "stack_tool_for_tombstones"
   },
   {

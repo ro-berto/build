@@ -27,6 +27,7 @@
       "--build-properties",
       "{\"build_archive_url\": \"gs://dummy-bucket/Linux Release/full-build.zip\", \"recipe\": \"archive:example\"}"
     ],
+    "infra_step": true,
     "name": "zip build"
   },
   {

@@ -24,6 +24,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -112,6 +113,7 @@
       "origin/master"
     ],
     "cwd": "[START_DIR]/v8",
+    "infra_step": true,
     "name": "git checkout"
   },
   {
@@ -122,6 +124,7 @@
       "roll"
     ],
     "cwd": "[START_DIR]/v8",
+    "infra_step": true,
     "name": "git branch"
   },
   {
@@ -131,6 +134,7 @@
       "-ffd"
     ],
     "cwd": "[START_DIR]/v8",
+    "infra_step": true,
     "name": "git clean"
   },
   {
@@ -140,6 +144,7 @@
       "roll"
     ],
     "cwd": "[START_DIR]/v8",
+    "infra_step": true,
     "name": "git new-branch"
   },
   {
@@ -157,6 +162,7 @@
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "gclient get src deps",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -184,6 +190,7 @@
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "gclient get v8 deps",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -206,6 +213,7 @@
       "HEAD"
     ],
     "cwd": "[START_DIR]/v8",
+    "infra_step": true,
     "name": "look up base_trace_event_common",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -233,6 +241,7 @@
       "HEAD"
     ],
     "cwd": "[START_DIR]/v8",
+    "infra_step": true,
     "name": "look up build",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -275,6 +284,7 @@
       "diff"
     ],
     "cwd": "[START_DIR]/v8",
+    "infra_step": true,
     "name": "git diff",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -299,6 +309,7 @@
       "TBR=machenbach@chromium.org,vogelheim@chromium.org,hablich@chromium.org"
     ],
     "cwd": "[START_DIR]/v8",
+    "infra_step": true,
     "name": "git commit",
     "stdout": "/path/to/tmp/"
   },
@@ -315,6 +326,7 @@
       "--gerrit"
     ],
     "cwd": "[START_DIR]/v8",
+    "infra_step": true,
     "name": "git cl"
   },
   {

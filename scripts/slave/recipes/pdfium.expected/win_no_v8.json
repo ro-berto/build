@@ -23,6 +23,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -81,6 +82,7 @@
       "-service-account-json",
       "C:\\creds\\service_accounts\\service-account-goma-client.json"
     ],
+    "infra_step": true,
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -164,6 +166,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
+    "infra_step": true,
     "name": "preprocess_for_goma.start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -186,6 +189,7 @@
       "--pid-file",
       "[TMP_BASE]\\cloudtail.pid"
     ],
+    "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -322,6 +326,7 @@
       "--killed-pid-file",
       "[TMP_BASE]\\cloudtail.pid"
     ],
+    "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -360,6 +365,7 @@
       "[START_DIR]\\pdfium\\out\\debug\\ignore_hashes.txt"
     ],
     "cwd": "[START_DIR]\\pdfium",
+    "infra_step": true,
     "name": "get uninteresting hashes",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -420,6 +426,7 @@
       "/path/to/tmp/",
       "[START_DIR]\\pdfium\\out\\debug\\gold_output\\*.png"
     ],
+    "infra_step": true,
     "name": "find images"
   },
   {
@@ -434,6 +441,7 @@
       "[START_DIR]\\pdfium\\out\\debug\\gold_output\\*.png",
       "gs://skia-pdfium-gm/dm-images-v1"
     ],
+    "infra_step": true,
     "name": "gsutil upload images",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/skia-pdfium-gm/dm-images-v1@@@"
@@ -453,6 +461,7 @@
       "[START_DIR]\\pdfium\\out\\debug\\gold_output\\dm.json",
       "gs://skia-pdfium-gm/dm-json-v1/2012/05/14/12/d69d97171c17fdb12a52f78847e2ee2f0594eff1/windows_no_v8/1337000001/dm.json"
     ],
+    "infra_step": true,
     "name": "gsutil upload JSON",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/skia-pdfium-gm/dm-json-v1/2012/05/14/12/d69d97171c17fdb12a52f78847e2ee2f0594eff1/windows_no_v8/1337000001/dm.json@@@"

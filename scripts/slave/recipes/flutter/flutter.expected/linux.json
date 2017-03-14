@@ -7,6 +7,7 @@
       "rmcontents",
       "[START_DIR]"
     ],
+    "infra_step": true,
     "name": "rmcontents everything"
   },
   {
@@ -34,6 +35,7 @@
     "env": {
       "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
     },
+    "infra_step": true,
     "name": "git fetch"
   },
   {
@@ -44,6 +46,7 @@
       "FETCH_HEAD"
     ],
     "cwd": "[START_DIR]/flutter",
+    "infra_step": true,
     "name": "git checkout"
   },
   {
@@ -53,6 +56,7 @@
       "HEAD"
     ],
     "cwd": "[START_DIR]/flutter",
+    "infra_step": true,
     "name": "read revision",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -69,6 +73,7 @@
       "-x"
     ],
     "cwd": "[START_DIR]/flutter",
+    "infra_step": true,
     "name": "git clean"
   },
   {
@@ -78,6 +83,7 @@
       "sync"
     ],
     "cwd": "[START_DIR]/flutter",
+    "infra_step": true,
     "name": "submodule sync"
   },
   {
@@ -89,6 +95,7 @@
       "--recursive"
     ],
     "cwd": "[START_DIR]/flutter",
+    "infra_step": true,
     "name": "submodule update"
   },
   {
@@ -200,6 +207,7 @@
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:%(PATH)s",
       "PUB_CACHE": "[START_DIR]/.pub-cache"
     },
+    "infra_step": true,
     "name": "gsutil upload Stocks.apk",
     "~followup_annotations": [
       "@@@STEP_LINK@Stocks.apk@https://storage.cloud.google.com/flutter_infra/flutter/deadbeef/examples/Stocks.apk@@@"
@@ -237,6 +245,7 @@
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:%(PATH)s",
       "PUB_CACHE": "[START_DIR]/.pub-cache"
     },
+    "infra_step": true,
     "name": "gsutil upload Gallery.apk",
     "~followup_annotations": [
       "@@@STEP_LINK@Gallery.apk@https://storage.cloud.google.com/flutter_infra/flutter/deadbeef/examples/Gallery.apk@@@"

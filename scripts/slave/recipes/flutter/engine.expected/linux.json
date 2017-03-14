@@ -7,6 +7,7 @@
       "rmcontents",
       "[START_DIR]"
     ],
+    "infra_step": true,
     "name": "rmcontents everything"
   },
   {
@@ -33,6 +34,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -157,6 +159,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
+    "infra_step": true,
     "name": "gsutil upload \"linux-x64/artifacts.zip\"",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/linux-x64/artifacts.zip@@@"
@@ -173,6 +176,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
+    "infra_step": true,
     "name": "rmtree temp dir for linux-x64 UploadArtifacts artifacts.zip"
   },
   {
@@ -259,6 +263,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
+    "infra_step": true,
     "name": "gsutil upload \"android-arm/artifacts.zip\"",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm/artifacts.zip@@@"
@@ -275,6 +280,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
+    "infra_step": true,
     "name": "rmtree temp dir for android-arm UploadArtifacts artifacts.zip"
   },
   {
@@ -304,6 +310,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
+    "infra_step": true,
     "name": "gsutil upload \"android-arm/symbols.zip\"",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm/symbols.zip@@@"
@@ -320,6 +327,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
+    "infra_step": true,
     "name": "rmtree temp dir for android-arm UploadArtifacts symbols.zip"
   },
   {
@@ -372,6 +380,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
+    "infra_step": true,
     "name": "gsutil upload \"android-arm-profile/artifacts.zip\"",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm-profile/artifacts.zip@@@"
@@ -388,6 +397,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
+    "infra_step": true,
     "name": "rmtree temp dir for android-arm-profile UploadArtifacts artifacts.zip"
   },
   {
@@ -417,6 +427,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
+    "infra_step": true,
     "name": "gsutil upload \"android-arm-profile/linux-x64.zip\"",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm-profile/linux-x64.zip@@@"
@@ -433,6 +444,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
+    "infra_step": true,
     "name": "rmtree temp dir for android-arm-profile UploadArtifacts linux-x64.zip"
   },
   {
@@ -462,6 +474,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
+    "infra_step": true,
     "name": "gsutil upload \"android-arm-profile/symbols.zip\"",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm-profile/symbols.zip@@@"
@@ -478,6 +491,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
+    "infra_step": true,
     "name": "rmtree temp dir for android-arm-profile UploadArtifacts symbols.zip"
   },
   {
@@ -530,6 +544,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
+    "infra_step": true,
     "name": "gsutil upload \"android-arm-release/artifacts.zip\"",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm-release/artifacts.zip@@@"
@@ -546,6 +561,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
+    "infra_step": true,
     "name": "rmtree temp dir for android-arm-release UploadArtifacts artifacts.zip"
   },
   {
@@ -575,6 +591,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
+    "infra_step": true,
     "name": "gsutil upload \"android-arm-release/linux-x64.zip\"",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm-release/linux-x64.zip@@@"
@@ -591,6 +608,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
+    "infra_step": true,
     "name": "rmtree temp dir for android-arm-release UploadArtifacts linux-x64.zip"
   },
   {
@@ -620,6 +638,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
+    "infra_step": true,
     "name": "gsutil upload \"android-arm-release/symbols.zip\"",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm-release/symbols.zip@@@"
@@ -636,6 +655,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
+    "infra_step": true,
     "name": "rmtree temp dir for android-arm-release UploadArtifacts symbols.zip"
   },
   {
@@ -665,6 +685,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
+    "infra_step": true,
     "name": "gsutil upload sky_engine.zip",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/sky_engine.zip@@@"
@@ -681,6 +702,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
+    "infra_step": true,
     "name": "rmtree temp dir for UploadDartPackage sky_engine"
   },
   {
@@ -733,6 +755,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
+    "infra_step": true,
     "name": "gsutil upload \"android-x64/artifacts.zip\"",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-x64/artifacts.zip@@@"
@@ -749,6 +772,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
+    "infra_step": true,
     "name": "rmtree temp dir for android-x64 UploadArtifacts artifacts.zip"
   },
   {
@@ -778,6 +802,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
+    "infra_step": true,
     "name": "gsutil upload \"android-x64/symbols.zip\"",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-x64/symbols.zip@@@"
@@ -794,6 +819,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
+    "infra_step": true,
     "name": "rmtree temp dir for android-x64 UploadArtifacts symbols.zip"
   },
   {
@@ -846,6 +872,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
+    "infra_step": true,
     "name": "gsutil upload \"android-x86/artifacts.zip\"",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-x86/artifacts.zip@@@"
@@ -862,6 +889,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
+    "infra_step": true,
     "name": "rmtree temp dir for android-x86 UploadArtifacts artifacts.zip"
   },
   {
@@ -891,6 +919,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
+    "infra_step": true,
     "name": "gsutil upload \"android-x86/symbols.zip\"",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-x86/symbols.zip@@@"
@@ -907,6 +936,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
+    "infra_step": true,
     "name": "rmtree temp dir for android-x86 UploadArtifacts symbols.zip"
   },
   {
@@ -944,6 +974,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
+    "infra_step": true,
     "name": "rmtree temp dir for BuildJavadoc"
   },
   {
@@ -961,6 +992,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
+    "infra_step": true,
     "name": "gsutil upload javadoc",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-javadoc.zip@@@"

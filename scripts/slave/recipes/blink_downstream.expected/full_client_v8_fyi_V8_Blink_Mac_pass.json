@@ -48,6 +48,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -144,6 +145,7 @@
       "/creds/service_accounts/service-account-goma-client.json"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Mac",
+    "infra_step": true,
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -286,6 +288,7 @@
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
+    "infra_step": true,
     "name": "preprocess_for_goma.start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -309,6 +312,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Mac",
+    "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -460,6 +464,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Mac",
+    "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"

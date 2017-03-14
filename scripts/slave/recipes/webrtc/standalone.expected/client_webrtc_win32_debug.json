@@ -28,6 +28,7 @@
       "RECIPE_MODULE[build::webrtc]\\resources\\cleanup_symlinks.py",
       "[BUILDER_CACHE]\\Win32_Debug"
     ],
+    "infra_step": true,
     "name": "clean symlinks"
   },
   {
@@ -55,6 +56,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -90,6 +92,7 @@
       "RECIPE_MODULE[build::webrtc]\\resources\\cleanup_files.py",
       "[BUILDER_CACHE]\\Win32_Debug\\src\\out"
     ],
+    "infra_step": true,
     "name": "clean test output files"
   },
   {
@@ -102,6 +105,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\cleanup_temp.py"
     ],
+    "infra_step": true,
     "name": "cleanup_temp"
   },
   {
@@ -132,6 +136,7 @@
       "-service-account-json",
       "C:\\creds\\service_accounts\\service-account-goma-client.json"
     ],
+    "infra_step": true,
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -280,6 +285,7 @@
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
+    "infra_step": true,
     "name": "preprocess_for_goma.start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -303,6 +309,7 @@
       "[TMP_BASE]\\cloudtail.pid"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Debug\\src",
+    "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -452,6 +459,7 @@
       "[TMP_BASE]\\cloudtail.pid"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Debug\\src",
+    "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -587,6 +595,7 @@
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Debug",
+    "infra_step": true,
     "name": "[trigger] audio_decoder_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
@@ -669,6 +678,7 @@
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Debug",
+    "infra_step": true,
     "name": "[trigger] common_audio_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
@@ -751,6 +761,7 @@
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Debug",
+    "infra_step": true,
     "name": "[trigger] common_video_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
@@ -833,6 +844,7 @@
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Debug",
+    "infra_step": true,
     "name": "[trigger] modules_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
@@ -921,6 +933,7 @@
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Debug",
+    "infra_step": true,
     "name": "[trigger] modules_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
@@ -1033,6 +1046,7 @@
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Debug",
+    "infra_step": true,
     "name": "[trigger] ortc_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
@@ -1115,6 +1129,7 @@
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Debug",
+    "infra_step": true,
     "name": "[trigger] peerconnection_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
@@ -1215,6 +1230,7 @@
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Debug",
+    "infra_step": true,
     "name": "[trigger] rtc_media_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
@@ -1297,6 +1313,7 @@
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Debug",
+    "infra_step": true,
     "name": "[trigger] rtc_pc_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
@@ -1379,6 +1396,7 @@
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Debug",
+    "infra_step": true,
     "name": "[trigger] rtc_stats_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
@@ -1461,6 +1479,7 @@
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Debug",
+    "infra_step": true,
     "name": "[trigger] rtc_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
@@ -1573,6 +1592,7 @@
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Debug",
+    "infra_step": true,
     "name": "[trigger] system_wrappers_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
@@ -1655,6 +1675,7 @@
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Debug",
+    "infra_step": true,
     "name": "[trigger] test_support_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
@@ -1737,6 +1758,7 @@
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Debug",
+    "infra_step": true,
     "name": "[trigger] tools_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
@@ -1819,6 +1841,7 @@
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Debug",
+    "infra_step": true,
     "name": "[trigger] video_engine_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
@@ -1919,6 +1942,7 @@
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Debug",
+    "infra_step": true,
     "name": "[trigger] voice_engine_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
@@ -2001,6 +2025,7 @@
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Debug",
+    "infra_step": true,
     "name": "[trigger] webrtc_nonparallel_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",

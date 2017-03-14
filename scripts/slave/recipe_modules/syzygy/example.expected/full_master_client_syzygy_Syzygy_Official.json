@@ -35,6 +35,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -72,6 +73,7 @@
       "rmtree",
       "[START_DIR]\\src\\out\\Release"
     ],
+    "infra_step": true,
     "name": "rmtree clobber"
   },
   {
@@ -152,6 +154,7 @@
       "[START_DIR]\\src\\out\\Release",
       "metrics.csv"
     ],
+    "infra_step": true,
     "name": "rmwildcard metrics.csv in [START_DIR]\\src\\out\\Release"
   },
   {

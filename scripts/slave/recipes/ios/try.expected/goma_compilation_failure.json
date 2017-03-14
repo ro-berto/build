@@ -52,6 +52,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -177,6 +178,7 @@
       "-service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
+    "infra_step": true,
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -242,6 +244,7 @@
       "--name-only"
     ],
     "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
+    "infra_step": true,
     "name": "git diff to analyze patch",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -342,6 +345,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
+    "infra_step": true,
     "name": "preprocess_for_goma.start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -364,6 +368,7 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -510,6 +515,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -564,6 +570,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update (without patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -702,6 +709,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
+    "infra_step": true,
     "name": "preprocess_for_goma.start_goma (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -724,6 +732,7 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -866,6 +875,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",

@@ -7,6 +7,7 @@
       "rmcontents",
       "[START_DIR]"
     ],
+    "infra_step": true,
     "name": "rmcontents everything"
   },
   {
@@ -17,6 +18,7 @@
       "--verbose"
     ],
     "cwd": "RECIPE_PACKAGE_REPO[depot_tools]",
+    "infra_step": true,
     "name": "ensure git tooling on windows",
     "timeout": 300
   },
@@ -47,6 +49,7 @@
     "env": {
       "PATH": "RECIPE_PACKAGE_REPO[depot_tools];%(PATH)s"
     },
+    "infra_step": true,
     "name": "git fetch"
   },
   {
@@ -57,6 +60,7 @@
       "FETCH_HEAD"
     ],
     "cwd": "[START_DIR]\\flutter",
+    "infra_step": true,
     "name": "git checkout"
   },
   {
@@ -66,6 +70,7 @@
       "HEAD"
     ],
     "cwd": "[START_DIR]\\flutter",
+    "infra_step": true,
     "name": "read revision",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -82,6 +87,7 @@
       "-x"
     ],
     "cwd": "[START_DIR]\\flutter",
+    "infra_step": true,
     "name": "git clean"
   },
   {
@@ -91,6 +97,7 @@
       "sync"
     ],
     "cwd": "[START_DIR]\\flutter",
+    "infra_step": true,
     "name": "submodule sync"
   },
   {
@@ -102,6 +109,7 @@
       "--recursive"
     ],
     "cwd": "[START_DIR]\\flutter",
+    "infra_step": true,
     "name": "submodule update"
   },
   {

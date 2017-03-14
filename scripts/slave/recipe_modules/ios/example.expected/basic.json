@@ -23,6 +23,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -244,6 +245,7 @@
       "-service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
+    "infra_step": true,
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -352,6 +354,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
+    "infra_step": true,
     "name": "preprocess_for_goma.start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -374,6 +377,7 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -519,6 +523,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -536,6 +541,7 @@
       "[START_DIR]/src/out/Debug-iphonesimulator/Chrome.app",
       "gs://mock-gcs-bucket/fixed-path/Chrome.app"
     ],
+    "infra_step": true,
     "name": "gsutil upload Chrome.app",
     "~followup_annotations": [
       "@@@STEP_LINK@Chrome.app@https://storage.cloud.google.com/mock-gcs-bucket/fixed-path/Chrome.app@@@"
@@ -582,6 +588,7 @@
     "env": {
       "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
     },
+    "infra_step": true,
     "name": "bootstrap swarming.git fetch (swarming_client)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -595,6 +602,7 @@
       "FETCH_HEAD"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "bootstrap swarming.git checkout (swarming_client)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -607,6 +615,7 @@
       "HEAD"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "bootstrap swarming.read revision",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -623,6 +632,7 @@
       "-x"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "bootstrap swarming.git clean (swarming_client)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -635,6 +645,7 @@
       "sync"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "bootstrap swarming.submodule sync (swarming_client)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -649,6 +660,7 @@
       "--recursive"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "bootstrap swarming.submodule update (swarming_client)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1193,6 +1205,7 @@
       "[TMP_BASE]/isolate_tmp_1/8.isolate.gen.json"
     ],
     "cwd": "[START_DIR]/src",
+    "infra_step": true,
     "name": "isolate.archive",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1291,6 +1304,7 @@
       "fake-hash-0"
     ],
     "cwd": "[START_DIR]/src",
+    "infra_step": true,
     "name": "trigger.[trigger] fake test 1 (fake device 1 iOS 8.1)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1371,6 +1385,7 @@
       "fake-hash-1"
     ],
     "cwd": "[START_DIR]/src",
+    "infra_step": true,
     "name": "trigger.[trigger] fake included test 1 (fake device 1 iOS 8.1)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1451,6 +1466,7 @@
       "fake-hash-2"
     ],
     "cwd": "[START_DIR]/src",
+    "infra_step": true,
     "name": "trigger.[trigger] fake included test 2 (fake device 1 iOS 8.1)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1531,6 +1547,7 @@
       "fake-hash-3"
     ],
     "cwd": "[START_DIR]/src",
+    "infra_step": true,
     "name": "trigger.[trigger] fake test 2 (fake device 2 iOS 7.1)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1611,6 +1628,7 @@
       "fake-hash-4"
     ],
     "cwd": "[START_DIR]/src",
+    "infra_step": true,
     "name": "trigger.[trigger] fake included test 1 (fake device 2 iOS 7.1)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1691,6 +1709,7 @@
       "fake-hash-5"
     ],
     "cwd": "[START_DIR]/src",
+    "infra_step": true,
     "name": "trigger.[trigger] fake included test 2 (fake device 2 iOS 7.1)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",

@@ -46,6 +46,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -268,6 +269,7 @@
       "[TMP_BASE]/tgz_tmp_1/fake tests 1.tar.gz",
       "gs://fake-bucket-1/ios/0/fake tests 1.tar.gz"
     ],
+    "infra_step": true,
     "name": "upload fake tests 1.app.gsutil upload fake tests 1.tar.gz",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -286,6 +288,7 @@
       "[START_DIR]/src/out/Debug-iphonesimulator/fake tests 2.app",
       "gs://fake-bucket-2/ios/0/fake tests 2.app"
     ],
+    "infra_step": true,
     "name": "gsutil upload fake tests 2.app",
     "~followup_annotations": [
       "@@@STEP_LINK@fake tests 2.app@https://storage.cloud.google.com/fake-bucket-2/ios/0/fake tests 2.app@@@"
@@ -324,6 +327,7 @@
     "env": {
       "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
     },
+    "infra_step": true,
     "name": "bootstrap swarming.git fetch (swarming_client)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -337,6 +341,7 @@
       "FETCH_HEAD"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "bootstrap swarming.git checkout (swarming_client)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -349,6 +354,7 @@
       "HEAD"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "bootstrap swarming.read revision",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -365,6 +371,7 @@
       "-x"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "bootstrap swarming.git clean (swarming_client)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -377,6 +384,7 @@
       "sync"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "bootstrap swarming.submodule sync (swarming_client)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -391,6 +399,7 @@
       "--recursive"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "bootstrap swarming.submodule update (swarming_client)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -629,6 +638,7 @@
       "[TMP_BASE]/isolate_tmp_2/2.isolate.gen.json"
     ],
     "cwd": "[BUILDER_CACHE]/ios/src",
+    "infra_step": true,
     "name": "isolate.archive",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -707,6 +717,7 @@
       "fake-hash-0"
     ],
     "cwd": "[BUILDER_CACHE]/ios/src",
+    "infra_step": true,
     "name": "trigger.[trigger] fake tests 1 (fake device iOS 8.0)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -787,6 +798,7 @@
       "fake-hash-1"
     ],
     "cwd": "[BUILDER_CACHE]/ios/src",
+    "infra_step": true,
     "name": "trigger.[trigger] fake tests 2 (fake device iOS 7.1)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -867,6 +879,7 @@
       "fake-hash-2"
     ],
     "cwd": "[BUILDER_CACHE]/ios/src",
+    "infra_step": true,
     "name": "trigger.[trigger] fake_eg_test_host (fake device 3 iOS 9.3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",

@@ -23,6 +23,7 @@
     "env": {
       "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
     },
+    "infra_step": true,
     "name": "git fetch (swarming_client)"
   },
   {
@@ -33,6 +34,7 @@
       "FETCH_HEAD"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "git checkout (swarming_client)"
   },
   {
@@ -42,6 +44,7 @@
       "HEAD"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "read revision",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -57,6 +60,7 @@
       "-x"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "git clean (swarming_client)"
   },
   {
@@ -66,6 +70,7 @@
       "sync"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "submodule sync (swarming_client)"
   },
   {
@@ -77,6 +82,7 @@
       "--recursive"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "submodule update (swarming_client)",
     "~followup_annotations": [
       "@@@SET_BUILD_PROPERTY@got_revision@\"20123\"@@@",
@@ -174,6 +180,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
+    "infra_step": true,
     "name": "[trigger] Check",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
@@ -293,6 +300,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
+    "infra_step": true,
     "name": "[trigger] Mozilla",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
@@ -331,6 +339,7 @@
       "--json",
       "{\"base_task_name\": \"Check/Ubuntu-14.04/[dummy has/V8 Linux - nosnap - debug/571\", \"tasks\": {\"Check/Ubuntu-14.04/[dummy has/V8 Linux - nosnap - debug/571:5:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"Check/Ubuntu-14.04/[dummy has/V8 Linux - nosnap - debug/571:5:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"Check/Ubuntu-14.04/[dummy has/V8 Linux - nosnap - debug/571:5:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}, \"Check/Ubuntu-14.04/[dummy has/V8 Linux - nosnap - debug/571:5:3\": {\"shard_index\": 3, \"task_id\": \"10300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10300\"}, \"Check/Ubuntu-14.04/[dummy has/V8 Linux - nosnap - debug/571:5:4\": {\"shard_index\": 4, \"task_id\": \"10400\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10400\"}}}"
     ],
+    "infra_step": true,
     "name": "Check",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -370,6 +379,7 @@
       "--json",
       "{\"base_task_name\": \"Mozilla/Ubuntu-14.04/[dummy has/V8 Linux - nosnap - debug/571\", \"tasks\": {\"Mozilla/Ubuntu-14.04/[dummy has/V8 Linux - nosnap - debug/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
+    "infra_step": true,
     "name": "Mozilla",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",

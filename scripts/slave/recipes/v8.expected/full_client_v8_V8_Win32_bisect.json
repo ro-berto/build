@@ -10,6 +10,7 @@
       "ls",
       "gs://chromium-v8/v8-win32-rel/full-build-linux_a1.json"
     ],
+    "infra_step": true,
     "name": "Bisect.gsutil check build a1",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -27,6 +28,7 @@
       "ls",
       "gs://chromium-v8/v8-win32-rel/full-build-linux_a2.json"
     ],
+    "infra_step": true,
     "name": "Bisect.gsutil check build a2",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [

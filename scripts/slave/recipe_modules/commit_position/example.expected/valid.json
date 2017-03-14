@@ -7,6 +7,7 @@
       "01234567890abcdef01234567890abcdef01234567"
     ],
     "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
+    "infra_step": true,
     "name": "resolving hash 01234567890abcdef01234567890abcdef01234567",
     "stdout": "/path/to/tmp/"
   },

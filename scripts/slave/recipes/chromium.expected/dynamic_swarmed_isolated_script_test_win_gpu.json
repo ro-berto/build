@@ -5,6 +5,7 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\kill_processes.py"
     ],
+    "infra_step": true,
     "name": "taskkill"
   },
   {
@@ -31,6 +32,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -124,6 +126,7 @@
       "-service-account-json",
       "C:\\creds\\service_accounts\\service-account-goma-client.json"
     ],
+    "infra_step": true,
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -243,6 +246,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\cleanup_temp.py"
     ],
+    "infra_step": true,
     "name": "cleanup_temp"
   },
   {
@@ -253,6 +257,7 @@
       "rmtree",
       "[START_DIR]\\src\\out\\Release"
     ],
+    "infra_step": true,
     "name": "rmtree build directory"
   },
   {
@@ -281,6 +286,7 @@
       "--build-number",
       "571"
     ],
+    "infra_step": true,
     "name": "extract build"
   },
   {
@@ -372,6 +378,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
+    "infra_step": true,
     "name": "[trigger] telemetry_gpu_unittests on NVIDIA GPU on Windows on Windows",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows'@@@",
@@ -455,6 +462,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
+    "infra_step": true,
     "name": "[trigger] telemetry_gpu_unittests on ATI GPU on Windows on Windows",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows'@@@",
@@ -538,6 +546,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
+    "infra_step": true,
     "name": "[trigger] telemetry_gpu_unittests on (15ad) GPU on Windows on Windows",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows'@@@",
@@ -919,6 +928,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
+    "infra_step": true,
     "name": "process_dumps"
   },
   {

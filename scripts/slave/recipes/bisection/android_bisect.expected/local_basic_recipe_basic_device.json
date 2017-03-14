@@ -16,6 +16,7 @@
       "-service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
+    "infra_step": true,
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -87,6 +88,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -173,6 +175,7 @@
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/build_product.zip",
       "[BUILDER_CACHE]/android_one_perf_bisect/src"
     ],
+    "infra_step": true,
     "name": "clean local files",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -216,6 +219,7 @@
       "--name-only"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
+    "infra_step": true,
     "name": "git diff to analyze patch",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -233,6 +237,7 @@
       "~/adb"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
+    "infra_step": true,
     "name": "create adb symlink"
   },
   {
@@ -248,6 +253,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "spawn_logcat_monitor"
   },
   {
@@ -267,6 +273,7 @@
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/bad_devices.json"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
+    "infra_step": true,
     "name": "spawn_device_monitor"
   },
   {
@@ -283,6 +290,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "authorize_adb_devices"
   },
   {
@@ -302,6 +310,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "device_recovery"
   },
   {
@@ -330,6 +339,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "provision_devices"
   },
   {
@@ -353,6 +363,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "device_status",
     "~followup_annotations": [
       "@@@STEP_TEXT@Online devices: 2@@@",
@@ -534,6 +545,7 @@
       "[START_DIR]/bisect_results"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
+    "infra_step": true,
     "name": "Clearing results directory.rmtree old results directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -584,6 +596,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "device_status (2)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Online devices: 2@@@",
@@ -737,6 +750,7 @@
       "refs/remotes/origin/master"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
+    "infra_step": true,
     "name": "git update-ref"
   },
   {
@@ -746,6 +760,7 @@
       "master"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
+    "infra_step": true,
     "name": "git checkout"
   },
   {
@@ -903,6 +918,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_e28dc0d49c331def2a3bbf3ddd0096eb51551155.zip"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
+    "infra_step": true,
     "name": "Gathering reference values.gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -939,6 +955,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "Gathering reference values.bot_update",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1025,6 +1042,7 @@
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
+    "infra_step": true,
     "name": "Gathering reference values.rmtree build directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1045,6 +1063,7 @@
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/build_product.zip"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
+    "infra_step": true,
     "name": "Gathering reference values.gsutil download_build_product",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1057,6 +1076,7 @@
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/build_product.zip"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
+    "infra_step": true,
     "name": "Gathering reference values.unzip_build_product",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1094,6 +1114,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "Gathering reference values.install ChromePublic.apk",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1819,6 +1840,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_fc6dfc7ff5b1073408499478969261b826441144.zip"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
+    "infra_step": true,
     "name": "Gathering reference values.gsutil ls (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1855,6 +1877,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "Gathering reference values.bot_update (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1941,6 +1964,7 @@
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
+    "infra_step": true,
     "name": "Gathering reference values.rmtree build directory (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1961,6 +1985,7 @@
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/build_product.zip"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
+    "infra_step": true,
     "name": "Gathering reference values.gsutil download_build_product (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1973,6 +1998,7 @@
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/build_product.zip"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
+    "infra_step": true,
     "name": "Gathering reference values.unzip_build_product (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2010,6 +2036,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "Gathering reference values.install ChromePublic.apk (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2805,6 +2832,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "Re-testing reference range.Retesting GOOD revision.bot_update",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -2891,6 +2919,7 @@
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
+    "infra_step": true,
     "name": "Re-testing reference range.Retesting GOOD revision.rmtree build directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -2911,6 +2940,7 @@
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/build_product.zip"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
+    "infra_step": true,
     "name": "Re-testing reference range.Retesting GOOD revision.gsutil download_build_product",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -2923,6 +2953,7 @@
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/build_product.zip"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
+    "infra_step": true,
     "name": "Re-testing reference range.Retesting GOOD revision.unzip_build_product",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -2960,6 +2991,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "Re-testing reference range.Retesting GOOD revision.install ChromePublic.apk",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -3409,6 +3441,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "Re-testing reference range.Retesting BAD revision.bot_update",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -3495,6 +3528,7 @@
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
+    "infra_step": true,
     "name": "Re-testing reference range.Retesting BAD revision.rmtree build directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -3515,6 +3549,7 @@
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/build_product.zip"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
+    "infra_step": true,
     "name": "Re-testing reference range.Retesting BAD revision.gsutil download_build_product",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -3527,6 +3562,7 @@
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/build_product.zip"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
+    "infra_step": true,
     "name": "Re-testing reference range.Retesting BAD revision.unzip_build_product",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -3564,6 +3600,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "Re-testing reference range.Retesting BAD revision.install ChromePublic.apk",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -4013,6 +4050,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "Re-testing reference range.Retesting GOOD revision.bot_update (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -4099,6 +4137,7 @@
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
+    "infra_step": true,
     "name": "Re-testing reference range.Retesting GOOD revision.rmtree build directory (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -4119,6 +4158,7 @@
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/build_product.zip"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
+    "infra_step": true,
     "name": "Re-testing reference range.Retesting GOOD revision.gsutil download_build_product (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -4131,6 +4171,7 @@
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/build_product.zip"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
+    "infra_step": true,
     "name": "Re-testing reference range.Retesting GOOD revision.unzip_build_product (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -4168,6 +4209,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "Re-testing reference range.Retesting GOOD revision.install ChromePublic.apk (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -4845,6 +4887,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "Re-testing reference range.Retesting BAD revision.bot_update (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -4931,6 +4974,7 @@
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
+    "infra_step": true,
     "name": "Re-testing reference range.Retesting BAD revision.rmtree build directory (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -4951,6 +4995,7 @@
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/build_product.zip"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
+    "infra_step": true,
     "name": "Re-testing reference range.Retesting BAD revision.gsutil download_build_product (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -4963,6 +5008,7 @@
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/build_product.zip"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
+    "infra_step": true,
     "name": "Re-testing reference range.Retesting BAD revision.unzip_build_product (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -5000,6 +5046,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "Re-testing reference range.Retesting BAD revision.install ChromePublic.apk (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -5677,6 +5724,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "Re-testing reference range.Retesting GOOD revision.bot_update (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -5763,6 +5811,7 @@
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
+    "infra_step": true,
     "name": "Re-testing reference range.Retesting GOOD revision.rmtree build directory (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -5783,6 +5832,7 @@
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/build_product.zip"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
+    "infra_step": true,
     "name": "Re-testing reference range.Retesting GOOD revision.gsutil download_build_product (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -5795,6 +5845,7 @@
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/build_product.zip"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
+    "infra_step": true,
     "name": "Re-testing reference range.Retesting GOOD revision.unzip_build_product (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -5832,6 +5883,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "Re-testing reference range.Retesting GOOD revision.install ChromePublic.apk (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -6706,6 +6758,7 @@
       "e28dc0d49c331def2a3bbf3ddd0096eb51551155"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
+    "infra_step": true,
     "name": "resolving hash e28dc0d49c331def2a3bbf3ddd0096eb51551155",
     "stdout": "/path/to/tmp/"
   },
@@ -6723,6 +6776,7 @@
       "fc6dfc7ff5b1073408499478969261b826441144"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
+    "infra_step": true,
     "name": "Check bisect finished on revision chromium@e28dc0d49c.Checking DEPS for fc6dfc7ff5b1073408499478969261b826441144",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -6742,6 +6796,7 @@
       "fc6dfc7ff5b1073408499478969261b826441144"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
+    "infra_step": true,
     "name": "resolving hash fc6dfc7ff5b1073408499478969261b826441144",
     "stdout": "/path/to/tmp/"
   },
@@ -6833,6 +6888,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update (2)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -6920,6 +6976,7 @@
       "/tmp/device_monitor.pid"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
+    "infra_step": true,
     "name": "shutdown_device_monitor"
   },
   {
@@ -6932,6 +6989,7 @@
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
+    "infra_step": true,
     "name": "logcat_dump"
   },
   {
@@ -6953,6 +7011,7 @@
       "gs://chromium-android/logcat_dumps/android_one_perf_bisect/571"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
+    "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/android_one_perf_bisect/571@@@"
@@ -6972,6 +7031,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "stack_tool_with_logcat_dump"
   },
   {
@@ -6998,6 +7058,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "stack_tool_for_tombstones"
   },
   {

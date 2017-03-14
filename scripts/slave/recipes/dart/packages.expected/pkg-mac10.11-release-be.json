@@ -23,6 +23,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -77,6 +78,7 @@
       "[START_DIR]/sdk/sdk.zip"
     ],
     "cwd": "[START_DIR]/sdk",
+    "infra_step": true,
     "name": "gsutil Download sdk"
   },
   {
@@ -109,6 +111,7 @@
       "rmtree",
       "[START_DIR]/sdk/xcodebuild/ReleaseX64"
     ],
+    "infra_step": true,
     "name": "rmtree Clean build directory"
   },
   {

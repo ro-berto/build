@@ -23,6 +23,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -116,6 +117,7 @@
       "-service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
+    "infra_step": true,
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -207,6 +209,7 @@
       "--name-only"
     ],
     "cwd": "[START_DIR]/src",
+    "infra_step": true,
     "name": "git diff to analyze patch",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -233,6 +236,7 @@
       "[START_DIR]/bisect_results"
     ],
     "cwd": "[START_DIR]",
+    "infra_step": true,
     "name": "Clearing results directory.rmtree old results directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -270,6 +274,7 @@
       "refs/remotes/origin/master"
     ],
     "cwd": "[START_DIR]/src",
+    "infra_step": true,
     "name": "git update-ref"
   },
   {
@@ -279,6 +284,7 @@
       "master"
     ],
     "cwd": "[START_DIR]/src",
+    "infra_step": true,
     "name": "git checkout"
   },
   {
@@ -438,6 +444,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
     ],
     "cwd": "[START_DIR]",
+    "infra_step": true,
     "name": "Gathering reference values.gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -491,6 +498,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
     ],
     "cwd": "[START_DIR]",
+    "infra_step": true,
     "name": "Gathering reference values.Waiting for build.gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -551,6 +559,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
     ],
     "cwd": "[START_DIR]",
+    "infra_step": true,
     "name": "Gathering reference values.Waiting for build.gsutil ls (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -581,6 +590,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "Gathering reference values.bot_update",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -667,6 +677,7 @@
       "[START_DIR]/src/out/Release"
     ],
     "cwd": "[START_DIR]",
+    "infra_step": true,
     "name": "Gathering reference values.rmtree build directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -697,6 +708,7 @@
       "571"
     ],
     "cwd": "[START_DIR]",
+    "infra_step": true,
     "name": "Gathering reference values.extract build",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1350,6 +1362,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
     ],
     "cwd": "[START_DIR]",
+    "infra_step": true,
     "name": "Gathering reference values.gsutil ls (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1403,6 +1416,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
     ],
     "cwd": "[START_DIR]",
+    "infra_step": true,
     "name": "Gathering reference values.Waiting for build.gsutil ls (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -1460,6 +1474,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
     ],
     "cwd": "[START_DIR]",
+    "infra_step": true,
     "name": "Gathering reference values.Waiting for build.gsutil ls (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -1520,6 +1535,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
     ],
     "cwd": "[START_DIR]",
+    "infra_step": true,
     "name": "Gathering reference values.Waiting for build.gsutil ls (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -1580,6 +1596,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
     ],
     "cwd": "[START_DIR]",
+    "infra_step": true,
     "name": "Gathering reference values.Waiting for build.gsutil ls (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -1640,6 +1657,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
     ],
     "cwd": "[START_DIR]",
+    "infra_step": true,
     "name": "Gathering reference values.Waiting for build.gsutil ls (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -1700,6 +1718,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
     ],
     "cwd": "[START_DIR]",
+    "infra_step": true,
     "name": "Gathering reference values.Waiting for build.gsutil ls (8)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -1760,6 +1779,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
     ],
     "cwd": "[START_DIR]",
+    "infra_step": true,
     "name": "Gathering reference values.Waiting for build.gsutil ls (9)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -1820,6 +1840,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
     ],
     "cwd": "[START_DIR]",
+    "infra_step": true,
     "name": "Gathering reference values.Waiting for build.gsutil ls (10)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -1880,6 +1901,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
     ],
     "cwd": "[START_DIR]",
+    "infra_step": true,
     "name": "Gathering reference values.Waiting for build.gsutil ls (11)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -1940,6 +1962,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
     ],
     "cwd": "[START_DIR]",
+    "infra_step": true,
     "name": "Gathering reference values.Waiting for build.gsutil ls (12)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -1970,6 +1993,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "Gathering reference values.bot_update (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2056,6 +2080,7 @@
       "[START_DIR]/src/out/Release"
     ],
     "cwd": "[START_DIR]",
+    "infra_step": true,
     "name": "Gathering reference values.rmtree build directory (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2086,6 +2111,7 @@
       "571"
     ],
     "cwd": "[START_DIR]",
+    "infra_step": true,
     "name": "Gathering reference values.extract build (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2741,6 +2767,7 @@
       "a6298e4afedbf2cd461755ea6f45b0ad64222222"
     ],
     "cwd": "[START_DIR]/src",
+    "infra_step": true,
     "name": "resolving hash a6298e4afedbf2cd461755ea6f45b0ad64222222",
     "stdout": "/path/to/tmp/"
   },
@@ -2752,6 +2779,7 @@
       "dcdcdc0ff1122212323134879ddceeb1240b0988"
     ],
     "cwd": "[START_DIR]/src",
+    "infra_step": true,
     "name": "resolving hash dcdcdc0ff1122212323134879ddceeb1240b0988",
     "stdout": "/path/to/tmp/"
   },

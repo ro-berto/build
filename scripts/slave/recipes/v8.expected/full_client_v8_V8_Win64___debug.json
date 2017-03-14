@@ -5,6 +5,7 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\kill_processes.py"
     ],
+    "infra_step": true,
     "name": "taskkill"
   },
   {
@@ -32,6 +33,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -98,6 +100,7 @@
       "-service-account-json",
       "C:\\creds\\service_accounts\\service-account-goma-client.json"
     ],
+    "infra_step": true,
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -143,6 +146,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\cleanup_temp.py"
     ],
+    "infra_step": true,
     "name": "cleanup_temp"
   },
   {
@@ -248,6 +252,7 @@
       "RECIPE_MODULE[recipe_engine::shutil]\\resources\\rmtree.py",
       "[START_DIR]\\v8\\out\\gn"
     ],
+    "infra_step": true,
     "name": "rmtree [START_DIR]\\v8\\out\\gn"
   },
   {
@@ -308,6 +313,7 @@
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
+    "infra_step": true,
     "name": "preprocess_for_goma.start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -331,6 +337,7 @@
       "[TMP_BASE]\\cloudtail.pid"
     ],
     "cwd": "[START_DIR]\\v8",
+    "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -480,6 +487,7 @@
       "[TMP_BASE]\\cloudtail.pid"
     ],
     "cwd": "[START_DIR]\\v8",
+    "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -589,6 +597,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
+    "infra_step": true,
     "name": "[trigger] Check",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
@@ -690,6 +699,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
+    "infra_step": true,
     "name": "[trigger] Check - extra",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
@@ -792,6 +802,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
+    "infra_step": true,
     "name": "[trigger] Test262 - no variants",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
@@ -887,6 +898,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
+    "infra_step": true,
     "name": "[trigger] Mozilla",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
@@ -925,6 +937,7 @@
       "--json",
       "{\"base_task_name\": \"Check/Windows-7-SP1/[dummy has/V8 Win64 - debug/571\", \"tasks\": {\"Check/Windows-7-SP1/[dummy has/V8 Win64 - debug/571:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"Check/Windows-7-SP1/[dummy has/V8 Win64 - debug/571:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}}}"
     ],
+    "infra_step": true,
     "name": "Check",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -964,6 +977,7 @@
       "--json",
       "{\"base_task_name\": \"Check - extra/Windows-7-SP1/[dummy has/V8 Win64 - debug/571\", \"tasks\": {\"Check - extra/Windows-7-SP1/[dummy has/V8 Win64 - debug/571:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"Check - extra/Windows-7-SP1/[dummy has/V8 Win64 - debug/571:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}}}"
     ],
+    "infra_step": true,
     "name": "Check - extra",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -1003,6 +1017,7 @@
       "--json",
       "{\"base_task_name\": \"Test262 - no variants/Windows-7-SP1/[dummy has/V8 Win64 - debug/571\", \"tasks\": {\"Test262 - no variants/Windows-7-SP1/[dummy has/V8 Win64 - debug/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
+    "infra_step": true,
     "name": "Test262 - no variants",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -1042,6 +1057,7 @@
       "--json",
       "{\"base_task_name\": \"Mozilla/Windows-7-SP1/[dummy has/V8 Win64 - debug/571\", \"tasks\": {\"Mozilla/Windows-7-SP1/[dummy has/V8 Win64 - debug/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
+    "infra_step": true,
     "name": "Mozilla",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",

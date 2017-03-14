@@ -31,6 +31,7 @@
       "--output",
       "/path/to/tmp/json"
     ],
+    "infra_step": true,
     "name": "filter build_dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
@@ -49,6 +50,7 @@
       "[\"chrome\"]",
       "[START_DIR]/src/out/Release"
     ],
+    "infra_step": true,
     "name": "zipping"
   },
   {
@@ -67,6 +69,7 @@
       "[TMP_BASE]/chrome_staging_tmp_1/chrome-asan-linux-release-x10-component-234.zip",
       "gs://chromium/linux-release/chrome-asan-linux-release-x10-component-234.zip"
     ],
+    "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium/linux-release/chrome-asan-linux-release-x10-component-234.zip@@@"

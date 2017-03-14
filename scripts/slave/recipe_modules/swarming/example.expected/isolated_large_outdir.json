@@ -23,6 +23,7 @@
     "env": {
       "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
     },
+    "infra_step": true,
     "name": "git fetch (swarming_client)"
   },
   {
@@ -33,6 +34,7 @@
       "FETCH_HEAD"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "git checkout (swarming_client)"
   },
   {
@@ -42,6 +44,7 @@
       "HEAD"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "read revision",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -57,6 +60,7 @@
       "-x"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "git clean (swarming_client)"
   },
   {
@@ -66,6 +70,7 @@
       "sync"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "submodule sync (swarming_client)"
   },
   {
@@ -77,6 +82,7 @@
       "--recursive"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "submodule update (swarming_client)"
   },
   {
@@ -170,6 +176,7 @@
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
+    "infra_step": true,
     "name": "[trigger] hello_world on Windows-7-SP1",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
@@ -286,6 +293,7 @@
       "rmtree",
       "[TMP_BASE]/hello_isolated_world_tmp_1"
     ],
+    "infra_step": true,
     "name": "rmtree remove temp dir"
   },
   {

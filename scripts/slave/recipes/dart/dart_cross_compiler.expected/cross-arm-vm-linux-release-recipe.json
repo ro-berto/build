@@ -23,6 +23,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -95,6 +96,7 @@
       "gs://dart-cross-compiled-binaries/cross_build_arm_release_abcd1234efef5656.tar.bz2"
     ],
     "cwd": "[START_DIR]/sdk",
+    "infra_step": true,
     "name": "gsutil upoad tarball"
   },
   {

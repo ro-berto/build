@@ -24,6 +24,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -90,6 +91,7 @@
       "-service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
+    "infra_step": true,
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -135,6 +137,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
+    "infra_step": true,
     "name": "cleanup_temp"
   },
   {
@@ -240,6 +243,7 @@
       "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
       "[START_DIR]/v8/out/gn"
     ],
+    "infra_step": true,
     "name": "rmtree [START_DIR]/v8/out/gn"
   },
   {
@@ -300,6 +304,7 @@
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
+    "infra_step": true,
     "name": "preprocess_for_goma.start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -323,6 +328,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/v8",
+    "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -472,6 +478,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/v8",
+    "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -577,6 +584,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
+    "infra_step": true,
     "name": "[trigger] Check",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
@@ -615,6 +623,7 @@
       "--json",
       "{\"base_task_name\": \"Check/Ubuntu-14.04/[dummy has/V8 Linux64 - internal snapshot/571\", \"tasks\": {\"Check/Ubuntu-14.04/[dummy has/V8 Linux64 - internal snapshot/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
+    "infra_step": true,
     "name": "Check",
     "~followup_annotations": [
       "@@@STEP_TEXT@failures: 19<br/>@@@",
@@ -1227,6 +1236,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "Bisect a0.bot_update",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1280,6 +1290,7 @@
       "-service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
+    "infra_step": true,
     "name": "Bisect a0.ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -1432,6 +1443,7 @@
       "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
       "[START_DIR]/v8/out/gn"
     ],
+    "infra_step": true,
     "name": "Bisect a0.rmtree [START_DIR]/v8/out/gn",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1483,6 +1495,7 @@
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
+    "infra_step": true,
     "name": "Bisect a0.preprocess_for_goma.start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -1506,6 +1519,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/v8",
+    "infra_step": true,
     "name": "Bisect a0.preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -1662,6 +1676,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/v8",
+    "infra_step": true,
     "name": "Bisect a0.postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -1769,6 +1784,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
+    "infra_step": true,
     "name": "Bisect a0.[trigger] Retry",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1808,6 +1824,7 @@
       "--json",
       "{\"base_task_name\": \"Retry/Ubuntu-14.04/[dummy has/V8 Linux64 - internal snapshot/571\", \"tasks\": {\"Retry/Ubuntu-14.04/[dummy has/V8 Linux64 - internal snapshot/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
+    "infra_step": true,
     "name": "Bisect a0.Retry",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1865,6 +1882,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "Bisect a2.bot_update",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1918,6 +1936,7 @@
       "-service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
+    "infra_step": true,
     "name": "Bisect a2.ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -2070,6 +2089,7 @@
       "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
       "[START_DIR]/v8/out/gn"
     ],
+    "infra_step": true,
     "name": "Bisect a2.rmtree [START_DIR]/v8/out/gn",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2121,6 +2141,7 @@
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
+    "infra_step": true,
     "name": "Bisect a2.preprocess_for_goma.start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -2144,6 +2165,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/v8",
+    "infra_step": true,
     "name": "Bisect a2.preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -2300,6 +2322,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/v8",
+    "infra_step": true,
     "name": "Bisect a2.postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -2407,6 +2430,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
+    "infra_step": true,
     "name": "Bisect a2.[trigger] Retry",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2446,6 +2470,7 @@
       "--json",
       "{\"base_task_name\": \"Retry/Ubuntu-14.04/[dummy has/V8 Linux64 - internal snapshot/571\", \"tasks\": {\"Retry/Ubuntu-14.04/[dummy has/V8 Linux64 - internal snapshot/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
+    "infra_step": true,
     "name": "Bisect a2.Retry",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",

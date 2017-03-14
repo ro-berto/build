@@ -16,6 +16,7 @@
       "-service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
+    "infra_step": true,
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -87,6 +88,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -173,6 +175,7 @@
       "[BUILDER_CACHE]/android_nexus5_perf_bisect/src/out/build_product.zip",
       "[BUILDER_CACHE]/android_nexus5_perf_bisect/src"
     ],
+    "infra_step": true,
     "name": "clean local files",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -216,6 +219,7 @@
       "--name-only"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus5_perf_bisect/src",
+    "infra_step": true,
     "name": "git diff to analyze patch",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -233,6 +237,7 @@
       "~/adb"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus5_perf_bisect",
+    "infra_step": true,
     "name": "create adb symlink"
   },
   {
@@ -248,6 +253,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_nexus5_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus5_perf_bisect/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "spawn_logcat_monitor"
   },
   {
@@ -267,6 +273,7 @@
       "[BUILDER_CACHE]/android_nexus5_perf_bisect/src/out/bad_devices.json"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus5_perf_bisect",
+    "infra_step": true,
     "name": "spawn_device_monitor"
   },
   {
@@ -283,6 +290,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_nexus5_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus5_perf_bisect/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "authorize_adb_devices"
   },
   {
@@ -302,6 +310,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_nexus5_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus5_perf_bisect/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "device_recovery"
   },
   {
@@ -330,6 +339,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_nexus5_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus5_perf_bisect/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "provision_devices"
   },
   {
@@ -353,6 +363,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_nexus5_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus5_perf_bisect/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "device_status",
     "~followup_annotations": [
       "@@@STEP_TEXT@Online devices: 1@@@",
@@ -480,6 +491,7 @@
       "[BUILDER_CACHE]/android_nexus5_perf_bisect/src/out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus5_perf_bisect",
+    "infra_step": true,
     "name": "rmtree build directory"
   },
   {
@@ -497,6 +509,7 @@
       "[BUILDER_CACHE]/android_nexus5_perf_bisect/src/out/build_product.zip"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus5_perf_bisect",
+    "infra_step": true,
     "name": "gsutil download_build_product"
   },
   {
@@ -506,6 +519,7 @@
       "[BUILDER_CACHE]/android_nexus5_perf_bisect/src/out/build_product.zip"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus5_perf_bisect/src",
+    "infra_step": true,
     "name": "unzip_build_product"
   },
   {
@@ -537,6 +551,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_nexus5_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus5_perf_bisect/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "install ChromePublic.apk"
   },
   {
@@ -775,6 +790,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update (2)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -862,6 +878,7 @@
       "/tmp/device_monitor.pid"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus5_perf_bisect",
+    "infra_step": true,
     "name": "shutdown_device_monitor"
   },
   {
@@ -874,6 +891,7 @@
       "[BUILDER_CACHE]/android_nexus5_perf_bisect/src/out/logcat"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus5_perf_bisect",
+    "infra_step": true,
     "name": "logcat_dump"
   },
   {
@@ -895,6 +913,7 @@
       "gs://chromium-android/logcat_dumps/android_nexus5_perf_bisect/571"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus5_perf_bisect",
+    "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/android_nexus5_perf_bisect/571@@@"
@@ -914,6 +933,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_nexus5_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus5_perf_bisect/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "stack_tool_with_logcat_dump"
   },
   {
@@ -940,6 +960,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_nexus5_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus5_perf_bisect/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "stack_tool_for_tombstones"
   },
   {

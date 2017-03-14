@@ -7,6 +7,7 @@
       "rmtree",
       "[START_DIR]/git_clone_bundler/bundles"
     ],
+    "infra_step": true,
     "name": "rmtree old bundles"
   },
   {
@@ -40,6 +41,7 @@
       "--all"
     ],
     "cwd": "[START_DIR]/checkout",
+    "infra_step": true,
     "name": "create bundle"
   },
   {
@@ -54,6 +56,7 @@
       "[START_DIR]/git_clone_bundler/bundles/4c11f7d238ab3a5109562560694c3722.bundle",
       "gs://clone-dot-bundle-bucket/checkout/repository/clone.bundle"
     ],
+    "infra_step": true,
     "name": "gsutil upload bundle",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil bundle@https://storage.cloud.google.com/clone-dot-bundle-bucket/checkout/repository/clone.bundle@@@"

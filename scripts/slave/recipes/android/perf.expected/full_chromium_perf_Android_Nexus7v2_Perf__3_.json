@@ -23,6 +23,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -145,6 +146,7 @@
       "[START_DIR]/src/out/build_product.zip",
       "[START_DIR]/src"
     ],
+    "infra_step": true,
     "name": "clean local files",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -194,6 +196,7 @@
       "gs://chrome-perf/Android Builder/full-build-linux_deadbeef.zip",
       "[START_DIR]/src/out/build_product.zip"
     ],
+    "infra_step": true,
     "name": "gsutil download_build_product"
   },
   {
@@ -203,6 +206,7 @@
       "[START_DIR]/src/out/build_product.zip"
     ],
     "cwd": "[START_DIR]/src",
+    "infra_step": true,
     "name": "unzip_build_product"
   },
   {
@@ -214,6 +218,7 @@
       "[START_DIR]/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
       "~/adb"
     ],
+    "infra_step": true,
     "name": "create adb symlink"
   },
   {
@@ -228,6 +233,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "spawn_logcat_monitor"
   },
   {
@@ -246,6 +252,7 @@
       "--blacklist-file",
       "[START_DIR]/src/out/bad_devices.json"
     ],
+    "infra_step": true,
     "name": "spawn_device_monitor"
   },
   {
@@ -261,6 +268,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "authorize_adb_devices"
   },
   {
@@ -279,6 +287,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "device_recovery"
   },
   {
@@ -305,6 +314,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "provision_devices"
   },
   {
@@ -327,6 +337,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "device_status",
     "~followup_annotations": [
       "@@@STEP_TEXT@Online devices: 1@@@",
@@ -448,6 +459,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "install ChromePublic.apk"
   },
   {
@@ -469,6 +481,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "Host Info",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -609,6 +622,7 @@
       "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.html",
       "gs://chromium-testrunner-trace/Android Nexus7v2 Perf (3)/trace_571.html"
     ],
+    "infra_step": true,
     "name": "gsutil Upload Test Trace",
     "~followup_annotations": [
       "@@@STEP_LINK@Test Trace@https://storage.cloud.google.com/chromium-testrunner-trace/Android Nexus7v2 Perf (3)/trace_571.html@@@"
@@ -621,6 +635,7 @@
       "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
       "[TMP_BASE]/test_runner_trace_tmp_1"
     ],
+    "infra_step": true,
     "name": "rmtree [TMP_BASE]/test_runner_trace_tmp_1"
   },
   {
@@ -974,6 +989,7 @@
       "--pid-file-path",
       "/tmp/device_monitor.pid"
     ],
+    "infra_step": true,
     "name": "shutdown_device_monitor"
   },
   {
@@ -985,6 +1001,7 @@
       "[START_DIR]/src/out/Release/full_log",
       "[START_DIR]/src/out/logcat"
     ],
+    "infra_step": true,
     "name": "logcat_dump"
   },
   {
@@ -1003,6 +1020,7 @@
       "[START_DIR]/src/out/Release/full_log",
       "gs://chromium-android/logcat_dumps/Android Nexus7v2 Perf (3)/571"
     ],
+    "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/Android Nexus7v2 Perf (3)/571@@@"
@@ -1021,6 +1039,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "stack_tool_with_logcat_dump"
   },
   {
@@ -1045,6 +1064,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
+    "infra_step": true,
     "name": "stack_tool_for_tombstones"
   },
   {

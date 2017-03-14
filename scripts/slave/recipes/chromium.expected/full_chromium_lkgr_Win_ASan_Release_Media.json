@@ -5,6 +5,7 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\kill_processes.py"
     ],
+    "infra_step": true,
     "name": "taskkill"
   },
   {
@@ -54,6 +55,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -147,6 +149,7 @@
       "-service-account-json",
       "C:\\creds\\service_accounts\\service-account-goma-client.json"
     ],
+    "infra_step": true,
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -186,6 +189,7 @@
       "rmtree",
       "[BUILDER_CACHE]\\Win_ASan_Release_Media\\src\\out\\Release"
     ],
+    "infra_step": true,
     "name": "rmtree clobber"
   },
   {
@@ -214,6 +218,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\cleanup_temp.py"
     ],
+    "infra_step": true,
     "name": "cleanup_temp"
   },
   {
@@ -320,6 +325,7 @@
       "GOMA_DUMP_STATS_FILE": "[ROOT]\\build_data_dir\\goma_stats_proto",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
+    "infra_step": true,
     "name": "preprocess_for_goma.start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -343,6 +349,7 @@
       "[TMP_BASE]\\cloudtail.pid"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_ASan_Release_Media\\src",
+    "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -505,6 +512,7 @@
       "[TMP_BASE]\\cloudtail.pid"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_ASan_Release_Media\\src",
+    "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -522,6 +530,7 @@
       "--output",
       "/path/to/tmp/json"
     ],
+    "infra_step": true,
     "name": "filter build_dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
@@ -541,6 +550,7 @@
       "[\"file1\", \"file2\"]",
       "[BUILDER_CACHE]\\Win_ASan_Release_Media\\src\\out\\Release"
     ],
+    "infra_step": true,
     "name": "zipping"
   },
   {
@@ -561,6 +571,7 @@
       "[TMP_BASE]\\chrome_staging_tmp_1\\asan-win32-release-170242.zip",
       "gs://chrome-test-builds/media/win32-release/asan-win32-release-170242.zip"
     ],
+    "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-test-builds/media/win32-release/asan-win32-release-170242.zip@@@"

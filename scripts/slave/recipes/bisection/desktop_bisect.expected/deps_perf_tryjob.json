@@ -54,6 +54,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -148,6 +149,7 @@
       "-service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
+    "infra_step": true,
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -261,6 +263,7 @@
       "--name-only"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect/src/v8",
+    "infra_step": true,
     "name": "git diff to analyze patch",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -288,6 +291,7 @@
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
+    "infra_step": true,
     "name": "Running WITH patch.cleanup_temp",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -396,6 +400,7 @@
       "[BUILDER_CACHE]/linux_perf_bisect/src/out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
+    "infra_step": true,
     "name": "Running WITH patch.rmtree build directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -426,6 +431,7 @@
       "571"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
+    "infra_step": true,
     "name": "Running WITH patch.extract build",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -555,6 +561,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "De-applying patch.bot_update (without patch)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -655,6 +662,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linuxf27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.zip"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
+    "infra_step": true,
     "name": "Running WITHOUT patch.gsutil exists",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -673,6 +681,7 @@
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
+    "infra_step": true,
     "name": "Running WITHOUT patch.cleanup_temp",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -768,6 +777,7 @@
       "[BUILDER_CACHE]/linux_perf_bisect/src/out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
+    "infra_step": true,
     "name": "Running WITHOUT patch.rmtree build directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -798,6 +808,7 @@
       "571"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
+    "infra_step": true,
     "name": "Running WITHOUT patch.extract build",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"

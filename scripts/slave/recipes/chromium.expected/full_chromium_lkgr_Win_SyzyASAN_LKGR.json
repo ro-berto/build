@@ -5,6 +5,7 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\kill_processes.py"
     ],
+    "infra_step": true,
     "name": "taskkill"
   },
   {
@@ -54,6 +55,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -151,6 +153,7 @@
       "rmtree",
       "[BUILDER_CACHE]\\Win_SyzyASAN_LKGR\\src\\out\\Release"
     ],
+    "infra_step": true,
     "name": "rmtree clobber"
   },
   {
@@ -179,6 +182,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\cleanup_temp.py"
     ],
+    "infra_step": true,
     "name": "cleanup_temp"
   },
   {
@@ -247,6 +251,7 @@
       "--output",
       "/path/to/tmp/json"
     ],
+    "infra_step": true,
     "name": "filter build_dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
@@ -266,6 +271,7 @@
       "[\"file1\", \"file2\"]",
       "[BUILDER_CACHE]\\Win_SyzyASAN_LKGR\\src\\out\\Release"
     ],
+    "infra_step": true,
     "name": "zipping"
   },
   {
@@ -286,6 +292,7 @@
       "[TMP_BASE]\\chrome_staging_tmp_1\\asan-win32-release-170242.zip",
       "gs://chromium-browser-syzyasan/win32-release/asan-win32-release-170242.zip"
     ],
+    "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-browser-syzyasan/win32-release/asan-win32-release-170242.zip@@@"

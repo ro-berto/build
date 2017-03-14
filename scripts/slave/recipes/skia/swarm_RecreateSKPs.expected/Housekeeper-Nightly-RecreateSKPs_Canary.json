@@ -7,6 +7,7 @@
       "[CUSTOM_/_B_WORK]",
       "511"
     ],
+    "infra_step": true,
     "name": "makedirs checkout_path",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -50,6 +51,7 @@
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]",
       "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -101,6 +103,7 @@
       "Housekeeper-Nightly-RecreateSKPs_Canary"
     ],
     "cwd": "[CUSTOM_/_B_WORK]/skia",
+    "infra_step": true,
     "name": "exec buildbot_spec.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -139,6 +142,7 @@
       "[START_DIR]/tmp",
       "511"
     ],
+    "infra_step": true,
     "name": "makedirs tmp_dir",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -223,6 +227,7 @@
       "rmtree",
       "[START_DIR]/skp_output"
     ],
+    "infra_step": true,
     "name": "rmtree skp_output"
   },
   {

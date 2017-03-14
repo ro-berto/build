@@ -8,6 +8,7 @@
       "-b",
       "master"
     ],
+    "infra_step": true,
     "name": "repo init"
   },
   {
@@ -15,6 +16,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/repo",
       "sync"
     ],
+    "infra_step": true,
     "name": "repo sync"
   },
   {
@@ -25,6 +27,7 @@
       "rmtree",
       "[START_DIR]/out"
     ],
+    "infra_step": true,
     "name": "rmtree clobber"
   },
   {

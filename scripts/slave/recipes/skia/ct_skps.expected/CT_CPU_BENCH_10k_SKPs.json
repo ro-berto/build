@@ -8,6 +8,7 @@
       "https://skia.googlesource.com/skia.git"
     ],
     "cwd": "[START_DIR]/skia",
+    "infra_step": true,
     "name": "git remote set-url"
   },
   {
@@ -16,6 +17,7 @@
       "fetch"
     ],
     "cwd": "[START_DIR]/skia",
+    "infra_step": true,
     "name": "git fetch"
   },
   {
@@ -26,6 +28,7 @@
       "abc123"
     ],
     "cwd": "[START_DIR]/skia",
+    "infra_step": true,
     "name": "git reset"
   },
   {
@@ -36,6 +39,7 @@
       "-f"
     ],
     "cwd": "[START_DIR]/skia",
+    "infra_step": true,
     "name": "git clean"
   },
   {
@@ -47,6 +51,7 @@
       "https://chromium.googlesource.com/chromium/src.git"
     ],
     "cwd": "[START_DIR]/src",
+    "infra_step": true,
     "name": "git remote set-url (2)"
   },
   {
@@ -55,6 +60,7 @@
       "fetch"
     ],
     "cwd": "[START_DIR]/src",
+    "infra_step": true,
     "name": "git fetch (2)"
   },
   {
@@ -65,6 +71,7 @@
       "origin/master"
     ],
     "cwd": "[START_DIR]/src",
+    "infra_step": true,
     "name": "git reset (2)"
   },
   {
@@ -75,6 +82,7 @@
       "-f"
     ],
     "cwd": "[START_DIR]/src",
+    "infra_step": true,
     "name": "git clean (2)"
   },
   {
@@ -104,6 +112,7 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -157,6 +166,7 @@
     "env": {
       "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
     },
+    "infra_step": true,
     "name": "git fetch (swarming_client)"
   },
   {
@@ -167,6 +177,7 @@
       "FETCH_HEAD"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "git checkout (swarming_client)"
   },
   {
@@ -176,6 +187,7 @@
       "HEAD"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "read revision",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -191,6 +203,7 @@
       "-x"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "git clean (swarming_client)"
   },
   {
@@ -200,6 +213,7 @@
       "sync"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "submodule sync (swarming_client)"
   },
   {
@@ -211,6 +225,7 @@
       "--recursive"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
     "name": "submodule update (swarming_client)"
   },
   {
@@ -273,6 +288,7 @@
       "rmtree",
       "[START_DIR]/luci-go"
     ],
+    "infra_step": true,
     "name": "rmtree Go binary dir"
   },
   {
@@ -306,6 +322,7 @@
       "rmtree",
       "[START_DIR]/swarming_temp_dir"
     ],
+    "infra_step": true,
     "name": "rmtree swarming temp dir"
   },
   {
@@ -316,6 +333,7 @@
       "rmtree",
       "[START_DIR]/skps/slave1"
     ],
+    "infra_step": true,
     "name": "rmtree slave1"
   },
   {
@@ -360,6 +378,7 @@
       "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/10/*.skp",
       "[START_DIR]/skps/slave1"
     ],
+    "infra_step": true,
     "name": "gsutil cp"
   },
   {
@@ -402,6 +421,7 @@
       "rmtree",
       "[START_DIR]/skps/slave2"
     ],
+    "infra_step": true,
     "name": "rmtree slave2"
   },
   {
@@ -446,6 +466,7 @@
       "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/20/*.skp",
       "[START_DIR]/skps/slave2"
     ],
+    "infra_step": true,
     "name": "gsutil cp (2)"
   },
   {
@@ -488,6 +509,7 @@
       "rmtree",
       "[START_DIR]/skps/slave3"
     ],
+    "infra_step": true,
     "name": "rmtree slave3"
   },
   {
@@ -532,6 +554,7 @@
       "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/30/*.skp",
       "[START_DIR]/skps/slave3"
     ],
+    "infra_step": true,
     "name": "gsutil cp (3)"
   },
   {
@@ -574,6 +597,7 @@
       "rmtree",
       "[START_DIR]/skps/slave4"
     ],
+    "infra_step": true,
     "name": "rmtree slave4"
   },
   {
@@ -618,6 +642,7 @@
       "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/40/*.skp",
       "[START_DIR]/skps/slave4"
     ],
+    "infra_step": true,
     "name": "gsutil cp (4)"
   },
   {
@@ -660,6 +685,7 @@
       "rmtree",
       "[START_DIR]/skps/slave5"
     ],
+    "infra_step": true,
     "name": "rmtree slave5"
   },
   {
@@ -704,6 +730,7 @@
       "gs://cluster-telemetry/swarming/skps/10k/fad657e-276e633/50/*.skp",
       "[START_DIR]/skps/slave5"
     ],
+    "infra_step": true,
     "name": "gsutil cp (5)"
   },
   {
@@ -746,6 +773,7 @@
       "{\"chromium_build\": \"fad657e-276e633\", \"num_slaves\": 5, \"page_type\": \"10k\"}",
       "[START_DIR]/skps/skps_version"
     ],
+    "infra_step": true,
     "name": "Create [START_DIR]/skps/skps_version"
   },
   {
@@ -824,6 +852,7 @@
       "stepname:ct-nanobench-1",
       "[dummy hash for ct-nanobench-1]"
     ],
+    "infra_step": true,
     "name": "[trigger] ct-nanobench-1",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
@@ -886,6 +915,7 @@
       "stepname:ct-nanobench-2",
       "[dummy hash for ct-nanobench-2]"
     ],
+    "infra_step": true,
     "name": "[trigger] ct-nanobench-2",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
@@ -948,6 +978,7 @@
       "stepname:ct-nanobench-3",
       "[dummy hash for ct-nanobench-3]"
     ],
+    "infra_step": true,
     "name": "[trigger] ct-nanobench-3",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
@@ -1010,6 +1041,7 @@
       "stepname:ct-nanobench-4",
       "[dummy hash for ct-nanobench-4]"
     ],
+    "infra_step": true,
     "name": "[trigger] ct-nanobench-4",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
@@ -1072,6 +1104,7 @@
       "stepname:ct-nanobench-5",
       "[dummy hash for ct-nanobench-5]"
     ],
+    "infra_step": true,
     "name": "[trigger] ct-nanobench-5",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
@@ -1192,6 +1225,7 @@
       "AWS_CREDENTIAL_FILE": null,
       "BOTO_CONFIG": null
     },
+    "infra_step": true,
     "name": "gsutil upload json output",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/skia-perf/ct/10k/2012/05/14/12/@@@"
@@ -1214,6 +1248,7 @@
       "AWS_CREDENTIAL_FILE": null,
       "BOTO_CONFIG": null
     },
+    "infra_step": true,
     "name": "gsutil upload json output (2)",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/skia-perf/ct/10k/2012/05/14/12/@@@"
@@ -1321,6 +1356,7 @@
       "AWS_CREDENTIAL_FILE": null,
       "BOTO_CONFIG": null
     },
+    "infra_step": true,
     "name": "gsutil upload json output (3)",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/skia-perf/ct/10k/2012/05/14/12/@@@"
@@ -1343,6 +1379,7 @@
       "AWS_CREDENTIAL_FILE": null,
       "BOTO_CONFIG": null
     },
+    "infra_step": true,
     "name": "gsutil upload json output (4)",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/skia-perf/ct/10k/2012/05/14/12/@@@"
@@ -1450,6 +1487,7 @@
       "AWS_CREDENTIAL_FILE": null,
       "BOTO_CONFIG": null
     },
+    "infra_step": true,
     "name": "gsutil upload json output (5)",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/skia-perf/ct/10k/2012/05/14/12/@@@"
@@ -1472,6 +1510,7 @@
       "AWS_CREDENTIAL_FILE": null,
       "BOTO_CONFIG": null
     },
+    "infra_step": true,
     "name": "gsutil upload json output (6)",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/skia-perf/ct/10k/2012/05/14/12/@@@"
@@ -1579,6 +1618,7 @@
       "AWS_CREDENTIAL_FILE": null,
       "BOTO_CONFIG": null
     },
+    "infra_step": true,
     "name": "gsutil upload json output (7)",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/skia-perf/ct/10k/2012/05/14/12/@@@"
@@ -1601,6 +1641,7 @@
       "AWS_CREDENTIAL_FILE": null,
       "BOTO_CONFIG": null
     },
+    "infra_step": true,
     "name": "gsutil upload json output (8)",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/skia-perf/ct/10k/2012/05/14/12/@@@"
@@ -1708,6 +1749,7 @@
       "AWS_CREDENTIAL_FILE": null,
       "BOTO_CONFIG": null
     },
+    "infra_step": true,
     "name": "gsutil upload json output (9)",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/skia-perf/ct/10k/2012/05/14/12/@@@"
@@ -1730,6 +1772,7 @@
       "AWS_CREDENTIAL_FILE": null,
       "BOTO_CONFIG": null
     },
+    "infra_step": true,
     "name": "gsutil upload json output (10)",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/skia-perf/ct/10k/2012/05/14/12/@@@"

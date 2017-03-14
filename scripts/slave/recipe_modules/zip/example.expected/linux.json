@@ -91,6 +91,7 @@
       "rmtree",
       "[TMP_BASE]/zip-example_tmp_1"
     ],
+    "infra_step": true,
     "name": "rmtree cleanup"
   },
   {

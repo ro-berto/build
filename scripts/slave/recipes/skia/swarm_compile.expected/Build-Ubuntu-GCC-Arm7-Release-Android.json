@@ -7,6 +7,7 @@
       "[CUSTOM_/_B_WORK]",
       "511"
     ],
+    "infra_step": true,
     "name": "makedirs checkout_path",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -48,6 +49,7 @@
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]",
       "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts"
     },
+    "infra_step": true,
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -85,6 +87,7 @@
       "Build-Ubuntu-GCC-Arm7-Release-Android"
     ],
     "cwd": "[CUSTOM_/_B_WORK]/skia",
+    "infra_step": true,
     "name": "exec buildbot_spec.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -124,6 +127,7 @@
       "which",
       "adb"
     ],
+    "infra_step": true,
     "name": "which adb",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -147,6 +151,7 @@
       "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_OUT": "[CUSTOM_/_B_WORK]/skia/out/Build-Ubuntu-GCC-Arm7-Release-Android"
     },
+    "infra_step": true,
     "name": "has ccache?",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -200,6 +205,7 @@
       "[CUSTOM_/_B_WORK]/skia/out/Build-Ubuntu-GCC-Arm7-Release-Android/Release",
       "[CUSTOM_[SWARM_OUT_DIR]]/out/Release"
     ],
+    "infra_step": true,
     "name": "copy build products",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@import errno@@@",

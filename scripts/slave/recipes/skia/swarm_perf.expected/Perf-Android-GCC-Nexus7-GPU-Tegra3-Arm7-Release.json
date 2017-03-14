@@ -8,6 +8,7 @@
       "Perf-Android-GCC-Nexus7-GPU-Tegra3-Arm7-Release"
     ],
     "cwd": "[START_DIR]/skia",
+    "infra_step": true,
     "name": "exec buildbot_spec.py",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -50,6 +51,7 @@
       "which",
       "adb"
     ],
+    "infra_step": true,
     "name": "which adb",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -71,6 +73,7 @@
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[START_DIR]/out"
     },
+    "infra_step": true,
     "name": "wait for device (1)"
   },
   {
@@ -87,6 +90,7 @@
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[START_DIR]/out"
     },
+    "infra_step": true,
     "name": "wait for charge (1)"
   },
   {
@@ -103,6 +107,7 @@
       "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_OUT": "[START_DIR]/out"
     },
+    "infra_step": true,
     "name": "get EXTERNAL_STORAGE dir",
     "stdout": "/path/to/tmp/"
   },
@@ -118,6 +123,7 @@
       "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_OUT": "[START_DIR]/out"
     },
+    "infra_step": true,
     "name": "adb root",
     "stdout": "/path/to/tmp/"
   },
@@ -133,6 +139,7 @@
       "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_OUT": "[START_DIR]/out"
     },
+    "infra_step": true,
     "name": "wait"
   },
   {
@@ -149,6 +156,7 @@
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[START_DIR]/out"
     },
+    "infra_step": true,
     "name": "wait for device (2)"
   },
   {
@@ -165,6 +173,7 @@
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[START_DIR]/out"
     },
+    "infra_step": true,
     "name": "wait for charge (2)"
   },
   {
@@ -182,6 +191,7 @@
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[START_DIR]/out"
     },
+    "infra_step": true,
     "name": "kill skia"
   },
   {
@@ -197,6 +207,7 @@
       "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_OUT": "[START_DIR]/out"
     },
+    "infra_step": true,
     "name": "stop shell"
   },
   {
@@ -213,6 +224,7 @@
       "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_OUT": "[START_DIR]/out"
     },
+    "infra_step": true,
     "name": "starting battery stats"
   },
   {
@@ -229,6 +241,7 @@
       "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_OUT": "[START_DIR]/out"
     },
+    "infra_step": true,
     "name": "cat scaling_governor"
   },
   {
@@ -245,6 +258,7 @@
       "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_OUT": "[START_DIR]/out"
     },
+    "infra_step": true,
     "name": "cat cpu_freq"
   },
   {
@@ -264,6 +278,7 @@
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[START_DIR]/out"
     },
+    "infra_step": true,
     "name": "push resources"
   },
   {
@@ -274,6 +289,7 @@
       "[START_DIR]/skia/infra/bots/assets/skp/VERSION",
       "/path/to/tmp/"
     ],
+    "infra_step": true,
     "name": "Get downloaded SKP VERSION"
   },
   {
@@ -284,6 +300,7 @@
       "42",
       "[START_DIR]/tmp/SKP_VERSION"
     ],
+    "infra_step": true,
     "name": "write SKP_VERSION"
   },
   {
@@ -300,6 +317,7 @@
       "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_OUT": "[START_DIR]/out"
     },
+    "infra_step": true,
     "name": "read SKP_VERSION",
     "stdout": "/path/to/tmp/"
   },
@@ -311,6 +329,7 @@
       "[START_DIR]/skia/infra/bots/assets/skimage/VERSION",
       "/path/to/tmp/"
     ],
+    "infra_step": true,
     "name": "Get downloaded skimage VERSION"
   },
   {
@@ -321,6 +340,7 @@
       "42",
       "[START_DIR]/tmp/SK_IMAGE_VERSION"
     ],
+    "infra_step": true,
     "name": "write SK_IMAGE_VERSION"
   },
   {
@@ -337,6 +357,7 @@
       "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_OUT": "[START_DIR]/out"
     },
+    "infra_step": true,
     "name": "read SK_IMAGE_VERSION",
     "stdout": "/path/to/tmp/"
   },
@@ -355,6 +376,7 @@
       "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_OUT": "[START_DIR]/out"
     },
+    "infra_step": true,
     "name": "rmdir skia_perf"
   },
   {
@@ -378,6 +400,7 @@
       "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_OUT": "[START_DIR]/out"
     },
+    "infra_step": true,
     "name": "exists skia_perf",
     "stdout": "/path/to/tmp/"
   },
@@ -396,6 +419,7 @@
       "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_OUT": "[START_DIR]/out"
     },
+    "infra_step": true,
     "name": "mkdir skia_perf"
   },
   {
@@ -489,6 +513,7 @@
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[START_DIR]/out"
     },
+    "infra_step": true,
     "name": "pull skia_perf"
   },
   {
@@ -505,6 +530,7 @@
       "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_OUT": "[START_DIR]/out"
     },
+    "infra_step": true,
     "name": "final battery stats"
   },
   {
@@ -519,6 +545,7 @@
       "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_OUT": "[START_DIR]/out"
     },
+    "infra_step": true,
     "name": "reboot"
   },
   {
@@ -533,6 +560,7 @@
       "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_OUT": "[START_DIR]/out"
     },
+    "infra_step": true,
     "name": "wait for reboot"
   },
   {
@@ -549,6 +577,7 @@
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[START_DIR]/out"
     },
+    "infra_step": true,
     "name": "wait for device (3)"
   },
   {
@@ -565,6 +594,7 @@
       "SKIA_ANDROID_VERBOSE_SETUP": "1",
       "SKIA_OUT": "[START_DIR]/out"
     },
+    "infra_step": true,
     "name": "wait for charge (3)"
   },
   {
@@ -579,6 +609,7 @@
       "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts",
       "SKIA_OUT": "[START_DIR]/out"
     },
+    "infra_step": true,
     "name": "kill-server"
   },
   {
