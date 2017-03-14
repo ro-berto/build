@@ -625,7 +625,7 @@
       "--priority",
       "25",
       "--shards",
-      "2",
+      "1",
       "--task-name",
       "Check - extra/Ubuntu-14.04/[dummy has/V8 Linux - arm - sim - debug/571",
       "--dump-json",
@@ -696,21 +696,15 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Check - extra/Ubuntu-14.04/[dummy has/V8 Linux - arm - sim - debug/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Check - extra/Ubuntu-14.04/[dummy has/V8 Linux - arm - sim - debug/571:2:0\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Check - extra/Ubuntu-14.04/[dummy has/V8 Linux - arm - sim - debug/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Check - extra/Ubuntu-14.04/[dummy has/V8 Linux - arm - sim - debug/571:2:1\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 1, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10100\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
-      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/10100@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {
@@ -1763,7 +1757,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Check - extra/Ubuntu-14.04/[dummy has/V8 Linux - arm - sim - debug/571\", \"tasks\": {\"Check - extra/Ubuntu-14.04/[dummy has/V8 Linux - arm - sim - debug/571:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"Check - extra/Ubuntu-14.04/[dummy has/V8 Linux - arm - sim - debug/571:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}}}"
+      "{\"base_task_name\": \"Check - extra/Ubuntu-14.04/[dummy has/V8 Linux - arm - sim - debug/571\", \"tasks\": {\"Check - extra/Ubuntu-14.04/[dummy has/V8 Linux - arm - sim - debug/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "name": "Check - extra",
     "~followup_annotations": [

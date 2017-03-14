@@ -1303,7 +1303,7 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing_3,
-          V8TestingExtra_2,
+          V8TestingExtra,
           Test262,
           Test262Extra_2,
           Mozilla,
@@ -1329,7 +1329,7 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing_3,
-          V8TestingExtra_2,
+          V8TestingExtra,
           Test262,
           Test262Extra_2,
           Mozilla,
@@ -1374,7 +1374,7 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing_2,
-          V8TestingExtra_2,
+          V8TestingExtra,
           Test262,
           Test262Extra_2,
           Mozilla,
@@ -1392,8 +1392,8 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [
-          V8Testing_3,
-          V8TestingExtra_2,
+          V8Testing_4,
+          V8TestingExtra,
           Test262,
           Test262Extra_2,
           Mozilla,
@@ -2469,7 +2469,7 @@ BUILDERS = {
         'parent_buildername': 'v8_linux_arm_rel_ng',
         'enable_swarming': True,
         'tests': [
-          V8Testing_5,
+          V8Testing_7,
           V8TestingExtra_2,
           Test262,
           Test262Extra_2,
@@ -2548,7 +2548,7 @@ BUILDERS = {
         'parent_buildername': 'v8_linux_arm64_rel_ng',
         'enable_swarming': True,
         'tests': [
-          V8Testing_4,
+          V8Testing_5,
           V8TestingExtra_2,
           Test262,
           Test262Extra_2,
