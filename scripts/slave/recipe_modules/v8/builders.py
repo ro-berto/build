@@ -196,24 +196,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
         'enable_swarming': True,
       },
-      'V8 Linux - swarming staging': {
-        'chromium_apply_config': [
-          'default_compiler', 'v8_ninja', 'goma', 'mb'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'enable_swarming': True,
-        'tests': [
-          V8Initializers,
-          V8Testing,
-          OptimizeForSize,
-          Test262Variants_2,
-          Mozilla,
-        ],
-        'testing': {'platform': 'linux'},
-      },
       'V8 Linux - debug': {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -335,6 +317,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
+        'enable_swarming': True,
         'tests': [V8Testing, Mozilla, Test262],
         'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
@@ -2655,12 +2638,17 @@ BRANCH_BUILDERS = {}
 
 def AddBranchBuilder(build_config, arch, bits, presubmit=False,
                      unittests_only=False):
-  if unittests_only:
-    tests = [Unittests]
-  else:
-    tests = [V8Testing, Test262, Mozilla]
+  tests = []
   if presubmit:
-    tests = [Presubmit] + tests
+    tests.append(Presubmit)
+  if unittests_only:
+    tests.append(Unittests)
+  else:
+    if build_config == 'Release':
+      tests.append(V8Testing)
+    else:
+      tests.append(V8Testing_3)
+    tests.extend([Test262, Mozilla])
   return {
     'chromium_apply_config': ['default_compiler', 'v8_ninja', 'goma', 'mb'],
     'v8_config_kwargs': {
@@ -2668,6 +2656,7 @@ def AddBranchBuilder(build_config, arch, bits, presubmit=False,
       'TARGET_ARCH': arch,
       'TARGET_BITS': bits,
     },
+    'enable_swarming': True,
     'bot_type': 'builder_tester',
     'tests': tests,
     'testing': {'platform': 'linux'},
