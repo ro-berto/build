@@ -427,6 +427,33 @@ def GenTests(api):
   )
 
   yield (
+    api.test('dynamic_isolated_script_test_harness_failure_no_json') +
+    api.properties.generic(mastername='chromium.linux',
+                           buildername='Linux Tests',
+                           parent_buildername='Linux Builder') +
+    api.properties(swarm_hashes={
+      'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    }) +
+    api.platform('linux', 64) +
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'isolated_scripts': [
+                    {
+                      'isolate_name': 'telemetry_gpu_unittests',
+                      'name': 'telemetry_gpu_unittests',
+                    },
+                ],
+            },
+        })
+    ) +
+    api.override_step_data('telemetry_gpu_unittests',
+                           api.json.output(None),
+                           retcode=-11)
+  )
+
+  yield (
     api.test('build_dynamic_isolated_script_test_compile_target_overriden') +
     api.properties.generic(mastername='chromium.linux',
                            buildername='Linux Builder') +

@@ -791,7 +791,7 @@ class ResultsHandler(object):
 class JSONResultsHandler(ResultsHandler):
   @staticmethod
   def _is_json_format_results(results):
-    return results.get('version', 0) == 3
+    return results and results.get('version', 0) == 3
 
   def upload_results(self, api, results, step_name):
     # We only support uploading JSON Format test results.
