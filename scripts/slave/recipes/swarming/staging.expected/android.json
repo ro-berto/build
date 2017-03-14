@@ -5,7 +5,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'swarming_revision': ''}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'swarming_revision': ''}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]\ntarget_os = ['android']",
       "--patch_root",
       "src",
       "--revision_mapping_file",
@@ -129,7 +129,7 @@
       "--paths",
       "{\"checkout\": \"[START_DIR]/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"TestSlave\", \"buildername\": \"Linux Swarm\", \"buildnumber\": 123, \"mastername\": \"chromium.swarm\", \"slavename\": \"TestSlave\", \"target_platform\": \"linux\"}"
+      "{\"bot_id\": \"TestSlave\", \"buildername\": \"Android N5 Swarm\", \"buildnumber\": 123, \"mastername\": \"chromium.swarm\", \"slavename\": \"TestSlave\", \"target_platform\": \"android\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -148,19 +148,7 @@
     "name": "read test spec (chromium.swarm.json)",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [START_DIR]/src/testing/buildbot/chromium.swarm.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Linux Swarm\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true, @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"shards\": 2@@@",
-      "@@@STEP_LOG_LINE@json.output@        }, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"test\": \"browser_tests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
@@ -211,8 +199,9 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "component=static_library gomadir='[CACHE]/goma_client' target_arch=x64 use_goma=1",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "GYP_CROSSCOMPILE": "1",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[CACHE]/goma_client' target_arch=arm use_goma=1",
+      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
   },
@@ -233,12 +222,37 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
-      "--build-dir",
-      "[START_DIR]/src/out/Release",
-      "--clean-isolated-files"
+      "\nimport shutil, sys, os\nshutil.rmtree(sys.argv[1], True)\nshutil.rmtree(sys.argv[2], True)\ntry:\n  os.remove(sys.argv[3])\nexcept OSError:\n  pass\nfor base, _dirs, files in os.walk(sys.argv[4]):\n  for f in files:\n    if f.endswith('.pyc'):\n      os.remove(os.path.join(base, f))\n",
+      "[START_DIR]/src/out/Release/debug_info_dumps",
+      "[START_DIR]/src/out/Release/test_logs",
+      "[START_DIR]/src/out/build_product.zip",
+      "[START_DIR]/src"
     ],
-    "name": "clean isolated files"
+    "infra_step": true,
+    "name": "clean local files",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import shutil, sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@shutil.rmtree(sys.argv[1], True)@@@",
+      "@@@STEP_LOG_LINE@python.inline@shutil.rmtree(sys.argv[2], True)@@@",
+      "@@@STEP_LOG_LINE@python.inline@try:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.remove(sys.argv[3])@@@",
+      "@@@STEP_LOG_LINE@python.inline@except OSError:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  pass@@@",
+      "@@@STEP_LOG_LINE@python.inline@for base, _dirs, files in os.walk(sys.argv[4]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  for f in files:@@@",
+      "@@@STEP_LOG_LINE@python.inline@    if f.endswith('.pyc'):@@@",
+      "@@@STEP_LOG_LINE@python.inline@      os.remove(os.path.join(base, f))@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[START_DIR]/src/build/tree_truth.sh",
+      "[START_DIR]/src",
+      "src"
+    ],
+    "name": "tree truth steps"
   },
   {
     "cmd": [
@@ -249,24 +263,18 @@
       "-m",
       "chromium.swarm",
       "-b",
-      "Linux Swarm",
+      "Android N5 Swarm",
       "--config-file",
       "[START_DIR]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma_client",
-      "--swarming-targets-file",
-      "browser_tests\n",
       "//out/Release"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "generate_build_files",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@browser_tests@@@",
-      "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
-    ]
+    "name": "generate_build_files"
   },
   {
     "cmd": [
@@ -293,7 +301,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[CACHE]/goma/Linux_Swarm",
+      "[CACHE]/goma/Android_N5_Swarm",
       "511"
     ],
     "cwd": "[START_DIR]/src",
@@ -322,9 +330,10 @@
     "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/Linux_Swarm",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/Android_N5_Swarm",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start_goma",
@@ -364,13 +373,12 @@
       "-C",
       "[START_DIR]/src/out/Release",
       "-j",
-      "50",
-      "browser_tests",
-      "browser_tests_run"
+      "50"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
     "name": "compile"
   },
@@ -470,13 +478,13 @@
       "--ninja-log-outdir",
       "[START_DIR]/src/out/Release",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/Release', '-j', 50, 'browser_tests', 'browser_tests_run']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/Release', '-j', 50]",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",
       "goma",
       "--buildbot-buildername",
-      "Linux Swarm",
+      "Android N5 Swarm",
       "--buildbot-mastername",
       "chromium.swarm",
       "--buildbot-slavename",
@@ -512,230 +520,28 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/tools/determinism/remove_build_metadata.py",
-      "--build-dir",
-      "[START_DIR]/src/out/Release"
-    ],
-    "cwd": "[START_DIR]",
-    "name": "remove_build_metadata"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[START_DIR]/src/tools/swarming_client",
-      "batcharchive",
-      "--dump-json",
-      "/path/to/tmp/json",
-      "--isolate-server",
-      "https://isolateserver-dev.appspot.com",
-      "--verbose",
-      "[START_DIR]/src/out/Release/browser_tests.isolated.gen.json"
-    ],
-    "name": "isolate tests",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"browser_tests\": \"[dummy hash for browser_tests]\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
-      "--build-dir",
-      "[START_DIR]/src/out/Release",
-      "--output-json",
-      "/path/to/tmp/json"
+      "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
+      "[START_DIR]/src/out/Release/test_logs/*.log"
     ],
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
-    "name": "find isolated tests",
+    "name": "test_report",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"browser_tests\": \"deadbeef\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"browser_tests\": \"deadbeef\"}@@@"
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import glob, os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@for report in glob.glob(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  with open(report, 'r') as f:@@@",
+      "@@@STEP_LOG_LINE@python.inline@    for l in f.readlines():@@@",
+      "@@@STEP_LOG_LINE@python.inline@      print l@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.remove(report)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/src/tools/swarming_client/swarming.py",
-      "trigger",
-      "--swarming",
-      "https://chromium-swarm-dev.appspot.com",
-      "--isolate-server",
-      "https://isolateserver-dev.appspot.com",
-      "--priority",
-      "20",
-      "--shards",
-      "2",
-      "--task-name",
-      "browser_tests/Ubuntu/deadbeef/Linux Swarm/123",
-      "--dump-json",
-      "/path/to/tmp/json",
-      "--expiration",
-      "3600",
-      "--io-timeout",
-      "1200",
-      "--hard-timeout",
-      "3600",
-      "--dimension",
-      "cpu",
-      "x86-64",
-      "--dimension",
-      "gpu",
-      "none",
-      "--dimension",
-      "os",
-      "Ubuntu",
-      "--dimension",
-      "pool",
-      "Chrome",
-      "--tag",
-      "buildername:Linux Swarm",
-      "--tag",
-      "buildnumber:123",
-      "--tag",
-      "data:deadbeef",
-      "--tag",
-      "master:chromium.swarm",
-      "--tag",
-      "name:browser_tests",
-      "--tag",
-      "os:Ubuntu",
-      "--tag",
-      "project:chromium",
-      "--tag",
-      "purpose:staging",
-      "--tag",
-      "slavename:TestSlave",
-      "--tag",
-      "stepname:browser_tests on Ubuntu",
-      "--verbose",
-      "--idempotent",
-      "deadbeef",
-      "--",
-      "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "infra_step": true,
-    "name": "[trigger] browser_tests on Ubuntu",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu'@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"browser_tests/Ubuntu/deadbeef/Linux Swarm/123\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"browser_tests/Ubuntu/deadbeef/Linux Swarm/123:2:0\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10000\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"browser_tests/Ubuntu/deadbeef/Linux Swarm/123:2:1\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 1, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10100\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10100\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm-dev.appspot.com/user/task/10000@@@",
-      "@@@STEP_LINK@shard #1@https://chromium-swarm-dev.appspot.com/user/task/10100@@@"
-    ]
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::swarming]/resources/collect_gtest_task.py",
-      "--swarming-client-dir",
-      "[START_DIR]/src/tools/swarming_client",
-      "--temp-root-dir",
-      "[TMP_BASE]",
-      "--merged-test-output",
-      "/path/to/tmp/json",
-      "--",
-      "collect",
-      "--swarming",
-      "https://chromium-swarm-dev.appspot.com",
-      "--decorate",
-      "--print-status-updates",
-      "--verbose",
-      "--json",
-      "{\"base_task_name\": \"browser_tests/Ubuntu/deadbeef/Linux Swarm/123\", \"tasks\": {\"browser_tests/Ubuntu/deadbeef/Linux Swarm/123:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10000\"}, \"browser_tests/Ubuntu/deadbeef/Linux Swarm/123:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10100\"}}}"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "browser_tests on Ubuntu",
-    "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu'<br/>failures:<br/>Test.Two<br/>@@@",
-      "@@@STEP_LOG_LINE@step_metadata@{@@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"browser_tests\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"cpu\": \"x86-64\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"gpu\": \"none\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
-      "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"browser_tests on Ubuntu\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10000\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10100\"@@@",
-      "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": \"Linux Swarm\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": \"chromium.swarm\"@@@",
-      "@@@STEP_LOG_LINE@step_metadata@}@@@",
-      "@@@STEP_LOG_END@step_metadata@@@",
-      "@@@STEP_LINK@missing shard #1@https://chromium-swarm-dev.appspot.com/user/task/10100@@@",
-      "@@@STEP_EXCEPTION@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
-      "--input-json",
-      "{\"missing_shards\": [1], \"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"FAILURE\"}]}]}",
-      "--master-name",
-      "chromium.swarm",
-      "--builder-name",
-      "Linux Swarm",
-      "--build-number",
-      "123",
-      "--test-type",
-      "browser_tests on Ubuntu",
-      "--test-results-server",
-      "test-results.appspot.com",
-      "--chrome-revision",
-      "170242"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "Upload to test-results [browser_tests on Ubuntu]"
   },
   {
     "name": "$result",
-    "reason": "1 tests failed: ['browser_tests']",
     "recipe_result": null,
-    "status_code": 1
+    "status_code": 0
   }
 ]

@@ -80,53 +80,66 @@ def RunSteps(api, buildername, mastername):
   # Build all supported tests.
   api.chromium.ensure_goma()
   api.chromium.runhooks()
-  api.isolate.clean_isolated_files(api.chromium.output_dir)
   api.chromium_tests.compile_specific_targets(
       bot_config, update_step, bot_db, compile_targets, tests)
-  api.isolate.remove_build_metadata()
 
-  # Will search for *.isolated.gen.json files in the build directory and isolate
-  # corresponding targets.
-  api.isolate.isolate_tests(
-      api.chromium.output_dir,
-      verbose=True,
-      env={'SWARMING_PROFILE': '1'})
+  if api.chromium.c.TARGET_PLATFORM == 'android':
+    api.swarming.set_default_dimension('os', 'Android')
+    api.swarming.set_default_dimension('gpu', None)
+    api.swarming.set_default_dimension('cpu', None)
 
-  # Make swarming tasks that run isolated tests.
-  tasks = [
-    api.swarming.gtest_task(
-        test,
-        isolated_hash,
-        shards=2,
-        test_launcher_summary_output=api.test_utils.gtest_results(
-            add_json_log=False))
-    for test, isolated_hash in sorted(api.isolate.isolated_tests.iteritems())
-  ]
-
-  for task in tasks:
-    api.swarming.trigger_task(task)
-
-  # And wait for ALL them to finish.
-  with api.step.defer_results():
-    for task in tasks:
-      api.swarming.collect_task(task)
+  test_runner = api.chromium_tests.create_test_runner(tests)
+  with api.chromium_tests.wrap_chromium_tests(bot_config, tests):
+    test_runner()
 
 
 def GenTests(api):
+  yield (
+    api.test('android') +
+    api.properties(
+        buildername='Android N5 Swarm',
+        mastername='chromium.swarm',
+        bot_id='TestSlave',
+        buildnumber=123)
+  )
+
   # One 'collect' fails due to a missing shard and failing test, should not
   # prevent the second 'collect' from running.
   yield (
     api.test('one_fails') +
-    api.platform.name('linux') +
-    api.properties.scheduled() +
     api.properties(
         buildername='Linux Swarm',
-        mastername='chromium.swarm') +
+        mastername='chromium.swarm',
+        bot_id='TestSlave',
+        buildnumber=123) +
     api.override_step_data(
-        'dummy_target_1 on Ubuntu',
+        'read test spec (chromium.swarm.json)',
+        api.json.output({
+            'Linux Swarm': {
+                'gtest_tests': [
+                    {
+                        'test': 'browser_tests',
+                        'swarming': {
+                            'can_use_on_swarming_builders': True,
+                            'shards': 2,
+                         }
+                    },
+                ],
+            },
+        }
+      )
+    ) +
+    api.override_step_data(
+        'find isolated tests',
+        api.json.output({
+            'browser_tests': 'deadbeef',
+        })
+    ) +
+    api.override_step_data(
+        'browser_tests on Ubuntu',
         api.test_utils.canned_gtest_output(
             passing=False,
             minimal=True,
-            extra_json={'missing_shards': [1]}),
+            extra_json={'missing_shards': [1]})
     )
   )
