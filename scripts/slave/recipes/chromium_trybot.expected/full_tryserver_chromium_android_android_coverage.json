@@ -504,14 +504,14 @@
       "python",
       "-u",
       "[CACHE]/goma_client/goma_ctl.py",
-      "jsonstatus"
+      "jsonstatus",
+      "[TMP_BASE]/goma_jsonstatus.json"
     ],
     "cwd": "[BUILDER_CACHE]/android/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_jsonstatus",
-    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -525,20 +525,6 @@
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\"notice\": [{\"infra_status\": {\"num_user_error\": 0, \"ping_status_code\": 200}}]}",
-      "[CACHE]/goma_client/jsonstatus"
-    ],
-    "cwd": "[BUILDER_CACHE]/android/src",
-    "name": "postprocess_for_goma.write_jsonstatus",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -586,7 +572,7 @@
       "--gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--json-status",
-      "[CACHE]/goma_client/jsonstatus",
+      "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/android/src/out/Debug",
       "--ninja-log-command",
@@ -1672,7 +1658,8 @@
       "python",
       "-u",
       "[CACHE]/goma_client/goma_ctl.py",
-      "jsonstatus"
+      "jsonstatus",
+      "[TMP_BASE]/goma_jsonstatus.json"
     ],
     "cwd": "[BUILDER_CACHE]/android",
     "env": {
@@ -1680,7 +1667,6 @@
       "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "postprocess_for_goma.goma_jsonstatus (2)",
-    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1694,24 +1680,6 @@
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\"notice\": [{\"infra_status\": {\"num_user_error\": 0, \"ping_status_code\": 200}}]}",
-      "[CACHE]/goma_client/jsonstatus"
-    ],
-    "cwd": "[BUILDER_CACHE]/android",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
-    },
-    "name": "postprocess_for_goma.write_jsonstatus (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -1761,7 +1729,7 @@
       "--gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--json-status",
-      "[CACHE]/goma_client/jsonstatus",
+      "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/android/src/out/Debug",
       "--ninja-log-command",

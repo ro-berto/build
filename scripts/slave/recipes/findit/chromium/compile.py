@@ -420,15 +420,16 @@ def GenTests(api):
                              })) +
       api.override_step_data(
           'test r1.preprocess_for_goma.start_goma', retcode=1) +
-      api.override_step_data(
+      api.step_data(
           'test r1.preprocess_for_goma.goma_jsonstatus',
-          stdout=api.json.output({
-              'notice': [
-                  {
-                      "compile_error": "COMPILER_PROXY_UNREACHABLE",
-                  },
-              ],
-          }))
+          api.json.output(
+              data={
+                  'notice': [
+                      {
+                          "compile_error": "COMPILER_PROXY_UNREACHABLE",
+                      },
+                  ],
+              }))
   )
 
   yield (
@@ -441,17 +442,18 @@ def GenTests(api):
                              })) +
       api.override_step_data(
           'test r1.preprocess_for_goma.start_goma', retcode=1) +
-      api.override_step_data(
+      api.step_data(
           'test r1.preprocess_for_goma.goma_jsonstatus',
-          stdout=api.json.output({
-              'notice': [
-                  {
-                      'infra_status': {
-                          'ping_status_code': 408,
+          api.json.output(
+              data={
+                  'notice': [
+                      {
+                          'infra_status': {
+                              'ping_status_code': 408,
+                          },
                       },
-                  },
-              ],
-          }))
+                  ],
+              }))
   )
 
   yield (
@@ -464,18 +466,19 @@ def GenTests(api):
                              })) +
       api.override_step_data(
           'test r1.compile', retcode=1) +
-      api.override_step_data(
+      api.step_data(
           'test r1.postprocess_for_goma.goma_jsonstatus',
-          stdout=api.json.output({
-              'notice': [
-                  {
-                      'infra_status': {
-                          'ping_status_code': 200,
-                          'num_user_error': 1,
+          api.json.output(
+              data={
+                  'notice': [
+                      {
+                          'infra_status': {
+                              'ping_status_code': 200,
+                              'num_user_error': 1,
+                          },
                       },
-                  },
-              ],
-          }))
+                  ],
+              }))
   )
 
   yield (

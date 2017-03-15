@@ -44,7 +44,7 @@ class GomaApi(recipe_api.RecipeApi):
   @property
   def json_path(self):
     assert self._goma_dir
-    return self.m.path.join(self._goma_dir, 'jsonstatus')
+    return self.m.path['tmp_base'].join('goma_jsonstatus.json')
 
   @property
   def jsonstatus(self):
@@ -178,10 +178,10 @@ class GomaApi(recipe_api.RecipeApi):
   def _run_jsonstatus(self):
     jsonstatus_result = self.m.python(
         name='goma_jsonstatus', script=self.goma_ctl,
-        args=['jsonstatus'],
-        stdout=self.m.json.output(),
-        step_test_data=lambda: self.m.json.test_api.output_stream(
-            {'notice':[{
+        args=['jsonstatus',
+              self.m.json.output(leak_to=self.json_path)],
+        step_test_data=lambda: self.m.json.test_api.output(
+            data={'notice':[{
                 'infra_status': {
                     'ping_status_code': 200,
                     'num_user_error': 0,
@@ -190,10 +190,7 @@ class GomaApi(recipe_api.RecipeApi):
         env=self._goma_ctl_env)
     self._goma_jsonstatus_called = True
 
-    self._jsonstatus = jsonstatus_result.stdout
-    self.m.shutil.write('write_jsonstatus',
-                        path=self.json_path,
-                        data=json.dumps(self._jsonstatus))
+    self._jsonstatus = jsonstatus_result.json.output
 
   def _stop_cloudtail(self):
     """Stop cloudtail started by _start_cloudtail

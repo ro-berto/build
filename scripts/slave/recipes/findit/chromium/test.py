@@ -928,17 +928,18 @@ def GenTests(api):
       ) +
       api.override_step_data(
           'test r1.preprocess_for_goma.start_goma', retcode=1) +
-      api.override_step_data(
+      api.step_data(
           'test r1.preprocess_for_goma.goma_jsonstatus',
-          stdout=api.json.output({
-              'notice': [
-                  {
-                      'infra_status': {
-                          'ping_status_code': 408,
+          api.json.output(
+              data={
+                  'notice': [
+                      {
+                          'infra_status': {
+                              'ping_status_code': 408,
+                          },
                       },
-                  },
-              ],
-          }))
+                  ],
+              }))
   )
 
   yield (

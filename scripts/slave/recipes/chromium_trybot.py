@@ -296,17 +296,18 @@ def GenTests(api):
     api.override_step_data(
         'compile (with patch)',
         retcode=1) +
-    api.override_step_data(
+    api.step_data(
         'postprocess_for_goma.goma_jsonstatus',
-        stdout=api.json.output({
-            'notice': [
-                {
-                    'infra_status': {
-                        'ping_status_code': 408,
+        api.json.output(
+            data={
+                'notice': [
+                    {
+                        'infra_status': {
+                            'ping_status_code': 408,
+                        },
                     },
-                },
-            ],
-        }))
+                ],
+            }))
   )
 
   for step in ('bot_update', 'gclient runhooks (with patch)'):
