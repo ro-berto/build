@@ -75,6 +75,8 @@ def _Populate(BuildmasterConfig, builders, active_master_cls):
 
   mail_notifier = builders.get('mail_notifier')
 
+  order_console_by_time = builders.get('order_console_by_time')
+
   # Adds common status and tools to this master.
   # TODO: Look at the logic in this routine to see if any of the logic
   # in this routine can be moved there to simplify things.
@@ -82,6 +84,7 @@ def _Populate(BuildmasterConfig, builders, active_master_cls):
       mail_notifier=mail_notifier,
       public_html=public_html,
       templates=builders['templates'],
+      order_console_by_time=order_console_by_time,
       tagComparator=tag_comparator,
       enable_http_status_push=active_master_cls.is_production_host)
 
