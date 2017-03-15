@@ -87,7 +87,7 @@ class Package(object):
 PACKAGES = [
   # Packages in the 'dart-lang' project which are published.
   Package(github_repo='args'),
-  Package(github_repo='appengine', extra_branches=['flex']),
+  Package(github_repo='appengine'),
   Package(github_repo='async'),
   Package(github_repo='barback'),
   Package(github_repo='boolean_selector'),
