@@ -22,6 +22,7 @@ import test_env  # pylint: disable=W0403,W0611
 
 import mock
 from common import annotator
+from common import chromium_utils
 from common import env
 from slave import remote_run
 from slave import logdog_bootstrap
@@ -64,6 +65,10 @@ class RemoteRunTest(unittest.TestCase):
       'dict_prop': {'foo': 'bar'},
     }
 
+    # Emulate BuildBot enviornment w/ active subdir.
+    proc_env = os.environ.copy()
+    proc_env['INFRA_BUILDBOT_SLAVE_ACTIVE_SUBDIR'] = 'foo'
+
     script_path = os.path.join(BASE_DIR, 'remote_run.py')
     prop_gz = base64.b64encode(zlib.compress(json.dumps(build_properties)))
     exit_code = subprocess.call([
@@ -71,7 +76,9 @@ class RemoteRunTest(unittest.TestCase):
         '--build-properties-gz=%s' % (prop_gz,),
         '--recipe', 'remote_run_test',
         '--repository', self.REMOTE_REPO,
-        ])
+        ],
+        env=proc_env,
+    )
     self.assertEqual(exit_code, 0)
 
   def test_example_canary(self):
@@ -88,6 +95,7 @@ class RemoteRunTest(unittest.TestCase):
     # Emulate BuildBot enviornment.
     proc_env = os.environ.copy()
     proc_env['BUILDBOT_SLAVENAME'] = build_properties['slavename']
+    proc_env['INFRA_BUILDBOT_SLAVE_ACTIVE_SUBDIR'] = '' # No active subdir.
 
     script_path = os.path.join(BASE_DIR, 'remote_run.py')
     prop_gz = base64.b64encode(zlib.compress(json.dumps(build_properties)))
@@ -135,6 +143,7 @@ class RemoteRunExecTest(unittest.TestCase):
         mock.patch('os.path.exists'),
         mock.patch('common.chromium_utils.RemoveDirectory'),
         mock.patch('common.chromium_utils.MoveFile'),
+        mock.patch('common.chromium_utils.GetActiveSubdir'),
         ))
     self.addCleanup(mock.patch.stopall)
 
@@ -204,6 +213,9 @@ class RemoteRunExecTest(unittest.TestCase):
 
     # Use public recipes.py path.
     os.path.exists.return_value = False
+
+    # No active subdir by default.
+    chromium_utils.GetActiveSubdir.return_value = None
 
     # Easily-configurable CIPD pins.
     self.cipd_pins = remote_run._STABLE_CIPD_PINS

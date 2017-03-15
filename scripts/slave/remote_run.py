@@ -492,8 +492,17 @@ def main(argv, stream):
     # or persistent directories should do so explicitly.
     basedir = tempfile.gettempdir()
 
-  with robust_tempdir.RobustTempdir(
-      prefix='rr', leak=args.leak) as rt:
+  # Choose a tempdir prefix. If we have no active subdir, we will use a prefix
+  # of "rr". If we have an active subdir, we will use "rs/<subdir>". This way,
+  # there will be no tempdir collisions between combinations of the two
+  # sitautions.
+  active_subdir = chromium_utils.GetActiveSubdir()
+  if active_subdir:
+    prefix = os.path.join('rs', str(active_subdir))
+  else:
+    prefix = 'rr'
+
+  with robust_tempdir.RobustTempdir(prefix, leak=args.leak) as rt:
     # Explicitly clean up possibly leaked temporary directories
     # from previous runs.
     rt.cleanup(basedir)
