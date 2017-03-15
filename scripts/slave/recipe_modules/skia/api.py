@@ -344,13 +344,11 @@ class SkiaApi(recipe_api.RecipeApi):
     # Run 'gclient sync'.
     gclient_cfg.got_revision_mapping['skia'] = 'got_revision'
     gclient_cfg.target_os.add('llvm')
-    checkout_kwargs = {}
-    checkout_kwargs['env'] = self.default_env
 
     with self.m.step.context({'cwd': self.checkout_root}):
-      update_step = self.m.bot_update.ensure_checkout(
-          gclient_config=gclient_cfg,
-          **checkout_kwargs)
+      with self.m.step.context({'env': self.default_env}):
+        update_step = self.m.bot_update.ensure_checkout(
+            gclient_config=gclient_cfg)
 
       self.got_revision = update_step.presentation.properties['got_revision']
 

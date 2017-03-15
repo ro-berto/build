@@ -144,10 +144,7 @@
       "BUILDTYPE": "Release_x64",
       "CHROME_HEADLESS": "1",
       "CHROME_PATH": "[START_DIR]\\src",
-      "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
-      "GIT_HTTP_LOW_SPEED_TIME": "300",
       "GYP_DEFINES": "qt_sdk=C:/Qt/4.8.5/ skia_arch_type=x86_64 skia_vulkan=1 skia_warnings_as_errors=1 skia_win_debuggers_path=c:/DbgHelp skia_win_ltcg=0",
-      "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]",
       "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]\\scripts",
       "SKIA_OUT": "[CUSTOM_C:\\_B_WORK]\\skia\\out\\Build-Win-MSVC-x86_64-Release-Vulkan",
       "VK_SDK_PATH": "[START_DIR]\\vulkan_1.0.17.0"
