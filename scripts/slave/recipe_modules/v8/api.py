@@ -18,6 +18,7 @@ from . import builders
 from . import testing
 
 
+CBE_URL = 'http://chrome-build-extract.appspot.com'
 V8_URL = 'https://chromium.googlesource.com/v8/v8'
 
 COMMIT_TEMPLATE = '%s/+/%%s' % V8_URL
@@ -1165,8 +1166,9 @@ class V8Api(recipe_api.RecipeApi):
       step_result.presentation.logs['changes'] = self.m.json.dumps(
         changes, indent=2).splitlines()
     else:
-      url = '%sjson/builders/%s/builds/%s/source_stamp' % (
-          self.m.properties['buildbotURL'],
+      url = '%s/p/%s/builders/%s/builds/%s?json=1' % (
+          CBE_URL,
+          self.m.properties['mastername'],
           urllib.quote(self.m.properties['buildername']),
           str(self.m.properties['buildnumber']),
       )
@@ -1180,7 +1182,7 @@ class V8Api(recipe_api.RecipeApi):
           ],
           step_test_data=lambda: self.test_api.example_buildbot_changes(),
       )
-      changes = step_result.json.output['changes']
+      changes = step_result.json.output['sourceStamp']['changes']
 
     assert changes
     first_change = changes[0]['revision']

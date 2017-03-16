@@ -258,18 +258,22 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
 
   def example_buildbot_changes(self):
     return self.m.json.output({
-      'changes': [
-        {'revision': 'a1'},
-        {'revision': 'a2'},
-        {'revision': 'a3'},
-      ]
+      'sourceStamp': {
+        'changes': [
+          {'revision': 'a1'},
+          {'revision': 'a2'},
+          {'revision': 'a3'},
+        ]
+      }
     })
 
   def example_one_buildbot_change(self):
     return self.m.json.output({
-      'changes': [
-        {'revision': 'a1'},
-      ]
+      'sourceStamp': {
+        'changes': [
+          {'revision': 'a1'},
+        ]
+      }
     })
 
   def example_bisection_range(self):
