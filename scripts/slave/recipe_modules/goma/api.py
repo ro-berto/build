@@ -191,6 +191,8 @@ class GomaApi(recipe_api.RecipeApi):
     self._goma_jsonstatus_called = True
 
     self._jsonstatus = jsonstatus_result.json.output
+    if self._jsonstatus is None:
+      jsonstatus_result.presentation.status = self.m.step.WARNING
 
   def _stop_cloudtail(self):
     """Stop cloudtail started by _start_cloudtail

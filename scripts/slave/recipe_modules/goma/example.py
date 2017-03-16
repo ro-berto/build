@@ -6,6 +6,7 @@ import re
 
 DEPS = [
   'goma',
+  'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
@@ -59,4 +60,9 @@ def GenTests(api):
 
   yield (api.test('linux_set_custome_tmp_dir') + api.platform.name('linux') +
          api.properties(custom_tmp_dir='/tmp/goma_goma_module') +
+         api.properties.generic(**properties))
+
+  yield (api.test('linux_invalid_goma_jsonstatus') + api.platform.name('linux') +
+         api.step_data('postprocess_for_goma.goma_jsonstatus',
+                       api.json.output(data=None)) +
          api.properties.generic(**properties))
