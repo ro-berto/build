@@ -144,6 +144,9 @@
       "pkg"
     ],
     "cwd": "[START_DIR]/sdk",
+    "env": {
+      "PUB_ENVIRONMENT": "dart_bots"
+    },
     "name": "package unit tests"
   },
   {
@@ -168,6 +171,9 @@
       "pkg_tested"
     ],
     "cwd": "[START_DIR]/sdk",
+    "env": {
+      "PUB_ENVIRONMENT": "dart_bots"
+    },
     "name": "third_party/pkg_tested unit tests"
   },
   {
@@ -192,6 +198,9 @@
       "pkgbuild"
     ],
     "cwd": "[START_DIR]/sdk",
+    "env": {
+      "PUB_ENVIRONMENT": "dart_bots"
+    },
     "name": "pub get dependencies"
   },
   {

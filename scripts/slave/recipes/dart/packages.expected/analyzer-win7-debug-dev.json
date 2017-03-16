@@ -142,6 +142,9 @@
       "--copy-coredumps"
     ],
     "cwd": "[START_DIR]\\sdk",
+    "env": {
+      "PUB_ENVIRONMENT": "dart_bots"
+    },
     "name": "analyze tests"
   },
   {
@@ -165,6 +168,9 @@
       "pkg"
     ],
     "cwd": "[START_DIR]\\sdk",
+    "env": {
+      "PUB_ENVIRONMENT": "dart_bots"
+    },
     "name": "analyze pkg tests"
   },
   {
@@ -188,6 +194,9 @@
       "--checked"
     ],
     "cwd": "[START_DIR]\\sdk",
+    "env": {
+      "PUB_ENVIRONMENT": "dart_bots"
+    },
     "name": "analyze tests checked"
   },
   {
@@ -212,6 +221,9 @@
       "pkg"
     ],
     "cwd": "[START_DIR]\\sdk",
+    "env": {
+      "PUB_ENVIRONMENT": "dart_bots"
+    },
     "name": "analyze pkg tests checked"
   },
   {
@@ -237,6 +249,9 @@
       "pkg/analyzer"
     ],
     "cwd": "[START_DIR]\\sdk",
+    "env": {
+      "PUB_ENVIRONMENT": "dart_bots"
+    },
     "name": "analyzer unit tests"
   },
   {
@@ -262,6 +277,9 @@
       "pkg/analysis_server"
     ],
     "cwd": "[START_DIR]\\sdk",
+    "env": {
+      "PUB_ENVIRONMENT": "dart_bots"
+    },
     "name": "analysis server unit tests"
   },
   {
@@ -287,6 +305,9 @@
       "pkg/analyzer_cli"
     ],
     "cwd": "[START_DIR]\\sdk",
+    "env": {
+      "PUB_ENVIRONMENT": "dart_bots"
+    },
     "name": "analyzer_cli unit tests"
   },
   {
@@ -312,6 +333,9 @@
       "pkg/front_end"
     ],
     "cwd": "[START_DIR]\\sdk",
+    "env": {
+      "PUB_ENVIRONMENT": "dart_bots"
+    },
     "name": "front end unit tests"
   },
   {

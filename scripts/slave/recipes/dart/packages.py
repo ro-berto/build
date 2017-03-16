@@ -31,7 +31,8 @@ def RunTests(api, test_args, test_specs):
     else:
       args.append('--append_logs')
     args.extend(test_spec['tests'])
-    with api.step.context({'cwd': api.path['checkout']}):
+    with api.step.context({'cwd': api.path['checkout'],
+                           'env': {'PUB_ENVIRONMENT': 'dart_bots'}}):
       api.python(test_spec['name'],
                  api.path['checkout'].join('tools', 'test.py'),
                  args=args)
