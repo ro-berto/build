@@ -216,6 +216,9 @@ class GomaApi(recipe_api.RecipeApi):
     assert self._goma_dir
     assert not self._goma_started
 
+    if env is None:
+      env = {}
+
     with self.m.step.nest('preprocess_for_goma'):
       if self.build_data_dir:
         self._goma_ctl_env['GOMA_DUMP_STATS_FILE'] = (
@@ -227,10 +230,13 @@ class GomaApi(recipe_api.RecipeApi):
           self.service_account_json_path)
 
       # GLOG_log_dir should not be set.
-      assert env is None or 'GLOG_log_dir' not in env
+      assert 'GLOG_log_dir' not in env
 
-      if (env is not None) and ('GOMA_TMP_DIR' in env):
+      if 'GOMA_TMP_DIR' in env:
         self._goma_ctl_env['GOMA_TMP_DIR'] = env['GOMA_TMP_DIR']
+
+      if 'GOMA_CACHE_DIR' not in env:
+        self._goma_ctl_env['GOMA_CACHE_DIR'] = self.default_cache_path
 
       goma_ctl_start_env = self._goma_ctl_env.copy()
 

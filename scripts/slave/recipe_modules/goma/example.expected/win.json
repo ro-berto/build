@@ -80,6 +80,7 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "build_data_dir\\crash_report_id_file",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\test_builder",
       "GOMA_DUMP_STATS_FILE": "build_data_dir\\goma_stats_proto",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -136,6 +137,7 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "build_data_dir\\crash_report_id_file",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\test_builder",
       "GOMA_DUMP_STATS_FILE": "build_data_dir\\goma_stats_proto",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -164,6 +166,7 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "build_data_dir\\crash_report_id_file",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\test_builder",
       "GOMA_DUMP_STATS_FILE": "build_data_dir\\goma_stats_proto",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -181,6 +184,7 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "build_data_dir\\crash_report_id_file",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\test_builder",
       "GOMA_DUMP_STATS_FILE": "build_data_dir\\goma_stats_proto",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },

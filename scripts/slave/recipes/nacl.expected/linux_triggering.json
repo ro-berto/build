@@ -141,6 +141,7 @@
       "BUILDBOT_MASTERNAME": "client.nacl",
       "BUILDBOT_REVISION": "abcd",
       "BUILDBOT_SLAVE_TYPE": "BuilderTester",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/precise_64_newlib_arm_qemu_pnacl_dbg",
       "GOMA_DIR": "[CACHE]/goma_client",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GOMA_TMP_DIR": "[TMP_BASE]/goma",
@@ -210,6 +211,7 @@
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
     "env": {
+      "GOMA_CACHE_DIR": "[CACHE]/goma/precise_64_newlib_arm_qemu_pnacl_dbg",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GOMA_TMP_DIR": "[TMP_BASE]/goma"
     },
@@ -237,6 +239,7 @@
       "stat"
     ],
     "env": {
+      "GOMA_CACHE_DIR": "[CACHE]/goma/precise_64_newlib_arm_qemu_pnacl_dbg",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GOMA_TMP_DIR": "[TMP_BASE]/goma"
     },
@@ -253,6 +256,7 @@
       "stop"
     ],
     "env": {
+      "GOMA_CACHE_DIR": "[CACHE]/goma/precise_64_newlib_arm_qemu_pnacl_dbg",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GOMA_TMP_DIR": "[TMP_BASE]/goma"
     },

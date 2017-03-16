@@ -343,6 +343,7 @@
       "restart"
     ],
     "env": {
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/ios_simulator_gn",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "infra_step": true,
@@ -407,6 +408,7 @@
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
     "env": {
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/ios_simulator_gn",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_jsonstatus",
@@ -433,6 +435,7 @@
       "stat"
     ],
     "env": {
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/ios_simulator_gn",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_stat",
@@ -448,6 +451,7 @@
       "stop"
     ],
     "env": {
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/ios_simulator_gn",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.stop_goma",
@@ -694,6 +698,7 @@
       "restart"
     ],
     "env": {
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/ios_simulator_gn",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "infra_step": true,
@@ -754,6 +759,7 @@
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
     "env": {
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/ios_simulator_gn",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_jsonstatus (2)",
@@ -780,6 +786,7 @@
       "stat"
     ],
     "env": {
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/ios_simulator_gn",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_stat (2)",
@@ -795,6 +802,7 @@
       "stop"
     ],
     "env": {
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/ios_simulator_gn",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.stop_goma (2)",
