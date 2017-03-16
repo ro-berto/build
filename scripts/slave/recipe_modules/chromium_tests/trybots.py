@@ -591,14 +591,4 @@ TRYBOTS = freeze({
       }),
     },
   },
-
-  'luci.chromium.try': {
-    'builders': {
-      'LUCI linux_chromium_rel_ng': simple_bot({
-        'mastername': 'chromium.linux',
-        'buildername': 'Linux Builder',
-        'tester': 'Linux Tests',
-      }),
-    },
-  },
 })
