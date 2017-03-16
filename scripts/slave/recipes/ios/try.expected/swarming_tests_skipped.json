@@ -422,7 +422,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n  \"conditions\": [\n    [\n      \"OS == \\\"ios\\\"\", \n      {\n        \"variables\": {\n          \"command\": [\n            \"src/ios/build/bots/scripts/run.py\", \n            \"--app\", \n            \"<(app_path)\", \n            \"--args-json\", \n            \"{\\\"test_args\\\": <(test_args), \\\"xctest\\\": <(xctest)}\", \n            \"--out-dir\", \n            \"${ISOLATED_OUTDIR}\", \n            \"--retries\", \n            \"3\", \n            \"--xcode-version\", \n            \"<(xcode_version)\", \n            \"--iossim\", \n            \"src/out/Debug-iphonesimulator/iossim\", \n            \"--platform\", \n            \"<(platform)\", \n            \"--version\", \n            \"<(version)\"\n          ], \n          \"files\": [\n            \"<(app_path)/\", \n            \"src/ios/build/bots/scripts/\", \n            \"src/out/Debug-iphonesimulator/iossim\"\n          ]\n        }\n      }\n    ]\n  ]\n}",
+      "{'conditions': [['OS == \"ios\"', {'variables': {'files': ['<(app_path)/', 'src/ios/build/bots/scripts/', 'src/out/Debug-iphonesimulator/iossim'], 'command': ['src/ios/build/bots/scripts/run.py', '--app', '<(app_path)', '--args-json', '{\"test_args\": <(test_args), \"xctest\": <(xctest)}', '--out-dir', '${ISOLATED_OUTDIR}', '--retries', '3', '--xcode-version', '<(xcode_version)', '--iossim', 'src/out/Debug-iphonesimulator/iossim', '--platform', '<(platform)', '--version', '<(version)']}}]]}",
       "[START_DIR]/template.isolate"
     ],
     "cwd": "[BUILDER_CACHE]/ios_simulator_swarming/src",

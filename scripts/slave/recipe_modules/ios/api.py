@@ -555,19 +555,15 @@ class iOSApi(recipe_api.RecipeApi):
         }],
       ],
     }
-    if self.platform == 'simulator':
-      isolate_template_contents['conditions'][0][1]
-    isolate_template_contents = self.m.json.dumps(
-      isolate_template_contents, indent=2)
 
     isolate_template = self.m.path['start_dir'].join('template.isolate')
     step_result = self.m.file.write(
       'generate template.isolate',
       isolate_template,
-      isolate_template_contents,
+      str(isolate_template_contents),
     )
     step_result.presentation.logs['template.isolate'] = (
-      isolate_template_contents.splitlines())
+      self.m.json.dumps(isolate_template_contents, indent=2).splitlines())
 
     tmp_dir = self.m.path.mkdtemp('isolate')
 
