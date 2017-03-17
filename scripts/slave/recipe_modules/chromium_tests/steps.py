@@ -762,6 +762,7 @@ class DynamicPerfTests(Test):
   def compile_targets(_):
     return []
 
+
 class ResultsHandler(object):
   def upload_results(self, api, results, step_name):  # pragma: no cover
     """Uploads test results to the Test Results Server.
@@ -819,6 +820,62 @@ class JSONResultsHandler(ResultsHandler):
       return results['valid'], results['failures']
     else:
       return False, []
+
+
+class FakeCustomResultsHandler(ResultsHandler):
+  """Result handler just used for testing."""
+
+  def validate_results(self, api, results):
+    return True, []
+
+  def upload_results(self, api, results, step_name):
+    test_results = api.test_utils.create_results_from_json(results)
+    api.step.active_result.presentation.links['uploaded'] = step_name
+
+
+class LayoutTestResultsHandler(JSONResultsHandler):
+  """Uploads layout test results to Google storage."""
+
+  def upload_results(self, api, results, step_name):
+    # Also upload to standard JSON results handler
+    JSONResultsHandler.upload_results(self, api, results, step_name)
+
+    # LayoutTest's special archive and upload results
+    results_dir = api.path['start_dir'].join('layout-test-results')
+
+    buildername = api.properties['buildername']
+    buildnumber = api.properties['buildnumber']
+
+    archive_layout_test_results = api.chromium.package_repo_resource(
+        'scripts', 'slave', 'chromium', 'archive_layout_test_results.py')
+
+    archive_layout_test_args = [
+      '--results-dir', results_dir,
+      '--build-dir', api.chromium.c.build_dir,
+      '--build-number', buildnumber,
+      '--builder-name', buildername,
+      '--gs-bucket', 'gs://chromium-layout-test-archives',
+      '--staging-dir', api.path['cache'].join('chrome_staging'),
+    ]
+    archive_layout_test_args += api.build.slave_utils_args
+    # TODO(phajdan.jr): Pass gs_acl as a parameter, not build property.
+    if api.properties.get('gs_acl'):
+      archive_layout_test_args.extend(['--gs-acl', api.properties['gs_acl']])
+    archive_result = api.python(
+      'archive_webkit_tests_results',
+      archive_layout_test_results,
+      archive_layout_test_args)
+
+    # TODO(infra): http://crbug.com/418946 .
+    sanitized_buildername = re.sub('[ .()]', '_', buildername)
+    base = (
+      "https://storage.googleapis.com/chromium-layout-test-archives/%s/%s"
+      % (sanitized_buildername, buildnumber))
+
+    archive_result.presentation.links['layout_test_results'] = (
+        base + '/layout-test-results/results.html')
+    archive_result.presentation.links['(zip)'] = (
+        base + '/layout-test-results.zip')
 
 
 class SwarmingTest(Test):
@@ -1152,7 +1209,8 @@ class SwarmingGTestTest(SwarmingTest):
 
 class LocalIsolatedScriptTest(Test):
   def __init__(self, name, args=None, target_name=None,
-               override_compile_targets=None, **runtest_kwargs):
+               override_compile_targets=None, results_handler=None,
+               **runtest_kwargs):
     """Constructs an instance of LocalIsolatedScriptTest.
 
     An LocalIsolatedScriptTest knows how to invoke an isolate which obeys a
@@ -1182,7 +1240,7 @@ class LocalIsolatedScriptTest(Test):
     self._target_name = target_name
     self._runtest_kwargs = runtest_kwargs
     self._override_compile_targets = override_compile_targets
-    self.results_handler = JSONResultsHandler()
+    self.results_handler = results_handler or JSONResultsHandler()
 
   @property
   def name(self):
@@ -1248,6 +1306,7 @@ class LocalIsolatedScriptTest(Test):
     return self._test_runs[suffix]
 
 
+
 class SwarmingIsolatedScriptTest(SwarmingTest):
 
   def __init__(self, name, args=None, target_name=None, shards=1,
@@ -1256,7 +1315,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
                override_compile_targets=None, perf_id=None,
                results_url=None, perf_dashboard_id=None, io_timeout=None,
                waterfall_mastername=None, waterfall_buildername=None,
-               merge=None):
+               merge=None, results_handler=None):
     super(SwarmingIsolatedScriptTest, self).__init__(
         name, dimensions, tags, target_name, extra_suffix, priority, expiration,
         hard_timeout, io_timeout, waterfall_mastername=waterfall_mastername,
@@ -1270,7 +1329,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     self._perf_dashboard_id = perf_dashboard_id
     self._isolated_script_results = {}
     self._merge = merge
-    self.results_handler = JSONResultsHandler()
+    self.results_handler = results_handler or JSONResultsHandler()
 
   @property
   def target_name(self):
@@ -1445,6 +1504,24 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
                   """ % (name, merge_script))),
               as_log='details')
 
+    # TODO(tansell): Remove this once custom handling of results is no longer
+    # needed.
+    results_handler_name = spec.get('results_handler', 'default')
+    try:
+        results_handler = {
+            'default': lambda: None,
+            'fake': FakeCustomResultsHandler,
+            'layout tests': LayoutTestResultsHandler,
+        }[results_handler_name]()
+    except KeyError:
+      api.python.failing_step(
+          'isolated_scripts spec format error',
+          textwrap.wrap(textwrap.dedent("""\
+              The isolated_scripts target "%s" contains a custom results_handler
+              "%s" but that result handler was not found.
+              """ % (name, results_handler_name))),
+          as_log='details')
+
     swarming_dimensions = swarming_dimensions or {}
     if use_swarming:
       if swarming_dimension_sets:
@@ -1463,7 +1540,7 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
               io_timeout=swarming_io_timeout,
               waterfall_mastername=mastername,
               waterfall_buildername=buildername,
-              merge=merge)
+              merge=merge, results_handler=results_handler)
       else:
         yield SwarmingIsolatedScriptTest(
             name=name, args=args, target_name=target_name,
@@ -1474,11 +1551,12 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
             results_url=results_url, perf_dashboard_id=perf_dashboard_id,
             io_timeout=swarming_io_timeout,
             waterfall_mastername=mastername, waterfall_buildername=buildername,
-            merge=merge)
+            merge=merge, results_handler=results_handler)
     else:
       yield LocalIsolatedScriptTest(
           name=name, args=args, target_name=target_name,
-          override_compile_targets=override_compile_targets)
+          override_compile_targets=override_compile_targets,
+          results_handler=results_handler)
 
 
 class GTestTest(Test):
@@ -2024,6 +2102,7 @@ class BlinkTest(Test):
       step_result = api.step.active_result
       self._test_runs[suffix] = step_result
 
+      test_results_json = {}
       if step_result:
         r = step_result.test_utils.test_results
         p = step_result.presentation
@@ -2034,41 +2113,10 @@ class BlinkTest(Test):
             ['unexpected_failures:', r.unexpected_failures.keys()],
             ['Total executed: %s' % r.num_passes],
           ])
+          test_results_json = r.as_jsonish()
 
       if suffix in ('', 'with patch'):
-        buildername = api.properties['buildername']
-        buildnumber = api.properties['buildnumber']
-
-        archive_layout_test_results = api.chromium.package_repo_resource(
-            'scripts', 'slave', 'chromium', 'archive_layout_test_results.py')
-
-        archive_layout_test_args = [
-          '--results-dir', results_dir,
-          '--build-dir', api.chromium.c.build_dir,
-          '--build-number', buildnumber,
-          '--builder-name', buildername,
-          '--gs-bucket', 'gs://chromium-layout-test-archives',
-          '--staging-dir', api.path['cache'].join('chrome_staging'),
-        ]
-        archive_layout_test_args += api.build.slave_utils_args
-        # TODO(phajdan.jr): Pass gs_acl as a parameter, not build property.
-        if api.properties.get('gs_acl'):
-          archive_layout_test_args.extend(['--gs-acl', api.properties['gs_acl']])
-        archive_result = api.python(
-          'archive_webkit_tests_results',
-          archive_layout_test_results,
-          archive_layout_test_args)
-
-        # TODO(infra): http://crbug.com/418946 .
-        sanitized_buildername = re.sub('[ .()]', '_', buildername)
-        base = (
-          "https://storage.googleapis.com/chromium-layout-test-archives/%s/%s"
-          % (sanitized_buildername, buildnumber))
-
-        archive_result.presentation.links['layout_test_results'] = (
-            base + '/layout-test-results/results.html')
-        archive_result.presentation.links['(zip)'] = (
-            base + '/layout-test-results.zip')
+        LayoutTestResultsHandler().upload_results(api, test_results_json, step_name)
 
   def has_valid_results(self, api, suffix):
     if suffix not in self._test_runs:

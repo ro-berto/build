@@ -398,6 +398,36 @@ def GenTests(api):
   )
 
   yield (
+    api.test('dynamic_local_isolated_script_test_with_custom_results_handler') +
+    api.properties.generic(mastername='chromium.linux',
+                           buildername='Linux Tests',
+                           parent_buildername='Linux Builder') +
+    api.properties(swarm_hashes={
+      'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    }) +
+    api.platform('linux', 64) +
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'isolated_scripts': [
+                    {
+                      'isolate_name': 'telemetry_gpu_unittests',
+                      'name': 'telemetry_gpu_unittests',
+                      'results_handler': 'fake',
+                    },
+                ],
+            },
+        })
+    ) + api.override_step_data('telemetry_gpu_unittests',
+            api.test_utils.canned_isolated_script_output(
+                passing=False, is_win=False, swarming=False,
+                isolated_script_passing=False, valid=True,
+                use_json_test_format=True),
+            retcode=0)
+  )
+
+  yield (
     api.test('dynamic_isolated_script_test_harness_failure_zero_retcode') +
     api.properties.generic(mastername='chromium.linux',
                            buildername='Linux Tests',
@@ -1954,3 +1984,57 @@ def GenTests(api):
     api.post_process(post_process.Filter('fake_test'))
   )
 
+  yield (
+    api.test('isolated_script_test_custom_results_handler') +
+    api.properties.generic(mastername='chromium.linux',
+                           buildername='Linux Tests',
+                           parent_buildername='Linux Builder') +
+    api.platform('linux', 64) +
+    api.properties(swarm_hashes={
+      'fake_test': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    }) +
+    api.step_data('fake_test', api.json.output(json_results)) +
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'isolated_scripts': [
+                    {
+                      'isolate_name': 'fake_test',
+                      'name': 'fake_test',
+                      'results_handler': 'fake',
+                      'swarming': {
+                        'can_use_on_swarming_builders': True,
+                      },
+                    },
+                ],
+            },
+        })
+    ) +
+    api.post_process(post_process.Filter('fake_test'))
+  )
+
+  yield (
+    api.test('isolated_script_test_invalid_results_handler') +
+    api.properties.generic(mastername='chromium.linux',
+                           buildername='Linux Tests',
+                           parent_buildername='Linux Builder') +
+    api.platform('linux', 64) +
+    api.properties(swarm_hashes={
+      'fake_test': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    }) +
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'isolated_scripts': [
+                    {
+                      'isolate_name': 'fake_test',
+                      'name': 'fake_test',
+                      'results_handler': 'unknown',
+                    },
+                ],
+            },
+        })
+    )
+  )
