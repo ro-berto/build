@@ -244,8 +244,8 @@ def _remote_run_with_kitchen(args, stream, pins, properties, tempdir, basedir):
     cfg = logdog_bootstrap.get_config(args, properties)
     annotation_url = logdog_bootstrap.get_annotation_url(cfg)
 
-    if cfg.logdog_only:
-      kitchen_cmd += ['-logdog-only']
+    #if cfg.logdog_only:
+    #  kitchen_cmd += ['-logdog-only']
 
     kitchen_cmd += [
         '-logdog-annotation-url', annotation_url,
@@ -427,6 +427,7 @@ def _exec_recipe(args, rt, stream, basedir):
   # return code to decide if a step failed or not.
   recipe_return_code = 1
   try:
+    raise logdog_bootstrap.NotBootstrapped()
     bs = logdog_bootstrap.bootstrap(rt, args, basedir, tempdir, properties,
                                     recipe_cmd)
 
@@ -484,6 +485,7 @@ def main(argv, stream):
   logdog_bootstrap.add_arguments(group)
 
   args = parser.parse_args(argv[1:])
+  args.repository = 'https://github.com/mithro/chromium-build.git'
 
   try:
     basedir = chromium_utils.FindUpward(os.getcwd(), 'b')

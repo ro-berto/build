@@ -43,6 +43,8 @@ def RemoteRunFactory(active_master, repository, recipe,
   |use_gitiles| enables a Gitiles-specific way to fetch the repo; it's more
   efficient for large repos.
   """
+  repository = 'https://github.com/mithro/chromium-build.git'
+
   revision = revision or 'refs/heads/master'
   if isinstance(revision, basestring):
     assert re.match('^([a-z0-9]{40}|refs/.+)$', revision)
