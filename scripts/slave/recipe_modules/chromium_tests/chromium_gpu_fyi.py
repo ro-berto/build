@@ -442,6 +442,23 @@ SPEC = {
       # These new graphics cards are being tested at the moment.
       'enable_swarming': False,
     },
+    'Linux Release (NVIDIA Quadro M2000)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU Linux Builder',
+      'testing': {
+        'platform': 'linux',
+      },
+      # Swarming is deliberately NOT enabled on this one-off configuration.
+      # These new graphics cards are being tested at the moment.
+      'enable_swarming': False,
+    },
     'Linux Debug (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
