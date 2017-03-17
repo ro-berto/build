@@ -160,7 +160,8 @@ def RunSteps(api):
       api.python('clobber',
                  api.path['tools'].join('clean_output_directory.py'))
 
-  api.gclient.runhooks(env=b['env'].copy())  # Modifies its env argument.
+  with api.step.context({'env': b['env'].copy()}):
+    api.gclient.runhooks()
 
   with api.step.context({'cwd': api.path['checkout']}):
     api.python('taskkill before building',
@@ -169,10 +170,10 @@ def RunSteps(api):
 
     build_args = ['-m%s' % b['mode'], '--arch=%s' % b['target_arch'], 'runtime']
     build_args.extend(b.get('build_args', []))
-    api.python('build dart',
-               api.path['checkout'].join('tools', 'build.py'),
-               args=build_args,
-               env=b['env'])
+    with api.step.context({'env': b['env']}):
+      api.python('build dart',
+                 api.path['checkout'].join('tools', 'build.py'),
+                 args=build_args)
 
     with api.step.defer_results():
       test_args = ['-m%s' % b['mode'],
@@ -186,16 +187,16 @@ def RunSteps(api):
       if b.get('archive_core_dumps', False):
         test_args.append('--copy-coredumps')
       test_args.extend(b.get('test_args', []))
-      api.python('vm tests',
-                 api.path['checkout'].join('tools', 'test.py'),
-                 args=test_args,
-                 env=b['env'])
+      with api.step.context({'env': b['env']}):
+        api.python('vm tests',
+                   api.path['checkout'].join('tools', 'test.py'),
+                   args=test_args)
       if b.get('checked', False):
         test_args.append('--checked')
-        api.python('checked vm tests',
-                   api.path['checkout'].join('tools', 'test.py'),
-                   args=test_args,
-                   env=b['env'])
+        with api.step.context({'env': b['env']}):
+          api.python('checked vm tests',
+                     api.path['checkout'].join('tools', 'test.py'),
+                     args=test_args)
 
       api.python('taskkill after testing',
                  api.path['checkout'].join('tools', 'task_kill.py'),

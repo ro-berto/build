@@ -273,9 +273,8 @@ class iOSApi(recipe_api.RecipeApi):
     if self.__config['clobber']:
       self.m.file.rmcontents('out', cwd)
 
-    # runhooks modifies env, so pass a copy.
-    with self.m.step.context({'cwd': self.m.path['checkout']}):
-      self.m.gclient.runhooks(name='runhooks' + suffix, env=env.copy())
+    with self.m.step.context({'cwd': self.m.path['checkout'], 'env': env}):
+      self.m.gclient.runhooks(name='runhooks' + suffix)
 
     if setup_gn:
       cmd = [
@@ -283,22 +282,22 @@ class iOSApi(recipe_api.RecipeApi):
       ]
       if default_gn_args_path:
         cmd.extend(['--import', default_gn_args_path])
-      self.m.step('setup-gn.py', cmd, env={
-        # https://crbug.com/658104.
-        'CHROMIUM_BUILDTOOLS_PATH': self.m.path['checkout'].join('buildtools'),
-      })
+      with self.m.step.context({'env': {
+          'CHROMIUM_BUILDTOOLS_PATH': self.m.path['checkout'].join(
+              'buildtools')}}):
+        self.m.step('setup-gn.py', cmd)
 
     if use_mb:
       self.m.chromium.c.project_generator.tool = 'mb'
-      self.m.chromium.run_mb(
-          self.__config['mastername'],
-          self.m.properties['buildername'],
-          build_dir='//out/%s' % build_sub_path,
-          env=env,
-          mb_path=mb_path,
-          name='generate build files (mb)' + suffix,
-          use_goma=self.use_goma,
-      )
+      with self.m.step.context({'env': env}):
+        self.m.chromium.run_mb(
+            self.__config['mastername'],
+            self.m.properties['buildername'],
+            build_dir='//out/%s' % build_sub_path,
+            mb_path=mb_path,
+            name='generate build files (mb)' + suffix,
+            use_goma=self.use_goma,
+        )
     else:
       # If mb is not being used, set goma_dir before generating build files.
       if self.use_goma:
@@ -312,13 +311,14 @@ class iOSApi(recipe_api.RecipeApi):
       step_result.presentation.step_text = (
         '<br />%s' % '<br />'.join(self.__config['gn_args']))
       with self.m.step.context({
-          'cwd': self.m.path['checkout'].join('out', build_sub_path)}):
+          'cwd': self.m.path['checkout'].join('out', build_sub_path),
+          'env': env}):
         self.m.step('generate build files (gn)' + suffix, [
           self.m.path['checkout'].join('buildtools', 'mac', 'gn'),
           'gen',
           '--check',
           '//out/%s' % build_sub_path,
-        ], env=env)
+        ])
 
     # The same test may be configured to run on multiple platforms.
     tests = sorted(set(test['app'] for test in self.__config['tests']))
@@ -358,8 +358,8 @@ class iOSApi(recipe_api.RecipeApi):
     cmd.extend(sorted(compilation_targets))
     exit_status = -1
     try:
-      with self.m.step.context({'cwd': cwd}):
-        self.m.step('compile' + suffix, cmd, env=env)
+      with self.m.step.context({'cwd': cwd, 'env': env}):
+        self.m.step('compile' + suffix, cmd)
       exit_status = 0
     except self.m.step.StepFailure as e:
       exit_status = e.retcode

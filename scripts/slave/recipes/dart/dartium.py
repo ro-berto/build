@@ -33,9 +33,11 @@ def RunSteps(api):
   api.gclient.c.with_branch_heads = True
   api.bot_update.ensure_checkout()
 
-  api.gclient.runhooks(env={'GYP_GENERATORS': 'ninja',
-                            'GYP_DEFINES': ' '.join(gyp_defines),
-                            'GYP_MSVS_VERSION': '2013'})
+  with api.step.context({'env': {
+      'GYP_GENERATORS': 'ninja',
+      'GYP_DEFINES': ' '.join(gyp_defines),
+      'GYP_MSVS_VERSION': '2013'}}):
+    api.gclient.runhooks()
   api.gclient.c.got_revision_mapping.pop('src', None)
   api.gclient.c.got_revision_mapping['src/dart'] = 'got_revision'
 
@@ -49,12 +51,13 @@ def RunSteps(api):
         api.path['checkout'].join('dart', 'tools', 'task_kill.py'),
         args=['--kill_browsers=True'],
         ok_ret='any')
-      api.python(
-        'build dartium',
-        api.path['checkout'].join('dart', 'tools', 'dartium', 'build.py'),
-        args=['--mode=Release'],
-        env={'GYP_GENERATORS': 'ninja',
-             'GYP_DEFINES': ' '.join(gyp_defines)})
+      with api.step.context({'env': {
+          'GYP_GENERATORS': 'ninja',
+          'GYP_DEFINES': ' '.join(gyp_defines)}}):
+        api.python(
+          'build dartium',
+          api.path['checkout'].join('dart', 'tools', 'dartium', 'build.py'),
+          args=['--mode=Release'])
       api.python(
         'annotated steps',
         api.path['checkout'].join(

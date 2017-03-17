@@ -333,12 +333,12 @@ class AutoBisectStagingApi(recipe_api.RecipeApi):
     ]
     if args:
       full_deploy_flags += args
-    self.m.python(
-        'Deploy on Device',
-        deploy_script,
-        full_deploy_flags,
-        infra_step=True,
-        env=self.m.chromium.get_env())
+    with self.m.step.context({'env': self.m.chromium.get_env()}):
+      self.m.python(
+          'Deploy on Device',
+          deploy_script,
+          full_deploy_flags,
+          infra_step=True)
 
   def start_try_job(self, api, update_step=None, bot_db=None, **kwargs):
     """Starts a recipe bisect job, perf test run, or legacy bisect run.

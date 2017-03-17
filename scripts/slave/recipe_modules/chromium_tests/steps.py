@@ -1656,14 +1656,14 @@ class PrintPreviewTests(PythonBasedTest):  # pylint: disable=W032
       env['CHROME_DEVEL_SANDBOX'] = api.path.join(
           '/opt', 'chromium', 'chrome_sandbox')
 
-    return api.chromium.runtest(
-        test=path,
-        args=args,
-        xvfb=True,
-        name=self._step_name(suffix),
-        python_mode=True,
-        env=env,
-        **kwargs)
+    with api.step.context({'env': env}):
+      return api.chromium.runtest(
+          test=path,
+          args=args,
+          xvfb=True,
+          name=self._step_name(suffix),
+          python_mode=True,
+          **kwargs)
 
   @staticmethod
   def compile_targets(api):

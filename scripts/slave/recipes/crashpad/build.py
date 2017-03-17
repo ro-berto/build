@@ -30,7 +30,8 @@ def RunSteps(api):
   env = {}
   if '_x86' in buildername:
     env = {'GYP_DEFINES': 'target_arch=ia32'}
-  api.gclient.runhooks(env=env)
+  with api.step.context({'env': env}):
+    api.gclient.runhooks()
 
   # On Windows, we need to test:
   # a) x64 OS, x64 handler, x64 client

@@ -215,7 +215,8 @@ def RunSteps(api):
   api.chromium.ensure_goma()
   # CHROME_HEADLESS makes sure that running 'gclient runhooks' doesn't require
   # entering 'y' to agree to a license.
-  api.chromium.runhooks(env={'CHROME_HEADLESS': '1'})
+  with api.step.context({'env': {'CHROME_HEADLESS': '1'}}):
+    api.chromium.runhooks()
 
   result = GenerateCompilationDatabase(api, debug_path, targets, platform)
 

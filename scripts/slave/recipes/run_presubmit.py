@@ -108,7 +108,8 @@ def _RunStepsInternal(api):
     env['PYTHONPATH'] = ''
 
   try:
-    api.presubmit(*presubmit_args, env=env)
+    with api.step.context({'env': env}):
+      api.presubmit(*presubmit_args)
   except api.step.StepFailure as step_failure:
     if step_failure.result and step_failure.result.retcode == 1:
       api.tryserver.set_test_failure_tryjob_result()

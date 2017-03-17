@@ -197,8 +197,9 @@ def _run_command(api, command, step_name, **kwargs):
         lambda: api.m.raw_io.test_api.output_text('', name='stdout_proxy'))
   # TODO(prasadv): Remove this once bisect runs are no longer running
   # against revisions from February 2016 or earlier.
-  if 'android-chrome' in command:  # pragma: no cover
-    inner_kwargs['env'] = {'CHROMIUM_OUTPUT_DIR': api.m.chromium.output_dir}
+  context = {}
+  if 'android-chrome' in command:
+    context['env'] = {'CHROMIUM_OUTPUT_DIR': api.m.chromium.output_dir}
 
   # By default, we assume that the test to run is an executable binary. In the
   # case of python scripts, runtest.py will guess based on the extension.
@@ -217,15 +218,16 @@ def _run_command(api, command, step_name, **kwargs):
     python_mode = True
 
   try:
-    step_result = api.m.chromium.runtest(
-        test=_rebase_path(api, command_parts[0]),
-        args=command_parts[1:],
-        xvfb=True,
-        name=step_name,
-        python_mode=python_mode,
-        tee_stdout_file=stdout_proxy,
-        stderr=stderr,
-        **inner_kwargs)
+    with api.m.step.context(context):
+      step_result = api.m.chromium.runtest(
+          test=_rebase_path(api, command_parts[0]),
+          args=command_parts[1:],
+          xvfb=True,
+          name=step_name,
+          python_mode=python_mode,
+          tee_stdout_file=stdout_proxy,
+          stderr=stderr,
+          **inner_kwargs)
     step_result.presentation.logs['Captured Output'] = (
         step_result.raw_io.output_texts.get('stdout_proxy', '')).splitlines()
   except api.m.step.StepFailure as sf:

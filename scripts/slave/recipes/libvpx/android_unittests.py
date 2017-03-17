@@ -90,14 +90,14 @@ def RunSteps(api, libvpx_git_url, buildername):
           '--sdk-path=%s' % ndk_root, '--target=armv7-android-gcc'])
 
   # NDK requires NDK_PROJECT_PATH environment variable to be defined
-  api.step(
-      'ndk-build', [
-          ndk_root.join('ndk-build'),
-          'APP_BUILD_SCRIPT=%s'
-              % libvpx_root.join('test', 'android', 'Android.mk'),
-          'APP_ABI=armeabi-v7a', 'APP_PLATFORM=android-14',
-          'APP_OPTIM=release', 'APP_STL=gnustl_static'],
-      env={'NDK_PROJECT_PATH' : build_root})
+  with api.step.context({'env': {'NDK_PROJECT_PATH': build_root}}):
+    api.step(
+        'ndk-build', [
+            ndk_root.join('ndk-build'),
+            'APP_BUILD_SCRIPT=%s'
+                % libvpx_root.join('test', 'android', 'Android.mk'),
+            'APP_ABI=armeabi-v7a', 'APP_PLATFORM=android-14',
+            'APP_OPTIM=release', 'APP_STL=gnustl_static'])
 
   test_root = libvpx_root.join('test')
   api.python(

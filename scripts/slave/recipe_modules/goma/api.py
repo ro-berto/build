@@ -176,18 +176,18 @@ class GomaApi(recipe_api.RecipeApi):
       infra_step=True)
 
   def _run_jsonstatus(self):
-    jsonstatus_result = self.m.python(
-        name='goma_jsonstatus', script=self.goma_ctl,
-        args=['jsonstatus',
-              self.m.json.output(leak_to=self.json_path)],
-        step_test_data=lambda: self.m.json.test_api.output(
-            data={'notice':[{
-                'infra_status': {
-                    'ping_status_code': 200,
-                    'num_user_error': 0,
-                }
-            }]}),
-        env=self._goma_ctl_env)
+    with self.m.step.context({'env': self._goma_ctl_env}):
+      jsonstatus_result = self.m.python(
+          name='goma_jsonstatus', script=self.goma_ctl,
+          args=['jsonstatus',
+                self.m.json.output(leak_to=self.json_path)],
+          step_test_data=lambda: self.m.json.test_api.output(
+              data={'notice':[{
+                  'infra_status': {
+                      'ping_status_code': 200,
+                      'num_user_error': 0,
+                  }
+              }]}))
     self._goma_jsonstatus_called = True
 
     self._jsonstatus = jsonstatus_result.json.output
@@ -245,10 +245,11 @@ class GomaApi(recipe_api.RecipeApi):
 
       try:
         self._make_goma_cache_dir(self.default_cache_path)
-        self.m.python(
-            name='start_goma',
-            script=self.goma_ctl,
-            args=['restart'], env=goma_ctl_start_env, infra_step=True, **kwargs)
+        with self.m.step.context({'env': goma_ctl_start_env}):
+          self.m.python(
+              name='start_goma',
+              script=self.goma_ctl,
+              args=['restart'], infra_step=True, **kwargs)
         self._goma_started = True
 
         self._start_cloudtail()
@@ -257,10 +258,11 @@ class GomaApi(recipe_api.RecipeApi):
         with self.m.step.defer_results():
           self._run_jsonstatus()
 
-          self.m.python(
-              name='stop_goma (start failure)',
-              script=self.goma_ctl,
-              args=['stop'], env=self._goma_ctl_env, **kwargs)
+          with self.m.step.context({'env': self._goma_ctl_env}):
+            self.m.python(
+                name='stop_goma (start failure)',
+                script=self.goma_ctl,
+                args=['stop'], **kwargs)
           self._upload_logs(name='upload_goma_start_failed_logs')
 
         raise e
@@ -281,11 +283,12 @@ class GomaApi(recipe_api.RecipeApi):
       with self.m.step.defer_results():
         self._run_jsonstatus()
 
-        self.m.python(name='goma_stat', script=self.goma_ctl,
-                      args=['stat'],
-                      env=self._goma_ctl_env, **kwargs)
-        self.m.python(name='stop_goma', script=self.goma_ctl,
-                      args=['stop'], env=self._goma_ctl_env, **kwargs)
+        with self.m.step.context({'env': self._goma_ctl_env}):
+          self.m.python(name='goma_stat', script=self.goma_ctl,
+                        args=['stat'],
+                        **kwargs)
+          self.m.python(name='stop_goma', script=self.goma_ctl,
+                        args=['stop'], **kwargs)
         self._upload_logs(ninja_log_outdir, ninja_log_compiler,
                           ninja_log_command, ninja_log_exit_status)
         self._stop_cloudtail()
@@ -399,8 +402,8 @@ class GomaApi(recipe_api.RecipeApi):
     self.start(goma_env)
 
     try:
-      self.m.step(name or 'compile', ninja_command,
-                  env=ninja_env, **kwargs)
+      with self.m.step.context({'env': ninja_env}):
+        self.m.step(name or 'compile', ninja_command, **kwargs)
       ninja_log_exit_status = 0
     except self.m.step.StepFailure as e:
       ninja_log_exit_status = e.retcode

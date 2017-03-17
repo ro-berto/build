@@ -322,14 +322,14 @@ class AndroidApi(recipe_api.RecipeApi):
         infra_step=True)
 
   def spawn_logcat_monitor(self):
-    self.m.step(
-        'spawn_logcat_monitor',
-        [self.package_repo_resource('scripts', 'slave', 'daemonizer.py'),
-         '--', self.c.cr_build_android.join('adb_logcat_monitor.py'),
-         self.m.chromium.c.build_dir.join('logcat'),
-         self.m.adb.adb_path()],
-        env=self.m.chromium.get_env(),
-        infra_step=True)
+    with self.m.step.context({'env': self.m.chromium.get_env()}):
+      self.m.step(
+          'spawn_logcat_monitor',
+          [self.package_repo_resource('scripts', 'slave', 'daemonizer.py'),
+           '--', self.c.cr_build_android.join('adb_logcat_monitor.py'),
+           self.m.chromium.c.build_dir.join('logcat'),
+           self.m.adb.adb_path()],
+          infra_step=True)
 
   def spawn_device_monitor(self):
     script = self.package_repo_resource('scripts', 'slave', 'daemonizer.py')
@@ -356,8 +356,9 @@ class AndroidApi(recipe_api.RecipeApi):
     script = self.package_repo_resource(
         'scripts', 'slave', 'android', 'authorize_adb_devices.py')
     args = ['--verbose', '--adb-path', self.m.adb.adb_path()]
-    return self.m.python('authorize_adb_devices', script, args, infra_step=True,
-                         env=self.m.chromium.get_env())
+    with self.m.step.context({'env': self.m.chromium.get_env()}):
+      return self.m.python(
+          'authorize_adb_devices', script, args, infra_step=True)
 
   def detect_and_setup_devices(self, restart_usb=False, skip_wipe=False,
                                disable_location=False, min_battery_level=None,
@@ -417,50 +418,50 @@ class AndroidApi(recipe_api.RecipeApi):
           known_devices_arg = ['--known-devices-file', self.known_devices_file]
           args.extend(['--args', self.m.json.input(known_devices_arg)])
         args.extend(['run', '--output', self.m.json.output()])
-        results = self.m.step(
-            'Host Info',
-            [self.m.path['checkout'].join('testing', 'scripts',
-                                          'host_info.py')] + args,
-            env=self.m.chromium.get_env(),
-            infra_step=True,
-            step_test_data=lambda: self.m.json.test_api.output({
-                'valid': True,
-                'failures': [],
-                '_host_info': {
-                    'os_system': 'os_system',
-                    'os_release': 'os_release',
-                    'processor': 'processor',
-                    'num_cpus': 'num_cpus',
-                    'free_disk_space': 'free_disk_space',
-                    'python_version': 'python_version',
-                    'python_path': 'python_path',
-                    'devices': [{
-                        "usb_status": True,
-                        "blacklisted": None,
-                        "ro.build.fingerprint": "fingerprint",
-                        "battery": {
-                            "status": "5",
-                            "scale": "100",
-                            "temperature": "240",
-                            "level": "100",
-                            "technology": "Li-ion",
-                            "AC powered": "false",
-                            "health": "2",
-                            "voltage": "4302",
-                            "Wireless powered": "false",
-                            "USB powered": "true",
-                            "Max charging current": "500000",
-                            "present": "true"
-                        },
-                       "adb_status": "device",
-                       "imei_slice": "",
-                       "ro.build.product": "bullhead",
-                       "ro.build.id": "MDB08Q",
-                       "serial": "00d0d567893340f4",
-                       "wifi_ip": ""
-                    }]
-                }}),
-            **kwargs)
+        with self.m.step.context({'env': self.m.chromium.get_env()}):
+          results = self.m.step(
+              'Host Info',
+              [self.m.path['checkout'].join('testing', 'scripts',
+                                            'host_info.py')] + args,
+              infra_step=True,
+              step_test_data=lambda: self.m.json.test_api.output({
+                  'valid': True,
+                  'failures': [],
+                  '_host_info': {
+                      'os_system': 'os_system',
+                      'os_release': 'os_release',
+                      'processor': 'processor',
+                      'num_cpus': 'num_cpus',
+                      'free_disk_space': 'free_disk_space',
+                      'python_version': 'python_version',
+                      'python_path': 'python_path',
+                      'devices': [{
+                          "usb_status": True,
+                          "blacklisted": None,
+                          "ro.build.fingerprint": "fingerprint",
+                          "battery": {
+                              "status": "5",
+                              "scale": "100",
+                              "temperature": "240",
+                              "level": "100",
+                              "technology": "Li-ion",
+                              "AC powered": "false",
+                              "health": "2",
+                              "voltage": "4302",
+                              "Wireless powered": "false",
+                              "USB powered": "true",
+                              "Max charging current": "500000",
+                              "present": "true"
+                          },
+                         "adb_status": "device",
+                         "imei_slice": "",
+                         "ro.build.product": "bullhead",
+                         "ro.build.id": "MDB08Q",
+                         "serial": "00d0d567893340f4",
+                         "wifi_ip": ""
+                      }]
+                  }}),
+              **kwargs)
       return results
     except self.m.step.InfraFailure as f:
       for failure in f.result.json.output.get('failures', []):
@@ -477,14 +478,14 @@ class AndroidApi(recipe_api.RecipeApi):
     ]
     if self.c.restart_usb or restart_usb:
       args += ['--enable-usb-reset']
-    self.m.step(
-        'device_recovery',
-        [self.m.path['checkout'].join('third_party', 'catapult', 'devil',
-                                      'devil', 'android', 'tools',
-                                      'device_recovery.py')] + args,
-        env=self.m.chromium.get_env(),
-        infra_step=True,
-        **kwargs)
+    with self.m.step.context({'env': self.m.chromium.get_env()}):
+      self.m.step(
+          'device_recovery',
+          [self.m.path['checkout'].join('third_party', 'catapult', 'devil',
+                                        'devil', 'android', 'tools',
+                                        'device_recovery.py')] + args,
+          infra_step=True,
+          **kwargs)
 
   def device_status(self, **kwargs):
     buildbot_file = '/home/chrome-bot/.adb_device_info'
@@ -497,59 +498,59 @@ class AndroidApi(recipe_api.RecipeApi):
         '-v', '--overwrite-known-devices-files',
     ]
     try:
-      result = self.m.step(
-          'device_status',
-          [self.m.path['checkout'].join('third_party', 'catapult', 'devil',
-                                        'devil', 'android', 'tools',
-                                        'device_status.py')] + args,
-          step_test_data=lambda: self.m.json.test_api.output([
+      with self.m.step.context({'env': self.m.chromium.get_env()}):
+        result = self.m.step(
+            'device_status',
+            [self.m.path['checkout'].join('third_party', 'catapult', 'devil',
+                                          'devil', 'android', 'tools',
+                                          'device_status.py')] + args,
+            step_test_data=lambda: self.m.json.test_api.output([
+                {
+                  "battery": {
+                      "status": "5",
+                      "scale": "100",
+                      "temperature": "249",
+                      "level": "100",
+                      "AC powered": "false",
+                      "health": "2",
+                      "voltage": "4286",
+                      "Wireless powered": "false",
+                      "USB powered": "true",
+                      "technology": "Li-ion",
+                      "present": "true"
+                  },
+                  "wifi_ip": "",
+                  "imei_slice": "Unknown",
+                  "ro.build.id": "LRX21O",
+                  "ro.build.product": "product_name",
+                  "build_detail":
+                      "google/razor/flo:5.0/LRX21O/1570415:userdebug/dev-keys",
+                  "serial": "07a00ca4",
+                  "adb_status": "device",
+                  "blacklisted": False,
+                  "usb_status": True,
+              },
               {
-                "battery": {
-                    "status": "5",
-                    "scale": "100",
-                    "temperature": "249",
-                    "level": "100",
-                    "AC powered": "false",
-                    "health": "2",
-                    "voltage": "4286",
-                    "Wireless powered": "false",
-                    "USB powered": "true",
-                    "technology": "Li-ion",
-                    "present": "true"
-                },
-                "wifi_ip": "",
-                "imei_slice": "Unknown",
-                "ro.build.id": "LRX21O",
-                "ro.build.product": "product_name",
-                "build_detail":
-                    "google/razor/flo:5.0/LRX21O/1570415:userdebug/dev-keys",
-                "serial": "07a00ca4",
-                "adb_status": "device",
-                "blacklisted": False,
+                "adb_status": "offline",
+                "blacklisted": True,
+                "serial": "03e0363a003c6ad4",
+                "usb_status": False,
+              },
+              {
+                "adb_status": "unauthorized",
+                "blacklisted": True,
+                "serial": "03e0363a003c6ad5",
                 "usb_status": True,
-            },
-            {
-              "adb_status": "offline",
-              "blacklisted": True,
-              "serial": "03e0363a003c6ad4",
-              "usb_status": False,
-            },
-            {
-              "adb_status": "unauthorized",
-              "blacklisted": True,
-              "serial": "03e0363a003c6ad5",
-              "usb_status": True,
-            },
-            {
-              "adb_status": "device",
-              "blacklisted": True,
-              "serial": "03e0363a003c6ad6",
-              "usb_status": True,
-            }
-          ]),
-          env=self.m.chromium.get_env(),
-          infra_step=True,
-          **kwargs)
+              },
+              {
+                "adb_status": "device",
+                "blacklisted": True,
+                "serial": "03e0363a003c6ad6",
+                "usb_status": True,
+              }
+            ]),
+            infra_step=True,
+            **kwargs)
       self._devices = []
       offline_device_index = 1
       for d in result.json.output:
@@ -639,13 +640,13 @@ class AndroidApi(recipe_api.RecipeApi):
     else:
       provision_path = self.m.path['checkout'].join(
           'build', 'android', 'provision_devices.py')
-    result = self.m.python(
-      'provision_devices',
-      provision_path,
-      args=args,
-      env=self.m.chromium.get_env(),
-      infra_step=True,
-      **kwargs)
+    with self.m.step.context({'env': self.m.chromium.get_env()}):
+      result = self.m.python(
+        'provision_devices',
+        provision_path,
+        args=args,
+        infra_step=True,
+        **kwargs)
 
   def apk_path(self, apk):
     return self.m.chromium.output_dir.join('apks', apk) if apk else None
@@ -669,9 +670,9 @@ class AndroidApi(recipe_api.RecipeApi):
       install_cmd.append('--keep_data')
     if self.m.chromium.c.BUILD_CONFIG == 'Release':
       install_cmd.append('--release')
-    return self.m.step('install ' + self.m.path.basename(apk), install_cmd,
-                       infra_step=True,
-                       env=self.m.chromium.get_env())
+    with self.m.step.context({'env': self.m.chromium.get_env()}):
+      return self.m.step('install ' + self.m.path.basename(apk), install_cmd,
+                         infra_step=True)
 
   def _asan_device_setup(self, args):
     script = self.m.path['checkout'].join(
@@ -679,11 +680,11 @@ class AndroidApi(recipe_api.RecipeApi):
     cmd = [script] + args
     env = dict(self.m.chromium.get_env())
     env['ADB'] = self.m.adb.adb_path()
-    for d in self.devices:
-      self.m.step(d,
-                  cmd + ['--device', d],
-                  infra_step=True,
-                  env=env)
+    with self.m.step.context({'env': env}):
+      for d in self.devices:
+        self.m.step(d,
+                    cmd + ['--device', d],
+                    infra_step=True)
     self.wait_for_devices(self.devices)
 
   def wait_for_devices(self, devices):
@@ -730,11 +731,11 @@ class AndroidApi(recipe_api.RecipeApi):
         '--event-count=50000',
         '--blacklist-file', self.blacklist_file,
     ]
-    return self.test_runner(
-        'Monkey Test',
-        args,
-        env={'BUILDTYPE': self.c.BUILD_CONFIG},
-        **kwargs)
+    with self.m.step.context({'env': {'BUILDTYPE': self.c.BUILD_CONFIG}}):
+      return self.test_runner(
+          'Monkey Test',
+          args,
+          **kwargs)
 
 
   def _run_sharded_tests(self,
@@ -774,11 +775,12 @@ class AndroidApi(recipe_api.RecipeApi):
     if test_trace:
       args.extend(['--trace-output', test_trace])
 
-    with self.m.step.context({'cwd': self.m.path['checkout']}):
+    with self.m.step.context({
+        'cwd': self.m.path['checkout'],
+        'env': self.m.chromium.get_env()}):
       self.test_runner(
           'Sharded Perf Tests',
           args,
-          env=self.m.chromium.get_env(),
           **kwargs)
 
   def run_sharded_perf_tests(self, config, flaky_config=None, perf_id=None,
@@ -837,17 +839,17 @@ class AndroidApi(recipe_api.RecipeApi):
           link_name='Test Trace')
 
     # now obtain the list of tests that were executed.
-    result = self.test_runner(
-        'get perf test list',
-        ['perf', '--steps', config, '--output-json-list', self.m.json.output(),
-         '--blacklist-file', self.blacklist_file],
-        step_test_data=lambda: self.m.json.test_api.output([
-            {'test': 'perf_test.foo', 'device_affinity': 0,
-             'end_time': 1443438432.949711, 'has_archive': True},
-            {'test': 'perf_test.foo.reference', 'device_affinity': 0},
-            {'test': 'page_cycler.foo', 'device_affinity': 0}]),
-        env=self.m.chromium.get_env()
-    )
+    with self.m.step.context({'env': self.m.chromium.get_env()}):
+      result = self.test_runner(
+          'get perf test list',
+          ['perf', '--steps', config, '--output-json-list', self.m.json.output(),
+           '--blacklist-file', self.blacklist_file],
+          step_test_data=lambda: self.m.json.test_api.output([
+              {'test': 'perf_test.foo', 'device_affinity': 0,
+               'end_time': 1443438432.949711, 'has_archive': True},
+              {'test': 'perf_test.foo.reference', 'device_affinity': 0},
+              {'test': 'page_cycler.foo', 'device_affinity': 0}]),
+      )
     perf_tests = result.json.output
 
     if perf_tests and isinstance(perf_tests[0], dict):
@@ -931,22 +933,22 @@ class AndroidApi(recipe_api.RecipeApi):
         with self.handle_exit_codes():
           env = self.m.chromium.get_env()
           env['CHROMIUM_OUTPUT_DIR'] = self.m.chromium.output_dir
-          self.m.chromium.runtest(
-            self.c.test_runner,
-            print_step_cmd,
-            name=test_name,
-            perf_dashboard_id=test_type,
-            point_id=point_id,
-            test_type=test_type,
-            annotate=annotate,
-            results_url='https://chromeperf.appspot.com',
-            perf_id=perf_id,
-            env=env,
-            chartjson_file=chartjson_file,
-            step_test_data=(
-                lambda: self.m.json.test_api.output([]) +
-                        self.m.json.test_api.output(
-                            example_output_json, name='output_json')))
+          with self.m.step.context({'env': env}):
+            self.m.chromium.runtest(
+              self.c.test_runner,
+              print_step_cmd,
+              name=test_name,
+              perf_dashboard_id=test_type,
+              point_id=point_id,
+              test_type=test_type,
+              annotate=annotate,
+              results_url='https://chromeperf.appspot.com',
+              perf_id=perf_id,
+              chartjson_file=chartjson_file,
+              step_test_data=(
+                  lambda: self.m.json.test_api.output([]) +
+                          self.m.json.test_api.output(
+                              example_output_json, name='output_json')))
       except self.m.step.StepFailure as f:
         # Only warn for failures on reference builds.
         if test_name.endswith('.reference'):
@@ -1276,13 +1278,13 @@ class AndroidApi(recipe_api.RecipeApi):
     #     to be able to try revisions that happened before Feb 2016.
     env = self.m.chromium.get_env()
     env['CHROMIUM_OUTPUT_DIR'] = str(build_dir)
-    self.m.step(
-        'stack_tool_with_logcat_dump',
-        [self.m.path['checkout'].join('third_party', 'android_platform',
-                              'development', 'scripts', 'stack'),
-         '--arch', target_arch, '--more-info', log_file],
-        env=env,
-        infra_step=True)
+    with self.m.step.context({'env': env}):
+      self.m.step(
+          'stack_tool_with_logcat_dump',
+          [self.m.path['checkout'].join('third_party', 'android_platform',
+                                'development', 'scripts', 'stack'),
+           '--arch', target_arch, '--more-info', log_file],
+          infra_step=True)
     tombstones_cmd = [
         self.m.path['checkout'].join('build', 'android', 'tombstones.py'),
         '-a', '-s', '-w',
@@ -1290,20 +1292,19 @@ class AndroidApi(recipe_api.RecipeApi):
     if (force_latest_version or
         int(self.m.chromium.get_version().get('MAJOR', 0)) > 52):
       tombstones_cmd += ['--adb-path', self.m.adb.adb_path()]
-    self.m.step(
-        'stack_tool_for_tombstones',
-        tombstones_cmd,
-        env=env,
-        infra_step=True)
-    if self.c.asan_symbolize:
+    with self.m.step.context({'env': env}):
       self.m.step(
-          'stack_tool_for_asan',
-          [self.m.path['checkout'].join('build',
-                                        'android',
-                                        'asan_symbolize.py'),
-           '-l', log_file],
-          env=env,
+          'stack_tool_for_tombstones',
+          tombstones_cmd,
           infra_step=True)
+      if self.c.asan_symbolize:
+        self.m.step(
+            'stack_tool_for_asan',
+            [self.m.path['checkout'].join('build',
+                                          'android',
+                                          'asan_symbolize.py'),
+             '-l', log_file],
+            infra_step=True)
 
   def test_report(self):
     self.m.python.inline(
@@ -1433,12 +1434,12 @@ class AndroidApi(recipe_api.RecipeApi):
       args.extend(['-t', str(shard_timeout)])
     step_name = name or str(suite)
     try:
-      self.test_runner(
-          step_name,
-          args=args,
-          wrapper_script_suite_name=suite,
-          env=self.m.chromium.get_env(),
-          **kwargs)
+      with self.m.step.context({'env': self.m.chromium.get_env()}):
+        self.test_runner(
+            step_name,
+            args=args,
+            wrapper_script_suite_name=suite,
+            **kwargs)
     finally:
       result_step = self.m.step.active_result
       if result_details:
@@ -1464,12 +1465,12 @@ class AndroidApi(recipe_api.RecipeApi):
     if json_results_file:
       args.extend(['--json-results-file', json_results_file])
 
-    return self.test_runner(
-        '%s%s' % (str(suite), ' (%s)' % suffix if suffix else ''),
-        ['junit', '-s', suite] + args,
-        env=self.m.chromium.get_env(),
-        pass_adb_path=False,
-        **kwargs)
+    with self.m.step.context({'env': self.m.chromium.get_env()}):
+      return self.test_runner(
+          '%s%s' % (str(suite), ' (%s)' % suffix if suffix else ''),
+          ['junit', '-s', suite] + args,
+          pass_adb_path=False,
+          **kwargs)
 
   def _set_webview_command_line(self, command_line_args):
     """Set the Android WebView command line.
@@ -1732,12 +1733,14 @@ class AndroidApi(recipe_api.RecipeApi):
       args.extend(['--adb-path', self.m.adb.adb_path()])
     with self.handle_exit_codes():
       script = self.c.test_runner
+      context = {}
       if wrapper_script_suite_name:
         script = self.m.chromium.output_dir.join('bin', 'run_%s' %
                                                  wrapper_script_suite_name)
       else:
-        env = kwargs.get('env', {})
+        env = self.m.step.get_from_context('env', {})
         env['CHROMIUM_OUTPUT_DIR'] = env.get('CHROMIUM_OUTPUT_DIR',
                                              self.m.chromium.output_dir)
-        kwargs['env'] = env
-      return self.m.python(step_name, script, args, **kwargs)
+        context['env'] = env
+      with self.m.step.context(context):
+        return self.m.python(step_name, script, args, **kwargs)

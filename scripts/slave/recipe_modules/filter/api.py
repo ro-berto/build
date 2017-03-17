@@ -170,14 +170,14 @@ class FilterApi(recipe_api.RecipeApi):
         'test_targets': [],
     }
 
+    context = {}
+
     if use_mb:
       # Ensure that mb runs in a clean environment to avoid
       # picking up any GYP_DEFINES accidentally.
-      kwargs['env'] = {}
+      context['env'] = {}
     else:
-      kwargs.setdefault('env', {})
-
-    context = {}
+      context['env'] = self.m.step.get_from_context('env', {})
 
     # If building for CrOS, execute through the "chrome_sdk" wrapper. This will
     # override GYP environment variables, so we'll refrain from defining them
@@ -187,8 +187,8 @@ class FilterApi(recipe_api.RecipeApi):
       context['cwd'] = self.m.step.get_from_context(
           'cwd', self.m.path['checkout'])
     elif not use_mb:
-      kwargs['env'].update(self.m.chromium.c.gyp_env.as_jsonish())
-    kwargs['env']['GOMA_SERVICE_ACCOUNT_JSON_FILE'] = \
+      context['env'].update(self.m.chromium.c.gyp_env.as_jsonish())
+    context['env']['GOMA_SERVICE_ACCOUNT_JSON_FILE'] = \
         self.m.goma.service_account_json_path
 
     with self.m.step.context(context):

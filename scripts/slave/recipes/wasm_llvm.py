@@ -29,11 +29,10 @@ def RunSteps(api):
   api.goma.start()
   exit_status = -1
   try:
-    with api.step.context({'cwd': api.path['checkout']}):
+    with api.step.context({'cwd': api.path['checkout'], 'env': env}):
       api.python('annotated steps',
                  api.path['checkout'].join('src', 'build.py'),
-                 allow_subannotations=True,
-                 env=env)
+                 allow_subannotations=True)
     exit_status = 0
   except api.step.StepFailure as e:
     exit_status = e.retcode

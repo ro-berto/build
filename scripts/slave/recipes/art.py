@@ -95,56 +95,55 @@ def setup_host_x86(api, debug, bitness, concurrent_collector=False):
       env.update({ 'ART_USE_READ_BARRIER' : 'false' })
       env.update({ 'ART_HEAP_POISONING' : 'false' })
 
-    api.step('build sdk-eng',
-             [art_tools.join('buildbot-build.sh'), '-j8', '--host'],
-             env=env)
+    with api.step.context({'env': env}):
+      api.step('build sdk-eng',
+               [art_tools.join('buildbot-build.sh'), '-j8', '--host'])
 
-    api.step('test gtest',
-        ['make', '-j8', 'test-art-host-gtest%d' % bitness],
-        env=env)
+      api.step('test gtest',
+          ['make', '-j8', 'test-art-host-gtest%d' % bitness])
 
-    api.step('test optimizing', ['./art/test/testrunner/testrunner.py',
-                                 '-j8',
-                                 '--optimizing',
-                                 '--debuggable',
-                                 '--ndebuggable',
-                                 '--host',
-                                 '--verbose'], env=env)
-    # Use a lower -j number for interpreter, some tests take a long time
-    # to run on it.
-    api.step('test interpreter', ['./art/test/testrunner/testrunner.py',
-                                  '-j5',
-                                  '--interpreter',
-                                  '--host',
-                                  '--verbose'], env=env)
+      api.step('test optimizing', ['./art/test/testrunner/testrunner.py',
+                                   '-j8',
+                                   '--optimizing',
+                                   '--debuggable',
+                                   '--ndebuggable',
+                                   '--host',
+                                   '--verbose'])
+      # Use a lower -j number for interpreter, some tests take a long time
+      # to run on it.
+      api.step('test interpreter', ['./art/test/testrunner/testrunner.py',
+                                    '-j5',
+                                    '--interpreter',
+                                    '--host',
+                                    '--verbose'])
 
-    api.step('test jit', ['./art/test/testrunner/testrunner.py',
-                          '-j8',
-                          '--jit',
-                          '--host',
-                          '--verbose'], env=env)
+      api.step('test jit', ['./art/test/testrunner/testrunner.py',
+                            '-j8',
+                            '--jit',
+                            '--host',
+                            '--verbose'])
 
-    libcore_command = [art_tools.join('run-libcore-tests.sh'),
-                       '--mode=host',
-                       '--variant=X%d' % bitness]
-    if debug:
-      libcore_command.append('--debug')
-    api.step('test libcore', libcore_command, env=env)
+      libcore_command = [art_tools.join('run-libcore-tests.sh'),
+                         '--mode=host',
+                         '--variant=X%d' % bitness]
+      if debug:
+        libcore_command.append('--debug')
+      api.step('test libcore', libcore_command)
 
-    jdwp_command = [art_tools.join('run-jdwp-tests.sh'),
-                    '--mode=host',
-                    '--variant=X%d' % bitness]
-    if debug:
-      jdwp_command.append('--debug')
-    api.step('test jdwp jit', jdwp_command, env=env)
+      jdwp_command = [art_tools.join('run-jdwp-tests.sh'),
+                      '--mode=host',
+                      '--variant=X%d' % bitness]
+      if debug:
+        jdwp_command.append('--debug')
+      api.step('test jdwp jit', jdwp_command)
 
-    jdwp_command = [art_tools.join('run-jdwp-tests.sh'),
-                    '--mode=host',
-                    '--variant=X%d' % bitness,
-                    '--no-jit']
-    if debug:
-      jdwp_command.append('--debug')
-    api.step('test jdwp aot', jdwp_command, env=env)
+      jdwp_command = [art_tools.join('run-jdwp-tests.sh'),
+                      '--mode=host',
+                      '--variant=X%d' % bitness,
+                      '--no-jit']
+      if debug:
+        jdwp_command.append('--debug')
+      api.step('test jdwp aot', jdwp_command)
 
 def setup_target(api,
     serial,
@@ -207,57 +206,58 @@ def setup_target(api,
     make_jobs = 1
 
   with api.step.defer_results():
-    api.step('build target', [art_tools.join('buildbot-build.sh'),
-                              '-j8', '--target'],
-             env=env)
+    with api.step.context({'env': env}):
+      api.step('build target', [art_tools.join('buildbot-build.sh'),
+                                '-j8', '--target'])
 
-    api.step('setup device', [art_tools.join('setup-buildbot-device.sh')],
-             env=env)
+      api.step('setup device', [art_tools.join('setup-buildbot-device.sh')])
 
-    api.step('device cleanup', ['adb', 'shell', 'rm', '-rf'] +
-                               _ANDROID_CLEAN_DIRS,
-             env=env)
+      api.step('device cleanup', ['adb', 'shell', 'rm', '-rf'] +
+                                 _ANDROID_CLEAN_DIRS)
 
-    api.step('sync target', ['make', 'test-art-target-sync'], env=env)
+      api.step('sync target', ['make', 'test-art-target-sync'])
 
     def test_logging(api, test_name):
-      api.step(test_name + ': adb logcat',
-               ['adb', 'logcat', '-d', '-v', 'threadtime'],
-               env=env)
-      api.step(test_name + ': crashes',
-               [art_tools.join('symbolize-buildbot-crashes.sh')],
-               env=env)
-      api.step(test_name + ': adb clear log', ['adb', 'logcat', '-c'], env=env)
+      with api.step.context({'env': env}):
+        api.step(test_name + ': adb logcat',
+                 ['adb', 'logcat', '-d', '-v', 'threadtime'])
+        api.step(test_name + ': crashes',
+                 [art_tools.join('symbolize-buildbot-crashes.sh')])
+        api.step(test_name + ': adb clear log', ['adb', 'logcat', '-c'])
 
     test_env = env.copy()
     test_env.update({ 'ART_TEST_NO_SYNC': 'true' })
     test_env.update({ 'ANDROID_ROOT': android_root })
 
-    api.step('test gtest', ['make', '-j%d' % (make_jobs),
-      'test-art-target-gtest%d' % bitness], env=test_env)
+    with api.step.context({'env': test_env}):
+      api.step('test gtest', ['make', '-j%d' % (make_jobs),
+        'test-art-target-gtest%d' % bitness])
     test_logging(api, 'test gtest')
 
-    api.step('test optimizing', ['./art/test/testrunner/testrunner.py',
-                                 '-j%d' % (make_jobs),
-                                 '--optimizing',
-                                 '--debuggable',
-                                 '--ndebuggable',
-                                 '--target',
-                                 '--verbose'], env=test_env)
+    with api.step.context({'env': test_env}):
+      api.step('test optimizing', ['./art/test/testrunner/testrunner.py',
+                                   '-j%d' % (make_jobs),
+                                   '--optimizing',
+                                   '--debuggable',
+                                   '--ndebuggable',
+                                   '--target',
+                                   '--verbose'])
     test_logging(api, 'test optimizing')
 
-    api.step('test interpreter', ['./art/test/testrunner/testrunner.py',
-                                  '-j%d' % (make_jobs),
-                                  '--interpreter',
-                                  '--target',
-                                  '--verbose'], env=test_env)
+    with api.step.context({'env': test_env}):
+      api.step('test interpreter', ['./art/test/testrunner/testrunner.py',
+                                    '-j%d' % (make_jobs),
+                                    '--interpreter',
+                                    '--target',
+                                    '--verbose'])
     test_logging(api, 'test interpreter')
 
-    api.step('test jit', ['./art/test/testrunner/testrunner.py',
-                          '-j%d' % (make_jobs),
-                          '--jit',
-                          '--target',
-                          '--verbose'], env=test_env)
+    with api.step.context({'env': test_env}):
+      api.step('test jit', ['./art/test/testrunner/testrunner.py',
+                            '-j%d' % (make_jobs),
+                            '--jit',
+                            '--target',
+                            '--verbose'])
     test_logging(api, 'test jit')
 
     libcore_command = [art_tools.join('run-libcore-tests.sh'),
@@ -265,7 +265,8 @@ def setup_target(api,
                        '--variant=X%d' % bitness]
     if debug:
       libcore_command.append('--debug')
-    api.step('test libcore', libcore_command, env=test_env)
+    with api.step.context({'env': test_env}):
+      api.step('test libcore', libcore_command)
     test_logging(api, 'test libcore')
 
     jdwp_command = [art_tools.join('run-jdwp-tests.sh'),
@@ -273,7 +274,8 @@ def setup_target(api,
                     '--variant=X%d' % bitness]
     if debug:
       jdwp_command.append('--debug')
-    api.step('test jdwp jit', jdwp_command, env=test_env)
+    with api.step.context({'env': test_env}):
+      api.step('test jdwp jit', jdwp_command)
     test_logging(api, 'test jdwp jit')
 
     jdwp_command = [art_tools.join('run-jdwp-tests.sh'),
@@ -282,7 +284,8 @@ def setup_target(api,
                     '--no-jit']
     if debug:
       jdwp_command.append('--debug')
-    api.step('test jdwp aot', jdwp_command, env=test_env)
+    with api.step.context({'env': test_env}):
+      api.step('test jdwp aot', jdwp_command)
     test_logging(api, 'test jdwp aot')
 
 def setup_aosp_builder(api, read_barrier):
@@ -302,9 +305,9 @@ def setup_aosp_builder(api, read_barrier):
               'JACK_REPOSITORY': str(build_top_dir.join('prebuilts', 'sdk',
                                                         'tools', 'jacks')),
               'ART_USE_READ_BARRIER': 'true' if read_barrier else 'false'}
-      api.step('Clean oat %s' % build, ['make', '-j8', 'clean-oat-host'],
-          env=env)
-      api.step('build %s' % build, ['make', '-j8'], env=env)
+      with api.step.context({'env': env}):
+        api.step('Clean oat %s' % build, ['make', '-j8', 'clean-oat-host'])
+        api.step('build %s' % build, ['make', '-j8'])
 
 
 _CONFIG_MAP = {

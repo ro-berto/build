@@ -43,7 +43,8 @@ def RunSteps(api):
     api.python('clobber',
                api.path['tools'].join('clean_output_directory.py'),
                ok_ret='any')
-  api.gclient.runhooks(env={'DART_USE_GYP': '1'})
+  with api.step.context({'env': {'DART_USE_GYP': '1'}}):
+    api.gclient.runhooks()
 
   with api.step.context({'cwd': api.path['checkout']}):
     tarball = tarball_name(b['target_arch'], b['mode'], revision)

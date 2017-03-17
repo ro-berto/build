@@ -59,15 +59,14 @@ def _BuildSteps(api, buildername, is_debug, is_official):
 
   if goma_dir:
     env['GOMA_DIR'] = goma_dir
-  with api.step.context({'cwd': api.path['checkout']}):
-    api.python('mojob gn',
+  with api.step.context({'env': env}):
+    with api.step.context({'cwd': api.path['checkout']}):
+      api.python('mojob gn',
+                 mojob_path,
+                 args=['gn', build_type] + args + gn_args)
+    api.python('mojob build',
                mojob_path,
-               args=['gn', build_type] + args + gn_args,
-               env=env)
-  api.python('mojob build',
-             mojob_path,
-             args=['build', build_type] + args,
-             env=env)
+               args=['build', build_type] + args)
 
 
 def _DeviceCheckStep(api):

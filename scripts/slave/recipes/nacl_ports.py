@@ -31,12 +31,11 @@ def _AnnotatedStepsSteps(api, got_revision):
       'BUILDBOT_GOT_REVISION': got_revision,
       'BUILDBOT_SLAVE_TYPE': api.properties['slavetype'],
   }
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.step.context({'cwd': api.path['checkout'], 'env': env}):
     api.step('annotated steps',
         [api.path['checkout'].join('build_tools',
           'buildbot_selector.sh')],
         allow_subannotations=True,
-        env = env,
       )
 
 

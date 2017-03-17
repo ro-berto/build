@@ -39,7 +39,8 @@ def sdk_multi_steps(api):
            'LANDMINES_VERBOSE': '1',
            'DEPOT_TOOLS_UPDATE': '0',
            'GYP_DEFINES': 'fastbuild=1 component=static_library'}
-    api.chromium.runhooks(env=env)
+    with api.step.context({'env': env}):
+      api.chromium.runhooks()
 
     # generate_build_files step
     api.chromium.run_mb(api.properties.get('mastername'),
@@ -85,7 +86,8 @@ def sdk_multirel_steps(api):
            'LANDMINES_VERBOSE': '1',
            'DEPOT_TOOLS_UPDATE': '0',
            'GYP_DEFINES': 'fastbuild=1 component=static_library'}
-    api.chromium.runhooks(env=env)
+    with api.step.context({'env': env}):
+      api.chromium.runhooks()
 
     # generate_build_files step
     api.chromium.run_mb(api.properties.get('mastername'),

@@ -234,13 +234,14 @@ class WebRTCApi(recipe_api.RecipeApi):
           'data to the perf dashboard.')
       perf_config = self.PERF_CONFIG
       perf_config['r_webrtc_git'] = self.revision
-      self.m.chromium.runtest(
-          test=test, args=args, name=name,
-          results_url=self.DASHBOARD_UPLOAD_URL, annotate='graphing',
-          xvfb=True, perf_dashboard_id=perf_dashboard_id,
-          test_type=perf_dashboard_id, env=env, python_mode=python_mode,
-          revision=self.revision_number, perf_id=self.c.PERF_ID,
-          perf_config=perf_config)
+      with self.m.step.context({'env': env}):
+        self.m.chromium.runtest(
+            test=test, args=args, name=name,
+            results_url=self.DASHBOARD_UPLOAD_URL, annotate='graphing',
+            xvfb=True, perf_dashboard_id=perf_dashboard_id,
+            test_type=perf_dashboard_id, python_mode=python_mode,
+            revision=self.revision_number, perf_id=self.c.PERF_ID,
+            perf_config=perf_config)
     else:
       annotate = 'gtest'
       test_type = test
@@ -259,10 +260,11 @@ class WebRTCApi(recipe_api.RecipeApi):
         annotate = None  # The parallel script doesn't output gtest format.
         flakiness_dash = False
 
-      self.m.chromium.runtest(
-          test=test, args=args, name=name, annotate=annotate, xvfb=True,
-          flakiness_dash=flakiness_dash, python_mode=python_mode,
-          revision=revision, test_type=test_type, env=env)
+      with self.m.step.context({'env': env}):
+        self.m.chromium.runtest(
+            test=test, args=args, name=name, annotate=annotate, xvfb=True,
+            flakiness_dash=flakiness_dash, python_mode=python_mode,
+            revision=revision, test_type=test_type)
 
   def maybe_trigger(self):
     triggers = self.bot_config.get('triggers')

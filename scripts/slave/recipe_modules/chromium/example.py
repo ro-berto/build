@@ -9,6 +9,7 @@ DEPS = [
   'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/raw_io',
+  'recipe_engine/step',
 ]
 
 
@@ -37,10 +38,10 @@ def RunSteps(api):
                       android_version_name="example")
 
   env = {}
-  api.chromium.compile(
-      targets=['All'], out_dir=out_dir,
-      use_goma_module=use_goma_module,
-      env=env)
+  with api.step.context({'env': env}):
+    api.chromium.compile(
+        targets=['All'], out_dir=out_dir,
+        use_goma_module=use_goma_module)
 
 
 def GenTests(api):

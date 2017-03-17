@@ -364,12 +364,11 @@ class V8Test(BaseTest):
       '--json-test-results',
       self.api.json.output(add_json_log=False),
     ]
-    with self.api.step.context({'cwd': self.api.path['checkout']}):
+    with self.api.step.context({'cwd': self.api.path['checkout'], 'env': env}):
       self.api.python(
         test['name'] + self.test_step_config.suffix,
         self.api.path['checkout'].join('tools', 'run-tests.py'),
         full_args,
-        env=env,
         step_test_data=lambda: self.v8.test_api.output_json(),
         **kwargs
       )

@@ -109,11 +109,11 @@ def win_8_x64_drm_steps(api):
     # update tools step; null converted
     # unpack tools step; generic ShellCommand converted
     with api.step.context({
-        'cwd': api.path['start_dir'].join('tools', 'buildbot', 'bot_tools')}):
+        'cwd': api.path['start_dir'].join('tools', 'buildbot', 'bot_tools'),
+        'env': {}}):
       api.step("unpack tools",
                [api.path["start_dir"].join('tools', 'buildbot', 'bot_tools',
-                 'unpack.bat')],
-               env={})
+                 'unpack.bat')])
     # windows Dr. Memory ctest step
     api.step("Dr. Memory ctest",
              [api.package_repo_resource("scripts", "slave", "drmemory",
@@ -128,109 +128,116 @@ def win_8_x64_drm_steps(api):
               'http://data-race-test.googlecode.com/svn/trunk/',
               api.path["start_dir"].join("tsan")])
     # Build TSan tests step
-    api.step("Build TSan Tests",
-             ['E:\\b\\build\\scripts\\slave\\drmemory\\build_env.bat', 'make',
-              '-C', api.path["start_dir"].join("tsan", "unittest")],
-             env={"BOTTOOLS": api.path["start_dir"].join("tools", "buildbot",
-                                                           "bot_tools"),
-                  "CYGWIN": "nodosfilewarning"})
+    with api.step.context({'env': {
+        "BOTTOOLS": api.path["start_dir"].join(
+            "tools", "buildbot", "bot_tools"),
+        "CYGWIN": "nodosfilewarning"}}):
+      api.step("Build TSan Tests",
+               ['E:\\b\\build\\scripts\\slave\\drmemory\\build_env.bat', 'make',
+                '-C', api.path["start_dir"].join("tsan", "unittest")])
     # Dr. Memory TSan test step
-    api.step(
-        "dbg full TSan tests",
-        [api.package_repo_resource("scripts", "slave", "drmemory",
-                                "build_env.bat"),
-         'build_drmemory-dbg-32\\bin\\drmemory', '-dr_ops',
-         '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
-         '-suppress', api.path["checkout"].join(
-             "tests", "app_suite", "default-suppressions.txt"), "--",
-         api.path["start_dir"].join("tsan", 'unittest', 'bin',
-                                      'racecheck_unittest-windows-x86-O0.exe'),
-         '--gtest_filter='
-         '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
-         '-147'],
-        env={"BOTTOOLS": api.path["start_dir"].join("tools", "buildbot",
-                                                      "bot_tools")})
+    with api.step.context({'env': {
+        "BOTTOOLS": api.path["start_dir"].join(
+            "tools", "buildbot", "bot_tools")}}):
+      api.step(
+          "dbg full TSan tests",
+          [api.package_repo_resource("scripts", "slave", "drmemory",
+                                  "build_env.bat"),
+           'build_drmemory-dbg-32\\bin\\drmemory', '-dr_ops',
+           '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
+           '-suppress', api.path["checkout"].join(
+               "tests", "app_suite", "default-suppressions.txt"), "--",
+           api.path["start_dir"].join("tsan", 'unittest', 'bin',
+                                        'racecheck_unittest-windows-x86-O0.exe'),
+           '--gtest_filter='
+           '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
+           '-147'])
     # Dr. Memory TSan test step
-    api.step(
-        "dbg light TSan tests",
-        [api.package_repo_resource("scripts", "slave", "drmemory",
-                                "build_env.bat"),
-         'build_drmemory-dbg-32\\bin\\drmemory', '-dr_ops',
-         '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
-         '-suppress', api.path["checkout"].join(
-             "tests", "app_suite", "default-suppressions.txt"), "-light", "--",
-         api.path["start_dir"].join("tsan", 'unittest', 'bin',
-                                      'racecheck_unittest-windows-x86-O0.exe'),
-         '--gtest_filter='
-         '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
-         '-147'],
-        env={"BOTTOOLS": api.path["start_dir"].join("tools", "buildbot",
-                                                      "bot_tools")})
+    with api.step.context({'env': {
+        "BOTTOOLS": api.path["start_dir"].join(
+            "tools", "buildbot", "bot_tools")}}):
+      api.step(
+          "dbg light TSan tests",
+          [api.package_repo_resource("scripts", "slave", "drmemory",
+                                  "build_env.bat"),
+           'build_drmemory-dbg-32\\bin\\drmemory', '-dr_ops',
+           '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
+           '-suppress', api.path["checkout"].join(
+               "tests", "app_suite", "default-suppressions.txt"), "-light", "--",
+           api.path["start_dir"].join("tsan", 'unittest', 'bin',
+                                        'racecheck_unittest-windows-x86-O0.exe'),
+           '--gtest_filter='
+           '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
+           '-147'])
     # Dr. Memory TSan test step
-    api.step(
-        "rel full TSan tests",
-        [api.package_repo_resource("scripts", "slave", "drmemory",
-                                "build_env.bat"),
-         'build_drmemory-rel-32\\bin\\drmemory', '-dr_ops',
-         '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
-         '-suppress', api.path["checkout"].join(
-             "tests", "app_suite", "default-suppressions.txt"), "--",
-         api.path["start_dir"].join("tsan", 'unittest', 'bin',
-                                      'racecheck_unittest-windows-x86-O0.exe'),
-         '--gtest_filter='
-         '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
-         '-147'],
-        env={"BOTTOOLS": api.path["start_dir"].join("tools", "buildbot",
-                                                      "bot_tools")})
+    with api.step.context({'env': {
+        "BOTTOOLS": api.path["start_dir"].join(
+            "tools", "buildbot", "bot_tools")}}):
+      api.step(
+          "rel full TSan tests",
+          [api.package_repo_resource("scripts", "slave", "drmemory",
+                                  "build_env.bat"),
+           'build_drmemory-rel-32\\bin\\drmemory', '-dr_ops',
+           '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
+           '-suppress', api.path["checkout"].join(
+               "tests", "app_suite", "default-suppressions.txt"), "--",
+           api.path["start_dir"].join("tsan", 'unittest', 'bin',
+                                        'racecheck_unittest-windows-x86-O0.exe'),
+           '--gtest_filter='
+           '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
+           '-147'])
     # Dr. Memory TSan test step
-    api.step(
-        "rel light TSan tests",
-        [api.package_repo_resource("scripts", "slave", "drmemory",
-                                "build_env.bat"),
-         'build_drmemory-rel-32\\bin\\drmemory', '-dr_ops',
-         '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
-         '-suppress', api.path["checkout"].join(
-             "tests", "app_suite", "default-suppressions.txt"), "-light", "--",
-         api.path["start_dir"].join("tsan", 'unittest', 'bin',
-                                      'racecheck_unittest-windows-x86-O0.exe'),
-         '--gtest_filter='
-         '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
-         '-147'],
-        env={"BOTTOOLS": api.path["start_dir"].join("tools", "buildbot",
-                                                      "bot_tools")})
+    with api.step.context({'env': {
+        "BOTTOOLS": api.path["start_dir"].join(
+            "tools", "buildbot", "bot_tools")}}):
+      api.step(
+          "rel light TSan tests",
+          [api.package_repo_resource("scripts", "slave", "drmemory",
+                                  "build_env.bat"),
+           'build_drmemory-rel-32\\bin\\drmemory', '-dr_ops',
+           '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
+           '-suppress', api.path["checkout"].join(
+               "tests", "app_suite", "default-suppressions.txt"), "-light", "--",
+           api.path["start_dir"].join("tsan", 'unittest', 'bin',
+                                        'racecheck_unittest-windows-x86-O0.exe'),
+           '--gtest_filter='
+           '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
+           '-147'])
     # Dr. Memory TSan test step
-    api.step(
-        "dbg full nosyms TSan tests",
-        [api.package_repo_resource("scripts", "slave", "drmemory",
-                                "build_env.bat"),
-         'build_drmemory-dbg-32\\bin\\drmemory', '-dr_ops',
-         '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
-         '-suppress', api.path["checkout"].join(
-             "tests", "app_suite", "default-suppressions.txt"), "--",
-         api.path["start_dir"].join("tsan", 'unittest', 'bin',
-                                      'racecheck_unittest-windows-x86-O0.exe'),
-         '--gtest_filter='
-         '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
-         '-147'],
-        env={"BOTTOOLS": api.path["start_dir"].join("tools", "buildbot",
-                                                      "bot_tools")})
+    with api.step.context({'env': {
+        "BOTTOOLS": api.path["start_dir"].join(
+            "tools", "buildbot", "bot_tools")}}):
+      api.step(
+          "dbg full nosyms TSan tests",
+          [api.package_repo_resource("scripts", "slave", "drmemory",
+                                  "build_env.bat"),
+           'build_drmemory-dbg-32\\bin\\drmemory', '-dr_ops',
+           '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
+           '-suppress', api.path["checkout"].join(
+               "tests", "app_suite", "default-suppressions.txt"), "--",
+           api.path["start_dir"].join("tsan", 'unittest', 'bin',
+                                        'racecheck_unittest-windows-x86-O0.exe'),
+           '--gtest_filter='
+           '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
+           '-147'])
     # Prepare to pack test results step; null converted
     # Pack test results step
-    api.step("Pack test results",
-             [api.package_repo_resource("scripts", "slave", "drmemory",
-               "build_env.bat"), '7z', 'a', '-xr!*.pdb',
-              "testlogs_r" + build_properties["got_revision"] + "_b" +
-              str(build_properties["buildnumber"]) + ".7z",
-              'build_drmemory-dbg-32/logs',
-              'build_drmemory-dbg-32/Testing/Temporary',
-              'build_drmemory-rel-32/logs',
-              'build_drmemory-rel-32/Testing/Temporary',
-              'build_drmemory-dbg-64/logs',
-              'build_drmemory-dbg-64/Testing/Temporary',
-              'build_drmemory-rel-64/logs',
-              'build_drmemory-rel-64/Testing/Temporary', 'xmlresults'],
-             env={"BOTTOOLS": api.path["start_dir"].join("tools", "buildbot",
-                                                           "bot_tools")})
+    with api.step.context({'env': {
+        "BOTTOOLS": api.path["start_dir"].join(
+            "tools", "buildbot", "bot_tools")}}):
+      api.step("Pack test results",
+               [api.package_repo_resource("scripts", "slave", "drmemory",
+                 "build_env.bat"), '7z', 'a', '-xr!*.pdb',
+                "testlogs_r" + build_properties["got_revision"] + "_b" +
+                str(build_properties["buildnumber"]) + ".7z",
+                'build_drmemory-dbg-32/logs',
+                'build_drmemory-dbg-32/Testing/Temporary',
+                'build_drmemory-rel-32/logs',
+                'build_drmemory-rel-32/Testing/Temporary',
+                'build_drmemory-dbg-64/logs',
+                'build_drmemory-dbg-64/Testing/Temporary',
+                'build_drmemory-rel-64/logs',
+                'build_drmemory-rel-64/Testing/Temporary', 'xmlresults'])
     # upload drmemory test logs step
     api.gsutil.upload("testlogs_r" + build_properties["got_revision"] + "_b" +
                       str(api.properties[
@@ -258,11 +265,11 @@ def win_7_x64_drm_steps(api):
     # update tools step; null converted
     # unpack tools step; generic ShellCommand converted
     with api.step.context({
-        'cwd': api.path['start_dir'].join('tools', 'buildbot', 'bot_tools')}):
+        'cwd': api.path['start_dir'].join('tools', 'buildbot', 'bot_tools'),
+        'env': {}}):
       api.step("unpack tools",
                [api.path["start_dir"].join('tools', 'buildbot', 'bot_tools',
-                 'unpack.bat')],
-               env={})
+                 'unpack.bat')])
     # windows Dr. Memory ctest step
     api.step("Dr. Memory ctest",
              [api.package_repo_resource("scripts", "slave", "drmemory",
@@ -277,109 +284,116 @@ def win_7_x64_drm_steps(api):
               'http://data-race-test.googlecode.com/svn/trunk/',
               api.path["start_dir"].join("tsan")])
     # Build TSan tests step
-    api.step("Build TSan Tests",
-             ['E:\\b\\build\\scripts\\slave\\drmemory\\build_env.bat', 'make',
-              '-C', api.path["start_dir"].join("tsan", "unittest")],
-             env={"BOTTOOLS": api.path["start_dir"].join("tools", "buildbot",
-                                                           "bot_tools"),
-                  "CYGWIN": "nodosfilewarning"})
+    with api.step.context({'env': {
+        "BOTTOOLS": api.path["start_dir"].join(
+            "tools", "buildbot", "bot_tools"),
+        "CYGWIN": "nodosfilewarning"}}):
+      api.step("Build TSan Tests",
+               ['E:\\b\\build\\scripts\\slave\\drmemory\\build_env.bat', 'make',
+                '-C', api.path["start_dir"].join("tsan", "unittest")])
     # Dr. Memory TSan test step
-    api.step(
-        "dbg full TSan tests",
-        [api.package_repo_resource("scripts", "slave", "drmemory",
-                                "build_env.bat"),
-         'build_drmemory-dbg-32\\bin\\drmemory', '-dr_ops',
-         '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
-         '-suppress', api.path["checkout"].join(
-             "tests", "app_suite", "default-suppressions.txt"), "--",
-         api.path["start_dir"].join("tsan", 'unittest', 'bin',
-                                      'racecheck_unittest-windows-x86-O0.exe'),
-         '--gtest_filter='
-         '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
-         '-147'],
-        env={"BOTTOOLS": api.path["start_dir"].join("tools", "buildbot",
-                                                      "bot_tools")})
+    with api.step.context({'env': {
+        "BOTTOOLS": api.path["start_dir"].join(
+            "tools", "buildbot", "bot_tools")}}):
+      api.step(
+          "dbg full TSan tests",
+          [api.package_repo_resource("scripts", "slave", "drmemory",
+                                  "build_env.bat"),
+           'build_drmemory-dbg-32\\bin\\drmemory', '-dr_ops',
+           '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
+           '-suppress', api.path["checkout"].join(
+               "tests", "app_suite", "default-suppressions.txt"), "--",
+           api.path["start_dir"].join("tsan", 'unittest', 'bin',
+                                        'racecheck_unittest-windows-x86-O0.exe'),
+           '--gtest_filter='
+           '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
+           '-147'])
     # Dr. Memory TSan test step
-    api.step(
-        "dbg light TSan tests",
-        [api.package_repo_resource("scripts", "slave", "drmemory",
-                                "build_env.bat"),
-         'build_drmemory-dbg-32\\bin\\drmemory', '-dr_ops',
-         '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
-         '-suppress', api.path["checkout"].join(
-             "tests", "app_suite", "default-suppressions.txt"), "-light", "--",
-         api.path["start_dir"].join("tsan", 'unittest', 'bin',
-                                      'racecheck_unittest-windows-x86-O0.exe'),
-         '--gtest_filter='
-         '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
-         '-147'],
-        env={"BOTTOOLS": api.path["start_dir"].join("tools", "buildbot",
-                                                      "bot_tools")})
+    with api.step.context({'env': {
+        "BOTTOOLS": api.path["start_dir"].join(
+            "tools", "buildbot", "bot_tools")}}):
+      api.step(
+          "dbg light TSan tests",
+          [api.package_repo_resource("scripts", "slave", "drmemory",
+                                  "build_env.bat"),
+           'build_drmemory-dbg-32\\bin\\drmemory', '-dr_ops',
+           '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
+           '-suppress', api.path["checkout"].join(
+               "tests", "app_suite", "default-suppressions.txt"), "-light", "--",
+           api.path["start_dir"].join("tsan", 'unittest', 'bin',
+                                        'racecheck_unittest-windows-x86-O0.exe'),
+           '--gtest_filter='
+           '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
+           '-147'])
     # Dr. Memory TSan test step
-    api.step(
-        "rel full TSan tests",
-        [api.package_repo_resource("scripts", "slave", "drmemory",
-                                "build_env.bat"),
-         'build_drmemory-rel-32\\bin\\drmemory', '-dr_ops',
-         '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
-         '-suppress', api.path["checkout"].join(
-             "tests", "app_suite", "default-suppressions.txt"), "--",
-         api.path["start_dir"].join("tsan", 'unittest', 'bin',
-                                      'racecheck_unittest-windows-x86-O0.exe'),
-         '--gtest_filter='
-         '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
-         '-147'],
-        env={"BOTTOOLS": api.path["start_dir"].join("tools", "buildbot",
-                                                      "bot_tools")})
+    with api.step.context({'env': {
+        "BOTTOOLS": api.path["start_dir"].join(
+            "tools", "buildbot", "bot_tools")}}):
+      api.step(
+          "rel full TSan tests",
+          [api.package_repo_resource("scripts", "slave", "drmemory",
+                                  "build_env.bat"),
+           'build_drmemory-rel-32\\bin\\drmemory', '-dr_ops',
+           '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
+           '-suppress', api.path["checkout"].join(
+               "tests", "app_suite", "default-suppressions.txt"), "--",
+           api.path["start_dir"].join("tsan", 'unittest', 'bin',
+                                        'racecheck_unittest-windows-x86-O0.exe'),
+           '--gtest_filter='
+           '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
+           '-147'])
     # Dr. Memory TSan test step
-    api.step(
-        "rel light TSan tests",
-        [api.package_repo_resource("scripts", "slave", "drmemory",
-                                "build_env.bat"),
-         'build_drmemory-rel-32\\bin\\drmemory', '-dr_ops',
-         '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
-         '-suppress', api.path["checkout"].join(
-             "tests", "app_suite", "default-suppressions.txt"), "-light", "--",
-         api.path["start_dir"].join("tsan", 'unittest', 'bin',
-                                      'racecheck_unittest-windows-x86-O0.exe'),
-         '--gtest_filter='
-         '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
-         '-147'],
-        env={"BOTTOOLS": api.path["start_dir"].join("tools", "buildbot",
-                                                      "bot_tools")})
+    with api.step.context({'env': {
+        "BOTTOOLS": api.path["start_dir"].join(
+            "tools", "buildbot", "bot_tools")}}):
+      api.step(
+          "rel light TSan tests",
+          [api.package_repo_resource("scripts", "slave", "drmemory",
+                                  "build_env.bat"),
+           'build_drmemory-rel-32\\bin\\drmemory', '-dr_ops',
+           '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
+           '-suppress', api.path["checkout"].join(
+               "tests", "app_suite", "default-suppressions.txt"), "-light", "--",
+           api.path["start_dir"].join("tsan", 'unittest', 'bin',
+                                        'racecheck_unittest-windows-x86-O0.exe'),
+           '--gtest_filter='
+           '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
+           '-147'])
     # Dr. Memory TSan test step
-    api.step(
-        "dbg full nosyms TSan tests",
-        [api.package_repo_resource("scripts", "slave", "drmemory",
-                                "build_env.bat"),
-         'build_drmemory-dbg-32\\bin\\drmemory', '-dr_ops',
-         '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
-         '-suppress', api.path["checkout"].join(
-             "tests", "app_suite", "default-suppressions.txt"), "--",
-         api.path["start_dir"].join("tsan", 'unittest', 'bin',
-                                      'racecheck_unittest-windows-x86-O0.exe'),
-         '--gtest_filter='
-         '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
-         '-147'],
-        env={"BOTTOOLS": api.path["start_dir"].join("tools", "buildbot",
-                                                      "bot_tools")})
+    with api.step.context({'env': {
+        "BOTTOOLS": api.path["start_dir"].join(
+            "tools", "buildbot", "bot_tools")}}):
+      api.step(
+          "dbg full nosyms TSan tests",
+          [api.package_repo_resource("scripts", "slave", "drmemory",
+                                  "build_env.bat"),
+           'build_drmemory-dbg-32\\bin\\drmemory', '-dr_ops',
+           '-msgbox_mask 0 -stderr_mask 15', '-results_to_stderr', '-batch',
+           '-suppress', api.path["checkout"].join(
+               "tests", "app_suite", "default-suppressions.txt"), "--",
+           api.path["start_dir"].join("tsan", 'unittest', 'bin',
+                                        'racecheck_unittest-windows-x86-O0.exe'),
+           '--gtest_filter='
+           '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
+           '-147'])
     # Prepare to pack test results step; null converted
     # Pack test results step
-    api.step("Pack test results",
-             [api.package_repo_resource("scripts", "slave", "drmemory",
-               "build_env.bat"), '7z', 'a', '-xr!*.pdb',
-              "testlogs_r" + build_properties["got_revision"] + "_b" +
-              str(build_properties["buildnumber"]) + ".7z",
-              'build_drmemory-dbg-32/logs',
-              'build_drmemory-dbg-32/Testing/Temporary',
-              'build_drmemory-rel-32/logs',
-              'build_drmemory-rel-32/Testing/Temporary',
-              'build_drmemory-dbg-64/logs',
-              'build_drmemory-dbg-64/Testing/Temporary',
-              'build_drmemory-rel-64/logs',
-              'build_drmemory-rel-64/Testing/Temporary', 'xmlresults'],
-             env={"BOTTOOLS": api.path["start_dir"].join("tools", "buildbot",
-                                                           "bot_tools")})
+    with api.step.context({'env': {
+        "BOTTOOLS": api.path["start_dir"].join(
+            "tools", "buildbot", "bot_tools")}}):
+      api.step("Pack test results",
+               [api.package_repo_resource("scripts", "slave", "drmemory",
+                 "build_env.bat"), '7z', 'a', '-xr!*.pdb',
+                "testlogs_r" + build_properties["got_revision"] + "_b" +
+                str(build_properties["buildnumber"]) + ".7z",
+                'build_drmemory-dbg-32/logs',
+                'build_drmemory-dbg-32/Testing/Temporary',
+                'build_drmemory-rel-32/logs',
+                'build_drmemory-rel-32/Testing/Temporary',
+                'build_drmemory-dbg-64/logs',
+                'build_drmemory-dbg-64/Testing/Temporary',
+                'build_drmemory-rel-64/logs',
+                'build_drmemory-rel-64/Testing/Temporary', 'xmlresults'])
     # upload drmemory test logs step
     api.gsutil.upload("testlogs_r" + build_properties["got_revision"] + "_b" +
                       str(api.properties[
@@ -407,21 +421,22 @@ def win_builder_steps(api):
     # update tools step; null converted
     # unpack tools step; generic ShellCommand converted
     with api.step.context({
-        'cwd': api.path['start_dir'].join('tools', 'buildbot', 'bot_tools')}):
+        'cwd': api.path['start_dir'].join('tools', 'buildbot', 'bot_tools'),
+        'env': {}}):
       api.step("unpack tools",
                [api.path["start_dir"].join('tools', 'buildbot', 'bot_tools',
-                 'unpack.bat')],
-               env={})
+                 'unpack.bat')])
     # get buildnumber step; no longer needed
     with api.step.context({'cwd': api.path['start_dir']}):
-      # Package dynamorio step
-      api.step("Package Dr. Memory",
-               [api.package_repo_resource("scripts", "slave", "drmemory",
-                                       "build_env.bat"), 'ctest', '-VV', '-S',
-                str(api.path["checkout"].join("package.cmake")) + ",build=0x" +
-                build_properties["got_revision"][:7] + ";drmem_only"],
-               env={"BOTTOOLS": api.path["start_dir"].join("tools", "buildbot",
-                                                             "bot_tools")})
+      with api.step.context({'env': {
+          "BOTTOOLS": api.path["start_dir"].join(
+              "tools", "buildbot", "bot_tools")}}):
+        # Package dynamorio step
+        api.step("Package Dr. Memory",
+                 [api.package_repo_resource("scripts", "slave", "drmemory",
+                                         "build_env.bat"), 'ctest', '-VV', '-S',
+                  str(api.path["checkout"].join("package.cmake")) + ",build=0x" +
+                  build_properties["got_revision"][:7] + ";drmem_only"])
       # Find package basename step
       step_result = api.step("Find package basename",
                              ["cmd.exe", "/C", "dir", "/O-D", "/B",
@@ -437,7 +452,12 @@ def win_builder_steps(api):
         ok_ret=(0,1))
     # Create sfx archive step
     lastdir = api.path.basename(api.path["start_dir"])
-    with api.step.context({'cwd': api.path['start_dir']}):
+    with api.step.context({
+        'cwd': api.path['start_dir'],
+        'env': {
+            "BOTTOOLS": api.path["start_dir"].join(
+                "tools", "buildbot", "bot_tools")
+        }}):
       api.step("create sfx archive",
                [api.package_repo_resource("scripts", "slave", "drmemory",
                                        "build_env.bat"), "7z", "a", "-sfx",
@@ -446,9 +466,7 @@ def win_builder_steps(api):
                 # ...\\ZIP\\basename\\ dir we pass ..\\lastdir:
                 api.path.join(
                   '..', lastdir, 'build_drmemory-debug-32', '_CPack_Packages',
-                  'Windows', 'ZIP', basename, '*')],
-               env={"BOTTOOLS": api.path["start_dir"].join("tools", "buildbot",
-                                                             "bot_tools")})
+                  'Windows', 'ZIP', basename, '*')])
     # upload latest build step
     api.file.copy("copy locally",
         api.path["start_dir"].join(basename + "-sfx.exe"),

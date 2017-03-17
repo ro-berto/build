@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import contextlib
+
 from recipe_engine import recipe_api
 
 class ToolsBuildApi(recipe_api.RecipeApi):
@@ -24,12 +26,14 @@ class ToolsBuildApi(recipe_api.RecipeApi):
         '--slave-utils-gsutil-py-path', self.m.depot_tools.gsutil_py_path,
     ]
 
-  def add_slave_utils_kwargs(self, kwargs):
-    """Augments step/python keyword arguments with `slave_utils.py` parameters.
+  @contextlib.contextmanager
+  def gsutil_py_env(self):
+    """Augments environment with `slave_utils.py` parameters.
     """
-    env = kwargs.setdefault('env', {})
-    env['BUILD_SLAVE_UTILS_GSUTIL_PY_PATH'] = self.m.depot_tools.gsutil_py_path
-    return kwargs
+    with self.m.step.context({'env': {
+        'BUILD_SLAVE_UTILS_GSUTIL_PY_PATH':
+            self.m.depot_tools.gsutil_py_path}}):
+      yield
 
   def python(self, name, script, args=None, **kwargs):
     """Bootstraps a Python through "tools/build"'s "runit.py".

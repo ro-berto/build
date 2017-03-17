@@ -137,28 +137,28 @@ def _RunTests(api, memory_tool, v8, out_dir, build_config, revision):
                                                  'pdfium_unittests'))
   if api.platform.is_win:
     unittests_path += '.exe'
-  with api.step.context({'cwd': api.path['checkout']}):
-    api.step('unittests', [unittests_path], env=env)
+  with api.step.context({'cwd': api.path['checkout'], 'env': env}):
+    api.step('unittests', [unittests_path])
 
   embeddertests_path = str(api.path['checkout'].join('out', out_dir,
                                                      'pdfium_embeddertests'))
   if api.platform.is_win:
     embeddertests_path += '.exe'
-  with api.step.context({'cwd': api.path['checkout']}):
-    api.step('embeddertests', [embeddertests_path], env=env)
+  with api.step.context({'cwd': api.path['checkout'], 'env': env}):
+    api.step('embeddertests', [embeddertests_path])
 
   script_args = ['--build-dir', api.path.join('out', out_dir)]
 
   if v8:
     javascript_path = str(api.path['checkout'].join('testing', 'tools',
                                                     'run_javascript_tests.py'))
-    with api.step.context({'cwd': api.path['checkout']}):
-      api.python('javascript tests', javascript_path, script_args, env=env)
+    with api.step.context({'cwd': api.path['checkout'], 'env': env}):
+      api.python('javascript tests', javascript_path, script_args)
 
   pixel_tests_path = str(api.path['checkout'].join('testing', 'tools',
                                                    'run_pixel_tests.py'))
-  with api.step.context({'cwd': api.path['checkout']}):
-    api.python('pixel tests', pixel_tests_path, script_args, env=env)
+  with api.step.context({'cwd': api.path['checkout'], 'env': env}):
+    api.python('pixel tests', pixel_tests_path, script_args)
 
   # Add the arguments needed to upload the resulting images.
   gold_output_dir = api.path['checkout'].join('out', out_dir, 'gold_output')
@@ -176,8 +176,8 @@ def _RunTests(api, memory_tool, v8, out_dir, build_config, revision):
 
   corpus_tests_path = str(api.path['checkout'].join('testing', 'tools',
                                                     'run_corpus_tests.py'))
-  with api.step.context({'cwd': api.path['checkout']}):
-    api.python('corpus tests', corpus_tests_path, script_args, env=env)
+  with api.step.context({'cwd': api.path['checkout'], 'env': env}):
+    api.python('corpus tests', corpus_tests_path, script_args)
   upload_dm_results(api, gold_output_dir, revision)
 
 

@@ -141,20 +141,24 @@ class ChromedriverApi(recipe_api.RecipeApi):
 
   def _run_test(self, test_name, script_path, chromedriver,
                 ref_chromedriver=None, android_package=None, verbose=False,
-                archive_server_log=True, **kwargs): 
+                archive_server_log=True, env=None, **kwargs):
     with self.m.step.nest(test_name) as nest_step:
       with self.m.tempfile.temp_dir('server_log') as server_log_dir:
         build_number = self.m.properties['buildnumber']
         server_log = server_log_dir.join(
             ('%s_%s' % (test_name, build_number)).replace(' ', '_'))
         try:
-          self.m.step('Run Tests',
-                      self._generate_test_command(
-                          script_path, chromedriver, server_log,
-                          ref_chromedriver=ref_chromedriver,
-                          android_package=android_package,
-                          verbose=verbose),
-                      **kwargs)
+          context = {}
+          if env:
+            context['env'] = env
+          with self.m.step.context(context):
+            self.m.step('Run Tests',
+                        self._generate_test_command(
+                            script_path, chromedriver, server_log,
+                            ref_chromedriver=ref_chromedriver,
+                            android_package=android_package,
+                            verbose=verbose),
+                        **kwargs)
         except self.m.step.StepFailure:
           nest_step.presentation.status = self.m.step.FAILURE
           raise
@@ -164,7 +168,7 @@ class ChromedriverApi(recipe_api.RecipeApi):
 
   def run_python_tests(self, chromedriver, ref_chromedriver,
                        chrome_version_name=None, android_package=None,
-                       archive_server_log=True, **kwargs):
+                       archive_server_log=True, env=None, **kwargs):
     """Run the Chromedriver Python tests."""
     test_name = 'python_tests%s' % (
         ' %s' % chrome_version_name if chrome_version_name else '')
@@ -175,11 +179,12 @@ class ChromedriverApi(recipe_api.RecipeApi):
                    android_package=android_package,
                    verbose=False,
                    archive_server_log=archive_server_log,
+                   env=env,
                    **kwargs)
 
   def run_java_tests(self, chromedriver, chrome_version_name=None,
                      android_package=None, verbose=False,
-                     archive_server_log=True, **kwargs):
+                     archive_server_log=True, env=None, **kwargs):
     """Run the Chromedriver Java tests."""
     test_name = 'java_tests%s' % (
         ' %s' % chrome_version_name if chrome_version_name else '')
@@ -190,6 +195,7 @@ class ChromedriverApi(recipe_api.RecipeApi):
                    android_package=android_package,
                    verbose=verbose,
                    archive_server_log=archive_server_log,
+                   env=env,
                    **kwargs)
 
   def run_all_tests(self, android_packages=None, archive_server_logs=True):

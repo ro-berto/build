@@ -180,7 +180,7 @@ def RunSteps(api, buildername):
     env = _GetTargetEnv(buildername, bot_utils)
 
     # Run the unit tests.
-    with api.step.context({'cwd': api.path['checkout']}):
+    with api.step.context({'cwd': api.path['checkout'], 'env': env}):
       if _HasToken(buildername, 'android'):
         deferred = api.python('unit tests', go_env,
                               ['go', 'run',
@@ -188,21 +188,19 @@ def RunSteps(api, buildername):
                                '-build-dir', build_dir,
                                '-adb', adb_path,
                                '-suite', 'unit',
-                               '-json-output', api.test_utils.test_results()],
-                              env=env)
+                               '-json-output', api.test_utils.test_results()])
       else:
         deferred = api.python('unit tests', go_env,
                               msvc_prefix + ['go', 'run',
                                              api.path.join('util',
                                                            'all_tests.go'),
                                              '-json-output',
-                                             api.test_utils.test_results()],
-                              env=env)
+                                             api.test_utils.test_results()])
     _LogFailingTests(api, deferred)
 
     # Run the SSL tests.
     if _HasToken(buildername, 'android'):
-      with api.step.context({'cwd': api.path['checkout']}):
+      with api.step.context({'cwd': api.path['checkout'], 'env': env}):
         deferred = api.python('ssl tests', go_env,
                               ['go', 'run',
                                api.path.join('util', 'run_android_tests.go'),
@@ -210,15 +208,13 @@ def RunSteps(api, buildername):
                                '-adb', adb_path,
                                '-suite', 'ssl',
                                '-runner-args', '-pipe',
-                               '-json-output', api.test_utils.test_results()],
-                              env=env)
+                               '-json-output', api.test_utils.test_results()])
     else:
-      with api.step.context({'cwd': runner_dir}):
+      with api.step.context({'cwd': runner_dir, 'env': env}):
         deferred = api.python('ssl tests', go_env,
                               msvc_prefix + ['go', 'test', '-pipe',
                                              '-json-output',
-                                             api.test_utils.test_results()],
-                              env=env)
+                                             api.test_utils.test_results()])
     _LogFailingTests(api, deferred)
 
 
