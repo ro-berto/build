@@ -47,7 +47,7 @@ def GenTests(api):
       + api.properties(
           mastername='tryserver.chromium.perf',
           buildername='linux_perf_bisect',
-          bot_id='bot_id',
+          bot_id='dummybot',
           buildnumber=571,
           bisect_config={
               'test_type': 'perf',
@@ -265,6 +265,59 @@ def GenTests(api):
               'command':
                   ('./src/out/Release/cc_perftests '
                     '--test-launcher-print-test-stdio=always --verbose'),
+              'good_revision': '314015',
+              'bad_revision': '314017',
+              'metric': 'calc_draw_props_time/touch_region_heavy',
+              'bug_id': '-1',
+              'gs_bucket': 'chrome-perf',
+              'dummy_tests': 'True',
+              'dummy_job_names': 'True',
+              'bypass_stats_check': 'True',
+              'skip_gclient_ops': 'True',
+              'recipe_tester_name': 'linux_perf_tester'
+          })
+      + api.auto_bisect([
+          {
+              'hash': 'a6298e4afedbf2cd461755ea6f45b0ad64222222',
+              'commit_pos': '314015',
+              'parsed_values': [19, 20, 23, 1],
+              'test_results': 5 * [{'retcode': 0}],
+              'gsutil_exists': 10 * [False]
+          },
+          {
+              'hash': 'dcdcdc0ff1122212323134879ddceeb1240b0988',
+              'commit_pos': '314016',
+              'parsed_values': [12, 13, 16, 7],
+              'test_results': 5 * [{'retcode': 0}],
+              'gsutil_exists': [True],
+              'cl_info': {
+                  'author': 'DummyAuthor',
+                  'email': 'dummy@nowhere.com',
+                  'subject': 'Some random CL',
+                  'date': '01/01/2015',
+                  'body': ('A long description for a CL.\n'
+                           'Containing multiple lines'),
+              },
+          },
+          {
+              'hash': '00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111',
+              'commit_pos': '314017',
+              'parsed_values': [12, 13, 16, 7],
+              'test_results': 5 * [{'retcode': 0}],
+          }]))
+  yield (
+      api.test('basic_resource_sizes_bisect')
+      + api.properties(
+          mastername='tryserver.chromium.perf',
+          buildername='linux_perf_bisect',
+          bot_id='dummybot',
+          buildnumber=571,
+          bisect_config={
+              'test_type': 'perf',
+              'command':
+                  ('./src/build/android/resource_sizes.py '
+                    '--chromium-output-directory {CHROMIUM_OUTPUT_DIR} '
+                    '--chartjson {CHROMIUM_OUTPUT_DIR}'),
               'good_revision': '314015',
               'bad_revision': '314017',
               'metric': 'calc_draw_props_time/touch_region_heavy',

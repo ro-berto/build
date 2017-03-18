@@ -128,6 +128,10 @@ def run_perf_test(api, test_config, **kwargs):
       chartjson_path = temp_dir.join('results-chart.json')
       valueset_path = temp_dir.join('results-valueset.json')
 
+      if '{CHROMIUM_OUTPUT_DIR}' in command:
+        command = command.replace(
+            '{CHROMIUM_OUTPUT_DIR}', str(api.m.chromium.output_dir))
+
     step_name = "Performance Test%s %d of %d" % (
         ' (%s)' % kwargs['name'] if 'name' in kwargs else '', i + 1, repeat_count)
     if api.m.platform.is_linux:
