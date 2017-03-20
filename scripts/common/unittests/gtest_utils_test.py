@@ -5,6 +5,7 @@
 
 """Unit tests for classes in gtest_command.py."""
 
+import json
 import os
 import tempfile
 import unittest
@@ -721,6 +722,33 @@ class TestGTestJSONParserTests(auto_stub.TestCase):
     self.assertEqual(0, parser.DisabledTests())
     self.assertEqual(['SUCCESS'], parser.TriesForTest('Test.One'))
     self.assertEqual(['SUCCESS'], parser.TriesForTest('Test.Two'))
+
+  def testInvalidEscape_crbug632047(self):
+    parser = gtest_utils.GTestJSONParser()
+    parser.ProcessJSONData({
+      'disabled_tests': [],
+      'global_tags': [],
+      'per_iteration_data': [
+        {
+          'Test.One': [{
+            'status': 'FAILURE',
+            # Use 'loads' to make sure we get exactly what the parser returns.
+            'output_snippet': json.loads(
+              r'"\tcontent::BrowserMainLoop::PreMainMessageLoopRun ' +
+              r'(C:\\b\\c\\b\\CrWinAsan_dll_\\src\\content\\browser\\' +
+              r'browser_main_loop.cc:1172)\r\n"'),
+          }],
+        }
+      ]
+    })
+    self.assertEqual(['Test.One'], parser.FailedTests())
+    # '\\b' and '\\s' MUST be preserved.
+    self.assertEqual([
+      'Test.One (run #1):',
+      '\tcontent::BrowserMainLoop::PreMainMessageLoopRun '
+          '(C:\\b\\c\\b\\CrWinAsan_dll_\\src\\content\\browser\\'
+          'browser_main_loop.cc:1172)\r',
+      ''], parser.FailureDescription('Test.One'))
 
   def testFailedTests(self):
     parser = gtest_utils.GTestJSONParser()
