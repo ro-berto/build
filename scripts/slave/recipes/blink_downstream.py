@@ -32,6 +32,8 @@ DEPS = [
   'build/chromium',
   'build/chromium_checkout',
   'build/chromium_tests',
+  # TODO(tandrii): remove this workaround for http://crbug.com/703074.
+  'build/commit_position',
   'build/test_utils',
   'depot_tools/bot_update',
   'depot_tools/gclient',
