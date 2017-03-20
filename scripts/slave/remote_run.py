@@ -41,7 +41,9 @@ _CANARY_MASTERS = set((
   'chromium.infra',
   'chromium.infra.cron',
   'internal.infra',
-  'internal.infra.cron',
+
+  ## Not whitelisted b/c of recipe roller, see: crbug.com/703352
+  #'internal.infra.cron',
 
   'chromium.swarm',
 ))
