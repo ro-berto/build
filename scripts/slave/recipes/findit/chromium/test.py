@@ -288,6 +288,7 @@ def GenTests(api):
       ) +
       api.override_step_data(
           'test r1.affected_tests (r1)',
+          api.swarming.canned_summary_output() +
           api.test_utils.simulated_gtest_output(passed_test_names=['Test.One'])
       )
   )
@@ -344,6 +345,7 @@ def GenTests(api):
       ) +
       api.override_step_data(
           'test r1.gl_tests (r1)',
+          api.swarming.canned_summary_output(failure=True) +
           api.test_utils.simulated_gtest_output(
               failed_test_names=['Test.One', 'Test.Two', 'Test.Three'])
       )
@@ -368,6 +370,7 @@ def GenTests(api):
       ) +
       api.override_step_data(
           'test r1.gl_tests (r1)',
+          api.swarming.canned_summary_output() +
           api.test_utils.simulated_gtest_output(
               passed_test_names=['Test.One', 'Test.Two', 'Test.Three'])
       )
@@ -392,6 +395,7 @@ def GenTests(api):
       ) +
       api.override_step_data(
           'test r1.gl_tests (r1)',
+          api.swarming.canned_summary_output(failure=True) +
           api.test_utils.simulated_gtest_output(
               failed_test_names=['Test.One', 'Test.Two'],
               passed_test_names=['Test.Three'])
@@ -435,6 +439,7 @@ def GenTests(api):
       ) +
       api.override_step_data(
           'test r1.gl_tests (r1)',
+          api.swarming.canned_summary_output(failure=True) +
           api.test_utils.simulated_gtest_output(
               failed_test_names=['Test.One', 'Test.Two'],
               passed_test_names=['Test.Three'])
@@ -459,6 +464,7 @@ def GenTests(api):
       ) +
       api.override_step_data(
           'test r1.gl_tests (r1)',
+          api.swarming.canned_summary_output() +
           api.test_utils.simulated_gtest_output(passed_test_names=['Test.One'])
       )
   )
@@ -500,10 +506,12 @@ def GenTests(api):
               '\n'.join('r%d' % i for i in reversed(range(1, 7))))) +
       api.override_step_data(
           'test r2.gl_tests (r2)',
+          api.swarming.canned_summary_output() +
           api.test_utils.simulated_gtest_output(
               passed_test_names=['Test.One'])) +
       api.override_step_data(
           'test r3.gl_tests (r3)',
+          api.swarming.canned_summary_output(failure=True) +
           api.test_utils.simulated_gtest_output(failed_test_names=['Test.One']))
   )
 
@@ -571,18 +579,22 @@ def GenTests(api):
               '\n'.join('r%d' % i for i in reversed(range(1, 7))))) +
       api.override_step_data(
           'test r2.gl_tests (r2)',
+          api.swarming.canned_summary_output() +
           api.test_utils.simulated_gtest_output(
               passed_test_names=['Test.One'])) +
       api.override_step_data(
           'test r3.gl_tests (r3)',
+          api.swarming.canned_summary_output(failure=True) +
           api.test_utils.simulated_gtest_output(
               failed_test_names=['Test.One'])) +
       api.override_step_data(
           'test r5.gl_tests (r5)',
+          api.swarming.canned_summary_output(failure=True) +
           api.test_utils.simulated_gtest_output(
               passed_test_names=['Test.One'])) +
       api.override_step_data(
           'test r6.gl_tests (r6)',
+          api.swarming.canned_summary_output() +
           api.test_utils.simulated_gtest_output(passed_test_names=['Test.One']))
   )
 
@@ -637,14 +649,17 @@ def GenTests(api):
               '\n'.join('r%d' % i for i in reversed(range(1, 7))))) +
       api.override_step_data(
           'test r1.gl_tests (r1)',
+          api.swarming.canned_summary_output(failure=True) +
           api.test_utils.simulated_gtest_output(
               failed_test_names=['Test.One'])) +
       api.override_step_data(
           'test r5.gl_tests (r5)',
+          api.swarming.canned_summary_output() +
           api.test_utils.simulated_gtest_output(
               passed_test_names=['Test.One'])) +
       api.override_step_data(
           'test r6.gl_tests (r6)',
+          api.swarming.canned_summary_output() +
           api.test_utils.simulated_gtest_output(passed_test_names=['Test.One']))
   )
 
@@ -729,22 +744,27 @@ def GenTests(api):
               '\n'.join('r%d' % i for i in reversed(range(1, 7))))) +
       api.override_step_data(
           'test r5.gl_tests (r5)',
+          api.swarming.canned_summary_output(failure=True) +
           api.test_utils.simulated_gtest_output(
               failed_test_names=['Test.gl_One'])) +
       api.override_step_data(
           'test r5.browser_tests (r5)',
+          api.swarming.canned_summary_output() +
           api.test_utils.simulated_gtest_output(
               passed_test_names=['Test.browser_One'])) +
       api.override_step_data(
           'test r6.browser_tests (r6)',
+          api.swarming.canned_summary_output(failure=True) +
           api.test_utils.simulated_gtest_output(
               failed_test_names=['Test.browser_One']))+
       api.override_step_data(
           'test r2.gl_tests (r2)',
+          api.swarming.canned_summary_output() +
           api.test_utils.simulated_gtest_output(
               passed_test_names=['Test.gl_One'])) +
       api.override_step_data(
           'test r3.gl_tests (r3)',
+          api.swarming.canned_summary_output(failure=True) +
           api.test_utils.simulated_gtest_output(
               failed_test_names=['Test.gl_One']))
   )
@@ -826,24 +846,29 @@ def GenTests(api):
               '\n'.join('r%d' % i for i in reversed(range(1, 7))))) +
       api.override_step_data(
           'test r4.gl_tests (r4)',
+          api.swarming.canned_summary_output(failure=True) +
           api.test_utils.simulated_gtest_output(
               passed_test_names=['Test.One', 'Test.Three'],
               failed_test_names=['Test.Two'])) +
       api.override_step_data(
           'test r5.gl_tests (r5)',
+          api.swarming.canned_summary_output(failure=True) +
           api.test_utils.simulated_gtest_output(
               passed_test_names=['Test.One'],
               failed_test_names=['Test.Three'])) +
       api.override_step_data(
           'test r6.gl_tests (r6)',
+          api.swarming.canned_summary_output(failure=True) +
           api.test_utils.simulated_gtest_output(
               failed_test_names=['Test.One']))+
-          api.override_step_data(
+      api.override_step_data(
           'test r2.gl_tests (r2)',
+          api.swarming.canned_summary_output() +
           api.test_utils.simulated_gtest_output(
               passed_test_names=['Test.Two'])) +
       api.override_step_data(
           'test r3.gl_tests (r3)',
+          api.swarming.canned_summary_output(failure=True) +
           api.test_utils.simulated_gtest_output(failed_test_names=['Test.Two']))
   )
 
@@ -899,14 +924,17 @@ def GenTests(api):
               '\n'.join('r%d' % i for i in reversed(range(1, 7))))) +
       api.override_step_data(
           'test r4.gl_tests (r4)',
+          api.swarming.canned_summary_output(failure=True) +
           api.test_utils.simulated_gtest_output(
               failed_test_names=['Test.One'])) +
       api.override_step_data(
           'test r2.gl_tests (r2)',
+          api.swarming.canned_summary_output() +
           api.test_utils.simulated_gtest_output(
               passed_test_names=['Test.One'])) +
       api.override_step_data(
           'test r3.gl_tests (r3)',
+          api.swarming.canned_summary_output() +
           api.test_utils.simulated_gtest_output(passed_test_names=['Test.One']))
   )
 
@@ -999,14 +1027,17 @@ def GenTests(api):
               '\n'.join('r%d' % i for i in reversed(range(1, 7))))) +
       api.override_step_data(
           'test r4.gl_tests (r4)',
+          api.swarming.canned_summary_output(failure=True) +
           api.test_utils.simulated_gtest_output(
               failed_test_names=['Test.One'])) +
       api.override_step_data(
           'test r2.gl_tests (r2)',
+          api.swarming.canned_summary_output() +
           api.test_utils.simulated_gtest_output(
               passed_test_names=['Test.One'])) +
       api.override_step_data(
           'test r3.gl_tests (r3)',
+          api.swarming.canned_summary_output() +
           api.test_utils.simulated_gtest_output(passed_test_names=['Test.One']))
   )
 
@@ -1047,9 +1078,11 @@ def GenTests(api):
               '\n'.join('r%d' % i for i in reversed(range(1, 7))))) +
       api.override_step_data(
           'test r2.gl_tests (r2)',
+          api.swarming.canned_summary_output() +
           api.test_utils.simulated_gtest_output(
               passed_test_names=['Test.One'])) +
-          api.override_step_data(
+      api.override_step_data(
           'test r3.gl_tests (r3)',
+          api.swarming.canned_summary_output(failure=True) +
           api.test_utils.simulated_gtest_output(failed_test_names=['Test.One']))
   )

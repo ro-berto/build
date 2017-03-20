@@ -218,6 +218,7 @@ def GenTests(api):
     ) +
     # Make one of the tests fail to improve code coverage.
     api.override_step_data('base_unittests on NVIDIA GPU on Linux',
+        api.swarming.canned_summary_output(failure=True) +
         api.test_utils.canned_gtest_output(False))
   )
 

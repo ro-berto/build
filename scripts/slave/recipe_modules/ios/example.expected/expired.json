@@ -555,14 +555,14 @@
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@No suitable Swarming bot found in time.@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"shards\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"state\": 48@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@{@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"state\": 48@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@    }@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@  ]@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@}@@@",
+      "@@@STEP_LOG_END@swarming.summary@@@",
       "@@@STEP_LINK@shard #0 expired, not enough capacity@https://chromium-swarm.appspot.com/user/task/10000@@@",
       "@@@STEP_EXCEPTION@@@"
     ]

@@ -245,7 +245,7 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
       states_infra_failure = (
           self.m.swarming.State.EXPIRED, self.m.swarming.State.TIMED_OUT,
           self.m.swarming.State.BOT_DIED, self.m.swarming.State.CANCELED)
-      if step_result.json.output['shards'][0]['state'] in states_infra_failure:
+      if step_result.swarming.summary['shards'][0]['state'] in states_infra_failure:
         step_result.presentation.status = self.m.step.EXCEPTION
         raise self.m.step.InfraFailure(e.name, step_result)
       raise
@@ -264,14 +264,14 @@ class SkiaSwarmingApi(recipe_api.RecipeApi):
       the hash of the isolate output of the task.
     """
     res = self.collect_swarming_task(swarming_task)
-    return res.json.output['shards'][0]['isolated_out']['isolated']
+    return res.swarming.summary['shards'][0]['isolated_out']['isolated']
 
   def _add_log_links(self, step_result):
     """Add Milo log links to all shards in the step."""
     ids = []
-    shards = step_result.json.output.get('shards')
-    if shards:
-      for shard in shards:
+    if (hasattr(step_result, 'swarming')
+        and hasattr(step_result.swarming, 'summary')):
+      for shard in step_result.swarming.summary.get('shards', []):
         ids.append(shard['id'])
     else:
       for _, task in step_result.json.output.get('tasks', {}).iteritems():

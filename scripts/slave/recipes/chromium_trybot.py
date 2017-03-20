@@ -259,7 +259,10 @@ def GenTests(api):
         })
     ) +
     suppress_analyze() +
-    api.override_step_data('gl_tests (with patch)', canned_test(passing=False))
+    api.override_step_data(
+        'gl_tests (with patch)',
+        api.swarming.canned_summary_output(failure=True) +
+        canned_test(passing=False))
   )
 
   yield (

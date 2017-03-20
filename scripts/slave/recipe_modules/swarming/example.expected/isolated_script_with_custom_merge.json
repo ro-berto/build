@@ -224,7 +224,9 @@
       "--print-status-updates",
       "--verbose",
       "--json",
-      "{\"base_task_name\": \"hello_world/Windows-7-SP1/hash_for_w\", \"tasks\": {\"hello_world/Windows-7-SP1/hash_for_w\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"hello_world/Windows-7-SP1/hash_for_w\", \"tasks\": {\"hello_world/Windows-7-SP1/hash_for_w\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10000\"}}}",
+      "--task-summary-json",
+      "/path/to/tmp/json"
     ],
     "name": "hello_world on Windows-7-SP1",
     "~followup_annotations": [
@@ -241,6 +243,16 @@
       "@@@STEP_LOG_LINE@json.output@  \"version\": 3@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@{@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"exit_code\": \"0\", @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"internal_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"state\": 112@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@    }@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@  ]@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@}@@@",
+      "@@@STEP_LOG_END@swarming.summary@@@",
       "@@@STEP_LOG_LINE@outdir_json@{@@@",
       "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"state\\\": 112, \\\"exit_code\\\": \\\"0\\\"}]}\"@@@",
       "@@@STEP_LOG_LINE@outdir_json@}@@@",

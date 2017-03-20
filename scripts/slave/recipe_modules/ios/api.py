@@ -708,7 +708,7 @@ class iOSApi(recipe_api.RecipeApi):
 
       # We only run one shard, so the results we're interested in will
       # always be shard 0.
-      swarming_summary = step_result.json.output['shards'][0]
+      swarming_summary = step_result.swarming.summary['shards'][0]
       state = swarming_summary['state']
       exit_code = (swarming_summary.get('exit_codes') or [None])[0]
 

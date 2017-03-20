@@ -120,12 +120,8 @@ def RunSteps(api, platforms, show_isolated_out_in_collect_step,
   # Wait for all tasks to complete.
   for task in tasks:
     step_result = api.swarming.collect_task(task)
-    if isolated_script_task:
-      # Due to the way isolated_script_task is written, it uses raw_io instead
-      # of json.
-      data = json.loads(step_result.raw_io.output_dir['summary.json'])
-    else:
-      data = step_result.json.output
+    data = step_result.swarming.summary
+
     state = data['shards'][0]['state']
     if api.swarming.State.COMPLETED == state:
       state_name = api.swarming.State.to_string(state)
@@ -318,7 +314,7 @@ def GenTests(api):
       api.step_data(
           'hello_world on Windows-7-SP1',
           api.raw_io.output_dir({'summary.json': json.dumps(summary_data)}),
-          api.json.output(json_results)) +
+          api.json.output(json_results) + api.swarming.summary(summary_data)) +
       api.properties(
           isolated_script_task=True,
           merge={

@@ -9,6 +9,7 @@ DEPS = [
   'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/raw_io',
+  'swarming',
 ]
 
 def RunSteps(api):
@@ -188,7 +189,7 @@ def GenTests(api):
     )
     + api.override_step_data(
         'fake test (fake device iOS 8.1)',
-        api.json.output({
+        api.swarming.summary({
           'shards': [{
             'exit_codes': [1],
             'state': 112,
@@ -227,7 +228,7 @@ def GenTests(api):
     )
     + api.override_step_data(
         'fake test (fake device iOS 8.1)',
-        api.json.output({
+        api.swarming.summary({
           'shards': [{
             'exit_codes': [2],
             'state': 112,
@@ -266,7 +267,7 @@ def GenTests(api):
     )
     + api.override_step_data(
         'fake test (fake device iOS 8.1)',
-        api.json.output({
+        api.swarming.summary({
           'shards': [{
             'state': 64,
           }],
@@ -304,7 +305,7 @@ def GenTests(api):
     )
     + api.override_step_data(
         'fake test (fake device iOS 8.1)',
-        api.json.output({
+        api.swarming.summary({
           'shards': [{
             'state': 48,
           }],
@@ -342,7 +343,7 @@ def GenTests(api):
     )
     + api.override_step_data(
         'fake test (fake device iOS 8.1)',
-        api.json.output({
+        api.swarming.summary({
           'shards': [{
             'state': 112,
           }],

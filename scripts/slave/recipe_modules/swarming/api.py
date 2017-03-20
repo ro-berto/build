@@ -11,6 +11,8 @@ import os.path
 from recipe_engine import recipe_api
 from recipe_engine import util as recipe_util
 
+import state
+
 # Minimally supported version of swarming.py script (reported by --version).
 MINIMAL_SWARMING_VERSION = (0, 8, 6)
 
@@ -107,42 +109,7 @@ class SwarmingApi(recipe_api.RecipeApi):
   See also example.py for concrete code.
   """
 
-  class State(object):
-    """Copied from appengine/swarming/server/task_result.py.
-
-    KEEP IN SYNC.
-
-    Used to parse the 'state' value in task result.
-    """
-    RUNNING = 0x10    # 16
-    PENDING = 0x20    # 32
-    EXPIRED = 0x30    # 48
-    TIMED_OUT = 0x40  # 64
-    BOT_DIED = 0x50   # 80
-    CANCELED = 0x60   # 96
-    COMPLETED = 0x70  # 112
-
-    STATES = (
-        RUNNING, PENDING, EXPIRED, TIMED_OUT, BOT_DIED, CANCELED, COMPLETED)
-    STATES_RUNNING = (RUNNING, PENDING)
-    STATES_NOT_RUNNING = (EXPIRED, TIMED_OUT, BOT_DIED, CANCELED, COMPLETED)
-    STATES_DONE = (TIMED_OUT, COMPLETED)
-    STATES_ABANDONED = (EXPIRED, BOT_DIED, CANCELED)
-
-    _NAMES = {
-      RUNNING: 'Running',
-      PENDING: 'Pending',
-      EXPIRED: 'Expired',
-      TIMED_OUT: 'Execution timed out',
-      BOT_DIED: 'Bot died',
-      CANCELED: 'User canceled',
-      COMPLETED: 'Completed',
-    }
-
-    @classmethod
-    def to_string(cls, state):
-      """Returns a user-readable string representing a State."""
-      return cls._NAMES[state]
+  State = state.State
 
   #############################################################################
   # The below are helper functions to help transition between the old and new #
@@ -194,6 +161,10 @@ class SwarmingApi(recipe_api.RecipeApi):
     self._show_shards_in_collect_step = False
     self._swarming_server = 'https://chromium-swarm.appspot.com'
     self._verbose = False
+
+  @recipe_util.returns_placeholder
+  def summary(self):
+    return self.m.json.output()
 
   @property
   def swarming_server(self):
@@ -734,7 +705,7 @@ class SwarmingApi(recipe_api.RecipeApi):
   def _default_collect_step(self, task, **kwargs):
     """Produces a step that collects a result of an arbitrary task."""
     args = self.get_collect_cmd_args(task)
-    args.extend(['--task-summary-json', self.m.json.output()])
+    args.extend(['--task-summary-json', self.summary()])
     if task.task_output_dir:
       args.extend(['--task-output-dir', task.task_output_dir])
 
@@ -743,14 +714,13 @@ class SwarmingApi(recipe_api.RecipeApi):
           name=self.get_step_name('', task),
           script=self.m.swarming_client.path.join('swarming.py'),
           args=args,
-          step_test_data=functools.partial(
-              self._gen_collect_step_test_data, task),
+          step_test_data=lambda: self.test_api.canned_summary_output(task.shards),
           **kwargs)
     finally:
       step_result = self.m.step.active_result
 
       step_result.presentation.step_text = text_for_task(task)
-      summary_json = step_result.json.output
+      summary_json = step_result.swarming.summary
       if summary_json:
         self._handle_summary_json(task, summary_json, step_result)
 
@@ -764,26 +734,26 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     # Where to put combined summary to, consumed by recipes. Also emit
     # test expectation only if |merged_test_output| is really used.
-    step_test_data = kwargs.pop('step_test_data', None)
     if merged_test_output:
       args.extend(['--merged-test-output', merged_test_output])
-      if not step_test_data:
-        sample_swarming_summary = {
-          'swarming_summary': {
-            'shards': [{
-              'outputs_ref': {
-                'view_url': 'blah',
-              },
-            }]
-          },
-        }
 
-        step_test_data = lambda: self.m.test_utils.test_api.canned_gtest_output(
-            True, extra_json=sample_swarming_summary)
+    gtest_results_test_data = kwargs.pop('step_test_data', None)
+    if not gtest_results_test_data:
+      gtest_results_test_data = (
+          self.m.test_utils.test_api.canned_gtest_output(True))
+
+    # The call to collect_gtest_task emits two JSON files:
+    #  1) a task summary JSON emitted by swarming
+    #  2) a gtest results JSON emitted by the task
+    # This builds an instance of StepTestData that covers both.
+    step_test_data = (
+        self.test_api.canned_summary_output(shards=task.shards)
+        + gtest_results_test_data)
 
     # Arguments for actual 'collect' command.
     args.append('--')
     args.extend(self.get_collect_cmd_args(task))
+    args.extend(['--task-summary-json', self.summary()])
 
     # Always wait for all tasks to finish even if some of them failed. Allow
     # collect_gtest_task.py to emit all necessary annotations itself.
@@ -793,7 +763,7 @@ class SwarmingApi(recipe_api.RecipeApi):
           script=self.resource('collect_gtest_task.py'),
           args=args,
           allow_subannotations=True,
-          step_test_data=step_test_data,
+          step_test_data=lambda: step_test_data,
           **kwargs)
     finally:
       # HACK: it is assumed that caller used 'api.test_utils.gtest_results'
@@ -815,7 +785,7 @@ class SwarmingApi(recipe_api.RecipeApi):
           p.step_text += self.m.test_utils.format_step_text([
             ['failures:', gtest_results.failures]
           ])
-        swarming_summary = gtest_results.raw.get('swarming_summary', {})
+        swarming_summary = step_result.swarming.summary
         self._display_pending(swarming_summary, step_result.presentation)
 
         # Show any remaining isolated outputs (such as logcats).
@@ -869,21 +839,33 @@ class SwarmingApi(recipe_api.RecipeApi):
   def _isolated_script_collect_step(self, task, **kwargs):
     """Collects results for a step that is *not* a googletest, like telemetry.
     """
-    step_test_data = kwargs.pop('step_test_data', None)
-    if not step_test_data:
-      step_test_data = self.m.test_utils.test_api.canned_isolated_script_output(
-          passing=True, is_win=self.m.platform.is_win, swarming=True,
-          use_json_test_format=True)
+    isolated_script_results_test_data = kwargs.pop('step_test_data', None)
+    if not isolated_script_results_test_data:
+      isolated_script_results_test_data = (
+          self.m.test_utils.test_api.canned_isolated_script_output(
+              passing=True, is_win=self.m.platform.is_win, swarming=True,
+              use_json_test_format=True))
+
+    # The call to collect_isolated_script_task emits two JSON files:
+    #  1) a task summary JSON emitted by swarming
+    #  2) a test results JSON emitted by the task
+    # This builds an instance of StepTestData that covers both.
+    step_test_data = (
+        self.test_api.canned_summary_output(task.shards)
+        + isolated_script_results_test_data)
 
     collect_cmd = [
       'python',
       self.m.swarming_client.path.join('swarming.py')
     ]
     collect_cmd.extend(self.get_collect_cmd_args(task))
+    collect_cmd.extend([
+      '--task-summary-json', self.summary(),
+    ])
 
     task_args = [
       '-o', self.m.json.output(),
-      '--task-output-dir', self.m.raw_io.output_dir()
+      '--task-output-dir', self.m.raw_io.output_dir(),
     ]
     if task.build_properties:
       task_args.extend([
@@ -1049,43 +1031,6 @@ class SwarmingApi(recipe_api.RecipeApi):
           'view_url': '%s/user/task/1%02d00' % (self.swarming_server, i),
         } for i, suffix in enumerate(subtasks)
       },
-    })
-
-  def _gen_collect_step_test_data(self, task):
-    """Generates an expected value of --task-summary-json in 'collect' step.
-
-    Used when running recipes to generate test expectations.
-    """
-    return self.m.json.test_api.output({
-      'shards': [
-        {
-          'abandoned_ts': None,
-          'bot_id': 'vm30',
-          'completed_ts': '2014-09-25T01:42:00.123',
-          'created_ts': '2014-09-25T01:41:00.123',
-          'durations': [5.7, 31.5],
-          'exit_codes': [0, 0],
-          'failure': False,
-          'id': '148aa78d7aa%02d00' % i,
-          'internal_failure': False,
-          'isolated_out': {
-            'isolated': 'abc123',
-            'isolatedserver': 'https://isolateserver.appspot.com',
-            'namespace': 'default-gzip',
-            'view_url': 'blah',
-          },
-          'modified_ts': '2014-09-25 01:42:00',
-          'name': 'heartbeat-canary-2014-09-25_01:41:55-os=Windows',
-          'outputs': [
-            'Heart beat succeeded on win32.\n',
-            'Foo',
-          ],
-          'started_ts': '2014-09-25T01:42:11.123',
-          'state': self.State.COMPLETED,
-          'try_number': 1,
-          'user': 'unknown',
-        } for i in xrange(task.shards)
-      ],
     })
 
 

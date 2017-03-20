@@ -405,7 +405,9 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"telemetry_gpu_unittests/Ubuntu-14.04/eeeeeeeeee/Linux Tests/571\", \"tasks\": {\"telemetry_gpu_unittests/Ubuntu-14.04/eeeeeeeeee/Linux Tests/571:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"telemetry_gpu_unittests/Ubuntu-14.04/eeeeeeeeee/Linux Tests/571:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}}}"
+      "{\"base_task_name\": \"telemetry_gpu_unittests/Ubuntu-14.04/eeeeeeeeee/Linux Tests/571\", \"tasks\": {\"telemetry_gpu_unittests/Ubuntu-14.04/eeeeeeeeee/Linux Tests/571:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"telemetry_gpu_unittests/Ubuntu-14.04/eeeeeeeeee/Linux Tests/571:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}}}",
+      "--task-summary-json",
+      "/path/to/tmp/json"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -427,6 +429,9 @@
       "@@@STEP_LOG_LINE@json.output@  \"valid\": true@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_END@swarming.summary (invalid)@@@",
+      "@@@STEP_LOG_LINE@swarming.summary (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@swarming.summary (exception)@@@",
       "@@@STEP_LOG_LINE@outdir_json@{@@@",
       "@@@STEP_LOG_LINE@outdir_json@  \"0/output.json\": \"{\\\"successes\\\": [\\\"test1.Test1\\\", \\\"test2.Test2\\\"], \\\"failures\\\": [], \\\"valid\\\": true, \\\"times\\\": {\\\"test2.Test2\\\": 0.1, \\\"test1.Test1\\\": 0.1}}\", @@@",
       "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}, {\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}]}\"@@@",

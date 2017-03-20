@@ -137,6 +137,7 @@ def GenTests(api):
       ) +
       api.override_step_data(
           'test r0.browser_tests (r0)',
+          api.swarming.canned_summary_output() +
           api.test_utils.simulated_gtest_output(passed_test_names=['Test.One'])
       )
   )
@@ -158,6 +159,7 @@ def GenTests(api):
       ) +
       api.override_step_data(
           'test r0.gl_tests (r0)',
+          api.swarming.canned_summary_output() +
           api.test_utils.simulated_gtest_output(passed_test_names=['Test.One'])
 
       )
@@ -188,6 +190,7 @@ def GenTests(api):
       ) +
       api.override_step_data(
           'test r0.gl_tests (r0)',
+          api.swarming.canned_summary_output() +
           api.test_utils.simulated_gtest_output(passed_test_names=['Test.One'])
       )
   )

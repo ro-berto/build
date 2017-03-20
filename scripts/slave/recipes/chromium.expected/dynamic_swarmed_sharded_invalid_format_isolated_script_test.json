@@ -411,7 +411,9 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"telemetry_gpu_unittests/Ubuntu-14.04/eeeeeeeeee/Linux Tests/571\", \"tasks\": {\"telemetry_gpu_unittests/Ubuntu-14.04/eeeeeeeeee/Linux Tests/571:3:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"telemetry_gpu_unittests/Ubuntu-14.04/eeeeeeeeee/Linux Tests/571:3:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"telemetry_gpu_unittests/Ubuntu-14.04/eeeeeeeeee/Linux Tests/571:3:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}}}"
+      "{\"base_task_name\": \"telemetry_gpu_unittests/Ubuntu-14.04/eeeeeeeeee/Linux Tests/571\", \"tasks\": {\"telemetry_gpu_unittests/Ubuntu-14.04/eeeeeeeeee/Linux Tests/571:3:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"telemetry_gpu_unittests/Ubuntu-14.04/eeeeeeeeee/Linux Tests/571:3:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"telemetry_gpu_unittests/Ubuntu-14.04/eeeeeeeeee/Linux Tests/571:3:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}}}",
+      "--task-summary-json",
+      "/path/to/tmp/json"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -449,6 +451,9 @@
       "@@@STEP_LOG_LINE@json.output@  \"version\": 3@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_END@swarming.summary (invalid)@@@",
+      "@@@STEP_LOG_LINE@swarming.summary (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@swarming.summary (exception)@@@",
       "@@@STEP_LOG_LINE@outdir_json@{@@@",
       "@@@STEP_LOG_LINE@outdir_json@  \"0/chartjson-output.json\": \"{\\\"dummy\\\": \\\"dummy0\\\", \\\"enabled\\\": true, \\\"charts\\\": {\\\"entry2\\\": \\\"chart2\\\", \\\"entry1\\\": \\\"chart1\\\"}}\", @@@",
       "@@@STEP_LOG_LINE@outdir_json@  \"0/output.json\": \"{\\\"tests\\\": {\\\"test1\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"PASS\\\"}, \\\"Test2\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"TIMEOUT\\\"}}, \\\"test_common\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL PASS\\\"}}}, \\\"interrupted\\\": false, \\\"invalid\\\": \\\"1\\\", \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000000, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"PASS\\\": 2}}\", @@@",
