@@ -76,7 +76,7 @@
       "python",
       "-u",
       "[START_DIR]/crashpad/build/run_tests.py",
-      "Debug_x64"
+      "[START_DIR]/crashpad/out/Debug_x64"
     ],
     "name": "run tests"
   },

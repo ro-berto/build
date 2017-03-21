@@ -60,7 +60,7 @@ def RunSteps(api):
 
   api.python('run tests',
              api.path['checkout'].join('build', 'run_tests.py'),
-             args=[dirname])
+             args=[path])
 
 
 def GenTests(api):

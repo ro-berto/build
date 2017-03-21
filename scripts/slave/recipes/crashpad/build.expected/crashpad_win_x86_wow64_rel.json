@@ -69,7 +69,7 @@
       "python",
       "-u",
       "[START_DIR]/crashpad/build/run_tests.py",
-      "Release"
+      "[START_DIR]/crashpad/out/Release"
     ],
     "name": "run tests"
   },
