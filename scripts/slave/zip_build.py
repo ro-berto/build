@@ -129,6 +129,7 @@ def _MojomFiles(build_dir, suffixes):
     'gen/media/mojo/interfaces/',
     'gen/mojo',
     'gen/services',
+    'gen/skia/public/interfaces',
     'gen/third_party/WebKit/public',
     'gen/url/mojo',
     'gen/ui',
