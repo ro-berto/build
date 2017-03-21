@@ -58,7 +58,6 @@ def RunSteps(api):
     zip_out = api.path['start_dir'].join('webrtc_ios_api_framework.zip')
     pkg = api.zip.make_package(output_dir, zip_out)
     pkg.add_directory(output_dir.join('WebRTC.framework'))
-    pkg.add_file(output_dir.join('LICENSE.html'))
     pkg.zip('zip archive')
 
     api.gsutil.upload(
