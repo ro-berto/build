@@ -99,7 +99,8 @@
       "--vm-options=--no-enable-malloc-hooks",
       "co19",
       "language",
-      "kernel"
+      "kernel",
+      "service"
     ],
     "cwd": "[START_DIR]/sdk",
     "name": "vm tests"
