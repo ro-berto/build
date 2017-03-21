@@ -868,8 +868,10 @@ class SwarmingApi(recipe_api.RecipeApi):
       '--task-output-dir', self.m.raw_io.output_dir(),
     ]
     if task.build_properties:
+      properties = dict(task.build_properties)
+      properties.update(self.m.properties)
       task_args.extend([
-          '--build-properties', self.m.json.dumps(task.build_properties),
+          '--build-properties', self.m.json.dumps(properties),
       ])
 
     merge_script = (task.merge.get('script')
@@ -885,12 +887,13 @@ class SwarmingApi(recipe_api.RecipeApi):
     task_args.extend(collect_cmd)
 
     try:
-      return self.m.python(
-          name=self.get_step_name('', task),
-          script=self.resource('collect_isolated_script_task.py'),
-          args=task_args,
-          step_test_data=lambda: step_test_data,
-          **kwargs)
+      with self.m.step.context({'cwd': self.m.path['start_dir']}):
+        return self.m.python(
+            name=self.get_step_name('', task),
+            script=self.resource('collect_isolated_script_task.py'),
+            args=task_args,
+            step_test_data=lambda: step_test_data,
+            **kwargs)
     finally:
       # Regardless of the outcome of the test (pass or fail), we try to parse
       # the results. If any error occurs while parsing results, then we set them

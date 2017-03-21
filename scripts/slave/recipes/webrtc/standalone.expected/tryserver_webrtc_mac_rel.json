@@ -2149,7 +2149,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_rel",
+    "cwd": "[START_DIR]",
     "name": "audio_decoder_unittests on Mac-10.11",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac-10.11'@@@",
@@ -2259,7 +2259,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_rel",
+    "cwd": "[START_DIR]",
     "name": "common_audio_unittests on Mac-10.11",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac-10.11'@@@",
@@ -2369,7 +2369,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_rel",
+    "cwd": "[START_DIR]",
     "name": "common_video_unittests on Mac-10.11",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac-10.11'@@@",
@@ -2479,7 +2479,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_rel",
+    "cwd": "[START_DIR]",
     "name": "modules_tests on Mac-10.11",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac-10.11'@@@",
@@ -2592,7 +2592,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_rel",
+    "cwd": "[START_DIR]",
     "name": "modules_unittests on Mac-10.11",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac-10.11'@@@",
@@ -2717,7 +2717,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_rel",
+    "cwd": "[START_DIR]",
     "name": "ortc_unittests on Mac-10.11",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac-10.11'@@@",
@@ -2827,7 +2827,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_rel",
+    "cwd": "[START_DIR]",
     "name": "peerconnection_unittests on Mac-10.11",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac-10.11'@@@",
@@ -2946,7 +2946,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_rel",
+    "cwd": "[START_DIR]",
     "name": "rtc_media_unittests on Mac-10.11",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac-10.11'@@@",
@@ -3056,7 +3056,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_rel",
+    "cwd": "[START_DIR]",
     "name": "rtc_pc_unittests on Mac-10.11",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac-10.11'@@@",
@@ -3166,7 +3166,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_rel",
+    "cwd": "[START_DIR]",
     "name": "rtc_stats_unittests on Mac-10.11",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac-10.11'@@@",
@@ -3276,7 +3276,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_rel",
+    "cwd": "[START_DIR]",
     "name": "rtc_unittests on Mac-10.11",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac-10.11'@@@",
@@ -3401,7 +3401,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_rel",
+    "cwd": "[START_DIR]",
     "name": "system_wrappers_unittests on Mac-10.11",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac-10.11'@@@",
@@ -3511,7 +3511,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_rel",
+    "cwd": "[START_DIR]",
     "name": "test_support_unittests on Mac-10.11",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac-10.11'@@@",
@@ -3621,7 +3621,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_rel",
+    "cwd": "[START_DIR]",
     "name": "tools_unittests on Mac-10.11",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac-10.11'@@@",
@@ -3731,7 +3731,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_rel",
+    "cwd": "[START_DIR]",
     "name": "video_engine_tests on Mac-10.11",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac-10.11'@@@",
@@ -3850,7 +3850,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_rel",
+    "cwd": "[START_DIR]",
     "name": "voice_engine_unittests on Mac-10.11",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac-10.11'@@@",
@@ -3960,7 +3960,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]/mac_rel",
+    "cwd": "[START_DIR]",
     "name": "webrtc_nonparallel_tests on Mac-10.11",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac-10.11'@@@",

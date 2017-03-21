@@ -228,6 +228,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[START_DIR]",
     "name": "hello_world on Windows-7-SP1",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br>swarming pending 71s@@@",
