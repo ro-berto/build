@@ -7,12 +7,8 @@ from master.factory import annotator_factory, chromeos_factory
 
 from buildbot.schedulers.basic import SingleBranchScheduler as Scheduler
 
-def Builder(factory_obj, board, gn=False):
-  suffix = ''
-  if gn:
-    suffix = '-gn'
-
-  config = '%s-tot-chromium-pfq-informational%s' % (board, suffix)
+def Builder(factory_obj, board):
+  config = '%s-tot-chromium-pfq-informational' % (board,)
   builder = {
       'name': config,
       'builddir': config,
@@ -37,7 +33,6 @@ def Update(_config, active_master, c):
       Builder(factory_obj, 'x86-generic'),
       Builder(factory_obj, 'amd64-generic'),
       Builder(factory_obj, 'daisy'),
-      Builder(factory_obj, 'amd64-generic', gn=True),
   ]
 
   c['schedulers'] += [
