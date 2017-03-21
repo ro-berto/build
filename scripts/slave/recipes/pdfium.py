@@ -339,7 +339,7 @@ def upload_dm_results(api, results_dir, revision):
       infra_step=True)
 
   if len(files_to_upload) > 0:
-    gs_cp(api, 'images', img_glob, 'dm-images-v1')
+    gs_cp(api, 'images', img_glob, 'dm-images-v1', multithreaded=True)
 
   # Upload the JSON summary and verbose.log.
   sec_str = str(int(api.time.time()))
@@ -366,22 +366,20 @@ def upload_dm_results(api, results_dir, revision):
 
   summary_dest_path = '/'.join([summary_dest_path, DM_JSON])
   local_dmjson = results_dir.join(DM_JSON)
-  gs_cp(api, 'JSON', local_dmjson, summary_dest_path, ['-z', 'json,log'])
+  gs_cp(api, 'JSON', local_dmjson, summary_dest_path,
+        extra_args=['-z', 'json,log'])
 
-def gs_cp(api, name, src, dst, extra_args=None):
+def gs_cp(api, name, src, dst, multithreaded=False, extra_args=None):
   """
   Copy the src to dst in Google storage.
   """
   name = 'upload %s' % name
   for i in xrange(UPLOAD_ATTEMPTS):
     try:
-      api.gsutil.upload(
-          name=name,
-          source=src,
-          bucket=GS_BUCKET,
-          dest=dst,
-          args=extra_args if extra_args else [],
-      )
+      args = extra_args if extra_args else []
+      full_dest = 'gs://%s/%s' % (GS_BUCKET, dst)
+      api.gsutil(['cp'] + args + [src, full_dest],
+                 name=name, multithreaded=multithreaded)
       break
     except api.step.StepFailure: # pragma: no cover
       if i == UPLOAD_ATTEMPTS - 1:

@@ -427,16 +427,14 @@
       "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "-m",
       "----",
       "cp",
       "[START_DIR]/pdfium/out/debug/gold_output/*.png",
       "gs://skia-pdfium-gm/dm-images-v1"
     ],
     "infra_step": true,
-    "name": "gsutil upload images",
-    "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/skia-pdfium-gm/dm-images-v1@@@"
-    ]
+    "name": "gsutil upload images"
   },
   {
     "cmd": [
@@ -453,10 +451,7 @@
       "gs://skia-pdfium-gm/dm-json-v1/2012/05/14/12/d69d97171c17fdb12a52f78847e2ee2f0594eff1/mac_no_v8/1337000001/dm.json"
     ],
     "infra_step": true,
-    "name": "gsutil upload JSON",
-    "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/skia-pdfium-gm/dm-json-v1/2012/05/14/12/d69d97171c17fdb12a52f78847e2ee2f0594eff1/mac_no_v8/1337000001/dm.json@@@"
-    ]
+    "name": "gsutil upload JSON"
   },
   {
     "name": "$result",
