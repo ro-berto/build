@@ -124,6 +124,12 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
                                override_isolate_target=test))
       else:
         tests.append(AndroidJunitTest(test))
+    if api.m.tryserver.is_tryserver:
+      tests.append(GTestTest(
+          'webrtc_perf_tests',
+          enable_swarming=enable_swarming,
+          override_isolate_target='webrtc_perf_tests',
+          args=['--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/']))
   elif test_suite == 'android_experimental':
     for test in ANDROID_EXPERIMENTAL_TESTS:
       tests.append(GTestTest(test, enable_swarming=enable_swarming,
