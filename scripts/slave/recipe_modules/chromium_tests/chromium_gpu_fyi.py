@@ -173,7 +173,7 @@ SPEC = {
       # These new graphics cards are being tested at the moment.
       'enable_swarming': False,
     },
-    'Win10 Release (NVIDIA Quadro M2000)': {
+    'Win10 Release (NVIDIA Quadro P400)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -442,7 +442,7 @@ SPEC = {
       # These new graphics cards are being tested at the moment.
       'enable_swarming': False,
     },
-    'Linux Release (NVIDIA Quadro M2000)': {
+    'Linux Release (NVIDIA Quadro P400)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
       'gclient_config': 'chromium',

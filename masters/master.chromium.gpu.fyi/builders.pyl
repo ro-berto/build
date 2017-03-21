@@ -123,13 +123,13 @@
       "builder_timeout_s": 21600,
       "category": "0Windows",
     },
-    "Win10 Release (NVIDIA Quadro M2000)": {
+    "Win10 Release (NVIDIA Quadro P400)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
       # It's crucial to merge build requests on the testers.
       "mergeRequests": True,
-      "slave_pools": ["win10_rel_nvidia_quadro_m2000"],
+      "slave_pools": ["win10_rel_nvidia_quadro_p400"],
       "builder_timeout_s": 21600,
       "category": "0Windows",
     },
@@ -379,13 +379,13 @@
       "builder_timeout_s": 21600,
       "category": "2Linux",
     },
-    "Linux Release (NVIDIA Quadro M2000)": {
+    "Linux Release (NVIDIA Quadro P400)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
       # It's crucial to merge build requests on the testers.
       "mergeRequests": True,
-      "slave_pools": ["linux_rel_nvidia_quadro_m2000"],
+      "slave_pools": ["linux_rel_nvidia_quadro_p400"],
       "builder_timeout_s": 21600,
       "category": "2Linux",
     },
@@ -583,7 +583,7 @@
       },
       "slaves": ["build71-b1"],
     },
-    "win10_rel_nvidia_quadro_m2000": {
+    "win10_rel_nvidia_quadro_p400": {
       "slave_data": {
         "bits": 64,
         "os": "win",
@@ -815,7 +815,7 @@
       },
       "slaves": ["build70-b1"],
     },
-    "linux_rel_nvidia_quadro_m2000": {
+    "linux_rel_nvidia_quadro_p400": {
       "slave_data": {
         "bits": 64,
         "os": "linux",

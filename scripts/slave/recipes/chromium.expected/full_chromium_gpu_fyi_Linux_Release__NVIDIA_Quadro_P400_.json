@@ -3,17 +3,8 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\kill_processes.py"
-    ],
-    "infra_step": true,
-    "name": "taskkill"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[BUILDER_CACHE]\\Win10_Release__NVIDIA_Quadro_M2000_",
+      "[BUILDER_CACHE]/Linux_Release__NVIDIA_Quadro_P400_",
       "511"
     ],
     "name": "makedirs checkout path",
@@ -34,7 +25,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
+      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec",
       "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
       "--patch_root",
@@ -49,11 +40,11 @@
       "src@1111111",
       "--output_manifest"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win10_Release__NVIDIA_Quadro_M2000_",
+    "cwd": "[BUILDER_CACHE]/Linux_Release__NVIDIA_Quadro_P400_",
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
     "name": "bot_update",
@@ -138,16 +129,16 @@
   },
   {
     "cmd": [
-      "cipd.bat",
+      "cipd",
       "ensure",
       "-root",
-      "[CACHE]\\goma_client",
+      "[CACHE]/goma_client",
       "-ensure-file",
-      "infra/tools/cloudtail/windows-386 goma_recipe_module\ninfra_internal/goma/client/windows-amd64 release",
+      "infra/tools/cloudtail/linux-amd64 goma_recipe_module\ninfra_internal/goma/client/linux-amd64 release",
       "-json-output",
       "/path/to/tmp/json",
       "-service-account-json",
-      "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "/creds/service_accounts/service-account-goma-client.json"
     ],
     "infra_step": true,
     "name": "ensure_goma.ensure_installed",
@@ -157,11 +148,11 @@
       "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-goma_recipe_modu\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/cloudtail/windows-386\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/cloudtail/linux-amd64\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/windows-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/linux-amd64\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -172,7 +163,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win10_Release__NVIDIA_Quadro_M2000_\\src\\tools\\swarming_client\\swarming.py",
+      "[BUILDER_CACHE]/Linux_Release__NVIDIA_Quadro_P400_/src/tools/swarming_client/swarming.py",
       "--version"
     ],
     "name": "swarming.py --version",
@@ -185,14 +176,15 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win10_Release__NVIDIA_Quadro_M2000_\\src",
+    "cwd": "[BUILDER_CACHE]/Linux_Release__NVIDIA_Quadro_P400_/src",
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "GYP_DEFINES": "component=static_library fastbuild=1 gomadir='[CACHE]\\goma_client' target_arch=ia32 use_goma=1",
-      "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "GYP_CHROMIUM_NO_ACTION": "1",
+      "GYP_DEFINES": "component=static_library gomadir='[CACHE]/goma_client' target_arch=x64 use_goma=1",
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
   },
@@ -200,7 +192,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win10_Release__NVIDIA_Quadro_M2000_\\src\\testing\\scripts\\get_compile_targets.py",
+      "[BUILDER_CACHE]/Linux_Release__NVIDIA_Quadro_P400_/src/testing/scripts/get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
@@ -208,9 +200,9 @@
       "Release",
       "--use-src-side-runtest-py",
       "--paths",
-      "{\"checkout\": \"[BUILDER_CACHE]\\\\Win10_Release__NVIDIA_Quadro_M2000_\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
+      "{\"checkout\": \"[BUILDER_CACHE]/Linux_Release__NVIDIA_Quadro_P400_/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"test_bot\", \"buildername\": \"Win10 Release (NVIDIA Quadro M2000)\", \"buildnumber\": 571, \"mastername\": \"chromium.gpu.fyi\", \"slavename\": \"test_bot\", \"target_platform\": \"win\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"Linux Release (NVIDIA Quadro P400)\", \"buildnumber\": 571, \"mastername\": \"chromium.gpu.fyi\", \"slavename\": \"test_bot\", \"target_platform\": \"linux\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -223,12 +215,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]\\Win10_Release__NVIDIA_Quadro_M2000_\\src\\testing\\buildbot\\chromium.gpu.fyi.json",
+      "[BUILDER_CACHE]/Linux_Release__NVIDIA_Quadro_P400_/src/testing/buildbot/chromium.gpu.fyi.json",
       "/path/to/tmp/json"
     ],
     "name": "read test spec (chromium.gpu.fyi.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [BUILDER_CACHE]\\Win10_Release__NVIDIA_Quadro_M2000_\\src\\testing\\buildbot\\chromium.gpu.fyi.json@@@",
+      "@@@STEP_TEXT@path: [BUILDER_CACHE]/Linux_Release__NVIDIA_Quadro_P400_/src/testing/buildbot/chromium.gpu.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -237,11 +229,11 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\cleanup_temp.py"
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/cleanup_temp.py"
     ],
     "infra_step": true,
     "name": "cleanup_temp"
@@ -250,9 +242,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[build::file]/resources/fileutil.py",
       "rmtree",
-      "[BUILDER_CACHE]\\Win10_Release__NVIDIA_Quadro_M2000_\\src\\out\\Release"
+      "[BUILDER_CACHE]/Linux_Release__NVIDIA_Quadro_P400_/src/out/Release"
     ],
     "infra_step": true,
     "name": "rmtree build directory"
@@ -261,19 +253,19 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\extract_build.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/extract_build.py",
       "--gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--target",
       "Release",
       "--src-dir",
-      "[BUILDER_CACHE]\\Win10_Release__NVIDIA_Quadro_M2000_\\src",
+      "[BUILDER_CACHE]/Linux_Release__NVIDIA_Quadro_P400_/src",
       "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--build-archive-url",
       "gs://test-domain/test-archive.zip",
       "--master-name",

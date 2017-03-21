@@ -265,7 +265,7 @@
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Linux Release (NVIDIA Quadro M2000)\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Linux Release (NVIDIA Quadro P400)\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
@@ -763,7 +763,7 @@
         }
       },
       {
-        "builder_name": "Linux Release (NVIDIA Quadro M2000)",
+        "builder_name": "Linux Release (NVIDIA Quadro P400)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
           "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
@@ -824,7 +824,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Linux Release (AMD R5 230)<br />Linux Release (AMD R7 240)<br />Linux Release (Intel HD 530)<br />Linux Release (NVIDIA GeForce 730)<br />Linux Release (NVIDIA Quadro M2000)<br />Linux Release (NVIDIA)<br />Optional Linux Release (NVIDIA)@@@"
+      "@@@STEP_TEXT@Linux Release (AMD R5 230)<br />Linux Release (AMD R7 240)<br />Linux Release (Intel HD 530)<br />Linux Release (NVIDIA GeForce 730)<br />Linux Release (NVIDIA Quadro P400)<br />Linux Release (NVIDIA)<br />Optional Linux Release (NVIDIA)@@@"
     ]
   },
   {

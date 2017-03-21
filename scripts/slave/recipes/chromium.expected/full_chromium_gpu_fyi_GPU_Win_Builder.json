@@ -264,7 +264,7 @@
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Win10 Release (NVIDIA Quadro M2000)\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Win10 Release (NVIDIA Quadro P400)\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
@@ -772,7 +772,7 @@
         }
       },
       {
-        "builder_name": "Win10 Release (NVIDIA Quadro M2000)",
+        "builder_name": "Win10 Release (NVIDIA Quadro P400)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
           "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
@@ -893,7 +893,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Optional Win7 Release (AMD)<br />Optional Win7 Release (NVIDIA)<br />Win10 Release (Intel HD 530)<br />Win10 Release (NVIDIA Quadro M2000)<br />Win10 Release (NVIDIA)<br />Win7 Release (AMD R5 230)<br />Win7 Release (AMD)<br />Win7 Release (NVIDIA GeForce 730)<br />Win7 Release (NVIDIA)@@@"
+      "@@@STEP_TEXT@Optional Win7 Release (AMD)<br />Optional Win7 Release (NVIDIA)<br />Win10 Release (Intel HD 530)<br />Win10 Release (NVIDIA Quadro P400)<br />Win10 Release (NVIDIA)<br />Win7 Release (AMD R5 230)<br />Win7 Release (AMD)<br />Win7 Release (NVIDIA GeForce 730)<br />Win7 Release (NVIDIA)@@@"
     ]
   },
   {
