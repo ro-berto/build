@@ -1958,7 +1958,11 @@ SPEC = {
 
     'Android Builder (dbg)': {
       'chromium_config': 'android',
-      'chromium_apply_config': ['chrome_with_codecs', 'mb'],
+      'chromium_apply_config': [
+        'chrome_with_codecs',
+        'mb',
+        'download_vr_test_apks'
+      ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
