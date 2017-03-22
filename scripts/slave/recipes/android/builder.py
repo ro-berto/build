@@ -36,11 +36,11 @@ BUILDERS = freeze({
         'path': lambda api: ('Android Builder/full-build-linux_%s.zip'
                              % api.properties['revision']),
       },
-      'resource_sizes_apks': [
-        'ChromeModernPublic.apk',
-        'ChromePublic.apk',
-        'MonochromePublic.apk',
-        'SystemWebView.apk',
+      'resource_sizes_configs': [
+        {'apk_name': 'ChromeModernPublic.apk', 'estimate_patch_size': False},
+        {'apk_name': 'ChromePublic.apk', 'estimate_patch_size': False},
+        {'apk_name': 'MonochromePublic.apk', 'estimate_patch_size': True},
+        {'apk_name': 'SystemWebView.apk', 'estimate_patch_size': False},
       ],
       'run_mb': True,
       'targets': [
@@ -72,10 +72,10 @@ BUILDERS = freeze({
             'Android arm64 Builder/full-build-linux_%s.zip'
             % api.properties['revision']),
       },
-      'resource_sizes_apks': [
-        'ChromeModernPublic.apk',
-        'ChromePublic.apk',
-        'SystemWebView.apk',
+      'resource_sizes_configs': [
+        {'apk_name': 'ChromeModernPublic.apk', 'estimate_patch_size': True},
+        {'apk_name': 'ChromePublic.apk', 'estimate_patch_size': False},
+        {'apk_name': 'SystemWebView.apk', 'estimate_patch_size': False},
       ],
       'run_mb': True,
       'targets': [
@@ -253,9 +253,12 @@ def _RunStepsInternal(api, mastername, buildername, revision):
       api, mastername, buildername, update_step)
   api.chromium.compile(targets, use_goma_module=True)
 
-  for apk_name in bot_config.get('resource_sizes_apks', ()):
-    apk_path = api.chromium_android.apk_path(apk_name)
-    api.chromium_android.resource_sizes(apk_path, chartjson_file=True)
+  resource_sizes_configs = bot_config.get('resource_sizes_configs', ())
+  for config in resource_sizes_configs:
+    apk_path = api.chromium_android.apk_path(config['apk_name'])
+    estimate_patch_size = config['estimate_patch_size']
+    api.chromium_android.resource_sizes(
+        apk_path, chartjson_file=True, estimate_patch_size=estimate_patch_size)
 
   upload_for_bisect = bot_config.get('upload_for_bisect')
   if upload_for_bisect:
