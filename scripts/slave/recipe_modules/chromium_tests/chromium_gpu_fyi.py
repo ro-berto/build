@@ -885,24 +885,6 @@ SPEC = {
       },
       'enable_swarming': False,
     },
-    'Android Release (NVIDIA Shield)': {
-      'chromium_config': 'android',
-      'chromium_apply_config': ['chrome_with_codecs'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android', 'angle_top_of_tree'],
-      'chromium_config_kwargs': {
-        'TARGET_PLATFORM': 'android',
-      },
-      'android_config': 'main_builder_mb',
-      'android_apply_config': ['restart_usb', 'use_devil_adb'],
-      'bot_type': 'builder_tester',
-      'compile_targets': [
-      ],
-      'testing': {
-        'platform': 'linux',
-      },
-      'enable_swarming': False,
-    },
 
     'GPU Fake Linux Builder': {
       'chromium_config': 'chromium',
