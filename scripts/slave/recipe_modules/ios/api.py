@@ -582,13 +582,8 @@ class iOSApi(recipe_api.RecipeApi):
     if not gen_files:
       return tasks
 
-    isolate = self.m.swarming_client.path.join('isolate.py')
-    if self.m.properties['mastername'].endswith('.fyi'):
-      isolate = self.m.path['checkout'].join(
-          'tools', 'luci-go', 'mac64', 'isolate')
-
     cmd = [
-      isolate,
+      self.m.path['checkout'].join('tools', 'luci-go', 'mac64', 'isolate'),
       'batcharchive',
       '--dump-json', self.m.json.output(),
       '--isolate-server', self.m.isolate.isolate_server,

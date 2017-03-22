@@ -1179,7 +1179,7 @@
   },
   {
     "cmd": [
-      "[START_DIR]/swarming.client/isolate.py",
+      "[START_DIR]/src/tools/luci-go/mac64/isolate",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
