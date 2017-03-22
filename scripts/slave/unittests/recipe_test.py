@@ -3,25 +3,20 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+"""Runs simulation tests and lint on the recipes."""
+
 import os
-import pipes
-import shutil
 import subprocess
-import sys
 
-RECIPES_PY = os.path.join(
-    os.path.dirname(os.path.dirname(os.path.realpath(__file__))),
-    'recipes.py')
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-args = [
-  RECIPES_PY,
-  "--use-bootstrap",
-]
+def recipes_py(*args):
+  subprocess.check_call([
+      os.path.join(ROOT_DIR, 'recipes.py'), '--use-bootstrap'] + list(args))
 
-if 'CHROME_HEADLESS' in os.environ:
-  args += ["--deps-path=-"]
+# Run both current simulation test logic (simulation_test), and experimental
+# (test). Eventually the former will be removed.
+recipes_py('simulation_test')
+recipes_py('test', 'run')
 
-args += [
-    'test', 'run'
-]
-sys.exit(subprocess.call(args))
+recipes_py('lint')
