@@ -1210,31 +1210,9 @@
     },
     "name": "test r1.compile",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
-      "-w",
-      "dupbuild=err",
-      "-C",
-      "[BUILDER_CACHE]/linux/src/out/Release",
-      "-j",
-      "50",
-      "target_name",
-      "-d",
-      "explain",
-      "-n"
-    ],
-    "cwd": "[BUILDER_CACHE]/linux/src",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "test r1.compile confirm no-op",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "step returned non-zero exit code: 1",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -1324,7 +1302,7 @@
       "--ninja-log-command",
       "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/linux/src/out/Release', '-j', 50, 'target_name']",
       "--ninja-log-exit-status",
-      "0",
+      "1",
       "--ninja-log-compiler",
       "goma",
       "--buildbot-buildername",
@@ -1368,13 +1346,11 @@
     ],
     "name": "report",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>Culprit: <a href=\"https://crrev.com/r2\">r2</a>@@@",
       "@@@STEP_LOG_LINE@report@{@@@",
       "@@@STEP_LOG_LINE@report@  \"result\": {@@@",
-      "@@@STEP_LOG_LINE@report@    \"r1\": \"passed\", @@@",
+      "@@@STEP_LOG_LINE@report@    \"r1\": \"failed\", @@@",
       "@@@STEP_LOG_LINE@report@    \"r2\": \"failed\"@@@",
       "@@@STEP_LOG_LINE@report@  }, @@@",
-      "@@@STEP_LOG_LINE@report@  \"culprit\": \"r2\", @@@",
       "@@@STEP_LOG_LINE@report@  \"metadata\": {@@@",
       "@@@STEP_LOG_LINE@report@    \"use_bisect\": false, @@@",
       "@@@STEP_LOG_LINE@report@    \"regression_range_size\": 4, @@@",
@@ -1390,7 +1366,7 @@
       "@@@STEP_LOG_LINE@report@  }@@@",
       "@@@STEP_LOG_LINE@report@}@@@",
       "@@@STEP_LOG_END@report@@@",
-      "@@@SET_BUILD_PROPERTY@report@{\"culprit\": \"r2\", \"metadata\": {\"regression_range_size\": 4, \"sub_ranges\": [[null, \"r2\", \"r3\", \"r4\", \"r5\"]], \"use_bisect\": false}, \"result\": {\"r1\": \"passed\", \"r2\": \"failed\"}}@@@"
+      "@@@SET_BUILD_PROPERTY@report@{\"metadata\": {\"regression_range_size\": 4, \"sub_ranges\": [[null, \"r2\", \"r3\", \"r4\", \"r5\"]], \"use_bisect\": false}, \"result\": {\"r1\": \"failed\", \"r2\": \"failed\"}}@@@"
     ]
   },
   {

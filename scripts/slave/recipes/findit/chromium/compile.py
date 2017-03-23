@@ -53,6 +53,10 @@ PROPERTIES = {
         kind=Single(bool, empty_val=False, required=False), default=True,
         help='Use bisect to skip more revisions. '
              'Effective only when compile_targets is given.'),
+    'compile_on_good_revision': Property(
+        kind=Single(bool, empty_val=False, required=False), default=True,
+        help='Run compile on good revision as well if the first revision '
+             'in range is the suspected culprit.'),
 }
 
 
@@ -122,7 +126,8 @@ def _run_compile_at_revision(api, target_mastername, target_buildername,
 
 def RunSteps(api, target_mastername, target_buildername,
              good_revision, bad_revision, compile_targets,
-             buildbucket, use_analyze, suspected_revisions, use_bisect):
+             buildbucket, use_analyze, suspected_revisions, use_bisect,
+             compile_on_good_revision):
   if not compile_targets:
     # compile_targets could be saved in build parameter.
     buildbucket_json = json.loads(buildbucket)
@@ -187,7 +192,7 @@ def RunSteps(api, target_mastername, target_buildername,
   # beginning of the compile breakage.
   suspected_revision_index = [
       all_revisions.index(r)
-          for r in set(suspected_revisions) if r in all_revisions]
+      for r in set(suspected_revisions) if r in all_revisions]
   if suspected_revision_index:
     # For consecutive suspected revisions, make them all in the same sub-range
     # by removing the newer revisions, but keep the oldest one.
@@ -283,7 +288,19 @@ def RunSteps(api, target_mastername, target_buildername,
         # suspected revision was set for a failure of compile rerun, then the
         # culprit is found. If an exception occurs, the suspected revision might
         # not be correct even it is set.
-        found = True
+        if compile_on_good_revision and culprit_candidate == all_revisions[0]:
+          # The culprit is the first one in the regression range, we need to run
+          # compile on last good to reduce false positives.
+          compile_result = _run_compile_at_revision(
+              api, target_mastername, target_buildername,
+              good_revision, compile_targets, use_analyze)
+          compile_results[good_revision] = compile_result
+          # If compile failed on last good revision, the original failure could
+          # have been a flaky compile.
+          found = compile_result != CompileResult.FAILED
+        else:
+          found = True
+
   except api.step.InfraFailure:
     compile_results[revision_being_checked] = CompileResult.INFRA_FAILED
     report['metadata']['infra_failure'] = True
@@ -627,10 +644,44 @@ def GenTests(api):
           'git commits in range',
           api.raw_io.stream_output(
               '\n'.join('r%d' % i for i in reversed(range(2, 6))))) +
-      api.override_step_data('test r2.check_targets',
+      api.override_step_data('test r1.check_targets',
                              api.json.output({
                                  'found': ['target_name'],
                                  'not_found': [],
+                             })) +
+      api.override_step_data('test r1.compile', retcode=0) +
+      api.override_step_data('test r2.check_targets',
+                             api.json.output({
+                               'found': ['target_name'],
+                               'not_found': [],
+                             })) +
+      api.override_step_data('test r2.compile', retcode=1)
+  )
+
+  # Entire regression range: (r1, r5]
+  # Suspected_revisions: [r2]
+  # compile on r1 failed
+  # No reliable results
+  yield (
+      api.test('first_revision_of_entire_range_failed_but_is_not_culprit') +
+      props(compile_targets=['target_name'],
+            good_revision='r1',
+            bad_revision='r5',
+            suspected_revisions=['r2']) +
+      api.override_step_data(
+          'git commits in range',
+          api.raw_io.stream_output(
+              '\n'.join('r%d' % i for i in reversed(range(2, 6))))) +
+      api.override_step_data('test r1.check_targets',
+                             api.json.output({
+                                 'found': ['target_name'],
+                                 'not_found': [],
+                             })) +
+      api.override_step_data('test r1.compile', retcode=1) +
+      api.override_step_data('test r2.check_targets',
+                             api.json.output({
+                               'found': ['target_name'],
+                               'not_found': [],
                              })) +
       api.override_step_data('test r2.compile', retcode=1)
   )
