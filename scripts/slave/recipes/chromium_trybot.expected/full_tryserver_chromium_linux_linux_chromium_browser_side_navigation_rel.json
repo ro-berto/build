@@ -605,7 +605,7 @@
       "[START_DIR]/layout-test-results",
       "--build-dir",
       "[BUILDER_CACHE]/linux_chromium_browser_side_navigation_rel/src/out",
-      "--json-test-results",
+      "--write-full-results-to",
       "/path/to/tmp/json",
       "--test-results-server",
       "test-results.appspot.com",

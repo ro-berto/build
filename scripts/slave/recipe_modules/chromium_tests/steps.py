@@ -2179,7 +2179,7 @@ class BlinkTest(Test):
         '--target', api.chromium.c.BUILD_CONFIG,
         '--results-directory', results_dir,
         '--build-dir', api.chromium.c.build_dir,
-        '--json-test-results', api.test_utils.test_results(add_json_log=False),
+        '--write-full-results-to', api.test_utils.test_results(add_json_log=False),
         '--test-results-server', 'test-results.appspot.com',
         '--master-name', api.properties['mastername'],
         '--build-number', str(api.properties['buildnumber']),

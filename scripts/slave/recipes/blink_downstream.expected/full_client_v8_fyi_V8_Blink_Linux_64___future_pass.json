@@ -484,7 +484,7 @@
       "[START_DIR]/layout-test-results",
       "--build-dir",
       "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src/out",
-      "--json-test-results",
+      "--write-full-results-to",
       "/path/to/tmp/json",
       "--test-results-server",
       "test-results.appspot.com",
