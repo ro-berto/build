@@ -428,7 +428,7 @@
       "[START_DIR]/layout-test-results",
       "--build-dir",
       "[BUILDER_CACHE]/mac_layout/src/out",
-      "--write-full-results-to",
+      "--json-test-results",
       "/path/to/tmp/json",
       "--master-name",
       "chromium.webkit",

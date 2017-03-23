@@ -605,7 +605,7 @@
       "[START_DIR]/layout-test-results",
       "--build-dir",
       "[BUILDER_CACHE]/linux_chromium_browser_side_navigation_rel/src/out",
-      "--write-full-results-to",
+      "--json-test-results",
       "/path/to/tmp/json",
       "--master-name",
       "tryserver.chromium.linux",
