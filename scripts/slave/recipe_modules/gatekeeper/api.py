@@ -27,7 +27,7 @@ class Gatekeeper(recipe_api.RecipeApi):
             *tree_args['config'].split('/'))
 
       args = [
-          '-v', '--json', gatekeeper_json, '--email-app-secret-file',
+          '--json', gatekeeper_json, '--email-app-secret-file',
           '/creds/gatekeeper/mailer_password',
           '--milo-creds',
           self.m.service_account.get_json_path('gatekeeper'),
