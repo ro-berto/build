@@ -27,7 +27,7 @@ def layout_test(options):
   run_blink_tests = os.path.join(blink_scripts_dir, 'run-webkit-tests')
 
   # Forward all command line arguments on to run-webkit-tests.
-  command = [run_blink_tests, sys.argv[1:]]
+  command = [run_blink_tests] + sys.argv[1:]
 
   chromium_utils.RemoveDirectory(options.results_directory)
 
