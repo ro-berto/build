@@ -27,22 +27,19 @@ class BuildScanTest(unittest.TestCase):
   def testURLRetry(self):
     wanted = {'a': 'hi'}
 
-    # IOError is a super class of ssl.SSLError, which we are getting when the
-    # requests time out.
-    for exc_class in (urllib2.URLError, IOError):
-      with mock.patch('slave.build_scan.time.sleep') as sleep_mock:
-        with mock.patch('slave.build_scan.urllib2.urlopen') as func:
-          func.side_effect = [exc_class('test error'), StringIO.StringIO(
-              json.dumps(wanted))]
+    with mock.patch('slave.build_scan.time.sleep') as sleep_mock:
+      err_resp = mock.Mock()
+      err_resp.status = 500
+      resp = mock.Mock()
+      resp.status = 200
+      http = mock.Mock()
+      http.request.side_effect = [
+          (err_resp, None), (resp, '}]);' + json.dumps(wanted))]
 
-          result = build_scan._url_open_json('url')
-          self.assertEqual(result, wanted)
-          self.assertEqual(sleep_mock.call_args_list, [mock.call(2)])
-          self.assertEqual(len(func.call_args_list), 2)
-          for call_itm in func.call_args_list:
-            self.assertIsInstance(call_itm[0][0], urllib2.Request)
-            self.assertEqual(call_itm[0][0].get_full_url(), 'url')
-            self.assertEqual(call_itm[1], {'timeout': 30})
+      result = build_scan._get_from_milo('endpoint', 'data', http=http)
+      self.assertEqual(result, wanted)
+      self.assertEqual(sleep_mock.call_args_list, [mock.call(2)])
+      self.assertEqual(len(http.request.call_args_list), 2)
 
 
 if __name__ == '__main__':

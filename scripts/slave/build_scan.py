@@ -6,6 +6,8 @@
 """Scans a list of masters and saves information in a build_db."""
 
 from contextlib import closing
+import base64
+import httplib2
 import json
 import logging
 import optparse
@@ -13,10 +15,11 @@ import os
 import sys
 import time
 import urllib
-import urllib2
+import zlib
 
 from common import chromium_utils
 from slave import build_scan_db
+from master import auth
 
 SCRIPTS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                            '..', '..')
@@ -25,81 +28,57 @@ SCRIPTS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)),
 SUCCESS, WARNINGS, FAILURE, SKIPPED, EXCEPTION, RETRY = range(6)
 
 MAX_ATTEMPTS = 4
-URL_TIMEOUT = 30
+URL_TIMEOUT = 60
 
 BUILDER_WILDCARD = '*'
 
+ENDPOINT_ROOT = 'https://luci-milo.appspot.com/prpc/'
+SCOPES = ['https://www.googleapis.com/auth/userinfo.email']
 
-def _url_open_json(url):
+
+def _get_from_milo(endpoint, data, milo_creds=None, http=None):
   headers = {
     'Accept': 'application/json',
-    'User-Agent': 'Python-urllib/2.7 -- build_scan.py',
+    'Content-Type': 'application/json',
+    'User-Agent': 'Python-httplib2/2.7 -- build_scan.py',
   }
+  url =  ENDPOINT_ROOT + endpoint
+  if not http:
+    http = httplib2.Http()
+  if milo_creds:
+    creds = auth.create_service_account_credentials(milo_creds, SCOPES)
+    http = creds.authorize(http)
+    creds.refresh(http)
+  logging.info('fetching %s with %s' % (url, data))
 
   attempts = 0
   while True:
-    try:
-      r = urllib2.Request(url, headers=headers)
-      with closing(urllib2.urlopen(r, timeout=URL_TIMEOUT)) as f:
-        return json.load(f)
-    except (urllib2.URLError, IOError) as f:
-      if attempts > MAX_ATTEMPTS:
-        # Raise a ValueError because this can be called from multiprocessing,
-        # which can't pickle SSLContext objects, which apparently are
-        # properties of urllib2.URLError (it seems).
-        msg = "Error encountered during URL Fetch: %s" % f
-        logging.error(msg)
-        raise ValueError(msg)
+    resp, content = http.request(url, 'POST', body=data, headers=headers)
+    if resp.status == 200:
+      # Remove the jsonp header.
+      return json.loads(content[4:])
+    if attempts > MAX_ATTEMPTS:
+      msg = "Error encountered during URL Fetch: %s" % content
+      logging.error(msg)
+      raise ValueError(msg)
 
-      attempts += 1
-      time_to_sleep = 2 ** attempts
-      logging.info(
-        "url fetch encountered %s, sleeping for %d seconds and retrying..." % (
-            f, time_to_sleep))
-
-      time.sleep(time_to_sleep)
+    attempts += 1
+    time_to_sleep = 2 ** attempts
+    logging.info(
+      "url fetch encountered %d, sleeping for %d seconds and retrying..." % (
+          resp.status, time_to_sleep))
+    time.sleep(time_to_sleep)
 
 
-# A whitelist of masters which get master json information from CBE rather than
-# by directly polling. Note that right now CBE only works for external masters.
-CBE_WHITELIST = set([
-  'chromium',
-  'chromium.android',
-  'chromium.chrome',
-  'chromium.chromiumos',
-  'chromium.fyi',
-  'chromium.gpu',
-  'chromium.linux',
-  'chromium.mac',
-  'chromium.memory',
-  'chromium.perf',
-  'chromium.tools.build',
-  'chromium.webkit',
-  'chromium.win',
-  'chromiumos',
-  'chromium.infra',
-  'client.v8.fyi',
-  'client.v8',
-  'client.v8.ports',
-  'chromium.lkgr',
-  'client.boringssl',
-  'client.catapult',
-  'client.crashpad',
-])
-
-CBE_URL = 'https://chrome-build-extract.appspot.com'
-
-def get_root_json(master_url):
+def get_root_json(master_url, milo_creds):
   """Pull down root JSON which contains builder and build info."""
-  url = master_url + '/json'
-
   # Assumes we have something like https://build.chromium.org/p/chromium.perf
   name = master_url.rstrip('/').split('/')[-1]
-  if name in CBE_WHITELIST:
-    url = '%s/get_master/%s' % (CBE_URL, name)
 
-  logging.info('opening %s' % url)
-  return _url_open_json(url)
+  endpoint = 'milo.Buildbot/GetCompressedMasterJSON'
+  resp = _get_from_milo(endpoint, json.dumps({'name': name}), milo_creds)
+  data = zlib.decompress(base64.b64decode(resp['data']), zlib.MAX_WBITS | 16)
+  return json.loads(data)
 
 
 def find_new_builds(master_url, builderlist, root_json, build_db):
@@ -164,31 +143,37 @@ def find_new_builds(master_url, builderlist, root_json, build_db):
   return new_builds
 
 
-def find_new_builds_per_master(masters, build_db):
+def find_new_builds_per_master(masters, build_db, milo_creds):
   """Given a list of masters, find new builds and collect them under a dict."""
   builds = {}
   master_jsons = {}
   for master, builders in masters.iteritems():
-    root_json = get_root_json(master)
+    root_json = get_root_json(master, milo_creds)
     master_jsons[master] = root_json
-    builds[master] = find_new_builds(master, builders, root_json, build_db)
+    builds[master] = find_new_builds(
+        master, builders, root_json, build_db)
   return builds, master_jsons
 
 
 def get_build_json(url_tuple):
   """Downloads the json of a specific build."""
-  url, master, builder, buildnum = url_tuple
+  master_url, builder, buildnum, milo_creds = url_tuple
 
   # Assumes we have something like https://build.chromium.org/p/chromium.perf
-  name = master.rstrip('/').split('/')[-1]
-  if name in CBE_WHITELIST:
-    url = '%s/p/%s/builders/%s/builds/%d?json=1' % (
-        CBE_URL, name, urllib.quote(builder), buildnum)
+  master_name = master_url.rstrip('/').split('/')[-1]
 
-  logging.debug('opening %s...' % url)
-  return _url_open_json(url), master, builder, buildnum
+  endpoint = 'milo.Buildbot/GetBuildbotBuildJSON'
+  data = {
+    'master': master_name,
+    'builder': builder,
+    'build_num': int(buildnum)
+  }
+  resp = _get_from_milo(endpoint, json.dumps(data), milo_creds)
+  return (json.loads(base64.b64decode(resp['data'])),
+          master_url, builder, buildnum)
 
-def get_build_jsons(master_builds, processes):
+
+def get_build_jsons(master_builds, processes, milo_creds):
   """Get all new builds on specified masters.
 
   This takes a dict in the form of [master][builder][build], formats that URL
@@ -199,10 +184,7 @@ def get_build_jsons(master_builds, processes):
   for master, builder_dict in master_builds.iteritems():
     for builder, new_builds in builder_dict.iteritems():
       for buildnum in new_builds:
-        safe_builder = urllib.quote(builder)
-        url = master + '/json/builders/%s/builds/%s' % (safe_builder,
-                                                        buildnum)
-        url_list.append((url, master, builder, buildnum))
+        url_list.append((master, builder, buildnum, milo_creds))
 
   # Prevent map from hanging, see http://bugs.python.org/issue12157.
   if url_list:
@@ -238,6 +220,9 @@ def get_options():
   prog_desc = 'Scans for builds and outputs updated builds.'
   usage = '%prog [options] <one or more master urls>'
   parser = optparse.OptionParser(usage=(usage + '\n\n' + prog_desc))
+  parser.add_option('--milo-creds',
+                    help='Location to service account json credentials for '
+                         'accessing Milo.')
   parser.add_option('--build-db', default='build_scan_db.json',
                     help='records the last-seen build for each builder')
   parser.add_option('--clear-build-db', action='store_true',
@@ -259,12 +244,12 @@ def get_options():
   return options, args
 
 
-def get_updated_builds(masters, build_db, parallelism):
-  new_builds, master_jsons = find_new_builds_per_master(masters, build_db)
-  build_jsons = get_build_jsons(new_builds, parallelism)
+def get_updated_builds(masters, build_db, parallelism, milo_creds):
+  new_builds, master_jsons = find_new_builds_per_master(
+      masters, build_db, milo_creds)
+  build_jsons = get_build_jsons(new_builds, parallelism, milo_creds)
   propagate_build_json_to_db(build_db, build_jsons)
   return master_jsons, build_jsons
-
 
 
 def main():
@@ -283,7 +268,7 @@ def main():
     build_db = build_scan_db.get_build_db(options.build_db)
 
   _, build_jsons = get_updated_builds(
-      masters, build_db, options.parallelism)
+      masters, build_db, options.parallelism, options.milo_creds)
 
   for _, master_url, builder, buildnum in build_jsons:
     print '%s:%s:%s' % (master_url, builder, buildnum)

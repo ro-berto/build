@@ -772,6 +772,9 @@ def simulate_build_failure(build_db, master, builder, *steps):
 def get_args(argv):
   parser = argparse.ArgumentParser(description='Closes the tree if annotated '
                                                'builds fail.')
+  parser.add_argument('--milo-creds',
+                      help='Location of service account credentials to access '
+                           'Milo')
   parser.add_argument('--build-db', default='build_db.json',
                       help='records the last-seen build for each builder')
   parser.add_argument('--clear-build-db', action='store_true',
@@ -936,7 +939,7 @@ def main(argv):
 
   if not simulate:
     master_jsons, build_jsons = build_scan.get_updated_builds(
-        masters, build_db, args.parallelism)
+        masters, build_db, args.parallelism, args.milo_creds)
   else:
     master_jsons, build_jsons = simulate_build_failure(
         build_db, args.simulate_master, args.simulate_builder,

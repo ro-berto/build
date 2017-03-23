@@ -14,20 +14,22 @@ close the tree.
 # Needs to be at the top, otherwise coverage will spit nonsense.
 import utils  # "relative import" pylint: disable=W0403
 
-import copy
+import StringIO
+import base64
 import contextlib
+import copy
 import json
 import logging
 import mock
 import os
 import re
-import StringIO
 import sys
 import tempfile
 import unittest
 import urllib
 import urllib2
 import urlparse
+import zlib
 
 import test_env  # pylint: disable=W0403,W0611
 
@@ -118,10 +120,11 @@ class Builder(object):
 
 
 class Master(object):
-  def __init__(self, title, url, builders):
+  def __init__(self, name, title, url, builders):
+    self.builders = builders
+    self.name = name
     self.title = title
     self.url = url
-    self.builders = builders
 
 
 class GatekeeperTest(unittest.TestCase):
@@ -130,12 +133,18 @@ class GatekeeperTest(unittest.TestCase):
     build_scan.MAX_ATTEMPTS = 0
 
     self.files_to_cleanup = []
-    patcher = mock.patch('urllib2.urlopen')
-    self.urlopen = patcher.start()
+    patcher = mock.patch('slave.build_scan._get_from_milo')
+    self._get_from_milo = patcher.start()
     self.addCleanup(patcher.stop)
     self.argv = []
 
+    self._get_from_milo.side_effect = self._get_milo_handler
+
+    url_patcher = mock.patch('urllib2.urlopen')
+    self.urlopen = url_patcher.start()
+    self.addCleanup(url_patcher.stop)
     self.urlopen.side_effect = self._url_handler
+
     self.urls = {}
 
     self.url_calls = []
@@ -154,6 +163,8 @@ class GatekeeperTest(unittest.TestCase):
     self.handle_url_str(self.mailer_url, '')
 
     self.master_url_root = 'http://build.chromium.org/p/'
+    self.build_json = {}
+    self.master_json = {}
     self.masters = [self.create_generic_build_tree('Chromium FYI',
                                                    'chromium.fyi')]
 
@@ -163,14 +174,6 @@ class GatekeeperTest(unittest.TestCase):
     self.status_secret_file = self.fill_tempfile('reindeerflotilla')
 
     self._gatekeeper_config = None
-
-    self.cbe_master_json_re = re.compile(
-        '%s/get_master/([a-zA-Z.]+)' % build_scan.CBE_URL)
-    #reg = r'%s/p/([a-zA-Z.]+)/builders/([a-zA-Z.]+)/builds/([0-9]+)' % (
-    reg = r'%s/p/([a-zA-Z.]+)/builders/(.+)/builds/([\d]+)' % (
-            build_scan.CBE_URL)
-    print reg
-    self.cbe_build_json_re = re.compile(reg)
 
   def fill_tempfile(self, content):
     fd, filename = tempfile.mkstemp()
@@ -239,13 +242,11 @@ class GatekeeperTest(unittest.TestCase):
           else:
             builder_json['currentBuilds'].append(build.number)
 
-          build_json_url = master.url + '/json/builders/%s/builds/%d' % (
-              urllib.quote(builder.name), build.number)
-
-          self.handle_url_json(build_json_url, build_json)
+          self.build_json[(master.name, builder.name, build.number)] = (
+              build_json)
 
         master_json['builders'][builder.name] = builder_json
-      self.handle_url_json(master.url + '/json', master_json)
+      self.master_json[master.name] = master_json
 
   @staticmethod
   def create_generic_build(number, committers):
@@ -263,7 +264,7 @@ class GatekeeperTest(unittest.TestCase):
 
     url = self.master_url_root + master_name
 
-    return Master(master_title, url, [builder])
+    return Master(master_name, master_title, url, [builder])
 
   def call_gatekeeper(self, build_db=None, json=None):
     # pylint: disable=W0621
@@ -297,8 +298,7 @@ class GatekeeperTest(unittest.TestCase):
       raise ValueError('return code was %d' % ret)
 
     # Return urls as a convenience.
-    return [call['url'] for call in self.url_calls]
-
+    return [u['url'] for u in self.url_calls]
 
   def process_build_db(self, master, builder):
     """Reads the build_db from a file and splits out finished/unfinished."""
@@ -389,21 +389,36 @@ class GatekeeperTest(unittest.TestCase):
 
     self.url_calls.append(call)
 
-    master_json_url = self.cbe_master_json_re.match(url)
-    if master_json_url:
-      url = self.master_url_root + master_json_url.group(1) + '/json'
-
-    build_json_url = self.cbe_build_json_re.match(url)
-    if build_json_url:
-      g = build_json_url.group
-      url = '%s%s/json/builders/%s/builds/%s' % (
-          self.master_url_root, g(1), g(2), g(3))
-
     if url in self.urls:
       return copy.copy(self.urls[url](params))
 
-    raise urllib2.HTTPError(url, 404, 'Not Found: %s' % url,
-                            None, StringIO.StringIO(''))
+    raise urllib2.HTTPError(
+      url, 404, 'Not Found: %s. Avail: %s' % (url, self.urls.keys()),
+      None, StringIO.StringIO(''))
+
+  def update_status_handler(self, tree_message, status_url_root, username,
+                            password, simulate):
+    self.url_calls.append({'url': status_url_root + '/status'})
+
+  def _get_milo_handler(self, endpoint, data, milo_creds=None):
+    """Used by the mocked urlopen to respond to different URLs."""
+    data = json.loads(data)
+
+    self.url_calls.append({'url': endpoint, 'params': data})
+    if endpoint == 'milo.Buildbot/GetCompressedMasterJSON':
+      out = json.dumps(self.master_json[data['name']])
+      compressor = zlib.compressobj(6, zlib.DEFLATED, zlib.MAX_WBITS | 16)
+      compressed_data = compressor.compress(out)
+      compressed_data += compressor.flush(zlib.Z_FINISH)
+      return {'data': base64.b64encode(compressed_data)}
+    if endpoint == 'milo.Buildbot/GetBuildbotBuildJSON':
+      master = data['master']
+      builder = data['builder']
+      build_num = data['build_num']
+      out = json.dumps(self.build_json[(master, builder, build_num)])
+      return {'data': base64.b64encode(out)}
+
+    raise Exception('Not found %s : %s' % (endpoint, data))
 
   @staticmethod
   def decode_param_json(param):
