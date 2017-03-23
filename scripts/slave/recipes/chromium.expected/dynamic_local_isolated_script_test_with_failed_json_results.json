@@ -306,7 +306,7 @@
     },
     "name": "telemetry_gpu_unittests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>test1.Test1<br/>test1.Test2<br/>@@@",
+      "@@@STEP_TEXT@<br/>Total tests: 2<br/>* Passed: 0 (0 expected, 0 unexpected)<br/>* Failed: 2 (2 expected, 0 unexpected)<br/>* Flaky: 0 (0 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",

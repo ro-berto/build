@@ -307,9 +307,10 @@
     "name": "telemetry_gpu_unittests",
     "~followup_annotations": [
       "step returned non-zero exit code: -11",
+      "@@@STEP_TEXT@<br/>Exception while processing test results: Invalid data given<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@null@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_EXCEPTION@@@"
     ]
   },
   {

@@ -16,8 +16,9 @@ def convert_trie_to_flat_paths(trie, prefix, sep):
 
 class TestResults(object):
   def __init__(self, jsonish=None):
-    self.raw = jsonish or {}
+    self.raw = jsonish or {'version': 3}
     self.valid = (jsonish is not None)
+    self.version = self.raw.get('version', 'simplified')
 
     tests = self.raw.get('tests', {})
     sep = self.raw.get('path_delimiter', '/')
@@ -30,8 +31,6 @@ class TestResults(object):
     self.flakes = {}
     self.unexpected_flakes = {}
 
-    self.num_passes = self.raw.get('num_passes', 'n/a')
-
     # TODO(dpranke): crbug.com/357866 - we should simplify the handling of
     # both the return code and parsing the actual results, below.
 
@@ -40,6 +39,30 @@ class TestResults(object):
     # with reserved values from the shell.
     self.MAX_FAILURES_EXIT_STATUS = 101
 
+    if self.version == 'simplified':
+      self._simplified_json_results()
+    else:
+      self._json_results()
+
+  @property
+  def total_tests_results(self):
+    return sum([
+        len(self.passes), len(self.unexpected_passes),
+        len(self.failures), len(self.unexpected_failures),
+        len(self.flakes), len(self.unexpected_flakes),
+    ])
+
+  # TODO(tansell): https://crbug.com/704066 - Kill simplified JSON format.
+  def _simplified_json_results(self):
+    self.valid = self.raw.get('valid', False)
+    self.passes = {x: {} for x in self.raw.get('successes', [])}
+    self.unexpected_failures = {x: {} for x in self.raw.get('failures', [])}
+    self.tests = {}
+    self.tests.update(self.passes)
+    self.tests.update(self.unexpected_failures)
+
+  def _json_results(self):
+    self.valid = self.raw.get('version', 0) == 3
     passing_statuses = ('PASS', 'SLOW', 'NEEDSREBASELINE',
                         'NEEDSMANUALREBASELINE')
 

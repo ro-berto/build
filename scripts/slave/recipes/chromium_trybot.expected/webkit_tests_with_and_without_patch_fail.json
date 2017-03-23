@@ -646,7 +646,7 @@
     "name": "webkit_tests (with patch)",
     "~followup_annotations": [
       "step returned non-zero exit code: 5",
-      "@@@STEP_TEXT@<br/>unexpected_flakes:<br/>flake/slow.html<br/>flake/totally-flakey.html<br/>flake/timeout-then-crash.html<br/><br/>unexpected_failures:<br/>bad/totally-bad-probably.html<br/>tricky/totally-maybe-not-awesome.html<br/><br/>Total executed: 9001<br/>@@@",
+      "@@@STEP_TEXT@<br/>Total tests: 6<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Failed: 2 (0 expected, >>>2 unexpected<<<)<br/>* Flaky: 3 (0 expected, >>>3 unexpected<<<)<br/><br/>Unexpected Failures:<br/>* bad/totally-bad-probably.html<br/>* tricky/totally-maybe-not-awesome.html<br/><br/>Unexpected Flakes:<br/>* flake/slow.html<br/>* flake/timeout-then-crash.html<br/>* flake/totally-flakey.html<br/>@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
@@ -1119,7 +1119,7 @@
     "name": "webkit_tests (without patch)",
     "~followup_annotations": [
       "step returned non-zero exit code: 5",
-      "@@@STEP_TEXT@<br/>unexpected_flakes:<br/>flake/slow.html<br/>flake/totally-flakey.html<br/>flake/timeout-then-crash.html<br/><br/>unexpected_failures:<br/>bad/totally-bad-probably.html<br/>tricky/totally-maybe-not-awesome.html<br/><br/>Total executed: 9001<br/>@@@",
+      "@@@STEP_TEXT@<br/>Total tests: 5<br/>* Passed: 0 (0 expected, 0 unexpected)<br/>* Failed: 2 (0 expected, >>>2 unexpected<<<)<br/>* Flaky: 3 (0 expected, >>>3 unexpected<<<)<br/><br/>Unexpected Failures:<br/>* bad/totally-bad-probably.html<br/>* tricky/totally-maybe-not-awesome.html<br/><br/>Unexpected Flakes:<br/>* flake/slow.html<br/>* flake/timeout-then-crash.html<br/>* flake/totally-flakey.html<br/>@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },

@@ -537,7 +537,7 @@
     },
     "name": "webkit_tests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>unexpected_flakes:<br/>flake/flakey.html<br/><br/>Total executed: 9001<br/>@@@",
+      "@@@STEP_TEXT@<br/>Total tests: 7<br/>* Passed: 5 (5 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (0 expected, >>>1 unexpected<<<)<br/><br/>Unexpected Flakes:<br/>* flake/flakey.html<br/>@@@",
       "@@@STEP_WARNINGS@@@"
     ]
   },

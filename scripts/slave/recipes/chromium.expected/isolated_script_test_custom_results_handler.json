@@ -111,7 +111,7 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
       "@@@STEP_LINK@custom_link@http://example.com@@@",
-      "@@@STEP_LINK@uploaded@fake_test@@@"
+      "@@@STEP_LINK@uploaded@fake://@@@"
     ]
   }
 ]

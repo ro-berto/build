@@ -364,8 +364,37 @@ def GenTests(api):
     ) + api.override_step_data('telemetry_gpu_unittests',
             api.test_utils.canned_isolated_script_output(
                 passing=False, is_win=False, swarming=False,
-                isolated_script_passing=False, valid=True,
+                isolated_script_passing=False,
                 use_json_test_format=True),
+            retcode=0)
+  )
+
+  yield (
+    api.test('dynamic_local_isolated_script_test_with_corrupt_json_results') +
+    api.properties.generic(mastername='chromium.linux',
+                           buildername='Linux Tests',
+                           parent_buildername='Linux Builder') +
+    api.properties(swarm_hashes={
+      'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    }) +
+    api.platform('linux', 64) +
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'isolated_scripts': [
+                    {
+                      'isolate_name': 'telemetry_gpu_unittests',
+                      'name': 'telemetry_gpu_unittests',
+                    },
+                ],
+            },
+        })
+    ) + api.override_step_data('telemetry_gpu_unittests',
+            api.test_utils.canned_isolated_script_output(
+                passing=True, is_win=False, swarming=False,
+                isolated_script_passing=True,
+                use_json_test_format=True, corrupt=True),
             retcode=0)
   )
 
@@ -393,7 +422,7 @@ def GenTests(api):
     ) + api.override_step_data('telemetry_gpu_unittests',
             api.test_utils.canned_isolated_script_output(
                 passing=True, is_win=False, swarming=False,
-                isolated_script_passing=True, valid=True,
+                isolated_script_passing=True,
                 use_json_test_format=True),
             retcode=0)
   )
@@ -423,7 +452,7 @@ def GenTests(api):
     ) + api.override_step_data('telemetry_gpu_unittests',
             api.test_utils.canned_isolated_script_output(
                 passing=False, is_win=False, swarming=False,
-                isolated_script_passing=False, valid=True,
+                isolated_script_passing=False,
                 use_json_test_format=True),
             retcode=0)
   )
@@ -615,7 +644,7 @@ def GenTests(api):
     api.override_step_data('telemetry_gpu_unittests',
         api.test_utils.canned_isolated_script_output(
             passing=True, is_win=False, swarming=True,
-            shards=2, isolated_script_passing=True, valid=True,
+            shards=2, isolated_script_passing=True,
             use_json_test_format=True, output_chartjson=True),
         retcode=0)
   )
@@ -828,7 +857,7 @@ def GenTests(api):
   )
 
   yield (
-    api.test('dynamic_swarmed_sharded_invalid_format_isolated_script_test') +
+    api.test('dynamic_swarmed_sharded_corrupt_json_isolated_script_test') +
     api.properties.generic(mastername='chromium.linux',
                            buildername='Linux Tests',
                            parent_buildername='Linux Builder') +
@@ -856,8 +885,39 @@ def GenTests(api):
     api.override_step_data('telemetry_gpu_unittests',
         api.test_utils.canned_isolated_script_output(
             passing=True, is_win=False, swarming=True,
-            shards=3, isolated_script_passing=True, valid=False,
+            shards=3, isolated_script_passing=True, corrupt=True,
             use_json_test_format=True, output_chartjson=True),
+        retcode=0)
+  )
+
+  yield (
+    api.test('dynamic_swarmed_sharded_invalid_json_isolated_script_test') +
+    api.properties.generic(mastername='chromium.linux',
+                           buildername='Linux Tests',
+                           parent_buildername='Linux Builder') +
+    api.properties(swarm_hashes={
+      'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    }) +
+    api.platform('linux', 64) +
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'isolated_scripts': [
+                    {
+                        'isolate_name': 'telemetry_gpu_unittests',
+                        'name': 'telemetry_gpu_unittests',
+                        'swarming': {
+                            'can_use_on_swarming_builders': True,
+                            'shards': 3,
+                        },
+                    },
+                ],
+            },
+        })
+    ) +
+    api.override_step_data('telemetry_gpu_unittests',
+        api.json.output({'version': 2}),
         retcode=0)
   )
 
@@ -890,7 +950,7 @@ def GenTests(api):
     api.override_step_data('telemetry_gpu_unittests',
         api.test_utils.canned_isolated_script_output(
             passing=False, is_win=False, swarming=True,
-            shards=2, isolated_script_passing=False, valid=True,
+            shards=2, isolated_script_passing=False,
             use_json_test_format=True), retcode=1)
   )
 

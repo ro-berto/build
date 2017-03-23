@@ -538,7 +538,7 @@
     "name": "webkit_tests",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@<br/>Total executed: n/a<br/>@@@",
+      "@@@STEP_TEXT@<br/>Total tests: n/a<br/>@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },

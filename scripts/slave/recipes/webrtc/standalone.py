@@ -115,7 +115,7 @@ def GenTests(api):
             api.test_utils.canned_isolated_script_output(
                 passing=True, is_win=False, swarming=True,
                 shards=NORMAL_TESTS[test_name].get('shards', 1),
-                isolated_script_passing=True, valid=True,
+                isolated_script_passing=True,
                 use_json_test_format=True, output_chartjson=False),
             retcode=0)
     return test

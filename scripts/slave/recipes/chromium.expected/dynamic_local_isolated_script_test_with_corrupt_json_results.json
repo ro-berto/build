@@ -15,7 +15,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@191187",
+      "src@HEAD",
       "--output_manifest"
     ],
     "env": {
@@ -30,7 +30,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src\": \"191187\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"HEAD\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
@@ -175,10 +175,11 @@
       "--",
       "--build-config-fs",
       "Release",
+      "--use-src-side-runtest-py",
       "--paths",
       "{\"checkout\": \"[START_DIR]/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"test_bot\", \"buildername\": \"WebKit Linux Trusty\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"slavename\": \"test_bot\", \"target_platform\": \"linux\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"Linux Tests\", \"buildnumber\": 571, \"mastername\": \"chromium.linux\", \"slavename\": \"test_bot\", \"target_platform\": \"linux\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -191,13 +192,22 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[START_DIR]/src/testing/buildbot/chromium.webkit.json",
+      "[START_DIR]/src/testing/buildbot/chromium.linux.json",
       "/path/to/tmp/json"
     ],
-    "name": "read test spec (chromium.webkit.json)",
+    "name": "read test spec (chromium.linux.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [START_DIR]/src/testing/buildbot/chromium.webkit.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_TEXT@path: [START_DIR]/src/testing/buildbot/chromium.linux.json@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Linux Tests\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"isolated_scripts\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"isolate_name\": \"telemetry_gpu_unittests\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"name\": \"telemetry_gpu_unittests\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
@@ -218,87 +228,12 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/tools/mb/mb.py",
-      "gen",
-      "-m",
-      "chromium.webkit",
-      "-b",
-      "WebKit Linux Trusty",
-      "--config-file",
-      "[START_DIR]/src/tools/mb/mb_config.pyl",
-      "--goma-dir",
-      "[CACHE]/goma_client",
-      "//out/Release"
+      "RECIPE_MODULE[build::file]/resources/fileutil.py",
+      "rmtree",
+      "[START_DIR]/src/out/Release"
     ],
-    "cwd": "[START_DIR]/src",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "generate_build_files"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::goma]/resources/utils.py",
-      "jobs",
-      "--file-path",
-      "/path/to/tmp/"
-    ],
-    "name": "calculate the number of recommended jobs"
-  },
-  {
-    "cmd": [],
-    "cwd": "[START_DIR]/src",
-    "name": "preprocess_for_goma"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[CACHE]/goma/WebKit_Linux_Trusty",
-      "511"
-    ],
-    "cwd": "[START_DIR]/src",
-    "name": "preprocess_for_goma.makedirs goma cache directory",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
-      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
-      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
-      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
-      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
-      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
-      "restart"
-    ],
-    "cwd": "[START_DIR]/src",
-    "env": {
-      "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/WebKit_Linux_Trusty",
-      "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
     "infra_step": true,
-    "name": "preprocess_for_goma.start_goma",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
+    "name": "rmtree build directory"
   },
   {
     "cmd": [
@@ -308,270 +243,89 @@
       "--show-path",
       "--",
       "python",
-      "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
-      "start",
-      "--cloudtail-path",
-      "[CACHE]/goma_client/cloudtail",
-      "--cloudtail-service-account-json",
-      "/creds/service_accounts/service-account-goma-cloudtail.json",
-      "--pid-file",
-      "[TMP_BASE]/cloudtail.pid"
-    ],
-    "cwd": "[START_DIR]/src",
-    "infra_step": true,
-    "name": "preprocess_for_goma.start cloudtail",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
-      "-w",
-      "dupbuild=err",
-      "-C",
-      "[START_DIR]/src/out/Release",
-      "-j",
-      "50",
-      "blink_tests"
-    ],
-    "cwd": "[START_DIR]/src",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "compile"
-  },
-  {
-    "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
-      "-w",
-      "dupbuild=err",
-      "-C",
-      "[START_DIR]/src/out/Release",
-      "-j",
-      "50",
-      "blink_tests",
-      "-d",
-      "explain",
-      "-n"
-    ],
-    "cwd": "[START_DIR]/src",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "compile confirm no-op",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [],
-    "cwd": "[START_DIR]/src",
-    "name": "postprocess_for_goma"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
-      "jsonstatus",
-      "[TMP_BASE]/goma_jsonstatus.json"
-    ],
-    "cwd": "[START_DIR]/src",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "postprocess_for_goma.goma_jsonstatus",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"notice\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"infra_status\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"num_user_error\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"ping_status_code\": 200@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
-      "stat"
-    ],
-    "cwd": "[START_DIR]/src",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "postprocess_for_goma.goma_stat",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
-      "stop"
-    ],
-    "cwd": "[START_DIR]/src",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "postprocess_for_goma.stop_goma",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/upload_goma_logs.py",
-      "--upload-compiler-proxy-info",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/extract_build.py",
       "--gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "--json-status",
-      "[TMP_BASE]/goma_jsonstatus.json",
-      "--ninja-log-outdir",
-      "[START_DIR]/src/out/Release",
-      "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/Release', '-j', 50, 'blink_tests']",
-      "--ninja-log-exit-status",
-      "0",
-      "--ninja-log-compiler",
-      "goma",
-      "--buildbot-buildername",
-      "WebKit Linux Trusty",
-      "--buildbot-mastername",
-      "chromium.webkit",
-      "--buildbot-slavename",
-      "test_bot"
-    ],
-    "cwd": "[START_DIR]/src",
-    "name": "postprocess_for_goma.upload_log",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
-      "stop",
-      "--killed-pid-file",
-      "[TMP_BASE]/cloudtail.pid"
-    ],
-    "cwd": "[START_DIR]/src",
-    "infra_step": true,
-    "name": "postprocess_for_goma.stop cloudtail",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
-      "--no-xvfb",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"WebKit Linux Trusty\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"project\": \"webkit\", \"recipe\": \"chromium\", \"revision\": \"191187\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"WebKit Linux Trusty\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"project\": \"webkit\", \"recipe\": \"chromium\", \"revision\": \"191187\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--step-name=webkit_tests",
-      "--builder-name=WebKit Linux Trusty",
-      "--slave-name=test_bot",
-      "--build-number=571",
-      "--run-python-script",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/layout_test_wrapper.py",
-      "--target",
-      "Release",
-      "--results-directory",
-      "[START_DIR]/layout-test-results",
-      "--build-dir",
-      "[START_DIR]/src/out",
-      "--json-test-results",
-      "/path/to/tmp/json",
-      "--test-results-server",
-      "test-results.appspot.com",
-      "--master-name",
-      "chromium.webkit",
-      "--build-number",
-      "571",
-      "--builder-name",
-      "WebKit Linux Trusty",
-      "--step-name",
-      "webkit_tests",
-      "--no-show-results",
-      "--full-results-html",
-      "--clobber-old-results",
-      "--exit-after-n-failures",
-      "5000",
-      "--exit-after-n-crashes-or-timeouts",
-      "100",
-      "--debug-rwt-logging"
-    ],
-    "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "webkit_tests",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>Total tests: 5<br/>* Passed: 4 (4 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 0 (0 expected, 0 unexpected)<br/>@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/archive_layout_test_results.py",
-      "--results-dir",
-      "[START_DIR]/layout-test-results",
-      "--build-dir",
-      "[START_DIR]/src/out",
-      "--build-number",
-      "571",
-      "--builder-name",
-      "WebKit Linux Trusty",
-      "--gs-bucket",
-      "gs://chromium-layout-test-archives",
-      "--staging-dir",
-      "[CACHE]/chrome_staging",
+      "--src-dir",
+      "[START_DIR]/src",
       "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--build-url",
+      "gs://chromium-linux-archive/chromium.linux/Linux Builder/full-build-linux.zip",
+      "--build_revision",
+      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "--master-name",
+      "chromium.linux",
+      "--build-number",
+      "571"
+    ],
+    "infra_step": true,
+    "name": "extract build"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
+      "--build-dir",
+      "[START_DIR]/src/out/Release",
+      "--output-json",
+      "/path/to/tmp/json"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "archive_webkit_tests_results",
+    "name": "find isolated tests",
     "~followup_annotations": [
-      "@@@STEP_LINK@layout_test_results@https://storage.googleapis.com/chromium-layout-test-archives/WebKit_Linux_Trusty/571/layout-test-results/results.html@@@",
-      "@@@STEP_LINK@(zip)@https://storage.googleapis.com/chromium-layout-test-archives/WebKit_Linux_Trusty/571/layout-test-results.zip@@@"
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"dummy_target_1\": \"[dummy hash for dummy_target_1]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"dummy_target_2\": \"[dummy hash for dummy_target_2]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"dummy_target_1\": \"[dummy hash for dummy_target_1]\", \"dummy_target_2\": \"[dummy hash for dummy_target_2]\"}@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/src/tools/swarming_client/run_isolated.py",
+      "--isolated",
+      "eeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "-I",
+      "https://isolateserver.appspot.com",
+      "--verbose",
+      "--",
+      "--isolated-script-test-output",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "telemetry_gpu_unittests",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>Exception while processing test results: 'str' object has no attribute 'iteritems'<br/>@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"FAIL\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"PASS\": 2@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"path_delimiter\": \".\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"seconds_since_epoch\": 14000000, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"tests\": \"corrupted\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"version\": 3@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_EXCEPTION@@@"
     ]
   },
   {
     "name": "$result",
+    "reason": "1 tests failed: ['telemetry_gpu_unittests']",
     "recipe_result": null,
-    "status_code": 0
+    "status_code": 1
   }
 ]

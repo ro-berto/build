@@ -2142,7 +2142,7 @@
     "cwd": "[START_DIR]",
     "name": "audio_decoder_unittests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br/>Total tests: 3<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",
@@ -2252,7 +2252,7 @@
     "cwd": "[START_DIR]",
     "name": "common_audio_unittests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br/>Total tests: 3<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",
@@ -2362,7 +2362,7 @@
     "cwd": "[START_DIR]",
     "name": "common_video_unittests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br/>Total tests: 3<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",
@@ -2472,7 +2472,7 @@
     "cwd": "[START_DIR]",
     "name": "modules_tests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br/>Total tests: 3<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",
@@ -2585,7 +2585,7 @@
     "cwd": "[START_DIR]",
     "name": "modules_unittests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br/>Total tests: 3<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",
@@ -2710,7 +2710,7 @@
     "cwd": "[START_DIR]",
     "name": "ortc_unittests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br/>Total tests: 3<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",
@@ -2820,7 +2820,7 @@
     "cwd": "[START_DIR]",
     "name": "peerconnection_unittests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br/>Total tests: 3<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",
@@ -2939,7 +2939,7 @@
     "cwd": "[START_DIR]",
     "name": "rtc_media_unittests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br/>Total tests: 3<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",
@@ -3049,7 +3049,7 @@
     "cwd": "[START_DIR]",
     "name": "rtc_pc_unittests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br/>Total tests: 3<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",
@@ -3159,7 +3159,7 @@
     "cwd": "[START_DIR]",
     "name": "rtc_stats_unittests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br/>Total tests: 3<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",
@@ -3269,7 +3269,7 @@
     "cwd": "[START_DIR]",
     "name": "rtc_unittests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br/>Total tests: 3<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",
@@ -3394,7 +3394,7 @@
     "cwd": "[START_DIR]",
     "name": "system_wrappers_unittests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br/>Total tests: 3<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",
@@ -3504,7 +3504,7 @@
     "cwd": "[START_DIR]",
     "name": "test_support_unittests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br/>Total tests: 3<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",
@@ -3614,7 +3614,7 @@
     "cwd": "[START_DIR]",
     "name": "tools_unittests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br/>Total tests: 3<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",
@@ -3724,7 +3724,7 @@
     "cwd": "[START_DIR]",
     "name": "video_engine_tests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br/>Total tests: 3<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",
@@ -3843,7 +3843,7 @@
     "cwd": "[START_DIR]",
     "name": "voice_engine_unittests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br/>Total tests: 3<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",
@@ -3953,7 +3953,7 @@
     "cwd": "[START_DIR]",
     "name": "webrtc_nonparallel_tests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br/>Total tests: 3<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",

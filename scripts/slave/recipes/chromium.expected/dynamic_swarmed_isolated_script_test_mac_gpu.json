@@ -514,7 +514,7 @@
     },
     "name": "telemetry_gpu_unittests on Intel GPU on Mac on Mac-10.10",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Mac-10.10'@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.10'<br/>Total tests: 3<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",
@@ -672,7 +672,7 @@
     },
     "name": "telemetry_gpu_unittests on NVIDIA GPU on Mac Retina",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Mac-10.9'@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.9'<br/>Total tests: 3<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",

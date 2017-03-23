@@ -25,6 +25,10 @@ class GTestResultsOutputPlaceholder(JsonOutputPlaceholder):
     return GTestResults(ret)
 
 class TestUtilsApi(recipe_api.RecipeApi):
+
+  # This magic string is depended on by other infra tools.
+  INVALID_RESULTS_MAGIC = 'TEST RESULTS WERE INVALID'
+
   @staticmethod
   def format_step_text(data):
     """
@@ -149,7 +153,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
   def _invalid_test_results(self, test):
     self.m.tryserver.set_invalid_test_results_tryjob_result()
-    self.m.python.failing_step(test.name, 'TEST RESULTS WERE INVALID')
+    self.m.python.failing_step(test.name, self.INVALID_RESULTS_MAGIC)
 
   def _summarize_retried_test(self, caller_api, test):
     """Summarizes test results and exits with a failing status if there were new
@@ -203,6 +207,13 @@ class TestUtilsApi(recipe_api.RecipeApi):
     self.m.python('archive_retry_summary', script, args)
 
   def create_results_from_json(self, data):
+    return TestResults(data)
+
+  def create_results_from_json_if_needed(self, data):
+    if data is None:
+      raise TypeError('Invalid data given')
+    if isinstance(data, TestResults):
+      return data
     return TestResults(data)
 
   @recipe_util.returns_placeholder

@@ -774,6 +774,15 @@ class ResultsHandler(object):
     """
     raise NotImplementedError()
 
+  def render_results(self, api, results, presentation): # pragma: no cover
+    """Renders the test result into the step's output presentation.
+
+    Args:
+      api: Recipe API object.
+      results: Results returned by the step.
+      presentation: Presentation output of the step.
+    """
+    raise NotImplementedError()
 
   def validate_results(self, api, results):  # pragma: no cover
     """Validates test results and returns a list of failures.
@@ -790,13 +799,39 @@ class ResultsHandler(object):
 
 
 class JSONResultsHandler(ResultsHandler):
-  @staticmethod
-  def _is_json_format_results(results):
-    return results and results.get('version', 0) == 3
+  MAX_FAILS = 30
+
+  @classmethod
+  def _format_failures(cls, state, failures):
+    failures.sort()
+    num_failures = len(failures)
+    if num_failures > cls.MAX_FAILS:
+      failures = failures[:cls.MAX_FAILS]
+      failures.append('... %s more ...' % (num_failures - cls.MAX_FAILS))
+    return ('%s:' % state, ['* %s' % f for f in failures])
+
+  # TODO(tansell): Make this better formatted when milo supports html rendering.
+  @classmethod
+  def _format_counts(cls, state, expected, unexpected, highlight=False):
+    hi_left = ''
+    hi_right = ''
+    if highlight and unexpected > 0:
+      hi_left = '>>>'
+      hi_right = '<<<'
+    return (
+        "* %(state)s: %(total)d (%(expected)d expected, "
+        "%(hi_left)s%(unexpected)d unexpected%(hi_right)s)") % dict(
+            state=state, total=expected+unexpected,
+            expected=expected, unexpected=unexpected,
+            hi_left=hi_left, hi_right=hi_right)
 
   def upload_results(self, api, results, step_name):
-    # We only support uploading JSON Format test results.
-    if not self._is_json_format_results(results):
+    # TODO(tansell): Uncomment when LayoutTestResultsHandler calls the parent.
+    #if hasattr(results, 'as_jsonish'):
+    #  results = results.as_jsonish()
+
+    # Only version 3 of results is supported by the upload server.
+    if not results or results.get('version', None) != 3:
       return
 
     chrome_revision_cp = api.bot_update.last_returned_properties.get(
@@ -807,19 +842,88 @@ class JSONResultsHandler(ResultsHandler):
       api.json.input(results), chrome_revision=chrome_revision,
       test_type=step_name, test_results_server='test-results.appspot.com')
 
-  def validate_results(self, api, results):
-    if self._is_json_format_results(results):
-      test_results = api.test_utils.create_results_from_json(results)
-      tests = test_results.tests
-      failures = list(
-        t for t in tests
-        if all(res not in tests[t]['expected'].split()
-               for res in tests[t]['actual'].split()))
-      return True, failures
-    elif results:
-      return results['valid'], results['failures']
+  def render_results(self, api, results, presentation):
+    try:
+      results = api.test_utils.create_results_from_json_if_needed(
+          results)
+    except Exception as e:
+      presentation.status = api.step.EXCEPTION
+      presentation.step_text += api.test_utils.format_step_text([
+          ("Exception while processing test results: %s" % str(e),),
+      ])
+      return
+
+    if not results.valid:
+      # TODO(tansell): Change this to api.step.EXCEPTION after discussion.
+      presentation.status = api.step.FAILURE
+      presentation.step_text = api.test_utils.INVALID_RESULTS_MAGIC
+      return
+
+    step_text = []
+
+    if results.total_tests_results == 0:
+      step_text += [
+          ('Total tests: n/a',),
+      ]
+
+    # TODO(tansell): https://crbug.com/704066 - Kill simplified JSON format.
+    elif results.version == 'simplified':
+      if results.unexpected_failures:
+        presentation.status = api.step.FAILURE
+
+      step_text += [
+          ('%s passed, %s failed (%s total)' % (
+              len(results.passes.keys()),
+              len(results.unexpected_failures.keys()),
+              len(results.tests)),),
+      ]
+
     else:
-      return False, []
+      if results.unexpected_flakes:
+        presentation.status = api.step.WARNING
+      if results.unexpected_failures:
+        presentation.status = api.step.FAILURE
+
+      step_text += [
+          ('Total tests: %s' % len(results.tests), [
+              self._format_counts(
+                  'Passed',
+                  len(results.passes.keys()),
+                  len(results.unexpected_passes.keys())),
+              self._format_counts(
+                  'Failed',
+                  len(results.failures.keys()),
+                  len(results.unexpected_failures.keys()),
+                  highlight=True),
+              self._format_counts(
+                  'Flaky',
+                  len(results.flakes.keys()),
+                  len(results.unexpected_flakes.keys()),
+                  highlight=True),
+              ]
+          ),
+      ]
+
+    # format_step_text will automatically trim these if the list is empty.
+    step_text += [
+        self._format_failures(
+            'Unexpected Failures', results.unexpected_failures.keys()),
+    ]
+    step_text += [
+        self._format_failures(
+            'Unexpected Flakes', results.unexpected_flakes.keys()),
+    ]
+
+    presentation.step_text += api.test_utils.format_step_text(step_text)
+
+  def validate_results(self, api, results):
+    try:
+      results = api.test_utils.create_results_from_json_if_needed(
+          results)
+    except Exception as e:
+      return False, [str(e)]
+
+    return results.valid, results.unexpected_failures
 
 
 class FakeCustomResultsHandler(ResultsHandler):
@@ -828,9 +932,14 @@ class FakeCustomResultsHandler(ResultsHandler):
   def validate_results(self, api, results):
     return True, []
 
+  def render_results(self, api, results, presentation):
+    presentation.step_text += api.test_utils.format_step_text([
+        ['Fake results data',[]],
+    ])
+    presentation.links['uploaded'] = 'fake://'
+
   def upload_results(self, api, results, step_name):
     test_results = api.test_utils.create_results_from_json(results)
-    api.step.active_result.presentation.links['uploaded'] = step_name
 
 
 class LayoutTestResultsHandler(JSONResultsHandler):
@@ -838,7 +947,8 @@ class LayoutTestResultsHandler(JSONResultsHandler):
 
   def upload_results(self, api, results, step_name):
     # Also upload to standard JSON results handler
-    JSONResultsHandler.upload_results(self, api, results, step_name)
+    # TODO(tansell): Enable default upload result for layout tests.
+    #JSONResultsHandler.upload_results(self, api, results, step_name)
 
     # LayoutTest's special archive and upload results
     results_dir = api.path['start_dir'].join('layout-test-results')
@@ -866,7 +976,7 @@ class LayoutTestResultsHandler(JSONResultsHandler):
       archive_layout_test_results,
       archive_layout_test_args)
 
-    # TODO(infra): http://crbug.com/418946 .
+    # TODO(tansell): Move this to render_results function
     sanitized_buildername = re.sub('[ .()]', '_', buildername)
     base = (
       "https://storage.googleapis.com/chromium-layout-test-archives/%s/%s"
@@ -1291,18 +1401,16 @@ class LocalIsolatedScriptTest(Test):
       # between the two.
       self._test_runs[suffix] = api.step.active_result
       results = self._test_runs[suffix].json.output
-      valid, failures = self.results_handler.validate_results(api, results)
+      presentation = self._test_runs[suffix].presentation
 
-      if valid:
-        self._test_runs[suffix].presentation.step_text += (
-            api.test_utils.format_step_text([
-              ['failures:', failures]
-            ]))
-      elif api.step.active_result.retcode == 0:
+      valid, failures = self.results_handler.validate_results(api, results)
+      self.results_handler.render_results(api, results, presentation)
+
+      if api.step.active_result.retcode == 0 and not valid:
         # This failure won't be caught automatically. Need to manually
         # raise it as a step failure.
-        api.step.active_result.presentation.status = api.step.FAILURE
-        raise api.step.StepFailure('Test results were invalid')
+        raise api.step.StepFailure(api.test_utils.INVALID_RESULTS_MAGIC)
+
     return self._test_runs[suffix]
 
 
@@ -1360,15 +1468,18 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
 
   def validate_task_results(self, api, step_result):
     results = getattr(step_result, 'isolated_script_results', None) or {}
+
     valid, failures = self.results_handler.validate_results(api, results)
-    if not failures and step_result.retcode != 0:
-      failures = ['%s (entire test suite)' % self.name]
-      valid = False
+    self.results_handler.render_results(api, results, step_result.presentation)
+
     if valid:
       self._isolated_script_results = results
-      step_result.presentation.step_text += api.test_utils.format_step_text([
-        ['failures:', failures]
-      ])
+
+    if step_result.retcode == 0 and not valid:
+      # This failure won't be caught automatically. Need to manually
+      # raise it as a step failure.
+      raise api.step.StepFailure(api.test_utils.INVALID_RESULTS_MAGIC)
+
     # Check for chartjson results and upload to results dashboard if present.
     self._output_chartjson_results_if_present(api, step_result)
     return valid, failures
@@ -1378,7 +1489,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
       super(SwarmingIsolatedScriptTest, self).post_run(api, suffix)
     finally:
       results = self._isolated_script_results
-      if self._upload_test_results:
+      if results and self._upload_test_results:
         self.results_handler.upload_results(
             api, results, self._step_name(suffix))
 
@@ -2035,6 +2146,7 @@ class BlinkTest(Test):
   def __init__(self, extra_args=None):
     super(BlinkTest, self).__init__()
     self._extra_args = extra_args
+    self.results_handler = LayoutTestResultsHandler()
 
   name = 'webkit_tests'
 
@@ -2107,21 +2219,14 @@ class BlinkTest(Test):
       step_result = api.step.active_result
       self._test_runs[suffix] = step_result
 
-      test_results_json = {}
       if step_result:
-        r = step_result.test_utils.test_results
-        p = step_result.presentation
+        results = step_result.test_utils.test_results
 
-        if r.valid:
-          p.step_text += api.test_utils.format_step_text([
-            ['unexpected_flakes:', r.unexpected_flakes.keys()],
-            ['unexpected_failures:', r.unexpected_failures.keys()],
-            ['Total executed: %s' % r.num_passes],
-          ])
-          test_results_json = r.as_jsonish()
+        self.results_handler.render_results(
+            api, results, step_result.presentation)
 
-      if suffix in ('', 'with patch'):
-        LayoutTestResultsHandler().upload_results(api, test_results_json, step_name)
+        if suffix in ('', 'with patch'):
+          self.results_handler.upload_results(api, results, step_name)
 
   def has_valid_results(self, api, suffix):
     if suffix not in self._test_runs:

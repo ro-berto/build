@@ -306,6 +306,7 @@
     },
     "name": "telemetry_gpu_unittests",
     "~followup_annotations": [
+      "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"failures\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"test1.Test1\", @@@",

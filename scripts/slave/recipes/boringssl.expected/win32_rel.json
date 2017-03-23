@@ -173,7 +173,8 @@
       "@@@STEP_LOG_LINE@test_utils.test_results@        \"expected\": \"PASS\"@@@",
       "@@@STEP_LOG_LINE@test_utils.test_results@      }@@@",
       "@@@STEP_LOG_LINE@test_utils.test_results@    }@@@",
-      "@@@STEP_LOG_LINE@test_utils.test_results@  }@@@",
+      "@@@STEP_LOG_LINE@test_utils.test_results@  }, @@@",
+      "@@@STEP_LOG_LINE@test_utils.test_results@  \"version\": 3@@@",
       "@@@STEP_LOG_LINE@test_utils.test_results@}@@@",
       "@@@STEP_LOG_END@test_utils.test_results@@@"
     ]
@@ -232,7 +233,8 @@
       "@@@STEP_LOG_LINE@test_utils.test_results@        \"expected\": \"PASS\"@@@",
       "@@@STEP_LOG_LINE@test_utils.test_results@      }@@@",
       "@@@STEP_LOG_LINE@test_utils.test_results@    }@@@",
-      "@@@STEP_LOG_LINE@test_utils.test_results@  }@@@",
+      "@@@STEP_LOG_LINE@test_utils.test_results@  }, @@@",
+      "@@@STEP_LOG_LINE@test_utils.test_results@  \"version\": 3@@@",
       "@@@STEP_LOG_LINE@test_utils.test_results@}@@@",
       "@@@STEP_LOG_END@test_utils.test_results@@@"
     ]

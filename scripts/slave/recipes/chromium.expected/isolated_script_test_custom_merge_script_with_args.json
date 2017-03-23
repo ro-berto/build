@@ -33,7 +33,7 @@
     },
     "name": "fake_test",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br/>Total tests: n/a<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"links\": {@@@",

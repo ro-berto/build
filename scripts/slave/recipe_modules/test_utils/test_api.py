@@ -112,6 +112,7 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
     ret.retcode = retcode
     return ret
 
+  # TODO(tansell): https://crbug.com/704066 - Kill simplified JSON format.
   def generate_simplified_json_results(self, shards, isolated_script_passing,
                                        valid):
     per_shard_results = []
@@ -133,8 +134,7 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
       per_shard_results.append(jsonish_results)
     return per_shard_results
 
-  def generate_json_test_results(self, shards, isolated_script_passing,
-                                 valid):
+  def generate_json_test_results(self, shards, isolated_script_passing):
     per_shard_results = []
     for i in xrange(shards):
       jsonish_results = {
@@ -147,8 +147,6 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
            'PASS': 0
         }
       }
-      if not valid:
-        jsonish_results['invalid'] = '1'
       idx = 1 + (2 * i)
       if isolated_script_passing:
         tests_run = {
@@ -191,12 +189,13 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
 
   def canned_isolated_script_output(self, passing, is_win, swarming=False,
                                     shards=1, swarming_internal_failure=False,
-                                    isolated_script_passing=True, valid=True,
+                                    isolated_script_passing=True, valid=None,
                                     missing_shards=[],
                                     empty_shards=[],
                                     use_json_test_format=False,
                                     output_chartjson=False,
-                                    benchmark_enabled=True):
+                                    benchmark_enabled=True,
+                                    corrupt=False):
     """Produces a test results' compatible json for isolated script tests. """
     per_shard_results = []
     per_shard_chartjson_results = []
@@ -209,11 +208,16 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
         'entry%d' % (idx + 1): 'chart%d' % (idx + 1)}
       per_shard_chartjson_results.append(chartjsonish_results)
     if use_json_test_format:
+      assert valid is None, "valid flag not used in full JSON format."
       per_shard_results = self.generate_json_test_results(
-          shards, isolated_script_passing, valid)
+          shards, isolated_script_passing)
     else:
+      if valid is None:
+        valid = True
       per_shard_results = self.generate_simplified_json_results(
           shards, isolated_script_passing, valid)
+    if corrupt:
+      per_shard_results[0]['tests'] = 'corrupted'
     if swarming:
       jsonish_shards = []
       files_dict = {}
