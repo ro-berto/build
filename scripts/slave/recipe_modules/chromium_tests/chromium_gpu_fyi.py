@@ -224,7 +224,7 @@ SPEC = {
       # This new hardware is being tested for reliability.
       'enable_swarming': False,
     },
-    'Win7 Release (AMD R5 230)': {
+    'Win7 Release (AMD R7 240)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
