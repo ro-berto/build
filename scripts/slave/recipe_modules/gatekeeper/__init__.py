@@ -1,5 +1,4 @@
 DEPS = [
-  'build/service_account',
   'file',
   'recipe_engine/json',
   'recipe_engine/path',
