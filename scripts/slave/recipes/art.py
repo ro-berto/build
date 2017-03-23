@@ -386,7 +386,7 @@ _CONFIG_MAP = {
         'concurrent_collector': True,
       },
       'angler-armv8-ndebug': {
-        'serial': '84B7N15A28014046',
+        'serial': '84B7N16728001142',
         'device': 'angler',
         'debug': False,
       },
