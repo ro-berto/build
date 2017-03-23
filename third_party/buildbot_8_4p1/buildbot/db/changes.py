@@ -219,6 +219,7 @@ class ChangesConnectorComponent(base.DBConnectorComponent):
             changes_tbl = self.db.model.changes
             q = sa.select([changes_tbl.c.changeid],
                     order_by=[sa.desc(changes_tbl.c.changeid)])
+            q = q.where(changes_tbl.c.revision != '')
             if repository:
               q = q.where(changes_tbl.c.repository == repository)
             if author:
