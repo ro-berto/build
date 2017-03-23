@@ -279,6 +279,7 @@
       "-j",
       "50",
       "isac_fix_test",
+      "low_bandwidth_audio_test",
       "webrtc_perf_tests"
     ],
     "cwd": "[BUILDER_CACHE]\\Win7\\src",
@@ -369,7 +370,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]\\Win7\\src\\out\\Release",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]\\\\Win7\\\\src\\\\out\\\\Release', '-j', 50, 'isac_fix_test', 'webrtc_perf_tests']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]\\\\Win7\\\\src\\\\out\\\\Release', '-j', 50, 'isac_fix_test', 'low_bandwidth_audio_test', 'webrtc_perf_tests']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",
