@@ -147,7 +147,7 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
            'PASS': 0
         }
       }
-      idx = 1 + (2 * i)
+      idx = 1 + (3 * i)
       if isolated_script_passing:
         tests_run = {
           'test_common': {
@@ -165,9 +165,14 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
               'expected': 'PASS TIMEOUT',
               'actual': 'TIMEOUT',
              },
+            'Test%d' % (idx + 2): {
+              'expected': 'SKIP',
+              'actual': 'SKIP',
+             },
           }
         }
         jsonish_results['num_failures_by_type']['PASS'] = 2
+        jsonish_results['num_failures_by_type']['SKIP'] = 1
       else:
         tests_run = {
           'test%d' % idx: {
@@ -195,7 +200,9 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
                                     use_json_test_format=False,
                                     output_chartjson=False,
                                     benchmark_enabled=True,
-                                    corrupt=False):
+                                    corrupt=False,
+                                    unknown=False,
+                                    ):
     """Produces a test results' compatible json for isolated script tests. """
     per_shard_results = []
     per_shard_chartjson_results = []
@@ -216,8 +223,12 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
         valid = True
       per_shard_results = self.generate_simplified_json_results(
           shards, isolated_script_passing, valid)
+
+    if unknown:
+      per_shard_results[0]['tests']['test1']['Test1']['actual'] = 'UNKNOWN'
     if corrupt:
       per_shard_results[0]['tests'] = 'corrupted'
+
     if swarming:
       jsonish_shards = []
       files_dict = {}

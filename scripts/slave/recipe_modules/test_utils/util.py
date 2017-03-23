@@ -30,9 +30,12 @@ class TestResults(object):
     self.unexpected_failures = {}
     self.flakes = {}
     self.unexpected_flakes = {}
+    self.skipped = {}
+    self.unknown = {}
 
-    # TODO(dpranke): crbug.com/357866 - we should simplify the handling of
-    # both the return code and parsing the actual results, below.
+
+    # TODO(dpranke): https://crbug.com/357866 - we should simplify the handling
+    # of both the return code and parsing the actual results, below.
 
     # run-webkit-tests returns the number of failures as the return
     # code, but caps the return code at 101 to avoid overflow or colliding
@@ -45,7 +48,8 @@ class TestResults(object):
       self._json_results()
 
   @property
-  def total_tests_results(self):
+  def total_test_runs(self):
+    # Number of tests actually run, hence exclude skipped tests.
     return sum([
         len(self.passes), len(self.unexpected_passes),
         len(self.failures), len(self.unexpected_failures),
@@ -63,8 +67,48 @@ class TestResults(object):
 
   def _json_results(self):
     self.valid = self.raw.get('version', 0) == 3
-    passing_statuses = ('PASS', 'SLOW', 'NEEDSREBASELINE',
-                        'NEEDSMANUALREBASELINE')
+
+    # Test result types are described on the follow page.
+    # https://www.chromium.org/developers/the-json-test-results-format#TOC-Test-result-types
+
+    passing_statuses = (
+        # PASS - The test ran as expected.
+        'PASS',
+        # SLOW - Layout test specific. The test is expected to take longer than
+        # normal to run.
+        'SLOW',
+        # REBASELINE, NEEDSREBASELINE, NEEDSMANUALREBASELINE - Layout test
+        # specific. The expected test result is out of date and will be ignored
+        # (any result other than a crash or timeout will be considered as
+        # passing).
+        'REBASELINE', 'NEEDSREBASELINE', 'NEEDSMANUALREBASELINE',
+        # WONTFIX - **Undocumented** - Test is failing and won't be fixed?
+        'WONTFIX',
+    )
+
+    failing_statuses = (
+        # FAIL - The test did not run as expected.
+        'FAIL',
+        # CRASH - The test runner crashed during the test.
+        'CRASH',
+        # TIMEOUT - The test hung (did not complete) and was aborted.
+        'TIMEOUT',
+        # MISSING - Layout test specific. The test completed but we could not
+        # find an expected baseline to compare against.
+        'MISSING',
+        # LEAK - Layout test specific. Memory leaks were detected during the
+        # test execution.
+        'LEAK',
+        # TEXT, AUDIO, IMAGE, IMAGE+TEXT - Layout test specific, deprecated.
+        # The test is expected to produce a failure for only some parts.
+        # Normally you will see "FAIL" instead.
+        'TEXT', 'AUDIO', 'IMAGE', 'IMAGE+TEXT',
+    )
+
+    skipping_statuses = (
+        # SKIP - The test was not run.
+        'SKIP',
+    )
 
     for (test, result) in self.tests.iteritems():
       key = 'unexpected_' if result.get('is_unexpected') else ''
@@ -78,12 +122,17 @@ class TestResults(object):
         key += 'flakes'
       elif last_result in passing_statuses:
         key += 'passes'
-        # TODO(dpranke): crbug.com/357867 ...  Why are we assigning result
-        # instead of actual_result here. Do we even need these things to be
-        # hashes, or just lists?
+        # TODO(dpranke): https://crbug.com/357867 ...  Why are we assigning
+        # result instead of actual_result here. Do we even need these things to
+        # be hashes, or just lists?
         data = result
-      else:
+      elif last_result in failing_statuses:
         key += 'failures'
+      elif last_result in skipping_statuses:
+        key = 'skipped'
+      else:
+        # Unknown test state was found.
+        key = 'unknown'
       getattr(self, key)[test] = data
 
   def add_result(self, name, expected, actual=None):

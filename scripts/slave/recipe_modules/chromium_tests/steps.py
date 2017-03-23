@@ -861,7 +861,7 @@ class JSONResultsHandler(ResultsHandler):
 
     step_text = []
 
-    if results.total_tests_results == 0:
+    if results.total_test_runs == 0:
       step_text += [
           ('Total tests: n/a',),
       ]
@@ -891,6 +891,10 @@ class JSONResultsHandler(ResultsHandler):
                   len(results.passes.keys()),
                   len(results.unexpected_passes.keys())),
               self._format_counts(
+                  'Skipped',
+                  len(results.skipped.keys()),
+                  0),
+              self._format_counts(
                   'Failed',
                   len(results.failures.keys()),
                   len(results.unexpected_failures.keys()),
@@ -912,6 +916,15 @@ class JSONResultsHandler(ResultsHandler):
     step_text += [
         self._format_failures(
             'Unexpected Flakes', results.unexpected_flakes.keys()),
+    ]
+
+    # Unknown test results mean something has probably gone wrong, mark as an
+    # exception.
+    if results.unknown:
+      presentation.status = api.step.EXCEPTION
+    step_text += [
+        self._format_failures(
+            'Unknown test result', results.unknown.keys()),
     ]
 
     presentation.step_text += api.test_utils.format_step_text(step_text)

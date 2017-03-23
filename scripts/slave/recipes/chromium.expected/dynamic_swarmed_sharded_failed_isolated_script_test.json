@@ -416,7 +416,7 @@
     "name": "telemetry_gpu_unittests",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br/>Total tests: 2<br/>* Passed: 0 (0 expected, 0 unexpected)<br/>* Failed: 2 (2 expected, 0 unexpected)<br/>* Flaky: 0 (0 expected, 0 unexpected)<br/>@@@",
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br/>Total tests: 2<br/>* Passed: 0 (0 expected, 0 unexpected)<br/>* Skipped: 0 (0 expected, 0 unexpected)<br/>* Failed: 2 (2 expected, 0 unexpected)<br/>* Flaky: 0 (0 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",
@@ -445,7 +445,7 @@
       "@@@STEP_LOG_END@swarming.summary (exception)@@@",
       "@@@STEP_LOG_LINE@outdir_json@{@@@",
       "@@@STEP_LOG_LINE@outdir_json@  \"0/output.json\": \"{\\\"tests\\\": {\\\"test1\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL TIMEOUT\\\"}, \\\"Test2\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"FAIL FAIL FAIL\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000000, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 2, \\\"PASS\\\": 0}}\", @@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"1/output.json\": \"{\\\"tests\\\": {\\\"test3\\\": {\\\"Test3\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL TIMEOUT\\\"}, \\\"Test4\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"FAIL FAIL FAIL\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000001, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 2, \\\"PASS\\\": 0}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"1/output.json\": \"{\\\"tests\\\": {\\\"test4\\\": {\\\"Test5\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"FAIL FAIL FAIL\\\"}, \\\"Test4\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL TIMEOUT\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000001, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 2, \\\"PASS\\\": 0}}\", @@@",
       "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": true, \\\"exit_code\\\": \\\"1\\\"}, {\\\"internal_failure\\\": false, \\\"failure\\\": true, \\\"exit_code\\\": \\\"1\\\"}]}\"@@@",
       "@@@STEP_LOG_LINE@outdir_json@}@@@",
       "@@@STEP_LOG_END@outdir_json@@@",
