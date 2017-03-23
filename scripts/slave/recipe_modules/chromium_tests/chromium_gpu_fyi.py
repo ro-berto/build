@@ -407,24 +407,6 @@ SPEC = {
       'enable_swarming': True,
       'serialize_tests': True,
     },
-    'Linux Release (AMD R5 230)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'GPU Linux Builder',
-      'testing': {
-        'platform': 'linux',
-      },
-      # Swarming is deliberately NOT enabled on this one-off configuration.
-      # Multiple copies of the machines have to be deployed into swarming
-      # in order to keep up with the faster cycle time of the tests.
-      'enable_swarming': False,
-    },
     'Linux Release (NVIDIA GeForce 730)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
