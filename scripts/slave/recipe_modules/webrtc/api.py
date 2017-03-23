@@ -230,7 +230,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     args = args or []
     env = env or {}
     if perf_test and self.c.PERF_ID:
-      perf_dashboard_id = perf_dashboard_id or test
+      perf_dashboard_id = perf_dashboard_id or name
       assert self.revision_number, (
           'A revision number must be specified for perf tests as they upload '
           'data to the perf dashboard.')
