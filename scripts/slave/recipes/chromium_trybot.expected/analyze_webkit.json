@@ -690,8 +690,6 @@
       "[START_DIR]\\src\\out",
       "--write-full-results-to",
       "/path/to/tmp/json",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--master-name",
       "tryserver.chromium.win",
       "--build-number",
@@ -716,6 +714,31 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Total tests: 5<br/>* Passed: 4 (4 expected, 0 unexpected)<br/>* Skipped: 0 (0 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 0 (0 expected, 0 unexpected)<br/>@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]\\resources\\upload_test_results.py",
+      "--input-json",
+      "{\"num_passes\": 9001, \"num_regressions\": 0, \"path_separator\": \"/\", \"tests\": {\"bad\": {\"totally-bad-probably.html\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}}, \"bad/totally-bad-probably.html\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"flake\": {\"slow.html\": {\"actual\": \"SLOW\", \"expected\": \"SLOW\"}, \"timeout-then-crash.html\": {\"actual\": \"CRASH\", \"expected\": \"CRASH\"}, \"totally-flakey.html\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}}, \"flake/slow.html\": {\"actual\": \"SLOW\", \"expected\": \"SLOW\"}, \"flake/timeout-then-crash.html\": {\"actual\": \"CRASH\", \"expected\": \"CRASH\"}, \"flake/totally-flakey.html\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"tricky\": {\"totally-maybe-not-awesome.html\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}}, \"tricky/totally-maybe-not-awesome.html\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}}, \"version\": 3}",
+      "--master-name",
+      "tryserver.chromium.win",
+      "--builder-name",
+      "win_chromium_rel_ng",
+      "--build-number",
+      "571",
+      "--test-type",
+      "webkit_tests (with patch)",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "name": "Upload to test-results [webkit_tests (with patch)]"
   },
   {
     "cmd": [

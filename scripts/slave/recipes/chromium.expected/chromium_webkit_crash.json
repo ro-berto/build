@@ -512,8 +512,6 @@
       "[START_DIR]/src/out",
       "--write-full-results-to",
       "/path/to/tmp/json",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--master-name",
       "chromium.webkit",
       "--build-number",
@@ -541,6 +539,31 @@
       "@@@STEP_TEXT@<br/>Total tests: n/a<br/>@@@",
       "@@@STEP_FAILURE@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
+      "--input-json",
+      "{\"tests\": {}, \"version\": 3}",
+      "--master-name",
+      "chromium.webkit",
+      "--builder-name",
+      "WebKit Linux Trusty",
+      "--build-number",
+      "571",
+      "--test-type",
+      "webkit_tests",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "Upload to test-results [webkit_tests]"
   },
   {
     "cmd": [

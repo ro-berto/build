@@ -486,8 +486,6 @@
       "[BUILDER_CACHE]/V8_Blink_Linux_64___ignition/src/out",
       "--write-full-results-to",
       "/path/to/tmp/json",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--master-name",
       "client.v8.fyi",
       "--build-number",
@@ -522,6 +520,29 @@
       "@@@STEP_TEXT@<br/>Total tests: 6<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 0 (0 expected, 0 unexpected)<br/>* Failed: 2 (0 expected, >>>2 unexpected<<<)<br/>* Flaky: 3 (0 expected, >>>3 unexpected<<<)<br/><br/>Unexpected Failures:<br/>* bad/totally-bad-probably.html<br/>* tricky/totally-maybe-not-awesome.html<br/><br/>Unexpected Flakes:<br/>* flake/slow.html<br/>* flake/timeout-then-crash.html<br/>* flake/totally-flakey.html<br/>@@@",
       "@@@STEP_FAILURE@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
+      "--input-json",
+      "{\"num_passes\": 9001, \"num_regressions\": 5, \"path_separator\": \"/\", \"tests\": {\"bad\": {\"totally-bad-probably.html\": {\"actual\": \"FAIL\", \"expected\": \"PASS\", \"is_unexpected\": true}}, \"bad/totally-bad-probably.html\": {\"actual\": \"FAIL\", \"expected\": \"PASS\", \"is_unexpected\": true}, \"flake\": {\"slow.html\": {\"actual\": \"TIMEOUT SLOW\", \"expected\": \"SLOW\", \"is_unexpected\": true}, \"timeout-then-crash.html\": {\"actual\": \"TIMEOUT CRASH\", \"expected\": \"CRASH\", \"is_unexpected\": true}, \"totally-flakey.html\": {\"actual\": \"TIMEOUT PASS\", \"expected\": \"PASS\", \"is_unexpected\": true}}, \"flake/slow.html\": {\"actual\": \"TIMEOUT SLOW\", \"expected\": \"SLOW\", \"is_unexpected\": true}, \"flake/timeout-then-crash.html\": {\"actual\": \"TIMEOUT CRASH\", \"expected\": \"CRASH\", \"is_unexpected\": true}, \"flake/totally-flakey.html\": {\"actual\": \"TIMEOUT PASS\", \"expected\": \"PASS\", \"is_unexpected\": true}, \"good\": {\"totally-awesome.html\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}}, \"good/totally-awesome.html\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"tricky\": {\"totally-maybe-not-awesome.html\": {\"actual\": \"FAIL\", \"expected\": \"PASS\", \"is_unexpected\": true}}, \"tricky/totally-maybe-not-awesome.html\": {\"actual\": \"FAIL\", \"expected\": \"PASS\", \"is_unexpected\": true}}, \"version\": 3}",
+      "--master-name",
+      "client.v8.fyi",
+      "--builder-name",
+      "V8-Blink Linux 64 - ignition",
+      "--build-number",
+      "571",
+      "--test-type",
+      "webkit_tests (with patch)",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "43426"
+    ],
+    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___ignition",
+    "name": "Upload to test-results [webkit_tests (with patch)]"
   },
   {
     "cmd": [
@@ -580,8 +601,6 @@
       "[BUILDER_CACHE]/V8_Blink_Linux_64___ignition/src/out",
       "--write-full-results-to",
       "/path/to/tmp/json",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--master-name",
       "client.v8.fyi",
       "--build-number",

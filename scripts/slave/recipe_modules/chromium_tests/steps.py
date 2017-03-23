@@ -826,9 +826,8 @@ class JSONResultsHandler(ResultsHandler):
             hi_left=hi_left, hi_right=hi_right)
 
   def upload_results(self, api, results, step_name):
-    # TODO(tansell): Uncomment when LayoutTestResultsHandler calls the parent.
-    #if hasattr(results, 'as_jsonish'):
-    #  results = results.as_jsonish()
+    if hasattr(results, 'as_jsonish'):
+      results = results.as_jsonish()
 
     # Only version 3 of results is supported by the upload server.
     if not results or results.get('version', None) != 3:
@@ -960,8 +959,7 @@ class LayoutTestResultsHandler(JSONResultsHandler):
 
   def upload_results(self, api, results, step_name):
     # Also upload to standard JSON results handler
-    # TODO(tansell): Enable default upload result for layout tests.
-    #JSONResultsHandler.upload_results(self, api, results, step_name)
+    JSONResultsHandler.upload_results(self, api, results, step_name)
 
     # LayoutTest's special archive and upload results
     results_dir = api.path['start_dir'].join('layout-test-results')
@@ -2180,7 +2178,6 @@ class BlinkTest(Test):
         '--results-directory', results_dir,
         '--build-dir', api.chromium.c.build_dir,
         '--write-full-results-to', api.test_utils.test_results(add_json_log=False),
-        '--test-results-server', 'test-results.appspot.com',
         '--master-name', api.properties['mastername'],
         '--build-number', str(api.properties['buildnumber']),
         '--builder-name', api.properties['buildername'],
