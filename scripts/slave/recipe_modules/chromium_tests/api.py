@@ -943,8 +943,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     # TODO(phajdan.jr): Remove special case for layout tests.
     add_blink_tests = (affects_blink_paths and
-                       buildername in CHROMIUM_BLINK_TESTS_BUILDERS
-                       and False)
+                       buildername in CHROMIUM_BLINK_TESTS_BUILDERS)
 
     # Add blink tests that work well with "analyze" here. The tricky ones
     # that bypass it (like the layout tests) are added later.
@@ -968,22 +967,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     test_targets, compile_targets = self.m.filter.analyze(
         affected_files, test_targets, additional_compile_targets,
         'trybot_analyze_config.json')
-
-    print "--------------------"
-    print "--------------------"
-    print "--------------------"
-    print "--------------------"
-    print "Forcing targets!"
-    print "--------------------"
-    print "--------------------"
-    print "--------------------"
-    print "--------------------"
-    print "--------------------"
-    compile_targets = ['webkit_layout_tests_exparchive',]
-    test_targets = ['webkit_layout_tests_exparchive',]
-
-    print "compile_targets", compile_targets
-    print "test_targets", test_targets
 
     if bot_config.get('analyze_mode') == 'compile':
       tests = []
