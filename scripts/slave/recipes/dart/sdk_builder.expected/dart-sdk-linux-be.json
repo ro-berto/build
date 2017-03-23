@@ -1,0 +1,167 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
+      "--spec",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'sdk', 'url': 'https://chromium.googlesource.com/external/github.com/dart-lang/sdk.git'}]",
+      "--patch_root",
+      "sdk",
+      "--revision_mapping_file",
+      "{}",
+      "--git-cache-dir",
+      "[CACHE]/git",
+      "--output_json",
+      "/path/to/tmp/json",
+      "--revision",
+      "sdk@abcd1234efef5656",
+      "--output_manifest"
+    ],
+    "env": {
+      "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
+      "GIT_HTTP_LOW_SPEED_TIME": "300",
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+    },
+    "infra_step": true,
+    "name": "bot_update",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Some step text@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"sdk\": \"abcd1234efef5656\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"manifest\": {}, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"sdk\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"properties\": {}, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"root\": \"sdk\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"step_text\": \"Some step text\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/sdk/tools/task_kill.py"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "name": "taskkill before"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/sdk/tools/clean_output_directory.py"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "name": "clobber"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/sdk/tools/bots/dart_sdk.py"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "name": "generate sdks"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/sdk/tools/task_kill.py"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "name": "taskkill after"
+  },
+  {
+    "cmd": [],
+    "name": "trigger",
+    "trigger_specs": [
+      {
+        "builder_name": "analyzer-linux-release-be"
+      },
+      {
+        "builder_name": "analyzer-linux-release-strong-be"
+      },
+      {
+        "builder_name": "dart2js-linux-chromeff-1-4-be"
+      },
+      {
+        "builder_name": "dart2js-linux-chromeff-2-4-be"
+      },
+      {
+        "builder_name": "dart2js-linux-chromeff-3-4-be"
+      },
+      {
+        "builder_name": "dart2js-linux-chromeff-4-4-be"
+      },
+      {
+        "builder_name": "dart2js-linux-d8-hostchecked-1-5-be"
+      },
+      {
+        "builder_name": "dart2js-linux-d8-hostchecked-2-5-be"
+      },
+      {
+        "builder_name": "dart2js-linux-d8-hostchecked-3-5-be"
+      },
+      {
+        "builder_name": "dart2js-linux-d8-hostchecked-4-5-be"
+      },
+      {
+        "builder_name": "dart2js-linux-d8-hostchecked-5-5-be"
+      },
+      {
+        "builder_name": "dart2js-linux-d8-minified-1-5-be"
+      },
+      {
+        "builder_name": "dart2js-linux-d8-minified-2-5-be"
+      },
+      {
+        "builder_name": "dart2js-linux-d8-minified-3-5-be"
+      },
+      {
+        "builder_name": "dart2js-linux-d8-minified-4-5-be"
+      },
+      {
+        "builder_name": "dart2js-linux-d8-minified-5-5-be"
+      },
+      {
+        "builder_name": "dart2js-linux-drt-1-2-be"
+      },
+      {
+        "builder_name": "dart2js-linux-drt-2-2-be"
+      },
+      {
+        "builder_name": "dart2js-linux-drt-csp-minified-be"
+      },
+      {
+        "builder_name": "dart2js-linux-jsshell-1-4-be"
+      },
+      {
+        "builder_name": "dart2js-linux-jsshell-2-4-be"
+      },
+      {
+        "builder_name": "dart2js-linux-jsshell-3-4-be"
+      },
+      {
+        "builder_name": "dart2js-linux-jsshell-4-4-be"
+      },
+      {
+        "builder_name": "pkg-linux-release-be"
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@analyzer-linux-release-be<br />analyzer-linux-release-strong-be<br />dart2js-linux-chromeff-1-4-be<br />dart2js-linux-chromeff-2-4-be<br />dart2js-linux-chromeff-3-4-be<br />dart2js-linux-chromeff-4-4-be<br />dart2js-linux-d8-hostchecked-1-5-be<br />dart2js-linux-d8-hostchecked-2-5-be<br />dart2js-linux-d8-hostchecked-3-5-be<br />dart2js-linux-d8-hostchecked-4-5-be<br />dart2js-linux-d8-hostchecked-5-5-be<br />dart2js-linux-d8-minified-1-5-be<br />dart2js-linux-d8-minified-2-5-be<br />dart2js-linux-d8-minified-3-5-be<br />dart2js-linux-d8-minified-4-5-be<br />dart2js-linux-d8-minified-5-5-be<br />dart2js-linux-drt-1-2-be<br />dart2js-linux-drt-2-2-be<br />dart2js-linux-drt-csp-minified-be<br />dart2js-linux-jsshell-1-4-be<br />dart2js-linux-jsshell-2-4-be<br />dart2js-linux-jsshell-3-4-be<br />dart2js-linux-jsshell-4-4-be<br />pkg-linux-release-be@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]
