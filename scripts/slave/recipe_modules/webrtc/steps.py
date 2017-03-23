@@ -9,6 +9,7 @@ NORMAL_TESTS = freeze({
   'audio_decoder_unittests': {},
   'common_audio_unittests': {},
   'common_video_unittests': {},
+  'low_bandwidth_audio_test': {},
   'modules_tests': {
     'shards': 2,
   },
@@ -110,6 +111,14 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
       )
     tests.append(BaremetalTest('webrtc_perf_tests', revision=revision,
                                perf_test=True))
+
+    tests.append(BaremetalTest(
+        str(api.m.path['checkout'].join('webrtc', 'audio', 'test',
+                                        'low_bandwidth_audio_test.py')),
+        name='low_bandwidth_audio_test',
+        args=[api.m.chromium.output_dir, '--remove'],
+        revision=revision,
+        perf_test=True))
   elif test_suite == 'android_perf' and api.c.PERF_ID:
     # TODO(kjellander): Fix the Android ASan bot so we can have an assert here.
     tests.append(AndroidPerfTest('webrtc_perf_tests', revision=revision))
