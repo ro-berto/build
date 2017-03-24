@@ -60,7 +60,8 @@ def RunSteps(api):
 
   api.python('run tests',
              api.path['checkout'].join('build', 'run_tests.py'),
-             args=[path])
+             args=[path],
+             timeout=5*60)
 
 
 def GenTests(api):

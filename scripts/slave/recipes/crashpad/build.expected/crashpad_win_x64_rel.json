@@ -78,7 +78,8 @@
       "[START_DIR]/crashpad/build/run_tests.py",
       "[START_DIR]/crashpad/out/Release_x64"
     ],
-    "name": "run tests"
+    "name": "run tests",
+    "timeout": 300
   },
   {
     "name": "$result",

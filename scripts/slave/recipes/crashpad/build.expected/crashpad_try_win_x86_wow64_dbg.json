@@ -71,7 +71,8 @@
       "[START_DIR]/crashpad/build/run_tests.py",
       "[START_DIR]/crashpad/out/Debug"
     ],
-    "name": "run tests"
+    "name": "run tests",
+    "timeout": 300
   },
   {
     "name": "$result",
