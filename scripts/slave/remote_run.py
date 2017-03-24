@@ -69,7 +69,7 @@ _STABLE_CIPD_PINS = CipdPins(
 # Canary CIPD pin set.
 _CANARY_CIPD_PINS = CipdPins(
       recipes='git_revision:3125a3b89e18dff89cf6d59f0a0486d832521bf1',
-      kitchen='git_revision:b4507cd464bcbbda2e506a30fcf2c5ba01813d2c')
+      kitchen='git_revision:054be2c5e4f94f6529e3b89087b695d6db6dbfcf')
 
 
 def _get_cipd_pins(mastername, force_canary):
