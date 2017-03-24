@@ -8,10 +8,8 @@
 TODO(qyearsley): Remove all usage of this script, see crbug.com/695700.
 """
 
-import json
 import argparse
 import os
-import re
 import sys
 
 from common import chromium_utils
@@ -40,31 +38,35 @@ def layout_test(options):
         build_dir, options.target, command)
   finally:
     results_dir = options.results_directory
-    results_json = os.path.join(results_dir, "failing_results.json")
+    results_json = os.path.join(results_dir, "full_results.json")
 
     # If the json results file was not produced, then we produce no output
     # file too and rely on a recipe to handle this as invalid result.
-    if os.path.isfile(results_json):
+    if not os.path.isfile(results_json):
+      print 'File %s not found!' % results_json
+    else:
       with open(results_json, 'rb') as f:
         data = f.read()
 
       # data is in the form of:
-      #   ADD_RESULTS(<json object>);
-      # but use a regex match to also support a raw json object.
-      m = re.match(r'[^({]*' # From the beginning, take any except '(' or '{'
-                   r'(?:'
-                     r'\((.*)\);'  # Expect '(<json>);'
-                     r'|'          # or
-                     r'({.*})'     # '<json object>'
-                   r')$', data)
-      assert m is not None
-      data = m.group(1) or m.group(2)
+      # 'ADD_RESULTS({json object});' or just '{json object}'
+      start = data.find('{')
+      end = data.rfind('}')
+      # Find returns -1 when it didn't find something.
+      if start != -1 and end != -1:
+        data = data[start:end+1]
+        with open(options.json_test_results, 'wb') as f:
+          f.write(data)
+        print 'Wrote test results to %s (%d bytes)' % (
+            options.json_test_results, len(data))
+      else:
+        print 'JSON data not found in full_results.json'
+        print '-'*75
 
-      json_data = json.loads(data)
-      assert isinstance(json_data, dict)
-
-      with open(options.json_test_results, 'wb') as f:
-        f.write(data)
+      print data[:500], '...'
+      print '<snip>'
+      print '...', data[-500:]
+      print '-'*75
 
 
 def main():
