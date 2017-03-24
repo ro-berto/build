@@ -29,7 +29,8 @@ def RunSteps(api):
   api.chromite.set_config('base')
 
   # Basic checkout exercise.
-  api.chromite.checkout()
+  api.chromite.checkout(
+      repo_sync_args=api.properties.get('repo_sync_args', None))
   api.chromite.setup_board('amd64-generic', args=['--cache-dir', '.cache'])
   api.chromite.build_packages('amd64-generic')
   api.chromite.cros_sdk('cros_sdk', ['echo', 'hello'],
@@ -64,3 +65,10 @@ def GenTests(api):
       api.properties(path_config='buildbot')
   )
 
+  yield (
+      api.test('pass_repo_sync_args') +
+      api.chromite.seed_chromite_config(_TEST_CONFIG) +
+      # chromite module uses path['root'] which exists only in Buildbot.
+      api.properties(path_config='buildbot',
+                     repo_sync_args=['-j16'])
+  )

@@ -203,12 +203,15 @@ class ChromiteApi(recipe_api.RecipeApi):
     soln.revision = '%s:' % (self.c.chromite_branch,)
     return cfg
 
-  def checkout(self, manifest_url=None, repo_url=None):
+  def checkout(self, manifest_url=None, repo_url=None, repo_sync_args=None):
+    if repo_sync_args is None:
+      repo_sync_args = []
+
     manifest_url = manifest_url or self.manifest_url
     repo_url = repo_url or self.repo_url
 
     self.m.repo.init(manifest_url, '--repo-url', repo_url)
-    self.m.repo.sync()
+    self.m.repo.sync(*repo_sync_args)
 
   @property
   def using_old_chromite_layout(self):
