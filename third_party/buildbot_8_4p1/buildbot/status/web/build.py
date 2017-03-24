@@ -22,7 +22,8 @@ import urllib, time
 from twisted.python import log
 from buildbot.status.web.base import HtmlResource, \
      css_classes, path_to_build, path_to_builder, path_to_slave, \
-     getAndCheckProperties, path_to_authfail, unicodify
+     getAndCheckProperties, path_to_authfail, unicodify, \
+     getStepLogsURLsAndAliases
 
 from buildbot.status.web.step import StepsResource
 from buildbot.status.web.tests import TestsResource
@@ -115,24 +116,26 @@ class StatusResourceBuild(HtmlResource):
 
             cxt['steps'].append(step)
 
+            step_logs, step_urls, step_aliases = getStepLogsURLsAndAliases(
+                s,
+                False,
+                lambda l: req.childLink(
+                    "steps/%s/logs/%s" %
+                   (urllib.quote(s.getName(), safe=''),
+                    urllib.quote(l.getName(), safe=''))),
+            )
+
             step['link'] = req.childLink("steps/%s" % urllib.quote(s.getName(),
                                                                    safe=''))
             step['text'] = " ".join(s.getText())
-            step['urls'] = map(lambda x:dict(url=x[1],logname=x[0]), s.getURLs().items())
+            step['urls'] = step_urls
             step['nest_level'] = s.getNestLevel()
 
-            step['logs']= []
-
-            for l in s.getLogs():
-                logname = l.getName()
-                step['logs'].append({ 'link': req.childLink("steps/%s/logs/%s" %
-                                           (urllib.quote(s.getName(), safe=''),
-                                            urllib.quote(logname, safe=''))),
-                                      'name': logname })
+            step['logs']= step_logs
 
             step['aliases'] = {}
             seen_aliases = set()
-            for base, aliases in s.getAliases().iteritems():
+            for base, aliases in step_aliases.iteritems():
                 step['aliases'][base] = [{
                     'text': a[0],
                     'url': a[1],

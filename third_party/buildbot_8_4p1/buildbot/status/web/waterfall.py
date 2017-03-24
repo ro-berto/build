@@ -28,7 +28,7 @@ from buildbot.changes import changes
 
 from buildbot.status.web.base import Box, HtmlResource, IBox, ICurrentBox, \
      ITopBox, build_get_class, path_to_build, path_to_step, path_to_root, \
-     map_branches, unicodify
+     map_branches, unicodify, getStepLogsURLsAndAliases
 
 
 def earlier(old, new):
@@ -181,20 +181,21 @@ class StepBox(components.Adapter):
             log.msg("getText() gave None", urlbase)
             text = []
         text = text[:]
-        logs = self.original.getLogs()
 
-        cxt = dict(text=text, logs=[], urls=[])
-
-        for num in range(len(logs)):
-            name = logs[num].getName()
-            if logs[num].hasContents():
-                url = urlbase + "/logs/%s" % urllib.quote(name)
+        def native_link_fn(l):
+            if l.hasContents():
+                url = urlbase + "/logs/%s" % urllib.quote(l.getName())
             else:
                 url = None
-            cxt['logs'].append(dict(name=name, url=url))
+            return url
 
-        for name, target in self.original.getURLs().items():
-            cxt['urls'].append(dict(link=target,name=name))
+        logs, urls, _ = getStepLogsURLsAndAliases(
+            self.original,
+            False,
+            native_link_fn,
+        )
+
+        cxt = dict(text=text, logs=logs, urls=urls)
 
         template = req.site.buildbot_service.templates.get_template("box_macros.html")
         text = template.module.step_box(**unicodify(cxt))
