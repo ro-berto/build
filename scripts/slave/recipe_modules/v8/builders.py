@@ -1285,7 +1285,7 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [
-          V8Testing_3,
+          V8Testing_4,
           V8TestingExtra,
           Test262,
           Test262Extra_2,
@@ -1294,11 +1294,11 @@ BUILDERS = {
         ] + with_test_args(
             'armv8-a',
             ['--extra-flags', '--enable-armv8'],
-            [V8Testing_3, Test262, Mozilla],
+            [V8Testing_4, Test262, Mozilla],
         ) + with_test_args(
             'novfp3',
             ['--novfp3'],
-            [V8Testing_3, Test262, Mozilla],
+            [V8Testing_4, Test262, Mozilla],
         ),
         'testing': {'platform': 'linux'},
       },
@@ -1311,7 +1311,7 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [
-          V8Testing_3,
+          V8Testing_4,
           V8TestingExtra,
           Test262,
           Test262Extra_2,
@@ -1320,11 +1320,11 @@ BUILDERS = {
         ] + with_test_args(
             'armv8-a',
             ['--extra-flags', '--enable-armv8'],
-            [V8Testing_3, Test262, Mozilla],
+            [V8Testing_4, Test262, Mozilla],
         ) + with_test_args(
             'novfp3',
             ['--novfp3'],
-            [V8Testing_3, Test262, Mozilla],
+            [V8Testing_4, Test262, Mozilla],
             V8NoExhaustiveVariants(),
         ),
         'testing': {'platform': 'linux'},
@@ -1356,8 +1356,8 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [
-          V8Testing_2,
-          V8TestingExtra,
+          V8Testing_3,
+          V8TestingExtra_2,
           Test262,
           Test262Extra_2,
           Mozilla,
@@ -1376,7 +1376,7 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing_4,
-          V8TestingExtra,
+          V8TestingExtra_2,
           Test262,
           Test262Extra_2,
           Mozilla,
