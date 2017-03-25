@@ -20,8 +20,7 @@ import urllib
 from twisted.internet import defer
 from buildbot import util
 from buildbot.status import builder
-from buildbot.status.web.base import HtmlResource, unicodify, \
-     getStepLogsURLsAndAliases
+from buildbot.status.web.base import HtmlResource, unicodify
 from buildbot.changes import changes
 
 class DoesNotPassFilter(Exception): pass # Used for filtering revs
@@ -299,16 +298,6 @@ class ConsoleStatusResource(HtmlResource):
             (result, reason) = step.getResults()
             if result == builder.FAILURE:
                 name = step.getName()
-                logs, _, _ = getStepLogsURLsAndAliases(
-                    step,
-                    False,
-                    lambda l: request.childLink(
-                        "../builders/%s/builds/%s/steps/%s/logs/%s" %
-                        (urllib.quote(builderName, safe=''),
-                         build.getNumber(),
-                         urllib.quote(name, safe=''),
-                         urllib.quote(logname, safe=''))),
-                )
 
                 # Remove html tags from the error text.
                 stripHtml = re.compile(r'<.*?>')
@@ -317,7 +306,18 @@ class ConsoleStatusResource(HtmlResource):
                 details['buildername'] = builderName
                 details['status'] = strippedDetails
                 details['reason'] = reason
-                details['logs'] = logs
+                logs = details['logs'] = []
+
+                if step.getLogs():
+                    for log in step.getLogs():
+                        logname = log.getName()
+                        logurl = request.childLink(
+                          "../builders/%s/builds/%s/steps/%s/logs/%s" %
+                            (urllib.quote(builderName, safe=''),
+                             build.getNumber(),
+                             urllib.quote(name, safe=''),
+                             urllib.quote(logname, safe='')))
+                        logs.append(dict(url=logurl, name=logname))
         return details
 
     def getBuildsForRevision(self, request, builder, builderName, lastRevision,
