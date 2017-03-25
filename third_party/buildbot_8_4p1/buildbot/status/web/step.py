@@ -16,7 +16,7 @@
 
 import urllib
 from buildbot.status.web.base import HtmlResource, path_to_builder, \
-     path_to_build, css_classes, unicodify
+     path_to_build, css_classes, unicodify, getStepLogsURLsAndAliases
 from buildbot.status.web.logs import LogsResource
 from buildbot import util
 from time import ctime
@@ -35,16 +35,17 @@ class StatusResourceBuildStep(HtmlResource):
         s = self.step_status
         b = s.getBuild()
 
-        logs = cxt['logs'] = []        
-        for l in s.getLogs():
-            # FIXME: If the step name has a / in it, this is broken
-            # either way.  If we quote it but say '/'s are safe,
-            # it chops up the step name.  If we quote it and '/'s
-            # are not safe, it escapes the / that separates the
-            # step name from the log number.
-            logs.append({'has_contents': l.hasContents(),
-                         'name': l.getName(),
-                         'link': req.childLink("logs/%s" % urllib.quote(l.getName())) })
+        # FIXME: If the step name has a / in it, this is broken
+        # either way.  If we quote it but say '/'s are safe,
+        # it chops up the step name.  If we quote it and '/'s
+        # are not safe, it escapes the / that separates the
+        # step name from the log number.
+        logs, _, _ = getStepLogsURLsAndAliases(
+            s,
+            True,
+            lambda l: req.childLink("logs/%s" % urllib.quote(l.getName())),
+        )
+        cxt['logs'] = logs
 
         start, end = s.getTimes()
         

@@ -788,3 +788,129 @@ def unicodify(e):
         return e.decode('utf-8')
     else:
         return e
+
+
+def getStepLogsURLsAndAliases(step, check_log_contents, native_link_fn):
+    """CrOps function to generate compatible content with "getLogs",
+    "getURLs", and "getAliases", allowing for preprocessing.
+
+    This is used to implement LogDog-only mode links. In the event that the
+    attached build has a "log_location" that begins with a LogDog URL, we will
+    prefer aliases over log links.
+
+    The resulting "logs" will be returned as renderable dictionaries, not native
+    LogFile objects. If the log link is not substituted, "native_link_fn" will
+    be used to generate its "link" field.
+
+    Args:
+      step (buildbot.status.BuildStepStatus): The build step whose fields will
+          be processed.
+      check_log_contents (bool): True if we should check to see if the log has
+          contents and add a 'has_contents' field accordingly; False if not.
+      native_link_fn (callable): Function that accepts a
+          buildbot.status.logfile.LogEntry and returns a link for it.
+    """
+    # Returns a rendered log dictionary suitable for passing to templates. This
+    # covers the supserset of all template field projections for simplicity.
+    def rendered_log(name, link, has_contents):
+      return {
+          'name': name,
+          'url': link,
+          'link': link,
+          'has_contents': has_contents,
+      }
+
+    # Returns a rendered URL dictionary suitable for passing to templates. This
+    # covers the supserset of all template field projections for simplicity.
+    def rendered_url(name, link):
+        return {
+            'name': name,
+            'logname': name,
+            'url': link,
+            'link': link,
+        }
+
+    # The first step in a build represents the overall build, and is called
+    # "steps". This one is special, since its "stdio" log is actually a portal
+    # to BuildBot's perspective of the entire build, so we don't want to
+    # substitute it for LogDog.
+    is_steps_step = step.getName() == 'steps'
+
+    logs = [rendered_log(l.getName(),
+                         native_link_fn(l),
+                         l.hasContents() if check_log_contents else None)
+            for l in step.getLogs()]
+    urls = [rendered_url(u[0], u[1]) for u in step.getURLs().iteritems()]
+    aliases = step.getAliases()
+
+    # Get the current build. Note that this might result in a datasbase
+    # resolution, but the result is cached via weakref, so future references
+    # to getBuild will not repeat this overhead. Anything rendering steps in
+    # enough quantity for this to be problematic is already calling this
+    # multiple times.
+    build = step.getBuild()
+    log_location = build.getProperties().getProperty('log_location')
+    if not (log_location and log_location.startswith('logdog://')):
+        # Not a LogDog-only build.
+        return logs, urls, aliases
+
+    # This is a LogDog-only build. If a given log or URL has one or more
+    # aliases associated with it, we will replace its entry with entries for
+    # its aliases.
+    new_logs = []
+    for l in logs:
+        log_name = l['name']
+
+        # If this is the first step, we will leave its "stdio" log in place,
+        # since that contains BuildBot-side metadata about the build.
+        if is_steps_step and log_name == 'stdio':
+            new_logs.append(l)
+            continue
+
+        alias_list = aliases.pop(log_name, None)
+        if alias_list:
+            # This log has aliases. Replace its rendered entry with them.
+            for alias_text, alias_url in alias_list:
+                # For legacy / aesthetic reasons, log streams are all
+                # alias-tagged as "logdog".
+                if alias_text == 'logdog':
+                    alias_text = log_name
+                new_logs.append(rendered_log(alias_text, alias_url, True))
+        else:
+            # This is a log entry without aliases. We assume that the BuildBot
+            # logs are valid here.
+            #
+            # Note that there is a case where this will not work: if the log
+            # itself actually had no contents, then there will be no aliases,
+            # but the BuildBot "stdio" log will just contain the LogDog-only
+            # notice message. Ideally we'd suppress this and display "no logs",
+            # but there's not a good way to differentiate between this and a
+            # step that LogDog isn't enabled for, so we will render it anyway.
+            new_logs.append(l)
+
+    new_urls = []
+    for u in urls:
+        url_name = u['logname']
+        alias_list = aliases.pop(url_name, None)
+        if not alias_list:
+            # This is a BuildBot URL entry with no aliases, so just use the URL
+            # entry directly.
+            new_urls.append(u)
+            continue
+
+        # This URL has aliases. Replace its rendered entry with them.
+        new_urls += [rendered_url(url_name, alias_url)
+                     for _, alias_url in alias_list]
+
+    # LogDog creates an aliases named "stdio" and links it to "all". This will
+    # be confusing to users, since "stdio" shows up twice in the logs list. Use
+    # a more appropriate name.
+    if is_steps_step:
+        all_alias = aliases.get('all', [])
+        for idx, (alias_text, alias_url) in enumerate(all_alias):
+            if alias_text == 'stdio':
+                all_alias[idx] = ('all', alias_url)
+
+    # Return the rendered log and URL links, as well as the pruned alias
+    # dictionary.
+    return new_logs, new_urls, aliases
