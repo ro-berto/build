@@ -246,7 +246,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "Zip android-arm artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"chromium-debug.keystore\", \"path\": \"[START_DIR]/src/build/android/ant/chromium-debug.keystore\", \"type\": \"file\"}, {\"archive_name\": \"flutter.jar\", \"path\": \"[START_DIR]/src/out/android_debug/flutter.jar\", \"type\": \"file\"}, {\"archive_name\": \"libsky_shell.so\", \"path\": \"[START_DIR]/src/out/android_debug/gen/flutter/shell/platform/android/android/android/libs/armeabi-v7a/libsky_shell.so\", \"type\": \"file\"}, {\"archive_name\": \"icudtl.dat\", \"path\": \"[START_DIR]/src/out/android_debug/icudtl.dat\", \"type\": \"file\"}, {\"archive_name\": \"classes.dex.jar\", \"path\": \"[START_DIR]/src/out/android_debug/gen/flutter/shell/platform/android/android/classes.dex.jar\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_2/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"flutter.jar\", \"path\": \"[START_DIR]/src/out/android_debug/flutter.jar\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_2/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -293,7 +293,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "Zip android-arm symbols.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"libsky_shell.so\", \"path\": \"[START_DIR]/src/out/android_debug/libsky_shell.so\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_3/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"libflutter.so\", \"path\": \"[START_DIR]/src/out/android_debug/libflutter.so\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_3/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -363,7 +363,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "Zip android-arm-profile artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"chromium-debug.keystore\", \"path\": \"[START_DIR]/src/build/android/ant/chromium-debug.keystore\", \"type\": \"file\"}, {\"archive_name\": \"dart_io_entries.txt\", \"path\": \"[START_DIR]/src/dart/runtime/bin/dart_io_entries.txt\", \"type\": \"file\"}, {\"archive_name\": \"dart_vm_entry_points.txt\", \"path\": \"[START_DIR]/src/flutter/runtime/dart_vm_entry_points.txt\", \"type\": \"file\"}, {\"archive_name\": \"dart_vm_entry_points_android.txt\", \"path\": \"[START_DIR]/src/flutter/runtime/dart_vm_entry_points_android.txt\", \"type\": \"file\"}, {\"archive_name\": \"flutter.jar\", \"path\": \"[START_DIR]/src/out/android_profile/flutter.jar\", \"type\": \"file\"}, {\"archive_name\": \"libsky_shell.so\", \"path\": \"[START_DIR]/src/out/android_profile/gen/flutter/shell/platform/android/android/android/libs/armeabi-v7a/libsky_shell.so\", \"type\": \"file\"}, {\"archive_name\": \"icudtl.dat\", \"path\": \"[START_DIR]/src/out/android_profile/icudtl.dat\", \"type\": \"file\"}, {\"archive_name\": \"classes.dex.jar\", \"path\": \"[START_DIR]/src/out/android_profile/gen/flutter/shell/platform/android/android/classes.dex.jar\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_4/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"dart_io_entries.txt\", \"path\": \"[START_DIR]/src/dart/runtime/bin/dart_io_entries.txt\", \"type\": \"file\"}, {\"archive_name\": \"dart_vm_entry_points.txt\", \"path\": \"[START_DIR]/src/flutter/runtime/dart_vm_entry_points.txt\", \"type\": \"file\"}, {\"archive_name\": \"dart_vm_entry_points_android.txt\", \"path\": \"[START_DIR]/src/flutter/runtime/dart_vm_entry_points_android.txt\", \"type\": \"file\"}, {\"archive_name\": \"flutter.jar\", \"path\": \"[START_DIR]/src/out/android_profile/flutter.jar\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_4/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -457,7 +457,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "Zip android-arm-profile symbols.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"libsky_shell.so\", \"path\": \"[START_DIR]/src/out/android_profile/libsky_shell.so\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_6/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"libflutter.so\", \"path\": \"[START_DIR]/src/out/android_profile/libflutter.so\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_6/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -527,7 +527,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "Zip android-arm-release artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"chromium-debug.keystore\", \"path\": \"[START_DIR]/src/build/android/ant/chromium-debug.keystore\", \"type\": \"file\"}, {\"archive_name\": \"dart_io_entries.txt\", \"path\": \"[START_DIR]/src/dart/runtime/bin/dart_io_entries.txt\", \"type\": \"file\"}, {\"archive_name\": \"dart_vm_entry_points.txt\", \"path\": \"[START_DIR]/src/flutter/runtime/dart_vm_entry_points.txt\", \"type\": \"file\"}, {\"archive_name\": \"dart_vm_entry_points_android.txt\", \"path\": \"[START_DIR]/src/flutter/runtime/dart_vm_entry_points_android.txt\", \"type\": \"file\"}, {\"archive_name\": \"flutter.jar\", \"path\": \"[START_DIR]/src/out/android_release/flutter.jar\", \"type\": \"file\"}, {\"archive_name\": \"libsky_shell.so\", \"path\": \"[START_DIR]/src/out/android_release/gen/flutter/shell/platform/android/android/android/libs/armeabi-v7a/libsky_shell.so\", \"type\": \"file\"}, {\"archive_name\": \"icudtl.dat\", \"path\": \"[START_DIR]/src/out/android_release/icudtl.dat\", \"type\": \"file\"}, {\"archive_name\": \"classes.dex.jar\", \"path\": \"[START_DIR]/src/out/android_release/gen/flutter/shell/platform/android/android/classes.dex.jar\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_7/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"dart_io_entries.txt\", \"path\": \"[START_DIR]/src/dart/runtime/bin/dart_io_entries.txt\", \"type\": \"file\"}, {\"archive_name\": \"dart_vm_entry_points.txt\", \"path\": \"[START_DIR]/src/flutter/runtime/dart_vm_entry_points.txt\", \"type\": \"file\"}, {\"archive_name\": \"dart_vm_entry_points_android.txt\", \"path\": \"[START_DIR]/src/flutter/runtime/dart_vm_entry_points_android.txt\", \"type\": \"file\"}, {\"archive_name\": \"flutter.jar\", \"path\": \"[START_DIR]/src/out/android_release/flutter.jar\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_7/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -621,7 +621,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "Zip android-arm-release symbols.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"libsky_shell.so\", \"path\": \"[START_DIR]/src/out/android_release/libsky_shell.so\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_9/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"libflutter.so\", \"path\": \"[START_DIR]/src/out/android_release/libflutter.so\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_9/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -738,7 +738,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "Zip android-x64 artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"chromium-debug.keystore\", \"path\": \"[START_DIR]/src/build/android/ant/chromium-debug.keystore\", \"type\": \"file\"}, {\"archive_name\": \"flutter.jar\", \"path\": \"[START_DIR]/src/out/android_debug_x64/flutter.jar\", \"type\": \"file\"}, {\"archive_name\": \"libsky_shell.so\", \"path\": \"[START_DIR]/src/out/android_debug_x64/gen/flutter/shell/platform/android/android/android/libs/x86_64/libsky_shell.so\", \"type\": \"file\"}, {\"archive_name\": \"icudtl.dat\", \"path\": \"[START_DIR]/src/out/android_debug_x64/icudtl.dat\", \"type\": \"file\"}, {\"archive_name\": \"classes.dex.jar\", \"path\": \"[START_DIR]/src/out/android_debug_x64/gen/flutter/shell/platform/android/android/classes.dex.jar\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_11/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"flutter.jar\", \"path\": \"[START_DIR]/src/out/android_debug_x64/flutter.jar\", \"type\": \"file\"}, {\"archive_name\": \"libflutter.so\", \"path\": \"[START_DIR]/src/out/android_debug_x64/lib.stripped/libflutter.so\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_11/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -785,7 +785,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "Zip android-x64 symbols.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"libsky_shell.so\", \"path\": \"[START_DIR]/src/out/android_debug_x64/libsky_shell.so\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_12/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"libflutter.so\", \"path\": \"[START_DIR]/src/out/android_debug_x64/libflutter.so\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_12/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -855,7 +855,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "Zip android-x86 artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"chromium-debug.keystore\", \"path\": \"[START_DIR]/src/build/android/ant/chromium-debug.keystore\", \"type\": \"file\"}, {\"archive_name\": \"flutter.jar\", \"path\": \"[START_DIR]/src/out/android_debug_x86/flutter.jar\", \"type\": \"file\"}, {\"archive_name\": \"libsky_shell.so\", \"path\": \"[START_DIR]/src/out/android_debug_x86/gen/flutter/shell/platform/android/android/android/libs/x86/libsky_shell.so\", \"type\": \"file\"}, {\"archive_name\": \"icudtl.dat\", \"path\": \"[START_DIR]/src/out/android_debug_x86/icudtl.dat\", \"type\": \"file\"}, {\"archive_name\": \"classes.dex.jar\", \"path\": \"[START_DIR]/src/out/android_debug_x86/gen/flutter/shell/platform/android/android/classes.dex.jar\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_13/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"flutter.jar\", \"path\": \"[START_DIR]/src/out/android_debug_x86/flutter.jar\", \"type\": \"file\"}, {\"archive_name\": \"libflutter.so\", \"path\": \"[START_DIR]/src/out/android_debug_x86/lib.stripped/libflutter.so\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_13/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -902,7 +902,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:%(PATH)s"
     },
     "name": "Zip android-x86 symbols.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"libsky_shell.so\", \"path\": \"[START_DIR]/src/out/android_debug_x86/libsky_shell.so\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_14/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"libflutter.so\", \"path\": \"[START_DIR]/src/out/android_debug_x86/libflutter.so\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_14/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [

@@ -94,22 +94,17 @@ def AnalyzeDartUI(api):
 
 
 def BuildLinuxAndroidx86(api):
-  for x86_variant, abi in [('x64', 'x86_64'), ('x86', 'x86')]:
+  for x86_variant in ['x64', 'x86']:
     RunGN(api, '--android', '--android-cpu=' + x86_variant)
     out_dir = 'android_debug_' + x86_variant
     Build(api, out_dir)
     folder = 'android-' + x86_variant
     UploadArtifacts(api, folder, [
-      'build/android/ant/chromium-debug.keystore',
       'out/%s/flutter.jar' % out_dir,
-      ('out/%s/gen/flutter/shell/platform/android/android/android/libs/%s/'
-       'libsky_shell.so' % (out_dir, abi)),
-      'out/%s/icudtl.dat' % out_dir,
-      ('out/%s/gen/flutter/shell/platform/android/android/classes.dex.jar'
-       % out_dir),
+      'out/%s/lib.stripped/libflutter.so' % out_dir,
     ])
     UploadArtifacts(api, folder, [
-      'out/%s/libsky_shell.so' % out_dir
+      'out/%s/libflutter.so' % out_dir
     ], archive_name='symbols.zip')
 
 
@@ -120,19 +115,14 @@ def AddPathPrefix(api, prefix, paths):
 def BuildLinuxAndroidArm(api):
   out_paths = [
     'flutter.jar',
-    ('gen/flutter/shell/platform/android/android/android/libs/armeabi-v7a/'
-     'libsky_shell.so'),
-    'icudtl.dat',
-    'gen/flutter/shell/platform/android/android/classes.dex.jar',
   ]
   RunGN(api, '--android')
   Build(api, 'android_debug')
   Build(api, 'android_debug', ':dist')
+  UploadArtifacts(api, 'android-arm',
+                  AddPathPrefix(api, 'out/android_debug', out_paths))
   UploadArtifacts(api, 'android-arm', [
-    'build/android/ant/chromium-debug.keystore',
-  ] + AddPathPrefix(api, 'out/android_debug', out_paths))
-  UploadArtifacts(api, 'android-arm', [
-      'out/android_debug/libsky_shell.so'
+      'out/android_debug/libflutter.so'
   ], archive_name='symbols.zip')
 
   # Build and upload engines for the runtime modes that use AOT compilation.
@@ -144,7 +134,6 @@ def BuildLinuxAndroidArm(api):
     Build(api, build_output_dir)
 
     UploadArtifacts(api, upload_dir, [
-      'build/android/ant/chromium-debug.keystore',
       'dart/runtime/bin/dart_io_entries.txt',
       'flutter/runtime/dart_vm_entry_points.txt',
       'flutter/runtime/dart_vm_entry_points_android.txt',
@@ -155,7 +144,7 @@ def BuildLinuxAndroidArm(api):
       'out/%s/clang_x86/gen_snapshot' % build_output_dir,
     ], archive_name='linux-x64.zip')
     UploadArtifacts(api, upload_dir, [
-        'out/%s/libsky_shell.so' % build_output_dir
+        'out/%s/libflutter.so' % build_output_dir
     ], archive_name='symbols.zip')
 
   UploadDartPackage(api, 'sky_engine')
