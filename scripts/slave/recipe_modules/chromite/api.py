@@ -232,10 +232,7 @@ class ChromiteApi(recipe_api.RecipeApi):
     args = (args or [])[:]
     args.append(config)
 
-    bindir = 'bin'
-    if self.using_old_chromite_layout:
-      bindir = 'buildbot'
-    cmd = [self.chromite_path.join(bindir, 'cbuildbot')] + args
+    cmd = [self.chromite_path.join('scripts', 'cbuildbot_launch')] + args
     return self.m.step(name, cmd, allow_subannotations=True, **kwargs)
 
   def cros_sdk(self, name, cmd, args=None, environ=None, **kwargs):
@@ -305,17 +302,6 @@ class ChromiteApi(recipe_api.RecipeApi):
         gclient_config=self.gclient_config(),
         update_presentation=False)
 
-    if self.c.chromite_branch and self.c.cbb.disable_bootstrap:
-      # Chromite auto-detects which branch to build for based on its current
-      # checkout. "bot_update" checks out remote branches, but Chromite requires
-      # a local branch.
-      #
-      # Normally we'd bootstrap, but if we're disabling bootstrapping, we have
-      # to checkout the local branch to let Chromite know which branch to build.
-      self.m.git('checkout', self.c.chromite_branch,
-          name=str('checkout chromite branch [%s]' % (self.c.chromite_branch)))
-      self.m.git('pull',
-          name=str('sync chromite branch [%s]' % (self.c.chromite_branch)))
     self._set_chromite_path(self.m.path['checkout'])
 
     # If we are configured with build type configurations, we will need to load
@@ -403,7 +389,7 @@ class ChromiteApi(recipe_api.RecipeApi):
     ]
     if not args:
       cbb_args.append('--buildbot')
-    if self.c.chromite_branch and not self.c.cbb.disable_bootstrap:
+    if self.c.chromite_branch:
       cbb_args.extend(['--branch', self.c.chromite_branch])
     if self.c.cbb.build_number is not None:
       cbb_args.extend(['--buildnumber', self.c.cbb.build_number])

@@ -77,6 +77,7 @@ def BaseConfig(CBB_CONFIG=None, CBB_BRANCH=None, CBB_BUILD_NUMBER=None,
       # The (optional) configuration repository to use.
       config_repo = Single(basestring),
 
+      # TODO(dgarrett): Obsolete. Remove after a roll happens.
       # This disables Chromite bootstrapping by omitting the explicit "--branch"
       # argument.
       disable_bootstrap = Single(bool),
@@ -98,6 +99,7 @@ def BaseConfig(CBB_CONFIG=None, CBB_BRANCH=None, CBB_BUILD_NUMBER=None,
       extra_args = List(basestring),
     ),
 
+    # TODO(dgarrett): Obsolete. Remove after a roll happens.
     # A list of branches whose Chromite version is "old". Old Chromite
     # buildbot commands reside in the "buildbot" subdirectory of the Chromite
     # repository instead of the "bin".
