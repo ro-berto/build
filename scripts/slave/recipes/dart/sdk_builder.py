@@ -40,24 +40,27 @@ def RunSteps(api):
                  args=[],
                  ok_ret='any')
 
-    # Step 3) We always do clean builds on the sdk builders.
+    # Step 3) Run gclient hooks.
+    api.gclient.runhooks()
+
+    # Step 4) We always do clean builds on the sdk builders.
     api.python('clobber',
                api.path['tools'].join('clean_output_directory.py'))
 
-    # Step 4) Run the old annotated steps.
+    # Step 5) Run the old annotated steps.
     # TODO(kustermann/whesse): We might consider pulling some of the steps
     # of 'tools/bots/dart_sdk.py' out to here.
     api.python('generate sdks',
         api.path['checkout'].join('tools', 'bots', 'dart_sdk.py'),
         args=[])
 
-    # Step 5) Run taskkill.
+    # Step 6) Run taskkill.
     api.python('taskkill after',
                api.path['checkout'].join('tools', 'task_kill.py'),
                args=[],
                ok_ret='any')
 
-  # Step 6) Trigger dependent builders.
+  # Step 7) Trigger dependent builders.
   buildernames = {
     'linux' : (
         BuildBuilderNames('analyzer-linux-release', channel) +
