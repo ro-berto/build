@@ -91,6 +91,9 @@ def BaseConfig(CBB_CONFIG=None, CBB_BRANCH=None, CBB_BUILD_NUMBER=None,
       # If supplied, forward to cbuildbot as '--buildbucket-id'
       buildbucket_id = Single(basestring, empty_val=CBB_BUILDBUCKET_ID),
 
+      # If set, use goma for the build.
+      use_goma = Single(bool),
+
       # Extra arguments passed to cbuildbot.
       extra_args = List(basestring),
     ),
@@ -120,6 +123,10 @@ def BaseConfig(CBB_CONFIG=None, CBB_BRANCH=None, CBB_BUILD_NUMBER=None,
     # The branch version where the "--git-cache" flag was introduced.
     # Set to a ToT build after R54 branch, "release-R54-8743.B".
     git_cache_min_branch_version = Single(int, empty_val=8829),
+
+    # The branch version where the goma relate flags (e.g., "--goma_dir") were
+    # introduced.
+    goma_min_branch_version = Single(int, empty_val=9366)
   )
 
   if CBB_EXTRA_ARGS:
@@ -189,8 +196,8 @@ def base(c):
 def cros(c):
   """Base configuration for CrOS builders to inherit from."""
   # Enable Git cache on all ToT builds and release branches that support it.
-  if not (c.branch_version is not None and
-          c.branch_version < c.git_cache_min_branch_version):
+  if (c.branch_version is None or
+      c.branch_version >= c.git_cache_min_branch_version):
     c.cbb.git_cache_dir = '/b/cros_git_cache'
 
 
@@ -221,7 +228,10 @@ def master_chromiumos(c):
 @config_ctx(group='build_type')
 def chromiumos_paladin(c):
   c.read_cros_manifest = True
-
+  # Enable goma on all ToT builds and release branches that support it.
+  if (c.branch_version is None or
+      c.branch_version >= c.goma_branch_version):
+    c.cbb.use_goma = True
 
 @config_ctx(group='master', includes=['external'])
 def master_chromiumos_tryserver(c):

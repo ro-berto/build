@@ -431,6 +431,13 @@ class ChromiteApi(recipe_api.RecipeApi):
     if self.c.cbb.build_id:
       cbb_args.extend(['--master-build-id', self.c.cbb.build_id])
 
+    if self.c.cbb.use_goma:
+      # Update or install goma client via cipd.
+      goma_dir = self.m.goma.ensure_goma()
+      cbb_args.extend([
+          '--goma_dir', goma_dir,
+          '--goma_client_json', self.m.goma.service_account_json_path])
+
     # Add custom args, if there are any.
     cbb_args.extend(self.c.cbb.extra_args)
 
