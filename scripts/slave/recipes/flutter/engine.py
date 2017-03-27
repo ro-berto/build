@@ -155,7 +155,7 @@ def BuildLinux(api):
   Build(api, 'host_debug_unopt')
   UploadArtifacts(api, 'linux-x64', [
     'out/host_debug_unopt/icudtl.dat',
-    'out/host_debug_unopt/sky_shell',
+    'out/host_debug_unopt/flutter_tester',
     'out/host_debug_unopt/gen/flutter/lib/snapshot/isolate_snapshot.bin',
     'out/host_debug_unopt/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
   ])
@@ -163,11 +163,11 @@ def BuildLinux(api):
 
 def TestObservatory(api):
   checkout = api.path['start_dir'].join('src')
-  sky_shell_path = checkout.join('out/host_debug_unopt/sky_shell')
+  flutter_tester_path = checkout.join('out/host_debug_unopt/flutter_tester')
   empty_main_path = \
       checkout.join('flutter/shell/testing/observatory/empty_main.dart')
   test_path = checkout.join('flutter/shell/testing/observatory/test.dart')
-  test_cmd = ['dart', test_path, sky_shell_path, empty_main_path]
+  test_cmd = ['dart', test_path, flutter_tester_path, empty_main_path]
   with api.step.context({'cwd': checkout}):
     api.step('test observatory and service protocol', test_cmd)
 
@@ -190,7 +190,7 @@ def BuildMac(api):
 
   UploadArtifacts(api, 'darwin-x64', [
     'out/host_debug_unopt/icudtl.dat',
-    'out/host_debug_unopt/sky_shell',
+    'out/host_debug_unopt/flutter_tester',
     'out/host_debug_unopt/gen/flutter/lib/snapshot/isolate_snapshot.bin',
     'out/host_debug_unopt/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
   ])
