@@ -397,14 +397,34 @@ def main():
     os.path.join(BUILD_DIR, 'scripts'),
     os.path.join(BUILD_DIR, 'scripts', 'release'),
     os.path.join(BUILD_DIR, 'third_party'),
+    os.path.join(BUILD_DIR, 'third_party', 'google_api_python_client'),
+    os.path.join(BUILD_DIR, 'third_party', 'httplib2', 'python2'),
+    os.path.join(BUILD_DIR, 'third_party', 'infra_libs'),
+    os.path.join(BUILD_DIR, 'third_party', 'oauth2client'),
+    os.path.join(BUILD_DIR, 'third_party', 'pyasn1'),
+    os.path.join(BUILD_DIR, 'third_party', 'pyasn1-modules'),
+    os.path.join(BUILD_DIR, 'third_party', 'python-rsa'),
     os.path.join(BUILD_DIR, 'third_party', 'requests_2_10_0'),
+    os.path.join(BUILD_DIR, 'third_party', 'setuptools-0.6c11'),
+    os.path.join(BUILD_DIR, 'third_party', 'site-packages'),
+    os.path.join(BUILD_DIR, 'third_party', 'uritemplate'),
     os.path.join(ROOT_DIR, 'build_internal', 'site_config'),
     os.path.join(ROOT_DIR, 'build_internal', 'symsrc'),
     SCRIPT_DIR,  # Include the current working directory by default.
   ]
 
-  # Need to update sys.path prior to the following imports.
-  sys.path = python_path + sys.path
+  # Need to update sys.path prior to the following imports.  Remove any
+  # dist-packages and site-packages directories from the path - we want all our
+  # dependencies to come from third_party, not from random packages that happen
+  # to be installed on the machine.  We want to *remove* the paths (rather than
+  # just being before them) because conflicts occur when a module is found in
+  # multiple locations on the path.  In particular this causes problems when
+  # google-protobuf is installed as a system package (often at an earlier
+  # version than ours in third_party).  It uses setuptools to make "google" a
+  # namespace package, and importing google.protobuf then gets us the wrong one.
+  sys.path = python_path + [
+      x for x in sys.path
+      if 'dist-packages' not in x and 'site-packages' not in x]
   import slave.bootstrap
   import config_bootstrap
   active_slavename = chromium_utils.GetActiveSlavename()
