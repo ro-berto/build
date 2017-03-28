@@ -19,10 +19,13 @@ import zlib
 
 from common import chromium_utils
 from slave import build_scan_db
-from master import auth
 
 SCRIPTS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                            '..', '..')
+
+# We need master to be on the path to import auth.
+sys.path.insert(0, os.path.join(SCRIPTS_DIR, 'master'))
+from master import auth
 
 # Buildbot status enum.
 SUCCESS, WARNINGS, FAILURE, SKIPPED, EXCEPTION, RETRY = range(6)
