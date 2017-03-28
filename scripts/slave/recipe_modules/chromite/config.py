@@ -199,6 +199,10 @@ def cros(c):
   if (c.branch_version is None or
       c.branch_version >= c.git_cache_min_branch_version):
     c.cbb.git_cache_dir = '/b/cros_git_cache'
+  # Enable goma on all ToT builds and release branches that support it.
+  if (c.branch_version is None or
+      c.branch_version >= c.goma_min_branch_version):
+    c.cbb.use_goma = True
 
 
 @config_ctx(includes=['cros'])
@@ -228,10 +232,7 @@ def master_chromiumos(c):
 @config_ctx(group='build_type')
 def chromiumos_paladin(c):
   c.read_cros_manifest = True
-  # Enable goma on all ToT builds and release branches that support it.
-  if (c.branch_version is None or
-      c.branch_version >= c.goma_branch_version):
-    c.cbb.use_goma = True
+
 
 @config_ctx(group='master', includes=['external'])
 def master_chromiumos_tryserver(c):
