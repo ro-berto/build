@@ -139,7 +139,6 @@ class StatusResourceBuild(HtmlResource):
                 step['aliases'][base] = [{
                     'text': a[0],
                     'url': a[1],
-                    'base': base,
                 } for a in aliases]
                 seen_aliases.add(base)
 
@@ -158,7 +157,6 @@ class StatusResourceBuild(HtmlResource):
                 step['logs'].append({'name': base, 'link': ''})
 
         ps = cxt['properties'] = []
-        pmap = cxt['propertymap'] = {}
         for name, value, source in b.getProperties().asList():
             value = str(value)
             p = { 'name': name, 'value': value, 'source': source}
@@ -166,7 +164,6 @@ class StatusResourceBuild(HtmlResource):
                 p['short_value'] = value[:500]
 
             ps.append(p)
-            pmap[name] = value
 
         
         cxt['responsible_users'] = list(b.getResponsibleUsers())

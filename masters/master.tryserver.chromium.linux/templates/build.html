@@ -157,35 +157,21 @@ Build #{{ b.getNumber() }}
       {% set item_class = cycler('alt', '') %}
       {% for l in s.logs %}
         <li class="{{ item_class.next() }}">
-          {% if propertymap and s.aliases and
-             propertymap.get('log_location', '')[:9] == 'logdog://' and
-             l.name in s.aliases and
-             not (s.name == 'steps' and l.name == 'stdio') %}
-
-            {# Show only the aliased LogDog URL, not BuildBot #}
-            {% for a in s.aliases[l.name] %}
-              <a href="{{ a.url }}">
-                {# For legacy / aesthetic reasons, log streams are all
-                   alias-tagged as "logdog". #}
-                {% if a.text == 'logdog' %}
-                  {{ a.base }}
-                {% else %}
-                  {{ a.text }}
-                {% endif %}
-              </a>
-            {% endfor %}
-
+          {% if l.link %}
+            <a href="{{ l.link }}">{{ l.name }}</a>
           {% else %}
-            {% if l.link %}
-              <a href="{{ l.link }}">{{ l.name }}</a>
-            {% else %}
-              <span>{{ l.name }}</span>
-            {% endif %}
-            {% if s.aliases %}
-              {% for a in s.aliases.get(l.name, ()) %}
-                <a href="{{ a.url }}">[{{ a.text }}]</a>
-              {% endfor %}
-            {% endif %}
+            <span>{{ l.name }}</span>
+          {% endif %}
+          <a href="https://storage.cloud.google.com/chrome-build-logs-private/logs/{{
+                   b.getProperty('mastername') }}/{{ b.getBuilder().getName()
+                   }}/{{ '%.7d' % b.getNumber() }}/{{ s.name|replace('/', '_') }}.{{
+                   l.name|replace('/', '_') }}"
+             title="Raw log stored on Google Cloud Storage (available after up to 5 min after end of build)">cache</a>
+
+          {% if s.aliases %}
+            {% for a in s.aliases.get(l.name, ()) %}
+              <a href="{{ a.url }}">[{{ a.text }}]</a>
+            {% endfor %}
           {% endif %}
         </li>
       {% else %}
@@ -194,22 +180,11 @@ Build #{{ b.getNumber() }}
 
       {% for u in s.urls %}
         <li class="{{ item_class.next() }}">
-          {% if propertymap and s.aliases and
-             propertymap.get('log_location', '')[:9] == 'logdog://' and
-             u.logname in s.aliases %}
-
-            {# Show only the aliased LogDog URL, not BuildBot #}
-            {% for a in s.aliases[u.logname] %}
-              <a href="{{ a.url }}">{{ a.base }}</a>
+          <a href="{{ u.url }}">{{ u.logname }}</a>
+          {% if s.aliases %}
+            {% for a in s.aliases.get(u.logname, ()) %}
+              <a href="{{ a.url }}">[{{ a.text }}]</a>
             {% endfor %}
-
-          {% else %}
-            <a href="{{ u.url }}">{{ u.logname }}</a>
-            {% if s.aliases %}
-              {% for a in s.aliases.get(u.logname, ()) %}
-                <a href="{{ a.url }}">[{{ a.text }}]</a>
-              {% endfor %}
-            {% endif %}
           {% endif %}
         </li>
       {% endfor %}
