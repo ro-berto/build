@@ -63,6 +63,7 @@ def RunSteps(api):
   # Step 7) Trigger dependent builders.
   buildernames = {
     'linux' : (
+        BuildBuilderNames('analyze-linux', channel) +
         BuildBuilderNames('analyzer-linux-release', channel) +
         BuildBuilderNames('analyzer-linux-release-strong', channel) +
         BuildBuilderNames('dart2js-linux-chromeff', channel, 4) +
@@ -76,10 +77,9 @@ def RunSteps(api):
     'windows' : (
         BuildBuilderNames('analyzer-win7-release', channel) +
         BuildBuilderNames('analyzer-win7-release-strong', channel) +
-        BuildBuilderNames('dart2js-win7-ie10chrome', channel, 4) +
+        BuildBuilderNames('dart2js-win7-chrome', channel, 4) +
         BuildBuilderNames('dart2js-win7-ie11ff', channel, 4) +
-        BuildBuilderNames('dart2js-win8-ie10', channel) +
-        BuildBuilderNames('dart2js-win8-ie11', channel) +
+        BuildBuilderNames('dart2js-win8-ie11', channel, 4) +
         BuildBuilderNames('pkg-win7-release', channel)
     ),
     'mac' : (
