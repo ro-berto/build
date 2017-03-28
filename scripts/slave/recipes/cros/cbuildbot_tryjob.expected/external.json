@@ -44,6 +44,25 @@
   },
   {
     "cmd": [
+      "git",
+      "checkout",
+      "master"
+    ],
+    "cwd": "[START_DIR]/chromite",
+    "infra_step": true,
+    "name": "checkout chromite branch [master]"
+  },
+  {
+    "cmd": [
+      "git",
+      "pull"
+    ],
+    "cwd": "[START_DIR]/chromite",
+    "infra_step": true,
+    "name": "sync chromite branch [master]"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
@@ -64,11 +83,9 @@
   {
     "allow_subannotations": true,
     "cmd": [
-      "[START_DIR]/chromite/scripts/cbuildbot_launch",
+      "[START_DIR]/chromite/bin/cbuildbot",
       "--buildroot",
       "[ROOT]/cbuild/external_master",
-      "--branch",
-      "master",
       "--git-cache-dir",
       "/b/cros_git_cache",
       "--timeout",

@@ -138,7 +138,7 @@
   {
     "allow_subannotations": true,
     "cmd": [
-      "[START_DIR]/chromite/scripts/cbuildbot_launch",
+      "[START_DIR]/chromite/bin/cbuildbot",
       "--buildroot",
       "[ROOT]/cbuild/external_master",
       "--buildbot",
