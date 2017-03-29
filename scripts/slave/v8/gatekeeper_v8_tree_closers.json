@@ -32,9 +32,6 @@
           "v8_all"
         ],
         "excluded_builders" : [
-          "V8 Arm",
-          "V8 Arm - debug",
-          "V8 Arm GC Stress",
           "V8 Linux - mipsel - sim",
           "V8 Mips - big endian - nosnap - 1",
           "V8 Mips - big endian - nosnap - 2",
