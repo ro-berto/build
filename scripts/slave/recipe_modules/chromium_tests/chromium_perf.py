@@ -210,10 +210,10 @@ _AddTestSpec('Android Nexus5X Perf', 'android-nexus5X', 'android',
 # Webview
 _AddTestSpec('Android Nexus5X WebView Perf', 'android-webview-nexus5X',
              'android', num_device_shards=7, num_host_shards=3,
-             replace_webview=True)
+             replace_webview=True, parent_buildername='Android arm64 Compile')
 _AddTestSpec('Android Nexus6 WebView Perf', 'android-webview-nexus6',
-             'android', num_device_shards=7, num_host_shards=3,
-             target_bits=32, replace_webview=True)
+             'android', num_device_shards=7, num_host_shards=3, target_bits=32,
+             replace_webview=True, parent_buildername='Android Compile')
 
 
 _AddIsolatedTestSpec('Win Zenbook Perf', 'win-zenbook', 'win')
