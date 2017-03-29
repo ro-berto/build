@@ -98,11 +98,7 @@
       "--shards=4",
       "-cdartkp",
       "-rdart_precompiled",
-      "--vm-options=--no-enable-malloc-hooks",
-      "co19",
-      "language",
-      "kernel",
-      "service"
+      "--vm-options=--no-enable-malloc-hooks"
     ],
     "cwd": "[START_DIR]/sdk",
     "name": "vm tests"
