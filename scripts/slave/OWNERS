@@ -1,3 +1,4 @@
+per-file compile.py=yyanagisawa@chromium.org
 per-file goma_utils.py=yyanagisawa@chromium.org
 
 per-file upload_goma_logs.py=shinyak@chromium.org

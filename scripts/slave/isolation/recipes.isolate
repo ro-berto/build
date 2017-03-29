@@ -27,6 +27,7 @@
       '../bootstrap.py',
       '../build_directory.py',
       '../cleanup_temp.py',
+      '../compile.py',
       '../crash_utils.py',
       '../gclient_safe_revert.py',
       '../gsutil',
