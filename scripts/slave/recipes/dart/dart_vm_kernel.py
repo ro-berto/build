@@ -26,9 +26,9 @@ builders = {
 for platform in ['linux']:
   for arch in ['x64']:
     for mode in ['debug', 'release']:
-      extra_args = []
+      extra_args = ['--builder-tag=no_ipv6']
       if mode == 'debug':
-        extra_args = ['--vm-options=--no-enable-malloc-hooks']
+        extra_args += ['--vm-options=--no-enable-malloc-hooks']
       builders['vm-kernel-%s-%s-%s' % (platform, mode, arch)] = {
         'mode': mode,
         'target_arch': arch,

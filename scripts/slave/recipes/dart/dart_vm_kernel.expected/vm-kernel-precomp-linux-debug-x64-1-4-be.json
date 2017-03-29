@@ -98,6 +98,7 @@
       "--shards=4",
       "-cdartkp",
       "-rdart_precompiled",
+      "--builder-tag=no_ipv6",
       "--vm-options=--no-enable-malloc-hooks"
     ],
     "cwd": "[START_DIR]/sdk",
