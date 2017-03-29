@@ -271,6 +271,16 @@ BUILDERS = freeze({
           'cpu': 'x86',
         }
       },
+      'Linux32 Release (ARM)': {
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'linux'},
+      },
       'Linux64 Debug': {
         'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
@@ -301,12 +311,22 @@ BUILDERS = freeze({
           'cpu': 'x86-64',
         }
       },
-      'Linux32 ARM': {
+      'Linux64 Debug (ARM)': {
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'linux'},
+      },
+      'Linux64 Release (ARM)': {
         'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
+          'TARGET_BITS': 64,
         },
         'bot_type': 'builder',
         'testing': {'platform': 'linux'},
@@ -634,6 +654,16 @@ BUILDERS = freeze({
           'os': 'Ubuntu-14.04',
           'cpu': 'x86-64',
         }
+      },
+      'Linux32 Debug (ARM)': {
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'linux'},
       },
       'Linux64 GCC': {
         'recipe_config': 'webrtc',
@@ -1156,6 +1186,26 @@ BUILDERS = freeze({
           'cpu': 'x86-64',
         }
       },
+      'linux_arm64_dbg': {
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'linux'},
+      },
+      'linux_arm64_rel': {
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'linux'},
+      },
       'linux32_dbg': {
         'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
@@ -1186,7 +1236,17 @@ BUILDERS = freeze({
           'cpu': 'x86',
         }
       },
-      'linux_arm': {
+      'linux32_arm_dbg': {
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'linux'},
+      },
+      'linux32_arm_rel': {
         'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',

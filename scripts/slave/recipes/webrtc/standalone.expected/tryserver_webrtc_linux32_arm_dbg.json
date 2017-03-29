@@ -4,7 +4,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[BUILDER_CACHE]/Linux32_ARM",
+      "[BUILDER_CACHE]/linux32_arm_dbg",
       "511"
     ],
     "name": "makedirs checkout path",
@@ -26,10 +26,42 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::webrtc]/resources/cleanup_symlinks.py",
-      "[BUILDER_CACHE]/Linux32_ARM"
+      "[BUILDER_CACHE]/linux32_arm_dbg"
     ],
     "infra_step": true,
     "name": "clean symlinks"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport json, os, sys\nif os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):\n  with open(sys.argv[2], 'w') as f:\n    json.dump(os.listdir(sys.argv[1]), f)\n",
+      "[BUILDER_CACHE]/linux32_arm_dbg",
+      "/path/to/tmp/json"
+    ],
+    "name": "listdir checkout root",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"src\"@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import json, os, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  with open(sys.argv[2], 'w') as f:@@@",
+      "@@@STEP_LOG_LINE@python.inline@    json.dump(os.listdir(sys.argv[1]), f)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "reset",
+      "--hard"
+    ],
+    "cwd": "[BUILDER_CACHE]/linux32_arm_dbg/src",
+    "infra_step": true,
+    "name": "reset checkout [crbug.com/677823]"
   },
   {
     "cmd": [
@@ -44,13 +76,19 @@
       "{\"src\": \"got_revision\"}",
       "--git-cache-dir",
       "[GIT_CACHE]",
+      "--issue",
+      "666666",
+      "--patchset",
+      "1",
+      "--rietveld_server",
+      "https://fake.rietveld.url",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
       "src@12345",
       "--output_manifest"
     ],
-    "cwd": "[BUILDER_CACHE]/Linux32_ARM",
+    "cwd": "[BUILDER_CACHE]/linux32_arm_dbg",
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
@@ -90,7 +128,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::webrtc]/resources/cleanup_files.py",
-      "[BUILDER_CACHE]/Linux32_ARM/src/out"
+      "[BUILDER_CACHE]/linux32_arm_dbg/src/out"
     ],
     "infra_step": true,
     "name": "clean test output files"
@@ -151,11 +189,11 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/Linux32_ARM/src",
+    "cwd": "[BUILDER_CACHE]/linux32_arm_dbg/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "component=static_library gomadir='[CACHE]/goma_client' target_arch=arm use_goma=1",
+      "GYP_DEFINES": "component=shared_library dcheck_always_on=1 fastbuild=1 gomadir='[CACHE]/goma_client' target_arch=arm use_goma=1",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -164,19 +202,19 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Linux32_ARM/src/tools-webrtc/mb/mb.py",
+      "[BUILDER_CACHE]/linux32_arm_dbg/src/tools-webrtc/mb/mb.py",
       "gen",
       "-m",
-      "client.webrtc",
+      "tryserver.webrtc",
       "-b",
-      "Linux32 ARM",
+      "linux32_arm_dbg",
       "--config-file",
-      "[BUILDER_CACHE]/Linux32_ARM/src/tools-webrtc/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/linux32_arm_dbg/src/tools-webrtc/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma_client",
-      "//out/Release"
+      "//out/Debug"
     ],
-    "cwd": "[BUILDER_CACHE]/Linux32_ARM/src",
+    "cwd": "[BUILDER_CACHE]/linux32_arm_dbg/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -199,7 +237,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/Linux32_ARM/src",
+    "cwd": "[BUILDER_CACHE]/linux32_arm_dbg/src",
     "name": "preprocess_for_goma"
   },
   {
@@ -207,10 +245,10 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[GOMA_CACHE]/Linux32_ARM",
+      "[GOMA_CACHE]/linux32_arm_dbg",
       "511"
     ],
-    "cwd": "[BUILDER_CACHE]/Linux32_ARM/src",
+    "cwd": "[BUILDER_CACHE]/linux32_arm_dbg/src",
     "name": "preprocess_for_goma.makedirs goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -233,11 +271,11 @@
       "[CACHE]/goma_client/goma_ctl.py",
       "restart"
     ],
-    "cwd": "[BUILDER_CACHE]/Linux32_ARM/src",
+    "cwd": "[BUILDER_CACHE]/linux32_arm_dbg/src",
     "env": {
-      "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]/Linux32_ARM",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/linux32_arm_dbg",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
+      "GOMA_FAIL_FAST": "true",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "infra_step": true,
@@ -263,7 +301,7 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[BUILDER_CACHE]/Linux32_ARM/src",
+    "cwd": "[BUILDER_CACHE]/linux32_arm_dbg/src",
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
@@ -276,11 +314,11 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/Linux32_ARM/src/out/Release",
+      "[BUILDER_CACHE]/linux32_arm_dbg/src/out/Debug",
       "-j",
       "50"
     ],
-    "cwd": "[BUILDER_CACHE]/Linux32_ARM/src",
+    "cwd": "[BUILDER_CACHE]/linux32_arm_dbg/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -288,7 +326,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/Linux32_ARM/src",
+    "cwd": "[BUILDER_CACHE]/linux32_arm_dbg/src",
     "name": "postprocess_for_goma"
   },
   {
@@ -299,7 +337,7 @@
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
-    "cwd": "[BUILDER_CACHE]/Linux32_ARM/src",
+    "cwd": "[BUILDER_CACHE]/linux32_arm_dbg/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -326,7 +364,7 @@
       "[CACHE]/goma_client/goma_ctl.py",
       "stat"
     ],
-    "cwd": "[BUILDER_CACHE]/Linux32_ARM/src",
+    "cwd": "[BUILDER_CACHE]/linux32_arm_dbg/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -342,7 +380,7 @@
       "[CACHE]/goma_client/goma_ctl.py",
       "stop"
     ],
-    "cwd": "[BUILDER_CACHE]/Linux32_ARM/src",
+    "cwd": "[BUILDER_CACHE]/linux32_arm_dbg/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -366,21 +404,21 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[BUILDER_CACHE]/Linux32_ARM/src/out/Release",
+      "[BUILDER_CACHE]/linux32_arm_dbg/src/out/Debug",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Linux32_ARM/src/out/Release', '-j', 50]",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/linux32_arm_dbg/src/out/Debug', '-j', 50]",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",
       "goma",
       "--buildbot-buildername",
-      "Linux32 ARM",
+      "linux32_arm_dbg",
       "--buildbot-mastername",
-      "client.webrtc",
+      "tryserver.webrtc",
       "--buildbot-slavename",
       "bot_id"
     ],
-    "cwd": "[BUILDER_CACHE]/Linux32_ARM/src",
+    "cwd": "[BUILDER_CACHE]/linux32_arm_dbg/src",
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -399,7 +437,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[BUILDER_CACHE]/Linux32_ARM/src",
+    "cwd": "[BUILDER_CACHE]/linux32_arm_dbg/src",
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
