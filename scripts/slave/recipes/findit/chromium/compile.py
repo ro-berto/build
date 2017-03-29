@@ -124,6 +124,13 @@ def _run_compile_at_revision(api, target_mastername, target_buildername,
       return CompileResult.FAILED
 
 
+def _is_flaky_compile(compile_result, revision_being_checked, last_revision):
+  # If compile on the last revision in range passed, the original build should
+  # succeed as well, thus the compile failure in original build is flaky.
+  return (compile_result == CompileResult.PASSED and
+          revision_being_checked == last_revision)
+
+
 def RunSteps(api, target_mastername, target_buildername,
              good_revision, bad_revision, compile_targets,
              buildbucket, use_analyze, suspected_revisions, use_bisect,
@@ -226,8 +233,9 @@ def RunSteps(api, target_mastername, target_buildername,
   culprit_candidate = None
   revision_being_checked = None
   found = False
+  flaky_compile = False
   try:
-    while not found and sub_ranges:
+    while not found and sub_ranges and not flaky_compile:
       # Sub-ranges with newer revisions are tested first.
       revision_before_suspect = sub_ranges[0][0]
       remaining_revisions = sub_ranges[0][1:]
@@ -267,6 +275,11 @@ def RunSteps(api, target_mastername, target_buildername,
             # This failed revision is the new candidate to suspect.
             culprit_candidate = revision_being_checked
             remaining_revisions = remaining_revisions[:index]
+          elif _is_flaky_compile(
+              compile_result, revision_being_checked, all_revisions[-1]):
+            # The last revision in range passed on compile, bail out.
+            flaky_compile = True
+            break
           else:  # Compile passed, or skipped for non-existent compile targets.
             # TODO(http://crbug.com/610526): If compile failures is due to
             # "unknown targets", bisect won't work due to skipped compile.
@@ -281,6 +294,11 @@ def RunSteps(api, target_mastername, target_buildername,
           if compile_result == CompileResult.FAILED:
             # First failure after a series of pass.
             culprit_candidate = revision
+            break
+          elif _is_flaky_compile(
+              compile_result, revision_being_checked, all_revisions[-1]):
+            # The last revision in range passed on compile, bail out.
+            flaky_compile = True
             break
 
       if culprit_candidate is not None:
@@ -656,6 +674,77 @@ def GenTests(api):
                                'not_found': [],
                              })) +
       api.override_step_data('test r2.compile', retcode=1)
+  )
+
+  # Entire regression range: (r1, r5]
+  # Suspected_revisions: [r5]
+  # Expected smaller ranges:
+  #     [None, r2, r3], [r4, r5]
+  # Compile on r5 passed, should bail out right away.
+  yield (
+      api.test('last_revision_pass_not_bisect') +
+      props(compile_targets=['target_name'],
+            good_revision='r1',
+            bad_revision='r5',
+            suspected_revisions=['r5']) +
+      api.override_step_data(
+          'git commits in range',
+          api.raw_io.stream_output(
+              '\n'.join('r%d' % i for i in reversed(range(2, 6))))) +
+      api.override_step_data('test r4.check_targets',
+                             api.json.output({
+                                 'found': ['target_name'],
+                                 'not_found': [],
+                             })) +
+      api.override_step_data('test r4.compile', retcode=0) +
+      api.override_step_data('test r5.check_targets',
+                             api.json.output({
+                               'found': ['target_name'],
+                               'not_found': [],
+                             })) +
+      api.override_step_data('test r5.compile', retcode=0)
+  )
+
+  # Entire regression range: (r1, r10]
+  # Suspected_revisions: [r7]
+  # Expected smaller ranges:
+  #     [None, r2, r3, r4, r5], [r6, r7, r8, r9, r10]
+  # Compile on r10 passed, should bail out right away.
+  yield (
+      api.test('last_revision_pass_bisect') +
+      props(compile_targets=['target_name'],
+            good_revision='r1',
+            bad_revision='r10',
+            suspected_revisions=['r7'],
+            use_bisect=True) +
+      api.override_step_data(
+          'git commits in range',
+          api.raw_io.stream_output(
+              '\n'.join('r%d' % i for i in reversed(range(2, 11))))) +
+      api.override_step_data('test r6.check_targets',
+                             api.json.output({
+                                 'found': ['target_name'],
+                                 'not_found': [],
+                             })) +
+      api.override_step_data('test r6.compile', retcode=0) +
+      api.override_step_data('test r7.check_targets',
+                             api.json.output({
+                               'found': ['target_name'],
+                               'not_found': [],
+                             })) +
+      api.override_step_data('test r7.compile', retcode=0) +
+      api.override_step_data('test r9.check_targets',
+                             api.json.output({
+                               'found': ['target_name'],
+                               'not_found': [],
+                             })) +
+      api.override_step_data('test r9.compile', retcode=0) +
+      api.override_step_data('test r10.check_targets',
+                             api.json.output({
+                               'found': ['target_name'],
+                               'not_found': [],
+                             })) +
+      api.override_step_data('test r10.compile', retcode=0)
   )
 
   # Entire regression range: (r1, r5]
