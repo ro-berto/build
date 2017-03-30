@@ -21,7 +21,6 @@ class iOSApi(recipe_api.RecipeApi):
     super(iOSApi, self).__init__(*args, **kwargs)
     self.__config = None
     self._include_cache = {}
-    self.bootstrapped_swarming = False
 
   @property
   def bucket(self):
@@ -240,7 +239,7 @@ class iOSApi(recipe_api.RecipeApi):
       default_gn_args_path=None,
       mb_path=None,
       setup_gn=False,
-      suffix='',
+      suffix=None,
       use_mb=True,
   ):
     """Builds from this bot's build config.
@@ -256,6 +255,8 @@ class iOSApi(recipe_api.RecipeApi):
       use_mb: Whether or not to use mb to generate build files.
     """
     assert self.__config is not None
+
+    suffix = ' (%s)' % suffix if suffix else ''
 
     env = {
       'LANDMINES_VERBOSE': '1',
@@ -369,8 +370,7 @@ class iOSApi(recipe_api.RecipeApi):
             ninja_log_outdir=cwd,
             ninja_log_compiler='goma',
             ninja_log_command=cmd,
-            ninja_log_exit_status=exit_status,
-        )
+            ninja_log_exit_status=exit_status)
 
   def symupload(self, artifact):
     """Uploads the given symbols file.
@@ -449,27 +449,23 @@ class iOSApi(recipe_api.RecipeApi):
 
   def bootstrap_swarming(self):
     """Bootstraps Swarming."""
-    if self.bootstrapped_swarming:
-      return
-
     self.m.swarming.show_isolated_out_in_collect_step = False
     self.m.swarming.show_shards_in_collect_step = True
     self.m.swarming_client.checkout('stable')
     self.m.swarming_client.query_script_version('swarming.py')
-    self.bootstrapped_swarming = True
 
   @staticmethod
   def get_step_name(test):
     return str('%s (%s iOS %s)' % (
         test['app'], test['device type'], test['os']))
 
-  def isolate_test(self, test, tmp_dir, isolate_template, suffix=''):
+  def isolate_test(self, test, tmp_dir, isolate_template):
     """Isolates a single test."""
     task = {
         'isolate.gen': None,
         'isolated hash': None,
         'skip': 'skip' in test,
-        'step name': self.get_step_name(test) + suffix,
+        'step name': self.get_step_name(test),
         'task': None,
         'test': copy.deepcopy(test),
         'tmp dir': None,
@@ -521,7 +517,7 @@ class iOSApi(recipe_api.RecipeApi):
 
     return task
 
-  def isolate(self, scripts_dir='src/ios/build/bots/scripts', suffix=''):
+  def isolate(self, scripts_dir='src/ios/build/bots/scripts'):
     """Isolates the tests specified in this bot's build config."""
     assert self.__config
 
@@ -572,13 +568,11 @@ class iOSApi(recipe_api.RecipeApi):
     tmp_dir = self.m.path.mkdtemp('isolate')
 
     for test in self.__config['tests']:
-      tasks.append(
-          self.isolate_test(test, tmp_dir, isolate_template, suffix=suffix))
+      tasks.append(self.isolate_test(test, tmp_dir, isolate_template))
       tasks[-1]['buildername'] = self.m.properties['buildername']
     for bot, tests in self.__config['triggered tests'].iteritems():
       for test in tests:
-        tasks.append(
-            self.isolate_test(test, tmp_dir, isolate_template, suffix=suffix))
+        tasks.append(self.isolate_test(test, tmp_dir, isolate_template))
         tasks[-1]['buildername'] = bot
 
     gen_files = []
@@ -793,16 +787,16 @@ class iOSApi(recipe_api.RecipeApi):
         failure = self.m.step.InfraFailure
       raise failure('Failed %s.' % ', '.join(sorted(failures)))
 
-  def test_swarming(self, scripts_dir='src/ios/build/bots/scripts', suffix=''):
+  def test_swarming(self, scripts_dir='src/ios/build/bots/scripts'):
     """Runs tests on Swarming as instructed by this bot's build config."""
     assert self.__config
 
     with self.m.step.context({'cwd': self.m.path['checkout']}):
-      with self.m.step.nest('bootstrap swarming' + suffix):
+      with self.m.step.nest('bootstrap swarming'):
         self.bootstrap_swarming()
 
-      with self.m.step.nest('isolate' + suffix):
-        tasks = self.isolate(scripts_dir=scripts_dir, suffix=suffix)
+      with self.m.step.nest('isolate'):
+        tasks = self.isolate(scripts_dir=scripts_dir)
         if self.__config['triggered bots']:
           self.m.file.write(
               'generate isolated_tasks.json',
@@ -810,7 +804,7 @@ class iOSApi(recipe_api.RecipeApi):
               self.m.json.dumps(tasks),
           )
 
-      with self.m.step.nest('trigger' + suffix):
+      with self.m.step.nest('trigger'):
         self.trigger(tasks)
 
       self.collect(tasks)
