@@ -777,8 +777,8 @@ def GenTests(api):
         'benchmark on Intel GPU on Windows on Windows-10-10586',
         api.test_utils.canned_isolated_script_output(
             passing=False, is_win=True, swarming=True,
-            shards=2, isolated_script_passing=True, valid=True,
-            output_chartjson=True),
+            shards=2, isolated_script_passing=False,
+            use_json_test_format=True, output_chartjson=True),
         retcode=1))
 
 

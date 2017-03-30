@@ -1485,7 +1485,11 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     results = getattr(step_result, 'isolated_script_results', None) or {}
 
     valid, failures = self.results_handler.validate_results(api, results)
-    self.results_handler.render_results(api, results, step_result.presentation)
+    presentation = step_result.presentation
+    self.results_handler.render_results(api, results, presentation)
+    if (self._ignore_swarming_task_failure and valid and
+        presentation.status == api.step.FAILURE):
+      presentation.status = api.step.WARNING
 
     if valid:
       self._isolated_script_results = results

@@ -183,6 +183,7 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
             'Test%d' % (idx + 1): {
               'expected': 'PASS TIMEOUT',
                'actual': 'FAIL FAIL FAIL',
+               'is_unexpected': True,
              },
           }
         }
