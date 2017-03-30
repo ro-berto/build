@@ -111,16 +111,14 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
       )
     tests.append(BaremetalTest('webrtc_perf_tests', revision=revision,
                                perf_test=True))
-    # TODO(kjellander): Add on Mac and Windows when the test is working.
-    # See bugs.webrtc.org/7229 for details.
-    if api.m.platform.is_linux:
-      tests.append(BaremetalTest(
-          str(api.m.path['checkout'].join('webrtc', 'audio', 'test',
-                                          'low_bandwidth_audio_test.py')),
-          name='low_bandwidth_audio_test',
-          args=[api.m.chromium.output_dir, '--remove'],
-          revision=revision,
-          perf_test=True))
+
+    tests.append(BaremetalTest(
+        str(api.m.path['checkout'].join('webrtc', 'audio', 'test',
+                                        'low_bandwidth_audio_test.py')),
+        name='low_bandwidth_audio_test',
+        args=[api.m.chromium.output_dir, '--remove'],
+        revision=revision,
+        perf_test=True))
   elif test_suite == 'android_perf' and api.c.PERF_ID:
     # TODO(kjellander): Fix the Android ASan bot so we can have an assert here.
     tests.append(AndroidPerfTest('webrtc_perf_tests', revision=revision))
