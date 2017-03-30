@@ -128,6 +128,12 @@ def _ComputeBuilders(builders, m_annotator, active_master_cls):
       props.update(builders.get('default_remote_run_properties', {}).copy())
     props.update(builder_data.get('properties', {}))
 
+    # Only pass timeout if 'no_output_timeout_s' is specified, to avoid
+    # overwriting the default value in BaseFactory.
+    kwargs = {}
+    if builder_data.get('no_output_timeout_s'):
+      kwargs['timeout'] = builder_data['no_output_timeout_s']
+
     if builder_data.get('use_remote_run'):
       factory = remote_run_factory.RemoteRunFactory(
           active_master=active_master_cls,
@@ -140,12 +146,14 @@ def _ComputeBuilders(builders, m_annotator, active_master_cls):
           max_time=builder_data.get('builder_timeout_s'),
           factory_properties=props,
           use_gitiles=builder_data.get('remote_run_use_gitiles', False),
+          **kwargs
       )
     else:
       factory = m_annotator.BaseFactory(
           recipe=builder_data['recipe'],
           max_time=builder_data.get('builder_timeout_s'),
           factory_properties=props,
+          **kwargs
       )
     actual_builders.append({
         'auto_reboot': builder_data.get('auto_reboot', True),

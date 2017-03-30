@@ -34,6 +34,27 @@ SAMPLE_WATERFALL_PYL = """\
       "slave_pools": ["main"],
       "slavebuilddir": "test"
     },
+    "Test Linux Timeouts": {
+      "properties": {
+        "config": "Release"
+      },
+      "recipe": "test_recipe",
+      "scheduler": "test_repo",
+      "slave_pools": ["main"],
+      "slavebuilddir": "test",
+      "builder_timeout_s": 7200,
+      "no_output_timeout_s": 3600,
+    },
+    "Test Linux Remote Run": {
+      "properties": {
+        "config": "Release"
+      },
+      "recipe": "test_recipe",
+      "scheduler": "test_repo",
+      "slave_pools": ["main"],
+      "slavebuilddir": "test",
+      "use_remote_run": True,
+    },
     "Test Linux Nightly": {
       "properties": {
         "config": "Release"
@@ -127,6 +148,14 @@ class _FakeMaster(_FakeMasterBase):
 
 
 class PopulateBuildmasterConfigTest(unittest.TestCase):
+  def verify_timeouts(self, builder, expected_builder_timeout=None,
+                      expected_no_output_timeout=2400):
+    steps = builder['factory'].steps
+    self.assertEqual(1, len(steps))
+    step_dict = steps[0][1]
+    self.assertEqual(step_dict['maxTime'], expected_builder_timeout)
+    self.assertEqual(step_dict['timeout'], expected_no_output_timeout)
+
   def test_waterfall(self):
     try:
       fp = tempfile.NamedTemporaryFile(delete=False)
@@ -135,9 +164,17 @@ class PopulateBuildmasterConfigTest(unittest.TestCase):
 
       c = {}
       master_gen.PopulateBuildmasterConfig(c, fp.name, _FakeMaster)
+      c['builders'] = sorted(c['builders'])
 
-      self.assertEqual(len(c['builders']), 2)
+      self.assertEqual(len(c['builders']), 4)
       self.assertEqual(c['builders'][0]['name'], 'Test Linux')
+      self.verify_timeouts(c['builders'][0])
+
+      self.assertEqual(c['builders'][1]['name'], 'Test Linux Timeouts')
+      self.verify_timeouts(c['builders'][1], 7200, 3600)
+
+      self.assertEqual(c['builders'][2]['name'], 'Test Linux Remote Run')
+      self.verify_timeouts(c['builders'][2])
 
       self.assertEqual(len(c['change_source']), 1)
       self.assertEqual(len(c['schedulers']), 2)
