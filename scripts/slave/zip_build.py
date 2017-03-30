@@ -145,6 +145,24 @@ def _MojomFiles(build_dir, suffixes):
   return mojom_files
 
 
+def _LayoutTestFiles(build_dir):
+  """Lists all layout test data files that need to be included in the archive.
+
+  Args:
+    build_dir: The build directory.
+
+  Returns:
+    A list of file paths which are relative to the build directory.
+  """
+  results = []
+  layout_test_data_dir = os.path.join(build_dir, 'gen/layout_test_data')
+  for path, _, files in os.walk(layout_test_data_dir):
+    rel_path = os.path.relpath(path, build_dir)
+    for entry in files:
+      results.append(os.path.join(rel_path, entry))
+  return results
+
+
 def WriteRevisionFile(dirname, build_revision):
   """Writes a file containing revision number to given directory.
   Replaces the target file in place.
@@ -377,11 +395,15 @@ def Archive(options):
 
   zip_file_list = [f for f in root_files if path_filter.Match(f)]
 
-  # TODO(yzshen): Once we have swarming support ready, we could use it to
-  # archive run time dependencies of tests and remove this step.
+  # TODO(yzshen): Switch layout tests to use files from 'gen/layout_test_data'
+  # and remove this.
   mojom_files = _MojomFiles(build_dir, ['.mojom.js', '_mojom.py'])
   print 'Include mojom files: %s' % mojom_files
   zip_file_list.extend(mojom_files)
+
+  layout_test_data_files = _LayoutTestFiles(build_dir)
+  print 'Include layout test data: %s' % layout_test_data_files
+  zip_file_list.extend(layout_test_data_files)
 
   zip_file = MakeUnversionedArchive(build_dir, staging_dir, zip_file_list,
                                     unversioned_base_name,
