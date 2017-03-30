@@ -103,6 +103,7 @@ PACKAGES = [
   Package(github_repo='glob'),
   Package(github_repo='googleapis_auth'),
   Package(github_repo='html5lib'),
+  Package(github_repo='http2'),
   Package(github_repo='http'),
   Package(github_repo='http_multi_server'),
   Package(github_repo='http_parser'),
