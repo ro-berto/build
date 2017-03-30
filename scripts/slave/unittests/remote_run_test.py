@@ -189,7 +189,6 @@ class RemoteRunExecTest(unittest.TestCase):
         '-log-level', 'info',
         'cook',
         '-mode', 'buildbot',
-        '-recipe-engine-path', self._bp('.remote_run_cipd'),
         '-output-result-json', self._tp('recipe_result.json'),
         '-properties-file', self._tp('remote_run_properties.json'),
         '-recipe', self.opts.recipe,
@@ -219,7 +218,8 @@ class RemoteRunExecTest(unittest.TestCase):
 
     # Easily-configurable CIPD pins.
     self.cipd_pins = remote_run._STABLE_CIPD_PINS
-    remote_run._get_cipd_pins = lambda _args, _mastername: self.cipd_pins
+    remote_run._get_cipd_pins = (
+        lambda _mastername, _buildername, _force_canary: self.cipd_pins)
 
     # Written via '_write_recipe_result'.
     self.recipe_result = None

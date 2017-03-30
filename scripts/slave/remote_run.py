@@ -36,17 +36,23 @@ BUILDBOT_ROOT = os.path.abspath(os.path.dirname(BUILD_ROOT))
 
 LOGGER = logging.getLogger('remote_run')
 
-# Masters in this list will use the canary path.
-_CANARY_MASTERS = set((
-  'chromium.infra',
-  'chromium.infra.cron',
-  'internal.infra',
+# This is a map of master names to whitelist for canary configurations.
+#
+# Each master's value is either:
+# - _ALL_BUILDERS, indicating that *all* builders on that master are
+#   whitelisted.
+# - An iterable of specific builder names to whitelist.
+_ALL_BUILDERS = object()
+_CANARY_CONFIG = {
+  'chromium.infra': _ALL_BUILDERS,
+  'chromium.infra.cron': _ALL_BUILDERS,
+  'internal.infra': _ALL_BUILDERS,
 
   ## Not whitelisted b/c of recipe roller, see: crbug.com/703352
   #'internal.infra.cron',
 
-  'chromium.swarm',
-))
+  'chromium.swarm': _ALL_BUILDERS,
+}
 
 # The name of the recipe engine CIPD package.
 _RECIPES_PY_CIPD_PACKAGE = 'infra/recipes-py'
@@ -72,9 +78,11 @@ _CANARY_CIPD_PINS = CipdPins(
       kitchen='git_revision:054be2c5e4f94f6529e3b89087b695d6db6dbfcf')
 
 
-def _get_cipd_pins(mastername, force_canary):
-  return (_CANARY_CIPD_PINS if force_canary or (mastername in _CANARY_MASTERS)
-          else _STABLE_CIPD_PINS)
+def _get_cipd_pins(mastername, buildername, force_canary):
+  slave_list = _CANARY_CONFIG.get(mastername)
+  if slave_list is not None:
+    force_canary = slave_list is _ALL_BUILDERS or buildername in slave_list
+  return _CANARY_CIPD_PINS if force_canary else _STABLE_CIPD_PINS
 
 
 def all_cipd_packages():
@@ -182,14 +190,11 @@ def _remote_run_with_kitchen(args, stream, pins, properties, tempdir, basedir):
 
   # Use CIPD to download Kitchen to a root within the temporary directory.
   cipd_root = os.path.join(basedir, '.remote_run_cipd')
-  recipes_pkg = cipd.CipdPackage(
-      name=_RECIPES_PY_CIPD_PACKAGE,
-      version=pins.recipes)
   kitchen_pkg = cipd.CipdPackage(
       name=_KITCHEN_CIPD_PACKAGE,
       version=pins.kitchen)
 
-  _install_cipd_packages(cipd_root, kitchen_pkg, recipes_pkg)
+  _install_cipd_packages(cipd_root, kitchen_pkg)
 
   kitchen_bin = os.path.join(cipd_root, 'kitchen' + infra_platform.exe_suffix())
 
@@ -202,7 +207,6 @@ def _remote_run_with_kitchen(args, stream, pins, properties, tempdir, basedir):
   kitchen_cmd += [
       'cook',
       '-mode', 'buildbot',
-      '-recipe-engine-path', cipd_root,
       '-output-result-json', recipe_result_path,
       '-properties-file', properties_file,
       '-recipe', args.recipe or properties.get('recipe'),
@@ -295,7 +299,8 @@ def _exec_recipe(args, rt, stream, basedir):
 
   # Determine our pins.
   mastername = properties.get('mastername')
-  pins = _get_cipd_pins(mastername,
+  buildername = properties.get('buildername')
+  pins = _get_cipd_pins(mastername, buildername,
                         args.canary or 'remote_run_canary' in properties)
   if args.kitchen:
     pins = pins._replace(kitchen=args.kitchen)
@@ -303,8 +308,7 @@ def _exec_recipe(args, rt, stream, basedir):
 
   # Augment our input properties...
   properties['build_data_dir'] = build_data_dir
-  properties['builder_id'] = 'master.%s:%s' % (
-    mastername, properties['buildername'])
+  properties['builder_id'] = 'master.%s:%s' % (mastername, buildername)
 
   if legacy_remote_run:
     # path_config property defines what paths a build uses for checkout, git
