@@ -754,17 +754,14 @@
       "[START_DIR]/src/build/android/pylib/results/presentation/test_results_presentation.py",
       "--json-file",
       "{}",
-      "--test-name",
-      "cronet_sample_test_apk",
-      "--builder-name",
-      "android_cronet_tester",
-      "--build-number",
-      "571"
+      "--master-name",
+      "chromium.testing.master"
     ],
     "name": "cronet_sample_test_apk: generate result details",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_LINK@result_details@https://storage.cloud.google.com/chromium-result-details@@@"
+      "@@@STEP_LOG_LINE@result_details@<!DOCTYPE html><html></html>@@@",
+      "@@@STEP_LOG_END@result_details@@@"
     ]
   },
   {
@@ -791,17 +788,14 @@
       "[START_DIR]/src/build/android/pylib/results/presentation/test_results_presentation.py",
       "--json-file",
       "{}",
-      "--test-name",
-      "cronet_smoketests_missing_native_library_instrumentation_apk",
-      "--builder-name",
-      "android_cronet_tester",
-      "--build-number",
-      "571"
+      "--master-name",
+      "chromium.testing.master"
     ],
     "name": "cronet_smoketests_missing_native_library_instrumentation_apk: generate result details",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_LINK@result_details@https://storage.cloud.google.com/chromium-result-details@@@"
+      "@@@STEP_LOG_LINE@result_details@<!DOCTYPE html><html></html>@@@",
+      "@@@STEP_LOG_END@result_details@@@"
     ]
   },
   {
@@ -828,17 +822,14 @@
       "[START_DIR]/src/build/android/pylib/results/presentation/test_results_presentation.py",
       "--json-file",
       "{}",
-      "--test-name",
-      "cronet_smoketests_platform_only_instrumentation_apk",
-      "--builder-name",
-      "android_cronet_tester",
-      "--build-number",
-      "571"
+      "--master-name",
+      "chromium.testing.master"
     ],
     "name": "cronet_smoketests_platform_only_instrumentation_apk: generate result details",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_LINK@result_details@https://storage.cloud.google.com/chromium-result-details@@@"
+      "@@@STEP_LOG_LINE@result_details@<!DOCTYPE html><html></html>@@@",
+      "@@@STEP_LOG_END@result_details@@@"
     ]
   },
   {
@@ -865,17 +856,14 @@
       "[START_DIR]/src/build/android/pylib/results/presentation/test_results_presentation.py",
       "--json-file",
       "{}",
-      "--test-name",
-      "cronet_test_instrumentation_apk",
-      "--builder-name",
-      "android_cronet_tester",
-      "--build-number",
-      "571"
+      "--master-name",
+      "chromium.testing.master"
     ],
     "name": "cronet_test_instrumentation_apk: generate result details",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_LINK@result_details@https://storage.cloud.google.com/chromium-result-details@@@"
+      "@@@STEP_LOG_LINE@result_details@<!DOCTYPE html><html></html>@@@",
+      "@@@STEP_LOG_END@result_details@@@"
     ]
   },
   {

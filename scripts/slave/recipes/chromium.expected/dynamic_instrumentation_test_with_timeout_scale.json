@@ -572,12 +572,8 @@
       "[START_DIR]/src/build/android/pylib/results/presentation/test_results_presentation.py",
       "--json-file",
       "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"FAILURE\"}]}]}",
-      "--test-name",
-      "ChromePublicTest",
-      "--builder-name",
-      "Lollipop Low-end Tester",
-      "--build-number",
-      "571"
+      "--master-name",
+      "chromium.android.fyi"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -587,7 +583,8 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@result_details@https://storage.cloud.google.com/chromium-result-details@@@"
+      "@@@STEP_LOG_LINE@result_details@<!DOCTYPE html><html></html>@@@",
+      "@@@STEP_LOG_END@result_details@@@"
     ]
   },
   {

@@ -1109,19 +1109,16 @@
       "[START_DIR]/src/build/android/pylib/results/presentation/test_results_presentation.py",
       "--json-file",
       "{}",
-      "--test-name",
-      "SmallTest",
-      "--builder-name",
-      "result_details",
-      "--build-number",
-      "571",
+      "--master-name",
+      "chromium.testing.master",
       "--cs-base-url",
       "cs_base_url"
     ],
     "name": "SmallTest: generate result details",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_LINK@result_details@https://storage.cloud.google.com/chromium-result-details@@@"
+      "@@@STEP_LOG_LINE@result_details@<!DOCTYPE html><html></html>@@@",
+      "@@@STEP_LOG_END@result_details@@@"
     ]
   },
   {
@@ -1153,17 +1150,14 @@
       "[START_DIR]/src/build/android/pylib/results/presentation/test_results_presentation.py",
       "--json-file",
       "{}",
-      "--test-name",
-      "unittests",
-      "--builder-name",
-      "result_details",
-      "--build-number",
-      "571"
+      "--master-name",
+      "chromium.testing.master"
     ],
     "name": "unittests: generate result details",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_LINK@result_details@https://storage.cloud.google.com/chromium-result-details@@@"
+      "@@@STEP_LOG_LINE@result_details@<!DOCTYPE html><html></html>@@@",
+      "@@@STEP_LOG_END@result_details@@@"
     ]
   },
   {
