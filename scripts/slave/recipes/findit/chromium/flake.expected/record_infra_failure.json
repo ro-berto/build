@@ -710,8 +710,7 @@
       "@@@STEP_LOG_LINE@report@    \"infra_failure\": true@@@",
       "@@@STEP_LOG_LINE@report@  }@@@",
       "@@@STEP_LOG_LINE@report@}@@@",
-      "@@@STEP_LOG_END@report@@@",
-      "@@@SET_BUILD_PROPERTY@report@{\"metadata\": {\"infra_failure\": true}, \"result\": {\"r0\": \"infra_failed\"}}@@@"
+      "@@@STEP_LOG_END@report@@@"
     ]
   },
   {

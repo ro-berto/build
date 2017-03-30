@@ -1126,8 +1126,7 @@
       "@@@STEP_LOG_LINE@report@    \"regression_range_size\": 1@@@",
       "@@@STEP_LOG_LINE@report@  }@@@",
       "@@@STEP_LOG_LINE@report@}@@@",
-      "@@@STEP_LOG_END@report@@@",
-      "@@@SET_BUILD_PROPERTY@report@{\"metadata\": {\"regression_range_size\": 1}, \"result\": {\"r1\": {\"gl_tests\": {\"pass_fail_counts\": {\"Test.One\": {\"fail_count\": 0, \"pass_count\": 1}}, \"status\": \"passed\", \"step_metadata\": {\"canonical_step_name\": \"gl_tests\", \"dimensions\": {\"cpu\": \"x86-64\", \"gpu\": \"none\", \"os\": \"Mac-10.9\", \"pool\": \"Chrome\"}, \"full_step_name\": \"gl_tests (r1)\", \"patched\": false, \"swarm_task_ids\": [\"10000\"], \"waterfall_buildername\": \"Mac10.9 Tests\", \"waterfall_mastername\": \"chromium.mac\"}, \"valid\": true}}}}@@@"
+      "@@@STEP_LOG_END@report@@@"
     ]
   },
   {

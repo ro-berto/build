@@ -1184,8 +1184,7 @@
       "@@@STEP_LOG_LINE@report@  }, @@@",
       "@@@STEP_LOG_LINE@report@  \"metadata\": {}@@@",
       "@@@STEP_LOG_LINE@report@}@@@",
-      "@@@STEP_LOG_END@report@@@",
-      "@@@SET_BUILD_PROPERTY@report@{\"metadata\": {}, \"result\": {\"r0\": {\"browser_tests\": {\"pass_fail_counts\": {\"Test.One\": {\"fail_count\": 0, \"pass_count\": 1}}, \"status\": \"passed\", \"step_metadata\": {\"canonical_step_name\": \"browser_tests\", \"dimensions\": {\"cpu\": \"x86-64\", \"gpu\": \"none\", \"os\": \"Mac-10.9\", \"pool\": \"Chrome\"}, \"full_step_name\": \"browser_tests (r0)\", \"patched\": false, \"swarm_task_ids\": [\"10200\", \"10300\", \"10000\", \"10100\", \"10600\", \"10700\", \"10400\", \"10500\", \"10800\", \"10900\"], \"waterfall_buildername\": \"Mac10.9 Tests\", \"waterfall_mastername\": \"chromium.mac\"}, \"valid\": true}}}}@@@"
+      "@@@STEP_LOG_END@report@@@"
     ]
   },
   {

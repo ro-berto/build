@@ -1255,8 +1255,7 @@
       "@@@STEP_LOG_LINE@report@    \"regression_range_size\": 1@@@",
       "@@@STEP_LOG_LINE@report@  }@@@",
       "@@@STEP_LOG_LINE@report@}@@@",
-      "@@@STEP_LOG_END@report@@@",
-      "@@@SET_BUILD_PROPERTY@report@{\"metadata\": {\"regression_range_size\": 1}, \"result\": {\"r1\": {\"affected_tests\": {\"pass_fail_counts\": {\"Test.One\": {\"fail_count\": 0, \"pass_count\": 1}}, \"status\": \"passed\", \"step_metadata\": {\"canonical_step_name\": \"affected_tests\", \"dimensions\": {\"cpu\": \"x86-64\", \"gpu\": \"none\", \"os\": \"Windows-7-SP1\", \"pool\": \"Chrome\"}, \"full_step_name\": \"affected_tests (r1)\", \"patched\": false, \"swarm_task_ids\": [\"10000\"], \"waterfall_buildername\": \"Win7 Tests (1)\", \"waterfall_mastername\": \"chromium.win\"}, \"valid\": true}, \"unaffected_tests\": {\"status\": \"skipped\", \"valid\": true}}}}@@@"
+      "@@@STEP_LOG_END@report@@@"
     ]
   },
   {

@@ -204,12 +204,8 @@ def RunSteps(api, target_mastername, target_testername, good_revision,
       report['culprits'] = culprits
 
     # Give the full report including test results and metadata.
-    step_result = api.python.succeeding_step(
+    api.python.succeeding_step(
         'report', [json.dumps(report, indent=2)], as_log='report')
-
-    # Set the report as a build property too, so that it will be reported back
-    # to Buildbucket and Findit will pull from there instead of buildbot master.
-    step_result.presentation.properties['report'] = report
 
   return report
 

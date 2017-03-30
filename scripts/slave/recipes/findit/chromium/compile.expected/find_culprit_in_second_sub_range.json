@@ -1942,8 +1942,7 @@
       "@@@STEP_LOG_LINE@report@    ]@@@",
       "@@@STEP_LOG_LINE@report@  }@@@",
       "@@@STEP_LOG_LINE@report@}@@@",
-      "@@@STEP_LOG_END@report@@@",
-      "@@@SET_BUILD_PROPERTY@report@{\"culprit\": \"r4\", \"metadata\": {\"regression_range_size\": 9, \"sub_ranges\": [[\"r7\", \"r8\", \"r9\", \"r10\"], [\"r3\", \"r4\", \"r5\", \"r6\"], [null, \"r2\"]], \"use_bisect\": false}, \"result\": {\"r3\": \"passed\", \"r4\": \"failed\", \"r7\": \"failed\"}}@@@"
+      "@@@STEP_LOG_END@report@@@"
     ]
   },
   {

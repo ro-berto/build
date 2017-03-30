@@ -579,8 +579,7 @@
       "@@@STEP_LOG_LINE@report@    \"regression_range_size\": 1@@@",
       "@@@STEP_LOG_LINE@report@  }@@@",
       "@@@STEP_LOG_LINE@report@}@@@",
-      "@@@STEP_LOG_END@report@@@",
-      "@@@SET_BUILD_PROPERTY@report@{\"metadata\": {\"regression_range_size\": 1}, \"result\": {\"r1\": {\"checkperms\": {\"status\": \"passed\", \"valid\": true}}}}@@@"
+      "@@@STEP_LOG_END@report@@@"
     ]
   },
   {

@@ -1397,8 +1397,7 @@
       "@@@STEP_LOG_LINE@report@    ]@@@",
       "@@@STEP_LOG_LINE@report@  }@@@",
       "@@@STEP_LOG_LINE@report@}@@@",
-      "@@@STEP_LOG_END@report@@@",
-      "@@@SET_BUILD_PROPERTY@report@{\"culprit\": \"r5\", \"metadata\": {\"regression_range_size\": 7, \"sub_ranges\": [[\"r4\", \"r5\", \"r6\", \"r7\", \"r8\"], [null, \"r2\", \"r3\"]], \"use_bisect\": true}, \"result\": {\"r4\": \"passed\", \"r5\": \"failed\"}}@@@"
+      "@@@STEP_LOG_END@report@@@"
     ]
   },
   {

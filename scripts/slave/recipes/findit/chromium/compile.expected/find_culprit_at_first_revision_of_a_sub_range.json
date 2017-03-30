@@ -1393,8 +1393,7 @@
       "@@@STEP_LOG_LINE@report@    ]@@@",
       "@@@STEP_LOG_LINE@report@  }@@@",
       "@@@STEP_LOG_LINE@report@}@@@",
-      "@@@STEP_LOG_END@report@@@",
-      "@@@SET_BUILD_PROPERTY@report@{\"culprit\": \"r3\", \"metadata\": {\"regression_range_size\": 5, \"sub_ranges\": [[\"r3\", \"r4\", \"r5\", \"r6\"], [null, \"r2\"]], \"use_bisect\": false}, \"result\": {\"r2\": \"passed\", \"r3\": \"failed\"}}@@@"
+      "@@@STEP_LOG_END@report@@@"
     ]
   },
   {

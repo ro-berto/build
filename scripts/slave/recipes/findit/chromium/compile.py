@@ -336,10 +336,6 @@ def RunSteps(api, target_mastername, target_buildername,
           '<br/>Culprit: <a href="https://crrev.com/%s">%s</a>' % (
               culprit_candidate, culprit_candidate))
 
-    # Set the report as a build property too, so that it will be reported back
-    # to Buildbucket and Findit will pull from there instead of buildbot master.
-    step_result.presentation.properties['report'] = report
-
   return report
 
 

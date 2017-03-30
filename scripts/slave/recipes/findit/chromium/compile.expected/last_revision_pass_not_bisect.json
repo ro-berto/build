@@ -1411,8 +1411,7 @@
       "@@@STEP_LOG_LINE@report@    ]@@@",
       "@@@STEP_LOG_LINE@report@  }@@@",
       "@@@STEP_LOG_LINE@report@}@@@",
-      "@@@STEP_LOG_END@report@@@",
-      "@@@SET_BUILD_PROPERTY@report@{\"metadata\": {\"regression_range_size\": 4, \"sub_ranges\": [[\"r4\", \"r5\"], [null, \"r2\", \"r3\"]], \"use_bisect\": false}, \"result\": {\"r4\": \"passed\", \"r5\": \"passed\"}}@@@"
+      "@@@STEP_LOG_END@report@@@"
     ]
   },
   {

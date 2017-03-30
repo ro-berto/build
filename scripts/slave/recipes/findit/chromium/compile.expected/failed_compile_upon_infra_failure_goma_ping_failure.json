@@ -726,8 +726,7 @@
       "@@@STEP_LOG_LINE@report@    ]@@@",
       "@@@STEP_LOG_LINE@report@  }@@@",
       "@@@STEP_LOG_LINE@report@}@@@",
-      "@@@STEP_LOG_END@report@@@",
-      "@@@SET_BUILD_PROPERTY@report@{\"metadata\": {\"infra_failure\": true, \"regression_range_size\": 1, \"sub_ranges\": [[null, \"r1\"]], \"use_bisect\": false}, \"result\": {\"r1\": \"infra_failed\"}}@@@"
+      "@@@STEP_LOG_END@report@@@"
     ]
   },
   {
