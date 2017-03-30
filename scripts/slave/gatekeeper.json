@@ -682,7 +682,8 @@
             ],
             "forgive_all": "true",
             "closing_optional": [
-              "webkit_tests"
+              "webkit_tests",
+              "webkit_layout_tests"
             ]
           },
           "Ozone Linux": {
