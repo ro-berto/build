@@ -25,6 +25,12 @@ DEPS = [
 BUILDERS = freeze({
   'client.v8.fyi': {
     'builders': {
+      'V8 - node.js baseline': {
+        'baseline_only': True,
+        'testing': {
+          'platform': 'linux',
+        },
+      },
       'V8 - node.js integration': {
         'testing': {
           'platform': 'linux',
@@ -105,7 +111,12 @@ def RunSteps(api):
   v8.checkout()
   api.chromium.cleanup_temp()
 
+  if v8.bot_config.get('baseline_only', False):
+    _build_and_test(api)
+    return
+
   try:
+    # TODO(machenbach): Remove baseline testing on continuous bot.
     # Build and test the node.js branch as FYI.
     _build_and_test(api, ' - baseline')
   except api.step.StepFailure:  # pragma: no cover
