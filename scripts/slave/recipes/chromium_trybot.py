@@ -192,7 +192,8 @@ def GenTests(api):
     suppress_analyze() +
     api.override_step_data(
         'telemetry_gpu_unittests (with patch)',
-        api.test_utils.canned_isolated_script_output(
+        api.swarming.canned_summary_output()
+        + api.test_utils.canned_isolated_script_output(
             passing=True, is_win=False, swarming=True))
   )
 
