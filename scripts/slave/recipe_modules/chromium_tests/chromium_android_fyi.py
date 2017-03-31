@@ -75,6 +75,7 @@ SPEC = {
     },
 
     'Lollipop Low-end Tester': {
+      'enable_swarming': True,
       'chromium_config': 'android',
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],

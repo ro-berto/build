@@ -150,7 +150,7 @@
         "version": "trusty",
         "bits": "64",
       },
-      "slaves": ["build19-b1"],
+      "slaves": ["slave72-c1"],
     },
     "memory_bot": {
       "slave_data": {
