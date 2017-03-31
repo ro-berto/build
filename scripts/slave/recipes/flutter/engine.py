@@ -136,7 +136,6 @@ def BuildLinuxAndroidArm(api):
     UploadArtifacts(api, upload_dir, [
       'dart/runtime/bin/dart_io_entries.txt',
       'flutter/runtime/dart_vm_entry_points.txt',
-      'flutter/runtime/dart_vm_entry_points_android.txt',
     ] + AddPathPrefix(api, 'out/%s' % build_output_dir, out_paths))
 
     # Upload artifacts used for AOT compilation on Linux hosts.
