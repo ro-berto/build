@@ -21,6 +21,7 @@ class iOSApi(recipe_api.RecipeApi):
     super(iOSApi, self).__init__(*args, **kwargs)
     self.__config = None
     self._include_cache = {}
+    self.compilation_targets = None
 
   @property
   def bucket(self):
@@ -321,30 +322,35 @@ class iOSApi(recipe_api.RecipeApi):
     # The same test may be configured to run on multiple platforms.
     tests = sorted(set(test['app'] for test in self.__config['tests']))
 
-    if analyze:
-      with self.m.step.context({'cwd': self.m.path['checkout']}):
-        affected_files = self.m.chromium_checkout.get_files_affected_by_patch()
+    if self.compilation_targets is None:
+      if analyze:
+        with self.m.step.context({'cwd': self.m.path['checkout']}):
+          affected_files = (
+            self.m.chromium_checkout.get_files_affected_by_patch())
 
-      test_targets, compilation_targets = (
-        self.m.filter.analyze(
-          affected_files,
-          tests,
-          self.__config['additional_compile_targets'],
-          'trybot_analyze_config.json',
-          additional_names=['chromium', 'ios'],
-          mb_mastername=self.__config['mastername'],
+        test_targets, self.compilation_targets = (
+          self.m.filter.analyze(
+            affected_files,
+            tests,
+            self.__config['additional_compile_targets'],
+            'trybot_analyze_config.json',
+            additional_names=['chromium', 'ios'],
+            mb_mastername=self.__config['mastername'],
+          )
         )
-      )
 
-      test_targets = set(test_targets)
+        test_targets = set(test_targets)
 
-      for test in self.__config['tests']:
-        if test['app'] not in test_targets:
-          test['skip'] = True
-    else:
-      compilation_targets = []
-      compilation_targets.extend(tests)
-      compilation_targets.extend(self.__config['additional_compile_targets'])
+        for test in self.__config['tests']:
+          if test['app'] not in test_targets:
+            test['skip'] = True
+      else:
+        self.compilation_targets = []
+        self.compilation_targets.extend(tests)
+        self.compilation_targets.extend(
+          self.__config['additional_compile_targets'])
+
+      self.compilation_targets.sort()
 
     cmd = ['ninja', '-C', cwd]
     cmd.extend(self.__config['compiler flags'])
@@ -353,7 +359,7 @@ class iOSApi(recipe_api.RecipeApi):
       cmd.extend(['-j', '50'])
       self.m.goma.start()
 
-    cmd.extend(sorted(compilation_targets))
+    cmd.extend(self.compilation_targets)
     exit_status = -1
     try:
       with self.m.step.context({'cwd': cwd, 'env': env}):

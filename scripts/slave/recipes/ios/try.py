@@ -4,6 +4,7 @@
 
 DEPS = [
   'ios',
+  'depot_tools/bot_update',
   'depot_tools/gclient',
   'depot_tools/tryserver',
   'recipe_engine/json',
@@ -21,10 +22,7 @@ def RunSteps(api):
     try:
       api.ios.build(analyze=True, suffix='with patch')
     except api.step.StepFailure:
-      bot_update_json = bot_update_step.json.output
-      api.gclient.c.revisions['src'] = str(
-          bot_update_json['properties']['got_revision'])
-      api.ios.checkout(patch=False, update_presentation=False)
+      api.bot_update.deapply_patch(bot_update_step)
       api.ios.build(suffix='without patch')
       raise
     api.ios.test_swarming()
