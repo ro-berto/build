@@ -1108,11 +1108,11 @@ class AndroidApi(recipe_api.RecipeApi):
             hasattr(result_step.test_utils, 'gtest_results')):
           json_results = self.m.json.input(
               result_step.test_utils.gtest_results.raw)
-          details = self.create_result_details(step_name,
-                                               json_results,
-                                               cs_base_url)
-          self.m.step.active_result.presentation.logs['result_details'] = (
-              details)
+          details_link = self.create_result_details(step_name,
+                                                    json_results,
+                                                    cs_base_url)
+          self.m.step.active_result.presentation.links['result_details'] = (
+              details_link)
       # Need to copy gtest results over. A few places call
       # |run_instrumentation_suite| function and then look for results in
       # the active_result.
@@ -1125,23 +1125,28 @@ class AndroidApi(recipe_api.RecipeApi):
       active_step.test_utils = result_step.test_utils
 
   def create_result_details(self, step_name, json_results_file, cs_base_url):
-    presentation_args = ['--json-file',
-                         json_results_file,
-                         '--master-name',
-                         self.m.properties.get('mastername')]
+    presentation_args = ['--json-file', json_results_file,
+                         '--test-name', step_name,
+                         '--builder-name', self.m.properties['buildername'],
+                         '--build-number', self.m.properties['buildnumber']]
     if cs_base_url:
       presentation_args.extend(['--cs-base-url', cs_base_url])
-    result_details = self.m.python(
-        '%s: generate result details' % step_name,
-        script=self.m.path['checkout'].join(
-            'build', 'android', 'pylib', 'results', 'presentation',
-            'test_results_presentation.py'),
-        args=presentation_args,
-        stdout=self.m.raw_io.output_text(),
-        step_test_data=(
-            lambda: self.m.raw_io.test_api.stream_output(
-                '<!DOCTYPE html><html></html>')))
-    return result_details.stdout.splitlines()
+
+    try:
+      result_details = self.m.python(
+          '%s: generate result details' % step_name,
+          script=self.m.path['checkout'].join(
+              'build', 'android', 'pylib', 'results', 'presentation',
+              'test_results_presentation.py'),
+          args=presentation_args,
+          stdout=self.m.raw_io.output_text(),
+          step_test_data=(
+              lambda: self.m.raw_io.test_api.stream_output(
+                  'https://storage.cloud.google.com/chromium-result-details')))
+      return result_details.stdout
+    except self.m.step.StepFailure as f:
+      return ('https://storage.googleapis.com/chromium-result-details/'
+              'UploadQuietFailure.txt')
 
   def _upload_render_test_failures(self, render_results_dir):
     """Uploads render test results. Generates HTML file displaying results."""
@@ -1451,11 +1456,11 @@ class AndroidApi(recipe_api.RecipeApi):
             hasattr(result_step.test_utils, 'gtest_results')):
           json_results = self.m.json.input(
               result_step.test_utils.gtest_results.raw)
-          details = self.create_result_details(step_name,
-                                               json_results,
-                                               None)
-          self.m.step.active_result.presentation.logs[
-              'result_details'] = details
+          details_link = self.create_result_details(step_name,
+                                                    json_results,
+                                                    None)
+          self.m.step.active_result.presentation.links['result_details'] = (
+              details_link)
         self.copy_gtest_results(result_step,
                                 self.m.step.active_result)
 

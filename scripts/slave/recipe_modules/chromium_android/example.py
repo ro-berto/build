@@ -380,3 +380,7 @@ def GenTests(api):
              api.json.output({'successes': ['passed_test1', 'passed_test2'],
                               'failures': ['failed_test_1', 'failed_test_2']}),
              retcode=1))
+
+  yield (api.test('upload_result_details_failures') +
+         properties_for('result_details') +
+         api.override_step_data('unittests: generate result details', retcode=1))
