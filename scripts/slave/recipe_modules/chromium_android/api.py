@@ -1477,7 +1477,8 @@ class AndroidApi(recipe_api.RecipeApi):
     with self.m.step.context({'env': self.m.chromium.get_env()}):
       return self.test_runner(
           '%s%s' % (str(suite), ' (%s)' % suffix if suffix else ''),
-          ['junit', '-s', suite] + args,
+          args=args,
+          wrapper_script_suite_name=str(suite),
           pass_adb_path=False,
           **kwargs)
 

@@ -2014,16 +2014,12 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Android32__M_Nexus5X_/src/build/android/test_runner.py",
-      "junit",
-      "-s",
-      "android_junit_tests",
+      "[BUILDER_CACHE]/Android32__M_Nexus5X_/src/out/Release/bin/run_android_junit_tests",
       "--verbose",
       "--release"
     ],
     "cwd": "[BUILDER_CACHE]/Android32__M_Nexus5X_",
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/Android32__M_Nexus5X_/src/out/Release",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/Android32__M_Nexus5X_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32__M_Nexus5X_/src/build/android:%(PATH)s"
     },

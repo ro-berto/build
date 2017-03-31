@@ -2148,15 +2148,11 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/android_dbg/src/build/android/test_runner.py",
-      "junit",
-      "-s",
-      "android_junit_tests",
+      "[BUILDER_CACHE]/android_dbg/src/out/Debug/bin/run_android_junit_tests",
       "--verbose"
     ],
     "cwd": "[BUILDER_CACHE]/android_dbg",
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_dbg/src/out/Debug",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_dbg/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_dbg/src/build/android:%(PATH)s"
     },
