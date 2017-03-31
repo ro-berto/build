@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright 2017 The Chromium Authors. All rights reserved.
+# Copyright 2014 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -7,6 +7,7 @@ import json
 import optparse
 import os
 import shutil
+import subprocess
 import sys
 import tempfile
 import traceback
@@ -35,7 +36,7 @@ def emit_warning(title, log=None):
     slave_utils.WriteLogLines(title, log.split('\n'))
 
 
-def merge_shard_results(summary_json, jsons_to_merge):
+def merge_shard_results(output_dir):
   """Reads JSON test output from all shards and combines them into one.
 
   Returns dict with merged test output on success or None on failure. Emits
@@ -44,7 +45,7 @@ def merge_shard_results(summary_json, jsons_to_merge):
   # summary.json is produced by swarming.py itself. We are mostly interested
   # in the number of shards.
   try:
-    with open(summary_json) as f:
+    with open(os.path.join(output_dir, 'summary.json')) as f:
       summary = json.load(f)
   except (IOError, ValueError):
     emit_warning(
@@ -77,7 +78,7 @@ def merge_shard_results(summary_json, jsons_to_merge):
             'Either it ran for too long (hard timeout) or it didn\'t produce '
             'I/O for an extended period of time (I/O timeout)')
       elif state == u'COMPLETED':
-        json_data, err_msg = load_shard_json(index, jsons_to_merge)
+        json_data, err_msg = load_shard_json(output_dir, index)
         if json_data:
           # Set-like fields.
           for key in ('all_tests', 'disabled_tests', 'global_tags'):
@@ -115,7 +116,7 @@ def merge_shard_results(summary_json, jsons_to_merge):
 OUTPUT_JSON_SIZE_LIMIT = 100 * 1024 * 1024  # 100 MB
 
 
-def load_shard_json(index, jsons_to_merge):
+def load_shard_json(output_dir, index):
   """Reads JSON output of the specified shard.
 
   Args:
@@ -128,20 +129,7 @@ def load_shard_json(index, jsons_to_merge):
     (exactly one of the tuple elements will be non-None).
   """
   # 'output.json' is set in swarming/api.py, gtest_task method.
-  rel_path = os.path.join(str(index), 'output.json')
-  matching_json_files = [
-      j for j in jsons_to_merge
-      if j.endswith(rel_path)]
-
-  if not matching_json_files:
-    print >> sys.stderr, 'shard %s test output missing' % index
-    return (None, 'shard %s test output was missing' % index)
-  elif len(matching_json_files) > 1:
-    print >> sys.stderr, 'duplicate test output for shard %s' % index
-    return (None, 'shard %s test output was duplicated' % index)
-
-  path = matching_json_files[0]
-
+  path = os.path.join(output_dir, str(index), 'output.json')
   try:
     filesize = os.stat(path).st_size
     if filesize > OUTPUT_JSON_SIZE_LIMIT:
@@ -178,28 +166,72 @@ def emit_test_annotations(exit_code, json_data):
   annotation_utils.annotate('', exit_code, parser)
 
 
-def standard_gtest_merge(
-    output_json, summary_json, jsons_to_merge):
+def main(args):
+  # Split |args| into options for shim and options for swarming.py script.
+  if '--' in args:
+    index = args.index('--')
+    shim_args, swarming_args = args[:index], args[index+1:]
+  else:
+    shim_args, swarming_args = args, []
 
-  output = merge_shard_results(summary_json, jsons_to_merge)
-  with open(output_json, 'wb') as f:
-    json.dump(output, f)
+  # Parse shim own's options.
+  parser = optparse.OptionParser()
+  parser.add_option('--swarming-client-dir')
+  parser.add_option('--temp-root-dir', default=tempfile.gettempdir())
+  parser.add_option('--merged-test-output')
+  options, extra_args = parser.parse_args(shim_args)
 
-  return 0
+  # Validate options.
+  if extra_args:
+    parser.error('Unexpected command line arguments')
+  if not options.swarming_client_dir:
+    parser.error('--swarming-client-dir is required')
 
+  # Prepare a directory to store JSON files fetched from isolate.
+  task_output_dir = tempfile.mkdtemp(
+      suffix='_swarming', dir=options.temp_root_dir)
 
-def main(raw_args):
+  # Start building the command line for swarming.py.
+  args = [
+    sys.executable,
+    '-u',
+    os.path.join(options.swarming_client_dir, 'swarming.py'),
+  ]
 
-  parser = argparse.ArgumentParser()
-  parser.add_argument('--build-properties')
-  parser.add_argument('--summary-json')
-  parser.add_argument('-o', '--output-json', required=True)
-  parser.add_argument('jsons_to_merge', nargs='*')
+  # swarming.py run uses '--' to separate args for swarming.py itself and for
+  # isolated command. Insert --task-output-dir into section of swarming.py args.
+  if '--' in swarming_args:
+    idx = swarming_args.index('--')
+    args.extend(swarming_args[:idx])
+    args.extend(['--task-output-dir', task_output_dir])
+    args.extend(swarming_args[idx:])
+  else:
+    args.extend(swarming_args)
+    args.extend(['--task-output-dir', task_output_dir])
 
-  args = parser.parse_args(raw_args)
+  exit_code = 1
+  try:
+    # Run the real script, regardless of an exit code try to find and parse
+    # JSON output files, since exit code may indicate that the isolated task
+    # failed, not the swarming.py invocation itself.
+    exit_code = subprocess.call(args)
 
-  return standard_gtest_merge(
-      args.output_json, args.summary_json, args.jsons_to_merge)
+    # Output parsing should not change exit code no matter what, so catch any
+    # exceptions and just log them.
+    try:
+      merged = merge_shard_results(task_output_dir)
+      emit_test_annotations(exit_code, merged)
+      if options.merged_test_output:
+        with open(options.merged_test_output, 'wb') as f:
+          json.dump(merged, f, separators=(',', ':'))
+    except Exception:
+      emit_warning(
+          'failed to process gtest output JSON', traceback.format_exc())
+
+  finally:
+    shutil.rmtree(task_output_dir, ignore_errors=True)
+
+  return exit_code
 
 
 if __name__ == '__main__':

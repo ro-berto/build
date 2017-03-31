@@ -34,7 +34,6 @@ def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('-o', '--output-json', required=True)
   parser.add_argument('--build-properties', help=argparse.SUPPRESS)
-  parser.add_argument('--summary-json', help=argparse.SUPPRESS)
   parser.add_argument('jsons_to_merge', nargs='*')
 
   args = parser.parse_args()

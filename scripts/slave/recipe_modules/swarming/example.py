@@ -24,13 +24,12 @@ PROPERTIES = {
   'platforms': Property(default=('win',)),
   'show_isolated_out_in_collect_step': Property(default=True),
   'show_shards_in_collect_step': Property(default=False),
-  'gtest_task': Property(default=False),
   'isolated_script_task': Property(default=False),
   'merge': Property(default=None),
 }
 
 def RunSteps(api, platforms, show_isolated_out_in_collect_step,
-             show_shards_in_collect_step, gtest_task, isolated_script_task,
+             show_shards_in_collect_step, isolated_script_task,
              merge):
   # Checkout swarming client.
   api.swarming_client.checkout('master')
@@ -182,25 +181,6 @@ def GenTests(api):
   data = {
     'shards': [
       {
-        '': '',
-      }
-    ]
-  }
-
-  yield (
-      api.test('gtest_with_outputs_ref') +
-      api.step_data(
-          'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
-      api.step_data(
-          'hello_world on Windows-7-SP1',
-          api.swarming.canned_summary_output() +
-          api.test_utils.canned_gtest_output(True))
-    )
-
-  data = {
-    'shards': [
-      {
         'abandoned_ts': '2014-09-25T01:41:00.123',
         'bot_id': 'vm30',
         'completed_ts': None,
@@ -227,7 +207,7 @@ def GenTests(api):
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
-      api.step_data('hello_world on Windows-7-SP1', api.swarming.summary(data)))
+      api.step_data('hello_world on Windows-7-SP1', api.json.output(data)))
   yield (
       api.test('isolated_script_expired_old') +
       api.step_data(
@@ -244,7 +224,7 @@ def GenTests(api):
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
-      api.step_data('hello_world on Windows-7-SP1', api.swarming.summary(data)))
+      api.step_data('hello_world on Windows-7-SP1', api.json.output(data)))
   yield (
       api.test('isolated_script_expired_new') +
       api.step_data(
@@ -261,7 +241,7 @@ def GenTests(api):
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
-      api.step_data('hello_world on Windows-7-SP1', api.swarming.summary(data)))
+      api.step_data('hello_world on Windows-7-SP1', api.json.output(data)))
   yield (
       api.test('isolated_script_timeout_old') +
       api.step_data(
@@ -278,7 +258,7 @@ def GenTests(api):
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
-      api.step_data('hello_world on Windows-7-SP1', api.swarming.summary(data)))
+      api.step_data('hello_world on Windows-7-SP1', api.json.output(data)))
   yield (
       api.test('isolated_script_timeout_new') +
       api.step_data(

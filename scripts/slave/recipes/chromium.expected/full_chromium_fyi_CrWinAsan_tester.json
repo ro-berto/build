@@ -372,19 +372,18 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::swarming]\\resources\\collect_task.py",
-      "-o",
-      "/path/to/tmp/json",
-      "--task-output-dir",
-      "/path/to/tmp/",
-      "--merge-script",
-      "RECIPE_MODULE[build::swarming]\\resources\\standard_gtest_merge.py",
-      "--merge-additional-args",
-      "[]",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "--show-path",
       "--",
       "python",
-      "-u",
-      "[BUILDER_CACHE]\\CrWinAsan_tester\\src\\tools\\swarming_client\\swarming.py",
+      "RECIPE_MODULE[build::swarming]\\resources\\collect_gtest_task.py",
+      "--swarming-client-dir",
+      "[BUILDER_CACHE]\\CrWinAsan_tester\\src\\tools\\swarming_client",
+      "--temp-root-dir",
+      "[TMP_BASE]",
+      "--merged-test-output",
+      "/path/to/tmp/json",
+      "--",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -395,13 +394,13 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
+    "cwd": "[BUILDER_CACHE]\\CrWinAsan_tester",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "name": "browser_tests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br>swarming pending 71s<br>swarming pending 71s@@@",
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br>swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
@@ -460,8 +459,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": \"chromium.fyi\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
-      "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
   {

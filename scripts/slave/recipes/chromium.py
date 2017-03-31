@@ -670,10 +670,8 @@ def GenTests(api):
             },
         })
     ) +
-    api.override_step_data(
-        'telemetry_gpu_unittests',
-        api.swarming.canned_summary_output(2)
-        + api.test_utils.canned_isolated_script_output(
+    api.override_step_data('telemetry_gpu_unittests',
+        api.test_utils.canned_isolated_script_output(
             passing=True, is_win=False, swarming=True,
             shards=2, isolated_script_passing=True,
             use_json_test_format=True, output_chartjson=True),
@@ -723,8 +721,7 @@ def GenTests(api):
     ) +
     api.override_step_data(
         'benchmark on Intel GPU on Windows on Windows-10-10586',
-        api.swarming.canned_summary_output(2)
-        + api.test_utils.canned_isolated_script_output(
+        api.test_utils.canned_isolated_script_output(
             passing=True, is_win=True, swarming=True,
             shards=2, isolated_script_passing=True, valid=True,
             output_chartjson=True),
@@ -778,8 +775,7 @@ def GenTests(api):
     ) +
     api.override_step_data(
         'benchmark on Intel GPU on Windows on Windows-10-10586',
-        api.swarming.canned_summary_output(2)
-        + api.test_utils.canned_isolated_script_output(
+        api.test_utils.canned_isolated_script_output(
             passing=False, is_win=True, swarming=True,
             shards=2, isolated_script_passing=False,
             use_json_test_format=True, output_chartjson=True),
@@ -829,8 +825,7 @@ def GenTests(api):
     ) +
     api.override_step_data(
         'benchmark on Intel GPU on Windows on Windows-10-10586',
-        api.swarming.canned_summary_output(2)
-        + api.test_utils.canned_isolated_script_output(
+        api.test_utils.canned_isolated_script_output(
             passing=True, is_win=True, swarming=True,
             shards=2, isolated_script_passing=True, valid=True,
             output_chartjson=False),
@@ -881,8 +876,7 @@ def GenTests(api):
     ) +
     api.override_step_data(
         'benchmark on Intel GPU on Windows on Windows-10-10586',
-        api.swarming.canned_summary_output(2)
-        + api.test_utils.canned_isolated_script_output(
+        api.test_utils.canned_isolated_script_output(
             passing=True, is_win=True, swarming=True,
             shards=2, isolated_script_passing=True, valid=True,
             output_chartjson=True, benchmark_enabled=False),
@@ -935,8 +929,7 @@ def GenTests(api):
     ) +
     api.override_step_data(
         'benchmark on Intel GPU on Windows on Windows-10-10586',
-        api.swarming.canned_summary_output(2)
-        + api.test_utils.canned_isolated_script_output(
+        api.test_utils.canned_isolated_script_output(
             passing=True, is_win=True, swarming=True,
             shards=1, isolated_script_passing=True, valid=True,
             output_chartjson=True, benchmark_enabled=False, empty_shards=[1]),
@@ -969,10 +962,8 @@ def GenTests(api):
             },
         })
     ) +
-    api.override_step_data(
-        'telemetry_gpu_unittests',
-        api.swarming.canned_summary_output(3)
-        + api.test_utils.canned_isolated_script_output(
+    api.override_step_data('telemetry_gpu_unittests',
+        api.test_utils.canned_isolated_script_output(
             passing=True, is_win=False, swarming=True,
             shards=3, isolated_script_passing=True, corrupt=True,
             use_json_test_format=True, output_chartjson=True),
@@ -1036,10 +1027,8 @@ def GenTests(api):
             },
         })
     ) +
-    api.override_step_data(
-        'telemetry_gpu_unittests',
-        api.swarming.canned_summary_output(2)
-        + api.test_utils.canned_isolated_script_output(
+    api.override_step_data('telemetry_gpu_unittests',
+        api.test_utils.canned_isolated_script_output(
             passing=False, is_win=False, swarming=True,
             shards=2, isolated_script_passing=False,
             use_json_test_format=True), retcode=1)
@@ -1073,8 +1062,7 @@ def GenTests(api):
     ) +
     api.override_step_data(
       'telemetry_gpu_unittests',
-      api.swarming.canned_summary_output(2)
-      + api.test_utils.canned_isolated_script_output(
+      api.test_utils.canned_isolated_script_output(
         passing=True, is_win=False, swarming=True,
         shards=2, isolated_script_passing=True, valid=True,
         missing_shards=[1]),
@@ -1109,8 +1097,7 @@ def GenTests(api):
     ) +
     api.override_step_data(
       'telemetry_gpu_unittests',
-      api.swarming.canned_summary_output(2)
-      + api.test_utils.canned_isolated_script_output(
+      api.test_utils.canned_isolated_script_output(
         passing=True, is_win=False, swarming=True,
         shards=2, isolated_script_passing=True, valid=True,
         empty_shards=[1]),
@@ -1146,8 +1133,7 @@ def GenTests(api):
     ) +
     api.override_step_data(
       'telemetry_gpu_unittests',
-      api.swarming.canned_summary_output(2)
-      + api.test_utils.canned_isolated_script_output(
+      api.test_utils.canned_isolated_script_output(
         passing=True, is_win=False, swarming=True,
         shards=4, isolated_script_passing=True, valid=True,
         empty_shards=[1], output_chartjson=True),
@@ -1181,10 +1167,8 @@ def GenTests(api):
             },
         })
     ) +
-    api.override_step_data(
-        'telemetry_gpu_unittests',
-        api.swarming.canned_summary_output(2)
-        + api.test_utils.canned_isolated_script_output(
+    api.override_step_data('telemetry_gpu_unittests',
+        api.test_utils.canned_isolated_script_output(
             passing=True, is_win=False, swarming=True,
             shards=2, isolated_script_passing=True, valid=True,
             output_chartjson=True, benchmark_enabled=False),
@@ -1222,8 +1206,7 @@ def GenTests(api):
     ) +
     api.override_step_data(
       'telemetry_gpu_unittests',
-      api.swarming.canned_summary_output(2)
-      + api.test_utils.canned_isolated_script_output(
+      api.test_utils.canned_isolated_script_output(
         passing=True, is_win=False, swarming=True,
         shards=2, isolated_script_passing=True, valid=True,
         missing_shards=[1], output_chartjson=True),
@@ -1264,8 +1247,7 @@ def GenTests(api):
     ) +
     api.override_step_data(
       'telemetry_gpu_unittests',
-      api.swarming.canned_summary_output(2)
-      + api.test_utils.canned_isolated_script_output(
+      api.test_utils.canned_isolated_script_output(
         passing=True, is_win=False, swarming=True,
         shards=2, isolated_script_passing=True, valid=True,
         missing_shards=[1], output_chartjson=True),
@@ -1440,10 +1422,8 @@ def GenTests(api):
             },
         })
     ) +
-    api.override_step_data(
-        'telemetry_gpu_unittests',
-        api.swarming.canned_summary_output()
-        + api.test_utils.canned_isolated_script_output(
+    api.override_step_data('telemetry_gpu_unittests',
+        api.test_utils.canned_isolated_script_output(
             passing=True, is_win=False, swarming=True,
             isolated_script_passing=False, valid=True),
         retcode=255)
@@ -1472,10 +1452,8 @@ def GenTests(api):
             },
         })
     ) +
-    api.override_step_data(
-        'telemetry_gpu_unittests',
-        api.swarming.canned_summary_output()
-        + api.test_utils.canned_isolated_script_output(
+    api.override_step_data('telemetry_gpu_unittests',
+        api.test_utils.canned_isolated_script_output(
             passing=True, is_win=False, swarming=True,
             isolated_script_passing=True, valid=True),
         retcode=255)
@@ -1505,10 +1483,8 @@ def GenTests(api):
             },
         })
     ) +
-    api.override_step_data(
-        'telemetry_gpu_unittests',
-        api.swarming.canned_summary_output(internal_failure=True)
-        + api.test_utils.canned_isolated_script_output(
+    api.override_step_data('telemetry_gpu_unittests',
+        api.test_utils.canned_isolated_script_output(
             passing=False, is_win=False, swarming=True,
             swarming_internal_failure=True, isolated_script_passing=True,
             valid=True),
@@ -1904,7 +1880,7 @@ def GenTests(api):
             },
         })
     ) +
-    api.override_step_data('base_unittests', retcode=1)
+    api.step_data('base_unittests', retcode=1)
   )
 
   yield (

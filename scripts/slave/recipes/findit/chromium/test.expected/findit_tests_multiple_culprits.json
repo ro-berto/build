@@ -966,19 +966,18 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::swarming]/resources/collect_task.py",
-      "-o",
-      "/path/to/tmp/json",
-      "--task-output-dir",
-      "/path/to/tmp/",
-      "--merge-script",
-      "RECIPE_MODULE[build::swarming]/resources/standard_gtest_merge.py",
-      "--merge-additional-args",
-      "[]",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
       "--",
       "python",
-      "-u",
-      "[BUILDER_CACHE]/mac/src/tools/swarming_client/swarming.py",
+      "RECIPE_MODULE[build::swarming]/resources/collect_gtest_task.py",
+      "--swarming-client-dir",
+      "[BUILDER_CACHE]/mac/src/tools/swarming_client",
+      "--temp-root-dir",
+      "[TMP_BASE]",
+      "--merged-test-output",
+      "/path/to/tmp/json",
+      "--",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -989,7 +988,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
+    "cwd": "[BUILDER_CACHE]/mac",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -998,7 +997,7 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@Run on OS: 'Mac-10.9'<br>swarming pending 71s<br/>failures:<br/>Test.Two<br/><br>swarming pending 71s@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.9'<br/>failures:<br/>Test.Two<br/><br>swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
@@ -1058,7 +1057,6 @@
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
@@ -1793,19 +1791,18 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::swarming]/resources/collect_task.py",
-      "-o",
-      "/path/to/tmp/json",
-      "--task-output-dir",
-      "/path/to/tmp/",
-      "--merge-script",
-      "RECIPE_MODULE[build::swarming]/resources/standard_gtest_merge.py",
-      "--merge-additional-args",
-      "[]",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
       "--",
       "python",
-      "-u",
-      "[BUILDER_CACHE]/mac/src/tools/swarming_client/swarming.py",
+      "RECIPE_MODULE[build::swarming]/resources/collect_gtest_task.py",
+      "--swarming-client-dir",
+      "[BUILDER_CACHE]/mac/src/tools/swarming_client",
+      "--temp-root-dir",
+      "[TMP_BASE]",
+      "--merged-test-output",
+      "/path/to/tmp/json",
+      "--",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1816,7 +1813,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
+    "cwd": "[BUILDER_CACHE]/mac",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -1825,7 +1822,7 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@Run on OS: 'Mac-10.9'<br>swarming pending 71s<br/>failures:<br/>Test.Three<br/><br>swarming pending 71s@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.9'<br/>failures:<br/>Test.Three<br/><br>swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
@@ -1885,7 +1882,6 @@
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
@@ -2620,19 +2616,18 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::swarming]/resources/collect_task.py",
-      "-o",
-      "/path/to/tmp/json",
-      "--task-output-dir",
-      "/path/to/tmp/",
-      "--merge-script",
-      "RECIPE_MODULE[build::swarming]/resources/standard_gtest_merge.py",
-      "--merge-additional-args",
-      "[]",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
       "--",
       "python",
-      "-u",
-      "[BUILDER_CACHE]/mac/src/tools/swarming_client/swarming.py",
+      "RECIPE_MODULE[build::swarming]/resources/collect_gtest_task.py",
+      "--swarming-client-dir",
+      "[BUILDER_CACHE]/mac/src/tools/swarming_client",
+      "--temp-root-dir",
+      "[TMP_BASE]",
+      "--merged-test-output",
+      "/path/to/tmp/json",
+      "--",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -2643,7 +2638,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
+    "cwd": "[BUILDER_CACHE]/mac",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -2652,7 +2647,7 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@Run on OS: 'Mac-10.9'<br>swarming pending 71s<br/>failures:<br/>Test.One<br/><br>swarming pending 71s@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.9'<br/>failures:<br/>Test.One<br/><br>swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
@@ -2712,7 +2707,6 @@
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
@@ -3447,19 +3441,18 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::swarming]/resources/collect_task.py",
-      "-o",
-      "/path/to/tmp/json",
-      "--task-output-dir",
-      "/path/to/tmp/",
-      "--merge-script",
-      "RECIPE_MODULE[build::swarming]/resources/standard_gtest_merge.py",
-      "--merge-additional-args",
-      "[]",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
       "--",
       "python",
-      "-u",
-      "[BUILDER_CACHE]/mac/src/tools/swarming_client/swarming.py",
+      "RECIPE_MODULE[build::swarming]/resources/collect_gtest_task.py",
+      "--swarming-client-dir",
+      "[BUILDER_CACHE]/mac/src/tools/swarming_client",
+      "--temp-root-dir",
+      "[TMP_BASE]",
+      "--merged-test-output",
+      "/path/to/tmp/json",
+      "--",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -3470,7 +3463,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
+    "cwd": "[BUILDER_CACHE]/mac",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -3478,7 +3471,7 @@
     "name": "test r2.gl_tests (r2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@Run on OS: 'Mac-10.9'<br>swarming pending 71s<br>swarming pending 71s@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.9'<br>swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
@@ -3537,8 +3530,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": \"chromium.mac\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
-      "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
   {
@@ -4272,19 +4264,18 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::swarming]/resources/collect_task.py",
-      "-o",
-      "/path/to/tmp/json",
-      "--task-output-dir",
-      "/path/to/tmp/",
-      "--merge-script",
-      "RECIPE_MODULE[build::swarming]/resources/standard_gtest_merge.py",
-      "--merge-additional-args",
-      "[]",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
       "--",
       "python",
-      "-u",
-      "[BUILDER_CACHE]/mac/src/tools/swarming_client/swarming.py",
+      "RECIPE_MODULE[build::swarming]/resources/collect_gtest_task.py",
+      "--swarming-client-dir",
+      "[BUILDER_CACHE]/mac/src/tools/swarming_client",
+      "--temp-root-dir",
+      "[TMP_BASE]",
+      "--merged-test-output",
+      "/path/to/tmp/json",
+      "--",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -4295,7 +4286,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
+    "cwd": "[BUILDER_CACHE]/mac",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -4304,7 +4295,7 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@Run on OS: 'Mac-10.9'<br>swarming pending 71s<br/>failures:<br/>Test.Two<br/><br>swarming pending 71s@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.9'<br/>failures:<br/>Test.Two<br/><br>swarming pending 71s@@@",
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
@@ -4364,7 +4355,6 @@
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
