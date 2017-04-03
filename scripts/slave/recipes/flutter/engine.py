@@ -39,7 +39,7 @@ def RunHostTests(api, out_dir):
     if api.platform.is_mac:
       api.step('Test Flutter Channels', ['./flutter_channels_unittests'])
     api.step('Test FML', [
-      './fml_unittests, --gtest_filter="-*TimeSensitiveTest*"'
+      './fml_unittests', '--gtest_filter="-*TimeSensitiveTest*"'
     ])
     api.step('Test FTL', ['./ftl_unittests'])
     api.step('Test Synchronization', ['./synchronization_unittests'])

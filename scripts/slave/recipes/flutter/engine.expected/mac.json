@@ -138,7 +138,8 @@
   },
   {
     "cmd": [
-      "./fml_unittests, --gtest_filter=\"-*TimeSensitiveTest*\""
+      "./fml_unittests",
+      "--gtest_filter=\"-*TimeSensitiveTest*\""
     ],
     "cwd": "[START_DIR]/src/out/host_debug_unopt",
     "env": {
