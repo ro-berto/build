@@ -319,9 +319,11 @@ def _exec_recipe(args, rt, stream, basedir):
   if legacy_remote_run:
     # path_config property defines what paths a build uses for checkout, git
     # cache, goma cache, etc.
-    # Unless it is explicitly specified by a builder, use paths for buildbot
-    # environment.
-    properties['path_config'] = properties.get('path_config', 'buildbot')
+    #
+    # TODO(dnj or phajdan): Rename "kitchen" path config to "remote_run_legacy".
+    # "kitchen" was never correct, and incorrectly implies that Kitchen is
+    # somehow involved int his path config.
+    properties['path_config'] = 'kitchen'
     properties['bot_id'] = properties['slavename']
   else:
     # If we're using Kitchen, our "path_config" must be empty or "kitchen".
