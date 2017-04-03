@@ -33,6 +33,16 @@ def Build(api, config, *targets):
   api.step('build %s' % ' '.join([config] + list(targets)), ninja_args)
 
 
+def RunHostTests(api, out_dir):
+  directory = api.path['start_dir'].join('src', out_dir)
+  with api.step.context({'cwd': directory}):
+    api.step('Test Flutter Channels', ['./flutter_channels_unittests'])
+    api.step('Test FML', ['./fml_unittests'])
+    api.step('Test FTL', ['./ftl_unittests'])
+    api.step('Test Synchronization', ['./synchronization_unittests'])
+    api.step('Test WTF', ['./wtf_unittests'])
+
+
 def RunGN(api, *args):
   checkout = api.path['start_dir'].join('src')
   gn_cmd = ['python', checkout.join('flutter/tools/gn')]
@@ -152,6 +162,7 @@ def BuildLinuxAndroidArm(api):
 def BuildLinux(api):
   RunGN(api, '--unoptimized')
   Build(api, 'host_debug_unopt')
+  RunHostTests(api, 'out/host_debug_unopt')
   UploadArtifacts(api, 'linux-x64', [
     'out/host_debug_unopt/icudtl.dat',
     'out/host_debug_unopt/flutter_tester',
@@ -184,6 +195,8 @@ def BuildMac(api):
   RunGN(api, '--runtime-mode', 'release', '--android')
 
   Build(api, 'host_debug_unopt')
+  RunHostTests(api, 'out/host_debug_unopt')
+
   Build(api, 'android_profile', 'flutter/lib/snapshot')
   Build(api, 'android_release', 'flutter/lib/snapshot')
 
