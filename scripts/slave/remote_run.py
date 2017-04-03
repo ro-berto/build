@@ -5,6 +5,7 @@
 
 import argparse
 import collections
+import contextlib
 import copy
 import json
 import logging
@@ -76,12 +77,12 @@ CipdPins = collections.namedtuple('CipdPins', ('recipes', 'kitchen'))
 # Stable CIPD pin set.
 _STABLE_CIPD_PINS = CipdPins(
       recipes='git_revision:e77477ba61ef082e2e34d58fd1251a1cb707f698',
-      kitchen='')
+      kitchen=None)
 
 # Canary CIPD pin set.
 _CANARY_CIPD_PINS = CipdPins(
-      recipes='git_revision:e77477ba61ef082e2e34d58fd1251a1cb707f698',
-      kitchen='git_revision:054be2c5e4f94f6529e3b89087b695d6db6dbfcf')
+      recipes=None,
+      kitchen='git_revision:286917984487c80d97a613115ac311b296c7f87e')
 
 
 def _get_cipd_pins(mastername, buildername, force_canary):
@@ -95,7 +96,9 @@ def all_cipd_packages():
   """Generator which yields all referenced CIPD packages."""
   # All CIPD packages are in top-level platform config.
   for pins in (_STABLE_CIPD_PINS, _CANARY_CIPD_PINS):
-    yield cipd.CipdPackage(name=_RECIPES_PY_CIPD_PACKAGE, version=pins.recipes)
+    if pins.recipes: # TODO(dnj): Remove me when everything runs on Kitchen.
+      yield cipd.CipdPackage(name=_RECIPES_PY_CIPD_PACKAGE,
+                             version=pins.recipes)
     if pins.kitchen: # TODO(dnj): Remove me when everything runs on Kitchen.
       yield cipd.CipdPackage(name=_KITCHEN_CIPD_PACKAGE, version=pins.kitchen)
 
@@ -162,33 +165,65 @@ def _install_cipd_packages(path, *packages):
         proc.returncode,))
 
 
-def _rename_or_delete(src, dst):
-  if not os.path.isdir(src):
-    return
-  if os.path.isdir(dst):
-    LOGGER.info('Removing legacy [%s] in favor of [%s]', src, dst)
-    chromium_utils.RemoveDirectory(src)
+def _cleanup_old_layouts(using_kitchen, properties, buildbot_build_dir,
+                         cache_dir):
+  cleanup_paths = []
+
+  # Make switching to remote_run easier: we do not use buildbot workdir,
+  # and it takes disk space leading to out of disk errors.
+  buildbot_workdir = properties.get('workdir')
+  if buildbot_workdir and os.path.isdir(buildbot_workdir):
+    try:
+      buildbot_workdir = os.path.realpath(buildbot_workdir)
+      buildbot_build_dir = os.path.realpath(buildbot_build_dir)
+      if buildbot_build_dir.startswith(buildbot_workdir):
+        buildbot_workdir = buildbot_build_dir
+
+      # Buildbot workdir is usually used as current working directory,
+      # so do not remove it, but delete all of the contents. Deleting
+      # current working directory of a running process may cause
+      # confusing errors.
+      cleanup_paths.extend(os.path.join(buildbot_workdir, x)
+                           for x in os.listdir(buildbot_workdir))
+    except Exception:
+      # It's preferred that we keep going rather than fail the build
+      # on optional cleanup.
+      LOGGER.exception('Buildbot workdir cleanup failed: %s', buildbot_workdir)
+
+  if using_kitchen:
+    # We want to delete the 'git_cache' cache directory, which was used by the
+    # legacy "remote" code path.
+    cleanup_paths.append(os.path.join(cache_dir, 'git_cache'))
+
+    # We want to delete "<cache>/b", the legacy build cache directory. We will
+    # use "<cache>/builder" from the "generic" infra configuration setup.
+    cleanup_paths.append(os.path.join(cache_dir, 'b'))
   else:
-    LOGGER.info('Moving [%s] => [%s]', src, dst)
-    chromium_utils.MoveFile(src, dst)
+    # If we have a 'git' cache directory from a previous Kitchen run, we should
+    # delete that in favor of the 'git_cache' cache directory.
+    cleanup_paths.append(os.path.join(cache_dir, 'git'))
+
+    # We want to delete "<cache>/builder" from the Kitchen run.
+    cleanup_paths.append(os.path.join(cache_dir, 'builder'))
+
+  cleanup_paths = [p for p in cleanup_paths if os.path.exists(p)]
+  if cleanup_paths:
+    LOGGER.info('Cleaning up %d old layout path(s)...', len(cleanup_paths))
+
+    for path in cleanup_paths:
+      LOGGER.info('Removing path from previous layout: %s', path)
+      try:
+        chromium_utils.RemovePath(path)
+      except Exception:
+        LOGGER.exception('Failed to cleanup path: %s', path)
 
 
-def _remote_run_with_kitchen(args, stream, pins, properties, tempdir, basedir):
+def _remote_run_with_kitchen(args, stream, pins, properties, tempdir, basedir,
+                             cache_dir):
   # Write our build properties to a JSON file.
   properties_file = os.path.join(tempdir, 'remote_run_properties.json')
   with open(properties_file, 'w') as f:
     json.dump(properties, f)
-
-  # "/b/c" as a cache directory.
-  cache_dir = os.path.join(BUILDBOT_ROOT, 'c')
-  try:
-    # Kitchen-style paths use a Git cache directory named 'git'. However,
-    # traditional paths use 'git_cache'. We will try and convert these paths
-    # and, failing that, delete the original one.
-    _rename_or_delete(os.path.join(cache_dir, 'git_cache'),
-                      os.path.join(cache_dir, 'git'))
-  except Exception as e:
-    LOGGER.error('Failed to update Git cache paths: %s', e)
 
   # Create our directory structure.
   recipe_temp_dir = os.path.join(tempdir, 't')
@@ -292,7 +327,7 @@ def _remote_run_with_kitchen(args, stream, pins, properties, tempdir, basedir):
   return recipe_return_code
 
 
-def _exec_recipe(args, rt, stream, basedir):
+def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir):
   tempdir = rt.tempdir(basedir)
   LOGGER.info('Using temporary directory: [%s].', tempdir)
 
@@ -310,13 +345,12 @@ def _exec_recipe(args, rt, stream, basedir):
                         args.canary or 'remote_run_canary' in properties)
   if args.kitchen:
     pins = pins._replace(kitchen=args.kitchen)
-  legacy_remote_run = not pins.kitchen
 
   # Augment our input properties...
   properties['build_data_dir'] = build_data_dir
   properties['builder_id'] = 'master.%s:%s' % (mastername, buildername)
 
-  if legacy_remote_run:
+  if not pins.kitchen:
     # path_config property defines what paths a build uses for checkout, git
     # cache, goma cache, etc.
     #
@@ -341,53 +375,23 @@ def _exec_recipe(args, rt, stream, basedir):
   cipd_bootstrap_v2.high_level_ensure_cipd_client(
     basedir, properties.get(mastername))
 
-  # Make switching to remote_run easier: we do not use buildbot workdir,
-  # and it takes disk space leading to out of disk errors.
-  buildbot_workdir = properties.get('workdir')
-  if buildbot_workdir:
-    try:
-      if os.path.exists(buildbot_workdir):
-        buildbot_workdir = os.path.realpath(buildbot_workdir)
-        cwd = os.path.realpath(os.getcwd())
-        if cwd.startswith(buildbot_workdir):
-          buildbot_workdir = cwd
+  # "/b/c" as a cache directory.
+  cache_dir = os.path.join(BUILDBOT_ROOT, 'c')
 
-        LOGGER.info('Cleaning up buildbot workdir %r', buildbot_workdir)
-
-        # Buildbot workdir is usually used as current working directory,
-        # so do not remove it, but delete all of the contents. Deleting
-        # current working directory of a running process may cause
-        # confusing errors.
-        for p in (os.path.join(buildbot_workdir, x)
-                  for x in os.listdir(buildbot_workdir)):
-          LOGGER.info('Deleting %r', p)
-          chromium_utils.RemovePath(p)
-    except Exception as e:
-      # It's preferred that we keep going rather than fail the build
-      # on optional cleanup.
-      LOGGER.exception('Buildbot workdir cleanup failed: %s', e)
+  # Cleanup data from old builds.
+  _cleanup_old_layouts(pins.kitchen, properties, buildbot_build_dir, cache_dir)
 
   # (Canary) Use Kitchen if configured.
   # TODO(dnj): Make this the only path once we move to Kitchen.
-  if not legacy_remote_run:
-    return _remote_run_with_kitchen(args, stream, pins, properties, tempdir,
-        basedir)
+  if pins.kitchen:
+    return _remote_run_with_kitchen(
+        args, stream, pins, properties, tempdir, basedir, cache_dir)
 
   ##
   # Classic Remote Run
   #
   # TODO(dnj): Delete this in favor of Kitchen.
   ##
-
-  cache_dir = os.path.join(BUILDBOT_ROOT, 'c')
-  try:
-    # Kitchen-style paths use a Git cache directory named 'git'. However,
-    # traditional paths use 'git_cache'. If we deployed a Kitchen-style cache
-    # on this bot, convert it back to a non-Kitchen cache.
-    _rename_or_delete(os.path.join(cache_dir, 'git'),
-                      os.path.join(cache_dir, 'git_cache'))
-  except Exception as e:
-    LOGGER.error('Failed to revert Git cache paths: %s', e)
 
   properties_file = os.path.join(tempdir, 'remote_run_properties.json')
   with open(properties_file, 'w') as f:
@@ -446,7 +450,7 @@ def _exec_recipe(args, rt, stream, basedir):
     bs.annotate(stream)
     _ = _call(bs.cmd)
     recipe_return_code = bs.get_result()
-  except logdog_bootstrap.NotBootstrapped as e:
+  except logdog_bootstrap.NotBootstrapped:
     LOGGER.info('Not using LogDog. Invoking `recipes.py` directly.')
     recipe_return_code = _call(recipe_cmd)
 
@@ -497,8 +501,9 @@ def main(argv, stream):
 
   args = parser.parse_args(argv[1:])
 
+  buildbot_build_dir = os.getcwd()
   try:
-    basedir = chromium_utils.FindUpward(os.getcwd(), 'b')
+    basedir = chromium_utils.FindUpward(buildbot_build_dir, 'b')
   except chromium_utils.PathNotFound as e:
     LOGGER.warn(e)
     # Use base directory inside system temporary directory - if we use slave
@@ -520,7 +525,7 @@ def main(argv, stream):
     # Explicitly clean up possibly leaked temporary directories
     # from previous runs.
     rt.cleanup(basedir)
-    return _exec_recipe(args, rt, stream, basedir)
+    return _exec_recipe(args, rt, stream, basedir, buildbot_build_dir)
 
 
 def shell_main(argv):
