@@ -52,7 +52,12 @@ def _build_and_test(api, suffix=''):
     )
 
     api.step(
-      'build and test node.js%s' % suffix,
+      'build node.js%s' % suffix,
+      ['make', '-j8'],
+    )
+
+    api.step(
+      'build addons and test node.js%s' % suffix,
       ['make', '-j8', 'test-ci'],
     )
 

@@ -87,11 +87,19 @@
   {
     "cmd": [
       "make",
+      "-j8"
+    ],
+    "cwd": "[START_DIR]/node.js",
+    "name": "build node.js"
+  },
+  {
+    "cmd": [
+      "make",
       "-j8",
       "test-ci"
     ],
     "cwd": "[START_DIR]/node.js",
-    "name": "build and test node.js"
+    "name": "build addons and test node.js"
   },
   {
     "name": "$result",
