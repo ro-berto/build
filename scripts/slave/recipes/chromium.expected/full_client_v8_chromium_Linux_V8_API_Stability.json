@@ -202,10 +202,11 @@
       "--",
       "--build-config-fs",
       "Release",
+      "--use-src-side-runtest-py",
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/Linux_V8_API_Stability/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"test_bot\", \"buildername\": \"Linux V8 API Stability\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"slavename\": \"test_bot\", \"target_platform\": \"linux\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"Linux V8 API Stability\", \"buildnumber\": 571, \"mastername\": \"client.v8.chromium\", \"slavename\": \"test_bot\", \"target_platform\": \"linux\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -218,12 +219,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/Linux_V8_API_Stability/src/testing/buildbot/chromium.fyi.json",
+      "[BUILDER_CACHE]/Linux_V8_API_Stability/src/testing/buildbot/client.v8.chromium.json",
       "/path/to/tmp/json"
     ],
-    "name": "read test spec (chromium.fyi.json)",
+    "name": "read test spec (client.v8.chromium.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [BUILDER_CACHE]/Linux_V8_API_Stability/src/testing/buildbot/chromium.fyi.json@@@",
+      "@@@STEP_TEXT@path: [BUILDER_CACHE]/Linux_V8_API_Stability/src/testing/buildbot/client.v8.chromium.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -248,7 +249,7 @@
       "[BUILDER_CACHE]/Linux_V8_API_Stability/src/tools/mb/mb.py",
       "gen",
       "-m",
-      "chromium.fyi",
+      "client.v8.chromium",
       "-b",
       "Linux V8 API Stability",
       "--config-file",
@@ -472,7 +473,7 @@
       "--buildbot-buildername",
       "Linux V8 API Stability",
       "--buildbot-mastername",
-      "chromium.fyi",
+      "client.v8.chromium",
       "--buildbot-slavename",
       "test_bot"
     ],

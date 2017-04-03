@@ -664,17 +664,6 @@
               "compile_v2"
             ]
           },
-          "Linux V8 API Stability": {
-            "tree_notify": [
-              "machenbach@chromium.org",
-              "hablich@chromium.org"
-            ],
-            "forgive_all": "true",
-            "closing_optional": [
-              "compile"
-            ],
-            "subject_template": "V8 API checker %(result)s in %(project_name)s, revision %(revision)s"
-          },
           "Ozone Linux": {
             "tree_notify": [
               "thomasanderson@chromium.org",

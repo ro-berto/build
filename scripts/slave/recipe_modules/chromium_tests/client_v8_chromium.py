@@ -48,5 +48,23 @@ SPEC = {
       'enable_swarming': True,
       'checkout_dir': 'linux',
     },
+    'Linux V8 API Stability': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['v8_canary', 'with_branch_heads'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder_tester',
+      'compile_targets': [
+        'all',
+      ],
+      'test_results_config': 'staging_server',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
   },
 }

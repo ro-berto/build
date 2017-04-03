@@ -126,6 +126,13 @@
         "status-url": "https://pdfium-status.appspot.com",
         "track-revisions": true
     },
+    "v8-chromium": {
+        "build-db": "v8_chromium_build_db.json",
+        "config": "v8/gatekeeper_v8_chromium.json",
+        "masters": {
+            "https://build.chromium.org/p/client.v8.chromium": ["*"]
+        }
+    },
     "v8-node": {
         "build-db": "v8_node_build_db.json",
         "config": "v8/gatekeeper_v8_node.json",
