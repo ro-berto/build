@@ -154,7 +154,7 @@
   },
   {
     "cmd": [
-      "./ftl_unittests"
+      "./ftl_unittests.exe"
     ],
     "cwd": "[START_DIR]\\src\\out/host_debug_unopt",
     "env": {
