@@ -1143,7 +1143,7 @@ class AndroidApi(recipe_api.RecipeApi):
           step_test_data=(
               lambda: self.m.raw_io.test_api.stream_output(
                   'https://storage.cloud.google.com/chromium-result-details')))
-      return result_details.stdout
+      return result_details.stdout.strip()
     except self.m.step.StepFailure as f:
       return ('https://storage.googleapis.com/chromium-result-details/'
               'UploadQuietFailure.txt')
