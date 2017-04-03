@@ -271,13 +271,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     def test_runner():
       failed_tests = []
 
-      for t in tests:
-        try:
-          t.pre_run(self._api_for_tests, suffix)
-        except self.m.step.InfraFailure:  # pragma: no cover
-          raise
-        except self.m.step.StepFailure:  # pragma: no cover
-          failed_tests.append(t)
+      with self.m.step.nest('test_pre_run'):
+        for t in tests:
+          try:
+            t.pre_run(self._api_for_tests, suffix)
+          except self.m.step.InfraFailure:  # pragma: no cover
+            raise
+          except self.m.step.StepFailure:  # pragma: no cover
+            failed_tests.append(t)
 
       for t in tests:
         try:

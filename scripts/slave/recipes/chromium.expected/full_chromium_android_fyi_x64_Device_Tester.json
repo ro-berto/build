@@ -627,6 +627,15 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/x64_Device_Tester",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/x64_Device_Tester/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/x64_Device_Tester/src/build/android:%(PATH)s"
+    },
+    "name": "test_pre_run"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -638,8 +647,9 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/x64_Device_Tester/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/x64_Device_Tester/src/build/android:%(PATH)s"
     },
-    "name": "[error] browser_tests",
+    "name": "test_pre_run.[error] browser_tests",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys@@@",
       "@@@STEP_LOG_LINE@python.inline@print '*.isolated file for target %s is missing' % sys.argv[1]@@@",

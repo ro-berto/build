@@ -313,6 +313,15 @@
     "name": "extract build"
   },
   {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/Android_Find_Annotated_Test",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/Android_Find_Annotated_Test/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_Find_Annotated_Test/src/build/android:%(PATH)s"
+    },
+    "name": "test_pre_run"
+  },
+  {
     "cmd": [
       "python",
       "-u",

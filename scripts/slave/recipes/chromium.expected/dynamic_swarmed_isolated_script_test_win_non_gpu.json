@@ -304,6 +304,13 @@
     ]
   },
   {
+    "cmd": [],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "name": "test_pre_run"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -370,8 +377,9 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "infra_step": true,
-    "name": "[trigger] telemetry_gpu_unittests on Windows",
+    "name": "test_pre_run.[trigger] telemetry_gpu_unittests on Windows",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Windows'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"telemetry_gpu_unittests/Windows/eeeeeeeeee/Win7 Tests (1)/571\", @@@",

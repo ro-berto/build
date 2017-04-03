@@ -723,6 +723,14 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]\\Win_Builder_FYI",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "name": "test_pre_run"
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",

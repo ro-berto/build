@@ -537,6 +537,10 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "test_pre_run"
+  },
+  {
     "cmd": [
       "python",
       "-u",

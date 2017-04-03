@@ -283,6 +283,14 @@
     "name": "extract build"
   },
   {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/Linux_Tester",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "test_pre_run"
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",

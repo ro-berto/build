@@ -600,6 +600,15 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
+    "name": "test_pre_run"
+  },
+  {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/android",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
+    },
     "name": "AndroidWebViewTest",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",

@@ -527,6 +527,15 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]\\CrWinGomaStaging",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
+      "GOMA_STUBBY_PROXY_IP_ADDRESS": "sandbox.google.com"
+    },
+    "name": "test_pre_run"
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",

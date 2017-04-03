@@ -297,6 +297,15 @@
     "name": "upload_ninja_log"
   },
   {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/Print_Preview_Mac",
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "test_pre_run"
+  },
+  {
     "cmd": [
       "python",
       "-u",
