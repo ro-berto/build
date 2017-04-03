@@ -675,17 +675,6 @@
             ],
             "subject_template": "V8 API checker %(result)s in %(project_name)s, revision %(revision)s"
           },
-          "WebKit Linux - TraceWrappables": {
-            "tree_notify": [
-              "hlopko@chromium.org",
-              "mlippautz@chromium.org"
-            ],
-            "forgive_all": "true",
-            "closing_optional": [
-              "webkit_tests",
-              "webkit_layout_tests"
-            ]
-          },
           "Ozone Linux": {
             "tree_notify": [
               "thomasanderson@chromium.org",

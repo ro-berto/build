@@ -143,31 +143,6 @@ SPEC = {
       },
       'enable_swarming': True,
     },
-    'WebKit Linux - TraceWrappables': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 64,
-      },
-      'compile_targets': [
-        'blink_tests',
-      ],
-      'tests': [
-        steps.BlinkTest(extra_args=[
-          '--additional-driver-flag',
-          '--enable-blink-features=TraceWrappables',
-          '--additional-driver-flag',
-          '--js-flags=--incremental-marking-wrappers',
-        ]),
-      ],
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'linux',
-      },
-      'enable_swarming': True,
-    },
     'WebKit Linux - RandomOrder':{
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb','ninja_confirm_noop'],
