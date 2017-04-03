@@ -120,12 +120,13 @@
       "ninja",
       "-C",
       "[START_DIR]\\src\\out/host_debug_unopt",
-      "flutter/lib/snapshot:generate_snapshot_bin"
+      "flutter/lib/snapshot:generate_snapshot_bin",
+      "lib/ftl:ftl_unittests"
     ],
     "env": {
       "PATH": "[START_DIR]\\src\\third_party\\dart-sdk\\dart-sdk\\bin;%(PATH)s"
     },
-    "name": "build host_debug_unopt flutter/lib/snapshot:generate_snapshot_bin"
+    "name": "build host_debug_unopt flutter/lib/snapshot:generate_snapshot_bin lib/ftl:ftl_unittests"
   },
   {
     "cmd": [
@@ -150,6 +151,16 @@
       "PATH": "[START_DIR]\\src\\third_party\\dart-sdk\\dart-sdk\\bin;%(PATH)s"
     },
     "name": "build android_release gen_snapshot"
+  },
+  {
+    "cmd": [
+      "./ftl_unittests"
+    ],
+    "cwd": "[START_DIR]\\src\\out/host_debug_unopt",
+    "env": {
+      "PATH": "[START_DIR]\\src\\third_party\\dart-sdk\\dart-sdk\\bin;%(PATH)s"
+    },
+    "name": "Test FTL"
   },
   {
     "cmd": [

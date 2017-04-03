@@ -38,12 +38,14 @@ def RunHostTests(api, out_dir):
   with api.step.context({'cwd': directory}):
     if api.platform.is_mac:
       api.step('Test Flutter Channels', ['./flutter_channels_unittests'])
-    api.step('Test FML', [
-      './fml_unittests', '--gtest_filter="-*TimeSensitiveTest*"'
-    ])
     api.step('Test FTL', ['./ftl_unittests'])
-    api.step('Test Synchronization', ['./synchronization_unittests'])
-    api.step('Test WTF', ['./wtf_unittests'])
+    # TODO(goderbauer): enable these tests on Windows when they pass.
+    if not api.platform.is_win:
+      api.step('Test FML', [
+        './fml_unittests', '--gtest_filter="-*TimeSensitiveTest*"'
+      ])
+      api.step('Test Synchronization', ['./synchronization_unittests'])
+      api.step('Test WTF', ['./wtf_unittests'])
 
 
 def RunGN(api, *args):
@@ -279,9 +281,12 @@ def BuildWindows(api):
   RunGN(api, '--runtime-mode', 'profile', '--android')
   RunGN(api, '--runtime-mode', 'release', '--android')
 
-  Build(api, 'host_debug_unopt', 'flutter/lib/snapshot:generate_snapshot_bin')
+  Build(api, 'host_debug_unopt',
+    'flutter/lib/snapshot:generate_snapshot_bin', 'lib/ftl:ftl_unittests')
   Build(api, 'android_profile', 'gen_snapshot')
   Build(api, 'android_release', 'gen_snapshot')
+
+  RunHostTests(api, 'out/host_debug_unopt')
 
   UploadArtifacts(api, 'windows-x64', [
     'out/host_debug_unopt/gen/flutter/lib/snapshot/isolate_snapshot.bin',
