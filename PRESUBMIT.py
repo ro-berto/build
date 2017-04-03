@@ -24,11 +24,8 @@ def pythonpath(path):
     sys.path = orig
 
 
-def CommonChecks(input_api, output_api):
-  def join(*args):
-    return input_api.os_path.join(input_api.PresubmitLocalPath(), *args)
-
-  black_list = list(input_api.DEFAULT_BLACK_LIST) + [
+def GetBlackList(input_api):
+  return list(input_api.DEFAULT_BLACK_LIST) + [
       r'.*slave/.*/build.*/.*',
       r'.*slave/.*/isolate.*/.*',
       r'.*depot_tools/.*',
@@ -37,7 +34,7 @@ def CommonChecks(input_api, output_api):
       r'.*scripts/release/.*',
       r'.*scripts/slave/recipes.py$',
       r'.*scripts/slave/recipes/.*_autogen.py$',
-      r'.*scripts/slave/recipe_modules/.*',
+      r'.*scripts/slave/recipe_modules/[^/]*/[^/]*.py$',
       r'.*scripts/gsd_generate_index/.*',
       r'.*masters/.*/templates/.*\.html$',
       r'.*masters/.*/templates/.*\.css$',
@@ -55,11 +52,16 @@ def CommonChecks(input_api, output_api):
       # these, it will hang forever, so we must exclude them.
       r'^(.*/)?\..*recipe_deps/.*',
   ]
-  tests = []
+
+
+def CommonChecks(input_api, output_api):
+  def join(*args):
+    return input_api.os_path.join(input_api.PresubmitLocalPath(), *args)
+
+  output = []
 
   infra_path = input_api.subprocess.check_output(
       ['python', 'scripts/common/env.py', 'print']).split()
-
   test_sys_path = infra_path + [
       # Initially, a separate run was done for unit tests but now that
       # pylint is fetched in memory with setuptools, it seems it caches
@@ -74,11 +76,22 @@ def CommonChecks(input_api, output_api):
       'C0321',  # More than one statement on a single line
       'W0613',  # Unused argument
     ]
-    tests.extend(input_api.canned_checks.GetPylint(
+    output.extend(input_api.canned_checks.RunPylint(
         input_api,
         output_api,
-        black_list=black_list,
+        black_list=GetBlackList(input_api),
         disabled_warnings=disabled_warnings))
+
+  return output
+
+
+def CommitChecks(input_api, output_api):
+  def join(*args):
+    return input_api.os_path.join(input_api.PresubmitLocalPath(), *args)
+  tests = []
+
+  infra_path = input_api.subprocess.check_output(
+      ['python', 'scripts/common/env.py', 'print']).split()
 
   # Run our 'test_env.py' script to generate any required binaries before
   # executing the tests in parallel. Otherwise, individual tests may attempt to
@@ -151,7 +164,7 @@ def CommonChecks(input_api, output_api):
       output.extend(input_api.RunTests(tests))
 
     output.extend(input_api.canned_checks.PanProjectChecks(
-      input_api, output_api, excluded_paths=black_list))
+        input_api, output_api, excluded_paths=GetBlackList(input_api)))
     return output
 
 
@@ -195,12 +208,13 @@ def BuildInternalCheck(output, input_api, output_api):
   return []
 
 
-def CheckChangeOnUpload(_input_api, _output_api):
-  return [] # Try-jobs/commit-queue do a better job of testing, faster.
+def CheckChangeOnUpload(input_api, output_api):
+  return CommonChecks(input_api, output_api)
 
 
 def CheckChangeOnCommit(input_api, output_api):
   output = CommonChecks(input_api, output_api)
+  output.extend(CommitChecks(input_api, output_api))
   output.extend(ConditionalChecks(input_api, output_api))
   output.extend(BuildInternalCheck(output, input_api, output_api))
   return output

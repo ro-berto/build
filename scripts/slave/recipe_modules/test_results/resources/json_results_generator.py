@@ -127,10 +127,10 @@ class JSONResultsGenerator(object):
     self._file_writer = file_writer
 
   def generate_json_output(self):
-    json = self.get_full_results_json()
+    json_contents = self.get_full_results_json()
     file_path = os.path.join(self._results_directory,
                              self.FULL_RESULTS_FILENAME)
-    self._write_json(json, file_path)
+    self._write_json(json_contents, file_path)
 
   def generate_times_ms_file(self):
     times = generate_test_timings_trie(

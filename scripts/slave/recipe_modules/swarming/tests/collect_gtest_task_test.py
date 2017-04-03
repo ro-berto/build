@@ -219,6 +219,7 @@ class MainFuncTest(auto_stub.TestCase):
     # Make tempfile.mkdtemp deterministic.
     self.mkdtemp_counter = 0
     def fake_mkdtemp(prefix=None, suffix=None, dir=None):
+      # pylint: disable=redefined-builtin
       self.mkdtemp_counter += 1
       return self.mkdtemp_result(self.mkdtemp_counter, prefix, suffix, dir)
     self.mock(
@@ -232,6 +233,7 @@ class MainFuncTest(auto_stub.TestCase):
 
   def mkdtemp_result(self, index, prefix=None, suffix=None, dir=None):
     """Result of fake mkdtemp call for given invocation index."""
+    # pylint: disable=redefined-builtin
     return os.path.join(
         dir or self.temp_dir,
         '%s%d%s' % (prefix or '', index, suffix or ''))

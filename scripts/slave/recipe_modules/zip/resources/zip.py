@@ -133,7 +133,7 @@ def main():
     if exit_code:
       try:
         os.remove(output)
-      except:
+      except:  # pylint: disable=bare-except
         pass
   if not exit_code:
     print 'Archive size: %.1f KB' % (os.stat(output).st_size / 1024.0,)

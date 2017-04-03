@@ -64,12 +64,15 @@ TEST_DIRS = (
 # TODO(phajdan.jr): remove the workaround when it's not needed on the bot.
 class MyTarFile(tarfile.TarFile):
   def set_remove_nonessential_files(self, remove):
+    # pylint: disable=attribute-defined-outside-init
     self.__remove_nonessential_files = remove
 
   def set_verbose(self, verbose):
+    # pylint: disable=attribute-defined-outside-init
     self.__verbose = verbose
 
   def set_src_dir(self, src_dir):
+    # pylint: disable=attribute-defined-outside-init
     self.__src_dir = src_dir
 
   def __report_skipped(self, name):
@@ -81,6 +84,7 @@ class MyTarFile(tarfile.TarFile):
       print 'A\t%s' % name
 
   def add(self, name, arcname=None, recursive=True, exclude=None, filter=None):
+    # pylint: disable=redefined-builtin
     _, file_name = os.path.split(name)
     if file_name in ('.git', 'out'):
       self.__report_skipped(name)
