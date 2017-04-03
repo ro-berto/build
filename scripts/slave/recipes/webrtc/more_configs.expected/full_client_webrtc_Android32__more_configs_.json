@@ -332,8 +332,11 @@
     ],
     "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.upload_log",
+    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@compiler_proxy_log@http://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log.INFO.20170329-222936.4420.gz@@@",
+      "@@@STEP_LINK@ninja_log@http://chromium-build-stats.appspot.com/ninja_log/2017/03/30/build11-m1/ninja_log.build11-m1.chrome-bot.20170329-224321.9976.gz@@@"
     ]
   },
   {
@@ -559,8 +562,11 @@
     ],
     "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.upload_log (2)",
+    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@compiler_proxy_log@http://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log.INFO.20170329-222936.4420.gz@@@",
+      "@@@STEP_LINK@ninja_log@http://chromium-build-stats.appspot.com/ninja_log/2017/03/30/build11-m1/ninja_log.build11-m1.chrome-bot.20170329-224321.9976.gz@@@"
     ]
   },
   {
@@ -786,8 +792,11 @@
     ],
     "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.upload_log (3)",
+    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@compiler_proxy_log@http://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log.INFO.20170329-222936.4420.gz@@@",
+      "@@@STEP_LINK@ninja_log@http://chromium-build-stats.appspot.com/ninja_log/2017/03/30/build11-m1/ninja_log.build11-m1.chrome-bot.20170329-224321.9976.gz@@@"
     ]
   },
   {
@@ -1013,8 +1022,11 @@
     ],
     "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.upload_log (4)",
+    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@compiler_proxy_log@http://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log.INFO.20170329-222936.4420.gz@@@",
+      "@@@STEP_LINK@ninja_log@http://chromium-build-stats.appspot.com/ninja_log/2017/03/30/build11-m1/ninja_log.build11-m1.chrome-bot.20170329-224321.9976.gz@@@"
     ]
   },
   {
@@ -1240,8 +1252,11 @@
     ],
     "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.upload_log (5)",
+    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@compiler_proxy_log@http://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log.INFO.20170329-222936.4420.gz@@@",
+      "@@@STEP_LINK@ninja_log@http://chromium-build-stats.appspot.com/ninja_log/2017/03/30/build11-m1/ninja_log.build11-m1.chrome-bot.20170329-224321.9976.gz@@@"
     ]
   },
   {
@@ -1467,8 +1482,11 @@
     ],
     "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.upload_log (6)",
+    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@compiler_proxy_log@http://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log.INFO.20170329-222936.4420.gz@@@",
+      "@@@STEP_LINK@ninja_log@http://chromium-build-stats.appspot.com/ninja_log/2017/03/30/build11-m1/ninja_log.build11-m1.chrome-bot.20170329-224321.9976.gz@@@"
     ]
   },
   {
@@ -1694,8 +1712,11 @@
     ],
     "cwd": "[START_DIR]/src",
     "name": "postprocess_for_goma.upload_log (7)",
+    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@compiler_proxy_log@http://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log.INFO.20170329-222936.4420.gz@@@",
+      "@@@STEP_LINK@ninja_log@http://chromium-build-stats.appspot.com/ninja_log/2017/03/30/build11-m1/ninja_log.build11-m1.chrome-bot.20170329-224321.9976.gz@@@"
     ]
   },
   {

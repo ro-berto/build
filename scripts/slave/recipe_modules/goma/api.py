@@ -362,11 +362,22 @@ class GomaApi(recipe_api.RecipeApi):
             '--buildbot-%s' % flag_suffix, self.m.properties[prop_name]
         ])
 
-    self.m.build.python(
+    result = self.m.build.python(
       name=name or 'upload_log',
       script=self.package_repo_resource('scripts', 'slave',
                                         'upload_goma_logs.py'),
-      args=args)
+      args=args,
+      stdout=self.m.raw_io.output_text(),
+      step_test_data=(
+          lambda: self.m.raw_io.test_api.stream_output(
+              """Visualization at http://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log.INFO.20170329-222936.4420.gz
+Visualization at http://chromium-build-stats.appspot.com/ninja_log/2017/03/30/build11-m1/ninja_log.build11-m1.chrome-bot.20170329-224321.9976.gz""")))
+
+    for url in re.findall(r"Visualization at (.*)", result.stdout):
+      if 'ninja_log' in url:
+        result.presentation.links['ninja_log'] = url
+      elif 'compiler_proxy_log' in url:
+        result.presentation.links['compiler_proxy_log'] = url
 
   def build_with_goma(self, ninja_command, name=None, ninja_log_outdir=None,
                       ninja_log_compiler=None, goma_env=None, ninja_env=None,
