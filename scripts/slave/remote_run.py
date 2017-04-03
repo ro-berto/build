@@ -51,6 +51,12 @@ _CANARY_CONFIG = {
   ## Not whitelisted b/c of recipe roller, see: crbug.com/703352
   #'internal.infra.cron',
 
+  'chromium.fyi': set((
+      'Site Isolation Linux',
+      'Site Isolation Android',
+      'Site Isolation Win',
+   )),
+
   'chromium.swarm': _ALL_BUILDERS,
 }
 
