@@ -26,24 +26,32 @@ builders = {
 for platform in ['linux']:
   for arch in ['x64']:
     for mode in ['debug', 'release']:
-      extra_args = ['--builder-tag=no_ipv6']
-      if mode == 'debug':
-        extra_args += ['--vm-options=--no-enable-malloc-hooks']
-      builders['vm-kernel-%s-%s-%s' % (platform, mode, arch)] = {
-        'mode': mode,
-        'target_arch': arch,
-        'build_args': ['runtime_kernel'],
-        'test_args': ['-cdartk', '-rvm'] + extra_args,
-      }
-      builders['vm-kernel-precomp-%s-%s-%s' % (platform, mode, arch)] = {
-        'mode': mode,
-        'target_arch': arch,
-        'build_args': (['runtime_kernel',
-                        'dart_bootstrap',
-                        'dart_precompiled_runtime']),
-        'test_args': ['-cdartkp', '-rdart_precompiled'] + extra_args,
-        'archive_core_dumps': (platform == 'linux' or platform == 'win'),
-      }
+      for checked in ['-checked', '']:
+        extra_args = ['--builder-tag=no_ipv6']
+
+        if mode == 'debug':
+          extra_args += ['--vm-options=--no-enable-malloc-hooks']
+
+        if checked:
+          extra_args += ['--checked']
+
+        builders['vm-kernel-%s-%s-%s%s' % (platform, mode, arch, checked)] = {
+          'mode': mode,
+          'target_arch': arch,
+          'build_args': ['runtime_kernel'],
+          'test_args': ['-cdartk', '-rvm'] + extra_args,
+        }
+
+        builders['vm-kernel-precomp%s-%s-%s-%s'
+            % (checked, platform, mode, arch)] = {
+          'mode': mode,
+          'target_arch': arch,
+          'build_args': (['runtime_kernel',
+                          'dart_bootstrap',
+                          'dart_precompiled_runtime']),
+          'test_args': ['-cdartkp', '-rdart_precompiled'] + extra_args,
+          'archive_core_dumps': (platform == 'linux' or platform == 'win'),
+        }
 
 def RunSteps(api):
   api.gclient.set_config('dart')
