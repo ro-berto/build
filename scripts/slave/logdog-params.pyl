@@ -212,6 +212,10 @@
     'client.skia.android': {},
     'client.skia.fyi': {},
 
+    # Syzygy
+    'client.syzygy': {},
+    'tryserver.client.syzygy': {},
+
     # WebRTC
     'client.webrtc': {},
     'client.webrtc.fyi': {},
