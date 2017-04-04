@@ -59,7 +59,7 @@ def GetLatestGlogInfoFile(pattern):
     pattern: a string of INFO file pattern.
 
   Returns:
-    the latest glog INFO filename in fullpath.
+    the latest glog INFO filename in fullpath.  Or, None if not found.
   """
   dirname = GetGomaLogDirectory()
   info_pattern = os.path.join(dirname, '%s.*.INFO.*' % pattern)
@@ -77,6 +77,22 @@ def GetLatestGomaCompilerProxyInfo():
 def GetLatestGomaCompilerProxySubprocInfo():
   """Get a filename of the latest goma comiler_proxy-subproc.INFO."""
   return GetLatestGlogInfoFile('compiler_proxy-subproc')
+
+
+def GetListOfGomaccInfoAfterCompilerProxyStart():
+  """Returns list of gomacc.INFO generated after compiler_proxy starts.
+
+  Returns:
+    list of gomacc.INFO file path strings.
+  """
+  compiler_proxy_start_time = GetCompilerProxyStartTime()
+  recent_gomacc_infos = []
+  logs = glob.glob(os.path.join(GetGomaLogDirectory(), 'gomacc.*.INFO.*'))
+  for log in logs:
+    timestamp = GetLogFileTimestamp(log)
+    if timestamp and timestamp > compiler_proxy_start_time:
+      recent_gomacc_infos.append(log)
+  return recent_gomacc_infos
 
 
 def UploadToGomaLogGS(file_path, gs_filename,
@@ -120,7 +136,15 @@ def UploadToGomaLogGS(file_path, gs_filename,
 def UploadGomaCompilerProxyInfo(override_gsutil=None,
                                 builder='unknown', master='unknown',
                                 slave='unknown', clobber=''):
-  """Upload goma compiler_proxy.INFO to Google Storage."""
+  """Upload compiler_proxy{,-subproc}.INFO and gomacc.INFO to Google Storage.
+
+  Args:
+    override_gsutil: gsutil path to override.
+    builder: a string name of a builder.
+    master: a string name of a master.
+    slave: a string name of a slave.
+    clobber: set something if clobber (to be removed)
+  """
   latest_subproc_info = GetLatestGomaCompilerProxySubprocInfo()
 
   builderinfo = {
@@ -156,6 +180,14 @@ def UploadGomaCompilerProxyInfo(override_gsutil=None,
   viewer_url = ('http://chromium-build-stats.appspot.com/compiler_proxy_log/'
                 + log_path)
   print 'Visualization at %s' % viewer_url
+
+  gomacc_logs = GetListOfGomaccInfoAfterCompilerProxyStart()
+  if gomacc_logs:
+    for log in gomacc_logs:
+      UploadToGomaLogGS(
+          log, os.path.basename(log),
+          metadata=metadata,
+          override_gsutil=override_gsutil)
 
 
 def UploadNinjaLog(
@@ -338,12 +370,34 @@ def SendGomaStats(goma_stats_file, goma_crash_report, build_data_dir):
       pass
 
 
-def GetCompilerProxyStartTime():
-  """Returns datetime instance of the latest compiler_proxy start time."""
-  with open(GetLatestGomaCompilerProxyInfo()) as f:
+def GetLogFileTimestamp(glog_log):
+  """Returns timestamp when the given glog log was created.
+
+  Args:
+    glog_log: a filename of a google-glog log.
+
+  Returns:
+    datetime instance when the logfile was created.
+    Or, returns None if not a glog file.
+
+  Raises:
+    IOError if this function cannot open glog_log.
+  """
+  with open(glog_log) as f:
     matched = TIMESTAMP_PATTERN.search(f.readline())
     if matched:
       return datetime.datetime.strptime(matched.group(1), TIMESTAMP_FORMAT)
+  return None
+
+
+def GetCompilerProxyStartTime():
+  """Returns timestamp when the latest compiler_proxy started.
+
+  Returns:
+    datetime instance of timestamp when the latest compiler_proxy start.
+    Or, returns None if not a glog file.
+  """
+  return GetLogFileTimestamp(GetLatestGomaCompilerProxyInfo())
 
 
 def SendCountersToTsMon(counters):
