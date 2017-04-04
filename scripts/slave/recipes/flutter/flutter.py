@@ -74,7 +74,7 @@ def BuildExamples(api, git_hash, flutter_executable):
     # This is linux just to have only one bot archive at once.
     if api.platform.is_linux:
       cloud_path = GetCloudPath(api, git_hash, 'examples/%s' % apk_name)
-      apk_path = app_path.join('android', 'app', 'build', 'outputs', 'apk', 'app.apk')
+      apk_path = app_path.join('build', 'app', 'outputs', 'apk', 'app.apk')
       api.gsutil.upload(apk_path, BUCKET_NAME, cloud_path,
           link_name=apk_name, name='upload %s' % apk_name)
 

@@ -199,7 +199,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[START_DIR]/flutter/examples/stocks/android/app/build/outputs/apk/app.apk",
+      "[START_DIR]/flutter/examples/stocks/build/app/outputs/apk/app.apk",
       "gs://flutter_infra/flutter/deadbeef/examples/Stocks.apk"
     ],
     "env": {
@@ -237,7 +237,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[START_DIR]/flutter/examples/flutter_gallery/android/app/build/outputs/apk/app.apk",
+      "[START_DIR]/flutter/examples/flutter_gallery/build/app/outputs/apk/app.apk",
       "gs://flutter_infra/flutter/deadbeef/examples/Gallery.apk"
     ],
     "env": {
