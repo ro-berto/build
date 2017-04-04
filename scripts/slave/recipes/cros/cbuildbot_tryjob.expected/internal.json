@@ -43,45 +43,6 @@
     ]
   },
   {
-    "cmd": [
-      "git",
-      "checkout",
-      "master"
-    ],
-    "cwd": "[START_DIR]/chromite",
-    "infra_step": true,
-    "name": "checkout chromite branch [master]"
-  },
-  {
-    "cmd": [
-      "git",
-      "pull"
-    ],
-    "cwd": "[START_DIR]/chromite",
-    "infra_step": true,
-    "name": "sync chromite branch [master]"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[START_DIR]/chromite/cbuildbot/config_dump.json",
-      "/path/to/tmp/json"
-    ],
-    "name": "read chromite config",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@config@{@@@",
-      "@@@STEP_LOG_LINE@config@  \"internal-paladin\": {@@@",
-      "@@@STEP_LOG_LINE@config@    \"_template\": \"paladin\", @@@",
-      "@@@STEP_LOG_LINE@config@    \"build_type\": \"paladin\", @@@",
-      "@@@STEP_LOG_LINE@config@    \"internal\": true@@@",
-      "@@@STEP_LOG_LINE@config@  }@@@",
-      "@@@STEP_LOG_LINE@config@}@@@",
-      "@@@STEP_LOG_END@config@@@"
-    ]
-  },
-  {
     "cmd": [],
     "name": "ensure_goma"
   },
@@ -120,9 +81,11 @@
   {
     "allow_subannotations": true,
     "cmd": [
-      "[START_DIR]/chromite/bin/cbuildbot",
+      "[START_DIR]/chromite/scripts/cbuildbot_launch",
       "--buildroot",
-      "[ROOT]/cbuild/internal_master",
+      "[ROOT]/cbuild/repository",
+      "--branch",
+      "master",
       "--git-cache-dir",
       "/b/cros_git_cache",
       "--goma_dir",
