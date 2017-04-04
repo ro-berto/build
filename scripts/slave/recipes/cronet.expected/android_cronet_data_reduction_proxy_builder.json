@@ -854,7 +854,7 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/build/android/provision_devices.py",
+      "[START_DIR]/src/third_party/catapult/devil/devil/android/tools/provision_devices.py",
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
       "--blacklist-file",

@@ -46,6 +46,7 @@ class CronetApi(recipe_api.RecipeApi):
     droid.configure_from_properties(
         recipe_config,
         **dict(default_kwargs.items() + kwargs.items()))
+    droid.apply_config('use_devil_provision')
     self.m.chromium.apply_config('cronet_builder')
     for c in chromium_apply_config or []:
       self.m.chromium.apply_config(c)
