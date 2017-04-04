@@ -93,16 +93,6 @@
       "builder_timeout_s": 21600,
       "category": "0Windows",
     },
-    "Win7 Release (NVIDIA GeForce 730)": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": None,
-      # It's crucial to merge build requests on the testers.
-      "mergeRequests": True,
-      "slave_pools": ["win_rel_nvidia_geforce_730"],
-      "builder_timeout_s": 21600,
-      "category": "0Windows",
-    },
     "Win10 Release (Intel HD 530)": {
       "recipe": "chromium",
       "use_remote_run": True,
@@ -359,16 +349,6 @@
       "builder_timeout_s": 21600,
       "category": "2Linux",
     },
-    "Linux Release (NVIDIA GeForce 730)": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": None,
-      # It's crucial to merge build requests on the testers.
-      "mergeRequests": True,
-      "slave_pools": ["linux_rel_nvidia_geforce_730"],
-      "builder_timeout_s": 21600,
-      "category": "2Linux",
-    },
     "Linux Release (NVIDIA Quadro P400)": {
       "recipe": "chromium",
       "use_remote_run": True,
@@ -556,14 +536,6 @@
         "version": "win7",
       },
       "slaves": ["vm102-m1"],
-    },
-    "win_rel_nvidia_geforce_730": {
-      "slave_data": {
-        "bits": 64,
-        "os": "win",
-        "version": "win7",
-      },
-      "slaves": ["build71-b1"],
     },
     "win10_rel_nvidia_quadro_p400": {
       "slave_data": {
@@ -780,14 +752,6 @@
         "version": "trusty",
       },
       "slaves": ["build115-b1"],
-    },
-    "linux_rel_nvidia_geforce_730": {
-      "slave_data": {
-        "bits": 64,
-        "os": "linux",
-        "version": "trusty",
-      },
-      "slaves": ["build70-b1"],
     },
     "linux_rel_nvidia_quadro_p400": {
       "slave_data": {
