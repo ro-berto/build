@@ -447,16 +447,6 @@ def GenTests(api):
         'read test spec (chromium.linux.json)', api.json.output({}))
   )
 
-  # Verifies analyze skips projects other than src.
-  yield (
-    api.test('dont_analyze_for_non_src_project') +
-    props(buildername='linux_chromium_rel_ng') +
-    props(patch_project='v8') +
-    api.platform.name('linux') +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)', api.json.output({}))
-  )
-
   # This should result in a compile.
   yield (
     api.test('compile_because_of_analyze_matching_exclusion') +
