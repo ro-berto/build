@@ -2317,7 +2317,7 @@ class WebViewCTSTest(Test):
 
 
 class IncrementalCoverageTest(Test):
-  name = 'incremental_coverage'
+  _name = 'incremental_coverage'
 
   @property
   def uses_local_devices(self):
@@ -2332,7 +2332,7 @@ class IncrementalCoverageTest(Test):
   @property
   def name(self):  # pragma: no cover
     """Name of the test."""
-    return IncrementalCoverageTest.name
+    return IncrementalCoverageTest._name
 
   @staticmethod
   def compile_targets(api):
