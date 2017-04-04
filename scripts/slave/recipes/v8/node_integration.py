@@ -120,13 +120,6 @@ def RunSteps(api):
     _build_and_test(api)
     return
 
-  try:
-    # TODO(machenbach): Remove baseline testing on continuous bot.
-    # Build and test the node.js branch as FYI.
-    _build_and_test(api, ' - baseline')
-  except api.step.StepFailure:  # pragma: no cover
-    pass
-
   # Update V8.
   api.python(
       name='update v8',
