@@ -94,7 +94,8 @@
       "--time",
       "--failure-summary",
       "--write-debug-log",
-      "--write-test-outcome-log"
+      "--write-test-outcome-log",
+      "--copy-coredumps"
     ],
     "cwd": "[START_DIR]/sdk",
     "name": "front-end tests"
@@ -112,6 +113,7 @@
       "--failure-summary",
       "--write-debug-log",
       "--write-test-outcome-log",
+      "--copy-coredumps",
       "-cdartk",
       "-rvm",
       "--builder-tag=no_ipv6",

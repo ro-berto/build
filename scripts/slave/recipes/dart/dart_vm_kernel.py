@@ -40,6 +40,7 @@ for platform in ['linux']:
           'target_arch': arch,
           'build_args': ['runtime_kernel'],
           'test_args': ['-cdartk', '-rvm'] + extra_args,
+          'archive_core_dumps': (platform == 'linux' or platform == 'win'),
         }
 
         builders['vm-kernel-precomp%s-%s-%s-%s'
