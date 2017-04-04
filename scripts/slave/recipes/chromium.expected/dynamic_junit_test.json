@@ -18,6 +18,7 @@
       "src@HEAD",
       "--output_manifest"
     ],
+    "cwd": "[START_DIR]",
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
@@ -308,6 +309,7 @@
       "['[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb', 'devices']",
       "/path/to/tmp/json"
     ],
+    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
@@ -328,6 +330,7 @@
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
       "014E1F310401C009"
     ],
+    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
@@ -348,6 +351,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
@@ -356,6 +360,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
@@ -376,6 +381,7 @@
       "--json-results-file",
       "/path/to/tmp/json"
     ],
+    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
@@ -407,6 +413,7 @@
       "--chrome-revision",
       "refs/heads/master@{#170242}"
     ],
+    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
@@ -423,6 +430,7 @@
       "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
       "[START_DIR]/src/out/Release/test_logs/*.log"
     ],
+    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"

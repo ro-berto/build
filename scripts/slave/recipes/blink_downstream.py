@@ -139,10 +139,7 @@ def RunSteps(api):
   # Ensure we remember the chromium revision.
   api.gclient.c.got_revision_mapping['src'] = 'got_cr_revision'
 
-  context = {}
-  checkout_dir = api.chromium_checkout.get_checkout_dir(bot_config)
-  if checkout_dir:
-    context['cwd'] = checkout_dir
+  context = {'cwd': api.chromium_checkout.get_checkout_dir(bot_config)}
 
   # Run all steps in the checkout dir (consistent with chromium_tests).
   with api.step.context(context):

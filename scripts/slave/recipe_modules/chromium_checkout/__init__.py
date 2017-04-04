@@ -1,5 +1,6 @@
 DEPS = [
   'chromium',
+  'file',
   'depot_tools/bot_update',
   'depot_tools/gclient',
   'depot_tools/tryserver',

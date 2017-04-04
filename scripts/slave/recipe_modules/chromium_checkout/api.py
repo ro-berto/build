@@ -23,20 +23,21 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
 
   def get_checkout_dir(self, bot_config):
     """Returns directory where checkout can be created.
-
-    None means to use default checkout directory.
     """
+    # If explicitly specified, use the named builder cache base directory.
     try:
       builder_cache = self.m.path['builder_cache']
-    except KeyError:  # no-op if builder cache is not set up.
-      return None
-    else:
-      sanitized_buildername = ''.join(
-          c if c.isalnum() else '_' for c in self.m.properties['buildername'])
-      checkout_dir = builder_cache.join(
-          bot_config.get('checkout_dir', sanitized_buildername))
-      self.m.shutil.makedirs('checkout path', checkout_dir)
-      return checkout_dir
+    except KeyError:
+      # No explicit builder cache directory defined. Use the "start_dir"
+      # directory.
+      return self.m.path['start_dir']
+
+    checkout_name = ''.join(
+        c if c.isalnum() else '_' for c in self.m.properties['buildername'])
+    checkout_dir = builder_cache.join(
+        bot_config.get('checkout_dir', checkout_name))
+    self.m.shutil.makedirs('checkout path', checkout_dir)
+    return checkout_dir
 
   def get_files_affected_by_patch(self, relative_to='src/', cwd=None):
     """Returns list of POSIX paths of files affected by patch for "analyze".
@@ -64,10 +65,8 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
     if self.m.platform.is_win:
       self.m.chromium.taskkill()
 
-    context = {}
     self._working_dir = self.get_checkout_dir(bot_config)
-    if self._working_dir:
-      context['cwd'] = self._working_dir
+    context = {'cwd': self._working_dir}
 
     # Bot Update re-uses the gclient configs.
     with self.m.step.context(context):

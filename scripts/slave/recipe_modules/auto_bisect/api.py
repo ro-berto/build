@@ -71,7 +71,7 @@ class AutoBisectStagingApi(recipe_api.RecipeApi):
   def working_dir(self):
    if not self._working_dir:
      self._working_dir = self.m.chromium_checkout.get_checkout_dir({})
-   return self._working_dir or self.m.path['start_dir']
+   return self._working_dir
 
   def create_bisector(self, bisect_config_dict, dummy_mode=False, **flags):
     """Passes the api and the config dictionary to the Bisector constructor.

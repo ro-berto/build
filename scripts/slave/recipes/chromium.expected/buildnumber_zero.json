@@ -18,6 +18,7 @@
       "src@HEAD",
       "--output_manifest"
     ],
+    "cwd": "[START_DIR]",
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
@@ -266,6 +267,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -302,6 +304,7 @@
       "--build-number=0",
       "base_unittests"
     ],
+    "cwd": "[START_DIR]",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -341,6 +344,7 @@
       "--test-launcher-shard-index=0",
       "--test-launcher-total-shards=2"
     ],
+    "cwd": "[START_DIR]",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"

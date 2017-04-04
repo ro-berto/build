@@ -58,15 +58,13 @@ class iOSApi(recipe_api.RecipeApi):
     """Checks out Chromium."""
     self.m.gclient.set_config('ios')
 
-    context = {}
     checkout_dir = self.m.chromium_checkout.get_checkout_dir({})
-    if checkout_dir:
-      context['cwd'] = kwargs.get('cwd', checkout_dir)
+    context = {'cwd': kwargs.get('cwd', checkout_dir)}
 
     # Support for legacy buildbot clobber. If the "clobber" property is
     # present at all with any value, clobber the whole checkout.
     if 'clobber' in self.m.properties:
-      self.m.file.rmcontents('checkout', self.m.path['start_dir'])
+      self.m.file.rmcontents('checkout', checkout_dir)
 
     with self.m.step.context(context):
       return self.m.bot_update.ensure_checkout(**kwargs)

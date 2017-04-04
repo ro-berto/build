@@ -72,9 +72,7 @@ def RunSteps(api):
   api.chromium_tests.configure_build(
       bot_config, override_bot_type='builder_tester')
 
-  # TODO(iannucci): Refactor these two lines into a single api call.
-  base_dir = api.chromium_checkout.get_checkout_dir(bot_config) or (
-      api.path['start_dir'])
+  base_dir = api.chromium_checkout.get_checkout_dir(bot_config)
   checkout_dir = base_dir.join(api.gclient.c.solutions[0].name)
 
   # Most recent commit in local checkout

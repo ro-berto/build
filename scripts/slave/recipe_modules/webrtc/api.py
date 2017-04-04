@@ -129,12 +129,7 @@ class WebRTCApi(recipe_api.RecipeApi):
         self.m.swarming.set_default_dimension(key, value)
 
   def checkout(self, **kwargs):
-    context = {}
     self._working_dir = self.m.chromium_checkout.get_checkout_dir({})
-    if self._working_dir:
-      context['cwd'] = self.m.step.get_from_context('cwd', self._working_dir)
-    else:
-      self._working_dir = self.m.path['start_dir']
 
     # Cleanup symlinks if there are any created.
     self.m.python('clean symlinks',
@@ -152,6 +147,7 @@ class WebRTCApi(recipe_api.RecipeApi):
                    name='reset checkout [crbug.com/677823]',
                    infra_step=True)
 
+    context = {'cwd': self.m.step.get_from_context('cwd', self._working_dir)}
     with self.m.step.context(context):
       update_step = self.m.bot_update.ensure_checkout(**kwargs)
     assert update_step.json.output['did_run']

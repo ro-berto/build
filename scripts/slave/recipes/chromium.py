@@ -2008,6 +2008,16 @@ def GenTests(api):
   )
 
   yield (
+    api.test('generic_path_config') +
+    api.properties(
+        mastername='chromium.fyi',
+        buildername='Linux remote_run Builder',
+        bot_id='build1-a1',
+        buildnumber='77457',
+        path_config='generic')
+  )
+
+  yield (
     api.test('ensure_goma_fail') +
     api.properties(
         mastername='chromium.fyi',
