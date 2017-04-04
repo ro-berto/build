@@ -1508,8 +1508,13 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - mipsel - sim - builder',
         'build_gs_archive': 'mipsel_sim_rel_archive',
         'enable_swarming': True,
-        'tests': [V8Testing_3, Test262],
+        'tests': [V8Testing_4, Test262],
         'testing': {'platform': 'linux'},
+        'swarming_properties': {
+          'default_expiration': 2 * 60 * 60,
+          'default_hard_timeout': 2 * 60 * 60,
+          'default_priority': 35,
+        },
       },
 ####### Category: PPC
       'V8 Linux - ppc - sim': {
