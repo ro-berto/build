@@ -317,7 +317,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/staging_android_nexus5X_perf_bisect/src/build/android/provision_devices.py",
+      "[BUILDER_CACHE]/staging_android_nexus5X_perf_bisect/src/third_party/catapult/devil/devil/android/tools/provision_devices.py",
       "--adb-path",
       "[BUILDER_CACHE]/staging_android_nexus5X_perf_bisect/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
       "--blacklist-file",

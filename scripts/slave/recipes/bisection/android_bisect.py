@@ -96,6 +96,7 @@ def RunSteps(api, mastername, buildername):
   }
   kwargs.update(bot_config.get('kwargs', {}))
   api.chromium_android.configure_from_properties(recipe_config, **kwargs)
+  api.chromium_android.apply_config('use_devil_provision')
   api.chromium.set_config(recipe_config, **kwargs)
   api.chromium.ensure_goma()
   api.chromium_android.c.set_val({'deps_file': 'DEPS'})
