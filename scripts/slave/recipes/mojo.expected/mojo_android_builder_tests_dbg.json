@@ -138,7 +138,7 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/build/android/provision_devices.py"
+      "[START_DIR]/src/third_party/catapult/devil/devil/android/tools/provision_devices.py"
     ],
     "infra_step": true,
     "name": "provision_device"

@@ -70,32 +70,34 @@ def _BuildSteps(api, buildername, is_debug, is_official):
 
 
 def _DeviceCheckStep(api):
-  known_devices_path = api.m.path.join(
-      api.m.path.expanduser('~'), '.android', 'known_devices.json')
+  known_devices_path = api.path.join(
+      api.path.expanduser('~'), '.android', 'known_devices.json')
   # Device recovery.
   args = [
       '--known-devices-file', known_devices_path,
-      '--adb-path', api.m.adb.adb_path(),
+      '--adb-path', api.adb.adb_path(),
       '-v'
   ]
-  api.m.step(
+  api.step(
       'device_recovery',
-      [api.m.path['checkout'].join('third_party', 'catapult', 'devil',
-                                   'devil', 'android', 'tools',
-                                   'device_recovery.py')] + args,
+      [api.path['checkout'].join('third_party', 'catapult', 'devil',
+                                 'devil', 'android', 'tools',
+                                 'device_recovery.py')] + args,
       infra_step=True)
 
   # Device provisioning.
   api.python(
       'provision_device',
-      api.path['checkout'].join('build', 'android', 'provision_devices.py'),
+      api.path['checkout'].join('third_party', 'catapult', 'devil',
+                                'devil', 'android', 'tools',
+                                'provision_devices.py'),
       infra_step=True)
 
   # Device Status.
   try:
     buildbot_file = '/home/chrome-bot/.adb_device_info'
     args = [
-        '--json-output', api.m.json.output(),
+        '--json-output', api.json.output(),
         '--known-devices-file', known_devices_path,
         '--buildbot-path', buildbot_file,
         '-v', '--overwrite-known-devices-files',
