@@ -112,7 +112,7 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [START_DIR]/src/testing/buildbot/chromium.perf.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Android Nexus5 Perf (1)\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Android Nexus6 WebView Perf (1)\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"scripts\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"name\": \"host_info\", @@@",
@@ -137,7 +137,7 @@
       "--paths",
       "{\"checkout\": \"[START_DIR]/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"bot_id\", \"buildername\": \"Android Nexus5 Perf (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"perf-id\": \"android-nexus5\", \"results-url\": \"https://chromeperf.appspot.com\", \"slavename\": \"bot_id\", \"target_platform\": \"android\"}"
+      "{\"bot_id\": \"bot_id\", \"buildername\": \"Android Nexus6 WebView Perf (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"perf-id\": \"android-webview-nexus6\", \"results-url\": \"https://chromeperf.appspot.com\", \"slavename\": \"bot_id\", \"target_platform\": \"android\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -317,7 +317,8 @@
       "--disable-network",
       "--disable-java-debug",
       "--max-battery-temp",
-      "350"
+      "350",
+      "--remove-system-webview"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -456,7 +457,7 @@
   {
     "cmd": [
       "[START_DIR]/src/build/android/adb_install_apk.py",
-      "ChromePublic.apk",
+      "SystemWebView.apk",
       "-v",
       "--blacklist-file",
       "[START_DIR]/src/out/bad_devices.json",
@@ -469,7 +470,35 @@
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
     "infra_step": true,
-    "name": "install ChromePublic.apk"
+    "name": "install SystemWebView.apk"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[START_DIR]/src/chrome/VERSION",
+      "/path/to/tmp/"
+    ],
+    "name": "get version (2)"
+  },
+  {
+    "cmd": [
+      "[START_DIR]/src/build/android/adb_install_apk.py",
+      "SystemWebViewShell.apk",
+      "-v",
+      "--blacklist-file",
+      "[START_DIR]/src/out/bad_devices.json",
+      "--adb-path",
+      "[START_DIR]/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
+      "--release"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
+    },
+    "infra_step": true,
+    "name": "install SystemWebViewShell.apk"
   },
   {
     "cmd": [
@@ -479,7 +508,7 @@
       "--paths",
       "{\"checkout\": \"[START_DIR]/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"bot_id\", \"buildername\": \"Android Nexus5 Perf (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"perf-id\": \"android-nexus5\", \"results-url\": \"https://chromeperf.appspot.com\", \"slavename\": \"bot_id\", \"target_platform\": \"android\"}",
+      "{\"bot_id\": \"bot_id\", \"buildername\": \"Android Nexus6 WebView Perf (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"perf-id\": \"android-webview-nexus6\", \"results-url\": \"https://chromeperf.appspot.com\", \"slavename\": \"bot_id\", \"target_platform\": \"android\"}",
       "--args",
       "[\"--known-devices-file\", \"[HOME]/.android/known_devices.json\"]",
       "run",
@@ -550,7 +579,7 @@
       "--paths",
       "{\"checkout\": \"[START_DIR]/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"bot_id\", \"buildername\": \"Android Nexus5 Perf (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"perf-id\": \"android-nexus5\", \"results-url\": \"https://chromeperf.appspot.com\", \"slavename\": \"bot_id\", \"target_platform\": \"android\"}",
+      "{\"bot_id\": \"bot_id\", \"buildername\": \"Android Nexus6 WebView Perf (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"perf-id\": \"android-webview-nexus6\", \"results-url\": \"https://chromeperf.appspot.com\", \"slavename\": \"bot_id\", \"target_platform\": \"android\"}",
       "run",
       "--output",
       "/path/to/tmp/json"
@@ -573,11 +602,11 @@
       "[START_DIR]/src/tools/perf/run_benchmark",
       "list",
       "--browser",
-      "android-chromium",
+      "android-webview",
       "--json-output",
       "/path/to/tmp/json",
       "--num-shards",
-      "21",
+      "18",
       "--device",
       "07a00ca4"
     ],
@@ -635,7 +664,6 @@
       "350",
       "--known-devices-file",
       "[HOME]/.android/known_devices.json",
-      "--enable-platform-mode",
       "--trace-output",
       "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.html",
       "--adb-path",
@@ -659,12 +687,12 @@
       "----",
       "cp",
       "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.html",
-      "gs://chromium-testrunner-trace/Android Nexus5 Perf (1)/trace_571.html"
+      "gs://chromium-testrunner-trace/Android Nexus6 WebView Perf (1)/trace_571.html"
     ],
     "infra_step": true,
     "name": "gsutil Upload Test Trace",
     "~followup_annotations": [
-      "@@@STEP_LINK@Test Trace@https://storage.cloud.google.com/chromium-testrunner-trace/Android Nexus5 Perf (1)/trace_571.html@@@"
+      "@@@STEP_LINK@Test Trace@https://storage.cloud.google.com/chromium-testrunner-trace/Android Nexus6 WebView Perf (1)/trace_571.html@@@"
     ]
   },
   {
@@ -734,18 +762,18 @@
       "android",
       "--no-xvfb",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"bot_id\", \"buildername\": \"Android Nexus5 Perf (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_buildername\": \"parent_buildername\", \"parent_buildnumber\": \"1729\", \"parent_revision\": \"deadbeef\", \"path_config\": \"kitchen\", \"recipe\": \"android/perf\", \"repo_name\": \"src\", \"repo_url\": \"https://chromium.googlesource.com/chromium/src.git\", \"revision\": \"deadbeef\", \"slavename\": \"TestSlavename\", \"target\": \"Release\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"bot_id\", \"buildername\": \"Android Nexus6 WebView Perf (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_buildername\": \"parent_buildername\", \"parent_buildnumber\": \"1729\", \"parent_revision\": \"deadbeef\", \"path_config\": \"kitchen\", \"recipe\": \"android/perf\", \"repo_name\": \"src\", \"repo_url\": \"https://chromium.googlesource.com/chromium/src.git\", \"revision\": \"deadbeef\", \"slavename\": \"TestSlavename\", \"target\": \"Release\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"bot_id\", \"buildername\": \"Android Nexus5 Perf (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_buildername\": \"parent_buildername\", \"parent_buildnumber\": \"1729\", \"parent_revision\": \"deadbeef\", \"path_config\": \"kitchen\", \"recipe\": \"android/perf\", \"repo_name\": \"src\", \"repo_url\": \"https://chromium.googlesource.com/chromium/src.git\", \"revision\": \"deadbeef\", \"slavename\": \"TestSlavename\", \"target\": \"Release\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"bot_id\", \"buildername\": \"Android Nexus6 WebView Perf (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_buildername\": \"parent_buildername\", \"parent_buildnumber\": \"1729\", \"parent_revision\": \"deadbeef\", \"path_config\": \"kitchen\", \"recipe\": \"android/perf\", \"repo_name\": \"src\", \"repo_url\": \"https://chromium.googlesource.com/chromium/src.git\", \"revision\": \"deadbeef\", \"slavename\": \"TestSlavename\", \"target\": \"Release\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=page_cycler.foo",
-      "--perf-id=android-nexus5",
+      "--perf-id=android-webview-nexus6",
       "--test-type=page_cycler.foo",
       "--step-name=page_cycler.foo",
       "--chartjson-file",
       "/path/to/tmp/json",
-      "--builder-name=Android Nexus5 Perf (1)",
+      "--builder-name=Android Nexus6 WebView Perf (1)",
       "--slave-name=bot_id",
       "--build-number=571",
       "--run-python-script",
@@ -758,7 +786,6 @@
       "[START_DIR]/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
       "--blacklist-file",
       "[START_DIR]/src/out/bad_devices.json",
-      "--enable-platform-mode",
       "--output-json-data",
       "/path/to/tmp/json"
     ],
@@ -834,18 +861,18 @@
       "android",
       "--no-xvfb",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"bot_id\", \"buildername\": \"Android Nexus5 Perf (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_buildername\": \"parent_buildername\", \"parent_buildnumber\": \"1729\", \"parent_revision\": \"deadbeef\", \"path_config\": \"kitchen\", \"recipe\": \"android/perf\", \"repo_name\": \"src\", \"repo_url\": \"https://chromium.googlesource.com/chromium/src.git\", \"revision\": \"deadbeef\", \"slavename\": \"TestSlavename\", \"target\": \"Release\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"bot_id\", \"buildername\": \"Android Nexus6 WebView Perf (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_buildername\": \"parent_buildername\", \"parent_buildnumber\": \"1729\", \"parent_revision\": \"deadbeef\", \"path_config\": \"kitchen\", \"recipe\": \"android/perf\", \"repo_name\": \"src\", \"repo_url\": \"https://chromium.googlesource.com/chromium/src.git\", \"revision\": \"deadbeef\", \"slavename\": \"TestSlavename\", \"target\": \"Release\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"bot_id\", \"buildername\": \"Android Nexus5 Perf (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_buildername\": \"parent_buildername\", \"parent_buildnumber\": \"1729\", \"parent_revision\": \"deadbeef\", \"path_config\": \"kitchen\", \"recipe\": \"android/perf\", \"repo_name\": \"src\", \"repo_url\": \"https://chromium.googlesource.com/chromium/src.git\", \"revision\": \"deadbeef\", \"slavename\": \"TestSlavename\", \"target\": \"Release\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"bot_id\", \"buildername\": \"Android Nexus6 WebView Perf (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_buildername\": \"parent_buildername\", \"parent_buildnumber\": \"1729\", \"parent_revision\": \"deadbeef\", \"path_config\": \"kitchen\", \"recipe\": \"android/perf\", \"repo_name\": \"src\", \"repo_url\": \"https://chromium.googlesource.com/chromium/src.git\", \"revision\": \"deadbeef\", \"slavename\": \"TestSlavename\", \"target\": \"Release\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=perf_test.foo",
-      "--perf-id=android-nexus5",
+      "--perf-id=android-webview-nexus6",
       "--test-type=perf_test.foo",
       "--step-name=perf_test.foo",
       "--chartjson-file",
       "/path/to/tmp/json",
-      "--builder-name=Android Nexus5 Perf (1)",
+      "--builder-name=Android Nexus6 WebView Perf (1)",
       "--slave-name=bot_id",
       "--build-number=571",
       "--run-python-script",
@@ -858,7 +885,6 @@
       "[START_DIR]/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
       "--blacklist-file",
       "[START_DIR]/src/out/bad_devices.json",
-      "--enable-platform-mode",
       "--output-json-data",
       "/path/to/tmp/json"
     ],
@@ -934,18 +960,18 @@
       "android",
       "--no-xvfb",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"bot_id\", \"buildername\": \"Android Nexus5 Perf (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_buildername\": \"parent_buildername\", \"parent_buildnumber\": \"1729\", \"parent_revision\": \"deadbeef\", \"path_config\": \"kitchen\", \"recipe\": \"android/perf\", \"repo_name\": \"src\", \"repo_url\": \"https://chromium.googlesource.com/chromium/src.git\", \"revision\": \"deadbeef\", \"slavename\": \"TestSlavename\", \"target\": \"Release\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"bot_id\", \"buildername\": \"Android Nexus6 WebView Perf (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_buildername\": \"parent_buildername\", \"parent_buildnumber\": \"1729\", \"parent_revision\": \"deadbeef\", \"path_config\": \"kitchen\", \"recipe\": \"android/perf\", \"repo_name\": \"src\", \"repo_url\": \"https://chromium.googlesource.com/chromium/src.git\", \"revision\": \"deadbeef\", \"slavename\": \"TestSlavename\", \"target\": \"Release\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"bot_id\", \"buildername\": \"Android Nexus5 Perf (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_buildername\": \"parent_buildername\", \"parent_buildnumber\": \"1729\", \"parent_revision\": \"deadbeef\", \"path_config\": \"kitchen\", \"recipe\": \"android/perf\", \"repo_name\": \"src\", \"repo_url\": \"https://chromium.googlesource.com/chromium/src.git\", \"revision\": \"deadbeef\", \"slavename\": \"TestSlavename\", \"target\": \"Release\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"bot_id\", \"buildername\": \"Android Nexus6 WebView Perf (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"parent_buildername\": \"parent_buildername\", \"parent_buildnumber\": \"1729\", \"parent_revision\": \"deadbeef\", \"path_config\": \"kitchen\", \"recipe\": \"android/perf\", \"repo_name\": \"src\", \"repo_url\": \"https://chromium.googlesource.com/chromium/src.git\", \"revision\": \"deadbeef\", \"slavename\": \"TestSlavename\", \"target\": \"Release\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=perf_test.foo.reference",
-      "--perf-id=android-nexus5",
+      "--perf-id=android-webview-nexus6",
       "--test-type=perf_test.foo.reference",
       "--step-name=perf_test.foo.reference",
       "--chartjson-file",
       "/path/to/tmp/json",
-      "--builder-name=Android Nexus5 Perf (1)",
+      "--builder-name=Android Nexus6 WebView Perf (1)",
       "--slave-name=bot_id",
       "--build-number=571",
       "--run-python-script",
@@ -958,7 +984,6 @@
       "[START_DIR]/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
       "--blacklist-file",
       "[START_DIR]/src/out/bad_devices.json",
-      "--enable-platform-mode",
       "--output-json-data",
       "/path/to/tmp/json"
     ],
@@ -1057,12 +1082,12 @@
       "----",
       "cp",
       "[START_DIR]/src/out/Release/full_log",
-      "gs://chromium-android/logcat_dumps/Android Nexus5 Perf (1)/571"
+      "gs://chromium-android/logcat_dumps/Android Nexus6 WebView Perf (1)/571"
     ],
     "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/Android Nexus5 Perf (1)/571@@@"
+      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/Android Nexus6 WebView Perf (1)/571@@@"
     ]
   },
   {
@@ -1089,7 +1114,7 @@
       "[START_DIR]/src/chrome/VERSION",
       "/path/to/tmp/"
     ],
-    "name": "get version (2)"
+    "name": "get version (3)"
   },
   {
     "cmd": [
@@ -1128,7 +1153,7 @@
   {
     "cmd": [
       "echo",
-      "Missing: [START_DIR]/src/out/Release/lib.unstripped/libchrome.so [START_DIR]/src/out/Release/dump_syms"
+      "Missing: [START_DIR]/src/out/Release/lib.unstripped/libchrome.so [START_DIR]/src/out/Release/lib.unstripped/libwebviewchromium.so [START_DIR]/src/out/Release/dump_syms"
     ],
     "name": "skipping stackwalker step",
     "~followup_annotations": [

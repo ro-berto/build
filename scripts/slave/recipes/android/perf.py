@@ -65,21 +65,6 @@ def _CreateTestSpec(name, perf_id, required_apks, num_device_shards=1,
 
 def _ChromiumPerfTesters():
   testers = [
-    _CreateTestSpec('Android Nexus5 Perf', 'android-nexus5',
-        required_apks=['ChromePublic.apk'], num_device_shards=7,
-        num_host_shards=3, target_bits=32, enable_platform_mode=True),
-    _CreateTestSpec('Android Nexus5X Perf', 'android-nexus5X',
-        required_apks=['ChromePublic.apk'], num_device_shards=7,
-        num_host_shards=3, enable_platform_mode=True),
-    _CreateTestSpec('Android Nexus6 Perf', 'android-nexus6',
-        required_apks=['ChromePublic.apk'], num_device_shards=7,
-        num_host_shards=3, target_bits=32),
-    _CreateTestSpec('Android Nexus7v2 Perf', 'android-nexus7v2',
-        required_apks=['ChromePublic.apk'], num_device_shards=7,
-        num_host_shards=3, target_bits=32, enable_platform_mode=True),
-    _CreateTestSpec('Android One Perf', 'android-one',
-        required_apks=['ChromePublic.apk'], num_device_shards=7,
-        num_host_shards=3, target_bits=32),
     _CreateTestSpec('Android Nexus5X WebView Perf', 'android-webview-nexus5X',
         required_apks=['SystemWebView.apk', 'SystemWebViewShell.apk'],
         num_device_shards=7, num_host_shards=3, target_bits=64,
@@ -94,21 +79,8 @@ def _ChromiumPerfTesters():
     master_spec.update(spec)
   return master_spec
 
-def _ChromiumPerfFyiTesters():
-  testers = [
-    _CreateTestSpec('Android Power Nexus 5X Perf', 'android-power-nexus-5x',
-        required_apks=['ChromePublic.apk'], num_device_shards=7,
-        num_host_shards=1),
-  ]
-
-  master_spec = {}
-  for spec in testers:
-    master_spec.update(spec)
-  return master_spec
-
 BUILDERS = freeze({
   'chromium.perf': _ChromiumPerfTesters(),
-  'chromium.perf.fyi': _ChromiumPerfFyiTesters(),
 })
 
 
@@ -248,7 +220,7 @@ def GenTests(api):
           repo_name='src',
               repo_url=REPO_URL,
               mastername='chromium.perf',
-              buildername='Android Nexus5 Perf (1)',
+              buildername='Android Nexus6 WebView Perf (1)',
               parent_buildername='parent_buildername',
               parent_buildnumber='1729',
               parent_revision='deadbeef',
@@ -264,7 +236,7 @@ def GenTests(api):
           repo_name='src',
           repo_url=REPO_URL,
           mastername='chromium.perf',
-          buildername='Android Nexus5 Perf (1)',
+          buildername='Android Nexus6 WebView Perf (1)',
           parent_buildername='parent_buildername',
           parent_buildnumber='1729',
           parent_revision='deadbeef',
@@ -282,7 +254,7 @@ def GenTests(api):
           repo_name='src',
           repo_url=REPO_URL,
           mastername='chromium.perf',
-          buildername='Android Nexus5 Perf (1)',
+          buildername='Android Nexus6 WebView Perf (1)',
           parent_buildername='parent_buildername',
           parent_buildnumber='1729',
           parent_revision='deadbeef',
@@ -294,7 +266,7 @@ def GenTests(api):
       api.override_step_data(
         'read test spec (chromium.perf.json)',
         api.json.output({
-            "Android Nexus5 Perf (1)": {
+            "Android Nexus6 WebView Perf (1)": {
               "scripts": [
                 {
                   "name": "host_info",
@@ -307,7 +279,7 @@ def GenTests(api):
           repo_name='src',
           repo_url=REPO_URL,
           mastername='chromium.perf',
-          buildername='Android Nexus5 Perf (1)',
+          buildername='Android Nexus6 WebView Perf (1)',
           parent_buildername='parent_buildername',
           parent_buildnumber='1729',
           parent_revision='deadbeef',
@@ -324,7 +296,7 @@ def GenTests(api):
           repo_name='src',
           repo_url=REPO_URL,
           mastername='chromium.perf',
-          buildername='Android Nexus5 Perf (1)',
+          buildername='Android Nexus6 WebView Perf (1)',
           parent_buildername='parent_buildername',
           parent_buildnumber='1729',
           parent_revision='deadbeef',
@@ -341,7 +313,7 @@ def GenTests(api):
           repo_name='src',
               repo_url=REPO_URL,
               mastername='chromium.perf',
-              buildername='Android Nexus5 Perf (1)',
+              buildername='Android Nexus6 WebView Perf (1)',
               parent_buildername='parent_buildername',
               parent_buildnumber='1729',
               parent_revision='deadbeef',
