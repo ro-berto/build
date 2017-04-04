@@ -24,6 +24,14 @@ DEPS = [
 def RunSteps(api):
   webrtc = api.webrtc
   webrtc.apply_bot_config(webrtc.BUILDERS, webrtc.RECIPE_CONFIGS)
+
+  # TODO(kjellander): Remove when https://bugs.webrtc.org/7413 is fixed.
+  if api.properties['buildername'] in ('Linux32 Debug', 'Linux32 Release'):
+    step_result = api.step('Disabled: see https://bugs.webrtc.org/7413',
+                           cmd=None)
+    step_result.presentation.status = api.step.WARNING
+    return
+
   webrtc.configure_swarming()
 
   webrtc.checkout()
@@ -106,7 +114,9 @@ def GenTests(api):
     test += api.properties(buildnumber=1337)
 
     if (chromium_kwargs.get('TARGET_PLATFORM') != 'android' and
-        bot_config.get('enable_swarming', False)):
+        bot_config.get('enable_swarming', False) and
+        # TODO(kjellander): Remove when https://bugs.webrtc.org/7413 is fixed.
+        buildername not in ('Linux32 Debug', 'Linux32 Release')):
       os_suffix = ' on %s' % bot_config['swarming_dimensions']['os']
       if 'Windows' in os_suffix or os_suffix == ' on Ubuntu-14.04':
         os_suffix = ''
