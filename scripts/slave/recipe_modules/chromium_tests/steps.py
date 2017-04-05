@@ -764,13 +764,14 @@ class DynamicPerfTests(Test):
 
 
 class ResultsHandler(object):
-  def upload_results(self, api, results, step_name):  # pragma: no cover
+  def upload_results(self, api, results, step_name, step_suffix=None):  # pragma: no cover
     """Uploads test results to the Test Results Server.
 
     Args:
       api: Recipe API object.
       results: Results returned by the step.
       step_name: Name of the step that produced results.
+      step_suffix: Suffix appended to the step name.
     """
     raise NotImplementedError()
 
@@ -825,7 +826,7 @@ class JSONResultsHandler(ResultsHandler):
             expected=expected, unexpected=unexpected,
             hi_left=hi_left, hi_right=hi_right)
 
-  def upload_results(self, api, results, step_name):
+  def upload_results(self, api, results, step_name, step_suffix=None):
     if hasattr(results, 'as_jsonish'):
       results = results.as_jsonish()
 
@@ -950,16 +951,28 @@ class FakeCustomResultsHandler(ResultsHandler):
     ])
     presentation.links['uploaded'] = 'fake://'
 
-  def upload_results(self, api, results, step_name):
+  def upload_results(self, api, results, step_name, step_suffix=None):
     test_results = api.test_utils.create_results_from_json(results)
 
 
 class LayoutTestResultsHandler(JSONResultsHandler):
   """Uploads layout test results to Google storage."""
 
-  def upload_results(self, api, results, step_name):
+  # Step name suffixes that we will archive results for.
+  archive_results_suffixes = (
+      None,
+      '',
+      'with patch',
+  )
+
+  def upload_results(self, api, results, step_name, step_suffix=None):
+    # Don't archive the results unless the step_suffix matches
+    if step_suffix not in self.archive_results_suffixes:
+        return
+
     # Also upload to standard JSON results handler
-    JSONResultsHandler.upload_results(self, api, results, step_name)
+    JSONResultsHandler.upload_results(
+        self, api, results, step_name, step_suffix)
 
     # LayoutTest's special archive and upload results
     results_dir = api.path['start_dir'].join('layout-test-results')
@@ -1509,7 +1522,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
       results = self._isolated_script_results
       if results and self._upload_test_results:
         self.results_handler.upload_results(
-            api, results, self._step_name(suffix))
+            api, results, self._step_name(suffix), suffix)
 
   def _output_chartjson_results_if_present(self, api, step_result):
     results = \
@@ -2247,8 +2260,7 @@ class BlinkTest(Test):
         self.results_handler.render_results(
             api, results, step_result.presentation)
 
-        if suffix in ('', 'with patch'):
-          self.results_handler.upload_results(api, results, step_name)
+        self.results_handler.upload_results(api, results, step_name, suffix)
 
   def has_valid_results(self, api, suffix):
     if suffix not in self._test_runs:
