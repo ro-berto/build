@@ -163,6 +163,71 @@ def GenTests(api):
   )
 
   yield (
+    api.test('dynamic_isolated_script_test_on_trybot_passing') +
+    props(extra_swarmed_tests=['telemetry_gpu_unittests']) +
+    api.platform.name('linux') +
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'isolated_scripts': [
+                    {
+                      'isolate_name': 'telemetry_gpu_unittests',
+                      'name': 'telemetry_gpu_unittests',
+                      'swarming': {'can_use_on_swarming_builders': True},
+                    },
+                ],
+            },
+        })
+    ) +
+    suppress_analyze() +
+    api.override_step_data(
+        'telemetry_gpu_unittests (with patch)',
+        api.test_utils.canned_isolated_script_output(
+            passing=True, is_win=False, swarming=True
+        ) +
+        api.swarming.canned_summary_output()
+    )
+  )
+
+  yield (
+    api.test('dynamic_isolated_script_test_on_trybot_failing') +
+    props(extra_swarmed_tests=['telemetry_gpu_unittests']) +
+    api.platform.name('linux') +
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'isolated_scripts': [
+                    {
+                      'isolate_name': 'telemetry_gpu_unittests',
+                      'name': 'telemetry_gpu_unittests',
+                      'swarming': {'can_use_on_swarming_builders': True},
+                    },
+                ],
+            },
+        })
+    ) +
+    suppress_analyze() +
+    api.override_step_data(
+        'telemetry_gpu_unittests (with patch)',
+        api.test_utils.canned_isolated_script_output(
+            passing=True, is_win=False, swarming=True,
+            isolated_script_passing=False,
+        ) +
+        api.swarming.canned_summary_output(failure=True),
+    ) +
+    api.override_step_data(
+        'telemetry_gpu_unittests (without patch)',
+        api.test_utils.canned_isolated_script_output(
+            passing=True, is_win=False, swarming=True,
+            isolated_script_passing=True,
+        ) +
+        api.swarming.canned_summary_output()
+    )
+  )
+
+  yield (
     api.test('dynamic_isolated_script_test_with_args_on_trybot') +
     props(extra_swarmed_tests=['telemetry_gpu_unittests']) +
     api.platform.name('linux') +
@@ -193,7 +258,10 @@ def GenTests(api):
     api.override_step_data(
         'telemetry_gpu_unittests (with patch)',
         api.test_utils.canned_isolated_script_output(
-            passing=True, is_win=False, swarming=True))
+            passing=True, is_win=False, swarming=True,
+        ) +
+        api.swarming.canned_summary_output(failure=False)
+    )
   )
 
   yield (
@@ -610,14 +678,18 @@ def GenTests(api):
     )
   )
 
-  # This tests that if the first fails, but the second pass succeeds
-  # that we fail the whole build.
-  yield (
-    api.test('blink_minimal_pass_continues') +
+  webkit_tests = (
     props(mastername='tryserver.blink',
           buildername='linux_trusty_blink_rel') +
     suppress_analyze() +
-    api.platform.name('linux') +
+    api.platform.name('linux')
+  )
+
+  # This tests that if the first fails, but the second pass succeeds
+  # that we fail the whole build.
+  yield (
+    api.test('webkit_tests_minimal_pass_continues') +
+    webkit_tests +
     api.override_step_data('webkit_tests (with patch)',
         api.test_utils.canned_test_output(passing=False)) +
     api.override_step_data('webkit_tests (without patch)',
@@ -625,11 +697,8 @@ def GenTests(api):
   )
 
   yield (
-    api.test('blink_compile_without_patch_fails') +
-    props(mastername='tryserver.blink',
-          buildername='linux_trusty_blink_rel') +
-    suppress_analyze() +
-    api.platform.name('linux') +
+    api.test('webkit_tests_compile_without_patch_fails') +
+    webkit_tests +
     api.override_step_data('webkit_tests (with patch)',
         api.test_utils.canned_test_output(passing=False)) +
     api.override_step_data('compile (without patch)', retcode=1)
@@ -642,10 +711,7 @@ def GenTests(api):
   # 255 == test_run_results.UNEXPECTED_ERROR_EXIT_STATUS in run-webkit-tests.
   yield (
     api.test('webkit_tests_unexpected_error') +
-    props(mastername='tryserver.blink',
-          buildername='linux_trusty_blink_rel') +
-    suppress_analyze() +
-    api.platform.name('linux') +
+    webkit_tests +
     api.override_step_data('webkit_tests (with patch)',
         api.test_utils.canned_test_output(passing=False, retcode=255))
   )
@@ -657,10 +723,7 @@ def GenTests(api):
   # 130 == test_run_results.INTERRUPTED_EXIT_STATUS in run-webkit-tests.
   yield (
     api.test('webkit_tests_interrupted') +
-    props(mastername='tryserver.blink',
-          buildername='linux_trusty_blink_rel') +
-    suppress_analyze() +
-    api.platform.name('linux') +
+    webkit_tests +
     api.override_step_data('webkit_tests (with patch)',
         api.test_utils.canned_test_output(passing=False, retcode=130))
   )
@@ -670,11 +733,8 @@ def GenTests(api):
   # (this should be a soft failure and we can still retry w/o the patch
   # and compare the lists of failing tests).
   yield (
-    api.test('too_many_failures_for_retcode') +
-    props(mastername='tryserver.blink',
-          buildername='linux_trusty_blink_rel') +
-    suppress_analyze() +
-    api.platform.name('linux') +
+    api.test('webkit_tests_too_many_failures_for_retcode') +
+    webkit_tests +
     api.override_step_data('webkit_tests (with patch)',
         api.test_utils.canned_test_output(passing=False,
                                           num_additional_failures=125)) +
@@ -684,13 +744,118 @@ def GenTests(api):
 
   yield (
     api.test('webkit_tests_with_and_without_patch_fail') +
-    suppress_analyze() +
-    props(mastername='tryserver.blink',
-          buildername='linux_trusty_blink_rel') +
+    webkit_tests +
     api.override_step_data('webkit_tests (with patch)',
         api.test_utils.canned_test_output(passing=False)) +
     api.override_step_data('webkit_tests (without patch)',
         api.test_utils.canned_test_output(passing=False, minimal=True))
+  )
+
+  swarmed_webkit_tests = (
+    props(extra_swarmed_tests=['webkit_layout_tests']) +
+    api.platform.name('linux') +
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'isolated_scripts': [
+                    {
+                      'isolate_name': 'webkit_layout_tests',
+                      'name': 'webkit_layout_tests',
+                      'swarming': {'can_use_on_swarming_builders': True},
+                      'results_handler': 'layout tests',
+                    },
+                ],
+            },
+        })
+    ) +
+    suppress_analyze()
+  )
+
+  # This tests that if the first fails, but the second pass succeeds
+  # that we fail the whole build.
+  yield (
+    api.test('swarmed_webkit_tests_minimal_pass_continues') +
+    swarmed_webkit_tests +
+    api.override_step_data('webkit_layout_tests (with patch)',
+        api.test_utils.canned_isolated_script_output(
+            passing=True, swarming=True,
+            isolated_script_passing=False)) +
+    api.override_step_data('webkit_layout_tests (without patch)',
+        api.test_utils.canned_isolated_script_output(
+            passing=True, swarming=True,
+            isolated_script_passing=True))
+  )
+
+  yield (
+    api.test('swarmed_webkit_tests_compile_without_patch_fails') +
+    swarmed_webkit_tests +
+    api.override_step_data('webkit_layout_tests (with patch)',
+        api.test_utils.canned_isolated_script_output(
+            passing=True, swarming=True,
+            isolated_script_passing=False)) +
+    api.override_step_data('compile (without patch)', retcode=1)
+  )
+
+  # This tests what happens if something goes horribly wrong in
+  # run-webkit-tests and we return an internal error; the step should
+  # be considered a hard failure and we shouldn't try to compare the
+  # lists of failing tests.
+  # 255 == test_run_results.UNEXPECTED_ERROR_EXIT_STATUS in run-webkit-tests.
+  yield (
+    api.test('swarmed_webkit_tests_unexpected_error') +
+    swarmed_webkit_tests +
+    api.override_step_data('webkit_layout_tests (with patch)',
+        api.test_utils.canned_isolated_script_output(
+            passing=True, swarming=True,
+            isolated_script_passing=False,
+            isolated_script_retcode=255))
+  )
+
+  # TODO(dpranke): crbug.com/357866 . This tests what happens if we exceed the
+  # number of failures specified with --exit-after-n-crashes-or-times or
+  # --exit-after-n-failures; the step should be considered a hard failure and
+  # we shouldn't try to compare the lists of failing tests.
+  # 130 == test_run_results.INTERRUPTED_EXIT_STATUS in run-webkit-tests.
+  yield (
+    api.test('swarmed_webkit_tests_interrupted') +
+    swarmed_webkit_tests +
+    api.override_step_data('webkit_layout_tests (with patch)',
+        api.test_utils.canned_isolated_script_output(
+            passing=True, swarming=True,
+            isolated_script_passing=False,
+            isolated_script_retcode=130))
+  )
+
+  # This tests what happens if we don't trip the thresholds listed
+  # above, but fail more tests than we can safely fit in a return code.
+  # (this should be a soft failure and we can still retry w/o the patch
+  # and compare the lists of failing tests).
+  yield (
+    api.test('swarmed_layout_tests_too_many_failures_for_retcode') +
+    swarmed_webkit_tests +
+    api.override_step_data('webkit_layout_tests (with patch)',
+        api.test_utils.canned_isolated_script_output(
+            passing=True, swarming=True,
+            isolated_script_passing=False,
+            isolated_script_retcode=125)) +
+    api.override_step_data('webkit_layout_tests (without patch)',
+        api.test_utils.canned_isolated_script_output(
+            passing=True,
+            isolated_script_passing=True))
+  )
+
+  yield (
+    api.test('swarmed_layout_tests_with_and_without_patch_fail') +
+    swarmed_webkit_tests +
+    api.override_step_data('webkit_layout_tests (with patch)',
+        api.test_utils.canned_isolated_script_output(
+            passing=True, swarming=True,
+            isolated_script_passing=False)) +
+    api.override_step_data('webkit_layout_tests (without patch)',
+        api.test_utils.canned_isolated_script_output(
+            passing=True, swarming=True,
+            isolated_script_passing=True))
   )
 
   yield (

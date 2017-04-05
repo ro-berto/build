@@ -1438,7 +1438,6 @@ class LocalIsolatedScriptTest(Test):
     return self._test_runs[suffix]
 
 
-
 class SwarmingIsolatedScriptTest(SwarmingTest):
 
   def __init__(self, name, args=None, target_name=None, shards=1,
@@ -1507,12 +1506,21 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     if valid:
       self._isolated_script_results = results
 
+    # Even if the output is valid, if the return code is greater than
+    # MAX_FAILURES_EXIT_STATUS then the test did not complete correctly and the
+    # results can't be trusted. It probably exited early due to a large number
+    # of failures or an environment setup issue.
+    if step_result.retcode > api.test_utils.MAX_FAILURES_EXIT_STATUS:
+      return False, failures
+
     if step_result.retcode == 0 and not valid:
       # This failure won't be caught automatically. Need to manually
       # raise it as a step failure.
       raise api.step.StepFailure(api.test_utils.INVALID_RESULTS_MAGIC)
+
     # Check for chartjson results and upload to results dashboard if present.
     self._output_chartjson_results_if_present(api, step_result)
+
     return valid, failures
 
   def post_run(self, api, suffix):
@@ -1858,7 +1866,7 @@ class PythonBasedTest(Test):
     if not hasattr(step, 'test_utils'):
       return False  # pragma: no cover
     return (step.test_utils.test_results.valid and
-            step.retcode <= step.test_utils.test_results.MAX_FAILURES_EXIT_STATUS and
+            step.retcode <= api.test_utils.MAX_FAILURES_EXIT_STATUS and
             (step.retcode == 0) or self.failures(api, suffix))
 
   def failures(self, api, suffix):
@@ -2274,7 +2282,7 @@ class BlinkTest(Test):
     # if we bailed out after 100 crashes w/ -exit-after-n-crashes, in
     # which case the retcode is actually 130
     return (step.test_utils.test_results.valid and
-            step.retcode <= step.test_utils.test_results.MAX_FAILURES_EXIT_STATUS)
+            step.retcode <= api.test_utils.MAX_FAILURES_EXIT_STATUS)
 
   def failures(self, api, suffix):
     return self._test_runs[suffix].test_utils.test_results.unexpected_failures

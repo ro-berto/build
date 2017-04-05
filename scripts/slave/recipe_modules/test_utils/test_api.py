@@ -2,6 +2,7 @@ import json
 
 from recipe_engine import recipe_test_api
 
+from .api import TestUtilsApi
 from .util import GTestResults, TestResults
 
 class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
@@ -49,7 +50,8 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
     if retcode is not None:
         ret.retcode = retcode
     else:
-        ret.retcode = min(t.raw['num_regressions'], t.MAX_FAILURES_EXIT_STATUS)
+        ret.retcode = min(
+            t.raw['num_regressions'], TestUtilsApi.MAX_FAILURES_EXIT_STATUS)
     return ret
 
   def raw_test_output(self, jsonish, retcode):
@@ -193,9 +195,11 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
       per_shard_results.append(jsonish_results)
     return per_shard_results
 
-  def canned_isolated_script_output(self, passing, is_win, swarming=False,
+  def canned_isolated_script_output(self, passing, is_win=False, swarming=False,
                                     shards=1, swarming_internal_failure=False,
-                                    isolated_script_passing=True, valid=None,
+                                    isolated_script_passing=True,
+                                    isolated_script_retcode=None,
+                                    valid=None,
                                     missing_shards=[],
                                     empty_shards=[],
                                     use_json_test_format=False,
@@ -203,6 +207,7 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
                                     benchmark_enabled=True,
                                     corrupt=False,
                                     unknown=False,
+                                    canned_summary=None,
                                     ):
     """Produces a test results' compatible json for isolated script tests. """
     per_shard_results = []
@@ -234,10 +239,14 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
       jsonish_shards = []
       files_dict = {}
       for i in xrange(shards):
+        if isolated_script_retcode is None:
+            exit_code = '1' if not passing or swarming_internal_failure else '0'
+        else:
+            exit_code = str(isolated_script_retcode)
         jsonish_shards.append({
           'failure': not passing,
           'internal_failure': swarming_internal_failure,
-          'exit_code': '1' if not passing or swarming_internal_failure else '0'
+          'exit_code': exit_code,
         })
         swarming_path = str(i)
         swarming_path += '\\output.json' if is_win else '/output.json'

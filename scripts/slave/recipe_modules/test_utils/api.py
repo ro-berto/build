@@ -26,6 +26,11 @@ class GTestResultsOutputPlaceholder(JsonOutputPlaceholder):
 
 class TestUtilsApi(recipe_api.RecipeApi):
 
+  # Some test runners (such as run-webkit-tests and python tests) returns the
+  # number of failures as the return code. They need to cap the return code at
+  # 101 to avoid overflow or colliding with reserved values from the shell.
+  MAX_FAILURES_EXIT_STATUS = 101
+
   # This magic string is depended on by other infra tools.
   INVALID_RESULTS_MAGIC = 'TEST RESULTS WERE INVALID'
 

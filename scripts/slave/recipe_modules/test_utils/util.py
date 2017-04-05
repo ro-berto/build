@@ -33,14 +33,8 @@ class TestResults(object):
     self.skipped = {}
     self.unknown = {}
 
-
     # TODO(dpranke): https://crbug.com/357866 - we should simplify the handling
-    # of both the return code and parsing the actual results, below.
-
-    # run-webkit-tests returns the number of failures as the return
-    # code, but caps the return code at 101 to avoid overflow or colliding
-    # with reserved values from the shell.
-    self.MAX_FAILURES_EXIT_STATUS = 101
+    # of both the return code and parsing the actual results.
 
     if self.version == 'simplified':
       self._simplified_json_results()
