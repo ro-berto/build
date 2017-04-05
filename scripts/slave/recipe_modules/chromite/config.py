@@ -53,7 +53,6 @@ def BaseConfig(CBB_CONFIG=None, CBB_BRANCH=None, CBB_BUILD_NUMBER=None,
       # The Chromite configuration to use.
       config = Single(basestring, empty_val=CBB_CONFIG),
 
-      # TODO(dgarrett): Obsolete. Remove after a roll happens.
       # The buildroot directory name to use.
       builddir = Single(basestring),
 
@@ -78,12 +77,10 @@ def BaseConfig(CBB_CONFIG=None, CBB_BRANCH=None, CBB_BUILD_NUMBER=None,
       # The (optional) configuration repository to use.
       config_repo = Single(basestring),
 
-      # TODO(dgarrett): Obsolete. Remove after a roll happens.
       # This disables Chromite bootstrapping by omitting the explicit "--branch"
       # argument.
       disable_bootstrap = Single(bool),
 
-      # TODO(dgarrett): Obsolete. Remove after a roll happens.
       # Whether this Chromite version supports warm cache.
       # https://chromium-review.googlesource.com/#/c/348011
       supports_repo_cache = Single(bool),
@@ -94,7 +91,6 @@ def BaseConfig(CBB_CONFIG=None, CBB_BRANCH=None, CBB_BUILD_NUMBER=None,
       # If supplied, forward to cbuildbot as '--buildbucket-id'
       buildbucket_id = Single(basestring, empty_val=CBB_BUILDBUCKET_ID),
 
-      # TODO(dgarrett): Obsolete. Remove after a roll happens.
       # If set, use goma for the build.
       use_goma = Single(bool),
 
@@ -102,7 +98,6 @@ def BaseConfig(CBB_CONFIG=None, CBB_BRANCH=None, CBB_BUILD_NUMBER=None,
       extra_args = List(basestring),
     ),
 
-    # TODO(dgarrett): Obsolete. Remove after a roll happens.
     # A list of branches whose Chromite version is "old". Old Chromite
     # buildbot commands reside in the "buildbot" subdirectory of the Chromite
     # repository instead of the "bin".
@@ -120,13 +115,11 @@ def BaseConfig(CBB_CONFIG=None, CBB_BRANCH=None, CBB_BUILD_NUMBER=None,
     # Set in "base".
     branch_version = Single(int),
 
-    # TODO(dgarrett): Obsolete. Remove after a roll happens.
     # Directory where a warm repo cache is stored. If set, and if the current
     # build supports a warm cache, this will be used to bootstrap the Chromite
     # checkout.
     repo_cache_dir = Single(basestring),
 
-    # TODO(dgarrett): Obsolete. Remove after a roll happens.
     # The branch version where the "--git-cache" flag was introduced.
     # Set to a ToT build after R54 branch, "release-R54-8743.B".
     git_cache_min_branch_version = Single(int, empty_val=8829),
@@ -202,7 +195,14 @@ def base(c):
 @config_ctx(includes=['base'])
 def cros(c):
   """Base configuration for CrOS builders to inherit from."""
-  c.cbb.git_cache_dir = '/b/cros_git_cache'
+  # Enable Git cache on all ToT builds and release branches that support it.
+  if (c.branch_version is None or
+      c.branch_version >= c.git_cache_min_branch_version):
+    c.cbb.git_cache_dir = '/b/cros_git_cache'
+  # Enable goma on all ToT builds and release branches that support it.
+  if (c.branch_version is None or
+      c.branch_version >= c.goma_min_branch_version):
+    c.cbb.use_goma = True
 
 
 @config_ctx(includes=['cros'])
@@ -220,19 +220,29 @@ def external(c):
 @config_ctx(group='master', includes=['external'])
 def master_chromiumos_chromium(c):
   c.use_chrome_version = True
+  c.cbb.builddir = 'shared_external'
 
 
 @config_ctx(group='master', includes=['external'])
 def master_chromiumos(c):
-  pass
+  c.cbb.builddir = 'external_master'
+  c.cbb.supports_repo_cache = True
+
+
+@config_ctx(group='build_type')
+def chromiumos_paladin(c):
+  c.read_cros_manifest = True
+
 
 @config_ctx(group='master', includes=['external'])
 def master_chromiumos_tryserver(c):
-  pass
+  c.cbb.disable_bootstrap = True
+
 
 @config_ctx(includes=['master_chromiumos'])
 def chromiumos_coverage(c):
   c.use_chrome_version = True
+  c.read_cros_manifest = True
   c.cbb.chrome_rev = 'stable'
   c.cbb.config_repo = 'https://example.com/repo.git'
 

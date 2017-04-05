@@ -15,7 +15,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "chromite@master:",
+      "chromite@firmware-uboot_v2-1299.B:",
       "--output_manifest"
     ],
     "env": {
@@ -30,7 +30,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"chromite\": \"master:\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"chromite\": \"firmware-uboot_v2-1299.B:\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {}, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
@@ -43,47 +43,11 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "ensure_goma"
-  },
-  {
-    "cmd": [
-      "cipd",
-      "ensure",
-      "-root",
-      "[CACHE]/goma_client",
-      "-ensure-file",
-      "infra/tools/cloudtail/linux-amd64 goma_recipe_module\ninfra_internal/goma/client/linux-amd64 release",
-      "-json-output",
-      "/path/to/tmp/json",
-      "-service-account-json",
-      "/creds/service_accounts/service-account-goma-client.json"
-    ],
-    "infra_step": true,
-    "name": "ensure_goma.ensure_installed",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-goma_recipe_modu\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/cloudtail/linux-amd64\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/linux-amd64\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
     "allow_subannotations": true,
     "cmd": [
-      "[START_DIR]/chromite/scripts/cbuildbot_launch",
+      "[START_DIR]/chromite/buildbot/cbuildbot",
       "--buildroot",
-      "[ROOT]/cbuild/repository",
+      "[ROOT]/cbuild/external_master",
       "--buildbot",
       "--branch",
       "firmware-uboot_v2-1299.B",
@@ -95,12 +59,8 @@
       "--clobber",
       "--config_repo",
       "https://example.com/repo.git",
-      "--git-cache-dir",
-      "/b/cros_git_cache",
-      "--goma_dir",
-      "[CACHE]/goma_client",
-      "--goma_client_json",
-      "/creds/service_accounts/service-account-goma-client.json",
+      "--repo-cache",
+      "/var/cache/chrome-infra/ccompute-setup/cros-internal",
       "x86-generic-full"
     ],
     "cwd": "[START_DIR]",

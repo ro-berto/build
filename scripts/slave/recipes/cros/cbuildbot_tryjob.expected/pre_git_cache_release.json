@@ -15,7 +15,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "chromite@master:",
+      "chromite@release-R54-8743.B:",
       "--output_manifest"
     ],
     "env": {
@@ -30,7 +30,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"chromite\": \"master:\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"chromite\": \"release-R54-8743.B:\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {}, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
@@ -43,55 +43,49 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "ensure_goma"
+    "cmd": [
+      "git",
+      "checkout",
+      "release-R54-8743.B"
+    ],
+    "cwd": "[START_DIR]/chromite",
+    "infra_step": true,
+    "name": "checkout chromite branch [release-R54-8743.B]"
   },
   {
     "cmd": [
-      "cipd",
-      "ensure",
-      "-root",
-      "[CACHE]/goma_client",
-      "-ensure-file",
-      "infra/tools/cloudtail/linux-amd64 goma_recipe_module\ninfra_internal/goma/client/linux-amd64 release",
-      "-json-output",
-      "/path/to/tmp/json",
-      "-service-account-json",
-      "/creds/service_accounts/service-account-goma-client.json"
+      "git",
+      "pull"
     ],
+    "cwd": "[START_DIR]/chromite",
     "infra_step": true,
-    "name": "ensure_goma.ensure_installed",
+    "name": "sync chromite branch [release-R54-8743.B]"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[START_DIR]/chromite/cbuildbot/config_dump.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "read chromite config",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-goma_recipe_modu\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/cloudtail/linux-amd64\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/linux-amd64\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_LINE@config@{@@@",
+      "@@@STEP_LOG_LINE@config@  \"x86-generic-full\": {@@@",
+      "@@@STEP_LOG_LINE@config@    \"_template\": \"full\", @@@",
+      "@@@STEP_LOG_LINE@config@    \"build_type\": \"full\"@@@",
+      "@@@STEP_LOG_LINE@config@  }@@@",
+      "@@@STEP_LOG_LINE@config@}@@@",
+      "@@@STEP_LOG_END@config@@@"
     ]
   },
   {
     "allow_subannotations": true,
     "cmd": [
-      "[START_DIR]/chromite/scripts/cbuildbot_launch",
+      "[START_DIR]/chromite/bin/cbuildbot",
       "--buildroot",
-      "[ROOT]/cbuild/repository",
-      "--branch",
-      "release-R54-8743.B",
-      "--git-cache-dir",
-      "/b/cros_git_cache",
-      "--goma_dir",
-      "[CACHE]/goma_client",
-      "--goma_client_json",
-      "/creds/service_accounts/service-account-goma-client.json",
+      "[ROOT]/cbuild/external_master",
       "--timeout",
       "14400",
       "--remote-trybot",

@@ -87,6 +87,29 @@ def RunSteps(api):
 
   # Load the Chromite configuration for our target.
   api.chromite.checkout_chromite()
+  cbb_config = api.chromite.load_config(cbb_config_name)
+
+  # Determine our build directory name based on whether this build is internal
+  # or external.
+  #
+  # We have two checkout options: internal and external. By default we will
+  # infer which to use based on the Chromite config. However, the pinned
+  # Chromite config may not be up to date. If the value cannot be inferred, we
+  # will "quarantine" the build by running it in a separate "etc_master"
+  # build root and instructing `cbuildbot` to clobber beforehand.
+  #
+  # TODO: As the configuration owner, Chromite should be the entity to make the
+  # internal/external buildroot decision. A future iteration should add flags
+  # to Chromite to inform it of the internal/external build roots on the slave
+  # and defer to it to decide which to use based on the config that it is
+  # executing.
+  if not api.chromite.c.cbb.builddir:
+    if cbb_config:
+      namebase = 'internal' if cbb_config.get('internal') else 'external'
+      api.chromite.c.cbb.builddir = '%s_master' % (namebase,)
+    else:
+      api.chromite.c.cbb.builddir = 'etc_master'
+      api.chromite.c.cbb.clobber = True
 
   # Run our 'cbuildbot'.
   api.chromite.run(args=tryjob_args)
@@ -113,6 +136,7 @@ def GenTests(api):
                          '"--remote-version=4"]',
           **common_properties
       )
+      + api.chromite.seed_chromite_config(_CHROMITE_CONFIG)
   )
 
   yield (
@@ -124,6 +148,7 @@ def GenTests(api):
                          '"--remote-version=4"]',
           **common_properties
       )
+      + api.chromite.seed_chromite_config(_CHROMITE_CONFIG)
   )
 
   yield (
@@ -136,6 +161,7 @@ def GenTests(api):
                          '"--remote-version=4"]',
           **common_properties
       )
+      + api.chromite.seed_chromite_config(_CHROMITE_CONFIG)
   )
 
   yield (
@@ -149,6 +175,7 @@ def GenTests(api):
               '--remote-version=4', '--branch=release-R00-0000.B']),
           **common_properties
       )
+      + api.chromite.seed_chromite_config(_CHROMITE_CONFIG)
   )
 
   yield (
@@ -162,6 +189,7 @@ def GenTests(api):
               '--remote-version=4', '--branch', 'release-R00-0000.B']),
           **common_properties
       )
+      + api.chromite.seed_chromite_config(_CHROMITE_CONFIG)
   )
 
   yield (
@@ -174,6 +202,7 @@ def GenTests(api):
                          '"--remote-version=4"]',
           **common_properties
       )
+      + api.chromite.seed_chromite_config(_CHROMITE_CONFIG)
   )
 
   # Test a CrOS tryjob with compressed "cbb_extra_args".
@@ -187,6 +216,7 @@ def GenTests(api):
             '/PzbE2UYgFJaBNI'),
           **common_properties
       )
+      + api.chromite.seed_chromite_config(_CHROMITE_CONFIG)
   )
 
   # Test a config that is not registered in Chromite.
@@ -199,6 +229,7 @@ def GenTests(api):
                          '"--remote-version=4"]',
           **common_properties
       )
+      + api.chromite.seed_chromite_config(_CHROMITE_CONFIG)
   )
 
   # Test a config with buildbucket properties
@@ -212,4 +243,5 @@ def GenTests(api):
           buildbucket=json.dumps({'build': {'id':'12345'}}),
           **common_properties
       )
+      + api.chromite.seed_chromite_config(_CHROMITE_CONFIG)
   )

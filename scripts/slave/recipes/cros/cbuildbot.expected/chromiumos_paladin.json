@@ -46,6 +46,24 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[START_DIR]/chromite/cbuildbot/config_dump.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "read chromite config",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@config@{@@@",
+      "@@@STEP_LOG_LINE@config@  \"x86-generic-paladin\": {@@@",
+      "@@@STEP_LOG_LINE@config@    \"build_type\": \"paladin\"@@@",
+      "@@@STEP_LOG_LINE@config@  }@@@",
+      "@@@STEP_LOG_LINE@config@}@@@",
+      "@@@STEP_LOG_END@config@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[build::gitiles]/resources/gerrit_client.py",
       "--json-file",
       "/path/to/tmp/json",
@@ -120,9 +138,9 @@
   {
     "allow_subannotations": true,
     "cmd": [
-      "[START_DIR]/chromite/scripts/cbuildbot_launch",
+      "[START_DIR]/chromite/bin/cbuildbot",
       "--buildroot",
-      "[ROOT]/cbuild/repository",
+      "[ROOT]/cbuild/external_master",
       "--buildbot",
       "--branch",
       "master",

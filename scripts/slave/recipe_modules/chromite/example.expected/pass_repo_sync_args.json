@@ -1,14 +1,94 @@
 [
   {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[depot_tools]/repo",
+      "init",
+      "-u",
+      "https://chromium.googlesource.com/chromiumos/manifest.git",
+      "--repo-url",
+      "https://chromium.googlesource.com/external/repo.git"
+    ],
+    "infra_step": true,
+    "name": "repo init"
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[depot_tools]/repo",
+      "sync",
+      "-j16"
+    ],
+    "infra_step": true,
+    "name": "repo sync"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/chromite/bin/cros_sdk",
+      "--cache-dir",
+      ".cache",
+      "--",
+      "./setup_board",
+      "--board",
+      "amd64-generic"
+    ],
+    "name": "setup board"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/chromite/bin/cros_sdk",
+      "--",
+      "./build_packages",
+      "--board",
+      "amd64-generic"
+    ],
+    "name": "build packages"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/chromite/bin/cros_sdk",
+      "var1=value",
+      "--",
+      "echo",
+      "hello"
+    ],
+    "name": "cros_sdk"
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
-      "[START_DIR]/chromite/scripts/cbuildbot_launch",
+      "[START_DIR]/chromite/bin/cbuildbot",
       "--clobber",
       "--build-dir",
       "/here/there",
       "amd64-generic-full"
     ],
     "name": "cbuildbot"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[START_DIR]/chromite/cbuildbot/config_dump.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "read chromite config",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@config@{@@@",
+      "@@@STEP_LOG_LINE@config@  \"myconfig\": {@@@",
+      "@@@STEP_LOG_LINE@config@    \"_template\": \"woot\", @@@",
+      "@@@STEP_LOG_LINE@config@    \"baz\": \"templated\", @@@",
+      "@@@STEP_LOG_LINE@config@    \"foo\": \"bar\", @@@",
+      "@@@STEP_LOG_LINE@config@    \"local\": \"variable\"@@@",
+      "@@@STEP_LOG_LINE@config@  }@@@",
+      "@@@STEP_LOG_LINE@config@}@@@",
+      "@@@STEP_LOG_END@config@@@"
+    ]
   },
   {
     "name": "$result",

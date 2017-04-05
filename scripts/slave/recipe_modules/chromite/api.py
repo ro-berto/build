@@ -8,6 +8,33 @@ import re
 from recipe_engine import recipe_api
 
 
+class Config(object):
+  _NONE = object()
+
+  def __init__(self, name, *layers):
+    self.name = name
+    self.layers = layers
+
+  def get(self, key, d=None):
+    for l in self.layers:
+      v = l.get(key, self._NONE)
+      if v is not self._NONE:
+        return v
+    return d
+
+  def __getitem__(self, key):
+    v = self.get(key, self._NONE)
+    if v is not self._NONE:
+      return v
+    raise KeyError('Invalid configuration key: %s' % (key,))
+
+  def dict(self):
+    d = {}
+    for l in reversed(self.layers):
+      d.update(l)
+    return d
+
+
 class ChromiteApi(recipe_api.RecipeApi):
   chromite_url = 'https://chromium.googlesource.com/chromiumos/chromite.git'
   manifest_url = 'https://chromium.googlesource.com/chromiumos/manifest.git'
@@ -49,6 +76,49 @@ class ChromiteApi(recipe_api.RecipeApi):
       defaults['CBB_BUILDBUCKET_ID'] = buildbucket_props['build']['id']
 
     return defaults
+
+  def _load_config_dump(self):
+    if self.using_old_chromite_layout or self.c.cbb.config_repo:
+      # Our method of loading the configuration from the JSON dump will not
+      # work on old Chromite layout repositories.
+      #
+      # We also don't support loading our configuration from an external config
+      # repo. If we wanted to support this in the future, we would need to
+      # check out that other config repo at the correct revision and load
+      # "config_dump.json" from its root.
+      return {}
+
+    if not self._cached_config:
+      config_path = self.m.path.join(self.chromite_path,
+                                     'cbuildbot', 'config_dump.json')
+      step_result = self.m.json.read('read chromite config', config_path,
+                                     add_json_log=False)
+      self._cached_config = step_result.json.output
+    return self._cached_config
+
+  def load_config(self, name):
+    c = self._load_config_dump()
+    assert c is not None, 'Unable to load config dump'
+
+    conf = c.get(name)
+    if conf is None:
+      return None
+
+    layers = [conf]
+    template = conf.get('_template')
+    if template:
+      layers.append(c['_templates'][template])
+    default = c.get('_default')
+    if default:
+      layers.append(default)
+
+    config = Config(name, *layers)
+
+    presentation_dict = {name: config.dict()}
+    self.m.step.active_result.presentation.logs['config'] = [
+      self.m.json.dumps(presentation_dict, indent=2),
+    ]
+    return config
 
   def check_repository(self, repo_type_key, value):
     """Scans through registered repositories for a specified value.
@@ -130,8 +200,24 @@ class ChromiteApi(recipe_api.RecipeApi):
     soln.url = self.chromite_url
     # Set the revision using 'bot_update' remote branch:revision notation.
     # Omitting the revision uses HEAD.
-    soln.revision = 'master:'
+    soln.revision = '%s:' % (self.c.chromite_branch,)
     return cfg
+
+  def checkout(self, manifest_url=None, repo_url=None, repo_sync_args=None):
+    if repo_sync_args is None:
+      repo_sync_args = []
+
+    manifest_url = manifest_url or self.manifest_url
+    repo_url = repo_url or self.repo_url
+
+    self.m.repo.init(manifest_url, '--repo-url', repo_url)
+    self.m.repo.sync(*repo_sync_args)
+
+  @property
+  def using_old_chromite_layout(self):
+    """Returns (bool): True if we're using old Chromite checkout layout.
+    """
+    return self.c.chromite_branch in self.c.old_chromite_branches
 
   def cbuildbot(self, name, config, args=None, **kwargs):
     """Runs the cbuildbot command defined by the arguments.
@@ -146,8 +232,35 @@ class ChromiteApi(recipe_api.RecipeApi):
     args = (args or [])[:]
     args.append(config)
 
-    cmd = [self.chromite_path.join('scripts', 'cbuildbot_launch')] + args
+    bindir = 'bin'
+    if self.using_old_chromite_layout:
+      bindir = 'buildbot'
+    cmd = [self.chromite_path.join(bindir, 'cbuildbot')] + args
     return self.m.step(name, cmd, allow_subannotations=True, **kwargs)
+
+  def cros_sdk(self, name, cmd, args=None, environ=None, **kwargs):
+    """Return a step to run a command inside the cros_sdk."""
+    chroot_cmd = self.chromite_path.join('bin', 'cros_sdk')
+
+    arg_list = (args or [])[:]
+    for t in sorted((environ or {}).items()):
+      arg_list.append('%s=%s' % t)
+    arg_list.append('--')
+    arg_list.extend(cmd)
+
+    self.m.python(name, chroot_cmd, arg_list, **kwargs)
+
+  def setup_board(self, board, args=None, **kwargs):
+    """Run the setup_board script inside the chroot."""
+    self.cros_sdk('setup board',
+                  ['./setup_board', '--board', board],
+                  args, **kwargs)
+
+  def build_packages(self, board, args=None, **kwargs):
+    """Run the build_packages script inside the chroot."""
+    self.cros_sdk('build packages',
+                  ['./build_packages', '--board', board],
+                  args, **kwargs)
 
   def configure(self, properties, config_map, **KWARGS):
     """Loads configuration from build properties into this recipe config.
@@ -178,6 +291,7 @@ class ChromiteApi(recipe_api.RecipeApi):
       for config_name in config_map.get('variants', {}).get(variant, ()):
         self.apply_config(config_name)
 
+
   def run_cbuildbot(self):
     """Performs a Chromite repository checkout, then runs cbuildbot.
     """
@@ -191,9 +305,52 @@ class ChromiteApi(recipe_api.RecipeApi):
         gclient_config=self.gclient_config(),
         update_presentation=False)
 
+    if self.c.chromite_branch and self.c.cbb.disable_bootstrap:
+      # Chromite auto-detects which branch to build for based on its current
+      # checkout. "bot_update" checks out remote branches, but Chromite requires
+      # a local branch.
+      #
+      # Normally we'd bootstrap, but if we're disabling bootstrapping, we have
+      # to checkout the local branch to let Chromite know which branch to build.
+      self.m.git('checkout', self.c.chromite_branch,
+          name=str('checkout chromite branch [%s]' % (self.c.chromite_branch)))
+      self.m.git('pull',
+          name=str('sync chromite branch [%s]' % (self.c.chromite_branch)))
     self._set_chromite_path(self.m.path['checkout'])
 
+    # If we are configured with build type configurations, we will need to load
+    # the Chromite configuration for this configuration target.
+    self._apply_build_type_config()
+
     return self.chromite_path
+
+  def _apply_build_type_config(self):
+    """Identify the "build_type" field for this config, and apply any additional
+    recipe configurations based on that value.
+
+    This is used to specialize builders based on the type of builder that they
+    are.
+
+    If no build type config is defined for this configuration's build type, or
+    if this configuration's build type could not be loaded, no additional
+    configuration will be applied.
+    """
+    if not self.c.build_type_configs:
+      # If no build type configs are defined, then there's no point doing the
+      # work of loading the configuration.
+      return
+
+    # Load our build type from the configuration JSON, if one is not already
+    # provided.
+    if not self.c.build_type:
+      assert self.c.cbb.config, 'No build configuration installed.'
+      config = self.load_config(self.c.cbb.config)
+      self.c.build_type = (config or {}).get('build_type')
+
+    # If we have a build type, and it has a configuration associated with it,
+    # apply that configuration.
+    if self.c.build_type and self.c.build_type in self.c.build_type_configs:
+      self.apply_config(self.c.build_type_configs[self.c.build_type])
 
   def run(self, args=[]):
     """Runs the configured 'cbuildbot' build.
@@ -220,6 +377,7 @@ class ChromiteApi(recipe_api.RecipeApi):
     """
     # Assert correct configuration.
     assert self.c.cbb.config, 'An empty configuration was specified.'
+    assert self.c.cbb.builddir, 'A build directory name must be specified.'
 
     # Load properties from the commit being processed. This requires both a
     # repository and revision to proceed.
@@ -234,17 +392,18 @@ class ChromiteApi(recipe_api.RecipeApi):
         # '--chrome_version' flag.
         self.c.cbb.chrome_version = self.m.properties['revision']
 
-      # This change comes from a manifest repository. Load configuration
-      # parameters from the manifest command.
-      self.load_manifest_config(repository, revision)
+      if self.c.read_cros_manifest:
+        # This change comes from a manifest repository. Load configuration
+        # parameters from the manifest command.
+        self.load_manifest_config(repository, revision)
 
-    buildroot = self.m.path['root'].join('cbuild', 'repository')
+    buildroot = self.m.path['root'].join('cbuild', self.c.cbb.builddir)
     cbb_args = [
         '--buildroot', buildroot,
     ]
     if not args:
       cbb_args.append('--buildbot')
-    if self.c.chromite_branch:
+    if self.c.chromite_branch and not self.c.cbb.disable_bootstrap:
       cbb_args.extend(['--branch', self.c.chromite_branch])
     if self.c.cbb.build_number is not None:
       cbb_args.extend(['--buildnumber', self.c.cbb.build_number])
@@ -265,16 +424,19 @@ class ChromiteApi(recipe_api.RecipeApi):
     # TODO(nxia): Remove "repo_cache" support after "git_cache" has rolled out.
     if self.c.cbb.git_cache_dir:
       cbb_args.extend(['--git-cache-dir', self.c.cbb.git_cache_dir])
+    elif self.c.repo_cache_dir and self.c.cbb.supports_repo_cache:
+      cbb_args.extend(['--repo-cache', self.c.repo_cache_dir])
 
     # Set the build ID, if specified.
     if self.c.cbb.build_id:
       cbb_args.extend(['--master-build-id', self.c.cbb.build_id])
 
-    # Update or install goma client via cipd.
-    goma_dir = self.m.goma.ensure_goma()
-    cbb_args.extend([
-        '--goma_dir', goma_dir,
-        '--goma_client_json', self.m.goma.service_account_json_path])
+    if self.c.cbb.use_goma:
+      # Update or install goma client via cipd.
+      goma_dir = self.m.goma.ensure_goma()
+      cbb_args.extend([
+          '--goma_dir', goma_dir,
+          '--goma_client_json', self.m.goma.service_account_json_path])
 
     # Add custom args, if there are any.
     cbb_args.extend(self.c.cbb.extra_args)
