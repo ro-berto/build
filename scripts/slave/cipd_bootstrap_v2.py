@@ -38,7 +38,15 @@ MASTER_VERSION = {
 # Auxiliary binary packages to add to PATH during CIPD installation.
 AUX_BINARY_PACKAGES = {
     # Default (production) packages.
-    None: (),
+    None: (
+      cipd.CipdPackage(
+          name='infra/tools/luci/vpython/${platform}',
+          version='git_revision:c3fae7a556e1eb5252750ee47907ca0d42223c6c'),
+
+      cipd.CipdPackage(
+          name='infra/tools/git/${platform}',
+          version='git_revision:c3fae7a556e1eb5252750ee47907ca0d42223c6c'),
+    ),
 
     STAGING: (
       cipd.CipdPackage(
