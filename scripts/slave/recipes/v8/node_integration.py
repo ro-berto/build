@@ -10,8 +10,9 @@ from recipe_engine.types import freeze
 DEPS = [
   'chromium',
   'depot_tools/gclient',
-  'file',
   'depot_tools/gsutil',
+  'depot_tools/tryserver',
+  'file',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/platform',
@@ -32,6 +33,15 @@ BUILDERS = freeze({
         },
       },
       'V8 - node.js integration': {
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+    },
+  },
+  'tryserver.v8': {
+    'builders': {
+      'v8_node_linux64_rel': {
         'testing': {
           'platform': 'linux',
         },
@@ -121,6 +131,7 @@ def RunSteps(api):
     return
 
   # Update V8.
+  # TODO(machenbach): Also apply patch on tryserver.
   api.python(
       name='update v8',
       script=api.path['start_dir'].join(
@@ -134,24 +145,31 @@ def RunSteps(api):
   # Build and test node.js with the checked-out v8.
   _build_and_test(api)
 
+  # Don't upload on tryserver.
+  if api.tryserver.is_tryserver:
+    return
+
   # Build and upload node.js distribution with the checked-out v8.
   _build_and_upload(api)
 
 
-def _sanitize_nonalpha(text):
-  return ''.join(c if c.isalnum() else '_' for c in text)
+def _sanitize_nonalpha(*chunks):
+  return '_'.join(
+      ''.join(c if c.isalnum() else '_' for c in text)
+      for text in chunks
+  )
 
 
 def GenTests(api):
   for mastername, masterconf in BUILDERS.iteritems():
     for buildername, _ in masterconf['builders'].iteritems():
+      if mastername.startswith('tryserver'):
+        properties_fn = api.properties.tryserver
+      else:
+        properties_fn = api.properties.generic
       yield (
-          api.test('_'.join([
-            'full',
-            _sanitize_nonalpha(mastername),
-            _sanitize_nonalpha(buildername),
-          ])) +
-          api.properties.generic(
+          api.test(_sanitize_nonalpha('full', mastername, buildername)) +
+          properties_fn(
               mastername=mastername,
               buildername=buildername,
               branch='refs/heads/master',
