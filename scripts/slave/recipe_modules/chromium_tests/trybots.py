@@ -133,8 +133,8 @@ TRYBOTS = freeze({
       }),
       'android_n5x_swarming_dbg': simple_bot({
         'mastername': 'chromium.android',
-        'buildername': 'Marshmallow 64 bit Tester',
-        'tester': 'Android arm64 Builder (dbg)',
+        'buildername': 'Android arm64 Builder (dbg)',
+        'tester': 'Marshmallow 64 bit Tester',
        }),
       'android_n5x_swarming_rel': simple_bot({
         'mastername': 'chromium.android',
