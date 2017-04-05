@@ -100,8 +100,8 @@ SPEC = {
         'os': 'Ubuntu-14.04',
       },
     },
-    # There are no slaves for this builder and this builder doesn't
-    # appear on the actual continuous waterfall; this configuration
+    # There are no slaves for the following two "Dummy Builders" and they
+    # do not appear on the actual continuous waterfall; this configuration
     # is here so that a try bot can be added.
     'WebKit Linux slimming_paint_v2 Dummy Builder': {
       'chromium_config': 'chromium',
@@ -117,6 +117,28 @@ SPEC = {
       'tests': [
         steps.BlinkTest(extra_args=[
           '--additional-driver-flag=--enable-slimming-paint-v2',
+        ]),
+      ],
+      'test_results_config': 'staging_server',
+      'testing': {
+          'platform': 'linux',
+      },
+      'enable_swarming': True,
+    },
+    'WebKit Linux layout_ng Dummy Builder': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb','ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'compile_targets': [
+        'blink_tests',
+      ],
+      'tests': [
+        steps.BlinkTest(extra_args=[
+          '--enable-blink-features=LayoutNG',
         ]),
       ],
       'test_results_config': 'staging_server',

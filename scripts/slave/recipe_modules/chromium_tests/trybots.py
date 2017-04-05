@@ -389,6 +389,10 @@ TRYBOTS = freeze({
         'mastername': 'chromium.fyi',
         'buildername': 'WebKit Linux slimming_paint_v2 Dummy Builder',
       }),
+      'linux_layout_tests_layout_ng': simple_bot({
+        'mastername': 'chromium.fyi',
+        'buildername': 'WebKit Linux layout_ng Dummy Builder',
+      }),
       'linux_chromium_analysis': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'Linux Clang Analyzer',
