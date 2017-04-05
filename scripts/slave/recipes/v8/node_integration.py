@@ -130,16 +130,20 @@ def RunSteps(api):
     _build_and_test(api)
     return
 
+  args = [
+    api.path['start_dir'].join('v8'),
+    api.path['start_dir'].join('node.js'),
+  ]
+
+  if api.tryserver.is_tryserver:
+    args.append('--with-patch')
+
   # Update V8.
-  # TODO(machenbach): Also apply patch on tryserver.
   api.python(
       name='update v8',
       script=api.path['start_dir'].join(
           'v8', 'tools', 'release', 'update_node.py'),
-      args=[
-        api.path['start_dir'].join('v8'),
-        api.path['start_dir'].join('node.js'),
-      ],
+      args=args,
   )
 
   # Build and test node.js with the checked-out v8.
