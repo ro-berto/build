@@ -46,6 +46,7 @@ per-file chromium_trybot.py=phajdan.jr@chromium.org
 per-file chromium_trybot.py=sergeyberezin@chromium.org
 per-file chromium_trybot.py=sergiyb@chromium.org
 per-file chromium_trybot.py=stip@chromium.org
+per-file chromium_trybot.py=tansell@chromium.org
 per-file catapult.py=sullivan@chromium.org
 per-file catapult_cron.py=sullivan@chromium.org
 per-file ct_top1k_perf.py=rmistry@chromium.org
