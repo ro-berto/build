@@ -278,7 +278,7 @@ SPEC = {
       },
       'parent_buildername': 'Android arm64 Builder (dbg)',
       'bot_type': 'tester',
-      'android_config': 'main_builder_mb',
+      'android_config': 'arm64_builder_mb',
       'test_results_config': 'public_server',
       'remove_system_webview': True,
       'tests': [
