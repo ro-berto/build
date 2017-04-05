@@ -35,6 +35,33 @@ MASTER_VERSION = {
 }
 
 
+# Auxiliary binary packages to add to PATH during CIPD installation.
+AUX_BINARY_PACKAGES = {
+    # Default (production) packages.
+    None: (),
+
+    STAGING: (
+      cipd.CipdPackage(
+          name='infra/tools/luci/vpython/${platform}',
+          version='git_revision:c3fae7a556e1eb5252750ee47907ca0d42223c6c'),
+
+      cipd.CipdPackage(
+          name='infra/tools/git/${platform}',
+          version='git_revision:c3fae7a556e1eb5252750ee47907ca0d42223c6c'),
+    ),
+
+    CANARY: (
+      cipd.CipdPackage(
+          name='infra/tools/luci/vpython/${platform}',
+          version='latest'),
+
+      cipd.CipdPackage(
+          name='infra/tools/git/${platform}',
+          version='latest'),
+    ),
+}
+
+
 BINARY_FILE = 0
 # copied from
 #   https://github.com/luci/recipes-py/blob/master/recipe_engine/step_runner.py
@@ -70,12 +97,13 @@ else:
 
 
 def all_cipd_packages():
-  """Returns (list): All referenced CIPD packages."""
+  """Generator which yields all referenced CIPD packages."""
   package_name = 'infra/tools/cipd/${platform}'
-  return (
-      cipd.CipdPackage(name=package_name, version=DEFAULT_CIPD_VERSION),
-      cipd.CipdPackage(name=package_name, version=STAGING_CIPD_VERSION),
-  )
+  yield cipd.CipdPackage(name=package_name, version=DEFAULT_CIPD_VERSION)
+  yield cipd.CipdPackage(name=package_name, version=STAGING_CIPD_VERSION)
+  for packages in AUX_BINARY_PACKAGES.itervalues():
+    for pkg in packages:
+      yield pkg
 
 
 def _update_client(path, version):
@@ -235,6 +263,49 @@ def ensure_cipd_client(path, version):
   _add_to_path(path)
 
 
+def install_cipd_packages(dest, *packages):
+  """Bootstraps CIPD in |dest| and installs requested |packages|.
+
+  Args:
+    dest (str): The CIPD installation root.
+    packages (list of CipdPackage): The set of CIPD packages to install.
+  """
+  # Build our CIPD manifest. We'll pass it via STDIN.
+  manifest = '\n'.join('%s %s' % (pkg.name, pkg.version) for pkg in packages)
+
+  cmd = [
+      CLIENT_NAME,
+      'ensure',
+      '-ensure-file', '-',
+      '-root', dest,
+  ]
+
+  LOGGER.info('Executing CIPD command: %s\nManifest:\n%s', cmd, manifest)
+  proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                          stderr=subprocess.STDOUT)
+  stdout, _ = proc.communicate(input=manifest)
+  if proc.returncode != 0:
+    LOGGER.error('CIPD exited with non-zero return code (%s):\n%s',
+        proc.returncode, stdout)
+    raise ValueError('Failed to install CIPD packages (%d)' % (
+        proc.returncode,))
+
+
+def install_auxiliary_path_packages(dest, selected):
+  """Installs the set of auxiliary binary packages into PATH.
+
+  Args:
+    dest (str): The CIPD root directory to install into and add to PATH.
+  """
+  packages = AUX_BINARY_PACKAGES.get(selected, AUX_BINARY_PACKAGES[None])
+  if packages:
+    if not os.path.isdir(dest):
+      os.makedirs(dest)
+
+    install_cipd_packages(dest, *packages)
+    _add_to_path(dest)
+
+
 def high_level_ensure_cipd_client(b_dir, mastername):
   """Ensures that <b_dir>/cipd_client/ contains the cipd (or cipd.exe) client.
 
@@ -247,7 +318,8 @@ def high_level_ensure_cipd_client(b_dir, mastername):
   """
   LOGGER.info('bootstrapping CIPD')
 
-  cipd_dir = os.path.join(os.path.abspath(b_dir), 'cipd_client')
+  b_dir = os.path.abspath(b_dir)
+  cipd_dir = os.path.join(b_dir, 'cipd_client')
   cipd_version = DEFAULT_CIPD_VERSION
   selected = MASTER_VERSION.get(mastername)
   if selected == STAGING:
@@ -259,3 +331,5 @@ def high_level_ensure_cipd_client(b_dir, mastername):
 
   os.environ['CIPD_CACHE_DIR'] = os.path.join(b_dir, 'c', 'cipd')
   ensure_cipd_client(cipd_dir, cipd_version)
+  install_auxiliary_path_packages(os.path.join(b_dir, 'cipd_path_tools'),
+                                  selected)

@@ -22,6 +22,7 @@ from common import annotator
 from common import env
 from slave import logdog_bootstrap as ldbs
 from slave import cipd
+from slave import cipd_bootstrap_v2
 from slave import gce
 from slave import infra_platform
 from slave import robust_tempdir
@@ -46,6 +47,7 @@ class LogDogBootstrapTest(unittest.TestCase):
         mock.patch('slave.infra_platform.get'),
         mock.patch('slave.logdog_bootstrap._check_call'),
         mock.patch('slave.gce.Authenticator.is_gce'),
+        mock.patch('slave.cipd_bootstrap_v2.install_cipd_packages'),
         mock.patch('os.environ', {}),
         ))
 
@@ -187,17 +189,21 @@ class LogDogBootstrapTest(unittest.TestCase):
                         self.properties, recipe_cmd)
 
     # Check CIPD installation.
-    ldbs._check_call.assert_called_once_with([
-        sys.executable, ldbs._CIPD_PY_PATH,
-      '--dest-directory', self._bp('.recipe_cipd'),
-      '-P', 'infra/tools/luci/logdog/butler/${platform}@stable',
-      '-P', 'infra/tools/luci/logdog/annotee/${platform}@stable',
-    ])
+    cipd_dir = os.path.join(self.basedir, '.recipe_cipd')
+    cipd_bootstrap_v2.install_cipd_packages.assert_called_once_with(
+        cipd_dir,
+        cipd.CipdPackage(
+            name='infra/tools/luci/logdog/butler/${platform}',
+            version='stable'),
+        cipd.CipdPackage(
+            name='infra/tools/luci/logdog/annotee/${platform}',
+            version='stable'),
+    )
 
     # Check bootstrap command.
     self.assertEqual(
         bs.cmd,
-        [os.path.join(self.basedir, '.recipe_cipd', 'logdog_butler'),
+        [os.path.join(cipd_dir, 'logdog_butler'),
             '-log-level', 'warning',
             '-project', 'myproject',
             '-prefix', 'bb/mastername/buildername/1337',
@@ -213,7 +219,7 @@ class LogDogBootstrapTest(unittest.TestCase):
             '-stderr', 'tee=stderr',
             '-streamserver-uri', streamserver_uri,
             '--',
-            os.path.join(self.basedir, '.recipe_cipd', 'logdog_annotee'),
+            os.path.join(cipd_dir, 'logdog_annotee'),
                 '-log-level', 'warning',
                 '-name-base', 'recipes',
                 '-print-summary',
@@ -248,17 +254,21 @@ class LogDogBootstrapTest(unittest.TestCase):
                         self.properties, recipe_cmd)
 
     # Check CIPD installation.
-    ldbs._check_call.assert_called_once_with([
-        sys.executable, ldbs._CIPD_PY_PATH,
-      '--dest-directory', self._bp('.recipe_cipd'),
-      '-P', 'infra/tools/luci/logdog/butler/${platform}@stable',
-      '-P', 'infra/tools/luci/logdog/annotee/${platform}@stable',
-    ])
+    cipd_dir = os.path.join(self.basedir, '.recipe_cipd')
+    cipd_bootstrap_v2.install_cipd_packages.assert_called_once_with(
+        cipd_dir,
+        cipd.CipdPackage(
+            name='infra/tools/luci/logdog/butler/${platform}',
+            version='stable'),
+        cipd.CipdPackage(
+            name='infra/tools/luci/logdog/annotee/${platform}',
+            version='stable'),
+    )
 
     # Check bootstrap command.
     self.assertEqual(
         bs.cmd,
-        [os.path.join(self.basedir, '.recipe_cipd', 'logdog_butler.exe'),
+        [os.path.join(cipd_dir, 'logdog_butler.exe'),
             '-log-level', 'warning',
             '-project', 'myproject',
             '-prefix', 'bb/mastername/buildername/1337',
@@ -275,7 +285,7 @@ class LogDogBootstrapTest(unittest.TestCase):
             '-stderr', 'tee=stderr',
             '-streamserver-uri', streamserver_uri,
             '--',
-            os.path.join(self.basedir, '.recipe_cipd', 'logdog_annotee.exe'),
+            os.path.join(cipd_dir, 'logdog_annotee.exe'),
                 '-log-level', 'warning',
                 '-name-base', 'recipes',
                 '-print-summary',
@@ -310,17 +320,21 @@ class LogDogBootstrapTest(unittest.TestCase):
                         self.properties, recipe_cmd)
 
     # Check CIPD installation.
-    ldbs._check_call.assert_called_once_with([
-        sys.executable, ldbs._CIPD_PY_PATH,
-      '--dest-directory', self._bp('.recipe_cipd'),
-      '-P', 'infra/tools/luci/logdog/butler/${platform}@canary',
-      '-P', 'infra/tools/luci/logdog/annotee/${platform}@canary',
-    ])
+    cipd_dir = os.path.join(self.basedir, '.recipe_cipd')
+    cipd_bootstrap_v2.install_cipd_packages.assert_called_once_with(
+        cipd_dir,
+        cipd.CipdPackage(
+            name='infra/tools/luci/logdog/butler/${platform}',
+            version='canary'),
+        cipd.CipdPackage(
+            name='infra/tools/luci/logdog/annotee/${platform}',
+            version='canary'),
+    )
 
     # Check bootstrap command.
     self.assertEqual(
         bs.cmd,
-        [os.path.join(self.basedir, '.recipe_cipd', 'logdog_butler'),
+        [os.path.join(cipd_dir, 'logdog_butler'),
             '-log-level', 'warning',
             '-project', 'myproject',
             '-prefix', 'bb/mastername/buildername/1337',
@@ -336,7 +350,7 @@ class LogDogBootstrapTest(unittest.TestCase):
             '-stderr', 'tee=stderr',
             '-streamserver-uri', 'unix:foo/butler.sock',
             '--',
-            os.path.join(self.basedir, '.recipe_cipd', 'logdog_annotee'),
+            os.path.join(cipd_dir, 'logdog_annotee'),
                 '-log-level', 'warning',
                 '-name-base', 'recipes',
                 '-print-summary',
@@ -371,17 +385,21 @@ class LogDogBootstrapTest(unittest.TestCase):
                         self.properties, recipe_cmd)
 
     # Check CIPD installation.
-    ldbs._check_call.assert_called_once_with([
-        sys.executable, ldbs._CIPD_PY_PATH,
-      '--dest-directory', self._bp('.recipe_cipd'),
-      '-P', 'infra/tools/luci/logdog/butler/${platform}@canary',
-      '-P', 'infra/tools/luci/logdog/annotee/${platform}@canary',
-    ])
+    cipd_dir = os.path.join(self.basedir, '.recipe_cipd')
+    cipd_bootstrap_v2.install_cipd_packages.assert_called_once_with(
+        cipd_dir,
+        cipd.CipdPackage(
+            name='infra/tools/luci/logdog/butler/${platform}',
+            version='canary'),
+        cipd.CipdPackage(
+            name='infra/tools/luci/logdog/annotee/${platform}',
+            version='canary'),
+    )
 
     # Check bootstrap command.
     self.assertEqual(
         bs.cmd,
-        [os.path.join(self.basedir, '.recipe_cipd', 'logdog_butler.exe'),
+        [os.path.join(cipd_dir, 'logdog_butler.exe'),
             '-log-level', 'warning',
             '-project', 'myproject',
             '-prefix', 'bb/mastername/buildername/1337',
@@ -398,7 +416,7 @@ class LogDogBootstrapTest(unittest.TestCase):
             '-stderr', 'tee=stderr',
             '-streamserver-uri', 'net.pipe:LUCILogDogButler',
             '--',
-            os.path.join(self.basedir, '.recipe_cipd', 'logdog_annotee.exe'),
+            os.path.join(cipd_dir, 'logdog_annotee.exe'),
                 '-log-level', 'warning',
                 '-name-base', 'recipes',
                 '-print-summary',
@@ -490,29 +508,17 @@ class LogDogBootstrapTest(unittest.TestCase):
         self.opts, ('foo', 'bar'))
     self.assertEqual(service_account_json, ':gce')
 
-  def test_cipd_install(self):
-    ldbs._install_cipd_packages(self.basedir,
-        cipd.CipdPackage('infra/foo', 'v0'),
-        cipd.CipdPackage('infra/bar', 'v1'),
-        )
+  @mock.patch('slave.logdog_bootstrap.get_config')
+  def test_cipd_install_failure_raises_bootstrap_error(self, get_config):
+    cipd_bootstrap_v2.install_cipd_packages.side_effect = (
+        subprocess.CalledProcessError(0, [], 'PROCESS ERROR'))
 
-    ldbs._check_call.assert_called_once_with([
-      sys.executable,
-       os.path.join(env.Build, 'scripts', 'slave', 'cipd.py'),
-       '--dest-directory', self.basedir,
-       '-P', 'infra/foo@v0',
-       '-P', 'infra/bar@v1',
-    ])
+    with self.assertRaises(ldbs.BootstrapError) as e:
+      ldbs.bootstrap(self.rt, self.opts, self.basedir, self.tdir,
+                    self.properties, [])
 
-  def test_cipd_install_failure_raises_bootstrap_error(self):
-    ldbs._check_call.side_effect = subprocess.CalledProcessError(0, [], '')
-
-    self.assertRaises(ldbs.BootstrapError,
-        ldbs._install_cipd_packages,
-        self.basedir,
-        cipd.CipdPackage('infra/foo', 'v0'),
-        cipd.CipdPackage('infra/bar', 'v1'),
-    )
+    self.assertEqual(e.exception.message, 'Failed to install CIPD packages.')
+    cipd_bootstrap_v2.install_cipd_packages.assert_called_once()
 
   @mock.patch('slave.logdog_bootstrap._get_params')
   def test_will_not_bootstrap_if_recursive(self, get_params):

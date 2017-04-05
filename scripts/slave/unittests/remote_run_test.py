@@ -241,7 +241,7 @@ class RemoteRunExecTest(unittest.TestCase):
 
   @mock.patch('slave.logdog_bootstrap.bootstrap',
               side_effect=logdog_bootstrap.NotBootstrapped())
-  @mock.patch('slave.remote_run._install_cipd_packages')
+  @mock.patch('slave.cipd_bootstrap_v2.install_cipd_packages')
   @mock.patch('slave.robust_tempdir.RobustTempdir.tempdir')
   def test_exec_without_logdog(self, rt_tempdir, _install_cipd_packages,
                                _logdog_bootstrap):
@@ -258,7 +258,7 @@ class RemoteRunExecTest(unittest.TestCase):
 
   @mock.patch('slave.logdog_bootstrap.bootstrap',
               side_effect=logdog_bootstrap.NotBootstrapped())
-  @mock.patch('slave.remote_run._install_cipd_packages')
+  @mock.patch('slave.cipd_bootstrap_v2.install_cipd_packages')
   @mock.patch('slave.robust_tempdir.RobustTempdir.tempdir')
   def test_kitchen_exec_without_logdog(self, rt_tempdir, _install_cipd_packages,
                                       _logdog_bootstrap):
@@ -281,7 +281,7 @@ class RemoteRunExecTest(unittest.TestCase):
 
   @mock.patch('slave.logdog_bootstrap.bootstrap')
   @mock.patch('slave.logdog_bootstrap.BootstrapState.get_result')
-  @mock.patch('slave.remote_run._install_cipd_packages')
+  @mock.patch('slave.cipd_bootstrap_v2.install_cipd_packages')
   @mock.patch('slave.robust_tempdir.RobustTempdir.tempdir')
   def test_exec_with_logdog(self, rt_tempdir, _install_cipd_packages,
                             _logdog_bootstrap_result, bootstrap):
@@ -324,7 +324,7 @@ class RemoteRunExecTest(unittest.TestCase):
 
   @mock.patch('slave.logdog_bootstrap.bootstrap')
   @mock.patch('slave.logdog_bootstrap.BootstrapState.get_result')
-  @mock.patch('slave.remote_run._install_cipd_packages')
+  @mock.patch('slave.cipd_bootstrap_v2.install_cipd_packages')
   @mock.patch('slave.robust_tempdir.RobustTempdir.tempdir')
   def test_exec_with_logdog_only(self, rt_tempdir, _install_cipd_packages,
                                  _logdog_bootstrap_result, bootstrap):
@@ -368,7 +368,7 @@ class RemoteRunExecTest(unittest.TestCase):
 
   @mock.patch('slave.logdog_bootstrap.get_config')
   @mock.patch('slave.logdog_bootstrap.BootstrapState.get_result')
-  @mock.patch('slave.remote_run._install_cipd_packages')
+  @mock.patch('slave.cipd_bootstrap_v2.install_cipd_packages')
   @mock.patch('slave.robust_tempdir.RobustTempdir.tempdir')
   def test_kitchen_exec_with_logdog(self, rt_tempdir, _install_cipd_packages,
                                    _logdog_bootstrap_result, get_config):

@@ -137,34 +137,6 @@ def _call(cmd, **kwargs):
   return exit_code
 
 
-def _install_cipd_packages(path, *packages):
-  """Bootstraps CIPD in |path| and installs requested |packages|.
-
-  Args:
-    path (str): The CIPD installation root.
-    packages (list of CipdPackage): The set of CIPD packages to install.
-  """
-  # Build our CIPD manifest. We'll pass it via STDIN.
-  manifest = '\n'.join('%s %s' % (pkg.name, pkg.version) for pkg in packages)
-
-  cmd = [
-      'cipd' + infra_platform.exe_suffix(), # TODO(dnj): Is the suffix needed?
-      'ensure',
-      '-ensure-file', '-',
-      '-root', path,
-  ]
-
-  LOGGER.info('Executing CIPD command: %s\nManifest:\n%s', cmd, manifest)
-  proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-                          stderr=subprocess.STDOUT)
-  stdout, _ = proc.communicate(input=manifest)
-  if proc.returncode != 0:
-    LOGGER.error('CIPD exited with non-zero return code (%s):\n%s',
-        proc.returncode, stdout)
-    raise ValueError('Failed to install CIPD packages (%d)' % (
-        proc.returncode,))
-
-
 def _cleanup_old_layouts(using_kitchen, properties, buildbot_build_dir,
                          cache_dir):
   cleanup_paths = []
@@ -235,7 +207,8 @@ def _remote_run_with_kitchen(args, stream, pins, properties, tempdir, basedir,
       name=_KITCHEN_CIPD_PACKAGE,
       version=pins.kitchen)
 
-  _install_cipd_packages(cipd_root, kitchen_pkg)
+  from slave import cipd_bootstrap_v2
+  cipd_bootstrap_v2.install_cipd_packages(cipd_root, kitchen_pkg)
 
   kitchen_bin = os.path.join(cipd_root, 'kitchen' + infra_platform.exe_suffix())
 
@@ -372,8 +345,7 @@ def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir):
 
   # Ensure that the CIPD client is installed and available on PATH.
   from slave import cipd_bootstrap_v2
-  cipd_bootstrap_v2.high_level_ensure_cipd_client(
-    basedir, properties.get(mastername))
+  cipd_bootstrap_v2.high_level_ensure_cipd_client(basedir, mastername)
 
   # "/b/c" as a cache directory.
   cache_dir = os.path.join(BUILDBOT_ROOT, 'c')
@@ -399,7 +371,7 @@ def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir):
 
   cipd_path = os.path.join(basedir, '.remote_run_cipd')
 
-  _install_cipd_packages(cipd_path,
+  cipd_bootstrap_v2.install_cipd_packages(cipd_path,
       cipd.CipdPackage(_RECIPES_PY_CIPD_PACKAGE, pins.recipes))
 
   engine_flags = _get_engine_flags(mastername)

@@ -17,6 +17,7 @@ from common import annotator
 from common import chromium_utils
 from common import env
 from slave import cipd
+from slave import cipd_bootstrap_v2
 from slave import gce
 from slave import infra_platform
 
@@ -336,39 +337,6 @@ def _get_service_account_json(opts, credential_path):
                        'Tried: %s' % (credential_path,))
 
 
-def _install_cipd_packages(path, *packages):
-  """Installs the packages specified by "packages" in path.
-
-  TODO(dnj): Maybe switch this over to direct "cipd ensure" call and read
-  manifest from STDIN? Can delete "cipd.py"?
-
-  Args:
-    path (str): The CIPD installation root.
-    packages (CipdPackage): The set of CIPD packages to install.
-  """
-  verbosity = 0
-  level = logging.getLogger().level
-  if level <= logging.INFO:
-    verbosity += 1
-  if level <= logging.DEBUG:
-    verbosity += 1
-
-  cmd = [
-      sys.executable,
-      _CIPD_PY_PATH,
-      '--dest-directory', path,
-  ] + (['--verbose'] * verbosity)
-
-  for pkg in packages:
-    cmd += ['-P', '%s@%s' % (pkg.name, pkg.version)]
-
-  try:
-    _check_call(cmd)
-  except subprocess.CalledProcessError:
-    LOGGER.exception('Failed to install LogDog CIPD packages: %s', packages)
-    raise BootstrapError('Failed to install CIPD packages.')
-
-
 def _build_prefix(params):
   """Constructs a LogDog stream prefix and tags from the supplied properties.
 
@@ -403,7 +371,7 @@ def _build_prefix(params):
   return prefix, tags
 
 
-def _make_butler_output(opts, cfg):
+def _make_butler_output(opts, _cfg):
   """Returns a Butler output string.
   """
   if opts.logdog_debug_out_file:
@@ -514,17 +482,23 @@ def bootstrap(rt, opts, basedir, tempdir, properties, cmd):
 
   # Install our Butler/Annotee packages from CIPD.
   cipd_path = os.path.join(basedir, '.recipe_cipd')
-  _install_cipd_packages(cipd_path,
-      # butler
+
+  packages = (
+      # Butler
       cipd.CipdPackage(
           name=cfg.plat.butler,
           version=cfg.params.cipd_tag),
 
-      # annotee
+      # Annotee
       cipd.CipdPackage(
           name=cfg.plat.annotee,
           version=cfg.params.cipd_tag),
   )
+  try:
+    cipd_bootstrap_v2.install_cipd_packages(cipd_path, *packages)
+  except Exception:
+    LOGGER.exception('Failed to install LogDog CIPD packages: %s', packages)
+    raise BootstrapError('Failed to install CIPD packages.')
 
   def cipd_bin(base):
     return os.path.join(cipd_path, base + infra_platform.exe_suffix())
