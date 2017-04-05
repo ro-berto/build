@@ -595,8 +595,9 @@ def GenTests(api):
     )
   )
 
+  # Test we *do* run the BlinkTest if we touch third_party/WebKit
   yield (
-    api.test('analyze_webkit') +
+    api.test('add_layout_tests_via_manual_diff_inspection') +
     api.properties.tryserver(
       mastername='tryserver.chromium.win',
       buildername='win_chromium_rel_ng',
@@ -607,6 +608,65 @@ def GenTests(api):
         'git diff to analyze patch',
         api.raw_io.stream_output(
             'third_party/WebKit/Source/core/dom/Element.cpp\n')
+    )
+  )
+
+  # Test we *don't* run the BlinkTest if we don't touch the right paths
+  yield (
+    api.test('skip_layout_tests_via_manual_diff_doesnt_match') +
+    api.properties.tryserver(
+      mastername='tryserver.chromium.win',
+      buildername='win_chromium_rel_ng',
+      swarm_hashes={}
+    ) +
+    api.platform.name('win') +
+    api.override_step_data(
+        'git diff to analyze patch',
+        api.raw_io.stream_output(
+            'base/time.h\n')
+    )
+  )
+
+  # Test we run the swarming layout tests if we touch third_party/WebKit
+  yield (
+    api.test('add_swarming_layout_tests_via_manual_diff_inspection') +
+    api.properties.tryserver(
+      mastername='tryserver.chromium.linux',
+      buildername='linux_chromium_rel_ng',
+      swarm_hashes={}
+    ) +
+    props(extra_swarmed_tests=['webkit_layout_tests_exparchive']) +
+    api.platform.name('linux') +
+    api.override_step_data(
+      'analyze',
+      api.json.output({'status': 'Found dependency',
+                       'test_targets': ['webkit_layout_tests_exparchive'],
+                       'compile_targets': ['webkit_layout_tests_exparchive']})) +
+    api.override_step_data(
+        'git diff to analyze patch',
+        api.raw_io.stream_output(
+            'third_party/WebKit/Source/core/dom/Element.cpp\n')
+    ) +
+    api.override_step_data(
+        'webkit_layout_tests_exparchive (with patch)',
+        api.test_utils.canned_isolated_script_output(
+            passing=True, is_win=False, swarming=True))
+  )
+
+  # Test we don't run the swarming layout tests if we don't touch the right
+  # paths
+  yield (
+    api.test('skip_swarming_layout_tests_via_manual_diff_doesnt_match') +
+    api.properties.tryserver(
+      mastername='tryserver.chromium.linux',
+      buildername='linux_chromium_rel_ng',
+      swarm_hashes={}
+    ) +
+    api.platform.name('linux') +
+    api.override_step_data(
+        'git diff to analyze patch',
+        api.raw_io.stream_output(
+            'base/time.h\n')
     )
   )
 

@@ -27,9 +27,12 @@ RECIPE_CONFIG_PATHS = [
 # TODO(phajdan.jr): Remove special case for layout tests.
 # This could be done by moving layout tests to main waterfall.
 CHROMIUM_BLINK_TESTS_BUILDERS = freeze([
-  'linux_chromium_rel_ng',
   'mac_chromium_rel_ng',
   'win_chromium_rel_ng',
+])
+
+CHROMIUM_BLINK_TESTS_SWARMING_BUILDERS = freeze([
+  'linux_chromium_rel_ng',
 ])
 
 
@@ -943,8 +946,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     self.m.tryserver.set_subproject_tag(subproject_tag)
 
     # TODO(phajdan.jr): Remove special case for layout tests.
-    add_blink_tests = (affects_blink_paths and
-                       buildername in CHROMIUM_BLINK_TESTS_BUILDERS)
+    add_blink_tests = (
+        affects_blink_paths and
+        buildername in
+        CHROMIUM_BLINK_TESTS_BUILDERS+CHROMIUM_BLINK_TESTS_SWARMING_BUILDERS)
+    add_blink_tests_swarming = (
+        affects_blink_paths and
+        buildername in CHROMIUM_BLINK_TESTS_SWARMING_BUILDERS)
 
     # Add blink tests that work well with "analyze" here. The tricky ones
     # that bypass it (like the layout tests) are added later.
@@ -954,6 +962,45 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           self.steps.GTestTest('blink_platform_unittests'),
           self.steps.GTestTest('webkit_unit_tests'),
           self.steps.GTestTest('wtf_unittests'),
+      ])
+    if add_blink_tests_swarming:
+      merge = {
+          'script': self.m.path['checkout'].join(
+              'third_party', 'WebKit', 'Tools', 'Scripts',
+              'merge-layout-test-results'),
+          'args': [
+              '--verbose',
+              '--results-json-override-with-build-property',
+              'build_number',
+              'buildnumber',
+              '--results-json-override-with-build-property',
+              'builder_name',
+              'buildername',
+              '--results-json-override-with-build-property',
+              'chromium_revision',
+              'got_revision_cp',
+            ],
+      }
+      add_tests([
+          self.steps.SwarmingIsolatedScriptTest(
+              name='webkit_layout_tests_exparchive',
+              args=[],
+              target_name='webkit_layout_tests_exparchive',
+              shards=6,
+              dimensions={'os': 'Ubuntu-14.04'},
+              override_compile_targets=None,
+              priority=None,
+              expiration=None,
+              hard_timeout=None,
+              perf_id=bot_config.get('perf-id'),
+              results_url=bot_config.get('results-url'),
+              perf_dashboard_id='webkt_layout_tests_exparchive',
+              io_timeout=None,
+              waterfall_mastername=mastername,
+              waterfall_buildername=buildername,
+              merge=merge,
+              results_handler=self.steps.LayoutTestResultsHandler(),
+          ),
       ])
 
     compile_targets = self.get_compile_targets(
@@ -979,11 +1026,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       tests_including_triggered = self._tests_in_compile_targets(
           test_targets, tests_including_triggered)
 
-      # Blink tests are tricky at this moment. We'd like to use "analyze" for
-      # everything else. However, there are blink changes that only add or
-      # modify layout test files (html etc). This is not recognized by "analyze"
-      # as compile dependency. However, the blink tests should still be
-      # executed.
+      # TODO(tansell): Remove these special cases.
+      # At the moment there remains a few blink tests which are not using
+      # "analyze". These tests don't correctly specify their dependencies and
+      # thus need to be manually added on blink changes.
+      # See https://crbug.com/703894
       if add_blink_tests:
         blink_tests = [
             self.steps.ScriptTest(
@@ -991,8 +1038,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             self.steps.ScriptTest(
                 'webkit_python_tests', 'webkit_python_tests.py',
                 collections.defaultdict(list)),
-            self.steps.BlinkTest(),
         ]
+        # TODO(tansell): Remove this once all builders are running layout tests
+        # via analyze.
+        if not add_blink_tests_swarming:
+          blink_tests.append(self.steps.BlinkTest())
+
         add_tests(blink_tests)
         for test in blink_tests:
           compile_targets.extend(test.compile_targets(self._api_for_tests))
