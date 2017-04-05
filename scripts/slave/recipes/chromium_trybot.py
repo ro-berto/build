@@ -648,7 +648,7 @@ def GenTests(api):
             'third_party/WebKit/Source/core/dom/Element.cpp\n')
     ) +
     api.override_step_data(
-        'webkit_layout_tests_exparchive (with patch)',
+        'webkit_layout_tests (with patch)',
         api.test_utils.canned_isolated_script_output(
             passing=True, is_win=False, swarming=True))
   )

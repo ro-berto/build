@@ -983,7 +983,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       }
       add_tests([
           self.steps.SwarmingIsolatedScriptTest(
-              name='webkit_layout_tests_exparchive',
+              name='webkit_layout_tests',
               args=[],
               target_name='webkit_layout_tests_exparchive',
               shards=6,
