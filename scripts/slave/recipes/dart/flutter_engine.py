@@ -56,11 +56,11 @@ def BuildLinux(api):
 
 def TestObservatory(api):
   checkout = api.path['start_dir'].join('src')
-  sky_shell_path = checkout.join('out/host_debug_unopt/sky_shell')
+  flutter_tester_path = checkout.join('out/host_debug_unopt/flutter_tester')
   empty_main_path = checkout.join(
       'flutter/shell/testing/observatory/empty_main.dart')
   test_path = checkout.join('flutter/shell/testing/observatory/test.dart')
-  test_cmd = ['dart', test_path, sky_shell_path, empty_main_path]
+  test_cmd = ['dart', test_path, flutter_tester_path, empty_main_path]
   with api.step.context({'cwd': checkout}):
     api.step('test observatory and service protocol', test_cmd)
 

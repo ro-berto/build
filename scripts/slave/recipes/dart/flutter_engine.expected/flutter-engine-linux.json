@@ -127,7 +127,7 @@
     "cmd": [
       "dart",
       "[START_DIR]/src/flutter/shell/testing/observatory/test.dart",
-      "[START_DIR]/src/out/host_debug_unopt/sky_shell",
+      "[START_DIR]/src/out/host_debug_unopt/flutter_tester",
       "[START_DIR]/src/flutter/shell/testing/observatory/empty_main.dart"
     ],
     "cwd": "[START_DIR]/src",
