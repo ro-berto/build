@@ -111,10 +111,9 @@ def _GNGenBuilds(api, memory_tool, skia, xfa, v8, target_cpu, clang, rel,
   return gold_build_config(args)
 
 def _BuildSteps(api, clang, out_dir):
-  # Build sample file using Ninja
   debug_path = api.path['checkout'].join('out', out_dir)
   ninja_cmd = ['ninja', '-C', debug_path,
-               '-j', api.goma.recommended_goma_jobs]
+               '-j', api.goma.recommended_goma_jobs, 'pdfium_all']
 
   api.goma.build_with_goma(
       name='compile with ninja',
