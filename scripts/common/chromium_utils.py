@@ -1007,14 +1007,8 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
 
   pipes = pipes or []
 
-  command_str = ' '.join(command)
-  debug = ('win_chromium_rel_ng' in command_str and
-           'layout_test_wrapper' in command_str)
-  if debug:
-    print 'Logging extra information to debug layout test hang.'
-
   # Print the given command (which should be a list of one or more strings).
-  if print_cmd or debug:
+  if print_cmd:
     print '\n' + subprocess.list2cmdline(command) + '\n',
     for pipe in pipes:
       print '     | ' + subprocess.list2cmdline(pipe) + '\n',
@@ -1026,8 +1020,6 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
     # Run the command.  The stdout and stderr file handles are passed to the
     # subprocess directly for writing.  No processing happens on the output of
     # the subprocess.
-    if debug:
-      print 'Calling subprocess.Popen directly'
     proc = subprocess.Popen(command, stdout=sys.stdout, stderr=sys.stderr,
                             bufsize=0, **kwargs)
 
@@ -1070,14 +1062,9 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
                               args=(proc_handles[0], sys.stdout),
                               kwargs={'parser_func': parser_func,
                                       'filter_obj': filter_obj,
-                                      'log_event': log_event,
-                                      'debug': debug})
-    if debug:
-      thread.daemon = True
-      print "Setting stdout thread to daemon", thread
+                                      'log_event': log_event})
 
     kill_lock = threading.Lock()
-
 
     def term_then_kill(handle, initial_timeout, numtimeouts, interval):
       def timed_check():
@@ -1150,26 +1137,14 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
 
     # Wait for the commands to terminate.
     for handle in proc_handles:
-      if debug:
-        print "Waiting on", handle, "to finish"
       handle.wait()
       assert handle.returncode is not None
-      if debug:
-        print handle, "finished with", handle.returncode
-
-    if debug:
-      print "All processes finished", proc_handles
 
     # Wake up timeout threads.
     finished_event.set()
     log_event.set()
 
-    if debug:
-      print "Not waiting for stdout thread to exit",
-      print threading.currentThread(), "Threads",
-      print threading.enumerate()
-    else:
-      thread.join()
+    thread.join()
 
     # Check whether any of the sub commands has failed.
     for handle in proc_handles:
