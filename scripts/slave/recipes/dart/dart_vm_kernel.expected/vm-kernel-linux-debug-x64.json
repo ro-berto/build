@@ -114,6 +114,7 @@
       "--write-debug-log",
       "--write-test-outcome-log",
       "--copy-coredumps",
+      "--append_logs",
       "-cdartk",
       "-rvm",
       "--builder-tag=no_ipv6",
@@ -131,6 +132,14 @@
     ],
     "cwd": "[START_DIR]/sdk",
     "name": "taskkill after testing"
+  },
+  {
+    "cmd": [
+      "cat",
+      ".debug.log"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "name": "debug log"
   },
   {
     "name": "$result",

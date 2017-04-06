@@ -38,10 +38,10 @@ default_envs = {
 
 builders = {
   # This is used by recipe coverage tests, not by any actual master.
-  'test-coverage': {
+  'test-coverage-win': {
     'mode': 'release',
     'target_arch': 'x64',
-    'env': default_envs['linux'],
+    'env': default_envs['win'],
     'checked': True},
 }
 
@@ -192,7 +192,7 @@ def RunSteps(api):
                    api.path['checkout'].join('tools', 'test.py'),
                    args=test_args)
       if b.get('checked', False):
-        test_args.append('--checked')
+        test_args.extend(['--checked', '--append_logs'])
         with api.step.context({'env': b['env']}):
           api.python('checked vm tests',
                      api.path['checkout'].join('tools', 'test.py'),
@@ -201,6 +201,12 @@ def RunSteps(api):
       api.python('taskkill after testing',
                  api.path['checkout'].join('tools', 'task_kill.py'),
                  args=['--kill_browsers=True'])
+      if api.platform.name == 'win':
+        api.step('debug log',
+                 ['cmd.exe', '/c', 'type', '.debug.log'])
+      else:
+        api.step('debug log',
+                 ['cat', '.debug.log'])
 
 def GenTests(api):
    yield (
@@ -208,9 +214,9 @@ def GenTests(api):
       api.properties.generic(mastername='client.dart',
                              buildername='vm-linux-release-x64-asan-be'))
    yield (
-      api.test('test-coverage') + api.platform('linux', 32) +
+      api.test('test-coverage') + api.platform('win', 64) +
       api.properties.generic(mastername='client.dart',
-                             buildername='test-coverage-be',
+                             buildername='test-coverage-win-be',
                              clobber=''))
    yield (
       api.test('precomp-linux-debug-x64') + api.platform('linux', 64) +

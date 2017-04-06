@@ -69,6 +69,7 @@ def RunSteps(api):
       api.python('checked vm tests',
                  api.path['tools'].join('test.py'),
                  args=test_args)
+      api.step('debug log', ['cat', '.debug.log'])
       api.step('delete tarball', ['rm', tarball])
       api.python('clobber',
                  api.path['tools'].join('clean_output_directory.py'))

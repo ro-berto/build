@@ -126,7 +126,8 @@
       "--copy-coredumps",
       "--builder-tag=asan",
       "--timeout=240",
-      "--checked"
+      "--checked",
+      "--append_logs"
     ],
     "cwd": "[START_DIR]/sdk",
     "env": {
@@ -145,6 +146,14 @@
     ],
     "cwd": "[START_DIR]/sdk",
     "name": "taskkill after testing"
+  },
+  {
+    "cmd": [
+      "cat",
+      ".debug.log"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "name": "debug log"
   },
   {
     "name": "$result",

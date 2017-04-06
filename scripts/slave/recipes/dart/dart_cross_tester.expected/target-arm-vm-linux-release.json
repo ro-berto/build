@@ -128,6 +128,14 @@
   },
   {
     "cmd": [
+      "cat",
+      ".debug.log"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "name": "debug log"
+  },
+  {
+    "cmd": [
       "rm",
       "cross_build_arm_release_abcd1234efef5656.tar.bz2"
     ],

@@ -21,6 +21,11 @@ builders = {
     'target_arch': 'x64',
     'clobber': True
   },
+  'test-coverage-win': {
+    'mode': 'release',
+    'target_arch': 'x64',
+    'clobber': True
+  },
 }
 
 for platform in ['linux']:
@@ -112,6 +117,7 @@ def RunSteps(api):
       if 'precomp' not in buildername:
         front_end_args = ['pkg/front_end', '-rvm', '-cnone', '--checked']
         front_end_args.extend(test_args)
+        test_args.append('--append_logs')
         api.python('front-end tests',
                    api.path['checkout'].join('tools', 'test.py'),
                    args=front_end_args)
@@ -122,6 +128,12 @@ def RunSteps(api):
       api.python('taskkill after testing',
                  api.path['checkout'].join('tools', 'task_kill.py'),
                  args=['--kill_browsers=True'])
+      if api.platform.name == 'win':
+        api.step('debug log',
+                 ['cmd.exe', '/c', 'type', '.debug.log'])
+      else:
+        api.step('debug log',
+                 ['cat', '.debug.log'])
 
 
 def GenTests(api):
@@ -147,3 +159,8 @@ def GenTests(api):
       api.platform('linux', 32) +
       api.properties.generic(mastername='client.dart.internal',
                              buildername='test-coverage'))
+   yield (
+      api.test('test-coverage-win') +
+      api.platform('win', 64) +
+      api.properties.generic(mastername='client.dart.internal',
+                             buildername='test-coverage-win'))

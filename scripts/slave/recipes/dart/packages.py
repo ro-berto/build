@@ -169,9 +169,10 @@ def RunSteps(api):
                  api.path['checkout'].join('tools', 'task_kill.py'),
                  args=['--kill_browsers=True'],
                  ok_ret='any')
-      # TODO(whesse): Upload the logs to cloud storage, put a link to them
-      # in the step presentation.
-      if system in ['linux', 'mac10.11']:
+      if api.platform.name == 'win':
+        api.step('debug log',
+                 ['cmd.exe', '/c', 'type', '.debug.log'])
+      else:
         api.step('debug log',
                  ['cat', '.debug.log'])
 

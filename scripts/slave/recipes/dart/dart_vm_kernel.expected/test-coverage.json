@@ -119,7 +119,8 @@
       "--time",
       "--failure-summary",
       "--write-debug-log",
-      "--write-test-outcome-log"
+      "--write-test-outcome-log",
+      "--append_logs"
     ],
     "cwd": "[START_DIR]/sdk",
     "name": "vm tests"
@@ -133,6 +134,14 @@
     ],
     "cwd": "[START_DIR]/sdk",
     "name": "taskkill after testing"
+  },
+  {
+    "cmd": [
+      "cat",
+      ".debug.log"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "name": "debug log"
   },
   {
     "name": "$result",
