@@ -780,11 +780,13 @@ def GenTests(api):
     api.override_step_data('webkit_layout_tests (with patch)',
         api.test_utils.canned_isolated_script_output(
             passing=True, swarming=True,
-            isolated_script_passing=False)) +
+            isolated_script_passing=False)
+        + api.swarming.canned_summary_output()) +
     api.override_step_data('webkit_layout_tests (without patch)',
         api.test_utils.canned_isolated_script_output(
             passing=True, swarming=True,
-            isolated_script_passing=True))
+            isolated_script_passing=True)
+        + api.swarming.canned_summary_output())
   )
 
   yield (
@@ -793,7 +795,8 @@ def GenTests(api):
     api.override_step_data('webkit_layout_tests (with patch)',
         api.test_utils.canned_isolated_script_output(
             passing=True, swarming=True,
-            isolated_script_passing=False)) +
+            isolated_script_passing=False) +
+        api.swarming.canned_summary_output(failure=True)) +
     api.override_step_data('compile (without patch)', retcode=1)
   )
 
@@ -809,7 +812,8 @@ def GenTests(api):
         api.test_utils.canned_isolated_script_output(
             passing=True, swarming=True,
             isolated_script_passing=False,
-            isolated_script_retcode=255))
+            isolated_script_retcode=255) +
+        api.swarming.canned_summary_output(failure=True))
   )
 
   # TODO(dpranke): crbug.com/357866 . This tests what happens if we exceed the
@@ -824,7 +828,8 @@ def GenTests(api):
         api.test_utils.canned_isolated_script_output(
             passing=True, swarming=True,
             isolated_script_passing=False,
-            isolated_script_retcode=130))
+            isolated_script_retcode=130) +
+        api.swarming.canned_summary_output(failure=True))
   )
 
   # This tests what happens if we don't trip the thresholds listed
@@ -838,11 +843,13 @@ def GenTests(api):
         api.test_utils.canned_isolated_script_output(
             passing=True, swarming=True,
             isolated_script_passing=False,
-            isolated_script_retcode=125)) +
+            isolated_script_retcode=125) +
+        api.swarming.canned_summary_output(failure=True)) +
     api.override_step_data('webkit_layout_tests (without patch)',
         api.test_utils.canned_isolated_script_output(
             passing=True,
-            isolated_script_passing=True))
+            isolated_script_passing=True) +
+        api.swarming.canned_summary_output())
   )
 
   yield (
@@ -851,11 +858,13 @@ def GenTests(api):
     api.override_step_data('webkit_layout_tests (with patch)',
         api.test_utils.canned_isolated_script_output(
             passing=True, swarming=True,
-            isolated_script_passing=False)) +
+            isolated_script_passing=False) +
+        api.swarming.canned_summary_output(failure=True)) +
     api.override_step_data('webkit_layout_tests (without patch)',
         api.test_utils.canned_isolated_script_output(
             passing=True, swarming=True,
-            isolated_script_passing=True))
+            isolated_script_passing=True) +
+        api.swarming.canned_summary_output(failure=True))
   )
 
   yield (

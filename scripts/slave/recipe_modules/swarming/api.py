@@ -8,6 +8,7 @@ import hashlib
 import logging
 import os.path
 
+from recipe_engine import config_types
 from recipe_engine import recipe_api
 from recipe_engine import util as recipe_util
 
@@ -456,7 +457,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         merge=merge)
 
   def gtest_task(self, title, isolated_hash, test_launcher_summary_output=None,
-                 extra_args=None, cipd_packages=None, **kwargs):
+                 extra_args=None, cipd_packages=None, merge=None, **kwargs):
     """Returns a new SwarmingTask instance to run an isolated gtest on Swarming.
 
     Swarming recipe module knows how collect and interpret JSON files with test
@@ -475,13 +476,15 @@ class SwarmingApi(recipe_api.RecipeApi):
     if bad_args:  # pragma: no cover
       raise ValueError('--test-launcher-summary-output should not be used.')
 
-    # Append it. output.json name is expected by collect_gtest_task.py.
+    # Append it. output.json name is expected by collect_task.py.
     extra_args.append(
         '--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json')
 
+    merge = merge or {'script': self.resource('standard_gtest_merge.py')}
+
     # Make a task, configure it to be collected through shim script.
     task = self.task(title, isolated_hash, extra_args=extra_args,
-                     cipd_packages=cipd_packages, **kwargs)
+                     cipd_packages=cipd_packages, merge=merge, **kwargs)
     task.collect_step = lambda *args, **kw: (
         self._gtest_collect_step(test_launcher_summary_output, *args, **kw))
     return task
@@ -499,9 +502,8 @@ class SwarmingApi(recipe_api.RecipeApi):
     extra_args.append(output_arg)
     return extra_args
 
-  def isolated_script_task(self, title, isolated_hash,
-                           ignore_swarming_task_failure=False, extra_args=None,
-                           idempotent=False, **kwargs):
+  def isolated_script_task(self, title, isolated_hash, extra_args=None,
+                           idempotent=False, merge=None, **kwargs):
     """Returns a new SwarmingTask to run an isolated script test on Swarming.
 
     At the time of this writting, this code is used by WebRTC and
@@ -516,7 +518,7 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     # Ensure output flags are not already passed. We are going
     # to overwrite them.
-    # output.json name is expected by collect_gtest_task.py.
+    # output.json name is expected by collect_task.py.
     extra_args = self._check_and_set_output_flag(
       extra_args, 'isolated-script-test-output', 'output.json')
     # chartjson-output.json name is expected by benchmarks generating chartjson
@@ -526,8 +528,12 @@ class SwarmingApi(recipe_api.RecipeApi):
       'isolated-script-test-chartjson-output',
       'chartjson-output.json')
 
-    task = self.task(title, isolated_hash, ignore_swarming_task_failure,
-                     extra_args=extra_args, idempotent=idempotent, **kwargs)
+    merge = merge or {
+      'script': self.resource('standard_isolated_script_merge.py')
+    }
+
+    task = self.task(title, isolated_hash, extra_args=extra_args,
+                     idempotent=idempotent, merge=merge, **kwargs)
     task.collect_step = self._isolated_script_collect_step
     return task
 
@@ -706,68 +712,113 @@ class SwarmingApi(recipe_api.RecipeApi):
     if max_pending > 10:
       step_presentation.step_text += '<br>swarming pending %ds' % max_pending
 
-  def _default_collect_step(self, task, **kwargs):
+  def _default_collect_step(
+      self, task, merged_test_output=None,
+      step_test_data=None,
+      **kwargs):
     """Produces a step that collects a result of an arbitrary task."""
-    args = self.get_collect_cmd_args(task)
-    args.extend(['--task-summary-json', self.summary()])
-    if task.task_output_dir:
-      args.extend(['--task-output-dir', task.task_output_dir])
+    task_output_dir = task.task_output_dir or self.m.raw_io.output_dir()
+
+    # If we don't already have a Placeholder, wrap the task_output_dir in one
+    # so we can read out of it later w/ step_result.raw_io.output_dir.
+    if not isinstance(task_output_dir, recipe_util.Placeholder):
+      task_output_dir = self.m.raw_io.output_dir(leak_to=task_output_dir)
+
+    task_args = [
+      '-o', merged_test_output or self.m.json.output(),
+      '--task-output-dir', task_output_dir,
+    ]
+
+    merge_script = (task.merge.get('script')
+                    or self.resource('noop_merge.py'))
+    merge_args = (task.merge.get('args') or [])
+
+    task_args.extend([
+      '--merge-script', merge_script,
+      '--merge-additional-args', self.m.json.dumps(merge_args),
+    ])
+
+    if task.build_properties:
+      properties = dict(task.build_properties)
+      properties.update(self.m.properties)
+      task_args.extend([
+          '--build-properties', self.m.json.dumps(properties),
+      ])
+
+    task_args.append('--')
+    # Arguments for the actual 'collect' command.
+    collect_cmd = [
+      'python',
+      '-u',
+      self.m.swarming_client.path.join('swarming.py'),
+    ]
+    collect_cmd.extend(self.get_collect_cmd_args(task))
+    collect_cmd.extend([
+      '--task-summary-json', self.summary(),
+    ])
+
+    task_args.extend(collect_cmd)
+
+    allowed_return_codes = {0}
+    if task.ignore_swarming_task_failure:
+      allowed_return_codes = 'any'
+
+    # The call to collect_task emits two JSON files:
+    #  1) a task summary JSON emitted by swarming
+    #  2) a gtest results JSON emitted by the task
+    # This builds an instance of StepTestData that covers both.
+    step_test_data = step_test_data or (
+      self.test_api.canned_summary_output(task.shards) +
+      self.m.json.test_api.output({}))
 
     try:
-      return self.m.python(
-          name=self.get_step_name('', task),
-          script=self.m.swarming_client.path.join('swarming.py'),
-          args=args,
-          step_test_data=lambda: self.test_api.canned_summary_output(task.shards),
-          **kwargs)
+      with self.m.step.context({'cwd': self.m.path['start_dir']}):
+        return self.m.python(
+            name=self.get_step_name('', task),
+            script=self.resource('collect_task.py'),
+            args=task_args,
+            ok_ret=allowed_return_codes,
+            step_test_data=lambda: step_test_data,
+            **kwargs)
     finally:
       step_result = self.m.step.active_result
 
       step_result.presentation.step_text = text_for_task(task)
       summary_json = step_result.swarming.summary
-      if summary_json:
-        self._handle_summary_json(task, summary_json, step_result)
+      self._handle_summary_json(task, summary_json, step_result)
+
+      links = {}
+      if hasattr(step_result, 'json') and hasattr(step_result.json, 'output'):
+        links = step_result.json.output.get('links', {})
+      elif (hasattr(step_result, 'test_utils') and
+            hasattr(step_result.test_utils, 'gtest_results')):
+        links = step_result.test_utils.gtest_results.raw.get('links', {})
+      for k, v in links.iteritems():
+        step_result.presentation.links[k] = v
 
   def _gtest_collect_step(self, merged_test_output, task, **kwargs):
     """Produces a step that collects and processes a result of google-test task.
     """
-    args = [
-      '--swarming-client-dir', self.m.swarming_client.path,
-      '--temp-root-dir', self.m.path['tmp_base'],
-    ]
-
     # Where to put combined summary to, consumed by recipes. Also emit
     # test expectation only if |merged_test_output| is really used.
-    if merged_test_output:
-      args.extend(['--merged-test-output', merged_test_output])
-
     gtest_results_test_data = kwargs.pop('step_test_data', None)
-    if not gtest_results_test_data:
+    if merged_test_output and not gtest_results_test_data:
       gtest_results_test_data = (
           self.m.test_utils.test_api.canned_gtest_output(True))
 
-    # The call to collect_gtest_task emits two JSON files:
+    # The call to collect_task emits two JSON files:
     #  1) a task summary JSON emitted by swarming
     #  2) a gtest results JSON emitted by the task
     # This builds an instance of StepTestData that covers both.
     step_test_data = (
         self.test_api.canned_summary_output(shards=task.shards)
         + gtest_results_test_data)
-
-    # Arguments for actual 'collect' command.
-    args.append('--')
-    args.extend(self.get_collect_cmd_args(task))
-    args.extend(['--task-summary-json', self.summary()])
-
-    # Always wait for all tasks to finish even if some of them failed. Allow
-    # collect_gtest_task.py to emit all necessary annotations itself.
     try:
-      return self.m.build.python(
-          name=self.get_step_name('', task),
-          script=self.resource('collect_gtest_task.py'),
-          args=args,
+      return self._default_collect_step(
+          task,
+          merged_test_output=merged_test_output,
+          step_test_data=step_test_data,
           allow_subannotations=True,
-          step_test_data=lambda: step_test_data,
           **kwargs)
     finally:
       # HACK: it is assumed that caller used 'api.test_utils.gtest_results'
@@ -775,7 +826,6 @@ class SwarmingApi(recipe_api.RecipeApi):
       # gtest_task(...). It's not enforced in any way.
       step_result = self.m.step.active_result
 
-      step_result.presentation.step_text = text_for_task(task)
       gtest_results = getattr(step_result.test_utils, 'gtest_results', None)
       if gtest_results and gtest_results.raw:
         p = step_result.presentation
@@ -793,7 +843,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         self._display_pending(swarming_summary, step_result.presentation)
 
         # Show any remaining isolated outputs (such as logcats).
-        # Note that collect_gtest_task.py uses the default summary.json, which
+        # Note that collect_task.py uses the default summary.json, which
         # only has 'outputs_ref' instead of the deprecated 'isolated_out'.
         for index, shard in enumerate(swarming_summary.get('shards', [])):
           outputs_ref = shard.get('outputs_ref')
@@ -855,53 +905,12 @@ class SwarmingApi(recipe_api.RecipeApi):
     #  2) a test results JSON emitted by the task
     # This builds an instance of StepTestData that covers both.
     step_test_data = (
-        self.test_api.canned_summary_output(task.shards)
-        + isolated_script_results_test_data)
-
-    collect_cmd = [
-      'python',
-      self.m.swarming_client.path.join('swarming.py')
-    ]
-    collect_cmd.extend(self.get_collect_cmd_args(task))
-    collect_cmd.extend([
-      '--task-summary-json', self.summary(),
-    ])
-
-    task_args = [
-      '-o', self.m.json.output(),
-      '--task-output-dir', self.m.raw_io.output_dir(),
-    ]
-    if task.build_properties:
-      properties = dict(task.build_properties)
-      properties.update(self.m.properties)
-      task_args.extend([
-          '--build-properties', self.m.json.dumps(properties),
-      ])
-
-    merge_script = (task.merge.get('script')
-                    or self.resource('standard_isolated_script_merge.py'))
-    merge_args = (task.merge.get('args') or [])
-
-    task_args.extend([
-        '--merge-script', merge_script,
-        '--merge-additional-args', self.m.json.dumps(merge_args),
-    ])
-
-    task_args.append('--')
-    task_args.extend(collect_cmd)
-    allowed_return_codes = {0}
-    if task.ignore_swarming_task_failure:
-      allowed_return_codes = 'any'
+        self.test_api.canned_summary_output(task.shards) +
+        isolated_script_results_test_data)
 
     try:
-      with self.m.step.context({'cwd': self.m.path['start_dir']}):
-        return self.m.python(
-            name=self.get_step_name('', task),
-            script=self.resource('collect_isolated_script_task.py'),
-            ok_ret=allowed_return_codes,
-            args=task_args,
-            step_test_data=lambda: step_test_data,
-            **kwargs)
+      return self._default_collect_step(
+          task, step_test_data=step_test_data, **kwargs)
     finally:
       # Regardless of the outcome of the test (pass or fail), we try to parse
       # the results. If any error occurs while parsing results, then we set them
@@ -917,19 +926,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         outdir_json = self.m.json.dumps(outdir, indent=2)
         step_result.presentation.logs['outdir_json'] = outdir_json.splitlines()
 
-        step_result.presentation.step_text = text_for_task(task)
-
-        # Check if it's an internal failure. 'summary.json' is saved in the
-        # output directory.
-        summary_json = self.m.json.loads(
-            step_result.raw_io.output_dir['summary.json'])
-
-        self._handle_summary_json(task, summary_json, step_result)
-
         step_result.isolated_script_results = step_result.json.output
-        links = (step_result.isolated_script_results or {}).get('links', {})
-        for k, v in links.iteritems():
-          step_result.presentation.links[k] = v
 
         # Obtain chartjson results if present
         step_result.isolated_script_chartjson_results = \

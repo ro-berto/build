@@ -205,17 +205,18 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::swarming]/resources/collect_isolated_script_task.py",
+      "RECIPE_MODULE[build::swarming]/resources/collect_task.py",
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "/path/to/tmp/",
+      "[TMP_BASE]/hello_isolated_world_tmp_1/task_output_dir",
       "--merge-script",
       "RECIPE_MODULE[build::swarming]/resources/standard_isolated_script_merge.py",
       "--merge-additional-args",
       "[]",
       "--",
       "python",
+      "-u",
       "[START_DIR]/swarming.client/swarming.py",
       "collect",
       "--swarming",
@@ -311,9 +312,7 @@
       "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"isolated_out\\\": null, \\\"created_ts\\\": \\\"2014-09-25T01:41:00.123\\\", \\\"try_number\\\": null, \\\"name\\\": \\\"heartbeat-canary-2014-09-25_01:41:55-os=Windows\\\", \\\"internal_failure\\\": false, \\\"outputs\\\": [], \\\"durations\\\": null, \\\"id\\\": \\\"148aa78d7aa0100\\\", \\\"abandoned_ts\\\": \\\"2014-09-25T01:41:00.123\\\", \\\"failure\\\": false, \\\"state\\\": \\\"EXPIRED\\\", \\\"modified_ts\\\": \\\"2014-09-25 01:42:00\\\", \\\"exit_codes\\\": [], \\\"started_ts\\\": \\\"2014-09-25T01:42:11.123\\\", \\\"user\\\": \\\"unknown\\\", \\\"completed_ts\\\": null, \\\"bot_id\\\": \\\"vm30\\\"}]}\"@@@",
       "@@@STEP_LOG_LINE@outdir_json@}@@@",
       "@@@STEP_LOG_END@outdir_json@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@Infra Failure in Shard #0 failed: There isn't enough capacity to run your test@@@",
-      "@@@STEP_LOG_END@no_results_exc@@@",
-      "@@@STEP_EXCEPTION@@@"
+      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
   {
