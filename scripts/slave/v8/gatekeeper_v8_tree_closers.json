@@ -53,8 +53,7 @@
           "v8_compile"
         ],
         "excluded_builders" : [
-          "Linux Snapshot Builder",
-          "Chromium Win SyzyASAN"
+          "Linux Snapshot Builder"
         ],
         "builders": {
           "*": {}

@@ -640,10 +640,6 @@ def chromium_sanitizer(c):
 def chromium_asan(c):
   pass
 
-@config_ctx(includes=['chromium_asan'])
-def chromium_asan_default_targets(c):
-  c.compile_py.default_targets = ['chromium_builder_asan']
-
 @config_ctx(includes=['chromium_asan', 'asan_test_batch'])
 def chromium_linux_asan(c):
   pass

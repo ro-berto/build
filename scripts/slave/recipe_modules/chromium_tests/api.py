@@ -518,7 +518,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
          archive_prefix=bot_config.get('cf_archive_name'),
          archive_subdir_suffix=bot_config.get('cf_archive_subdir_suffix', ''),
          revision_dir=bot_config.get('cf_revision_dir'),
-         fixed_staging_dir=bot_config.get('fixed_staging_dir', False),
        )
 
   def run_mb_and_compile(self, compile_targets, isolated_targets, name_suffix,
