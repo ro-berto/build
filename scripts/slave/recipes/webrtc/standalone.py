@@ -32,13 +32,6 @@ def RunSteps(api):
     step_result.presentation.status = api.step.WARNING
     return
 
-  # TODO(kjellander): Remove when crbug.com/708104 is fixed (webrtc:7024).
-  if api.properties['buildername'] == 'Linux64 Debug (ARM)':
-    step_result = api.step('Disabled: see https://bugs.webrtc.org/7024',
-                           cmd=None)
-    step_result.presentation.status = api.step.WARNING
-    return
-
   webrtc.configure_swarming()
 
   webrtc.checkout()
