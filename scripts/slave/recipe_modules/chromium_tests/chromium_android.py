@@ -13,7 +13,10 @@ SPEC = {
     'Android arm Builder (dbg)': {
       'chromium_config': 'android',
       'enable_swarming': True,
-      'chromium_apply_config': ['chrome_with_codecs'],
+      'chromium_apply_config': [
+        'chrome_with_codecs',
+        'download_vr_test_apks',
+      ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
@@ -31,7 +34,10 @@ SPEC = {
     'Android arm64 Builder (dbg)': {
       'enable_swarming': True,
       'chromium_config': 'android',
-      'chromium_apply_config': ['chrome_with_codecs'],
+      'chromium_apply_config': [
+        'chrome_with_codecs',
+        'download_vr_test_apks',
+      ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
