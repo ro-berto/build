@@ -100,6 +100,8 @@ def _GetTargetCMakeArgs(buildername, checkout, ninja_path):
     elif _HasToken(buildername, 'aarch64'):
       args['ANDROID_ABI'] = 'arm64-v8a'
       args['ANDROID_NATIVE_API_LEVEL'] = 21
+  if _HasToken(buildername, 'fips'):
+    args['FIPS'] = '1'
   return args
 
 
@@ -230,6 +232,10 @@ def GenTests(api):
     ('linux_rel', api.platform('linux', 64)),
     ('linux32_rel', api.platform('linux', 64)),
     ('linux_clang_rel', api.platform('linux', 64)),
+    ('linux_fips', api.platform('linux', 64)),
+    ('linux_fips_rel', api.platform('linux', 64)),
+    ('linux_fips_clang', api.platform('linux', 64)),
+    ('linux_fips_clang_rel', api.platform('linux', 64)),
     ('mac', api.platform('mac', 64)),
     ('mac_small', api.platform('mac', 64)),
     ('mac_rel', api.platform('mac', 64)),

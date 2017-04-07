@@ -140,11 +140,35 @@
       "slave_pools": ["android_n5x"],
       "category": "3android",
     },
+    "linux_fips": {
+      "recipe": "boringssl",
+      "scheduler": "boringssl_commits",
+      "slave_pools": ["linux_trusty"],
+      "category": "4fips",
+    },
+    "linux_fips_rel": {
+      "recipe": "boringssl",
+      "scheduler": "boringssl_commits",
+      "slave_pools": ["linux_trusty"],
+      "category": "4fips",
+    },
+    "linux_fips_clang": {
+      "recipe": "boringssl",
+      "scheduler": "boringssl_commits",
+      "slave_pools": ["linux_trusty"],
+      "category": "4fips",
+    },
+    "linux_fips_clang_rel": {
+      "recipe": "boringssl",
+      "scheduler": "boringssl_commits",
+      "slave_pools": ["linux_trusty"],
+      "category": "4fips",
+    },
     "docs": {
       "recipe": "boringssl_docs",
       "scheduler": "boringssl_commits",
       "slave_pools": ["linux_trusty"],
-      "category": "4docs",
+      "category": "5docs",
     },
   },
 
@@ -166,6 +190,8 @@
         "slave43-c3",
         "slave44-c3",
         "slave208-c3",
+        "slave245-c3",
+        "slave246-c3",
       ],
     },
     "mac": {
