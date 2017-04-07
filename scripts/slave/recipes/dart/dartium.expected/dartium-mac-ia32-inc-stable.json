@@ -84,6 +84,7 @@
     "name": "build dartium"
   },
   {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",

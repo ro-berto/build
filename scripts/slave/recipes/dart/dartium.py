@@ -61,7 +61,8 @@ def RunSteps(api):
       api.python(
         'annotated steps',
         api.path['checkout'].join(
-          'dart', 'tools', 'dartium', 'buildbot_annotated_steps.py'))
+          'dart', 'tools', 'dartium', 'buildbot_annotated_steps.py'),
+        allow_subannotations=True)
       api.python(
         'taskkill after building',
         api.path['checkout'].join('dart', 'tools', 'task_kill.py'),
