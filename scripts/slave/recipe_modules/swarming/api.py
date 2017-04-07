@@ -378,7 +378,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       'win': 'Windows-7-SP1',
     }[platform]
 
-  def task(self, title, isolated_hash, ignore_swarming_task_failure=False, shards=1,
+  def task(self, title, isolated_hash, ignore_task_failure=False, shards=1,
            task_output_dir=None, extra_args=None, idempotent=None,
            cipd_packages=None, build_properties=None, merge=None):
     """Returns a new SwarmingTask instance to run an isolated executable on
@@ -397,7 +397,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       title: name of the test, used as part of a task ID.
       isolated_hash: hash of isolated test on isolate server, the test should
           be already isolated there, see 'isolate' recipe module.
-      ignore_swarming_task_failure: whether to ignore the test failure of swarming
+      ignore_task_failure: whether to ignore the test failure of swarming
         tasks. By default, this is set to False.
       shards: if defined, the number of shards to use for the task. By default
           this value is either 1 or based on the title.
@@ -447,7 +447,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         io_timeout=self.default_io_timeout,
         hard_timeout=self.default_hard_timeout,
         idempotent=idempotent,
-        ignore_swarming_task_failure=ignore_swarming_task_failure,
+        ignore_task_failure=ignore_task_failure,
         extra_args=extra_args,
         collect_step=self._default_collect_step,
         task_output_dir=task_output_dir,
@@ -500,7 +500,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     return extra_args
 
   def isolated_script_task(self, title, isolated_hash,
-                           ignore_swarming_task_failure=False, extra_args=None,
+                           ignore_task_failure=False, extra_args=None,
                            idempotent=False, **kwargs):
     """Returns a new SwarmingTask to run an isolated script test on Swarming.
 
@@ -526,7 +526,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       'isolated-script-test-chartjson-output',
       'chartjson-output.json')
 
-    task = self.task(title, isolated_hash, ignore_swarming_task_failure,
+    task = self.task(title, isolated_hash, ignore_task_failure,
                      extra_args=extra_args, idempotent=idempotent, **kwargs)
     task.collect_step = self._isolated_script_collect_step
     return task
@@ -890,7 +890,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     task_args.append('--')
     task_args.extend(collect_cmd)
     allowed_return_codes = {0}
-    if task.ignore_swarming_task_failure:
+    if task.ignore_task_failure:
       allowed_return_codes = 'any'
 
     try:
@@ -1048,7 +1048,7 @@ class SwarmingApi(recipe_api.RecipeApi):
 class SwarmingTask(object):
   """Definition of a task to run on swarming."""
 
-  def __init__(self, title, isolated_hash, ignore_swarming_task_failure, dimensions,
+  def __init__(self, title, isolated_hash, ignore_task_failure, dimensions,
                env, priority, shards, buildername, buildnumber, expiration,
                user, io_timeout, hard_timeout, idempotent, extra_args,
                collect_step, task_output_dir, cipd_packages=None,
@@ -1061,7 +1061,7 @@ class SwarmingTask(object):
       isolated_hash: hash of isolated file that describes all files needed to
           run the task as well as command line to launch. See 'isolate' recipe
           module.
-      ignore_swarming_task_failure: whether to ignore the test failure of swarming
+      ignore_task_failure: whether to ignore the test failure of swarming
         tasks.
       cipd_packages: list of 3-tuples corresponding to CIPD packages needed for
           the task: ('path', 'package_name', 'version'), defined as follows:
@@ -1120,7 +1120,7 @@ class SwarmingTask(object):
     self.extra_args = tuple(extra_args or [])
     self.hard_timeout = hard_timeout
     self.idempotent = idempotent
-    self.ignore_swarming_task_failure = ignore_swarming_task_failure
+    self.ignore_task_failure = ignore_task_failure
     self.io_timeout = io_timeout
     self.isolated_hash = isolated_hash
     self.merge = merge or {}
