@@ -125,7 +125,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "gcmole=1 gomadir='[CACHE]/goma_client' target_arch=ia32 use_goma=1 v8_target_arch=ia32",
+      "GYP_DEFINES": "dcheck_always_on=1 fastbuild=1 gcmole=1 gomadir='[CACHE]/goma_client' target_arch=ia32 use_goma=1 v8_target_arch=ia32",
       "GYP_GENERATORS": "ninja",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -303,9 +303,9 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
-      "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]/goma/v8_linux_rel_ng",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
+      "GOMA_FAIL_FAST": "true",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "infra_step": true,
@@ -518,13 +518,24 @@
       {
         "builder_name": "v8_linux_rel_ng_triggered",
         "properties": {
+          "category": "cq",
+          "master": "tryserver.v8",
           "parent_build_environment": {
             "GYP_DEFINES": "target_arch=x64 cool_flag=a=1"
           },
           "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "parent_got_revision_cp": "refs/heads/master@{#50110}",
           "parent_got_swarming_client_revision": "e4fee0b18f8163be6097c9c571640038896debc4",
-          "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
+          "patch_gerrit_url": "https://chromium-review.googlesource.com",
+          "patch_issue": "456789",
+          "patch_project": "v8",
+          "patch_ref": "refs/changes/89/456789/12",
+          "patch_repository_url": "https://chromium.googlesource.com/v8/v8",
+          "patch_set": "12",
+          "patch_storage": "gerrit",
+          "reason": "CQ",
+          "requester": "commit-bot@chromium.org",
+          "revision": "12345",
           "swarm_hashes": {
             "benchmarks": "[dummy hash for benchmarks]",
             "bot_default": "[dummy hash for bot_default]",

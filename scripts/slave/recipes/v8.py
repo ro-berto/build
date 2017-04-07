@@ -48,10 +48,13 @@ def RunSteps(api):
       api.chromium.taskkill()
 
     if v8.generate_sanitizer_coverage:
-      # When collecting code coverage, we need to resync to the revision that
+      # When collecting code coverage, we need to sync to the revision that
       # fits to the patch for the line numbers to match.
-      v8.checkout(patch=False)
-      revision = v8.calculate_patch_base()
+      if api.properties['patch_storage'] == 'gerrit':
+        revision = v8.calculate_patch_base_gerrit()
+      else:
+        v8.checkout(patch=False)
+        revision = v8.calculate_patch_base_rietveld()
       update_step = v8.checkout(revision=revision, suffix='with patch base')
     else:
       update_step = v8.checkout()
@@ -432,6 +435,18 @@ def GenTests(api):
     api.v8.test(
         'tryserver.v8',
         'v8_linux_rel_ng',
+        'gerrit',
+        requester='commit-bot@chromium.org',
+        gerrit_project='v8/v8',
+        blamelist=['dude@chromium.org'],
+    )
+  )
+
+  # Test gerrit tryjobs on coverage bot.
+  yield (
+    api.v8.test(
+        'tryserver.v8',
+        'v8_linux64_sanitizer_coverage_rel',
         'gerrit',
         requester='commit-bot@chromium.org',
         gerrit_project='v8/v8',

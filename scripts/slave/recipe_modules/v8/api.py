@@ -193,7 +193,7 @@ class V8Api(recipe_api.RecipeApi):
 
     return update_step
 
-  def calculate_patch_base(self):
+  def calculate_patch_base_rietveld(self):
     """Calculates the latest commit hash that fits the patch."""
     url = ('https://codereview.chromium.org/download/issue%s_%s.diff' %
            (self.m.properties['issue'], self.m.properties['patchset']))
@@ -213,6 +213,22 @@ class V8Api(recipe_api.RecipeApi):
         ],
         step_test_data=lambda: self.m.raw_io.test_api.output_text('[fitting hsh]'),
     ).raw_io.output_text
+
+  def calculate_patch_base_gerrit(self):
+    """Calculates the commit hash a gerrit patch was branched off."""
+    commits, _ = self.m.gitiles.log(
+        url=V8_URL,
+        ref='master..%s' % self.m.properties['patch_ref'],
+        limit=100,
+        step_name='Get patches',
+        step_test_data=lambda: self.test_api.example_patch_range(),
+    )
+    # There'll be at least one commit with the patch. Maybe more for dependent
+    # CLs.
+    assert len(commits) >= 1
+    # We don't support merges.
+    assert len(commits[-1]['parents']) == 1
+    return commits[-1]['parents'][0]
 
   def set_up_swarming(self):
     if self.bot_config.get('enable_swarming'):

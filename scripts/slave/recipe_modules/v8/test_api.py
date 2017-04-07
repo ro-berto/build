@@ -277,7 +277,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     })
 
   def example_bisection_range(self):
-    # Gitiles returns changes in the order newest -> oldest.
+    # Gitiles returns changes in the order child -> parent.
     return self.m.json.output({
       'log': [
         {'commit': 'a3', 'msg': 'Cool commit 3'},
@@ -322,6 +322,15 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       },
       'num_files': 3615,
       'top100_avg_deps': 1.3,
+    })
+
+  def example_patch_range(self):
+    # Gitiles returns changes in the order child -> parent.
+    return self.m.json.output({
+      'log': [
+        {'commit': '[child2 hsh]', 'parents': ['[child1 hsh]']},
+        {'commit': '[child1 hsh]', 'parents': ['[master-branch-point hsh]']},
+      ],
     })
 
   def _get_test_branch_name(self, mastername, buildername):
@@ -411,11 +420,13 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
           category='cq',
           master='tryserver.v8',
           patch_project='v8',
-          patch_storage='rietveld',
           reason='CQ',
           revision='12345',
           try_job_key='1234',
       )
+    if (mastername.startswith('tryserver') and
+        not kwargs.get('gerrit_project')):
+      test += self.m.properties(patch_storage='rietveld')
 
     return test
 

@@ -256,15 +256,27 @@ class SanitizerCoverageContext(object):
 
   def maybe_upload(self):
     """Uploads coverage data to google storage if on tryserver."""
-    if self.api.tryserver.is_tryserver:
-      assert self.api.properties['issue']
-      assert self.api.properties['patchset']
 
-      results_path = '/'.join([
-        'tryserver',
-        'sanitizer_coverage',
-        str(self.api.properties['issue']),
-        str(self.api.properties['patchset']),
+    path_prefix = [
+      'tryserver',
+      'sanitizer_coverage',
+    ]
+
+    if self.api.tryserver.is_tryserver:
+      issue = str(self.api.properties.get('issue', ''))
+      patchset = str(self.api.properties.get('patchset', ''))
+      if not issue:
+        # Disambiguate new gerrit paths with an extra path element to not have
+        # the issue numbers clashing at some point.
+        path_prefix.append('gerrit')
+        issue = str(self.api.properties.get('patch_issue', ''))
+        patchset = str(self.api.properties.get('patch_set', ''))
+      assert issue
+      assert patchset
+
+      results_path = '/'.join(path_prefix + [
+        issue,
+        patchset,
         self.v8.bot_config.get('sanitizer_coverage_folder'),
       ])
 
