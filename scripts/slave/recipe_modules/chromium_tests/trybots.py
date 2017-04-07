@@ -33,27 +33,33 @@ TRYBOTS = freeze({
       }, analyze_mode='compile'),
       'mac10.9_blink_dbg': simple_bot({
         'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Mac10.11 (dbg)',
+        'buildername': 'WebKit Mac Builder (dbg)',
+        'tester': 'WebKit Mac10.11 (dbg)',
       }),
       'mac10.9_blink_rel': simple_bot({
         'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Mac10.9',
+        'buildername': 'WebKit Mac Builder',
+        'tester': 'WebKit Mac10.9',
       }),
       'mac10.9_blink_compile_dbg': simple_bot({
         'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Mac10.11 (dbg)',
+        'buildername': 'WebKit Mac Builder (dbg)',
+        'tester': 'WebKit Mac10.11 (dbg)',
       }, analyze_mode='compile'),
       'mac10.9_blink_compile_rel': simple_bot({
         'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Mac10.9',
+        'buildername': 'WebKit Mac Builder',
+        'tester': 'WebKit Mac10.9',
       }, analyze_mode='compile'),
       'mac10.10_blink_rel': simple_bot({
         'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Mac10.10',
+        'buildername': 'WebKit Mac Builder',
+        'tester': 'WebKit Mac10.10',
       }),
       'mac10.11_blink_rel': simple_bot({
         'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Mac10.11',
+        'buildername': 'WebKit Mac Builder',
+        'tester': 'WebKit Mac10.11',
       }),
       'mac10.11_retina_blink_rel': simple_bot({
         'mastername': 'chromium.webkit',
@@ -61,27 +67,33 @@ TRYBOTS = freeze({
       }),
       'mac10.12_blink_rel': simple_bot({
         'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Mac10.12',
+        'buildername': 'WebKit Mac Builder',
+        'tester': 'WebKit Mac10.12',
       }),
       'win7_blink_dbg': simple_bot({
         'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Win7 (dbg)',
+        'buildername': 'WebKit Win Builder (dbg)',
+        'tester': 'WebKit Win7 (dbg)',
       }),
       'win7_blink_rel': simple_bot({
         'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Win7',
+        'buildername': 'WebKit Win Builder',
+        'tester': 'WebKit Win7',
       }),
       'win7_blink_compile_dbg': simple_bot({
         'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Win7 (dbg)',
+        'buildername': 'WebKit Win Builder (dbg)',
+        'tester': 'WebKit Win7 (dbg)'
       }, analyze_mode='compile'),
       'win7_blink_compile_rel': simple_bot({
         'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Win7',
+        'buildername': 'WebKit Win Builder',
+        'tester': 'WebKit Win7'
       }, analyze_mode='compile'),
       'win10_blink_rel': simple_bot({
         'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Win10',
+        'buildername': 'WebKit Win Builder',
+        'tester': 'WebKit Win10',
       }),
     },
   },
@@ -97,7 +109,8 @@ TRYBOTS = freeze({
       }, analyze_mode='compile'),
       'android_blink_rel': simple_bot({
         'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Android (Nexus4)',
+        'buildername': 'Android Builder',
+        'tester': 'WebKit Android (Nexus4)',
       }),
       'android_clang_dbg_recipe': simple_bot({
         'mastername': 'chromium.linux',

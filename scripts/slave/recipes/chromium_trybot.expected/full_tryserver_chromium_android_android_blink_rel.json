@@ -624,54 +624,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::adb]/resources/list_devices.py",
-      "['[BUILDER_CACHE]/android_blink_rel/src/third_party/android_tools/sdk/platform-tools/adb', 'devices']",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[BUILDER_CACHE]/android_blink_rel",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_blink_rel/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_blink_rel/src/build/android:%(PATH)s"
-    },
-    "name": "List adb devices",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"014E1F310401C009\"@@@",
-      "@@@STEP_LOG_LINE@json.output@]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport subprocess\nimport sys\nadb_path = sys.argv[1]\nfor device in sys.argv[2:]:\n  print 'Attempting to root device %s ...' % (device)\n  subprocess.check_call([adb_path, '-s', device, 'root'])\n  subprocess.check_call([adb_path, '-s', device, 'wait-for-device'])\n  print 'Finished rooting device %s' % (device)\n",
-      "[BUILDER_CACHE]/android_blink_rel/src/third_party/android_tools/sdk/platform-tools/adb",
-      "014E1F310401C009"
-    ],
-    "cwd": "[BUILDER_CACHE]/android_blink_rel",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_blink_rel/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_blink_rel/src/build/android:%(PATH)s"
-    },
-    "name": "Root devices",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import subprocess@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@adb_path = sys.argv[1]@@@",
-      "@@@STEP_LOG_LINE@python.inline@for device in sys.argv[2:]:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  print 'Attempting to root device %s ...' % (device)@@@",
-      "@@@STEP_LOG_LINE@python.inline@  subprocess.check_call([adb_path, '-s', device, 'root'])@@@",
-      "@@@STEP_LOG_LINE@python.inline@  subprocess.check_call([adb_path, '-s', device, 'wait-for-device'])@@@",
-      "@@@STEP_LOG_LINE@python.inline@  print 'Finished rooting device %s' % (device)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[BUILDER_CACHE]/android_blink_rel/src/build/symlink.py",
       "-f",
       "[BUILDER_CACHE]/android_blink_rel/src/third_party/android_tools/sdk/platform-tools/adb",

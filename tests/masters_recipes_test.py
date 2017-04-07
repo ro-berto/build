@@ -22,11 +22,13 @@ MAIN_WATERFALL_MASTERS = [
     'master.chromium.linux',
     'master.chromium.mac',
     'master.chromium.memory',
+    'master.chromium.webkit',
     'master.chromium.win',
 ]
 
 
 TRYSERVER_MASTERS = [
+    'master.tryserver.blink',
     'master.tryserver.chromium.android',
     'master.tryserver.chromium.linux',
     'master.tryserver.chromium.mac',
@@ -56,14 +58,22 @@ SUPPRESSIONS = {
         'Deterministic Linux',
     ],
     'master.chromium.mac': [
-        'ios-device',
+        'ios-device', # these are covered, just by the iOS recipes instead.
         'ios-device-xcode-clang',
         'ios-simulator',
         'ios-simulator-xcode-clang',
+
         'Mac10.11 Tests',
     ],
     'master.chromium.memory': [
         'Linux ASan Tests (sandboxed)',
+    ],
+    'master.chromium.webkit': [
+        'WebKit Linux Trusty ASAN',
+        'WebKit Linux Trusty Leak',
+        'WebKit Linux Trusty MSAN',
+        'WebKit Win x64 Builder',
+        'WebKit Win x64 Builder (dbg)',
     ],
     'master.chromium.win': [
         'Win7 (32) Tests',
