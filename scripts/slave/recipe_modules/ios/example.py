@@ -187,7 +187,7 @@ def GenTests(api):
         'bootstrap swarming.swarming.py --version',
         stdout=api.raw_io.output_text('1.2.3'),
     )
-    + api.override_step_data(
+    + api.step_data(
         'fake test (fake device iOS 8.1)',
         api.swarming.summary({
           'shards': [{
@@ -226,7 +226,7 @@ def GenTests(api):
         'bootstrap swarming.swarming.py --version',
         stdout=api.raw_io.output_text('1.2.3'),
     )
-    + api.override_step_data(
+    + api.step_data(
         'fake test (fake device iOS 8.1)',
         api.swarming.summary({
           'shards': [{
@@ -265,7 +265,7 @@ def GenTests(api):
         'bootstrap swarming.swarming.py --version',
         stdout=api.raw_io.output_text('1.2.3'),
     )
-    + api.override_step_data(
+    + api.step_data(
         'fake test (fake device iOS 8.1)',
         api.swarming.summary({
           'shards': [{
@@ -303,7 +303,7 @@ def GenTests(api):
         'bootstrap swarming.swarming.py --version',
         stdout=api.raw_io.output_text('1.2.3'),
     )
-    + api.override_step_data(
+    + api.step_data(
         'fake test (fake device iOS 8.1)',
         api.swarming.summary({
           'shards': [{
@@ -341,7 +341,7 @@ def GenTests(api):
         'bootstrap swarming.swarming.py --version',
         stdout=api.raw_io.output_text('1.2.3'),
     )
-    + api.override_step_data(
+    + api.step_data(
         'fake test (fake device iOS 8.1)',
         api.swarming.summary({
           'shards': [{

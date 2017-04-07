@@ -271,7 +271,7 @@ def GenTests(api):
         'V8 Fuzzer',
         'fuzz_archive',
     ) +
-    api.override_step_data('Fuzz', retcode=1)
+    api.step_data('Fuzz', retcode=1)
   )
 
   # Bisect over range a1, a2, a3. Assume a2 is the culprit. Steps:
