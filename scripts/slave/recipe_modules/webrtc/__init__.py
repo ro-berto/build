@@ -1,4 +1,5 @@
 DEPS = [
+  'adb',
   'archive',
   'depot_tools/bot_update',
   'chromium',

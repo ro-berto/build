@@ -103,25 +103,31 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
     if api.m.platform.is_linux:
       f = api.m.path['checkout'].join
       tests.append(
-          BaremetalTest('isac_fix_test',
-                        revision=revision,
-                        args=['32000', f('resources', 'speech_and_misc_wb.pcm'),
-                              'isac_speech_and_misc_wb.pcm'],
-                        perf_test=True),
+          PerfTest('isac_fix_test',
+                   revision=revision,
+                   args=['32000', f('resources', 'speech_and_misc_wb.pcm'),
+                         'isac_speech_and_misc_wb.pcm']),
       )
-    tests.append(BaremetalTest('webrtc_perf_tests', revision=revision,
-                               perf_test=True))
 
-    tests.append(BaremetalTest(
+    tests.append(PerfTest('webrtc_perf_tests', revision=revision))
+
+    tests.append(PerfTest(
         str(api.m.path['checkout'].join('webrtc', 'audio', 'test',
                                         'low_bandwidth_audio_test.py')),
         name='low_bandwidth_audio_test',
         args=[api.m.chromium.output_dir, '--remove'],
-        revision=revision,
-        perf_test=True))
+        revision=revision))
   elif test_suite == 'android_perf' and api.c.PERF_ID:
     # TODO(kjellander): Fix the Android ASan bot so we can have an assert here.
     tests.append(AndroidPerfTest('webrtc_perf_tests', revision=revision))
+
+    tests.append(PerfTest(
+        str(api.m.path['checkout'].join('webrtc', 'audio', 'test',
+                                        'low_bandwidth_audio_test.py')),
+        name='low_bandwidth_audio_test',
+        args=[api.m.chromium.output_dir, '--remove',
+              '--android', '--adb-path', api.m.adb.adb_path()],
+        revision=revision))
   elif test_suite == 'android':
     for test in (ANDROID_DEVICE_TESTS +
                  ANDROID_INSTRUMENTATION_TESTS):
@@ -183,14 +189,20 @@ class WebRTCTest(Test):
                  **self._runtest_kwargs)
 
 class BaremetalTest(WebRTCTest):
-  """A WebRTC desktop test that uses audio and/or video devices."""
-  def __init__(self, test, name=None, revision=None, perf_test=False, **runtest_kwargs):
+  """A WebRTC test that uses audio and/or video devices."""
+  def __init__(self, test, name=None, revision=None, perf_test=False, **kwargs):
     # Tests accessing hardware devices shouldn't be run in parallel.
     super(BaremetalTest, self).__init__(test, name, revision=revision,
                                         parallel=False, perf_test=perf_test,
-                                        **runtest_kwargs)
+                                        **kwargs)
     if perf_test:
       assert revision, 'Revision is mandatory for perf tests'
+
+class PerfTest(BaremetalTest):
+  """A WebRTC test that needs consistent hardware performance."""
+  def __init__(self, test, name=None, revision=None, **kwargs):
+    super(PerfTest, self).__init__(test, name, revision=revision,
+                                   perf_test=True, **kwargs)
 
 class AndroidJunitTest(Test):
   """Runs an Android Junit test."""
@@ -198,7 +210,7 @@ class AndroidJunitTest(Test):
   def run(self, api, suffix):
     api.m.chromium_android.run_java_unit_test_suite(self._name)
 
-class AndroidPerfTest(Test):
+class AndroidPerfTest(PerfTest):
   """A performance test to run on Android devices.
 
     Basically just wrap what happens in chromium_android.run_test_suite to run
@@ -209,8 +221,6 @@ class AndroidPerfTest(Test):
 
   def __init__(self, test, name=None, revision=None):
     super(AndroidPerfTest, self).__init__(test, name, revision)
-    assert revision, 'Revision is mandatory for perf tests'
-    self._revision = revision
 
   def run(self, api, suffix):
     wrapper_script = api.m.chromium.output_dir.join('bin',
@@ -221,6 +231,6 @@ class AndroidPerfTest(Test):
                  args=args,
                  revision=self._revision,
                  python_mode=True,
-                 perf_test=True,
+                 perf_test=self._perf_test,
                  perf_dashboard_id=self._name)
 
