@@ -55,7 +55,7 @@ AUX_BINARY_PACKAGES = {
 
       cipd.CipdPackage(
           name='infra/tools/git/${platform}',
-          version='git_revision:c3fae7a556e1eb5252750ee47907ca0d42223c6c'),
+          version='git_revision:090a5e6b035ea86964f3ae4fb398d00443db8695'),
     ),
 
     CANARY: (
