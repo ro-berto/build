@@ -1466,23 +1466,7 @@
       "@@@STEP_LOG_END@outdir_json@@@",
       "@@@STEP_LOG_LINE@no_results_exc@'summary.json'@@@",
       "@@@STEP_LOG_END@no_results_exc@@@",
-      "@@@STEP_LOG_LINE@step_metadata@{@@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"webkit_layout_tests\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"cpu\": \"x86-64\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"gpu\": \"none\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-14.04\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
-      "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"webkit_layout_tests (without patch)\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
-      "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": \"Linux Tests\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": \"chromium.linux\"@@@",
-      "@@@STEP_LOG_LINE@step_metadata@}@@@",
-      "@@@STEP_LOG_END@step_metadata@@@"
+      "@@@SET_BUILD_PROPERTY@failure_type@\"INVALID_TEST_RESULTS\"@@@"
     ]
   },
   {
@@ -1495,42 +1479,17 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "webkit_layout_tests (retry summary)",
+    "name": "webkit_layout_tests",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@<br/>failures:<br/>test2.Test2<br/>test1.Test1<br/>@@@",
+      "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@",
       "@@@STEP_FAILURE@@@",
-      "@@@SET_BUILD_PROPERTY@failure_type@\"TEST_FAILURE\"@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/archive_layout_test_retry_summary.py",
-      "--retry-summary-json",
-      "{\"failures\": [\"test1.Test1\", \"test2.Test2\"], \"ignored\": []}",
-      "--build-number",
-      "571",
-      "--builder-name",
-      "linux_chromium_rel_ng",
-      "--gs-bucket",
-      "gs://chromium-layout-test-archives",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
-    ],
-    "cwd": "[BUILDER_CACHE]/linux",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "archive_retry_summary",
-    "~followup_annotations": [
-      "@@@SET_BUILD_PROPERTY@failure_hash@\"c60e949a3ad18abea428a2089edde25ed602ae16\"@@@"
+      "@@@SET_BUILD_PROPERTY@failure_hash@\"0033d2da60be0ce69f9e42d2cc9e1cf7eaa08145\"@@@"
     ]
   },
   {
     "name": "$result",
-    "reason": "1 out of 1 aggregated steps failed. Failures: Step('webkit_layout_tests (retry summary)') failed with return_code 1",
+    "reason": "1 out of 1 aggregated steps failed. Failures: Step('webkit_layout_tests') failed with return_code 1",
     "recipe_result": null,
     "status_code": 1
   }
