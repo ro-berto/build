@@ -17,6 +17,26 @@ SPEC = {
   'builders': {},
 }
 
+BROWSER_TESTS_FILTER = [
+  # Benefits from non-default device configurations (but could be implemented
+  # on a VM using the fake device flags in different combinations)..
+  'MediaStreamDevicesControllerTest.*',
+  'MediaStreamDevicesControllerBrowserTestInstance*',
+
+  # Runs hardware-exercising test and/or video calling tests.
+  'WebRtcApprtcBrowserTest.*',
+  'WebRtcAudioQualityBrowserTest.*',
+  'WebRtcBrowserTest.*',
+  'WebRtcDisableEncryptionFlagBrowserTest.*',
+  'WebRtcInternalsPerfBrowserTest.*',
+  'WebRtcSimulcastBrowserTest.*',
+  'WebRtcStatsPerfBrowserTest.*',
+  'WebRtcGetMediaDevicesBrowserTests*',
+  'WebRtcVideoQualityBrowserTests*',
+  'WebRtcWebcamBrowserTests*',
+  'WebrtcAudioPrivateTest.*',
+]
+
 
 def BaseSpec(bot_type, chromium_apply_config, gclient_config, platform,
              target_bits, build_config='Release'):
@@ -119,7 +139,7 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
           # These tests needs --test-launcher-jobs=1 since some of them are
           # not able to run in parallel (due to the usage of the
           # peerconnection server).
-          args=['--gtest_filter=WebRtc*:Webrtc*:TabCapture*:*MediaStream*',
+          args=['--gtest_filter=%s' % ':'.join(BROWSER_TESTS_FILTER),
                 '--run-manual', '--ui-test-action-max-timeout=350000',
                 '--test-launcher-jobs=1',
                 '--test-launcher-bot-mode',

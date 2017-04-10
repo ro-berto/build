@@ -365,7 +365,7 @@
       "--slave-name=test_bot",
       "--build-number=571",
       "browser_tests",
-      "--gtest_filter=WebRtc*:Webrtc*:TabCapture*:*MediaStream*",
+      "--gtest_filter=MediaStreamDevicesControllerTest.*:MediaStreamDevicesControllerBrowserTestInstance*:WebRtcApprtcBrowserTest.*:WebRtcAudioQualityBrowserTest.*:WebRtcBrowserTest.*:WebRtcDisableEncryptionFlagBrowserTest.*:WebRtcInternalsPerfBrowserTest.*:WebRtcSimulcastBrowserTest.*:WebRtcStatsPerfBrowserTest.*:WebRtcGetMediaDevicesBrowserTests*:WebRtcVideoQualityBrowserTests*:WebRtcWebcamBrowserTests*:WebrtcAudioPrivateTest.*",
       "--run-manual",
       "--ui-test-action-max-timeout=350000",
       "--test-launcher-jobs=1",
