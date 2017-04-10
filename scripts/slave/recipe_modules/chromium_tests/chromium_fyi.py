@@ -138,7 +138,7 @@ SPEC = {
       ],
       'tests': [
         steps.BlinkTest(extra_args=[
-          '--enable-blink-features=LayoutNG',
+          '--additional-driver-flag=--enable-blink-features=LayoutNG',
         ]),
       ],
       'test_results_config': 'staging_server',
