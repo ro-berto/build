@@ -43,13 +43,32 @@ def GetShortHostname():
 
 
 def GetGomaLogDirectory():
-  """Get goma's log directory."""
-  candidates = ['TEST_TMPDIR', 'TMPDIR', 'TMP']
+  """Get goma's log directory.
+
+  Returns:
+    a string of a directory name where goma's log may exist.
+
+  Raises:
+    chromium_utils.PathNotFound if it cannot find an available log directory.
+  """
+  candidates = ['GLOG_log_dir', 'GOOGLE_LOG_DIR', 'TEST_TMPDIR']
+  default_dir = None
+  if chromium_utils.IsWindows():
+    candidates.extend(['TMP', 'TEMP', 'USERPROFILE'])
+    # Note: I believe one of environment variables is set for usual Windows
+    # environment, let me avoid to check the Windows directory, which we
+    # need to use win32api on Python.
+  else:
+    candidates.extend(['TEST_TMPDIR', 'TMPDIR', 'TMP'])
+    default_dir = '/tmp'
+
   for candidate in candidates:
     value = os.environ.get(candidate)
     if value and os.path.isdir(value):
       return value
-  return '/tmp'
+  if default_dir:
+    return default_dir
+  raise chromium_utils.PathNotFound('Cannot find Goma log directory.')
 
 
 def GetLatestGlogInfoFile(pattern):
