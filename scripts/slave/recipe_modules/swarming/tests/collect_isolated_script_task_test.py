@@ -19,22 +19,22 @@ import test_env
 
 RESOURCES_DIR = os.path.abspath(os.path.join(THIS_DIR, '..', 'resources'))
 sys.path.insert(0, RESOURCES_DIR)
-import collect_task
+import collect_isolated_script_task
 
 from testing_support import auto_stub
 
 
-class CollectTaskTest(auto_stub.TestCase):
+class CollectIsolatedScriptTaskTest(auto_stub.TestCase):
 
   def setUp(self):
-    super(CollectTaskTest, self).setUp()
+    super(CollectIsolatedScriptTaskTest, self).setUp()
 
     self.subprocess_calls = []
     def mocked_subprocess_call(args):
       self.subprocess_calls.append(args)
       return 0
     self.mock(
-        collect_task.subprocess,
+        collect_isolated_script_task.subprocess,
         'call',
         mocked_subprocess_call)
 
@@ -42,45 +42,7 @@ class CollectTaskTest(auto_stub.TestCase):
 
   def tearDown(self):
     shutil.rmtree(self.temp_dir)
-    super(CollectTaskTest, self).tearDown()
-
-  def test_basic(self):
-    collect_cmd = [
-      'swarming.py',
-      'positional0',
-      '--swarming-arg0', '0',
-      '--swarming-arg1', '1',
-      'positional1',
-    ]
-    build_props_json = os.path.join(self.temp_dir, 'build_properties.json')
-    task_output_dir = os.path.join(self.temp_dir, 'task_output_dir')
-    os.makedirs(task_output_dir)
-    output_json = os.path.join(self.temp_dir, 'output.json')
-    exit_code = collect_task.collect_task(
-        collect_cmd, 'merge.py', build_props_json, None, task_output_dir,
-        output_json)
-    self.assertEqual(0, exit_code)
-
-    # Should append correct --task-output-dir to args after '--'.
-    self.assertEqual(
-        [
-            [
-                'swarming.py',
-                'positional0',
-                '--swarming-arg0', '0',
-                '--swarming-arg1', '1',
-                'positional1',
-                '--task-output-dir',
-                task_output_dir,
-            ],
-            [
-                sys.executable,
-                'merge.py',
-                '--build-properties', build_props_json,
-                '-o', output_json,
-            ]
-        ],
-        self.subprocess_calls)
+    super(CollectIsolatedScriptTaskTest, self).tearDown()
 
   def test_task_output_dir_handling(self):
     collect_cmd = [
@@ -105,7 +67,7 @@ class CollectTaskTest(auto_stub.TestCase):
 
     build_props_json = os.path.join(self.temp_dir, 'build_properties.json')
     output_json = os.path.join(self.temp_dir, 'output.json')
-    exit_code = collect_task.collect_task(
+    exit_code = collect_isolated_script_task.CollectIsolatedScriptTask(
         collect_cmd, merge_script, build_props_json, None, task_output_dir,
         output_json)
 
@@ -124,7 +86,6 @@ class CollectTaskTest(auto_stub.TestCase):
             sys.executable,
             merge_script,
             '--build-properties', build_props_json,
-            '--summary-json', summary_json,
             '-o', output_json,
             shard0_output_json
           ],
@@ -145,7 +106,7 @@ class CollectTaskTest(auto_stub.TestCase):
 
     build_props_json = os.path.join(self.temp_dir, 'build_properties.json')
     output_json = os.path.join(self.temp_dir, 'output.json')
-    exit_code = collect_task.collect_task(
+    exit_code = collect_isolated_script_task.CollectIsolatedScriptTask(
         collect_cmd, merge_script, build_props_json, None, task_output_dir,
         output_json)
 
@@ -189,7 +150,7 @@ class CollectTaskTest(auto_stub.TestCase):
     ])
 
     output_json = os.path.join(self.temp_dir, 'output.json')
-    exit_code = collect_task.collect_task(
+    exit_code = collect_isolated_script_task.CollectIsolatedScriptTask(
         collect_cmd, merge_script, build_props, merge_args,
         task_output_dir, output_json)
 

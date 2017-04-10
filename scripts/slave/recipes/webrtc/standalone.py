@@ -16,7 +16,6 @@ DEPS = [
   'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/step',
-  'swarming',
   'test_utils',
   'webrtc',
 ]
@@ -121,13 +120,11 @@ def GenTests(api):
       os_suffix = ' on %s' % bot_config['swarming_dimensions']['os']
       if 'Windows' in os_suffix or os_suffix == ' on Ubuntu-14.04':
         os_suffix = ''
-      for test_name, test_data in NORMAL_TESTS.iteritems():
-        test += api.override_step_data(
-            test_name + os_suffix,
-            api.swarming.canned_summary_output(test_data.get('shards', 1))
-            + api.test_utils.canned_isolated_script_output(
+      for test_name in NORMAL_TESTS:
+        test += api.override_step_data(test_name + os_suffix,
+            api.test_utils.canned_isolated_script_output(
                 passing=True, is_win=False, swarming=True,
-                shards=test_data.get('shards', 1),
+                shards=NORMAL_TESTS[test_name].get('shards', 1),
                 isolated_script_passing=True,
                 use_json_test_format=True, output_chartjson=False),
             retcode=0)
