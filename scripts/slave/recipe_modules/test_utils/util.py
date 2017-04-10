@@ -163,7 +163,11 @@ class TestResults(object):
 
 
 class GTestResults(object):
+
+  MAX_LOG_LINES = 5000
+
   def __init__(self, jsonish=None):
+    self.logs = {}
     self.raw = jsonish or {}
     self.pass_fail_counts = {}
 
@@ -194,15 +198,28 @@ class GTestResults(object):
         # it passes at least once.
         self.pass_fail_counts.setdefault(
             test_fullname, {'pass_count': 0, 'fail_count': 0})
+        self.logs.setdefault(test_fullname, [])
         for cur_result in results:
           if cur_result['status'] == 'SUCCESS':
             self.pass_fail_counts[test_fullname]['pass_count'] += 1
           elif cur_result['status'] != 'SKIPPED':
             self.pass_fail_counts[test_fullname]['fail_count'] += 1
+          ascii_log = cur_result['output_snippet'].encode('ascii',
+                                                          errors='replace')
+          self.logs[test_fullname].extend(
+              self._compress_list(ascii_log.splitlines()))
 
     # With multiple iterations a test could have passed in one but failed
     # in another. Remove tests that ever failed from the passing set.
     self.passes -= self.failures
+
+  def _compress_list(self, lines):
+    if len(lines) > self.MAX_LOG_LINES: # pragma: no cover
+      remove_from_start = self.MAX_LOG_LINES / 2
+      return (lines[:remove_from_start] +
+              ['<truncated>'] +
+              lines[len(lines) - (self.MAX_LOG_LINES - remove_from_start):])
+    return lines
 
   def as_jsonish(self):
     ret = self.raw.copy()

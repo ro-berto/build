@@ -214,7 +214,6 @@ class MainFuncTest(auto_stub.TestCase):
 
     # Mute other calls.
     self.mock(collect_gtest_task, 'merge_shard_results', lambda *_: None)
-    self.mock(collect_gtest_task, 'emit_test_annotations', lambda *_: None)
 
     # Make tempfile.mkdtemp deterministic.
     self.mkdtemp_counter = 0
@@ -441,24 +440,6 @@ class MergeShardResultsTest(auto_stub.TestCase):
           'shard %s test output exceeded the size limit' % large_shard, stdout)
     finally:
       collect_gtest_task.OUTPUT_JSON_SIZE_LIMIT = old_json_limit
-
-
-class EmitTestAnnotationsTest(auto_stub.TestCase):
-  """Test for emit_test_annotations function."""
-
-  def call(self, exit_code, json_data):
-    stdout = cStringIO.StringIO()
-    self.mock(sys, 'stdout', stdout)
-    collect_gtest_task.emit_test_annotations(exit_code, json_data)
-    return stdout.getvalue().strip()
-
-  def test_it(self):
-    stdout = self.call(0, GOOD_GTEST_JSON_MERGED)
-    self.assertEqual(
-        'exit code (as seen by runtest.py): 0\n'
-        '@@@STEP_TEXT@@@@\n'
-        '@@@STEP_TEXT@3 disabled@@@',
-        stdout)
 
 
 if __name__ == '__main__':

@@ -158,14 +158,6 @@ def merge_list_of_dicts(left, right):
   return output
 
 
-def emit_test_annotations(exit_code, json_data):
-  """Emits annotations with logs of failed tests."""
-  parser = gtest_utils.GTestJSONParser()
-  if json_data:
-    parser.ProcessJSONData(json_data)
-  annotation_utils.annotate('', exit_code, parser)
-
-
 def main(args):
   # Split |args| into options for shim and options for swarming.py script.
   if '--' in args:
@@ -220,7 +212,6 @@ def main(args):
     # exceptions and just log them.
     try:
       merged = merge_shard_results(task_output_dir)
-      emit_test_annotations(exit_code, merged)
       if options.merged_test_output:
         with open(options.merged_test_output, 'wb') as f:
           json.dump(merged, f, separators=(',', ':'))

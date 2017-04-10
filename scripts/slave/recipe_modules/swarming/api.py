@@ -789,6 +789,8 @@ class SwarmingApi(recipe_api.RecipeApi):
           p.step_text += self.m.test_utils.format_step_text([
             ['failures:', gtest_results.failures]
           ])
+          for failure in gtest_results.failures:
+            p.logs[failure] = gtest_results.logs[failure]
         swarming_summary = step_result.swarming.summary
         self._display_pending(swarming_summary, step_result.presentation)
 

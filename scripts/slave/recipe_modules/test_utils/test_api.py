@@ -78,14 +78,14 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
       'Test.One': [
         {
           'elapsed_time_ms': 0,
-          'output_snippet': '',
+          'output_snippet': ':)',
           'status': 'SUCCESS',
         },
       ],
       'Test.Two': [
         {
           'elapsed_time_ms': 0,
-          'output_snippet': '',
+          'output_snippet': ':)' if passing else ':(',
           'status': 'SUCCESS' if passing else 'FAILURE',
         },
       ],
@@ -282,13 +282,13 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
     for test_name in failed_test_names:
       cur_iteration_data[test_name] = [{
           'elapsed_time_ms': 0,
-          'output_snippet': '',
+          'output_snippet': ':(',
           'status': 'FAILURE',
       }]
     for test_name in passed_test_names:
       cur_iteration_data[test_name] = [{
           'elapsed_time_ms': 0,
-          'output_snippet': '',
+          'output_snippet': ':)',
           'status': 'SUCCESS',
       }]
 
