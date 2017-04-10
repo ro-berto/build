@@ -1620,9 +1620,7 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
       swarming_spec = spec.get('swarming', {})
       if swarming_spec.get('can_use_on_swarming_builders', False):
         use_swarming = True
-        # TODO(crbug.com/458261): only uses 'ignore_task_failure' field.
         swarming_ignore_task_failure = (
-            swarming_spec.get('ignore_swarming_task_failure', False) or
             swarming_spec.get('ignore_task_failure', False))
         swarming_shards = swarming_spec.get('shards', 1)
         swarming_dimension_sets = swarming_spec.get('dimension_sets')
