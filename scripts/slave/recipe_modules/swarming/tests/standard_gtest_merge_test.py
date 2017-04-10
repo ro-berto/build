@@ -17,7 +17,7 @@ THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 # For 'test_env'.
 sys.path.insert(
     0, os.path.abspath(os.path.join(THIS_DIR, '..', '..', '..', 'unittests')))
-# For 'collect_gtest_task.py'.
+# For 'standard_gtest_merge.py'.
 sys.path.insert(
     0, os.path.abspath(os.path.join(THIS_DIR, '..', 'resources')))
 
@@ -26,7 +26,7 @@ import test_env
 
 # In depot_tools/
 from testing_support import auto_stub
-import collect_gtest_task
+import standard_gtest_merge
 
 
 # gtest json output for successfully finished shard #0.
@@ -193,153 +193,85 @@ BAD_GTEST_JSON_ONLY_1_SHARD = {
 }
 
 
-class MainFuncTest(auto_stub.TestCase):
-  """Tests for 'main' function."""
+class _StandardGtestMergeTest(auto_stub.TestCase):
 
   def setUp(self):
-    super(MainFuncTest, self).setUp()
-
-    # Temp root dir for the test.
+    super(_StandardGtestMergeTest, self).setUp()
     self.temp_dir = tempfile.mkdtemp()
-
-    # Collect calls to 'subprocess.call'.
-    self.subprocess_calls = []
-    def mocked_subprocess_call(args):
-      self.subprocess_calls.append(args)
-      return 0
-    self.mock(
-        collect_gtest_task.subprocess,
-        'call',
-        mocked_subprocess_call)
-
-    # Mute other calls.
-    self.mock(collect_gtest_task, 'merge_shard_results', lambda *_: None)
-
-    # Make tempfile.mkdtemp deterministic.
-    self.mkdtemp_counter = 0
-    def fake_mkdtemp(prefix=None, suffix=None, dir=None):
-      # pylint: disable=redefined-builtin
-      self.mkdtemp_counter += 1
-      return self.mkdtemp_result(self.mkdtemp_counter, prefix, suffix, dir)
-    self.mock(
-        collect_gtest_task.tempfile,
-        'mkdtemp',
-        fake_mkdtemp)
 
   def tearDown(self):
     shutil.rmtree(self.temp_dir)
-    super(MainFuncTest, self).tearDown()
+    super(_StandardGtestMergeTest, self).tearDown()
 
-  def mkdtemp_result(self, index, prefix=None, suffix=None, dir=None):
-    """Result of fake mkdtemp call for given invocation index."""
-    # pylint: disable=redefined-builtin
-    return os.path.join(
-        dir or self.temp_dir,
-        '%s%d%s' % (prefix or '', index, suffix or ''))
-
-  def test_main_calls_swarming_py_no_extra_args(self):
-    exit_code = collect_gtest_task.main([
-      '--swarming-client-dir', os.path.join(self.temp_dir, 'fake_swarming'),
-      '--temp-root-dir', self.temp_dir,
-      '--',
-      'positional0',
-      '--swarming-arg0', '0'
-      '--swarming-arg1', '1',
-      'positional1',
-    ])
-    self.assertEqual(0, exit_code)
-
-    # Should append correct --task-output-dir to args after '--'.
-    self.assertEqual(
-        [[
-          sys.executable,
-          '-u',
-          os.path.join(self.temp_dir, 'fake_swarming', 'swarming.py'),
-          'positional0',
-          '--swarming-arg0', '0'
-          '--swarming-arg1', '1',
-          'positional1',
-          '--task-output-dir',
-          self.mkdtemp_result(1, suffix='_swarming', dir=self.temp_dir),
-        ]],
-        self.subprocess_calls)
-
-  def test_main_calls_swarming_py_with_extra_args(self):
-    exit_code = collect_gtest_task.main([
-      '--swarming-client-dir', os.path.join(self.temp_dir, 'fake_swarming'),
-      '--temp-root-dir', self.temp_dir,
-      '--',
-      'positional0',
-      '--swarming-arg0', '0'
-      '--swarming-arg1', '1',
-      'positional1',
-      '--',
-      '--isolated-cmd-extra-arg0',
-      'extra_arg1',
-    ])
-    self.assertEqual(0, exit_code)
-
-    # Should insert correct --task-output-dir before extra args to swarming.py.
-    self.assertEqual(
-        [[
-          sys.executable,
-          '-u',
-          os.path.join(self.temp_dir, 'fake_swarming', 'swarming.py'),
-          'positional0',
-          '--swarming-arg0', '0'
-          '--swarming-arg1', '1',
-          'positional1',
-          '--task-output-dir',
-          self.mkdtemp_result(1, suffix='_swarming', dir=self.temp_dir),
-          '--',
-          '--isolated-cmd-extra-arg0',
-          'extra_arg1',
-        ]],
-        self.subprocess_calls)
+  def _write_temp_file(self, path, content):
+    abs_path = os.path.join(self.temp_dir, path.replace('/', os.sep))
+    if not os.path.exists(os.path.dirname(abs_path)):
+      os.makedirs(os.path.dirname(abs_path))
+    with open(abs_path, 'w') as f:
+      if isinstance(content, dict):
+        json.dump(content, f)
+      else:
+        assert isinstance(content, str)
+        f.write(content)
+    return abs_path
 
 
-class MergeShardResultsTest(auto_stub.TestCase):
+class LoadShardJsonTest(_StandardGtestMergeTest):
+
+  def test_double_digit_jsons(self):
+    jsons_to_merge = []
+    for i in xrange(15):
+      json_dir = os.path.join(self.temp_dir, str(i))
+      json_path = os.path.join(json_dir, 'output.json')
+      if not os.path.exists(json_dir):
+        os.makedirs(json_dir)
+      with open(json_path, 'w') as f:
+        json.dump({'all_tests': ['LoadShardJsonTest.test%d' % i]}, f)
+      jsons_to_merge.append(json_path)
+
+    content, err = standard_gtest_merge.load_shard_json(0, jsons_to_merge)
+    self.assertEqual({'all_tests': ['LoadShardJsonTest.test0']}, content)
+    self.assertIsNone(err)
+
+    content, err = standard_gtest_merge.load_shard_json(12, jsons_to_merge)
+    self.assertEqual({'all_tests': ['LoadShardJsonTest.test12']}, content)
+    self.assertIsNone(err)
+
+
+class MergeShardResultsTest(_StandardGtestMergeTest):
   """Tests for merge_shard_results function."""
 
   def setUp(self):
     super(MergeShardResultsTest, self).setUp()
-    self.temp_dir = tempfile.mkdtemp()
+    self.summary = None
+    self.test_files = []
 
-  def tearDown(self):
-    shutil.rmtree(self.temp_dir)
-    super(MergeShardResultsTest, self).tearDown()
-
-  def stage(self, files):
+  def stage(self, summary, files):
+    self.summary = self._write_temp_file('summary.json', summary)
     for path, content in files.iteritems():
-      abs_path = os.path.join(self.temp_dir, path.replace('/', os.sep))
-      if not os.path.exists(os.path.dirname(abs_path)):
-        os.makedirs(os.path.dirname(abs_path))
-      with open(abs_path, 'w') as f:
-        if isinstance(content, dict):
-          json.dump(content, f)
-        else:
-          assert isinstance(content, str)
-          f.write(content)
+      abs_path = self._write_temp_file(path, content)
+      self.test_files.append(abs_path)
 
   def call(self, exit_code=0):
     stdout = cStringIO.StringIO()
     self.mock(sys, 'stdout', stdout)
-    merged = collect_gtest_task.merge_shard_results(self.temp_dir)
+    merged = standard_gtest_merge.merge_shard_results(
+        self.summary, self.test_files)
     return merged, stdout.getvalue().strip()
 
   def test_ok(self):
     # Two shards, both successfully finished.
     self.stage({
-      'summary.json': {
-        u'shards': [
-          {
-            u'state': u'COMPLETED',
-          },
-          {
-            u'state': u'COMPLETED',
-          },
-        ],
-      },
+      u'shards': [
+        {
+          u'state': u'COMPLETED',
+        },
+        {
+          u'state': u'COMPLETED',
+        },
+      ],
+    },
+    {
       '0/output.json': GOOD_GTEST_JSON_0,
       '1/output.json': GOOD_GTEST_JSON_1,
     })
@@ -359,6 +291,7 @@ class MergeShardResultsTest(auto_stub.TestCase):
 
   def test_missing_summary_json(self):
     # summary.json is missing, should return None and emit warning.
+    self.summary = os.path.join(self.temp_dir, 'summary.json')
     merged, output = self.call()
     self.assertEqual(None, merged)
     self.assertIn('@@@STEP_WARNINGS@@@', output)
@@ -367,14 +300,14 @@ class MergeShardResultsTest(auto_stub.TestCase):
   def test_unfinished_shards(self):
     # Only one shard (#1) finished. Shard #0 did not.
     self.stage({
-      'summary.json': {
-        u'shards': [
-          None,
-          {
-            u'state': u'COMPLETED',
-          },
-        ],
-      },
+      u'shards': [
+        None,
+        {
+          u'state': u'COMPLETED',
+        },
+      ],
+    },
+    {
       u'1/output.json': GOOD_GTEST_JSON_1,
     })
     merged, stdout = self.call(1)
@@ -389,16 +322,16 @@ class MergeShardResultsTest(auto_stub.TestCase):
   def test_missing_output_json(self):
     # Shard #0 output json is missing.
     self.stage({
-      'summary.json': {
-        u'shards': [
-          {
-            u'state': u'COMPLETED',
-          },
-          {
-            u'state': u'COMPLETED',
-          },
-        ],
-      },
+      u'shards': [
+        {
+          u'state': u'COMPLETED',
+        },
+        {
+          u'state': u'COMPLETED',
+        },
+      ],
+    },
+    {
       u'1/output.json': GOOD_GTEST_JSON_1,
     })
     merged, stdout = self.call(1)
@@ -406,32 +339,31 @@ class MergeShardResultsTest(auto_stub.TestCase):
     self.assertEqual(BAD_GTEST_JSON_ONLY_1_SHARD, merged)
     self.assertIn(
         '@@@STEP_WARNINGS@@@\nTask ran but no result was found: '
-        'shard 0 test output was missing or invalid', stdout)
+        'shard 0 test output was missing', stdout)
 
   def test_large_output_json(self):
     # a shard is too large.
     self.stage({
-      'summary.json': {
-        u'shards': [
-          {
-            u'state': u'COMPLETED',
-          },
-          {
-            u'state': u'COMPLETED',
-          },
-        ],
-      },
+      u'shards': [
+        {
+          u'state': u'COMPLETED',
+        },
+        {
+          u'state': u'COMPLETED',
+        },
+      ],
+    },
+    {
       '0/output.json': GOOD_GTEST_JSON_0,
       '1/output.json': GOOD_GTEST_JSON_1,
     })
-    old_json_limit = collect_gtest_task.OUTPUT_JSON_SIZE_LIMIT
+    old_json_limit = standard_gtest_merge.OUTPUT_JSON_SIZE_LIMIT
     len0 = len(json.dumps(GOOD_GTEST_JSON_0))
     len1 = len(json.dumps(GOOD_GTEST_JSON_1))
     large_shard = "0" if len0 > len1 else "1"
     try:
       # Override max output.json size just for this test.
-      collect_gtest_task.OUTPUT_JSON_SIZE_LIMIT = min(len0,len1)
-  
+      standard_gtest_merge.OUTPUT_JSON_SIZE_LIMIT = min(len0,len1)
       merged, stdout = self.call(1)
       merged.pop('swarming_summary')
       self.assertEqual(BAD_GTEST_JSON_ONLY_1_SHARD, merged)
@@ -439,7 +371,7 @@ class MergeShardResultsTest(auto_stub.TestCase):
           '@@@STEP_WARNINGS@@@\nTask ran but no result was found: '
           'shard %s test output exceeded the size limit' % large_shard, stdout)
     finally:
-      collect_gtest_task.OUTPUT_JSON_SIZE_LIMIT = old_json_limit
+      standard_gtest_merge.OUTPUT_JSON_SIZE_LIMIT = old_json_limit
 
 
 if __name__ == '__main__':

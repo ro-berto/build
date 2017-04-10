@@ -61,11 +61,11 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
     return ret
 
   @recipe_test_api.placeholder_step_data
-  def gtest_results(self, test_results, retcode=None):
-    return self.m.json.output(test_results.as_jsonish(), retcode)
+  def gtest_results(self, test_results, retcode=None, name=None):
+    return self.m.json.output(test_results.as_jsonish(), retcode, name)
 
   def canned_gtest_output(self, passing, minimal=False, passes=9001,
-                          extra_json=None):
+                          extra_json=None, name=None):
     """Produces a 'json test results' compatible object with some canned tests.
     Args:
       passing - Determines if this test result is passing or not.
@@ -73,6 +73,7 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
       minimal - If True, the canned output will omit one test to emulate the
                 effect of running fewer than the total number of tests.
       extra_json - dict with additional keys to add to gtest JSON.
+      name - Optional string name of the json output.
     """
     cur_iteration_data = {
       'Test.One': [
@@ -106,12 +107,11 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
     canned_jsonish.update(extra_json or {})
 
     retcode = None if passing else 1
-    return self.raw_gtest_output(canned_jsonish, retcode)
+    return self.raw_gtest_output(canned_jsonish, retcode, name)
 
-  def raw_gtest_output(self, jsonish, retcode):
+  def raw_gtest_output(self, jsonish, retcode, name=None):
     t = GTestResults(jsonish)
-    ret = self.gtest_results(t)
-    ret.retcode = retcode
+    ret = self.gtest_results(t, retcode=retcode, name=name)
     return ret
 
   # TODO(tansell): https://crbug.com/704066 - Kill simplified JSON format.
