@@ -18,7 +18,6 @@ class TestResults(object):
   def __init__(self, jsonish=None):
     self.raw = jsonish or {'version': 3}
     self.valid = (jsonish is not None)
-    self.interrupted = False
     self.version = self.raw.get('version', 'simplified')
 
     tests = self.raw.get('tests', {})
@@ -62,9 +61,6 @@ class TestResults(object):
 
   def _json_results(self):
     self.valid = self.raw.get('version', 0) == 3
-    # Interrupted is a required field. If it is missing, assume we where
-    # interrupted.
-    self.interrupted = self.raw.get('interrupted', True)
 
     # Test result types are described on the follow page.
     # https://www.chromium.org/developers/the-json-test-results-format#TOC-Test-result-types

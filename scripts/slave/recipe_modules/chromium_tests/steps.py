@@ -936,10 +936,7 @@ class JSONResultsHandler(ResultsHandler):
     except Exception as e:
       return False, [str(e)]
 
-    # If results where interrupted, we can't trust they have all the tests in
-    # them. For this reason we mark them as invalid.
-    return (results.valid and not results.interrupted,
-            results.unexpected_failures)
+    return results.valid, results.unexpected_failures
 
 
 class FakeCustomResultsHandler(ResultsHandler):
