@@ -100,10 +100,6 @@ def GenTests(api):
               ]),
           ),
       )
-      + api.chromite.add_chromite_config(
-          'x86-generic-paladin',
-          build_type='paladin',
-      )
   )
 
   # Test a ChromiumOS Paladin build whose manifest is not parsable.
@@ -126,10 +122,6 @@ def GenTests(api):
               None
           )
       )
-      + api.chromite.add_chromite_config(
-          'x86-generic-paladin',
-          build_type='paladin',
-      )
   )
 
   # Test a ChromiumOS Paladin build that was configured using BuildBucket
@@ -151,10 +143,6 @@ def GenTests(api):
             },
           }),
           **common_properties
-      )
-      + api.chromite.add_chromite_config(
-          'auron-paladin',
-          build_type='paladin',
       )
   )
 

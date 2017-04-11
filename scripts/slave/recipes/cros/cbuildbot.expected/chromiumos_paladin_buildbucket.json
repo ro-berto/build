@@ -43,24 +43,6 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[START_DIR]/chromite/cbuildbot/config_dump.json",
-      "/path/to/tmp/json"
-    ],
-    "name": "read chromite config",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@config@{@@@",
-      "@@@STEP_LOG_LINE@config@  \"auron-paladin\": {@@@",
-      "@@@STEP_LOG_LINE@config@    \"build_type\": \"paladin\"@@@",
-      "@@@STEP_LOG_LINE@config@  }@@@",
-      "@@@STEP_LOG_LINE@config@}@@@",
-      "@@@STEP_LOG_END@config@@@"
-    ]
-  },
-  {
     "cmd": [],
     "name": "ensure_goma"
   },
@@ -99,9 +81,9 @@
   {
     "allow_subannotations": true,
     "cmd": [
-      "[START_DIR]/chromite/bin/cbuildbot",
+      "[START_DIR]/chromite/scripts/cbuildbot_launch",
       "--buildroot",
-      "[ROOT]/cbuild/external_master",
+      "[ROOT]/cbuild/repository",
       "--buildbot",
       "--branch",
       "master",

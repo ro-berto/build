@@ -61,34 +61,13 @@
   {
     "allow_subannotations": true,
     "cmd": [
-      "[START_DIR]/chromite/bin/cbuildbot",
+      "[START_DIR]/chromite/scripts/cbuildbot_launch",
       "--clobber",
       "--build-dir",
       "/here/there",
       "amd64-generic-full"
     ],
     "name": "cbuildbot"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[START_DIR]/chromite/cbuildbot/config_dump.json",
-      "/path/to/tmp/json"
-    ],
-    "name": "read chromite config",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@config@{@@@",
-      "@@@STEP_LOG_LINE@config@  \"myconfig\": {@@@",
-      "@@@STEP_LOG_LINE@config@    \"_template\": \"woot\", @@@",
-      "@@@STEP_LOG_LINE@config@    \"baz\": \"templated\", @@@",
-      "@@@STEP_LOG_LINE@config@    \"foo\": \"bar\", @@@",
-      "@@@STEP_LOG_LINE@config@    \"local\": \"variable\"@@@",
-      "@@@STEP_LOG_LINE@config@  }@@@",
-      "@@@STEP_LOG_LINE@config@}@@@",
-      "@@@STEP_LOG_END@config@@@"
-    ]
   },
   {
     "name": "$result",
