@@ -798,11 +798,7 @@
       "--builder-name",
       "gn_test",
       "--build-number",
-      "571",
-      "--cs-base-url",
-      "http://cs.chromium.org",
-      "--bucket",
-      "chromium-result-details"
+      "571"
     ],
     "name": "cronet_sample_test_apk: generate result details",
     "stdout": "/path/to/tmp/",
@@ -839,11 +835,7 @@
       "--builder-name",
       "gn_test",
       "--build-number",
-      "571",
-      "--cs-base-url",
-      "http://cs.chromium.org",
-      "--bucket",
-      "chromium-result-details"
+      "571"
     ],
     "name": "cronet_smoketests_missing_native_library_instrumentation_apk: generate result details",
     "stdout": "/path/to/tmp/",
@@ -880,11 +872,7 @@
       "--builder-name",
       "gn_test",
       "--build-number",
-      "571",
-      "--cs-base-url",
-      "http://cs.chromium.org",
-      "--bucket",
-      "chromium-result-details"
+      "571"
     ],
     "name": "cronet_smoketests_platform_only_instrumentation_apk: generate result details",
     "stdout": "/path/to/tmp/",
@@ -921,11 +909,7 @@
       "--builder-name",
       "gn_test",
       "--build-number",
-      "571",
-      "--cs-base-url",
-      "http://cs.chromium.org",
-      "--bucket",
-      "chromium-result-details"
+      "571"
     ],
     "name": "cronet_test_instrumentation_apk: generate result details",
     "stdout": "/path/to/tmp/",

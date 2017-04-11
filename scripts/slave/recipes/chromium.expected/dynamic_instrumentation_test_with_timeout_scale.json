@@ -596,11 +596,7 @@
       "--builder-name",
       "Lollipop Low-end Tester",
       "--build-number",
-      "571",
-      "--cs-base-url",
-      "http://cs.chromium.org",
-      "--bucket",
-      "chromium-result-details"
+      "571"
     ],
     "cwd": "[START_DIR]",
     "env": {

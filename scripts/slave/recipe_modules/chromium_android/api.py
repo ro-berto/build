@@ -1052,6 +1052,7 @@ class AndroidApi(recipe_api.RecipeApi):
                                 device_flags=None,
                                 wrapper_script_suite_name=None,
                                 result_details=False,
+                                cs_base_url=None,
                                 store_tombstones=False,
                                 render_results_dir=None,
                                 args=None,
@@ -1117,7 +1118,8 @@ class AndroidApi(recipe_api.RecipeApi):
           json_results = self.m.json.input(
               result_step.test_utils.gtest_results.raw)
           details_link = self.create_result_details(step_name,
-                                                    json_results)
+                                                    json_results,
+                                                    cs_base_url)
           self.m.step.active_result.presentation.links['result_details'] = (
               details_link)
       # Need to copy gtest results over. A few places call
@@ -1131,13 +1133,14 @@ class AndroidApi(recipe_api.RecipeApi):
         hasattr(result_step.test_utils, 'gtest_results')):
       active_step.test_utils = result_step.test_utils
 
-  def create_result_details(self, step_name, json_results_file):
+  def create_result_details(self, step_name, json_results_file, cs_base_url):
     presentation_args = ['--json-file', json_results_file,
                          '--test-name', step_name,
                          '--builder-name', self.m.properties['buildername'],
-                         '--build-number', self.m.properties['buildnumber'],
-                         '--cs-base-url', self.c.cs_base_url,
-                         '--bucket', self.c.results_bucket]
+                         '--build-number', self.m.properties['buildnumber']]
+    if cs_base_url:
+      presentation_args.extend(['--cs-base-url', cs_base_url])
+
     try:
       result_details = self.m.python(
           '%s: generate result details' % step_name,
@@ -1463,7 +1466,8 @@ class AndroidApi(recipe_api.RecipeApi):
           json_results = self.m.json.input(
               result_step.test_utils.gtest_results.raw)
           details_link = self.create_result_details(step_name,
-                                                    json_results)
+                                                    json_results,
+                                                    None)
           self.m.step.active_result.presentation.links['result_details'] = (
               details_link)
         self.copy_gtest_results(result_step,

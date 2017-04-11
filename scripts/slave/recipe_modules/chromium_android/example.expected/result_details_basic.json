@@ -1116,9 +1116,7 @@
       "--build-number",
       "571",
       "--cs-base-url",
-      "http://cs.chromium.org",
-      "--bucket",
-      "chromium-result-details"
+      "cs_base_url"
     ],
     "name": "SmallTest: generate result details",
     "stdout": "/path/to/tmp/",
@@ -1160,11 +1158,7 @@
       "--builder-name",
       "result_details",
       "--build-number",
-      "571",
-      "--cs-base-url",
-      "http://cs.chromium.org",
-      "--bucket",
-      "chromium-result-details"
+      "571"
     ],
     "name": "unittests: generate result details",
     "stdout": "/path/to/tmp/",
