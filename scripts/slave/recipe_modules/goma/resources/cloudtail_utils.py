@@ -28,7 +28,9 @@ def start_cloudtail(args):
   ])
 
   with open(args.pid_file, 'w') as f:
-    f.write(str(proc.pid))
+    pidstr = str(proc.pid)
+    f.write(pidstr)
+    print('cloudtail started pid=%s' % pidstr)
 
 
 def is_running_posix(pid):
