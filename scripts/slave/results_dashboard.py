@@ -106,8 +106,6 @@ def _SendResultsFromCache(cache_file_name, url):
     if not line:
       continue
     print 'Sending result %d of %d to dashboard.' % (index + 1, total_results)
-    # TODO(rnephew): Get rid of this when crbug.com/525214 is resolved.
-    print line
     # Check that the line that was read from the file is valid JSON. If not,
     # don't try to send it, and don't re-try it later; just print an error.
     if not _CanParseJSON(line):
