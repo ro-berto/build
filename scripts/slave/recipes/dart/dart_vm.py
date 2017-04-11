@@ -53,14 +53,14 @@ for platform in ['linux', 'mac', 'win']:
         'target_arch': arch,
         'env': default_envs[platform],
         'checked': True,
-        'archive_core_dumps': (platform == 'linux' or platform == 'win'),
+        'archive_core_dumps': True,
       }
     builders['vm-%s-product-%s' % (platform, arch)] = {
       'mode': 'product',
       'target_arch': arch,
       'env': default_envs[platform],
       'test_args': ['--builder-tag=no_ipv6'],
-      'archive_core_dumps': (platform == 'linux' or platform == 'win'),
+      'archive_core_dumps': True,
     }
 
 for arch in ['simmips', 'simarm', 'simarm64']:

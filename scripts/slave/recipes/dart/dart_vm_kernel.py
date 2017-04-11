@@ -45,7 +45,7 @@ for platform in ['linux']:
           'target_arch': arch,
           'build_args': ['runtime_kernel'],
           'test_args': ['-cdartk', '-rvm'] + extra_args,
-          'archive_core_dumps': (platform == 'linux' or platform == 'win'),
+          'archive_core_dumps': True,
         }
 
         builders['vm-kernel-precomp%s-%s-%s-%s'
@@ -56,7 +56,7 @@ for platform in ['linux']:
                           'dart_bootstrap',
                           'dart_precompiled_runtime']),
           'test_args': ['-cdartkp', '-rdart_precompiled'] + extra_args,
-          'archive_core_dumps': (platform == 'linux' or platform == 'win'),
+          'archive_core_dumps': True,
         }
 
 def RunSteps(api):
