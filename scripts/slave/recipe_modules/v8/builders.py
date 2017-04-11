@@ -46,6 +46,7 @@ Test262Variants = TestStepConfig('test262_variants')
 Test262Variants_2 = TestStepConfig('test262_variants', shards=2)
 Test262Variants_3 = TestStepConfig('test262_variants', shards=3)
 Test262Variants_4 = TestStepConfig('test262_variants', shards=4)
+Test262Variants_5 = TestStepConfig('test262_variants', shards=5)
 Unittests = TestStepConfig('unittests')
 V8Initializers = TestStepConfig('v8initializers')
 V8Testing = TestStepConfig('v8testing')
@@ -2034,7 +2035,7 @@ BUILDERS = {
         'tests': [
           V8Testing_3,
           V8TestingExtra_2,
-          Test262Variants_4,
+          Test262Variants_5,
         ],
         'testing': {'platform': 'linux'},
       },
