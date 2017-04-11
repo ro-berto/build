@@ -239,7 +239,8 @@ class StatusPush(StatusReceiverMultiService):
         credentials=auth.create_credentials_for_master(self.activeMaster),
         discoveryServiceUrl=self.discoveryUrlTemplate,
         verbose=self.verbose,
-        log_prefix='CBEStatusPush')
+        log_prefix='CBEStatusPush',
+        http_client_name='cbe')
     defer.returnValue(service)
 
   @defer.inlineCallbacks

@@ -92,7 +92,7 @@ class PubSubClient(object):
   @defer.inlineCallbacks
   def start(self):
     self.resource = yield DeferredResource.build(
-        'pubsub', 'v1', credentials=self.credentials)
+        'pubsub', 'v1', credentials=self.credentials, http_client_name='milo')
     self.resource.start()
     # Check to see if the topic exists.  Anything that's not a 200 means it
     # doesn't exist or is inaccessable.
