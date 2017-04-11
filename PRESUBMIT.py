@@ -133,7 +133,7 @@ def CommitChecks(input_api, output_api):
 
 
   recipe_modules_tests = input_api.glob(
-      join('scripts', 'slave', 'recipe_modules', '*', 'tests'))
+      join('scripts', 'slave', 'recipe_modules', '*', 'unittests'))
   for path in recipe_modules_tests:
     tests.extend(input_api.canned_checks.GetUnitTestsInDirectory(
         input_api,
