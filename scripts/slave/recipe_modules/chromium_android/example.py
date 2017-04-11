@@ -99,7 +99,6 @@ BUILDERS = freeze({
     },
     'result_details': {
         'result_details': True,
-        'cs_base_url': 'cs_base_url',
         'store_tombstones': True,
     },
     'enable_platform_mode': {
@@ -240,7 +239,6 @@ def RunSteps(api, buildername):
       device_flags=config.get('device_flags'),
       json_results_file=config.get('json_results_file'),
       result_details=config.get('result_details'),
-      cs_base_url=config.get('cs_base_url'),
       store_tombstones=config.get('store_tombstones'),
       render_results_dir=config.get('render_results_dir'))
   api.chromium_android.run_test_suite(
