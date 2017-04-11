@@ -51,22 +51,61 @@ def collect_task(
   Returns:
     The exit code of collect_cmd or merge_cmd.
   """
+  logging.debug('Using task_output_dir: %r', task_output_dir)
+  if os.path.exists(task_output_dir):
+    logging.warn('task_output_dir %r already exists!', task_output_dir)
+    existing_contents = []
+    try:
+      for p in os.listdir(task_output_dir):
+        existing_contents.append(os.path.join(task_output_dir, p))
+    except (OSError, IOError) as e:
+      logging.error('Error while examining existing task_output_dir: %s', e)
+
+    logging.warn('task_output_dir existing content: %r', existing_contents)
+
   collect_cmd.extend(['--task-output-dir', task_output_dir])
 
   logging.info('collect_cmd: %s', ' '.join(collect_cmd))
   collect_result = subprocess.call(collect_cmd)
+  if collect_result != 0:
+    logging.warn('collect_cmd had non-zero return code: %s', collect_result)
 
-  task_output_dir_contents = (
-      os.path.join(task_output_dir, p)
-      for p in os.listdir(task_output_dir))
+  task_output_dir_contents = []
+  try:
+    task_output_dir_contents.extend(
+        os.path.join(task_output_dir, p)
+        for p in os.listdir(task_output_dir))
+  except (OSError, IOError) as e:
+    logging.error('Error while processing task_output_dir: %s', e)
+
+  logging.debug('Contents of task_output_dir: %r', task_output_dir_contents)
+  if not task_output_dir_contents:
+    logging.warn(
+        'No files found in task_output_dir: %r',
+        task_output_dir)
+
   task_output_subdirs = (
       p for p in task_output_dir_contents
       if os.path.isdir(p))
-  shard_json_files = (
+  shard_json_files = [
       os.path.join(subdir, 'output.json')
-      for subdir in task_output_subdirs)
-  extant_shard_json_files = (
-      f for f in shard_json_files if os.path.exists(f))
+      for subdir in task_output_subdirs]
+  extant_shard_json_files = [
+      f for f in shard_json_files if os.path.exists(f)]
+
+  if shard_json_files != extant_shard_json_files:
+    logging.warn(
+        'Expected output.json file missing: %r\nFound: %r\nExpected: %r\n',
+        set(shard_json_files) - set(extant_shard_json_files),
+        extant_shard_json_files,
+        shard_json_files)
+
+  if not extant_shard_json_files:
+    logging.warn(
+        'No shard json files found in task_output_dir: %r\nFound %r',
+        task_output_dir, task_output_dir_contents)
+
+  logging.debug('Found shard_json_files: %r', shard_json_files)
 
   summary_json_file = os.path.join(task_output_dir, 'summary.json')
 
@@ -77,6 +116,8 @@ def collect_task(
     merge_cmd.extend(('--build-properties', build_properties))
   if os.path.exists(summary_json_file):
     merge_cmd.extend(('--summary-json', summary_json_file))
+  else:
+    logging.warn('Summary json file missing: %r', summary_json_file)
   if merge_arguments:
     merge_cmd.extend(json.loads(merge_arguments))
   merge_cmd.extend(('-o', output_json))
@@ -84,6 +125,12 @@ def collect_task(
 
   logging.info('merge_cmd: %s', ' '.join(merge_cmd))
   merge_result = subprocess.call(merge_cmd)
+  if merge_result != 0:
+    logging.warn('merge_cmd had non-zero return code: %s', merge_result)
+
+  if not os.path.exists(output_json):
+    logging.warn(
+        'merge_cmd did not create output_json file: %r', output_json)
 
   return collect_result or merge_result
 
@@ -95,9 +142,12 @@ def main():
   parser.add_argument('--merge-script', required=True)
   parser.add_argument('--task-output-dir', required=True)
   parser.add_argument('-o', '--output-json', required=True)
+  parser.add_argument('--verbose', action='store_true')
   parser.add_argument('collect_cmd', nargs='+')
 
   args = parser.parse_args()
+  if args.verbose:
+    logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
   return collect_task(
       args.collect_cmd,
