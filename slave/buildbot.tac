@@ -7,12 +7,15 @@
 
 # Chrome Buildbot slave configuration
 
+import argparse
 import os
 import socket
 import sys
 
-from twisted.application import service
 from buildslave.bot import BuildSlave
+from infra_libs import ts_mon
+from twisted.application import service
+from twisted.internet import reactor
 
 # Register the commands.
 from slave import chromium_commands
@@ -51,6 +54,25 @@ print 'Using master port %s' % port
 if basedir is None:
     basedir = os.path.dirname(os.path.abspath(__file__))
 
+
+def setup_timeseries_monitoring():
+    parser = argparse.ArgumentParser()
+    ts_mon.add_argparse_options(parser)
+    parser.set_defaults(
+        ts_mon_target_type='task',
+        ts_mon_task_service_name='buildslave',
+        ts_mon_task_job_name='buildslave',
+    )
+    args = parser.parse_args([])
+    ts_mon.process_argparse_options(args)
+
+
+def stop_timeseries_monitoring():
+    ts_mon.close()
+
+
+reactor.addSystemEventTrigger('during', 'startup', setup_timeseries_monitoring)
+reactor.addSystemEventTrigger('during', 'shutdown', stop_timeseries_monitoring)
 
 application = service.Application('buildslave')
 s = BuildSlave(host, port, slavename, password, basedir, keepalive, usepty,

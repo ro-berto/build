@@ -29,6 +29,23 @@ from buildslave.pbutil import ReconnectingPBClientFactory
 from buildslave.commands import registry, base
 from buildslave import monkeypatches
 
+from infra_libs import ts_mon
+
+connected_metric = ts_mon.BooleanMetric('buildbot/slave/connected',
+    'Whether the slave is currently connected to its master.',
+    None)
+connection_failures_metric = ts_mon.CounterMetric(
+    'buildbot/slave/connection_failures',
+    'Count of failures connecting to the buildbot master.',
+    [ts_mon.StringField('reason')])
+running_metric = ts_mon.BooleanMetric('buildbot/slave/is_building',
+    'Whether a build step is currently in progress.',
+    [ts_mon.StringField('builder')])
+steps_metric = ts_mon.CounterMetric('buildbot/slave/steps',
+    'Count of build steps run by each builder on this slave.',
+    [ts_mon.StringField('builder'), ts_mon.BooleanField('success')])
+
+
 class UnknownCommand(pb.Error):
     pass
 
@@ -57,6 +74,7 @@ class SlaveBuilder(pb.Referenceable, service.Service):
     def __init__(self, name):
         #service.Service.__init__(self) # Service has no __init__ method
         self.setName(name)
+        running_metric.set(False, {'builder': self.name})
 
     def __repr__(self):
         return "<SlaveBuilder '%s' at %d>" % (self.name, id(self))
@@ -141,6 +159,7 @@ class SlaveBuilder(pb.Referenceable, service.Service):
         d = self.command.doStart()
         d.addCallback(lambda res: None)
         d.addBoth(self.commandComplete)
+        running_metric.set(True, {'builder': self.name})
         return None
 
     def remote_interruptCommand(self, stepId, why):
@@ -160,6 +179,7 @@ class SlaveBuilder(pb.Referenceable, service.Service):
         output. This is used when the buildslave is shutting down or the
         connection to the master has been lost. Interrupt the command,
         silence it, and then forget about it."""
+        running_metric.set(False, {'builder': self.name})
         if not self.command:
             return
         log.msg("stopCommand: halting current command %s" % self.command)
@@ -202,6 +222,8 @@ class SlaveBuilder(pb.Referenceable, service.Service):
 
     # this is fired by the Deferred attached to each Command
     def commandComplete(self, failure):
+        running_metric.set(False, {'builder': self.name})
+        steps_metric.increment({'builder': self.name, 'success': not failure})
         if failure:
             log.msg("SlaveBuilder.commandFailed", self.command)
             log.err(failure)
@@ -353,11 +375,13 @@ class BotFactory(ReconnectingPBClientFactory):
 
     def startedConnecting(self, connector):
         log.msg("Connecting to %s:%s" % (self.buildmaster_host, self.port))
+        connected_metric.set(False)
         ReconnectingPBClientFactory.startedConnecting(self, connector)
         self.connector = connector
 
     def gotPerspective(self, perspective):
         log.msg("Connected to %s:%s; slave is ready" % (self.buildmaster_host, self.port))
+        connected_metric.set(True)
         ReconnectingPBClientFactory.gotPerspective(self, perspective)
         self.perspective = perspective
         try:
@@ -377,12 +401,18 @@ class BotFactory(ReconnectingPBClientFactory):
         why = reason
         if reason.check(error.ConnectionRefusedError):
             why = "Connection Refused"
+            connection_failures_metric.increment({'reason': 'refused'})
+        else:
+            connection_failures_metric.increment({'reason': 'other'})
+        connected_metric.set(False)
         log.msg("Connection to %s:%s failed: %s" % (self.buildmaster_host, self.port, why))
         ReconnectingPBClientFactory.clientConnectionFailed(self,
                                                            connector, reason)
 
     def clientConnectionLost(self, connector, reason):
         log.msg("Lost connection to %s:%s" % (self.buildmaster_host, self.port))
+        connection_failures_metric.increment({'reason': 'lost'})
+        connected_metric.set(False)
         self.connector = None
         self.stopTimers()
         self.perspective = None
