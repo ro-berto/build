@@ -94,7 +94,6 @@ def getBuilders(recipe_name):
   try:
     subprocess.check_call([
         os.path.join(BASE_DIR, 'scripts', 'slave', 'recipes.py'),
-        '--deps-path=-',
         'run', recipe_name, 'dump_builders=%s' % builders_file])
     with open(builders_file) as fh:
       return json.load(fh)
