@@ -18,7 +18,7 @@ deps = {
     '@98fc59a5896f4ea990a4d527548204fed8f06c64',
   'build/third_party/infra_libs':
     'https://chromium.googlesource.com/infra/infra/packages/infra_libs.git'
-    '@d2fb7b516a0cae6e0a127e4e002fc3955110b6f3',
+    '@3eddb1684ce9a315b14d7ec8f40e9f616cf50fa6',
   'build/third_party/pyasn1':
     'https://chromium.googlesource.com/external/github.com/etingof/pyasn1.git'
     '@4181b2379eeae3d6fd9f4f76d0e6ae3789ed56e7',
