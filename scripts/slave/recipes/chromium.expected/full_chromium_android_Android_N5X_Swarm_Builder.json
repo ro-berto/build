@@ -181,6 +181,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/Android_N5X_Swarm_Builder/src",
     "env": {
+      "DOWNLOAD_VR_TEST_APKS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
