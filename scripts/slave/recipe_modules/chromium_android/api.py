@@ -689,9 +689,9 @@ class AndroidApi(recipe_api.RecipeApi):
         self.m.step(d,
                     cmd + ['--device', d],
                     infra_step=True)
-    self.wait_for_devices(self.devices)
+    self.wait_for_devices(self.devices, timeout=150)
 
-  def wait_for_devices(self, devices):
+  def wait_for_devices(self, devices, timeout=None):
     script = self.m.path['checkout'].join(
         'third_party', 'catapult', 'devil', 'devil', 'android', 'tools',
         'wait_for_devices.py')
@@ -699,6 +699,10 @@ class AndroidApi(recipe_api.RecipeApi):
         '--adb-path', self.m.adb.adb_path(),
         '-v'
     ]
+    if timeout:
+      args.extend([
+          '--timeout', timeout
+      ])
     args += devices
     self.m.python('wait_for_devices', script, args, infra_step=True)
 
@@ -721,7 +725,12 @@ class AndroidApi(recipe_api.RecipeApi):
               'third_party', 'llvm-build', 'Release+Asserts', 'lib', 'clang',
               clang_version, 'lib', 'linux', 'libclang_rt.asan-arm-android.so')
       ]
-      self._asan_device_setup(args)
+      try:
+        self._asan_device_setup(args)
+      except self.m.step.StepFailure:
+        # Attempt to restore the devices to a non-ASAN state.
+        self._asan_device_setup(['--revert'])
+        raise
 
   def asan_device_teardown(self):
     with self.m.step.nest('Tear down ASAN on devices'):

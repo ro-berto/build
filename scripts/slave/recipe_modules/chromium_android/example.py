@@ -122,6 +122,9 @@ BUILDERS = freeze({
     },
     'stackwalker': {
       'run_stackwalker': True,
+    },
+    'asan': {
+      'chromium_apply_config': ['chromium_asan'],
     }
 })
 
@@ -147,6 +150,9 @@ def RunSteps(api, buildername):
 
   if config.get('adb_vendor_keys'):
     api.chromium.c.env.ADB_VENDOR_KEYS = api.path['start_dir'].join('.adb_key')
+
+  for c in config.get('chromium_apply_config', []):
+    api.chromium.apply_config(c)
 
   for c in config.get('android_apply_config', []):
     api.chromium_android.apply_config(c)
@@ -371,8 +377,10 @@ def GenTests(api):
 
   yield (api.test('tombstones_m53') +
          properties_for('tester') +
-         api.override_step_data('get version (2)',
-             api.raw_io.output_text('MAJOR=53\nMINOR=0\nBUILD=2800\nPATCH=0\n')))
+         api.override_step_data(
+             'get version (2)',
+             api.raw_io.output_text(
+                 'MAJOR=53\nMINOR=0\nBUILD=2800\nPATCH=0\n')))
 
   yield (api.test('telemetry_browser_tests_failures') +
          properties_for('telemetry_browser_tests_tester') +
@@ -383,4 +391,10 @@ def GenTests(api):
 
   yield (api.test('upload_result_details_failures') +
          properties_for('result_details') +
-         api.override_step_data('unittests: generate result details', retcode=1))
+         api.override_step_data('unittests: generate result details',
+                                retcode=1))
+
+  yield (api.test('asan_setup_failure') +
+         properties_for('asan') +
+         api.override_step_data('Set up ASAN on devices.wait_for_devices',
+                                retcode=87))

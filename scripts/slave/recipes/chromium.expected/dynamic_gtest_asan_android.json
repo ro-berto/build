@@ -653,6 +653,8 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
       "-v",
+      "--timeout",
+      "150",
       "07a00ca4"
     ],
     "cwd": "[START_DIR]",
@@ -897,6 +899,8 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
       "-v",
+      "--timeout",
+      "150",
       "07a00ca4"
     ],
     "cwd": "[START_DIR]",
