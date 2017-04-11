@@ -7,12 +7,28 @@
 
 import os
 import subprocess
+import sys
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+RECIPES_PY = os.path.join(ROOT_DIR, 'recipes.py')
+
+VERBOSE = '--verbose' in sys.argv or '-v' in sys.argv
+VERBOSE_ARG = ['--verbose'] if VERBOSE else []
+
+ALLOWED_ARGS = 1 if VERBOSE else 0
+
+if len(sys.argv) > ALLOWED_ARGS+1:
+  print 'It looks like you\'re manually invoking this test script. Please note'
+  print 'that this is just a wrapper to enable `git cl presubmit` testing.'
+  print
+  print 'To interact with the recipes, please use %s directly.' % RECIPES_PY
+  sys.exit(1)
+
 def recipes_py(*args):
   subprocess.check_call([
-      os.path.join(ROOT_DIR, 'recipes.py'), '--use-bootstrap'] + list(args))
+      os.path.join(ROOT_DIR, 'recipes.py'), '--use-bootstrap'
+  ] + VERBOSE_ARG + list(args))
 
 recipes_py('test', 'run')
 
