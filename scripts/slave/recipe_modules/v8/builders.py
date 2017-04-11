@@ -868,7 +868,7 @@ BUILDERS = {
         'tests': [
           V8Testing_2,
           V8TestingExtra_2,
-          Test262,
+          Test262Variants_3,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -2035,7 +2035,7 @@ BUILDERS = {
         'tests': [
           V8Testing_3,
           V8TestingExtra_2,
-          Test262_2,
+          Test262Variants_4,
         ],
         'testing': {'platform': 'linux'},
       },
