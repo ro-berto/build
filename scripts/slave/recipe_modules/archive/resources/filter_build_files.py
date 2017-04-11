@@ -47,7 +47,6 @@ EXCLUDED_TOP_LEVEL_DIRS = {
     'Chromium Helper.app',
     'Google Chrome Helper.app',
     'lib',
-    'mkpeephole.dSYM',
     'mksnapshot.dSYM',
     'v8_shell.dSYM',
   ]),
@@ -77,7 +76,6 @@ EXCLUDED_FILES_ALL_PLATFORMS = [
   '.landmines',
   '.ninja_deps',
   '.ninja_log',
-  'mkpeephole',
   'mksnapshot',
   'v8_shell',
 ]
@@ -85,8 +83,6 @@ EXCLUDED_FILES_ALL_PLATFORMS = [
 # Excluded files on specific platforms.
 EXCLUDED_FILES = {
   'win': set(EXCLUDED_FILES_ALL_PLATFORMS + [
-    'mkpeephole.exe',
-    'mkpeephole.exe.pdb',
     'mksnapshot.exe',
     'mksnapshot.exe.pdb',
     'v8_shell.exe',
