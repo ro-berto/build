@@ -473,6 +473,10 @@ def main(argv, stream):
 
   args = parser.parse_args(argv[1:])
 
+  # Cleanup system and temporary directories.
+  from slave import cleanup_temp
+  cleanup_temp.Cleanup()
+
   buildbot_build_dir = os.getcwd()
   try:
     basedir = chromium_utils.FindUpward(buildbot_build_dir, 'b')

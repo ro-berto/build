@@ -360,6 +360,10 @@ def main(argv):
     # Write our annotated_run.py monitoring event.
     monitoring_utils.write_build_monitoring_event(build_data_dir, properties)
 
+    # Cleanup system and temporary directories.
+    from slave import cleanup_temp
+    cleanup_temp.Cleanup()
+
     # Execute our recipe.
     return _exec_recipe(rt, opts, stream, basedir, tdir, properties)
 

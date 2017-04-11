@@ -5,6 +5,7 @@
 
 """Clean up acculumated cruft, including tmp directory."""
 
+import collections
 import contextlib
 import ctypes
 import getpass
@@ -22,7 +23,19 @@ from slave import slave_utils
 
 class FullDriveException(Exception):
   """A disk is almost full."""
+
+  def __init__(self, path, free_space):
+    super(FullDriveException, self).__init__()
+    self.path = path
+    self.free_space = free_space
+
+
+class UnknownPlatform(Exception):
+  """Don't know how to cleanup current platform."""
   pass
+
+
+Options = collections.namedtuple('Options', ('preserve_tempdir',))
 
 
 def send_alert(path, left):
@@ -136,10 +149,11 @@ def check_free_space_path(path, min_free_space=1024*1024*1024):
   """
   free_space = get_free_space(path)
   if free_space < min_free_space:
+    send_alert(path, free_space)
     raise FullDriveException(path, free_space)
 
 
-def main_win():
+def _CleanupWindows():
   """Main function for Windows platform."""
   with function_logger('removing any Chrome temporary files'):
     slave_utils.RemoveChromeTemporaryFiles()
@@ -167,10 +181,9 @@ def main_win():
           filepath = os.path.join(crash_reports, filename)
           if os.path.isfile(filepath):
             os.remove(filepath)
-  return 0
 
 
-def main_mac():
+def _CleanupMac():
   """Main function for Mac platform."""
   with function_logger('removing any Chrome temporary files'):
     slave_utils.RemoveChromeTemporaryFiles()
@@ -183,10 +196,9 @@ def main_mac():
     check_free_space_path('/b')
   check_free_space_path(os.environ['HOME'])
   check_free_space_path(os.path.dirname(os.path.abspath(__file__)))
-  return 0
 
 
-def main_linux():
+def _CleanupLinux():
   """Main function for linux platform."""
   with function_logger('removing any Chrome temporary files'):
     slave_utils.RemoveChromeTemporaryFiles()
@@ -199,28 +211,39 @@ def main_linux():
     check_free_space_path('/b')
   check_free_space_path(os.environ['HOME'])
   check_free_space_path(os.path.dirname(os.path.abspath(__file__)))
-  return 0
 
 
-def main():
+def Cleanup():
+  """Performs the cleanup operation for the current platform.
+
+  Raises:
+    UnknownPlatform: If the current platform is unknown.
+    FullDriveException: If one of the target drives was too full to operate.
+  """
   if os.environ.get('SWARMING_HEADLESS'):
     # On Swarming, this script is run from a temporary directory. Eh.
     print('Skipping temp cleanup when run from Swarming.')
-    return 0
+    return
+
+  if chromium_utils.IsWindows():
+    _CleanupWindows()
+  elif chromium_utils.IsMac():
+    _CleanupMac()
+  elif chromium_utils.IsLinux():
+    _CleanupLinux()
+  else:
+    raise UnknownPlatform('Unknown platform: %s' % (sys.platform,))
+
+
+def main():
+  """Main application entry point."""
+  # When running as an application, do not presume full ownership of the
+  # temporary directory.
   try:
-    if chromium_utils.IsWindows():
-      return main_win()
-    elif chromium_utils.IsMac():
-      return main_mac()
-    elif chromium_utils.IsLinux():
-      return main_linux()
-    else:
-      print 'Unknown platform: ' + sys.platform
-      return 1
+    Cleanup()
   except FullDriveException, e:
     print >> sys.stderr, 'Not enough free space on %s: %d bytes left' % (
-        e.args[0], e.args[1])
-    send_alert(e.args[0], e.args[1])
+        e.path, e.free_space)
 
 
 if '__main__' == __name__:
