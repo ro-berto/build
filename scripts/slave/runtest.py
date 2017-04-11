@@ -1140,10 +1140,7 @@ def _MainLinux(options, args, extra_env):
 
   # Figure out what we want for a special frame buffer directory.
   special_xvfb_dir = None
-  fp_chromeos = options.factory_properties.get('chromeos', None)
-  if (fp_chromeos or
-      slave_utils.GypFlagIsOn(options, 'use_aura') or
-      slave_utils.GypFlagIsOn(options, 'chromeos')):
+  if options.factory_properties.get('chromeos'):
     special_xvfb_dir = xvfb_path
 
   telemetry_info = _UpdateRunBenchmarkArgs(args, options)
