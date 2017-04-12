@@ -77,6 +77,8 @@ AddBuildSpec('Android Builder ARM64 (dbg)', 'android', build_config='Debug')
 
 AddTestSpec('Win7 Tester', 'chromium-webrtc-trunk-tot-rel-win7', 'win',
             target_bits=32)
+AddTestSpec('Win8 Tester', 'chromium-webrtc-trunk-tot-rel-win8', 'win',
+            target_bits=32)
 AddTestSpec('Win10 Tester', 'chromium-webrtc-trunk-tot-rel-win10', 'win',
             target_bits=32)
 AddTestSpec('Mac Tester', 'chromium-webrtc-trunk-tot-rel-mac', 'mac')
