@@ -860,7 +860,7 @@ class ChromiumApi(recipe_api.RecipeApi):
   def process_dumps(self, **kwargs):
     # Dumps are especially useful when other steps (e.g. tests) are failing.
     try:
-      self.m.python(
+      self.m.build.python(
           'process_dumps',
           self.package_repo_resource('scripts', 'slave', 'process_dumps.py'),
           ['--target', self.c.build_config_fs],
