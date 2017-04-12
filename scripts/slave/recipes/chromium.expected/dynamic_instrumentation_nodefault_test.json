@@ -629,7 +629,11 @@
       "--builder-name",
       "Android Tests",
       "--build-number",
-      "571"
+      "571",
+      "--cs-base-url",
+      "http://cs.chromium.org",
+      "--bucket",
+      "chromium-result-details"
     ],
     "cwd": "[START_DIR]",
     "env": {
