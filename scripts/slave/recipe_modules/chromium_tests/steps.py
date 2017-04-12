@@ -1506,8 +1506,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
         presentation.status == api.step.FAILURE):
       presentation.status = api.step.WARNING
 
-    if valid:
-      self._isolated_script_results = results
+    self._isolated_script_results = results
 
     # Even if the output is valid, if the return code is greater than
     # MAX_FAILURES_EXIT_STATUS then the test did not complete correctly and the
