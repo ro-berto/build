@@ -419,7 +419,7 @@ class SwarmingApi(recipe_api.RecipeApi):
           These are typically but not necessarily the properties emitted by
           bot_update.
       merge: An optional dict containing:
-          "merge": path to a script to call to post process and merge the
+          "script": path to a script to call to post process and merge the
               collected outputs from the tasks. The script should take one
               named (but required) parameter, '-o' (for output), that represents
               the path that the merged results should be written to, and accept
@@ -773,7 +773,7 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     try:
       with self.m.step.context({'cwd': self.m.path['start_dir']}):
-        return self.m.python(
+        return self.m.build.python(
             name=self.get_step_name('', task),
             script=self.resource('collect_task.py'),
             args=task_args,

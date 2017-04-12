@@ -759,6 +759,10 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
       "RECIPE_MODULE[build::swarming]/resources/collect_task.py",
       "-o",
       "/path/to/tmp/json",
@@ -1442,6 +1446,10 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
       "RECIPE_MODULE[build::swarming]/resources/collect_task.py",
       "-o",
       "/path/to/tmp/json",
