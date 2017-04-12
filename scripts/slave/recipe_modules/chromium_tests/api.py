@@ -402,7 +402,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         "bot_db argument %r was not a BotConfigAndTestDB" % (bot_db)
     bot_type = override_bot_type or bot_config.get('bot_type', 'builder_tester')
 
-    self.m.chromium.cleanup_temp()
     if self.m.chromium.c.TARGET_PLATFORM == 'android':
       self.m.chromium_android.clean_local_files()
       self.m.chromium_android.run_tree_truth()

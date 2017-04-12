@@ -62,7 +62,6 @@ def V8RevisionFrom(deps):
 def RunSteps(api):
   monitoring_state = 'failure'
   try:
-    api.chromium.cleanup_temp()
     api.gclient.set_config('chromium')
     api.gclient.apply_config('v8_bleeding_edge_git')
 

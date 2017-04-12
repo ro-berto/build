@@ -857,16 +857,6 @@ class ChromiumApi(recipe_api.RecipeApi):
       self.package_repo_resource('scripts', 'slave', 'kill_processes.py'),
       infra_step=True)
 
-  def cleanup_temp(self):
-    # TODO(dnj): Delete this entirely. System cleanup is the responsibility of
-    # the build launcher, not the build script. Intermediate artifact management
-    # needs to be done at a finer granularity than the full system ownership
-    # that this script assumes.
-    self.m.build.python(
-      'cleanup_temp',
-      self.package_repo_resource('scripts', 'slave', 'cleanup_temp.py'),
-      infra_step=True)
-
   def process_dumps(self, **kwargs):
     # Dumps are especially useful when other steps (e.g. tests) are failing.
     try:

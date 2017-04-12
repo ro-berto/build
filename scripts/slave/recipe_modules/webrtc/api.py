@@ -327,8 +327,6 @@ class WebRTCApi(recipe_api.RecipeApi):
     self.clean_test_output()
     if self.m.chromium.c.TARGET_PLATFORM == 'android':
       self.m.chromium_android.clean_local_files(clean_pyc_files=False)
-    else:
-      self.m.chromium.cleanup_temp()
     if self.c.use_isolate:
       self.m.isolate.clean_isolated_files(self.m.chromium.output_dir)
 

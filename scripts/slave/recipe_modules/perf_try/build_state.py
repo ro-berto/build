@@ -85,9 +85,6 @@ class BuildState(object):
   def request_build(self):
     if self.api.m.chromium.c.TARGET_PLATFORM == 'android':
       self.api.m.chromium_android.clean_local_files()
-    else:
-      # Removes any chrome temporary files or build.dead directories.
-      self.api.m.chromium.cleanup_temp()
     properties = {
         'parent_got_revision': self.commit_hash,
         'clobber': True,

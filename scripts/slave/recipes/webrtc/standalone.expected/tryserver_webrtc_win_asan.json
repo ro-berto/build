@@ -146,19 +146,6 @@
     "name": "clean test output files"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
-      "--show-path",
-      "--",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\cleanup_temp.py"
-    ],
-    "infra_step": true,
-    "name": "cleanup_temp"
-  },
-  {
     "cmd": [],
     "name": "ensure_goma"
   },

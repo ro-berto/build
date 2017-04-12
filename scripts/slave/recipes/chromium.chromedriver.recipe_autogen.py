@@ -74,8 +74,6 @@ def Linux32_steps(api):
   with api.step.context({'env': env}):
     api.python("gclient runhooks wrapper", api.package_repo_resource("scripts",
       "slave", "runhooks_wrapper.py"))
-  # cleanup_temp step
-  api.chromium.cleanup_temp()
   # meta build step
   goma_dir = api.goma.ensure_goma()
   api.python("meta build", api.path["checkout"].join("tools", "mb", "mb.py"),
@@ -143,8 +141,6 @@ def Mac_10_6_steps(api):
   with api.step.context({'env': env}):
     api.python("gclient runhooks wrapper", api.package_repo_resource("scripts",
       "slave", "runhooks_wrapper.py"))
-  # cleanup_temp step
-  api.chromium.cleanup_temp()
   # meta build step
   goma_dir = api.goma.ensure_goma()
   api.python("meta build", api.path["checkout"].join("tools", "mb", "mb.py"),
@@ -214,8 +210,6 @@ def Win7_steps(api):
   with api.step.context({'env': env}):
     api.python("gclient runhooks wrapper", api.package_repo_resource("scripts",
       "slave", "runhooks_wrapper.py"))
-  # cleanup_temp step
-  api.chromium.cleanup_temp()
   # meta build step
   goma_dir = api.goma.ensure_goma()
   api.python("meta build", api.path["checkout"].join("tools", "mb", "mb.py"),
@@ -279,8 +273,6 @@ def Linux_steps(api):
   with api.step.context({'env': env}):
     api.python("gclient runhooks wrapper", api.package_repo_resource("scripts",
       "slave", "runhooks_wrapper.py"))
-  # cleanup_temp step
-  api.chromium.cleanup_temp()
   # meta build step
   goma_dir = api.goma.ensure_goma()
   api.python("meta build", api.path["checkout"].join("tools", "mb", "mb.py"),

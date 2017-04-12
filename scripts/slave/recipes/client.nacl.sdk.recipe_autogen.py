@@ -46,9 +46,6 @@ def sdk_multi_steps(api):
     api.chromium.run_mb(api.properties.get('mastername'),
                         api.properties.get('buildername'))
 
-    # cleanup_temp step
-    api.chromium.cleanup_temp()
-
     # compile step
     api.chromium.compile(['chrome'], use_goma_module=True)
 
@@ -92,9 +89,6 @@ def sdk_multirel_steps(api):
     # generate_build_files step
     api.chromium.run_mb(api.properties.get('mastername'),
                         api.properties.get('buildername'))
-
-    # cleanup_temp step
-    api.chromium.cleanup_temp()
 
     # compile step
     api.chromium.compile(['chrome'], use_goma_module=True)

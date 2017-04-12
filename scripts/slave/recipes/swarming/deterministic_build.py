@@ -123,8 +123,6 @@ def ConfigureChromiumBuilder(api, recipe_config):
   api.gclient.set_config(recipe_config['gclient_config'],
                          **recipe_config.get('gclient_config_kwargs', {}))
 
-  api.chromium.cleanup_temp()
-
   # Checkout chromium.
   api.bot_update.ensure_checkout()
 
