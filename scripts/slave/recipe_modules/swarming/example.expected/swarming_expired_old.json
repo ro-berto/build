@@ -261,13 +261,25 @@
       "@@@STEP_LOG_LINE@swarming.summary@  ]@@@",
       "@@@STEP_LOG_LINE@swarming.summary@}@@@",
       "@@@STEP_LOG_END@swarming.summary@@@",
+      "@@@STEP_LOG_LINE@no_results_exc@Infra Failure in Shard #0 failed: There isn't enough capacity to run your test@@@",
+      "@@@STEP_LOG_END@no_results_exc@@@",
       "@@@STEP_EXCEPTION@@@"
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::file]/resources/fileutil.py",
+      "rmtree",
+      "[TMP_BASE]/hello_isolated_world_tmp_1"
+    ],
+    "infra_step": true,
+    "name": "rmtree remove temp dir"
+  },
+  {
     "name": "$result",
-    "reason": "Infra Failure: Step(\"Shard #0 failed: There isn't enough capacity to run your test\") returned 2",
     "recipe_result": null,
-    "status_code": 2
+    "status_code": 0
   }
 ]

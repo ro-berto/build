@@ -785,16 +785,19 @@ class SwarmingApi(recipe_api.RecipeApi):
 
       step_result.presentation.step_text = text_for_task(task)
       summary_json = step_result.swarming.summary
-      self._handle_summary_json(task, summary_json, step_result)
+      try:
+        self._handle_summary_json(task, summary_json, step_result)
 
-      links = {}
-      if hasattr(step_result, 'json') and hasattr(step_result.json, 'output'):
-        links = step_result.json.output.get('links', {})
-      elif (hasattr(step_result, 'test_utils') and
-            hasattr(step_result.test_utils, 'gtest_results')):
-        links = step_result.test_utils.gtest_results.raw.get('links', {})
-      for k, v in links.iteritems():
-        step_result.presentation.links[k] = v
+        links = {}
+        if hasattr(step_result, 'json') and hasattr(step_result.json, 'output'):
+          links = step_result.json.output.get('links', {})
+        elif (hasattr(step_result, 'test_utils') and
+              hasattr(step_result.test_utils, 'gtest_results')):
+          links = step_result.test_utils.gtest_results.raw.get('links', {})
+        for k, v in links.iteritems():
+          step_result.presentation.links[k] = v
+      except Exception as e:
+        step_result.presentation.logs['no_results_exc'] = [str(e)]
 
   def _gtest_collect_step(self, merged_test_output, task, **kwargs):
     """Produces a step that collects and processes a result of google-test task.
@@ -935,7 +938,7 @@ class SwarmingApi(recipe_api.RecipeApi):
           self._merge_isolated_script_chartjson_output_shards(task, step_result)
 
       except Exception as e:
-        self.m.step.active_result.presentation.logs['no_results_exc'] = [str(e)]
+        self.m.step.active_result.presentation.logs['no_isolated_results_exc'] = [str(e)]
         self.m.step.active_result.isolated_script_results = None
 
   def get_step_name(self, prefix, task):
