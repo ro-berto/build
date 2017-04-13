@@ -102,6 +102,7 @@ def RunSteps(api):
     api.webrtc.add_test('bwe_simulations_tests',
         args=['--gtest_filter=VideoSendersTest/'
                'BweSimulation.Choke1000kbps500kbps1000kbps/1'])
+  BuildSteps(api, gn_arg='rtc_use_dummy_audio_file_devices=true')
   BuildSteps(api, gn_arg='use_rtti=true')
   BuildSteps(api, gn_arg='rtc_enable_sctp=false')
   if (api.chromium.c.TARGET_PLATFORM == 'linux'):

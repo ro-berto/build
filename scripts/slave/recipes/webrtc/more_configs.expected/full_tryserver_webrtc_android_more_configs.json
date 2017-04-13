@@ -1317,12 +1317,12 @@
       "--root=[START_DIR]/src",
       "gen",
       "//out/Debug",
-      "--args=use_rtti=true is_debug=true target_os=\"android\" target_cpu=\"arm\" use_goma=true goma_dir=\"[CACHE]/goma_client\""
+      "--args=rtc_use_dummy_audio_file_devices=true is_debug=true target_os=\"android\" target_cpu=\"arm\" use_goma=true goma_dir=\"[CACHE]/goma_client\""
     ],
     "cwd": "[START_DIR]/src",
     "name": "gn (6)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@gn (use_rtti=true)@@@"
+      "@@@STEP_TEXT@gn (rtc_use_dummy_audio_file_devices=true)@@@"
     ]
   },
   {
@@ -1547,12 +1547,12 @@
       "--root=[START_DIR]/src",
       "gen",
       "//out/Debug",
-      "--args=rtc_enable_sctp=false is_debug=true target_os=\"android\" target_cpu=\"arm\" use_goma=true goma_dir=\"[CACHE]/goma_client\""
+      "--args=use_rtti=true is_debug=true target_os=\"android\" target_cpu=\"arm\" use_goma=true goma_dir=\"[CACHE]/goma_client\""
     ],
     "cwd": "[START_DIR]/src",
     "name": "gn (7)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@gn (rtc_enable_sctp=false)@@@"
+      "@@@STEP_TEXT@gn (use_rtti=true)@@@"
     ]
   },
   {
@@ -1765,6 +1765,236 @@
     "cwd": "[START_DIR]/src",
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail (7)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gn.py",
+      "--root=[START_DIR]/src",
+      "gen",
+      "//out/Debug",
+      "--args=rtc_enable_sctp=false is_debug=true target_os=\"android\" target_cpu=\"arm\" use_goma=true goma_dir=\"[CACHE]/goma_client\""
+    ],
+    "cwd": "[START_DIR]/src",
+    "name": "gn (8)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@gn (rtc_enable_sctp=false)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[START_DIR]/src",
+    "name": "preprocess_for_goma (8)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[CACHE]/goma/android_more_configs",
+      "511"
+    ],
+    "cwd": "[START_DIR]/src",
+    "name": "preprocess_for_goma.makedirs goma cache directory (8)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/goma_client/goma_ctl.py",
+      "restart"
+    ],
+    "cwd": "[START_DIR]/src",
+    "env": {
+      "GOMA_CACHE_DIR": "[CACHE]/goma/android_more_configs",
+      "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
+      "GOMA_FAIL_FAST": "true",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
+    },
+    "infra_step": true,
+    "name": "preprocess_for_goma.start_goma (8)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
+      "start",
+      "--cloudtail-path",
+      "[CACHE]/goma_client/cloudtail",
+      "--cloudtail-service-account-json",
+      "/creds/service_accounts/service-account-goma-cloudtail.json",
+      "--pid-file",
+      "[TMP_BASE]/cloudtail.pid"
+    ],
+    "cwd": "[START_DIR]/src",
+    "infra_step": true,
+    "name": "preprocess_for_goma.start cloudtail (8)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[START_DIR]/src/out/Debug",
+      "-j",
+      "50"
+    ],
+    "cwd": "[START_DIR]/src",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
+    },
+    "name": "compile (8)"
+  },
+  {
+    "cmd": [],
+    "cwd": "[START_DIR]/src",
+    "name": "postprocess_for_goma (8)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/goma_client/goma_ctl.py",
+      "jsonstatus",
+      "[TMP_BASE]/goma_jsonstatus.json"
+    ],
+    "cwd": "[START_DIR]/src",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "postprocess_for_goma.goma_jsonstatus (8)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"notice\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"infra_status\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"num_user_error\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"ping_status_code\": 200@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/goma_client/goma_ctl.py",
+      "stat"
+    ],
+    "cwd": "[START_DIR]/src",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "postprocess_for_goma.goma_stat (8)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/goma_client/goma_ctl.py",
+      "stop"
+    ],
+    "cwd": "[START_DIR]/src",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "postprocess_for_goma.stop_goma (8)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/upload_goma_logs.py",
+      "--upload-compiler-proxy-info",
+      "--gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--json-status",
+      "[TMP_BASE]/goma_jsonstatus.json",
+      "--ninja-log-outdir",
+      "[START_DIR]/src/out/Debug",
+      "--ninja-log-command",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/Debug', '-j', 50]",
+      "--ninja-log-exit-status",
+      "0",
+      "--ninja-log-compiler",
+      "goma",
+      "--buildbot-buildername",
+      "android_more_configs",
+      "--buildbot-mastername",
+      "tryserver.webrtc",
+      "--buildbot-slavename",
+      "test_bot"
+    ],
+    "cwd": "[START_DIR]/src",
+    "name": "postprocess_for_goma.upload_log (8)",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@compiler_proxy_log@http://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log.INFO.20170329-222936.4420.gz@@@",
+      "@@@STEP_LINK@ninja_log@http://chromium-build-stats.appspot.com/ninja_log/2017/03/30/build11-m1/ninja_log.build11-m1.chrome-bot.20170329-224321.9976.gz@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
+      "stop",
+      "--killed-pid-file",
+      "[TMP_BASE]/cloudtail.pid"
+    ],
+    "cwd": "[START_DIR]/src",
+    "infra_step": true,
+    "name": "postprocess_for_goma.stop cloudtail (8)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
