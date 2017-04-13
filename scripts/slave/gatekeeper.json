@@ -417,21 +417,6 @@
         }
       }
     ],
-    "https://build.chromium.org/p/chromium.memory.full": [
-      {
-        "categories": [
-          "chromium_memory_full"
-        ],
-        "sheriff_classes": ["sheriff_memory"],
-
-        "builders": {
-          "Chromium Linux MSan Builder": {},
-          "Linux MSan Tests": {},
-          "Chromium Linux ChromeOS MSan Builder": {},
-          "Linux ChromeOS MSan Tests": {}
-        }
-      }
-    ],
     "https://build.chromium.org/p/chromium.perf": [
       {
         "forgive_all": "true",
