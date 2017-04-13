@@ -221,9 +221,31 @@
     "name": "read test spec (chromium.memory.json)",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [BUILDER_CACHE]/Linux_ChromiumOS_MSan_Builder/src/testing/buildbot/chromium.memory.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Linux ChromiumOS MSan Tests\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true@@@",
+      "@@@STEP_LOG_LINE@json.output@        }, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"test\": \"browser_tests\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
+      "--build-dir",
+      "[BUILDER_CACHE]/Linux_ChromiumOS_MSan_Builder/src/out/Release",
+      "--clean-isolated-files"
+    ],
+    "name": "clean isolated files"
   },
   {
     "cmd": [
@@ -239,13 +261,19 @@
       "[BUILDER_CACHE]/Linux_ChromiumOS_MSan_Builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma_client",
+      "--swarming-targets-file",
+      "browser_tests\n",
       "//out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_ChromiumOS_MSan_Builder/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "generate_build_files"
+    "name": "generate_build_files",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@browser_tests@@@",
+      "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
+    ]
   },
   {
     "allow_subannotations": true,
@@ -368,8 +396,8 @@
       "[BUILDER_CACHE]/Linux_ChromiumOS_MSan_Builder/src/out/Release",
       "-j",
       "50",
-      "All",
-      "chromium_builder_tests"
+      "browser_tests",
+      "browser_tests_run"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_ChromiumOS_MSan_Builder/src",
     "env": {
@@ -465,7 +493,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/Linux_ChromiumOS_MSan_Builder/src/out/Release",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Linux_ChromiumOS_MSan_Builder/src/out/Release', '-j', 50, 'All', 'chromium_builder_tests']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Linux_ChromiumOS_MSan_Builder/src/out/Release', '-j', 50, 'browser_tests', 'browser_tests_run']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",
@@ -513,6 +541,39 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/Linux_ChromiumOS_MSan_Builder/src/tools/determinism/remove_build_metadata.py",
+      "--build-dir",
+      "[BUILDER_CACHE]/Linux_ChromiumOS_MSan_Builder/src/out/Release"
+    ],
+    "cwd": "[START_DIR]",
+    "name": "remove_build_metadata"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::isolate]/resources/isolate.py",
+      "[BUILDER_CACHE]/Linux_ChromiumOS_MSan_Builder/src/tools/swarming_client",
+      "batcharchive",
+      "--dump-json",
+      "/path/to/tmp/json",
+      "--isolate-server",
+      "https://isolateserver.appspot.com",
+      "--verbose",
+      "[BUILDER_CACHE]/Linux_ChromiumOS_MSan_Builder/src/out/Release/browser_tests.isolated.gen.json"
+    ],
+    "name": "isolate tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"browser_tests\": \"[dummy hash for browser_tests]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -543,6 +604,35 @@
     ],
     "infra_step": true,
     "name": "package build"
+  },
+  {
+    "cmd": [],
+    "name": "trigger",
+    "trigger_specs": [
+      {
+        "builder_name": "Linux ChromiumOS MSan Tests",
+        "properties": {
+          "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
+          "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
+          "parent_got_buildtools_revision": "f0319a328b2809876916353cb994259692140934",
+          "parent_got_buildtools_revision_cp": "refs/heads/master@{#182578}",
+          "parent_got_nacl_revision": "d998e125e8253980d76e269b7982aeeefc1b9b50",
+          "parent_got_nacl_revision_cp": "refs/heads/master@{#274981}",
+          "parent_got_revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+          "parent_got_revision_cp": "refs/heads/master@{#170242}",
+          "parent_got_swarming_client_revision": "a0ee5d99f1d4b38ddaa4c759c837980b63b99566",
+          "parent_got_swarming_client_revision_cp": "refs/heads/master@{#276089}",
+          "parent_got_v8_revision": "801ada225ddc271c132c3a35f03975671d43e399",
+          "parent_got_v8_revision_cp": "refs/heads/master@{#43426}",
+          "parent_got_webrtc_revision": "0f90628433546e61d9268596da93418c623137f4",
+          "parent_got_webrtc_revision_cp": "refs/heads/master@{#120644}",
+          "parent_mastername": "chromium.memory"
+        }
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Linux ChromiumOS MSan Tests@@@"
+    ]
   },
   {
     "name": "$result",

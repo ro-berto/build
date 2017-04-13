@@ -111,7 +111,7 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'Chromium Linux ChromeOS MSan Builder',
+      'parent_buildername': 'Linux ChromiumOS MSan Builder',
       'testing': {'platform': 'linux'},
       'enable_swarming': True,
       'swarming_dimensions': {
