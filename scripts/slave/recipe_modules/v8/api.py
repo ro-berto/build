@@ -419,7 +419,9 @@ class V8Api(recipe_api.RecipeApi):
             set_swarm_hashes=False,
         )
         if self.should_upload_build:
+          # TODO(machenbach): Deprecate in favor of method below.
           self.upload_isolated_json()
+        self.upload_isolated_json_generic()
 
   def _update_build_environment(self, mb_output):
     """Sets the build_environment property based on gyp or gn properties in mb
@@ -568,6 +570,7 @@ class V8Api(recipe_api.RecipeApi):
           archive,
           src_dir='v8')
 
+  # TODO(machenbach): Deprecate in favor of method below.
   def upload_isolated_json(self):
     archive = self.GS_ARCHIVES[self.bot_config['build_gs_archive']]
     name = self.get_archive_name_pattern(use_swarming=True) % self.revision
@@ -576,6 +579,18 @@ class V8Api(recipe_api.RecipeApi):
         # The gsutil module wants bucket paths without gs:// prefix.
         archive[len('gs://'):],
         name,
+        args=['-a', 'public-read'],
+    )
+
+  def upload_isolated_json_generic(self):
+    archive = 'chromium-v8/isolated/%s/%s' % (
+        self.m.properties['mastername'],
+        self.m.properties['buildername'],
+    )
+    self.m.gsutil.upload(
+        self.m.json.input(self.m.isolate.isolated_tests),
+        archive,
+        '%s.json' % self.revision,
         args=['-a', 'public-read'],
     )
 

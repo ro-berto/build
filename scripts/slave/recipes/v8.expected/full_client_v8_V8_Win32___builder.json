@@ -516,6 +516,26 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "----",
+      "cp",
+      "-a",
+      "public-read",
+      "{\"bot_default\": \"[dummy hash for bot_default]\", \"mozilla\": \"[dummy hash for mozilla]\", \"test262\": \"[dummy hash for test262]\"}",
+      "gs://chromium-v8/isolated/client.v8/V8 Win32 - builder/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json"
+    ],
+    "infra_step": true,
+    "name": "gsutil upload (2)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/isolated/client.v8/V8 Win32 - builder/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json@@@"
+    ]
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",
