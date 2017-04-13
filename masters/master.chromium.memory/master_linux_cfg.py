@@ -28,12 +28,18 @@ def Update(_config, active_master, c):
                 treeStableTimer=60,
                 builderNames=[
           'Linux ASan LSan Builder',
+          'Linux ChromiumOS MSan Builder',
+          'Linux MSan Builder',
           'Linux TSan Builder',
       ]),
       Triggerable(name='linux_asan_rel_trigger', builderNames=[
           'Linux ASan LSan Tests (1)',
           'Linux ASan Tests (sandboxed)',
       ]),
+      Triggerable(name='linux_chromiumos_msan_rel_trigger',
+                  builderNames=['Linux ChromiumOS MSan Tests']),
+      Triggerable(name='linux_msan_rel_trigger',
+                  builderNames=['Linux MSan Tests']),
       Triggerable(name='linux_tsan_rel_trigger',
                   builderNames=['Linux TSan Tests']),
   ])
@@ -41,15 +47,33 @@ def Update(_config, active_master, c):
     {
       'name': 'Linux ASan LSan Builder',
       'triggers': ['linux_asan_rel_trigger'],
-      'category': '1linux asan lsan',
+      'category': '1linux asan lsan msan',
     },
     {
       'name': 'Linux ASan LSan Tests (1)',
-      'category': '1linux asan lsan',
+      'category': '1linux asan lsan msan',
     },
     {
       'name': 'Linux ASan Tests (sandboxed)',
-      'category': '1linux asan lsan',
+      'category': '1linux asan lsan msan',
+    },
+    {
+      'name': 'Linux ChromiumOS MSan Builder',
+      'triggers': ['linux_chromiumos_msan_rel_trigger'],
+      'category': '1linux asan lsan msan',
+    },
+    {
+      'name': 'Linux ChromiumOS MSan Tests',
+      'category': '1linux asan lsan msan',
+    },
+    {
+      'name': 'Linux MSan Builder',
+      'triggers': ['linux_msan_rel_trigger'],
+      'category': '1linux asan lsan msan',
+    },
+    {
+      'name': 'Linux MSan Tests',
+      'category': '1linux asan lsan msan',
     },
     {
       'name': 'Linux TSan Builder',

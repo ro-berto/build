@@ -56,6 +56,69 @@ SPEC = {
       'testing': {'platform': 'linux'},
       'enable_swarming': True,
     },
+    'Linux MSan Builder': {
+      'chromium_config': 'chromium_msan',
+      'gclient_config': 'chromium',
+      'chromium_apply_config': ['mb', 'prebuilt_instrumented_libraries'],
+      'GYP_DEFINES': {
+        'msan_track_origins': 2,
+      },
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder',
+      'testing': {'platform': 'linux'},
+      'enable_swarming': True,
+    },
+    'Linux MSan Tests': {
+      'chromium_config': 'chromium_msan',
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'Linux MSan Builder',
+      'testing': {'platform': 'linux'},
+      'enable_swarming': True,
+      'swarming_dimensions': {
+        'cpu': 'x86-64',
+        'os': 'Ubuntu-14.04',
+      },
+    },
+    'Linux ChromiumOS MSan Builder': {
+      'chromium_config': 'chromium_msan',
+      'gclient_config': 'chromium',
+      'chromium_apply_config': ['mb', 'prebuilt_instrumented_libraries'],
+      'GYP_DEFINES': {
+        'msan_track_origins': 2,
+        'chromeos': 1
+      },
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder',
+      'testing': {'platform': 'linux'},
+      'enable_swarming': True,
+    },
+    'Linux ChromiumOS MSan Tests': {
+      'chromium_config': 'chromium_msan',
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'Chromium Linux ChromeOS MSan Builder',
+      'testing': {'platform': 'linux'},
+      'enable_swarming': True,
+      'swarming_dimensions': {
+        'cpu': 'x86-64',
+        'os': 'Ubuntu-14.04',
+      },
+    },
     'Linux TSan Builder': {
       'chromium_config': 'chromium_tsan2',
       'gclient_config': 'chromium',

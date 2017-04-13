@@ -355,9 +355,9 @@ TRYBOTS = freeze({
         'buildername': 'Linux ChromiumOS Builder',
       }, analyze_mode='compile'),
       'linux_chromium_chromeos_msan_rel_ng': simple_bot({
-        'mastername': 'chromium.memory.full',
-        'buildername': 'Chromium Linux ChromeOS MSan Builder',
-        'tester': 'Linux ChromeOS MSan Tests',
+        'mastername': 'chromium.memory',
+        'buildername': 'Linux ChromiumOS MSan Builder',
+        'tester': 'Linux ChromiumOS MSan Tests',
       }),
       'linux_chromium_chromeos_ozone_rel_ng': simple_bot({
         'mastername': 'chromium.chromiumos',
@@ -369,8 +369,8 @@ TRYBOTS = freeze({
         'buildername': 'Linux Builder (dbg)(32)',
       }, analyze_mode='compile'),
       'linux_chromium_msan_rel_ng': simple_bot({
-        'mastername': 'chromium.memory.full',
-        'buildername': 'Chromium Linux MSan Builder',
+        'mastername': 'chromium.memory',
+        'buildername': 'Linux MSan Builder',
         'tester': 'Linux MSan Tests',
       }),
       'linux_chromium_tsan_rel_ng': simple_bot({

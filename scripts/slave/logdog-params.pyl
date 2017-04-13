@@ -171,11 +171,6 @@
         'logdog_only': True,
       },
     },
-    'chromium.memory.full': {
-      '*': {
-        'logdog_only': True,
-      },
-    },
 
     'chromium.webrtc': {},
     'chromium.webrtc.fyi': {},

@@ -1843,12 +1843,12 @@ def GenTests(api):
 
   yield (
     api.test('msan') +
-    api.properties.generic(mastername='chromium.memory.full',
+    api.properties.generic(mastername='chromium.memory',
                            buildername='Linux MSan Tests',
-                           parent_buildername='Chromium Linux MSan Builder') +
+                           parent_buildername='Linux MSan Builder') +
     api.platform('linux', 64) +
     api.override_step_data(
-        'read test spec (chromium.memory.full.json)',
+        'read test spec (chromium.memory.json)',
         api.json.output({
             'Linux MSan Tests': {
                 'compile_targets': ['base_unittests'],
