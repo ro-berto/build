@@ -235,6 +235,7 @@ class V8Api(recipe_api.RecipeApi):
 
     self.m.swarming.set_default_dimension('pool', 'Chrome')
     self.m.swarming.set_default_dimension('os', 'Ubuntu-14.04')
+    self.m.swarming.set_default_dimension('cores', '8')
     self.m.swarming.add_default_tag('project:v8')
     self.m.swarming.default_hard_timeout = 45 * 60
 

@@ -1226,6 +1226,7 @@ BUILDERS = {
         },
         'swarming_dimensions': {
           'cpu': 'armv7l',
+          'cores': '2',
         },
         'testing': {'platform': 'linux'},
       },
@@ -1250,6 +1251,7 @@ BUILDERS = {
         },
         'swarming_dimensions': {
           'cpu': 'armv7l',
+          'cores': '2',
         },
         'testing': {'platform': 'linux'},
       },
@@ -1272,6 +1274,7 @@ BUILDERS = {
         },
         'swarming_dimensions': {
           'cpu': 'armv7l',
+          'cores': '2',
         },
         'testing': {'platform': 'linux'},
       },
