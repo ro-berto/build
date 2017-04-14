@@ -66,6 +66,13 @@ PROPERTIES = {
     'suspected_revisions': Property(
         kind=List(basestring), default=[],
         help='A list of suspected revisions from heuristic analysis.'),
+    'test_on_good_revision': Property(
+        kind=Single(bool, empty_val=False, required=False), default=True,
+        help='Run test on good revision as well if the first revision '
+             'in range is suspected.'),
+    'test_repeat_count': Property(
+        kind=Single(int, required=False), default=20,
+        help='How many times to repeat the tests.'),
 }
 
 
@@ -85,7 +92,7 @@ def _get_reduced_test_dict(original_test_dict, failed_tests_dict):
 
 def RunSteps(api, target_mastername, target_testername, good_revision,
              bad_revision, tests, buildbucket, use_analyze,
-             suspected_revisions):
+             suspected_revisions, test_on_good_revision, test_repeat_count):
 
   tests, target_buildername = api.findit.configure_and_sync(
       api, tests, buildbucket, target_mastername, target_testername,
@@ -137,6 +144,8 @@ def RunSteps(api, target_mastername, target_testername, good_revision,
   }
 
   revision_being_checked = None
+  found = False
+  flakes = defaultdict(list)
   try:
     culprits = defaultdict(dict)
     # Tests that haven't found culprits in tested revision(s).
@@ -157,7 +166,8 @@ def RunSteps(api, target_mastername, target_testername, good_revision,
         test_results[potential_green_rev], tests_failed_in_potential_green = (
             api.findit.compile_and_test_at_revision(
                 api, target_mastername, target_buildername, target_testername,
-                potential_green_rev,tests_have_not_found_culprit, use_analyze))
+                potential_green_rev, tests_have_not_found_culprit, use_analyze,
+                test_repeat_count=test_repeat_count))
       else:
         tests_failed_in_potential_green = {}
 
@@ -176,7 +186,7 @@ def RunSteps(api, target_mastername, target_testername, good_revision,
           test_results[revision], tests_failed_in_revision = (
               api.findit.compile_and_test_at_revision(
                   api, target_mastername, target_buildername, target_testername,
-                  revision, tests_to_run, use_analyze))
+                  revision, tests_to_run, use_analyze, test_repeat_count))
 
           # Removes tests that passed in potential green and failed in
           # following revisions: culprits have been found for them.
@@ -195,13 +205,44 @@ def RunSteps(api, target_mastername, target_testername, good_revision,
           if not tests_to_run:
             break
 
+    if culprits and test_on_good_revision:
+      # Need to deflake by running on good revision.
+      tests_run_on_good_revision = defaultdict(list)
+      for step, step_culprits in culprits.iteritems():
+        for test, test_culprit in step_culprits.iteritems():
+          if test_culprit == revisions_to_check[0]:
+            tests_run_on_good_revision[step].append(test)
+
+      if tests_run_on_good_revision:
+        test_results[good_revision], tests_failed_in_revision = (
+          api.findit.compile_and_test_at_revision(
+            api, target_mastername, target_buildername, target_testername,
+            good_revision, tests_run_on_good_revision, use_analyze,
+            test_repeat_count))
+        if tests_failed_in_revision:
+          # Some tests also failed on good revision, they should be flaky.
+          # Should remove them from culprits.
+          new_culprits = defaultdict(dict)
+          for step, step_culprits in culprits.iteritems():
+            for test, test_culprit in step_culprits.iteritems():
+              if test in tests_failed_in_revision.get(step, []):
+                continue
+              new_culprits[step][test] = test_culprit
+          culprits = new_culprits
+          flakes = tests_failed_in_revision
+
+    found = bool(culprits)
+
   except api.step.InfraFailure:
     test_results[revision_being_checked] = api.findit.TestResult.INFRA_FAILED
     report['metadata']['infra_failure'] = True
     raise
   finally:
-    if culprits:
+    if found:
       report['culprits'] = culprits
+
+    if flakes:
+      report['flakes'] = flakes
 
     # Give the full report including test results and metadata.
     api.python.succeeding_step(
@@ -213,7 +254,8 @@ def RunSteps(api, target_mastername, target_testername, good_revision,
 def GenTests(api):
   def props(
       tests, platform_name, tester_name, use_analyze=False, good_revision=None,
-      bad_revision=None, suspected_revisions=None, buildbucket=None):
+      bad_revision=None, suspected_revisions=None, buildbucket=None,
+      test_on_good_revision=True, test_repeat_count=20):
     properties = {
         'path_config': 'kitchen',
         'mastername': 'tryserver.chromium.%s' % platform_name,
@@ -225,6 +267,8 @@ def GenTests(api):
         'good_revision': good_revision or 'r0',
         'bad_revision': bad_revision or 'r1',
         'use_analyze': use_analyze,
+        'test_on_good_revision': test_on_good_revision,
+        'test_repeat_count': test_repeat_count,
     }
     if tests:
       properties['tests'] = tests
@@ -325,7 +369,7 @@ def GenTests(api):
   yield (
       api.test('all_test_failed') +
       props({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']},
-            'win', 'Win7 Tests (1)') +
+            'win', 'Win7 Tests (1)', test_on_good_revision=False) +
       api.override_step_data(
           'test r1.read test spec (chromium.win.json)',
           api.json.output({
@@ -377,6 +421,25 @@ def GenTests(api):
       props({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']},
             'win', 'Win7 Tests (1)') +
       api.override_step_data(
+        'test r0.read test spec (chromium.win.json)',
+        api.json.output({
+          'Win7 Tests (1)': {
+            'gtest_tests': [
+              {
+                'test': 'gl_tests',
+                'swarming': {'can_use_on_swarming_builders': True},
+              },
+            ],
+          },
+        })
+      ) +
+      api.override_step_data(
+        'test r0.gl_tests (r0)',
+        api.swarming.canned_summary_output(failure=True) +
+        api.test_utils.simulated_gtest_output(
+          passed_test_names=['Test.One', 'Test.Two'])
+      ) +
+      api.override_step_data(
           'test r1.read test spec (chromium.win.json)',
           api.json.output({
               'Win7 Tests (1)': {
@@ -419,7 +482,7 @@ def GenTests(api):
   yield (
       api.test('none_swarming_tests') +
       props({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']},
-            'win', 'Win7 Tests (1)') +
+            'win', 'Win7 Tests (1)', test_on_good_revision=False) +
       api.override_step_data(
           'test r1.read test spec (chromium.win.json)',
           api.json.output({
@@ -599,7 +662,7 @@ def GenTests(api):
       props(
           {'gl_tests': ['Test.One']}, 'mac', 'Mac10.9 Tests', use_analyze=False,
            good_revision='r0', bad_revision='r6',
-           suspected_revisions=['r6']) +
+           suspected_revisions=['r6'], test_on_good_revision=False) +
       api.override_step_data(
           'test r1.read test spec (chromium.mac.json)',
           api.json.output({
@@ -1081,4 +1144,50 @@ def GenTests(api):
           'test r3.gl_tests (r3)',
           api.swarming.canned_summary_output(failure=True) +
           api.test_utils.simulated_gtest_output(failed_test_names=['Test.One']))
+  )
+
+  yield (
+      api.test('flaky_tests') +
+      props({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']},
+            'win', 'Win7 Tests (1)') +
+      api.override_step_data(
+        'test r0.read test spec (chromium.win.json)',
+        api.json.output({
+          'Win7 Tests (1)': {
+            'gtest_tests': [
+              {
+                'test': 'gl_tests',
+                'swarming': {'can_use_on_swarming_builders': True},
+              },
+            ],
+          },
+        })
+      ) +
+      api.override_step_data(
+        'test r0.gl_tests (r0)',
+        api.swarming.canned_summary_output(failure=True) +
+        api.test_utils.simulated_gtest_output(
+              failed_test_names=['Test.One'],
+              passed_test_names=['Test.Two'])
+      ) +
+      api.override_step_data(
+          'test r1.read test spec (chromium.win.json)',
+          api.json.output({
+              'Win7 Tests (1)': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          })
+      ) +
+      api.override_step_data(
+          'test r1.gl_tests (r1)',
+          api.swarming.canned_summary_output(failure=True) +
+          api.test_utils.simulated_gtest_output(
+              failed_test_names=['Test.One', 'Test.Two'],
+              passed_test_names=['Test.Three'])
+      )
   )

@@ -815,9 +815,9 @@
       "--target",
       "Release",
       "--factory-properties",
-      "{\"bad_revision\": \"r1\", \"bot_id\": \"build1-a1\", \"buildername\": \"win_chromium_variable\", \"buildnumber\": 1, \"good_revision\": \"r0\", \"mastername\": \"tryserver.chromium.win\", \"path_config\": \"kitchen\", \"recipe\": \"findit/chromium/test\", \"slavename\": \"build1-a1\", \"target_mastername\": \"chromium.win\", \"target_testername\": \"Win7 Tests (1)\", \"tests\": {\"gl_tests\": [\"Test.One\", \"Test.Two\", \"Test.Three\"]}, \"use_analyze\": false}",
+      "{\"bad_revision\": \"r1\", \"bot_id\": \"build1-a1\", \"buildername\": \"win_chromium_variable\", \"buildnumber\": 1, \"good_revision\": \"r0\", \"mastername\": \"tryserver.chromium.win\", \"path_config\": \"kitchen\", \"recipe\": \"findit/chromium/test\", \"slavename\": \"build1-a1\", \"target_mastername\": \"chromium.win\", \"target_testername\": \"Win7 Tests (1)\", \"test_on_good_revision\": false, \"test_repeat_count\": 20, \"tests\": {\"gl_tests\": [\"Test.One\", \"Test.Two\", \"Test.Three\"]}, \"use_analyze\": false}",
       "--build-properties",
-      "{\"bad_revision\": \"r1\", \"bot_id\": \"build1-a1\", \"buildername\": \"win_chromium_variable\", \"buildnumber\": 1, \"good_revision\": \"r0\", \"mastername\": \"tryserver.chromium.win\", \"path_config\": \"kitchen\", \"recipe\": \"findit/chromium/test\", \"slavename\": \"build1-a1\", \"target_mastername\": \"chromium.win\", \"target_testername\": \"Win7 Tests (1)\", \"tests\": {\"gl_tests\": [\"Test.One\", \"Test.Two\", \"Test.Three\"]}, \"use_analyze\": false}",
+      "{\"bad_revision\": \"r1\", \"bot_id\": \"build1-a1\", \"buildername\": \"win_chromium_variable\", \"buildnumber\": 1, \"good_revision\": \"r0\", \"mastername\": \"tryserver.chromium.win\", \"path_config\": \"kitchen\", \"recipe\": \"findit/chromium/test\", \"slavename\": \"build1-a1\", \"target_mastername\": \"chromium.win\", \"target_testername\": \"Win7 Tests (1)\", \"test_on_good_revision\": false, \"test_repeat_count\": 20, \"tests\": {\"gl_tests\": [\"Test.One\", \"Test.Two\", \"Test.Three\"]}, \"use_analyze\": false}",
       "--annotate=gtest",
       "--test-type=gl_tests",
       "--step-name=gl_tests (r1)",
@@ -830,7 +830,10 @@
       "--slave-name=build1-a1",
       "--build-number=1",
       "gl_tests.exe",
-      "Test.One\nTest.Two\nTest.Three"
+      "--gtest_repeat=20",
+      "Test.One\nTest.Two\nTest.Three",
+      "--test-launcher-retry-limit=0",
+      "--gtest_also_run_disabled_tests"
     ],
     "cwd": "[BUILDER_CACHE]\\win",
     "env": {
