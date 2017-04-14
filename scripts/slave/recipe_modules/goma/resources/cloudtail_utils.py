@@ -17,6 +17,10 @@ from slave import goma_utils
 def start_cloudtail(args):
   """Write process id of started cloudtail to file object f"""
 
+  kwargs = {}
+  if subprocess.mswindows:
+    kwargs['creationflags'] = subprocess.CREATE_NEW_PROCESS_GROUP
+
   proc = subprocess.Popen([args.cloudtail_path,
                            'tail',
                            '--project-id', 'goma-logs',
@@ -25,7 +29,7 @@ def start_cloudtail(args):
                            '--log-id', 'goma_compiler_proxy',
                            '--path',
                            goma_utils.GetLatestGomaCompilerProxyInfo(),
-  ])
+  ], **kwargs)
 
   with open(args.pid_file, 'w') as f:
     pidstr = str(proc.pid)
