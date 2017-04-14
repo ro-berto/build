@@ -616,8 +616,14 @@ def main():
   except (OSError, subprocess.CalledProcessError) as e:
     Log('WARNING: Could not get git version information: %r' % e)
     git_version = '?'
-  os.environ.setdefault('GIT_USER_AGENT', '%s git/%s %s' % (
-      sys.platform, git_version.rstrip().split()[-1], socket.getfqdn()))
+
+  # Add some extra information to the git User-Agent string to allow for
+  # logging/debugging on the server side.
+  # This string needs to begin with git/X.Y.Z otherwise for certain servers
+  # (e.g. github) fail to recognize the request as coming from git.
+  os.environ.setdefault('GIT_USER_AGENT', 'git/%s %s %s' % (
+      git_version.rstrip().split()[-1], sys.platform, socket.getfqdn()))
+
   # This may be redundant, unless this is imported and main is called.
   UseBotoPath()
 
