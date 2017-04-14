@@ -12,7 +12,3 @@ PROPERTIES = {
     'buildername': Property(default=None),
     'buildnumber': Property(default=None),
 }
-
-
-# TODO(phajdan.jr): provide coverage (http://crbug.com/693058).
-DISABLE_STRICT_COVERAGE = True

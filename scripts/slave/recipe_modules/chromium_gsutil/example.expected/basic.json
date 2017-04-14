@@ -1,0 +1,22 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/gsutil_download.py",
+      "--url",
+      "https://example/url",
+      "--dst",
+      "None/destination",
+      "--partial-name",
+      "example_name"
+    ],
+    "cwd": "[START_DIR]",
+    "name": "Download latest file from GS"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]

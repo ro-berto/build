@@ -9,6 +9,11 @@ DEPS = [
 def RunSteps(api):
   assert api.build.slave_utils_args
 
+  with api.build.gsutil_py_env():
+    api.build.python(
+        'runtest',
+        api.build.package_repo_resource('scripts', 'slave', 'runtest.py'))
+
 
 def GenTests(api):
   yield api.test('basic')
