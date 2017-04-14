@@ -1188,6 +1188,34 @@ def GenTests(api):
           api.swarming.canned_summary_output(failure=True) +
           api.test_utils.simulated_gtest_output(
               failed_test_names=['Test.One', 'Test.Two'],
-              passed_test_names=['Test.Three'])
-      )
+              passed_test_names=['Test.Three']))
+  )
+
+  yield (
+      api.test('use_abbreviated_revision_in_step_name') +
+      props(
+          {'gl_tests': ['Test.One']}, 'mac', 'Mac10.9 Tests', use_analyze=False,
+           good_revision='1234567890abcdefg', bad_revision='gfedcba0987654321',
+           test_on_good_revision=False) +
+      api.override_step_data(
+          'test gfedcba.read test spec (chromium.mac.json)',
+          api.json.output({
+              'Mac10.9 Tests': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          })
+      ) +
+      api.override_step_data(
+          'git commits in range',
+          api.raw_io.stream_output('gfedcba0987654321')) +
+      api.override_step_data(
+          'test gfedcba.gl_tests (gfedcba)',
+          api.swarming.canned_summary_output(failure=True) +
+          api.test_utils.simulated_gtest_output(
+              failed_test_names=['Test.One']))
   )

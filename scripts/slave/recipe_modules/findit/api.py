@@ -148,7 +148,8 @@ class FinditApi(recipe_api.RecipeApi):
           be passed.
     """
     results = {}
-    with api.m.step.nest('test %s' % str(revision)):
+    abbreviated_revision = revision[:7]
+    with api.m.step.nest('test %s' % str(abbreviated_revision)):
       # Checkout code at the given revision to recompile.
       bot_id = {
           'mastername': target_mastername,
@@ -221,22 +222,24 @@ class FinditApi(recipe_api.RecipeApi):
         except NotImplementedError:
           # ScriptTests do not support test_options property
           pass
+
       # Run the tests.
       with api.m.chromium_tests.wrap_chromium_tests(
           bot_config, actual_tests_to_run):
         failed_tests = api.m.test_utils.run_tests(
-            api, actual_tests_to_run, suffix=str(revision))
+            api, actual_tests_to_run, suffix=abbreviated_revision)
 
       # Process failed tests.
       failed_tests_dict = defaultdict(list)
       for failed_test in failed_tests:
-        valid = failed_test.has_valid_results(api, suffix=revision)
+        valid = failed_test.has_valid_results(api, suffix=abbreviated_revision)
         results[failed_test.name] = {
             'status': self.TestResult.FAILED,
             'valid': valid,
         }
         if valid:
-          test_list = list(failed_test.failures(api, suffix=revision))
+          test_list = list(
+              failed_test.failures(api, suffix=abbreviated_revision))
           results[failed_test.name]['failures'] = test_list
           failed_tests_dict[failed_test.name].extend(test_list)
 
@@ -249,11 +252,11 @@ class FinditApi(recipe_api.RecipeApi):
           }
 
         if hasattr(test, 'pass_fail_counts'):
-          pass_fail_counts = test.pass_fail_counts(suffix=revision)
+          pass_fail_counts = test.pass_fail_counts(suffix=abbreviated_revision)
           results[test.name]['pass_fail_counts'] = pass_fail_counts
 
         if hasattr(test, 'step_metadata'):
-          step_metadata = test.step_metadata(api, suffix=revision)
+          step_metadata = test.step_metadata(api, suffix=abbreviated_revision)
           results[test.name]['step_metadata'] = step_metadata
 
       # Process skipped tests in two scenarios:
