@@ -630,6 +630,9 @@ class iOSApi(recipe_api.RecipeApi):
         'xcode_version': task['test'].get(
           'xcode version', self.__config['xcode version'])
       }
+      if 'internal' not in self.m.properties['mastername']:
+        # 4 cores are better than 8! See https://crbug.com/711845.
+        swarming_task.dimensions['cores'] = '4'
       if self.platform == 'simulator':
         swarming_task.dimensions['os'] = 'Mac'
       elif self.platform == 'device':
