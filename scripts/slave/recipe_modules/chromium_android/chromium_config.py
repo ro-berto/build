@@ -69,7 +69,6 @@ def mipsel_builder_mb(c):
 
 @CONFIG_CTX(includes=['clobber'])
 def cronet_builder(c):
-  c.gn_args.append('disable_brotli_filter=true')
   c.gn_args.append('disable_file_support=true')
   c.gn_args.append('disable_ftp_support=true')
   c.gn_args.append('enable_websockets=false')
