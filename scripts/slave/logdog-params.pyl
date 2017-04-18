@@ -213,7 +213,9 @@
 
     # WebRTC
     'client.webrtc': {},
+    'client.webrtc.branches': {},
     'client.webrtc.fyi': {},
+    'client.webrtc.perf': {},
     'tryserver.webrtc': {},
   },
 
