@@ -21,13 +21,24 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::file]/resources/fileutil.py",
+      "rmtree",
+      "[START_DIR]/out"
+    ],
+    "infra_step": true,
+    "name": "rmtree clobber"
+  },
+  {
+    "cmd": [
       "[START_DIR]/art/tools/buildbot-build.sh",
       "-j8",
       "--target"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
@@ -36,14 +47,14 @@
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_READ_BARRIER": "true",
-      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "armv8",
+      "TARGET_PRODUCT": "arm_krait",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "build target"
@@ -54,7 +65,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
@@ -63,14 +74,14 @@
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_READ_BARRIER": "true",
-      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "armv8",
+      "TARGET_PRODUCT": "arm_krait",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "setup device"
@@ -89,7 +100,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
@@ -98,14 +109,14 @@
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_READ_BARRIER": "true",
-      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "armv8",
+      "TARGET_PRODUCT": "arm_krait",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "device cleanup"
@@ -117,7 +128,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
@@ -126,14 +137,14 @@
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_READ_BARRIER": "true",
-      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "armv8",
+      "TARGET_PRODUCT": "arm_krait",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "sync target"
@@ -142,11 +153,11 @@
     "cmd": [
       "make",
       "-j2",
-      "test-art-target-gtest64"
+      "test-art-target-gtest32"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -157,14 +168,14 @@
       "ART_TEST_NO_SYNC": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_READ_BARRIER": "true",
-      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "armv8",
+      "TARGET_PRODUCT": "arm_krait",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test gtest"
@@ -179,7 +190,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
@@ -188,14 +199,14 @@
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_READ_BARRIER": "true",
-      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "armv8",
+      "TARGET_PRODUCT": "arm_krait",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test gtest: adb logcat"
@@ -206,7 +217,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
@@ -215,14 +226,14 @@
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_READ_BARRIER": "true",
-      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "armv8",
+      "TARGET_PRODUCT": "arm_krait",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test gtest: crashes"
@@ -235,7 +246,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
@@ -244,14 +255,14 @@
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_READ_BARRIER": "true",
-      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "armv8",
+      "TARGET_PRODUCT": "arm_krait",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test gtest: adb clear log"
@@ -268,7 +279,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -279,14 +290,14 @@
       "ART_TEST_NO_SYNC": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_READ_BARRIER": "true",
-      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "armv8",
+      "TARGET_PRODUCT": "arm_krait",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test optimizing"
@@ -301,7 +312,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
@@ -310,14 +321,14 @@
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_READ_BARRIER": "true",
-      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "armv8",
+      "TARGET_PRODUCT": "arm_krait",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test optimizing: adb logcat"
@@ -328,7 +339,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
@@ -337,14 +348,14 @@
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_READ_BARRIER": "true",
-      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "armv8",
+      "TARGET_PRODUCT": "arm_krait",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test optimizing: crashes"
@@ -357,7 +368,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
@@ -366,14 +377,14 @@
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_READ_BARRIER": "true",
-      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "armv8",
+      "TARGET_PRODUCT": "arm_krait",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test optimizing: adb clear log"
@@ -388,7 +399,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -399,14 +410,14 @@
       "ART_TEST_NO_SYNC": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_READ_BARRIER": "true",
-      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "armv8",
+      "TARGET_PRODUCT": "arm_krait",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test interpreter"
@@ -421,7 +432,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
@@ -430,14 +441,14 @@
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_READ_BARRIER": "true",
-      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "armv8",
+      "TARGET_PRODUCT": "arm_krait",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test interpreter: adb logcat"
@@ -448,7 +459,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
@@ -457,14 +468,14 @@
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_READ_BARRIER": "true",
-      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "armv8",
+      "TARGET_PRODUCT": "arm_krait",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test interpreter: crashes"
@@ -477,7 +488,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
@@ -486,14 +497,14 @@
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_READ_BARRIER": "true",
-      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "armv8",
+      "TARGET_PRODUCT": "arm_krait",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test interpreter: adb clear log"
@@ -508,7 +519,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -519,14 +530,14 @@
       "ART_TEST_NO_SYNC": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_READ_BARRIER": "true",
-      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "armv8",
+      "TARGET_PRODUCT": "arm_krait",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test jit"
@@ -541,7 +552,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
@@ -550,14 +561,14 @@
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_READ_BARRIER": "true",
-      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "armv8",
+      "TARGET_PRODUCT": "arm_krait",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test jit: adb logcat"
@@ -568,7 +579,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
@@ -577,14 +588,14 @@
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_READ_BARRIER": "true",
-      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "armv8",
+      "TARGET_PRODUCT": "arm_krait",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test jit: crashes"
@@ -597,7 +608,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
@@ -606,14 +617,14 @@
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_READ_BARRIER": "true",
-      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "armv8",
+      "TARGET_PRODUCT": "arm_krait",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test jit: adb clear log"
@@ -622,12 +633,12 @@
     "cmd": [
       "[START_DIR]/art/tools/run-libcore-tests.sh",
       "--mode=device",
-      "--variant=X64",
+      "--variant=X32",
       "--debug"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -638,14 +649,14 @@
       "ART_TEST_NO_SYNC": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_READ_BARRIER": "true",
-      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "armv8",
+      "TARGET_PRODUCT": "arm_krait",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test libcore"
@@ -660,7 +671,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
@@ -669,14 +680,14 @@
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_READ_BARRIER": "true",
-      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "armv8",
+      "TARGET_PRODUCT": "arm_krait",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test libcore: adb logcat"
@@ -687,7 +698,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
@@ -696,14 +707,14 @@
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_READ_BARRIER": "true",
-      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "armv8",
+      "TARGET_PRODUCT": "arm_krait",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test libcore: crashes"
@@ -716,7 +727,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
@@ -725,14 +736,14 @@
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_READ_BARRIER": "true",
-      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "armv8",
+      "TARGET_PRODUCT": "arm_krait",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test libcore: adb clear log"
@@ -741,12 +752,12 @@
     "cmd": [
       "[START_DIR]/art/tools/run-jdwp-tests.sh",
       "--mode=device",
-      "--variant=X64",
+      "--variant=X32",
       "--debug"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -757,14 +768,14 @@
       "ART_TEST_NO_SYNC": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_READ_BARRIER": "true",
-      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "armv8",
+      "TARGET_PRODUCT": "arm_krait",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test jdwp jit"
@@ -779,7 +790,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
@@ -788,14 +799,14 @@
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_READ_BARRIER": "true",
-      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "armv8",
+      "TARGET_PRODUCT": "arm_krait",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test jdwp jit: adb logcat"
@@ -806,7 +817,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
@@ -815,14 +826,14 @@
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_READ_BARRIER": "true",
-      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "armv8",
+      "TARGET_PRODUCT": "arm_krait",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test jdwp jit: crashes"
@@ -835,7 +846,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
@@ -844,14 +855,14 @@
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_READ_BARRIER": "true",
-      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "armv8",
+      "TARGET_PRODUCT": "arm_krait",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test jdwp jit: adb clear log"
@@ -860,13 +871,13 @@
     "cmd": [
       "[START_DIR]/art/tools/run-jdwp-tests.sh",
       "--mode=device",
-      "--variant=X64",
+      "--variant=X32",
       "--no-jit",
       "--debug"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -877,14 +888,14 @@
       "ART_TEST_NO_SYNC": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_READ_BARRIER": "true",
-      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "armv8",
+      "TARGET_PRODUCT": "arm_krait",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test jdwp aot"
@@ -899,7 +910,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
@@ -908,14 +919,14 @@
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_READ_BARRIER": "true",
-      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "armv8",
+      "TARGET_PRODUCT": "arm_krait",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test jdwp aot: adb logcat"
@@ -926,7 +937,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
@@ -935,14 +946,14 @@
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_READ_BARRIER": "true",
-      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "armv8",
+      "TARGET_PRODUCT": "arm_krait",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test jdwp aot: crashes"
@@ -955,7 +966,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
@@ -964,14 +975,14 @@
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_READ_BARRIER": "true",
-      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker64",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "armv8",
+      "TARGET_PRODUCT": "arm_krait",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test jdwp aot: adb clear log"

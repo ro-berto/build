@@ -12,7 +12,12 @@ DEPS = [
 ]
 
 _TARGET_DEVICE_MAP = {
-    'volantis': {
+    'volantis-armv7': {
+      'bitness': 32,
+      'make_jobs': 2,
+      'product': 'arm_krait',
+      },
+    'volantis-armv8': {
       'bitness': 64,
       'make_jobs': 2,
       'product': 'armv8',
@@ -58,7 +63,7 @@ def clobber(api):
   if 'clobber' in api.properties:
     api.file.rmtree('clobber', api.path['start_dir'].join('out'))
 
-def setup_host_x86(api, debug, bitness, concurrent_collector=False):
+def setup_host_x86(api, debug, bitness, concurrent_collector=True):
   with api.step.defer_results():
     checkout(api)
     clobber(api)
@@ -89,11 +94,9 @@ def setup_host_x86(api, debug, bitness, concurrent_collector=False):
       env.update({ 'ART_TEST_RUN_TEST_DEBUG' : 'false' })
 
     if concurrent_collector:
-      env.update({ 'ART_USE_READ_BARRIER' : 'true'  })
-      env.update({ 'ART_HEAP_POISONING' : 'true'  })
+      env.update({ 'ART_USE_READ_BARRIER' : 'true' })
     else:
       env.update({ 'ART_USE_READ_BARRIER' : 'false' })
-      env.update({ 'ART_HEAP_POISONING' : 'false' })
 
     with api.step.context({'env': env}):
       api.step('build sdk-eng',
@@ -149,7 +152,8 @@ def setup_target(api,
     serial,
     debug,
     device,
-    concurrent_collector=False):
+    concurrent_collector=True,
+    heap_poisoning=False):
   build_top_dir = api.path['start_dir']
   art_tools = api.path['start_dir'].join('art', 'tools')
   android_root = '/data/local/tmp/system'
@@ -179,9 +183,12 @@ def setup_target(api,
 
   if concurrent_collector:
     env.update({ 'ART_USE_READ_BARRIER' : 'true' })
-    env.update({ 'ART_HEAP_POISONING' : 'true' })
   else:
     env.update({ 'ART_USE_READ_BARRIER' : 'false' })
+
+  if heap_poisoning:
+    env.update({ 'ART_HEAP_POISONING' : 'true' })
+  else:
     env.update({ 'ART_HEAP_POISONING' : 'false' })
 
 
@@ -330,15 +337,15 @@ _CONFIG_MAP = {
         'debug': True,
         'bitness': 64,
       },
-      'host-x86-concurrent-collector': {
+      'host-x86-cms': {
         'debug': True,
         'bitness': 32,
-        'concurrent_collector': True,
+        'concurrent_collector': False,
       },
-      'host-x86_64-concurrent-collector': {
+      'host-x86_64-cms': {
         'debug': True,
         'bitness': 64,
-        'concurrent_collector': True,
+        'concurrent_collector': False,
       },
     },
 
@@ -353,15 +360,23 @@ _CONFIG_MAP = {
         'device': 'hammerhead',
         'debug': True,
       },
-      'volantis-armv8-ndebug': {
-        'serial': 'HT4CTJT03670',
-        'device': 'volantis',
-        'debug': False,
-      },
-      'volantis-armv8-debug': {
-        'serial': 'HT49CJT00070',
-        'device': 'volantis',
+      'volantis-armv7-poison-debug': {
+        'serial': 'HT591JT00517',
+        'device': 'volantis-armv7',
         'debug': True,
+        'heap_poisoning': True
+      },
+      'volantis-armv8-poison-ndebug': {
+        'serial': 'HT4CTJT03670',
+        'device': 'volantis-armv8',
+        'debug': False,
+        'heap_poisoning': True,
+      },
+      'volantis-armv8-poison-debug': {
+        'serial': 'HT49CJT00070',
+        'device': 'volantis-armv8',
+        'debug': True,
+        'heap_poisoning': True
       },
       'fugu-ndebug': {
         'serial': '0BCDB85D',
@@ -373,17 +388,11 @@ _CONFIG_MAP = {
         'device': 'fugu',
         'debug': True,
       },
-      'hammerhead-concurrent-collector': {
+      'hammerhead-cms': {
         'serial': '84B7N15B03000329',
         'device': 'hammerhead',
         'debug': True,
-        'concurrent_collector': True,
-      },
-      'volantis-armv8-concurrent-collector': {
-        'serial': 'HT591JT00517',
-        'device': 'volantis',
-        'debug': True,
-        'concurrent_collector': True,
+        'concurrent_collector': False,
       },
       'angler-armv8-ndebug': {
         'serial': '84B7N16728001142',
@@ -395,11 +404,11 @@ _CONFIG_MAP = {
         'device': 'angler',
         'debug': True,
       },
-      'angler-armv8-concurrent-collector': {
+      'angler-armv8-cms': {
         'serial': '84B7N15B03000641',
         'device': 'angler',
         'debug': True,
-        'concurrent_collector': True,
+        'concurrent_collector': False,
       },
     },
 

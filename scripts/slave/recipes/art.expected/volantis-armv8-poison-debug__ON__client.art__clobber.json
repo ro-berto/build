@@ -21,6 +21,17 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::file]/resources/fileutil.py",
+      "rmtree",
+      "[START_DIR]/out"
+    ],
+    "infra_step": true,
+    "name": "rmtree clobber"
+  },
+  {
+    "cmd": [
       "[START_DIR]/art/tools/buildbot-build.sh",
       "-j8",
       "--target"
@@ -28,7 +39,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
-      "ANDROID_SERIAL": "84B7N15B03000641",
+      "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -55,7 +66,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
-      "ANDROID_SERIAL": "84B7N15B03000641",
+      "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -90,7 +101,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
-      "ANDROID_SERIAL": "84B7N15B03000641",
+      "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -118,7 +129,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
-      "ANDROID_SERIAL": "84B7N15B03000641",
+      "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -141,14 +152,14 @@
   {
     "cmd": [
       "make",
-      "-j4",
+      "-j2",
       "test-art-target-gtest64"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_ROOT": "/data/local/tmp/system",
-      "ANDROID_SERIAL": "84B7N15B03000641",
+      "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -180,7 +191,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
-      "ANDROID_SERIAL": "84B7N15B03000641",
+      "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -207,7 +218,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
-      "ANDROID_SERIAL": "84B7N15B03000641",
+      "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -236,7 +247,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
-      "ANDROID_SERIAL": "84B7N15B03000641",
+      "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -259,7 +270,7 @@
   {
     "cmd": [
       "./art/test/testrunner/testrunner.py",
-      "-j4",
+      "-j2",
       "--optimizing",
       "--debuggable",
       "--ndebuggable",
@@ -270,7 +281,7 @@
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_ROOT": "/data/local/tmp/system",
-      "ANDROID_SERIAL": "84B7N15B03000641",
+      "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -302,7 +313,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
-      "ANDROID_SERIAL": "84B7N15B03000641",
+      "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -329,7 +340,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
-      "ANDROID_SERIAL": "84B7N15B03000641",
+      "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -358,7 +369,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
-      "ANDROID_SERIAL": "84B7N15B03000641",
+      "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -381,7 +392,7 @@
   {
     "cmd": [
       "./art/test/testrunner/testrunner.py",
-      "-j4",
+      "-j2",
       "--interpreter",
       "--target",
       "--verbose"
@@ -390,7 +401,7 @@
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_ROOT": "/data/local/tmp/system",
-      "ANDROID_SERIAL": "84B7N15B03000641",
+      "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -422,7 +433,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
-      "ANDROID_SERIAL": "84B7N15B03000641",
+      "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -449,7 +460,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
-      "ANDROID_SERIAL": "84B7N15B03000641",
+      "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -478,7 +489,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
-      "ANDROID_SERIAL": "84B7N15B03000641",
+      "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -501,7 +512,7 @@
   {
     "cmd": [
       "./art/test/testrunner/testrunner.py",
-      "-j4",
+      "-j2",
       "--jit",
       "--target",
       "--verbose"
@@ -510,7 +521,7 @@
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_ROOT": "/data/local/tmp/system",
-      "ANDROID_SERIAL": "84B7N15B03000641",
+      "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -542,7 +553,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
-      "ANDROID_SERIAL": "84B7N15B03000641",
+      "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -569,7 +580,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
-      "ANDROID_SERIAL": "84B7N15B03000641",
+      "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -598,7 +609,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
-      "ANDROID_SERIAL": "84B7N15B03000641",
+      "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -629,7 +640,7 @@
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_ROOT": "/data/local/tmp/system",
-      "ANDROID_SERIAL": "84B7N15B03000641",
+      "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -661,7 +672,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
-      "ANDROID_SERIAL": "84B7N15B03000641",
+      "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -688,7 +699,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
-      "ANDROID_SERIAL": "84B7N15B03000641",
+      "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -717,7 +728,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
-      "ANDROID_SERIAL": "84B7N15B03000641",
+      "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -748,7 +759,7 @@
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_ROOT": "/data/local/tmp/system",
-      "ANDROID_SERIAL": "84B7N15B03000641",
+      "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -780,7 +791,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
-      "ANDROID_SERIAL": "84B7N15B03000641",
+      "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -807,7 +818,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
-      "ANDROID_SERIAL": "84B7N15B03000641",
+      "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -836,7 +847,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
-      "ANDROID_SERIAL": "84B7N15B03000641",
+      "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -868,7 +879,7 @@
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_ROOT": "/data/local/tmp/system",
-      "ANDROID_SERIAL": "84B7N15B03000641",
+      "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -900,7 +911,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
-      "ANDROID_SERIAL": "84B7N15B03000641",
+      "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -927,7 +938,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
-      "ANDROID_SERIAL": "84B7N15B03000641",
+      "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -956,7 +967,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
-      "ANDROID_SERIAL": "84B7N15B03000641",
+      "ANDROID_SERIAL": "HT49CJT00070",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "true",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
