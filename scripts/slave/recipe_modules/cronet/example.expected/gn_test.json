@@ -514,6 +514,40 @@
     ]
   },
   {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "--target",
+      "Debug",
+      "--no-xvfb",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"branch\": \"master\", \"buildername\": \"gn_test\", \"buildnumber\": 571, \"mastername\": \"chromium.testing.master\", \"project\": \"src\", \"recipe\": \"cronet:example\", \"repository\": \"https://chromium.googlesource.com/chromium/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"branch\": \"master\", \"buildername\": \"gn_test\", \"buildnumber\": 571, \"mastername\": \"chromium.testing.master\", \"project\": \"src\", \"recipe\": \"cronet:example\", \"repository\": \"https://chromium.googlesource.com/chromium/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--test-type=sizes",
+      "--builder-name=gn_test",
+      "--slave-name=test_bot",
+      "--build-number=571",
+      "--run-python-script",
+      "--annotate=graphing",
+      "--results-url=https://chromeperf.appspot.com",
+      "--perf-dashboard-id=sizes",
+      "--perf-id=sample-perf-id",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/sizes.py",
+      "--target",
+      "Debug",
+      "--platform",
+      "android-cronet"
+    ],
+    "name": "sizes"
+  },
+  {
     "cmd": [
       "python",
       "-u",

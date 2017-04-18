@@ -3,13 +3,19 @@
 # found in the LICENSE file.
 
 DEPS = [
+  'recipe_engine/properties',
   'recipe_engine/raw_io',
+  'recipe_engine/step',
   'swarming_client',
 ]
 
+
 def RunSteps(api):
   # Code coverage for these methods.
-  api.swarming_client.checkout('master')
+  api.step('client path', [])
+  api.step.active_result.step_text = api.swarming_client.path
+  api.swarming_client.checkout()
+  #api.swarming_client.checkout('master')
   api.swarming_client.query_script_version('swarming.py')
   api.swarming_client.ensure_script_version('swarming.py', (0, 4, 4))
 
@@ -23,9 +29,12 @@ def RunSteps(api):
   # Coverage for 'fail' path of ensure_script_version.
   api.swarming_client.ensure_script_version('swarming.py', (20, 0, 0))
 
+
 def GenTests(api):
   yield (
       api.test('basic') +
+      api.properties(parent_got_swarming_client_revision='sample_sha') +
       api.step_data(
           'swarming.py --version',
-          stdout=api.raw_io.output_text('0.4.4')))
+          stdout=api.raw_io.output_text('0.4.4'))
+  )

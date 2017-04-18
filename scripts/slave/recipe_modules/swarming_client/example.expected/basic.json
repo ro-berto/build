@@ -1,5 +1,9 @@
 [
   {
+    "cmd": [],
+    "name": "client path"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -17,7 +21,7 @@
       "retry",
       "fetch",
       "origin",
-      "master"
+      "sample_sha"
     ],
     "cwd": "[START_DIR]/swarming.client",
     "env": {

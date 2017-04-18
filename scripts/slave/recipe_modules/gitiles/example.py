@@ -16,7 +16,7 @@ def RunSteps(api):
       api.gitiles.log(url, ref, limit=10, cursor=cursor)
   api.gitiles.commit_log(url, api.properties['commit_log_hash'])
 
-  data = api.gitiles.download_file(url, 'OWNERS')
+  data = api.gitiles.download_file(url, 'OWNERS', attempts=5)
   assert data == 'foobar'
 
 

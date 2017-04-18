@@ -42,6 +42,18 @@ def RunSteps(api):
     # Make |temp_dir| surface in expectation files.
     api.step('print %s' % prefix, ['echo', temp_dir])
 
+  # move demo
+  api.file.move(
+      'move',
+      api.path['start_dir'].join('source'),
+      api.path['start_dir'].join('destination'))
+
+  # remove demo
+  api.file.remove('remove', api.path['start_dir'].join('some_file'))
+
+  # rmcontents demo
+  api.file.rmcontents('rmcontents', api.path['start_dir'].join('some_dir'))
+
   # rmwildcard demo
   api.file.rmwildcard('*.o', api.path['start_dir'])
 

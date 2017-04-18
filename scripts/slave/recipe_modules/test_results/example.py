@@ -14,9 +14,15 @@ PROPERTIES = {
     'warning': Property(
         default=False, kind=bool,
         help='Whether a failure should be treated as a warning.'),
+    'server_config': Property(
+        default=None,
+        help='Name of the server config to use.')
 }
 
-def RunSteps(api, warning):
+def RunSteps(api, warning, server_config):
+  if server_config:
+    api.test_results.set_config(server_config)
+
   gtest_results = {
       'disabled_tests': [
           'Disabled.Test',
@@ -32,16 +38,19 @@ def RunSteps(api, warning):
       chrome_revision=2,
       test_type='example-test-type',
       test_results_server='localhost',
-      downgrade_error_to_warning=warning)
+      downgrade_error_to_warning=warning,
+      builder_name_suffix='sample-suffix')
 
 
 def GenTests(api):
-  yield (
-      api.test('upload_success') +
-      api.properties(
-          mastername='example.master',
-          buildername='ExampleBuilder',
-          buildnumber=123))
+  for config in ('public_server', 'staging_server'):
+    yield (
+        api.test('upload_success_%s' % config) +
+        api.properties(
+            mastername='example.master',
+            buildername='ExampleBuilder',
+            buildnumber=123,
+            server_config=config))
 
   yield (
       api.test('upload_and_degrade_to_warning') +

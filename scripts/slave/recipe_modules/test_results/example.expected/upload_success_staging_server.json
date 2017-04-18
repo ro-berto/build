@@ -19,11 +19,7 @@
       "--chrome-revision",
       "2"
     ],
-    "name": "Upload to test-results [example-test-type]",
-    "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_FAILURE@@@"
-    ]
+    "name": "Upload to test-results [example-test-type]"
   },
   {
     "name": "$result",

@@ -9,7 +9,7 @@
       "--master-name",
       "example.master",
       "--builder-name",
-      "ExampleBuilder",
+      "ExampleBuilder-sample-suffix",
       "--build-number",
       "123",
       "--test-type",

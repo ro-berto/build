@@ -8,10 +8,16 @@ DEPS = [
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/python',
+  'recipe_engine/step',
 ]
 
 
 def RunSteps(api):
+  api.step('all_packages', [])
+  api.step.active_result.presentation.logs['details'] = [
+    '%r: %r' % (plat, arch) for plat, arch in api.gae_sdk.all_packages
+  ]
+
   for plat in api.gae_sdk.platforms:
     out = api.gae_sdk.package_repo_resource(
         'gae_sdk', '%s_%s' % (plat, api.platform.name))

@@ -31,6 +31,15 @@ BUILDERS = freeze({
     },
     'chromium_apply_config': ['gn'],
   },
+  'mb_test': {
+    'recipe_config': 'main_builder',
+    'run_tests': True,
+    'upload_package': True,
+    'kwargs': {
+      'BUILD_CONFIG': 'Release',
+    },
+    'chromium_apply_config': ['mb'],
+  },
 })
 
 
@@ -56,6 +65,7 @@ def RunSteps(api, buildername):
   cronet.build(use_goma=use_goma)
 
   cronet.upload_package(kwargs['BUILD_CONFIG'])
+  cronet.sizes('sample-perf-id')
   cronet.run_tests(kwargs['BUILD_CONFIG'])
 
 def GenTests(api):

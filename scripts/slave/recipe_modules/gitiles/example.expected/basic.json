@@ -523,7 +523,9 @@
       "--url",
       "https://chromium.googlesource.com/chromium/src/+/master/OWNERS",
       "--format",
-      "text"
+      "text",
+      "--attempts",
+      "5"
     ],
     "name": "fetch master:OWNERS"
   },

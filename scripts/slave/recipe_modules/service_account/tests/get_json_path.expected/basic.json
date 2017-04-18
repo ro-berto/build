@@ -1,0 +1,14 @@
+[
+  {
+    "cmd": [],
+    "name": "json path",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@/creds/service_accounts/service-account-foo.json@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]
