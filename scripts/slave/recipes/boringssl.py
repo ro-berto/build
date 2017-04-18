@@ -236,6 +236,7 @@ def GenTests(api):
     ('linux_fips_rel', api.platform('linux', 64)),
     ('linux_fips_clang', api.platform('linux', 64)),
     ('linux_fips_clang_rel', api.platform('linux', 64)),
+    ('linux_fips_noasm_asan', api.platform('linux', 64)),
     ('mac', api.platform('mac', 64)),
     ('mac_small', api.platform('mac', 64)),
     ('mac_rel', api.platform('mac', 64)),

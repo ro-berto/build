@@ -164,6 +164,12 @@
       "slave_pools": ["linux_trusty"],
       "category": "4fips",
     },
+    "linux_fips_noasm_asan": {
+      "recipe": "boringssl",
+      "scheduler": "boringssl_commits",
+      "slave_pools": ["linux_trusty"],
+      "category": "4fips",
+    },
     "docs": {
       "recipe": "boringssl_docs",
       "scheduler": "boringssl_commits",
