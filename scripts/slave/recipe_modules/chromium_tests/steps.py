@@ -676,7 +676,10 @@ class DynamicPerfTests(Test):
       self._browser_name = override_browser_name  # pragma: no cover
     else:
       if platform == 'android':
-        self._browser_name = 'android-chromium'
+        if self._replace_webview:
+          self._browser_name = 'android-webview'
+        else:
+          self._browser_name = 'android-chromium'
       elif platform == 'win' and target_bits == 64:
         self._browser_name = 'release_x64'
       else:
@@ -691,6 +694,11 @@ class DynamicPerfTests(Test):
     return True
 
   def run(self, api, suffix):
+    if self._replace_webview:
+      for apk in self.WEBVIEW_REQUIRED_APKS:
+        api.chromium_android.adb_install_apk(
+            api.chromium.output_dir.join('apks', apk))
+
     tests = self._test_list(api)
 
     if self._num_device_shards == 1:
@@ -718,11 +726,6 @@ class DynamicPerfTests(Test):
     return tests
 
   def _run_sharded(self, api, tests):
-    if self._replace_webview:
-      for apk in self.WEBVIEW_REQUIRED_APKS:
-        api.chromium_android.adb_install_apk(
-            api.chromium.output_dir.join('apks', apk))
-
     api.chromium_android.run_sharded_perf_tests(
       config=api.json.input(data=tests),
       perf_id=self._perf_id,
