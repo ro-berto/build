@@ -20,10 +20,9 @@ DEPS = [
     'chromium_swarming',
     'chromium_tests',
     'commit_position',
-    'depot_tools/gclient',
-    'depot_tools/git',
     'filter',
     'findit',
+    'depot_tools/gclient',
     'isolate',
     'recipe_engine/json',
     'recipe_engine/path',
@@ -95,7 +94,7 @@ def RunSteps(api, target_mastername, target_testername, good_revision,
              bad_revision, tests, buildbucket, use_analyze,
              suspected_revisions, test_on_good_revision, test_repeat_count):
 
-  tests, target_buildername, previous_revision = api.findit.configure_and_sync(
+  tests, target_buildername = api.findit.configure_and_sync(
       api, tests, buildbucket, target_mastername, target_testername,
       bad_revision)
 
@@ -141,8 +140,7 @@ def RunSteps(api, target_mastername, target_testername, good_revision,
   }
   report = {
       'result': test_results,
-      'metadata': try_job_metadata,
-      'previously_checked_out_revision': previous_revision
+      'metadata': try_job_metadata
   }
 
   revision_being_checked = None

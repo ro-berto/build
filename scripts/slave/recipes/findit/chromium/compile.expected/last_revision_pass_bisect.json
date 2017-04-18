@@ -1,31 +1,6 @@
 [
   {
     "cmd": [
-      "git",
-      "fetch",
-      "origin",
-      "master"
-    ],
-    "cwd": "[START_DIR]/src",
-    "infra_step": true,
-    "name": "sync slave checkout with local git cache"
-  },
-  {
-    "cmd": [
-      "git",
-      "rev-parse",
-      "origin/master"
-    ],
-    "cwd": "[START_DIR]/src",
-    "infra_step": true,
-    "name": "record previously checked-out revision",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@SET_BUILD_PROPERTY@previously_checked_out_revision@\"1234567123456712345671234567888812345678\"@@@"
-    ]
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
@@ -2489,7 +2464,6 @@
     "name": "report",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@report@{@@@",
-      "@@@STEP_LOG_LINE@report@  \"previously_checked_out_revision\": \"1234567123456712345671234567888812345678\", @@@",
       "@@@STEP_LOG_LINE@report@  \"result\": {@@@",
       "@@@STEP_LOG_LINE@report@    \"r6\": \"passed\", @@@",
       "@@@STEP_LOG_LINE@report@    \"r7\": \"passed\", @@@",

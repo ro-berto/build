@@ -4,13 +4,8 @@
 
 import json
 from collections import defaultdict
-import re
 
 from recipe_engine import recipe_api
-
-
-# This has no special meaning, just a placeholder for expectations data.
-_DUMMY_PREVIOUS_REVISION = '1234567123456712345671234567888812345678'
 
 
 class FinditApi(recipe_api.RecipeApi):
@@ -331,7 +326,6 @@ class FinditApi(recipe_api.RecipeApi):
 
     api.chromium.apply_config('goma_failfast')
 
-    previous_revision = self.record_previous_revision(api)
     # Configure to match the test config on the tester, as builders don't have
     # the settings for swarming tests.
     if target_buildername != target_testername:
@@ -346,35 +340,5 @@ class FinditApi(recipe_api.RecipeApi):
         bot_config,
         root_solution_revision=revision)
 
-    return tests, target_buildername, previous_revision
+    return tests, target_buildername
 
-  def record_previous_revision(self, api):
-    """Records the latest checked out revision.
-
-    Examines the checkout available before it is updated and records the latest
-    available revision i.e. origin/master for the first gclient solution.
-
-    Args:
-      api (RecipeApi): With the dependencies injected by the calling recipe
-    """
-    # api.path['checkout'] is not set yet, hence we assemble it from
-    # api.path['start_dir'].
-    checkout_path = api.gclient.c.src_root or api.gclient.c.solutions[0].name
-    with api.step.context({'cwd': api.path['start_dir'].join(checkout_path)}):
-      api.git(
-          'fetch', 'origin', 'master',
-          name='sync slave checkout with local git cache',
-          can_fail_build=False)
-      previous_revision_step = api.git(
-          'rev-parse', 'origin/master',
-          stdout=api.raw_io.output(),
-          name='record previously checked-out revision',
-          can_fail_build=False,
-          step_test_data=lambda: api.raw_io.test_api.stream_output(
-              _DUMMY_PREVIOUS_REVISION))
-      previous_revision = previous_revision_step.stdout.strip()
-      if not re.match('[a-fA-f0-9]{40}', previous_revision):
-        previous_revision = None
-      previous_revision_step.presentation.properties[
-          'previously_checked_out_revision'] = previous_revision
-      return previous_revision
