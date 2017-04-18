@@ -676,7 +676,10 @@ class DynamicPerfTests(Test):
       self._browser_name = override_browser_name  # pragma: no cover
     else:
       if platform == 'android':
-        self._browser_name = 'android-chromium'
+        if self._replace_webview:
+          self._browser_name = 'android-webview'
+        else:
+          self._browser_name = 'android-chromium'
       elif platform == 'win' and target_bits == 64:
         self._browser_name = 'release_x64'
       else:

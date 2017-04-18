@@ -579,7 +579,7 @@
       "[BUILDER_CACHE]/Android_Nexus5X_WebView_Perf__1_/src/tools/perf/run_benchmark",
       "list",
       "--browser",
-      "android-chromium",
+      "android-webview",
       "--json-output",
       "/path/to/tmp/json",
       "--num-shards",
