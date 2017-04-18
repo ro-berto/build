@@ -58,8 +58,7 @@ BUILDERS = freeze({
         'skip_wipe': True,
     },
     'webview_tester': {
-        'remove_system_webview': True,
-        'disable_system_chrome': True,
+        'android_apply_config': ['remove_all_system_webviews'],
     },
     'slow_tester': {
         'timeout_scale': 2,
@@ -202,9 +201,7 @@ def RunSteps(api, buildername):
         disable_location=config.get('disable_location', False),
         min_battery_level=config.get('min_battery_level'),
         max_battery_temp=config.get('max_battery_temp'),
-        reboot_timeout=1800,
-        remove_system_webview=config.get('remove_system_webview', False),
-        disable_system_chrome=config.get('disable_system_chrome', False))
+        reboot_timeout=1800)
 
     api.chromium_android.common_tests_setup_steps()
 
@@ -270,18 +267,22 @@ def RunSteps(api, buildername):
     api.chromium_android.coverage_report()
 
   if config.get('run_stackwalker'):
-    breakpad_binary = api.path['checkout'].join(
+    chrome_breakpad_binary = api.path['checkout'].join(
         'out', api.chromium.c.BUILD_CONFIG, 'lib.unstripped', 'libchrome.so')
+    webview_breakpad_binary = api.path['checkout'].join(
+        'out', api.chromium.c.BUILD_CONFIG, 'lib.unstripped',
+        'libwebviewchromium.so')
     dump_syms_binary = api.path['checkout'].join(
         'out', api.chromium.c.BUILD_CONFIG, 'dump_syms')
     microdump_stackwalk_binary = api.path['checkout'].join(
         'out', api.chromium.c.BUILD_CONFIG, 'microdump_stackwalk')
-    api.path.mock_add_paths(breakpad_binary)
+    api.path.mock_add_paths(chrome_breakpad_binary)
+    api.path.mock_add_paths(webview_breakpad_binary)
     api.path.mock_add_paths(dump_syms_binary)
     api.path.mock_add_paths(microdump_stackwalk_binary)
-    api.chromium_android.stackwalker(
-        root_chromium_dir=api.path['checkout'],
-        binary_paths=[breakpad_binary])
+
+    api.chromium_android.common_tests_final_steps(
+        checkout_dir=api.path['checkout'])
 
 
   if failure:

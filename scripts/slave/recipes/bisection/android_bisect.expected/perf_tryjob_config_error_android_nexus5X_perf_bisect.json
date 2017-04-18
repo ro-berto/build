@@ -331,8 +331,7 @@
       "--disable-network",
       "--disable-java-debug",
       "--max-battery-temp",
-      "350",
-      "--remove-system-webview"
+      "350"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus5X_perf_bisect",
     "env": {

@@ -627,12 +627,12 @@ class AndroidApi(recipe_api.RecipeApi):
       assert max_battery_temp <= 500
       args.extend(['--max-battery-temp', max_battery_temp])
     if disable_system_chrome:
-      args.append('--disable-system-chrome')
+      args.append('--disable-system-chrome')  # pragma: no cover
     if remove_system_webview:
-      args.append('--remove-system-webview')
-    if self.c and self.c.remove_system_apps:
-      args.append('--remove-system-apps')
-      args.extend(self.c.remove_system_apps)
+      args.append('--remove-system-webview')  # pragma: no cover
+    if self.c and self.c.remove_system_packages:
+      args.append('--remove-system-packages')
+      args.extend(self.c.remove_system_packages)
     if self.c and self.c.chrome_specific_wipe:
       args.append('--chrome-specific-wipe')
     if emulators:
@@ -1366,8 +1366,7 @@ class AndroidApi(recipe_api.RecipeApi):
       self.asan_device_setup()
 
   def common_tests_final_steps(self, logcat_gs_bucket='chromium-android',
-                               force_latest_version=False, checkout_dir=None,
-                               uses_webview=False):
+                               force_latest_version=False, checkout_dir=None):
     self.shutdown_device_monitor()
     self.logcat_dump(gs_bucket=logcat_gs_bucket)
     self.stack_tool_steps(force_latest_version)
@@ -1378,7 +1377,8 @@ class AndroidApi(recipe_api.RecipeApi):
     if checkout_dir:
       binary_dir = self.m.chromium.output_dir.join('lib.unstripped')
       breakpad_binaries = [binary_dir.join('libchrome.so')]
-      if uses_webview:
+      if self.m.path.exists(
+          binary_dir.join('libwebviewchromium.so')):
         breakpad_binaries.append(binary_dir.join('libwebviewchromium.so'))
       self.stackwalker(
           root_chromium_dir=checkout_dir,
@@ -1392,8 +1392,7 @@ class AndroidApi(recipe_api.RecipeApi):
       This wraps every overall bisect run.
       """
       try:
-        self.common_tests_setup_steps(
-            perf_setup=True, remove_system_webview=True)
+        self.common_tests_setup_steps(perf_setup=True)
         with api.step.context({'cwd': api.path['checkout']}):
           api.chromium.runhooks()
 

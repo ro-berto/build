@@ -396,7 +396,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/build/android/provision_devices.py",
+      "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/catapult/devil/devil/android/tools/provision_devices.py",
       "--adb-path",
       "[BUILDER_CACHE]/Android_WebView_L__dbg_/src/third_party/android_tools/sdk/platform-tools/adb",
       "--blacklist-file",
@@ -405,7 +405,11 @@
       "/path/to/tmp/json",
       "-t",
       "Debug",
-      "--remove-system-webview"
+      "--remove-system-packages",
+      "com.android.chrome",
+      "com.google.android.webview",
+      "com.android.webview",
+      "org.chromium.webview_shell"
     ],
     "cwd": "[BUILDER_CACHE]/Android_WebView_L__dbg_",
     "env": {
@@ -810,7 +814,7 @@
   {
     "cmd": [
       "echo",
-      "Missing: [BUILDER_CACHE]/Android_WebView_L__dbg_/src/out/Debug/lib.unstripped/libchrome.so [BUILDER_CACHE]/Android_WebView_L__dbg_/src/out/Debug/lib.unstripped/libwebviewchromium.so [BUILDER_CACHE]/Android_WebView_L__dbg_/src/out/Debug/microdump_stackwalk [BUILDER_CACHE]/Android_WebView_L__dbg_/src/out/Debug/dump_syms"
+      "Missing: [BUILDER_CACHE]/Android_WebView_L__dbg_/src/out/Debug/lib.unstripped/libchrome.so [BUILDER_CACHE]/Android_WebView_L__dbg_/src/out/Debug/microdump_stackwalk [BUILDER_CACHE]/Android_WebView_L__dbg_/src/out/Debug/dump_syms"
     ],
     "cwd": "[BUILDER_CACHE]/Android_WebView_L__dbg_",
     "env": {

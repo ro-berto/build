@@ -30,8 +30,6 @@ BUILDERS = freeze({
       'provision_settings': {
         'disable_location': True,
         'disable_network': True,
-        'disable_system_chrome': True,
-        'remove_system_webview': True,
       },
       'sample_gtest_suite': 'sample_test',
     }
@@ -51,6 +49,7 @@ def RunSteps(api, mastername, buildername):
       REPO_URL=REPO_URL,
       INTERNAL=False,
       BUILD_CONFIG=builder['target'])
+  api.chromium_android.apply_config('remove_all_system_webviews')
 
   api.emulator.set_config('base_config')
   api.gclient.set_config('chromium')

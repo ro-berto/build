@@ -309,7 +309,11 @@
       "--disable-java-debug",
       "--max-battery-temp",
       "350",
-      "--remove-system-webview"
+      "--remove-system-packages",
+      "com.android.chrome",
+      "com.google.android.webview",
+      "com.android.webview",
+      "org.chromium.webview_shell"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",

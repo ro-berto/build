@@ -32,7 +32,8 @@ def chromium_perf(c):
   pass
 
 
-def _BaseSpec(bot_type, config_name, platform, target_bits, tests):
+def _BaseSpec(bot_type, config_name, platform, target_bits, tests,
+              remove_system_webview=None):
   spec = {
     'bot_type': bot_type,
     'chromium_config': config_name,
@@ -50,6 +51,8 @@ def _BaseSpec(bot_type, config_name, platform, target_bits, tests):
   if platform == 'android':
     spec['android_config'] = 'chromium_perf'
     spec['android_apply_config'] = ['use_devil_adb']
+    if remove_system_webview:
+      spec['android_apply_config'].append('remove_all_system_webviews')
     spec['chromium_apply_config'] = ['android']
     spec['chromium_config_kwargs']['TARGET_ARCH'] = 'arm'
     spec['chromium_config_kwargs']['TARGET_PLATFORM'] = 'android'
@@ -97,12 +100,11 @@ def TestSpec(config_name, perf_id, platform, target_bits,
       platform=platform,
       target_bits=target_bits,
       tests=tests or [],
+      remove_system_webview=remove_system_webview,
   )
 
   if not parent_buildername:
     parent_buildername = builders[platform][target_bits]
-  if remove_system_webview is not None:
-    spec['remove_system_webview'] = remove_system_webview
   spec['parent_buildername'] = parent_buildername
   spec['perf-id'] = perf_id
   spec['results-url'] = 'https://chromeperf.appspot.com'

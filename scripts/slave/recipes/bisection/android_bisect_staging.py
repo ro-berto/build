@@ -58,12 +58,14 @@ BUILDERS = freeze({
             },
             'android_webview_arm64_aosp_perf_bisect': {
                 'recipe_config': 'main_builder_rel_mb',
+                'android_apply_config': ['remove_all_system_webviews'],
                 'gclient_apply_config': ['android', 'perf'],
                 'bucket': 'chrome-perf',
                 'webview': True,
             },
             'android_webview_nexus6_aosp_perf_bisect': {
                 'recipe_config': 'main_builder_rel_mb',
+                'android_apply_config': ['remove_all_system_webviews'],
                 'gclient_apply_config': ['android', 'perf'],
                 'bucket': 'chrome-perf',
                 'webview': True,
@@ -101,6 +103,8 @@ def RunSteps(api, mastername, buildername):
   api.chromium.ensure_goma()
   api.chromium_android.c.set_val({'deps_file': 'DEPS'})
   api.gclient.set_config('tryserver_chromium_perf')
+  for c in bot_config.get('android_apply_config', []):
+    api.chromium_android.apply_config(c)
   for c in bot_config.get('gclient_apply_config', []):
     api.gclient.apply_config(c)
   update_step = api.auto_bisect_staging.ensure_checkout()

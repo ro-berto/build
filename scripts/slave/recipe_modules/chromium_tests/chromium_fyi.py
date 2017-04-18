@@ -2026,7 +2026,7 @@ SPEC = {
       'parent_buildername': 'Android Builder (dbg)',
       'bot_type': 'tester',
       'android_config': 'main_builder_mb',
-      'remove_system_webview': True,
+      'android_apply_config': ['remove_all_system_webviews'],
       'tests': [
         steps.FindAnnotatedTest(),
       ],

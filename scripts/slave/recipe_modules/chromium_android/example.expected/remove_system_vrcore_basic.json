@@ -395,8 +395,8 @@
       "/path/to/tmp/json",
       "-t",
       "Release",
-      "--remove-system-apps",
-      "GoogleVrCore"
+      "--remove-system-packages",
+      "com.google.vr.vrcore"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -825,8 +825,8 @@
       "Release",
       "--reboot-timeout",
       "1800",
-      "--remove-system-apps",
-      "GoogleVrCore"
+      "--remove-system-packages",
+      "com.google.vr.vrcore"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -928,8 +928,8 @@
       "/path/to/tmp/json",
       "-t",
       "Release",
-      "--remove-system-apps",
-      "GoogleVrCore"
+      "--remove-system-packages",
+      "com.google.vr.vrcore"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",

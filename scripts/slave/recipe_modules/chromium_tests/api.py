@@ -622,13 +622,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           require_device_steps):
         #TODO(prasadv): Remove this hack and implement specific functions
         # at the point of call.
-        remove_system_webview = bot_config.get('remove_system_webview')
         perf_setup = bot_config.matches_any_bot_id(lambda bot_id:
             bot_id['mastername'].startswith('chromium.perf') or
             bot_id['mastername'].startswith('tryserver.chromium.perf'))
-        self.m.chromium_android.common_tests_setup_steps(
-            perf_setup=perf_setup,
-            remove_system_webview=remove_system_webview)
+        self.m.chromium_android.common_tests_setup_steps(perf_setup=perf_setup)
 
       try:
         yield
@@ -643,8 +640,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           if require_device_steps:
             self.m.chromium_android.common_tests_final_steps(
                 logcat_gs_bucket='chromium-android',
-                checkout_dir=checkout_dir,
-                uses_webview=bool(bot_config.get('remove_system_webview')))
+                checkout_dir=checkout_dir)
           else:
             self.m.chromium_android.test_report()
 

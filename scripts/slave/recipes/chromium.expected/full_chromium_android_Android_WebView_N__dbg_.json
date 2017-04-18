@@ -396,7 +396,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Android_WebView_N__dbg_/src/build/android/provision_devices.py",
+      "[BUILDER_CACHE]/Android_WebView_N__dbg_/src/third_party/catapult/devil/devil/android/tools/provision_devices.py",
       "--adb-path",
       "[BUILDER_CACHE]/Android_WebView_N__dbg_/src/third_party/android_tools/sdk/platform-tools/adb",
       "--blacklist-file",
@@ -405,7 +405,11 @@
       "/path/to/tmp/json",
       "-t",
       "Debug",
-      "--remove-system-webview"
+      "--remove-system-packages",
+      "com.android.chrome",
+      "com.google.android.webview",
+      "com.android.webview",
+      "org.chromium.webview_shell"
     ],
     "cwd": "[BUILDER_CACHE]/Android_WebView_N__dbg_",
     "env": {
@@ -541,6 +545,76 @@
       "PATH": "[BUILDER_CACHE]/Android_WebView_N__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_WebView_N__dbg_/src/build/android:%(PATH)s"
     },
     "name": "test_pre_run"
+  },
+  {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/Android_WebView_N__dbg_",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/Android_WebView_N__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_WebView_N__dbg_/src/build/android:%(PATH)s"
+    },
+    "name": "SystemWebViewShellLayoutTest",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/Android_WebView_N__dbg_/src/out/Debug/bin/run_system_webview_shell_layout_test_apk",
+      "--blacklist-file",
+      "[BUILDER_CACHE]/Android_WebView_N__dbg_/src/out/bad_devices.json",
+      "--verbose",
+      "--json-results-file",
+      "/path/to/tmp/json",
+      "--additional-apk",
+      "[BUILDER_CACHE]/Android_WebView_N__dbg_/src/out/Debug/apks/SystemWebView.apk",
+      "--adb-path",
+      "[BUILDER_CACHE]/Android_WebView_N__dbg_/src/third_party/android_tools/sdk/platform-tools/adb"
+    ],
+    "cwd": "[BUILDER_CACHE]/Android_WebView_N__dbg_",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/Android_WebView_N__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_WebView_N__dbg_/src/build/android:%(PATH)s"
+    },
+    "name": "SystemWebViewShellLayoutTest.SystemWebViewShellLayoutTest",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "step returned non-zero exit code: 1",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
+      "--input-json",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":(\", \"status\": \"FAILURE\"}]}]}",
+      "--master-name",
+      "chromium.android",
+      "--builder-name",
+      "Android WebView N (dbg)",
+      "--build-number",
+      "571",
+      "--test-type",
+      "SystemWebViewShellLayoutTest",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "refs/heads/master@{#170242}"
+    ],
+    "cwd": "[BUILDER_CACHE]/Android_WebView_N__dbg_",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/Android_WebView_N__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_WebView_N__dbg_/src/build/android:%(PATH)s"
+    },
+    "name": "SystemWebViewShellLayoutTest.Upload to test-results [SystemWebViewShellLayoutTest]",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -740,7 +814,7 @@
   {
     "cmd": [
       "echo",
-      "Missing: [BUILDER_CACHE]/Android_WebView_N__dbg_/src/out/Debug/lib.unstripped/libchrome.so [BUILDER_CACHE]/Android_WebView_N__dbg_/src/out/Debug/lib.unstripped/libwebviewchromium.so [BUILDER_CACHE]/Android_WebView_N__dbg_/src/out/Debug/microdump_stackwalk [BUILDER_CACHE]/Android_WebView_N__dbg_/src/out/Debug/dump_syms"
+      "Missing: [BUILDER_CACHE]/Android_WebView_N__dbg_/src/out/Debug/lib.unstripped/libchrome.so [BUILDER_CACHE]/Android_WebView_N__dbg_/src/out/Debug/microdump_stackwalk [BUILDER_CACHE]/Android_WebView_N__dbg_/src/out/Debug/dump_syms"
     ],
     "cwd": "[BUILDER_CACHE]/Android_WebView_N__dbg_",
     "env": {
@@ -757,7 +831,7 @@
   },
   {
     "name": "$result",
-    "reason": "1 tests failed: ['WebView CTS: N']",
+    "reason": "2 tests failed: ['SystemWebViewShellLayoutTest', 'WebView CTS: N']",
     "recipe_result": null,
     "status_code": 1
   }

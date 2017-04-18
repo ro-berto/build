@@ -244,8 +244,8 @@ SPEC = {
       'parent_buildername': 'Android arm Builder (dbg)',
       'bot_type': 'tester',
       'android_config': 'main_builder_mb',
+      'android_apply_config': ['remove_all_system_webviews'],
       'test_results_config': 'public_server',
-      'remove_system_webview': True,
       'tests': [
         steps.AndroidInstrumentationTest('SystemWebViewShellLayoutTest'),
         steps.WebViewCTSTest('L'),
@@ -267,7 +267,7 @@ SPEC = {
       'bot_type': 'tester',
       'android_config': 'main_builder_mb',
       'test_results_config': 'public_server',
-      'remove_system_webview': True,
+      'android_apply_config': ['remove_all_system_webviews'],
       'tests': [
         steps.AndroidInstrumentationTest('SystemWebViewShellLayoutTest'),
         steps.WebViewCTSTest('M'),
@@ -289,8 +289,9 @@ SPEC = {
       'bot_type': 'tester',
       'android_config': 'arm64_builder_mb',
       'test_results_config': 'public_server',
-      'remove_system_webview': True,
+      'android_apply_config': ['remove_all_system_webviews'],
       'tests': [
+        steps.AndroidInstrumentationTest('SystemWebViewShellLayoutTest'),
         steps.WebViewCTSTest('N'),
       ],
       'testing': {

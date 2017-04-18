@@ -422,8 +422,10 @@
       "[BUILDER_CACHE]/Android_arm64_Builder__dbg_/src/out/Debug",
       "-j",
       "50",
+      "android_tools",
       "browser_tests_apk_run",
-      "system_webview_apk"
+      "system_webview_apk",
+      "system_webview_shell_layout_test_apk"
     ],
     "cwd": "[BUILDER_CACHE]/Android_arm64_Builder__dbg_/src",
     "env": {
@@ -520,7 +522,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/Android_arm64_Builder__dbg_/src/out/Debug",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Android_arm64_Builder__dbg_/src/out/Debug', '-j', 50, 'browser_tests_apk_run', 'system_webview_apk']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Android_arm64_Builder__dbg_/src/out/Debug', '-j', 50, 'android_tools', 'browser_tests_apk_run', 'system_webview_apk', 'system_webview_shell_layout_test_apk']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",

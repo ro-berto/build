@@ -101,6 +101,8 @@ def RunSteps(api):
 
   api.chromium_android.set_config(builder_config, **kwargs)
   api.chromium_android.apply_config('use_devil_provision')
+  if builder.get('uses_webview', False):
+    api.chromium_android.apply_config('remove_all_system_webviews')
   api.chromium.set_config(builder_config, **kwargs)
   api.gclient.set_config('perf')
   api.gclient.apply_config('android')
@@ -142,9 +144,7 @@ def RunSteps(api):
   api.chromium_android.download_build(bucket=builder['bucket'],
     path=builder['path'](api))
 
-  api.chromium_android.common_tests_setup_steps(
-      perf_setup=True,
-      remove_system_webview=builder.get('uses_webview', False))
+  api.chromium_android.common_tests_setup_steps(perf_setup=True)
 
   required_apks = builder.get('required_apks', [])
   for apk in required_apks:

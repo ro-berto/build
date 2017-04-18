@@ -420,7 +420,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__2_/src/build/android/provision_devices.py",
+      "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__2_/src/third_party/catapult/devil/devil/android/tools/provision_devices.py",
       "--adb-path",
       "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__2_/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb",
       "--blacklist-file",
@@ -435,7 +435,11 @@
       "--disable-java-debug",
       "--max-battery-temp",
       "350",
-      "--remove-system-webview"
+      "--remove-system-packages",
+      "com.android.chrome",
+      "com.google.android.webview",
+      "com.android.webview",
+      "org.chromium.webview_shell"
     ],
     "cwd": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__2_",
     "env": {
@@ -1244,7 +1248,7 @@
   {
     "cmd": [
       "echo",
-      "Missing: [BUILDER_CACHE]/Android_Nexus6_WebView_Perf__2_/src/out/Release/lib.unstripped/libchrome.so [BUILDER_CACHE]/Android_Nexus6_WebView_Perf__2_/src/out/Release/lib.unstripped/libwebviewchromium.so [BUILDER_CACHE]/Android_Nexus6_WebView_Perf__2_/src/out/Release/microdump_stackwalk [BUILDER_CACHE]/Android_Nexus6_WebView_Perf__2_/src/out/Release/dump_syms"
+      "Missing: [BUILDER_CACHE]/Android_Nexus6_WebView_Perf__2_/src/out/Release/lib.unstripped/libchrome.so [BUILDER_CACHE]/Android_Nexus6_WebView_Perf__2_/src/out/Release/microdump_stackwalk [BUILDER_CACHE]/Android_Nexus6_WebView_Perf__2_/src/out/Release/dump_syms"
     ],
     "cwd": "[BUILDER_CACHE]/Android_Nexus6_WebView_Perf__2_",
     "env": {

@@ -47,7 +47,7 @@ def BaseConfig(CHECKOUT_PATH, INTERNAL=False, REPO_NAME=None, REPO_URL=None,
     # TODO(jbudorick): Remove this once everything has switched to devil
     # provisioning.
     use_devil_provision = Single(bool, required=False, empty_val=False),
-    remove_system_apps = List(inner_type=basestring),
+    remove_system_packages = List(inner_type=basestring),
   )
 
 
@@ -256,4 +256,24 @@ def use_devil_provision(c):
 
 @config_ctx(includes=['use_devil_provision'])
 def remove_system_vrcore(c):
-  c.remove_system_apps.append('GoogleVrCore')
+  c.remove_system_packages.append('com.google.vr.vrcore')
+
+@config_ctx(includes=['use_devil_provision'])
+def remove_system_webview(c):
+  c.remove_system_packages.extend(
+      ['com.google.android.webview', 'com.android.webview'])
+
+@config_ctx(includes=['use_devil_provision'])
+def remove_system_webview_shell(c):
+  c.remove_system_packages.append('org.chromium.webview_shell')
+
+@config_ctx(includes=['use_devil_provision'])
+def remove_system_chrome(c):
+  c.remove_system_packages.append('com.android.chrome')
+
+@config_ctx(includes=[
+    'remove_system_chrome',
+    'remove_system_webview',
+    'remove_system_webview_shell'])
+def remove_all_system_webviews(c):
+  pass

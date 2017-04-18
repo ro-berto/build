@@ -198,7 +198,7 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/build/android/provision_devices.py",
+      "[START_DIR]/src/third_party/catapult/devil/devil/android/tools/provision_devices.py",
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
       "--blacklist-file",
@@ -207,6 +207,11 @@
       "/path/to/tmp/json",
       "-t",
       "Debug",
+      "--remove-system-packages",
+      "com.android.chrome",
+      "com.google.android.webview",
+      "com.android.webview",
+      "org.chromium.webview_shell",
       "--emulators"
     ],
     "env": {
