@@ -88,8 +88,6 @@
       "firmware-uboot_v2-1299.B",
       "--buildnumber",
       "0",
-      "--chrome_rev",
-      "stable",
       "--debug",
       "--clobber",
       "--config_repo",

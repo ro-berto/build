@@ -295,8 +295,6 @@ class ChromiteApi(recipe_api.RecipeApi):
       cbb_args.extend(['--branch', self.c.chromite_branch])
     if self.c.cbb.build_number is not None:
       cbb_args.extend(['--buildnumber', self.c.cbb.build_number])
-    if self.c.cbb.chrome_rev:
-      cbb_args.extend(['--chrome_rev', self.c.cbb.chrome_rev])
     if self.c.cbb.debug:
       cbb_args.extend(['--debug'])
     if self.c.cbb.clobber:

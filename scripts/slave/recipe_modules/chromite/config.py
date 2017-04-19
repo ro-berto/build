@@ -53,19 +53,11 @@ def BaseConfig(CBB_CONFIG=None, CBB_BRANCH=None, CBB_BUILD_NUMBER=None,
       # The Chromite configuration to use.
       config = Single(basestring, empty_val=CBB_CONFIG),
 
-      # TODO(dgarrett): Obsolete. Remove after a roll happens.
-      # The buildroot directory name to use.
-      builddir = Single(basestring),
-
       # If supplied, forward to cbuildbot as '--master-build-id'.
       build_id = Single(basestring, empty_val=CBB_MASTER_BUILD_ID),
 
       # If supplied, forward to cbuildbot as '--buildnumber'.
       build_number = Single(int, empty_val=CBB_BUILD_NUMBER),
-
-      # TODO(dgarrett): Obsolete. Remove after a roll happens.
-      # If supplied, forward to cbuildbot as '--chrome-rev'.
-      chrome_rev = Single(basestring),
 
       # If supplied, forward to cbuildbot as '--chrome_version'.
       chrome_version = Single(basestring),
@@ -79,62 +71,21 @@ def BaseConfig(CBB_CONFIG=None, CBB_BRANCH=None, CBB_BUILD_NUMBER=None,
       # The (optional) configuration repository to use.
       config_repo = Single(basestring),
 
-      # TODO(dgarrett): Obsolete. Remove after a roll happens.
-      # This disables Chromite bootstrapping by omitting the explicit "--branch"
-      # argument.
-      disable_bootstrap = Single(bool),
-
-      # TODO(dgarrett): Obsolete. Remove after a roll happens.
-      # Whether this Chromite version supports warm cache.
-      # https://chromium-review.googlesource.com/#/c/348011
-      supports_repo_cache = Single(bool),
-
       # If set, supply the "--git-cache-dir" option with this value.
       git_cache_dir = Single(basestring),
 
       # If supplied, forward to cbuildbot as '--buildbucket-id'
       buildbucket_id = Single(basestring, empty_val=CBB_BUILDBUCKET_ID),
 
-      # TODO(dgarrett): Obsolete. Remove after a roll happens.
-      # If set, use goma for the build.
-      use_goma = Single(bool),
-
       # Extra arguments passed to cbuildbot.
       extra_args = List(basestring),
     ),
-
-    # TODO(dgarrett): Obsolete. Remove after a roll happens.
-    # A list of branches whose Chromite version is "old". Old Chromite
-    # buildbot commands reside in the "buildbot" subdirectory of the Chromite
-    # repository instead of the "bin".
-    old_chromite_branches = Set(basestring),
-
-    # A list of branches whose builders should not use a shared buildroot.
-    non_shared_root_branches = Set(basestring),
-
-    # A list of branches whose builders checkout Chrome from SVN instead of Git.
-    chrome_svn_branches = Set(basestring),
 
     # If "chromite_branch" includes a branch version, this will be set to the
     # version value. Otherwise, this will be None.
     #
     # Set in "base".
     branch_version = Single(int),
-
-    # TODO(dgarrett): Obsolete. Remove after a roll happens.
-    # Directory where a warm repo cache is stored. If set, and if the current
-    # build supports a warm cache, this will be used to bootstrap the Chromite
-    # checkout.
-    repo_cache_dir = Single(basestring),
-
-    # TODO(dgarrett): Obsolete. Remove after a roll happens.
-    # The branch version where the "--git-cache" flag was introduced.
-    # Set to a ToT build after R54 branch, "release-R54-8743.B".
-    git_cache_min_branch_version = Single(int, empty_val=8829),
-
-    # The branch version where the goma relate flags (e.g., "--goma_dir") were
-    # introduced.
-    goma_min_branch_version = Single(int, empty_val=9366)
   )
 
   if CBB_EXTRA_ARGS:
@@ -150,26 +101,6 @@ def base(c):
   c.repositories['tryjob'] = []
   c.repositories['chromium'] = []
   c.repositories['cros_manifest'] = []
-  c.repo_cache_dir = '/var/cache/chrome-infra/ccompute-setup/cros-internal'
-
-  c.old_chromite_branches.update((
-    'firmware-uboot_v2-1299.B',
-     # TODO(dnj): Remove this once internal expectations are updated.
-    'factory-1412.B',
-  ))
-  c.non_shared_root_branches.update(c.old_chromite_branches)
-  c.non_shared_root_branches.update((
-    'factory-2305.B',
-  ))
-  c.chrome_svn_branches.update((
-     # TODO(dnj): Remove this once internal expectations are updated.
-    'factory-4455.B',
-     # TODO(dnj): Remove this once internal expectations are updated.
-    'factory-zako-5220.B',
-
-    'factory-rambi-5517.B',
-    'factory-nyan-5772.B',
-  ))
 
   # Determine if we're manually specifying the tryjob branch in the extra
   # args. If we are, use that as the branch version.
@@ -234,10 +165,9 @@ def master_chromiumos_tryserver(c):
 @config_ctx(includes=['master_chromiumos'])
 def chromiumos_coverage(c):
   c.use_chrome_version = True
-  c.cbb.chrome_rev = 'stable'
   c.cbb.config_repo = 'https://example.com/repo.git'
 
 # TODO(dnj): Remove this config once variant support is removed.
 @config_ctx()
 def coverage_variant(c):
-  c.cbb.chrome_rev = 'canary'
+  pass
