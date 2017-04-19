@@ -86,7 +86,7 @@
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
     "name": "bot_update",
@@ -857,7 +857,7 @@
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
     "name": "Gathering reference values.bot_update",
@@ -1790,7 +1790,7 @@
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
     "name": "Gathering reference values.bot_update (2)",
@@ -2756,7 +2756,7 @@
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
     "name": "Re-testing reference range.Retesting GOOD revision.bot_update",
@@ -3376,7 +3376,7 @@
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
     "name": "Re-testing reference range.Retesting BAD revision.bot_update",
@@ -3996,7 +3996,7 @@
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
     "name": "Re-testing reference range.Retesting GOOD revision.bot_update (2)",
@@ -4844,7 +4844,7 @@
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
     "name": "Re-testing reference range.Retesting BAD revision.bot_update (2)",
@@ -5692,7 +5692,7 @@
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
     "name": "Re-testing reference range.Retesting GOOD revision.bot_update (3)",
@@ -6984,7 +6984,7 @@
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
     "name": "bot_update (2)",
