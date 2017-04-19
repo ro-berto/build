@@ -41,6 +41,7 @@ def _AddBuildSpec(name, platform, target_bits=64):
   # We run sizes with no perf_id for perf tryjobs. http://crbug.com/610772
   SPEC['builders'][name] = chromium_perf.BuildSpec(
       'tryserver_chromium_perf', None, platform, target_bits)
+  SPEC['builders'][name]['use_triggered_tests_from_master'] = 'chromium.perf'
 
 
 def _AddTestSpec(name, platform, target_bits=64):

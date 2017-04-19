@@ -128,9 +128,14 @@ class BotConfig(object):
     for bot_id in self._bot_ids:
       bot_config = bot_db.get_bot_config(
           bot_id['mastername'], bot_id['buildername'])
+      # Allows a builder to simulate another builder's triggered tests. Useful
+      # if you want a try builder to match the compilation and isolate steps of
+      # a waterfall builder.
+      mastername = bot_config.get('use_triggered_tests_from_master',
+                                  bot_id['mastername'])
 
       for _, _, test_bot in bot_db.bot_configs_matching_parent_buildername(
-          bot_id['mastername'], bot_id['buildername']):
+          mastername, bot_id['buildername']):
         tests_including_triggered.extend(test_bot.get('tests', []))
 
     return tests, tests_including_triggered
