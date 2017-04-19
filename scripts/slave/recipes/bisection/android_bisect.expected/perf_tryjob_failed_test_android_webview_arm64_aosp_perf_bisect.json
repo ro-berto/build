@@ -86,7 +86,7 @@
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
     },
     "infra_step": true,
     "name": "bot_update",
@@ -844,7 +844,7 @@
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
     },
     "infra_step": true,
     "name": "De-applying patch.bot_update (without patch)",
@@ -1376,7 +1376,7 @@
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:%(PATH)s"
     },
     "infra_step": true,
     "name": "bot_update (2)",
