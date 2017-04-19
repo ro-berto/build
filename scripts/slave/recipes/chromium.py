@@ -2062,6 +2062,61 @@ def GenTests(api):
   }
 
   yield (
+    api.test('gtest_custom_merge_script') +
+    api.properties.generic(mastername='chromium.linux',
+                           parent_buildername='Linux Builder',
+                           buildername='Linux Tests') +
+    api.platform('linux', 64) +
+    api.properties(swarm_hashes={
+      'browser_tests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    }) +
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'gtest_tests': [
+                    {
+                        'test': 'browser_tests',
+                        'swarming': {'can_use_on_swarming_builders': True},
+                        'merge': {
+                            'script': '//fake_merge_script.py',
+                        },
+                    },
+                ],
+            },
+        })
+    ) +
+    api.post_process(post_process.Filter('browser_tests'))
+  )
+
+  yield (
+    api.test('gtest_bad_custom_merge_script') +
+    api.properties.generic(mastername='chromium.linux',
+                           parent_buildername='Linux Builder',
+                           buildername='Linux Tests') +
+    api.platform('linux', 64) +
+    api.properties(swarm_hashes={
+      'browser_tests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    }) +
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'gtest_tests': [
+                    {
+                        'test': 'browser_tests',
+                        'swarming': {'can_use_on_swarming_builders': True},
+                        'merge': {
+                            'script': 'fake_merge_script.py',
+                        },
+                    },
+                ],
+            },
+        })
+    )
+  )
+
+  yield (
     api.test('isolated_script_test_custom_merge_script') +
     api.properties.generic(mastername='chromium.linux',
                            buildername='Linux Tests',

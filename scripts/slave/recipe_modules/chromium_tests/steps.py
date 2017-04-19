@@ -552,6 +552,24 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
     name = str(test.get('name', target_name))
     swarming_dimensions = swarming_dimensions or {}
     use_xvfb = test.get('use_xvfb', True)
+    merge = test.get('merge', {})
+    if merge:
+      merge_script = merge.get('script')
+      if merge_script:
+        if merge_script.startswith('//'):
+          merge['script'] = api.path['checkout'].join(
+              merge_script[2:].replace('/', api.path.sep))
+        else:
+          api.python.failing_step(
+              'gtest spec format error',
+              textwrap.wrap(textwrap.dedent("""\
+                  The gtest target "%s" contains a custom merge_script "%s"
+                  that doesn't match the expected format. Custom merge_script entries
+                  should be a path relative to the top-level chromium src directory and
+                  should start with "//".
+                  """ % (name, merge_script))),
+              as_log='details')
+
     if use_swarming and swarming_dimension_sets:
       for dimensions in swarming_dimension_sets:
         # Yield potentially multiple invocations of the same test, on
@@ -570,7 +588,8 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
                         override_isolate_target=override_isolate_target,
                         use_xvfb=use_xvfb, cipd_packages=cipd_packages,
                         waterfall_mastername=mastername,
-                        waterfall_buildername=buildername)
+                        waterfall_buildername=buildername,
+                        merge=merge)
     else:
       yield GTestTest(name, args=args, target_name=target_name,
                       flakiness_dash=True,
@@ -584,7 +603,8 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
                       override_isolate_target=override_isolate_target,
                       use_xvfb=use_xvfb, cipd_packages=cipd_packages,
                       waterfall_mastername=mastername,
-                      waterfall_buildername=buildername)
+                      waterfall_buildername=buildername,
+                      merge=merge)
 
 
 def generate_instrumentation_test(api, chromium_tests_api, mastername,
@@ -1240,7 +1260,7 @@ class SwarmingGTestTest(SwarmingTest):
                expiration=None, hard_timeout=None, upload_test_results=True,
                override_compile_targets=None, override_isolate_target=None,
                cipd_packages=None, waterfall_mastername=None,
-               waterfall_buildername=None):
+               waterfall_buildername=None, merge=None):
     super(SwarmingGTestTest, self).__init__(
         name, dimensions, tags, target_name, extra_suffix, priority, expiration,
         hard_timeout, waterfall_mastername=waterfall_mastername,
@@ -1252,6 +1272,7 @@ class SwarmingGTestTest(SwarmingTest):
     self._override_isolate_target = override_isolate_target
     self._cipd_packages = cipd_packages
     self._gtest_results = {}
+    self._merge = merge
 
   @Test.test_options.setter
   def test_options(self, value):
@@ -1303,7 +1324,8 @@ class SwarmingGTestTest(SwarmingTest):
         shards=self._shards,
         test_launcher_summary_output=api.test_utils.gtest_results(
             add_json_log=False),
-        cipd_packages=self._cipd_packages, extra_args=args)
+        cipd_packages=self._cipd_packages, extra_args=args,
+        merge=self._merge)
 
   def validate_task_results(self, api, step_result):
     if not hasattr(step_result, 'test_utils'):
@@ -1725,7 +1747,7 @@ class GTestTest(Test):
                swarming_extra_suffix=None, swarming_priority=None,
                swarming_expiration=None, swarming_hard_timeout=None,
                cipd_packages=None, waterfall_mastername=None,
-               waterfall_buildername=None,
+               waterfall_buildername=None, merge=None,
                **runtest_kwargs):
     super(GTestTest, self).__init__(
         waterfall_mastername=waterfall_mastername,
@@ -1741,7 +1763,8 @@ class GTestTest(Test):
           override_isolate_target=runtest_kwargs.get(
               'override_isolate_target'),
           waterfall_mastername=waterfall_mastername,
-          waterfall_buildername=waterfall_buildername)
+          waterfall_buildername=waterfall_buildername,
+          merge=merge)
     else:
       self._test = LocalGTestTest(
           name, args, target_name, waterfall_mastername=waterfall_mastername,
