@@ -402,8 +402,6 @@ class ChromiumApi(recipe_api.RecipeApi):
           failure_result_code = 'GOMA_BUILD_ERROR'
 
         if failure_result_code:
-          # Mark goma setup failure as exception instead of step failure.
-          step_result.presentation.status = self.m.step.EXCEPTION
           assert len(failure_result_code) <= 20
           properties = self.m.step.active_result.presentation.properties
           if not properties.get('extra_result_code'):

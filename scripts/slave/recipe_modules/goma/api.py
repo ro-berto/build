@@ -219,7 +219,7 @@ class GomaApi(recipe_api.RecipeApi):
     if env is None:
       env = {}
 
-    with self.m.step.nest('preprocess_for_goma'):
+    with self.m.step.nest('preprocess_for_goma') as nested_result:
       if self.build_data_dir:
         self._goma_ctl_env['GOMA_DUMP_STATS_FILE'] = (
             self.m.path.join(self.build_data_dir, 'goma_stats_proto'))
@@ -264,7 +264,7 @@ class GomaApi(recipe_api.RecipeApi):
                 script=self.goma_ctl,
                 args=['stop'], **kwargs)
           self._upload_logs(name='upload_goma_start_failed_logs')
-
+        nested_result.presentation.status = self.m.step.EXCEPTION
         raise e
 
   def stop(self, ninja_log_outdir=None, ninja_log_compiler=None,
@@ -279,22 +279,26 @@ class GomaApi(recipe_api.RecipeApi):
     """
     assert self._goma_dir
 
-    with self.m.step.nest('postprocess_for_goma'):
-      with self.m.step.defer_results():
-        self._run_jsonstatus()
+    with self.m.step.nest('postprocess_for_goma') as nested_result:
+      try:
+        with self.m.step.defer_results():
+          self._run_jsonstatus()
 
-        with self.m.step.context({'env': self._goma_ctl_env}):
-          self.m.python(name='goma_stat', script=self.goma_ctl,
-                        args=['stat'],
-                        **kwargs)
-          self.m.python(name='stop_goma', script=self.goma_ctl,
-                        args=['stop'], **kwargs)
-        self._upload_logs(ninja_log_outdir, ninja_log_compiler,
-                          ninja_log_command, ninja_log_exit_status)
-        self._stop_cloudtail()
+          with self.m.step.context({'env': self._goma_ctl_env}):
+            self.m.python(name='goma_stat', script=self.goma_ctl,
+                          args=['stat'],
+                          **kwargs)
+            self.m.python(name='stop_goma', script=self.goma_ctl,
+                          args=['stop'], **kwargs)
+          self._upload_logs(ninja_log_outdir, ninja_log_compiler,
+                            ninja_log_command, ninja_log_exit_status)
+          self._stop_cloudtail()
 
-      self._goma_started = False
-      self._goma_ctl_env = {}
+        self._goma_started = False
+        self._goma_ctl_env = {}
+      except self.m.step.StepFailure:
+        nested_result.presentation.status = self.m.step.EXCEPTION
+        raise
 
   def _upload_logs(self, ninja_log_outdir=None, ninja_log_compiler=None,
                    ninja_log_command=None, ninja_log_exit_status=None,
