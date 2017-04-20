@@ -25,6 +25,7 @@ from slave import annotated_run
 from slave import logdog_bootstrap
 from slave import robust_tempdir
 from slave import update_scripts
+from slave.unittests.utils import FakeBuildRootTestCase
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -33,7 +34,7 @@ MockOptions = collections.namedtuple('MockOptions',
     ('dry_run', 'logdog_disable'))
 
 
-class AnnotatedRunTest(unittest.TestCase):
+class AnnotatedRunTest(FakeBuildRootTestCase):
   def test_example(self):
     build_properties = {
       'mastername': 'tryserver.chromium.linux',
@@ -49,40 +50,18 @@ class AnnotatedRunTest(unittest.TestCase):
     script_path = os.path.join(BASE_DIR, 'annotated_run.py')
     exit_code = subprocess.call([
         'python', script_path,
-        '--build-properties=%s' % json.dumps(build_properties)])
+        '--build-properties=%s' % json.dumps(build_properties)],
+        cwd=self.fake_build_root,
+        env=self.get_test_env(),
+    )
     self.assertEqual(exit_code, 0)
-
-  @mock.patch('slave.update_scripts._run_command')
-  @mock.patch('slave.annotated_run._run_command')
-  @mock.patch('slave.annotated_run.main')
-  @mock.patch('sys.platform', return_value='win')
-  @mock.patch('tempfile.mkstemp', side_effect=Exception('failure'))
-  def test_update_scripts_must_run(self, _tempfile_mkstemp, _sys_platform,
-                                   main, annotated_run_command,
-                                   update_scripts_run_command):
-    update_scripts._run_command.return_value = (0, "")
-    annotated_run._run_command.return_value = (0, "")
-    annotated_run.main.side_effect = Exception('Test error!')
-    annotated_run.shell_main(['annotated_run.py', 'foo'])
-
-    gclient_path = os.path.join(env.Build, os.pardir, 'depot_tools',
-                                'gclient.bat')
-    annotated_run_command.assert_has_calls([
-        mock.call([sys.executable, 'annotated_run.py', 'foo']),
-        ])
-    update_scripts_run_command.assert_has_calls([
-        mock.call([gclient_path, 'sync',
-                   '--force', '--delete_unversioned_trees',
-                   '--break_repo_locks', '--verbose', '--jobs=2'],
-                  cwd=env.Build),
-        ])
-    main.assert_not_called()
 
 
 class AnnotatedRunExecTest(unittest.TestCase):
   def setUp(self):
     logging.basicConfig(level=logging.ERROR+1)
 
+    self._orig_env = os.environ.copy()
     self.maxDiff = None
     self._patchers = []
     map(self._patch, (
@@ -127,6 +106,7 @@ class AnnotatedRunExecTest(unittest.TestCase):
     annotated_run._get_engine_flags.return_value = {}
 
   def tearDown(self):
+    os.environ = self._orig_env
     self.rt.close()
     for p in reversed(self._patchers):
       p.stop()
@@ -155,6 +135,30 @@ class AnnotatedRunExecTest(unittest.TestCase):
   def _writeRecipeResult(self, v):
     with open(self._tp('recipe_result.json'), 'w') as fd:
       json.dump(v, fd)
+
+  @mock.patch('slave.update_scripts._run_command')
+  @mock.patch('slave.annotated_run.main')
+  @mock.patch('sys.platform', return_value='win')
+  @mock.patch('tempfile.mkstemp', side_effect=Exception('failure'))
+  def test_update_scripts_must_run(self, _tempfile_mkstemp, _sys_platform,
+                                   main, update_scripts_run_command):
+    update_scripts_run_command.return_value = (0, "")
+    annotated_run._run_command.return_value = (0, "")
+    main.side_effect = Exception('Test error!')
+
+    annotated_run.shell_main(['annotated_run.py', 'foo'])
+    gclient_path = os.path.join(env.Build, os.pardir, 'depot_tools',
+                                'gclient.bat')
+    annotated_run._run_command.assert_has_calls([
+        mock.call([sys.executable, 'annotated_run.py', 'foo']),
+        ])
+    update_scripts_run_command.assert_has_calls([
+        mock.call([gclient_path, 'sync',
+                   '--force', '--delete_unversioned_trees',
+                   '--break_repo_locks', '--verbose', '--jobs=2'],
+                  cwd=env.Build),
+        ])
+    self.assertFalse(main.called)
 
   def test_exec_successful(self):
     annotated_run._run_command.return_value = (0, '')

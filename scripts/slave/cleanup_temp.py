@@ -153,14 +153,17 @@ def check_free_space_path(path, min_free_space=1024*1024*1024):
     raise FullDriveException(path, free_space)
 
 
-def _CleanupWindows():
+def _CleanupWindows(b_dir=None):
   """Main function for Windows platform."""
   with function_logger('removing any Chrome temporary files'):
     slave_utils.RemoveChromeTemporaryFiles()
-  if os.path.isdir('e:\\'):
-    slave_path = 'e:\\b\\build\\slave'
-  else:
-    slave_path = 'c:\\b\\build\\slave'
+  if not b_dir:
+    if os.path.isdir('e:\\'):
+      b_dir = 'e:\\b'
+    else:
+      b_dir = 'c:\\b'
+  slave_path = os.path.join(b_dir, 'build', 'slave')
+
   remove_build_dead(slave_path)
   remove_old_isolate_directories(slave_path)
   remove_old_isolate_execution_directories(slave_path)
@@ -183,37 +186,45 @@ def _CleanupWindows():
             os.remove(filepath)
 
 
-def _CleanupMac():
+def _CleanupMac(b_dir=None):
   """Main function for Mac platform."""
   with function_logger('removing any Chrome temporary files'):
     slave_utils.RemoveChromeTemporaryFiles()
-  remove_build_dead('/b/build/slave')
-  remove_old_isolate_directories('/b/build/slave')
-  remove_old_isolate_execution_directories('/b/build/slave')
+  if not b_dir:
+    b_dir = '/b'
+  slave_path = os.path.join(b_dir, 'build', 'slave')
+
+  remove_build_dead(slave_path)
+  remove_old_isolate_directories(slave_path)
+  remove_old_isolate_execution_directories(slave_path)
   # On the Mac, clearing out the entire tmp folder could be problematic,
   # as it might remove files in use by apps not related to the build.
-  if os.path.isdir('/b'):
-    check_free_space_path('/b')
+  if os.path.isdir(b_dir):
+    check_free_space_path(b_dir)
   check_free_space_path(os.environ['HOME'])
   check_free_space_path(os.path.dirname(os.path.abspath(__file__)))
 
 
-def _CleanupLinux():
+def _CleanupLinux(b_dir=None):
   """Main function for linux platform."""
   with function_logger('removing any Chrome temporary files'):
     slave_utils.RemoveChromeTemporaryFiles()
-  remove_build_dead('/b/build/slave')
-  remove_old_isolate_directories('/b/build/slave')
-  remove_old_isolate_execution_directories('/b/build/slave')
+  if not b_dir:
+    b_dir = '/b'
+  slave_path = os.path.join(b_dir, 'build', 'slave')
+
+  remove_build_dead(slave_path)
+  remove_old_isolate_directories(slave_path)
+  remove_old_isolate_execution_directories(slave_path)
   # TODO(maruel): Temporary, add back.
   # cleanup_directory('/tmp')
-  if os.path.isdir('/b'):
-    check_free_space_path('/b')
+  if os.path.isdir(b_dir):
+    check_free_space_path(b_dir)
   check_free_space_path(os.environ['HOME'])
   check_free_space_path(os.path.dirname(os.path.abspath(__file__)))
 
 
-def Cleanup():
+def Cleanup(b_dir=None):
   """Performs the cleanup operation for the current platform.
 
   Raises:
@@ -226,11 +237,11 @@ def Cleanup():
     return
 
   if chromium_utils.IsWindows():
-    _CleanupWindows()
+    _CleanupWindows(b_dir=b_dir)
   elif chromium_utils.IsMac():
-    _CleanupMac()
+    _CleanupMac(b_dir=b_dir)
   elif chromium_utils.IsLinux():
-    _CleanupLinux()
+    _CleanupLinux(b_dir=b_dir)
   else:
     raise UnknownPlatform('Unknown platform: %s' % (sys.platform,))
 

@@ -473,10 +473,6 @@ def main(argv, stream):
 
   args = parser.parse_args(argv[1:])
 
-  # Cleanup system and temporary directories.
-  from slave import cleanup_temp
-  cleanup_temp.Cleanup()
-
   buildbot_build_dir = os.getcwd()
   try:
     basedir = chromium_utils.FindUpward(buildbot_build_dir, 'b')
@@ -486,6 +482,10 @@ def main(argv, stream):
     # one (cwd), the paths get too long. Recipes which need different paths
     # or persistent directories should do so explicitly.
     basedir = tempfile.gettempdir()
+
+  # Cleanup system and temporary directories.
+  from slave import cleanup_temp
+  cleanup_temp.Cleanup(b_dir=basedir)
 
   # Choose a tempdir prefix. If we have no active subdir, we will use a prefix
   # of "rr". If we have an active subdir, we will use "rs/<subdir>". This way,

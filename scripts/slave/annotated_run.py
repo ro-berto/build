@@ -362,7 +362,7 @@ def main(argv):
 
     # Cleanup system and temporary directories.
     from slave import cleanup_temp
-    cleanup_temp.Cleanup()
+    cleanup_temp.Cleanup(B_DIR)
 
     # Execute our recipe.
     return _exec_recipe(rt, opts, stream, basedir, tdir, properties)

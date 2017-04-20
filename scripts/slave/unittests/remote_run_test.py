@@ -24,10 +24,12 @@ import mock
 from common import annotator
 from common import chromium_utils
 from common import env
-from slave import remote_run
+from slave import cleanup_temp
 from slave import logdog_bootstrap
+from slave import remote_run
 from slave import robust_tempdir
 from slave import update_scripts
+from slave.unittests.utils import FakeBuildRootTestCase
 
 # <build>/scripts/slave
 BASE_DIR = os.path.join(env.Build, 'scripts', 'slave')
@@ -40,19 +42,9 @@ MockOptions = collections.namedtuple('MockOptions', (
 ))
 
 
-class RemoteRunTest(unittest.TestCase):
-
-  class TestException(Exception):
-    pass
+class RemoteRunTest(FakeBuildRootTestCase):
 
   REMOTE_REPO = 'https://chromium.googlesource.com/chromium/tools/build.git'
-
-  def setUp(self):
-    # Because we modify system-level globals (yay!)
-    self._orig_env = os.environ.copy()
-
-  def tearDown(self):
-    os.environ = self._orig_env
 
   def test_example(self):
     build_properties = {
@@ -66,8 +58,8 @@ class RemoteRunTest(unittest.TestCase):
     }
 
     # Emulate BuildBot enviornment w/ active subdir.
-    proc_env = os.environ.copy()
-    proc_env['INFRA_BUILDBOT_SLAVE_ACTIVE_SUBDIR'] = 'foo'
+    proc_env = self.get_test_env(
+        INFRA_BUILDBOT_SLAVE_ACTIVE_SUBDIR='foo')
 
     script_path = os.path.join(BASE_DIR, 'remote_run.py')
     prop_gz = base64.b64encode(zlib.compress(json.dumps(build_properties)))
@@ -77,6 +69,7 @@ class RemoteRunTest(unittest.TestCase):
         '--recipe', 'remote_run_test',
         '--repository', self.REMOTE_REPO,
         ],
+        cwd=self.fake_build_root,
         env=proc_env,
     )
     self.assertEqual(exit_code, 0)
@@ -93,9 +86,10 @@ class RemoteRunTest(unittest.TestCase):
     }
 
     # Emulate BuildBot enviornment.
-    proc_env = os.environ.copy()
-    proc_env['BUILDBOT_SLAVENAME'] = build_properties['slavename']
-    proc_env['INFRA_BUILDBOT_SLAVE_ACTIVE_SUBDIR'] = '' # No active subdir.
+    proc_env = self.get_test_env(
+        BUILDBOT_SLAVENAME=build_properties['slavename'],
+        # No active subdir.
+        INFRA_BUILDBOT_SLAVE_ACTIVE_SUBDIR='')
 
     script_path = os.path.join(BASE_DIR, 'remote_run.py')
     prop_gz = base64.b64encode(zlib.compress(json.dumps(build_properties)))
@@ -106,34 +100,17 @@ class RemoteRunTest(unittest.TestCase):
         '--repository', self.REMOTE_REPO,
         '--canary',
         ],
-        env=proc_env)
+        cwd=self.fake_build_root,
+        env=proc_env,
+    )
     self.assertEqual(exit_code, 0)
-
-  @mock.patch('slave.remote_run._call')
-  @mock.patch('slave.update_scripts._run_command')
-  @mock.patch('sys.platform', return_value='win')
-  @mock.patch('tempfile.mkstemp', side_effect=Exception('failure'))
-  def test_update_scripts_must_run(self, _tempfile_mkstemp, _sys_platform,
-                                   update_scripts_run_command, remote_run_call):
-    update_scripts_run_command.return_value = (0, "")
-    remote_run_call._call.return_value = 0
-
-    remote_run.shell_main(['remote_run.py', 'foo'])
-
-    gclient_path = os.path.join(env.Build, os.pardir, 'depot_tools',
-                                'gclient.bat')
-    update_scripts_run_command.assert_has_calls([
-        mock.call([gclient_path, 'sync',
-                   '--force', '--delete_unversioned_trees',
-                   '--break_repo_locks', '--verbose', '--jobs=2'],
-                  cwd=env.Build),
-        ])
 
 
 class RemoteRunExecTest(unittest.TestCase):
   def setUp(self):
     logging.basicConfig(level=logging.ERROR+1)
 
+    self._orig_env = os.environ.copy()
     self.maxDiff = None
     map(lambda x: x.start(), (
         mock.patch('slave.remote_run._call'),
@@ -225,6 +202,9 @@ class RemoteRunExecTest(unittest.TestCase):
     # Written via '_write_recipe_result'.
     self.recipe_result = None
 
+  def tearDown(self):
+    os.environ = self._orig_env
+
   def _bp(self, *p):
     return os.path.join(*((self.basedir,) + p))
 
@@ -238,6 +218,31 @@ class RemoteRunExecTest(unittest.TestCase):
   def _write_recipe_result(self):
     with open(self._tp('recipe_result.json'), 'w') as fd:
       json.dump(self.recipe_result, fd)
+
+  @mock.patch('slave.update_scripts._run_command')
+  @mock.patch('slave.remote_run.main')
+  @mock.patch('sys.platform', return_value='win')
+  @mock.patch('tempfile.mkstemp', side_effect=Exception('failure'))
+  def test_update_scripts_must_run(self, _tempfile_mkstemp, _sys_platform,
+                                   main, update_scripts_run_command):
+    update_scripts_run_command.return_value = (0, "")
+    remote_run._call.return_value = 0
+
+    remote_run.shell_main([
+        'remote_run.py',
+        '--repository', 'foo',
+        '--recipe', 'pants',
+    ])
+
+    gclient_path = os.path.join(env.Build, os.pardir, 'depot_tools',
+                                'gclient.bat')
+    update_scripts_run_command.assert_has_calls([
+        mock.call([gclient_path, 'sync',
+                   '--force', '--delete_unversioned_trees',
+                   '--break_repo_locks', '--verbose', '--jobs=2'],
+                  cwd=env.Build),
+        ])
+    self.assertFalse(main.called)
 
   @mock.patch('slave.logdog_bootstrap.bootstrap',
               side_effect=logdog_bootstrap.NotBootstrapped())

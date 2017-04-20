@@ -26,6 +26,7 @@ LOGGER = logging.getLogger('update_scripts')
 def _run_command(cmd, **kwargs):
   LOGGER.debug('Executing command: %s', cmd)
   kwargs.setdefault('stderr', subprocess.STDOUT)
+
   proc = subprocess.Popen(cmd, **kwargs)
   stdout, _ = proc.communicate()
 
@@ -58,13 +59,21 @@ def update_scripts():
     os.environ.pop('RUN_SLAVE_UPDATED_SCRIPTS')
     return False
 
+  # For testing, we don't actually want to run "gclient sync" against its native
+  # root. However, we don't want to mock/disable it either, since we want to
+  # exercise this code path.
+  build_dir = os.environ.get(
+      'RUN_SLAVE_UPDATED_SCRIPTS_TEST_BUILD_DIR', env.Build)
+
   stream = annotator.StructuredAnnotationStream()
 
   with stream.step('update_scripts') as s:
-    if ensure_managed(os.path.join(env.Build, os.pardir, '.gclient')):
+    if ensure_managed(os.path.join(build_dir, os.pardir, '.gclient')):
       s.step_text('Top-level gclient solution was unmanaged, '
                   'changed to managed')
 
+    # Get our "gclient" file. We will use the "gclient" relative to this
+    # script's checkout, regardless of "build_dir".
     gclient_name = 'gclient'
     if sys.platform.startswith('win'):
       gclient_name += '.bat'
@@ -85,10 +94,10 @@ def update_scripts():
     cmd_dict = {
         'name': 'update_scripts',
         'cmd': gclient_cmd,
-        'cwd': env.Build,
+        'cwd': build_dir,
     }
     annotator.print_step(cmd_dict, os.environ, stream)
-    rv, _ = _run_command(gclient_cmd, cwd=env.Build)
+    rv, _ = _run_command(gclient_cmd, cwd=build_dir)
     if rv != 0:
       s.step_text('gclient sync failed!')
       s.step_exception()
