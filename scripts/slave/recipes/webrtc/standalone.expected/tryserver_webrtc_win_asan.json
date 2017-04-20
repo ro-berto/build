@@ -192,6 +192,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_DEFINES": "chromium_win_pch=0 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[CACHE]\\goma_client' syzyasan=1 target_arch=ia32 use_goma=1 win_z7=1",
+      "GYP_MSVS_VERSION": "2015",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -214,7 +215,8 @@
     ],
     "cwd": "[BUILDER_CACHE]\\win_asan\\src",
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
+      "GYP_MSVS_VERSION": "2015"
     },
     "name": "generate_build_files"
   },
