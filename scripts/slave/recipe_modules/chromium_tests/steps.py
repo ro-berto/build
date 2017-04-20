@@ -1325,7 +1325,7 @@ class SwarmingGTestTest(SwarmingTest):
         test_launcher_summary_output=api.test_utils.gtest_results(
             add_json_log=False),
         cipd_packages=self._cipd_packages, extra_args=args,
-        merge=self._merge)
+        merge=self._merge, build_properties=api.chromium.build_properties)
 
   def validate_task_results(self, api, step_result):
     if not hasattr(step_result, 'test_utils'):
