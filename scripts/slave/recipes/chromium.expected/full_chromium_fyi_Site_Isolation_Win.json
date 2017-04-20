@@ -384,6 +384,7 @@
       "50",
       "blink_tests",
       "browser_tests",
+      "browser_tests_run",
       "content_browsertests",
       "content_unittests"
     ],
@@ -481,7 +482,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]\\Site_Isolation_Win\\src\\out\\Release",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]\\\\Site_Isolation_Win\\\\src\\\\out\\\\Release', '-j', 50, 'blink_tests', 'browser_tests', 'content_browsertests', 'content_unittests']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]\\\\Site_Isolation_Win\\\\src\\\\out\\\\Release', '-j', 50, 'blink_tests', 'browser_tests', 'browser_tests_run', 'content_browsertests', 'content_unittests']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",

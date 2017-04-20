@@ -352,7 +352,8 @@
       "[START_DIR]/src/out/Release",
       "-j",
       "50",
-      "browser_tests"
+      "browser_tests",
+      "browser_tests_run"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
@@ -442,7 +443,7 @@
       "--ninja-log-outdir",
       "[START_DIR]/src/out/Release",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/Release', '-j', 50, 'browser_tests']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/Release', '-j', 50, 'browser_tests', 'browser_tests_run']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",

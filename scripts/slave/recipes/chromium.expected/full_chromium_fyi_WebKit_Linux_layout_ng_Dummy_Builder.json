@@ -374,7 +374,8 @@
       "-j",
       "50",
       "blink_tests",
-      "browser_tests"
+      "browser_tests",
+      "browser_tests_run"
     ],
     "cwd": "[BUILDER_CACHE]/WebKit_Linux_layout_ng_Dummy_Builder/src",
     "env": {
@@ -393,6 +394,7 @@
       "50",
       "blink_tests",
       "browser_tests",
+      "browser_tests_run",
       "-d",
       "explain",
       "-n"
@@ -492,7 +494,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/WebKit_Linux_layout_ng_Dummy_Builder/src/out/Release",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/WebKit_Linux_layout_ng_Dummy_Builder/src/out/Release', '-j', 50, 'blink_tests', 'browser_tests']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/WebKit_Linux_layout_ng_Dummy_Builder/src/out/Release', '-j', 50, 'blink_tests', 'browser_tests', 'browser_tests_run']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",

@@ -374,7 +374,8 @@
       "-j",
       "50",
       "all",
-      "browser_tests"
+      "browser_tests",
+      "browser_tests_run"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Clang_Analyzer/src",
     "env": {
@@ -470,7 +471,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/Linux_Clang_Analyzer/src/out/Release",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Linux_Clang_Analyzer/src/out/Release', '-j', 50, 'all', 'browser_tests']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Linux_Clang_Analyzer/src/out/Release', '-j', 50, 'all', 'browser_tests', 'browser_tests_run']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",

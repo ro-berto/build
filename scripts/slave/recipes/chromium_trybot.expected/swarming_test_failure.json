@@ -315,17 +315,21 @@
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [@@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"chromium_swarm_tests\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"gl_tests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"gl_tests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"gl_tests_run\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [@@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"chromium_swarm_tests\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"gl_tests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"gl_tests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"gl_tests_run\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.test_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"gl_tests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"gl_tests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"gl_tests_run\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"test_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"gl_tests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"gl_tests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"gl_tests_run\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ]@@@",
       "@@@STEP_LOG_LINE@analyze_details@}@@@",
       "@@@STEP_LOG_END@analyze_details@@@"
@@ -468,7 +472,8 @@
       "-j",
       "50",
       "chromium_swarm_tests",
-      "gl_tests"
+      "gl_tests",
+      "gl_tests_run"
     ],
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
@@ -487,6 +492,7 @@
       "50",
       "chromium_swarm_tests",
       "gl_tests",
+      "gl_tests_run",
       "-d",
       "explain",
       "-n"
@@ -580,7 +586,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/linux/src/out/Release",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/linux/src/out/Release', '-j', 50, 'chromium_swarm_tests', 'gl_tests']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/linux/src/out/Release', '-j', 50, 'chromium_swarm_tests', 'gl_tests', 'gl_tests_run']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",
@@ -1125,7 +1131,8 @@
       "[BUILDER_CACHE]/linux/src/out/Release",
       "-j",
       "50",
-      "gl_tests"
+      "gl_tests",
+      "gl_tests_run"
     ],
     "cwd": "[BUILDER_CACHE]/linux",
     "env": {
@@ -1143,6 +1150,7 @@
       "-j",
       "50",
       "gl_tests",
+      "gl_tests_run",
       "-d",
       "explain",
       "-n"
@@ -1239,7 +1247,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/linux/src/out/Release",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/linux/src/out/Release', '-j', 50, 'gl_tests']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/linux/src/out/Release', '-j', 50, 'gl_tests', 'gl_tests_run']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",

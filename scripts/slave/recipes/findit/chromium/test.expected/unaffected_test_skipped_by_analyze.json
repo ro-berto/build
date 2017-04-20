@@ -574,7 +574,7 @@
       "Win Builder",
       "-v",
       "//out/Release",
-      "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": [\"affected_tests\", \"unaffected_tests\"]}",
+      "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": [\"affected_tests\", \"affected_tests_run\", \"unaffected_tests\", \"unaffected_tests_run\"]}",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -611,7 +611,9 @@
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"test_targets\": [@@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"affected_tests\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"unaffected_tests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"affected_tests_run\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"unaffected_tests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"unaffected_tests_run\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ]@@@",
       "@@@STEP_LOG_LINE@analyze_details@}@@@",
       "@@@STEP_LOG_END@analyze_details@@@"

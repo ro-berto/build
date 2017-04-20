@@ -298,7 +298,7 @@
       "--goma-dir",
       "[CACHE]/goma_client",
       "--swarming-targets-file",
-      "browser_tests\n",
+      "browser_tests_apk\n",
       "//out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/Android_N5_Swarm/src",
@@ -307,7 +307,7 @@
     },
     "name": "generate_build_files",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@browser_tests@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@browser_tests_apk@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
     ]
   },
@@ -411,7 +411,7 @@
       "[BUILDER_CACHE]/Android_N5_Swarm/src/out/Release",
       "-j",
       "50",
-      "browser_tests"
+      "browser_tests_apk_run"
     ],
     "cwd": "[BUILDER_CACHE]/Android_N5_Swarm/src",
     "env": {
@@ -508,7 +508,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/Android_N5_Swarm/src/out/Release",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Android_N5_Swarm/src/out/Release', '-j', 50, 'browser_tests']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Android_N5_Swarm/src/out/Release', '-j', 50, 'browser_tests_apk_run']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",
@@ -578,12 +578,12 @@
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[BUILDER_CACHE]/Android_N5_Swarm/src/out/Release/browser_tests.isolated.gen.json"
+      "[BUILDER_CACHE]/Android_N5_Swarm/src/out/Release/browser_tests_apk.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"browser_tests\": \"[dummy hash for browser_tests]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"browser_tests_apk\": \"[dummy hash for browser_tests_apk]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -627,7 +627,7 @@
       "python",
       "-u",
       "\nimport sys\nprint '*.isolated file for target %s is missing' % sys.argv[1]\nsys.exit(1)\n",
-      "browser_tests"
+      "browser_tests_apk"
     ],
     "cwd": "[BUILDER_CACHE]/Android_N5_Swarm",
     "env": {

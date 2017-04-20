@@ -383,9 +383,9 @@
       "[BUILDER_CACHE]/Android_Builder/src/out/Release",
       "-j",
       "50",
-      "blink_heap_unittests",
+      "blink_heap_unittests_apk",
       "blink_tests",
-      "webkit_unit_tests"
+      "webkit_unit_tests_apk"
     ],
     "cwd": "[BUILDER_CACHE]/Android_Builder/src",
     "env": {
@@ -482,7 +482,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/Android_Builder/src/out/Release",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Android_Builder/src/out/Release', '-j', 50, 'blink_heap_unittests', 'blink_tests', 'webkit_unit_tests']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Android_Builder/src/out/Release', '-j', 50, 'blink_heap_unittests_apk', 'blink_tests', 'webkit_unit_tests_apk']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",

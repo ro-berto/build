@@ -383,7 +383,8 @@
       "-j",
       "50",
       "blink_tests",
-      "browser_tests"
+      "browser_tests",
+      "browser_tests_run"
     ],
     "cwd": "[BUILDER_CACHE]\\win_layout\\src",
     "env": {
@@ -479,7 +480,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]\\win_layout\\src\\out\\Debug",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]\\\\win_layout\\\\src\\\\out\\\\Debug', '-j', 50, 'blink_tests', 'browser_tests']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]\\\\win_layout\\\\src\\\\out\\\\Debug', '-j', 50, 'blink_tests', 'browser_tests', 'browser_tests_run']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",
