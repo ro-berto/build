@@ -357,12 +357,6 @@ class LocalGTestTest(Test):
     # TODO(phajdan.jr): clean up override_compile_targets (remove or cover).
     if self._override_compile_targets:  # pragma: no cover
       return self._override_compile_targets
-
-    if api.chromium.c.TARGET_PLATFORM == 'android':
-      # TODO(agrieve): Remove _apk suffix in favour of bin/run_${target} once
-      #     GYP is gone. http://crbug.com/599919
-      return [self.target_name + '_apk']
-
     return [self.target_name]
 
   def run(self, api, suffix):
@@ -1279,27 +1273,15 @@ class SwarmingGTestTest(SwarmingTest):
     self._test_options = value
 
   def compile_targets(self, api):
-    # <X>_run target depends on <X>, and then isolates it invoking isolate.py.
-    # It is a convention, not a hard coded rule.
-    # Also include name without the _run suffix to help recipes correctly
-    # interpret results returned by "analyze".
     if self._override_compile_targets:
       return self._override_compile_targets
-
-    if api.chromium.c.TARGET_PLATFORM == 'android':
-      # Not all _apk_runs have a corresponding _apk, so we only return the
-      # _apk_run here.
-      return [self.target_name + '_apk_run']
-
-    return [self.target_name, self.target_name + '_run']
+    return [self.target_name]
 
   def isolate_target(self, api):
-    # TODO(agrieve): Remove override_isolate_target and _apk suffix in
-    #     favour of bin/run_${target} once GYP is gone. http://crbug.com/599919
+    # TODO(agrieve,jbudorick): Remove override_isolate_target once clients
+    #     have stopped using it.
     if self._override_isolate_target:
       return self._override_isolate_target
-    if api.chromium.c.TARGET_PLATFORM == 'android':
-      return self.target_name + '_apk'
     return self.target_name
 
   def create_task(self, api, suffix, isolated_hash):

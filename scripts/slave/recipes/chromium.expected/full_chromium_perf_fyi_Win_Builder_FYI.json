@@ -403,7 +403,6 @@
       "-j",
       "50",
       "browser_tests",
-      "browser_tests_run",
       "chrome",
       "chromium_builder_perf"
     ],
@@ -503,7 +502,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]\\Win_Builder_FYI\\src\\out\\Release_x64",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]\\\\Win_Builder_FYI\\\\src\\\\out\\\\Release_x64', '-j', 50, 'browser_tests', 'browser_tests_run', 'chrome', 'chromium_builder_perf']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]\\\\Win_Builder_FYI\\\\src\\\\out\\\\Release_x64', '-j', 50, 'browser_tests', 'chrome', 'chromium_builder_perf']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",

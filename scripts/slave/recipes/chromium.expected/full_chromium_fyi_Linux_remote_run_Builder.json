@@ -374,8 +374,7 @@
       "-j",
       "50",
       "base_unittests",
-      "browser_tests",
-      "browser_tests_run"
+      "browser_tests"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_remote_run_Builder/src",
     "env": {
@@ -394,7 +393,6 @@
       "50",
       "base_unittests",
       "browser_tests",
-      "browser_tests_run",
       "-d",
       "explain",
       "-n"
@@ -494,7 +492,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/Linux_remote_run_Builder/src/out/Release",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Linux_remote_run_Builder/src/out/Release', '-j', 50, 'base_unittests', 'browser_tests', 'browser_tests_run']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Linux_remote_run_Builder/src/out/Release', '-j', 50, 'base_unittests', 'browser_tests']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",

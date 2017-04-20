@@ -383,8 +383,7 @@
       "-j",
       "50",
       "blink_tests",
-      "browser_tests",
-      "browser_tests_run"
+      "browser_tests"
     ],
     "cwd": "[BUILDER_CACHE]\\WebKit_Win___RandomOrder\\src",
     "env": {
@@ -403,7 +402,6 @@
       "50",
       "blink_tests",
       "browser_tests",
-      "browser_tests_run",
       "-d",
       "explain",
       "-n"
@@ -503,7 +501,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]\\WebKit_Win___RandomOrder\\src\\out\\Release",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]\\\\WebKit_Win___RandomOrder\\\\src\\\\out\\\\Release', '-j', 50, 'blink_tests', 'browser_tests', 'browser_tests_run']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]\\\\WebKit_Win___RandomOrder\\\\src\\\\out\\\\Release', '-j', 50, 'blink_tests', 'browser_tests']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",
