@@ -1515,6 +1515,37 @@ def GenTests(api):
   )
 
   yield (
+    api.test(
+        'dynamic_swarmed_isolated_script_test_failure_no_result_json') +
+    api.properties.generic(mastername='chromium.linux',
+                           buildername='Linux Tests',
+                           parent_buildername='Linux Builder') +
+    api.properties(swarm_hashes={
+      'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    }) +
+    api.platform('linux', 64) +
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'isolated_scripts': [
+                    {
+                      'isolate_name': 'telemetry_gpu_unittests',
+                      'name': 'telemetry_gpu_unittests',
+                      'swarming': {'can_use_on_swarming_builders': True},
+                    },
+                ],
+            },
+        })
+    ) +
+    api.override_step_data(
+        'telemetry_gpu_unittests',
+        api.swarming.canned_summary_output(failure=True)
+        + api.json.output({}),
+        retcode=1)
+  )
+
+  yield (
     api.test('dynamic_instrumentation_test') +
     api.properties.generic(mastername='chromium.linux',
                            buildername='Android Tests',

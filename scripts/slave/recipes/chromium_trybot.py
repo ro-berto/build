@@ -265,6 +265,33 @@ def GenTests(api):
   )
 
   yield (
+    api.test(
+        'dynamic_swarmed_isolated_script_test_failure_no_result_json') +
+    props(extra_swarmed_tests=['telemetry_gpu_unittests']) +
+    api.platform.name('linux') +
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'isolated_scripts': [
+                    {
+                      'isolate_name': 'telemetry_gpu_unittests',
+                      'name': 'telemetry_gpu_unittests',
+                      'swarming': {'can_use_on_swarming_builders': True},
+                    },
+                ],
+            },
+        })
+    ) +
+    suppress_analyze() +
+    api.override_step_data(
+        'telemetry_gpu_unittests (with patch)',
+        api.swarming.canned_summary_output(failure=True)
+        + api.json.output({}),
+        retcode=1)
+  )
+
+  yield (
     api.test('swarming_test_with_priority_expiration_and_timeout') +
     props(extra_swarmed_tests=['gl_tests']) +
     api.platform.name('linux') +

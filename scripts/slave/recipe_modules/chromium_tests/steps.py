@@ -1533,6 +1533,11 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
 
     self._isolated_script_results = results
 
+    # If we got no results and a nonzero exit code, the test probably
+    # did not run correctly.
+    if step_result.retcode != 0 and not results:
+      return False, failures
+
     # Even if the output is valid, if the return code is greater than
     # MAX_FAILURES_EXIT_STATUS then the test did not complete correctly and the
     # results can't be trusted. It probably exited early due to a large number
