@@ -19,6 +19,8 @@ import tempfile
 import re
 import uuid
 
+from recipe_engine.recipe_api import StepFailure
+
 from . import depot_config
 from . import bisect_exceptions
 
@@ -186,7 +188,7 @@ class RevisionState(object):
         while not self._check_revision_good():  # pragma: no cover
           min(self, self.bisector.lkgr, self.bisector.fkbr,
               key=lambda(x): x.test_run_count)._do_test()
-      except api.m.step.StepFailure as e:  # pragma: no cover
+      except StepFailure as e:  # pragma: no cover
         raise bisect_exceptions.UntestableRevisionException(e.reason)
 
       # If this is the initial good/bad revision, we should to check if any
@@ -244,7 +246,7 @@ class RevisionState(object):
           repository_url=url, file_path=file_name, branch=branch,
           step_test_data=lambda: api._test_data['download_deps'].get(
               self.commit_hash, ''))
-    except self.m.step.StepFailure:
+    except StepFailure:
       err = 'Could not read content for %s/%s/%s' % (url, file_name, branch)
       api.m.step.active_result.presentation.status = api.m.step.WARNING
       api.m.step.active_result.presentation.logs['Gitiles Warning'] = [err]
@@ -331,7 +333,7 @@ class RevisionState(object):
           api.m.service_account.get_json_path(api.SERVICE_ACCOUNT),
           step_test_data=lambda: api.test_api.buildbot_job_status_mock(
               api._test_data.get('build_status', {}).get(self.commit_hash, [])))
-    except api.m.step.StepFailure:
+    except StepFailure:
       # If the check fails, we cannot assume that the build is failed.
       return False
     if result.stdout['build']['status'] == 'COMPLETED':
@@ -395,7 +397,7 @@ class RevisionState(object):
           api.m.service_account.get_json_path(api.SERVICE_ACCOUNT),
           step_test_data=lambda: api.m.json.test_api.output_stream(
               {'results':[{'build':{'id':'1201331270'}}]}))
-    except api.m.step.StepFailure:  # pragma: no cover
+    except StepFailure:  # pragma: no cover
       self.bisector.surface_result('BUILD_FAILURE')
       raise
     self.build_id = result.stdout['results'][0]['build']['id']
@@ -524,7 +526,7 @@ class RevisionState(object):
       try:
         commit = str(self.bisector.api.m.commit_position
                      .chromium_commit_position_from_hash(self.commit_hash))
-      except self.bisector.api.m.step.StepFailure:
+      except StepFailure:
         pass # Failure to resolve a commit position is no reason to break.
     result += '%s@%s' % (self.depot_name, commit)
     self._rev_str = result
