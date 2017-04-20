@@ -177,14 +177,6 @@
       "slavebuilddir": "android_clang_dbg_recipe",
       "slave_pools": ["ccompute_optional_bots"],
     },
-    "android_chromium_variable_gn": {
-      "builder_timeout_s": 36000,  # 60 * 600
-      "recipe": "findit/chromium/compile",
-      "use_remote_run": True,
-      "scheduler": None,
-      "slavebuilddir": "android_chromium_gn",
-      "slave_pools": ["ccompute_optional_bots"],
-    },
     "android_chromium_variable_nexus4": {
       "builder_timeout_s": 36000,  # 60 * 600
       "recipe": "findit/chromium/compile",
