@@ -1,0 +1,29 @@
+[
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[depot_tools]/cros",
+      "chrome-sdk",
+      "--board=x86-generic",
+      "--nocolor",
+      "--use-external-config",
+      "--clear-sdk-cache",
+      "--",
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
+      "runhooks"
+    ],
+    "cwd": "None",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "GYP_CHROMIUM_NO_ACTION": "1",
+      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+    },
+    "name": "gclient runhooks"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]

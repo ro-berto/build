@@ -1,0 +1,19 @@
+[
+  {
+    "cmd": [],
+    "env": {
+      "ADB_VENDOR_KEYS": "[START_DIR]/.adb_key",
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "GOMA_STUBBY_PROXY_IP_ADDRESS": "sandbox.google.com",
+      "LLVM_FORCE_HEAD_REVISION": "YES",
+      "MAC_TOOLCHAIN_REVISION": "8C1002-2"
+    },
+    "name": "test"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]

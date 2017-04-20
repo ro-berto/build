@@ -1,0 +1,15 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "None/tools/clang/scripts/update.py"
+    ],
+    "name": "update_clang"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]

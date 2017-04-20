@@ -1,0 +1,18 @@
+[
+  {
+    "cmd": [
+      "some/other/path/gn",
+      "--root=None",
+      "gen",
+      "//out/Release",
+      "--args=is_debug=false target_cpu=\"x64\" use_goma=true goma_dir=\"None\""
+    ],
+    "cwd": "None",
+    "name": "gn"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]

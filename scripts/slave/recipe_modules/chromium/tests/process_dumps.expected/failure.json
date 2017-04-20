@@ -1,0 +1,26 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/process_dumps.py",
+      "--target",
+      "Release"
+    ],
+    "infra_step": true,
+    "name": "process_dumps",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_EXCEPTION@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]

@@ -1,0 +1,60 @@
+[
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "[TMP_BASE]/stdout.log",
+      "--",
+      "python",
+      "None/infra/scripts/runtest_wrapper.py",
+      "--",
+      "--target",
+      "Release",
+      "--no-xvfb",
+      "--factory-properties",
+      "{\"annotate\": \"gtest\", \"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"recipe\": \"chromium:tests/runtest\", \"slavename\": \"test_bot_id\"}",
+      "--build-properties",
+      "{\"annotate\": \"gtest\", \"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"recipe\": \"chromium:tests/runtest\", \"slavename\": \"test_bot_id\"}",
+      "--annotate=gtest",
+      "--results-url=https://example/url",
+      "--perf-dashboard-id=test_perf_dashboard_id",
+      "--perf-id=test_perf_id",
+      "--perf-config",
+      "{\"a_default_rev\": \"some_sha\"}",
+      "--test-type=base_unittests",
+      "--step-name=base_unittests",
+      "--test-launcher-summary-output",
+      "/path/to/tmp/json",
+      "--generate-json-file",
+      "-o",
+      "gtest-results/base_unittests",
+      "--builder-name=test_buildername",
+      "--slave-name=test_bot_id",
+      "--build-number=123",
+      "--point-id=123456",
+      "--revision=some_sha",
+      "base_unittests",
+      "A\nt\nE\nx\ni\nt\n*"
+    ],
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+    },
+    "name": "base_unittests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]

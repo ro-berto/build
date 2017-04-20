@@ -1,0 +1,15 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "None/build/download_gold_plugin.py"
+    ],
+    "name": "download LTO plugin"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]

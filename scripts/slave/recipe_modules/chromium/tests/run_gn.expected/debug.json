@@ -1,0 +1,20 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gn.py",
+      "--root=None",
+      "gen",
+      "//out/Debug",
+      "--args=is_debug=true target_cpu=\"x64\" use_goma=true goma_dir=\"None\""
+    ],
+    "cwd": "None",
+    "name": "gn"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]

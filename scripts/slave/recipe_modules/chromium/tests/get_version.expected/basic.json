@@ -1,0 +1,17 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "None/chrome/VERSION",
+      "/path/to/tmp/"
+    ],
+    "name": "get version"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]

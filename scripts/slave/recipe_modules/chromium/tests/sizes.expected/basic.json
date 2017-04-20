@@ -1,0 +1,99 @@
+[
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
+      "--src-dir",
+      "None",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "clang_revision",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "None/out/Release",
+      "All",
+      "chromium_builder_tests"
+    ],
+    "cwd": "None",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "compile"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/upload_goma_logs.py",
+      "--gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--skip-sendgomatsmon",
+      "--ninja-log-outdir",
+      "None/out/Release",
+      "--ninja-log-command",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', 'None/out/Release', 'All', 'chromium_builder_tests']",
+      "--ninja-log-exit-status",
+      "0",
+      "--ninja-log-compiler",
+      "goma-clang"
+    ],
+    "name": "upload_ninja_log"
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--no-xvfb",
+      "--factory-properties",
+      "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"recipe\": \"chromium:tests/sizes\", \"slavename\": \"test_bot_id\"}",
+      "--build-properties",
+      "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"recipe\": \"chromium:tests/sizes\", \"slavename\": \"test_bot_id\"}",
+      "--test-type=sizes",
+      "--builder-name=test_buildername",
+      "--slave-name=test_bot_id",
+      "--build-number=123",
+      "--run-python-script",
+      "--annotate=graphing",
+      "--results-url=https://example/url",
+      "--perf-dashboard-id=sizes",
+      "--perf-id=test-perf-id",
+      "--perf-config={'r_clang_rev': '123456'}",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/sizes.py",
+      "--target",
+      "Release",
+      "--platform",
+      "linux"
+    ],
+    "name": "sizes"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]
