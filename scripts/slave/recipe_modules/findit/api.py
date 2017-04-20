@@ -271,7 +271,7 @@ class FinditApi(recipe_api.RecipeApi):
 
       return results, failed_tests_dict
 
-  def configure_and_sync(self, api, tests, buildbucket_str, target_mastername,
+  def configure_and_sync(self, api, tests, buildbucket, target_mastername,
                          target_testername, revision):
     """Loads tests from buildbucket, applies bot/swarming configs & syncs code.
 
@@ -286,11 +286,11 @@ class FinditApi(recipe_api.RecipeApi):
           i.e. for GTests these are built into a test filter string, and passed
           in the command line. E.g.
               {'browser_tests': ['suite.test1', 'suite.test2']}
-          These are likely superseded by the contents of buildbucket_str below.
-      buildbucket_str (str):
-          JSON string containing a buildbucket job spec from which to extract
-          the tests to execute. Parsed if the `tests` parameter above is not
-          provided.
+          These are likely superseded by the contents of buildbucket below.
+      buildbucket (str or dict):
+          JSON string or dict containing a buildbucket job spec from which to
+          extract the tests to execute. Parsed if the `tests` parameter above is
+          not provided.
       target_mastername (str): Which master to derive the configuration off of.
       target_testername (str): likewise
       revision (str): A string representing the commit hash of the revision to
@@ -300,7 +300,13 @@ class FinditApi(recipe_api.RecipeApi):
 
     if not tests:
       # tests should be saved in build parameter in this case.
-      buildbucket_json = json.loads(buildbucket_str)
+
+      # If the recipe is run by swarmbucket, the property 'buildbucket' will be
+      # a dict instead of a string containing json.
+      if isinstance(buildbucket, dict):
+        buildbucket_json = buildbucket
+      else:
+        buildbucket_json = json.loads(buildbucket)
       build_id = buildbucket_json['build']['id']
       get_build_result = api.buildbucket.get_build(build_id)
       tests = json.loads(
@@ -341,4 +347,3 @@ class FinditApi(recipe_api.RecipeApi):
         root_solution_revision=revision)
 
     return tests, target_buildername
-

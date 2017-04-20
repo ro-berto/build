@@ -137,7 +137,13 @@ def RunSteps(api, target_mastername, target_buildername,
              compile_on_good_revision):
   if not compile_targets:
     # compile_targets could be saved in build parameter.
-    buildbucket_json = json.loads(buildbucket)
+
+    # If the recipe is run by swarmbucket, the property 'buildbucket' will be
+    # a dict instead of a string containing json.
+    if isinstance(buildbucket, dict):
+      buildbucket_json = buildbucket
+    else:
+      buildbucket_json = json.loads(buildbucket)
     build_id = buildbucket_json['build']['id']
     get_build_result = api.buildbucket.get_build(build_id)
     compile_targets = json.loads(
@@ -430,6 +436,13 @@ def GenTests(api):
   yield (
       api.test('compile_succeeded') +
       props(buildbucket=json.dumps({'build': {'id': 'id1'}})) +
+      simulated_buildbucket_output({}) +
+      api.override_step_data('test r1.compile', retcode=0)
+  )
+
+  yield (
+      api.test('compile_succeeded_non_json_buildbucket') +
+      props(buildbucket={'build': {'id': 'id1'}}) +
       simulated_buildbucket_output({}) +
       api.override_step_data('test r1.compile', retcode=0)
   )

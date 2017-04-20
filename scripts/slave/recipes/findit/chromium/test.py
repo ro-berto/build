@@ -1101,6 +1101,77 @@ def GenTests(api):
   )
 
   yield (
+      api.test('use_build_parameter_for_tests_non_json_buildbucket') +
+      props({}, 'mac', 'Mac10.9 Tests', use_analyze=False,
+            good_revision='r0', bad_revision='r6',
+            suspected_revisions=['r3', 'r4'],
+            buildbucket={'build': {'id': 'id1'}}) +
+      api.buildbucket.simulated_buildbucket_output({
+          'additional_build_parameters' : {
+              'tests': {
+                  'gl_tests': ['Test.One']
+              }
+          }}) +
+      api.override_step_data(
+          'test r2.read test spec (chromium.mac.json)',
+          api.json.output({
+              'Mac10.9 Tests': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          })
+      ) +
+      api.override_step_data(
+          'test r3.read test spec (chromium.mac.json)',
+          api.json.output({
+              'Mac10.9 Tests': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          })
+      ) +
+      api.override_step_data(
+          'test r4.read test spec (chromium.mac.json)',
+          api.json.output({
+              'Mac10.9 Tests': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          })
+      ) +
+      api.override_step_data(
+          'git commits in range',
+          api.raw_io.stream_output(
+              '\n'.join('r%d' % i for i in reversed(range(1, 7))))) +
+      api.override_step_data(
+          'test r4.gl_tests (r4)',
+          api.swarming.canned_summary_output(failure=True) +
+          api.test_utils.simulated_gtest_output(
+              failed_test_names=['Test.One'])) +
+      api.override_step_data(
+          'test r2.gl_tests (r2)',
+          api.swarming.canned_summary_output() +
+          api.test_utils.simulated_gtest_output(
+              passed_test_names=['Test.One'])) +
+      api.override_step_data(
+          'test r3.gl_tests (r3)',
+          api.swarming.canned_summary_output() +
+          api.test_utils.simulated_gtest_output(passed_test_names=['Test.One']))
+  )
+
+  yield (
       api.test('use_analyze_set_to_False_for_non_linear_try_job') +
       props(
           {'gl_tests': ['Test.One']}, 'mac', 'Mac10.9 Tests', use_analyze=True,
