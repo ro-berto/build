@@ -7,6 +7,6 @@ CONFIG_CTX = DEPS['chromium_android'].CONFIG_CTX
 from recipe_engine.config_types import Path
 
 
-@CONFIG_CTX(includes=['base_config'])
+@CONFIG_CTX(includes=['base_config', 'use_devil_provision'])
 def webrtc(c):
   pass

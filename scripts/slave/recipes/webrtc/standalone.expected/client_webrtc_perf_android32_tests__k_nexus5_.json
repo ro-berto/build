@@ -261,7 +261,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Android32_Tests__K_Nexus5_/src/build/android/provision_devices.py",
+      "[BUILDER_CACHE]/Android32_Tests__K_Nexus5_/src/third_party/catapult/devil/devil/android/tools/provision_devices.py",
       "--adb-path",
       "[BUILDER_CACHE]/Android32_Tests__K_Nexus5_/src/third_party/android_tools/sdk/platform-tools/adb",
       "--blacklist-file",
