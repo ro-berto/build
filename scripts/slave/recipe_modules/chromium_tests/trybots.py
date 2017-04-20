@@ -575,17 +575,14 @@ TRYBOTS = freeze({
         'buildername': 'CrWinClang64',
       }),
       # Optional GPU bots.
+      # This trybot used to mirror "Optional Win7 Release (AMD)",
+      # but that had to be disabled due to capacity constraints.
       'win_optional_gpu_tests_rel': {
         'bot_ids': [
           {
             'mastername': 'chromium.gpu.fyi',
             'buildername': 'GPU Win Builder',
             'tester': 'Optional Win7 Release (NVIDIA)',
-          },
-          {
-            'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU Win Builder',
-            'tester': 'Optional Win7 Release (AMD)',
           },
         ],
       },
