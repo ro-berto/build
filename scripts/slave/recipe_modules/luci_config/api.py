@@ -74,53 +74,6 @@ class LuciConfigApi(recipe_api.RecipeApi):
     result['content'] = base64.b64decode(result['content'])
     return result
 
-  def parse_textproto(self, lines):
-    """(badly) parses a text protobuf.
-
-    This is not real protobuf parsing at the moment; eventually, maybe it could
-    be. For now, it's enough to just get by.
-
-    We assume all fields are repeated since we don't have a proto spec to work
-    with.
-
-    Args:
-      lines: a list of the lines to parse
-    Returns:
-      A recursive dictionary of lists.
-    """
-    def parse_atom(text):
-      # NOTE: Assuming we only have numbers and strings to avoid using
-      # ast.literal_eval
-      try:
-        return int(text)
-      except ValueError:
-        return text.strip("'").strip('"')
-
-    ret = {}
-    while lines:
-      line = lines.pop(0).strip()
-
-      m = re.match(r'(\w+)\s*:\s*(.*)', line)
-      if m:
-        ret.setdefault(m.group(1), []).append(parse_atom(m.group(2)))
-        continue
-
-      m = re.match(r'(\w+)\s*{', line)
-      if m:
-        subparse = self.parse_textproto(lines)
-        ret.setdefault(m.group(1), []).append(subparse)
-        continue
-
-      if line == '}':
-        return ret
-      if line == '':
-        continue
-
-      raise ValueError(
-          'Could not understand line: <%s>' % line) # pragma: no cover
-    return ret
-
   def get_project_metadata(self, project):
     mapping = self.get_projects()
     return mapping.get(project)
-
