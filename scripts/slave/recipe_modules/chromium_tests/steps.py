@@ -2278,8 +2278,8 @@ class BlinkTest(Test):
               passing=True, minimal=True))
       else:
         step_result = api.chromium.runtest(
-          api.path['checkout'].join('third_party', 'WebKit', 'Tools',
-                                    'Scripts', 'run-webkit-tests'),
+          api.chromium.package_repo_resource(
+              'scripts', 'slave', 'chromium', 'layout_test_wrapper.py'),
           args, name=step_name,
           # TODO(phajdan.jr): Clean up the runtest.py mess.
           disable_src_side_runtest_py=True,
