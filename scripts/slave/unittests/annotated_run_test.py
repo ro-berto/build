@@ -34,6 +34,9 @@ MockOptions = collections.namedtuple('MockOptions',
 
 
 class AnnotatedRunTest(unittest.TestCase):
+  @unittest.skip("This runs annotated_run directly in the current checkout "
+                 "which is unsafe (as it does an update scripts, as well as "
+                 "attempts to manage the /b/ directory).  crbug.com/713506")
   def test_example(self):
     build_properties = {
       'mastername': 'tryserver.chromium.linux',
