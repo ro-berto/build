@@ -37,7 +37,7 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'compile_targets': [
-        'linux'
+        'chrome/installer/linux'
       ],
       'testing': {
         'platform': 'linux',
