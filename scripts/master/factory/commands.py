@@ -187,10 +187,8 @@ class CompileWithRequiredSwarmTargets(shell.Compile):
     swarm_tests = list(GetSwarmTestsFromTestFilter(test_filters,
                                                    run_default_swarm_tests))
 
-    # Append each swarm test foo_run target so the .isolated file is generated.
     # Only add if not already present.
     for t in swarm_tests:
-      t += '_run'
       if t not in command:
         command.append(t)
 

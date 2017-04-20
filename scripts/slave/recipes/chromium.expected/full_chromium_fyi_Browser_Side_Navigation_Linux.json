@@ -375,7 +375,6 @@
       "50",
       "blink_tests",
       "browser_tests",
-      "browser_tests_run",
       "content_browsertests",
       "content_unittests"
     ],
@@ -473,7 +472,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/Browser_Side_Navigation_Linux/src/out/Release",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Browser_Side_Navigation_Linux/src/out/Release', '-j', 50, 'blink_tests', 'browser_tests', 'browser_tests_run', 'content_browsertests', 'content_unittests']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Browser_Side_Navigation_Linux/src/out/Release', '-j', 50, 'blink_tests', 'browser_tests', 'content_browsertests', 'content_unittests']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",

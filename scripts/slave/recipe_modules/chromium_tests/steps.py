@@ -1279,10 +1279,6 @@ class SwarmingGTestTest(SwarmingTest):
     self._test_options = value
 
   def compile_targets(self, api):
-    # <X>_run target depends on <X>, and then isolates it invoking isolate.py.
-    # It is a convention, not a hard coded rule.
-    # Also include name without the _run suffix to help recipes correctly
-    # interpret results returned by "analyze".
     if self._override_compile_targets:
       return self._override_compile_targets
 
@@ -1291,7 +1287,7 @@ class SwarmingGTestTest(SwarmingTest):
       # _apk_run here.
       return [self.target_name + '_apk_run']
 
-    return [self.target_name, self.target_name + '_run']
+    return [self.target_name]
 
   def isolate_target(self, api):
     # TODO(agrieve): Remove override_isolate_target and _apk suffix in

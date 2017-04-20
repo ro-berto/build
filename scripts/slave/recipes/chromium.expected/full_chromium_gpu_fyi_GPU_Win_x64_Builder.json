@@ -386,8 +386,7 @@
       "[BUILDER_CACHE]\\win\\src\\out\\Release_x64",
       "-j",
       "50",
-      "browser_tests",
-      "browser_tests_run"
+      "browser_tests"
     ],
     "cwd": "[BUILDER_CACHE]\\win\\src",
     "env": {
@@ -405,7 +404,6 @@
       "-j",
       "50",
       "browser_tests",
-      "browser_tests_run",
       "-d",
       "explain",
       "-n"
@@ -505,7 +503,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]\\win\\src\\out\\Release_x64",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]\\\\win\\\\src\\\\out\\\\Release_x64', '-j', 50, 'browser_tests', 'browser_tests_run']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]\\\\win\\\\src\\\\out\\\\Release_x64', '-j', 50, 'browser_tests']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",

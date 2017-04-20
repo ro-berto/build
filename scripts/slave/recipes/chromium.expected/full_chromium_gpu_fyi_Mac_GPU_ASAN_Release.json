@@ -403,8 +403,7 @@
       "[BUILDER_CACHE]/Mac_GPU_ASAN_Release/src/out/Release",
       "-j",
       "50",
-      "browser_tests",
-      "browser_tests_run"
+      "browser_tests"
     ],
     "cwd": "[BUILDER_CACHE]/Mac_GPU_ASAN_Release/src",
     "env": {
@@ -423,7 +422,6 @@
       "-j",
       "50",
       "browser_tests",
-      "browser_tests_run",
       "-d",
       "explain",
       "-n"
@@ -524,7 +522,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/Mac_GPU_ASAN_Release/src/out/Release",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Mac_GPU_ASAN_Release/src/out/Release', '-j', 50, 'browser_tests', 'browser_tests_run']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Mac_GPU_ASAN_Release/src/out/Release', '-j', 50, 'browser_tests']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",

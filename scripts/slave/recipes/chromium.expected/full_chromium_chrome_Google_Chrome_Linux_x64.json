@@ -357,7 +357,7 @@
       "-j",
       "50",
       "chrome",
-      "linux_packages_all"
+      "linux"
     ],
     "cwd": "[BUILDER_CACHE]/Google_Chrome_Linux_x64/src",
     "env": {
@@ -455,7 +455,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/Google_Chrome_Linux_x64/src/out/Release",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Google_Chrome_Linux_x64/src/out/Release', '-j', 50, 'chrome', 'linux_packages_all']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Google_Chrome_Linux_x64/src/out/Release', '-j', 50, 'chrome', 'linux']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",

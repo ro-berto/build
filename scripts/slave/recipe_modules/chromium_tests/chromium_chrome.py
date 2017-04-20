@@ -37,7 +37,7 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'compile_targets': [
-        'linux_packages_all'
+        'linux'
       ],
       'testing': {
         'platform': 'linux',
