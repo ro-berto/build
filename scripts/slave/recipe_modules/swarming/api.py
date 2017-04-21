@@ -675,7 +675,12 @@ class SwarmingApi(recipe_api.RecipeApi):
     try:
       return task.collect_step(task, **kwargs)
     finally:
-      self.m.step.active_result.swarming_task = task
+      try:
+        self.m.step.active_result.swarming_task = task
+      except Exception:  # pragma: no cover
+        # If we don't have an active_result, something failed very early,
+        # so we eat this exception and let that one propagate.
+        pass
 
   def trigger(self, tasks, **kwargs):  # pragma: no cover
     """Batch version of 'trigger_task'.
