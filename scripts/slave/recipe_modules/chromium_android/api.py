@@ -367,16 +367,14 @@ class AndroidApi(recipe_api.RecipeApi):
   def detect_and_setup_devices(self, restart_usb=False, skip_wipe=False,
                                disable_location=False, min_battery_level=None,
                                disable_network=False, disable_java_debug=False,
-                               reboot_timeout=None, max_battery_temp=None,
-                               remove_system_webview=False):
+                               reboot_timeout=None, max_battery_temp=None):
     self.authorize_adb_devices()
     self.device_recovery()
     self.provision_devices(
       skip_wipe=skip_wipe, disable_location=disable_location,
       min_battery_level=min_battery_level, disable_network=disable_network,
       disable_java_debug=disable_java_debug, reboot_timeout=reboot_timeout,
-      max_battery_temp=max_battery_temp,
-      remove_system_webview=remove_system_webview)
+      max_battery_temp=max_battery_temp)
     self.device_status()
 
   @property
@@ -595,9 +593,7 @@ class AndroidApi(recipe_api.RecipeApi):
   def provision_devices(self, skip_wipe=False, disable_location=False,
                         min_battery_level=None, disable_network=False,
                         disable_java_debug=False, max_battery_temp=None,
-                        disable_system_chrome=False, reboot_timeout=None,
-                        remove_system_webview=False, emulators=False,
-                        **kwargs):
+                        reboot_timeout=None, emulators=False, **kwargs):
     args = [
         '--adb-path', self.m.adb.adb_path(),
         '--blacklist-file', self.blacklist_file,
@@ -626,10 +622,6 @@ class AndroidApi(recipe_api.RecipeApi):
       assert max_battery_temp >= 0
       assert max_battery_temp <= 500
       args.extend(['--max-battery-temp', max_battery_temp])
-    if disable_system_chrome:
-      args.append('--disable-system-chrome')  # pragma: no cover
-    if remove_system_webview:
-      args.append('--remove-system-webview')  # pragma: no cover
     if self.c and self.c.remove_system_packages:
       args.append('--remove-system-packages')
       args.extend(self.c.remove_system_packages)
@@ -1339,8 +1331,7 @@ class AndroidApi(recipe_api.RecipeApi):
                                             '*.log')],
     )
 
-  def common_tests_setup_steps(self, perf_setup=False,
-                               remove_system_webview=False, skip_wipe=False):
+  def common_tests_setup_steps(self, perf_setup=False, skip_wipe=False):
     if self.c.use_devil_adb:
       self.use_devil_adb()
     self.create_adb_symlink()
@@ -1360,8 +1351,7 @@ class AndroidApi(recipe_api.RecipeApi):
       kwargs = {}
     if skip_wipe:
       kwargs['skip_wipe'] = True
-    self.provision_devices(remove_system_webview=remove_system_webview,
-                           **kwargs)
+    self.provision_devices(**kwargs)
     self.device_status()
     if self.m.chromium.c.gyp_env.GYP_DEFINES.get('asan', 0) == 1:
       self.asan_device_setup()
