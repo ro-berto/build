@@ -128,9 +128,9 @@ def change_from_change_spec(change):
   """
   create_ts = None
   if 'when_timestamp' in change:
-    # Convert from seconds to milliseconds since Unix Epoch.
+    # Convert from seconds to microseconds since Unix Epoch.
     assert isinstance(change['when_timestamp'], (int, float))
-    create_ts = change['when_timestamp'] * 1000
+    create_ts = change['when_timestamp'] * 1000 * 1000
 
   return {
       'revision': change.get('revision'),
