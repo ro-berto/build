@@ -246,7 +246,7 @@ class RevisionState(object):
           repository_url=url, file_path=file_name, branch=branch,
           step_test_data=lambda: api._test_data['download_deps'].get(
               self.commit_hash, ''))
-    except StepFailure:
+    except (TypeError, StepFailure):
       err = 'Could not read content for %s/%s/%s' % (url, file_name, branch)
       api.m.step.active_result.presentation.status = api.m.step.WARNING
       api.m.step.active_result.presentation.logs['Gitiles Warning'] = [err]
