@@ -9,7 +9,7 @@
       "--patch_root",
       "v8",
       "--revision_mapping_file",
-      "{\"node.js\": \"got_node_js_revision\", \"v8\": \"got_revision\"}",
+      "{\"got_node_js_revision\": \"node.js\", \"got_revision\": \"v8\"}",
       "--git-cache-dir",
       "[CACHE]/git",
       "--output_json",

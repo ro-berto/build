@@ -9,7 +9,7 @@
       "--patch_root",
       "build_internal",
       "--revision_mapping_file",
-      "{\"build\": \"got_build_revision\", \"build_internal\": \"got_revision\"}",
+      "{\"got_build_revision\": \"build\", \"got_revision\": \"build_internal\"}",
       "--git-cache-dir",
       "[CACHE]/git",
       "--issue",

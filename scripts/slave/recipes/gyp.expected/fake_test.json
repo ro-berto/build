@@ -9,7 +9,7 @@
       "--patch_root",
       "gyp",
       "--revision_mapping_file",
-      "{\"gyp\": \"got_revision\"}",
+      "{\"got_revision\": \"gyp\"}",
       "--git-cache-dir",
       "[CACHE]/git",
       "--output_json",

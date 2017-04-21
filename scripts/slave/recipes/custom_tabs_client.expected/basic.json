@@ -9,7 +9,7 @@
       "--patch_root",
       "custom_tabs_client",
       "--revision_mapping_file",
-      "{\"custom_tabs_client\": \"got_revision\"}",
+      "{\"got_revision\": \"custom_tabs_client\"}",
       "--git-cache-dir",
       "[CACHE]/git",
       "--output_json",

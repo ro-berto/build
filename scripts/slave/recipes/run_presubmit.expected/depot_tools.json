@@ -9,7 +9,7 @@
       "--patch_root",
       "depot_tools",
       "--revision_mapping_file",
-      "{\"depot_tools\": \"got_revision\"}",
+      "{\"got_revision\": \"depot_tools\"}",
       "--git-cache-dir",
       "[CACHE]/git",
       "--issue",

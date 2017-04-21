@@ -85,7 +85,7 @@
       "--patch_root",
       "src",
       "--revision_mapping_file",
-      "{\"src\": \"got_revision\"}",
+      "{\"got_revision\": \"src\"}",
       "--git-cache-dir",
       "[GIT_CACHE]",
       "--issue",

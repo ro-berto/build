@@ -9,7 +9,7 @@
       "--patch_root",
       "build_internal/slave.DEPS",
       "--revision_mapping_file",
-      "{\"build_internal/slave.DEPS\": \"got_revision\"}",
+      "{\"got_revision\": \"build_internal/slave.DEPS\"}",
       "--git-cache-dir",
       "[CACHE]/git",
       "--issue",

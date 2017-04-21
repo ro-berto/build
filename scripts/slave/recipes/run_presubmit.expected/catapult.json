@@ -9,7 +9,7 @@
       "--patch_root",
       "catapult",
       "--revision_mapping_file",
-      "{\"catapult\": \"got_revision\"}",
+      "{\"got_revision\": \"catapult\"}",
       "--git-cache-dir",
       "[CACHE]/git",
       "--issue",

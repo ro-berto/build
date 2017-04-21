@@ -18,7 +18,7 @@
       "--patch_root",
       "v8",
       "--revision_mapping_file",
-      "{\"v8\": \"got_revision\", \"v8/tools/swarming_client\": \"got_swarming_client_revision\"}",
+      "{\"got_revision\": \"v8\", \"got_swarming_client_revision\": \"v8/tools/swarming_client\"}",
       "--git-cache-dir",
       "[CACHE]\\git",
       "--issue",

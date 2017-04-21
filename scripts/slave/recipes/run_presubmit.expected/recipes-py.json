@@ -9,7 +9,7 @@
       "--patch_root",
       "infra/recipes-py",
       "--revision_mapping_file",
-      "{\"infra/recipes-py\": \"got_revision\"}",
+      "{\"got_revision\": \"infra/recipes-py\"}",
       "--git-cache-dir",
       "[CACHE]/git",
       "--issue",

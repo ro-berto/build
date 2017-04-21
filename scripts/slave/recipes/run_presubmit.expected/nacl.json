@@ -9,7 +9,7 @@
       "--patch_root",
       "native_client",
       "--revision_mapping_file",
-      "{\"native_client\": \"got_revision\"}",
+      "{\"got_revision\": \"native_client\"}",
       "--git-cache-dir",
       "[CACHE]/git",
       "--issue",

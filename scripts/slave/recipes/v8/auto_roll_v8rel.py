@@ -18,6 +18,10 @@ DEPS = [
 def RunSteps(api):
   api.gclient.set_config('chromium')
   api.gclient.apply_config('v8')
+
+  # Chromium and V8 side-by-side makes the got_revision mapping ambiguous.
+  del api.gclient.c.got_revision_mapping['src']
+
   api.bot_update.ensure_checkout(
       no_shallow=True, with_branch_heads=True)
   with api.step.context({'cwd': api.path['start_dir'].join('v8')}):

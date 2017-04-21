@@ -20,7 +20,7 @@
       "--patch_root",
       "src/flutter",
       "--revision_mapping_file",
-      "{\"src/flutter\": \"got_engine_revision\"}",
+      "{\"got_engine_revision\": \"src/flutter\"}",
       "--git-cache-dir",
       "[CACHE]\\git",
       "--output_json",

@@ -9,7 +9,7 @@
       "--patch_root",
       "pdfium",
       "--revision_mapping_file",
-      "{\"pdfium\": \"got_revision\"}",
+      "{\"got_revision\": \"pdfium\"}",
       "--git-cache-dir",
       "[CACHE]/git",
       "--issue",

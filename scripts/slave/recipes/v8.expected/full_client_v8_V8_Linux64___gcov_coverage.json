@@ -9,7 +9,7 @@
       "--patch_root",
       "v8",
       "--revision_mapping_file",
-      "{\"v8\": \"got_revision\"}",
+      "{\"got_revision\": \"v8\"}",
       "--git-cache-dir",
       "[CACHE]/git",
       "--output_json",

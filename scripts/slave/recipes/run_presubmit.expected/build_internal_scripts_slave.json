@@ -9,7 +9,7 @@
       "--patch_root",
       "build_internal/scripts/slave",
       "--revision_mapping_file",
-      "{\"build\": \"got_build_revision\", \"build_internal/scripts/slave\": \"got_revision\"}",
+      "{\"got_build_revision\": \"build\", \"got_revision\": \"build_internal/scripts/slave\"}",
       "--git-cache-dir",
       "[CACHE]/git",
       "--issue",

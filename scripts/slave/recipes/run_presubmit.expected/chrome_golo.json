@@ -9,7 +9,7 @@
       "--patch_root",
       "chrome_golo",
       "--revision_mapping_file",
-      "{\"chrome_golo\": \"got_revision\"}",
+      "{\"got_revision\": \"chrome_golo\"}",
       "--git-cache-dir",
       "[CACHE]/git",
       "--issue",
