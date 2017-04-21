@@ -1,0 +1,28 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "None/build/android/test_runner.py",
+      "instrumentation",
+      "--blacklist-file",
+      "None/out/bad_devices.json",
+      "--tool=test_tool",
+      "--verbose",
+      "--num-retries",
+      "5",
+      "--release",
+      "--adb-path",
+      "None/third_party/android_tools/sdk/platform-tools/adb"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "None/out/Release"
+    },
+    "name": "test_suite"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]

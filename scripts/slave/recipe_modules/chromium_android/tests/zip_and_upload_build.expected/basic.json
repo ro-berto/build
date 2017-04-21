@@ -1,0 +1,37 @@
+[
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/zip_build.py",
+      "--target",
+      "Release",
+      "--gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--staging-dir",
+      "[CACHE]/chrome_staging",
+      "--src-dir",
+      "[START_DIR]/src",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--exclude-files",
+      "lib.target,gen,android_webview,jingle_unittests",
+      "--factory-properties",
+      "{\"recipe\": \"chromium_android:tests/zip_and_upload_build\"}",
+      "--build-properties",
+      "{\"recipe\": \"chromium_android:tests/zip_and_upload_build\"}"
+    ],
+    "infra_step": true,
+    "name": "zip_build"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]

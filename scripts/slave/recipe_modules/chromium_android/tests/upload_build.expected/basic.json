@@ -1,0 +1,41 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/android/archive_build.py",
+      "--target",
+      "Release",
+      "--name",
+      "build_product.zip"
+    ],
+    "cwd": "None",
+    "infra_step": true,
+    "name": "zip_build_product"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--force-version",
+      "4.7",
+      "----",
+      "cp",
+      "None/out/build_product.zip",
+      "gs://test-bucket/test/path"
+    ],
+    "infra_step": true,
+    "name": "gsutil upload_build_product",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/test-bucket/test/path@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]

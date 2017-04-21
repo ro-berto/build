@@ -203,7 +203,7 @@ def RunSteps(api, buildername):
         max_battery_temp=config.get('max_battery_temp'),
         reboot_timeout=1800)
 
-    api.chromium_android.common_tests_setup_steps()
+    api.chromium_android.common_tests_setup_steps(skip_wipe=True)
 
   except api.step.StepFailure as f:
     failure = f

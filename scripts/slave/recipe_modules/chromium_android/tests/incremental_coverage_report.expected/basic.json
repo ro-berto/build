@@ -1,0 +1,58 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "build/android/emma_coverage_stats.py",
+      "-v",
+      "--out",
+      "/path/to/tmp/json",
+      "--emma-dir",
+      "None/out/Debug/coverage/coverage_html",
+      "--lines-for-coverage",
+      "[TMP_BASE]/coverage_tmp_1/file_changes.json"
+    ],
+    "cwd": "None",
+    "name": "Incremental coverage report",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"files\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"sample file 1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"absolute\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"covered\": 70, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"total\": 100@@@",
+      "@@@STEP_LOG_LINE@json.output@      }, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"incremental\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"covered\": 30, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"total\": 50@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"sample file 2\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"absolute\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"covered\": 50, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"total\": 100@@@",
+      "@@@STEP_LOG_LINE@json.output@      }, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"incremental\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"covered\": 50, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"total\": 50@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"incremental\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"covered\": 80, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"total\": 100@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@moreInfoURL@\"https://example/url/builders/test_buildername/builds/123/steps/Incremental%20coverage%20report/logs/json.output\"@@@",
+      "@@@SET_BUILD_PROPERTY@summary@\"Test coverage for this patch: 80/100 lines (80%).\"@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]

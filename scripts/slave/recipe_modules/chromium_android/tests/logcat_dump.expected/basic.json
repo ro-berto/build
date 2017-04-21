@@ -1,0 +1,43 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "None/build/android/adb_logcat_printer.py",
+      "--output-path",
+      "None/out/Release/full_log",
+      "None/out/logcat"
+    ],
+    "infra_step": true,
+    "name": "logcat_dump"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--force-version",
+      "4.7",
+      "-o",
+      "GSUtil:parallel_composite_upload_threshold=50M",
+      "----",
+      "cp",
+      "-a",
+      "public-read",
+      "None/out/Release/full_log",
+      "gs://test-bucket/logcat_dumps/TestBuilder/571"
+    ],
+    "infra_step": true,
+    "name": "gsutil upload",
+    "~followup_annotations": [
+      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/test-bucket/logcat_dumps/TestBuilder/571@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]

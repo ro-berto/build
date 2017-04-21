@@ -1,0 +1,242 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "None/build/android/test_runner.py",
+      "perf",
+      "--release",
+      "--verbose",
+      "--steps",
+      "{\"steps\": {\"resource_sizes (test.apk)\": {\"archive_output_dir\": true, \"cmd\": \"build/android/resource_sizes.py '[START_DIR]/test.apk' --estimate-patch-size --reference-apk-builder test_buildername\", \"device_affinity\": null}}, \"version\": 1}",
+      "--blacklist-file",
+      "None/out/bad_devices.json",
+      "--num-retries",
+      "0",
+      "--trace-output",
+      "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.html",
+      "--adb-path",
+      "None/third_party/android_tools/sdk/platform-tools/adb"
+    ],
+    "cwd": "None",
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "None/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "Sharded Perf Tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.html",
+      "gs://chromium-testrunner-trace/test_buildername/trace_123.html"
+    ],
+    "infra_step": true,
+    "name": "gsutil Upload Test Trace",
+    "~followup_annotations": [
+      "@@@STEP_LINK@Test Trace@https://storage.cloud.google.com/chromium-testrunner-trace/test_buildername/trace_123.html@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
+      "[TMP_BASE]/test_runner_trace_tmp_1"
+    ],
+    "infra_step": true,
+    "name": "rmtree [TMP_BASE]/test_runner_trace_tmp_1"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "None/build/android/test_runner.py",
+      "perf",
+      "--steps",
+      "{\"steps\": {\"resource_sizes (test.apk)\": {\"archive_output_dir\": true, \"cmd\": \"build/android/resource_sizes.py '[START_DIR]/test.apk' --estimate-patch-size --reference-apk-builder test_buildername\", \"device_affinity\": null}}, \"version\": 1}",
+      "--output-json-list",
+      "/path/to/tmp/json",
+      "--blacklist-file",
+      "None/out/bad_devices.json",
+      "--adb-path",
+      "None/third_party/android_tools/sdk/platform-tools/adb"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "None/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "get perf test list",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"device_affinity\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"end_time\": 1443438432.949711, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"has_archive\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test\": \"perf_test.foo\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"device_affinity\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test\": \"perf_test.foo.reference\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"device_affinity\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test\": \"page_cycler.foo\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--no-xvfb",
+      "--factory-properties",
+      "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"recipe\": \"chromium_android:tests/resource_sizes\", \"slavename\": \"test_bot_id\"}",
+      "--build-properties",
+      "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"recipe\": \"chromium_android:tests/resource_sizes\", \"slavename\": \"test_bot_id\"}",
+      "--annotate=graphing",
+      "--results-url=https://chromeperf.appspot.com",
+      "--perf-dashboard-id=page_cycler.foo",
+      "--perf-id=test_buildername",
+      "--test-type=page_cycler.foo",
+      "--step-name=page_cycler.foo",
+      "--builder-name=test_buildername",
+      "--slave-name=test_bot_id",
+      "--build-number=123",
+      "--run-python-script",
+      "None/build/android/test_runner.py",
+      "perf",
+      "--print-step",
+      "page_cycler.foo",
+      "--verbose",
+      "--adb-path",
+      "None/third_party/android_tools/sdk/platform-tools/adb",
+      "--blacklist-file",
+      "None/out/bad_devices.json"
+    ],
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "CHROMIUM_OUTPUT_DIR": "None/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "page_cycler.foo",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>Device Affinity: 0<br/>@@@"
+    ]
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--no-xvfb",
+      "--factory-properties",
+      "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"recipe\": \"chromium_android:tests/resource_sizes\", \"slavename\": \"test_bot_id\"}",
+      "--build-properties",
+      "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"recipe\": \"chromium_android:tests/resource_sizes\", \"slavename\": \"test_bot_id\"}",
+      "--annotate=graphing",
+      "--results-url=https://chromeperf.appspot.com",
+      "--perf-dashboard-id=perf_test.foo",
+      "--perf-id=test_buildername",
+      "--test-type=perf_test.foo",
+      "--step-name=perf_test.foo",
+      "--builder-name=test_buildername",
+      "--slave-name=test_bot_id",
+      "--build-number=123",
+      "--run-python-script",
+      "None/build/android/test_runner.py",
+      "perf",
+      "--print-step",
+      "perf_test.foo",
+      "--verbose",
+      "--adb-path",
+      "None/third_party/android_tools/sdk/platform-tools/adb",
+      "--blacklist-file",
+      "None/out/bad_devices.json"
+    ],
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "CHROMIUM_OUTPUT_DIR": "None/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "perf_test.foo",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>Device Affinity: 0<br/>@@@"
+    ]
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--no-xvfb",
+      "--factory-properties",
+      "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"recipe\": \"chromium_android:tests/resource_sizes\", \"slavename\": \"test_bot_id\"}",
+      "--build-properties",
+      "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"recipe\": \"chromium_android:tests/resource_sizes\", \"slavename\": \"test_bot_id\"}",
+      "--annotate=graphing",
+      "--results-url=https://chromeperf.appspot.com",
+      "--perf-dashboard-id=perf_test.foo.reference",
+      "--perf-id=test_buildername",
+      "--test-type=perf_test.foo.reference",
+      "--step-name=perf_test.foo.reference",
+      "--builder-name=test_buildername",
+      "--slave-name=test_bot_id",
+      "--build-number=123",
+      "--run-python-script",
+      "None/build/android/test_runner.py",
+      "perf",
+      "--print-step",
+      "perf_test.foo.reference",
+      "--verbose",
+      "--adb-path",
+      "None/third_party/android_tools/sdk/platform-tools/adb",
+      "--blacklist-file",
+      "None/out/bad_devices.json"
+    ],
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "CHROMIUM_OUTPUT_DIR": "None/out/Release",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "perf_test.foo.reference",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>Device Affinity: 0<br/>@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]

@@ -938,7 +938,8 @@
       "--output-device-blacklist",
       "/path/to/tmp/json",
       "-t",
-      "Release"
+      "Release",
+      "--skip-wipe"
     ],
     "env": {
       "ADB_VENDOR_KEYS": "[START_DIR]/.adb_key",

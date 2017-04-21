@@ -1177,7 +1177,8 @@
       "--output-device-blacklist",
       "/path/to/tmp/json",
       "-t",
-      "Release"
+      "Release",
+      "--skip-wipe"
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",

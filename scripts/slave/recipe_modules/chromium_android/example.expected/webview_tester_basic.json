@@ -934,6 +934,7 @@
       "/path/to/tmp/json",
       "-t",
       "Release",
+      "--skip-wipe",
       "--remove-system-packages",
       "com.android.chrome",
       "com.google.android.webview",
