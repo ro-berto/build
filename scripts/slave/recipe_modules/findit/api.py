@@ -112,6 +112,7 @@ class FinditApi(recipe_api.RecipeApi):
 
     # Run ninja to check existences of targets.
     args = ['--target-build-dir', self.m.chromium.output_dir]
+    args.extend(['--ninja-path', self.m.depot_tools.ninja_path])
     for target in targets:
       args.extend(['--target', target])
     args.extend(['--json-output', self.m.json.output()])

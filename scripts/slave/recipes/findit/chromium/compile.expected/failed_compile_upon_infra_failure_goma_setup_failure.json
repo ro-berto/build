@@ -500,6 +500,8 @@
       "RECIPE_MODULE[build::findit]/resources/check_target_existence.py",
       "--target-build-dir",
       "[BUILDER_CACHE]/linux/src/out/Release",
+      "--ninja-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "--target",
       "target_name",
       "--json-output",
