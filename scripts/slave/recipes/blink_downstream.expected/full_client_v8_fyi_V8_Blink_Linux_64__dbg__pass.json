@@ -480,7 +480,7 @@
       "--slave-name=test_bot",
       "--build-number=571",
       "--run-python-script",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/layout_test_wrapper.py",
+      "[BUILDER_CACHE]/V8_Blink_Linux_64__dbg_/src/third_party/WebKit/Tools/Scripts/run-webkit-tests",
       "--target",
       "Debug",
       "--results-directory",
