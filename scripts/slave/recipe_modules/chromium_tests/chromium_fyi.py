@@ -2230,7 +2230,7 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'compile_targets': [
-        'all',
+        'chrome',
       ],
       'bot_type': 'builder_tester',
       'test_results_config': 'staging_server',
