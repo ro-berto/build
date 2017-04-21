@@ -108,7 +108,8 @@ _AddTestSpec('Android Power Nexus 5X Perf', 'fyi-android-power-nexus-5x',
              parent_buildername='Android Builder FYI')
 
 _AddIsolatedTestSpec('Android Swarming N5X Tester', 'fyi-android-swarming-n5x',
-                     'android', parent_buildername='Android Builder FYI')
+                     'android', parent_buildername='Android Builder FYI',
+                     target_bits=32)
 
 _AddBuildSpec('Win Builder FYI', 'win', 'win', enable_swarming=True,
               force_exparchive=True)
