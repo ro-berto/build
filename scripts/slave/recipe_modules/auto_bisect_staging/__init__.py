@@ -12,9 +12,10 @@ DEPS = [
     'depot_tools/bot_update',
     'depot_tools/gclient',
     'depot_tools/git',
+    'depot_tools/gitiles',
     'depot_tools/tryserver',
+    'depot_tools/url',
     'file',
-    'gitiles',
     'goma',
     'depot_tools/gsutil',
     'halt',
@@ -31,7 +32,6 @@ DEPS = [
     'service_account',
     'test_utils',
     'trigger',
-    'url',
 ]
 
 

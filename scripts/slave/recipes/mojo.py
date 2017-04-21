@@ -6,6 +6,7 @@ DEPS = [
   'adb',
   'depot_tools/bot_update',
   'depot_tools/gclient',
+  'depot_tools/url',
   'goma',
   'recipe_engine/json',
   'recipe_engine/path',
@@ -14,7 +15,6 @@ DEPS = [
   'recipe_engine/python',
   'recipe_engine/step',
   'depot_tools/tryserver',
-  'url',
 ]
 
 

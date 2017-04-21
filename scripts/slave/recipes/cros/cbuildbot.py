@@ -4,7 +4,7 @@
 
 DEPS = [
   'chromite',
-  'gitiles',
+  'depot_tools/gitiles',
   'recipe_engine/properties',
 ]
 

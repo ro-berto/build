@@ -6,6 +6,7 @@ import contextlib
 
 DEPS = [
   'depot_tools/git',
+  'depot_tools/url',
   'file',
   'depot_tools/gsutil',
   'recipe_engine/json',
@@ -14,7 +15,6 @@ DEPS = [
   'recipe_engine/properties',
   'recipe_engine/step',
   'recipe_engine/python',
-  'url',
   'zip',
 ]
 

@@ -12,6 +12,7 @@ DEPS = [
   'depot_tools/gclient',
   'depot_tools/git',
   'depot_tools/tryserver',
+  'depot_tools/url',
   'file',
   'depot_tools/gsutil',
   'recipe_engine/generator_script',
@@ -24,6 +25,5 @@ DEPS = [
   'recipe_engine/tempfile',
   'recipe_engine/time',
   'test_utils',
-  'url',
   'zip',
 ]

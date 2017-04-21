@@ -9,7 +9,7 @@ import zlib
 
 DEPS = [
   'chromite',
-  'gitiles',
+  'depot_tools/gitiles',
   'recipe_engine/json',
   'recipe_engine/properties',
 ]

@@ -9,14 +9,14 @@ DEPS = [
   'depot_tools/bot_update',
   'depot_tools/gclient',
   'depot_tools/git',
-  'gitiles',
+  'depot_tools/gitiles',
+  'depot_tools/url',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/python',
   'recipe_engine/raw_io',
   'recipe_engine/step',
-  'url',
 ]
 
 TEST_DEPS_FILE = """

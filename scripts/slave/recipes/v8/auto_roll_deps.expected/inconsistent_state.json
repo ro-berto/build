@@ -19,7 +19,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/pycurl.py",
+      "RECIPE_MODULE[depot_tools::url]/resources/pycurl.py",
       "https://codereview.chromium.org/search?owner=v8-autoroll%40chromium.org&limit=30&closed=3&format=json",
       "--outfile",
       "/path/to/tmp/"
@@ -146,7 +146,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::gitiles]/resources/gerrit_client.py",
+      "RECIPE_MODULE[depot_tools::gitiles]/resources/gerrit_client.py",
       "--json-file",
       "/path/to/tmp/json",
       "--url",

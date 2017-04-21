@@ -5,7 +5,7 @@ DEPS = [
   'commit_position',
   'file',
   'depot_tools/gclient',
-  'gitiles',
+  'depot_tools/gitiles',
   'depot_tools/gsutil',
   'isolate',
   'perf_dashboard',

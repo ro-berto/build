@@ -112,7 +112,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/pycurl.py",
+      "RECIPE_MODULE[depot_tools::url]/resources/pycurl.py",
       "https://services.gradle.org/distributions/gradle-2.14.1-bin.zip",
       "--outfile",
       "[START_DIR]/flutter/dev/bots/gradle-2.14.1-bin.zip"
