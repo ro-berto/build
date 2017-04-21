@@ -163,23 +163,34 @@ def RunSteps(api):
         test_specs = [
           {'name': 'dart2js %s tests' % runtime,
            'tests': ['--exclude-suite=observatory_ui,co19']},
-          {'name': 'dart2js %s observatory_ui tests' % runtime,
-           'tests': ['observatory_ui']},
           {'name': 'dart2js %s package tests' % runtime,
            'tests': ['pkg']},
-          {'name': 'dart2js %s co19 tests' % runtime,
-           'tests': ['co19']},
+          {'name': 'dart2js %s observatory_ui tests' % runtime,
+           'tests': ['observatory_ui']},
           {'name': 'dart2js %s extra tests' % runtime,
            'tests': ['dart2js_extra', 'dart2js_native']},
+          {'name': 'dart2js %s co19 tests' % runtime,
+           'tests': ['co19']},
         ]
 
       needs_xvfb = (runtime in ['drt', 'dartium', 'chrome', 'ff'] and
                     system == 'linux')
       RunTests(api, test_args, test_specs, use_xvfb=needs_xvfb)
+
+      if runtime == 'd8':
+        kernel_test_args = test_args + ['--dart2js-with-kernel']
+        kernel_test_specs = [{
+            'name': 'dart2js-with-kernel d8 tests',
+            'tests': ['language', 'corelib', 'dart2js_extra', 'dart2js_native']
+        }]
+        RunTests(api, kernel_test_args, kernel_test_specs, use_xvfb=needs_xvfb)
+
       test_args.append('--fast-startup')
       for spec in test_specs:
         spec['name'] = spec['name'].replace(' tests', ' fast-startup tests')
       RunTests(api, test_args, test_specs, use_xvfb=needs_xvfb)
+
+
       if runtime in ['d8', 'drt']:
         test_args.append('--checked')
         for spec in test_specs:
@@ -218,6 +229,12 @@ def GenTests(api):
       api.properties.generic(
         mastername='client.dart',
         buildername='dart2js-linux-drt-93-105-dev',
+        revision='hash_of_revision'))
+   yield (
+      api.test('dart2js-linux-d8-be') + api.platform('linux', 64) +
+      api.properties.generic(
+        mastername='client.dart',
+        buildername='dart2js-linux-d8-1-4-be',
         revision='hash_of_revision'))
    yield (
       api.test('dart2js-mac10.11-safari-1-3-be') + api.platform('mac', 64) +

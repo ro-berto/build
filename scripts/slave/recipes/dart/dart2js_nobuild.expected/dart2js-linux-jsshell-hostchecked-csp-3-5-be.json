@@ -201,35 +201,6 @@
       "--shards=5",
       "--shard=3",
       "--append_logs",
-      "observatory_ui"
-    ],
-    "cwd": "[START_DIR]/sdk",
-    "name": "dart2js jsshell observatory_ui tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/sdk/tools/test.py",
-      "--mode=release",
-      "--arch=x64",
-      "--use-sdk",
-      "--compiler=dart2js",
-      "--dart2js-batch",
-      "--runtime=jsshell",
-      "--progress=buildbot",
-      "-v",
-      "--reset-browser-configuration",
-      "--report",
-      "--time",
-      "--failure-summary",
-      "--write-debug-log",
-      "--write-test-outcome-log",
-      "--host-checked",
-      "--csp",
-      "--shards=5",
-      "--shard=3",
-      "--append_logs",
       "pkg"
     ],
     "cwd": "[START_DIR]/sdk",
@@ -259,10 +230,10 @@
       "--shards=5",
       "--shard=3",
       "--append_logs",
-      "co19"
+      "observatory_ui"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js jsshell co19 tests"
+    "name": "dart2js jsshell observatory_ui tests"
   },
   {
     "cmd": [
@@ -293,6 +264,35 @@
     ],
     "cwd": "[START_DIR]/sdk",
     "name": "dart2js jsshell extra tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/sdk/tools/test.py",
+      "--mode=release",
+      "--arch=x64",
+      "--use-sdk",
+      "--compiler=dart2js",
+      "--dart2js-batch",
+      "--runtime=jsshell",
+      "--progress=buildbot",
+      "-v",
+      "--reset-browser-configuration",
+      "--report",
+      "--time",
+      "--failure-summary",
+      "--write-debug-log",
+      "--write-test-outcome-log",
+      "--host-checked",
+      "--csp",
+      "--shards=5",
+      "--shard=3",
+      "--append_logs",
+      "co19"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "name": "dart2js jsshell co19 tests"
   },
   {
     "cmd": [
@@ -349,36 +349,6 @@
       "--shard=3",
       "--fast-startup",
       "--append_logs",
-      "observatory_ui"
-    ],
-    "cwd": "[START_DIR]/sdk",
-    "name": "dart2js jsshell observatory_ui fast-startup tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/sdk/tools/test.py",
-      "--mode=release",
-      "--arch=x64",
-      "--use-sdk",
-      "--compiler=dart2js",
-      "--dart2js-batch",
-      "--runtime=jsshell",
-      "--progress=buildbot",
-      "-v",
-      "--reset-browser-configuration",
-      "--report",
-      "--time",
-      "--failure-summary",
-      "--write-debug-log",
-      "--write-test-outcome-log",
-      "--host-checked",
-      "--csp",
-      "--shards=5",
-      "--shard=3",
-      "--fast-startup",
-      "--append_logs",
       "pkg"
     ],
     "cwd": "[START_DIR]/sdk",
@@ -409,10 +379,10 @@
       "--shard=3",
       "--fast-startup",
       "--append_logs",
-      "co19"
+      "observatory_ui"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js jsshell co19 fast-startup tests"
+    "name": "dart2js jsshell observatory_ui fast-startup tests"
   },
   {
     "cmd": [
@@ -444,6 +414,36 @@
     ],
     "cwd": "[START_DIR]/sdk",
     "name": "dart2js jsshell extra fast-startup tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/sdk/tools/test.py",
+      "--mode=release",
+      "--arch=x64",
+      "--use-sdk",
+      "--compiler=dart2js",
+      "--dart2js-batch",
+      "--runtime=jsshell",
+      "--progress=buildbot",
+      "-v",
+      "--reset-browser-configuration",
+      "--report",
+      "--time",
+      "--failure-summary",
+      "--write-debug-log",
+      "--write-test-outcome-log",
+      "--host-checked",
+      "--csp",
+      "--shards=5",
+      "--shard=3",
+      "--fast-startup",
+      "--append_logs",
+      "co19"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "name": "dart2js jsshell co19 fast-startup tests"
   },
   {
     "cmd": [

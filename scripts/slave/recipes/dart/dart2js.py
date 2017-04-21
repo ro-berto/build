@@ -105,21 +105,7 @@ def RunSteps(api):
                          "--progress=buildbot", "-v",
                          "--reset-browser-configuration",
                          "--shards=%s" % num_shards, "--shard=%s" % shard,
-                         "--checked", "dart2js", "try"])
-    if runtime == 'drt':
-      IsFirstTestStep = False
-      args = ["--mode=release", "--compiler=none", "--runtime=drt",
-              "--arch=ia32", "--time", "--use-sdk", "--report",
-              "--write-debug-log", "--write-test-outcome-log",
-              "--progress=buildbot", "-v", "--reset-browser-configuration",
-              "--checked", "try"]
-      if sharded:
-        args.extend(["--shards=%s" % num_shards, "--shard=%s" % shard])
-      xvfb_cmd = ['xvfb-run', '-a', '--server-args=-screen 0 1024x768x24']
-      xvfb_cmd.extend(['python', '-u', './tools/test.py'])
-      xvfb_cmd.extend(args)
-      with api.step.context({'cwd': api.path['checkout']}):
-        api.step('none drt try tests', xvfb_cmd)
+                         "--checked", "dart2js"])
 
     # Standard test steps, run on all runtimes.
     runtimes = multiple_runtimes.get(runtime, [runtime])
@@ -159,11 +145,10 @@ def RunSteps(api):
            'tests': ['pkg']},
           {'name': 'dart2js %s observatory_ui tests' % runtime,
            'tests': ['observatory_ui']},
-          {'name': 'dart2js %s co19 tests' % runtime,
-           'tests': ['co19']},
           {'name': 'dart2js %s extra tests' % runtime,
            'tests': ['dart2js_extra', 'dart2js_native']},
-          {'name': 'dart2js %s try tests' % runtime, 'tests': ['try']}
+          {'name': 'dart2js %s co19 tests' % runtime,
+           'tests': ['co19']},
         ]
 
       needs_xvfb = (runtime in ['drt', 'dartium', 'chrome', 'ff'] and

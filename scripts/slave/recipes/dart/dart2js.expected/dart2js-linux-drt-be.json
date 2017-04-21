@@ -86,34 +86,6 @@
       "-u",
       "./tools/test.py",
       "--mode=release",
-      "--compiler=none",
-      "--runtime=drt",
-      "--arch=ia32",
-      "--time",
-      "--use-sdk",
-      "--report",
-      "--write-debug-log",
-      "--write-test-outcome-log",
-      "--progress=buildbot",
-      "-v",
-      "--reset-browser-configuration",
-      "--checked",
-      "try",
-      "--shards=105",
-      "--shard=93"
-    ],
-    "cwd": "[START_DIR]/sdk",
-    "name": "none drt try tests"
-  },
-  {
-    "cmd": [
-      "xvfb-run",
-      "-a",
-      "--server-args=-screen 0 1024x768x24",
-      "python",
-      "-u",
-      "./tools/test.py",
-      "--mode=release",
       "--arch=ia32",
       "--compiler=dart2js",
       "--dart2js-batch",
@@ -128,7 +100,6 @@
       "--write-test-outcome-log",
       "--shards=105",
       "--shard=93",
-      "--append_logs",
       "--exclude-suite=observatory_ui,co19"
     ],
     "cwd": "[START_DIR]/sdk",
@@ -216,35 +187,6 @@
       "--shards=105",
       "--shard=93",
       "--append_logs",
-      "co19"
-    ],
-    "cwd": "[START_DIR]/sdk",
-    "name": "dart2js drt co19 tests"
-  },
-  {
-    "cmd": [
-      "xvfb-run",
-      "-a",
-      "--server-args=-screen 0 1024x768x24",
-      "python",
-      "-u",
-      "./tools/test.py",
-      "--mode=release",
-      "--arch=ia32",
-      "--compiler=dart2js",
-      "--dart2js-batch",
-      "--runtime=drt",
-      "--progress=buildbot",
-      "-v",
-      "--reset-browser-configuration",
-      "--report",
-      "--time",
-      "--failure-summary",
-      "--write-debug-log",
-      "--write-test-outcome-log",
-      "--shards=105",
-      "--shard=93",
-      "--append_logs",
       "dart2js_extra",
       "dart2js_native"
     ],
@@ -275,10 +217,10 @@
       "--shards=105",
       "--shard=93",
       "--append_logs",
-      "try"
+      "co19"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js drt try tests"
+    "name": "dart2js drt co19 tests"
   },
   {
     "cmd": [
@@ -395,36 +337,6 @@
       "--shard=93",
       "--checked",
       "--append_logs",
-      "co19"
-    ],
-    "cwd": "[START_DIR]/sdk",
-    "name": "dart2js drt co19 checked tests"
-  },
-  {
-    "cmd": [
-      "xvfb-run",
-      "-a",
-      "--server-args=-screen 0 1024x768x24",
-      "python",
-      "-u",
-      "./tools/test.py",
-      "--mode=release",
-      "--arch=ia32",
-      "--compiler=dart2js",
-      "--dart2js-batch",
-      "--runtime=drt",
-      "--progress=buildbot",
-      "-v",
-      "--reset-browser-configuration",
-      "--report",
-      "--time",
-      "--failure-summary",
-      "--write-debug-log",
-      "--write-test-outcome-log",
-      "--shards=105",
-      "--shard=93",
-      "--checked",
-      "--append_logs",
       "dart2js_extra",
       "dart2js_native"
     ],
@@ -456,10 +368,10 @@
       "--shard=93",
       "--checked",
       "--append_logs",
-      "try"
+      "co19"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js drt try checked tests"
+    "name": "dart2js drt co19 checked tests"
   },
   {
     "cmd": [
