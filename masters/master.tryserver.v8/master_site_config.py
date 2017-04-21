@@ -15,7 +15,6 @@ class V8TryServer(Master.Master4):
   buildbot_url = 'http://build.chromium.org/p/tryserver.v8/'
   from_address = 'v8-dev@googlegroups.com'
   reply_to = 'chrome-troopers+tryserver@google.com'
-  svn_url = 'svn://svn-mirror.golo.chromium.org/chrome-try-v8'
   base_app_url = 'https://v8-status.appspot.com'
   tree_status_url = base_app_url + '/status'
   store_revisions_url = base_app_url + '/revisions'
