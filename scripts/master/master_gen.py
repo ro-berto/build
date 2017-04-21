@@ -64,7 +64,7 @@ def _Populate(BuildmasterConfig, builders, active_master_cls):
 
   # This does some sanity checks on the configuration.
   slaves = slaves_list.BaseSlavesList(
-      chromium_utils.GetSlavesFromBuilders(builders),
+      chromium_utils.GetBotsFromBuilders(builders),
       builders['master_classname'])
   master_utils.VerifySetup(c, slaves)
 
@@ -119,8 +119,8 @@ def _ComputeBuilders(builders, m_annotator, active_master_cls):
     # You can override this behavior by setting the mergeRequests field though.
     merge_requests = builder_data.get('mergeRequests', has_schedulers)
 
-    slavebuilddir = builder_data.get('slavebuilddir',
-                                     util.safeTranslate(builder_name))
+    botbuilddir = builder_data.get('botbuilddir',
+                                   util.safeTranslate(builder_name))
 
     props = {}
     props.update(builders.get('default_properties', {}).copy())
@@ -160,9 +160,9 @@ def _ComputeBuilders(builders, m_annotator, active_master_cls):
         'mergeRequests': merge_requests,
         'name': builder_name,
         'factory': factory,
-        'slavebuilddir': slavebuilddir,
-        'slavenames': chromium_utils.GetSlaveNamesForBuilder(builders,
-                                                             builder_name),
+        'slavebuilddir': botbuilddir,
+        'slavenames': chromium_utils.GetBotNamesForBuilder(builders,
+                                                           builder_name),
         'category': builder_data.get('category'),
         'trybot': builder_data.get('trybot'),
     })

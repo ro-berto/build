@@ -1304,7 +1304,7 @@ def ListMastersWithSlaves(include_public=True, include_internal=True):
 def GetSlavesFromMasterPath(path, fail_hard=False):
   builders_path = os.path.join(path, 'builders.pyl')
   if os.path.exists(builders_path):
-    return GetSlavesFromBuildersFile(builders_path)
+    return GetBotsFromBuildersFile(builders_path)
   return RunSlavesCfg(os.path.join(path, 'slaves.cfg'), fail_hard=fail_hard)
 
 
@@ -1961,67 +1961,80 @@ def ParseBuildersFileContents(path, contents):
       builders['pubsub_service_account_file'])
   builders['pubsub_topic_str'] = repr(builders['pubsub_topic'])
 
+  # Handle backwards-compatibility of old 'slaves' nomenclature.
+  # TODO: Remove this once all builders.pyl files have been upgraded.
+  if 'slave_port' in builders:
+    builders['bot_port'] = builders.pop('slave_port')
+    builders['bot_pools'] = builders.pop('slave_pools')
+    for builder_data in builders['builders'].values():
+      builder_data['bot_pools'] = builder_data.pop('slave_pools')
+      if 'slavebuilddir' in builders:
+        builder_data['botbuilddir'] = builder_data.pop('slavebuilddir')
+    for bot_pool in builders['bot_pools'].values():
+      bot_pool['bot_data'] = bot_pool.pop('slave_data')
+      bot_pool['bots'] = bot_pool.pop('slaves')
+
   return builders
 
 
-def GetSlavesFromBuildersFile(builders_path):
-  """Read builders_path and return a list of slave dicts.
+def GetBotsFromBuildersFile(builders_path):
+  """Read builders_path and return a list of bot dicts.
 
   Args:
      builders_path (str): path to a builders.pyl file.
 
   Returns:
-    slaves(list of dict): each element is a dict with keys 'hostname',
+    bots(list of dict): each element is a dict with keys 'hostname',
       'builder', 'master', 'os', 'version', 'bits', as found in slaves.cfg.
       The return value must match the output of RunSlavesCfg(). The source of
       truth is in master/slave_list.py.
   """
   builders = ReadBuildersFile(builders_path)
-  return GetSlavesFromBuilders(builders)
+  return GetBotsFromBuilders(builders)
 
 
-def GetSlavesFromBuilders(builders):
-  """Returns a list of slave dicts derived from the builders dict."""
+def GetBotsFromBuilders(builders):
+  """Returns a list of bot dicts derived from the builders dict."""
   builders_in_pool = {}
 
-  # builders.pyl contains a list of builders -> slave_pools
-  # and a list of slave_pools -> slaves.
-  # We require that each slave is in a single pool, but each slave
+  # builders.pyl contains a list of builders -> bot_pools
+  # and a list of _pools -> bots.
+  # We require that each bot is in a single pool, but each bot
   # may have multiple builders, so we need to build up the list of
-  # builders each slave pool supports.
+  # builders each bot pool supports.
   for builder_name, builder_vals in builders['builders'].items():
-    pool_names = builder_vals['slave_pools']
+    pool_names = builder_vals['bot_pools']
     for pool_name in pool_names:
      if pool_name not in builders_in_pool:
        builders_in_pool[pool_name] = set()
-     pool_data = builders['slave_pools'][pool_name]
-     for slave in pool_data['slaves']:
+     pool_data = builders['bot_pools'][pool_name]
+     for bot in pool_data['bots']:
        builders_in_pool[pool_name].add(builder_name)
 
-  # Now we can generate the list of slaves using the above lookup table.
-  slaves = []
-  for pool_name, pool_data in builders['slave_pools'].items():
-    slave_data = pool_data['slave_data']
+  # Now we can generate the list of bots using the above lookup table.
+  bots = []
+  for pool_name, pool_data in builders['bot_pools'].items():
+    bot_data = pool_data['bot_data']
     builder_names = sorted(builders_in_pool[pool_name])
-    for slave in pool_data['slaves']:
-      slaves.append({
-          'hostname': slave,
+    for bot in pool_data['bots']:
+      bots.append({
+          'hostname': bot,
           'builder': builder_names,
           'master': builders['master_classname'],
-          'os': slave_data['os'],
-          'version': slave_data['version'],
-          'bits': slave_data['bits'],
+          'os': bot_data['os'],
+          'version': bot_data['version'],
+          'bits': bot_data['bits'],
       })
 
-  return slaves
+  return bots
 
-def GetSlaveNamesForBuilder(builders, builder_name):
-  """Returns a list of slave hostnames for the given builder name."""
-  slaves = []
-  pool_names = builders['builders'][builder_name]['slave_pools']
+def GetBotNamesForBuilder(builders, builder_name):
+  """Returns a list of bot hostnames for the given builder name."""
+  bots = []
+  pool_names = builders['builders'][builder_name]['bot_pools']
   for pool_name in pool_names:
-    slaves.extend(builders['slave_pools'][pool_name]['slaves'])
-  return slaves
+    bots.extend(builders['bot_pools'][pool_name]['bots'])
+  return bots
 
 def IsClangWinBuild(build_dir, target):
   """Check if a ninja build has been build with Clang on Windows."""

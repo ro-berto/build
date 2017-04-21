@@ -21,7 +21,7 @@ SAMPLE_WATERFALL_PYL = """\
   "master_base_class": "_FakeMasterBase",
   "master_port": 20999,
   "master_port_alt": 40999,
-  "slave_port": 30999,
+  "bot_port": 30999,
   "templates": ["templates"],
 
   "builders": {
@@ -31,8 +31,8 @@ SAMPLE_WATERFALL_PYL = """\
       },
       "recipe": "test_recipe",
       "scheduler": "test_repo",
-      "slave_pools": ["main"],
-      "slavebuilddir": "test"
+      "bot_pools": ["main"],
+      "botbuilddir": "test"
     },
     "Test Linux Timeouts": {
       "properties": {
@@ -40,8 +40,8 @@ SAMPLE_WATERFALL_PYL = """\
       },
       "recipe": "test_recipe",
       "scheduler": "test_repo",
-      "slave_pools": ["main"],
-      "slavebuilddir": "test",
+      "bot_pools": ["main"],
+      "botbuilddir": "test",
       "builder_timeout_s": 7200,
       "no_output_timeout_s": 3600,
     },
@@ -51,8 +51,8 @@ SAMPLE_WATERFALL_PYL = """\
       },
       "recipe": "test_recipe",
       "scheduler": "test_repo",
-      "slave_pools": ["main"],
-      "slavebuilddir": "test",
+      "bot_pools": ["main"],
+      "botbuilddir": "test",
       "use_remote_run": True,
     },
     "Test Linux Nightly": {
@@ -61,8 +61,8 @@ SAMPLE_WATERFALL_PYL = """\
       },
       "recipe": "test_nightly_recipe",
       "scheduler": "nightly",
-      "slave_pools": ["main"],
-      "slavebuilddir": "test",
+      "bot_pools": ["main"],
+      "botbuilddir": "test",
       "category": "0nightly"
     }
   },
@@ -79,14 +79,14 @@ SAMPLE_WATERFALL_PYL = """\
     },
   },
 
-  "slave_pools": {
+  "bot_pools": {
     "main": {
-      "slave_data": {
+      "bot_data": {
         "bits": 64,
         "os":  "linux",
         "version": "precise"
       },
-      "slaves": ["vm9999-m1"],
+      "bots": ["vm9999-m1"],
     },
   },
 }
@@ -98,7 +98,7 @@ SAMPLE_TRYSERVER_PYL = """\
   "master_base_class": "_FakeMasterBase",
   "master_port": 20999,
   "master_port_alt": 40999,
-  "slave_port": 30999,
+  "bot_port": 30999,
   "buildbucket_bucket": "fake_bucket",
   "service_account_file": "fake_service_account",
   "templates": ["templates"],
@@ -110,21 +110,21 @@ SAMPLE_TRYSERVER_PYL = """\
       },
       "recipe": "test_recipe",
       "scheduler": None,
-      "slave_pools": ["main"],
-      "slavebuilddir": "test"
+      "bot_pools": ["main"],
+      "botbuilddir": "test"
     }
   },
 
   "schedulers": {},
 
-  "slave_pools": {
+  "bot_pools": {
     "main": {
-      "slave_data": {
+      "bot_data": {
         "bits": 64,
         "os":  "linux",
         "version": "precise"
       },
-      "slaves": ["vm9999-m1"],
+      "bots": ["vm9999-m1"],
     },
   },
 }
@@ -185,6 +185,65 @@ class PopulateBuildmasterConfigTest(unittest.TestCase):
     try:
       fp = tempfile.NamedTemporaryFile(delete=False)
       fp.write(SAMPLE_TRYSERVER_PYL)
+      fp.close()
+
+      c = {}
+      master_gen.PopulateBuildmasterConfig(c, fp.name, _FakeMaster)
+
+      self.assertEqual(len(c['builders']), 1)
+      self.assertEqual(c['builders'][0]['name'], 'Test Linux')
+
+      self.assertEqual(len(c['change_source']), 0)
+      self.assertEqual(len(c['schedulers']), 0)
+    finally:
+      os.remove(fp.name)
+
+
+# TODO: Remove this code once all of the builders.pyl formats have
+# been upgraded to the new nomenclature.
+
+OLD_TRYSERVER_PYL = """\
+{
+  "master_base_class": "_FakeMasterBase",
+  "master_port": 20999,
+  "master_port_alt": 40999,
+  "slave_port": 30999,
+  "buildbucket_bucket": "fake_bucket",
+  "service_account_file": "fake_service_account",
+  "templates": ["templates"],
+
+  "builders": {
+    "Test Linux": {
+      "properties": {
+        "config": "Release"
+      },
+      "recipe": "test_recipe",
+      "scheduler": None,
+      "slave_pools": ["main"],
+      "slavebuilddir": "test"
+    }
+  },
+
+  "schedulers": {},
+
+  "slave_pools": {
+    "main": {
+      "slave_data": {
+        "bits": 64,
+        "os":  "linux",
+        "version": "precise"
+      },
+      "slaves": ["vm9999-m1"],
+    },
+  },
+}
+"""
+
+class OldNomenclature(unittest.TestCase):
+  def test_old_nomenclature(self):
+    try:
+      fp = tempfile.NamedTemporaryFile(delete=False)
+      fp.write(OLD_TRYSERVER_PYL)
       fp.close()
 
       c = {}

@@ -116,8 +116,8 @@ SAMPLE_BUILDERS_PY = """\
         "config": "Release"
       },
       "recipe": "test_recipe",
-      "slave_pools": ["main"],
-      "slavebuilddir": "test"
+      "bot_pools": ["main"],
+      "botbuilddir": "test"
     }
   },
   "git_repo_url": "https://chromium.googlesource.com/test/test.git",
@@ -125,15 +125,15 @@ SAMPLE_BUILDERS_PY = """\
   "master_classname": "_FakeMaster",
   "master_port": 20999,
   "master_port_alt": 40999,
-  "slave_port": 30999,
-  "slave_pools": {
+  "bot_port": 30999,
+  "bot_pools": {
     "main": {
-      "slave_data": {
+      "bot_data": {
         "bits": 64,
         "os":  "linux",
         "version": "precise"
       },
-      "slaves": ["vm9999-m1"],
+      "bots": ["vm9999-m1"],
     },
   },
   "templates": ["templates"],
@@ -141,22 +141,22 @@ SAMPLE_BUILDERS_PY = """\
 """
 
 
-class GetSlavesFromBuilders(unittest.TestCase):
+class GetBotsFromBuilders(unittest.TestCase):
   def test_normal(self):
     try:
       fp = tempfile.NamedTemporaryFile(delete=False)
       fp.write(SAMPLE_BUILDERS_PY)
       fp.close()
 
-      slaves = chromium_utils.GetSlavesFromBuildersFile(fp.name)
-      self.assertEqual(slaves, [{
+      bots = chromium_utils.GetBotsFromBuildersFile(fp.name)
+      self.assertEqual([{
           'hostname': 'vm9999-m1',
-          'builder_name': ['Test Linux'],
+          'builder': ['Test Linux'],
           'master': '_FakeMaster',
           'os': 'linux',
           'version': 'precise',
           'bits': 64,
-      }])
+      }], bots)
     finally:
       os.remove(fp.name)
 
