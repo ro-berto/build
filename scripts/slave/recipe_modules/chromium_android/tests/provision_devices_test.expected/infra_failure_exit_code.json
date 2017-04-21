@@ -1,0 +1,33 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "None/build/android/provision_devices.py",
+      "--adb-path",
+      "None/third_party/android_tools/sdk/platform-tools/adb",
+      "--blacklist-file",
+      "None/out/bad_devices.json",
+      "--output-device-blacklist",
+      "/path/to/tmp/json",
+      "-t",
+      "Debug"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "None/third_party/android_tools/sdk/platform-tools:None/build/android:%(PATH)s"
+    },
+    "infra_step": true,
+    "name": "provision_devices",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 87",
+      "@@@STEP_EXCEPTION@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "reason": "Infra Failure: Step('provision_devices') returned 87",
+    "recipe_result": null,
+    "status_code": 87
+  }
+]

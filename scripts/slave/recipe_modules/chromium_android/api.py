@@ -645,12 +645,13 @@ class AndroidApi(recipe_api.RecipeApi):
       provision_path = self.m.path['checkout'].join(
           'build', 'android', 'provision_devices.py')
     with self.m.step.context({'env': self.m.chromium.get_env()}):
-      result = self.m.python(
-        'provision_devices',
-        provision_path,
-        args=args,
-        infra_step=True,
-        **kwargs)
+      with self.handle_exit_codes():
+        result = self.m.python(
+          'provision_devices',
+          provision_path,
+          args=args,
+          infra_step=True,
+          **kwargs)
 
   def apk_path(self, apk):
     return self.m.chromium.output_dir.join('apks', apk) if apk else None
