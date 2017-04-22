@@ -171,7 +171,9 @@ def BuildLinuxAndroidArm(api):
 
 def BuildLinux(api):
   RunGN(api, '--unoptimized')
+  RunGN(api, '--runtime-mode', 'release', '--android', '--enable-vulkan')
   Build(api, 'host_debug_unopt')
+  Build(api, 'android_release_vulkan')
   RunHostTests(api, 'out/host_debug_unopt')
   UploadArtifacts(api, 'linux-x64', [
     'out/host_debug_unopt/icudtl.dat',
@@ -203,12 +205,14 @@ def BuildMac(api):
   RunGN(api, '--runtime-mode', 'debug', '--unoptimized')
   RunGN(api, '--runtime-mode', 'profile', '--android')
   RunGN(api, '--runtime-mode', 'release', '--android')
+  RunGN(api, '--runtime-mode', 'release', '--android', '--enable-vulkan')
 
   Build(api, 'host_debug_unopt')
   RunHostTests(api, 'out/host_debug_unopt')
 
   Build(api, 'android_profile', 'flutter/lib/snapshot')
   Build(api, 'android_release', 'flutter/lib/snapshot')
+  Build(api, 'android_release_vulkan')
 
   UploadArtifacts(api, 'darwin-x64', [
     'out/host_debug_unopt/icudtl.dat',
