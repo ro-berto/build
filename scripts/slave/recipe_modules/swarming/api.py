@@ -786,11 +786,11 @@ class SwarmingApi(recipe_api.RecipeApi):
             step_test_data=lambda: step_test_data,
             **kwargs)
     finally:
-      step_result = self.m.step.active_result
-
-      step_result.presentation.step_text = text_for_task(task)
-      summary_json = step_result.swarming.summary
+      step_result = None
       try:
+        step_result = self.m.step.active_result
+        step_result.presentation.step_text = text_for_task(task)
+        summary_json = step_result.swarming.summary
         self._handle_summary_json(task, summary_json, step_result)
 
         links = {}
@@ -802,7 +802,8 @@ class SwarmingApi(recipe_api.RecipeApi):
         for k, v in links.iteritems():
           step_result.presentation.links[k] = v
       except Exception as e:
-        step_result.presentation.logs['no_results_exc'] = [str(e)]
+        if step_result:
+          step_result.presentation.logs['no_results_exc'] = [str(e)]
 
   def _gtest_collect_step(self, merged_test_output, task, **kwargs):
     """Produces a step that collects and processes a result of google-test task.
