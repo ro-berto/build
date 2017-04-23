@@ -363,11 +363,16 @@ def _build_prefix(params):
   mastername, buildername, buildnumber = (normalize(p) for p in (
       params.mastername, params.buildername, params.buildnumber))
   prefix = 'bb/%s/%s/%s' % (mastername, buildername, buildnumber)
-  tags = {
-      'buildbot.master': mastername,
-      'buildbot.builder': buildername,
-      'buildbot.buildnumber': str(buildnumber),
-  }
+
+  viewer_url = (
+      'https://luci-milo.appspot.com/buildbot/%(mastername)s/%(buildername)s/'
+      '%(buildnumber)d' % params._asdict())
+  tags = collections.OrderedDict((
+      ('buildbot.master', mastername),
+      ('buildbot.builder', buildername),
+      ('buildbot.buildnumber', str(buildnumber)),
+      ('logdog.viewer_url', viewer_url),
+  ))
   return prefix, tags
 
 

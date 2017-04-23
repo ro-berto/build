@@ -212,6 +212,8 @@ class LogDogBootstrapTest(unittest.TestCase):
             '-tag', 'buildbot.master=mastername',
             '-tag', 'buildbot.builder=buildername',
             '-tag', 'buildbot.buildnumber=1337',
+            '-tag', 'logdog.viewer_url=https://luci-milo.appspot.com/buildbot/'
+                    'mastername/buildername/1337',
             '-service-account-json', ':gce',
             '-output-max-buffer-age', '30s',
             'run',
@@ -277,6 +279,8 @@ class LogDogBootstrapTest(unittest.TestCase):
             '-tag', 'buildbot.master=mastername',
             '-tag', 'buildbot.builder=buildername',
             '-tag', 'buildbot.buildnumber=1337',
+            '-tag', 'logdog.viewer_url=https://luci-milo.appspot.com/buildbot/'
+                    'mastername/buildername/1337',
             '-service-account-json', 'creds.json',
             '-output-max-buffer-age', '30s',
             '-io-keepalive-stderr', '5m',
@@ -343,6 +347,8 @@ class LogDogBootstrapTest(unittest.TestCase):
             '-tag', 'buildbot.master=mastername',
             '-tag', 'buildbot.builder=buildername',
             '-tag', 'buildbot.buildnumber=1337',
+            '-tag', 'logdog.viewer_url=https://luci-milo.appspot.com/buildbot/'
+                    'mastername/buildername/1337',
             '-service-account-json', 'creds.json',
             '-output-max-buffer-age', '30s',
             'run',
@@ -408,6 +414,8 @@ class LogDogBootstrapTest(unittest.TestCase):
             '-tag', 'buildbot.master=mastername',
             '-tag', 'buildbot.builder=buildername',
             '-tag', 'buildbot.buildnumber=1337',
+            '-tag', 'logdog.viewer_url=https://luci-milo.appspot.com/buildbot/'
+                    'mastername/buildername/1337',
             '-service-account-json', 'creds.json',
             '-output-max-buffer-age', '30s',
             '-io-keepalive-stderr', '5m',
