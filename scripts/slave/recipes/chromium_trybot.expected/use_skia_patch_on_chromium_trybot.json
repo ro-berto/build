@@ -283,7 +283,7 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@files@third_party/skia/foo.cc@@@",
       "@@@STEP_LOG_END@files@@@",
-      "@@@SET_BUILD_PROPERTY@subproject_tag@\"blink-paths\"@@@"
+      "@@@SET_BUILD_PROPERTY@subproject_tag@\"blink\"@@@"
     ]
   },
   {

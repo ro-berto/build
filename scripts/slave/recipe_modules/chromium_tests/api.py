@@ -878,13 +878,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     affects_blink_paths = any(
         f.startswith(path) for f in affected_files
         for path in CHROMIUM_BLINK_TESTS_PATHS)
-    affects_blink = any(
-        f.startswith('third_party/WebKit') for f in affected_files)
 
-    if affects_blink:
+    if affects_blink_paths:
       subproject_tag = 'blink'
-    elif affects_blink_paths:
-      subproject_tag = 'blink-paths'
     else:
       subproject_tag = 'chromium'
 
