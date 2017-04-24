@@ -319,6 +319,9 @@ class ChromiumApi(recipe_api.RecipeApi):
     command = [str(self.m.depot_tools.ninja_path), '-w', 'dupbuild=err',
                '-C', target_output_dir]
 
+    if self.c.compile_py.show_ninja_stats:
+      command.extend(['-d', 'stats'])
+
     if self.c.compile_py.build_args:
       command.extend(self.c.compile_py.build_args)
 

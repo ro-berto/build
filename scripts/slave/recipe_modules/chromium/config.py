@@ -39,6 +39,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       mode = Single(basestring, required=False),
       goma_dir = Single(Path, required=False),
       goma_canary = Single(bool, empty_val=False, required=False),
+      show_ninja_stats = Single(bool, empty_val=False, required=False),
       goma_hermetic = Single(basestring, required=False),
       goma_enable_remote_link = Single(bool, empty_val=False, required=False),
       goma_store_local_run_output = Single(bool, empty_val=False, required=False),
@@ -263,6 +264,7 @@ def goma_canary(c):
   c.compile_py.goma_canary = True
   c.compile_py.goma_hermetic = 'error'
   c.compile_py.goma_failfast = True
+  c.compile_py.show_ninja_stats = True
 
 @config_ctx()
 def goma_staging(c):

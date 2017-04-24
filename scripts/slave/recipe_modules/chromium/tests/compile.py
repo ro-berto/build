@@ -53,3 +53,10 @@ def GenTests(api):
           target_platform='chromeos',
           target_cros_board='x86-generic')
   )
+
+  yield (
+      api.test('goma_canary') +
+      api.properties(
+          buildername='test_buildername',
+          chromium_apply_config=['goma_canary'])
+  )
