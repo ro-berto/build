@@ -12,7 +12,7 @@ def v8(c):
   soln = c.solutions.add()
   soln.name = 'v8'
   soln.url = ChromiumGitURL(c, 'v8', 'v8')
-  c.got_revision_mapping['v8'] = 'got_revision'
+  c.got_revision_reverse_mapping['got_revision'] = 'v8'
   # Needed to get the testers to properly sync the right revision.
   # TODO(infra): Upload full buildspecs for every build to isolate and then use
   # them instead of this gclient garbage.
@@ -41,7 +41,7 @@ def node_js(c):
   soln.name = 'node.js'
   soln.url = ChromiumGitURL(c, 'external', 'github.com', 'v8', 'node')
   soln.revision = 'vee-eight-lkgr:HEAD'
-  c.got_revision_mapping[soln.name] = 'got_node_js_revision'
+  c.got_revision_reverse_mapping['got_node_js_revision'] = soln.name
 
 
 @CONFIG_CTX(includes=['v8'])

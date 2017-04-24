@@ -106,8 +106,8 @@ class V8Api(recipe_api.RecipeApi):
       self.apply_config(c)
 
     if self.bot_config.get('enable_swarming'):
-      self.m.gclient.c.got_revision_mapping['v8/tools/swarming_client'] = (
-          'got_swarming_client_revision')
+      self.m.gclient.c.got_revision_reverse_mapping[
+          'got_swarming_client_revision'] = ('v8/tools/swarming_client')
 
     # FIXME(machenbach): Use a context object that stores the state for each
     # test process. Otherwise it's easy to introduce bugs with multiple test
