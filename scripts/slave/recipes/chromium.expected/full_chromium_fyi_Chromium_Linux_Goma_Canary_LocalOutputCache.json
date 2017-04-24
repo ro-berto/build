@@ -359,8 +359,8 @@
       "stats",
       "-j",
       "50",
+      "all",
       "base_unittests",
-      "chromium_builder_tests",
       "content_unittests"
     ],
     "cwd": "[BUILDER_CACHE]/Chromium_Linux_Goma_Canary_LocalOutputCache/src",
@@ -457,7 +457,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/Chromium_Linux_Goma_Canary_LocalOutputCache/src/out/Release",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Chromium_Linux_Goma_Canary_LocalOutputCache/src/out/Release', '-d', 'stats', '-j', 50, 'base_unittests', 'chromium_builder_tests', 'content_unittests']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Chromium_Linux_Goma_Canary_LocalOutputCache/src/out/Release', '-d', 'stats', '-j', 50, 'all', 'base_unittests', 'content_unittests']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",

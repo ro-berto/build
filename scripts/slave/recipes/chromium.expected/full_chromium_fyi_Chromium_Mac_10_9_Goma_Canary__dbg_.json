@@ -374,7 +374,7 @@
       "-j",
       "50",
       "base_unittests",
-      "chromium_builder_tests",
+      "chrome",
       "content_unittests"
     ],
     "cwd": "[BUILDER_CACHE]/Chromium_Mac_10_9_Goma_Canary__dbg_/src",
@@ -472,7 +472,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/Chromium_Mac_10_9_Goma_Canary__dbg_/src/out/Debug",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Chromium_Mac_10_9_Goma_Canary__dbg_/src/out/Debug', '-d', 'stats', '-j', 50, 'base_unittests', 'chromium_builder_tests', 'content_unittests']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Chromium_Mac_10_9_Goma_Canary__dbg_/src/out/Debug', '-d', 'stats', '-j', 50, 'base_unittests', 'chrome', 'content_unittests']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",

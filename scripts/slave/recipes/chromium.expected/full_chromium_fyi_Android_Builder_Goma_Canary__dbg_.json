@@ -385,6 +385,7 @@
       "stats",
       "-j",
       "50",
+      "chrome",
       "chromedriver_webview_shell_apk",
       "gn_all"
     ],
@@ -483,7 +484,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/Android_Builder_Goma_Canary__dbg_/src/out/Debug",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Android_Builder_Goma_Canary__dbg_/src/out/Debug', '-d', 'stats', '-j', 50, 'chromedriver_webview_shell_apk', 'gn_all']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Android_Builder_Goma_Canary__dbg_/src/out/Debug', '-d', 'stats', '-j', 50, 'chrome', 'chromedriver_webview_shell_apk', 'gn_all']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",

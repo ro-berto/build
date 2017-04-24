@@ -368,8 +368,8 @@
       "stats",
       "-j",
       "50",
+      "all",
       "base_unittests",
-      "chromium_builder_tests",
       "content_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\CrWinGoma_loc_\\src",
@@ -466,7 +466,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]\\CrWinGoma_loc_\\src\\out\\Release",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]\\\\CrWinGoma_loc_\\\\src\\\\out\\\\Release', '-d', 'stats', '-j', 50, 'base_unittests', 'chromium_builder_tests', 'content_unittests']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]\\\\CrWinGoma_loc_\\\\src\\\\out\\\\Release', '-d', 'stats', '-j', 50, 'all', 'base_unittests', 'content_unittests']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",
