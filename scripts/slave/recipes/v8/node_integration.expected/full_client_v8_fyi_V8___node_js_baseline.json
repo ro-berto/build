@@ -18,8 +18,7 @@
       "node.js@vee-eight-lkgr:HEAD",
       "--revision",
       "v8@deadbeef",
-      "--no_shallow",
-      "--output_manifest"
+      "--no_shallow"
     ],
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",

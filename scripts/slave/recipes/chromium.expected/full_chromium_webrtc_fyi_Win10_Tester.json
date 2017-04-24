@@ -48,8 +48,7 @@
       "--revision",
       "src@HEAD",
       "--revision",
-      "src/third_party/webrtc@1111111",
-      "--output_manifest"
+      "src/third_party/webrtc@1111111"
     ],
     "cwd": "[BUILDER_CACHE]\\Win10_Tester",
     "env": {

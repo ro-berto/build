@@ -37,8 +37,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@r5",
-      "--output_manifest"
+      "src@r5"
     ],
     "cwd": "[BUILDER_CACHE]/linux",
     "env": {
@@ -287,8 +286,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@r4",
-      "--output_manifest"
+      "src@r4"
     ],
     "cwd": "[BUILDER_CACHE]/linux",
     "env": {
@@ -854,8 +852,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@r5",
-      "--output_manifest"
+      "src@r5"
     ],
     "cwd": "[BUILDER_CACHE]/linux",
     "env": {

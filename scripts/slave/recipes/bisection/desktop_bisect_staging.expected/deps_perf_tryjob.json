@@ -45,8 +45,7 @@
       "--revision",
       "src@HEAD",
       "--revision",
-      "src/v8@feeedbeed",
-      "--output_manifest"
+      "src/v8@feeedbeed"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "env": {
@@ -535,8 +534,7 @@
       "--revision",
       "src@f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--revision",
-      "src/v8@feeedbeed",
-      "--output_manifest"
+      "src/v8@feeedbeed"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "env": {

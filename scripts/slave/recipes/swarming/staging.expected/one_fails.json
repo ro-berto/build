@@ -17,8 +17,7 @@
       "--revision",
       "src@HEAD",
       "--revision",
-      "src/tools/swarming_client@HEAD",
-      "--output_manifest"
+      "src/tools/swarming_client@HEAD"
     ],
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",

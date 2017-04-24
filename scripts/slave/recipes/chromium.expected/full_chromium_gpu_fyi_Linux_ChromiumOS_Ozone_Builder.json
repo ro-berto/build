@@ -39,8 +39,7 @@
       "--revision",
       "src@HEAD",
       "--revision",
-      "src/third_party/angle@HEAD",
-      "--output_manifest"
+      "src/third_party/angle@HEAD"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_ChromiumOS_Ozone_Builder",
     "env": {

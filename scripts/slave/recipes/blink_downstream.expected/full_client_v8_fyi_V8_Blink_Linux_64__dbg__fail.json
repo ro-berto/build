@@ -39,8 +39,7 @@
       "--revision",
       "src@HEAD",
       "--revision",
-      "src/v8@20123",
-      "--output_manifest"
+      "src/v8@20123"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64__dbg_",
     "env": {
@@ -586,8 +585,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "--output_manifest"
+      "src@f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64__dbg_",
     "env": {

@@ -48,8 +48,7 @@
       "--revision",
       "src@origin/lkcr",
       "--revision",
-      "src/v8@22135",
-      "--output_manifest"
+      "src/v8@22135"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_Release__NVIDIA_",
     "env": {

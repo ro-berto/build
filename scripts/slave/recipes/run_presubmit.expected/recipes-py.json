@@ -23,8 +23,7 @@
       "--revision",
       "infra@origin/master",
       "--revision",
-      "infra/recipes-py@HEAD",
-      "--output_manifest"
+      "infra/recipes-py@HEAD"
     ],
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",

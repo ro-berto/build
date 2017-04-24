@@ -15,8 +15,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@HEAD",
-      "--output_manifest"
+      "src@HEAD"
     ],
     "cwd": "[START_DIR]",
     "env": {
@@ -1071,8 +1070,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@a6298e4afedbf2cd461755ea6f45b0ad64222222",
-      "--output_manifest"
+      "src@a6298e4afedbf2cd461755ea6f45b0ad64222222"
     ],
     "cwd": "[START_DIR]",
     "env": {
@@ -1759,8 +1757,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
-      "--output_manifest"
+      "src@00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111"
     ],
     "cwd": "[START_DIR]",
     "env": {
@@ -2611,8 +2608,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@dcdcdc0ff1122212323134879ddceeb1240b0988",
-      "--output_manifest"
+      "src@dcdcdc0ff1122212323134879ddceeb1240b0988"
     ],
     "cwd": "[START_DIR]",
     "env": {
@@ -3695,8 +3691,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@a6298e4afedbf2cd461755ea6f45b0ad64222222",
-      "--output_manifest"
+      "src@a6298e4afedbf2cd461755ea6f45b0ad64222222"
     ],
     "cwd": "[START_DIR]",
     "env": {
@@ -4184,8 +4179,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
-      "--output_manifest"
+      "src@00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111"
     ],
     "cwd": "[START_DIR]",
     "env": {
@@ -4673,8 +4667,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@dcdcdc0ff1122212323134879ddceeb1240b0988",
-      "--output_manifest"
+      "src@dcdcdc0ff1122212323134879ddceeb1240b0988"
     ],
     "cwd": "[START_DIR]",
     "env": {
@@ -5332,8 +5325,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@a6298e4afedbf2cd461755ea6f45b0ad64222222",
-      "--output_manifest"
+      "src@a6298e4afedbf2cd461755ea6f45b0ad64222222"
     ],
     "cwd": "[START_DIR]",
     "env": {
@@ -5991,8 +5983,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
-      "--output_manifest"
+      "src@00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111"
     ],
     "cwd": "[START_DIR]",
     "env": {
@@ -6650,8 +6641,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@dcdcdc0ff1122212323134879ddceeb1240b0988",
-      "--output_manifest"
+      "src@dcdcdc0ff1122212323134879ddceeb1240b0988"
     ],
     "cwd": "[START_DIR]",
     "env": {

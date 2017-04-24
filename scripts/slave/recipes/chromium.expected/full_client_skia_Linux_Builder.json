@@ -39,8 +39,7 @@
       "--revision",
       "src@HEAD",
       "--revision",
-      "src/third_party/skia@origin/master",
-      "--output_manifest"
+      "src/third_party/skia@origin/master"
     ],
     "cwd": "[BUILDER_CACHE]/linux",
     "env": {

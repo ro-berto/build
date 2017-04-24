@@ -46,8 +46,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@1111111",
-      "--output_manifest"
+      "src@1111111"
     ],
     "cwd": "[BUILDER_CACHE]\\Win7_Release__AMD_R7_240_",
     "env": {

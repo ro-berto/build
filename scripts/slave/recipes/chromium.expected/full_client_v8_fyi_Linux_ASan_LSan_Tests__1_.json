@@ -39,8 +39,7 @@
       "--revision",
       "src@origin/lkcr",
       "--revision",
-      "src/v8@1111111",
-      "--output_manifest"
+      "src/v8@1111111"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_ASan_LSan_Tests__1_",
     "env": {

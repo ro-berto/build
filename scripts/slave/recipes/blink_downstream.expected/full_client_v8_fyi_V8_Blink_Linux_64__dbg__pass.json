@@ -39,8 +39,7 @@
       "--revision",
       "src@HEAD",
       "--revision",
-      "src/v8@20123",
-      "--output_manifest"
+      "src/v8@20123"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64__dbg_",
     "env": {

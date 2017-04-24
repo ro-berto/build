@@ -39,8 +39,7 @@
       "--revision",
       "src@HEAD",
       "--revision",
-      "src/third_party/webrtc@1111111",
-      "--output_manifest"
+      "src/third_party/webrtc@1111111"
     ],
     "cwd": "[BUILDER_CACHE]/Android_Tests__dbg___K_Nexus5_",
     "env": {

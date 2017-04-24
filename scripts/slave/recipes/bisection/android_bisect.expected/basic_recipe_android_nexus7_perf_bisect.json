@@ -79,8 +79,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@1111111",
-      "--output_manifest"
+      "src@1111111"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus7_perf_bisect",
     "env": {
@@ -788,8 +787,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@1111111",
-      "--output_manifest"
+      "src@1111111"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus7_perf_bisect",
     "env": {
