@@ -36,3 +36,9 @@ per-file trybots.py=prasadv@chromium.org
 per-file trybots.py=robertocn@chromium.org
 per-file trybots.py=simonhatch@chromium.org
 per-file trybots.py=thakis@chromium.org
+
+# For goma canary bots config.
+per-file chromium_fyi.py=shinyak@chromium.org
+per-file chromium_fyi.py=tikuta@chromium.org
+per-file chromium_fyi.py=ukai@chromium.org
+per-file chromium_fyi.py=yyanagisawa@chromium.org
