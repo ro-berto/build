@@ -42,13 +42,10 @@ def _RunStepsInternal(api):
   relative_root = api.gclient.calculate_patch_root(
       api.properties['patch_project'],
       gclient_config=gclient_config).rstrip('/')
-  if gclient_config:
-    got_revision_property = gclient_config.got_revision_mapping[relative_root]
-  else:
-    got_revision_property = api.gclient.c.got_revision_mapping[relative_root]
-
+  got_revision_properties = api.bot_update.get_project_revision_properties(
+      relative_root, gclient_config or api.gclient.c)
   upstream = bot_update_step.json.output['properties'].get(
-      got_revision_property)
+      got_revision_properties[0])
 
   abs_root = api.path['start_dir'].join(relative_root)
   with api.step.context({'cwd': abs_root}):
