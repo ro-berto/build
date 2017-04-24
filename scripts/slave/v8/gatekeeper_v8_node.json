@@ -10,7 +10,7 @@
               "machenbach@chromium.org",
               "node-build-notifications@google.com"
             ],
-            "subject_template": "V8/node.js broke, see https://github.com/v8/v8/wiki/What-should-I-do-if-my-CL-broke-the-Node.js-integration-build%3F",
+            "subject_template": "V8/node.js integration broken after %(revision)s",
             "closing_optional": [
               "*"
             ],
