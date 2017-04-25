@@ -39,7 +39,7 @@ RECIPE_CONFIGS = freeze({
     'chromium_config': 'webrtc_android_perf',
     'chromium_android_config': 'webrtc',
     'gclient_config': 'webrtc',
-    'gclient_apply_config': ['android'],
+    'gclient_apply_config': ['android', 'webrtc_test_resources'],
     'test_suite': 'android_perf',
   },
   'webrtc_android_clang': {
