@@ -37,7 +37,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@gfedcba0987654321"
+      "src@gfedcba0987654321",
+      "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/mac",
     "env": {
@@ -284,7 +285,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@gfedcba0987654321"
+      "src@gfedcba0987654321",
+      "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/mac",
     "env": {

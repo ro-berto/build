@@ -37,7 +37,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@HEAD"
+      "src@HEAD",
+      "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/Android_Builder_Goma_Canary__dbg_",
     "env": {

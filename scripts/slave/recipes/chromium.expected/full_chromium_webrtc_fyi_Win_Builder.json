@@ -48,7 +48,8 @@
       "--revision",
       "src@HEAD",
       "--revision",
-      "src/third_party/webrtc@HEAD"
+      "src/third_party/webrtc@HEAD",
+      "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_Builder",
     "env": {

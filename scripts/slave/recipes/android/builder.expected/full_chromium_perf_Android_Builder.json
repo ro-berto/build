@@ -55,7 +55,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@267739"
+      "src@267739",
+      "--output_manifest"
     ],
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",

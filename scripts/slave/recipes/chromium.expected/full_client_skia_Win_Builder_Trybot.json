@@ -48,7 +48,8 @@
       "--revision",
       "src@HEAD",
       "--revision",
-      "src/third_party/skia@origin/master"
+      "src/third_party/skia@origin/master",
+      "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]\\win",
     "env": {

@@ -16,7 +16,8 @@
       "/path/to/tmp/json",
       "--revision",
       "v8@20123",
-      "--no_shallow"
+      "--no_shallow",
+      "--output_manifest"
     ],
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
@@ -741,7 +742,8 @@
       "/path/to/tmp/json",
       "--revision",
       "v8@a0",
-      "--no_shallow"
+      "--no_shallow",
+      "--output_manifest"
     ],
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
@@ -1250,7 +1252,8 @@
       "/path/to/tmp/json",
       "--revision",
       "v8@a2",
-      "--no_shallow"
+      "--no_shallow",
+      "--output_manifest"
     ],
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
@@ -1792,7 +1795,8 @@
       "/path/to/tmp/json",
       "--revision",
       "v8@a1",
-      "--no_shallow"
+      "--no_shallow",
+      "--output_manifest"
     ],
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",

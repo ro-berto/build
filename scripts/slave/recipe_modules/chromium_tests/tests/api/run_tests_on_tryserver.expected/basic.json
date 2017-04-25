@@ -21,7 +21,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@HEAD"
+      "src@HEAD",
+      "--output_manifest"
     ],
     "cwd": "[START_DIR]",
     "env": {
@@ -449,7 +450,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
+      "src@f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "--output_manifest"
     ],
     "cwd": "[START_DIR]",
     "env": {

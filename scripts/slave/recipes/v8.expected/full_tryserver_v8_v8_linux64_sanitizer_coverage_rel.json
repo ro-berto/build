@@ -18,7 +18,8 @@
       "/path/to/tmp/json",
       "--revision",
       "v8@12345",
-      "--no_shallow"
+      "--no_shallow",
+      "--output_manifest"
     ],
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
@@ -107,7 +108,8 @@
       "/path/to/tmp/json",
       "--revision",
       "v8@[fitting hsh]",
-      "--no_shallow"
+      "--no_shallow",
+      "--output_manifest"
     ],
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",

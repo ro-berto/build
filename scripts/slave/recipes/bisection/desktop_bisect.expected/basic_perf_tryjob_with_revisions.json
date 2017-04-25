@@ -43,7 +43,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@HEAD"
+      "src@HEAD",
+      "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "env": {
@@ -351,7 +352,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@bad49c331def2a3bbf3ddd0096eb51551155"
+      "src@bad49c331def2a3bbf3ddd0096eb51551155",
+      "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "env": {
@@ -644,7 +646,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@d49c331def2a3bbf3ddd0096eb51551155"
+      "src@d49c331def2a3bbf3ddd0096eb51551155",
+      "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "env": {

@@ -39,7 +39,8 @@
       "--revision",
       "src@HEAD",
       "--revision",
-      "src/third_party/webrtc@HEAD"
+      "src/third_party/webrtc@HEAD",
+      "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/Android_Builder__dbg_",
     "env": {

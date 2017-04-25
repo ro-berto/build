@@ -38,7 +38,8 @@
       "/path/to/tmp/json",
       "--revision",
       "src@HEAD",
-      "--clobber"
+      "--clobber",
+      "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/coverage_clobber",
     "env": {

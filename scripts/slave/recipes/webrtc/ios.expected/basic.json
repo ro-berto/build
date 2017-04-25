@@ -47,7 +47,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@HEAD"
+      "src@HEAD",
+      "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/ios_debug",
     "env": {

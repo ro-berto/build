@@ -57,7 +57,8 @@
       "--revision",
       "src@origin/lkcr",
       "--revision",
-      "src/v8@267739"
+      "src/v8@267739",
+      "--output_manifest"
     ],
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",

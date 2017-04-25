@@ -45,7 +45,8 @@
       "--revision",
       "src@HEAD",
       "--revision",
-      "src/third_party/skia@HEAD"
+      "src/third_party/skia@HEAD",
+      "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/mac_layout",
     "env": {

@@ -21,7 +21,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "build_internal/master.DEPS@HEAD"
+      "build_internal/master.DEPS@HEAD",
+      "--output_manifest"
     ],
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",

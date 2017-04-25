@@ -26,7 +26,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src/flutter@HEAD"
+      "src/flutter@HEAD",
+      "--output_manifest"
     ],
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",

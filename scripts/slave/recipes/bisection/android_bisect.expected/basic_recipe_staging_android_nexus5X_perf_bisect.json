@@ -79,7 +79,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@1111111"
+      "src@1111111",
+      "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/staging_android_nexus5X_perf_bisect",
     "env": {
@@ -787,7 +788,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@1111111"
+      "src@1111111",
+      "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/staging_android_nexus5X_perf_bisect",
     "env": {

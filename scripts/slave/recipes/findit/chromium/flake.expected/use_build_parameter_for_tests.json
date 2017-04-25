@@ -56,7 +56,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@r0"
+      "src@r0",
+      "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/mac",
     "env": {
@@ -287,7 +288,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@r0"
+      "src@r0",
+      "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/mac",
     "env": {

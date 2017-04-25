@@ -45,7 +45,8 @@
       "--revision",
       "src@HEAD",
       "--revision",
-      "src/v8@HEAD"
+      "src/v8@HEAD",
+      "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/linux_layout",
     "env": {
@@ -717,7 +718,8 @@
       "--revision",
       "src@f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--revision",
-      "src/v8@801ada225ddc271c132c3a35f03975671d43e399"
+      "src/v8@801ada225ddc271c132c3a35f03975671d43e399",
+      "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/linux_layout",
     "env": {

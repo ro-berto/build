@@ -37,7 +37,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@1111111"
+      "src@1111111",
+      "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/Mac_Retina_Release__NVIDIA_",
     "env": {

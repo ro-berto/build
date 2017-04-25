@@ -48,7 +48,8 @@
       "--revision",
       "src@HEAD",
       "--revision",
-      "src/third_party/angle@HEAD"
+      "src/third_party/angle@HEAD",
+      "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]\\GPU_Win_Clang_Builder__dbg_",
     "env": {

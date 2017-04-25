@@ -39,7 +39,8 @@
       "--revision",
       "src@HEAD",
       "--revision",
-      "src/third_party/angle@HEAD"
+      "src/third_party/angle@HEAD",
+      "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_GPU_TSAN_Release",
     "env": {

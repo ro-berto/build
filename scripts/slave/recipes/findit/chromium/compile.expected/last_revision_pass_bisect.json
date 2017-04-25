@@ -37,7 +37,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@r10"
+      "src@r10",
+      "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/linux",
     "env": {
@@ -291,7 +292,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@r6"
+      "src@r6",
+      "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/linux",
     "env": {
@@ -857,7 +859,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@r7"
+      "src@r7",
+      "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/linux",
     "env": {
@@ -1405,7 +1408,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@r9"
+      "src@r9",
+      "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/linux",
     "env": {
@@ -1953,7 +1957,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@r10"
+      "src@r10",
+      "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/linux",
     "env": {

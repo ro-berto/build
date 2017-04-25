@@ -16,7 +16,8 @@
       "/path/to/tmp/json",
       "--revision",
       "sdk@123456789abcdef",
-      "--no_shallow"
+      "--no_shallow",
+      "--output_manifest"
     ],
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",

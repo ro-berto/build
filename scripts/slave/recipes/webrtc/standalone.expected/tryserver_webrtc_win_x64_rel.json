@@ -97,7 +97,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@12345"
+      "src@12345",
+      "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]\\win_x64_rel",
     "env": {

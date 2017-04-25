@@ -46,7 +46,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@1111111"
+      "src@1111111",
+      "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_7_Tests_x64__1_",
     "env": {

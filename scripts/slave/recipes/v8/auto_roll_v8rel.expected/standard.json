@@ -17,6 +17,7 @@
       "--revision",
       "src@HEAD",
       "--no_shallow",
+      "--output_manifest",
       "--with_branch_heads"
     ],
     "env": {

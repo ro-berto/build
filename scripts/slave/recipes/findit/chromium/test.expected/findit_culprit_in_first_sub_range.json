@@ -37,7 +37,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@r6"
+      "src@r6",
+      "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/mac",
     "env": {
@@ -289,7 +290,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@r5"
+      "src@r5",
+      "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/mac",
     "env": {
@@ -1125,7 +1127,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@r6"
+      "src@r6",
+      "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/mac",
     "env": {
@@ -1943,7 +1946,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@r1"
+      "src@r1",
+      "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/mac",
     "env": {

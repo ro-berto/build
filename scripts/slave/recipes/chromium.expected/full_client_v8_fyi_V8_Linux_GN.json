@@ -39,7 +39,8 @@
       "--revision",
       "src@origin/lkcr",
       "--revision",
-      "src/v8@22135"
+      "src/v8@22135",
+      "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Linux_GN",
     "env": {

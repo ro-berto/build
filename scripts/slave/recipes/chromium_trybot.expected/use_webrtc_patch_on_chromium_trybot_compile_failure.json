@@ -45,7 +45,8 @@
       "--revision",
       "src@HEAD",
       "--revision",
-      "src/third_party/webrtc@HEAD"
+      "src/third_party/webrtc@HEAD",
+      "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/linux",
     "env": {
@@ -591,7 +592,8 @@
       "--revision",
       "src@f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--revision",
-      "src/third_party/webrtc@0f90628433546e61d9268596da93418c623137f4"
+      "src/third_party/webrtc@0f90628433546e61d9268596da93418c623137f4",
+      "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/linux",
     "env": {

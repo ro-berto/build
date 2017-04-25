@@ -56,7 +56,8 @@
       "/path/to/tmp/json",
       "--revision",
       "v8@[master-branch-point hsh]",
-      "--no_shallow"
+      "--no_shallow",
+      "--output_manifest"
     ],
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",

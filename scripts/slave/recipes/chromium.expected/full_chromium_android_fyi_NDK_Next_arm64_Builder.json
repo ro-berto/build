@@ -39,7 +39,8 @@
       "--revision",
       "src@HEAD",
       "--revision",
-      "src/third_party/android_tools/ndk@origin/next"
+      "src/third_party/android_tools/ndk@origin/next",
+      "--output_manifest"
     ],
     "cwd": "[BUILDER_CACHE]/NDK_Next_arm64_Builder",
     "env": {
