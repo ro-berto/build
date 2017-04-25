@@ -5,6 +5,7 @@
 DEPS = [
     'chromium_tests',
     'recipe_engine/path',
+    'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/python',
 ]
@@ -33,4 +34,26 @@ def GenTests(api):
       api.properties.tryserver(
           mastername='tryserver.chromium.perf',
           buildername='linux_perf_bisect_builder')
+  )
+
+  yield (
+      api.test('cf_archive_build') +
+      api.properties.generic(
+          mastername='chromium.lkgr',
+          buildername='ASAN Release')
+  )
+
+  yield (
+      api.test('archive_build') +
+      api.properties.generic(
+          mastername='chromium',
+          buildername='Linux x64')
+  )
+
+  yield (
+      api.test('cross_master_trigger') +
+      api.platform.name('win') +
+      api.properties.generic(
+          mastername='chromium.perf',
+          buildername='Win x64 Builder')
   )

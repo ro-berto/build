@@ -14,6 +14,7 @@ DEPS = [
 
 def RunSteps(api):
   api.chromium_tests.trybot_steps()
+  assert api.chromium_tests.is_precommit_mode()
 
 
 def GenTests(api):

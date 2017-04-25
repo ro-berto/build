@@ -194,7 +194,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   # entry point to _add_master_dict_and_test_spec which can really complicate
   # things.
   def create_bot_db_from_master_dict(self, mastername, master_dict):
-    bot_db = bdb_module.BotConfigAndTestDB()
+    bot_db = self.create_bot_db_object()
     bot_db._add_master_dict_and_test_spec(mastername, master_dict, {})
     return bot_db
 
@@ -484,6 +484,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                 self.m.chromium.c.HOST_PLATFORM == 'mac'),
         )
 
+      # TODO(phajdan.jr): Triggering should be separate from archiving.
       trigger_specs = []
       for loop_mastername, loop_buildername, builder_dict in sorted(
           bot_db.bot_configs_matching_parent_buildername(
