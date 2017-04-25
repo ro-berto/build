@@ -4,7 +4,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary__LocalOutputCache_",
+      "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary_LocalOutputCache",
       "511"
     ],
     "name": "makedirs checkout path",
@@ -39,7 +39,7 @@
       "--revision",
       "src@HEAD"
     ],
-    "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary__LocalOutputCache_",
+    "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary_LocalOutputCache",
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
@@ -162,7 +162,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary__LocalOutputCache_/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary_LocalOutputCache/src/tools/swarming_client/swarming.py",
       "--version"
     ],
     "name": "swarming.py --version",
@@ -177,7 +177,7 @@
       "-u",
       "RECIPE_MODULE[build::file]/resources/fileutil.py",
       "rmtree",
-      "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary__LocalOutputCache_/src/out/Debug"
+      "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary_LocalOutputCache/src/out/Debug"
     ],
     "infra_step": true,
     "name": "rmtree clobber"
@@ -189,7 +189,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary__LocalOutputCache_/src",
+    "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary_LocalOutputCache/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -203,16 +203,16 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary__LocalOutputCache_/src/testing/scripts/get_compile_targets.py",
+      "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary_LocalOutputCache/src/testing/scripts/get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
       "Debug",
       "--paths",
-      "{\"checkout\": \"[BUILDER_CACHE]/Chromium_Mac_Goma_Canary__LocalOutputCache_/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
+      "{\"checkout\": \"[BUILDER_CACHE]/Chromium_Mac_Goma_Canary_LocalOutputCache/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"test_bot\", \"buildername\": \"Chromium Mac Goma Canary (LocalOutputCache)\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"slavename\": \"test_bot\", \"target_platform\": \"mac\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"Chromium Mac Goma Canary LocalOutputCache\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"slavename\": \"test_bot\", \"target_platform\": \"mac\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -225,12 +225,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary__LocalOutputCache_/src/testing/buildbot/chromium.fyi.json",
+      "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary_LocalOutputCache/src/testing/buildbot/chromium.fyi.json",
       "/path/to/tmp/json"
     ],
     "name": "read test spec (chromium.fyi.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [BUILDER_CACHE]/Chromium_Mac_Goma_Canary__LocalOutputCache_/src/testing/buildbot/chromium.fyi.json@@@",
+      "@@@STEP_TEXT@path: [BUILDER_CACHE]/Chromium_Mac_Goma_Canary_LocalOutputCache/src/testing/buildbot/chromium.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -239,19 +239,19 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary__LocalOutputCache_/src/tools/mb/mb.py",
+      "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary_LocalOutputCache/src/tools/mb/mb.py",
       "gen",
       "-m",
       "chromium.fyi",
       "-b",
-      "Chromium Mac Goma Canary (LocalOutputCache)",
+      "Chromium Mac Goma Canary LocalOutputCache",
       "--config-file",
-      "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary__LocalOutputCache_/src/tools/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary_LocalOutputCache/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma_client",
       "//out/Debug"
     ],
-    "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary__LocalOutputCache_/src",
+    "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary_LocalOutputCache/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -265,7 +265,7 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
       "--src-dir",
-      "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary__LocalOutputCache_/src",
+      "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary_LocalOutputCache/src",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -298,7 +298,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary__LocalOutputCache_/src",
+    "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary_LocalOutputCache/src",
     "name": "preprocess_for_goma"
   },
   {
@@ -306,10 +306,10 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[GOMA_CACHE]/Chromium_Mac_Goma_Canary__LocalOutputCache_",
+      "[GOMA_CACHE]/Chromium_Mac_Goma_Canary_LocalOutputCache",
       "511"
     ],
-    "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary__LocalOutputCache_/src",
+    "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary_LocalOutputCache/src",
     "name": "preprocess_for_goma.makedirs goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -332,11 +332,11 @@
       "[CACHE]/goma_client/goma_ctl.py",
       "restart"
     ],
-    "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary__LocalOutputCache_/src",
+    "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary_LocalOutputCache/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[ROOT]/build_data_dir/crash_report_id_file",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]/Chromium_Mac_Goma_Canary__LocalOutputCache_",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/Chromium_Mac_Goma_Canary_LocalOutputCache",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_STATS_FILE": "[ROOT]/build_data_dir/goma_stats_proto",
       "GOMA_FAIL_FAST": "true",
@@ -367,7 +367,7 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary__LocalOutputCache_/src",
+    "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary_LocalOutputCache/src",
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
@@ -380,7 +380,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary__LocalOutputCache_/src/out/Debug",
+      "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary_LocalOutputCache/src/out/Debug",
       "-d",
       "stats",
       "-j",
@@ -389,7 +389,7 @@
       "base_unittests",
       "content_unittests"
     ],
-    "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary__LocalOutputCache_/src",
+    "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary_LocalOutputCache/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -398,7 +398,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary__LocalOutputCache_/src",
+    "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary_LocalOutputCache/src",
     "name": "postprocess_for_goma"
   },
   {
@@ -409,7 +409,7 @@
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
-    "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary__LocalOutputCache_/src",
+    "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary_LocalOutputCache/src",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[ROOT]/build_data_dir/crash_report_id_file",
       "GOMA_DUMP_STATS_FILE": "[ROOT]/build_data_dir/goma_stats_proto",
@@ -438,7 +438,7 @@
       "[CACHE]/goma_client/goma_ctl.py",
       "stat"
     ],
-    "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary__LocalOutputCache_/src",
+    "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary_LocalOutputCache/src",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[ROOT]/build_data_dir/crash_report_id_file",
       "GOMA_DUMP_STATS_FILE": "[ROOT]/build_data_dir/goma_stats_proto",
@@ -456,7 +456,7 @@
       "[CACHE]/goma_client/goma_ctl.py",
       "stop"
     ],
-    "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary__LocalOutputCache_/src",
+    "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary_LocalOutputCache/src",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[ROOT]/build_data_dir/crash_report_id_file",
       "GOMA_DUMP_STATS_FILE": "[ROOT]/build_data_dir/goma_stats_proto",
@@ -482,9 +482,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary__LocalOutputCache_/src/out/Debug",
+      "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary_LocalOutputCache/src/out/Debug",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Chromium_Mac_Goma_Canary__LocalOutputCache_/src/out/Debug', '-d', 'stats', '-j', 50, 'all', 'base_unittests', 'content_unittests']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Chromium_Mac_Goma_Canary_LocalOutputCache/src/out/Debug', '-d', 'stats', '-j', 50, 'all', 'base_unittests', 'content_unittests']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",
@@ -496,13 +496,13 @@
       "--build-data-dir",
       "[ROOT]/build_data_dir",
       "--buildbot-buildername",
-      "Chromium Mac Goma Canary (LocalOutputCache)",
+      "Chromium Mac Goma Canary LocalOutputCache",
       "--buildbot-mastername",
       "chromium.fyi",
       "--buildbot-slavename",
       "test_bot"
     ],
-    "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary__LocalOutputCache_/src",
+    "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary_LocalOutputCache/src",
     "name": "postprocess_for_goma.upload_log",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -524,7 +524,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary__LocalOutputCache_/src",
+    "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary_LocalOutputCache/src",
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
@@ -533,7 +533,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary__LocalOutputCache_",
+    "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary_LocalOutputCache",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -553,20 +553,20 @@
       "--target",
       "Debug",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"Chromium Mac Goma Canary (LocalOutputCache)\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"Chromium Mac Goma Canary LocalOutputCache\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"Chromium Mac Goma Canary (LocalOutputCache)\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"Chromium Mac Goma Canary LocalOutputCache\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=gtest",
       "--test-type=base_unittests",
       "--step-name=base_unittests",
       "--test-launcher-summary-output",
       "/path/to/tmp/json",
-      "--builder-name=Chromium Mac Goma Canary (LocalOutputCache)",
+      "--builder-name=Chromium Mac Goma Canary LocalOutputCache",
       "--slave-name=test_bot",
       "--build-number=571",
       "base_unittests"
     ],
-    "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary__LocalOutputCache_",
+    "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary_LocalOutputCache",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -584,7 +584,7 @@
       "--master-name",
       "chromium.fyi",
       "--builder-name",
-      "Chromium Mac Goma Canary (LocalOutputCache)",
+      "Chromium Mac Goma Canary LocalOutputCache",
       "--build-number",
       "571",
       "--test-type",
@@ -594,7 +594,7 @@
       "--chrome-revision",
       "refs/heads/master@{#170242}"
     ],
-    "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary__LocalOutputCache_",
+    "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary_LocalOutputCache",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -614,20 +614,20 @@
       "--target",
       "Debug",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"Chromium Mac Goma Canary (LocalOutputCache)\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"Chromium Mac Goma Canary LocalOutputCache\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"Chromium Mac Goma Canary (LocalOutputCache)\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"build_data_dir\": \"[ROOT]/build_data_dir\", \"buildername\": \"Chromium Mac Goma Canary LocalOutputCache\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=gtest",
       "--test-type=content_unittests",
       "--step-name=content_unittests",
       "--test-launcher-summary-output",
       "/path/to/tmp/json",
-      "--builder-name=Chromium Mac Goma Canary (LocalOutputCache)",
+      "--builder-name=Chromium Mac Goma Canary LocalOutputCache",
       "--slave-name=test_bot",
       "--build-number=571",
       "content_unittests"
     ],
-    "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary__LocalOutputCache_",
+    "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary_LocalOutputCache",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -645,7 +645,7 @@
       "--master-name",
       "chromium.fyi",
       "--builder-name",
-      "Chromium Mac Goma Canary (LocalOutputCache)",
+      "Chromium Mac Goma Canary LocalOutputCache",
       "--build-number",
       "571",
       "--test-type",
@@ -655,7 +655,7 @@
       "--chrome-revision",
       "refs/heads/master@{#170242}"
     ],
-    "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary__LocalOutputCache_",
+    "cwd": "[BUILDER_CACHE]/Chromium_Mac_Goma_Canary_LocalOutputCache",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"

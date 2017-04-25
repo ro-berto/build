@@ -1287,7 +1287,7 @@ SPEC = {
         'platform': 'mac'
       }
     },
-    'Chromium Mac Goma Canary (LocalOutputCache)': {
+    'Chromium Mac Goma Canary LocalOutputCache': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'clobber',
