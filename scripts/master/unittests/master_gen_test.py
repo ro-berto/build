@@ -124,7 +124,7 @@ SAMPLE_TRYSERVER_PYL = """\
         "os":  "linux",
         "version": "precise"
       },
-      "bots": ["vm9999-m1"],
+      "bots": ["vm{9998..9999}-m1"],
     },
   },
 }
@@ -192,6 +192,8 @@ class PopulateBuildmasterConfigTest(unittest.TestCase):
 
       self.assertEqual(len(c['builders']), 1)
       self.assertEqual(c['builders'][0]['name'], 'Test Linux')
+      self.assertEqual(set(s.slavename for s in c['slaves']),
+                       set(['vm9998-m1', 'vm9999-m1']))
 
       self.assertEqual(len(c['change_source']), 0)
       self.assertEqual(len(c['schedulers']), 0)

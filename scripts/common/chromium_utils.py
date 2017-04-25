@@ -2007,34 +2007,67 @@ def GetBotsFromBuilders(builders):
     for pool_name in pool_names:
      if pool_name not in builders_in_pool:
        builders_in_pool[pool_name] = set()
-     pool_data = builders['bot_pools'][pool_name]
-     for bot in pool_data['bots']:
-       builders_in_pool[pool_name].add(builder_name)
+     builders_in_pool[pool_name].add(builder_name)
 
   # Now we can generate the list of bots using the above lookup table.
   bots = []
   for pool_name, pool_data in builders['bot_pools'].items():
     bot_data = pool_data['bot_data']
     builder_names = sorted(builders_in_pool[pool_name])
-    for bot in pool_data['bots']:
-      bots.append({
-          'hostname': bot,
-          'builder': builder_names,
-          'master': builders['master_classname'],
-          'os': bot_data['os'],
-          'version': bot_data['version'],
-          'bits': bot_data['bits'],
-      })
+    for entry in pool_data['bots']:
+      for name in ExpandBotsEntry(entry):
+        bots.append({
+            'hostname': name,
+            'builder': builder_names,
+            'master': builders['master_classname'],
+            'os': bot_data['os'],
+            'version': bot_data['version'],
+            'bits': bot_data['bits'],
+        })
 
   return bots
+
 
 def GetBotNamesForBuilder(builders, builder_name):
   """Returns a list of bot hostnames for the given builder name."""
   bots = []
   pool_names = builders['builders'][builder_name]['bot_pools']
   for pool_name in pool_names:
-    bots.extend(builders['bot_pools'][pool_name]['bots'])
+    for entry in builders['bot_pools'][pool_name]['bots']:
+      bots.extend(ExpandBotsEntry(entry))
   return bots
+
+
+def ExpandBotsEntry(entry):
+  left = entry.find('{')
+  right = entry.rfind('}')
+  if left == -1 and right == -1:
+    return [entry]
+  if entry.count('{') != 1 or entry.count('}') != 1 or left > right:
+    raise ValueError('syntax error in bot entry "%s"' % entry)
+  m_expr = re.match(r'(.*)\{(.+)\}(.*)', entry)
+  if not m_expr:
+    raise ValueError('syntax error in bot entry "%s"' % entry)
+
+  prefix = m_expr.group(1)
+  expr = m_expr.group(2)
+  suffix = m_expr.group(3)
+  m_range = re.match(r'(\d+)\.\.(\d+)$', expr)
+  ids = []
+  if m_range:
+    start, end = int(m_range.group(1)), int(m_range.group(2))
+    if end >= start:
+      ids = range(start, end + 1)
+  else:
+    m_list = re.match(r'\d+(,\d+)*$', expr)
+    if m_list:
+      ids = [int(e) for e in expr.split(',')]
+
+  if not ids:
+    raise ValueError('syntax error in bot entry "%s"' % entry)
+
+  return ['%s%d%s' % (prefix, i, suffix) for i in ids]
+
 
 def IsClangWinBuild(build_dir, target):
   """Check if a ninja build has been build with Clang on Windows."""

@@ -160,6 +160,74 @@ class GetBotsFromBuilders(unittest.TestCase):
     finally:
       os.remove(fp.name)
 
+  def test_range(self):
+    # This tests that bash-style range expansion works for builder names.
+    # The interval should be fully closed, i.e., x..y includes both x and y.
+    try:
+      fp = tempfile.NamedTemporaryFile(delete=False)
+      fp.write(SAMPLE_BUILDERS_PY.replace('vm9999-m1', 'vm{1..3}-m1'))
+      fp.close()
+      bots = chromium_utils.GetBotsFromBuildersFile(fp.name)
+      self.assertEqual([
+        {
+          'hostname': 'vm1-m1',
+          'builder': ['Test Linux'],
+          'master': '_FakeMaster',
+          'os': 'linux',
+          'version': 'precise',
+          'bits': 64,
+        },
+        {
+          'hostname': 'vm2-m1',
+          'builder': ['Test Linux'],
+          'master': '_FakeMaster',
+          'os': 'linux',
+          'version': 'precise',
+          'bits': 64,
+        },
+        {
+          'hostname': 'vm3-m1',
+          'builder': ['Test Linux'],
+          'master': '_FakeMaster',
+          'os': 'linux',
+          'version': 'precise',
+          'bits': 64,
+        }], bots)
+    finally:
+      os.remove(fp.name)
+
+
+  def test_hostname_syntax_and_expansion(self):
+    expand = chromium_utils.ExpandBotsEntry
+    self.assertEqual(['vm1'], expand('vm1'))
+    self.assertEqual(['vm1-c1', 'vm12-c1'], expand('vm{1,12}-c1'))
+    self.assertEqual(['vm11-c1', 'vm12-c1'], expand('vm{11..12}-c1'))
+
+    # These have mismatched braces.
+    self.assertRaises(ValueError, expand, 'vm{')
+    self.assertRaises(ValueError, expand, 'vm{{')
+    self.assertRaises(ValueError, expand, 'vm}{')
+    self.assertRaises(ValueError, expand, 'vm{{}')
+
+    # Only one set of braces is allowed.
+    self.assertRaises(ValueError, expand, 'vm{1,2}{3,4}')
+
+    # An empty set of braces is not allowed.
+    self.assertRaises(ValueError, expand, 'vm{}')
+
+    # Nested braces are not allowed.
+    self.assertRaises(ValueError, expand, 'vm{{{}}}')
+
+    # The start must be smaller than the end.
+    self.assertRaises(ValueError, expand, 'vm{3..2}')
+
+    # Mixing both ranges and lists is not allowed.
+    self.assertRaises(ValueError, expand, 'vm{2..3,4}')
+
+    # Spaces are not allowed.
+    self.assertRaises(ValueError, expand, 'vm{2 ,4}')
+
+
 
 if __name__ == '__main__':
   unittest.main()
