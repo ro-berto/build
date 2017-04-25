@@ -38,6 +38,7 @@ def Update(config, active_master, c):
     {'name': 'Mac10.9 Tests'},
     {'name': 'Mac10.10 Tests'},
     {'name': 'Mac10.11 Tests'},
+    {'name': 'Mac10.12 Tests'},
     {'name': 'Mac Builder (dbg)'},
     {'name': 'Mac10.9 Tests (dbg)'},
   ]
