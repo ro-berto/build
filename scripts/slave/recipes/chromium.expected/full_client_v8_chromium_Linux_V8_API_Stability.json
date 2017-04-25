@@ -40,7 +40,6 @@
       "src@HEAD",
       "--revision",
       "src/v8@origin/canary",
-      "--output_manifest",
       "--with_branch_heads"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_V8_API_Stability",

@@ -15,8 +15,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@HEAD",
-      "--output_manifest"
+      "src@HEAD"
     ],
     "cwd": "[START_DIR]",
     "env": {
@@ -464,8 +463,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@0a1b2c3d4f0a1b2c3d4f0a1b2c3d4f0a1b2c3d4f",
-      "--output_manifest"
+      "src@0a1b2c3d4f0a1b2c3d4f0a1b2c3d4f0a1b2c3d4f"
     ],
     "cwd": "[START_DIR]",
     "env": {
@@ -1176,8 +1174,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
-      "--output_manifest"
+      "src@00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111"
     ],
     "cwd": "[START_DIR]",
     "env": {

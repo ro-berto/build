@@ -28,8 +28,7 @@
       "--revision",
       "src/dart@foo",
       "--revision",
-      "src/flutter@bar",
-      "--output_manifest"
+      "src/flutter@bar"
     ],
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",

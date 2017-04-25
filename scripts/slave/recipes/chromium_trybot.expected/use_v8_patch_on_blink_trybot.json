@@ -45,8 +45,7 @@
       "--revision",
       "src@HEAD",
       "--revision",
-      "src/v8@HEAD",
-      "--output_manifest"
+      "src/v8@HEAD"
     ],
     "cwd": "[BUILDER_CACHE]/mac_layout",
     "env": {

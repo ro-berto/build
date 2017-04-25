@@ -57,8 +57,7 @@
       "src@HEAD",
       "--revision",
       "src/v8@HEAD",
-      "--no_shallow",
-      "--output_manifest"
+      "--no_shallow"
     ],
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",

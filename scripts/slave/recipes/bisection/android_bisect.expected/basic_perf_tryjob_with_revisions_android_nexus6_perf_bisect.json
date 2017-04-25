@@ -79,8 +79,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@HEAD",
-      "--output_manifest"
+      "src@HEAD"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "env": {
@@ -561,8 +560,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@bad49c331def2a3bbf3ddd0096eb51551155",
-      "--output_manifest"
+      "src@bad49c331def2a3bbf3ddd0096eb51551155"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "env": {
@@ -897,8 +895,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@d49c331def2a3bbf3ddd0096eb51551155",
-      "--output_manifest"
+      "src@d49c331def2a3bbf3ddd0096eb51551155"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "env": {
@@ -1452,8 +1449,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@d49c331def2a3bbf3ddd0096eb51551155",
-      "--output_manifest"
+      "src@d49c331def2a3bbf3ddd0096eb51551155"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "env": {

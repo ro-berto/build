@@ -45,8 +45,7 @@
       "--revision",
       "src@origin/lkcr",
       "--revision",
-      "src/v8@HEAD",
-      "--output_manifest"
+      "src/v8@HEAD"
     ],
     "cwd": "[BUILDER_CACHE]/v8_linux_chromium_gn_rel",
     "env": {

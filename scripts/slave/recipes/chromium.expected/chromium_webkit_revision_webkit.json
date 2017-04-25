@@ -15,8 +15,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@191187",
-      "--output_manifest"
+      "src@191187"
     ],
     "cwd": "[START_DIR]",
     "env": {

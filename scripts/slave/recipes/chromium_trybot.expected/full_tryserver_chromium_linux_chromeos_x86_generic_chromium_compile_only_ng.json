@@ -43,8 +43,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@HEAD",
-      "--output_manifest"
+      "src@HEAD"
     ],
     "cwd": "[BUILDER_CACHE]/chromeos_x86_generic_chromium_compile_only_ng",
     "env": {

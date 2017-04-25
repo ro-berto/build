@@ -48,8 +48,7 @@
       "--revision",
       "src@HEAD",
       "--revision",
-      "src/third_party/angle@HEAD",
-      "--output_manifest"
+      "src/third_party/angle@HEAD"
     ],
     "cwd": "[BUILDER_CACHE]\\Win_Builder__ANGLE_",
     "env": {

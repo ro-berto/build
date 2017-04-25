@@ -39,8 +39,7 @@
       "--revision",
       "src@HEAD",
       "--revision",
-      "src/third_party/webrtc@HEAD",
-      "--output_manifest"
+      "src/third_party/webrtc@HEAD"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Builder",
     "env": {
