@@ -128,6 +128,16 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
         args=[api.m.chromium.output_dir, '--remove',
               '--android', '--adb-path', api.m.adb.adb_path()],
         revision=revision))
+
+    build_out_dir = api.m.path['checkout'].join(
+        'out', api.m.chromium.c.build_config_fs)
+    tests.append(PerfTest(
+        str(api.m.path['checkout'].join('webrtc', 'examples', 'androidtests',
+                                        'video_quality_loopback_test.py')),
+        name='video_quality_loopback_test',
+        args=['--adb-path', api.m.adb.adb_path(), build_out_dir],
+        revision=revision))
+
   elif test_suite == 'android':
     for test in (ANDROID_DEVICE_TESTS +
                  ANDROID_INSTRUMENTATION_TESTS):
