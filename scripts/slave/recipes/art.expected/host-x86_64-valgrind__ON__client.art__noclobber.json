@@ -1,0 +1,34 @@
+[
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[depot_tools]/repo",
+      "init",
+      "-u",
+      "https://android.googlesource.com/platform/manifest",
+      "-b",
+      "master-art"
+    ],
+    "infra_step": true,
+    "name": "repo init"
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[depot_tools]/repo",
+      "sync"
+    ],
+    "infra_step": true,
+    "name": "repo sync"
+  },
+  {
+    "cmd": [
+      "[START_DIR]/art/test/testrunner/run_build_test_target.py",
+      "art-gtest-valgrind64"
+    ],
+    "name": "Run valgrind tests"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]

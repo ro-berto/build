@@ -63,7 +63,8 @@ def clobber(api):
   if 'clobber' in api.properties:
     api.file.rmtree('clobber', api.path['start_dir'].join('out'))
 
-def setup_host_x86(api, debug, bitness, concurrent_collector=True):
+def setup_host_x86(api, debug, bitness, concurrent_collector=True,
+    heap_poisoning=False):
   with api.step.defer_results():
     checkout(api)
     clobber(api)
@@ -97,6 +98,12 @@ def setup_host_x86(api, debug, bitness, concurrent_collector=True):
       env.update({ 'ART_USE_READ_BARRIER' : 'true' })
     else:
       env.update({ 'ART_USE_READ_BARRIER' : 'false' })
+
+    if heap_poisoning:
+      env.update({ 'ART_HEAP_POISONING' : 'true' })
+    else:
+      env.update({ 'ART_HEAP_POISONING' : 'false' })
+
 
     with api.step.context({'env': env}):
       api.step('build sdk-eng',
@@ -316,6 +323,26 @@ def setup_aosp_builder(api, read_barrier):
         api.step('Clean oat %s' % build, ['make', '-j8', 'clean-oat-host'])
         api.step('build %s' % build, ['make', '-j8'])
 
+def setup_valgrind_runner(api, bitness):
+  checkout(api)
+  clobber(api)
+  build_top_dir = api.path['start_dir']
+  run = api.path['start_dir'].join('art', 'test', 'testrunner', 'run_build_test_target.py')
+  with api.step.defer_results():
+    env = { 'TARGET_PRODUCT': 'sdk',
+            'TARGET_BUILD_VARIANT': 'eng',
+            'TARGET_BUILD_TYPE': 'release',
+            'ANDROID_BUILD_TOP': build_top_dir,
+            'PATH': '/usr/lib/jvm/java-8-openjdk-amd64/bin/' +
+                    api.path.pathsep + '%(PATH)s',
+            'JACK_SERVER': 'false',
+            'JACK_REPOSITORY': str(build_top_dir.join('prebuilts', 'sdk',
+                                                      'tools', 'jacks')) }
+    if bitness == 32:
+      env.update({ 'HOST_PREFER_32_BIT' : 'true' })
+
+    api.step('Run valgrind tests', [run, 'art-gtest-valgrind%d' % bitness])
+
 
 _CONFIG_MAP = {
   'client.art': {
@@ -346,6 +373,16 @@ _CONFIG_MAP = {
         'debug': True,
         'bitness': 64,
         'concurrent_collector': False,
+      },
+      'host-x86-poison-debug': {
+        'debug': True,
+        'bitness': 32,
+        'heap_poisoning': True,
+      },
+      'host-x86_64-poison-debug': {
+        'debug': True,
+        'bitness': 64,
+        'heap_poisoning': True,
       },
     },
 
@@ -420,6 +457,15 @@ _CONFIG_MAP = {
         'read_barrier': True
       },
     },
+
+    'valgrind': {
+      'host-x86-valgrind': {
+        'bitness': 32
+      },
+      'host-x86_64-valgrind': {
+        'bitness': 64
+      },
+    },
   },
 }
 
@@ -428,6 +474,7 @@ _CONFIG_DISPATCH_MAP = {
     'x86': setup_host_x86,
     'target': setup_target,
     'aosp': setup_aosp_builder,
+    'valgrind': setup_valgrind_runner,
   }
 }
 

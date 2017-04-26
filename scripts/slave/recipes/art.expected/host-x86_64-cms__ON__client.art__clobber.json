@@ -38,6 +38,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ART_HEAP_POISONING": "false",
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
@@ -60,6 +61,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ART_HEAP_POISONING": "false",
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
@@ -86,6 +88,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ART_HEAP_POISONING": "false",
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
@@ -110,6 +113,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ART_HEAP_POISONING": "false",
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
@@ -134,6 +138,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ART_HEAP_POISONING": "false",
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
@@ -157,6 +162,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ART_HEAP_POISONING": "false",
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
@@ -180,6 +186,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ART_HEAP_POISONING": "false",
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
@@ -204,6 +211,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ART_HEAP_POISONING": "false",
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
