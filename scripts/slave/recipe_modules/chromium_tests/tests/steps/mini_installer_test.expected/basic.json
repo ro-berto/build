@@ -1,0 +1,33 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "None/chrome/test/mini_installer/test_installer.py",
+      "--build-dir",
+      "None/out",
+      "--target",
+      "Release",
+      "--force-clean",
+      "--config",
+      "None/chrome/test/mini_installer/config/config.config",
+      "--write-full-results-to",
+      "/path/to/tmp/json"
+    ],
+    "name": "test_installer"
+  },
+  {
+    "cmd": [],
+    "name": "details",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@details@compile_targets: ['mini_installer', 'next_version_mini_installer']@@@",
+      "@@@STEP_LOG_LINE@details@uses_local_devices: False@@@",
+      "@@@STEP_LOG_END@details@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]

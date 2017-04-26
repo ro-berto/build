@@ -1,0 +1,192 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "None/build/android/generate_emma_html.py",
+      "--coverage-dir",
+      "None/out/Debug/coverage",
+      "--metadata-dir",
+      "None/out/Debug",
+      "--cleanup",
+      "--output",
+      "None/out/Debug/coverage/coverage_html/index.html"
+    ],
+    "infra_step": true,
+    "name": "Generate coverage report"
+  },
+  {
+    "cmd": [
+      "git",
+      "diff",
+      "--staged",
+      "--name-only",
+      "--diff-filter",
+      "A"
+    ],
+    "cwd": "None",
+    "infra_step": true,
+    "name": "Finding changed files matching diff filter: A",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "fake/file1.java",
+      "/path/to/tmp/"
+    ],
+    "name": "Finding lines changed in added file fake/file1.java"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "fake/file2.java;",
+      "/path/to/tmp/"
+    ],
+    "name": "Finding lines changed in added file fake/file2.java;"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "fake/file3.java",
+      "/path/to/tmp/"
+    ],
+    "name": "Finding lines changed in added file fake/file3.java"
+  },
+  {
+    "cmd": [
+      "git",
+      "diff",
+      "--staged",
+      "--name-only",
+      "--diff-filter",
+      "M"
+    ],
+    "cwd": "None",
+    "infra_step": true,
+    "name": "Finding changed files matching diff filter: M",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "git",
+      "blame",
+      "-l",
+      "-s",
+      "fake/file1.java"
+    ],
+    "cwd": "None",
+    "infra_step": true,
+    "name": "Finding lines changed in modified file fake/file1.java",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "git",
+      "blame",
+      "-l",
+      "-s",
+      "fake/file2.java;"
+    ],
+    "cwd": "None",
+    "infra_step": true,
+    "name": "Finding lines changed in modified file fake/file2.java;",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "git",
+      "blame",
+      "-l",
+      "-s",
+      "fake/file3.java"
+    ],
+    "cwd": "None",
+    "infra_step": true,
+    "name": "Finding lines changed in modified file fake/file3.java",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "{\"fake/file1.java\": [], \"fake/file2.java;\": [], \"fake/file3.java\": []}",
+      "[TMP_BASE]/coverage_tmp_1/file_changes.json"
+    ],
+    "name": "Saving changed lines for revision."
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "build/android/emma_coverage_stats.py",
+      "-v",
+      "--out",
+      "/path/to/tmp/json",
+      "--emma-dir",
+      "None/out/Debug/coverage/coverage_html",
+      "--lines-for-coverage",
+      "[TMP_BASE]/coverage_tmp_1/file_changes.json"
+    ],
+    "cwd": "None",
+    "name": "Incremental coverage report",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"files\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"sample file 1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"absolute\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"covered\": 70, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"total\": 100@@@",
+      "@@@STEP_LOG_LINE@json.output@      }, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"incremental\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"covered\": 30, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"total\": 50@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"sample file 2\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"absolute\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"covered\": 50, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"total\": 100@@@",
+      "@@@STEP_LOG_LINE@json.output@      }, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"incremental\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"covered\": 50, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"total\": 50@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"incremental\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"covered\": 80, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"total\": 100@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@moreInfoURL@\"https://example/url/builders/test_buildername/builds/123/steps/Incremental%20coverage%20report/logs/json.output\"@@@",
+      "@@@SET_BUILD_PROPERTY@summary@\"Test coverage for this patch: 80/100 lines (80%).\"@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "details",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@details@compile_targets: []@@@",
+      "@@@STEP_LOG_LINE@details@failures: []@@@",
+      "@@@STEP_LOG_LINE@details@has_valid_results: True@@@",
+      "@@@STEP_LOG_LINE@details@uses_local_devices: True@@@",
+      "@@@STEP_LOG_END@details@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]

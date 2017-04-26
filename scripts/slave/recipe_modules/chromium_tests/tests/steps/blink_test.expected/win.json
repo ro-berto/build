@@ -1,0 +1,141 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "None\\third_party\\WebKit\\Tools\\Scripts\\run-webkit-tests",
+      "--target",
+      "Release",
+      "--results-directory",
+      "[START_DIR]\\layout-test-results",
+      "--build-dir",
+      "None\\out",
+      "--json-test-results",
+      "/path/to/tmp/json",
+      "--master-name",
+      "test_mastername",
+      "--build-number",
+      "123",
+      "--builder-name",
+      "test_buildername",
+      "--step-name",
+      "webkit_tests (with patch)",
+      "--no-show-results",
+      "--full-results-html",
+      "--clobber-old-results",
+      "--exit-after-n-failures",
+      "5000",
+      "--exit-after-n-crashes-or-timeouts",
+      "100",
+      "--debug-rwt-logging",
+      "--js-flags=--future"
+    ],
+    "name": "webkit_tests (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>Total tests: 5<br/>* Passed: 4 (4 expected, 0 unexpected)<br/>* Skipped: 0 (0 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 0 (0 expected, 0 unexpected)<br/>@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]\\resources\\upload_test_results.py",
+      "--input-json",
+      "{\"num_passes\": 9001, \"num_regressions\": 0, \"path_separator\": \"/\", \"tests\": {\"bad\": {\"totally-bad-probably.html\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}}, \"bad/totally-bad-probably.html\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"flake\": {\"slow.html\": {\"actual\": \"SLOW\", \"expected\": \"SLOW\"}, \"timeout-then-crash.html\": {\"actual\": \"CRASH\", \"expected\": \"CRASH\"}, \"totally-flakey.html\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}}, \"flake/slow.html\": {\"actual\": \"SLOW\", \"expected\": \"SLOW\"}, \"flake/timeout-then-crash.html\": {\"actual\": \"CRASH\", \"expected\": \"CRASH\"}, \"flake/totally-flakey.html\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"tricky\": {\"totally-maybe-not-awesome.html\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}}, \"tricky/totally-maybe-not-awesome.html\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}}, \"version\": 3}",
+      "--master-name",
+      "test_mastername",
+      "--builder-name",
+      "test_buildername",
+      "--build-number",
+      "123",
+      "--test-type",
+      "webkit_tests (with patch)",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "0"
+    ],
+    "name": "Upload to test-results [webkit_tests (with patch)]"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\chromium\\archive_layout_test_results.py",
+      "--results-dir",
+      "[START_DIR]\\layout-test-results",
+      "--build-dir",
+      "None\\out",
+      "--build-number",
+      "123",
+      "--builder-name",
+      "test_buildername",
+      "--gs-bucket",
+      "gs://chromium-layout-test-archives",
+      "--staging-dir",
+      "[CACHE]\\chrome_staging",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+    ],
+    "name": "archive_webkit_tests_results",
+    "~followup_annotations": [
+      "@@@STEP_LINK@layout_test_results@https://storage.googleapis.com/chromium-layout-test-archives/test_buildername/123/layout-test-results/results.html@@@",
+      "@@@STEP_LINK@(zip)@https://storage.googleapis.com/chromium-layout-test-archives/test_buildername/123/layout-test-results.zip@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "details",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@details@compile_targets: ['blink_tests']@@@",
+      "@@@STEP_LOG_LINE@details@has_valid_results (no suffix): False@@@",
+      "@@@STEP_LOG_LINE@details@uses_local_devices: True@@@",
+      "@@@STEP_LOG_END@details@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "None\\third_party\\WebKit\\Tools\\Scripts\\run-webkit-tests",
+      "--target",
+      "Release",
+      "--results-directory",
+      "[START_DIR]\\layout-test-results",
+      "--build-dir",
+      "None\\out",
+      "--json-test-results",
+      "/path/to/tmp/json",
+      "--master-name",
+      "test_mastername",
+      "--build-number",
+      "123",
+      "--builder-name",
+      "test_buildername",
+      "--step-name",
+      "webkit_tests (without patch)",
+      "--no-show-results",
+      "--full-results-html",
+      "--clobber-old-results",
+      "--exit-after-n-failures",
+      "5000",
+      "--exit-after-n-crashes-or-timeouts",
+      "100",
+      "--debug-rwt-logging",
+      "--js-flags=--future",
+      "--test-list",
+      "",
+      "--skipped",
+      "always"
+    ],
+    "name": "webkit_tests (without patch)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>Total tests: 5<br/>* Passed: 4 (4 expected, 0 unexpected)<br/>* Skipped: 0 (0 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 0 (0 expected, 0 unexpected)<br/>@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]

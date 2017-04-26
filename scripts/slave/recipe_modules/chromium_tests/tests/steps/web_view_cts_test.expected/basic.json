@@ -1,0 +1,67 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "None/chrome/VERSION",
+      "/path/to/tmp/"
+    ],
+    "name": "get version"
+  },
+  {
+    "cmd": [
+      "None/build/android/adb_install_apk.py",
+      "None/out/Release/apks/SystemWebView.apk",
+      "-v",
+      "--blacklist-file",
+      "None/out/bad_devices.json",
+      "--adb-path",
+      "None/third_party/android_tools/sdk/platform-tools/adb",
+      "--release"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "infra_step": true,
+    "name": "install SystemWebView.apk"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "None/android_webview/tools/run_cts.py",
+      "--arch",
+      "arm_64",
+      "--platform",
+      "L",
+      "--skip-expected-failures",
+      "--apk-dir",
+      "[CACHE]",
+      "--json-results-file",
+      "/path/to/tmp/json",
+      "--verbose"
+    ],
+    "name": "Run CTS",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "details",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@details@compile_targets: ['system_webview_apk']@@@",
+      "@@@STEP_LOG_LINE@details@uses_local_devices: True@@@",
+      "@@@STEP_LOG_END@details@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "reason": "Step('Run CTS') failed with return_code 1",
+    "recipe_result": null,
+    "status_code": 1
+  }
+]
