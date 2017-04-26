@@ -22,6 +22,7 @@
   {
     "cmd": [
       "[START_DIR]/art/test/testrunner/run_build_test_target.py",
+      "-j8",
       "art-gtest-valgrind32"
     ],
     "env": {
