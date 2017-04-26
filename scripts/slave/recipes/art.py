@@ -248,9 +248,15 @@ def setup_target(api,
         'test-art-target-gtest%d' % bitness])
     test_logging(api, 'test gtest')
 
+    optimizing_make_jobs = make_jobs
+    # Decrease the number of parallel tests for fugu/optimizing, as some tests
+    # eat lots of memory.
+    if not debug and device == 'fugu':
+      optimizing_make_jobs = 1
+
     with api.step.context({'env': test_env}):
       api.step('test optimizing', ['./art/test/testrunner/testrunner.py',
-                                   '-j%d' % (make_jobs),
+                                   '-j%d' % (optimizing_make_jobs),
                                    '--optimizing',
                                    '--debuggable',
                                    '--ndebuggable',
@@ -341,7 +347,8 @@ def setup_valgrind_runner(api, bitness):
     if bitness == 32:
       env.update({ 'HOST_PREFER_32_BIT' : 'true' })
 
-    api.step('Run valgrind tests', [run, 'art-gtest-valgrind%d' % bitness])
+    with api.step.context({'env': env}):
+      api.step('Run valgrind tests', [run, 'art-gtest-valgrind%d' % bitness])
 
 
 _CONFIG_MAP = {

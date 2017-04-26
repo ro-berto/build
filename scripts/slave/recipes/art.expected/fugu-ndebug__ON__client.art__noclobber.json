@@ -275,7 +275,7 @@
   {
     "cmd": [
       "./art/test/testrunner/testrunner.py",
-      "-j4",
+      "-j1",
       "--optimizing",
       "--debuggable",
       "--ndebuggable",
