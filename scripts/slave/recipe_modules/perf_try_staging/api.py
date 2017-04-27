@@ -70,12 +70,15 @@ class PerfTryJobApi(recipe_api.RecipeApi):
 
     # Run with patch.
     with self.m.step.nest('Running WITH patch'):
+      results_label = 'Patch'
+      if r[0]:
+        results_label += ' @%s' % r[0]
       results_with_patch = self._build_and_run_tests(
           test_cfg, bot_update_step, bot_db, r[0],
-          name='With Patch' if r[0] is None else r[0],
+          name='With Patch',
           reset_on_first_run=True,
           upload_on_last_run=True,
-          results_label='Patch' if r[0] is None else r[0],
+          results_label=results_label,
           allow_flakes=False)
 
     with self.m.step.nest('De-applying patch'):
@@ -85,9 +88,10 @@ class PerfTryJobApi(recipe_api.RecipeApi):
 
     # Run without patch.
     with self.m.step.nest('Running WITHOUT patch'):
+      results_name = 'Without Patch'
       results_without_patch = self._build_and_run_tests(
           test_cfg, bot_update_step, bot_db, r[1],
-          name='Without Patch' if r[1] is None else r[1],
+          name=results_name,
           reset_on_first_run=False,
           upload_on_last_run=True,
           results_label='TOT' if r[1] is None else r[1],
@@ -144,7 +148,7 @@ class PerfTryJobApi(recipe_api.RecipeApi):
   def _build_and_run_tests(self, cfg, update_step, bot_db, revision_hash,
                            **kwargs):
     """Compiles binaries and runs tests for a given a revision."""
-    with_patch = kwargs.get('name') == 'With Patch'
+    with_patch = 'With Patch' in kwargs.get('name')  # pragma: no cover
     update_step = self._checkout_revision(update_step, bot_db, revision_hash)
     if update_step.presentation.properties:
       revision_hash = update_step.presentation.properties['got_revision']
@@ -165,7 +169,7 @@ class PerfTryJobApi(recipe_api.RecipeApi):
       self.m.gsutil(['ls', path], name='exists')
     except self.m.step.StepFailure:  # pragma: no cover
       return False
-    return True
+    return True # pragma: no cover
 
   def _load_config_file(self, name, src_path, **kwargs):
     """Attempts to load the specified config file and grab config dict."""
