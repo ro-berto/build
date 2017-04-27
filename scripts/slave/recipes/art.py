@@ -22,7 +22,7 @@ _TARGET_DEVICE_MAP = {
       'make_jobs': 2,
       'product': 'armv8',
       },
-    'hammerhead': {
+    'angler-armv7': {
       'bitness': 32,
       'make_jobs': 4,
       'product': 'arm_krait',
@@ -37,7 +37,7 @@ _TARGET_DEVICE_MAP = {
       'make_jobs': 2,
       'product': 'mips32r2_fp_xburst',
       },
-    'angler': {
+    'angler-armv8': {
       'bitness': 64,
       'make_jobs': 4,
       'product': 'armv8',
@@ -394,14 +394,14 @@ _CONFIG_MAP = {
     },
 
     'target': {
-      'hammerhead-ndebug': {
-        'serial': '84B7N15B03000703',
-        'device': 'hammerhead',
+      'angler-armv7-ndebug': {
+        'serial': '84B7N16728001148',
+        'device': 'angler-armv7',
         'debug': False,
       },
-      'hammerhead-debug': {
+      'angler-armv7-debug': {
         'serial': '84B7N15B03000729',
-        'device': 'hammerhead',
+        'device': 'angler-armv7',
         'debug': True,
       },
       'volantis-armv7-poison-debug': {
@@ -432,25 +432,25 @@ _CONFIG_MAP = {
         'device': 'fugu',
         'debug': True,
       },
-      'hammerhead-cms': {
+      'angler-armv7-cms': {
         'serial': '84B7N15B03000329',
-        'device': 'hammerhead',
+        'device': 'angler-armv7',
         'debug': True,
         'concurrent_collector': False,
       },
       'angler-armv8-ndebug': {
         'serial': '84B7N16728001142',
-        'device': 'angler',
+        'device': 'angler-armv8',
         'debug': False,
       },
       'angler-armv8-debug': {
         'serial': '84B7N15B03000660',
-        'device': 'angler',
+        'device': 'angler-armv8',
         'debug': True,
       },
       'angler-armv8-cms': {
         'serial': '84B7N15B03000641',
-        'device': 'angler',
+        'device': 'angler-armv8',
         'debug': True,
         'concurrent_collector': False,
       },
@@ -531,26 +531,26 @@ def GenTests(api):
       ) +
       api.step_data('test jdwp aot', retcode=1))
   yield (
-      api.test('target_hammerhead_setup_failure') +
+      api.test('target_angler_setup_failure') +
       api.properties(
         mastername='client.art',
-        buildername='hammerhead-ndebug',
+        buildername='angler-armv7-ndebug',
         bot_id='TestSlave',
       )
       + api.step_data('setup device', retcode=1))
   yield (
-      api.test('target_hammerhead_test_failure') +
+      api.test('target_angler_test_failure') +
       api.properties(
         mastername='client.art',
-        buildername='hammerhead-ndebug',
+        buildername='angler-armv7-ndebug',
         bot_id='TestSlave',
       ) +
       api.step_data('test jdwp aot', retcode=1))
   yield (
-      api.test('target_hammerhead_device_cleanup_failure') +
+      api.test('target_angler_device_cleanup_failure') +
       api.properties(
         mastername='client.art',
-        buildername='hammerhead-ndebug',
+        buildername='angler-armv7-ndebug',
         bot_id='TestSlave',
       ) +
       api.step_data('device cleanup', retcode=1))

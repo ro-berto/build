@@ -28,7 +28,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15B03000703",
+      "ANDROID_SERIAL": "84B7N16728001148",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -57,7 +57,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15B03000703",
+      "ANDROID_SERIAL": "84B7N16728001148",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -77,11 +77,7 @@
       "TARGET_PRODUCT": "arm_krait",
       "USE_DEX2OAT_DEBUG": "false"
     },
-    "name": "setup device",
-    "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_FAILURE@@@"
-    ]
+    "name": "setup device"
   },
   {
     "cmd": [
@@ -98,7 +94,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15B03000703",
+      "ANDROID_SERIAL": "84B7N16728001148",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -118,7 +114,11 @@
       "TARGET_PRODUCT": "arm_krait",
       "USE_DEX2OAT_DEBUG": "false"
     },
-    "name": "device cleanup"
+    "name": "device cleanup",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "cmd": [
@@ -128,7 +128,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15B03000703",
+      "ANDROID_SERIAL": "84B7N16728001148",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -160,7 +160,7 @@
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_ROOT": "/data/local/tmp/system",
-      "ANDROID_SERIAL": "84B7N15B03000703",
+      "ANDROID_SERIAL": "84B7N16728001148",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -194,7 +194,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15B03000703",
+      "ANDROID_SERIAL": "84B7N16728001148",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -223,7 +223,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15B03000703",
+      "ANDROID_SERIAL": "84B7N16728001148",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -254,7 +254,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15B03000703",
+      "ANDROID_SERIAL": "84B7N16728001148",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -290,7 +290,7 @@
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_ROOT": "/data/local/tmp/system",
-      "ANDROID_SERIAL": "84B7N15B03000703",
+      "ANDROID_SERIAL": "84B7N16728001148",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -324,7 +324,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15B03000703",
+      "ANDROID_SERIAL": "84B7N16728001148",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -353,7 +353,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15B03000703",
+      "ANDROID_SERIAL": "84B7N16728001148",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -384,7 +384,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15B03000703",
+      "ANDROID_SERIAL": "84B7N16728001148",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -418,7 +418,7 @@
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_ROOT": "/data/local/tmp/system",
-      "ANDROID_SERIAL": "84B7N15B03000703",
+      "ANDROID_SERIAL": "84B7N16728001148",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -452,7 +452,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15B03000703",
+      "ANDROID_SERIAL": "84B7N16728001148",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -481,7 +481,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15B03000703",
+      "ANDROID_SERIAL": "84B7N16728001148",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -512,7 +512,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15B03000703",
+      "ANDROID_SERIAL": "84B7N16728001148",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -546,7 +546,7 @@
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_ROOT": "/data/local/tmp/system",
-      "ANDROID_SERIAL": "84B7N15B03000703",
+      "ANDROID_SERIAL": "84B7N16728001148",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -580,7 +580,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15B03000703",
+      "ANDROID_SERIAL": "84B7N16728001148",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -609,7 +609,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15B03000703",
+      "ANDROID_SERIAL": "84B7N16728001148",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -640,7 +640,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15B03000703",
+      "ANDROID_SERIAL": "84B7N16728001148",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -672,7 +672,7 @@
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_ROOT": "/data/local/tmp/system",
-      "ANDROID_SERIAL": "84B7N15B03000703",
+      "ANDROID_SERIAL": "84B7N16728001148",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -706,7 +706,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15B03000703",
+      "ANDROID_SERIAL": "84B7N16728001148",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -735,7 +735,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15B03000703",
+      "ANDROID_SERIAL": "84B7N16728001148",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -766,7 +766,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15B03000703",
+      "ANDROID_SERIAL": "84B7N16728001148",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -798,7 +798,7 @@
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_ROOT": "/data/local/tmp/system",
-      "ANDROID_SERIAL": "84B7N15B03000703",
+      "ANDROID_SERIAL": "84B7N16728001148",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -832,7 +832,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15B03000703",
+      "ANDROID_SERIAL": "84B7N16728001148",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -861,7 +861,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15B03000703",
+      "ANDROID_SERIAL": "84B7N16728001148",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -892,7 +892,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15B03000703",
+      "ANDROID_SERIAL": "84B7N16728001148",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -925,7 +925,7 @@
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_ROOT": "/data/local/tmp/system",
-      "ANDROID_SERIAL": "84B7N15B03000703",
+      "ANDROID_SERIAL": "84B7N16728001148",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -959,7 +959,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15B03000703",
+      "ANDROID_SERIAL": "84B7N16728001148",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -988,7 +988,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15B03000703",
+      "ANDROID_SERIAL": "84B7N16728001148",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -1019,7 +1019,7 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15B03000703",
+      "ANDROID_SERIAL": "84B7N16728001148",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
@@ -1043,7 +1043,7 @@
   },
   {
     "name": "$result",
-    "reason": "1 out of 32 aggregated steps failed. Failures: Step('setup device') failed with return_code 1",
+    "reason": "1 out of 32 aggregated steps failed. Failures: Step('device cleanup') failed with return_code 1",
     "recipe_result": null,
     "status_code": 1
   }
