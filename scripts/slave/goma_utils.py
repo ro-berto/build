@@ -59,7 +59,7 @@ def GetGomaLogDirectory():
     # environment, let me avoid to check the Windows directory, which we
     # need to use win32api on Python.
   else:
-    candidates.extend(['TEST_TMPDIR', 'TMPDIR', 'TMP'])
+    candidates.extend(['TMPDIR', 'TMP'])
     default_dir = '/tmp'
 
   for candidate in candidates:
