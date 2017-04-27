@@ -920,8 +920,7 @@
       "--upload-bucket=public",
       "--reset-results",
       "--upload-results",
-      "--results-label=Patch",
-      "@bad49c331def2a3bbf3ddd0096eb51551155",
+      "--results-label=Patch_bad49c331def2a3bbf3ddd0096eb51551155",
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus5X_perf_bisect",

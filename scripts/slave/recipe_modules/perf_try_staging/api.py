@@ -72,7 +72,7 @@ class PerfTryJobApi(recipe_api.RecipeApi):
     with self.m.step.nest('Running WITH patch'):
       results_label = 'Patch'
       if r[0]:
-        results_label += ' @%s' % r[0]
+        results_label += '_%s' % r[0]
       results_with_patch = self._build_and_run_tests(
           test_cfg, bot_update_step, bot_db, r[0],
           name='With Patch',
