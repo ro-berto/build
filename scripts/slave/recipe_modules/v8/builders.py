@@ -2665,6 +2665,11 @@ def AddBranchBuilder(name, build_config, bits, presubmit=False,
     'bot_type': 'builder_tester',
     'tests': tests,
     'testing': {'platform': 'linux'},
+    'swarming_properties': {
+      'default_expiration': 2 * 60 * 60,
+      'default_hard_timeout': 90 * 60,
+      'default_priority': 35,
+    },
   }
 
 for build_config, name_suffix in (('Release', ''), ('Debug', ' - debug')):
