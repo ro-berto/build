@@ -1,0 +1,172 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[START_DIR]/bisect_results/dummy",
+      "511"
+    ],
+    "name": "makedirs results directory",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "/path/to/tmp/",
+      "--",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--xvfb",
+      "--factory-properties",
+      "{\"bisect_config\": {\"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium --output-format=valueset page_cycler_v2.intl_ar_fa_he\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"recipe\": \"chromium_tests:tests/steps/bisect_test\", \"slavename\": \"test_bot_id\"}",
+      "--build-properties",
+      "{\"bisect_config\": {\"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium --output-format=valueset page_cycler_v2.intl_ar_fa_he\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"recipe\": \"chromium_tests:tests/steps/bisect_test\", \"slavename\": \"test_bot_id\"}",
+      "--step-name=Performance Test 1 of 2",
+      "--builder-name=test_buildername",
+      "--slave-name=test_bot_id",
+      "--run-python-script",
+      "./tools/perf/run_benchmark",
+      "-v",
+      "--browser=android-chromium",
+      "--output-format=valueset",
+      "page_cycler_v2.intl_ar_fa_he",
+      "--output-dir=[START_DIR]/bisect_results/dummy"
+    ],
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+    },
+    "name": "Performance Test 1 of 2",
+    "stderr": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@Captured Output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "Reading valueset results",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"dummy\": \"dict\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[START_DIR]/bisect_results/dummy",
+      "511"
+    ],
+    "name": "makedirs results directory (2)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "/path/to/tmp/",
+      "--",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--xvfb",
+      "--factory-properties",
+      "{\"bisect_config\": {\"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium --output-format=valueset page_cycler_v2.intl_ar_fa_he\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"recipe\": \"chromium_tests:tests/steps/bisect_test\", \"slavename\": \"test_bot_id\"}",
+      "--build-properties",
+      "{\"bisect_config\": {\"bug_id\": \"425582\", \"builder_host\": \"master4.golo.chromium.org\", \"builder_port\": \"8341\", \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium --output-format=valueset page_cycler_v2.intl_ar_fa_he\", \"gs_bucket\": \"chrome-perf\", \"max_time_minutes\": \"5\", \"metric\": \"warm_times/page_load_time\", \"repeat_count\": \"2\", \"test_type\": \"perf\", \"truncate_percent\": \"25\"}, \"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"recipe\": \"chromium_tests:tests/steps/bisect_test\", \"slavename\": \"test_bot_id\"}",
+      "--step-name=Performance Test 2 of 2",
+      "--builder-name=test_buildername",
+      "--slave-name=test_bot_id",
+      "--run-python-script",
+      "./tools/perf/run_benchmark",
+      "-v",
+      "--browser=android-chromium",
+      "--output-format=valueset",
+      "page_cycler_v2.intl_ar_fa_he",
+      "--output-dir=[START_DIR]/bisect_results/dummy"
+    ],
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+    },
+    "name": "Performance Test 2 of 2",
+    "stderr": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@Captured Output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[START_DIR]/bisect_results/dummy/results-valueset.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "Reading valueset results (2)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"dummy\": \"dict\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "details",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@details@compile_targets: ['chrome']@@@",
+      "@@@STEP_LOG_LINE@details@uses_local_devices: False@@@",
+      "@@@STEP_LOG_END@details@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]

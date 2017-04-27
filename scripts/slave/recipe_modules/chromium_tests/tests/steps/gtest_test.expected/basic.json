@@ -1,0 +1,76 @@
+[
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--xvfb",
+      "--factory-properties",
+      "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"mastername\": \"test_mastername\", \"recipe\": \"chromium_tests:tests/steps/gtest_test\", \"slavename\": \"test_bot_id\"}",
+      "--build-properties",
+      "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"mastername\": \"test_mastername\", \"recipe\": \"chromium_tests:tests/steps/gtest_test\", \"slavename\": \"test_bot_id\"}",
+      "--annotate=gtest",
+      "--test-type=base_unittests",
+      "--step-name=base_unittests",
+      "--test-launcher-summary-output",
+      "/path/to/tmp/json",
+      "--builder-name=test_buildername",
+      "--slave-name=test_bot_id",
+      "--build-number=123",
+      "base_unittests",
+      "--gtest_repeat=2",
+      "foo.bar",
+      "--test-launcher-retry-limit=3",
+      "--gtest_also_run_disabled_tests"
+    ],
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+    },
+    "name": "base_unittests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
+      "--input-json",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}]}]}",
+      "--master-name",
+      "test_mastername",
+      "--builder-name",
+      "test_buildername",
+      "--build-number",
+      "123",
+      "--test-type",
+      "base_unittests",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "x@{#0}"
+    ],
+    "name": "Upload to test-results [base_unittests]"
+  },
+  {
+    "cmd": [],
+    "name": "details",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@details@compile_targets: ['base_unittests']@@@",
+      "@@@STEP_LOG_LINE@details@step_metadata: {'waterfall_mastername': None, 'canonical_step_name': 'base_unittests', 'patched': False, 'waterfall_buildername': None}@@@",
+      "@@@STEP_LOG_LINE@details@pass_fail_counts: {'Test.Three': {'pass_count': 1, 'fail_count': 0}, 'Test.One': {'pass_count': 1, 'fail_count': 0}, 'Test.Two': {'pass_count': 1, 'fail_count': 0}}@@@",
+      "@@@STEP_LOG_LINE@details@uses_local_devices: True@@@",
+      "@@@STEP_LOG_END@details@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]

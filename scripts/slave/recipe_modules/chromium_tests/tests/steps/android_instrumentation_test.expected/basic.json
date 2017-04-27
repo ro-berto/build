@@ -1,0 +1,70 @@
+[
+  {
+    "cmd": [],
+    "name": "ChromePublicTest",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "None/out/Release/bin/run_chrome_public_test_apk",
+      "--blacklist-file",
+      "None/out/bad_devices.json",
+      "--verbose",
+      "--json-results-file",
+      "/path/to/tmp/json",
+      "--adb-path",
+      "None/third_party/android_tools/sdk/platform-tools/adb"
+    ],
+    "name": "ChromePublicTest.ChromePublicTest",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "step returned non-zero exit code: 1",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
+      "--input-json",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":(\", \"status\": \"FAILURE\"}]}]}",
+      "--master-name",
+      "test_mastername",
+      "--builder-name",
+      "test_buildername",
+      "--build-number",
+      "123",
+      "--test-type",
+      "ChromePublicTest",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "x@{#0}"
+    ],
+    "name": "ChromePublicTest.Upload to test-results [ChromePublicTest]",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "details",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@details@compile_targets: ['chrome_public_test_apk']@@@",
+      "@@@STEP_LOG_LINE@details@uses_local_devices: True@@@",
+      "@@@STEP_LOG_END@details@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "reason": "Step('ChromePublicTest.ChromePublicTest') failed with return_code 1",
+    "recipe_result": null,
+    "status_code": 1
+  }
+]
