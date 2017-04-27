@@ -83,7 +83,8 @@ def RunSteps(api):
   api.gclient.apply_config('chromium')
 
   # Chromium and V8 side-by-side makes the got_revision mapping ambiguous.
-  del api.gclient.c.got_revision_mapping['src']
+  api.gclient.c.got_revision_mapping.pop('src', None)
+  api.gclient.c.got_revision_reverse_mapping['got_revision'] = 'v8'
 
   # Allow rolling all v8 os deps.
   api.gclient.c.target_os.add('android')

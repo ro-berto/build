@@ -137,7 +137,8 @@ def RunSteps(api):
       bot_config['component']['revision'] % component_revision)
 
   # Ensure we remember the chromium revision.
-  api.gclient.c.got_revision_mapping['src'] = 'got_cr_revision'
+  api.gclient.c.got_revision_reverse_mapping['got_cr_revision'] = 'src'
+  api.gclient.c.got_revision_mapping.pop('src', None)
 
   context = {'cwd': api.chromium_checkout.get_checkout_dir(bot_config)}
 

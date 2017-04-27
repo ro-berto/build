@@ -20,7 +20,7 @@ def RunSteps(api):
   api.gclient.apply_config('v8')
 
   # Chromium and V8 side-by-side makes the got_revision mapping ambiguous.
-  del api.gclient.c.got_revision_mapping['src']
+  api.gclient.c.got_revision_mapping.pop('src', None)
 
   api.bot_update.ensure_checkout(
       no_shallow=True, with_branch_heads=True)
