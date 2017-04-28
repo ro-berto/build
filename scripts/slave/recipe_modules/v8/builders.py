@@ -290,7 +290,7 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - nosnap debug builder',
         'build_gs_archive': 'linux_nosnap_dbg_archive',
         'enable_swarming': True,
-        'tests': [V8Testing_5, Mozilla],
+        'tests': [V8Testing_7, Mozilla],
         'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
         'swarming_properties': {
@@ -1395,7 +1395,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing_4],
+        'tests': [V8Testing_7],
         'variants': V8Variant('default'),
         'testing': {'platform': 'linux'},
         'swarming_properties': {
