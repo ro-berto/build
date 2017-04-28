@@ -381,7 +381,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def compile_specific_targets(
       self, bot_config, update_step, bot_db,
       compile_targets, tests_including_triggered,
-      mb_mastername=None, mb_buildername=None, override_bot_type=None):
+      mb_mastername=None, mb_buildername=None, mb_config_path=None,
+      override_bot_type=None):
     """Runs compile and related steps for given builder.
 
     Allows finer-grained control about exact compile targets used.
@@ -424,7 +425,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             self.run_mb_and_compile(compile_targets, isolated_targets,
                                     name_suffix=transform_name(''),
                                     mb_mastername=mb_mastername,
-                                    mb_buildername=mb_buildername))
+                                    mb_buildername=mb_buildername,
+                                    mb_config_path=mb_config_path))
       except self.m.step.StepFailure:
         self.m.tryserver.set_compile_failure_tryjob_result()
         raise
@@ -524,14 +526,17 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
        )
 
   def run_mb_and_compile(self, compile_targets, isolated_targets, name_suffix,
-                         mb_mastername=None, mb_buildername=None):
+                         mb_mastername=None, mb_buildername=None,
+                         mb_config_path=None):
     use_goma_module=False
     if self.m.chromium.c.project_generator.tool == 'mb':
       mb_mastername = mb_mastername or self.m.properties['mastername']
       mb_buildername = mb_buildername or self.m.properties['buildername']
       use_goma = (self.m.chromium.c.compile_py.compiler and
                   'goma' in self.m.chromium.c.compile_py.compiler)
-      self.m.chromium.run_mb(mb_mastername, mb_buildername, use_goma=use_goma,
+      self.m.chromium.run_mb(mb_mastername, mb_buildername,
+                             mb_config_path=mb_config_path,
+                             use_goma=use_goma,
                              isolated_targets=isolated_targets,
                              name='generate_build_files%s' % name_suffix)
       if use_goma:

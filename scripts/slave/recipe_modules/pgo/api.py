@@ -45,7 +45,7 @@ class PGOApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
     super(PGOApi, self).__init__(**kwargs)
 
-  def _compile_instrumented_image(self, bot_config):
+  def _compile_instrumented_image(self, bot_config, mb_config_path=None):
     """
     Generates the instrumented version of the binaries.
     """
@@ -55,6 +55,7 @@ class PGOApi(recipe_api.RecipeApi):
     self.m.chromium.run_mb(
         self.m.properties['mastername'],
         self.m.properties['buildername'],
+        mb_config_path=mb_config_path,
         use_goma=False,
         phase=1)
     # Remove the profile files from the previous builds.
@@ -78,7 +79,7 @@ class PGOApi(recipe_api.RecipeApi):
                                    'run_pgo_profiling_benchmarks.py'),
       args)
 
-  def _compile_optimized_image(self, bot_config):
+  def _compile_optimized_image(self, bot_config, mb_config_path=None):
     """
     Generates the optimized version of the binaries.
     """
@@ -88,6 +89,7 @@ class PGOApi(recipe_api.RecipeApi):
     self.m.chromium.run_mb(
         self.m.properties['mastername'],
         self.m.properties['buildername'],
+        mb_config_path=mb_config_path,
         use_goma=False,
         phase=2)
     self.m.chromium.compile(name='Compile: Optimization phase.')

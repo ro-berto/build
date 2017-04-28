@@ -33,7 +33,10 @@ def RunSteps(api):
 
   update_step, bot_db = api.chromium_tests.prepare_checkout(bot_config)
 
+  mb_config_path = api.properties.get('mb_config_path')
+
   api.chromium.run_mb(mastername, buildername, use_goma=True,
+                      mb_config_path=mb_config_path,
                       android_version_code=3,
                       android_version_name="example")
 
@@ -51,6 +54,15 @@ def GenTests(api):
       bot_id='build1-a1',
       buildnumber='77457',
       out_dir='/tmp',
+  )
+
+  yield api.test('basic_out_dir_with_custom_mb_config') + api.properties(
+      mastername='chromium.linux',
+      buildername='Android Builder (dbg)',
+      bot_id='build1-a1',
+      buildnumber='77457',
+      out_dir='/tmp',
+      mb_config_path='/custom/config.pyl',
   )
 
   yield api.test('basic_out_dir_without_compile_py') + api.properties(
