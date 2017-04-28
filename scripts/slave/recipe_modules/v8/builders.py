@@ -1215,7 +1215,7 @@ BUILDERS = {
         'build_gs_archive': 'arm_rel_archive',
         'parent_buildername': 'V8 Arm - builder',
         'tests': [
-          V8Testing,
+          V8Testing_2,
           Benchmarks,
           OptimizeForSize,
         ],
@@ -1239,7 +1239,7 @@ BUILDERS = {
         'build_gs_archive': 'arm_dbg_archive',
         'parent_buildername': 'V8 Arm - debug builder',
         'tests': [
-          V8Testing_2,
+          V8Testing_3,
           OptimizeForSize,
         ],
         'variants': V8NoExhaustiveVariants(),
