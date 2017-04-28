@@ -25,16 +25,17 @@ BROWSER_TESTS_FILTER = [
 
   # Runs hardware-exercising test and/or video calling tests.
   'WebRtcApprtcBrowserTest.*',
+  'WebrtcAudioPrivateTest.*',
   'WebRtcAudioQualityBrowserTest.*',
   'WebRtcBrowserTest.*',
   'WebRtcDisableEncryptionFlagBrowserTest.*',
+  'WebRtcGetMediaDevicesBrowserTests*',
   'WebRtcInternalsPerfBrowserTest.*',
+  'WebRtcMediaRecorderTest.*',
   'WebRtcSimulcastBrowserTest.*',
   'WebRtcStatsPerfBrowserTest.*',
-  'WebRtcGetMediaDevicesBrowserTests*',
   'WebRtcVideoQualityBrowserTests*',
   'WebRtcWebcamBrowserTests*',
-  'WebrtcAudioPrivateTest.*',
 ]
 
 

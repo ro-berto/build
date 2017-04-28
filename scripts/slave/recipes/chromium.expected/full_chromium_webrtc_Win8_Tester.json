@@ -357,7 +357,7 @@
       "--slave-name=test_bot",
       "--build-number=571",
       "browser_tests.exe",
-      "--gtest_filter=MediaStreamDevicesControllerTest.*:MediaStreamDevicesControllerBrowserTestInstance*:WebRtcApprtcBrowserTest.*:WebRtcAudioQualityBrowserTest.*:WebRtcBrowserTest.*:WebRtcDisableEncryptionFlagBrowserTest.*:WebRtcInternalsPerfBrowserTest.*:WebRtcSimulcastBrowserTest.*:WebRtcStatsPerfBrowserTest.*:WebRtcGetMediaDevicesBrowserTests*:WebRtcVideoQualityBrowserTests*:WebRtcWebcamBrowserTests*:WebrtcAudioPrivateTest.*",
+      "--gtest_filter=MediaStreamDevicesControllerTest.*:MediaStreamDevicesControllerBrowserTestInstance*:WebRtcApprtcBrowserTest.*:WebrtcAudioPrivateTest.*:WebRtcAudioQualityBrowserTest.*:WebRtcBrowserTest.*:WebRtcDisableEncryptionFlagBrowserTest.*:WebRtcGetMediaDevicesBrowserTests*:WebRtcInternalsPerfBrowserTest.*:WebRtcMediaRecorderTest.*:WebRtcSimulcastBrowserTest.*:WebRtcStatsPerfBrowserTest.*:WebRtcVideoQualityBrowserTests*:WebRtcWebcamBrowserTests*",
       "--run-manual",
       "--ui-test-action-max-timeout=350000",
       "--test-launcher-jobs=1",
