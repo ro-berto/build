@@ -901,15 +901,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         affects_blink_paths and
         buildername in CHROMIUM_BLINK_TESTS_SWARMING_BUILDERS)
 
-    # Add blink tests that work well with "analyze" here. The tricky ones
-    # that bypass it (like the layout tests) are added later.
-    if add_blink_tests:
-      add_tests([
-          self.steps.GTestTest('blink_heap_unittests'),
-          self.steps.GTestTest('blink_platform_unittests'),
-          self.steps.GTestTest('webkit_unit_tests'),
-          self.steps.GTestTest('wtf_unittests'),
-      ])
+    # Before layout tests on swarming is rolled out to run on all CLs, blink layout tests needs 
+    # to be manually added to the analyze list.
     if add_blink_tests_swarming:
       merge = {
           'script': self.m.path['checkout'].join(
