@@ -67,6 +67,13 @@ ANDROID_EXPERIMENTAL_TESTS = (
   'AppRTCMobileTestStubbedVideoIO',
 )
 
+ANDROID_CIPD_PACKAGES = [
+    ("bin",
+     "infra/tools/luci/logdog/butler/${platform}",
+     "git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c",
+    )
+]
+
 
 def generate_tests(api, test_suite, revision, enable_swarming=False):
   tests = []
@@ -144,7 +151,8 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
     for test in (ANDROID_DEVICE_TESTS +
                  ANDROID_INSTRUMENTATION_TESTS):
       tests.append(GTestTest(test, enable_swarming=enable_swarming,
-                             override_isolate_target=test))
+                             override_isolate_target=test,
+                             cipd_packages=ANDROID_CIPD_PACKAGES))
     for test in ANDROID_JUNIT_TESTS:
       if api.mastername == 'client.webrtc.fyi':
         tests.append(GTestTest(test, enable_swarming=enable_swarming,
@@ -160,7 +168,8 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
   elif test_suite == 'android_experimental':
     for test in ANDROID_EXPERIMENTAL_TESTS:
       tests.append(GTestTest(test, enable_swarming=enable_swarming,
-                             override_isolate_target=test))
+                             override_isolate_target=test,
+                             cipd_packages=ANDROID_CIPD_PACKAGES))
 
   return tests
 
