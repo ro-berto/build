@@ -1667,7 +1667,7 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
     # TODO(nednguyen, kbr): Remove this once all the GYP builds are converted
     # to GN.
     override_compile_targets = spec.get('override_compile_targets', None)
-    merge = spec.get('merge', {})
+    merge = dict(spec.get('merge', {}))
     if merge:
       merge_script = merge.get('script')
       if merge_script:

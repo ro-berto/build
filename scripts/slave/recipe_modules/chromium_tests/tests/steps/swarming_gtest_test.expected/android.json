@@ -1,0 +1,50 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys\nprint '*.isolated file for target %s is missing' % sys.argv[1]\nsys.exit(1)\n",
+      "base_unittests_apk"
+    ],
+    "name": "[error] base_unittests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@print '*.isolated file for target %s is missing' % sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@sys.exit(1)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys\nprint '%s wasn\\'t triggered' % sys.argv[1]\nsys.exit(1)\n",
+      "base_unittests"
+    ],
+    "name": "[collect error] base_unittests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@print '%s wasn\\'t triggered' % sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@sys.exit(1)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "details",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@details@compile_targets: ['base_unittests_apk_run']@@@",
+      "@@@STEP_LOG_LINE@details@uses_local_devices: False@@@",
+      "@@@STEP_LOG_LINE@details@uses_swarming: True@@@",
+      "@@@STEP_LOG_LINE@details@pass_fail_counts: None@@@",
+      "@@@STEP_LOG_END@details@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]
