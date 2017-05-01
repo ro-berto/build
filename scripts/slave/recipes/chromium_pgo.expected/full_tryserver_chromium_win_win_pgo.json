@@ -125,7 +125,6 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_DEFINES": "buildtype=Official chrome_pgo_phase=1 component=static_library fastbuild=0 target_arch=ia32 use_goma=0",
-      "GYP_MSVS_VERSION": "2015",
       "PATH": "[START_DIR]\\src\\out\\Release;%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient Runhooks: Instrumentation phase."
@@ -148,8 +147,7 @@
     ],
     "cwd": "[START_DIR]\\src",
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "GYP_MSVS_VERSION": "2015"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "name": "generate_build_files"
   },
@@ -225,7 +223,6 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_DEFINES": "buildtype=Official chrome_pgo_phase=2 component=static_library fastbuild=0 target_arch=ia32 use_goma=0",
-      "GYP_MSVS_VERSION": "2015",
       "PATH": "%(PATH)s;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient Runhooks: Optimization phase."
@@ -248,8 +245,7 @@
     ],
     "cwd": "[START_DIR]\\src",
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "GYP_MSVS_VERSION": "2015"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "name": "generate_build_files (2)"
   },
