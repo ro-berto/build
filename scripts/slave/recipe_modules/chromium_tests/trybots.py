@@ -410,6 +410,14 @@ TRYBOTS = freeze({
         'mastername': 'chromium.fyi',
         'buildername': 'Linux Clang Analyzer',
       }),
+      'linux_mojo': simple_bot({
+        'mastername': 'chromium.fyi',
+        'buildername': 'Mojo Linux',
+      }),
+      'linux_mojo_chromeos': simple_bot({
+        'mastername': 'chromium.fyi',
+        'buildername': 'Mojo ChromiumOS',
+      }),
       # Optional GPU bots.
       'linux_optional_gpu_tests_rel': {
         'bot_ids': [
@@ -578,6 +586,10 @@ TRYBOTS = freeze({
       'win_clang_x64_rel': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'CrWinClang64',
+      }),
+      'win_mojo': simple_bot({
+        'mastername': 'chromium.fyi',
+        'buildername': 'Mojo Windows',
       }),
       # Optional GPU bots.
       # This trybot used to mirror "Optional Win7 Release (AMD)",
