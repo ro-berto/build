@@ -9,6 +9,7 @@ import re
 import subprocess
 import sys
 import tempfile
+import traceback
 
 
 # Install Infra build environment.
@@ -53,6 +54,50 @@ def ensure_managed(dot_gclient_filename):
     return True
   return False
 
+IMPORTANT_REPOS = ['build', 'depot_tools']
+
+REPO_TO_GITILES_PATH = {
+    'build': 'chromium/tools/build',
+    'depot_tools': 'chromium/tools/depot_tools',
+}
+
+GITILES_COMMIT_TEMPLATE = 'https://chromium.googlesource.com/%s/+/%s'
+GITILES_LOG_TEMPLATE = 'https://chromium.googlesource.com/%s/+log/%s..%s'
+
+def get_repo_head(path):
+  cmd = ['git', 'rev-parse', 'HEAD']
+  return _run_command(cmd, cwd=path)
+
+
+def add_revision_links(s, repos_to_old_hashes):
+  """Adds infra repo revision information to the update_scripts step.
+
+  Args:
+    s: The step to add the links and step text to.
+    repos_to_old_hashes: A dictionary mapping repo name to revision hash
+      before update scripts was executed.
+  """
+  for repo, old_hash in sorted(
+      repos_to_old_hashes.items(), key=lambda it: it[0]):
+    path = os.path.join(env.Build, os.pardir, repo)
+    rv, out = get_repo_head(path)
+    if rv:
+      sys.stderr.write(
+          'error while getting revision info for project %r (return'
+          ' code was %s):\n%s' % (repo, rv, out))
+      continue
+
+    new_hash = out.strip()
+    if new_hash == old_hash:
+      s.step_link(
+          '%s: %s' % (repo, new_hash), GITILES_COMMIT_TEMPLATE % (
+              REPO_TO_GITILES_PATH[repo], new_hash))
+    else:
+      gitiles_link = GITILES_LOG_TEMPLATE % (
+          REPO_TO_GITILES_PATH[repo], old_hash, new_hash)
+      s.step_link(
+          '%s: %s..%s' % (repo, old_hash, new_hash), gitiles_link)
+
 
 def update_scripts():
   if os.environ.get('RUN_SLAVE_UPDATED_SCRIPTS'):
@@ -91,6 +136,20 @@ def update_scripts():
     except Exception:
       # Super paranoia try block.
       output_json = None
+
+    repos_to_old_hashes = {}
+    try:
+      for repo in sorted(IMPORTANT_REPOS):
+        path = os.path.join(env.Build, os.pardir, repo)
+        rv, out = get_repo_head(path)
+        if rv:
+          break
+
+        proj_sha = out.strip()
+        repos_to_old_hashes[repo] = proj_sha
+    except Exception:
+      traceback.print_exc()
+
     cmd_dict = {
         'name': 'update_scripts',
         'cmd': gclient_cmd,
@@ -111,12 +170,15 @@ def update_scripts():
           s.step_log_line('gclient_json', line)
         s.step_log_end('gclient_json')
 
-        build_checkout = gclient_json['solutions'].get('build/')
-        if build_checkout:
-          s.step_text('%(scm)s - %(revision)s' % build_checkout)
-          s.set_build_property('build_scm', json.dumps(build_checkout['scm']))
-          s.set_build_property('build_revision',
-                               json.dumps(build_checkout['revision']))
+        if repos_to_old_hashes:
+          add_revision_links(s, repos_to_old_hashes, env)
+        else:
+          build_checkout = gclient_json['solutions'].get('build/')
+          if build_checkout:
+            s.step_text('%(scm)s - %(revision)s' % build_checkout)
+            s.set_build_property('build_scm', json.dumps(build_checkout['scm']))
+            s.set_build_property('build_revision',
+                                 json.dumps(build_checkout['revision']))
       except Exception as e:
         s.step_text('Unable to process gclient JSON %s' % repr(e))
         s.step_exception()
