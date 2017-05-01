@@ -113,7 +113,7 @@ _PLATFORM_CONFIG = {
 # Loaded by '_get_params'.
 Params = collections.namedtuple('Params', (
     'project', 'cipd_tag', 'api', 'mastername', 'buildername', 'buildnumber',
-    'logdog_only',
+    'logdog_only', 'generation',
 ))
 
 
@@ -241,6 +241,7 @@ def _get_params(properties):
     'enabled': True,
     'cipd_tag': '$stable',
     'logdog_only': False,
+    'generation': None,
   }
   for bn in (buildername, '*'):
     bn_map = master_config.get(bn)
@@ -269,6 +270,7 @@ def _get_params(properties):
       buildername=buildername,
       buildnumber=buildnumber,
       logdog_only=builder_map['logdog_only'],
+      generation=builder_map['generation'],
   )
 
 
@@ -362,7 +364,12 @@ def _build_prefix(params):
 
   mastername, buildername, buildnumber = (normalize(p) for p in (
       params.mastername, params.buildername, params.buildnumber))
-  prefix = 'bb/%s/%s/%s' % (mastername, buildername, buildnumber)
+
+  parts = ['bb', mastername, buildername]
+  if params.generation:
+    parts += [params.generation]
+  parts += [buildnumber]
+  prefix = '/'.join(str(x) for x in parts)
 
   viewer_url = (
       'https://luci-milo.appspot.com/buildbot/%(mastername)s/%(buildername)s/'
