@@ -29,9 +29,11 @@ RECIPE_CONFIG_PATHS = [
 CHROMIUM_BLINK_TESTS_BUILDERS = freeze([
   'mac_chromium_rel_ng',
   'win_chromium_rel_ng',
+  'linux_chromium_rel_ng',
 ])
 
-CHROMIUM_BLINK_TESTS_SWARMING_BUILDERS = freeze([
+# If we are running layout tests, we run on swarming if the buildername is in this list.
+LAYOUT_TESTS_SWARMING_BUILDERS = freeze([
   'linux_chromium_rel_ng',
 ])
 
@@ -896,14 +898,21 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     add_blink_tests = (
         affects_blink_paths and
         buildername in
-        CHROMIUM_BLINK_TESTS_BUILDERS+CHROMIUM_BLINK_TESTS_SWARMING_BUILDERS)
-    add_blink_tests_swarming = (
-        affects_blink_paths and
-        buildername in CHROMIUM_BLINK_TESTS_SWARMING_BUILDERS)
+        CHROMIUM_BLINK_TESTS_BUILDERS)
+
+    swarming_builder = buildername in LAYOUT_TESTS_SWARMING_BUILDERS
+
+    # We decide at this point whether we will add layout tests to run on
+    # swarming, locally, or not at all.
+    # TODO(mcgreevy): Also check at this point whether there is already a
+    # src-configured test called "webkit_layout_tests", in which case both
+    # add_swarmed_layout_tests and add_local_layout_tests should be false.
+    add_swarmed_layout_tests = add_blink_tests and swarming_builder
+    add_local_layout_tests = add_blink_tests and not swarming_builder
 
     # Before layout tests on swarming is rolled out to run on all CLs, blink layout tests needs 
     # to be manually added to the analyze list.
-    if add_blink_tests_swarming:
+    if add_swarmed_layout_tests:
       merge = {
           'script': self.m.path['checkout'].join(
               'third_party', 'WebKit', 'Tools', 'Scripts',
@@ -960,35 +969,36 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       tests = []
       tests_including_triggered = []
 
+    # TODO(tansell): Remove these special cases.
+    # At the moment there remains a few blink tests which are not using
+    # "analyze". These tests don't correctly specify their dependencies and
+    # thus need to be manually added on blink changes.
+    # See https://crbug.com/703894
+    nonanalyze_blink_tests = []
+    if add_blink_tests:
+      nonanalyze_blink_tests = [
+          self.steps.ScriptTest(
+              'webkit_lint', 'webkit_lint.py', collections.defaultdict(list)),
+          self.steps.ScriptTest(
+              'webkit_python_tests', 'webkit_python_tests.py',
+              collections.defaultdict(list)),
+      ]
+    # TODO(tansell): Remove this once all builders are running layout tests
+    # via analyze.
+    if add_local_layout_tests:
+        nonanalyze_blink_tests.append(self.steps.BlinkTest())
+
     # Blink tests have to bypass "analyze", see below.
-    if compile_targets or add_blink_tests:
+    if compile_targets or nonanalyze_blink_tests:
       tests = self._tests_in_compile_targets(test_targets, tests)
       tests_including_triggered = self._tests_in_compile_targets(
           test_targets, tests_including_triggered)
 
-      # TODO(tansell): Remove these special cases.
-      # At the moment there remains a few blink tests which are not using
-      # "analyze". These tests don't correctly specify their dependencies and
-      # thus need to be manually added on blink changes.
-      # See https://crbug.com/703894
-      if add_blink_tests:
-        blink_tests = [
-            self.steps.ScriptTest(
-                'webkit_lint', 'webkit_lint.py', collections.defaultdict(list)),
-            self.steps.ScriptTest(
-                'webkit_python_tests', 'webkit_python_tests.py',
-                collections.defaultdict(list)),
-        ]
-        # TODO(tansell): Remove this once all builders are running layout tests
-        # via analyze.
-        if not add_blink_tests_swarming:
-          blink_tests.append(self.steps.BlinkTest())
+      add_tests(nonanalyze_blink_tests)
+      for test in nonanalyze_blink_tests:
+        compile_targets.extend(test.compile_targets(self._api_for_tests))
 
-        add_tests(blink_tests)
-        for test in blink_tests:
-          compile_targets.extend(test.compile_targets(self._api_for_tests))
-        compile_targets = sorted(set(compile_targets))
-
+      compile_targets = sorted(set(compile_targets))
       self.compile_specific_targets(
           bot_config_object,
           bot_update_step,
