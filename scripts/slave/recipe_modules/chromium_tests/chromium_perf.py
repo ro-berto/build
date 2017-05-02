@@ -207,7 +207,7 @@ _AddTestSpec('Android One Perf', 'android-one', 'android',
 # 64 bit android
 _AddTestSpec('Android Nexus5X Perf', 'android-nexus5X', 'android',
              num_device_shards=7, num_host_shards=3,
-             parent_buildername='Android arm64 Compile')
+             parent_buildername='Android Compile')
 
 # Webview
 _AddTestSpec('Android Nexus5X WebView Perf', 'android-webview-nexus5X',
