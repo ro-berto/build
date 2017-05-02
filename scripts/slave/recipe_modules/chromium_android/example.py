@@ -168,8 +168,9 @@ def RunSteps(api, buildername):
 
   if config.get('build', False):
     api.chromium.compile(use_goma_module=True)
-    api.chromium_android.make_zip_archive('zip_build_proudct', 'archive.zip',
-        filters=['*.apk'])
+    api.chromium_android.make_zip_archive(
+        'zip_build_product', 'archive.zip', include_filters=['*.apk'],
+        exclude_filters=['*.so', '*.a'])
   else:
     api.chromium_android.download_build('build-bucket',
                                         'build_product.zip')

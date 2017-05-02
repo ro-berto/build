@@ -67,16 +67,18 @@ class AndroidApi(recipe_api.RecipeApi):
     self.m.chromium.set_config(config_name, optional=True, **kwargs)
 
   def make_zip_archive(self, step_name, archive_name, files=None,
-                       preserve_paths=True, filters=None, **kwargs):
+                       preserve_paths=True, include_filters=None,
+                       exclude_filters=None, **kwargs):
     """Creates and stores the archive file.
 
     Args:
       step_name: Name of the step.
       archive_name: Name of the archive file.
       files: If specified, only include files here instead of out/<target>.
-      filters: List of globs to be included in the archive.
-      preserve_paths: If True, files will be stored using the subdolders
+      preserve_paths: If True, files will be stored using the subdirectories
         in the archive.
+      include_filters: List of globs to be included in the archive.
+      exclude_filters: List of globs to be excluded from the archive.
     """
     archive_args = ['--target', self.m.chromium.c.BUILD_CONFIG,
                     '--name', archive_name]
@@ -84,8 +86,12 @@ class AndroidApi(recipe_api.RecipeApi):
     # TODO(luqui): Clean up when these are covered by the external builders.
     if files:              # pragma: no cover
       archive_args.extend(['--files', ','.join(files)])
-    if filters:
-      archive_args.extend(['--filters', ','.join(filters)])
+    if include_filters:
+      for f in include_filters:
+        archive_args.extend(['--include-filter', f])
+    if exclude_filters:
+      for f in exclude_filters:
+        archive_args.extend(['--exclude-filter', f])
     if not preserve_paths: # pragma: no cover
       archive_args.append('--ignore-subfolder-names')
 
@@ -262,6 +268,12 @@ class AndroidApi(recipe_api.RecipeApi):
         'zip_build_product',
         archive_name,
         preserve_paths=True,
+        exclude_filters=[
+            "obj/*", "gen/*",  # Default toolchain's obj/ and gen/
+            "*/obj/*", "*/gen/*",  # Secondary toolchains' obj/ and gen/
+            "*.stamp", "*.d",  # Files used only for incremental builds
+            "*.ninja", ".ninja_*",  # Build files, .ninja_log, .ninja_deps
+        ]
       )
 
     self.m.gsutil.upload(

@@ -22,7 +22,8 @@ from common import chromium_utils
 
 
 def archive_build(target='Debug', name='archive.zip', location='out',
-                  files=None, ignore_subfolder_names=False, filters=None):
+                  files=None, ignore_subfolder_names=False,
+                  include_filters=None, exclude_filters=None):
   out_dir = 'out'
   target_dir = os.path.join(out_dir, target)
   zip_file = os.path.join(location, name)
@@ -42,9 +43,12 @@ def archive_build(target='Debug', name='archive.zip', location='out',
     zip_args += 'j'
   command = ['zip', zip_args, zip_file]
   command.extend(expanded_files)
-  if filters:
-    for f in filters:
-      command.extend(['-i', "'%s'" % f])
+  if include_filters:
+    for f in include_filters:
+      command.extend(['--include', "'%s'" % f])
+  if exclude_filters:
+    for f in exclude_filters:
+      command.extend(['--exclude', "'%s'" % f])
   print command
   subprocess.call(' '.join(command), shell=True)
   os.chdir(saved_dir)
@@ -62,8 +66,12 @@ def main(argv):
   option_parser.add_option('--files',
                            help='list of files to include - can be file paths '
                                 'or globs')
-  option_parser.add_option('--filters',
-                           help='include only specified files or globs')
+  option_parser.add_option('--include-filter', action='append',
+                           dest='include_filters',
+                           help='glob to include. May be repeated.')
+  option_parser.add_option('--exclude-filter', action='append',
+                           dest='exclude_filters',
+                           help='glob to exclude. May be repeated.')
   option_parser.add_option('--ignore-subfolder-names',
                            dest='ignore_subfolder_names',
                            action='store_true', default=False,
@@ -74,13 +82,12 @@ def main(argv):
 
   if options.files:
     options.files = options.files.split(',')
-  if options.filters:
-    options.filters = options.filters.split(',')
 
   return archive_build(target=options.target, name=options.name,
                        location=options.location, files=options.files,
                        ignore_subfolder_names=options.ignore_subfolder_names,
-                       filters=options.filters)
+                       include_filters=options.include_filters,
+                       exclude_filters=options.exclude_filters)
 
 
 if '__main__' == __name__:
