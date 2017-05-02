@@ -39,7 +39,7 @@ def arm_hard_float(c):
 
 @CONFIG_CTX(includes=['v8'])
 def sanitizer_bb_coverage(c):
-  c.gyp_env.GYP_DEFINES['sanitizer_coverage'] = 'bb'
+  c.gyp_env.GYP_DEFINES['sanitizer_coverage'] = 'bb,trace-pc-guard'
 
 
 @CONFIG_CTX(includes=['v8'])

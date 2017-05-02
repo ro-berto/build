@@ -429,7 +429,7 @@ def asan_symbolized(c):
 
 @config_ctx()
 def sanitizer_coverage(c):
-  c.gyp_env.GYP_DEFINES['sanitizer_coverage'] = 'edge'
+  c.gyp_env.GYP_DEFINES['sanitizer_coverage'] = 'trace-pc-guard'
 
 @config_ctx(deps=['compiler'])
 def msan(c):
