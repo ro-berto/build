@@ -154,6 +154,7 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
                        '--test-launcher-jobs=1',
                        '--test-launcher-print-test-stdio=always']),
       steps.GTestTest('content_unittests'),
+      steps.GTestTest('jingle_unittests'),
       steps.GTestTest('remoting_unittests', args=['--gtest_filter=Webrtc*']),
     ]
   return spec

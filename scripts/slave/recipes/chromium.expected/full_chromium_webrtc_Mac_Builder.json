@@ -382,6 +382,7 @@
       "capture_unittests",
       "content_browsertests",
       "content_unittests",
+      "jingle_unittests",
       "remoting_unittests"
     ],
     "cwd": "[BUILDER_CACHE]/Mac_Builder/src",
@@ -479,7 +480,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/Mac_Builder/src/out/Release",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Mac_Builder/src/out/Release', '-j', 50, 'browser_tests', 'capture_unittests', 'content_browsertests', 'content_unittests', 'remoting_unittests']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Mac_Builder/src/out/Release', '-j', 50, 'browser_tests', 'capture_unittests', 'content_browsertests', 'content_unittests', 'jingle_unittests', 'remoting_unittests']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",
