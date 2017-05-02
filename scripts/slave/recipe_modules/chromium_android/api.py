@@ -381,6 +381,12 @@ class AndroidApi(recipe_api.RecipeApi):
   def blacklist_file(self):
     return self.out_path.join('bad_devices.json')
 
+  def non_blacklisted_devices(self):
+    if not self.m.path.exists(self.blacklist_file):
+      return self.devices
+    step_result = self.m.json.read('read_blacklist_file', self.blacklist_file)
+    blacklisted_devices = step_result.json.output
+    return [s for s in self.devices if s not in blacklisted_devices]
 
   def revert_device_file_format(self):
     # If current device file is jsonified, revert it back to original format.
