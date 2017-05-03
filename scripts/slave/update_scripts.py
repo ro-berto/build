@@ -66,7 +66,7 @@ GITILES_LOG_TEMPLATE = 'https://chromium.googlesource.com/%s/+log/%s..%s'
 
 def get_repo_head(path):
   cmd = ['git', 'rev-parse', 'HEAD']
-  return _run_command(cmd, cwd=path)
+  return _run_command(cmd, cwd=path, stdout=subprocess.PIPE)
 
 
 def add_revision_links(s, repos_to_old_hashes):
