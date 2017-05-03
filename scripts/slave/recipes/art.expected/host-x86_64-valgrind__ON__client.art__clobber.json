@@ -45,7 +45,7 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "sdk"
     },
-    "name": "Run valgrind tests"
+    "name": "run valgrind tests"
   },
   {
     "name": "$result",

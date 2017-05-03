@@ -133,6 +133,12 @@ def setup_host_x86(api, debug, bitness, concurrent_collector=True,
                             '--host',
                             '--verbose'])
 
+      api.step('test speed-profile', ['./art/test/testrunner/testrunner.py',
+                                      '-j8',
+                                      '--speed-profile',
+                                      '--host',
+                                      '--verbose'])
+
       libcore_command = [art_tools.join('run-libcore-tests.sh'),
                          '--mode=host',
                          '--variant=X%d' % bitness]
@@ -280,6 +286,14 @@ def setup_target(api,
                             '--verbose'])
     test_logging(api, 'test jit')
 
+    with api.step.context({'env': test_env}):
+      api.step('test speed-profile', ['./art/test/testrunner/testrunner.py',
+                                      '-j%d' % (make_jobs),
+                                      '--speed-profile',
+                                      '--target',
+                                      '--verbose'])
+    test_logging(api, 'test speed-profile')
+
     libcore_command = [art_tools.join('run-libcore-tests.sh'),
                        '--mode=device',
                        '--variant=X%d' % bitness]
@@ -348,7 +362,7 @@ def setup_valgrind_runner(api, bitness):
       env.update({ 'HOST_PREFER_32_BIT' : 'true' })
 
     with api.step.context({'env': env}):
-      api.step('Run valgrind tests', [run, '-j8', 'art-gtest-valgrind%d' % bitness])
+      api.step('run valgrind tests', [run, '-j8', 'art-gtest-valgrind%d' % bitness])
 
 
 _CONFIG_MAP = {
