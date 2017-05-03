@@ -1038,14 +1038,20 @@ BUILDERS = freeze({
         'testing': {'platform': 'win'},
       },
       'win_asan': {
-        'recipe_config': 'webrtc',
-        'chromium_apply_config': ['syzyasan'],
+        'recipe_config': 'webrtc_clang',
+        'chromium_apply_config': ['asan'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Windows-7-SP1',
+          'cpu': 'x86-64',
+        }
       },
       'win_x64_win8': {
         'recipe_config': 'webrtc',
