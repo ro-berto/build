@@ -37,19 +37,23 @@ def tryserver_chromium_perf(c):
               'catapult-project/catapult.git')
 
 
-def _AddBuildSpec(name, platform, target_bits=64):
+def _AddBuildSpec(name, platform, target_bits=64, enable_swarming=False):
   # We run sizes with no perf_id for perf tryjobs. http://crbug.com/610772
   SPEC['builders'][name] = chromium_perf.BuildSpec(
-      'tryserver_chromium_perf', None, platform, target_bits)
+      'tryserver_chromium_perf', None, platform, target_bits,
+      enable_swarming=enable_swarming, force_exparchive=enable_swarming)
   SPEC['builders'][name]['use_triggered_tests_from_master'] = 'chromium.perf'
 
 
 def _AddTestSpec(name, platform, target_bits=64):
-  SPEC['builders'][name] = chromium_perf.TestSpec(
-      'tryserver_chromium_perf', None, platform, target_bits)
+   # parent_buildername is not used by the bisect or perf try recipes,
+   # but required for running the chromium expectations tests.
+   SPEC['builders'][name] = chromium_perf.TestSpec(
+       'tryserver_chromium_perf', None, platform, target_bits,
+       parent_buildername='dummy')
 
 
-_AddBuildSpec('Mac Builder', 'mac')
+_AddBuildSpec('Mac Builder', 'mac', enable_swarming=True)
 
 
 _AddBuildSpec('android_perf_bisect_builder', 'android', target_bits=32)
