@@ -498,8 +498,7 @@ def syzyasan_compile_only(c):
   gyp_defs['win_z7'] = 0
 
 @config_ctx(
-    deps=['compiler'], group='memory_tool', includes=['syzyasan_compile_only',
-                                                      'msvs2015'])
+    deps=['compiler'], group='memory_tool', includes=['syzyasan_compile_only'])
 def syzyasan(c):
   if c.gyp_env.GYP_DEFINES['component'] != 'static_library':  # pragma: no cover
     raise BadConf('SyzyASan requires component=static_library')
