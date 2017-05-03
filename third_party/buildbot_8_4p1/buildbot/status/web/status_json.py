@@ -1105,50 +1105,12 @@ class VarzResource(JsonResource):
 
     @defer.deferredGenerator
     def asDict(self, request):
-        builders = {}
-        for builder_name in self.status.getBuilderNames():
-            builder = self.status.getBuilder(builder_name)
-            slaves = builder.getSlaves()
-            builders[builder_name] = {
-                'connected_slaves': sum(1 for x in slaves if x.connected),
-                'current_builds': len(builder.getCurrentBuilds()),
-                'pending_builds': 0,
-                'state': builder.currentBigState,
-                'total_slaves': len(slaves),
-            }
-
-        # Get pending build requests directly from the db for all builders at
-        # once.
-        d = self.status.master.db.buildrequests.getBuildRequests(claimed=False)
-
-        # Timeout the database request after 5 seconds.
-        def timeout():
-            if not d.called:
-                d.cancel()
-        reactor.callLater(5, timeout)
-
-        wfd = defer.waitForDeferred(d)
-        yield wfd
-        try:
-            brdicts = wfd.getResult()
-        except Exception as ex:
-            twlog.err(ex, 'getBuildRequests failed responding to /json/varz')
-        else:
-            for brdict in brdicts:
-                if brdict['buildername'] in builders:
-                    builders[brdict['buildername']]['pending_builds'] += 1
-
-        pool = self.status.master.db.pool
         yield {
             'accepting_builds': bool(self.status.master.botmaster.brd.running),
-            'builders': builders,
-            'db_thread_pool': {
-                'queue': pool.q.qsize(),
-                'waiting': len(pool.waiters),
-                'working': len(pool.working),
-            },
-            'server_uptime': (
-                    get_timeblock()['utc_ts'] - SERVER_STARTED['utc_ts']),
+            'builders': {name: {
+                'current_builds': len(
+                    self.status.getBuilder(name).getCurrentBuilds()),
+            } for name in self.status.getBuilderNames()},
         }
 
 
