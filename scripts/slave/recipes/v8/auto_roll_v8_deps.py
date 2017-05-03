@@ -34,6 +34,7 @@ BLACKLIST = [
   'test/simdjs/data',
   'test/test262/data',
   'test/wasm-js',
+  'testing/gtest',
   'third_party/WebKit/Source/platform/inspector_protocol',
 ]
 
