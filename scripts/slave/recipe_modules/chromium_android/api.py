@@ -232,16 +232,6 @@ class AndroidApi(recipe_api.RecipeApi):
         json_output=False,
         upload_archives_to_bucket=upload_archives_to_bucket)
 
-  def create_supersize_archive(self, apk_path, size_path):
-    """Creates a .size file for the given .apk."""
-    supersize_path = self.m.path['checkout'].join(
-        'tools', 'binary_size', 'supersize')
-    with self.m.step.context({'env': self.m.chromium.get_env()}):
-      return self.m.step(
-          'supersize_archive',
-          [supersize_path, 'archive', size_path, '--apk-path', apk_path, '-v']
-      )
-
   def upload_apks_for_bisect(self, update_properties, bucket, path):
     """Uploads android apks for functional bisects."""
     archive_name = 'build_product.zip'

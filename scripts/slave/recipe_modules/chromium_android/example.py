@@ -254,9 +254,6 @@ def RunSteps(api, buildername):
         apk_path=api.chromium_android.apk_path('Example.apk'),
         chartjson_file=True,
         upload_archives_to_bucket='Bucket')
-    api.chromium_android.create_supersize_archive(
-        apk_path=api.chromium_android.apk_path('Example.apk'),
-        size_path=api.chromium_android.apk_path('Example.apk.size'))
 
   if config.get('run_webview_cts'):
     api.chromium_android.run_webview_cts(command_line_args=[
