@@ -82,7 +82,7 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
   if test_suite == 'webrtc':
     if enable_swarming:
       for test, extra_args in sorted(NORMAL_TESTS.items()):
-        tests.append(SwarmingTest(test, args=['--timeout=900'], **extra_args))
+        tests.append(SwarmingTest(test, **extra_args))
     else:
       for test in sorted(api.NORMAL_TESTS):
         parallel = test != 'webrtc_nonparallel_tests'

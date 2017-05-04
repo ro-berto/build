@@ -630,7 +630,6 @@
       "stepname:audio_decoder_unittests",
       "[dummy hash for audio_decoder_unittests]",
       "--",
-      "--timeout=900",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
@@ -715,7 +714,6 @@
       "stepname:common_audio_unittests",
       "[dummy hash for common_audio_unittests]",
       "--",
-      "--timeout=900",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
@@ -800,7 +798,6 @@
       "stepname:common_video_unittests",
       "[dummy hash for common_video_unittests]",
       "--",
-      "--timeout=900",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
@@ -885,7 +882,6 @@
       "stepname:low_bandwidth_audio_test",
       "[dummy hash for low_bandwidth_audio_test]",
       "--",
-      "--timeout=900",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
@@ -970,7 +966,6 @@
       "stepname:modules_tests",
       "[dummy hash for modules_tests]",
       "--",
-      "--timeout=900",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
@@ -1061,7 +1056,6 @@
       "stepname:modules_unittests",
       "[dummy hash for modules_unittests]",
       "--",
-      "--timeout=900",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
@@ -1176,7 +1170,6 @@
       "stepname:ortc_unittests",
       "[dummy hash for ortc_unittests]",
       "--",
-      "--timeout=900",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
@@ -1261,7 +1254,6 @@
       "stepname:peerconnection_unittests",
       "[dummy hash for peerconnection_unittests]",
       "--",
-      "--timeout=900",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
@@ -1364,7 +1356,6 @@
       "stepname:rtc_media_unittests",
       "[dummy hash for rtc_media_unittests]",
       "--",
-      "--timeout=900",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
@@ -1449,7 +1440,6 @@
       "stepname:rtc_pc_unittests",
       "[dummy hash for rtc_pc_unittests]",
       "--",
-      "--timeout=900",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
@@ -1534,7 +1524,6 @@
       "stepname:rtc_stats_unittests",
       "[dummy hash for rtc_stats_unittests]",
       "--",
-      "--timeout=900",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
@@ -1619,7 +1608,6 @@
       "stepname:rtc_unittests",
       "[dummy hash for rtc_unittests]",
       "--",
-      "--timeout=900",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
@@ -1734,7 +1722,6 @@
       "stepname:system_wrappers_unittests",
       "[dummy hash for system_wrappers_unittests]",
       "--",
-      "--timeout=900",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
@@ -1819,7 +1806,6 @@
       "stepname:test_support_unittests",
       "[dummy hash for test_support_unittests]",
       "--",
-      "--timeout=900",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
@@ -1904,7 +1890,6 @@
       "stepname:tools_unittests",
       "[dummy hash for tools_unittests]",
       "--",
-      "--timeout=900",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
@@ -1989,7 +1974,6 @@
       "stepname:video_engine_tests",
       "[dummy hash for video_engine_tests]",
       "--",
-      "--timeout=900",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
@@ -2092,7 +2076,6 @@
       "stepname:voice_engine_unittests",
       "[dummy hash for voice_engine_unittests]",
       "--",
-      "--timeout=900",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
@@ -2177,7 +2160,6 @@
       "stepname:webrtc_nonparallel_tests",
       "[dummy hash for webrtc_nonparallel_tests]",
       "--",
-      "--timeout=900",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
