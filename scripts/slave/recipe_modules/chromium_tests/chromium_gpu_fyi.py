@@ -463,9 +463,12 @@ SPEC = {
     },
     'Linux GPU TSAN Release': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'chromium_apply_config': ['mb',
+                                'ninja_confirm_noop',
+                                'fetch_telemetry_dependencies'],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
+      'gclient_apply_config': ['chrome_internal',
+                               'angle_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -729,7 +732,9 @@ SPEC = {
     },
     'Mac GPU ASAN Release': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'chromium_apply_config': ['mb',
+                                'ninja_confirm_noop',
+                                'fetch_telemetry_dependencies'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
       'chromium_config_kwargs': {

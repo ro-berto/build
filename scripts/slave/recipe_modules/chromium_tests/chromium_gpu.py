@@ -89,7 +89,8 @@ SPEC = {
       'chromium_apply_config': [
         'mb',
         'ninja_confirm_noop',
-        'chrome_with_codecs'
+        'chrome_with_codecs',
+        'fetch_telemetry_dependencies',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -110,7 +111,8 @@ SPEC = {
       'chromium_apply_config': [
         'mb',
         'ninja_confirm_noop',
-        'chrome_with_codecs'
+        'chrome_with_codecs',
+        'fetch_telemetry_dependencies',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -161,6 +163,7 @@ SPEC = {
         'chrome_with_codecs',
         'mb',
         'ninja_confirm_noop',
+        'fetch_telemetry_dependencies',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -182,6 +185,7 @@ SPEC = {
         'chrome_with_codecs',
         'mb',
         'ninja_confirm_noop',
+        'fetch_telemetry_dependencies',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {

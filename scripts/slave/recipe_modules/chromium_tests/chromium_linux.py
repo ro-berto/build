@@ -18,7 +18,8 @@ SPEC = {
       'chromium_apply_config': [
         'mb',
         'ninja_confirm_noop',
-        'chrome_with_codecs'
+        'chrome_with_codecs',
+        'fetch_telemetry_dependencies',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -52,7 +53,11 @@ SPEC = {
     },
     'Linux Builder (dbg)(32)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'chromium_apply_config': [
+        'mb',
+        'ninja_confirm_noop',
+        'fetch_telemetry_dependencies',
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -91,7 +96,11 @@ SPEC = {
 
     'Linux Builder (dbg)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'chromium_apply_config': [
+        'mb',
+        'ninja_confirm_noop',
+        'fetch_telemetry_dependencies',
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
