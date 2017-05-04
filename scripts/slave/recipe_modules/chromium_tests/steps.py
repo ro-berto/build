@@ -2094,9 +2094,6 @@ class AndroidJunitTest(AndroidTest):
 
 class AndroidInstrumentationTest(AndroidTest):
   _DEFAULT_SUITES = {
-    'AndroidWebViewTest': {
-      'compile_target': 'android_webview_test_apk',
-    },
     'ChromePublicTest': {
       'compile_target': 'chrome_public_test_apk',
     },
@@ -2125,6 +2122,9 @@ class AndroidInstrumentationTest(AndroidTest):
         'SystemWebView.apk',
       ],
     },
+    'WebViewInstrumentationTest': {
+      'compile_target': 'webview_instrumentation_test_apk',
+    },
     'WebViewUiTest': {
       'compile_target': 'webview_ui_test_app_test_apk',
       # TODO(yolandyan): These should be removed once crbug/643660 is resolved
@@ -2138,7 +2138,6 @@ class AndroidInstrumentationTest(AndroidTest):
   }
 
   _DEFAULT_SUITES_BY_TARGET = {
-    'android_webview_test_apk': _DEFAULT_SUITES['AndroidWebViewTest'],
     'chrome_public_test_apk': _DEFAULT_SUITES['ChromePublicTest'],
     'chrome_sync_shell_test_apk': _DEFAULT_SUITES['ChromeSyncShellTest'],
     'content_shell_test_apk': _DEFAULT_SUITES['ContentShellTest'],
@@ -2146,6 +2145,8 @@ class AndroidInstrumentationTest(AndroidTest):
     'remoting_test_apk': _DEFAULT_SUITES['ChromotingTest'],
     'system_webview_shell_layout_test_apk':
         _DEFAULT_SUITES['SystemWebViewShellLayoutTest'],
+    'webview_instrumentation_test_apk':
+        _DEFAULT_SUITES['WebViewInstrumentationTest'],
     'webview_ui_test_app_test_apk': _DEFAULT_SUITES['WebViewUiTest'],
   }
 
@@ -2397,11 +2398,11 @@ class IncrementalCoverageTest(Test):
 
 class FindAnnotatedTest(Test):
   _TEST_APKS = {
-      'android_webview_test_apk': 'AndroidWebViewTest',
       'chrome_public_test_apk': 'ChromePublicTest',
       'chrome_sync_shell_test_apk': 'ChromeSyncShellTest',
       'content_shell_test_apk': 'ContentShellTest',
       'system_webview_shell_layout_test_apk': 'SystemWebViewShellLayoutTest',
+      'webview_instrumentation_test_apk': 'WebViewInstrumentationTest',
   }
 
   @staticmethod

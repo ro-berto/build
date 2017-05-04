@@ -2053,10 +2053,11 @@ SPEC = {
       'android_config': 'clang_tests',
       'root_devices': True,
       'tests': [
-        steps.AndroidInstrumentationTest('AndroidWebViewTest', tool='asan'),
         steps.AndroidInstrumentationTest('ChromePublicTest', tool='asan'),
         steps.AndroidInstrumentationTest('ContentShellTest', tool='asan'),
         steps.AndroidInstrumentationTest('ChromeSyncShellTest', tool='asan'),
+        steps.AndroidInstrumentationTest(
+            'WebViewInstrumentationTest', tool='asan'),
       ],
       'test_results_config': 'staging_server',
       'testing': {
@@ -2095,10 +2096,10 @@ SPEC = {
       'root_devices': True,
       'checkout_dir': 'android',
       'tests': [
-        steps.AndroidInstrumentationTest('AndroidWebViewTest'),
         steps.AndroidInstrumentationTest('ChromePublicTest'),
         steps.AndroidInstrumentationTest('ContentShellTest'),
         steps.AndroidInstrumentationTest('ChromeSyncShellTest'),
+        steps.AndroidInstrumentationTest('WebViewInstrumentationTest'),
         steps.IncrementalCoverageTest(),
       ],
       'test_results_config': 'staging_server',

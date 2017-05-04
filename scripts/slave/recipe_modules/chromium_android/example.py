@@ -224,9 +224,9 @@ def RunSteps(api, buildername):
   except api.step.StepFailure as f:
     failure = f
   api.chromium_android.run_instrumentation_suite(
-      name='AndroidWebViewTest',
-      apk_under_test=api.chromium_android.apk_path('AndroidWebView.apk'),
-      test_apk=api.chromium_android.apk_path('AndroidWebViewTest.apk'),
+      name='WebViewInstrumentationTest',
+      apk_under_test=api.chromium_android.apk_path('WebViewInstrumentation.apk'),
+      test_apk=api.chromium_android.apk_path('WebViewInstrumentationTest.apk'),
       flakiness_dashboard='test-results.appspot.com',
       annotation='SmallTest',
       except_annotation='FlakyTest',

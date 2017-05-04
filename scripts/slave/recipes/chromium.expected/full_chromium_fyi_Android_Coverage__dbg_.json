@@ -595,76 +595,6 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
-    "name": "AndroidWebViewTest",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
-      "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILDER_CACHE]/android/src/out/Debug/bin/run_android_webview_test_apk",
-      "--blacklist-file",
-      "[BUILDER_CACHE]/android/src/out/bad_devices.json",
-      "--verbose",
-      "--coverage-dir",
-      "[BUILDER_CACHE]/android/src/out/Debug/coverage",
-      "--json-results-file",
-      "/path/to/tmp/json",
-      "--adb-path",
-      "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools/adb"
-    ],
-    "cwd": "[BUILDER_CACHE]/android",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
-    },
-    "name": "AndroidWebViewTest.AndroidWebViewTest",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "step returned non-zero exit code: 1",
-      "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
-      "--input-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":(\", \"status\": \"FAILURE\"}]}]}",
-      "--master-name",
-      "chromium.fyi",
-      "--builder-name",
-      "Android Coverage (dbg)",
-      "--build-number",
-      "571",
-      "--test-type",
-      "AndroidWebViewTest",
-      "--test-results-server",
-      "test-results.appspot.com",
-      "--chrome-revision",
-      "refs/heads/master@{#170242}"
-    ],
-    "cwd": "[BUILDER_CACHE]/android",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
-    },
-    "name": "AndroidWebViewTest.Upload to test-results [AndroidWebViewTest]",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[BUILDER_CACHE]/android",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
-    },
     "name": "ChromePublicTest",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
@@ -864,6 +794,76 @@
       "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
     },
     "name": "ChromeSyncShellTest.Upload to test-results [ChromeSyncShellTest]",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/android",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
+    },
+    "name": "WebViewInstrumentationTest",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/android/src/out/Debug/bin/run_webview_instrumentation_test_apk",
+      "--blacklist-file",
+      "[BUILDER_CACHE]/android/src/out/bad_devices.json",
+      "--verbose",
+      "--coverage-dir",
+      "[BUILDER_CACHE]/android/src/out/Debug/coverage",
+      "--json-results-file",
+      "/path/to/tmp/json",
+      "--adb-path",
+      "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools/adb"
+    ],
+    "cwd": "[BUILDER_CACHE]/android",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
+    },
+    "name": "WebViewInstrumentationTest.WebViewInstrumentationTest",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "step returned non-zero exit code: 1",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
+      "--input-json",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":(\", \"status\": \"FAILURE\"}]}]}",
+      "--master-name",
+      "chromium.fyi",
+      "--builder-name",
+      "Android Coverage (dbg)",
+      "--build-number",
+      "571",
+      "--test-type",
+      "WebViewInstrumentationTest",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "refs/heads/master@{#170242}"
+    ],
+    "cwd": "[BUILDER_CACHE]/android",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[BUILDER_CACHE]/android/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android/src/build/android:%(PATH)s"
+    },
+    "name": "WebViewInstrumentationTest.Upload to test-results [WebViewInstrumentationTest]",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -1245,7 +1245,7 @@
   },
   {
     "name": "$result",
-    "reason": "4 tests failed: ['AndroidWebViewTest', 'ChromePublicTest', 'ContentShellTest', 'ChromeSyncShellTest']",
+    "reason": "4 tests failed: ['ChromePublicTest', 'ContentShellTest', 'ChromeSyncShellTest', 'WebViewInstrumentationTest']",
     "recipe_result": null,
     "status_code": 1
   }

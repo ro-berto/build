@@ -322,8 +322,8 @@
       "--test-apks",
       "ChromePublicTest",
       "ContentShellTest",
-      "AndroidWebViewTest",
       "SystemWebViewShellLayoutTest",
+      "WebViewInstrumentationTest",
       "ChromeSyncShellTest"
     ],
     "cwd": "[BUILDER_CACHE]/Android_Find_Annotated_Test/src",

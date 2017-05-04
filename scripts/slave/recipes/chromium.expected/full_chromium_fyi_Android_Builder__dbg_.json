@@ -383,14 +383,14 @@
       "[BUILDER_CACHE]/Android_Builder__dbg_/src/out/Debug",
       "-j",
       "50",
-      "android_webview_test_apk",
       "chrome_public_test_apk",
       "chrome_sync_shell_test_apk",
       "chromedriver_webview_shell_apk",
       "content_shell_test_apk",
       "remoting_test_apk",
       "remoting_unittests_apk",
-      "system_webview_shell_layout_test_apk"
+      "system_webview_shell_layout_test_apk",
+      "webview_instrumentation_test_apk"
     ],
     "cwd": "[BUILDER_CACHE]/Android_Builder__dbg_/src",
     "env": {
@@ -487,7 +487,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/Android_Builder__dbg_/src/out/Debug",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Android_Builder__dbg_/src/out/Debug', '-j', 50, 'android_webview_test_apk', 'chrome_public_test_apk', 'chrome_sync_shell_test_apk', 'chromedriver_webview_shell_apk', 'content_shell_test_apk', 'remoting_test_apk', 'remoting_unittests_apk', 'system_webview_shell_layout_test_apk']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Android_Builder__dbg_/src/out/Debug', '-j', 50, 'chrome_public_test_apk', 'chrome_sync_shell_test_apk', 'chromedriver_webview_shell_apk', 'content_shell_test_apk', 'remoting_test_apk', 'remoting_unittests_apk', 'system_webview_shell_layout_test_apk', 'webview_instrumentation_test_apk']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",
