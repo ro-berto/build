@@ -16,6 +16,9 @@ def RunSteps(api):
 def GenTests(api):
   yield (
       api.test('builder') +
+      api.chromium_tests.platform([{
+          'mastername': 'chromium.linux',
+          'buildername': 'Linux Builder'}]) +
       api.properties.generic(
           mastername='chromium.linux',
           buildername='Linux Builder')
@@ -23,6 +26,9 @@ def GenTests(api):
 
   yield (
       api.test('tester') +
+      api.chromium_tests.platform([{
+          'mastername': 'chromium.linux',
+          'buildername': 'Linux Tests'}]) +
       api.properties.generic(
           mastername='chromium.linux',
           buildername='Linux Tests',

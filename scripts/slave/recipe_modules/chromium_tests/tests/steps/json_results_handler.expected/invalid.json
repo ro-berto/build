@@ -1,0 +1,35 @@
+[
+  {
+    "cmd": [
+      "/path/to/tmp/json"
+    ],
+    "name": "results",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "presentation_step",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>Exception while processing test results: Invalid data given<br/>@@@",
+      "@@@STEP_EXCEPTION@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "details",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@details@valid: False@@@",
+      "@@@STEP_LOG_LINE@details@unexpected_failures: ['Invalid data given']@@@",
+      "@@@STEP_LOG_END@details@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]

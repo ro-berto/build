@@ -60,7 +60,8 @@ def GenTests(api):
           buildername='test_buildername',
           buildnumber=123,
           bot_id='test_bot_id',
-          target_platform='win')
+          target_platform='win',
+          gs_acl='public')
   )
 
   yield (
@@ -75,4 +76,17 @@ def GenTests(api):
           api.test_utils.canned_test_output(
               passing=True, unexpected_flakes=True),
       retcode=0)
+  )
+
+  yield (
+      api.test('big') +
+      api.properties(
+          mastername='test_mastername',
+          buildername='test_buildername',
+          buildnumber=123,
+          bot_id='test_bot_id') +
+      api.override_step_data(
+          'webkit_tests (with patch)',
+          api.test_utils.canned_test_output(
+              passing=False, num_additional_failures=125))
   )

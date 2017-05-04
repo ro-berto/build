@@ -9,7 +9,6 @@ from . import steps
 _builders = collections.defaultdict(dict)
 
 
-RESULTS_URL = 'https://chromeperf.appspot.com'
 SPEC = {
   'settings': {
     'build_gs_bucket': 'chromium-webrtc',
@@ -77,37 +76,6 @@ def BuildSpec(platform, target_bits, build_config='Release',
   return spec
 
 
-class WebRTCPerfTest(steps.LocalGTestTest):
-  """A LocalGTestTest reporting perf metrics.
-
-  WebRTC is the only project that runs correctness tests with perf reporting
-  enabled at the same time, which differs from the chromium.perf bots.
-  """
-  def __init__(self, name, args, perf_id, **runtest_kwargs):
-    assert perf_id
-    # TODO(kjellander): See if it's possible to rely on the build spec
-    # properties 'perf-id' and 'results-url' as set in the
-    # chromium_tests/chromium_perf.py. For now, set these to get an exact
-    # match of our current expectations.
-    runtest_kwargs['perf_id'] = perf_id
-    runtest_kwargs['results_url'] = RESULTS_URL
-
-    # TODO(kjellander): See if perf_dashboard_id is still needed.
-    runtest_kwargs['perf_dashboard_id'] = name
-    runtest_kwargs['annotate'] = 'graphing'
-    super(WebRTCPerfTest, self).__init__(name, args, **runtest_kwargs)
-
-  def run(self, api, suffix):
-    webrtc_subtree_git_hash = api.bot_update.last_returned_properties.get(
-        'got_webrtc_revision', 'deadbeef')
-    self._runtest_kwargs['perf_config'] = {
-        # TODO(kjellander: Change to r_webrtc_git after crbug.com/611808.
-        'r_webrtc_subtree_git': webrtc_subtree_git_hash,
-        'a_default_rev': 'r_webrtc_subtree_git',
-    }
-    steps.LocalGTestTest.run(self, api, suffix)
-
-
 def TestSpec(parent_builder, perf_id, platform, target_bits,
              build_config='Release', gclient_config='chromium_webrtc',
              test_spec_file='chromium.webrtc.json'):
@@ -131,12 +99,14 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
   else:
     spec['gclient_apply_config'].append('webrtc_test_resources')
     spec['tests'] = [
-      WebRTCPerfTest('content_browsertests',
-                     args=['--gtest_filter=WebRtc*', '--run-manual',
-                           '--test-launcher-print-test-stdio=always',
-                           '--test-launcher-bot-mode'],
-                     perf_id=perf_id),
-      WebRTCPerfTest('browser_tests',
+      steps.WebRTCPerfTest(
+          'content_browsertests',
+          args=['--gtest_filter=WebRtc*', '--run-manual',
+                '--test-launcher-print-test-stdio=always',
+                '--test-launcher-bot-mode'],
+          perf_id=perf_id),
+      steps.WebRTCPerfTest(
+          'browser_tests',
           # These tests needs --test-launcher-jobs=1 since some of them are
           # not able to run in parallel (due to the usage of the
           # peerconnection server).

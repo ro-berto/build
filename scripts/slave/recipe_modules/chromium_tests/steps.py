@@ -12,6 +12,9 @@ import traceback
 from recipe_engine.types import freeze
 
 
+RESULTS_URL = 'https://chromeperf.appspot.com'
+
+
 class TestOptions(object):
   """Abstracts command line flags to be passed to the test."""
   def __init__(self, repeat_count=None, test_filter=None, run_disabled=False,
@@ -73,7 +76,7 @@ class Test(object):
     return self._test_options or TestOptions()
 
   @test_options.setter
-  def test_options(self, value):
+  def test_options(self, value):  # pragma: no cover
     raise NotImplementedError(
         'This test %s does not support test options objects yet' % type(self))
 
@@ -509,7 +512,7 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
     if isinstance(test, basestring):
       canonical_test = {'test': test}
     else:
-      canonical_test = test.copy()
+      canonical_test = dict(test)
 
     canonical_test.setdefault('shard_index', 0)
     canonical_test.setdefault('total_shards', 1)
@@ -552,7 +555,7 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
     name = str(test.get('name', target_name))
     swarming_dimensions = swarming_dimensions or {}
     use_xvfb = test.get('use_xvfb', True)
-    merge = test.get('merge', {})
+    merge = dict(test.get('merge', {}))
     if merge:
       merge_script = merge.get('script')
       if merge_script:
@@ -2432,6 +2435,38 @@ class FindAnnotatedTest(Test):
           temp_output_dir.join(
               '%s-android-chrome.json' % timestamp_string),
           'chromium-annotated-tests', 'android')
+
+
+class WebRTCPerfTest(LocalGTestTest):
+  """A LocalGTestTest reporting perf metrics.
+
+  WebRTC is the only project that runs correctness tests with perf reporting
+  enabled at the same time, which differs from the chromium.perf bots.
+  """
+  def __init__(self, name, args, perf_id, **runtest_kwargs):
+    assert perf_id
+    # TODO(kjellander): See if it's possible to rely on the build spec
+    # properties 'perf-id' and 'results-url' as set in the
+    # chromium_tests/chromium_perf.py. For now, set these to get an exact
+    # match of our current expectations.
+    runtest_kwargs['perf_id'] = perf_id
+    runtest_kwargs['results_url'] = RESULTS_URL
+
+    # TODO(kjellander): See if perf_dashboard_id is still needed.
+    runtest_kwargs['perf_dashboard_id'] = name
+    runtest_kwargs['annotate'] = 'graphing'
+    super(WebRTCPerfTest, self).__init__(name, args, **runtest_kwargs)
+
+  def run(self, api, suffix):
+    webrtc_subtree_git_hash = api.bot_update.last_returned_properties.get(
+        'got_webrtc_revision', 'deadbeef')
+    self._runtest_kwargs['perf_config'] = {
+        # TODO(kjellander: Change to r_webrtc_git after crbug.com/611808.
+        'r_webrtc_subtree_git': webrtc_subtree_git_hash,
+        'a_default_rev': 'r_webrtc_subtree_git',
+    }
+    LocalGTestTest.run(self, api, suffix)
+
 
 GOMA_TESTS = [
   GTestTest('base_unittests'),

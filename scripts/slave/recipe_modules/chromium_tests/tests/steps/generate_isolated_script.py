@@ -3,20 +3,27 @@
 # found in the LICENSE file.
 
 DEPS = [
+    'chromium',
     'chromium_tests',
     'depot_tools/bot_update',
     'depot_tools/gclient',
+    'isolate',
     'recipe_engine/json',
     'recipe_engine/path',
+    'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/python',
     'recipe_engine/step',
+    'swarming',
     'test_utils',
 ]
 
 
 def RunSteps(api):
   api.gclient.set_config('chromium')
+  api.chromium.set_config('chromium')
+
+  api.chromium_tests.set_precommit_mode()
 
   update_step = api.bot_update.ensure_checkout()
 
@@ -36,7 +43,9 @@ def RunSteps(api):
       update_step,
       enable_swarming=api.properties.get('enable_swarming')):
     try:
+      test.pre_run(api, '')
       test.run(api, '')
+      test.post_run(api, '')
     finally:
       api.step('details', [])
       api.step.active_result.presentation.logs['details'] = [
@@ -52,6 +61,24 @@ def GenTests(api):
           'name': 'base_unittests',
           'isolate_name': 'base_unittests_run',
       })
+  )
+
+  yield (
+      api.test('fake_results_handler') +
+      api.properties(
+          enable_swarming=True,
+          single_spec={
+              'name': 'base_unittests',
+              'isolate_name': 'base_unittests_run',
+              'results_handler': 'fake',
+              'swarming': {
+                  'can_use_on_swarming_builders': True,
+              },
+          },
+          swarm_hashes={
+            'base_unittests_run': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
+      )
   )
 
   yield (

@@ -1,0 +1,52 @@
+[
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--no-xvfb",
+      "--factory-properties",
+      "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"recipe\": \"chromium_tests:tests/steps/sizes_step\", \"slavename\": \"test_bot_id\"}",
+      "--build-properties",
+      "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"recipe\": \"chromium_tests:tests/steps/sizes_step\", \"slavename\": \"test_bot_id\"}",
+      "--test-type=sizes",
+      "--builder-name=test_buildername",
+      "--slave-name=test_bot_id",
+      "--build-number=123",
+      "--run-python-script",
+      "--annotate=graphing",
+      "--results-url=https://example/url",
+      "--perf-dashboard-id=sizes",
+      "--perf-id=test-perf-id",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/sizes.py",
+      "--target",
+      "Release",
+      "--platform",
+      "linux"
+    ],
+    "name": "sizes"
+  },
+  {
+    "cmd": [],
+    "name": "details",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@details@compile_targets: ['chrome']@@@",
+      "@@@STEP_LOG_LINE@details@uses_local_devices: False@@@",
+      "@@@STEP_LOG_LINE@details@has_valid_results: True@@@",
+      "@@@STEP_LOG_LINE@details@failures: []@@@",
+      "@@@STEP_LOG_END@details@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]

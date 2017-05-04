@@ -1,0 +1,56 @@
+[
+  {
+    "cmd": [
+      "/path/to/tmp/json"
+    ],
+    "name": "results",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"FAIL\": 2, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"PASS\": 0@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"path_delimiter\": \".\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"seconds_since_epoch\": 14000000, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"tests\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"Test1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"actual\": \"FAIL FAIL TIMEOUT\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"expected\": \"PASS\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"Test2\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"actual\": \"FAIL FAIL FAIL\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"expected\": \"PASS TIMEOUT\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"is_unexpected\": true@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"version\": 3@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "presentation_step",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>Total tests: 2<br/>* Passed: 0 (0 expected, 0 unexpected)<br/>* Skipped: 0 (0 expected, 0 unexpected)<br/>* Failed: 2 (1 expected, >>>1 unexpected<<<)<br/>* Flaky: 0 (0 expected, 0 unexpected)<br/><br/>Unexpected Failures:<br/>* test1.Test2<br/>@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "details",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@details@valid: True@@@",
+      "@@@STEP_LOG_LINE@details@unexpected_failures: {'test1.Test2': 'FAIL FAIL FAIL'}@@@",
+      "@@@STEP_LOG_END@details@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]

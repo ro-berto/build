@@ -1,0 +1,65 @@
+[
+  {
+    "cmd": [
+      "/path/to/tmp/json"
+    ],
+    "name": "results",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"FAIL\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"PASS\": 2, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"SKIP\": 1@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"path_delimiter\": \".\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"seconds_since_epoch\": 14000000, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"tests\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"Test1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"actual\": \"PASS\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"expected\": \"PASS\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"Test2\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"actual\": \"TIMEOUT\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"expected\": \"PASS TIMEOUT\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"Test3\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"actual\": \"SKIP\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"expected\": \"SKIP\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test_common\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"Test1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"actual\": \"FAIL FAIL PASS\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"expected\": \"PASS\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"version\": 3@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "presentation_step",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "details",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@details@valid: True@@@",
+      "@@@STEP_LOG_LINE@details@unexpected_failures: {}@@@",
+      "@@@STEP_LOG_END@details@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]

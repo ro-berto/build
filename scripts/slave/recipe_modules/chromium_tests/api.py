@@ -14,7 +14,6 @@ from recipe_engine import recipe_api
 from . import bot_config_and_test_db as bdb_module
 from . import builders
 from . import steps
-from . import trybots
 
 
 # Paths which affect recipe config and behavior in a way that survives
@@ -83,7 +82,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   @property
   def trybots(self):
-    return trybots.TRYBOTS
+    return self.test_api.trybots
 
   def add_builders(self, builders):
     """Adds builders to our builder map"""

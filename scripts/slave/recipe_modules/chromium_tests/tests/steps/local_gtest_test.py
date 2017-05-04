@@ -4,6 +4,7 @@
 
 DEPS = [
     'chromium',
+    'chromium_android',
     'chromium_tests',
     'depot_tools/bot_update',
     'recipe_engine/json',
@@ -15,7 +16,10 @@ DEPS = [
 
 
 def RunSteps(api):
-  api.chromium.set_config('chromium')
+  api.chromium.set_config(
+      'chromium',
+      TARGET_PLATFORM=api.properties.get('target_platform', 'linux'))
+  api.chromium_android.set_config('main_builder')
   api.test_results.set_config('public_server')
 
   test = api.chromium_tests.steps.LocalGTestTest('base_unittests')
@@ -28,7 +32,7 @@ def RunSteps(api):
   test.test_options = test_options
 
   try:
-    test.run(api, '')
+    test.run(api, 'with patch')
   finally:
     api.step('details', [])
     api.step.active_result.presentation.logs['details'] = [
@@ -37,6 +41,8 @@ def RunSteps(api):
         'pass_fail_counts: %r' % test.pass_fail_counts(''),
         'uses_local_devices: %r' % test.uses_local_devices,
     ]
+
+    test.run(api, 'without patch')
 
 
 def GenTests(api):
@@ -47,4 +53,14 @@ def GenTests(api):
           buildername='test_buildername',
           bot_id='test_bot_id',
           buildnumber=123)
+  )
+
+  yield (
+      api.test('android') +
+      api.properties(
+          mastername='test_mastername',
+          buildername='test_buildername',
+          bot_id='test_bot_id',
+          buildnumber=123,
+          target_platform='android')
   )

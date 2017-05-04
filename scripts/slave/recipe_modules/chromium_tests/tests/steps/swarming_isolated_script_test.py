@@ -33,7 +33,12 @@ def RunSteps(api):
       perf_dashboard_id='test-perf-dashboard-id',
       results_url=api.properties.get('results_url'),
       ignore_task_failure=api.properties.get('ignore_task_failure'),
-      override_compile_targets=api.properties.get('override_compile_targets'))
+      override_compile_targets=api.properties.get('override_compile_targets'),
+      io_timeout=120,
+      hard_timeout=360,
+      expiration=7200,
+      priority='lower',
+      dimensions=api.properties.get('dimensions', {'gpu': '8086'}))
 
   test.pre_run(api, '')
   test.run(api, '')
@@ -92,7 +97,7 @@ def GenTests(api):
           perf_id='test-perf-id',
           results_url='https://example/url') +
       api.override_step_data(
-          'base_unittests',
+          'base_unittests on Intel GPU on Linux',
           api.swarming.canned_summary_output(2)
           + api.test_utils.canned_isolated_script_output(
               passing=True, swarming=True,
@@ -117,7 +122,7 @@ def GenTests(api):
           results_url='https://example/url',
           ignore_task_failure=True) +
       api.override_step_data(
-          'base_unittests',
+          'base_unittests on Intel GPU on Linux',
           api.swarming.canned_summary_output(2)
           + api.test_utils.canned_isolated_script_output(
               passing=False, swarming=True,
@@ -140,7 +145,7 @@ def GenTests(api):
           perf_id='test-perf-id',
           results_url='https://example/url') +
       api.override_step_data(
-          'base_unittests',
+          'base_unittests on Intel GPU on Linux',
           api.swarming.canned_summary_output(2)
           + api.test_utils.canned_isolated_script_output(
               passing=True, swarming=True,
@@ -164,7 +169,7 @@ def GenTests(api):
           perf_id='test-perf-id',
           results_url='https://example/url') +
       api.override_step_data(
-          'base_unittests',
+          'base_unittests on Intel GPU on Linux',
           api.swarming.canned_summary_output(2)
           + api.test_utils.canned_isolated_script_output(
               passing=True, swarming=True,
@@ -203,7 +208,7 @@ def GenTests(api):
           got_revision_cp=123456,
           perf_id='test-perf-id',
           results_url='https://example/url') +
-      api.override_step_data('base_unittests', retcode=1)
+      api.override_step_data('base_unittests on Intel GPU on Linux', retcode=1)
   )
 
   yield (
@@ -219,7 +224,7 @@ def GenTests(api):
           version='test-version',
           got_revision_cp=123456) +
       api.override_step_data(
-          'base_unittests',
+          'base_unittests on Intel GPU on Linux',
           api.swarming.canned_summary_output(2)
           + api.test_utils.canned_isolated_script_output(
               passing=True, swarming=True,
@@ -243,11 +248,56 @@ def GenTests(api):
           perf_id='test-perf-id',
           results_url='https://example/url') +
       api.override_step_data(
-          'base_unittests',
+          'base_unittests on Intel GPU on Linux',
           api.swarming.canned_summary_output(2)
           + api.test_utils.canned_isolated_script_output(
               passing=True, swarming=True,
               shards=2, isolated_script_passing=True, valid=True,
               output_chartjson=True, benchmark_enabled=False),
           retcode=0)
+  )
+
+  yield (
+      api.test('dimensions_windows') +
+      api.properties(
+          mastername='test_mastername',
+          buildername='test_buildername',
+          buildnumber=123,
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
+          git_revision='test_sha',
+          version='test-version',
+          got_revision_cp=123456,
+          dimensions={'gpu': '8086', 'os': 'Windows'})
+  )
+
+  yield (
+      api.test('dimensions_mac') +
+      api.properties(
+          mastername='test_mastername',
+          buildername='test_buildername',
+          buildnumber=123,
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
+          git_revision='test_sha',
+          version='test-version',
+          got_revision_cp=123456,
+          dimensions={'gpu': '8086', 'os': 'Mac'})
+  )
+
+  yield (
+      api.test('dimensions_mac_hidpi') +
+      api.properties(
+          mastername='test_mastername',
+          buildername='test_buildername',
+          buildnumber=123,
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
+          git_revision='test_sha',
+          version='test-version',
+          got_revision_cp=123456,
+          dimensions={'gpu': '8086', 'os': 'Mac', 'hidpi': '1'})
   )
