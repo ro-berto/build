@@ -54,6 +54,7 @@
     }
   }, 
   "unallocated": [
-    "build333-m2"
+    "build333-m2", 
+    "cros-beefy439-c2"
   ]
 }
