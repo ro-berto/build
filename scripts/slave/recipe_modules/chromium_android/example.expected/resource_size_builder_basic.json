@@ -1420,6 +1420,21 @@
   },
   {
     "cmd": [
+      "[START_DIR]/src/tools/binary_size/supersize",
+      "archive",
+      "[START_DIR]/src/out/Release/apks/Example.apk.size",
+      "--apk-file",
+      "[START_DIR]/src/out/Release/apks/Example.apk",
+      "-v"
+    ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
+    },
+    "name": "supersize_archive"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
