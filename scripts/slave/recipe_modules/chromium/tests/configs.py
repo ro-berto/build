@@ -359,3 +359,9 @@ def GenTests(api):
       api.properties(chromium_apply_config=['download_vr_test_apks']) +
       api.post_process(post_process.DropExpectation)
   )
+
+  yield (
+      api.test('fetch_telemetry_dependencies') +
+      api.properties(chromium_apply_config=['fetch_telemetry_dependencies']) +
+      api.post_process(post_process.DropExpectation)
+  )
