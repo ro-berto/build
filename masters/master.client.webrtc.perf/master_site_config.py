@@ -19,7 +19,6 @@ class WebRTCPerf(Master.Master3a):
   permitted_domains = ('google.com', 'chromium.org', 'webrtc.org')
   buildbot_url = 'http://build.chromium.org/p/client.webrtc.perf/'
   service_account_file = 'service-account-webrtc.json'
-  buildbucket_bucket = 'master.client.webrtc.perf'
   pubsub_service_account_file = 'service-account-luci-milo.json'
   pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
   name = 'client.webrtc.perf'

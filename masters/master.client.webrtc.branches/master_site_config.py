@@ -19,7 +19,6 @@ class WebRTCBranches(Master.Master3a):
   permitted_domains = ('google.com', 'chromium.org', 'webrtc.org')
   buildbot_url = 'http://build.chromium.org/p/client.webrtc.branches/'
   service_account_file = 'service-account-webrtc.json'
-  buildbucket_bucket = 'master.client.webrtc.branches'
   pubsub_service_account_file = 'service-account-luci-milo.json'
   pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
   name = 'client.webrtc.branches'
