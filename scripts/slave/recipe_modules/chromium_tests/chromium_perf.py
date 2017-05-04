@@ -112,8 +112,10 @@ def TestSpec(config_name, perf_id, platform, target_bits,
   return spec
 
 
-def _AddIsolatedTestSpec(name, perf_id, platform, target_bits=64):
-  spec = TestSpec('chromium_perf', perf_id, platform, target_bits)
+def _AddIsolatedTestSpec(name, perf_id, platform, target_bits=64,
+                         parent_buildername=None):
+  spec = TestSpec('chromium_perf', perf_id, platform, target_bits,
+                  parent_buildername=parent_buildername)
   spec['enable_swarming'] = True
   SPEC['builders'][name] = spec
 
@@ -204,10 +206,9 @@ _AddTestSpec('Android One Perf', 'android-one', 'android',
              target_bits=32, num_device_shards=7, num_host_shards=3,
              parent_buildername='Android Compile')
 
-# 64 bit android
-_AddTestSpec('Android Nexus5X Perf', 'android-nexus5X', 'android',
-             num_device_shards=7, num_host_shards=3,
-             parent_buildername='Android Compile')
+# 32 bit android swarming
+_AddIsolatedTestSpec('Android Nexus5X Perf', 'android-nexus5X', 'android',
+                     parent_buildername='Android Compile', target_bits=32)
 
 # Webview
 _AddTestSpec('Android Nexus5X WebView Perf', 'android-webview-nexus5X',
