@@ -28,6 +28,9 @@
       "oak-full": [
         "cros-beefy428-c2"
       ], 
+      "tatl-paladin": [
+        "cros-beefy439-c2"
+      ], 
       "x86-generic-full": [
         "build182-m2"
       ], 
@@ -54,7 +57,6 @@
     }
   }, 
   "unallocated": [
-    "build333-m2", 
-    "cros-beefy439-c2"
+    "build333-m2"
   ]
 }
