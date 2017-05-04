@@ -53,8 +53,7 @@ _CANARY_CONFIG = {
   #'internal.infra.cron',
 
   'chromium.fyi': set((
-      # See crbug.com/715848 for the issue w/ Xvfb and TEMPDIR.
-      # 'Site Isolation Linux',
+      'Site Isolation Linux',
       'Site Isolation Android',
       'Site Isolation Win',
    )),
