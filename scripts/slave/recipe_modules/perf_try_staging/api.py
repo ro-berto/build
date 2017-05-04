@@ -149,9 +149,14 @@ class PerfTryJobApi(recipe_api.RecipeApi):
                            **kwargs):
     """Compiles binaries and runs tests for a given a revision."""
     with_patch = 'With Patch' in kwargs.get('name')  # pragma: no cover
-    update_step = self._checkout_revision(update_step, bot_db, revision_hash)
-    if update_step.presentation.properties:
-      revision_hash = update_step.presentation.properties['got_revision']
+
+    # We don't need to do a checkout if there's a patch applied, since that will
+    # overwrite the local changes and potentially change the test results.
+    if not with_patch:  # pragma: no cover
+      update_step = self._checkout_revision(update_step, bot_db, revision_hash)
+    if not revision_hash:
+      if update_step.presentation.properties:
+        revision_hash = update_step.presentation.properties['got_revision']
     revision = build_state.BuildState(self, revision_hash, with_patch)
     # request build and wait for it only when the build is nonexistent
     if with_patch or not self._gsutil_file_exists(revision.build_file_path):
