@@ -741,19 +741,6 @@
   },
   {
     "cmd": [
-      "[START_DIR]/src/tools/binary_size/supersize",
-      "[START_DIR]/src/out/Release/apks/ChromeModernPublic.apk.size",
-      "--apk-path",
-      "[START_DIR]/src/out/Release/apks/ChromeModernPublic.apk"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
-    },
-    "name": "supersize_archive"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "[START_DIR]/src/build/android/test_runner.py",
@@ -1013,19 +1000,6 @@
   },
   {
     "cmd": [
-      "[START_DIR]/src/tools/binary_size/supersize",
-      "[START_DIR]/src/out/Release/apks/ChromePublic.apk.size",
-      "--apk-path",
-      "[START_DIR]/src/out/Release/apks/ChromePublic.apk"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
-    },
-    "name": "supersize_archive (2)"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "[START_DIR]/src/build/android/test_runner.py",
@@ -1282,19 +1256,6 @@
       "@@@STEP_LOG_LINE@json.output@[]@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
-  },
-  {
-    "cmd": [
-      "[START_DIR]/src/tools/binary_size/supersize",
-      "[START_DIR]/src/out/Release/apks/SystemWebView.apk.size",
-      "--apk-path",
-      "[START_DIR]/src/out/Release/apks/SystemWebView.apk"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
-    },
-    "name": "supersize_archive (3)"
   },
   {
     "cmd": [
