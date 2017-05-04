@@ -856,6 +856,15 @@ BUILDERS = {
         'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
+      'V8 Linux64 gcc 4.8 - debug': {
+        'chromium_apply_config': ['v8_ninja', 'gcc', 'goma', 'mb'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'linux'},
+      },
       'V8 Linux64 ASAN': {
         'chromium_apply_config': [
           'v8_ninja', 'clang', 'asan', 'goma', 'mb'],
@@ -1841,6 +1850,16 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'tests': [V8Testing],
+        'testing': {'platform': 'linux'},
+      },
+      'v8_linux64_gcc_compile_dbg': {
+        'chromium_apply_config': [
+          'v8_ninja', 'gcc', 'goma', 'mb'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_rel_ng': {
