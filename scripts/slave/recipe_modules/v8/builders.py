@@ -1085,7 +1085,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing_4, V8TestingExtra_2],
+        'tests': [V8Testing_5, V8TestingExtra_2],
         'swarming_dimensions': {
           'os': 'Mac-10.9',
           'cpu': 'x86-64',
