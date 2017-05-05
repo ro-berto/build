@@ -1,0 +1,22 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "None/tools/determinism/remove_build_metadata.py",
+      "--build-dir",
+      "None/out/Release"
+    ],
+    "cwd": "[START_DIR]",
+    "name": "remove_build_metadata",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_WARNINGS@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]
