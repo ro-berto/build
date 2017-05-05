@@ -12,7 +12,6 @@ import time
 import zlib
 
 from buildbot.status.base import StatusReceiverMultiService
-from buildbot.util.lru import SyncLRUCache
 from master import auth
 from master.deferred_resource import DeferredResource
 from twisted.internet import defer, reactor
@@ -213,9 +212,6 @@ class StatusPush(StatusReceiverMultiService):
     self._updated_builds = set()
     self._pushTimer = None
     self._splits = 1
-    # Cache pending builds by brid, because they are expensive to query.
-    self._pending_build_lru = SyncLRUCache(
-        self._get_build_request, max_size=200)
     log.msg('Creating PubSub service.')
     # Pending build database.
     # Key: builder name.
@@ -446,18 +442,6 @@ class StatusPush(StatusReceiverMultiService):
     # If we can't load the build, then return None to signify failure.
     return defer.succeed((b, build.asDict() if build else None))
 
-  @staticmethod
-  def _get_build_request(_key, pb_request_status):
-    """Retrieves source, reason, builderName, and submittedAt from a pbrs.
-
-    the key param is not used.  It's just there to satisfy the function
-    signature for SyncLRUCache's miss_fn.
-
-    This takes a pending build request status object, and runs a query
-    against postgres.  This is fairly expensive.
-    """
-    return pb_request_status._getBuildRequest()
-
   @defer.inlineCallbacks
   def _get_pending_build(self, pb_request_status):
     """Returns a pending build.
@@ -467,8 +451,11 @@ class StatusPush(StatusReceiverMultiService):
     """
     result = {}
 
-    br = yield self._pending_build_lru.get(
-        pb_request_status.brid, pb_request_status=pb_request_status)
+    # This creates two postgres request if this is the first time it has been
+    # called, one for the buildrequest -> buildset ID lookup, and the other
+    # to fetch the buildset.  After it gets called the first time, the data
+    # gets cached in the request.
+    br = yield pb_request_status._getBuildRequest()
     if not br:
       log.msg(
           'PubSub: WARNING - no build request found for %s'
