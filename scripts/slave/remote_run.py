@@ -86,9 +86,10 @@ _CANARY_CIPD_PINS = CipdPins(
 
 
 def _get_cipd_pins(mastername, buildername, force_canary):
-  slave_list = _CANARY_CONFIG.get(mastername)
-  if slave_list is not None:
-    force_canary = slave_list is _ALL_BUILDERS or buildername in slave_list
+  canary_builders = _CANARY_CONFIG.get(mastername)
+  if canary_builders is not None:
+    force_canary = (
+        canary_builders is _ALL_BUILDERS or buildername in canary_builders)
   return _CANARY_CIPD_PINS if force_canary else _STABLE_CIPD_PINS
 
 
@@ -217,11 +218,11 @@ def _remote_run_with_kitchen(args, stream, pins, properties, tempdir, basedir,
       '-log-level', ('debug' if LOGGER.isEnabledFor(logging.DEBUG) else 'info'),
   ]
 
-  recipe_result_path = os.path.join(tempdir, 'recipe_result.json')
+  kitchen_result_path = os.path.join(tempdir, 'kitchen_result.json')
   kitchen_cmd += [
       'cook',
       '-mode', 'buildbot',
-      '-output-result-json', recipe_result_path,
+      '-output-result-json', kitchen_result_path,
       '-properties-file', properties_file,
       '-recipe', args.recipe or properties.get('recipe'),
       '-repository', args.repository,
@@ -278,26 +279,32 @@ def _remote_run_with_kitchen(args, stream, pins, properties, tempdir, basedir,
     LOGGER.info('Not configured to use LogDog: %s', e)
 
   # Invoke Kitchen, capture its return code.
-  recipe_return_code = _call(kitchen_cmd)
+  return_code = _call(kitchen_cmd)
 
-  # Try to open recipe result JSON. Any failure will result in an exception
+  # Try to open kitchen result file. Any failure will result in an exception
   # and an infra failure.
-  #
-  # On success, it may be JSON "null", so use an empty dict.
-  with open(recipe_result_path) as f:
-    return_value = json.load(f) or {}
+  with open(kitchen_result_path) as f:
+    kitchen_result = json.load(f)
+    if isinstance(kitchen_result, dict) and 'recipe_result' in kitchen_result:
+      recipe_result = kitchen_result['recipe_result']  # always a dict
+    else:
+      # Legacy mode: kitchen result is recipe result
+      # TODO(nodir): remove this code path
+
+      # On success, it may be JSON "null", so use an empty dict.
+      recipe_result = kitchen_result or {}
 
   # If we failed, but aren't a step failure, we assume it was an
   # exception.
-  f = return_value.get('failure', {})
-  if any(f.get(typ) for typ in ('timeout', 'step_data')):
+  f = recipe_result.get('failure', {})
+  if f.get('timeout') or f.get('step_data'):
     # Return an infra failure for these failure types.
     #
     # The recipe engine used to return -1, which got interpreted as 255 by
     # os.exit in python, since process exit codes are a single byte.
-    recipe_return_code = 255
+    return_code = 255
 
-  return recipe_return_code
+  return return_code
 
 
 def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir):

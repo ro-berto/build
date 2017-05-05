@@ -167,7 +167,7 @@ class RemoteRunExecTest(unittest.TestCase):
         '-log-level', 'info',
         'cook',
         '-mode', 'buildbot',
-        '-output-result-json', self._tp('recipe_result.json'),
+        '-output-result-json', self._tp('kitchen_result.json'),
         '-properties-file', self._tp('remote_run_properties.json'),
         '-recipe', self.opts.recipe,
         '-repository', self.opts.repository,
@@ -188,9 +188,6 @@ class RemoteRunExecTest(unittest.TestCase):
         self.opts.recipe,
     ]
 
-    # Use public recipes.py path.
-    os.path.exists.return_value = False
-
     # No active subdir by default.
     chromium_utils.GetActiveSubdir.return_value = None
 
@@ -201,6 +198,8 @@ class RemoteRunExecTest(unittest.TestCase):
 
     # Written via '_write_recipe_result'.
     self.recipe_result = None
+    # Written via '_write_kitchen_result'.
+    self.kitchen_result = None
 
   def tearDown(self):
     os.environ = self._orig_env
@@ -218,6 +217,10 @@ class RemoteRunExecTest(unittest.TestCase):
   def _write_recipe_result(self):
     with open(self._tp('recipe_result.json'), 'w') as fd:
       json.dump(self.recipe_result, fd)
+
+  def _write_kitchen_result(self):
+    with open(self._tp('kitchen_result.json'), 'w') as fd:
+      json.dump(self.kitchen_result, fd)
 
   @mock.patch('slave.update_scripts._run_command')
   @mock.patch('slave.remote_run.main')
@@ -272,7 +275,7 @@ class RemoteRunExecTest(unittest.TestCase):
 
     remote_run._call.return_value = 0
     rt_tempdir.side_effect = [self.tempdir, self.build_data_dir]
-    self._write_recipe_result()
+    self._write_kitchen_result()
 
     opts = self.opts._replace(revision='refs/heads/somebranch')
     rv = remote_run._exec_recipe(opts, self.rt, self.stream, self.basedir,
@@ -391,7 +394,7 @@ class RemoteRunExecTest(unittest.TestCase):
 
     remote_run._call.return_value = 0
     rt_tempdir.side_effect = [self.tempdir, self.build_data_dir]
-    self._write_recipe_result()
+    self._write_kitchen_result()
 
     opts = self.opts._replace(revision='origin/master')
     rv = remote_run._exec_recipe(opts, self.rt, self.stream, self.basedir,
