@@ -2153,6 +2153,8 @@
       "--tag",
       "stepname:webrtc_perf_tests on Android",
       "--idempotent",
+      "--cipd-package",
+      "bin:infra/tools/luci/logdog/butler/${platform}:git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c",
       "[dummy hash for webrtc_perf_tests]",
       "--",
       "--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/",

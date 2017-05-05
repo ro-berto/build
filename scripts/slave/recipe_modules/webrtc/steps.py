@@ -164,6 +164,7 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
           'webrtc_perf_tests',
           enable_swarming=enable_swarming,
           override_isolate_target='webrtc_perf_tests',
+          cipd_packages=ANDROID_CIPD_PACKAGES,
           args=['--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/']))
   elif test_suite == 'android_experimental':
     for test in ANDROID_EXPERIMENTAL_TESTS:
