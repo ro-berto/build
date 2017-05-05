@@ -169,14 +169,15 @@ class GTestResults(object):
     self.raw = jsonish or {}
     self.pass_fail_counts = {}
 
+    self.passes = set()
+    self.failures = set()
+
     if not jsonish:
       self.valid = False
       return
 
     self.valid = True
 
-    self.passes = set()
-    self.failures = set()
     for cur_iteration_data in self.raw.get('per_iteration_data', []):
       for test_fullname, results in cur_iteration_data.iteritems():
         # Results is a list with one entry per test try. Last one is the final

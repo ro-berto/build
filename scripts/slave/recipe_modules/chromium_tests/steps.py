@@ -1338,7 +1338,7 @@ class SwarmingGTestTest(SwarmingTest):
     if 'UNRELIABLE_RESULTS' in global_tags:
       return False, None  # pragma: no cover
 
-    return True, gtest_results.failures
+    return gtest_results.valid, gtest_results.failures
 
   def pass_fail_counts(self, suffix):
     if suffix in self._gtest_results:

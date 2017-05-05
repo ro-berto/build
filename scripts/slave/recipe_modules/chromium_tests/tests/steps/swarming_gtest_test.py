@@ -85,3 +85,18 @@ def GenTests(api):
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           })
   )
+
+  yield (
+      api.test('no_result_json') +
+      api.properties(
+          mastername='test_mastername',
+          buildername='test_buildername',
+          buildnumber=123,
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }) +
+      api.override_step_data(
+          'base_unittests',
+          api.swarming.canned_summary_output(failure=True),
+          retcode=1)
+  )
