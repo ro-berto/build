@@ -389,6 +389,10 @@ class RemoteRunExecTest(unittest.TestCase):
         ),
         prefix="prefix",
         host="example.com",
+        tags=collections.OrderedDict((
+          ('foo', 'bar'),
+          ('baz', None),
+        )),
     )
     get_config.return_value = cfg
 
@@ -403,6 +407,8 @@ class RemoteRunExecTest(unittest.TestCase):
 
     kitchen_args = self.kitchen_args + [
         '-logdog-annotation-url', logdog_bootstrap.get_annotation_url(cfg),
+        '-logdog-tag', 'foo=bar',
+        '-logdog-tag', 'baz',
     ]
 
     remote_run._call.assert_called_once_with(kitchen_args)

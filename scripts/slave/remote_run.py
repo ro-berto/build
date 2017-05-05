@@ -82,7 +82,7 @@ _STABLE_CIPD_PINS = CipdPins(
 # Canary CIPD pin set.
 _CANARY_CIPD_PINS = CipdPins(
       recipes=None,
-      kitchen='git_revision:407254b0dfe2b0866b8ddda43a3aec6a0e6bd404')
+      kitchen='git_revision:ba51f6f2cc413ca6da84ff85739352ca1376e1d5')
 
 
 def _get_cipd_pins(mastername, buildername, force_canary):
@@ -269,6 +269,14 @@ def _remote_run_with_kitchen(args, stream, pins, properties, tempdir, basedir,
     kitchen_cmd += [
         '-logdog-annotation-url', annotation_url,
     ]
+
+    # Add LogDog tags.
+    if cfg.tags:
+      for k, v in cfg.tags.iteritems():
+        param = k
+        if v is not None:
+          param += '=' + v
+        kitchen_cmd += ['-logdog-tag', param]
 
     # (Debug) Use Kitchen output file if in debug mode.
     if args.logdog_debug_out_file:
