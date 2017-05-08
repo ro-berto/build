@@ -1,0 +1,18 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "None/syzygy/internal/scripts/archive_symbols.py",
+      "-s",
+      "-b",
+      "None/out/Release/*kasko.dll"
+    ],
+    "name": "upload_symbols"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]
