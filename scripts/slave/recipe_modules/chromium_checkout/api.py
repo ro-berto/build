@@ -74,6 +74,14 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
           patch_root=bot_config.get('patch_root'),
           root_solution_revision=root_solution_revision,
           clobber=bot_config.get('clobber', False))
+
+      # Run a non-fatal gclient validation step, allowing us to collect
+      # metrics using event_mon.
+      # TODO(phajdan.jr): always enable or remove (http://crbug.com/570091).
+      try:
+        self.m.gclient('validate', ['validate'])
+      except self.m.step.StepFailure:  # pragma: no cover
+        pass
     assert update_step.json.output['did_run']
     # HACK(dnj): Remove after 'crbug.com/398105' has landed
     self.m.chromium.set_build_properties(update_step.json.output['properties'])
