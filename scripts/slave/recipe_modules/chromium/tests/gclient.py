@@ -26,7 +26,6 @@ TEST_CONFIGS = [
   'ndk_next',
   'perf',
   'show_v8_revision',
-  'v8_bleeding_edge_git',
   'v8_canary',
   'v8_tot',
   'webrtc_test_resources',
