@@ -103,6 +103,7 @@ def show_v8_revision(c):
   # Needed to get the testers to properly sync the right revision.
   c.parent_got_revision_mapping['parent_got_revision'] = 'got_revision'
 
+# TODO(machenbach): Deprecate this.
 @CONFIG_CTX(includes=['chromium'])
 def v8_bleeding_edge_git(c):
   c.solutions[0].revision = 'HEAD'
@@ -111,9 +112,13 @@ def v8_bleeding_edge_git(c):
   c.solutions[0].custom_vars['v8_branch'] = 'branches/bleeding_edge'
   c.revisions['src/v8'] = 'HEAD'
 
-@CONFIG_CTX()
+@CONFIG_CTX(includes=['chromium'])
 def v8_canary(c):
   c.revisions['src/v8'] = 'origin/canary'
+
+@CONFIG_CTX(includes=['chromium'])
+def v8_tot(c):
+  c.revisions['src/v8'] = 'HEAD'
 
 @CONFIG_CTX(includes=['chromium', 'chrome_internal'])
 def perf(c):

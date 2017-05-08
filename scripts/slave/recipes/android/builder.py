@@ -163,7 +163,7 @@ BUILDERS = freeze({
       'gclient_apply_config': [
         'android',
         'perf',
-        'v8_bleeding_edge_git',
+        'v8_tot',
         'chromium_lkcr',
         'show_v8_revision',
       ],

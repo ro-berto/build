@@ -13,7 +13,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
       'gclient_apply_config': [
-        'v8_bleeding_edge_git',
+        'v8_tot',
         'chromium_lkcr',
         'show_v8_revision',
       ],
@@ -33,7 +33,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
       'gclient_apply_config': [
-        'v8_bleeding_edge_git',
+        'v8_tot',
         'chromium_lkcr',
         'show_v8_revision',
       ],
@@ -67,7 +67,7 @@ SPEC = {
         'chromium_lkcr',
         'perf',
         'show_v8_revision',
-        'v8_bleeding_edge_git',
+        'v8_tot',
       ],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -98,7 +98,7 @@ SPEC = {
       'gclient_config': 'chromium',
       'gclient_apply_config': [
         'android',
-        'v8_bleeding_edge_git',
+        'v8_tot',
         'chromium_lkcr',
         'show_v8_revision',
       ],
@@ -126,7 +126,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
       'gclient_apply_config': [
-        'v8_bleeding_edge_git',
+        'v8_tot',
         'chromium_lkcr',
         'show_v8_revision',
       ],
@@ -147,7 +147,7 @@ SPEC = {
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': [
-        'v8_bleeding_edge_git',
+        'v8_tot',
         'chromium_lkcr',
         'show_v8_revision',
       ],
@@ -167,7 +167,7 @@ SPEC = {
       'chromium_config': 'chromium_linux_asan',
       'gclient_config': 'chromium',
       'gclient_apply_config': [
-        'v8_bleeding_edge_git',
+        'v8_tot',
         'chromium_lkcr',
         'show_v8_revision',
       ],
@@ -188,7 +188,7 @@ SPEC = {
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': [
-        'v8_bleeding_edge_git',
+        'v8_tot',
         'chromium_lkcr',
         'show_v8_revision',
       ],
@@ -219,7 +219,7 @@ SPEC = {
       ],
       'gclient_config': 'chromium',
       'gclient_apply_config': [
-        'v8_bleeding_edge_git',
+        'v8_tot',
         'chromium_lkcr',
         'show_v8_revision',
       ],
@@ -246,7 +246,7 @@ SPEC = {
       ],
       'gclient_config': 'chromium',
       'gclient_apply_config': [
-        'v8_bleeding_edge_git',
+        'v8_tot',
         'chromium_lkcr',
         'show_v8_revision',
       ],
@@ -273,7 +273,7 @@ SPEC = {
       ],
       'gclient_config': 'chromium',
       'gclient_apply_config': [
-        'v8_bleeding_edge_git',
+        'v8_tot',
         'chromium_lkcr',
         'show_v8_revision',
       ],
@@ -300,7 +300,7 @@ SPEC = {
       'gclient_config': 'chromium',
       'gclient_apply_config': [
         'android',
-        'v8_bleeding_edge_git',
+        'v8_tot',
         'chromium_lkcr',
         'show_v8_revision',
       ],

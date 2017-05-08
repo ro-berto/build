@@ -63,7 +63,7 @@ def RunSteps(api):
   monitoring_state = 'failure'
   try:
     api.gclient.set_config('chromium')
-    api.gclient.apply_config('v8_bleeding_edge_git')
+    api.gclient.apply_config('v8_tot')
 
     step_result = api.python(
         'check roll status',
