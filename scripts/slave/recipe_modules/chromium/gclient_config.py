@@ -5,11 +5,9 @@
 import DEPS
 CONFIG_CTX = DEPS['gclient'].CONFIG_CTX
 ChromiumGitURL = DEPS['gclient'].config.ChromiumGitURL
+ChromeInternalGitURL = DEPS['gclient'].config.ChromeInternalGitURL
 
 gclient_api = DEPS['gclient'].api
-
-def ChromiumSrcURL(c):
-  return ChromiumGitURL(c, 'chromium', 'src.git')
 
 def mirror_only(c, obj, default=None):
   return obj if c.USE_MIRROR else (default or obj.__class__())
@@ -18,7 +16,7 @@ def mirror_only(c, obj, default=None):
 def chromium_bare(c):
   s = c.solutions.add()
   s.name = 'src'
-  s.url = ChromiumSrcURL(c)
+  s.url = ChromiumGitURL(c, 'chromium', 'src.git')
   s.custom_vars = {}
   m = c.got_revision_reverse_mapping
   m['got_revision'] = 'src'
@@ -193,3 +191,56 @@ def chromedriver(c):
   c.solutions[0].custom_deps[
       'src/chrome/test/chromedriver/third_party/java_tests'] = (
           ChromiumGitURL(c, 'chromium', 'deps', 'webdriver'))
+
+# TODO(phajdan.jr): Move to proper repo and add coverage.
+@CONFIG_CTX()
+def angle_top_of_tree(c):  # pragma: no cover
+  """Configures the top-of-tree ANGLE in a Chromium checkout.
+
+  Sets up ToT instead of the DEPS-pinned revision for ANGLE.
+  """
+  # TODO(tandrii): I think patch_projects in bare_chromium fixed this.
+  c.solutions[0].revision = 'HEAD'
+  c.revisions['src/third_party/angle'] = 'HEAD'
+
+# TODO(phajdan.jr): Move to proper repo and add coverage.
+@CONFIG_CTX()
+def valgrind(c):  # pragma: no cover
+  """Add Valgrind binaries to the gclient solution."""
+  c.solutions[0].custom_deps['src/third_party/valgrind'] = \
+    ChromiumGitURL(c, 'chromium', 'deps', 'valgrind', 'binaries')
+
+@CONFIG_CTX()
+def ndk_next(c):
+  c.revisions['src/third_party/android_tools/ndk'] = 'origin/next'
+
+# TODO(iannucci,vadimsh): Switch this to src-limited
+@CONFIG_CTX()
+def chrome_internal(c):
+  s = c.solutions.add()
+  s.name = 'src-internal'
+  s.url = ChromeInternalGitURL(c, 'chrome', 'src-internal.git')
+  # Remove some things which are generally not needed
+  s.custom_deps = {
+    "src/data/autodiscovery" : None,
+    "src/data/page_cycler" : None,
+    "src/tools/grit/grit/test/data" : None,
+    "src/chrome/test/data/perf/frame_rate/private" : None,
+    "src/data/mozilla_js_tests" : None,
+    "src/chrome/test/data/firefox2_profile/searchplugins" : None,
+    "src/chrome/test/data/firefox2_searchplugins" : None,
+    "src/chrome/test/data/firefox3_profile/searchplugins" : None,
+    "src/chrome/test/data/firefox3_searchplugins" : None,
+    "src/chrome/test/data/ssl/certs" : None,
+    "src/data/mach_ports" : None,
+    "src/data/esctf" : None,
+    "src/data/selenium_core" : None,
+    "src/chrome/test/data/plugin" : None,
+    "src/data/memory_test" : None,
+    "src/data/tab_switching" : None,
+    "src/chrome/test/data/osdd" : None,
+    "src/webkit/data/bmp_decoder":None,
+    "src/webkit/data/ico_decoder":None,
+    "src/webkit/data/test_shell/plugins":None,
+    "src/webkit/data/xbm_decoder":None,
+  }

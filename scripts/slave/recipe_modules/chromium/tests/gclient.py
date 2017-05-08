@@ -11,6 +11,7 @@ DEPS = [
 TEST_CONFIGS = [
   'android_bare',
   'blink',
+  'chrome_internal',
   'chromedriver',
   'chromium',
   'chromium_lkcr',
@@ -21,6 +22,7 @@ TEST_CONFIGS = [
   'chromium_webrtc',
   'chromium_webrtc_tot',
   'ios',
+  'ndk_next',
   'perf',
   'show_v8_revision',
   'v8_bleeding_edge_git',
