@@ -899,19 +899,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         buildername in
         CHROMIUM_BLINK_TESTS_BUILDERS)
 
-    swarming_builder = buildername in LAYOUT_TESTS_SWARMING_BUILDERS
-
     # We decide at this point whether we will add layout tests to run on
     # swarming, locally, or not at all.
-    # TODO(mcgreevy): Also check at this point whether there is already a
-    # src-configured test called "webkit_layout_tests", in which case both
-    # add_swarmed_layout_tests and add_local_layout_tests should be false.
-    add_swarmed_layout_tests = add_blink_tests and swarming_builder
-    add_local_layout_tests = add_blink_tests and not swarming_builder
+    layout_tests_strategy = _layout_tests_strategy(
+        tests, buildername, add_blink_tests)
 
     # Before layout tests on swarming is rolled out to run on all CLs, blink layout tests needs 
     # to be manually added to the analyze list.
-    if add_swarmed_layout_tests:
+    if layout_tests_strategy == 'add_swarmed':
       merge = {
           'script': self.m.path['checkout'].join(
               'third_party', 'WebKit', 'Tools', 'Scripts',
@@ -984,7 +979,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       ]
     # TODO(tansell): Remove this once all builders are running layout tests
     # via analyze.
-    if add_local_layout_tests:
+    if layout_tests_strategy == 'add_local':
         nonanalyze_blink_tests.append(self.steps.BlinkTest())
 
     # Blink tests have to bypass "analyze", see below.
@@ -1042,3 +1037,38 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           not test_compile_targets):
         result.append(test)
     return result
+
+
+def _get_test_by_name(tests, name):
+  """ Returns the test with the specified name, or None if none match. """
+  for test in tests:
+    if test.name == name:
+      return test
+  return None
+
+
+def _layout_tests_strategy(tests, builder_name, add_blink_tests):
+  """Returns whether layout_tests should be run locally or on swarming.
+
+  Args:
+    tests: the list of tests according to the bot config.
+    builder_name: the name of the builder.
+    add_blink_tests: when false, inhibits running of layout tests.
+
+  Returns: one of the following:
+    None: do not add layout tests.
+    'add_local': add BlinkTest to run locally on the bot.
+    'add_swarmed': add webkit_layout_tests to run on swarming.
+
+    Note: If a webkit_layout_tests test has been configured src-side, this
+    function returns None, so that we don't manually add tests that
+    will conflict with the src-configured test.
+  """
+  if _get_test_by_name(tests, 'webkit_layout_tests') is not None:
+    return None
+
+  if not add_blink_tests:
+    return None
+
+  swarm = builder_name in LAYOUT_TESTS_SWARMING_BUILDERS
+  return 'add_swarmed' if swarm else 'add_local'
