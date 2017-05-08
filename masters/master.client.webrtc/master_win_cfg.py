@@ -34,7 +34,7 @@ def Update(c):
           'Win32 Release (Clang)',
           'Win64 Debug (Clang)',
           'Win64 Release (Clang)',
-          'Win SyzyASan',
+          'Win32 ASan',
       ]),
   ])
 
@@ -54,7 +54,7 @@ def Update(c):
     {'name': 'Win32 Release (Clang)', 'slavebuilddir': 'win_clang'},
     {'name': 'Win64 Debug (Clang)', 'slavebuilddir': 'win_clang'},
     {'name': 'Win64 Release (Clang)', 'slavebuilddir': 'win_clang'},
-    {'name': 'Win SyzyASan', 'slavebuilddir': 'win-syzyasan'},
+    {'name': 'Win32 ASan', 'slavebuilddir': 'win_asan'},
   ]
 
   c['builders'].extend([

@@ -45,9 +45,6 @@ def RunSteps(api):
   if webrtc.should_build:
     webrtc.compile()
 
-    if api.chromium.c.gyp_env.GYP_DEFINES.get('syzyasan', 0) == 1:
-      api.chromium.apply_syzyasan()
-
   if webrtc.should_upload_build:
     webrtc.package_build()
   if webrtc.should_upload_apprtcmobile:
