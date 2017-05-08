@@ -37,29 +37,47 @@ BUILDBOT_ROOT = os.path.abspath(os.path.dirname(BUILD_ROOT))
 
 LOGGER = logging.getLogger('remote_run')
 
-# This is a map of master names to whitelist for canary configurations.
-#
-# Each master's value is either:
-# - _ALL_BUILDERS, indicating that *all* builders on that master are
-#   whitelisted.
-# - An iterable of specific builder names to whitelist.
-_ALL_BUILDERS = object()
-_CANARY_CONFIG = {
+# KitchenConfig is a set of per-master Kitchen configuration properties.
+KitchenConfig = collections.namedtuple('KitchenConfig', (
+    # List of builders that are explicitly configured for Kitchen. If None,
+    # all builders on the master are configured for Kitchen.
+    'builders',
+    # If True, "builders" is interpreted as a blacklist instead of a whitelist,
+    # meaing that all builders *except* those explicitly named should use
+    # Kitchen.
+    'is_blacklist'))
+
+_ALL_BUILDERS = KitchenConfig(builders=None, is_blacklist=False)
+
+# This is a map of KitchenConfig to apply to master. Keys are master names,
+# values are KitchenConfig instances to apply to that master.
+_KITCHEN_CONFIG = {
   'chromium.infra': _ALL_BUILDERS,
   'chromium.infra.cron': _ALL_BUILDERS,
   'internal.infra': _ALL_BUILDERS,
 
   ## Not whitelisted b/c of recipe roller, see: crbug.com/703352
-  #'internal.infra.cron',
+  #'internal.infra.cron': _ALL_BUILDERS,
 
-  'chromium.fyi': set((
-      'Site Isolation Linux',
-      'Site Isolation Android',
-      'Site Isolation Win',
-   )),
+  'chromium.fyi': KitchenConfig(
+      builders=set((
+        'Site Isolation Linux',
+        'Site Isolation Android',
+        'Site Isolation Win',
+      )),
+      is_blacklist=False,
+  ),
 
   'chromium.swarm': _ALL_BUILDERS,
 }
+
+# Masters that are running "canary" run.
+_CANARY_MASTERS = set((
+  'chromium.infra',
+  'chromium.infra.cron',
+  'internal.infra',
+  'internal.infra.cron',
+))
 
 # The name of the recipe engine CIPD package.
 _RECIPES_PY_CIPD_PACKAGE = 'infra/recipes-py'
@@ -77,31 +95,37 @@ CipdPins = collections.namedtuple('CipdPins', ('recipes', 'kitchen'))
 # Stable CIPD pin set.
 _STABLE_CIPD_PINS = CipdPins(
       recipes='git_revision:e77477ba61ef082e2e34d58fd1251a1cb707f698',
-      kitchen=None)
+      kitchen='git_revision:407254b0dfe2b0866b8ddda43a3aec6a0e6bd404')
 
 # Canary CIPD pin set.
 _CANARY_CIPD_PINS = CipdPins(
-      recipes=None,
+      recipes='git_revision:e77477ba61ef082e2e34d58fd1251a1cb707f698',
       kitchen='git_revision:407254b0dfe2b0866b8ddda43a3aec6a0e6bd404')
 
 
-def _get_cipd_pins(mastername, buildername, force_canary):
-  canary_builders = _CANARY_CONFIG.get(mastername)
-  if canary_builders is not None:
-    force_canary = (
-        canary_builders is _ALL_BUILDERS or buildername in canary_builders)
-  return _CANARY_CIPD_PINS if force_canary else _STABLE_CIPD_PINS
+def _get_cipd_pins(mastername):
+  return (_STABLE_CIPD_PINS if mastername not in _CANARY_MASTERS
+          else _CANARY_CIPD_PINS)
+
+
+def _get_is_kitchen(mastername, buildername):
+  kc = _KITCHEN_CONFIG.get(mastername)
+  if not kc:
+    return False
+  if kc.builders is None:
+    return True
+  if kc.is_blacklist:
+    return buildername not in kc.builders
+  return buildername in kc.builders
 
 
 def all_cipd_packages():
   """Generator which yields all referenced CIPD packages."""
   # All CIPD packages are in top-level platform config.
   for pins in (_STABLE_CIPD_PINS, _CANARY_CIPD_PINS):
-    if pins.recipes: # TODO(dnj): Remove me when everything runs on Kitchen.
-      yield cipd.CipdPackage(name=_RECIPES_PY_CIPD_PACKAGE,
-                             version=pins.recipes)
-    if pins.kitchen: # TODO(dnj): Remove me when everything runs on Kitchen.
-      yield cipd.CipdPackage(name=_KITCHEN_CIPD_PACKAGE, version=pins.kitchen)
+    # TODO(dnj): Remove me when everything runs on Kitchen.
+    yield cipd.CipdPackage(name=_RECIPES_PY_CIPD_PACKAGE, version=pins.recipes)
+    yield cipd.CipdPackage(name=_KITCHEN_CIPD_PACKAGE, version=pins.kitchen)
 
 
 # ENGINE_FLAGS is a mapping of master name to a engine flags. This can be used
@@ -191,8 +215,8 @@ def _cleanup_old_layouts(using_kitchen, properties, buildbot_build_dir,
         LOGGER.exception('Failed to cleanup path: %s', path)
 
 
-def _remote_run_with_kitchen(args, stream, pins, properties, tempdir, basedir,
-                             cache_dir):
+def _remote_run_with_kitchen(args, stream, kitchen_version, properties, tempdir,
+                             basedir, cache_dir):
   # Write our build properties to a JSON file.
   properties_file = os.path.join(tempdir, 'remote_run_properties.json')
   with open(properties_file, 'w') as f:
@@ -206,7 +230,7 @@ def _remote_run_with_kitchen(args, stream, pins, properties, tempdir, basedir,
   cipd_root = os.path.join(basedir, '.remote_run_cipd')
   kitchen_pkg = cipd.CipdPackage(
       name=_KITCHEN_CIPD_PACKAGE,
-      version=pins.kitchen)
+      version=kitchen_version)
 
   from slave import cipd_bootstrap_v2
   cipd_bootstrap_v2.install_cipd_packages(cipd_root, kitchen_pkg)
@@ -329,16 +353,33 @@ def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir):
   # Determine our pins.
   mastername = properties.get('mastername')
   buildername = properties.get('buildername')
-  pins = _get_cipd_pins(mastername, buildername,
-                        args.canary or 'remote_run_canary' in properties)
+
+  # Determine our CIPD pins.
+  #
+  # If a property includes "remote_run_canary", we will explicitly use canary
+  # pins. This can be done by manually submitting a build to the waterfall.
+  if 'remote_run_canary' in properties or args.canary:
+    pins = _CANARY_CIPD_PINS
+  else:
+    pins = _get_cipd_pins(mastername)
+
+  # Determine if we're running Kitchen.
+  #
+  # If a property includes "remote_run_kitchen", we will explicitly use canary
+  # pins. This can be done by manually submitting a build to the waterfall.
+  is_kitchen = (_get_is_kitchen(mastername, buildername) or
+                'remote_run_kitchen' in properties)
+
+  # Allow command-line "--kitchen" to override.
   if args.kitchen:
     pins = pins._replace(kitchen=args.kitchen)
+    is_kitchen = True
 
   # Augment our input properties...
   properties['build_data_dir'] = build_data_dir
   properties['builder_id'] = 'master.%s:%s' % (mastername, buildername)
 
-  if not pins.kitchen:
+  if not is_kitchen:
     # path_config property defines what paths a build uses for checkout, git
     # cache, goma cache, etc.
     #
@@ -366,13 +407,13 @@ def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir):
   cache_dir = os.path.join(BUILDBOT_ROOT, 'c')
 
   # Cleanup data from old builds.
-  _cleanup_old_layouts(pins.kitchen, properties, buildbot_build_dir, cache_dir)
+  _cleanup_old_layouts(is_kitchen, properties, buildbot_build_dir, cache_dir)
 
   # (Canary) Use Kitchen if configured.
   # TODO(dnj): Make this the only path once we move to Kitchen.
-  if pins.kitchen:
+  if is_kitchen:
     return _remote_run_with_kitchen(
-        args, stream, pins, properties, tempdir, basedir, cache_dir)
+        args, stream, pins.kitchen, properties, tempdir, basedir, cache_dir)
 
   ##
   # Classic Remote Run

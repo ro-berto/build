@@ -115,6 +115,7 @@ class RemoteRunExecTest(unittest.TestCase):
     map(lambda x: x.start(), (
         mock.patch('slave.remote_run._call'),
         mock.patch('slave.remote_run._get_cipd_pins'),
+        mock.patch('slave.remote_run._get_is_kitchen'),
         mock.patch('slave.cipd_bootstrap_v2.high_level_ensure_cipd_client'),
         mock.patch('slave.monitoring_utils.write_build_monitoring_event'),
         mock.patch('os.path.exists'),
@@ -193,8 +194,9 @@ class RemoteRunExecTest(unittest.TestCase):
 
     # Easily-configurable CIPD pins.
     self.cipd_pins = remote_run._STABLE_CIPD_PINS
-    remote_run._get_cipd_pins = (
-        lambda _mastername, _buildername, _force_canary: self.cipd_pins)
+    self.is_kitchen = False
+    remote_run._get_cipd_pins.side_effect = lambda *_a: self.cipd_pins
+    remote_run._get_is_kitchen.side_effect = lambda *_a: self.is_kitchen
 
     # Written via '_write_recipe_result'.
     self.recipe_result = None
@@ -270,8 +272,7 @@ class RemoteRunExecTest(unittest.TestCase):
   @mock.patch('slave.robust_tempdir.RobustTempdir.tempdir')
   def test_kitchen_exec_without_logdog(self, rt_tempdir, _install_cipd_packages,
                                       _logdog_bootstrap):
-    # Force Kitchen enable.
-    self.cipd_pins = remote_run._CANARY_CIPD_PINS._replace(kitchen='enable')
+    self.is_kitchen = True
 
     remote_run._call.return_value = 0
     rt_tempdir.side_effect = [self.tempdir, self.build_data_dir]
@@ -380,8 +381,7 @@ class RemoteRunExecTest(unittest.TestCase):
   @mock.patch('slave.robust_tempdir.RobustTempdir.tempdir')
   def test_kitchen_exec_with_logdog(self, rt_tempdir, _install_cipd_packages,
                                    _logdog_bootstrap_result, get_config):
-    # Force Kitchen enable.
-    self.cipd_pins = remote_run._CANARY_CIPD_PINS._replace(kitchen='enable')
+    self.is_kitchen = True
 
     cfg = self._default_namedtuple(logdog_bootstrap.Config)._replace(
         params=self._default_namedtuple(logdog_bootstrap.Params)._replace(
@@ -426,6 +426,54 @@ class RemoteRunExecTest(unittest.TestCase):
             '@@@STEP_CLOSED@@@',
         ]
     )
+
+
+class ConfigurationTest(unittest.TestCase):
+
+  def setUp(self):
+    self._orig_kitchen_config = remote_run._KITCHEN_CONFIG
+    remote_run._KITCHEN_CONFIG = {
+      'all': remote_run._ALL_BUILDERS,
+      'whitelist': remote_run.KitchenConfig(
+        builders=['foo', 'bar'],
+        is_blacklist=False,
+       ),
+      'blacklist': remote_run.KitchenConfig(
+        builders=['foo', 'bar'],
+        is_blacklist=True,
+       ),
+    }
+
+    self._orig_canary_masters = remote_run._CANARY_MASTERS
+    remote_run._CANARY_MASTERS = set(('canary'))
+
+  def tearDown(self):
+    remote_run._KITCHEN_CONFIG_MASTERS = self._orig_kitchen_config
+    remote_run._CANARY_MASTERS = self._orig_canary_masters
+
+  def test_get_cipd_pins_stable(self):
+    self.assertEqual(remote_run._get_cipd_pins('not.canary'),
+                     remote_run._STABLE_CIPD_PINS)
+
+  def test_get_cipd_pins_canary(self):
+    self.assertEqual(remote_run._get_cipd_pins('canary'),
+                     remote_run._CANARY_CIPD_PINS)
+
+  def test_get_is_kitchen_unlisted(self):
+    self.assertFalse(remote_run._get_is_kitchen('unlisted', 'buildername'))
+
+  def test_get_is_kitchen_all(self):
+    self.assertTrue(remote_run._get_is_kitchen('all', 'buildername'))
+
+  def test_get_is_kitchen_whitelist(self):
+    self.assertTrue(remote_run._get_is_kitchen('whitelist', 'foo'))
+    self.assertTrue(remote_run._get_is_kitchen('whitelist', 'bar'))
+    self.assertFalse(remote_run._get_is_kitchen('whitelist', 'baz'))
+
+  def test_get_is_kitchen_blacklist(self):
+    self.assertFalse(remote_run._get_is_kitchen('blacklist', 'foo'))
+    self.assertFalse(remote_run._get_is_kitchen('blacklist', 'bar'))
+    self.assertTrue(remote_run._get_is_kitchen('blacklist', 'baz'))
 
 
 if __name__ == '__main__':
