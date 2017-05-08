@@ -100,12 +100,11 @@ _STABLE_CIPD_PINS = CipdPins(
 # Canary CIPD pin set.
 _CANARY_CIPD_PINS = CipdPins(
       recipes='git_revision:e77477ba61ef082e2e34d58fd1251a1cb707f698',
-      kitchen='git_revision:407254b0dfe2b0866b8ddda43a3aec6a0e6bd404')
+      kitchen='git_revision:90f1017bf26434387f2a3b7af2bbeb7f18bcf3fb')
 
 
-def _get_cipd_pins(mastername):
-  return (_STABLE_CIPD_PINS if mastername not in _CANARY_MASTERS
-          else _CANARY_CIPD_PINS)
+def _get_is_canary(mastername):
+  return mastername in _CANARY_MASTERS
 
 
 def _get_is_kitchen(mastername, buildername):
@@ -215,8 +214,8 @@ def _cleanup_old_layouts(using_kitchen, properties, buildbot_build_dir,
         LOGGER.exception('Failed to cleanup path: %s', path)
 
 
-def _remote_run_with_kitchen(args, stream, kitchen_version, properties, tempdir,
-                             basedir, cache_dir):
+def _remote_run_with_kitchen(args, stream, is_canary, kitchen_version,
+                             properties, tempdir, basedir, cache_dir):
   # Write our build properties to a JSON file.
   properties_file = os.path.join(tempdir, 'remote_run_properties.json')
   with open(properties_file, 'w') as f:
@@ -310,8 +309,14 @@ def _remote_run_with_kitchen(args, stream, kitchen_version, properties, tempdir,
   except logdog_bootstrap.NotBootstrapped as e:
     LOGGER.info('Not configured to use LogDog: %s', e)
 
+  # Remove PYTHNONPATH, since Kitchen will re-establish its own hermetic path.
+  # TODO(dnj): Make this happen all the time after this passes canary.
+  kitchen_env = os.environ.copy()
+  if is_canary:
+    kitchen_env.pop('PYTHONPATH', None)
+
   # Invoke Kitchen, capture its return code.
-  return_code = _call(kitchen_cmd)
+  return_code = _call(kitchen_cmd, env=kitchen_env)
 
   # Try to open kitchen result file. Any failure will result in an exception
   # and an infra failure.
@@ -358,10 +363,9 @@ def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir):
   #
   # If a property includes "remote_run_canary", we will explicitly use canary
   # pins. This can be done by manually submitting a build to the waterfall.
-  if 'remote_run_canary' in properties or args.canary:
-    pins = _CANARY_CIPD_PINS
-  else:
-    pins = _get_cipd_pins(mastername)
+  is_canary = (_get_is_canary(mastername) or
+               'remote_run_canary' in properties or args.canary)
+  pins = _STABLE_CIPD_PINS if not is_canary else _CANARY_CIPD_PINS
 
   # Determine if we're running Kitchen.
   #
@@ -413,7 +417,8 @@ def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir):
   # TODO(dnj): Make this the only path once we move to Kitchen.
   if is_kitchen:
     return _remote_run_with_kitchen(
-        args, stream, pins.kitchen, properties, tempdir, basedir, cache_dir)
+        args, stream, is_canary, pins.kitchen, properties, tempdir, basedir,
+        cache_dir)
 
   ##
   # Classic Remote Run

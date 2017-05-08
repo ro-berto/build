@@ -111,10 +111,12 @@ class RemoteRunExecTest(unittest.TestCase):
     logging.basicConfig(level=logging.ERROR+1)
 
     self._orig_env = os.environ.copy()
+    os.environ = {'FOO': 'BAR', 'PYTHONPATH': '/pants'}
+
     self.maxDiff = None
     map(lambda x: x.start(), (
         mock.patch('slave.remote_run._call'),
-        mock.patch('slave.remote_run._get_cipd_pins'),
+        mock.patch('slave.remote_run._get_is_canary'),
         mock.patch('slave.remote_run._get_is_kitchen'),
         mock.patch('slave.cipd_bootstrap_v2.high_level_ensure_cipd_client'),
         mock.patch('slave.monitoring_utils.write_build_monitoring_event'),
@@ -193,9 +195,9 @@ class RemoteRunExecTest(unittest.TestCase):
     chromium_utils.GetActiveSubdir.return_value = None
 
     # Easily-configurable CIPD pins.
-    self.cipd_pins = remote_run._STABLE_CIPD_PINS
+    self.is_canary = False
     self.is_kitchen = False
-    remote_run._get_cipd_pins.side_effect = lambda *_a: self.cipd_pins
+    remote_run._get_is_canary.side_effect = lambda *_a: self.is_canary
     remote_run._get_is_kitchen.side_effect = lambda *_a: self.is_kitchen
 
     # Written via '_write_recipe_result'.
@@ -286,7 +288,34 @@ class RemoteRunExecTest(unittest.TestCase):
     kitchen_args = self.kitchen_args + [
         '-revision', 'refs/heads/somebranch',
     ]
-    remote_run._call.assert_called_once_with(kitchen_args)
+    remote_run._call.assert_called_once_with(kitchen_args, env=os.environ)
+
+  @mock.patch('slave.logdog_bootstrap.bootstrap',
+              side_effect=logdog_bootstrap.NotBootstrapped())
+  @mock.patch('slave.cipd_bootstrap_v2.install_cipd_packages')
+  @mock.patch('slave.robust_tempdir.RobustTempdir.tempdir')
+  def test_kitchen_exec_canary_without_logdog(self, rt_tempdir,
+                                              _install_cipd_packages,
+                                              _logdog_bootstrap):
+    self.is_canary = True
+    self.is_kitchen = True
+
+    remote_run._call.return_value = 0
+    rt_tempdir.side_effect = [self.tempdir, self.build_data_dir]
+    self._write_kitchen_result()
+
+    opts = self.opts._replace(revision='refs/heads/somebranch')
+    rv = remote_run._exec_recipe(opts, self.rt, self.stream, self.basedir,
+                                 self.buildbot_build_dir)
+    self.assertEqual(rv, 0)
+
+    kitchen_args = self.kitchen_args + [
+        '-revision', 'refs/heads/somebranch',
+    ]
+    kitchen_env = os.environ.copy()
+    kitchen_env.pop('PYTHONPATH', None)
+
+    remote_run._call.assert_called_once_with(kitchen_args, env=kitchen_env)
 
   @mock.patch('slave.logdog_bootstrap.bootstrap')
   @mock.patch('slave.logdog_bootstrap.BootstrapState.get_result')
@@ -411,7 +440,7 @@ class RemoteRunExecTest(unittest.TestCase):
         '-logdog-tag', 'baz',
     ]
 
-    remote_run._call.assert_called_once_with(kitchen_args)
+    remote_run._call.assert_called_once_with(kitchen_args, env=os.environ)
     self.assertEqual(
         [l for l in self.stream_output.getvalue().splitlines() if l],
         [
@@ -445,19 +474,17 @@ class ConfigurationTest(unittest.TestCase):
     }
 
     self._orig_canary_masters = remote_run._CANARY_MASTERS
-    remote_run._CANARY_MASTERS = set(('canary'))
+    remote_run._CANARY_MASTERS = set(('canary',))
 
   def tearDown(self):
     remote_run._KITCHEN_CONFIG_MASTERS = self._orig_kitchen_config
     remote_run._CANARY_MASTERS = self._orig_canary_masters
 
   def test_get_cipd_pins_stable(self):
-    self.assertEqual(remote_run._get_cipd_pins('not.canary'),
-                     remote_run._STABLE_CIPD_PINS)
+    self.assertFalse(remote_run._get_is_canary('not.canary'))
 
   def test_get_cipd_pins_canary(self):
-    self.assertEqual(remote_run._get_cipd_pins('canary'),
-                     remote_run._CANARY_CIPD_PINS)
+    self.assertTrue(remote_run._get_is_canary('canary'))
 
   def test_get_is_kitchen_unlisted(self):
     self.assertFalse(remote_run._get_is_kitchen('unlisted', 'buildername'))
