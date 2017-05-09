@@ -407,7 +407,7 @@
       "[BUILDER_CACHE]/Android_Builder__dbg_/src/out/Debug",
       "-j",
       "50",
-      "content_browsertests_apk"
+      "content_browsertests"
     ],
     "cwd": "[BUILDER_CACHE]/Android_Builder__dbg_/src",
     "env": {
@@ -506,7 +506,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/Android_Builder__dbg_/src/out/Debug",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Android_Builder__dbg_/src/out/Debug', '-j', 50, 'content_browsertests_apk']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Android_Builder__dbg_/src/out/Debug', '-j', 50, 'content_browsertests']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",

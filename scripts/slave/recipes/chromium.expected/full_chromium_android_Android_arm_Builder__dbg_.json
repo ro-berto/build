@@ -362,7 +362,7 @@
       "--goma-dir",
       "[CACHE]/goma_client",
       "--swarming-targets-file",
-      "browser_tests_apk\n",
+      "browser_tests\n",
       "//out/Debug"
     ],
     "cwd": "[BUILDER_CACHE]/Android_arm_Builder__dbg_/src",
@@ -371,7 +371,7 @@
     },
     "name": "generate_build_files",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@browser_tests_apk@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@browser_tests@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
     ]
   },
@@ -476,8 +476,8 @@
       "-j",
       "50",
       "android_tools",
-      "browser_tests_apk_run",
-      "gfx_unittests_apk",
+      "browser_tests",
+      "gfx_unittests",
       "system_webview_apk",
       "system_webview_shell_layout_test_apk",
       "webview_ui_test_app_test_apk"
@@ -579,7 +579,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/Android_arm_Builder__dbg_/src/out/Debug",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Android_arm_Builder__dbg_/src/out/Debug', '-j', 50, 'android_tools', 'browser_tests_apk_run', 'gfx_unittests_apk', 'system_webview_apk', 'system_webview_shell_layout_test_apk', 'webview_ui_test_app_test_apk']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Android_arm_Builder__dbg_/src/out/Debug', '-j', 50, 'android_tools', 'browser_tests', 'gfx_unittests', 'system_webview_apk', 'system_webview_shell_layout_test_apk', 'webview_ui_test_app_test_apk']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",
@@ -653,12 +653,12 @@
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[BUILDER_CACHE]/Android_arm_Builder__dbg_/src/out/Debug/browser_tests_apk.isolated.gen.json"
+      "[BUILDER_CACHE]/Android_arm_Builder__dbg_/src/out/Debug/browser_tests.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"browser_tests_apk\": \"[dummy hash for browser_tests_apk]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"browser_tests\": \"[dummy hash for browser_tests]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
