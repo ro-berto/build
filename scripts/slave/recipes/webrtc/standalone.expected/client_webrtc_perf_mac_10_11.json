@@ -149,14 +149,14 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Mac_10_11/src/tools-webrtc/mb/mb.py",
+      "[BUILDER_CACHE]/Mac_10_11/src/tools_webrtc/mb/mb.py",
       "gen",
       "-m",
       "client.webrtc.perf",
       "-b",
       "Mac 10.11",
       "--config-file",
-      "[BUILDER_CACHE]/Mac_10_11/src/tools-webrtc/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/Mac_10_11/src/tools_webrtc/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma_client",
       "//out/Release"

@@ -149,14 +149,14 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win32_Debug__Clang_\\src\\tools-webrtc\\mb\\mb.py",
+      "[BUILDER_CACHE]\\Win32_Debug__Clang_\\src\\tools_webrtc\\mb\\mb.py",
       "gen",
       "-m",
       "client.webrtc",
       "-b",
       "Win32 Debug (Clang)",
       "--config-file",
-      "[BUILDER_CACHE]\\Win32_Debug__Clang_\\src\\tools-webrtc\\mb\\mb_config.pyl",
+      "[BUILDER_CACHE]\\Win32_Debug__Clang_\\src\\tools_webrtc\\mb\\mb_config.pyl",
       "--goma-dir",
       "[CACHE]\\goma_client",
       "//out/Debug"

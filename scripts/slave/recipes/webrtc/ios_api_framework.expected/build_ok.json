@@ -202,7 +202,7 @@
   },
   {
     "cmd": [
-      "[BUILDER_CACHE]/iOS_API_Framework_Builder/src/tools-webrtc/ios/build_ios_libs.py",
+      "[BUILDER_CACHE]/iOS_API_Framework_Builder/src/tools_webrtc/ios/build_ios_libs.py",
       "-c"
     ],
     "name": "cleanup"
@@ -211,7 +211,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/iOS_API_Framework_Builder/src/tools-webrtc/ios/build_ios_libs.py",
+      "[BUILDER_CACHE]/iOS_API_Framework_Builder/src/tools_webrtc/ios/build_ios_libs.py",
       "-r",
       "170242",
       "-e",

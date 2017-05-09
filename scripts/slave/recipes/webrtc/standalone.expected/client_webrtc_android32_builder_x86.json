@@ -174,14 +174,14 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Android32_Builder_x86/src/tools-webrtc/mb/mb.py",
+      "[BUILDER_CACHE]/Android32_Builder_x86/src/tools_webrtc/mb/mb.py",
       "gen",
       "-m",
       "client.webrtc",
       "-b",
       "Android32 Builder x86",
       "--config-file",
-      "[BUILDER_CACHE]/Android32_Builder_x86/src/tools-webrtc/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/Android32_Builder_x86/src/tools_webrtc/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma_client",
       "//out/Release"

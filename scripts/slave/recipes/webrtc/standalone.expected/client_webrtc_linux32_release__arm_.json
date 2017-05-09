@@ -150,14 +150,14 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Linux32_Release__ARM_/src/tools-webrtc/mb/mb.py",
+      "[BUILDER_CACHE]/Linux32_Release__ARM_/src/tools_webrtc/mb/mb.py",
       "gen",
       "-m",
       "client.webrtc",
       "-b",
       "Linux32 Release (ARM)",
       "--config-file",
-      "[BUILDER_CACHE]/Linux32_Release__ARM_/src/tools-webrtc/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/Linux32_Release__ARM_/src/tools_webrtc/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma_client",
       "//out/Release"

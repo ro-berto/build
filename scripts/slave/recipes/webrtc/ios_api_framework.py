@@ -32,7 +32,7 @@ def RunSteps(api):
   ninja_log_exit_status = 1
 
   try:
-    build_script = api.path['checkout'].join('tools-webrtc', 'ios',
+    build_script = api.path['checkout'].join('tools_webrtc', 'ios',
                                              'build_ios_libs.py')
     if not api.tryserver.is_tryserver:
       api.step('cleanup', [build_script, '-c'])

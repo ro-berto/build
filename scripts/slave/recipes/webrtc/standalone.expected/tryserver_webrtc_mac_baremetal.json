@@ -187,14 +187,14 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/mac_baremetal/src/tools-webrtc/mb/mb.py",
+      "[BUILDER_CACHE]/mac_baremetal/src/tools_webrtc/mb/mb.py",
       "gen",
       "-m",
       "tryserver.webrtc",
       "-b",
       "mac_baremetal",
       "--config-file",
-      "[BUILDER_CACHE]/mac_baremetal/src/tools-webrtc/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/mac_baremetal/src/tools_webrtc/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma_client",
       "//out/Release"

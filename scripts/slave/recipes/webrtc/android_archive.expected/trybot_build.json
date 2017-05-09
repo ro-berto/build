@@ -233,7 +233,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/android_archive/src/tools-webrtc/android/build_aar.py",
+      "[BUILDER_CACHE]/android_archive/src/tools_webrtc/android/build_aar.py",
       "--use-goma",
       "--verbose",
       "--extra-gn-args",

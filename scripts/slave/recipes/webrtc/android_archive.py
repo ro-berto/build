@@ -28,7 +28,7 @@ def RunSteps(api):
   api.goma.start()
   ninja_log_exit_status = 1
   try:
-    build_script = api.path['checkout'].join('tools-webrtc', 'android',
+    build_script = api.path['checkout'].join('tools_webrtc', 'android',
                                              'build_aar.py')
     with api.step.context({'cwd': api.path['checkout']}):
       step_result = api.python(

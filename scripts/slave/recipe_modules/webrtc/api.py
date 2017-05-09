@@ -166,7 +166,7 @@ class WebRTCApi(recipe_api.RecipeApi):
   def run_mb(self):
     self.m.chromium.run_mb(
       self.mastername, self.buildername, use_goma=True,
-      mb_path=self.m.path['checkout'].join('tools-webrtc', 'mb'),
+      mb_path=self.m.path['checkout'].join('tools_webrtc', 'mb'),
       isolated_targets=self._isolated_targets)
 
   def compile(self):

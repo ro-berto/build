@@ -126,7 +126,7 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/tools-webrtc/autoroller/roll_deps.py",
+      "[START_DIR]/src/tools_webrtc/autoroller/roll_deps.py",
       "--clean",
       "--verbose"
     ],

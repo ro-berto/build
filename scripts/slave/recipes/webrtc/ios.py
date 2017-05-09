@@ -21,13 +21,13 @@ def RunSteps(api):
   api.webrtc.checkout()
 
   build_config_base_dir = api.path['checkout'].join(
-      'tools-webrtc',
+      'tools_webrtc',
       'ios',
   )
   buildername = api.properties['buildername'].replace(' ', '_')
   api.ios.read_build_config(build_config_base_dir=build_config_base_dir,
                             buildername=buildername)
-  mb_path = api.path['checkout'].join('tools-webrtc', 'mb')
+  mb_path = api.path['checkout'].join('tools_webrtc', 'mb')
   api.ios.build(mb_path=mb_path)
   api.ios.test_swarming()
 

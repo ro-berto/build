@@ -51,7 +51,7 @@ def RunSteps(api):
     # uploading etc. It will also delete any previous roll branch.
     api.python(
         'autoroll DEPS',
-        api.path['checkout'].join('tools-webrtc', 'autoroller', 'roll_deps.py'),
+        api.path['checkout'].join('tools_webrtc', 'autoroller', 'roll_deps.py'),
         ['--clean', '--verbose'],
     )
 
