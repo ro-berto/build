@@ -49,6 +49,7 @@
       "os:Mac",
       "--tag",
       "stepname:base_unittests on Intel GPU on Mac Retina on Mac",
+      "--isolated",
       "ffffffffffffffffffffffffffffffffffffffff",
       "--",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",

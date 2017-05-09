@@ -749,6 +749,7 @@
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
+      "--isolated",
       "[dummy hash for gl_tests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"

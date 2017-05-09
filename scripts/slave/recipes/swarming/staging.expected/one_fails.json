@@ -608,6 +608,7 @@
       "stepname:browser_tests on Ubuntu",
       "--verbose",
       "--idempotent",
+      "--isolated",
       "deadbeef",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"

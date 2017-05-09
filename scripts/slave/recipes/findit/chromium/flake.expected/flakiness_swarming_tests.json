@@ -932,6 +932,7 @@
       "--tag",
       "stepname:browser_tests (r0)",
       "--idempotent",
+      "--isolated",
       "[dummy hash for browser_tests]",
       "--",
       "--gtest_repeat=100",

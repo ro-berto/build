@@ -746,6 +746,7 @@
       "stepname:telemetry_gpu_unittests (with patch)",
       "--user",
       "commit-bot@chromium.org",
+      "--isolated",
       "[dummy hash for telemetry_gpu_unittests]",
       "--",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",

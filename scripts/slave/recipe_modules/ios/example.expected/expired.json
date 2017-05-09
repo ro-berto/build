@@ -514,6 +514,7 @@
       "stepname:fake test (fake device iOS 8.1)",
       "--tag",
       "test:fake test",
+      "--isolated",
       "fake-hash-0"
     ],
     "cwd": "[START_DIR]/src",

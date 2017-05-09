@@ -616,6 +616,7 @@
       "stepname:fake tests (fake device iOS 8.1)",
       "--tag",
       "test:fake tests",
+      "--isolated",
       "fake-hash-0"
     ],
     "cwd": "[BUILDER_CACHE]/ios/src",

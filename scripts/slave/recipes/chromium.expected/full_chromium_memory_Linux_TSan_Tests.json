@@ -379,6 +379,7 @@
       "--tag",
       "tsan:1",
       "--idempotent",
+      "--isolated",
       "ffffffffffffffffffffffffffffffffffffffff",
       "--",
       "--test-launcher-print-test-stdio=always",

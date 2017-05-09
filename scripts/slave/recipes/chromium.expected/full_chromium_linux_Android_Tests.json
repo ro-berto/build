@@ -462,6 +462,7 @@
       "--tag",
       "stepname:browser_tests on Android",
       "--idempotent",
+      "--isolated",
       "ffffffffffffffffffffffffffffffffffffffff",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"

@@ -622,7 +622,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         args.extend(['--cipd-package', '%s:%s:%s' % (path, pkg, version)])
 
     # What isolated command to trigger.
-    args.append(task.isolated_hash)
+    args.extend(('--isolated', task.isolated_hash))
 
     # Additional command line args for isolated command.
     if task.extra_args:

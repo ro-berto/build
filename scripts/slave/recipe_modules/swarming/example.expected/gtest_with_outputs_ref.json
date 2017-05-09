@@ -172,6 +172,7 @@
       "joe",
       "--cipd-package",
       "bin:super/awesome/pkg:git_revision:deadbeef",
+      "--isolated",
       "hash_for_win"
     ],
     "infra_step": true,

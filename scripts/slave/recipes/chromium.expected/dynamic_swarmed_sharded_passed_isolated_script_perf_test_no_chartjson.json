@@ -379,6 +379,7 @@
       "slavename:test_bot",
       "--tag",
       "stepname:benchmark on Intel GPU on Windows on Windows-10-10586",
+      "--isolated",
       "eeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
       "--",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",

@@ -358,6 +358,7 @@
       "slavename:test_bot",
       "--tag",
       "stepname:telemetry_gpu_unittests",
+      "--isolated",
       "eeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
       "--",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",

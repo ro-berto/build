@@ -627,6 +627,7 @@
       "--idempotent",
       "--cipd-package",
       "bin:infra/tools/luci/logdog/butler/${platform}:git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c",
+      "--isolated",
       "[dummy hash for audio_decoder_unittests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
@@ -713,6 +714,7 @@
       "--idempotent",
       "--cipd-package",
       "bin:infra/tools/luci/logdog/butler/${platform}:git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c",
+      "--isolated",
       "[dummy hash for common_audio_unittests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
@@ -799,6 +801,7 @@
       "--idempotent",
       "--cipd-package",
       "bin:infra/tools/luci/logdog/butler/${platform}:git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c",
+      "--isolated",
       "[dummy hash for common_video_unittests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
@@ -885,6 +888,7 @@
       "--idempotent",
       "--cipd-package",
       "bin:infra/tools/luci/logdog/butler/${platform}:git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c",
+      "--isolated",
       "[dummy hash for modules_tests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
@@ -971,6 +975,7 @@
       "--idempotent",
       "--cipd-package",
       "bin:infra/tools/luci/logdog/butler/${platform}:git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c",
+      "--isolated",
       "[dummy hash for modules_unittests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
@@ -1057,6 +1062,7 @@
       "--idempotent",
       "--cipd-package",
       "bin:infra/tools/luci/logdog/butler/${platform}:git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c",
+      "--isolated",
       "[dummy hash for ortc_unittests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
@@ -1143,6 +1149,7 @@
       "--idempotent",
       "--cipd-package",
       "bin:infra/tools/luci/logdog/butler/${platform}:git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c",
+      "--isolated",
       "[dummy hash for peerconnection_unittests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
@@ -1229,6 +1236,7 @@
       "--idempotent",
       "--cipd-package",
       "bin:infra/tools/luci/logdog/butler/${platform}:git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c",
+      "--isolated",
       "[dummy hash for rtc_stats_unittests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
@@ -1315,6 +1323,7 @@
       "--idempotent",
       "--cipd-package",
       "bin:infra/tools/luci/logdog/butler/${platform}:git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c",
+      "--isolated",
       "[dummy hash for rtc_unittests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
@@ -1401,6 +1410,7 @@
       "--idempotent",
       "--cipd-package",
       "bin:infra/tools/luci/logdog/butler/${platform}:git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c",
+      "--isolated",
       "[dummy hash for system_wrappers_unittests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
@@ -1487,6 +1497,7 @@
       "--idempotent",
       "--cipd-package",
       "bin:infra/tools/luci/logdog/butler/${platform}:git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c",
+      "--isolated",
       "[dummy hash for test_support_unittests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
@@ -1573,6 +1584,7 @@
       "--idempotent",
       "--cipd-package",
       "bin:infra/tools/luci/logdog/butler/${platform}:git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c",
+      "--isolated",
       "[dummy hash for tools_unittests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
@@ -1659,6 +1671,7 @@
       "--idempotent",
       "--cipd-package",
       "bin:infra/tools/luci/logdog/butler/${platform}:git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c",
+      "--isolated",
       "[dummy hash for video_engine_tests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
@@ -1745,6 +1758,7 @@
       "--idempotent",
       "--cipd-package",
       "bin:infra/tools/luci/logdog/butler/${platform}:git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c",
+      "--isolated",
       "[dummy hash for voice_engine_unittests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
@@ -1831,6 +1845,7 @@
       "--idempotent",
       "--cipd-package",
       "bin:infra/tools/luci/logdog/butler/${platform}:git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c",
+      "--isolated",
       "[dummy hash for webrtc_nonparallel_tests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
@@ -1917,6 +1932,7 @@
       "--idempotent",
       "--cipd-package",
       "bin:infra/tools/luci/logdog/butler/${platform}:git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c",
+      "--isolated",
       "[dummy hash for AppRTCMobileTest]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
@@ -2003,6 +2019,7 @@
       "--idempotent",
       "--cipd-package",
       "bin:infra/tools/luci/logdog/butler/${platform}:git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c",
+      "--isolated",
       "[dummy hash for libjingle_peerconnection_android_unittest]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
@@ -2087,6 +2104,7 @@
       "--tag",
       "stepname:android_junit_tests on Android",
       "--idempotent",
+      "--isolated",
       "[dummy hash for android_junit_tests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"

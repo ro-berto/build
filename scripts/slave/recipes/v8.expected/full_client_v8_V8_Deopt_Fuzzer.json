@@ -164,6 +164,7 @@
       "--tag",
       "stepname:Deopt Fuzz",
       "--idempotent",
+      "--isolated",
       "[dummy hash for run-deopt-fuzzer]",
       "--",
       "--mode",

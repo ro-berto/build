@@ -164,6 +164,7 @@
       "--tag",
       "stepname:Fuzz",
       "--idempotent",
+      "--isolated",
       "[dummy hash for jsfunfuzz]",
       "--",
       "out/Debug/d8",

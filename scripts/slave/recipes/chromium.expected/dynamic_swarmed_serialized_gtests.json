@@ -368,6 +368,7 @@
       "--tag",
       "stepname:base_unittests on NVIDIA GPU on Linux",
       "--idempotent",
+      "--isolated",
       "eeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
@@ -586,6 +587,7 @@
       "--tag",
       "stepname:browser_tests on NVIDIA GPU on Linux",
       "--idempotent",
+      "--isolated",
       "ffffffffffffffffffffffffffffff",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"

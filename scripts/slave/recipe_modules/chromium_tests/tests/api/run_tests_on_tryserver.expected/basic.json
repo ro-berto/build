@@ -288,6 +288,7 @@
       "slavename:test_bot",
       "--tag",
       "stepname:base_unittests (with patch)",
+      "--isolated",
       "ffffffffffffffffffffffffffffffffffffffff",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
@@ -965,6 +966,7 @@
       "slavename:test_bot",
       "--tag",
       "stepname:base_unittests (without patch)",
+      "--isolated",
       "ffffffffffffffffffffffffffffffffffffffff",
       "--",
       "--gtest_filter=Test.Two",

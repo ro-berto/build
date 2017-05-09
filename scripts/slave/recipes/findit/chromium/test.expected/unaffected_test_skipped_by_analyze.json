@@ -1057,6 +1057,7 @@
       "--tag",
       "stepname:affected_tests (r1)",
       "--idempotent",
+      "--isolated",
       "[dummy hash for affected_tests]",
       "--",
       "--gtest_repeat=20",

@@ -1305,6 +1305,7 @@
       "stepname:fake test 1 (fake device 1 iOS 8.1)",
       "--tag",
       "test:fake test 1",
+      "--isolated",
       "fake-hash-0"
     ],
     "cwd": "[START_DIR]/src",
@@ -1389,6 +1390,7 @@
       "stepname:fake included test 1 (fake device 1 iOS 8.1)",
       "--tag",
       "test:fake included test 1",
+      "--isolated",
       "fake-hash-1"
     ],
     "cwd": "[START_DIR]/src",
@@ -1473,6 +1475,7 @@
       "stepname:fake included test 2 (fake device 1 iOS 8.1)",
       "--tag",
       "test:fake included test 2",
+      "--isolated",
       "fake-hash-2"
     ],
     "cwd": "[START_DIR]/src",
@@ -1557,6 +1560,7 @@
       "stepname:fake test 2 (fake device 2 iOS 7.1)",
       "--tag",
       "test:fake test 2",
+      "--isolated",
       "fake-hash-3"
     ],
     "cwd": "[START_DIR]/src",
@@ -1641,6 +1645,7 @@
       "stepname:fake included test 1 (fake device 2 iOS 7.1)",
       "--tag",
       "test:fake included test 1",
+      "--isolated",
       "fake-hash-4"
     ],
     "cwd": "[START_DIR]/src",
@@ -1725,6 +1730,7 @@
       "stepname:fake included test 2 (fake device 2 iOS 7.1)",
       "--tag",
       "test:fake included test 2",
+      "--isolated",
       "fake-hash-5"
     ],
     "cwd": "[START_DIR]/src",

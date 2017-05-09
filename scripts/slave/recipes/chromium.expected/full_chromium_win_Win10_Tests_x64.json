@@ -387,6 +387,7 @@
       "--tag",
       "stepname:browser_tests on Windows-10-10586",
       "--idempotent",
+      "--isolated",
       "ffffffffffffffffffffffffffffffffffffffff",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"

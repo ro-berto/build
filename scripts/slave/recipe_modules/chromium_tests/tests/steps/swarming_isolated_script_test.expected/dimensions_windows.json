@@ -46,6 +46,7 @@
       "os:Windows",
       "--tag",
       "stepname:base_unittests on Intel GPU on Windows on Windows",
+      "--isolated",
       "ffffffffffffffffffffffffffffffffffffffff",
       "--",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",

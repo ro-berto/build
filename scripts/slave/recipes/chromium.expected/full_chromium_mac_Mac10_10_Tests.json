@@ -380,6 +380,7 @@
       "--tag",
       "stepname:browser_tests on Mac-10.10",
       "--idempotent",
+      "--isolated",
       "ffffffffffffffffffffffffffffffffffffffff",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"

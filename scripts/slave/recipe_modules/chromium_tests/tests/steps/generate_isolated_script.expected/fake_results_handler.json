@@ -140,6 +140,7 @@
       "os:Ubuntu-14.04",
       "--tag",
       "stepname:base_unittests",
+      "--isolated",
       "ffffffffffffffffffffffffffffffffffffffff",
       "--",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",

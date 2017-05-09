@@ -164,6 +164,7 @@
       "--tag",
       "stepname:Mjsunit",
       "--idempotent",
+      "--isolated",
       "[dummy hash for mjsunit]",
       "--",
       "--progress=verbose",

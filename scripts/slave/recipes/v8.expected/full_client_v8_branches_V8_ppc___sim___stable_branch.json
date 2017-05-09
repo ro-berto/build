@@ -570,6 +570,7 @@
       "--tag",
       "stepname:Unittests",
       "--idempotent",
+      "--isolated",
       "[dummy hash for unittests]",
       "--",
       "--progress=verbose",

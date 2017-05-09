@@ -381,6 +381,7 @@
       "--tag",
       "stepname:browser_tests",
       "--idempotent",
+      "--isolated",
       "ffffffffffffffffffffffffffffffffffffffff",
       "--",
       "--test-launcher-print-test-stdio=always",

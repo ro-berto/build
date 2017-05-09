@@ -947,6 +947,7 @@
       "--tag",
       "stepname:gl_tests (r1)",
       "--idempotent",
+      "--isolated",
       "[dummy hash for gl_tests]",
       "--",
       "--gtest_repeat=20",

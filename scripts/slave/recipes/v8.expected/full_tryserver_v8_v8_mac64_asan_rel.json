@@ -609,6 +609,7 @@
       "--idempotent",
       "--user",
       "commit-bot@chromium.org",
+      "--isolated",
       "[dummy hash for bot_default]",
       "--",
       "--progress=verbose",

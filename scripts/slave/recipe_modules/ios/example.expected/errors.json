@@ -633,6 +633,7 @@
       "stepname:fake test 2 (iPad Air iOS 8.1) on iOS-8.1",
       "--tag",
       "test:fake test 2",
+      "--isolated",
       "fake-hash-1"
     ],
     "cwd": "[START_DIR]/src",
@@ -737,6 +738,7 @@
       "stepname:fake test 4 (iPhone 5s iOS 8.1) on iOS-8.1",
       "--tag",
       "test:fake test 4",
+      "--isolated",
       "fake-hash-3"
     ],
     "cwd": "[START_DIR]/src",

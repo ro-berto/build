@@ -717,6 +717,7 @@
       "stepname:fake tests 1 (fake device iOS 8.0)",
       "--tag",
       "test:fake tests 1",
+      "--isolated",
       "fake-hash-0"
     ],
     "cwd": "[BUILDER_CACHE]/ios/src",
@@ -801,6 +802,7 @@
       "stepname:fake tests 2 (fake device iOS 7.1)",
       "--tag",
       "test:fake tests 2",
+      "--isolated",
       "fake-hash-1"
     ],
     "cwd": "[BUILDER_CACHE]/ios/src",
@@ -885,6 +887,7 @@
       "stepname:fake_eg_test_host (fake device 3 iOS 9.3)",
       "--tag",
       "test:fake_eg_test_host",
+      "--isolated",
       "fake-hash-2"
     ],
     "cwd": "[BUILDER_CACHE]/ios/src",

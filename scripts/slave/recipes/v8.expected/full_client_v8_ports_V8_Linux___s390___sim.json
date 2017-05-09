@@ -569,6 +569,7 @@
       "--tag",
       "stepname:Check",
       "--idempotent",
+      "--isolated",
       "[dummy hash for bot_default]",
       "--",
       "--progress=verbose",

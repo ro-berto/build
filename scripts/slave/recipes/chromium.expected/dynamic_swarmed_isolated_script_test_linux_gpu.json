@@ -364,6 +364,7 @@
       "slavename:test_bot",
       "--tag",
       "stepname:telemetry_gpu_unittests on NVIDIA GPU on Linux",
+      "--isolated",
       "eeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
       "--",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",

@@ -46,6 +46,7 @@
       "os:Ubuntu-14.04",
       "--tag",
       "stepname:base_unittests",
+      "--isolated",
       "ffffffffffffffffffffffffffffffffffffffff",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
