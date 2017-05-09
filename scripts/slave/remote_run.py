@@ -59,15 +59,7 @@ _KITCHEN_CONFIG = {
   ## Not whitelisted b/c of recipe roller, see: crbug.com/703352
   #'internal.infra.cron': _ALL_BUILDERS,
 
-  'chromium.fyi': KitchenConfig(
-      builders=set((
-        'Site Isolation Linux',
-        'Site Isolation Android',
-        'Site Isolation Win',
-      )),
-      is_blacklist=False,
-  ),
-
+  'chromium.fyi': _ALL_BUILDERS,
   'chromium.swarm': _ALL_BUILDERS,
 }
 
