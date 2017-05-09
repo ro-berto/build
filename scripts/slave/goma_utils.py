@@ -208,6 +208,7 @@ def UploadGomaCompilerProxyInfo(override_gsutil=None,
           metadata=metadata,
           override_gsutil=override_gsutil)
 
+  return viewer_url
 
 def UploadNinjaLog(
     outdir, compiler, command, exit_status, override_gsutil=None):
@@ -266,6 +267,7 @@ def UploadNinjaLog(
   viewer_url = 'http://chromium-build-stats.appspot.com/ninja_log/' + log_path
   print 'Visualization at %s' % viewer_url
 
+  return viewer_url
 
 def IsCompilerProxyKilledByFatalError():
   """Returns true if goma compiler_proxy is killed by CHECK or LOG(FATAL)."""

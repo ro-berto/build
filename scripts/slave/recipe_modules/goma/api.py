@@ -325,8 +325,13 @@ class GomaApi(recipe_api.RecipeApi):
 
     args = [
         '--upload-compiler-proxy-info',
+        '--log-url-json-file', self.m.json.output(),
         '--gsutil-py-path', self.m.depot_tools.gsutil_py_path,
     ]
+
+    json_test_data = {
+      'compiler_proxy_log': 'http://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log.INFO.20170329-222936.4420.gz'
+    }
 
     assert self._goma_jsonstatus_called
     args.extend(['--json-status', self.json_path])
@@ -338,6 +343,7 @@ class GomaApi(recipe_api.RecipeApi):
           '--ninja-log-outdir', ninja_log_outdir,
           '--ninja-log-command', str(ninja_log_command)
       ])
+      json_test_data['ninja_log'] = 'http://chromium-build-stats.appspot.com/ninja_log/2017/03/30/build11-m1/ninja_log.build11-m1.chrome-bot.20170329-224321.9976.gz'
 
     if ninja_log_exit_status is not None:
       args.extend(['--ninja-log-exit-status', ninja_log_exit_status])
@@ -371,17 +377,11 @@ class GomaApi(recipe_api.RecipeApi):
       script=self.package_repo_resource('scripts', 'slave',
                                         'upload_goma_logs.py'),
       args=args,
-      stdout=self.m.raw_io.output_text(),
-      step_test_data=(
-          lambda: self.m.raw_io.test_api.stream_output(
-              """Visualization at http://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log.INFO.20170329-222936.4420.gz
-Visualization at http://chromium-build-stats.appspot.com/ninja_log/2017/03/30/build11-m1/ninja_log.build11-m1.chrome-bot.20170329-224321.9976.gz""")))
+      step_test_data=(lambda: self.m.json.test_api.output(json_test_data)))
 
-    for url in re.findall(r"Visualization at (.*)", result.stdout):
-      if 'ninja_log' in url:
-        result.presentation.links['ninja_log'] = url
-      elif 'compiler_proxy_log' in url:
-        result.presentation.links['compiler_proxy_log'] = url
+    for log in ('compiler_proxy_log', 'ninja_log'):
+      if log in result.json.output:
+        result.presentation.links[log] = result.json.output[log]
 
   def build_with_goma(self, ninja_command, name=None, ninja_log_outdir=None,
                       ninja_log_compiler=None, goma_env=None, ninja_env=None,

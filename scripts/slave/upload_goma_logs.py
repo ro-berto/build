@@ -6,6 +6,7 @@
 """upload goma related logs."""
 
 import argparse
+import json
 import os
 import sys
 
@@ -18,6 +19,9 @@ def main():
                       action='store_true',
                       help='If set, the script will upload the latest '
                       'compiler_proxy.INFO.')
+  parser.add_argument('--log-url-json-file',
+                      help='If set, the script will write url of uploaded '
+                      'log visualizer.')
   parser.add_argument('--ninja-log-outdir',
                       metavar='DIR',
                       help='Directory that has .ninja_log file.')
@@ -77,23 +81,33 @@ def main():
     # Needs to add '--', otherwise gsutil options will be passed to gsutil.py.
     override_gsutil = [sys.executable, args.gsutil_py_path, '--']
 
+  viewer_urls = {}
+
   if args.upload_compiler_proxy_info:
-    goma_utils.UploadGomaCompilerProxyInfo(
+    viewer_url = goma_utils.UploadGomaCompilerProxyInfo(
         builder=args.buildbot_buildername,
         master=args.buildbot_mastername,
         slave=args.buildbot_slavename,
         clobber=args.buildbot_clobber,
         override_gsutil=override_gsutil
     )
+    if viewer_url is not None:
+      viewer_urls['compiler_proxy_log'] = viewer_url
 
   if args.ninja_log_outdir:
-    goma_utils.UploadNinjaLog(
+    viewer_url = goma_utils.UploadNinjaLog(
         args.ninja_log_outdir,
         args.ninja_log_compiler,
         args.ninja_log_command,
         args.ninja_log_exit_status,
         override_gsutil=override_gsutil
     )
+    if viewer_url is not None:
+      viewer_urls['ninja_log'] = viewer_url
+
+  if args.log_url_json_file:
+    with open(args.log_url_json_file, 'w') as f:
+      f.write(json.dumps(viewer_urls))
 
   if args.goma_stats_file:
     # MakeGomaExitStatusCounter should be callbed before
