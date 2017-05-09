@@ -164,12 +164,26 @@
   },
   {
     "cmd": [
-      "[START_DIR]/src/buildtools/linux64/gn",
+      "python",
+      "-u",
+      "[START_DIR]/src/tools/mb/mb.py",
       "gen",
-      "[START_DIR]/src/out/Debug",
-      "--args=is_clang=true is_component_build=true is_debug=true symbol_level=1 target_cpu=\"x64\" target_os=\"chromeos\" use_ozone=true use_goma=true goma_dir=\"[CACHE]/goma_client\""
+      "-m",
+      "chromium.infra.codesearch",
+      "-b",
+      "codesearch-gen-chromium-chromiumos",
+      "--config-file",
+      "[START_DIR]/src/tools/mb/mb_config.pyl",
+      "--phase",
+      "chromeos",
+      "--goma-dir",
+      "[CACHE]/goma_client",
+      "[START_DIR]/src/out/Debug"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "generate build files for chromeos"
   },
   {

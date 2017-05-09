@@ -46,27 +46,6 @@ GENERATED_REPO = '%s/chromium/src/out' % CHROMIUM_GIT_URL
 GENERATED_AUTHOR_EMAIL = 'git-generated-files-sync@chromium.org'
 GENERATED_AUTHOR_NAME = 'Automatic Generated Files Sync'
 
-BASE_GN_ARGS = [
-  'is_clang=true',
-  'is_component_build=true',
-  'is_debug=true',
-  'symbol_level=1',
-]
-
-LINUX_GN_ARGS = BASE_GN_ARGS + [
-  'target_cpu="x64"',
-]
-
-CHROMEOS_GN_ARGS = LINUX_GN_ARGS + [
-  'target_os="chromeos"',
-  'use_ozone=true',
-]
-
-ANDROID_GN_ARGS = BASE_GN_ARGS + [
-  'target_cpu="arm"',
-  'target_os="android"',
-]
-
 SPEC = freeze({
   # The builders have the following parameters:
   # - compile_targets: the compile targets.
@@ -144,21 +123,14 @@ SPEC = freeze({
 })
 
 def GenerateCompilationDatabase(api, debug_path, targets, platform):
-  # TODO(akuegel): If we ever build on Windows or Mac, this needs to be
-  # adjusted.
-  gn_path = api.path['checkout'].join('buildtools', 'linux64', 'gn')
-  if platform == 'linux':
-    args = LINUX_GN_ARGS
-  elif platform == 'chromeos':
-    args = CHROMEOS_GN_ARGS
-  elif platform == 'android':
-    args = ANDROID_GN_ARGS
+  mastername = api.properties.get('mastername')
+  buildername = api.properties.get('buildername')
+  api.chromium.run_mb(mastername,
+                      buildername,
+                      build_dir=debug_path,
+                      phase=platform,
+                      name='generate build files for %s' % platform)
 
-  args.extend(['use_goma=true',
-               'goma_dir="%s"' % api.goma.goma_dir])
-  command = [gn_path, 'gen', debug_path, '--args=%s' % ' '.join(args)]
-  with api.step.context({'cwd': api.path['checkout']}):
-    api.step('generate build files for %s' % platform, command)
   command = ['ninja', '-C', debug_path] + list(targets)
   # Add the parameters for creating the compilation database.
   command += ['-t', 'compdb', 'cc', 'cxx', 'objc', 'objcxx']
@@ -239,7 +211,7 @@ def RunSteps(api):
     result = GenerateCompilationDatabase(api, debug_path, targets, 'linux')
     api.python('Filter out duplicate compilation units',
                api.package_repo_resource('scripts', 'slave', 'chromium',
-                                      'filter_compilations.py'),
+                                         'filter_compilations.py'),
                ['--compdb-input', debug_path.join('compile_commands.json'),
                 '--compdb-filter', api.raw_io.input_text(data=result.stdout),
                 '--compdb-output', debug_path.join('compile_commands.json')])
