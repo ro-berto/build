@@ -288,7 +288,10 @@ class RemoteRunExecTest(unittest.TestCase):
     kitchen_args = self.kitchen_args + [
         '-revision', 'refs/heads/somebranch',
     ]
-    remote_run._call.assert_called_once_with(kitchen_args, env=os.environ)
+    kitchen_env = os.environ.copy()
+    kitchen_env.pop('PYTHONPATH', None)
+
+    remote_run._call.assert_called_once_with(kitchen_args, env=kitchen_env)
 
   @mock.patch('slave.logdog_bootstrap.bootstrap',
               side_effect=logdog_bootstrap.NotBootstrapped())
@@ -439,8 +442,10 @@ class RemoteRunExecTest(unittest.TestCase):
         '-logdog-tag', 'foo=bar',
         '-logdog-tag', 'baz',
     ]
+    kitchen_env = os.environ.copy()
+    kitchen_env.pop('PYTHONPATH', None)
 
-    remote_run._call.assert_called_once_with(kitchen_args, env=os.environ)
+    remote_run._call.assert_called_once_with(kitchen_args, env=kitchen_env)
     self.assertEqual(
         [l for l in self.stream_output.getvalue().splitlines() if l],
         [

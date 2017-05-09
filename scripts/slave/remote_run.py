@@ -95,7 +95,7 @@ CipdPins = collections.namedtuple('CipdPins', ('recipes', 'kitchen'))
 # Stable CIPD pin set.
 _STABLE_CIPD_PINS = CipdPins(
       recipes='git_revision:e77477ba61ef082e2e34d58fd1251a1cb707f698',
-      kitchen='git_revision:407254b0dfe2b0866b8ddda43a3aec6a0e6bd404')
+      kitchen='git_revision:90f1017bf26434387f2a3b7af2bbeb7f18bcf3fb')
 
 # Canary CIPD pin set.
 _CANARY_CIPD_PINS = CipdPins(
@@ -310,10 +310,8 @@ def _remote_run_with_kitchen(args, stream, is_canary, kitchen_version,
     LOGGER.info('Not configured to use LogDog: %s', e)
 
   # Remove PYTHNONPATH, since Kitchen will re-establish its own hermetic path.
-  # TODO(dnj): Make this happen all the time after this passes canary.
   kitchen_env = os.environ.copy()
-  if is_canary:
-    kitchen_env.pop('PYTHONPATH', None)
+  kitchen_env.pop('PYTHONPATH', None)
 
   # Invoke Kitchen, capture its return code.
   return_code = _call(kitchen_cmd, env=kitchen_env)
