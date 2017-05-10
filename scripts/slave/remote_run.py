@@ -69,6 +69,10 @@ _CANARY_MASTERS = set((
   'chromium.infra.cron',
   'internal.infra',
   'internal.infra.cron',
+
+  # Volunteered by bpastene@ as a generically representative waterfall that is
+  # not a big deal if it breaks.
+  'chromium.swarm',
 ))
 
 # The name of the recipe engine CIPD package.
@@ -87,7 +91,7 @@ CipdPins = collections.namedtuple('CipdPins', ('recipes', 'kitchen'))
 # Stable CIPD pin set.
 _STABLE_CIPD_PINS = CipdPins(
       recipes='git_revision:e77477ba61ef082e2e34d58fd1251a1cb707f698',
-      kitchen='git_revision:90f1017bf26434387f2a3b7af2bbeb7f18bcf3fb')
+      kitchen='git_revision:626f893e5822aa2fbea113c0c2e023f2a601c463')
 
 # Canary CIPD pin set.
 _CANARY_CIPD_PINS = CipdPins(
