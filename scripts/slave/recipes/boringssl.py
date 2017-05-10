@@ -79,7 +79,8 @@ def _GetTargetCMakeArgs(buildername, checkout, ninja_path):
     _AppendFlags(args, 'CMAKE_ASM_FLAGS', '-m32 -msse2')
   if _HasToken(buildername, 'noasm'):
     args['OPENSSL_NO_ASM'] = '1'
-  if _HasToken(buildername, 'asan') or _HasToken(buildername, 'clang'):
+  if _HasToken(buildername, 'asan') or _HasToken(buildername, 'clang') or \
+     _HasToken(buildername, 'fuzz'):
     args['CMAKE_C_COMPILER'] = bot_utils.join('llvm-build', 'bin', 'clang')
     args['CMAKE_CXX_COMPILER'] = bot_utils.join('llvm-build', 'bin', 'clang++')
   if _HasToken(buildername, 'asan'):
@@ -102,6 +103,14 @@ def _GetTargetCMakeArgs(buildername, checkout, ninja_path):
       args['ANDROID_NATIVE_API_LEVEL'] = 21
   if _HasToken(buildername, 'fips'):
     args['FIPS'] = '1'
+  if _HasToken(buildername, 'ios'):
+    args['CMAKE_OSX_SYSROOT'] = 'iphoneos'
+    args['CMAKE_OSX_ARCHITECTURES'] = 'armv7'
+  if _HasToken(buildername, 'ios64'):
+    args['CMAKE_OSX_SYSROOT'] = 'iphoneos'
+    args['CMAKE_OSX_ARCHITECTURES'] = 'arm64'
+  if _HasToken(buildername, 'fuzz'):
+    args['FUZZ'] = '1'
   return args
 
 
@@ -178,6 +187,9 @@ def RunSteps(api, buildername):
   api.python('ninja', go_env,
              msvc_prefix + [api.depot_tools.ninja_path, '-C', build_dir])
 
+  if _HasToken(buildername, 'compile'):
+    return
+
   with api.step.defer_results():
     env = _GetTargetEnv(buildername, bot_utils)
 
@@ -232,6 +244,7 @@ def GenTests(api):
     ('linux_rel', api.platform('linux', 64)),
     ('linux32_rel', api.platform('linux', 64)),
     ('linux_clang_rel', api.platform('linux', 64)),
+    ('linux_fuzz', api.platform('linux', 64)),
     ('linux_fips', api.platform('linux', 64)),
     ('linux_fips_rel', api.platform('linux', 64)),
     ('linux_fips_clang', api.platform('linux', 64)),
@@ -264,6 +277,18 @@ def GenTests(api):
                              api.test_utils.canned_test_output(True)) +
       api.override_step_data('ssl tests',
                              api.test_utils.canned_test_output(True))
+    )
+
+  compile_only_tests = [
+    ('ios_compile', api.platform('mac', 64)),
+    ('ios64_compile', api.platform('mac', 64)),
+  ]
+  for (buildername, host_platform) in compile_only_tests:
+    yield (
+      api.test(buildername) +
+      host_platform +
+      api.properties.generic(mastername='client.boringssl',
+                             buildername=buildername, bot_id='bot_id')
     )
 
   yield (
