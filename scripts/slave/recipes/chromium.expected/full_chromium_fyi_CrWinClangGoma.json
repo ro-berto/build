@@ -590,7 +590,6 @@
       "--build-dir",
       "[BUILDER_CACHE]\\CrWinClangGoma\\src\\out\\Release"
     ],
-    "cwd": "[START_DIR]",
     "name": "remove_build_metadata"
   },
   {

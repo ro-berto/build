@@ -862,7 +862,6 @@
       "--build-dir",
       "[BUILDER_CACHE]\\win\\src\\out\\Release"
     ],
-    "cwd": "[START_DIR]",
     "name": "test r1.remove_build_metadata",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1016,7 +1015,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -1712,7 +1710,6 @@
       "--build-dir",
       "[BUILDER_CACHE]\\win\\src\\out\\Release"
     ],
-    "cwd": "[START_DIR]",
     "name": "test r0.remove_build_metadata",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1866,7 +1863,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },

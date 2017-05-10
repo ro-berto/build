@@ -97,7 +97,6 @@
       "--remote-version=4",
       "xxx-fakeboard-fakebuild"
     ],
-    "cwd": "[START_DIR]",
     "name": "cbuildbot [xxx-fakeboard-fakebuild]"
   },
   {

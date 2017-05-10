@@ -470,7 +470,6 @@
       "--build-dir",
       "[START_DIR]/src/out/Release"
     ],
-    "cwd": "[START_DIR]",
     "name": "remove_build_metadata",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
@@ -833,7 +832,6 @@
       "--build-dir",
       "[START_DIR]/src/out/Release"
     ],
-    "cwd": "[START_DIR]",
     "name": "remove_build_metadata (2)"
   },
   {
@@ -904,7 +902,6 @@
       "--json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "compare_build_artifacts",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",

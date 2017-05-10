@@ -98,7 +98,6 @@
       "--branch=release-R00-0000.B",
       "x86-generic-full"
     ],
-    "cwd": "[START_DIR]",
     "name": "cbuildbot [x86-generic-full]"
   },
   {

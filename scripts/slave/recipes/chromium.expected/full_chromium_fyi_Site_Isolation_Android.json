@@ -584,7 +584,6 @@
       "--build-dir",
       "[BUILDER_CACHE]/Site_Isolation_Android/src/out/Release"
     ],
-    "cwd": "[START_DIR]",
     "name": "remove_build_metadata"
   },
   {

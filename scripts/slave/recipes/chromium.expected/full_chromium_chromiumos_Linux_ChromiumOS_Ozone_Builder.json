@@ -567,7 +567,6 @@
       "--build-dir",
       "[BUILDER_CACHE]/linux_chromeos/src/out/Release"
     ],
-    "cwd": "[START_DIR]",
     "name": "remove_build_metadata"
   },
   {

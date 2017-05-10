@@ -564,7 +564,6 @@
       "--build-dir",
       "[BUILDER_CACHE]/WebKit_Linux___RandomOrder/src/out/Release"
     ],
-    "cwd": "[START_DIR]",
     "name": "remove_build_metadata"
   },
   {

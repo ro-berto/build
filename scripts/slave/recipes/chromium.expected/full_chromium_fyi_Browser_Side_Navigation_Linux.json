@@ -546,7 +546,6 @@
       "--build-dir",
       "[BUILDER_CACHE]/Browser_Side_Navigation_Linux/src/out/Release"
     ],
-    "cwd": "[START_DIR]",
     "name": "remove_build_metadata"
   },
   {

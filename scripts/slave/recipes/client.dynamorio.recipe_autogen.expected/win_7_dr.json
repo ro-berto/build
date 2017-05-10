@@ -54,7 +54,6 @@
       "perl",
       "[START_DIR]/dynamorio/suite/runsuite_wrapper.pl"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "BOTTOOLS": "[START_DIR]/dynamorio/tools/buildbot/bot_tools"
     },

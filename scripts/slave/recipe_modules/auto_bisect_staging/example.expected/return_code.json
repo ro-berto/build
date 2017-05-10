@@ -17,7 +17,6 @@
       "--revision",
       "src@HEAD"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
@@ -107,7 +106,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "validate"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -233,12 +231,10 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]",
     "name": "***BISECT***"
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]",
     "name": "Clearing results directory"
   },
   {
@@ -249,7 +245,6 @@
       "rmtree",
       "[START_DIR]/bisect_results"
     ],
-    "cwd": "[START_DIR]",
     "infra_step": true,
     "name": "Clearing results directory.rmtree old results directory",
     "~followup_annotations": [
@@ -264,7 +259,6 @@
       "[START_DIR]/bisect_results",
       "511"
     ],
-    "cwd": "[START_DIR]",
     "name": "Clearing results directory.makedirs new results directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -303,7 +297,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]",
     "name": "config",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@Bisect job configuration@{@@@",
@@ -325,7 +318,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]",
     "name": "Expanding reference range",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Range: 0a1b2c3d4f0a1b2c3d4f0a1b2c3d4f0a1b2c3d4f:00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111 (2 commits)<br/>@@@",
@@ -352,7 +344,6 @@
       "--attempts",
       "3"
     ],
-    "cwd": "[START_DIR]",
     "name": "Expanding reference range.crrev get commit hash for refs/heads/master@{#314017}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -374,7 +365,6 @@
       "--attempts",
       "3"
     ],
-    "cwd": "[START_DIR]",
     "name": "Expanding reference range.crrev get commit hash for refs/heads/master@{#314014}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -394,7 +384,6 @@
       "--commit",
       "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111"
     ],
-    "cwd": "[START_DIR]",
     "name": "Expanding reference range.fetch file 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111:DEPS",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -410,7 +399,6 @@
       "--commit",
       "0a1b2c3d4f0a1b2c3d4f0a1b2c3d4f0a1b2c3d4f"
     ],
-    "cwd": "[START_DIR]",
     "name": "Expanding reference range.fetch file 0a1b2c3d4f0a1b2c3d4f0a1b2c3d4f0a1b2c3d4f:DEPS",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -426,7 +414,6 @@
       "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
       "https://chromium.googlesource.com/chromium/src"
     ],
-    "cwd": "[START_DIR]",
     "name": "Expanding reference range.for revisions 0a1b2c3d4f0a1b2c3d4f0a1b2c3d4f0a1b2c3d4f:00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -450,7 +437,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]",
     "name": "Gathering reference values"
   },
   {
@@ -464,7 +450,6 @@
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_0a1b2c3d4f0a1b2c3d4f0a1b2c3d4f0a1b2c3d4f.zip"
     ],
-    "cwd": "[START_DIR]",
     "infra_step": true,
     "name": "Gathering reference values.gsutil ls",
     "~followup_annotations": [
@@ -489,7 +474,6 @@
       "--revision",
       "src@0a1b2c3d4f0a1b2c3d4f0a1b2c3d4f0a1b2c3d4f"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
@@ -581,7 +565,6 @@
       "rmtree",
       "[START_DIR]/src/out/Release"
     ],
-    "cwd": "[START_DIR]",
     "infra_step": true,
     "name": "Gathering reference values.rmtree build directory",
     "~followup_annotations": [
@@ -612,7 +595,6 @@
       "--build-number",
       "571"
     ],
-    "cwd": "[START_DIR]",
     "infra_step": true,
     "name": "Gathering reference values.extract build",
     "~followup_annotations": [
@@ -621,7 +603,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -638,7 +619,6 @@
       "[START_DIR]/bisect_results/dummy",
       "511"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -689,7 +669,6 @@
       "smoothness.tough_scrolling_cases",
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -710,7 +689,6 @@
       "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -727,7 +705,6 @@
       "[START_DIR]/bisect_results/dummy",
       "511"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -778,7 +755,6 @@
       "smoothness.tough_scrolling_cases",
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -799,7 +775,6 @@
       "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -816,7 +791,6 @@
       "[START_DIR]/bisect_results/dummy",
       "511"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -867,7 +841,6 @@
       "smoothness.tough_scrolling_cases",
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -888,7 +861,6 @@
       "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -905,7 +877,6 @@
       "[START_DIR]/bisect_results/dummy",
       "511"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -956,7 +927,6 @@
       "smoothness.tough_scrolling_cases",
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -977,7 +947,6 @@
       "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -994,7 +963,6 @@
       "[START_DIR]/bisect_results/dummy",
       "511"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1045,7 +1013,6 @@
       "smoothness.tough_scrolling_cases",
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -1066,7 +1033,6 @@
       "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1083,7 +1049,6 @@
       "[START_DIR]/bisect_results/dummy",
       "511"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1134,7 +1099,6 @@
       "smoothness.tough_scrolling_cases",
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -1155,7 +1119,6 @@
       "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1175,7 +1138,6 @@
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111.zip"
     ],
-    "cwd": "[START_DIR]",
     "infra_step": true,
     "name": "Gathering reference values.gsutil ls (2)",
     "~followup_annotations": [
@@ -1200,7 +1162,6 @@
       "--revision",
       "src@00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
@@ -1292,7 +1253,6 @@
       "rmtree",
       "[START_DIR]/src/out/Release"
     ],
-    "cwd": "[START_DIR]",
     "infra_step": true,
     "name": "Gathering reference values.rmtree build directory (2)",
     "~followup_annotations": [
@@ -1323,7 +1283,6 @@
       "--build-number",
       "571"
     ],
-    "cwd": "[START_DIR]",
     "infra_step": true,
     "name": "Gathering reference values.extract build (2)",
     "~followup_annotations": [
@@ -1332,7 +1291,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1349,7 +1307,6 @@
       "[START_DIR]/bisect_results/dummy",
       "511"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1400,7 +1357,6 @@
       "smoothness.tough_scrolling_cases",
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -1423,7 +1379,6 @@
       "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1440,7 +1395,6 @@
       "[START_DIR]/bisect_results/dummy",
       "511"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1491,7 +1445,6 @@
       "smoothness.tough_scrolling_cases",
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -1514,7 +1467,6 @@
       "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1531,7 +1483,6 @@
       "[START_DIR]/bisect_results/dummy",
       "511"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1582,7 +1533,6 @@
       "smoothness.tough_scrolling_cases",
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -1605,7 +1555,6 @@
       "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1622,7 +1571,6 @@
       "[START_DIR]/bisect_results/dummy",
       "511"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1673,7 +1621,6 @@
       "smoothness.tough_scrolling_cases",
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -1696,7 +1643,6 @@
       "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1713,7 +1659,6 @@
       "[START_DIR]/bisect_results/dummy",
       "511"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1764,7 +1709,6 @@
       "smoothness.tough_scrolling_cases",
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -1787,7 +1731,6 @@
       "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1804,7 +1747,6 @@
       "[START_DIR]/bisect_results/dummy",
       "511"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1855,7 +1797,6 @@
       "smoothness.tough_scrolling_cases",
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -1876,7 +1817,6 @@
       "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1887,7 +1827,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]",
     "name": "Bisecting revision",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Revision: chromium@dcdcdc0ff1<br/>@@@"
@@ -1910,7 +1849,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]",
     "name": "Bisecting revision.Wiggling revision chromium@dcdcdc0ff1",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1972,7 +1910,6 @@
       "-o",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "Bisecting revision.Post bisect results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2057,7 +1994,6 @@
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
     ],
-    "cwd": "[START_DIR]",
     "infra_step": true,
     "name": "Bisecting revision.gsutil ls",
     "~followup_annotations": [
@@ -2082,7 +2018,6 @@
       "--revision",
       "src@dcdcdc0ff1122212323134879ddceeb1240b0988"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
@@ -2174,7 +2109,6 @@
       "rmtree",
       "[START_DIR]/src/out/Release"
     ],
-    "cwd": "[START_DIR]",
     "infra_step": true,
     "name": "Bisecting revision.rmtree build directory",
     "~followup_annotations": [
@@ -2205,7 +2139,6 @@
       "--build-number",
       "571"
     ],
-    "cwd": "[START_DIR]",
     "infra_step": true,
     "name": "Bisecting revision.extract build",
     "~followup_annotations": [
@@ -2214,7 +2147,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -2231,7 +2163,6 @@
       "[START_DIR]/bisect_results/dummy",
       "511"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -2282,7 +2213,6 @@
       "smoothness.tough_scrolling_cases",
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -2305,7 +2235,6 @@
       "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -2322,7 +2251,6 @@
       "[START_DIR]/bisect_results/dummy",
       "511"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -2373,7 +2301,6 @@
       "smoothness.tough_scrolling_cases",
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -2396,7 +2323,6 @@
       "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -2413,7 +2339,6 @@
       "[START_DIR]/bisect_results/dummy",
       "511"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -2464,7 +2389,6 @@
       "smoothness.tough_scrolling_cases",
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -2487,7 +2411,6 @@
       "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -2504,7 +2427,6 @@
       "[START_DIR]/bisect_results/dummy",
       "511"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -2555,7 +2477,6 @@
       "smoothness.tough_scrolling_cases",
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -2578,7 +2499,6 @@
       "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -2595,7 +2515,6 @@
       "[START_DIR]/bisect_results/dummy",
       "511"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -2646,7 +2565,6 @@
       "smoothness.tough_scrolling_cases",
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -2669,7 +2587,6 @@
       "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -2686,7 +2603,6 @@
       "[START_DIR]/bisect_results/dummy",
       "511"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -2737,7 +2653,6 @@
       "smoothness.tough_scrolling_cases",
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -2758,7 +2673,6 @@
       "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -2769,7 +2683,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]",
     "name": "Bisecting revision (2)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Revision: chromium@a6298e4afe<br/>@@@"
@@ -2786,7 +2699,6 @@
       "-o",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "Bisecting revision.Post bisect results (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2873,7 +2785,6 @@
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip"
     ],
-    "cwd": "[START_DIR]",
     "infra_step": true,
     "name": "Bisecting revision.gsutil ls (2)",
     "~followup_annotations": [
@@ -2898,7 +2809,6 @@
       "--revision",
       "src@a6298e4afedbf2cd461755ea6f45b0ad64222222"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
@@ -2990,7 +2900,6 @@
       "rmtree",
       "[START_DIR]/src/out/Release"
     ],
-    "cwd": "[START_DIR]",
     "infra_step": true,
     "name": "Bisecting revision.rmtree build directory (2)",
     "~followup_annotations": [
@@ -3021,7 +2930,6 @@
       "--build-number",
       "571"
     ],
-    "cwd": "[START_DIR]",
     "infra_step": true,
     "name": "Bisecting revision.extract build (2)",
     "~followup_annotations": [
@@ -3030,7 +2938,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -3047,7 +2954,6 @@
       "[START_DIR]/bisect_results/dummy",
       "511"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -3098,7 +3004,6 @@
       "smoothness.tough_scrolling_cases",
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -3119,7 +3024,6 @@
       "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -3136,7 +3040,6 @@
       "[START_DIR]/bisect_results/dummy",
       "511"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -3187,7 +3090,6 @@
       "smoothness.tough_scrolling_cases",
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -3208,7 +3110,6 @@
       "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -3225,7 +3126,6 @@
       "[START_DIR]/bisect_results/dummy",
       "511"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -3276,7 +3176,6 @@
       "smoothness.tough_scrolling_cases",
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -3297,7 +3196,6 @@
       "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -3314,7 +3212,6 @@
       "[START_DIR]/bisect_results/dummy",
       "511"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -3365,7 +3262,6 @@
       "smoothness.tough_scrolling_cases",
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -3386,7 +3282,6 @@
       "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -3403,7 +3298,6 @@
       "[START_DIR]/bisect_results/dummy",
       "511"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -3454,7 +3348,6 @@
       "smoothness.tough_scrolling_cases",
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -3475,7 +3368,6 @@
       "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -3492,7 +3384,6 @@
       "[START_DIR]/bisect_results/dummy",
       "511"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -3543,7 +3434,6 @@
       "smoothness.tough_scrolling_cases",
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -3564,7 +3454,6 @@
       "benchmark text",
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -3575,7 +3464,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]",
     "name": "Check bisect finished on revision chromium@a6298e4afe"
   },
   {
@@ -3596,12 +3484,10 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]",
     "name": "Debug Info"
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]",
     "name": "Resolving hashes"
   },
   {
@@ -3612,7 +3498,6 @@
       "dcdcdc0ff1122212323134879ddceeb1240b0988",
       "chromium"
     ],
-    "cwd": "[START_DIR]",
     "name": "Reading culprit cl information.",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -3631,7 +3516,6 @@
       "-o",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "Post bisect results",
     "~followup_annotations": [
       "@@@STEP_TEXT@Failed to post to Perf Dashboard. Error response: None@@@",
@@ -3649,7 +3533,6 @@
       "dcdcdc0ff1122212323134879ddceeb1240b0988",
       "chromium"
     ],
-    "cwd": "[START_DIR]",
     "name": "Reading culprit cl information. (2)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -3668,7 +3551,6 @@
       "-o",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "Post bisect results (2)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Failed to post to Perf Dashboard. Error response: None@@@",
@@ -3686,7 +3568,6 @@
       "dcdcdc0ff1122212323134879ddceeb1240b0988",
       "chromium"
     ],
-    "cwd": "[START_DIR]",
     "name": "Reading culprit cl information. (3)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [

@@ -611,7 +611,6 @@
       "--build-dir",
       "[BUILDER_CACHE]/mac_layout/src/out/Release"
     ],
-    "cwd": "[START_DIR]",
     "name": "remove_build_metadata"
   },
   {

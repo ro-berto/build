@@ -567,7 +567,6 @@
       "--build-dir",
       "[BUILDER_CACHE]/Linux_Release__NVIDIA_/src/out/Release"
     ],
-    "cwd": "[START_DIR]",
     "name": "remove_build_metadata"
   },
   {

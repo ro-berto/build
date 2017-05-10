@@ -596,7 +596,6 @@
       "--build-dir",
       "[BUILDER_CACHE]/Mac_GPU_ASAN_Release/src/out/Release"
     ],
-    "cwd": "[START_DIR]",
     "name": "remove_build_metadata"
   },
   {

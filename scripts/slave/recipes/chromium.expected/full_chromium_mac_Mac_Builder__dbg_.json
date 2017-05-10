@@ -595,7 +595,6 @@
       "--build-dir",
       "[BUILDER_CACHE]/mac/src/out/Debug"
     ],
-    "cwd": "[START_DIR]",
     "name": "remove_build_metadata"
   },
   {

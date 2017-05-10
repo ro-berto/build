@@ -96,7 +96,6 @@
       "/creds/service_accounts/service-account-goma-client.json",
       "ndk-linux-arm64-v8a"
     ],
-    "cwd": "[START_DIR]",
     "name": "cbuildbot [ndk-linux-arm64-v8a]"
   },
   {

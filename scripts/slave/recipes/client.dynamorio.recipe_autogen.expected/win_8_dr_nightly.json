@@ -57,7 +57,6 @@
       "long",
       "site=X64.Windows8.VS2010.BuildBot"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "BOTTOOLS": "[START_DIR]/dynamorio/tools/buildbot/bot_tools"
     },

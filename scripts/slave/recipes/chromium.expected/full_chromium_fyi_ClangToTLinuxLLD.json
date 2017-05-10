@@ -316,7 +316,6 @@
       "--build-dir",
       "[BUILDER_CACHE]/ClangToTLinuxLLD/src/out/Release"
     ],
-    "cwd": "[START_DIR]",
     "name": "remove_build_metadata"
   },
   {

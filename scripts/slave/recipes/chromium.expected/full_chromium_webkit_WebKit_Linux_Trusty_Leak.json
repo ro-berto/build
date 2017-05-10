@@ -544,7 +544,6 @@
       "--build-dir",
       "[BUILDER_CACHE]/WebKit_Linux_Trusty_Leak/src/out/Release"
     ],
-    "cwd": "[START_DIR]",
     "name": "remove_build_metadata"
   },
   {

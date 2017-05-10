@@ -576,7 +576,6 @@
       "--build-dir",
       "[BUILDER_CACHE]\\Win_Release__NVIDIA_\\src\\out\\Release"
     ],
-    "cwd": "[START_DIR]",
     "name": "remove_build_metadata"
   },
   {

@@ -97,7 +97,6 @@
       "--remote-version=4",
       "x86-generic-full"
     ],
-    "cwd": "[START_DIR]",
     "name": "cbuildbot [x86-generic-full]"
   },
   {

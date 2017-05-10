@@ -17,7 +17,6 @@
       "--revision",
       "src@HEAD"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
@@ -1784,7 +1783,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "fake test 1 (fake device 1 iOS 8.1)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac'<br>swarming pending 71s@@@",
@@ -1889,7 +1887,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "fake included test 1 (fake device 1 iOS 8.1)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac'<br>swarming pending 71s@@@",
@@ -1971,7 +1968,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "fake included test 2 (fake device 1 iOS 8.1)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac'<br>swarming pending 71s@@@",
@@ -2053,7 +2049,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "fake test 2 (fake device 2 iOS 7.1)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac'<br>swarming pending 71s@@@",
@@ -2135,7 +2130,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "fake included test 1 (fake device 2 iOS 7.1)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac'<br>swarming pending 71s@@@",
@@ -2217,7 +2211,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "fake included test 2 (fake device 2 iOS 7.1)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac'<br>swarming pending 71s@@@",

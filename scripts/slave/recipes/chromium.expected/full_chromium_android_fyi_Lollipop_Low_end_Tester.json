@@ -476,7 +476,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/Lollipop_Low_end_Tester/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Lollipop_Low_end_Tester/src/build/android:%(PATH)s"

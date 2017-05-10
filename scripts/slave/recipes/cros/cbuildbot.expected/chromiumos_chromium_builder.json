@@ -98,7 +98,6 @@
       "/creds/service_accounts/service-account-goma-client.json",
       "x86-generic-tot-chrome-pfq-informational"
     ],
-    "cwd": "[START_DIR]",
     "name": "cbuildbot [x86-generic-tot-chrome-pfq-informational]"
   },
   {

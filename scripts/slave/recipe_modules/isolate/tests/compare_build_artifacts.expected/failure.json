@@ -13,7 +13,6 @@
       "--json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "compare_build_artifacts",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",

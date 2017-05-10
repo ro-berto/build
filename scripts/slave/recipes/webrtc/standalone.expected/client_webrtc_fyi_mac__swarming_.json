@@ -477,7 +477,6 @@
       "--build-dir",
       "[BUILDER_CACHE]/Mac__swarming_/src/out/Release"
     ],
-    "cwd": "[START_DIR]",
     "name": "remove_build_metadata"
   },
   {
@@ -2163,7 +2162,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "audio_decoder_unittests on Mac-10.11",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac-10.11'<br>swarming pending 71s<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
@@ -2322,7 +2320,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "common_audio_unittests on Mac-10.11",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac-10.11'<br>swarming pending 71s<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
@@ -2481,7 +2478,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "common_video_unittests on Mac-10.11",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac-10.11'<br>swarming pending 71s<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
@@ -2640,7 +2636,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "low_bandwidth_audio_test on Mac-10.11",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac-10.11'<br>swarming pending 71s<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
@@ -2799,7 +2794,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "modules_tests on Mac-10.11",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac-10.11'<br>swarming pending 71s<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
@@ -2998,7 +2992,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "modules_unittests on Mac-10.11",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac-10.11'<br>swarming pending 71s<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
@@ -3357,7 +3350,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "ortc_unittests on Mac-10.11",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac-10.11'<br>swarming pending 71s<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
@@ -3516,7 +3508,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "peerconnection_unittests on Mac-10.11",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac-10.11'<br>swarming pending 71s<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
@@ -3795,7 +3786,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "rtc_media_unittests on Mac-10.11",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac-10.11'<br>swarming pending 71s<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
@@ -3954,7 +3944,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "rtc_pc_unittests on Mac-10.11",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac-10.11'<br>swarming pending 71s<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
@@ -4113,7 +4102,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "rtc_stats_unittests on Mac-10.11",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac-10.11'<br>swarming pending 71s<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
@@ -4272,7 +4260,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "rtc_unittests on Mac-10.11",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac-10.11'<br>swarming pending 71s<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
@@ -4631,7 +4618,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "system_wrappers_unittests on Mac-10.11",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac-10.11'<br>swarming pending 71s<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
@@ -4790,7 +4776,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "test_support_unittests on Mac-10.11",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac-10.11'<br>swarming pending 71s<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
@@ -4949,7 +4934,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "tools_unittests on Mac-10.11",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac-10.11'<br>swarming pending 71s<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
@@ -5108,7 +5092,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "video_engine_tests on Mac-10.11",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac-10.11'<br>swarming pending 71s<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
@@ -5387,7 +5370,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "voice_engine_unittests on Mac-10.11",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac-10.11'<br>swarming pending 71s<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
@@ -5546,7 +5528,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "webrtc_nonparallel_tests on Mac-10.11",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac-10.11'<br>swarming pending 71s<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",

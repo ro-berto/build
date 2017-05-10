@@ -97,7 +97,6 @@
       "--remote-version=4",
       "internal-paladin"
     ],
-    "cwd": "[START_DIR]",
     "name": "cbuildbot [internal-paladin]"
   },
   {

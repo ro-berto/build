@@ -577,7 +577,6 @@
       "--build-dir",
       "[BUILDER_CACHE]\\win\\src\\out\\Debug_x64"
     ],
-    "cwd": "[START_DIR]",
     "name": "remove_build_metadata"
   },
   {

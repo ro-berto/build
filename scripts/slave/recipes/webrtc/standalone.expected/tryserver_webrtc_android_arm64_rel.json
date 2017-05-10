@@ -521,7 +521,6 @@
       "--build-dir",
       "[BUILDER_CACHE]/android_arm64_rel/src/out/Release"
     ],
-    "cwd": "[START_DIR]",
     "name": "remove_build_metadata"
   },
   {
@@ -2250,7 +2249,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "audio_decoder_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>swarming pending 71s<br>swarming pending 71s@@@",
@@ -2372,7 +2370,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "common_audio_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>swarming pending 71s<br>swarming pending 71s@@@",
@@ -2494,7 +2491,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "common_video_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>swarming pending 71s<br>swarming pending 71s@@@",
@@ -2616,7 +2612,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "modules_tests on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>swarming pending 71s<br>swarming pending 71s@@@",
@@ -2738,7 +2733,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "modules_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>swarming pending 71s<br>swarming pending 71s@@@",
@@ -2860,7 +2854,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "ortc_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>swarming pending 71s<br>swarming pending 71s@@@",
@@ -2982,7 +2975,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "peerconnection_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>swarming pending 71s<br>swarming pending 71s@@@",
@@ -3104,7 +3096,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "rtc_stats_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>swarming pending 71s<br>swarming pending 71s@@@",
@@ -3226,7 +3217,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "rtc_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>swarming pending 71s<br>swarming pending 71s@@@",
@@ -3348,7 +3338,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "system_wrappers_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>swarming pending 71s<br>swarming pending 71s@@@",
@@ -3470,7 +3459,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "test_support_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>swarming pending 71s<br>swarming pending 71s@@@",
@@ -3592,7 +3580,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "tools_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>swarming pending 71s<br>swarming pending 71s@@@",
@@ -3714,7 +3701,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "video_engine_tests on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>swarming pending 71s<br>swarming pending 71s@@@",
@@ -3836,7 +3822,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "voice_engine_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>swarming pending 71s<br>swarming pending 71s@@@",
@@ -3958,7 +3943,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "webrtc_nonparallel_tests on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>swarming pending 71s<br>swarming pending 71s@@@",
@@ -4080,7 +4064,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "AppRTCMobileTest on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>swarming pending 71s<br>swarming pending 71s@@@",
@@ -4202,7 +4185,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "libjingle_peerconnection_android_unittest on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>swarming pending 71s<br>swarming pending 71s@@@",
@@ -4324,7 +4306,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "webrtc_perf_tests on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>swarming pending 71s<br>swarming pending 71s@@@",

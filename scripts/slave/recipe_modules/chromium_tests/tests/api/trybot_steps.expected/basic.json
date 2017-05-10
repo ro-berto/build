@@ -23,7 +23,6 @@
       "--revision",
       "src@HEAD"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
@@ -113,7 +112,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "validate"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -635,7 +633,6 @@
       "--build-number=571",
       "base_unittests"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"

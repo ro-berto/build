@@ -100,7 +100,6 @@
       "/creds/service_accounts/service-account-goma-client.json",
       "auron-paladin"
     ],
-    "cwd": "[START_DIR]",
     "name": "cbuildbot [auron-paladin]"
   },
   {

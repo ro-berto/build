@@ -17,7 +17,6 @@
       "--revision",
       "src@HEAD"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
@@ -107,7 +106,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "validate"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -233,12 +231,10 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]",
     "name": "***BISECT***"
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]",
     "name": "Clearing results directory"
   },
   {
@@ -249,7 +245,6 @@
       "rmtree",
       "[START_DIR]/bisect_results"
     ],
-    "cwd": "[START_DIR]",
     "infra_step": true,
     "name": "Clearing results directory.rmtree old results directory",
     "~followup_annotations": [
@@ -264,7 +259,6 @@
       "[START_DIR]/bisect_results",
       "511"
     ],
-    "cwd": "[START_DIR]",
     "name": "Clearing results directory.makedirs new results directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -303,7 +297,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]",
     "name": "config",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@Bisect job configuration@{@@@",
@@ -331,7 +324,6 @@
       "-u",
       "import sys; sys.exit(1)"
     ],
-    "cwd": "[START_DIR]",
     "name": "Recipe failed. Reason: Invalid value 'crbug.com/123123' for \"bug_id\".",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@import sys; sys.exit(1)@@@",

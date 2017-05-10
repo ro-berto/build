@@ -503,7 +503,6 @@
       "--partial-name",
       "gs://chromedriver-data/prebuilts/r"
     ],
-    "cwd": "[START_DIR]",
     "name": "Download Prebuilts.download latest prebuilt",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"

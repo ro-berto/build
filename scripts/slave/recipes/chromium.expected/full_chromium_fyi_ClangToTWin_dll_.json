@@ -325,7 +325,6 @@
       "--build-dir",
       "[BUILDER_CACHE]\\ClangToTWin_dll_\\src\\out\\Release"
     ],
-    "cwd": "[START_DIR]",
     "name": "remove_build_metadata"
   },
   {

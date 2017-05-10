@@ -569,7 +569,6 @@
       "--build-dir",
       "[BUILDER_CACHE]/linux/src/out/Debug"
     ],
-    "cwd": "[START_DIR]",
     "name": "remove_build_metadata"
   },
   {

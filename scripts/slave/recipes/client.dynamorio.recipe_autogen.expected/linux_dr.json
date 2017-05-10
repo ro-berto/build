@@ -46,7 +46,6 @@
       "perl",
       "[START_DIR]/dynamorio/suite/runsuite_wrapper.pl"
     ],
-    "cwd": "[START_DIR]",
     "name": "pre-commit suite"
   },
   {

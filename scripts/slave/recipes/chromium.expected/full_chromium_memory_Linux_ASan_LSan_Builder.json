@@ -576,7 +576,6 @@
       "--build-dir",
       "[BUILDER_CACHE]/Linux_ASan_LSan_Builder/src/out/Release"
     ],
-    "cwd": "[START_DIR]",
     "name": "remove_build_metadata"
   },
   {

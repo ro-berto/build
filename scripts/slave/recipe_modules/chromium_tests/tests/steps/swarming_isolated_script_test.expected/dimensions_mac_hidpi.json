@@ -106,7 +106,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "base_unittests on Intel GPU on Mac Retina on Mac",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac'<br>swarming pending 71s<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",

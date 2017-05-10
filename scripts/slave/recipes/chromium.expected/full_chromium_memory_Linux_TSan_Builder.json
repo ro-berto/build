@@ -566,7 +566,6 @@
       "--build-dir",
       "[BUILDER_CACHE]/Linux_TSan_Builder/src/out/Release"
     ],
-    "cwd": "[START_DIR]",
     "name": "remove_build_metadata"
   },
   {

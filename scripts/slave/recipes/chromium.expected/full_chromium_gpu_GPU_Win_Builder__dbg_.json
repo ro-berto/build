@@ -574,7 +574,6 @@
       "--build-dir",
       "[BUILDER_CACHE]\\GPU_Win_Builder__dbg_\\src\\out\\Debug"
     ],
-    "cwd": "[START_DIR]",
     "name": "remove_build_metadata"
   },
   {

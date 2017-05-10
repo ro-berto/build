@@ -428,7 +428,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "hello_world on Windows-7-SP1",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br>swarming pending 71s@@@",
@@ -510,7 +509,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "hello_world",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>swarming pending 71s@@@",
@@ -629,7 +627,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "hello_world on Mac-10.9",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac-10.9'<br>swarming pending 71s@@@",

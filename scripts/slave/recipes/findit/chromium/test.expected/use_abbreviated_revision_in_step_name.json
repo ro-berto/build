@@ -859,7 +859,6 @@
       "--build-dir",
       "[BUILDER_CACHE]/mac/src/out/Release"
     ],
-    "cwd": "[START_DIR]",
     "name": "test gfedcba.remove_build_metadata",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1014,7 +1013,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"

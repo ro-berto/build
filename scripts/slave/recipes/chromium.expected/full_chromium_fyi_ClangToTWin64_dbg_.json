@@ -325,7 +325,6 @@
       "--build-dir",
       "[BUILDER_CACHE]\\ClangToTWin64_dbg_\\src\\out\\Debug_x64"
     ],
-    "cwd": "[START_DIR]",
     "name": "remove_build_metadata"
   },
   {

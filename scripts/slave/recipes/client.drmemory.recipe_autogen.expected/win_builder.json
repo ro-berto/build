@@ -56,7 +56,6 @@
       "-S",
       "[START_DIR]\\drmemory\\package.cmake,build=0x1234567;drmem_only"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "BOTTOOLS": "[START_DIR]\\tools\\buildbot\\bot_tools"
     },
@@ -71,7 +70,6 @@
       "/B",
       "DrMemory-Windows-*0x1234567.zip"
     ],
-    "cwd": "[START_DIR]",
     "name": "Find package basename",
     "stdout": "/path/to/tmp/"
   },
@@ -100,7 +98,6 @@
       "DrMemory-Windows-1.2.3-0x1234567-sfx.exe",
       "..\\[START_DIR]\\build_drmemory-debug-32\\_CPack_Packages\\Windows\\ZIP\\DrMemory-Windows-1.2.3-0x1234567\\*"
     ],
-    "cwd": "[START_DIR]",
     "env": {
       "BOTTOOLS": "[START_DIR]\\tools\\buildbot\\bot_tools"
     },
@@ -128,7 +125,6 @@
       "drmemory-windows-latest-sfx.exe",
       "gs://chromium-drmemory-builds/"
     ],
-    "cwd": "[START_DIR]",
     "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [

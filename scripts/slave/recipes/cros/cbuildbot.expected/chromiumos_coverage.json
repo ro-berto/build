@@ -100,7 +100,6 @@
       "/creds/service_accounts/service-account-goma-client.json",
       "x86-generic-full"
     ],
-    "cwd": "[START_DIR]",
     "name": "cbuildbot [x86-generic-full]"
   },
   {

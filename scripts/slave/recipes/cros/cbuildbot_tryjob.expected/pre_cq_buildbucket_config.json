@@ -99,7 +99,6 @@
       "--remote-version=4",
       "binhost-pre-cq"
     ],
-    "cwd": "[START_DIR]",
     "name": "cbuildbot [binhost-pre-cq]"
   },
   {

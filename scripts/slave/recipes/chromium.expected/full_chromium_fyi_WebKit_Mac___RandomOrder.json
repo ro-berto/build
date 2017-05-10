@@ -594,7 +594,6 @@
       "--build-dir",
       "[BUILDER_CACHE]/WebKit_Mac___RandomOrder/src/out/Release"
     ],
-    "cwd": "[START_DIR]",
     "name": "remove_build_metadata"
   },
   {

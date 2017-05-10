@@ -679,7 +679,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "fake tests 1 (fake device iOS 8.0)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac'<br>swarming pending 71s@@@",
@@ -761,7 +760,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "fake tests 2 (fake device iOS 7.1)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac'<br>swarming pending 71s@@@",

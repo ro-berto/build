@@ -503,7 +503,6 @@
       "--build-dir",
       "[BUILDER_CACHE]/android_experimental/src/out/Release"
     ],
-    "cwd": "[START_DIR]",
     "name": "remove_build_metadata"
   },
   {
@@ -650,7 +649,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]",
     "name": "AppRTCMobileTestStubbedVideoIO on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>swarming pending 71s<br>swarming pending 71s@@@",

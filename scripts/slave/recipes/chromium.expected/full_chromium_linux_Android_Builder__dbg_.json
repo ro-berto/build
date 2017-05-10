@@ -583,7 +583,6 @@
       "--build-dir",
       "[BUILDER_CACHE]/android/src/out/Debug"
     ],
-    "cwd": "[START_DIR]",
     "name": "remove_build_metadata"
   },
   {

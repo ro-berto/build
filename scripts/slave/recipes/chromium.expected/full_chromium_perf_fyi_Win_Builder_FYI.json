@@ -576,7 +576,6 @@
       "--build-dir",
       "[BUILDER_CACHE]\\Win_Builder_FYI\\src\\out\\Release_x64"
     ],
-    "cwd": "[START_DIR]",
     "name": "remove_build_metadata"
   },
   {

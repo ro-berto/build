@@ -583,7 +583,6 @@
       "--build-dir",
       "[BUILDER_CACHE]/Android_N5X_Swarm_Builder/src/out/Release"
     ],
-    "cwd": "[START_DIR]",
     "name": "remove_build_metadata"
   },
   {

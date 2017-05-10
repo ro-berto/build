@@ -568,7 +568,6 @@
       "--build-dir",
       "[BUILDER_CACHE]/Linux_GPU_TSAN_Release/src/out/Release"
     ],
-    "cwd": "[START_DIR]",
     "name": "remove_build_metadata"
   },
   {
