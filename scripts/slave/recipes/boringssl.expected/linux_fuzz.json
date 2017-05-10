@@ -96,6 +96,7 @@
       "-DCMAKE_C_COMPILER=[START_DIR]/boringssl/util/bot/llvm-build/bin/clang",
       "-DCMAKE_MAKE_PROGRAM=RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "-DFUZZ=1",
+      "-DLIBFUZZER_FROM_DEPS=1",
       "[START_DIR]/boringssl"
     ],
     "cwd": "[START_DIR]/boringssl/build",

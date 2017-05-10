@@ -111,6 +111,7 @@ def _GetTargetCMakeArgs(buildername, checkout, ninja_path):
     args['CMAKE_OSX_ARCHITECTURES'] = 'arm64'
   if _HasToken(buildername, 'fuzz'):
     args['FUZZ'] = '1'
+    args['LIBFUZZER_FROM_DEPS'] = '1'
   return args
 
 
