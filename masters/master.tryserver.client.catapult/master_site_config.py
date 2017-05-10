@@ -21,6 +21,6 @@ class CatapultTryserver(Master.Master4a):
   buildbucket_bucket = 'master.tryserver.client.catapult'
   service_account_file = 'service-account-chromium-tryserver.json'
   # To enable outbound pubsub event streaming.
-  pubsub_service_account_file = None
-  pubsub_topic = None
+  pubsub_service_account_file = 'service-account-luci-milo.json'
+  pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
   name = 'tryserver.client.catapult'
