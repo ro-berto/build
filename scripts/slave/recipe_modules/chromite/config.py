@@ -36,18 +36,6 @@ def BaseConfig(CBB_CONFIG=None, CBB_BRANCH=None, CBB_BUILD_NUMBER=None,
     # flags?
     read_cros_manifest = Single(bool),
 
-    # The current configuration's "build_type". If not populated, it will be
-    # loaded by looking up the current configuration in the configuration
-    # dump JSON.
-    build_type = Single(basestring),
-
-    # A map of "build_type" values to the specialized "config" names to apply
-    # for those build types. This allows build and invocation specialization
-    # based on build type.
-    #
-    # This gets applied after the specified Chromite repository is checked out.
-    build_type_configs = Dict(value_type=basestring),
-
     # cbuildbot tool flags.
     cbb = ConfigGroup(
       # The Chromite configuration to use.
@@ -166,8 +154,3 @@ def master_chromiumos_tryserver(c):
 def chromiumos_coverage(c):
   c.use_chrome_version = True
   c.cbb.config_repo = 'https://example.com/repo.git'
-
-# TODO(dnj): Remove this config once variant support is removed.
-@config_ctx()
-def coverage_variant(c):
-  pass

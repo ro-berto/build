@@ -13,9 +13,6 @@ DEPS = [
 _MASTER_CONFIG_MAP = {
   'chromiumos': {
     'master_config': 'master_chromiumos',
-    'build_type_configs': {
-      'paladin': 'chromiumos_paladin',
-    },
   },
   'chromiumos.chromium': {
     'master_config': 'master_chromiumos_chromium',
@@ -24,13 +21,6 @@ _MASTER_CONFIG_MAP = {
   # Fake master name for Coverage.
   'chromiumos.coverage': {
     'master_config': 'chromiumos_coverage',
-    'build_type_configs': {
-      'foo': 'bar',
-    },
-    # TODO(dnj): Remove this entry once we deprecate variants.
-    'variants': {
-      'coverage': ['coverage_variant'],
-    },
   },
 }
 

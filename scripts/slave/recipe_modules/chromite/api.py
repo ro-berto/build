@@ -214,17 +214,6 @@ class ChromiteApi(recipe_api.RecipeApi):
         "No 'master_config' configuration for '%s'" % (master,))
     self.set_config(master_config, **KWARGS)
 
-    # If we have any specialized build type configurations for this master,
-    # load them.
-    self.c.build_type_configs = config_map.get('build_type_configs', {})
-
-    # Apply any variant configurations.
-    # TODO(dnj): Deprecate variants in favor of build types once all recipes
-    # using them have moved off of them.
-    if variant:
-      for config_name in config_map.get('variants', {}).get(variant, ()):
-        self.apply_config(config_name)
-
   def run_cbuildbot(self):
     """Performs a Chromite repository checkout, then runs cbuildbot.
     """
