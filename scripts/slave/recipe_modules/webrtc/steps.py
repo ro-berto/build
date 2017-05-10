@@ -80,13 +80,8 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
   GTestTest = api.m.chromium_tests.steps.GTestTest
   SwarmingTest = api.m.chromium_tests.steps.SwarmingIsolatedScriptTest
   if test_suite == 'webrtc':
-    if enable_swarming:
-      for test, extra_args in sorted(NORMAL_TESTS.items()):
-        tests.append(SwarmingTest(test, **extra_args))
-    else:
-      for test in sorted(api.NORMAL_TESTS):
-        parallel = test != 'webrtc_nonparallel_tests'
-        tests.append(WebRTCTest(test, revision=revision, parallel=parallel))
+    for test, extra_args in sorted(NORMAL_TESTS.items()):
+      tests.append(SwarmingTest(test, **extra_args))
     if api.mastername == 'client.webrtc.fyi' and api.m.platform.is_win:
       tests.append(WebRTCTest(
           'modules_tests',

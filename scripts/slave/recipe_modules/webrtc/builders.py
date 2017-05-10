@@ -605,6 +605,12 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Windows-8.1-SP0',
+          'cpu': 'x86-64',
+        }
       },
       'Win64 Debug (Win10)': {
         'recipe_config': 'webrtc',
@@ -614,6 +620,12 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Windows-10',
+          'cpu': 'x86-64',
+        }
       },
       'Mac (swarming)': {
         'recipe_config': 'webrtc',
@@ -1051,6 +1063,12 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Windows-8-SP0',
+          'cpu': 'x86-64',
+        }
       },
       'win_x64_win10': {
         'recipe_config': 'webrtc',
@@ -1060,6 +1078,12 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Windows-10',
+          'cpu': 'x86-64',
+        }
       },
       'mac_compile_dbg': {
         'recipe_config': 'webrtc',

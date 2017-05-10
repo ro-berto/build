@@ -116,7 +116,7 @@ def GenTests(api):
         # TODO(kjellander): Remove when https://bugs.webrtc.org/7413 is fixed.
         buildername not in ('Linux32 Debug', 'Linux32 Release')):
       os_suffix = ' on %s' % bot_config['swarming_dimensions']['os']
-      if 'Windows' in os_suffix or os_suffix == ' on Ubuntu-14.04':
+      if os_suffix in (' on Ubuntu-14.04', ' on Windows-7-SP1'):
         os_suffix = ''
       for test_name, test_data in NORMAL_TESTS.iteritems():
         test += api.override_step_data(
