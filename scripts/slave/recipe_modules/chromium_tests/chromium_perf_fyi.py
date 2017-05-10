@@ -134,3 +134,5 @@ _AddTestSpec('Win Clang Perf', 'chromium-win-clang', 'win',
              parent_buildername='Win Clang Builder', target_bits=32)
 _AddTestSpec('Win Clang Perf Ref', 'chromium-win-clang-ref', 'win',
              parent_buildername='Win Builder FYI', target_bits=32)
+
+_AddTestSpec('Mojo Linux Perf', 'mojo-linux-perf', 'linux')
