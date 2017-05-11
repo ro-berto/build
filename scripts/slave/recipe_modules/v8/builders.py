@@ -445,7 +445,7 @@ BUILDERS = {
           V8Testing_2,
           V8TestingExtra,
           OptimizeForSize,
-          Test262Variants_4,
+          Test262Variants_5,
           Test262Extra_2,
           Mozilla,
           MjsunitSPFrameAccess,
@@ -463,7 +463,7 @@ BUILDERS = {
         'build_gs_archive': 'linux64_dbg_archive',
         'enable_swarming': True,
         'tests': [
-          V8Testing,
+          V8Testing_2,
           Benchmarks,
           Mozilla,
         ],
@@ -719,7 +719,7 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [
-          V8Testing,
+          V8Testing_2,
           V8TestingExtra_2,
           Test262,
           Mozilla,
@@ -761,7 +761,7 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [
-          V8Testing,
+          V8Testing_2,
           V8TestingExtra_2,
           Test262,
           Mozilla,
