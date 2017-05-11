@@ -1240,6 +1240,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Arm - debug': {
+        'v8_apply_config': ['verify_heap_skip_remembered_set'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_ARCH': 'arm',
@@ -1265,7 +1266,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Arm GC Stress': {
-        'v8_apply_config': ['gc_stress'],
+        'v8_apply_config': ['gc_stress', 'verify_heap_skip_remembered_set'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_ARCH': 'arm',
@@ -1400,7 +1401,7 @@ BUILDERS = {
         'chromium_apply_config': [
           'default_compiler', 'v8_ninja', 'goma', 'simulate_arm',
           'no_snapshot', 'mb'],
-        'v8_apply_config': ['no_snapshot'],
+        'v8_apply_config': ['no_snapshot', 'verify_heap_skip_remembered_set'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -1419,7 +1420,7 @@ BUILDERS = {
       'V8 Linux - arm64 - sim - gc stress': {
         'chromium_apply_config': [
           'default_compiler', 'v8_ninja', 'goma', 'simulate_arm', 'mb'],
-        'v8_apply_config': ['gc_stress'],
+        'v8_apply_config': ['gc_stress', 'verify_heap_skip_remembered_set'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,

@@ -94,3 +94,8 @@ def no_harness(c):
 @config_ctx()
 def predictable(c):
   c.testing.test_args.append('--predictable')
+
+
+@config_ctx()
+def verify_heap_skip_remembered_set(c):
+  c.testing.test_args.append('--extra-flags=--verify-heap-skip-remembered-set')
