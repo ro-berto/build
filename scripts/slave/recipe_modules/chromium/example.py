@@ -31,7 +31,7 @@ def RunSteps(api):
   if ninja_confirm_noop:
     api.chromium.apply_config('ninja_confirm_noop')
 
-  update_step, bot_db = api.chromium_tests.prepare_checkout(bot_config)
+  api.chromium_tests.prepare_checkout(bot_config)
 
   mb_config_path = api.properties.get('mb_config_path')
 
@@ -40,11 +40,9 @@ def RunSteps(api):
                       android_version_code=3,
                       android_version_name="example")
 
-  env = {}
-  with api.step.context({'env': env}):
-    api.chromium.compile(
-        targets=['All'], out_dir=out_dir,
-        use_goma_module=use_goma_module)
+  api.chromium.compile(
+      targets=['All'], out_dir=out_dir,
+      use_goma_module=use_goma_module)
 
 
 def GenTests(api):

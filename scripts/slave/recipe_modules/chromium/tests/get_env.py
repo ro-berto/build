@@ -4,6 +4,7 @@
 
 DEPS = [
     'chromium',
+    'recipe_engine/context',
     'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/step',
@@ -18,7 +19,7 @@ def RunSteps(api):
 
   api.chromium.c.env.ADB_VENDOR_KEYS = api.path['start_dir'].join('.adb_key')
 
-  with api.step.context({'env': api.chromium.get_env()}):
+  with api.context(env=api.chromium.get_env()):
     api.step('test', [])
 
 

@@ -600,11 +600,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   @contextlib.contextmanager
   def wrap_chromium_tests(self, bot_config, tests=None):
-    context = {
-        'cwd': self.m.chromium_checkout.working_dir,
-        'env': self.m.chromium.get_env(),
-    }
-    with self.m.step.context(context):
+    with self.m.context(
+        cwd=self.m.chromium_checkout.working_dir or self.m.path['start_dir'],
+        env=self.m.chromium.get_env()):
       bot_type = bot_config.get('bot_type', 'builder_tester')
 
       if bot_type in ('tester', 'builder_tester'):
@@ -657,13 +655,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if self.m.platform.is_win:
       self.m.chromium.taskkill()
 
-    context = {}
-    if self.m.chromium_checkout.working_dir:
-      context['cwd'] = self.m.chromium_checkout.working_dir
-
-    with self.m.step.context(context):
+    with self.m.context(cwd=self.m.chromium_checkout.working_dir):
       self.m.bot_update.deapply_patch(bot_update_step)
-    with self.m.step.context({'cwd': self.m.path['checkout']}):
+
+    with self.m.context(cwd=self.m.path['checkout']):
       self.m.chromium.runhooks(name='runhooks (without patch)')
 
   def run_tests_on_tryserver(self, bot_config, tests, bot_update_step,
@@ -904,7 +899,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     layout_tests_strategy = _layout_tests_strategy(
         tests, buildername, add_blink_tests)
 
-    # Before layout tests on swarming is rolled out to run on all CLs, blink layout tests needs 
+    # Before layout tests on swarming is rolled out to run on all CLs, blink layout tests needs
     # to be manually added to the analyze list.
     if layout_tests_strategy == 'add_swarmed':
       merge = {

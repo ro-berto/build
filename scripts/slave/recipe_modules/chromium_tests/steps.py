@@ -1907,7 +1907,7 @@ class PrintPreviewTests(PythonBasedTest):  # pylint: disable=W032
       env['CHROME_DEVEL_SANDBOX'] = api.path.join(
           '/opt', 'chromium', 'chrome_sandbox')
 
-    with api.step.context({'env': env}):
+    with api.context(env=env):
       return api.chromium.runtest(
           test=path,
           args=args,
@@ -2411,7 +2411,7 @@ class FindAnnotatedTest(Test):
           '-v']
       args.extend(
           ['--test-apks'] + [i for i in FindAnnotatedTest._TEST_APKS.values()])
-      with api.step.context({'cwd': api.path['checkout']}):
+      with api.context(cwd=api.path['checkout']):
         api.python(
             'run find_annotated_tests.py',
             api.path['checkout'].join(

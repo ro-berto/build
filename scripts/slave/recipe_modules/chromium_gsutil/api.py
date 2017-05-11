@@ -21,5 +21,5 @@ class ChromiumGSUtilApi(recipe_api.RecipeApi):
     args = ['--url', base_url,
             '--dst', destination,
             '--partial-name', partial_name]
-    with self.m.step.context({'cwd': self.m.path['start_dir']}):
+    with self.m.context(cwd=self.m.path['start_dir']):
       return self.m.python(name, gsutil_download_path, args)

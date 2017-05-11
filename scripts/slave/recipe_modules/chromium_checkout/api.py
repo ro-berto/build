@@ -48,10 +48,7 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
         self.m.properties.get('patch_project'))
     if not cwd and self.working_dir:
       cwd = self.working_dir.join(patch_root)
-    context = {}
-    if cwd:
-      context['cwd'] = cwd
-    with self.m.step.context(context):
+    with self.m.context(cwd=cwd):
       files = self.m.tryserver.get_files_affected_by_patch(patch_root)
     for i, path in enumerate(files):
       path = str(path)
@@ -66,10 +63,9 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
       self.m.chromium.taskkill()
 
     self._working_dir = self.get_checkout_dir(bot_config)
-    context = {'cwd': self._working_dir}
 
     # Bot Update re-uses the gclient configs.
-    with self.m.step.context(context):
+    with self.m.context(cwd=self._working_dir):
       update_step = self.m.bot_update.ensure_checkout(
           patch_root=bot_config.get('patch_root'),
           root_solution_revision=root_solution_revision,

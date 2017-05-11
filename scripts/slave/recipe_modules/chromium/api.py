@@ -173,7 +173,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       occurs something failure on goma steps.
     """
 
-    with self.m.step.context({'env': ninja_env}):
+    with self.m.context(env=ninja_env):
       self.m.step(name or 'compile', ninja_command, **kwargs)
 
     if not ninja_confirm_noop:
@@ -183,7 +183,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     ninja_no_work = 'ninja: no work to do.'
 
-    with self.m.step.context({'env': ninja_env}):
+    with self.m.context(env=ninja_env):
       step_result = self.m.step(
           (name or 'compile') + ' confirm no-op',
           ninja_command_explain,
@@ -262,7 +262,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       self._clang_version = self.get_clang_version()
 
     goma_env = self.get_env()
-    goma_env.update(self.m.step.get_from_context('env', {}))
+    goma_env.update(self.m.context.env)
     ninja_env = goma_env.copy()
 
     goma_env['GOMA_CACHE_DIR'] = self.m.goma.default_cache_path
@@ -344,14 +344,12 @@ class ChromiumApi(recipe_api.RecipeApi):
     assert 'env' not in kwargs
 
     assert 'cwd' not in kwargs
-    context = {
-      'cwd': self.m.step.get_from_context('cwd', self.m.path['checkout']),
-    }
+
 
     if not use_goma_module:
       compile_exit_status = 1
       try:
-        with self.m.step.context(context):
+        with self.m.context(cwd=self.m.context.cwd or self.m.path['checkout']):
           self._run_ninja(ninja_command=command,
                           name=name or 'compile',
                           ninja_env=ninja_env,
@@ -379,7 +377,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       return
 
     try:
-      with self.m.step.context(context):
+      with self.m.context(cwd=self.m.context.cwd or self.m.path['checkout']):
         self._run_ninja_with_goma(
             name=name or 'compile',
             ninja_command=command,
@@ -587,7 +585,7 @@ class ChromiumApi(recipe_api.RecipeApi):
         full_args, allow_subannotations=True, **kwargs)
 
   def get_clang_version(self, **kwargs):
-    with self.m.step.context({'env': self.get_env()}):
+    with self.m.context(env=self.get_env()):
       step_result = self.m.python(
           'clang_revision',
           self.package_repo_resource('scripts', 'slave', 'clang_revision.py'),
@@ -666,7 +664,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     self.clobber_if_needed()
 
     runhooks_env = self.get_env()
-    runhooks_env.update(self.m.step.get_from_context('env', {}))
+    runhooks_env.update(self.m.context.env)
     runhooks_env.update(env or {})
 
     # CrOS "chrome_sdk" builds fully override GYP_DEFINES in the wrapper. Zero
@@ -683,7 +681,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     if self.c.TARGET_CROS_BOARD:
       # Wrap 'runhooks' through 'cros chrome-sdk'
       kwargs['wrapper'] = self.get_cros_chrome_sdk_wrapper(clean=True)
-    with self.m.step.context({'env': runhooks_env}):
+    with self.m.context(env=runhooks_env):
       self.m.gclient.runhooks(**kwargs)
 
   # No cover because internal recipes use this.
@@ -691,7 +689,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     gyp_chromium_path = self.m.path['checkout'].join('build', 'gyp_chromium.py')
     env = self.get_env()
     env.update(self.c.gyp_env.as_jsonish())
-    with self.m.step.context({'env': env}):
+    with self.m.context(env=env):
       self.m.python(name='gyp_chromium', script=gyp_chromium_path)
 
   def run_gn(self, use_goma=False, gn_path=None, build_dir=None, **kwargs):
@@ -744,8 +742,7 @@ class ChromiumApi(recipe_api.RecipeApi):
         build_dir,
         '--args=%s' % ' '.join(gn_args),
     ]
-    with self.m.step.context({
-        'cwd': kwargs.get('cwd', self.m.path['checkout'])}):
+    with self.m.context(cwd=kwargs.get('cwd', self.m.path['checkout'])):
       if str(gn_path).endswith('.py'):
         self.m.python(name='gn', script=gn_path, args=step_args, **kwargs)
       else:
@@ -809,7 +806,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     env = {
       'GOMA_SERVICE_ACCOUNT_JSON_FILE': self.m.goma.service_account_json_path,
     }
-    env.update(self.m.step.get_from_context('env', {}))
+    env.update(self.m.context.env)
     step_kwargs = {
       'name': name or 'generate_build_files',
       'script': mb_path.join('mb.py'),
@@ -829,10 +826,10 @@ class ChromiumApi(recipe_api.RecipeApi):
       step_kwargs['wrapper'] = self.get_cros_chrome_sdk_wrapper(clean=True)
 
     step_kwargs.update(kwargs)
-    with self.m.step.context({
+    with self.m.context(
         # TODO(phajdan.jr): get cwd from context, not kwargs.
-        'cwd': kwargs.get('cwd', self.m.path['checkout']),
-        'env': env}):
+        cwd=kwargs.get('cwd', self.m.path['checkout']),
+        env=env):
       self.m.python(**step_kwargs)
 
     # Comes after self.m.python so the log appears in the correct step result.
