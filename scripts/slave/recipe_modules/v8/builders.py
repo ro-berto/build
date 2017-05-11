@@ -445,7 +445,7 @@ BUILDERS = {
           V8Testing_2,
           V8TestingExtra,
           OptimizeForSize,
-          Test262Variants_3,
+          Test262Variants_4,
           Test262Extra_2,
           Mozilla,
           MjsunitSPFrameAccess,
@@ -614,7 +614,7 @@ BUILDERS = {
         'parent_buildername': 'V8 Win32 - debug builder',
         'enable_swarming': True,
         'tests': [
-          V8Testing_2,
+          V8Testing_3,
           V8TestingExtra_2,
           Test262,
           Mozilla,
@@ -666,7 +666,7 @@ BUILDERS = {
           'os': 'Windows-7-SP1',
         },
         'tests': [
-          V8Testing_2,
+          V8Testing_3,
           V8TestingExtra_2,
           Test262,
           Mozilla,
