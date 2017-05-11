@@ -216,7 +216,7 @@ def RunSteps(api, buildername):
         deferred = api.python('unit tests', go_env, [
             'go', 'run',
             api.path.join('util', 'run_android_tests.go'), '-build-dir',
-            build_dir, '-adb', adb_path, '-suite', 'unit', '-all-test-args',
+            build_dir, '-adb', adb_path, '-suite', 'unit', '-all-tests-args',
             ' '.join(all_tests_args), '-json-output',
             api.test_utils.test_results()
         ])
