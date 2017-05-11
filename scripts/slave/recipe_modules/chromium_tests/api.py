@@ -177,6 +177,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def set_up_swarming(self, bot_config):
     self.m.swarming.check_client_version()
+
+    if bot_config.get('isolate_server'):
+      self.m.isolate.isolate_server = bot_config.get('isolate_server')
+
+    if bot_config.get('swarming_server'):
+      self.m.swarming.swarming_server = bot_config.get('swarming_server')
+
     for key, value in bot_config.get('swarming_dimensions', {}).iteritems():
       self.m.swarming.set_default_dimension(key, value)
 

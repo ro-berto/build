@@ -25,3 +25,17 @@ class ChromiumTestsApi(recipe_test_api.RecipeTestApi):
         bot_config.get('testing', {}).get('platform'),
         bot_config.get(
             'chromium_config_kwargs', {}).get('TARGET_BITS', 64))
+
+  @staticmethod
+  def bot_config(
+      builder_dict,
+      mastername='test_mastername',
+      buildername='test_buildername'):
+    """Returns a synthesized BotConfig instance based on |builder_dict|.
+
+    This makes it possible to test APIs taking a bot config without
+    referencing production data.
+    """
+    return bdb_module.BotConfig(
+        {mastername: {'builders': {buildername: builder_dict}}},
+        [{'mastername': mastername, 'buildername': buildername}])
