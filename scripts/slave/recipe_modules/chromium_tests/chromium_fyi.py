@@ -336,6 +336,24 @@ SPEC = {
         'platform': 'linux',
       },
     },
+    'Fuchsia': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder_tester',
+      'compile_targets': [
+        'base_unittests',
+      ],
+      'checkout_dir': 'linux',
+      'test_results_config': 'staging_server',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
     'LTO Linux': {
       'chromium_config': 'chromium_official',
       'chromium_apply_config': ['mb'],
