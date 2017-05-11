@@ -1021,7 +1021,9 @@
       "python",
       "-u",
       "[START_DIR]/src/tools/clang/scripts/run_tool.py",
+      "--tool",
       "[START_DIR]/src/third_party/llvm-build/Release+Asserts/bin/translation_unit",
+      "-p",
       "[START_DIR]/src/out/Debug",
       "--all"
     ],

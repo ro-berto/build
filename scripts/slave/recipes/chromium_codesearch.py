@@ -223,10 +223,10 @@ def RunSteps(api):
               '--extra-tools', 'translation_unit'])
 
   # Run the clang tool
-  args = [api.path['checkout'].join('third_party', 'llvm-build',
+  args = ['--tool', api.path['checkout'].join('third_party', 'llvm-build',
                                     'Release+Asserts', 'bin',
                                     'translation_unit'),
-          debug_path, '--all']
+          '-p', debug_path, '--all']
   try:
     api.python(
         'run translation_unit clang tool',
