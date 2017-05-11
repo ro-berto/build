@@ -148,10 +148,7 @@ class ChromedriverApi(recipe_api.RecipeApi):
         server_log = server_log_dir.join(
             ('%s_%s' % (test_name, build_number)).replace(' ', '_'))
         try:
-          context = {}
-          if env:
-            context['env'] = env
-          with self.m.step.context(context):
+          with self.m.context(env=env):
             self.m.step('Run Tests',
                         self._generate_test_command(
                             script_path, chromedriver, server_log,
