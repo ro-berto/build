@@ -339,5 +339,7 @@ def high_level_ensure_cipd_client(b_dir, mastername):
 
   os.environ['CIPD_CACHE_DIR'] = os.path.join(b_dir, 'c', 'cipd')
   ensure_cipd_client(cipd_dir, cipd_version)
+
   install_auxiliary_path_packages(os.path.join(b_dir, 'cipd_path_tools'),
                                   selected)
+  os.environ['VPYTHON_VIRTUALENV_ROOT'] = os.path.join(b_dir, 'c', 'vpython')
