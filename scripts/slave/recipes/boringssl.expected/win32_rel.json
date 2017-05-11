@@ -188,9 +188,9 @@
       "x86",
       "go",
       "test",
-      "-pipe",
       "-json-output",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "-pipe"
     ],
     "cwd": "[START_DIR]\\boringssl\\ssl\\test\\runner",
     "name": "ssl tests",

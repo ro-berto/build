@@ -214,6 +214,9 @@ def RunSteps(api, buildername):
     _LogFailingTests(api, deferred)
 
     # Run the SSL tests.
+    runner_args = ['-pipe']
+    if _HasToken(buildername, 'fuzz'):
+      runner_args += ['-fuzzer', '-shim-config', 'fuzzer_mode.json']
     if _HasToken(buildername, 'android'):
       with api.step.context({'cwd': api.path['checkout'], 'env': env}):
         deferred = api.python('ssl tests', go_env,
@@ -222,14 +225,14 @@ def RunSteps(api, buildername):
                                '-build-dir', build_dir,
                                '-adb', adb_path,
                                '-suite', 'ssl',
-                               '-runner-args', '-pipe',
+                               '-runner-args', ' '.join(runner_args),
                                '-json-output', api.test_utils.test_results()])
     else:
       with api.step.context({'cwd': runner_dir, 'env': env}):
         deferred = api.python('ssl tests', go_env,
-                              msvc_prefix + ['go', 'test', '-pipe',
-                                             '-json-output',
-                                             api.test_utils.test_results()])
+                              msvc_prefix + ['go', 'test',
+                                             '-json-output', api.test_utils.test_results()] +
+                              runner_args)
     _LogFailingTests(api, deferred)
 
 
