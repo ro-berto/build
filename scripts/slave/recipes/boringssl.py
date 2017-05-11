@@ -163,6 +163,19 @@ def RunSteps(api, buildername):
   build_dir = api.path['checkout'].join('build')
   runner_dir = api.path['checkout'].join('ssl', 'test', 'runner')
 
+  # Extract the Intel SDE.
+  if _HasToken(buildername, 'sde'):
+    sde_path = bot_utils.join('sde-' + _GetHostToolSuffix(api.platform))
+    sde_archive = bot_utils.join('sde-' + _GetHostToolSuffix(api.platform) +
+                                 '.tar.bz2')
+    sde_hash = bot_utils.join('sde-' + _GetHostToolSuffix(api.platform) +
+                              '.tar.bz2.sha1')
+    api.python(
+        'download_sde', api.depot_tools.download_from_google_storage_path,
+        ['--no_resume', '--bucket', 'boringssl-sde-builder', '-s', sde_hash])
+    api.python('extract_sde',
+               bot_utils.join('extract.py'), [sde_archive, sde_path])
+
   # CMake is stateful, so do a clean build. BoringSSL builds quickly enough that
   # this isn't a concern.
   api.shutil.rmtree(build_dir, name='clean')
@@ -196,43 +209,45 @@ def RunSteps(api, buildername):
 
     # Run the unit tests.
     with api.step.context({'cwd': api.path['checkout'], 'env': env}):
+      all_tests_args = []
+      if _HasToken(buildername, 'sde'):
+        all_tests_args += ['-sde', '-sde-path', sde_path.join('sde')]
       if _HasToken(buildername, 'android'):
-        deferred = api.python('unit tests', go_env,
-                              ['go', 'run',
-                               api.path.join('util', 'run_android_tests.go'),
-                               '-build-dir', build_dir,
-                               '-adb', adb_path,
-                               '-suite', 'unit',
-                               '-json-output', api.test_utils.test_results()])
+        deferred = api.python('unit tests', go_env, [
+            'go', 'run',
+            api.path.join('util', 'run_android_tests.go'), '-build-dir',
+            build_dir, '-adb', adb_path, '-suite', 'unit', '-all-test-args',
+            ' '.join(all_tests_args), '-json-output',
+            api.test_utils.test_results()
+        ])
       else:
-        deferred = api.python('unit tests', go_env,
-                              msvc_prefix + ['go', 'run',
-                                             api.path.join('util',
-                                                           'all_tests.go'),
-                                             '-json-output',
-                                             api.test_utils.test_results()])
+        deferred = api.python('unit tests', go_env, msvc_prefix + [
+            'go', 'run',
+            api.path.join('util', 'all_tests.go'), '-json-output',
+            api.test_utils.test_results()
+        ] + all_tests_args)
     _LogFailingTests(api, deferred)
 
     # Run the SSL tests.
-    runner_args = ['-pipe']
-    if _HasToken(buildername, 'fuzz'):
-      runner_args += ['-fuzzer', '-shim-config', 'fuzzer_mode.json']
-    if _HasToken(buildername, 'android'):
-      with api.step.context({'cwd': api.path['checkout'], 'env': env}):
-        deferred = api.python('ssl tests', go_env,
-                              ['go', 'run',
-                               api.path.join('util', 'run_android_tests.go'),
-                               '-build-dir', build_dir,
-                               '-adb', adb_path,
-                               '-suite', 'ssl',
-                               '-runner-args', ' '.join(runner_args),
-                               '-json-output', api.test_utils.test_results()])
-    else:
-      with api.step.context({'cwd': runner_dir, 'env': env}):
-        deferred = api.python('ssl tests', go_env,
-                              msvc_prefix + ['go', 'test',
-                                             '-json-output', api.test_utils.test_results()] +
-                              runner_args)
+    if not _HasToken(buildername, 'sde'):
+      runner_args = ['-pipe']
+      if _HasToken(buildername, 'fuzz'):
+        runner_args += ['-fuzzer', '-shim-config', 'fuzzer_mode.json']
+      if _HasToken(buildername, 'android'):
+        with api.step.context({'cwd': api.path['checkout'], 'env': env}):
+          deferred = api.python('ssl tests', go_env, [
+              'go', 'run',
+              api.path.join('util', 'run_android_tests.go'), '-build-dir',
+              build_dir, '-adb', adb_path, '-suite', 'ssl', '-runner-args',
+              ' '.join(runner_args), '-json-output',
+              api.test_utils.test_results()
+          ])
+      else:
+        with api.step.context({'cwd': runner_dir, 'env': env}):
+          deferred = api.python(
+              'ssl tests', go_env, msvc_prefix +
+              ['go', 'test', '-json-output',
+               api.test_utils.test_results()] + runner_args)
     _LogFailingTests(api, deferred)
 
 
@@ -293,6 +308,20 @@ def GenTests(api):
       host_platform +
       api.properties.generic(mastername='client.boringssl',
                              buildername=buildername, bot_id='bot_id')
+    )
+
+  unit_test_only_tests = [
+    ('linux_sde', api.platform('linux', 64)),
+    ('linux32_sde', api.platform('linux', 64)),
+  ]
+  for (buildername, host_platform) in unit_test_only_tests:
+    yield (
+      api.test(buildername) +
+      host_platform +
+      api.properties.generic(mastername='client.boringssl',
+                             buildername=buildername, bot_id='bot_id') +
+      api.override_step_data('unit tests',
+                             api.test_utils.canned_test_output(True))
     )
 
   yield (

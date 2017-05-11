@@ -128,6 +128,8 @@
       "[START_DIR]/boringssl/util/bot/android_tools/sdk/platform-tools/adb",
       "-suite",
       "unit",
+      "-all-test-args",
+      "",
       "-json-output",
       "/path/to/tmp/json"
     ],
