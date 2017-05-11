@@ -202,11 +202,7 @@ class AutoBisectStagingApi(recipe_api.RecipeApi):
         skip_download=skip_download, **kwargs)
 
   def ensure_checkout(self, *args, **kwargs):
-    context = {}
-    if self.working_dir:
-      context['cwd'] = self.m.step.get_from_context('cwd', self.working_dir)
-
-    with self.m.step.context(context):
+    with self.m.context(cwd=(self.m.context.cwd or self.working_dir)):
       return self.m.bot_update.ensure_checkout(*args, **kwargs)
 
   def _SyncRevisionToTest(self, test_config_params):
@@ -367,12 +363,8 @@ class AutoBisectStagingApi(recipe_api.RecipeApi):
     else:
       self.bot_db = bot_db
 
-    context = {}
-    if self.working_dir:
-      context['cwd'] = self.working_dir
-
-    with api.step.context(context):
-      with self.m.step.context({'cwd': self.m.path['checkout']}):
+    with self.m.context(cwd=self.working_dir):
+      with self.m.context(cwd=self.m.path['checkout']):
         affected_files = self.m.tryserver.get_files_affected_by_patch()
       with self.build_context_mgr(self.m):
         if BISECT_CONFIG_FILE in affected_files:

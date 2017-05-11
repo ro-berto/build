@@ -215,7 +215,7 @@ class RevisionState(object):
     cwd = working_dir.join(
         depot_config.DEPOT_DEPS_NAME[self.depot_name]['src'])
     name = 'Checking DEPS for ' + self.commit_hash
-    with api.m.step.context({'cwd': cwd}):
+    with api.m.context(cwd=cwd):
       step_result = api.m.git(
           'show', '--name-only', '--pretty=format:',
           self.commit_hash, stdout=api.m.raw_io.output_text(), name=name,

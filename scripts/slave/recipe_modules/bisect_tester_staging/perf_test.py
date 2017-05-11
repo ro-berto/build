@@ -209,9 +209,9 @@ def _run_command(api, command, step_name, **kwargs):
         lambda: api.m.raw_io.test_api.output_text('', name='stdout_proxy'))
   # TODO(prasadv): Remove this once bisect runs are no longer running
   # against revisions from February 2016 or earlier.
-  context = {}
+  env = {}
   if 'android-chrome' in command or 'resource_sizes' in command:
-    context['env'] = {'CHROMIUM_OUTPUT_DIR': api.m.chromium.output_dir}
+    env = {'CHROMIUM_OUTPUT_DIR': api.m.chromium.output_dir}
 
   # By default, we assume that the test to run is an executable binary. In the
   # case of python scripts, runtest.py will guess based on the extension.
@@ -230,7 +230,7 @@ def _run_command(api, command, step_name, **kwargs):
     python_mode = True
 
   try:
-    with api.m.step.context(context):
+    with api.m.context(env=env):
       step_result = api.m.chromium.runtest(
           test=_rebase_path(api, command_parts[0]),
           args=command_parts[1:],
