@@ -12,7 +12,7 @@ import subprocess
 import tempfile
 import time
 
-def _XvfbDisplayIndex(slave_build_name):
+def _XvfbDisplayIndex(_slave_build_name):
   return '9'
 
 def _XvfbPidFilename(slave_build_name):
@@ -48,12 +48,23 @@ def StartVirtualX(slave_build_name, build_dir, with_wm=True, server_dir=None):
   # Note we don't add the optional screen here (+ '.0')
   os.environ['DISPLAY'] = display
 
+  # Parts of Xvfb use a hard-coded "/tmp" for its temporary directory.
+  # This can cause a failure when those parts expect to hardlink against
+  # files that were created in "TEMPDIR" / "TMPDIR".
+  #
+  # See: https://crbug.com/715848
+  env = os.environ.copy()
+  if env.get('TMPDIR') and env['TMPDIR'] != '/tmp':
+      print 'Overriding TMPDIR to "/tmp" for Xvfb, was: %s' % (env['TMPDIR'],)
+      env['TMPDIR'] = '/tmp'
+
   if xdisplaycheck_path and os.path.exists(xdisplaycheck_path):
     print 'Verifying Xvfb is not running ...'
     checkstarttime = time.time()
     xdisplayproc = subprocess.Popen([xdisplaycheck_path, '--noserver'],
                                     stdout=subprocess.PIPE,
-                                    stderr=subprocess.STDOUT)
+                                    stderr=subprocess.STDOUT,
+                                    env=env)
     # Wait for xdisplaycheck to exit.
     logs = xdisplayproc.communicate()[0]
     if xdisplayproc.returncode == 0:
@@ -82,7 +93,8 @@ def StartVirtualX(slave_build_name, build_dir, with_wm=True, server_dir=None):
   # run the tests even if we didn't start the tests from an X session.
   proc = subprocess.Popen([cmd, display, '-screen', '0', '1280x800x24', '-ac',
                            '-dpi', '96'],
-                          stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+                          stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                          env=env)
   xvfb_pid_filename = _XvfbPidFilename(slave_build_name)
   open(xvfb_pid_filename, 'w').write(str(proc.pid))
 
