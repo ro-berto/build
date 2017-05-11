@@ -53,6 +53,17 @@ PGO_BUILDERS = freeze({
         },
         'testing': { 'platform': 'win' },
       },
+      'win_pgo_x64': {
+        'recipe_config': 'chromium',
+        'chromium_config_instrument': 'chromium_pgo_instrument',
+        'chromium_config_optimize': 'chromium_pgo_optimize',
+        'gclient_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'testing': { 'platform': 'win' },
+      },
     },
   },
 })
