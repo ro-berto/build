@@ -529,6 +529,7 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
         'archive_apprtc': True,
+        'test_android_studio_project_generation': True,
         'enable_swarming': True,
         'use_isolate': True,
         'swarming_dimensions': {
@@ -1499,6 +1500,7 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
+        'test_android_studio_project_generation': True,
         'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
