@@ -170,32 +170,28 @@ class FilterApi(recipe_api.RecipeApi):
         'test_targets': [],
     }
 
-    context = {}
+    env = {}
 
     if use_mb:
       # Ensure that mb runs in a clean environment to avoid
       # picking up any GYP_DEFINES accidentally.
-      context['env'] = {}
       if self.m.chromium.c.env.FORCE_MAC_TOOLCHAIN:
-        context['env']['FORCE_MAC_TOOLCHAIN'] = \
+        env['FORCE_MAC_TOOLCHAIN'] = \
             self.m.chromium.c.env.FORCE_MAC_TOOLCHAIN
-    else:
-      context['env'] = self.m.step.get_from_context('env', {})
-
 
     # If building for CrOS, execute through the "chrome_sdk" wrapper. This will
     # override GYP environment variables, so we'll refrain from defining them
     # to avoid confusing output.
+    cwd = None
     if cros_board:
       kwargs['wrapper'] = self.m.chromium.get_cros_chrome_sdk_wrapper()
-      context['cwd'] = self.m.step.get_from_context(
-          'cwd', self.m.path['checkout'])
+      cwd = self.m.context.cwd or self.m.path['checkout']
     elif not use_mb:
-      context['env'].update(self.m.chromium.c.gyp_env.as_jsonish())
-    context['env']['GOMA_SERVICE_ACCOUNT_JSON_FILE'] = \
+      env.update(self.m.chromium.c.gyp_env.as_jsonish())
+    env['GOMA_SERVICE_ACCOUNT_JSON_FILE'] = \
         self.m.goma.service_account_json_path
 
-    with self.m.step.context(context):
+    with self.m.context(cwd=cwd, env=env):
       if use_mb:
         mb_mastername = mb_mastername or self.m.properties['mastername']
         mb_buildername = mb_buildername or self.m.properties['buildername']
