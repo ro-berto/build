@@ -77,6 +77,8 @@ ANDROID_CIPD_PACKAGES = [
 
 def generate_tests(api, test_suite, revision, enable_swarming=False):
   tests = []
+  build_out_dir = api.m.path['checkout'].join(
+      'out', api.m.chromium.c.build_config_fs)
   GTestTest = api.m.chromium_tests.steps.GTestTest
   SwarmingTest = api.m.chromium_tests.steps.SwarmingIsolatedScriptTest
   if test_suite == 'webrtc':
@@ -131,8 +133,6 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
               '--android', '--adb-path', api.m.adb.adb_path()],
         revision=revision))
 
-    build_out_dir = api.m.path['checkout'].join(
-        'out', api.m.chromium.c.build_config_fs)
     # Skip video_quality_loopback_test on Android K bot (not supported).
     if 'kitkat' not in api.c.PERF_ID:
       tests.append(PerfTest(
@@ -154,6 +154,14 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
                                override_isolate_target=test))
       else:
         tests.append(AndroidJunitTest(test))
+
+    if api.should_test_android_studio_project_generation:
+       tests.append(WebRTCTest(
+          name='gradle_project_test',
+          test=str(api.m.path['checkout'].join(
+            'webrtc', 'examples',  'androidtests', 'gradle_project_test.py')),
+          args=[build_out_dir],
+          parallel=False))
     if api.m.tryserver.is_tryserver:
       tests.append(GTestTest(
           'webrtc_perf_tests',
