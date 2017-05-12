@@ -649,6 +649,13 @@
               "compile_v2"
             ]
           },
+          "Mojo Linux": {
+            "tree_notify": [
+              "network-service-dev+bot@chromium.org"
+            ],
+            "forgive_all": "true",
+            "forgiving_optional": ["*"]
+          },
           "Ozone Linux": {
             "tree_notify": [
               "thomasanderson@chromium.org",
