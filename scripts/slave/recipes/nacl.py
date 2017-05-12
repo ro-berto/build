@@ -6,6 +6,7 @@ DEPS = [
   'depot_tools/bot_update',
   'depot_tools/gclient',
   'goma',
+  'recipe_engine/context',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
@@ -79,7 +80,7 @@ def _AnnotatedStepsSteps(api, got_revision):
     api.goma.start(env=env)
   exit_status = -1
   try:
-    with api.step.context({'cwd': api.path['checkout'], 'env': env}):
+    with api.context(cwd=api.path['checkout'], env=env):
       api.python('annotated steps',
                  api.path['checkout'].join('buildbot', 'buildbot_selector.py'),
                  allow_subannotations=True)
