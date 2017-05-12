@@ -2,9 +2,9 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-# TODO: remove redundant DEPS.
 DEPS = [
   'file',
+  'recipe_engine/context',
   'recipe_engine/path',
   'recipe_engine/properties',
   'repo',
@@ -105,7 +105,7 @@ def setup_host_x86(api, debug, bitness, concurrent_collector=True,
       env.update({ 'ART_HEAP_POISONING' : 'false' })
 
 
-    with api.step.context({'env': env}):
+    with api.context(env=env):
       api.step('build sdk-eng',
                [art_tools.join('buildbot-build.sh'), '-j8', '--host'])
 
@@ -226,7 +226,7 @@ def setup_target(api,
     make_jobs = 1
 
   with api.step.defer_results():
-    with api.step.context({'env': env}):
+    with api.context(env=env):
       api.step('build target', [art_tools.join('buildbot-build.sh'),
                                 '-j8', '--target'])
 
@@ -238,7 +238,7 @@ def setup_target(api,
       api.step('sync target', ['make', 'test-art-target-sync'])
 
     def test_logging(api, test_name):
-      with api.step.context({'env': env}):
+      with api.context(env=env):
         api.step(test_name + ': adb logcat',
                  ['adb', 'logcat', '-d', '-v', 'threadtime'])
         api.step(test_name + ': crashes',
@@ -249,7 +249,7 @@ def setup_target(api,
     test_env.update({ 'ART_TEST_NO_SYNC': 'true' })
     test_env.update({ 'ANDROID_ROOT': android_root })
 
-    with api.step.context({'env': test_env}):
+    with api.context(env=test_env):
       api.step('test gtest', ['make', '-j%d' % (make_jobs),
         'test-art-target-gtest%d' % bitness])
     test_logging(api, 'test gtest')
@@ -260,7 +260,7 @@ def setup_target(api,
     if not debug and device == 'fugu':
       optimizing_make_jobs = 1
 
-    with api.step.context({'env': test_env}):
+    with api.context(env=test_env):
       api.step('test optimizing', ['./art/test/testrunner/testrunner.py',
                                    '-j%d' % (optimizing_make_jobs),
                                    '--optimizing',
@@ -270,7 +270,7 @@ def setup_target(api,
                                    '--verbose'])
     test_logging(api, 'test optimizing')
 
-    with api.step.context({'env': test_env}):
+    with api.context(env=test_env):
       api.step('test interpreter', ['./art/test/testrunner/testrunner.py',
                                     '-j%d' % (make_jobs),
                                     '--interpreter',
@@ -278,7 +278,7 @@ def setup_target(api,
                                     '--verbose'])
     test_logging(api, 'test interpreter')
 
-    with api.step.context({'env': test_env}):
+    with api.context(env=test_env):
       api.step('test jit', ['./art/test/testrunner/testrunner.py',
                             '-j%d' % (make_jobs),
                             '--jit',
@@ -286,7 +286,7 @@ def setup_target(api,
                             '--verbose'])
     test_logging(api, 'test jit')
 
-    with api.step.context({'env': test_env}):
+    with api.context(env=test_env):
       api.step('test speed-profile', ['./art/test/testrunner/testrunner.py',
                                       '-j%d' % (make_jobs),
                                       '--speed-profile',
@@ -299,7 +299,7 @@ def setup_target(api,
                        '--variant=X%d' % bitness]
     if debug:
       libcore_command.append('--debug')
-    with api.step.context({'env': test_env}):
+    with api.context(env=test_env):
       api.step('test libcore', libcore_command)
     test_logging(api, 'test libcore')
 
@@ -308,7 +308,7 @@ def setup_target(api,
                     '--variant=X%d' % bitness]
     if debug:
       jdwp_command.append('--debug')
-    with api.step.context({'env': test_env}):
+    with api.context(env=test_env):
       api.step('test jdwp jit', jdwp_command)
     test_logging(api, 'test jdwp jit')
 
@@ -318,7 +318,7 @@ def setup_target(api,
                     '--no-jit']
     if debug:
       jdwp_command.append('--debug')
-    with api.step.context({'env': test_env}):
+    with api.context(env=test_env):
       api.step('test jdwp aot', jdwp_command)
     test_logging(api, 'test jdwp aot')
 
@@ -339,7 +339,7 @@ def setup_aosp_builder(api, read_barrier):
               'JACK_REPOSITORY': str(build_top_dir.join('prebuilts', 'sdk',
                                                         'tools', 'jacks')),
               'ART_USE_READ_BARRIER': 'true' if read_barrier else 'false'}
-      with api.step.context({'env': env}):
+      with api.context(env=env):
         api.step('Clean oat %s' % build, ['make', '-j8', 'clean-oat-host'])
         api.step('build %s' % build, ['make', '-j8'])
 
@@ -361,7 +361,7 @@ def setup_valgrind_runner(api, bitness):
     if bitness == 32:
       env.update({ 'HOST_PREFER_32_BIT' : 'true' })
 
-    with api.step.context({'env': env}):
+    with api.context(env=env):
       api.step('run valgrind tests', [run, '-j8', 'art-gtest-valgrind%d' % bitness])
 
 
