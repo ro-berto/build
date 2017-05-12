@@ -7,7 +7,6 @@ import argparse
 import collections
 import contextlib
 import copy
-import itertools
 import json
 import logging
 import os
@@ -95,15 +94,6 @@ _CANARY_MASTERS = set((
   'chromium.swarm',
 ))
 
-# If the build is a CQ dry run, and the blamelist contains one of these
-# usernames, the build will automatically opt-in to Kitchen.
-_OPT_IN_USERS = set([
-      'user:%s@%s' % (ldap, domain) for ldap, domain in itertools.product(
-        ('dnj', 'iannucci', 'hinoka', 'nodir', 'vadimsh', 'estaab', 'smut'),
-        ('chromium.org', 'google.com')
-      )
-])
-
 # The name of the recipe engine CIPD package.
 _RECIPES_PY_CIPD_PACKAGE = 'infra/recipes-py'
 # The name of the Kitchen CIPD package.
@@ -141,33 +131,6 @@ def _get_is_kitchen(mastername, buildername):
   if kc.is_blacklist:
     return buildername not in kc.builders
   return buildername in kc.builders
-
-
-def _get_is_opt_in(properties):
-  """Returns True if properties describes an opt-in user.
-
-  Opt-in users are identified by examining the "buildbucket.build.created_by"
-  field of the BuildBucket property.
-
-  The BuildBucket property looks like:
-  {
-    "build": {
-      "bucket": "master.tryserver.chromium.linux",
-      "created_by": "user:iannucci@chromium.org",
-      "created_ts": "1494616236661800",
-      "id": "8979775000984247248",
-      "lease_key": "2065395720",
-      "tags": [
-        "builder:linux_chromium_rel_ng",
-        "buildset:patch/rietveld/codereview.chromium.org/2852733003/1",
-        "master:tryserver.chromium.linux",
-        "user_agent:rietveld"
-      ]
-    }
-  }
-  """
-  v = properties.get('buildbucket', {}).get('build', {}).get('created_by')
-  return v in _OPT_IN_USERS
 
 
 def all_cipd_packages():
@@ -266,7 +229,7 @@ def _cleanup_old_layouts(using_kitchen, properties, buildbot_build_dir,
         LOGGER.exception('Failed to cleanup path: %s', path)
 
 
-def _remote_run_with_kitchen(args, stream, _is_canary, kitchen_version,
+def _remote_run_with_kitchen(args, stream, is_canary, kitchen_version,
                              properties, tempdir, basedir, cache_dir):
   # Write our build properties to a JSON file.
   properties_file = os.path.join(tempdir, 'remote_run_properties.json')
@@ -409,14 +372,11 @@ def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir):
   mastername = properties.get('mastername')
   buildername = properties.get('buildername')
 
-  # Determine if this build is an opt-in build.
-  is_opt_in = _get_is_opt_in(properties)
-
   # Determine our CIPD pins.
   #
   # If a property includes "remote_run_canary", we will explicitly use canary
   # pins. This can be done by manually submitting a build to the waterfall.
-  is_canary = (_get_is_canary(mastername) or is_opt_in or
+  is_canary = (_get_is_canary(mastername) or
                'remote_run_canary' in properties or args.canary)
   pins = _STABLE_CIPD_PINS if not is_canary else _CANARY_CIPD_PINS
 
@@ -424,7 +384,7 @@ def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir):
   #
   # If a property includes "remote_run_kitchen", we will explicitly use canary
   # pins. This can be done by manually submitting a build to the waterfall.
-  is_kitchen = (_get_is_kitchen(mastername, buildername) or is_opt_in or
+  is_kitchen = (_get_is_kitchen(mastername, buildername) or
                 'remote_run_kitchen' in properties)
 
   # Allow command-line "--kitchen" to override.
