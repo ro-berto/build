@@ -8,6 +8,7 @@ DEPS = [
   'depot_tools/gclient',
   'depot_tools/url',
   'goma',
+  'recipe_engine/context',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/platform',
@@ -59,8 +60,8 @@ def _BuildSteps(api, buildername, is_debug, is_official):
 
   if goma_dir:
     env['GOMA_DIR'] = goma_dir
-  with api.step.context({'env': env}):
-    with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(env=env):
+    with api.context(cwd=api.path['checkout']):
       api.python('mojob gn',
                  mojob_path,
                  args=['gn', build_type] + args + gn_args)
@@ -178,7 +179,7 @@ def _TestSteps(api):
     for entry in test_list:
       name = str(entry['name'])  # api.step() wants a non-Unicode string.
       command = entry['command']
-      with api.step.context({'cwd': api.path['checkout']}):
+      with api.context(cwd=api.path['checkout']):
         api.step(name, command)
 
 
