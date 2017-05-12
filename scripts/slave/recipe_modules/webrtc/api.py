@@ -146,13 +146,12 @@ class WebRTCApi(recipe_api.RecipeApi):
     # TODO(kjellander): Remove as soon crbug.com/677823 is resolved.
     if (self.m.tryserver.is_tryserver and
         'src' in  self.m.file.listdir('checkout root', self._working_dir)):
-      with self.m.step.context({'cwd': self._working_dir.join('src')}):
+      with self.m.context(cwd=self._working_dir.join('src')):
         self.m.git('reset', '--hard',
                    name='reset checkout [crbug.com/677823]',
                    infra_step=True)
 
-    context = {'cwd': self.m.step.get_from_context('cwd', self._working_dir)}
-    with self.m.step.context(context):
+    with self.m.context(cwd=self.m.context.cwd or self._working_dir):
       update_step = self.m.bot_update.ensure_checkout(**kwargs)
     assert update_step.json.output['did_run']
 
@@ -186,13 +185,9 @@ class WebRTCApi(recipe_api.RecipeApi):
     """Add a suite of test steps.
 
     Args:
-      test_suite: The name of the test suite.
+      test_suite=The name of the test suite.
     """
-    context = {}
-    if self._working_dir:
-      context['cwd'] = self._working_dir
-
-    with self.m.step.context(context):
+    with self.m.context(cwd=self._working_dir):
       tests = steps.generate_tests(self, self.c.TEST_SUITE, self.revision,
                                    self.c.enable_swarming)
       with self.m.step.defer_results():
@@ -228,7 +223,6 @@ class WebRTCApi(recipe_api.RecipeApi):
     """
     name = name or test
     args = args or []
-    env = env or {}
     if perf_test and self.c.PERF_ID:
       perf_dashboard_id = perf_dashboard_id or name
       assert self.revision_number, (
@@ -236,7 +230,7 @@ class WebRTCApi(recipe_api.RecipeApi):
           'data to the perf dashboard.')
       perf_config = self.PERF_CONFIG
       perf_config['r_webrtc_git'] = self.revision
-      with self.m.step.context({'env': env}):
+      with self.m.context(env=env):
         self.m.chromium.runtest(
             test=test, args=args, name=name,
             results_url=self.DASHBOARD_UPLOAD_URL, annotate='graphing',
@@ -262,7 +256,7 @@ class WebRTCApi(recipe_api.RecipeApi):
         annotate = None  # The parallel script doesn't output gtest format.
         flakiness_dash = False
 
-      with self.m.step.context({'env': env}):
+      with self.m.context(env=env):
         self.m.chromium.runtest(
             test=test, args=args, name=name, annotate=annotate, xvfb=True,
             flakiness_dash=flakiness_dash, python_mode=python_mode,

@@ -7,6 +7,7 @@ DEPS = [
   'depot_tools/bot_update',
   'depot_tools/gclient',
   'depot_tools/git',
+  'recipe_engine/context',
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/python',
@@ -41,7 +42,7 @@ def RunSteps(api):
   api.webrtc.checkout()
   api.gclient.runhooks()
 
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     # Enforce a clean state, and discard any local commits from previous runs.
     api.git('checkout', '-f', 'master')
     api.git('pull', 'origin', 'master')
