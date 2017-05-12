@@ -7,6 +7,7 @@ DEPS = [
   'depot_tools/gclient',
   'depot_tools/git',
   'depot_tools/presubmit',
+  'recipe_engine/context',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/properties',
@@ -48,7 +49,7 @@ def _RunStepsInternal(api):
       got_revision_properties[0])
 
   abs_root = api.path['start_dir'].join(relative_root)
-  with api.step.context({'cwd': abs_root}):
+  with api.context(cwd=abs_root):
     # TODO(hinoka): Extract email/name from issue?
     api.git('-c', 'user.email=commit-bot@chromium.org',
             '-c', 'user.name=The Commit Bot',
@@ -105,7 +106,7 @@ def _RunStepsInternal(api):
     env['PYTHONPATH'] = ''
 
   try:
-    with api.step.context({'env': env}):
+    with api.context(env=env):
       api.presubmit(*presubmit_args)
   except api.step.StepFailure as step_failure:
     if step_failure.result and step_failure.result.retcode == 1:

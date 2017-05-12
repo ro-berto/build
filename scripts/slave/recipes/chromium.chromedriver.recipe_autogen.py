@@ -8,6 +8,7 @@ DEPS = [
   'depot_tools/depot_tools',
   'depot_tools/gclient',
   'goma',
+  'recipe_engine/context',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/properties',
@@ -71,7 +72,7 @@ def Linux32_steps(api):
   # gclient update step; made unnecessary by bot_update
   # gclient runhooks wrapper step
   env = {'LANDMINES_VERBOSE': '1', 'DEPOT_TOOLS_UPDATE': '0'}
-  with api.step.context({'env': env}):
+  with api.context(env=env):
     api.python("gclient runhooks wrapper", api.package_repo_resource("scripts",
       "slave", "runhooks_wrapper.py"))
   # meta build step
@@ -138,7 +139,7 @@ def Mac_10_6_steps(api):
   # gclient update step; made unnecessary by bot_update
   # gclient runhooks wrapper step
   env = {'LANDMINES_VERBOSE': '1', 'DEPOT_TOOLS_UPDATE': '0'}
-  with api.step.context({'env': env}):
+  with api.context(env=env):
     api.python("gclient runhooks wrapper", api.package_repo_resource("scripts",
       "slave", "runhooks_wrapper.py"))
   # meta build step
@@ -207,7 +208,7 @@ def Win7_steps(api):
   # gclient update step; made unnecessary by bot_update
   # gclient runhooks wrapper step
   env = {'LANDMINES_VERBOSE': '1', 'DEPOT_TOOLS_UPDATE': '0'}
-  with api.step.context({'env': env}):
+  with api.context(env=env):
     api.python("gclient runhooks wrapper", api.package_repo_resource("scripts",
       "slave", "runhooks_wrapper.py"))
   # meta build step
@@ -270,7 +271,7 @@ def Linux_steps(api):
   # gclient update step; made unnecessary by bot_update
   # gclient runhooks wrapper step
   env = {'LANDMINES_VERBOSE': '1', 'DEPOT_TOOLS_UPDATE': '0'}
-  with api.step.context({'env': env}):
+  with api.context(env=env):
     api.python("gclient runhooks wrapper", api.package_repo_resource("scripts",
       "slave", "runhooks_wrapper.py"))
   # meta build step

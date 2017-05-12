@@ -7,6 +7,7 @@ DEPS = [
     'depot_tools/bot_update',
     'depot_tools/gclient',
     'file',
+    'recipe_engine/context',
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/properties',
@@ -39,7 +40,7 @@ def sdk_multi_steps(api):
            'LANDMINES_VERBOSE': '1',
            'DEPOT_TOOLS_UPDATE': '0',
            'GYP_DEFINES': 'fastbuild=1 component=static_library'}
-    with api.step.context({'env': env}):
+    with api.context(env=env):
       api.chromium.runhooks()
 
     # generate_build_files step
@@ -83,7 +84,7 @@ def sdk_multirel_steps(api):
            'LANDMINES_VERBOSE': '1',
            'DEPOT_TOOLS_UPDATE': '0',
            'GYP_DEFINES': 'fastbuild=1 component=static_library'}
-    with api.step.context({'env': env}):
+    with api.context(env=env):
       api.chromium.runhooks()
 
     # generate_build_files step

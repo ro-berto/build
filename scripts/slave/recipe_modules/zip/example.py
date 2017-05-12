@@ -4,6 +4,7 @@
 
 DEPS = [
   'file',
+  'recipe_engine/context',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/step',
@@ -35,7 +36,7 @@ def RunSteps(api):
   api.zip.unzip('unzipping', temp.join('output.zip'), temp.join('output'),
                 quiet=True)
   # List unzipped content.
-  with api.step.context({'cwd': temp.join('output')}):
+  with api.context(cwd=temp.join('output')):
     api.step('listing', ['find'])
   # Clean up.
   api.file.rmtree('cleanup', temp)

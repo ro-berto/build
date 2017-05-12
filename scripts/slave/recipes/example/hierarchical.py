@@ -4,17 +4,18 @@
 
 
 DEPS = [
+  'recipe_engine/context',
   'recipe_engine/step',
 ]
 
 
 def RunSteps(api):
-  with api.step.context({
-      'env': {'mood': 'excellent', 'climate': 'sunny'},
-      'name': 'grandparent'}):
-    with api.step.context({'env': {'climate': 'rainy'}, 'name': 'mom'}):
+  with api.context(
+      env={'mood': 'excellent', 'climate': 'sunny'},
+      name_prefix='grandparent'):
+    with api.context(env={'climate': 'rainy'}, name_prefix='mom'):
       api.step("child", ["echo", "billy"])
-    with api.step.context({'env': {'climate': 'cloudy'}, 'name': 'dad'}):
+    with api.context(env={'climate': 'cloudy'}, name_prefix='dad'):
       api.step("child", ["echo", "sam"])
     api.step("aunt", ["echo", "testb"])
 

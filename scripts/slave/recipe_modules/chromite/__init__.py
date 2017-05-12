@@ -5,6 +5,7 @@ DEPS = [
   'depot_tools/git',
   'depot_tools/gitiles',
   'goma',
+  'recipe_engine/context',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/properties',

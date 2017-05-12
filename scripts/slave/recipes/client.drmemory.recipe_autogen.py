@@ -8,6 +8,7 @@ DEPS = [
     'depot_tools/gclient',
     'file',
     'depot_tools/gsutil',
+    'recipe_engine/context',
     'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
@@ -108,9 +109,7 @@ def win_8_x64_drm_steps(api):
     # clear tools directory step; null converted
     # update tools step; null converted
     # unpack tools step; generic ShellCommand converted
-    with api.step.context({
-        'cwd': api.path['start_dir'].join('tools', 'buildbot', 'bot_tools'),
-        'env': {}}):
+    with api.context(cwd=api.path['start_dir'].join('tools', 'buildbot', 'bot_tools')):
       api.step("unpack tools",
                [api.path["start_dir"].join('tools', 'buildbot', 'bot_tools',
                  'unpack.bat')])
@@ -128,17 +127,17 @@ def win_8_x64_drm_steps(api):
               'http://data-race-test.googlecode.com/svn/trunk/',
               api.path["start_dir"].join("tsan")])
     # Build TSan tests step
-    with api.step.context({'env': {
+    with api.context(env={
         "BOTTOOLS": api.path["start_dir"].join(
-            "tools", "buildbot", "bot_tools"),
-        "CYGWIN": "nodosfilewarning"}}):
+          "tools", "buildbot", "bot_tools"),
+        "CYGWIN": "nodosfilewarning"}):
       api.step("Build TSan Tests",
                ['E:\\b\\build\\scripts\\slave\\drmemory\\build_env.bat', 'make',
                 '-C', api.path["start_dir"].join("tsan", "unittest")])
     # Dr. Memory TSan test step
-    with api.step.context({'env': {
+    with api.context(env={
         "BOTTOOLS": api.path["start_dir"].join(
-            "tools", "buildbot", "bot_tools")}}):
+          "tools", "buildbot", "bot_tools")}):
       api.step(
           "dbg full TSan tests",
           [api.package_repo_resource("scripts", "slave", "drmemory",
@@ -153,9 +152,9 @@ def win_8_x64_drm_steps(api):
            '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
            '-147'])
     # Dr. Memory TSan test step
-    with api.step.context({'env': {
+    with api.context(env={
         "BOTTOOLS": api.path["start_dir"].join(
-            "tools", "buildbot", "bot_tools")}}):
+          "tools", "buildbot", "bot_tools")}):
       api.step(
           "dbg light TSan tests",
           [api.package_repo_resource("scripts", "slave", "drmemory",
@@ -170,9 +169,9 @@ def win_8_x64_drm_steps(api):
            '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
            '-147'])
     # Dr. Memory TSan test step
-    with api.step.context({'env': {
+    with api.context(env={
         "BOTTOOLS": api.path["start_dir"].join(
-            "tools", "buildbot", "bot_tools")}}):
+          "tools", "buildbot", "bot_tools")}):
       api.step(
           "rel full TSan tests",
           [api.package_repo_resource("scripts", "slave", "drmemory",
@@ -187,9 +186,9 @@ def win_8_x64_drm_steps(api):
            '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
            '-147'])
     # Dr. Memory TSan test step
-    with api.step.context({'env': {
+    with api.context(env={
         "BOTTOOLS": api.path["start_dir"].join(
-            "tools", "buildbot", "bot_tools")}}):
+          "tools", "buildbot", "bot_tools")}):
       api.step(
           "rel light TSan tests",
           [api.package_repo_resource("scripts", "slave", "drmemory",
@@ -204,9 +203,9 @@ def win_8_x64_drm_steps(api):
            '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
            '-147'])
     # Dr. Memory TSan test step
-    with api.step.context({'env': {
+    with api.context(env={
         "BOTTOOLS": api.path["start_dir"].join(
-            "tools", "buildbot", "bot_tools")}}):
+          "tools", "buildbot", "bot_tools")}):
       api.step(
           "dbg full nosyms TSan tests",
           [api.package_repo_resource("scripts", "slave", "drmemory",
@@ -222,9 +221,9 @@ def win_8_x64_drm_steps(api):
            '-147'])
     # Prepare to pack test results step; null converted
     # Pack test results step
-    with api.step.context({'env': {
+    with api.context(env={
         "BOTTOOLS": api.path["start_dir"].join(
-            "tools", "buildbot", "bot_tools")}}):
+          "tools", "buildbot", "bot_tools")}):
       api.step("Pack test results",
                [api.package_repo_resource("scripts", "slave", "drmemory",
                  "build_env.bat"), '7z', 'a', '-xr!*.pdb',
@@ -264,9 +263,7 @@ def win_7_x64_drm_steps(api):
     # clear tools directory step; null converted
     # update tools step; null converted
     # unpack tools step; generic ShellCommand converted
-    with api.step.context({
-        'cwd': api.path['start_dir'].join('tools', 'buildbot', 'bot_tools'),
-        'env': {}}):
+    with api.context(cwd=api.path['start_dir'].join('tools', 'buildbot', 'bot_tools')):
       api.step("unpack tools",
                [api.path["start_dir"].join('tools', 'buildbot', 'bot_tools',
                  'unpack.bat')])
@@ -284,17 +281,17 @@ def win_7_x64_drm_steps(api):
               'http://data-race-test.googlecode.com/svn/trunk/',
               api.path["start_dir"].join("tsan")])
     # Build TSan tests step
-    with api.step.context({'env': {
+    with api.context(env={
         "BOTTOOLS": api.path["start_dir"].join(
-            "tools", "buildbot", "bot_tools"),
-        "CYGWIN": "nodosfilewarning"}}):
+          "tools", "buildbot", "bot_tools"),
+        "CYGWIN": "nodosfilewarning"}):
       api.step("Build TSan Tests",
                ['E:\\b\\build\\scripts\\slave\\drmemory\\build_env.bat', 'make',
                 '-C', api.path["start_dir"].join("tsan", "unittest")])
     # Dr. Memory TSan test step
-    with api.step.context({'env': {
+    with api.context(env={
         "BOTTOOLS": api.path["start_dir"].join(
-            "tools", "buildbot", "bot_tools")}}):
+          "tools", "buildbot", "bot_tools")}):
       api.step(
           "dbg full TSan tests",
           [api.package_repo_resource("scripts", "slave", "drmemory",
@@ -309,9 +306,9 @@ def win_7_x64_drm_steps(api):
            '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
            '-147'])
     # Dr. Memory TSan test step
-    with api.step.context({'env': {
+    with api.context(env={
         "BOTTOOLS": api.path["start_dir"].join(
-            "tools", "buildbot", "bot_tools")}}):
+          "tools", "buildbot", "bot_tools")}):
       api.step(
           "dbg light TSan tests",
           [api.package_repo_resource("scripts", "slave", "drmemory",
@@ -326,9 +323,9 @@ def win_7_x64_drm_steps(api):
            '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
            '-147'])
     # Dr. Memory TSan test step
-    with api.step.context({'env': {
+    with api.context(env={
         "BOTTOOLS": api.path["start_dir"].join(
-            "tools", "buildbot", "bot_tools")}}):
+          "tools", "buildbot", "bot_tools")}):
       api.step(
           "rel full TSan tests",
           [api.package_repo_resource("scripts", "slave", "drmemory",
@@ -343,9 +340,9 @@ def win_7_x64_drm_steps(api):
            '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
            '-147'])
     # Dr. Memory TSan test step
-    with api.step.context({'env': {
+    with api.context(env={
         "BOTTOOLS": api.path["start_dir"].join(
-            "tools", "buildbot", "bot_tools")}}):
+          "tools", "buildbot", "bot_tools")}):
       api.step(
           "rel light TSan tests",
           [api.package_repo_resource("scripts", "slave", "drmemory",
@@ -360,9 +357,9 @@ def win_7_x64_drm_steps(api):
            '-PositiveTests.FreeVsRead:NegativeTests.WaitForMultiple*',
            '-147'])
     # Dr. Memory TSan test step
-    with api.step.context({'env': {
+    with api.context(env={
         "BOTTOOLS": api.path["start_dir"].join(
-            "tools", "buildbot", "bot_tools")}}):
+          "tools", "buildbot", "bot_tools")}):
       api.step(
           "dbg full nosyms TSan tests",
           [api.package_repo_resource("scripts", "slave", "drmemory",
@@ -378,9 +375,9 @@ def win_7_x64_drm_steps(api):
            '-147'])
     # Prepare to pack test results step; null converted
     # Pack test results step
-    with api.step.context({'env': {
+    with api.context(env={
         "BOTTOOLS": api.path["start_dir"].join(
-            "tools", "buildbot", "bot_tools")}}):
+          "tools", "buildbot", "bot_tools")}):
       api.step("Pack test results",
                [api.package_repo_resource("scripts", "slave", "drmemory",
                  "build_env.bat"), '7z', 'a', '-xr!*.pdb',
@@ -420,17 +417,15 @@ def win_builder_steps(api):
     # clear tools directory step; null converted
     # update tools step; null converted
     # unpack tools step; generic ShellCommand converted
-    with api.step.context({
-        'cwd': api.path['start_dir'].join('tools', 'buildbot', 'bot_tools'),
-        'env': {}}):
+    with api.context(cwd=api.path['start_dir'].join('tools', 'buildbot', 'bot_tools')):
       api.step("unpack tools",
                [api.path["start_dir"].join('tools', 'buildbot', 'bot_tools',
                  'unpack.bat')])
     # get buildnumber step; no longer needed
-    with api.step.context({'cwd': api.path['start_dir']}):
-      with api.step.context({'env': {
+    with api.context(cwd=api.path['start_dir']):
+      with api.context(env={
           "BOTTOOLS": api.path["start_dir"].join(
-              "tools", "buildbot", "bot_tools")}}):
+            "tools", "buildbot", "bot_tools")}):
         # Package dynamorio step
         api.step("Package Dr. Memory",
                  [api.package_repo_resource("scripts", "slave", "drmemory",
@@ -452,12 +447,12 @@ def win_builder_steps(api):
         ok_ret=(0,1))
     # Create sfx archive step
     lastdir = api.path.basename(api.path["start_dir"])
-    with api.step.context({
-        'cwd': api.path['start_dir'],
-        'env': {
-            "BOTTOOLS": api.path["start_dir"].join(
-                "tools", "buildbot", "bot_tools")
-        }}):
+    with api.context(
+        cwd=api.path['start_dir'],
+        env={
+          "BOTTOOLS": api.path["start_dir"].join(
+            "tools", "buildbot", "bot_tools")
+        }):
       api.step("create sfx archive",
                [api.package_repo_resource("scripts", "slave", "drmemory",
                                        "build_env.bat"), "7z", "a", "-sfx",
@@ -471,7 +466,7 @@ def win_builder_steps(api):
     api.file.copy("copy locally",
         api.path["start_dir"].join(basename + "-sfx.exe"),
         api.path["start_dir"].join("drmemory-windows-latest-sfx.exe"))
-    with api.step.context({'cwd': api.path['start_dir']}):
+    with api.context(cwd=api.path['start_dir']):
       api.gsutil.upload("drmemory-windows-latest-sfx.exe",
                         "chromium-drmemory-builds",
                         "")

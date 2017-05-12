@@ -321,7 +321,7 @@ class ChromiteApi(recipe_api.RecipeApi):
     cbb_args.extend(self.c.cbb.extra_args)
 
     # Run cbuildbot.
-    with self.m.step.context({'cwd': self.m.path['start_dir']}):
+    with self.m.context(cwd=self.m.path['start_dir']):
       return self.cbuildbot(str('cbuildbot [%s]' % (self.c.cbb.config,)),
                             self.c.cbb.config,
                             args=cbb_args)

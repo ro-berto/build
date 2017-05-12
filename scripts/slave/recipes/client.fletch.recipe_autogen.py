@@ -5,6 +5,7 @@
 DEPS = [
     "depot_tools/bot_update",
     "depot_tools/gclient",
+    "recipe_engine/context",
     "recipe_engine/path",
     "recipe_engine/properties",
     "recipe_engine/python",
@@ -32,31 +33,31 @@ def target_dartino_linux_debug_arm_dev_steps(api):
   env = {"CHROMIUM_GYP_SYNTAX_CHECK": "1",
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
-  with api.step.context({'env': env}):
+  with api.context(env=env):
     api.python("gclient runhooks wrapper",
                api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": api.path["checkout"].join(
-              "third_party", "java", "linux", "j2sdk")}}):
+            "third_party", "java", "linux", "j2sdk")}):
         api.python("Taskkill",
                    api.path["checkout"].join("third_party", "dart", "tools",
                                              "task_kill.py"),
                    args=["--kill_browsers=True"])
       # dartino annotated steps step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": "third_party/java/linux/j2sdk",
           "BUILDBOT_ANNOTATED_STEPS_RUN": "1",
-          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}}):
+          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}):
         api.python("annotated steps",
                    api.path["checkout"].join("tools", "bots", "dartino.py"),
                    allow_subannotations=True)
       # taskkill step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": api.path["checkout"].join(
-              "third_party", "java", "linux", "j2sdk")}}):
+            "third_party", "java", "linux", "j2sdk")}):
         api.python("Taskkill",
                    api.path["checkout"].join("third_party", "dart", "tools",
                                              "task_kill.py"),
@@ -82,30 +83,28 @@ def dartino_mac_debug_asan_x86_dev_steps(api):
   env = {"CHROMIUM_GYP_SYNTAX_CHECK": "1",
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
-  with api.step.context({'env': env}):
+  with api.context(env=env):
     api.python("gclient runhooks wrapper",
                api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
-      with api.step.context({'env': {}}):
-        api.python("Taskkill",
-                   api.path["checkout"].join("third_party", "dart", "tools",
-                                             "task_kill.py"),
-                   args=["--kill_browsers=True"])
+      api.python("Taskkill",
+                 api.path["checkout"].join("third_party", "dart", "tools",
+                                           "task_kill.py"),
+                 args=["--kill_browsers=True"])
       # dartino annotated steps step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_ANNOTATED_STEPS_RUN": "1",
-          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}}):
+          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}):
         api.python("annotated steps",
                    api.path["checkout"].join("tools", "bots", "dartino.py"),
                    allow_subannotations=True)
       # taskkill step
-      with api.step.context({'env': {}}):
-        api.python("Taskkill",
-                   api.path["checkout"].join("third_party", "dart", "tools",
-                                             "task_kill.py"),
-                   args=["--kill_browsers=True"])
+      api.python("Taskkill",
+                 api.path["checkout"].join("third_party", "dart", "tools",
+                                           "task_kill.py"),
+                 args=["--kill_browsers=True"])
 
 
 def target_dartino_linux_release_arm_dev_steps(api):
@@ -127,31 +126,31 @@ def target_dartino_linux_release_arm_dev_steps(api):
   env = {"CHROMIUM_GYP_SYNTAX_CHECK": "1",
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
-  with api.step.context({'env': env}):
+  with api.context(env=env):
     api.python("gclient runhooks wrapper",
                api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": api.path["checkout"].join(
-              "third_party", "java", "linux", "j2sdk")}}):
+            "third_party", "java", "linux", "j2sdk")}):
         api.python("Taskkill",
                    api.path["checkout"].join("third_party", "dart", "tools",
                                              "task_kill.py"),
                    args=["--kill_browsers=True"])
       # dartino annotated steps step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": "third_party/java/linux/j2sdk",
           "BUILDBOT_ANNOTATED_STEPS_RUN": "1",
-          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}}):
+          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}):
         api.python("annotated steps",
                    api.path["checkout"].join("tools", "bots", "dartino.py"),
                    allow_subannotations=True)
       # taskkill step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": api.path["checkout"].join(
-              "third_party", "java", "linux", "j2sdk")}}):
+            "third_party", "java", "linux", "j2sdk")}):
         api.python("Taskkill",
                    api.path["checkout"].join("third_party", "dart", "tools",
                                              "task_kill.py"),
@@ -177,31 +176,31 @@ def dartino_lk_debug_arm_qemu_dev_steps(api):
   env = {"CHROMIUM_GYP_SYNTAX_CHECK": "1",
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
-  with api.step.context({'env': env}):
+  with api.context(env=env):
     api.python("gclient runhooks wrapper",
                api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": api.path["checkout"].join(
-              "third_party", "java", "linux", "j2sdk")}}):
+            "third_party", "java", "linux", "j2sdk")}):
         api.python("Taskkill",
                    api.path["checkout"].join("third_party", "dart", "tools",
                                              "task_kill.py"),
                    args=["--kill_browsers=True"])
       # dartino annotated steps step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": "third_party/java/linux/j2sdk",
           "BUILDBOT_ANNOTATED_STEPS_RUN": "1",
-          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}}):
+          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}):
         api.python("annotated steps",
                    api.path["checkout"].join("tools", "bots", "dartino.py"),
                    allow_subannotations=True)
       # taskkill step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": api.path["checkout"].join(
-              "third_party", "java", "linux", "j2sdk")}}):
+            "third_party", "java", "linux", "j2sdk")}):
         api.python("Taskkill",
                    api.path["checkout"].join("third_party", "dart", "tools",
                                              "task_kill.py"),
@@ -227,31 +226,31 @@ def dartino_linux_release_asan_x86_steps(api):
   env = {"CHROMIUM_GYP_SYNTAX_CHECK": "1",
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
-  with api.step.context({'env': env}):
+  with api.context(env=env):
     api.python("gclient runhooks wrapper",
                api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": api.path["checkout"].join(
-              "third_party", "java", "linux", "j2sdk")}}):
+            "third_party", "java", "linux", "j2sdk")}):
         api.python("Taskkill",
                    api.path["checkout"].join("third_party", "dart", "tools",
                                              "task_kill.py"),
                    args=["--kill_browsers=True"])
       # dartino annotated steps step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": "third_party/java/linux/j2sdk",
           "BUILDBOT_ANNOTATED_STEPS_RUN": "1",
-          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}}):
+          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}):
         api.python("annotated steps",
                    api.path["checkout"].join("tools", "bots", "dartino.py"),
                    allow_subannotations=True)
       # taskkill step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": api.path["checkout"].join(
-              "third_party", "java", "linux", "j2sdk")}}):
+            "third_party", "java", "linux", "j2sdk")}):
         api.python("Taskkill",
                    api.path["checkout"].join("third_party", "dart", "tools",
                                              "task_kill.py"),
@@ -277,30 +276,28 @@ def dartino_mac_release_x86_dev_steps(api):
   env = {"CHROMIUM_GYP_SYNTAX_CHECK": "1",
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
-  with api.step.context({'env': env}):
+  with api.context(env=env):
     api.python("gclient runhooks wrapper",
                api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
-      with api.step.context({'env': {}}):
-        api.python("Taskkill",
-                   api.path["checkout"].join("third_party", "dart", "tools",
-                                             "task_kill.py"),
-                   args=["--kill_browsers=True"])
+      api.python("Taskkill",
+                 api.path["checkout"].join("third_party", "dart", "tools",
+                                           "task_kill.py"),
+                 args=["--kill_browsers=True"])
       # dartino annotated steps step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_ANNOTATED_STEPS_RUN": "1",
-          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}}):
+          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}):
         api.python("annotated steps",
                    api.path["checkout"].join("tools", "bots", "dartino.py"),
                    allow_subannotations=True)
       # taskkill step
-      with api.step.context({'env': {}}):
-        api.python("Taskkill",
-                   api.path["checkout"].join("third_party", "dart", "tools",
-                                             "task_kill.py"),
-                   args=["--kill_browsers=True"])
+      api.python("Taskkill",
+                 api.path["checkout"].join("third_party", "dart", "tools",
+                                           "task_kill.py"),
+                 args=["--kill_browsers=True"])
 
 
 def cross_dartino_linux_arm_steps(api):
@@ -322,31 +319,31 @@ def cross_dartino_linux_arm_steps(api):
   env = {"CHROMIUM_GYP_SYNTAX_CHECK": "1",
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
-  with api.step.context({'env': env}):
+  with api.context(env=env):
     api.python("gclient runhooks wrapper",
                api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": api.path["checkout"].join(
-              "third_party", "java", "linux", "j2sdk")}}):
+            "third_party", "java", "linux", "j2sdk")}):
         api.python("Taskkill",
                    api.path["checkout"].join("third_party", "dart", "tools",
                                              "task_kill.py"),
                    args=["--kill_browsers=True"])
       # dartino annotated steps step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": "third_party/java/linux/j2sdk",
           "BUILDBOT_ANNOTATED_STEPS_RUN": "1",
-          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}}):
+          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}):
         api.python("annotated steps",
                    api.path["checkout"].join("tools", "bots", "dartino.py"),
                    allow_subannotations=True)
       # taskkill step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": api.path["checkout"].join(
-              "third_party", "java", "linux", "j2sdk")}}):
+            "third_party", "java", "linux", "j2sdk")}):
         api.python("Taskkill",
                    api.path["checkout"].join("third_party", "dart", "tools",
                                              "task_kill.py"),
@@ -376,30 +373,28 @@ def dartino_mac_release_asan_x86_steps(api):
   env = {"CHROMIUM_GYP_SYNTAX_CHECK": "1",
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
-  with api.step.context({'env': env}):
+  with api.context(env=env):
     api.python("gclient runhooks wrapper",
                api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
-      with api.step.context({'env': {}}):
-        api.python("Taskkill",
-                   api.path["checkout"].join("third_party", "dart", "tools",
-                                             "task_kill.py"),
-                   args=["--kill_browsers=True"])
+      api.python("Taskkill",
+                 api.path["checkout"].join("third_party", "dart", "tools",
+                                           "task_kill.py"),
+                 args=["--kill_browsers=True"])
       # dartino annotated steps step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_ANNOTATED_STEPS_RUN": "1",
-          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}}):
+          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}):
         api.python("annotated steps",
                    api.path["checkout"].join("tools", "bots", "dartino.py"),
                    allow_subannotations=True)
       # taskkill step
-      with api.step.context({'env': {}}):
-        api.python("Taskkill",
-                   api.path["checkout"].join("third_party", "dart", "tools",
-                                             "task_kill.py"),
-                   args=["--kill_browsers=True"])
+      api.python("Taskkill",
+                 api.path["checkout"].join("third_party", "dart", "tools",
+                                           "task_kill.py"),
+                 args=["--kill_browsers=True"])
 
 
 def cross_dartino_linux_arm_dev_steps(api):
@@ -421,31 +416,31 @@ def cross_dartino_linux_arm_dev_steps(api):
   env = {"CHROMIUM_GYP_SYNTAX_CHECK": "1",
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
-  with api.step.context({'env': env}):
+  with api.context(env=env):
     api.python("gclient runhooks wrapper",
                api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": api.path["checkout"].join(
-              "third_party", "java", "linux", "j2sdk")}}):
+            "third_party", "java", "linux", "j2sdk")}):
         api.python("Taskkill",
                    api.path["checkout"].join("third_party", "dart", "tools",
                                              "task_kill.py"),
                    args=["--kill_browsers=True"])
       # dartino annotated steps step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": "third_party/java/linux/j2sdk",
           "BUILDBOT_ANNOTATED_STEPS_RUN": "1",
-          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}}):
+          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}):
         api.python("annotated steps",
                    api.path["checkout"].join("tools", "bots", "dartino.py"),
                    allow_subannotations=True)
       # taskkill step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": api.path["checkout"].join(
-              "third_party", "java", "linux", "j2sdk")}}):
+            "third_party", "java", "linux", "j2sdk")}):
         api.python("Taskkill",
                    api.path["checkout"].join("third_party", "dart", "tools",
                                              "task_kill.py"),
@@ -475,31 +470,31 @@ def dartino_free_rtos_steps(api):
   env = {"CHROMIUM_GYP_SYNTAX_CHECK": "1",
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
-  with api.step.context({'env': env}):
+  with api.context(env=env):
     api.python("gclient runhooks wrapper",
                api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": api.path["checkout"].join(
-              "third_party", "java", "linux", "j2sdk")}}):
+            "third_party", "java", "linux", "j2sdk")}):
         api.python("Taskkill",
                    api.path["checkout"].join("third_party", "dart", "tools",
                                              "task_kill.py"),
                    args=["--kill_browsers=True"])
       # dartino annotated steps step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": "third_party/java/linux/j2sdk",
           "BUILDBOT_ANNOTATED_STEPS_RUN": "1",
-          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}}):
+          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}):
         api.python("annotated steps",
                    api.path["checkout"].join("tools", "bots", "dartino.py"),
                    allow_subannotations=True)
       # taskkill step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": api.path["checkout"].join(
-              "third_party", "java", "linux", "j2sdk")}}):
+            "third_party", "java", "linux", "j2sdk")}):
         api.python("Taskkill",
                    api.path["checkout"].join("third_party", "dart", "tools",
                                              "task_kill.py"),
@@ -525,30 +520,28 @@ def dartino_mac_release_x64_sdk_steps(api):
   env = {"CHROMIUM_GYP_SYNTAX_CHECK": "1",
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
-  with api.step.context({'env': env}):
+  with api.context(env=env):
     api.python("gclient runhooks wrapper",
                api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
-      with api.step.context({'env': {}}):
-        api.python("Taskkill",
-                   api.path["checkout"].join("third_party", "dart", "tools",
-                                             "task_kill.py"),
-                   args=["--kill_browsers=True"])
+      api.python("Taskkill",
+                 api.path["checkout"].join("third_party", "dart", "tools",
+                                           "task_kill.py"),
+                 args=["--kill_browsers=True"])
       # dartino annotated steps step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_ANNOTATED_STEPS_RUN": "1",
-          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}}):
+          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}):
         api.python("annotated steps",
                    api.path["checkout"].join("tools", "bots", "dartino.py"),
                    allow_subannotations=True)
       # taskkill step
-      with api.step.context({'env': {}}):
-        api.python("Taskkill",
-                   api.path["checkout"].join("third_party", "dart", "tools",
-                                             "task_kill.py"),
-                   args=["--kill_browsers=True"])
+      api.python("Taskkill",
+                 api.path["checkout"].join("third_party", "dart", "tools",
+                                           "task_kill.py"),
+                 args=["--kill_browsers=True"])
 
 
 def dartino_free_rtos_dev_steps(api):
@@ -570,31 +563,31 @@ def dartino_free_rtos_dev_steps(api):
   env = {"CHROMIUM_GYP_SYNTAX_CHECK": "1",
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
-  with api.step.context({'env': env}):
+  with api.context(env=env):
     api.python("gclient runhooks wrapper",
                api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": api.path["checkout"].join(
-              "third_party", "java", "linux", "j2sdk")}}):
+            "third_party", "java", "linux", "j2sdk")}):
         api.python("Taskkill",
                    api.path["checkout"].join("third_party", "dart", "tools",
                                              "task_kill.py"),
                    args=["--kill_browsers=True"])
       # dartino annotated steps step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": "third_party/java/linux/j2sdk",
           "BUILDBOT_ANNOTATED_STEPS_RUN": "1",
-          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}}):
+          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}):
         api.python("annotated steps",
                    api.path["checkout"].join("tools", "bots", "dartino.py"),
                    allow_subannotations=True)
       # taskkill step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": api.path["checkout"].join(
-              "third_party", "java", "linux", "j2sdk")}}):
+            "third_party", "java", "linux", "j2sdk")}):
         api.python("Taskkill",
                    api.path["checkout"].join("third_party", "dart", "tools",
                                              "task_kill.py"),
@@ -620,30 +613,28 @@ def dartino_mac_debug_asan_x86_steps(api):
   env = {"CHROMIUM_GYP_SYNTAX_CHECK": "1",
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
-  with api.step.context({'env': env}):
+  with api.context(env=env):
     api.python("gclient runhooks wrapper",
                api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
-      with api.step.context({'env': {}}):
-        api.python("Taskkill",
-                   api.path["checkout"].join("third_party", "dart", "tools",
-                                             "task_kill.py"),
-                   args=["--kill_browsers=True"])
+      api.python("Taskkill",
+                 api.path["checkout"].join("third_party", "dart", "tools",
+                                           "task_kill.py"),
+                 args=["--kill_browsers=True"])
       # dartino annotated steps step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_ANNOTATED_STEPS_RUN": "1",
-          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}}):
+          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}):
         api.python("annotated steps",
                    api.path["checkout"].join("tools", "bots", "dartino.py"),
                    allow_subannotations=True)
       # taskkill step
-      with api.step.context({'env': {}}):
-        api.python("Taskkill",
-                   api.path["checkout"].join("third_party", "dart", "tools",
-                                             "task_kill.py"),
-                   args=["--kill_browsers=True"])
+      api.python("Taskkill",
+                 api.path["checkout"].join("third_party", "dart", "tools",
+                                           "task_kill.py"),
+                 args=["--kill_browsers=True"])
 
 
 def dartino_mac_debug_x86_steps(api):
@@ -665,30 +656,28 @@ def dartino_mac_debug_x86_steps(api):
   env = {"CHROMIUM_GYP_SYNTAX_CHECK": "1",
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
-  with api.step.context({'env': env}):
+  with api.context(env=env):
     api.python("gclient runhooks wrapper",
                api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
-      with api.step.context({'env': {}}):
-        api.python("Taskkill",
-                   api.path["checkout"].join("third_party", "dart", "tools",
-                                             "task_kill.py"),
-                   args=["--kill_browsers=True"])
+      api.python("Taskkill",
+                 api.path["checkout"].join("third_party", "dart", "tools",
+                                           "task_kill.py"),
+                 args=["--kill_browsers=True"])
       # dartino annotated steps step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_ANNOTATED_STEPS_RUN": "1",
-          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}}):
+          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}):
         api.python("annotated steps",
                    api.path["checkout"].join("tools", "bots", "dartino.py"),
                    allow_subannotations=True)
       # taskkill step
-      with api.step.context({'env': {}}):
-        api.python("Taskkill",
-                   api.path["checkout"].join("third_party", "dart", "tools",
-                                             "task_kill.py"),
-                   args=["--kill_browsers=True"])
+      api.python("Taskkill",
+                 api.path["checkout"].join("third_party", "dart", "tools",
+                                           "task_kill.py"),
+                 args=["--kill_browsers=True"])
 
 
 def target_dartino_linux_debug_arm_steps(api):
@@ -710,31 +699,31 @@ def target_dartino_linux_debug_arm_steps(api):
   env = {"CHROMIUM_GYP_SYNTAX_CHECK": "1",
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
-  with api.step.context({'env': env}):
+  with api.context(env=env):
     api.python("gclient runhooks wrapper",
                api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": api.path["checkout"].join(
-              "third_party", "java", "linux", "j2sdk")}}):
+            "third_party", "java", "linux", "j2sdk")}):
         api.python("Taskkill",
                    api.path["checkout"].join("third_party", "dart", "tools",
                                              "task_kill.py"),
                    args=["--kill_browsers=True"])
       # dartino annotated steps step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": "third_party/java/linux/j2sdk",
           "BUILDBOT_ANNOTATED_STEPS_RUN": "1",
-          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}}):
+          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}):
         api.python("annotated steps",
                    api.path["checkout"].join("tools", "bots", "dartino.py"),
                    allow_subannotations=True)
       # taskkill step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": api.path["checkout"].join(
-              "third_party", "java", "linux", "j2sdk")}}):
+            "third_party", "java", "linux", "j2sdk")}):
         api.python("Taskkill",
                    api.path["checkout"].join("third_party", "dart", "tools",
                                              "task_kill.py"),
@@ -764,10 +753,10 @@ def dartino_win_debug_x86_steps(api):
   env = {"CHROMIUM_GYP_SYNTAX_CHECK": "1",
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
-  with api.step.context({'env': env}):
+  with api.context(env=env):
     api.python("gclient runhooks wrapper",
                api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
       api.python("Taskkill",
@@ -775,9 +764,9 @@ def dartino_win_debug_x86_steps(api):
                                            "task_kill.py"),
                  args=["--kill_browsers=True"])
       # dartino annotated steps step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_ANNOTATED_STEPS_RUN": "1",
-          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}}):
+          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}):
         api.step("annotated steps",
                  ["python_slave",
                   api.path["checkout"].join("tools", "bots", "dartino.py")],
@@ -808,31 +797,31 @@ def dartino_linux_release_x86_dev_steps(api):
   env = {"CHROMIUM_GYP_SYNTAX_CHECK": "1",
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
-  with api.step.context({'env': env}):
+  with api.context(env=env):
     api.python("gclient runhooks wrapper",
                api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": api.path["checkout"].join(
-              "third_party", "java", "linux", "j2sdk")}}):
+            "third_party", "java", "linux", "j2sdk")}):
         api.python("Taskkill",
                    api.path["checkout"].join("third_party", "dart", "tools",
                                              "task_kill.py"),
                    args=["--kill_browsers=True"])
       # dartino annotated steps step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": "third_party/java/linux/j2sdk",
           "BUILDBOT_ANNOTATED_STEPS_RUN": "1",
-          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}}):
+          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}):
         api.python("annotated steps",
                    api.path["checkout"].join("tools", "bots", "dartino.py"),
                    allow_subannotations=True)
       # taskkill step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": api.path["checkout"].join(
-               "third_party", "java", "linux", "j2sdk")}}):
+            "third_party", "java", "linux", "j2sdk")}):
         api.python("Taskkill",
                    api.path["checkout"].join("third_party", "dart", "tools",
                                              "task_kill.py"),
@@ -858,30 +847,28 @@ def dartino_mac_debug_x86_dev_steps(api):
   env = {"CHROMIUM_GYP_SYNTAX_CHECK": "1",
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
-  with api.step.context({'env': env}):
+  with api.context(env=env):
     api.python("gclient runhooks wrapper",
                api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
-      with api.step.context({'env': {}}):
-        api.python("Taskkill",
-                   api.path["checkout"].join("third_party", "dart", "tools",
-                                             "task_kill.py"),
-                   args=["--kill_browsers=True"])
+      api.python("Taskkill",
+                 api.path["checkout"].join("third_party", "dart", "tools",
+                                           "task_kill.py"),
+                 args=["--kill_browsers=True"])
       # dartino annotated steps step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_ANNOTATED_STEPS_RUN": "1",
-          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}}):
+          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}):
         api.python("annotated steps",
                    api.path["checkout"].join("tools", "bots", "dartino.py"),
                    allow_subannotations=True)
       # taskkill step
-      with api.step.context({'env': {}}):
-        api.python("Taskkill",
-                   api.path["checkout"].join("third_party", "dart", "tools",
-                                             "task_kill.py"),
-                   args=["--kill_browsers=True"])
+      api.python("Taskkill",
+                 api.path["checkout"].join("third_party", "dart", "tools",
+                                           "task_kill.py"),
+                 args=["--kill_browsers=True"])
 
 
 def dartino_linux_release_x64_sdk_dev_steps(api):
@@ -903,31 +890,31 @@ def dartino_linux_release_x64_sdk_dev_steps(api):
   env = {"CHROMIUM_GYP_SYNTAX_CHECK": "1",
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
-  with api.step.context({'env': env}):
+  with api.context(env=env):
     api.python("gclient runhooks wrapper",
                api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": api.path["checkout"].join(
-              "third_party", "java", "linux", "j2sdk")}}):
+            "third_party", "java", "linux", "j2sdk")}):
         api.python("Taskkill",
                    api.path["checkout"].join("third_party", "dart", "tools",
                                              "task_kill.py"),
                    args=["--kill_browsers=True"])
       # dartino annotated steps step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": "third_party/java/linux/j2sdk",
           "BUILDBOT_ANNOTATED_STEPS_RUN": "1",
-          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}}):
+          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}):
         api.python("annotated steps",
                    api.path["checkout"].join("tools", "bots", "dartino.py"),
                    allow_subannotations=True)
       # taskkill step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": api.path["checkout"].join(
-              "third_party", "java", "linux", "j2sdk")}}):
+            "third_party", "java", "linux", "j2sdk")}):
         api.python("Taskkill",
                    api.path["checkout"].join("third_party", "dart", "tools",
                                              "task_kill.py"),
@@ -956,31 +943,31 @@ def dartino_linux_debug_asan_x86_dev_steps(api):
   env = {"CHROMIUM_GYP_SYNTAX_CHECK": "1",
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
-  with api.step.context({'env': env}):
+  with api.context(env=env):
     api.python("gclient runhooks wrapper",
                api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": api.path["checkout"].join(
-              "third_party", "java", "linux", "j2sdk")}}):
+            "third_party", "java", "linux", "j2sdk")}):
         api.python("Taskkill",
                    api.path["checkout"].join("third_party", "dart", "tools",
                                              "task_kill.py"),
                    args=["--kill_browsers=True"])
       # dartino annotated steps step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": "third_party/java/linux/j2sdk",
           "BUILDBOT_ANNOTATED_STEPS_RUN": "1",
-          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}}):
+          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}):
         api.python("annotated steps",
                    api.path["checkout"].join("tools", "bots", "dartino.py"),
                    allow_subannotations=True)
       # taskkill step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": api.path["checkout"].join(
-              "third_party", "java", "linux", "j2sdk")}}):
+            "third_party", "java", "linux", "j2sdk")}):
         api.python("Taskkill",
                    api.path["checkout"].join("third_party", "dart", "tools",
                                              "task_kill.py"),
@@ -1006,31 +993,31 @@ def dartino_linux_debug_asan_x86_steps(api):
   env = {"CHROMIUM_GYP_SYNTAX_CHECK": "1",
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
-  with api.step.context({'env': env}):
+  with api.context(env=env):
     api.python("gclient runhooks wrapper",
                api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": api.path["checkout"].join(
-              "third_party", "java", "linux", "j2sdk")}}):
+            "third_party", "java", "linux", "j2sdk")}):
         api.python("Taskkill",
                    api.path["checkout"].join("third_party", "dart", "tools",
                                              "task_kill.py"),
                    args=["--kill_browsers=True"])
       # dartino annotated steps step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": "third_party/java/linux/j2sdk",
           "BUILDBOT_ANNOTATED_STEPS_RUN": "1",
-          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}}):
+          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}):
         api.python("annotated steps",
                    api.path["checkout"].join("tools", "bots", "dartino.py"),
                    allow_subannotations=True)
       # taskkill step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": api.path["checkout"].join(
-              "third_party", "java", "linux", "j2sdk")}}):
+            "third_party", "java", "linux", "j2sdk")}):
         api.python("Taskkill",
                    api.path["checkout"].join("third_party", "dart", "tools",
                                              "task_kill.py"),
@@ -1056,30 +1043,28 @@ def dartino_mac_release_asan_x86_dev_steps(api):
   env = {"CHROMIUM_GYP_SYNTAX_CHECK": "1",
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
-  with api.step.context({'env': env}):
+  with api.context(env=env):
     api.python("gclient runhooks wrapper",
                api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
-      with api.step.context({'env': {}}):
-        api.python("Taskkill",
-                   api.path["checkout"].join("third_party", "dart", "tools",
-                                             "task_kill.py"),
-                   args=["--kill_browsers=True"])
+      api.python("Taskkill",
+                 api.path["checkout"].join("third_party", "dart", "tools",
+                                           "task_kill.py"),
+                 args=["--kill_browsers=True"])
       # dartino annotated steps step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_ANNOTATED_STEPS_RUN": "1",
-          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}}):
+          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}):
         api.python("annotated steps",
                    api.path["checkout"].join("tools", "bots", "dartino.py"),
                    allow_subannotations=True)
       # taskkill step
-      with api.step.context({'env': {}}):
-        api.python("Taskkill",
-                   api.path["checkout"].join("third_party", "dart", "tools",
-                                             "task_kill.py"),
-                   args=["--kill_browsers=True"])
+      api.python("Taskkill",
+                 api.path["checkout"].join("third_party", "dart", "tools",
+                                           "task_kill.py"),
+                 args=["--kill_browsers=True"])
 
 
 def target_dartino_linux_release_arm_steps(api):
@@ -1101,31 +1086,31 @@ def target_dartino_linux_release_arm_steps(api):
   env = {"CHROMIUM_GYP_SYNTAX_CHECK": "1",
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
-  with api.step.context({'env': env}):
+  with api.context(env=env):
     api.python("gclient runhooks wrapper",
                api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": api.path["checkout"].join(
-              "third_party", "java", "linux", "j2sdk")}}):
+            "third_party", "java", "linux", "j2sdk")}):
         api.python("Taskkill",
                    api.path["checkout"].join("third_party", "dart", "tools",
                                              "task_kill.py"),
                    args=["--kill_browsers=True"])
       # dartino annotated steps step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": "third_party/java/linux/j2sdk",
           "BUILDBOT_ANNOTATED_STEPS_RUN": "1",
-          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}}):
+          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}):
         api.python("annotated steps",
                    api.path["checkout"].join("tools", "bots", "dartino.py"),
                    allow_subannotations=True)
       # taskkill step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": api.path["checkout"].join(
-              "third_party", "java", "linux", "j2sdk")}}):
+            "third_party", "java", "linux", "j2sdk")}):
         api.python("Taskkill",
                    api.path["checkout"].join("third_party", "dart", "tools",
                                              "task_kill.py"),
@@ -1151,30 +1136,28 @@ def dartino_mac_release_x86_steps(api):
   env = {"CHROMIUM_GYP_SYNTAX_CHECK": "1",
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
-  with api.step.context({'env': env}):
+  with api.context(env=env):
     api.python("gclient runhooks wrapper",
                api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
-      with api.step.context({'env': {}}):
-        api.python("Taskkill",
-                   api.path["checkout"].join("third_party", "dart", "tools",
-                                             "task_kill.py"),
-                   args=["--kill_browsers=True"])
+      api.python("Taskkill",
+                 api.path["checkout"].join("third_party", "dart", "tools",
+                                           "task_kill.py"),
+                 args=["--kill_browsers=True"])
       # dartino annotated steps step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_ANNOTATED_STEPS_RUN": "1",
-          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}}):
+          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}):
         api.python("annotated steps",
                    api.path["checkout"].join("tools", "bots", "dartino.py"),
                    allow_subannotations=True)
       # taskkill step
-      with api.step.context({'env': {}}):
-        api.python("Taskkill",
-                   api.path["checkout"].join("third_party", "dart", "tools",
-                                             "task_kill.py"),
-                   args=["--kill_browsers=True"])
+      api.python("Taskkill",
+                 api.path["checkout"].join("third_party", "dart", "tools",
+                                           "task_kill.py"),
+                 args=["--kill_browsers=True"])
 
 
 def dartino_linux_release_x64_sdk_steps(api):
@@ -1196,31 +1179,31 @@ def dartino_linux_release_x64_sdk_steps(api):
   env = {"CHROMIUM_GYP_SYNTAX_CHECK": "1",
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
-  with api.step.context({'env': env}):
+  with api.context(env=env):
     api.python("gclient runhooks wrapper",
                api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": api.path["checkout"].join(
-              "third_party", "java", "linux", "j2sdk")}}):
+            "third_party", "java", "linux", "j2sdk")}):
         api.python("Taskkill",
                    api.path["checkout"].join("third_party", "dart", "tools",
                                              "task_kill.py"),
                    args=["--kill_browsers=True"])
       # dartino annotated steps step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": "third_party/java/linux/j2sdk",
           "BUILDBOT_ANNOTATED_STEPS_RUN": "1",
-          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}}):
+          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}):
         api.python("annotated steps",
                    api.path["checkout"].join("tools", "bots", "dartino.py"),
                    allow_subannotations=True)
       # taskkill step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": api.path["checkout"].join(
-              "third_party", "java", "linux", "j2sdk")}}):
+            "third_party", "java", "linux", "j2sdk")}):
         api.python("Taskkill",
                    api.path["checkout"].join("third_party", "dart", "tools",
                                              "task_kill.py"),
@@ -1249,31 +1232,31 @@ def dartino_lk_debug_arm_qemu_steps(api):
   env = {"CHROMIUM_GYP_SYNTAX_CHECK": "1",
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
-  with api.step.context({'env': env}):
+  with api.context(env=env):
     api.python("gclient runhooks wrapper",
                api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": api.path["checkout"].join(
-              "third_party", "java", "linux", "j2sdk")}}):
+            "third_party", "java", "linux", "j2sdk")}):
         api.python("Taskkill",
                    api.path["checkout"].join("third_party", "dart", "tools",
                                              "task_kill.py"),
                    args=["--kill_browsers=True"])
       # dartino annotated steps step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": "third_party/java/linux/j2sdk",
           "BUILDBOT_ANNOTATED_STEPS_RUN": "1",
-          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}}):
+          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}):
         api.python("annotated steps",
                    api.path["checkout"].join("tools", "bots", "dartino.py"),
                    allow_subannotations=True)
       # taskkill step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": api.path["checkout"].join(
-              "third_party", "java", "linux", "j2sdk")}}):
+            "third_party", "java", "linux", "j2sdk")}):
         api.python("Taskkill",
                    api.path["checkout"].join("third_party", "dart", "tools",
                                              "task_kill.py"),
@@ -1299,30 +1282,28 @@ def dartino_mac_release_x64_sdk_dev_steps(api):
   env = {"CHROMIUM_GYP_SYNTAX_CHECK": "1",
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
-  with api.step.context({'env': env}):
+  with api.context(env=env):
     api.python("gclient runhooks wrapper",
                api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
-      with api.step.context({'env': {}}):
-        api.python("Taskkill",
-                   api.path["checkout"].join("third_party", "dart", "tools",
-                                             "task_kill.py"),
-                   args=["--kill_browsers=True"])
+      api.python("Taskkill",
+                 api.path["checkout"].join("third_party", "dart", "tools",
+                                           "task_kill.py"),
+                 args=["--kill_browsers=True"])
       # dartino annotated steps step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_ANNOTATED_STEPS_RUN": "1",
-          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}}):
+          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}):
         api.python("annotated steps",
                    api.path["checkout"].join("tools", "bots", "dartino.py"),
                    allow_subannotations=True)
       # taskkill step
-      with api.step.context({'env': {}}):
-        api.python("Taskkill",
-                   api.path["checkout"].join("third_party", "dart", "tools",
-                                             "task_kill.py"),
-                   args=["--kill_browsers=True"])
+      api.python("Taskkill",
+                 api.path["checkout"].join("third_party", "dart", "tools",
+                                           "task_kill.py"),
+                 args=["--kill_browsers=True"])
 
 
 def dartino_linux_release_asan_x86_dev_steps(api):
@@ -1344,31 +1325,31 @@ def dartino_linux_release_asan_x86_dev_steps(api):
   env = {"CHROMIUM_GYP_SYNTAX_CHECK": "1",
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
-  with api.step.context({'env': env}):
+  with api.context(env=env):
     api.python("gclient runhooks wrapper",
                api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": api.path["checkout"].join(
-              "third_party", "java", "linux", "j2sdk")}}):
+            "third_party", "java", "linux", "j2sdk")}):
         api.python("Taskkill",
                    api.path["checkout"].join("third_party", "dart", "tools",
                                              "task_kill.py"),
                    args=["--kill_browsers=True"])
       # dartino annotated steps step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": "third_party/java/linux/j2sdk",
           "BUILDBOT_ANNOTATED_STEPS_RUN": "1",
-          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}}):
+          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}):
         api.python("annotated steps",
                    api.path["checkout"].join("tools", "bots", "dartino.py"),
                    allow_subannotations=True)
       # taskkill step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": api.path["checkout"].join(
-              "third_party", "java", "linux", "j2sdk")}}):
+            "third_party", "java", "linux", "j2sdk")}):
         api.python("Taskkill",
                    api.path["checkout"].join("third_party", "dart", "tools",
                                              "task_kill.py"),
@@ -1394,31 +1375,31 @@ def dartino_linux_debug_x86_steps(api):
   env = {"CHROMIUM_GYP_SYNTAX_CHECK": "1",
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
-  with api.step.context({'env': env}):
+  with api.context(env=env):
     api.python("gclient runhooks wrapper",
                api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": api.path["checkout"].join(
-              "third_party", "java", "linux", "j2sdk")}}):
+            "third_party", "java", "linux", "j2sdk")}):
         api.python("Taskkill",
                    api.path["checkout"].join("third_party", "dart", "tools",
                                              "task_kill.py"),
                    args=["--kill_browsers=True"])
       # dartino annotated steps step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": "third_party/java/linux/j2sdk",
           "BUILDBOT_ANNOTATED_STEPS_RUN": "1",
-          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}}):
+          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}):
         api.python("annotated steps",
                    api.path["checkout"].join("tools", "bots", "dartino.py"),
                    allow_subannotations=True)
       # taskkill step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": api.path["checkout"].join(
-              "third_party", "java", "linux", "j2sdk")}}):
+            "third_party", "java", "linux", "j2sdk")}):
         api.python("Taskkill",
                    api.path["checkout"].join("third_party", "dart", "tools",
                                              "task_kill.py"),
@@ -1444,31 +1425,31 @@ def dartino_linux_release_x86_steps(api):
   env = {"CHROMIUM_GYP_SYNTAX_CHECK": "1",
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
-  with api.step.context({'env': env}):
+  with api.context(env=env):
     api.python("gclient runhooks wrapper",
                api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": api.path["checkout"].join(
-              "third_party", "java", "linux", "j2sdk")}}):
+            "third_party", "java", "linux", "j2sdk")}):
         api.python("Taskkill",
                    api.path["checkout"].join("third_party", "dart", "tools",
                                              "task_kill.py"),
                    args=["--kill_browsers=True"])
       # dartino annotated steps step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": "third_party/java/linux/j2sdk",
           "BUILDBOT_ANNOTATED_STEPS_RUN": "1",
-          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}}):
+          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}):
         api.python("annotated steps",
                    api.path["checkout"].join("tools", "bots", "dartino.py"),
                    allow_subannotations=True)
       # taskkill step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": api.path["checkout"].join(
-              "third_party", "java", "linux", "j2sdk")}}):
+            "third_party", "java", "linux", "j2sdk")}):
         api.python("Taskkill",
                    api.path["checkout"].join("third_party", "dart", "tools",
                                              "task_kill.py"),
@@ -1494,31 +1475,31 @@ def dartino_linux_debug_x86_dev_steps(api):
   env = {"CHROMIUM_GYP_SYNTAX_CHECK": "1",
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
-  with api.step.context({'env': env}):
+  with api.context(env=env):
     api.python("gclient runhooks wrapper",
                api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": api.path["checkout"].join(
-              "third_party", "java", "linux", "j2sdk")}}):
+            "third_party", "java", "linux", "j2sdk")}):
         api.python("Taskkill",
                    api.path["checkout"].join("third_party", "dart", "tools",
                                              "task_kill.py"),
                    args=["--kill_browsers=True"])
       # dartino annotated steps step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": "third_party/java/linux/j2sdk",
           "BUILDBOT_ANNOTATED_STEPS_RUN": "1",
-          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}}):
+          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}):
         api.python("annotated steps",
                    api.path["checkout"].join("tools", "bots", "dartino.py"),
                    allow_subannotations=True)
       # taskkill step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_JAVA_HOME": api.path["checkout"].join(
-              "third_party", "java", "linux", "j2sdk")}}):
+            "third_party", "java", "linux", "j2sdk")}):
         api.python("Taskkill",
                    api.path["checkout"].join("third_party", "dart", "tools",
                                              "task_kill.py"),
@@ -1548,10 +1529,10 @@ def dartino_win_debug_x86_dev_steps(api):
   env = {"CHROMIUM_GYP_SYNTAX_CHECK": "1",
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
-  with api.step.context({'env': env}):
+  with api.context(env=env):
     api.python("gclient runhooks wrapper",
                api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
       api.python("Taskkill",
@@ -1559,9 +1540,9 @@ def dartino_win_debug_x86_dev_steps(api):
                                            "task_kill.py"),
                  args=["--kill_browsers=True"])
       # dartino annotated steps step
-      with api.step.context({'env': {
+      with api.context(env={
           "BUILDBOT_ANNOTATED_STEPS_RUN": "1",
-          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}}):
+          "BUILDBOT_BUILDERNAME": api.properties["buildername"]}):
         api.step("annotated steps",
                  ["python_slave",
                   api.path["checkout"].join("tools", "bots", "dartino.py")],

@@ -30,9 +30,9 @@ class ToolsBuildApi(recipe_api.RecipeApi):
   def gsutil_py_env(self):
     """Augments environment with `slave_utils.py` parameters.
     """
-    with self.m.step.context({'env': {
+    with self.m.context(env={
         'BUILD_SLAVE_UTILS_GSUTIL_PY_PATH':
-            self.m.depot_tools.gsutil_py_path}}):
+        self.m.depot_tools.gsutil_py_path}):
       yield
 
   def python(self, name, script, args=None, **kwargs):
