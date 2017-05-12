@@ -41,7 +41,7 @@ AUX_BINARY_PACKAGES = {
     None: (
       cipd.CipdPackage(
           name='infra/tools/luci/vpython/${platform}',
-          version='git_revision:0d9aafc8115a09361c878329f301ea1e329c465b'),
+          version='git_revision:626f893e5822aa2fbea113c0c2e023f2a601c463'),
 
       cipd.CipdPackage(
           name='infra/tools/git/${platform}',
@@ -51,7 +51,7 @@ AUX_BINARY_PACKAGES = {
     STAGING: (
       cipd.CipdPackage(
           name='infra/tools/luci/vpython/${platform}',
-          version='git_revision:0d9aafc8115a09361c878329f301ea1e329c465b'),
+          version='git_revision:626f893e5822aa2fbea113c0c2e023f2a601c463'),
 
       cipd.CipdPackage(
           name='infra/tools/git/${platform}',
