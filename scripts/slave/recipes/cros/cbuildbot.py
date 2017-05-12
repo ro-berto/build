@@ -52,11 +52,9 @@ def GenTests(api):
   yield (
       api.test('swarming_builder')
       + api.properties(
+          bot_id='test',
+          path_config='generic',
           cbb_config='swarming-build-config',
-          # TODO(dgarrett) Swap after paths are updated for swarming.
-          # bot_id='test',
-          # path_config='generic',
-          **common_properties
       )
   )
 

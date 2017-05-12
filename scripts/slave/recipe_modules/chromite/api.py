@@ -277,7 +277,11 @@ class ChromiteApi(recipe_api.RecipeApi):
       # parameters from the manifest command.
       self.load_manifest_config(repository, revision)
 
-    buildroot = self.m.path['root'].join('cbuild', 'repository')
+    try:
+      buildroot = self.m.path['root'].join('cbuild', 'repository')
+    except KeyError:
+      buildroot = self.m.path['cache'].join('cbuild', 'repository')
+
     cbb_args = [
         '--buildroot', buildroot,
     ]
