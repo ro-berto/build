@@ -60,14 +60,13 @@ class iOSApi(recipe_api.RecipeApi):
     self.m.gclient.set_config('ios')
 
     checkout_dir = self.m.chromium_checkout.get_checkout_dir({})
-    context = {'cwd': kwargs.get('cwd', checkout_dir)}
 
     # Support for legacy buildbot clobber. If the "clobber" property is
     # present at all with any value, clobber the whole checkout.
     if 'clobber' in self.m.properties:
       self.m.file.rmcontents('checkout', checkout_dir)
 
-    with self.m.step.context(context):
+    with self.m.context(cwd=kwargs.get('cwd', checkout_dir)):
       return self.m.bot_update.ensure_checkout(**kwargs)
 
   def parse_tests(self, tests, include_dir, start_index=0):
@@ -272,7 +271,7 @@ class iOSApi(recipe_api.RecipeApi):
     if self.__config['clobber']:
       self.m.file.rmcontents('out', cwd)
 
-    with self.m.step.context({'cwd': self.m.path['checkout'], 'env': env}):
+    with self.m.context(cwd=self.m.path['checkout'], env=env):
       self.m.gclient.runhooks(name='runhooks' + suffix)
 
     if setup_gn:
@@ -281,14 +280,14 @@ class iOSApi(recipe_api.RecipeApi):
       ]
       if default_gn_args_path:
         cmd.extend(['--import', default_gn_args_path])
-      with self.m.step.context({'env': {
-          'CHROMIUM_BUILDTOOLS_PATH': self.m.path['checkout'].join(
-              'buildtools')}}):
+      with self.m.context(env={
+          'CHROMIUM_BUILDTOOLS_PATH':
+          self.m.path['checkout'].join('buildtools')}):
         self.m.step('setup-gn.py', cmd)
 
     if use_mb:
       self.m.chromium.c.project_generator.tool = 'mb'
-      with self.m.step.context({'env': env}):
+      with self.m.context(env=env):
         self.m.chromium.run_mb(
             self.__config['mastername'],
             self.m.properties['buildername'],
@@ -309,9 +308,9 @@ class iOSApi(recipe_api.RecipeApi):
       )
       step_result.presentation.step_text = (
         '<br />%s' % '<br />'.join(self.__config['gn_args']))
-      with self.m.step.context({
-          'cwd': self.m.path['checkout'].join('out', build_sub_path),
-          'env': env}):
+      with self.m.context(
+          cwd=self.m.path['checkout'].join('out', build_sub_path),
+          env=env):
         self.m.step('generate build files (gn)' + suffix, [
           self.m.path['checkout'].join('buildtools', 'mac', 'gn'),
           'gen',
@@ -324,7 +323,7 @@ class iOSApi(recipe_api.RecipeApi):
 
     if self.compilation_targets is None:
       if analyze:
-        with self.m.step.context({'cwd': self.m.path['checkout']}):
+        with self.m.context(cwd=self.m.path['checkout']):
           affected_files = (
             self.m.chromium_checkout.get_files_affected_by_patch())
 
@@ -362,7 +361,7 @@ class iOSApi(recipe_api.RecipeApi):
     cmd.extend(self.compilation_targets)
     exit_status = -1
     try:
-      with self.m.step.context({'cwd': cwd, 'env': env}):
+      with self.m.context(cwd=cwd, env=env):
         self.m.step('compile' + suffix, cmd)
       exit_status = 0
     except self.m.step.StepFailure as e:
@@ -411,7 +410,7 @@ class iOSApi(recipe_api.RecipeApi):
         '--verbose',
         artifact,
     ]
-    with self.m.step.context({'cwd': cwd}):
+    with self.m.context(cwd=cwd):
       self.m.step('tar %s' % tgz, cmd)
     self.m.gsutil.upload(
         archive,
@@ -798,7 +797,7 @@ class iOSApi(recipe_api.RecipeApi):
     """Runs tests on Swarming as instructed by this bot's build config."""
     assert self.__config
 
-    with self.m.step.context({'cwd': self.m.path['checkout']}):
+    with self.m.context(cwd=self.m.path['checkout']):
       with self.m.step.nest('bootstrap swarming'):
         self.bootstrap_swarming()
 
