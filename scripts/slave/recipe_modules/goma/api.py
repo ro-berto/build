@@ -92,7 +92,7 @@ class GomaApi(recipe_api.RecipeApi):
 
   def ensure_goma(self, canary=False):
     with self.m.step.nest('ensure_goma'):
-      with self.m.step.context({'infra_step': True}):
+      with self.m.context(infra_steps=True):
         self.m.cipd.set_service_account_credentials(
             self.service_account_json_path)
 
@@ -176,7 +176,7 @@ class GomaApi(recipe_api.RecipeApi):
       infra_step=True)
 
   def _run_jsonstatus(self):
-    with self.m.step.context({'env': self._goma_ctl_env}):
+    with self.m.context(env=self._goma_ctl_env):
       jsonstatus_result = self.m.python(
           name='goma_jsonstatus', script=self.goma_ctl,
           args=['jsonstatus',
@@ -245,7 +245,7 @@ class GomaApi(recipe_api.RecipeApi):
 
       try:
         self._make_goma_cache_dir(self.default_cache_path)
-        with self.m.step.context({'env': goma_ctl_start_env}):
+        with self.m.context(env=goma_ctl_start_env):
           self.m.python(
               name='start_goma',
               script=self.goma_ctl,
@@ -258,7 +258,7 @@ class GomaApi(recipe_api.RecipeApi):
         with self.m.step.defer_results():
           self._run_jsonstatus()
 
-          with self.m.step.context({'env': self._goma_ctl_env}):
+          with self.m.context(env=self._goma_ctl_env):
             self.m.python(
                 name='stop_goma (start failure)',
                 script=self.goma_ctl,
@@ -284,7 +284,7 @@ class GomaApi(recipe_api.RecipeApi):
         with self.m.step.defer_results():
           self._run_jsonstatus()
 
-          with self.m.step.context({'env': self._goma_ctl_env}):
+          with self.m.context(env=self._goma_ctl_env):
             self.m.python(name='goma_stat', script=self.goma_ctl,
                           args=['stat'],
                           **kwargs)
@@ -417,7 +417,7 @@ class GomaApi(recipe_api.RecipeApi):
     self.start(goma_env)
 
     try:
-      with self.m.step.context({'env': ninja_env}):
+      with self.m.context(env=ninja_env):
         self.m.step(name or 'compile', ninja_command, **kwargs)
       ninja_log_exit_status = 0
     except self.m.step.StepFailure as e:
