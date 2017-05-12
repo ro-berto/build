@@ -6,6 +6,7 @@ DEPS = [
   'depot_tools/bot_update',
   'chromium',
   'depot_tools/gclient',
+  'recipe_engine/context',
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/python',
@@ -34,7 +35,7 @@ def RunSteps(api):
   else:
     step_result.presentation.step_text = "Pushing activated"
 
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     api.python(
         'push candidate',
         api.path['checkout'].join(

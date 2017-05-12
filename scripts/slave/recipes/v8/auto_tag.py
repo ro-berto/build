@@ -22,6 +22,7 @@ DEPS = [
   'file',
   'depot_tools/gclient',
   'depot_tools/git',
+  'recipe_engine/context',
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/python',
@@ -90,7 +91,7 @@ class V8Version(object):
 
 def InitClean(api):
   """Ensures a clean state of the git checkout."""
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     api.git('checkout', '-f', 'FETCH_HEAD')
     api.git('branch', '-D', 'work', ok_ret='any')
     api.git('clean', '-ffd')
@@ -98,7 +99,7 @@ def InitClean(api):
 
 def Git(api, *args, **kwargs):
   """Convenience wrapper."""
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     return api.git(
         *args,
         stdout=api.raw_io.output_text(),
@@ -128,7 +129,7 @@ def GetCommitForRef(api, repo, ref):
 
 
 def PushRef(api, repo, ref, hsh):
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     api.git('push', repo, '+%s:%s' % (hsh, ref))
 
 
@@ -149,7 +150,7 @@ def IncrementVersion(api, ref, latest_version, latest_version_file):
   """
 
   # Create a fresh work branch.
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     api.git('new-branch', 'work', '--upstream', ref)
     api.git(
         'config', 'user.name', 'V8 Autoroll',
@@ -173,19 +174,19 @@ def IncrementVersion(api, ref, latest_version, latest_version_file):
   )
 
   # Commit and push changes.
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     api.git('commit', '-am', 'Version %s' % latest_version)
 
   if api.properties.get('dry_run'):
     api.step('Dry-run commit', cmd=None)
     return
 
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     api.git('cl', 'land', '-f', '--bypass-hooks')
 
   # Function to check if commit has landed.
   def has_landed():
-    with api.step.context({'cwd': api.path['checkout']}):
+    with api.context(cwd=api.path['checkout']):
       api.git('fetch', REPO, 'refs/branch-heads/*:refs/remotes/branch-heads/*')
     real_latest_version = V8Version.from_version_file(
         GetVersionContent(api, ref, 'committed'))
@@ -260,7 +261,7 @@ def RunSteps(api):
     if api.properties.get('dry_run'):
       api.step('Dry-run tag %s' % head_version, cmd=None)
     else:
-      with api.step.context({'cwd': api.path['checkout']}):
+      with api.context(cwd=api.path['checkout']):
         api.git('tag', str(head_version), head)
         api.git('push', repo, str(head_version))
 

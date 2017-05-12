@@ -13,6 +13,7 @@ DEPS = [
   'depot_tools/gsutil',
   'depot_tools/tryserver',
   'file',
+  'recipe_engine/context',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/platform',
@@ -55,7 +56,7 @@ ARCHIVE_LINK = ('https://storage.googleapis.com'
 
 
 def _build_and_test(api, suffix=''):
-  with api.step.context({'cwd': api.path['start_dir'].join('node.js')}):
+  with api.context(cwd=api.path['start_dir'].join('node.js')):
     api.step(
       'configure node.js%s' % suffix,
       [api.path['start_dir'].join('node.js', 'configure')],
@@ -72,7 +73,7 @@ def _build_and_test(api, suffix=''):
     )
 
 def _build_and_upload(api):
-  with api.step.context({'cwd': api.path['start_dir'].join('node.js')}):
+  with api.context(cwd=api.path['start_dir'].join('node.js')):
     api.step(
       'configure node.js - install',
       [
@@ -91,7 +92,7 @@ def _build_and_upload(api):
   api.file.makedirs('install directory', archive_dir)
 
   # Build and install.
-  with api.step.context({'cwd': api.path['start_dir'].join('node.js')}):
+  with api.context(cwd=api.path['start_dir'].join('node.js')):
     api.step(
       'build and install node.js',
       ['make', '-j8', 'install', 'DESTDIR=%s' % archive_dir],

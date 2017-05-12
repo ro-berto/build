@@ -8,6 +8,7 @@ DEPS = [
   'depot_tools/gclient',
   'depot_tools/git',
   'depot_tools/gsutil',
+  'recipe_engine/context',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/properties',
@@ -31,7 +32,7 @@ TIME_LIMIT_SEC = TIME_LIMIT_HOURS * SEC_TO_HOURS
 
 
 def GetRef(api, repo, ref):
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     # Fetch ref from remote.
     api.git('fetch', repo, '+%s:%s' % (ref, ref))
     # Read ref locally.
@@ -46,7 +47,7 @@ def GetRef(api, repo, ref):
 
 
 def PushRef(api, repo, ref, hsh):
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     api.git('update-ref', ref, hsh)
     api.git('push', repo, '%s:%s' % (ref, ref))
 

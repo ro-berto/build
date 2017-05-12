@@ -9,6 +9,7 @@ DEPS = [
   'depot_tools/bot_update',
   'depot_tools/gclient',
   'depot_tools/git',
+  'recipe_engine/context',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/properties',
@@ -49,7 +50,7 @@ def GetDEPS(api, name, repo):
 
   # Read local deps information. Each deps has one line in the format:
   # path/to/deps: repo@revision
-  with api.step.context({'cwd': api.path['start_dir']}):
+  with api.context(cwd=api.path['start_dir']):
     step_result = api.gclient(
         'get %s deps' % name,
         ['revinfo', '--deps', 'all', '--spec', spec],
@@ -105,7 +106,7 @@ def RunSteps(api):
   api.bot_update.ensure_checkout(no_shallow=True)
 
   # Enforce a clean state.
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     api.git('checkout', '-f', 'origin/master')
     api.git('branch', '-D', 'roll', ok_ret='any')
     api.git('clean', '-ffd')
@@ -146,7 +147,7 @@ def RunSteps(api):
 
     # Check if an update is necessary.
     if v8_rev != new_rev:
-      with api.step.context({'cwd': api.path['checkout']}):
+      with api.context(cwd=api.path['checkout']):
         step_result = api.step(
             'roll dependency %s' % name.replace('/', '_'),
             ['roll-dep-svn', '--no-verify-revision', 'v8/%s' % name, new_rev],
@@ -160,7 +161,7 @@ def RunSteps(api):
         step_result.presentation.status = api.step.WARNING
 
   # Check for a difference. If no deps changed, the diff is empty.
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     step_result = api.git('diff', stdout=api.raw_io.output_text())
   diff = step_result.stdout.strip()
   step_result.presentation.logs['diff'] = diff.splitlines()
@@ -172,7 +173,7 @@ def RunSteps(api):
       args.extend(['-m', message])
     args.extend(['-m', 'TBR=%s' % ','.join(AUTO_REVIEWERS)])
     kwargs = {'stdout': api.raw_io.output_text()}
-    with api.step.context({'cwd': api.path['checkout']}):
+    with api.context(cwd=api.path['checkout']):
       api.git(*args, **kwargs)
       api.git(
           'cl', 'upload', '-f', '--use-commit-queue', '--bypass-hooks',

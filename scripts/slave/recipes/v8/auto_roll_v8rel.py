@@ -8,6 +8,7 @@ DEPS = [
   'depot_tools/gclient',
   'depot_tools/git',
   'depot_tools/gsutil',
+  'recipe_engine/context',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/properties',
@@ -24,7 +25,7 @@ def RunSteps(api):
 
   api.bot_update.ensure_checkout(
       no_shallow=True, with_branch_heads=True)
-  with api.step.context({'cwd': api.path['start_dir'].join('v8')}):
+  with api.context(cwd=api.path['start_dir'].join('v8')):
     api.step(
         'V8Releases',
         [api.path['start_dir'].join(

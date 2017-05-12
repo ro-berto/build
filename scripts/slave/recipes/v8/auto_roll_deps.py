@@ -11,6 +11,7 @@ DEPS = [
   'depot_tools/git',
   'depot_tools/gitiles',
   'depot_tools/url',
+  'recipe_engine/context',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/properties',
@@ -147,7 +148,7 @@ def RunSteps(api):
       monitoring_state = 'inconsistent'
       return
 
-    with api.step.context({'cwd': api.path['checkout'].join('v8')}):
+    with api.context(cwd=api.path['checkout'].join('v8')):
       result = api.python(
           'roll deps',
           api.path['checkout'].join(

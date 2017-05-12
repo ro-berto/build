@@ -345,7 +345,7 @@ class V8Api(recipe_api.RecipeApi):
           'gs://chromium-v8/%s' % MIPS_TOOLCHAIN,
           self.m.path['start_dir'],
           name='bootstrapping mips toolchain')
-      with self.m.step.context({'cwd': self.m.path['start_dir']}):
+      with self.m.context(cwd=self.m.path['start_dir']):
         self.m.step('unzipping', ['tar', 'xf', MIPS_TOOLCHAIN])
 
     self.c.gyp_env.CC = self.m.path.join(mips_dir, 'mips-mti-linux-gnu-gcc')
@@ -547,8 +547,8 @@ class V8Api(recipe_api.RecipeApi):
     self.m.file.makedirs(
       'Create Build Dir',
       self.m.path['start_dir'].join('dynamorio', 'build'))
-    with self.m.step.context({
-        'cwd': self.m.path['start_dir'].join('dynamorio', 'build')}):
+    with self.m.context(
+        cwd=self.m.path['start_dir'].join('dynamorio', 'build')):
       self.m.step(
         'Configure Release x64 DynamoRIO',
         ['cmake', '..', '-DDEBUG=OFF'],

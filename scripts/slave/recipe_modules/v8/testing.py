@@ -376,7 +376,7 @@ class V8Test(BaseTest):
       '--json-test-results',
       self.api.json.output(add_json_log=False),
     ]
-    with self.api.step.context({'cwd': self.api.path['checkout'], 'env': env}):
+    with self.api.context(cwd=self.api.path['checkout'], env=env):
       self.api.python(
         test['name'] + self.test_step_config.suffix,
         self.api.path['checkout'].join('tools', 'run-tests.py'),
@@ -435,7 +435,7 @@ class V8Test(BaseTest):
 
     # If not specified, the isolated target is the same as the first test of
     # the original list. We need to set it explicitly now, as the tests
-    # parameter changes on rerun, but the isolated target is still the same. 
+    # parameter changes on rerun, but the isolated target is still the same.
     isolated_target = orig_config.get(
         'isolated_target', orig_config['tests'][0])
 
@@ -552,7 +552,7 @@ class V8SwarmingTest(V8Test):
 
 class V8Presubmit(BaseTest):
   def run(self, **kwargs):
-    with self.api.step.context({'cwd': self.api.path['checkout']}):
+    with self.api.context(cwd=self.api.path['checkout']):
       self.api.python(
         'Presubmit',
         self.api.path['checkout'].join('tools', 'presubmit.py'),
