@@ -143,7 +143,7 @@ def _get_is_kitchen(mastername, buildername):
   return buildername in kc.builders
 
 
-def _get_is_opt_in(properties):
+def get_is_opt_in(properties):
   """Returns True if properties describes an opt-in user.
 
   Opt-in users are identified by examining the "buildbucket.build.created_by"
@@ -417,7 +417,7 @@ def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir):
   buildername = properties.get('buildername')
 
   # Determine if this build is an opt-in build.
-  is_opt_in = _get_is_opt_in(properties)
+  is_opt_in = get_is_opt_in(properties)
 
   # Determine our CIPD pins.
   #

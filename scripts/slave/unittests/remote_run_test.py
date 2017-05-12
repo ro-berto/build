@@ -527,13 +527,13 @@ class ConfigurationTest(unittest.TestCase):
     self.buildbucket['build']['created_by'] = (
         'user:someone@chromium.org')
     props = {'buildbucket': json.dumps(self.buildbucket)}
-    self.assertFalse(remote_run._get_is_opt_in(props))
+    self.assertFalse(remote_run.get_is_opt_in(props))
 
   def test_get_is_opt_in(self):
     for user in remote_run._OPT_IN_USERS:
       self.buildbucket['build']['created_by'] = user
       props = {'buildbucket': json.dumps(self.buildbucket)}
-      self.assertTrue(remote_run._get_is_opt_in(props))
+      self.assertTrue(remote_run.get_is_opt_in(props))
 
 
 if __name__ == '__main__':

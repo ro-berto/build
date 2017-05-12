@@ -22,6 +22,7 @@ from common import env
 from common import master_cfg_utils
 from slave import logdog_bootstrap
 from slave import monitoring_utils
+from slave import remote_run
 from slave import robust_tempdir
 from slave import update_scripts
 
@@ -46,6 +47,17 @@ _ENGINE_FLAGS = {
 
 def _get_engine_flags(mastername):
   return  _ENGINE_FLAGS.get(mastername, _ENGINE_FLAGS[None])
+
+# List of bots that automatically get run through "remote_run".
+_REMOTE_RUN_PASSTHROUGH = {
+  'chromium.fyi': [
+    'ios-simulator',
+  ],
+}
+
+def _is_remote_run_passthrough(properties):
+  builders = _REMOTE_RUN_PASSTHROUGH.get(properties.get('mastername'), [])
+  return properties.get('buildername') in builders
 
 def _build_dir():
   return BUILD_DIR
@@ -233,6 +245,8 @@ def get_args(argv):
   parser.add_argument('--use-factory-properties-from-disk',
       action='store_true', default=False,
       help='use factory properties loaded from disk on the slave')
+  parser.add_argument('--remote-run-passthrough', action='store_true',
+      help='pass through and use remote_run')
 
   group = parser.add_argument_group('LogDog Bootstrap')
   logdog_bootstrap.add_arguments(group)
@@ -240,19 +254,48 @@ def get_args(argv):
   return parser.parse_args(argv)
 
 
-def _exec_recipe(rt, opts, stream, basedir, tdir, properties):
+def _locate_recipe(recipe):
   # Find out if the recipe we intend to run is in build_internal's recipes. If
   # so, use recipes.py from there, otherwise use the one from build.
-  recipe_file = properties['recipe'].replace('/', os.path.sep) + '.py'
+  recipe_file = recipe.replace('/', os.path.sep) + '.py'
 
   # Use the standard recipe runner unless the recipes are explicitly in the
   # "build_limited" repository.
-  recipe_runner = os.path.join(env.Build,
-                               'scripts', 'slave', 'recipes.py')
   if env.BuildInternal:
     build_limited = os.path.join(env.BuildInternal, 'scripts', 'slave')
     if os.path.exists(os.path.join(build_limited, 'recipes', recipe_file)):
-      recipe_runner = os.path.join(build_limited, 'recipes.py')
+      return (
+          os.path.join(build_limited, 'recipes.py'),
+          ('https://chrome-internal.googlesource.com/chrome/tools/'
+           'build_limited/scripts/slave.git'))
+
+  # Public recipe (this repository).
+  return (
+      os.path.join(env.Build, 'scripts', 'slave', 'recipes.py'),
+      'https://chromium.googlesource.com/chromium/tools/build.git')
+
+
+def _remote_run_passthrough(opts, properties, stream):
+  recipe = properties.pop('recipe')
+  _, recipe_repository = _locate_recipe(recipe)
+
+  cmd = [
+    'annotated_run', # argv[0]
+    '--repository', recipe_repository,
+    '--recipe', recipe,
+    '--build-properties-gz', chromium_utils.b64_gz_json_encode(properties),
+    '--canary',
+    '--kitchen', remote_run._CANARY_CIPD_PINS.kitchen,
+  ]
+  if opts.verbose > 0:
+    cmd += ['--verbose']
+  if opts.leak:
+    cmd += ['--leak']
+  return remote_run.main(cmd, stream)
+
+
+def _exec_recipe(rt, opts, stream, basedir, tdir, properties):
+  recipe_runner, _ = _locate_recipe(properties['recipe'])
 
   # Dump properties to JSON and build recipe command.
   props_file = os.path.join(tdir, 'recipe_properties.json')
@@ -336,6 +379,13 @@ def main(argv):
     properties = get_recipe_properties(
         stream, tdir, opts.build_properties, use_factory_properties_from_disk)
     LOGGER.debug('Loaded properties: %s', properties)
+
+    # If this is an opt-in run, or if this builder is configured for
+    # passthrough, use "remote_run"!
+    if (_is_remote_run_passthrough(properties) or
+        remote_run.get_is_opt_in(properties) or
+        opts.remote_run_passthrough):
+      return _remote_run_passthrough(opts, properties, stream)
 
     # put client in /b/cipd_client. Do import here to avoid ImportErrors
     # tanking the update_scripts mechanism.

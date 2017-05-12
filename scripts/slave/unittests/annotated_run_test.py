@@ -23,6 +23,7 @@ from common import annotator
 from common import env
 from slave import annotated_run
 from slave import logdog_bootstrap
+from slave import remote_run
 from slave import robust_tempdir
 from slave import update_scripts
 from slave.unittests.utils import FakeBuildRootTestCase
@@ -35,6 +36,7 @@ MockOptions = collections.namedtuple('MockOptions',
 
 
 class AnnotatedRunTest(FakeBuildRootTestCase):
+
   def test_example(self):
     build_properties = {
       'mastername': 'tryserver.chromium.linux',
@@ -53,6 +55,32 @@ class AnnotatedRunTest(FakeBuildRootTestCase):
         '--build-properties=%s' % json.dumps(build_properties)],
         cwd=self.fake_build_root,
         env=self.get_test_env(),
+    )
+    self.assertEqual(exit_code, 0)
+
+  def test_passthrough(self):
+    build_properties = {
+      'mastername': 'tryserver.chromium.linux',
+      'buildername': 'builder',
+      'slavename': 'bot42-m1',
+      'recipe': 'annotated_run_test',
+      'true_prop': True,
+      'num_prop': 123,
+      'string_prop': '321',
+      'dict_prop': {'foo': 'bar'},
+    }
+
+    subprocess_env = self.get_test_env()
+    subprocess_env['BUILDBOT_SLAVENAME'] = 'tools.build.test'
+
+    script_path = os.path.join(BASE_DIR, 'annotated_run.py')
+    exit_code = subprocess.call([
+          'python', script_path,
+          '--build-properties=%s' % json.dumps(build_properties),
+          '--remote-run-passthrough',
+        ],
+        cwd=self.fake_build_root,
+        env=subprocess_env,
     )
     self.assertEqual(exit_code, 0)
 
