@@ -478,6 +478,24 @@ class ConfigurationTest(unittest.TestCase):
        ),
     }
 
+    self.properties = {
+      'buildbucket': {
+        'build': {
+          'bucket': 'master.tryserver.chromium.linux',
+          'created_by': 'user:iannucci@chromium.org',
+          'created_ts': '1494616236661800',
+          'id': '8979775000984247248',
+          'lease_key': '2065395720',
+          'tags': [
+            'builder:linux_chromium_rel_ng',
+            'buildset:patch/rietveld/codereview.chromium.org/2852733003/1',
+            'master:tryserver.chromium.linux',
+            'user_agent:rietveld'
+          ],
+        },
+      },
+    }
+
     self._orig_canary_masters = remote_run._CANARY_MASTERS
     remote_run._CANARY_MASTERS = set(('canary',))
 
@@ -506,6 +524,16 @@ class ConfigurationTest(unittest.TestCase):
     self.assertFalse(remote_run._get_is_kitchen('blacklist', 'foo'))
     self.assertFalse(remote_run._get_is_kitchen('blacklist', 'bar'))
     self.assertTrue(remote_run._get_is_kitchen('blacklist', 'baz'))
+
+  def test_get_not_opt_in(self):
+    self.properties['buildbucket']['build']['created_by'] = (
+        'user:someone@chromium.org')
+    self.assertFalse(remote_run._get_is_opt_in(self.properties))
+
+  def test_get_is_opt_in(self):
+    for user in remote_run._OPT_IN_USERS:
+      self.properties['buildbucket']['build']['created_by'] = user
+      self.assertTrue(remote_run._get_is_opt_in(self.properties))
 
 
 if __name__ == '__main__':
