@@ -38,6 +38,7 @@ DEPS = [
   'build/test_utils',
   'depot_tools/bot_update',
   'depot_tools/gclient',
+  'recipe_engine/context',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/platform',
@@ -140,16 +141,14 @@ def RunSteps(api):
   api.gclient.c.got_revision_reverse_mapping['got_cr_revision'] = 'src'
   api.gclient.c.got_revision_mapping.pop('src', None)
 
-  context = {'cwd': api.chromium_checkout.get_checkout_dir(bot_config)}
-
   # Run all steps in the checkout dir (consistent with chromium_tests).
-  with api.step.context(context):
+  with api.context(cwd=api.chromium_checkout.get_checkout_dir(bot_config)):
     step_result = api.bot_update.ensure_checkout()
 
     api.chromium.ensure_goma()
 
     api.chromium.c.project_generator.tool = 'mb'
-    with api.step.context({'cwd': api.path['checkout']}):
+    with api.context(cwd=api.path['checkout']):
       api.chromium.runhooks()
 
     api.chromium_tests.run_mb_and_compile(
