@@ -37,7 +37,7 @@ class FinditApi(recipe_api.RecipeApi):
     cwd = self.m.path['checkout'].join(repo_dir)
 
     previous_revision = '%s~1' % revision
-    with self.m.step.context({'cwd': cwd}):
+    with self.m.context(cwd=cwd):
       step_result = self.m.git(
           'diff', revision + '~1', revision, '--name-only',
           name='git diff to analyze commit',
@@ -74,7 +74,7 @@ class FinditApi(recipe_api.RecipeApi):
     repo_dir = self._calculate_repo_dir(solution_name)
     cwd = self.m.path['checkout'].join(repo_dir)
 
-    with self.m.step.context({'cwd': cwd}):
+    with self.m.context(cwd=cwd):
       step_result = self.m.git('log', '--format=%H',
                                '%s..%s' % (start_revision, end_revision),
                                name='git commits in range',

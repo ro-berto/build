@@ -7,6 +7,7 @@ DEPS = [
   'chromium',
   'depot_tools/depot_tools',
   'depot_tools/git',
+  'recipe_engine/context',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/platform',

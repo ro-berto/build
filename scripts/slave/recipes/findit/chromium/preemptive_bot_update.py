@@ -15,6 +15,7 @@ DEPS = [
     'chromium_tests',
     'depot_tools/gclient',
     'depot_tools/git',
+    'recipe_engine/context',
     'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
@@ -76,7 +77,7 @@ def RunSteps(api):
   checkout_dir = base_dir.join(api.gclient.c.solutions[0].name)
 
   # Most recent commit in local checkout
-  with api.step.context({'cwd': checkout_dir}):
+  with api.context(cwd=checkout_dir):
     step_result = api.git(
         'log', '-1', '--pretty=format:%ct', 'refs/remotes/origin/master',
         stdout=api.raw_io.output_text(),
