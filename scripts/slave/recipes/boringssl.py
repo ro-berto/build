@@ -10,6 +10,7 @@ DEPS = [
   'depot_tools/depot_tools',
   'depot_tools/gclient',
   'file',
+  'recipe_engine/context',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
@@ -193,7 +194,7 @@ def RunSteps(api, buildername):
   cmake_args = _GetHostCMakeArgs(api.platform, bot_utils)
   cmake_args.update(_GetTargetCMakeArgs(buildername, api.path['checkout'],
                                         api.depot_tools.ninja_path))
-  with api.step.context({'cwd': build_dir}):
+  with api.context(cwd=build_dir):
     api.python('cmake', go_env,
                msvc_prefix + [cmake, '-GNinja'] +
                ['-D%s=%s' % (k, v) for (k, v) in sorted(cmake_args.items())] +
@@ -208,7 +209,7 @@ def RunSteps(api, buildername):
     env = _GetTargetEnv(buildername, bot_utils)
 
     # Run the unit tests.
-    with api.step.context({'cwd': api.path['checkout'], 'env': env}):
+    with api.context(cwd=api.path['checkout'], env=env):
       all_tests_args = []
       if _HasToken(buildername, 'sde'):
         all_tests_args += ['-sde', '-sde-path', sde_path.join('sde')]
@@ -234,7 +235,7 @@ def RunSteps(api, buildername):
       if _HasToken(buildername, 'fuzz'):
         runner_args += ['-fuzzer', '-shim-config', 'fuzzer_mode.json']
       if _HasToken(buildername, 'android'):
-        with api.step.context({'cwd': api.path['checkout'], 'env': env}):
+        with api.context(cwd=api.path['checkout'], env=env):
           deferred = api.python('ssl tests', go_env, [
               'go', 'run',
               api.path.join('util', 'run_android_tests.go'), '-build-dir',
@@ -243,7 +244,7 @@ def RunSteps(api, buildername):
               api.test_utils.test_results()
           ])
       else:
-        with api.step.context({'cwd': runner_dir, 'env': env}):
+        with api.context(cwd=runner_dir, env=env):
           deferred = api.python(
               'ssl tests', go_env, msvc_prefix +
               ['go', 'test', '-json-output',

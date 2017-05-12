@@ -11,6 +11,7 @@ DEPS = [
   'depot_tools/tryserver',
   'depot_tools/gclient',
   'depot_tools/gsutil',
+  'recipe_engine/context',
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/python',
@@ -30,7 +31,7 @@ def RunSteps(api):
   output = api.path.mkdtemp('boringssl-docs')
 
   # Generate and upload documentation.
-  with api.step.context({'cwd': util}):
+  with api.context(cwd=util):
     api.python('generate', go_env, ['go', 'run', 'doc.go', '-out', output])
   if not api.tryserver.is_tryserver:
     # Upload docs only if run after commit, not a tryjob.
