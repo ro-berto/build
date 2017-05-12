@@ -204,8 +204,11 @@ class ChromiteApi(recipe_api.RecipeApi):
       config_map (dict): The configuration map to use.
       KWARGS: Additional keyword arguments to forward to the configuration.
     """
-    master = properties['mastername']
-    variant = properties.get('cbb_variant')
+    master = properties.get('mastername')
+
+    if master is None:
+      self.set_config('master_swarming', **KWARGS)
+      return
 
     # Set the master's base configuration.
     config_map = config_map.get(master, {})

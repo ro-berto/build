@@ -138,6 +138,10 @@ def external(c):
 
 
 @config_ctx(group='master', includes=['external'])
+def master_swarming(c):
+  pass
+
+@config_ctx(group='master', includes=['external'])
 def master_chromiumos_chromium(c):
   c.use_chrome_version = True
 

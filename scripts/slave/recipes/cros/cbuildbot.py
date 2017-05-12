@@ -50,6 +50,18 @@ def GenTests(api):
 
   # Test a standard CrOS build triggered by a Chromium commit.
   yield (
+      api.test('swarming_builder')
+      + api.properties(
+          cbb_config='swarming-build-config',
+          # TODO(dgarrett) Swap after paths are updated for swarming.
+          # bot_id='test',
+          # path_config='generic',
+          **common_properties
+      )
+  )
+
+  # Test a standard CrOS build triggered by a Chromium commit.
+  yield (
       api.test('chromiumos_chromium_builder')
       + api.properties(
           mastername='chromiumos.chromium',
