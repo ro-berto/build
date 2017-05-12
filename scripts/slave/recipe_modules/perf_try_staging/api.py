@@ -126,7 +126,7 @@ class PerfTryJobApi(recipe_api.RecipeApi):
       update_step = self.m.bot_update.ensure_checkout(
           suffix=str(revision), patch=False, update_presentation=False)
       assert update_step.json.output['did_run']
-      with self.m.step.context({'cwd': self.m.path['checkout']}):
+      with self.m.context(cwd=self.m.path['checkout']):
         self.m.chromium.runhooks(name='runhooks on %s' % str(revision))
 
     return update_step
