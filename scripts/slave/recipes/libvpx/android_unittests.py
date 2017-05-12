@@ -9,6 +9,7 @@ DEPS = [
     'recipe_engine/json',
     'recipe_engine/path',
     'perf_dashboard',
+    'recipe_engine/context',
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/python',
@@ -75,7 +76,7 @@ def RunSteps(api, libvpx_git_url, buildername):
       libvpx_git_url, dir_path=libvpx_root, recursive=True)
 
   # The dashboards need a number to assign to this build for ordering purposes.
-  with api.step.context({'cwd': libvpx_root}):
+  with api.context(cwd=libvpx_root):
     step_result = api.git('number', stdout=api.raw_io.output_text())
   libvpx_revision_number = step_result.stdout
 
@@ -90,7 +91,7 @@ def RunSteps(api, libvpx_git_url, buildername):
           '--sdk-path=%s' % ndk_root, '--target=armv7-android-gcc'])
 
   # NDK requires NDK_PROJECT_PATH environment variable to be defined
-  with api.step.context({'env': {'NDK_PROJECT_PATH': build_root}}):
+  with api.context(env={'NDK_PROJECT_PATH': build_root}):
     api.step(
         'ndk-build', [
             ndk_root.join('ndk-build'),
