@@ -9,6 +9,7 @@ DEPS = [
   'file',
   'goma',
   'depot_tools/gsutil',
+  'recipe_engine/context',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/platform',
@@ -102,7 +103,7 @@ def _GNGenBuilds(api, memory_tool, skia, xfa, v8, target_cpu, clang, rel,
   if target_cpu == 'x86':
     args.append('target_cpu="x86"')
 
-  with api.step.context({'cwd': checkout}):
+  with api.context(cwd=checkout):
     api.python('gn gen', gn_cmd,
                ['--root=' + str(checkout), 'gen', '//out/' + out_dir,
                 '--args=' + ' '.join(args)])
@@ -136,14 +137,14 @@ def _RunTests(api, memory_tool, v8, out_dir, build_config, revision):
                                                  'pdfium_unittests'))
   if api.platform.is_win:
     unittests_path += '.exe'
-  with api.step.context({'cwd': api.path['checkout'], 'env': env}):
+  with api.context(cwd=api.path['checkout'], env=env):
     api.step('unittests', [unittests_path])
 
   embeddertests_path = str(api.path['checkout'].join('out', out_dir,
                                                      'pdfium_embeddertests'))
   if api.platform.is_win:
     embeddertests_path += '.exe'
-  with api.step.context({'cwd': api.path['checkout'], 'env': env}):
+  with api.context(cwd=api.path['checkout'], env=env):
     api.step('embeddertests', [embeddertests_path])
 
   script_args = ['--build-dir', api.path.join('out', out_dir)]
@@ -151,12 +152,12 @@ def _RunTests(api, memory_tool, v8, out_dir, build_config, revision):
   if v8:
     javascript_path = str(api.path['checkout'].join('testing', 'tools',
                                                     'run_javascript_tests.py'))
-    with api.step.context({'cwd': api.path['checkout'], 'env': env}):
+    with api.context(cwd=api.path['checkout'], env=env):
       api.python('javascript tests', javascript_path, script_args)
 
   pixel_tests_path = str(api.path['checkout'].join('testing', 'tools',
                                                    'run_pixel_tests.py'))
-  with api.step.context({'cwd': api.path['checkout'], 'env': env}):
+  with api.context(cwd=api.path['checkout'], env=env):
     api.python('pixel tests', pixel_tests_path, script_args)
 
   # Add the arguments needed to upload the resulting images.
@@ -175,7 +176,7 @@ def _RunTests(api, memory_tool, v8, out_dir, build_config, revision):
 
   corpus_tests_path = str(api.path['checkout'].join('testing', 'tools',
                                                     'run_corpus_tests.py'))
-  with api.step.context({'cwd': api.path['checkout'], 'env': env}):
+  with api.context(cwd=api.path['checkout'], env=env):
     api.python('corpus tests', corpus_tests_path, script_args)
   upload_dm_results(api, gold_output_dir, revision)
 
@@ -275,7 +276,7 @@ def get_gold_ignore_hashes(api, out_dir):
                                                out_dir,
                                                'ignore_hashes.txt')
   try:
-    with api.step.context({'cwd': api.path['checkout']}):
+    with api.context(cwd=api.path['checkout']):
       api.m.python.inline(
         'get uninteresting hashes',
         program="""
