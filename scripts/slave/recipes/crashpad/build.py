@@ -9,6 +9,7 @@ DEPS = [
   'file',
   'depot_tools/bot_update',
   'depot_tools/gclient',
+  'recipe_engine/context',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
@@ -30,7 +31,7 @@ def RunSteps(api):
   env = {}
   if '_x86' in buildername:
     env = {'GYP_DEFINES': 'target_arch=ia32'}
-  with api.step.context({'env': env}):
+  with api.context(env=env):
     api.gclient.runhooks()
 
   # On Windows, we need to test:
