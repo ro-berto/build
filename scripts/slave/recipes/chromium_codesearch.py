@@ -13,6 +13,7 @@ DEPS = [
   'file',
   'goma',
   'depot_tools/gsutil',
+  'recipe_engine/context',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/properties',
@@ -130,7 +131,6 @@ def GenerateCompilationDatabase(api, debug_path, targets, platform):
                       build_dir=debug_path,
                       phase=platform,
                       name='generate build files for %s' % platform)
-
   command = ['ninja', '-C', debug_path] + list(targets)
   # Add the parameters for creating the compilation database.
   command += ['-t', 'compdb', 'cc', 'cxx', 'objc', 'objcxx']
@@ -187,7 +187,7 @@ def RunSteps(api):
   api.chromium.ensure_goma()
   # CHROME_HEADLESS makes sure that running 'gclient runhooks' doesn't require
   # entering 'y' to agree to a license.
-  with api.step.context({'env': {'CHROME_HEADLESS': '1'}}):
+  with api.context(env={'CHROME_HEADLESS': '1'}):
     api.chromium.runhooks()
 
   result = GenerateCompilationDatabase(api, debug_path, targets, platform)
@@ -217,7 +217,7 @@ def RunSteps(api):
                 '--compdb-output', debug_path.join('compile_commands.json')])
   # Compile the clang tool
   script_path = api.path.sep.join(['tools', 'clang', 'scripts', 'update.py'])
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     api.step('compile translation_unit clang tool',
              [script_path, '--force-local-build', '--without-android',
               '--extra-tools', 'translation_unit'])
@@ -276,7 +276,7 @@ def RunSteps(api):
         ref=bot_config.get('gen_repo_branch', 'master'),
         dir_path=generated_repo_dir,
         submodules=False)
-    with api.step.context({'cwd': generated_repo_dir}):
+    with api.context(cwd=generated_repo_dir):
       api.git('config', 'user.email', GENERATED_AUTHOR_EMAIL)
       api.git('config', 'user.name', GENERATED_AUTHOR_NAME)
 
