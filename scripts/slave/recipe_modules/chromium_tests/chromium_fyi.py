@@ -1061,11 +1061,8 @@ SPEC = {
     },
     'CrWinGoma(loc)': {
       'chromium_config': 'chromium',
-      # Temporarily disable 'goma_localoutputcache' to check LocalOutputCache
-      # is causing crbug.com/715891.
       'chromium_apply_config': ['clobber', 'goma_canary', 'shared_library',
-                                # 'goma_localoutputcache',
-                                'mb'],
+                                'goma_localoutputcache', 'mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
