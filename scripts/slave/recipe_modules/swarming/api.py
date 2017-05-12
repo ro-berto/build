@@ -777,7 +777,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       self.m.json.test_api.output({}))
 
     try:
-      with self.m.step.context({'cwd': self.m.path['start_dir']}):
+      with self.m.context(cwd=self.m.path['start_dir']):
         return self.m.build.python(
             name=self.get_step_name('', task),
             script=self.resource('collect_task.py'),

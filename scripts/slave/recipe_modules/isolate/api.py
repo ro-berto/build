@@ -254,7 +254,7 @@ class IsolateApi(recipe_api.RecipeApi):
     # Turn the failures during this step into warnings, it's a best effort step
     # that shouldn't break the build for now.
     try:
-      with self.m.step.context({'cwd': self.m.path['start_dir']}):
+      with self.m.context(cwd=self.m.path['start_dir']):
         self.m.python('remove_build_metadata',
                       self.m.path.join(self.m.path['checkout'],
                                        'tools',
@@ -303,7 +303,7 @@ class IsolateApi(recipe_api.RecipeApi):
         '--json-output', self.m.json.output(),
     ]
     try:
-      with self.m.step.context({'cwd': self.m.path['start_dir']}):
+      with self.m.context(cwd=self.m.path['start_dir']):
         step_result = self.m.python(
             'compare_build_artifacts',
             self.m.path.join(self.m.path['checkout'],
