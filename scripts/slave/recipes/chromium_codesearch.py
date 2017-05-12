@@ -244,17 +244,6 @@ def RunSteps(api):
   commit_position = api.commit_position.parse_revision(got_revision_cp)
   got_revision = api.chromium.build_properties.get('got_revision')
 
-  # Create the grok index pack
-  index_pack_grok_name = 'index_pack_%s.zip' % platform
-  index_pack_grok_name_with_revision = 'index_pack_%s_%s.zip' % (
-      platform, commit_position)
-  api.python('create grok index pack',
-             api.package_repo_resource('scripts', 'slave', 'chromium',
-                                       'package_index.py'),
-             ['--path-to-compdb', debug_path.join('compile_commands.json'),
-              '--path-to-archive-output', debug_path.join(index_pack_grok_name),
-              '--keep-filepaths-files'])
-
   corpus = bot_config.get('corpus', 'chromium-linux')
 
   # Create the kythe index pack
@@ -271,38 +260,12 @@ def RunSteps(api):
               '--corpus', corpus,
               '--revision', got_revision])
 
-  # Upload the grok index pack
-  api.gsutil.upload(
-      name='upload grok index pack',
-      source=debug_path.join(index_pack_grok_name),
-      bucket=BUCKET_NAME,
-      dest='prod/%s' % index_pack_grok_name_with_revision
-  )
-
   # Upload the kythe index pack
   api.gsutil.upload(
       name='upload kythe index pack',
       source=debug_path.join(index_pack_kythe_name),
       bucket=BUCKET_NAME,
       dest='prod/%s' % index_pack_kythe_name_with_revision
-  )
-
-  # Package the source code.
-  tarball_name = 'chromium_src_%s.tar.bz2' % platform
-  tarball_name_with_revision = 'chromium_src_%s_%s.tar.bz2' % (
-      platform, commit_position)
-  api.python('archive source',
-             api.package_repo_resource('scripts','slave',
-                                    'archive_source_codesearch.py'),
-             ['src', 'build', 'infra', 'tools', '-f',
-              tarball_name])
-
-  # Upload the source code.
-  api.gsutil.upload(
-      name='upload source tarball',
-      source=api.path['start_dir'].join(tarball_name),
-      bucket=BUCKET_NAME,
-      dest='prod/%s' % tarball_name_with_revision
   )
 
   if bot_config.get('sync_generated_files', False):

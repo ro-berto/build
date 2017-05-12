@@ -695,19 +695,6 @@
       "--path-to-compdb",
       "[START_DIR]/src/out/Debug/compile_commands.json",
       "--path-to-archive-output",
-      "[START_DIR]/src/out/Debug/index_pack_linux.zip",
-      "--keep-filepaths-files"
-    ],
-    "name": "create grok index pack"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/package_index.py",
-      "--path-to-compdb",
-      "[START_DIR]/src/out/Debug/compile_commands.json",
-      "--path-to-archive-output",
       "[START_DIR]/src/out/Debug/index_pack_linux_kythe.zip",
       "--index-pack-format",
       "kythe",
@@ -727,24 +714,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[START_DIR]/src/out/Debug/index_pack_linux.zip",
-      "gs://chrome-codesearch/prod/index_pack_linux_170242.zip"
-    ],
-    "infra_step": true,
-    "name": "gsutil upload grok index pack",
-    "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/prod/index_pack_linux_170242.zip@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "cp",
       "[START_DIR]/src/out/Debug/index_pack_linux_kythe.zip",
       "gs://chrome-codesearch/prod/index_pack_linux_kythe_170242.zip"
     ],
@@ -752,38 +721,6 @@
     "name": "gsutil upload kythe index pack",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/prod/index_pack_linux_kythe_170242.zip@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/archive_source_codesearch.py",
-      "src",
-      "build",
-      "infra",
-      "tools",
-      "-f",
-      "chromium_src_linux.tar.bz2"
-    ],
-    "name": "archive source"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "cp",
-      "[START_DIR]/chromium_src_linux.tar.bz2",
-      "gs://chrome-codesearch/prod/chromium_src_linux_170242.tar.bz2"
-    ],
-    "infra_step": true,
-    "name": "gsutil upload source tarball",
-    "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/prod/chromium_src_linux_170242.tar.bz2@@@"
     ]
   },
   {
