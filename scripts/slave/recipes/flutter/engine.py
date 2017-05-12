@@ -9,6 +9,7 @@ DEPS = [
   'depot_tools/gclient',
   'file',
   'depot_tools/gsutil',
+  'recipe_engine/context',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
@@ -35,7 +36,7 @@ def Build(api, config, *targets):
 
 def RunHostTests(api, out_dir, exe_extension=''):
   directory = api.path['start_dir'].join('src', out_dir)
-  with api.step.context({'cwd': directory}):
+  with api.context(cwd=directory):
     if api.platform.is_mac:
       api.step('Test Flutter Channels',
         [directory.join('flutter_channels_unittests' + exe_extension)])
@@ -109,7 +110,7 @@ def AnalyzeDartUI(api):
   Build(api, 'host_debug_unopt', 'generate_dart_ui')
 
   checkout = api.path['start_dir'].join('src')
-  with api.step.context({'cwd': checkout}):
+  with api.context(cwd=checkout):
     api.step('analyze dart_ui', ['/bin/sh', 'flutter/travis/analyze.sh'])
 
 
@@ -190,14 +191,14 @@ def TestObservatory(api):
       checkout.join('flutter/shell/testing/observatory/empty_main.dart')
   test_path = checkout.join('flutter/shell/testing/observatory/test.dart')
   test_cmd = ['dart', test_path, flutter_tester_path, empty_main_path]
-  with api.step.context({'cwd': checkout}):
+  with api.context(cwd=checkout):
     api.step('test observatory and service protocol', test_cmd)
 
 
 def TestEngine(api):
   checkout = api.path['start_dir'].join('src')
   test_cmd = [checkout.join('flutter/testing/run_tests.sh')]
-  with api.step.context({'cwd': checkout}):
+  with api.context(cwd=checkout):
     api.step('engine unit tests', test_cmd)
 
 
@@ -244,7 +245,7 @@ def PackageIOSVariant(api, label, device_out, sim_out, bucket_name):
     '--simulator-out-dir',
     api.path.join(out_dir, sim_out),
   ]
-  with api.step.context({'cwd': checkout}):
+  with api.context(cwd=checkout):
     api.step('Create iOS %s Flutter.framework' % label,
       create_ios_framework_cmd)
 
@@ -316,7 +317,7 @@ def BuildJavadoc(api):
   with MakeTempDir(api, 'BuildJavadoc') as temp_dir:
     javadoc_cmd = [checkout.join('flutter/tools/gen_javadoc.py'),
                    '--out-dir', temp_dir]
-    with api.step.context({'cwd': checkout}):
+    with api.context(cwd=checkout):
       api.step('build javadoc', javadoc_cmd)
     api.zip.directory('archive javadoc', temp_dir,
                       checkout.join('out/android_javadoc.zip'))
@@ -354,7 +355,7 @@ def RunSteps(api):
   env = { 'PATH': api.path.pathsep.join((str(dart_bin), '%(PATH)s')) }
 
   # The context adds dart to the path, only needed for the analyze step for now.
-  with api.step.context({'env': env}):
+  with api.context(env=env):
 
     if api.platform.is_linux:
       AnalyzeDartUI(api)

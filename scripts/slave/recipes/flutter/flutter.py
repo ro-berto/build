@@ -9,6 +9,7 @@ DEPS = [
   'depot_tools/url',
   'file',
   'depot_tools/gsutil',
+  'recipe_engine/context',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/platform',
@@ -51,7 +52,7 @@ def GetCloudPath(api, git_hash, path):
 def BuildExamples(api, git_hash, flutter_executable):
   def BuildAndArchive(api, app_dir, apk_name):
     app_path = api.path['checkout'].join(app_dir)
-    with api.step.context({'cwd': app_path}):
+    with api.context(cwd=app_path):
       api.step('flutter build apk %s' % api.path.basename(app_dir),
           [flutter_executable, '-v', 'build', 'apk'])
 
@@ -162,14 +163,14 @@ def RunSteps(api):
   }
 
   # The context adds dart-sdk tools to PATH sets PUB_CACHE.
-  with api.step.context({'env': env}):
+  with api.context(env=env):
     if api.platform.is_mac:
       SetupXcode(api)
 
     flutter_executable = 'flutter' if not api.platform.is_win else 'flutter.bat'
     dart_executable = 'dart' if not api.platform.is_win else 'dart.exe'
 
-    with api.step.context({'cwd': checkout}):
+    with api.context(cwd=checkout):
       api.step('download dependencies', [flutter_executable, 'update-packages'])
       api.step('flutter doctor', [flutter_executable, 'doctor'])
       api.step('test.dart', [dart_executable, 'dev/bots/test.dart'])
