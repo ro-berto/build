@@ -7,6 +7,7 @@ DEPS = [
   'depot_tools/gclient',
   'depot_tools/gsutil',
   'file',
+  'recipe_engine/context',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
@@ -50,7 +51,7 @@ def RunSteps(api):
 
   api.gclient.runhooks()
 
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     api.python('taskkill before building',
                api.path['checkout'].join('tools', 'task_kill.py'),
                args=['--kill_browsers=True'],
@@ -66,7 +67,7 @@ def RunSteps(api):
 
   if builder == 'analyze':
     with api.step.defer_results():
-      with api.step.context({'cwd': api.path['checkout']}):
+      with api.context(cwd=api.path['checkout']):
         dartanalyzer_name = 'dartanalyzer'
         if api.platform.name == 'win':
           dartanalyzer_name = 'dartanalyzer.bat'
@@ -80,7 +81,7 @@ def RunSteps(api):
         api.step('analyze analyzer_plugin',
                  [dartanalyzer, "--no-hints", "pkg/analyzer_plugin"])
 
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     api.python('taskkill after testing',
                api.path['checkout'].join('tools', 'task_kill.py'),
                args=['--kill_browsers=True'],

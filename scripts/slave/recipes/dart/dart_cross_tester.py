@@ -7,6 +7,7 @@ DEPS = [
   'depot_tools/gclient',
   'file',
   'depot_tools/gsutil',
+  'recipe_engine/context',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
@@ -39,14 +40,14 @@ def RunSteps(api):
   buildername = buildername.replace('-recipe', '')
   b = builders[buildername]
 
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     api.python('clobber',
                api.path['tools'].join('clean_output_directory.py'),
                ok_ret='any')
-  with api.step.context({'env': {'DART_USE_GYP': '1'}}):
+  with api.context(env={'DART_USE_GYP': '1'}):
     api.gclient.runhooks()
 
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     tarball = tarball_name(b['target_arch'], b['mode'], revision)
     uri = "%s/%s" % (GCS_BUCKET, tarball)
     api.gsutil(['cp', uri, tarball], name='download tarball')

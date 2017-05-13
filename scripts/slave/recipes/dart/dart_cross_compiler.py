@@ -7,6 +7,7 @@ DEPS = [
   'depot_tools/gclient',
   'file',
   'depot_tools/gsutil',
+  'recipe_engine/context',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
@@ -51,13 +52,13 @@ def RunSteps(api):
   b = builders[buildername]
 
   if b.get('clobber', False):
-    with api.step.context({'cwd': api.path['checkout']}):
+    with api.context(cwd=api.path['checkout']):
       api.python('clobber',
                  api.path['tools'].join('clean_output_directory.py'))
 
   api.gclient.runhooks()
 
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     build_args = ['-m%s' % b['mode'], '--arch=%s' % b['target_arch'], 'runtime']
     api.python('build dart',
                api.path['checkout'].join('tools', 'build.py'),

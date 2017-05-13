@@ -6,6 +6,7 @@ DEPS = [
   'depot_tools/bot_update',
   'depot_tools/gclient',
   'file',
+  'recipe_engine/context',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
@@ -30,7 +31,7 @@ def AnalyzeDartUI(api):
   Build(api, 'host_debug_unopt', 'generate_dart_ui')
 
   checkout = api.path['start_dir'].join('src')
-  with api.step.context({'cwd': checkout}):
+  with api.context(cwd=checkout):
     api.step('analyze dart_ui', ['/bin/sh', 'flutter/travis/analyze.sh'])
 
 def BuildLinuxAndroidx86(api):
@@ -61,7 +62,7 @@ def TestObservatory(api):
       'flutter/shell/testing/observatory/empty_main.dart')
   test_path = checkout.join('flutter/shell/testing/observatory/test.dart')
   test_cmd = ['dart', test_path, flutter_tester_path, empty_main_path]
-  with api.step.context({'cwd': checkout}):
+  with api.context(cwd=checkout):
     api.step('test observatory and service protocol', test_cmd)
 
 def GetCheckout(api):
@@ -93,7 +94,7 @@ def RunSteps(api):
   env = { 'PATH': api.path.pathsep.join((str(dart_bin), '%(PATH)s')) }
 
   # The context adds dart to the path, only needed for the analyze step for now.
-  with api.step.context({'env': env}):
+  with api.context(env=env):
     AnalyzeDartUI(api)
 
     BuildLinux(api)

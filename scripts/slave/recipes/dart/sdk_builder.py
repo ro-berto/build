@@ -5,6 +5,7 @@
 DEPS = [
   'depot_tools/bot_update',
   'depot_tools/gclient',
+  'recipe_engine/context',
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/python',
@@ -32,7 +33,7 @@ def RunSteps(api):
   api.path['tools'] = api.path['checkout'].join('tools')
 
 
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     # Step 2) Run taskkill.
     with api.step.defer_results():
       api.python('taskkill before',

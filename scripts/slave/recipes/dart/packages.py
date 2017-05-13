@@ -7,6 +7,7 @@ DEPS = [
   'depot_tools/gclient',
   'file',
   'depot_tools/gsutil',
+  'recipe_engine/context',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
@@ -31,8 +32,8 @@ def RunTests(api, test_args, test_specs):
     else:
       args.append('--append_logs')
     args.extend(test_spec['tests'])
-    with api.step.context({'cwd': api.path['checkout'],
-                           'env': {'PUB_ENVIRONMENT': 'dart_bots'}}):
+    with api.context(cwd=api.path['checkout'],
+                     env={'PUB_ENVIRONMENT': 'dart_bots'}):
       api.python(test_spec['name'],
                  api.path['checkout'].join('tools', 'test.py'),
                  args=args)
@@ -71,7 +72,7 @@ def RunSteps(api):
 
   api.gclient.runhooks()
 
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     api.python('taskkill before building',
                api.path['checkout'].join('tools', 'task_kill.py'),
                args=['--kill_browsers=True'],
@@ -80,7 +81,7 @@ def RunSteps(api):
   with api.step.defer_results():
     zipfile = api.path.abspath(api.path['checkout'].join('sdk.zip'))
     url = sdk_url(channel, api.platform.name, 'x64', mode, revision)
-    with api.step.context({'cwd': api.path['checkout']}):
+    with api.context(cwd=api.path['checkout']):
       api.gsutil(['cp', url, zipfile], name='Download sdk')
     build_dir = api.path['checkout'].join(build_directories[api.platform.name])
     build_dir = api.path.abspath(build_dir)
@@ -163,7 +164,7 @@ def RunSteps(api):
       ]
     RunTests(api, test_args, test_specs)
 
-    with api.step.context({'cwd': api.path['checkout']}):
+    with api.context(cwd=api.path['checkout']):
       # TODO(whesse): Add archive coredumps step from dart_factory.py.
       api.python('taskkill after testing',
                  api.path['checkout'].join('tools', 'task_kill.py'),

@@ -6,6 +6,7 @@ DEPS = [
   'depot_tools/bot_update',
   'depot_tools/gclient',
   'file',
+  'recipe_engine/context',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
@@ -39,7 +40,7 @@ def RunTests(api, test_args, test_specs, use_xvfb=False):
       args.append('--append_logs')
     args.extend(test_spec['tests'])
 
-    with api.step.context({'cwd': api.path['checkout']}):
+    with api.context(cwd=api.path['checkout']):
       if use_xvfb:
         xvfb_cmd = ['xvfb-run', '-a', '--server-args=-screen 0 1024x768x24']
         xvfb_cmd.extend(['python', '-u', './tools/test.py'])
@@ -81,7 +82,7 @@ def RunSteps(api):
 
   api.gclient.runhooks()
 
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     api.python('taskkill before building',
                api.path['checkout'].join('tools', 'task_kill.py'),
                args=['--kill_browsers=True'])
@@ -96,7 +97,7 @@ def RunSteps(api):
     # Special hard-coded steps with compiler=none, run on selected runtimes
     if runtime == 'jsshell' and system == 'linux' and sharded:
       IsFirstTestStep = False
-      with api.step.context({'cwd': api.path['checkout']}):
+      with api.context(cwd=api.path['checkout']):
         api.python('dart2js unit tests',
                    api.path['checkout'].join('tools', 'test.py'),
                    args=["--mode=release", "--compiler=none", "--runtime=vm",
@@ -160,7 +161,7 @@ def RunSteps(api):
           spec['name'] = spec['name'].replace(' tests', ' checked tests')
         RunTests(api, test_args, test_specs, use_xvfb=needs_xvfb)
 
-    with api.step.context({'cwd': api.path['checkout']}):
+    with api.context(cwd=api.path['checkout']):
       # TODO(whesse): Add archive coredumps step from dart_factory.py.
       api.python('taskkill after testing',
                  api.path['checkout'].join('tools', 'task_kill.py'),

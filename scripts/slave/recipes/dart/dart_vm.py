@@ -6,6 +6,7 @@ DEPS = [
   'depot_tools/bot_update',
   'depot_tools/gclient',
   'file',
+  'recipe_engine/context',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
@@ -156,21 +157,21 @@ def RunSteps(api):
 
   # buildbot sets 'clobber' to the empty string which is falsey, check with 'in'
   if 'clobber' in api.properties:
-    with api.step.context({'cwd': api.path['checkout']}):
+    with api.context(cwd=api.path['checkout']):
       api.python('clobber',
                  api.path['tools'].join('clean_output_directory.py'))
 
-  with api.step.context({'env': b['env'].copy()}):
+  with api.context(env=b['env']):
     api.gclient.runhooks()
 
-  with api.step.context({'cwd': api.path['checkout']}):
+  with api.context(cwd=api.path['checkout']):
     api.python('taskkill before building',
                api.path['checkout'].join('tools', 'task_kill.py'),
                args=['--kill_browsers=True'])
 
     build_args = ['-m%s' % b['mode'], '--arch=%s' % b['target_arch'], 'runtime']
     build_args.extend(b.get('build_args', []))
-    with api.step.context({'env': b['env']}):
+    with api.context(env=b['env']):
       api.python('build dart',
                  api.path['checkout'].join('tools', 'build.py'),
                  args=build_args)
@@ -187,13 +188,13 @@ def RunSteps(api):
       if b.get('archive_core_dumps', False):
         test_args.append('--copy-coredumps')
       test_args.extend(b.get('test_args', []))
-      with api.step.context({'env': b['env']}):
+      with api.context(env=b['env']):
         api.python('vm tests',
                    api.path['checkout'].join('tools', 'test.py'),
                    args=test_args)
       if b.get('checked', False):
         test_args.extend(['--checked', '--append_logs'])
-        with api.step.context({'env': b['env']}):
+        with api.context(env=b['env']):
           api.python('checked vm tests',
                      api.path['checkout'].join('tools', 'test.py'),
                      args=test_args)

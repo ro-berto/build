@@ -6,6 +6,7 @@ DEPS = [
   'depot_tools/bot_update',
   'depot_tools/gclient',
   'file',
+  'recipe_engine/context',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
@@ -33,10 +34,10 @@ def RunSteps(api):
   api.gclient.c.with_branch_heads = True
   api.bot_update.ensure_checkout()
 
-  with api.step.context({'env': {
+  with api.context(env={
       'GYP_GENERATORS': 'ninja',
       'GYP_DEFINES': ' '.join(gyp_defines),
-      'GYP_MSVS_VERSION': '2013'}}):
+      'GYP_MSVS_VERSION': '2013'}):
     api.gclient.runhooks()
   api.gclient.c.got_revision_mapping.pop('src', None)
   api.gclient.c.got_revision_mapping['src/dart'] = 'got_revision'
@@ -45,15 +46,15 @@ def RunSteps(api):
   api.path['checkout'] = api.path['start_dir'].join('src')
 
   with api.step.defer_results():
-    with api.step.context({'cwd': api.path['checkout']}):
+    with api.context(cwd=api.path['checkout']):
       api.python(
         'taskkill before building',
         api.path['checkout'].join('dart', 'tools', 'task_kill.py'),
         args=['--kill_browsers=True'],
         ok_ret='any')
-      with api.step.context({'env': {
+      with api.context(env={
           'GYP_GENERATORS': 'ninja',
-          'GYP_DEFINES': ' '.join(gyp_defines)}}):
+          'GYP_DEFINES': ' '.join(gyp_defines)}):
         api.python(
           'build dartium',
           api.path['checkout'].join('dart', 'tools', 'dartium', 'build.py'),
