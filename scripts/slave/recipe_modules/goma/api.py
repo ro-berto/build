@@ -106,20 +106,6 @@ class GomaApi(recipe_api.RecipeApi):
           ref='candidate'
         self._goma_dir = self.m.path['cache'].join('goma_client')
 
-        # DELETE_ME_AFTER(March 17 2017):
-        # This was the old location of the goma client. However now we use
-        #     path['cache'].join('cipd')
-        # as the cache for cipd packages, so it doesn't make sense to have goma
-        # client be a subdirectory of that. If we find this old directory, clean
-        # it up. If you're reading this after March 17, please delete this code.
-        if self.m.path.exists(self.m.path['cache'].join('cipd', 'goma')):
-          try:
-            self.m.shutil.rmtree(
-              self.m.path['cache'].join('cipd', 'goma'),
-              name='clean old goma dir')
-          except self.m.step.StepFailure:
-            self.m.step.active_result.presentation.status = self.m.step.WARNING
-
         # To update:
         # ./cipd set-ref infra/tools/cloudtail/ \
         #     -ref goma_recipe_module \

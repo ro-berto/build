@@ -59,13 +59,6 @@ def GenTests(api):
          api.step_data('postprocess_for_goma.stop_goma', retcode=1) +
          api.properties.generic(**properties))
 
-  yield (api.test('old_cache_dir') + api.properties.generic(**properties) +
-         api.path.exists(api.path['cache'].join('cipd', 'goma')))
-
-  yield (api.test('old_cache_dir_fail') + api.properties.generic(**properties) +
-         api.path.exists(api.path['cache'].join('cipd', 'goma')) +
-         api.step_data('ensure_goma.clean old goma dir', retcode=1))
-
   yield (api.test('linux_set_custome_tmp_dir') + api.platform.name('linux') +
          api.properties(custom_tmp_dir='/tmp/goma_goma_module') +
          api.properties.generic(**properties))
