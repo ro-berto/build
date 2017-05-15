@@ -43,6 +43,10 @@ _ENGINE_FLAGS = {
   # None is the default set of engine flags, and is used if nothing else
   # matches. It MUST be defined.
   None: {},
+
+  'chromium.fyi': {
+    'use_result_proto': True,
+  },
 }
 
 def _get_engine_flags(mastername):
