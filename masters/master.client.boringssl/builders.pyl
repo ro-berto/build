@@ -161,13 +161,13 @@
     "ios_compile": {
       "recipe": "boringssl",
       "scheduler": "boringssl_commits",
-      "slave_pools": ["mac"],
+      "slave_pools": ["mac_10.11"],
       "category": "4ios",
     },
     "ios64_compile": {
       "recipe": "boringssl",
       "scheduler": "boringssl_commits",
-      "slave_pools": ["mac"],
+      "slave_pools": ["mac_10.11"],
       "category": "4ios",
     },
     "linux_fips": {
@@ -228,6 +228,7 @@
         "slave208-c3",
         "slave245-c3",
         "slave246-c3",
+        "slave251-c3",
       ],
     },
     "mac": {
@@ -238,6 +239,16 @@
       },
       "slaves": [
         "vm2-m3",
+      ],
+    },
+    "mac_10.11": {
+      "slave_data": {
+        "bits": 64,
+        "os": "mac",
+        "version": "10.11",
+      },
+      "slaves": [
+        "build4-m3",
       ],
     },
     "windows": {
