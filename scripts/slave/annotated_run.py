@@ -309,7 +309,9 @@ def _exec_recipe(rt, opts, stream, basedir, tdir, properties):
   if engine_flags:
     engine_flags_path = os.path.join(tdir, 'op_args.json')
     with open(engine_flags_path, 'w') as f:
-      json.dump(engine_flags, f)
+      json.dump({
+          'engine_flags': engine_flags
+      }, f)
     engine_args = ['--operational-args-path', engine_flags_path]
 
   recipe_cmd = [

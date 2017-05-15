@@ -186,33 +186,6 @@ def all_cipd_packages():
     yield cipd.CipdPackage(name=_KITCHEN_CIPD_PACKAGE, version=pins.kitchen)
 
 
-# ENGINE_FLAGS is a mapping of master name to a engine flags. This can be used
-# to test new recipe engine flags on a select few masters.
-_ENGINE_FLAGS = {
-  # None is the default set of engine flags, and is used if nothing else
-  # matches. It MUST be defined.
-  None: {
-    'engine_flags': {
-      'use_result_proto': True,
-    }
-  },
-
-  'chromium.fyi': {
-    'engine_flags': {
-      'use_result_proto': True,
-    }
-  },
-  'tryserver.chromium.linux': {
-    'engine_flags': {
-      'use_result_proto': True,
-    }
-  },
-}
-
-def _get_engine_flags(mastername):
-  return  _ENGINE_FLAGS.get(mastername, _ENGINE_FLAGS[None])
-
-
 def _call(cmd, **kwargs):
   LOGGER.info('Executing command: %s', cmd)
   exit_code = subprocess.call(cmd, **kwargs)
@@ -495,13 +468,17 @@ def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir):
   cipd_bootstrap_v2.install_cipd_packages(cipd_path,
       cipd.CipdPackage(_RECIPES_PY_CIPD_PACKAGE, pins.recipes))
 
-  engine_flags = _get_engine_flags(mastername)
+  engine_flags = {
+    'use_result_proto': True,
+  }
 
   engine_args = []
   if engine_flags:
     engine_flags_path = os.path.join(tempdir, 'engine_flags.json')
     with open(engine_flags_path, 'w') as f:
-      json.dump(engine_flags, f)
+      json.dump({
+          'engine_flags': engine_flags
+      }, f)
 
     engine_args = ['--operational-args-path', engine_flags_path]
 
@@ -552,14 +529,11 @@ def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir):
   with open(recipe_result_path) as f:
     return_value = json.load(f)
 
-  if engine_flags.get('use_result_proto'):
-    # If we failed, but aren't a step failure, we assume it was an
-    # exception.
-    f = return_value.get('failure')
-    if f is not None and not f.get('step_failure'):
-      # The recipe engine used to return -1, which got interpreted as 255
-      # by os.exit in python, since process exit codes are a single byte.
-      recipe_return_code = 255
+  f = return_value.get('failure')
+  if f is not None and not f.get('step_failure'):
+    # The recipe engine used to return -1, which got interpreted as 255
+    # by os.exit in python, since process exit codes are a single byte.
+    recipe_return_code = 255
 
   return recipe_return_code
 
