@@ -23,6 +23,9 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
 
   def get_checkout_dir(self, bot_config):
     """Returns directory where checkout can be created.
+
+    TODO: Cache this result for a given "bot_config.checkout_dir" value so we
+    don't have to "makedirs" each time the checkout dir is queried.
     """
     # If explicitly specified, use the named builder cache base directory.
     try:

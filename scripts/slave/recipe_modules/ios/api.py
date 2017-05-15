@@ -22,6 +22,7 @@ class iOSApi(recipe_api.RecipeApi):
     self.__config = None
     self._include_cache = {}
     self.compilation_targets = None
+    self._checkout_dir = None
 
   @property
   def bucket(self):
@@ -55,11 +56,16 @@ class iOSApi(recipe_api.RecipeApi):
     assert self.__config is not None
     return 'use_goma=true' in self.__config['gn_args']
 
+  def _ensure_checkout_dir(self):
+    if not self._checkout_dir:
+      self._checkout_dir = self.m.chromium_checkout.get_checkout_dir({})
+    return self._checkout_dir
+
   def checkout(self, **kwargs):
     """Checks out Chromium."""
     self.m.gclient.set_config('ios')
 
-    checkout_dir = self.m.chromium_checkout.get_checkout_dir({})
+    checkout_dir = self._ensure_checkout_dir()
 
     # Support for legacy buildbot clobber. If the "clobber" property is
     # present at all with any value, clobber the whole checkout.
@@ -383,8 +389,8 @@ class iOSApi(recipe_api.RecipeApi):
         out directory, so must have already been compiled.
     """
     cmd = [
-        self.m.path['start_dir'].join(self.most_recent_app_dir, 'symupload'),
-        self.m.path['start_dir'].join(self.most_recent_app_dir, artifact),
+        self.most_recent_app_path.join('symupload'),
+        self.most_recent_app_path.join(artifact),
         'https://client2.google.com/cr/symbol',
     ]
     self.m.step('symupload %s' % artifact, cmd)
@@ -400,7 +406,7 @@ class iOSApi(recipe_api.RecipeApi):
     """
     tgz = self.m.path.basename(path)
     archive = self.m.path.mkdtemp('tgz').join(tgz)
-    cwd = self.m.path['start_dir'].join(self.most_recent_app_dir)
+    cwd = self.most_recent_app_path
     cmd = [
         'tar',
         '--create',
@@ -443,7 +449,7 @@ class iOSApi(recipe_api.RecipeApi):
           )
       else:
         self.m.gsutil.upload(
-            self.m.path['start_dir'].join(self.most_recent_app_dir, name),
+            self.most_recent_app_path.join(name),
             artifact.get('bucket', self.bucket),
             '%s/%s' % (base_path, name),
             link_name=name,
@@ -476,10 +482,8 @@ class iOSApi(recipe_api.RecipeApi):
     if task['skip']:
       return task
 
-    app_path = self.m.path.join(
-      self.most_recent_app_dir,
-      '%s.app' % test['app'],
-    )
+    app_path = self.m.path.join(self.most_recent_app_dir,
+                                '%s.app' % test['app'])
     task['isolate.gen'] = tmp_dir.join('%s.isolate.gen.json' % test['id'])
 
     args = [
@@ -502,7 +506,7 @@ class iOSApi(recipe_api.RecipeApi):
       ])
     isolate_gen_file_contents = self.m.json.dumps({
       'args': args,
-      'dir': self.m.path['start_dir'],
+      'dir': self._ensure_checkout_dir(),
       'version': 1,
     }, indent=2)
     try:
@@ -541,7 +545,7 @@ class iOSApi(recipe_api.RecipeApi):
       '%s/' % scripts_dir,
     ]
     if self.platform == 'simulator':
-      iossim = self.m.path.join(self.most_recent_iossim)
+      iossim = self.most_recent_iossim
       cmd.extend([
         '--iossim', iossim,
         '--platform', '<(platform)',
@@ -816,8 +820,22 @@ class iOSApi(recipe_api.RecipeApi):
       self.collect(tasks)
 
   @property
+  def most_recent_app_path(self):
+    """Returns the Path to the directory of the most recently compiled apps."""
+    platform = {
+      'device': 'iphoneos',
+      'simulator': 'iphonesimulator',
+    }[self.platform]
+
+    return self.m.path['checkout'].join(
+      'out',
+      '%s-%s' % (self.configuration, platform),
+    )
+
+  @property
   def most_recent_app_dir(self):
-    """Returns the path to the directory of the most recently compiled apps."""
+    """Returns the path (relative to checkout working dir) of the most recently
+    compiled apps."""
     platform = {
       'device': 'iphoneos',
       'simulator': 'iphonesimulator',
@@ -832,10 +850,4 @@ class iOSApi(recipe_api.RecipeApi):
   @property
   def most_recent_iossim(self):
     """Returns the path to the most recently compiled iossim."""
-    platform = {
-      'device': 'iphoneos',
-      'simulator': 'iphonesimulator',
-    }[self.platform]
-
-    return self.m.path.join(
-      'src', 'out', '%s-%s' % (self.configuration, platform), 'iossim')
+    return self.m.path.join(self.most_recent_app_dir, 'iossim')

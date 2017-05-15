@@ -465,7 +465,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake tests.app\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"fake xcode version\", \n    \"--config-variable\", \n    \"xctest\", \n    \"true\", \n    \"--isolate\", \n    \"[START_DIR]/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_1/0.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake tests.app\", \n    \"--config-variable\", \n    \"platform\", \n    \"fake device\", \n    \"--config-variable\", \n    \"version\", \n    \"8.1\"\n  ], \n  \"dir\": \"[START_DIR]\", \n  \"version\": 1\n}",
+      "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake tests.app\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"fake xcode version\", \n    \"--config-variable\", \n    \"xctest\", \n    \"true\", \n    \"--isolate\", \n    \"[START_DIR]/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_1/0.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake tests.app\", \n    \"--config-variable\", \n    \"platform\", \n    \"fake device\", \n    \"--config-variable\", \n    \"version\", \n    \"8.1\"\n  ], \n  \"dir\": \"[BUILDER_CACHE]/ios_simulator\", \n  \"version\": 1\n}",
       "[TMP_BASE]/isolate_tmp_1/0.isolate.gen.json"
     ],
     "cwd": "[BUILDER_CACHE]/ios_simulator/src",
@@ -504,7 +504,7 @@
       "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"version\", @@@",
       "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"8.1\"@@@",
       "@@@STEP_LOG_LINE@0.isolate.gen.json@  ], @@@",
-      "@@@STEP_LOG_LINE@0.isolate.gen.json@  \"dir\": \"[START_DIR]\", @@@",
+      "@@@STEP_LOG_LINE@0.isolate.gen.json@  \"dir\": \"[BUILDER_CACHE]/ios_simulator\", @@@",
       "@@@STEP_LOG_LINE@0.isolate.gen.json@  \"version\": 1@@@",
       "@@@STEP_LOG_LINE@0.isolate.gen.json@}@@@",
       "@@@STEP_LOG_END@0.isolate.gen.json@@@"
