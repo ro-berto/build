@@ -119,7 +119,7 @@ CipdPins = collections.namedtuple('CipdPins', ('recipes', 'kitchen'))
 
 # Stable CIPD pin set.
 _STABLE_CIPD_PINS = CipdPins(
-      recipes='git_revision:e77477ba61ef082e2e34d58fd1251a1cb707f698',
+      recipes='git_revision:6eaacf24833ebd2565177157d368da33780fced9',
       kitchen='git_revision:626f893e5822aa2fbea113c0c2e023f2a601c463')
 
 # Canary CIPD pin set.
