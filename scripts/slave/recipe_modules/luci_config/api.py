@@ -27,13 +27,6 @@ class LuciConfigApi(recipe_api.RecipeApi):
       'Authorization': 'Bearer %s' % self.c.auth_token
     }
 
-  def _fetch(self, url, **kwargs):
-    """Wraps url fetch.
-
-    By default retries requests because app engine flakiness yay."""
-    kwargs.setdefault('attempts', 3)
-    return self.m.url.fetch(url, **kwargs)
-
   def get_projects(self):
     """Fetch the mapping of project id to url from luci-config.
 
@@ -42,13 +35,11 @@ class LuciConfigApi(recipe_api.RecipeApi):
       which there is a repo_url key).
     """
     url = self.c.base_url + '_ah/api/config/v1/projects'
-    fetch_result = self._fetch(
-        url, step_name='Get luci-config projects',
-        headers=self._get_headers()
-      )
+    reuslt = self.m.url.get_json(url, step_name='Get luci-config projects',
+        headers=self._get_headers()).output
 
     mapping = {}
-    for project in json.loads(fetch_result)['projects']:
+    for project in reuslt['projects']:
       # Unicode and str-s don't mix well
       mapping[str(project['id'])] = {str(k): str(v) for k, v in project.items()}
     return mapping
@@ -67,10 +58,9 @@ class LuciConfigApi(recipe_api.RecipeApi):
     url += self.m.url.quote('projects/%s/refs/heads/master' % project, safe='')
     url += '/config/%s' % config
 
-    fetch_result = self._fetch(
+    result = self.m.url.get_json(
         url, step_name='Get project %r config %r' % (project, config),
-        headers=self._get_headers())
-    result = json.loads(fetch_result)
+        headers=self._get_headers()).output
     result['content'] = base64.b64decode(result['content'])
     return result
 

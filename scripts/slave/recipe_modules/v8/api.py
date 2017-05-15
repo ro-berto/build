@@ -196,17 +196,16 @@ class V8Api(recipe_api.RecipeApi):
     """Calculates the latest commit hash that fits the patch."""
     url = ('https://codereview.chromium.org/download/issue%s_%s.diff' %
            (self.m.properties['issue'], self.m.properties['patchset']))
-    step_result = self.m.python(
-        'Download patch',
-        self.package_repo_resource('scripts', 'tools', 'pycurl.py'),
-        [url, '--outfile', self.m.raw_io.output_text()],
-        step_test_data=lambda: self.m.raw_io.test_api.output_text('some patch'),
-    )
+    patch_content = self.m.url.get_text(
+        url,
+        step_name='Download patch',
+        default_test_data='some patch',
+    ).output
     return self.m.python(
         name='Calculate patch base',
         script=self.resource('calculate_patch_base.py'),
         args=[
-          self.m.raw_io.input_text(step_result.raw_io.output_text),
+          self.m.raw_io.input_text(patch_content),
           self.m.path['checkout'],
           self.m.raw_io.output_text(),
         ],
@@ -1203,17 +1202,12 @@ class V8Api(recipe_api.RecipeApi):
           urllib.quote(self.m.properties['buildername']),
           str(self.m.properties['buildnumber']),
       )
-      step_result = self.m.python(
-          'Fetch changes',
-          self.package_repo_resource('scripts', 'tools', 'pycurl.py'),
-          [
-            url,
-            '--outfile',
-            self.m.json.output(),
-          ],
-          step_test_data=lambda: self.test_api.example_buildbot_changes(),
-      )
-      changes = step_result.json.output['sourceStamp']['changes']
+      change_json = self.m.url.get_json(
+          url,
+          step_name='Fetch changes',
+          default_test_data=self.test_api.example_buildbot_changes(),
+      ).output
+      changes = change_json['sourceStamp']['changes']
 
     assert changes
     first_change = changes[0]['revision']

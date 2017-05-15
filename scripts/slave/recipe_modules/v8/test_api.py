@@ -257,7 +257,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     }])
 
   def example_buildbot_changes(self):
-    return self.m.json.output({
+    return {
       'sourceStamp': {
         'changes': [
           {'revision': 'a1'},
@@ -265,16 +265,16 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
           {'revision': 'a3'},
         ]
       }
-    })
+    }
 
   def example_one_buildbot_change(self):
-    return self.m.json.output({
+    return {
       'sourceStamp': {
         'changes': [
           {'revision': 'a1'},
         ]
       }
-    })
+    }
 
   def example_bisection_range(self):
     # Gitiles returns changes in the order child -> parent.

@@ -15,6 +15,7 @@ DEPS = [
   'recipe_engine/properties',
   'recipe_engine/raw_io',
   'recipe_engine/step',
+  'recipe_engine/url',
   'swarming_client',
   'recipe_engine/time',
   'depot_tools/tryserver',
@@ -407,7 +408,7 @@ def GenTests(api):
         'bisect_one_change',
     ) +
     api.v8.fail('Mjsunit') +
-    api.override_step_data(
+    api.url.json(
         'Bisect.Fetch changes', api.v8.example_one_buildbot_change()) +
     api.override_step_data(
         'Bisect.Get change range',

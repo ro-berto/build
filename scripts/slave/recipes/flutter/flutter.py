@@ -6,7 +6,6 @@ import contextlib
 
 DEPS = [
   'depot_tools/git',
-  'depot_tools/url',
   'file',
   'depot_tools/gsutil',
   'recipe_engine/context',
@@ -16,6 +15,7 @@ DEPS = [
   'recipe_engine/properties',
   'recipe_engine/step',
   'recipe_engine/python',
+  'recipe_engine/url',
   'zip',
 ]
 
@@ -116,7 +116,7 @@ def SetupXcode(api):
 
 
 def InstallGradle(api, checkout):
-  api.url.fetch_to_file(
+  api.url.get_file(
       'https://services.gradle.org/distributions/gradle-2.14.1-bin.zip',
       checkout.join('dev', 'bots', 'gradle-2.14.1-bin.zip'),
       step_name='download gradle')

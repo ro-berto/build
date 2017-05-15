@@ -9,7 +9,6 @@ DEPS = [
     'depot_tools/gclient',
     'depot_tools/git',
     'depot_tools/tryserver',
-    'depot_tools/url',
     'file',
     'depot_tools/gsutil',
     'halt',

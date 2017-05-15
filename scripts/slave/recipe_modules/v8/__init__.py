@@ -23,6 +23,7 @@ DEPS = [
   'test_utils',
   'recipe_engine/tempfile',
   'recipe_engine/time',
+  'recipe_engine/url',
   'trigger',
   'depot_tools/tryserver',
 ]

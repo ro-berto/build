@@ -14,7 +14,6 @@ DEPS = [
     'depot_tools/git',
     'depot_tools/gitiles',
     'depot_tools/tryserver',
-    'depot_tools/url',
     'file',
     'goma',
     'depot_tools/gsutil',

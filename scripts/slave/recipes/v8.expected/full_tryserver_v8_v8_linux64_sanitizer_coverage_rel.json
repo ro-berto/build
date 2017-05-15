@@ -64,10 +64,13 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/pycurl.py",
+      "RECIPE_MODULE[recipe_engine::url]/resources/pycurl.py",
+      "--url",
       "https://codereview.chromium.org/download/issue12853011_1.diff",
+      "--status-json",
+      "/path/to/tmp/json",
       "--outfile",
       "/path/to/tmp/"
     ],

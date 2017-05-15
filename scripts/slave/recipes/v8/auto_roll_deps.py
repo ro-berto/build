@@ -10,7 +10,6 @@ DEPS = [
   'depot_tools/gclient',
   'depot_tools/git',
   'depot_tools/gitiles',
-  'depot_tools/url',
   'recipe_engine/context',
   'recipe_engine/json',
   'recipe_engine/path',
@@ -18,6 +17,7 @@ DEPS = [
   'recipe_engine/python',
   'recipe_engine/raw_io',
   'recipe_engine/step',
+  'recipe_engine/url',
 ]
 
 TEST_DEPS_FILE = """
@@ -66,22 +66,18 @@ def RunSteps(api):
     api.gclient.set_config('chromium')
     api.gclient.apply_config('v8_tot')
 
-    step_result = api.python(
-        'check roll status',
-        api.package_repo_resource('scripts', 'tools', 'runit.py'),
-        [api.package_repo_resource('scripts', 'tools', 'pycurl.py'),
-         'https://v8-roll.appspot.com/status'],
-        stdout=api.raw_io.output_text(),
-        step_test_data=lambda: api.raw_io.test_api.stream_output(
-            '1', stream='stdout')
-    )
-    step_result.presentation.logs['stdout'] = step_result.stdout.splitlines()
-    if step_result.stdout.strip() != '1':
-      step_result.presentation.step_text = 'Rolling deactivated'
+    output = api.url.get_text(
+        'https://v8-roll.appspot.com/status',
+        step_name='check roll status',
+        default_test_data='1',
+    ).output
+    api.step.active_result.presentation.logs['stdout'] = output.splitlines()
+    if output.strip() != '1':
+      api.step.active_result.presentation.step_text = 'Rolling deactivated'
       monitoring_state = 'deactivated'
       return
     else:
-      step_result.presentation.step_text = 'Rolling activated'
+      api.step.active_result.presentation.step_text = 'Rolling activated'
 
     params = {
       'closed': 3,
@@ -93,12 +89,10 @@ def RunSteps(api):
     params = api.url.urlencode(params)
     search_url = 'https://codereview.chromium.org/search?' + params
 
-    result = api.url.fetch(
+    results = api.url.get_json(
         search_url,
-        'check active roll',
-        step_test_data=lambda: api.raw_io.test_api.output_text('{"results": []}')
-    )
-    results = api.json.loads(result)['results']
+        step_name='check active roll',
+    ).output['results']
 
     if ContainsChromiumRoll(results):
       stale_roll = ExtractStaleRoll(results, api)
@@ -186,29 +180,36 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield api.test('standard') + api.properties.generic(
-      mastername='client.v8.fyi')
+  yield (api.test('standard') + api.properties.generic(
+      mastername='client.v8.fyi') +
+      api.url.json('check active roll', {'results': []}))
   yield (api.test('rolling_deactivated') +
       api.properties.generic(mastername='client.v8') +
-      api.override_step_data(
-          'check roll status', api.raw_io.stream_output('0', stream='stdout'))
+      api.url.text('check roll status', '0')
     )
   yield (api.test('active_roll') +
       api.properties.generic(mastername='client.v8') +
-      api.override_step_data(
-          'check active roll', api.raw_io.output_text(
-              '{"results": [{"subject": "Update V8 to foo",' +
-              ' "issue": 123456, "commit": true}]}'))
+      api.url.json('check active roll', {
+          'results': [{
+            'subject': 'Update V8 to foo',
+            'issue': 123456,
+            'commit': True,
+          }],
+      })
     )
   yield (api.test('stale_roll') +
       api.properties.generic(mastername='client.v8') +
-      api.override_step_data(
-          'check active roll', api.raw_io.output_text(
-              '{"results": [{"subject": "Update V8 to foo",' +
-              ' "issue": 123456, "commit": false}]}'))
+      api.url.json('check active roll', {
+          'results': [{
+            'subject': 'Update V8 to foo',
+            'issue': 123456,
+            'commit': False,
+          }],
+      })
     )
   yield (api.test('inconsistent_state') +
       api.properties.generic(mastername='client.v8') +
+      api.url.json('check active roll', {'results': []}) +
       api.override_step_data(
           'git cat-file', api.raw_io.stream_output(
               TEST_DEPS_FILE % 'beefdead'))

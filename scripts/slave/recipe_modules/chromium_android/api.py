@@ -1660,7 +1660,7 @@ class AndroidApi(recipe_api.RecipeApi):
           'builders',
           self.m.properties['buildername'],
           'builds',
-          self.m.properties['buildnumber'] or '0',
+          str(self.m.properties['buildnumber']) or '0',
           'steps',
           'Incremental%20coverage%20report',
           'logs',
