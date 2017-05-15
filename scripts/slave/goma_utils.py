@@ -15,7 +15,9 @@ import multiprocessing
 import os
 import re
 import shutil
+import signal
 import socket
+import subprocess
 import sys
 import tempfile
 import time
@@ -576,3 +578,195 @@ def DetermineGomaJobs():
     return min(10 * number_of_processors, 200)
 
   return 50
+
+
+def StopGomaClientAndUploadInfo(options, env, exit_status):
+  """Stop goma compiler_proxy and upload goma-related information.
+
+  Args:
+    options (Option) : options to specify where to store goma-related info.
+    env (dict)       : used when goma_ctl command executes.
+    exit_status (int): exit_status sent to monitoring system.
+  """
+  goma_ctl_cmd = [sys.executable,
+                  os.path.join(options.goma_dir, 'goma_ctl.py')]
+
+  tsmon_counters = []
+  if options.goma_jsonstatus:
+    chromium_utils.RunCommand(
+        goma_ctl_cmd + ['jsonstatus', options.goma_jsonstatus], env=env)
+    counter = MakeGomaStatusCounter(
+        options.goma_jsonstatus,
+        exit_status,
+        builder=options.buildbot_buildername,
+        master=options.buildbot_mastername,
+        slave=options.buildbot_slavename,
+        clobber=options.buildbot_clobber)
+    if counter:
+      tsmon_counters.append(counter)
+
+  # If goma compiler_proxy crashes, there could be crash dump.
+  if options.build_data_dir:
+    env['GOMACTL_CRASH_REPORT_ID_FILE'] = os.path.join(options.build_data_dir,
+                                                       'crash_report_id_file')
+  # We must stop the proxy to dump GomaStats.
+  chromium_utils.RunCommand(goma_ctl_cmd + ['stop'], env=env)
+  override_gsutil = None
+  if options.gsutil_py_path:
+    # Needs to add '--', otherwise gsutil options will be passed to gsutil.py.
+    override_gsutil = [sys.executable, options.gsutil_py_path, '--']
+  UploadGomaCompilerProxyInfo(override_gsutil=override_gsutil,
+                              builder=options.buildbot_buildername,
+                              master=options.buildbot_mastername,
+                              slave=options.buildbot_slavename,
+                              clobber=options.buildbot_clobber)
+
+  # Upload GomaStats to make it monitored.
+  if env.get('GOMA_DUMP_STATS_FILE'):
+    # MakeGomaExitStatusCounter should be callbed before SendGomaStats,
+    # since SendGomaStats removes stats file.
+    counter = MakeGomaExitStatusCounter(
+        env['GOMA_DUMP_STATS_FILE'],
+        options.build_data_dir,
+        builder=options.buildbot_buildername,
+        master=options.buildbot_mastername,
+        slave=options.buildbot_slavename,
+        clobber=options.buildbot_clobber)
+    if counter:
+      tsmon_counters.append(counter)
+    SendGomaStats(env['GOMA_DUMP_STATS_FILE'],
+                  env.get('GOMACTL_CRASH_REPORT_ID_FILE'),
+                  options.build_data_dir)
+
+  if tsmon_counters:
+    SendCountersToTsMon(tsmon_counters)
+
+
+def Setup(options, env):
+  """Sets up goma if necessary.
+
+  If using the Goma compiler, first call goma_ctl to ensure the proxy is
+  available, and returns (True, instance of cloudtail subprocess).
+  If it failed to start up compiler_proxy, modify options.compiler
+  and options.goma_dir, modify env to GOMA_DISABLED=true,
+  and returns (False, None).
+  """
+  cloudtail_pid_file = options.cloudtail_pid_file
+
+  if cloudtail_pid_file and os.path.exists(cloudtail_pid_file):
+    os.remove(cloudtail_pid_file)
+
+  if options.compiler not in ('goma', 'goma-clang'):
+    # Unset goma_dir to make sure we'll not use goma.
+    options.goma_dir = None
+    return False, None
+
+  if options.goma_fail_fast:
+    # startup fails when initial ping failed.
+    env['GOMA_FAIL_FAST'] = 'true'
+  else:
+    # If a network error continues 30 minutes, compiler_proxy make the compile
+    # failed.  When people use goma, they expect using goma is faster than
+    # compile locally. If goma cannot guarantee that, let it make compile
+    # as error.
+    env['GOMA_ALLOWED_NETWORK_ERROR_DURATION'] = '1800'
+
+  if options.goma_max_active_fail_fallback_tasks:
+    env['GOMA_MAX_ACTIVE_FAIL_FALLBACK_TASKS'] = (
+        options.goma_max_active_fail_fallback_tasks)
+
+  # Caches CRLs in GOMA_CACHE_DIR.
+  # Since downloading CRLs is usually slow, caching them may improves
+  # compiler_proxy start time.
+  if not os.path.exists(options.goma_cache_dir):
+    os.mkdir(options.goma_cache_dir, 0700)
+  env['GOMA_CACHE_DIR'] = options.goma_cache_dir
+
+  # Enable DepsCache. DepsCache caches the list of files to send goma server.
+  # This will greatly improve build speed when cache is warmed.
+  if options.goma_deps_cache_file:
+    env['GOMA_DEPS_CACHE_FILE'] = options.goma_deps_cache_file
+  else:
+    # TODO(shinyak): GOMA_DEPS_CACHE_DIR will be removed from goma in future.
+    # GOMA_DEPS_CACHE_FILE should be used.
+    env['GOMA_DEPS_CACHE_DIR'] = (
+      options.goma_deps_cache_dir or options.target_output_dir)
+
+  if options.goma_hermetic:
+    env['GOMA_HERMETIC'] = options.goma_hermetic
+  if options.goma_enable_remote_link:
+    env['GOMA_ENABLE_REMOTE_LINK'] = options.goma_enable_remote_link
+  if options.goma_enable_localoutputcache:
+    env['GOMA_LOCAL_OUTPUT_CACHE_DIR'] = (
+        os.path.join(options.goma_cache_dir, 'localoutputcache'))
+  if options.goma_store_local_run_output:
+    env['GOMA_STORE_LOCAL_RUN_OUTPUT'] = options.goma_store_local_run_output
+
+  if options.build_data_dir:
+    env['GOMA_DUMP_STATS_FILE'] = os.path.join(options.build_data_dir,
+                                               'goma_stats_proto')
+
+  if options.goma_service_account_json_file:
+    env['GOMA_SERVICE_ACCOUNT_JSON_FILE'] = \
+        options.goma_service_account_json_file
+  goma_start_command = ['restart']
+  goma_ctl_cmd = [sys.executable,
+                  os.path.join(options.goma_dir, 'goma_ctl.py')]
+  result = chromium_utils.RunCommand(goma_ctl_cmd + goma_start_command, env=env)
+  if not result:
+    # goma started sucessfully.
+    # Making cloudtail to upload the latest log.
+
+    cloudtail_path = '/opt/infra-tools/cloudtail'
+    if chromium_utils.IsWindows():
+      cloudtail_path = 'C:\\infra-tools\\cloudtail'
+
+    try:
+
+      cloudtail_proc = subprocess.Popen(
+          [cloudtail_path, 'tail', '--project-id', 'goma-logs',
+           '--service-account-json', options.cloudtail_service_account_json,
+           '--log-id', 'goma_compiler_proxy', '--path',
+           '--buffering-time', '60',
+           GetLatestGomaCompilerProxyInfo()])
+
+      if cloudtail_pid_file:
+        with open(cloudtail_pid_file,'w') as f:
+          f.write('%d' % cloudtail_proc.pid)
+    except Exception as e:
+      print 'failed to invoke cloudtail: %s' % e
+      return True, None
+    return True, cloudtail_proc
+
+  StopGomaClientAndUploadInfo(options, env, -1)
+
+  if options.goma_disable_local_fallback:
+    print 'error: failed to start goma; fallback has been disabled'
+    raise Exception('failed to start goma')
+
+  print 'warning: failed to start goma. falling back to non-goma'
+  # Drop goma from options.compiler
+  options.compiler = options.compiler.replace('goma-', '')
+  if options.compiler == 'goma':
+    options.compiler = None
+  # Reset options.goma_dir.
+  options.goma_dir = None
+  env['GOMA_DISABLED'] = '1'
+  return False, None
+
+
+def Teardown(options, env, exit_status, cloudtail_proc):
+  """Tears down goma if necessary. """
+  cloudtail_pid_file = options.cloudtail_pid_file
+
+  if options.goma_dir:
+    StopGomaClientAndUploadInfo(options, env, exit_status)
+
+  if cloudtail_proc:
+    cloudtail_proc.terminate()
+    cloudtail_proc.wait()
+  elif cloudtail_pid_file:
+    with open(cloudtail_pid_file) as f:
+      pid = int(f.read())
+      os.kill(pid, signal.SIGTERM)
+    os.remove(cloudtail_pid_file)
