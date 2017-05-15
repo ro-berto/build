@@ -1812,7 +1812,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing_3],
+        'tests': [V8Testing_4],
         'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
       },
@@ -1825,7 +1825,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing_4],
+        'tests': [V8Testing_5],
         'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
         'swarming_properties': {
@@ -2155,7 +2155,7 @@ BUILDERS = {
           'cpu': 'x86-64',
         },
         'tests': [
-          V8Testing_2,
+          V8Testing_3,
           V8TestingExtra_2,
           Mozilla,
         ],
@@ -2310,7 +2310,7 @@ BUILDERS = {
           'os': 'Windows-7-SP1',
         },
         'tests': [
-          V8Testing_2,
+          V8Testing_3,
           V8TestingExtra_2,
           Test262_2,
           Mozilla,
