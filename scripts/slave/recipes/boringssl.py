@@ -173,7 +173,7 @@ def RunSteps(api, buildername):
                               '.tar.bz2.sha1')
     api.python(
         'download_sde', api.depot_tools.download_from_google_storage_path,
-        ['--no_resume', '--bucket', 'boringssl-sde-builder', '-s', sde_hash])
+        ['--no_resume', '--bucket', 'chrome-boringssl-sde', '-s', sde_hash])
     api.python('extract_sde',
                bot_utils.join('extract.py'), [sde_archive, sde_path])
 

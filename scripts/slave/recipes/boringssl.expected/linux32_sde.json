@@ -61,7 +61,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/download_from_google_storage.py",
       "--no_resume",
       "--bucket",
-      "boringssl-sde-builder",
+      "chrome-boringssl-sde",
       "-s",
       "[START_DIR]/boringssl/util/bot/sde-linux64.tar.bz2.sha1"
     ],
