@@ -31,6 +31,7 @@ TEST_BUILDERS = freeze({
         },
         'patch_root': 'src',
         'testing': { 'platform': 'win' },
+        'archive_pgd': True,
       },
     },
   }

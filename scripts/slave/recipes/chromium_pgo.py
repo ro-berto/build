@@ -5,7 +5,6 @@
 from recipe_engine.types import freeze
 
 DEPS = [
-  'archive',
   'chromium',
   'pgo',
   'recipe_engine/platform',
@@ -27,6 +26,7 @@ PGO_BUILDERS = freeze({
           'TARGET_BITS': 32,
         },
         'testing': { 'platform': 'win' },
+        'archive_pgd': True,
       },
       'Chromium Win x64 PGO Builder': {
         'recipe_config': 'chromium',
@@ -37,6 +37,7 @@ PGO_BUILDERS = freeze({
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
+        'archive_pgd': True,
       },
     },
   },

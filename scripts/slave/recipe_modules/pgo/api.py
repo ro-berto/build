@@ -5,38 +5,6 @@
 from recipe_engine import recipe_api
 
 
-# List of the benchmark that we run during the profiling step.
-#
-# TODO(sebmarchand): Move this into a BenchmarkSuite in telemetry, this way
-# only have to run one benchmark.
-_BENCHMARKS_TO_RUN = {
-  'blink_perf.bindings',
-  'blink_perf.canvas',
-  'blink_perf.css',
-  'blink_perf.dom',
-  'blink_perf.paint',
-  'blink_perf.svg',
-  'blink_style.top_25',
-  'dromaeo.cssqueryjquery',
-  'dromaeo.domcoreattr',
-  'dromaeo.domcoremodify',
-  'dromaeo.domcorequery',
-  'dromaeo.domcoretraverse',
-  'dromaeo.jslibattrprototype',
-  'dromaeo.jslibeventprototype',
-  'dromaeo.jslibmodifyprototype',
-  'dromaeo.jslibstyleprototype',
-  'dromaeo.jslibtraversejquery',
-  'dromaeo.jslibtraverseprototype',
-  'media.tough_video_cases',
-  'octane',
-  'smoothness.top_25_smooth',
-  'speedometer',
-  'storage.indexeddb_endure_tracing',
-  'sunspider',
-}
-
-
 class PGOApi(recipe_api.RecipeApi):
   """
   PGOApi encapsulate the various step involved in a PGO build.
@@ -74,10 +42,10 @@ class PGOApi(recipe_api.RecipeApi):
         '--build-dir', self.m.chromium.output_dir,
     ]
     self.m.python(
-      'Profiling benchmarks.',
-      self.m.path['checkout'].join('build', 'win',
-                                   'run_pgo_profiling_benchmarks.py'),
-      args)
+        'Profiling benchmarks.',
+        self.m.path['checkout'].join('build', 'win',
+                                     'run_pgo_profiling_benchmarks.py'),
+        args)
 
   def _compile_optimized_image(self, bot_config, mb_config_path=None):
     """
@@ -135,12 +103,12 @@ class PGOApi(recipe_api.RecipeApi):
     # Augment the DEPS path if needed.
     if '%s' in self.m.gclient.c.solutions[0].deps_file:  # pragma: no cover
       self.m.gclient.c.solutions[0].deps_file = (
-        self.m.gclient.c.solutions[0].deps_file % bot_config['bucket'])
+          self.m.gclient.c.solutions[0].deps_file % bot_config['bucket'])
 
     if self.m.properties.get('bot_id') != 'fake_slave':
       self.m.chromium.taskkill()
 
-    self.m.bot_update.ensure_checkout()
+    update_step = self.m.bot_update.ensure_checkout()
     if bot_config.get('patch_root'):
       self.m.path['checkout'] = self.m.path['start_dir'].join(
           bot_config.get('patch_root'))
@@ -154,6 +122,46 @@ class PGOApi(recipe_api.RecipeApi):
     # Merge the pgc files.
     self._merge_pgc_files()
 
+    if bot_config.get('archive_pgd', False):
+      self.archive_profile_database(
+          update_step.presentation.properties['got_revision'])
+
     # Third step: Compilation of the optimized build, this will use the
     #     profile data files produced by the previous step.
     self._compile_optimized_image(bot_config)
+
+  def archive_profile_database(self, revision):
+    """
+    Archive the profile database into a cloud bucket and use 'git notes' to
+    annotate the current commit with the URL to this file.
+    """
+    with self.m.step.nest("archive profile database"):
+      assert self.m.platform.is_win
+      target_arch = {
+          'ia32': '386',
+          'x64': 'amd64',
+      }[self.m.chromium.c.gyp_env.GYP_DEFINES['target_arch']]
+      package_name = "chromium/pgo/profiles/profile_database/windows-%s" % (
+          target_arch)
+      pkg = self.m.cipd.PackageDefinition(package_name,
+                                          self.m.chromium.output_dir,
+                                          'copy')
+
+      # Copy the pgd files in a temp directory so cipd can pick them up.
+      for f in self.m.file.glob('list PGD files',
+                                self.m.chromium.output_dir.join('*.pgd'),
+                                test_data=[
+                                    self.m.chromium.output_dir.join('test.pgd')
+                                ]):
+        pkg.add_file(f)
+
+      pkg_json = self.m.cipd.create_from_pkg(pkg)
+      instance_id = pkg_json['instance_id']
+
+      # Add the git notes for this profile database.
+      git_notes_ref = 'refs/notes/pgo/profile_database/windows-%s' % target_arch
+      git_notes_msg = 'instance-id:%s git-revision:%s' % (instance_id, revision)
+      self.m.git('notes', '--ref', git_notes_ref,
+                 'add', '-m', git_notes_msg)
+
+      self.m.git('push', 'origin', git_notes_ref)
