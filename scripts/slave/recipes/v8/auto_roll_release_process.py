@@ -16,6 +16,7 @@ DEPS = [
   'recipe_engine/raw_io',
   'recipe_engine/step',
   'recipe_engine/time',
+  'recipe_engine/url',
   'v8',
 ]
 
@@ -95,15 +96,12 @@ def AgeLimitBailout(api, new_date, old_date):
 
 
 def GetLKGR(api):
-  step_result = api.python(
-      'get new lkgr',
-      api.package_repo_resource('scripts', 'tools', 'runit.py'),
-      [api.package_repo_resource('scripts', 'tools', 'pycurl.py'),
-       '%s/lkgr' % STATUS_URL],
-      stdout=api.raw_io.output_text(),
-  )
-  lkgr = step_result.stdout.strip()
-  step_result.presentation.logs['logs'] = [
+  output = api.url.get_text(
+      '%s/lkgr' % STATUS_URL,
+      step_name='get new lkgr',
+  ).output
+  lkgr = output.strip()
+  api.step.active_result.presentation.logs['logs'] = [
     'New candidate: %s (%s)' % (lkgr, str(api.time.time())),
   ]
   return lkgr
@@ -198,10 +196,7 @@ def GenTests(api):
         api.test(name) +
         api.properties.generic(mastername='client.v8.fyi',
                                buildername='Auto-roll - release process') +
-        api.override_step_data(
-            'get new lkgr',
-            api.raw_io.stream_output(new_lkgr, stream='stdout'),
-        ) +
+        api.url.text('get new lkgr', new_lkgr) +
         api.override_step_data(
             'git show-ref %s' % LKGR_REF,
             api.raw_io.stream_output(current_lkgr, stream='stdout'),

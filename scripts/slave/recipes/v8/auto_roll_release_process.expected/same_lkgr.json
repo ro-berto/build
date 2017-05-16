@@ -54,14 +54,17 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/pycurl.py",
-      "https://v8-status.appspot.com/lkgr"
+      "RECIPE_MODULE[recipe_engine::url]/resources/pycurl.py",
+      "--url",
+      "https://v8-status.appspot.com/lkgr",
+      "--status-json",
+      "/path/to/tmp/json",
+      "--outfile",
+      "/path/to/tmp/"
     ],
     "name": "get new lkgr",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@logs@New candidate: 74882b7a8e55268d1658f83efefa1c2585cee723 (396002)@@@",
       "@@@STEP_LOG_END@logs@@@"

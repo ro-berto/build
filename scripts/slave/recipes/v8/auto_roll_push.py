@@ -12,6 +12,7 @@ DEPS = [
   'recipe_engine/python',
   'recipe_engine/raw_io',
   'recipe_engine/step',
+  'recipe_engine/url',
   'v8',
 ]
 
@@ -19,21 +20,17 @@ def RunSteps(api):
   api.gclient.set_config('v8')
   api.bot_update.ensure_checkout(no_shallow=True)
 
-  step_result = api.python(
-      'check roll status',
-      api.package_repo_resource('scripts', 'tools', 'runit.py'),
-      [api.package_repo_resource('scripts', 'tools', 'pycurl.py'),
-       'https://v8-roll.appspot.com/status'],
-      stdout=api.raw_io.output_text(),
-      step_test_data=lambda: api.raw_io.test_api.stream_output(
-          '1', stream='stdout')
-    )
-  step_result.presentation.logs['stdout'] = step_result.stdout.splitlines()
-  if step_result.stdout.strip() != '1':
-    step_result.presentation.step_text = "Pushing deactivated"
+  output = api.url.get_text(
+      'https://v8-roll.appspot.com/status',
+      step_name='check roll status',
+      default_test_data='1',
+    ).output
+  api.step.active_result.presentation.logs['stdout'] = output.splitlines()
+  if output.strip() != '1':
+    api.step.active_result.presentation.step_text = "Pushing deactivated"
     return
   else:
-    step_result.presentation.step_text = "Pushing activated"
+    api.step.active_result.presentation.step_text = "Pushing activated"
 
   with api.context(cwd=api.path['checkout']):
     api.python(
@@ -52,7 +49,5 @@ def GenTests(api):
       mastername='client.v8.fyi')
   yield (api.test('rolling_deactivated') +
       api.properties.generic(mastername='client.v8.fyi') +
-      api.override_step_data(
-          'check roll status', api.raw_io.stream_output('0', stream='stdout'))
-    )
+      api.url.text('check roll status', '0'))
 

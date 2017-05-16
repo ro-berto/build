@@ -54,14 +54,17 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/pycurl.py",
-      "https://v8-roll.appspot.com/status"
+      "RECIPE_MODULE[recipe_engine::url]/resources/pycurl.py",
+      "--url",
+      "https://v8-roll.appspot.com/status",
+      "--status-json",
+      "/path/to/tmp/json",
+      "--outfile",
+      "/path/to/tmp/"
     ],
     "name": "check roll status",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@Pushing deactivated@@@",
       "@@@STEP_LOG_LINE@stdout@0@@@",
