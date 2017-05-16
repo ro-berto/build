@@ -190,7 +190,6 @@ def RunSteps(api, buildername):
   failure = False
   try:
     # TODO(luqui): remove redundant cruft, need one consistent API.
-    api.chromium_android.detect_and_setup_devices()
     api.chromium_android.device_status_check()
 
     api.path.mock_add_paths(api.chromium_android.known_devices_file)

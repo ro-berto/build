@@ -350,22 +350,6 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/android/authorize_adb_devices.py",
-      "--verbose",
-      "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
-    },
-    "infra_step": true,
-    "name": "authorize_adb_devices"
-  },
-  {
-    "cmd": [
       "[START_DIR]/src/third_party/catapult/devil/devil/android/tools/device_recovery.py",
       "--blacklist-file",
       "[START_DIR]/src/out/bad_devices.json",

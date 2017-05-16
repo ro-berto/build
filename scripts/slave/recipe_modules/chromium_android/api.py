@@ -386,18 +386,16 @@ class AndroidApi(recipe_api.RecipeApi):
       return self.m.python(
           'authorize_adb_devices', script, args, infra_step=True)
 
-  def detect_and_setup_devices(self, restart_usb=False, skip_wipe=False,
-                               disable_location=False, min_battery_level=None,
-                               disable_network=False, disable_java_debug=False,
-                               reboot_timeout=None, max_battery_temp=None):
-    self.authorize_adb_devices()
-    self.device_recovery()
-    self.provision_devices(
-      skip_wipe=skip_wipe, disable_location=disable_location,
-      min_battery_level=min_battery_level, disable_network=disable_network,
-      disable_java_debug=disable_java_debug, reboot_timeout=reboot_timeout,
-      max_battery_temp=max_battery_temp)
-    self.device_status()
+  def detect_and_setup_devices(
+      self, restart_usb=False, skip_wipe=False, disable_location=False,
+      min_battery_level=None, disable_network=False, disable_java_debug=False,
+      reboot_timeout=None, max_battery_temp=None): # pragma: no cover
+    # TODO(jbudorick): Remove this once internal clients no longer use it.
+    return self.common_tests_setup_steps(
+        skip_wipe=skip_wipe, disable_location=disable_location,
+        min_battery_level=min_battery_level, disable_network=disable_network,
+        disable_java_debug=disable_java_debug, reboot_timeout=reboot_timeout,
+        max_battery_temp=max_battery_temp)
 
   @property
   def blacklist_file(self):
@@ -1358,7 +1356,7 @@ class AndroidApi(recipe_api.RecipeApi):
                                             '*.log')],
     )
 
-  def common_tests_setup_steps(self, perf_setup=False, skip_wipe=False):
+  def common_tests_setup_steps(self, perf_setup=False, **provision_kwargs):
     if self.c.use_devil_adb:
       self.use_devil_adb()
     self.create_adb_symlink()
@@ -1376,8 +1374,7 @@ class AndroidApi(recipe_api.RecipeApi):
           'max_battery_temp': 350}
     else:
       kwargs = {}
-    if skip_wipe:
-      kwargs['skip_wipe'] = True
+    kwargs.update(provision_kwargs)
     self.provision_devices(**kwargs)
     self.device_status()
     if self.m.chromium.c.gyp_env.GYP_DEFINES.get('asan', 0) == 1:
