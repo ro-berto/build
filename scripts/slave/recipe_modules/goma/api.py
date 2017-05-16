@@ -22,15 +22,11 @@ class GomaApi(recipe_api.RecipeApi):
 
   @property
   def service_account_json_path(self):
-    if self.m.platform.is_win:
-      return 'C:\\creds\\service_accounts\\service-account-goma-client.json'
-    return '/creds/service_accounts/service-account-goma-client.json'
+    return self.m.service_account.get_json_path('goma-client')
 
   @property
   def cloudtail_service_account_json_path(self):
-    if self.m.platform.is_win:
-      return 'C:\\creds\\service_accounts\\service-account-goma-cloudtail.json'
-    return '/creds/service_accounts/service-account-goma-cloudtail.json'
+    return self.m.service_account.get_json_path('goma-cloudtail')
 
   @property
   def cloudtail_path(self):

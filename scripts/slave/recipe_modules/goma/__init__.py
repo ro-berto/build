@@ -13,4 +13,5 @@ DEPS = [
   'recipe_engine/raw_io',
   'recipe_engine/shutil',
   'recipe_engine/step',
+  'service_account',
 ]
