@@ -21,6 +21,7 @@ TEST_CONFIGS = [
   'chromium_skia',
   'chromium_webrtc',
   'chromium_webrtc_tot',
+  'fuchsia',
   'ios',
   'ndk_next',
   'perf',

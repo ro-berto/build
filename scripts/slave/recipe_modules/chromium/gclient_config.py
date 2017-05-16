@@ -120,6 +120,10 @@ def v8_canary(c):
 def v8_tot(c):
   c.revisions['src/v8'] = 'HEAD'
 
+@CONFIG_CTX()
+def fuchsia(c):
+  c.target_os.add('fuchsia')
+
 @CONFIG_CTX(includes=['chromium', 'chrome_internal'])
 def perf(c):
   s = c.solutions[0]
