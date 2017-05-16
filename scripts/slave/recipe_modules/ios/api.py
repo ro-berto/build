@@ -563,7 +563,7 @@ class iOSApi(recipe_api.RecipeApi):
       ],
     }
 
-    isolate_template = self.m.path['start_dir'].join('template.isolate')
+    isolate_template = self._ensure_checkout_dir().join('template.isolate')
     step_result = self.m.file.write(
       'generate template.isolate',
       isolate_template,
@@ -810,7 +810,7 @@ class iOSApi(recipe_api.RecipeApi):
         if self.__config['triggered bots']:
           self.m.file.write(
               'generate isolated_tasks.json',
-              self.m.path['start_dir'].join('isolated_tasks.json'),
+              self._ensure_checkout_dir().join('isolated_tasks.json'),
               self.m.json.dumps(tasks),
           )
 

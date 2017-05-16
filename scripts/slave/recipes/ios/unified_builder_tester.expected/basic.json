@@ -430,7 +430,7 @@
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "{'conditions': [['OS == \"ios\"', {'variables': {'files': ['<(app_path)/', 'src/ios/build/bots/scripts/', 'src/out/Debug-iphonesimulator/iossim'], 'command': ['src/ios/build/bots/scripts/run.py', '--app', '<(app_path)', '--args-json', '{\"test_args\": <(test_args), \"xctest\": <(xctest)}', '--out-dir', '${ISOLATED_OUTDIR}', '--retries', '3', '--xcode-version', '<(xcode_version)', '--iossim', 'src/out/Debug-iphonesimulator/iossim', '--platform', '<(platform)', '--version', '<(version)']}}]]}",
-      "[START_DIR]/template.isolate"
+      "[BUILDER_CACHE]/ios/template.isolate"
     ],
     "cwd": "[BUILDER_CACHE]/ios/src",
     "name": "isolate.generate template.isolate",
@@ -479,7 +479,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake tests 1.app\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"fake xcode version\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--isolate\", \n    \"[START_DIR]/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_2/0.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake tests 1.app\", \n    \"--config-variable\", \n    \"platform\", \n    \"fake device\", \n    \"--config-variable\", \n    \"version\", \n    \"8.0\"\n  ], \n  \"dir\": \"[BUILDER_CACHE]/ios\", \n  \"version\": 1\n}",
+      "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake tests 1.app\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"fake xcode version\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--isolate\", \n    \"[BUILDER_CACHE]/ios/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_2/0.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake tests 1.app\", \n    \"--config-variable\", \n    \"platform\", \n    \"fake device\", \n    \"--config-variable\", \n    \"version\", \n    \"8.0\"\n  ], \n  \"dir\": \"[BUILDER_CACHE]/ios\", \n  \"version\": 1\n}",
       "[TMP_BASE]/isolate_tmp_2/0.isolate.gen.json"
     ],
     "cwd": "[BUILDER_CACHE]/ios/src",
@@ -505,7 +505,7 @@
       "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"xctest\", @@@",
       "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"false\", @@@",
       "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"--isolate\", @@@",
-      "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"[START_DIR]/template.isolate\", @@@",
+      "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"[BUILDER_CACHE]/ios/template.isolate\", @@@",
       "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"--isolated\", @@@",
       "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"[TMP_BASE]/isolate_tmp_2/0.isolated\", @@@",
       "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"--path-variable\", @@@",
@@ -529,7 +529,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake tests 2.app\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"fake xcode version\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--isolate\", \n    \"[START_DIR]/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_2/1.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake tests 2.app\", \n    \"--config-variable\", \n    \"platform\", \n    \"fake device\", \n    \"--config-variable\", \n    \"version\", \n    \"7.1\"\n  ], \n  \"dir\": \"[BUILDER_CACHE]/ios\", \n  \"version\": 1\n}",
+      "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake tests 2.app\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"fake xcode version\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--isolate\", \n    \"[BUILDER_CACHE]/ios/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_2/1.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake tests 2.app\", \n    \"--config-variable\", \n    \"platform\", \n    \"fake device\", \n    \"--config-variable\", \n    \"version\", \n    \"7.1\"\n  ], \n  \"dir\": \"[BUILDER_CACHE]/ios\", \n  \"version\": 1\n}",
       "[TMP_BASE]/isolate_tmp_2/1.isolate.gen.json"
     ],
     "cwd": "[BUILDER_CACHE]/ios/src",
@@ -555,7 +555,7 @@
       "@@@STEP_LOG_LINE@1.isolate.gen.json@    \"xctest\", @@@",
       "@@@STEP_LOG_LINE@1.isolate.gen.json@    \"false\", @@@",
       "@@@STEP_LOG_LINE@1.isolate.gen.json@    \"--isolate\", @@@",
-      "@@@STEP_LOG_LINE@1.isolate.gen.json@    \"[START_DIR]/template.isolate\", @@@",
+      "@@@STEP_LOG_LINE@1.isolate.gen.json@    \"[BUILDER_CACHE]/ios/template.isolate\", @@@",
       "@@@STEP_LOG_LINE@1.isolate.gen.json@    \"--isolated\", @@@",
       "@@@STEP_LOG_LINE@1.isolate.gen.json@    \"[TMP_BASE]/isolate_tmp_2/1.isolated\", @@@",
       "@@@STEP_LOG_LINE@1.isolate.gen.json@    \"--path-variable\", @@@",
@@ -579,7 +579,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake_eg_test_host.app\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"fake xcode version\", \n    \"--config-variable\", \n    \"xctest\", \n    \"true\", \n    \"--isolate\", \n    \"[START_DIR]/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_2/2.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake_eg_test_host.app\", \n    \"--config-variable\", \n    \"platform\", \n    \"fake device 3\", \n    \"--config-variable\", \n    \"version\", \n    \"9.3\"\n  ], \n  \"dir\": \"[BUILDER_CACHE]/ios\", \n  \"version\": 1\n}",
+      "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake_eg_test_host.app\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"fake xcode version\", \n    \"--config-variable\", \n    \"xctest\", \n    \"true\", \n    \"--isolate\", \n    \"[BUILDER_CACHE]/ios/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_2/2.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake_eg_test_host.app\", \n    \"--config-variable\", \n    \"platform\", \n    \"fake device 3\", \n    \"--config-variable\", \n    \"version\", \n    \"9.3\"\n  ], \n  \"dir\": \"[BUILDER_CACHE]/ios\", \n  \"version\": 1\n}",
       "[TMP_BASE]/isolate_tmp_2/2.isolate.gen.json"
     ],
     "cwd": "[BUILDER_CACHE]/ios/src",
@@ -605,7 +605,7 @@
       "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"xctest\", @@@",
       "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"true\", @@@",
       "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"--isolate\", @@@",
-      "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"[START_DIR]/template.isolate\", @@@",
+      "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"[BUILDER_CACHE]/ios/template.isolate\", @@@",
       "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"--isolated\", @@@",
       "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"[TMP_BASE]/isolate_tmp_2/2.isolated\", @@@",
       "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"--path-variable\", @@@",
