@@ -61,6 +61,7 @@ def RunSteps(api, mastername, buildername):
       REPO_URL=REPO_URL,
       INTERNAL=False,
       BUILD_CONFIG=builder['target'])
+  api.chromium_android.apply_config('use_devil_provision')
 
   api.gclient.set_config('chromium')
   api.gclient.apply_config('android')

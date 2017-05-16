@@ -52,6 +52,7 @@ def RunSteps(api):
       REPO_URL=REPO_URL,
       INTERNAL=False,
       BUILD_CONFIG=builder['target'])
+  api.chromium_android.apply_config('use_devil_provision')
   android_packages = builder.get('android_packages')
   update_test_log = builder.get('update_test_log')
   platform = builder.get('chromedriver_platform')
