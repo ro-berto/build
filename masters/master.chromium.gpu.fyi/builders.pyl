@@ -438,14 +438,6 @@
       "builder_timeout_s": 21600,
       "category": "3Android",
     },
-    "Android Release (Pixel C)": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": "chromium_commits",
-      "slave_pools": ["android_rel_pixel_c"],
-      "builder_timeout_s": 21600,
-      "category": "3Android",
-    },
     "Android Release (NVIDIA Shield TV)": {
       "recipe": "chromium",
       "use_remote_run": True,
@@ -859,14 +851,6 @@
         "version": "trusty",
       },
       "slaves": ["build61-b1"],
-    },
-    "android_rel_pixel_c": {
-      "slave_data": {
-        "bits": 64,
-        "os": "linux",
-        "version": "trusty",
-      },
-      "slaves": ["build90-b1"],
     },
     "android_rel_nvidia_shield_tv": {
       "slave_data": {
