@@ -5,6 +5,7 @@
 import contextlib
 
 DEPS = [
+  'build',
   'depot_tools/git',
   'file',
   'depot_tools/gsutil',
@@ -95,8 +96,10 @@ def RunFindXcode(api, step_name, target_version=None):
   if target_version is not None:
     args.extend(['--version', target_version])
 
-  result = api.python(step_name, api.package_repo_resource('scripts', 'slave',
-    'ios', 'find_xcode.py'), args)
+  result = api.build.python(
+      step_name,
+      api.package_repo_resource('scripts', 'slave', 'ios', 'find_xcode.py'),
+      args)
 
   return result.json.output
 

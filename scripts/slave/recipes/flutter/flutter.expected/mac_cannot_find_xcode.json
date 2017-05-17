@@ -143,6 +143,10 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/ios/find_xcode.py",
       "--json-file",
       "/path/to/tmp/json"
