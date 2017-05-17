@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
+    'build',
     'chromium',
     'depot_tools/bot_update',
     'depot_tools/gclient',
@@ -51,7 +52,7 @@ def sdk_multi_steps(api):
     api.chromium.compile(['chrome'], use_goma_module=True)
 
     # annotated_steps step
-    api.python(
+    api.build.python(
         "annotated_steps",
         api.package_repo_resource("scripts", "slave", "chromium",
                                "nacl_sdk_buildbot_run.py"),
@@ -95,7 +96,7 @@ def sdk_multirel_steps(api):
     api.chromium.compile(['chrome'], use_goma_module=True)
 
     # annotated_steps step
-    api.python(
+    api.build.python(
         "annotated_steps",
         api.package_repo_resource("scripts", "slave", "chromium",
                                "nacl_sdk_buildbot_run.py"),

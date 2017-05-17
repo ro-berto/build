@@ -3,8 +3,9 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'depot_tools/bot_update',
+  'build',
   'chromium',
+  'depot_tools/bot_update',
   'depot_tools/gclient',
   'recipe_engine/path',
   'recipe_engine/platform',
@@ -25,7 +26,7 @@ def RunSteps(api):
   api.chromium.run_mb(
       api.properties.get('mastername'), api.properties.get('buildername'))
   api.chromium.compile(['chrome'], use_goma_module=True)
-  api.python(
+  api.build.python(
       'annotated_steps',
       api.package_repo_resource(
           'scripts', 'slave', 'chromium', 'nacl_sdk_buildbot_run.py'),
