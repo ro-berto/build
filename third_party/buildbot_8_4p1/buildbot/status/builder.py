@@ -14,6 +14,7 @@
 # Copyright Buildbot Team Members
 
 
+import datetime
 import weakref
 import gc
 import os, re, itertools
@@ -21,6 +22,7 @@ import random
 from cPickle import load, dump
 
 from zope.interface import implements
+from twisted.internet import threads
 from twisted.python import log, runtime
 from twisted.persisted import styles
 from buildbot.process import metrics
@@ -35,6 +37,12 @@ from buildbot.status.results import SUCCESS, WARNINGS, FAILURE, SKIPPED
 from buildbot.status.results import EXCEPTION, RETRY, Results, worst_status
 _hush_pyflakes = [ SUCCESS, WARNINGS, FAILURE, SKIPPED,
                    EXCEPTION, RETRY, Results, worst_status ]
+
+
+BUILD_FILENAME_RE = re.compile(r"^([0-9]+)$")
+BUILD_LOG_FILENAME_RE = re.compile(r"^([0-9]+)-.*$")
+MIN_PRUNING_INTERVAL = datetime.timedelta(minutes=10)
+
 
 class BuilderStatus(styles.Versioned):
     """I handle status information for a single process.build.Builder object.
@@ -73,6 +81,9 @@ class BuilderStatus(styles.Versioned):
     category = None
     currentBigState = "offline" # or idle/waiting/interlocked/building
     basedir = None # filled in by our parent
+
+    _deferred_pruning = None
+    _last_pruned_time = datetime.datetime.fromtimestamp(0)
 
     def __init__(self, buildername, category=None):
         self.name = buildername
@@ -113,6 +124,8 @@ class BuilderStatus(styles.Versioned):
         del d['basedir']
         del d['status']
         del d['nextBuildNumber']
+        del d['_deferred_pruning']
+        del d['_last_pruned_time']
         return d
 
     def __setstate__(self, d):
@@ -259,35 +272,65 @@ class BuilderStatus(styles.Versioned):
             earliest_log = earliest_build
 
         if earliest_build == 0:
-            return
+            return  # should not be anything to remove
 
-        # skim the directory and delete anything that shouldn't be there anymore
-        build_re = re.compile(r"^([0-9]+)$")
-        build_log_re = re.compile(r"^([0-9]+)-.*$")
-        # if the directory doesn't exist, bail out here
         if not os.path.exists(self.basedir):
-            return
+            return  # nothing to remove
 
-        for filename in os.listdir(self.basedir):
+        if self._deferred_pruning:
+            return  # pruning is in the process
+
+        if datetime.datetime.now() - self._last_pruned_time < MIN_PRUNING_INTERVAL:
+            return  # too early
+
+        def onSuccess(pruned):
+            log.msg("pruned %d files" % pruned)
+
+        def onCompletion():
+            # Executed even in case of an exception.
+            self._deferred_pruning = None
+            self._last_pruned_time = datetime.datetime.now()
+
+        log.msg('starting pruning asynchronously')
+        self._deferred_pruning = threads.deferToThread(
+            self._prune_files, self.basedir, set(self.buildCache.cache),
+            earliest_build, earliest_log)
+        self._deferred_pruning.addCallback(onSuccess)
+        self._deferred_pruning.addErrback(log.err)
+        self._deferred_pruning.addCallback(onCompletion)
+
+    @staticmethod
+    def _prune_files(basedir, cache, earliest_build, earliest_log):
+        # This function is executed in a separate thread.
+        # Do not read any state except the arguments or OS.
+
+        # skim the directory and delete anything that shouldn't be there
+        # anymore
+
+        pruned = 0
+        for filename in os.listdir(basedir):
             num = None
-            mo = build_re.match(filename)
             is_logfile = False
+            mo = BUILD_FILENAME_RE.match(filename)
             if mo:
                 num = int(mo.group(1))
             else:
-                mo = build_log_re.match(filename)
+                mo = BUILD_LOG_FILENAME_RE.match(filename)
                 if mo:
                     num = int(mo.group(1))
                     is_logfile = True
 
             if num is None: continue
-            if num in self.buildCache.cache: continue
+            if num in cache: continue
 
             if (is_logfile and num < earliest_log) or num < earliest_build:
-                pathname = os.path.join(self.basedir, filename)
-                log.msg("pruning '%s'" % pathname)
-                try: os.unlink(pathname)
-                except OSError: pass
+                pathname = os.path.join(basedir, filename)
+                try:
+                    os.unlink(pathname)
+                    pruned += 1
+                except OSError:
+                    pass
+        return pruned
 
     # IBuilderStatus methods
     def getName(self):
