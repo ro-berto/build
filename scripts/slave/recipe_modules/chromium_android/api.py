@@ -95,10 +95,10 @@ class AndroidApi(recipe_api.RecipeApi):
     if not preserve_paths: # pragma: no cover
       archive_args.append('--ignore-subfolder-names')
 
-    self.m.python(
+    self.m.build.python(
       step_name,
-      str(self.package_repo_resource(
-          'scripts', 'slave', 'android', 'archive_build.py')),
+      self.package_repo_resource(
+          'scripts', 'slave', 'android', 'archive_build.py'),
       archive_args,
       infra_step=True,
       **kwargs

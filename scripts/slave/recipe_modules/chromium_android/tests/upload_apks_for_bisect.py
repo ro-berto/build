@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
+  'build',
   'chromium',
   'chromium_android',
   'depot_tools/bot_update',

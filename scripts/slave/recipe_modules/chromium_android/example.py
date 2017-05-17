@@ -6,6 +6,7 @@ from recipe_engine.types import freeze
 
 DEPS = [
     'adb',
+    'build',
     'chromium',
     'chromium_android',
     'recipe_engine/json',

@@ -5,6 +5,7 @@
 DEPS = [
   'adb',
   'archive',
+  'build',
   'chromium',
   'commit_position',
   'depot_tools/bot_update',
