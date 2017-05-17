@@ -368,7 +368,7 @@ class ChromiumApi(recipe_api.RecipeApi):
             '--ninja-log-exit-status', compile_exit_status,
             '--ninja-log-compiler', self.c.compile_py.compiler or 'unknown'
         ]
-        self.m.python(
+        self.m.build.python(
             name='upload_ninja_log',
             script=self.package_repo_resource(
                 'scripts', 'slave', 'upload_goma_logs.py'),
@@ -586,7 +586,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
   def get_clang_version(self, **kwargs):
     with self.m.context(env=self.get_env()):
-      step_result = self.m.python(
+      step_result = self.m.build.python(
           'clang_revision',
           self.package_repo_resource('scripts', 'slave', 'clang_revision.py'),
           args=['--src-dir', self.m.path['checkout'],
@@ -849,7 +849,7 @@ class ChromiumApi(recipe_api.RecipeApi):
                                                       'scripts', 'update.py'))
 
   def taskkill(self):
-    self.m.python(
+    self.m.build.python(
       'taskkill',
       self.package_repo_resource('scripts', 'slave', 'kill_processes.py'),
       infra_step=True)
@@ -871,7 +871,7 @@ class ChromiumApi(recipe_api.RecipeApi):
         '--src-dir', self.m.path['checkout'],
         '--target', self.c.BUILD_CONFIG,
     ]
-    self.m.python(
+    self.m.build.python(
       'apply_syzyasan',
       self.package_repo_resource(
           'scripts', 'slave', 'chromium', 'win_apply_syzyasan.py'),
@@ -909,7 +909,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       ]
     if mode:
       args.extend(['--mode', mode])
-    self.m.python(
+    self.m.build.python(
       step_name,
       self.package_repo_resource(
           'scripts', 'slave', 'chromium', 'archive_build.py'),
