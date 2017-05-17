@@ -34,8 +34,8 @@ UNITTESTS = freeze([
 ])
 
 BUILDERS = freeze({
-  'chromium.fyi':{
-    'Android Tests (x86 emulator)': {
+  'chromium.android.fyi':{
+    'x86 Emulator Tester': {
       'config': 'x86_builder_mb',
       'target': 'Debug',
       'abi': 'x86',
@@ -120,9 +120,9 @@ def GenTests(api):
               mastername=mastername))
 
   yield (
-      api.test('Android_Tests__x86_emulator__test_fail') +
+      api.test('x86_Emulator_Tester_test_fail') +
       api.properties.generic(
-        buildername='Android Tests (x86 emulator)',
-        mastername='chromium.fyi') +
+        buildername='x86 Emulator Tester',
+        mastername='chromium.android.fyi') +
       api.step_data('android_webview_unittests', retcode=2)
   )

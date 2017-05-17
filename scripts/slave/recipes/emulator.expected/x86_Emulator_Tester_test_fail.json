@@ -187,9 +187,9 @@
       "[START_DIR]/src/tools/mb/mb.py",
       "gen",
       "-m",
-      "chromium.fyi",
+      "chromium.android.fyi",
       "-b",
-      "Android Tests (x86 emulator)",
+      "x86 Emulator Tester",
       "--config-file",
       "[START_DIR]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -227,7 +227,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[CACHE]/goma/Android_Tests__x86_emulator_",
+      "[CACHE]/goma/x86_Emulator_Tester",
       "511"
     ],
     "cwd": "[START_DIR]/src",
@@ -256,7 +256,7 @@
     "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/Android_Tests__x86_emulator_",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/x86_Emulator_Tester",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
@@ -409,9 +409,9 @@
       "--ninja-log-compiler",
       "goma",
       "--buildbot-buildername",
-      "Android Tests (x86 emulator)",
+      "x86 Emulator Tester",
       "--buildbot-mastername",
-      "chromium.fyi",
+      "chromium.android.fyi",
       "--buildbot-slavename",
       "test_bot"
     ],
@@ -540,7 +540,11 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
-    "name": "android_webview_unittests"
+    "name": "android_webview_unittests",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 2",
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "cmd": [
@@ -805,7 +809,8 @@
   },
   {
     "name": "$result",
+    "reason": "1 out of 11 aggregated steps failed. Failures: Step('android_webview_unittests') failed with return_code 2",
     "recipe_result": null,
-    "status_code": 0
+    "status_code": 1
   }
 ]
