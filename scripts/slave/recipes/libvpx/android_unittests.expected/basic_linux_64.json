@@ -261,6 +261,10 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/android/transfer_files.py",
       "[START_DIR]/android_tools/sdk/platform-tools/adb",
       "/data/local/tmp",

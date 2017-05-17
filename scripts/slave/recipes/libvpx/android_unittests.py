@@ -5,6 +5,7 @@
 from recipe_engine.types import freeze
 
 DEPS = [
+    'build',
     'depot_tools/git',
     'recipe_engine/json',
     'recipe_engine/path',
@@ -107,7 +108,7 @@ def RunSteps(api, libvpx_git_url, buildername):
           '-i', test_root.join('test-data.sha1'),
           '-o', test_data, '-u', TEST_FILES_URL])
 
-  api.python(
+  api.build.python(
       'transfer_files',
       api.package_repo_resource('scripts', 'slave', 'android',
                              'transfer_files.py'),
