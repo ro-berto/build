@@ -5,7 +5,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'chromite', 'url': 'https://chromium.googlesource.com/chromiumos/chromite.git'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'chromite', 'url': 'https://chromium.googlesource.com/chromiumos/chromite.git'}, {'deps_file': '.DEPS.git', 'managed': True, 'name': 'depot_tools', 'url': 'https://chromium.googlesource.com/chromium/tools/depot_tools.git'}]",
       "--patch_root",
       "chromite",
       "--revision_mapping_file",
@@ -15,7 +15,9 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "chromite@master:"
+      "chromite@master:",
+      "--revision",
+      "depot_tools@master:1defcf7c23f8117eaa9df2651fbca42ccd829b8c"
     ],
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
@@ -29,7 +31,8 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"chromite\": \"master:\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"chromite\": \"master:\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"depot_tools\": \"master:1defcf7c23f8117eaa9df2651fbca42ccd829b8c\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {}, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
@@ -99,6 +102,9 @@
       "release-R00-0000.B",
       "x86-generic-full"
     ],
+    "env": {
+      "PATH": "[START_DIR]/depot_tools:%(PATH)s"
+    },
     "name": "cbuildbot [x86-generic-full]"
   },
   {

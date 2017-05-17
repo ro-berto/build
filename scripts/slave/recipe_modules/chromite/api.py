@@ -10,10 +10,13 @@ from recipe_engine import recipe_api
 
 class ChromiteApi(recipe_api.RecipeApi):
   chromite_url = 'https://chromium.googlesource.com/chromiumos/chromite.git'
+  depot_tools_url = (
+      'https://chromium.googlesource.com/chromium/tools/depot_tools.git')
+  depot_tools_pin = '1defcf7c23f8117eaa9df2651fbca42ccd829b8c'
+
+  # Only used by the internal goma recipe.
   manifest_url = 'https://chromium.googlesource.com/chromiumos/manifest.git'
   repo_url = 'https://chromium.googlesource.com/external/repo.git'
-
-  _chromite_subpath = 'chromite'
 
   # The number of Gitiles attempts to make before giving up.
   _GITILES_ATTEMPTS = 10
@@ -21,17 +24,13 @@ class ChromiteApi(recipe_api.RecipeApi):
   _MANIFEST_CMD_RE = re.compile(r'Automatic:\s+Start\s+([^\s]+)\s+([^\s]+)')
   _BUILD_ID_RE = re.compile(r'CrOS-Build-Id: (.+)')
 
-  _cached_config = None
-
   @property
   def chromite_path(self):
-    v = self.m.path.c.dynamic_paths.get('chromite')
-    if v:
-      return v
-    return self.m.path['start_dir'].join(self._chromite_subpath)
+    return self.m.path['start_dir'].join('chromite')
 
-  def _set_chromite_path(self, path):
-    self.m.path.c.dynamic_paths['chromite'] = path
+  @property
+  def depot_tools_path(self):
+    return self.m.path['start_dir'].join('depot_tools')
 
   def get_config_defaults(self):
     defaults = {
@@ -131,6 +130,14 @@ class ChromiteApi(recipe_api.RecipeApi):
     # Set the revision using 'bot_update' remote branch:revision notation.
     # Omitting the revision uses HEAD.
     soln.revision = 'master:'
+
+    soln = cfg.solutions.add()
+    soln.name = 'depot_tools'
+    soln.url = self.depot_tools_url
+    # Set the revision using 'bot_update' remote branch:revision notation.
+    # Omitting the revision uses HEAD.
+    soln.revision = 'master:%s' % self.depot_tools_pin
+
     return cfg
 
   def cbuildbot(self, name, config, args=None, **kwargs):
@@ -230,8 +237,6 @@ class ChromiteApi(recipe_api.RecipeApi):
         gclient_config=self.gclient_config(),
         update_presentation=False)
 
-    self._set_chromite_path(self.m.path['checkout'])
-
     return self.chromite_path
 
   def run(self, args=[]):
@@ -321,7 +326,11 @@ class ChromiteApi(recipe_api.RecipeApi):
     cbb_args.extend(self.c.cbb.extra_args)
 
     # Run cbuildbot.
-    with self.m.context(cwd=self.m.path['start_dir']):
+    # TODO(dgarrett): stop adjusting path here, and pass into cbuildbot_launcher
+    # instead.
+    with self.m.context(
+        cwd=self.m.path['start_dir'],
+        env={'PATH': str(self.depot_tools_path) + ':%(PATH)s'}):
       return self.cbuildbot(str('cbuildbot [%s]' % (self.c.cbb.config,)),
                             self.c.cbb.config,
                             args=cbb_args)
