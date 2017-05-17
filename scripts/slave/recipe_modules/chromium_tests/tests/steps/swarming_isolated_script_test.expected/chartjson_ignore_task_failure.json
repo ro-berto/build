@@ -215,6 +215,10 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/upload_perf_dashboard_results.py",
       "--results-file",
       "{\"dummy\": \"dummy0\", \"enabled\": true, \"charts\": {\"entry2\": \"chart2\", \"entry1\": \"chart1\"}}",

@@ -1618,7 +1618,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
           api.chromium.build_properties['got_v8_revision']])
 
     step_name = '%s Dashboard Upload' % self._perf_dashboard_id
-    return api.python(
+    return api.build.python(
       step_name,
       api.chromium.package_repo_resource(
           'scripts', 'slave', 'upload_perf_dashboard_results.py'),
