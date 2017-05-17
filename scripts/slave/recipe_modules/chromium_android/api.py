@@ -384,7 +384,7 @@ class AndroidApi(recipe_api.RecipeApi):
         'scripts', 'slave', 'android', 'authorize_adb_devices.py')
     args = ['--verbose', '--adb-path', self.m.adb.adb_path()]
     with self.m.context(env=self.m.chromium.get_env()):
-      return self.m.python(
+      return self.m.build.python(
           'authorize_adb_devices', script, args, infra_step=True)
 
   def detect_and_setup_devices(
