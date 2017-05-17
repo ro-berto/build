@@ -1628,6 +1628,10 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/archive_layout_test_retry_summary.py",
       "--retry-summary-json",
       "{\"failures\": [\"test1.Test1\", \"test2.Test2\"], \"ignored\": []}",

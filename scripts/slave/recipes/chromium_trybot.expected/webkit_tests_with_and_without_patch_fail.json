@@ -1182,6 +1182,10 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/archive_layout_test_retry_summary.py",
       "--retry-summary-json",
       "{\"failures\": [], \"ignored\": [\"bad/totally-bad-probably.html\", \"tricky/totally-maybe-not-awesome.html\"]}",
