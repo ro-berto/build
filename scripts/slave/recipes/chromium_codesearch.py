@@ -5,6 +5,7 @@
 from recipe_engine.types import freeze
 
 DEPS = [
+  'build',
   'chromium',
   'commit_position',
   'depot_tools/bot_update',
@@ -209,12 +210,12 @@ def RunSteps(api):
 
   if platform == 'chromeos':
     result = GenerateCompilationDatabase(api, debug_path, targets, 'linux')
-    api.python('Filter out duplicate compilation units',
-               api.package_repo_resource('scripts', 'slave', 'chromium',
-                                         'filter_compilations.py'),
-               ['--compdb-input', debug_path.join('compile_commands.json'),
-                '--compdb-filter', api.raw_io.input_text(data=result.stdout),
-                '--compdb-output', debug_path.join('compile_commands.json')])
+    api.build.python('Filter out duplicate compilation units',
+        api.package_repo_resource('scripts', 'slave', 'chromium',
+                                  'filter_compilations.py'),
+        ['--compdb-input', debug_path.join('compile_commands.json'),
+         '--compdb-filter', api.raw_io.input_text(data=result.stdout),
+         '--compdb-output', debug_path.join('compile_commands.json')])
   # Compile the clang tool
   script_path = api.path.sep.join(['tools', 'clang', 'scripts', 'update.py'])
   with api.context(cwd=api.path['checkout']):
@@ -250,15 +251,15 @@ def RunSteps(api):
   index_pack_kythe_name = 'index_pack_%s_kythe.zip' % platform
   index_pack_kythe_name_with_revision = 'index_pack_%s_kythe_%s.zip' % (
       platform, commit_position)
-  api.python('create kythe index pack',
-             api.package_repo_resource('scripts', 'slave', 'chromium',
-                                       'package_index.py'),
-             ['--path-to-compdb', debug_path.join('compile_commands.json'),
-              '--path-to-archive-output',
-              debug_path.join(index_pack_kythe_name),
-              '--index-pack-format', 'kythe',
-              '--corpus', corpus,
-              '--revision', got_revision])
+  api.build.python('create kythe index pack',
+      api.package_repo_resource('scripts', 'slave', 'chromium',
+                                'package_index.py'),
+      ['--path-to-compdb', debug_path.join('compile_commands.json'),
+       '--path-to-archive-output',
+       debug_path.join(index_pack_kythe_name),
+       '--index-pack-format', 'kythe',
+       '--corpus', corpus,
+       '--revision', got_revision])
 
   # Upload the kythe index pack
   api.gsutil.upload(
@@ -281,18 +282,18 @@ def RunSteps(api):
       api.git('config', 'user.name', GENERATED_AUTHOR_NAME)
 
     # Sync the generated files into this checkout.
-    api.python('sync generated files',
-               api.package_repo_resource('scripts','slave',
-                                      'sync_generated_files_codesearch.py'),
-               ['--message',
-                'Generated files from "%s" build %s, revision %s' % (
-                    api.properties.get('buildername'),
-                    api.properties.get('buildnumber'),
-                    api.chromium.build_properties.get('got_revision')),
-                '--dest-branch',
-                bot_config.get('gen_repo_branch', 'master'),
-                'src/out',
-                generated_repo_dir])
+    api.build.python('sync generated files',
+        api.package_repo_resource('scripts','slave',
+                                  'sync_generated_files_codesearch.py'),
+        ['--message',
+         'Generated files from "%s" build %s, revision %s' % (
+             api.properties.get('buildername'),
+             api.properties.get('buildnumber'),
+             api.chromium.build_properties.get('got_revision')),
+         '--dest-branch',
+         bot_config.get('gen_repo_branch', 'master'),
+         'src/out',
+         generated_repo_dir])
 
 
 def _sanitize_nonalpha(text):
