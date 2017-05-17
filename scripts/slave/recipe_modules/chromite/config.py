@@ -59,9 +59,6 @@ def BaseConfig(CBB_CONFIG=None, CBB_BRANCH=None, CBB_BUILD_NUMBER=None,
       # The (optional) configuration repository to use.
       config_repo = Single(basestring),
 
-      # If set, supply the "--git-cache-dir" option with this value.
-      git_cache_dir = Single(basestring),
-
       # If supplied, forward to cbuildbot as '--buildbucket-id'
       buildbucket_id = Single(basestring, empty_val=CBB_BUILDBUCKET_ID),
 
@@ -122,7 +119,6 @@ def base(c):
 @config_ctx(includes=['base'])
 def cros(c):
   """Base configuration for CrOS builders to inherit from."""
-  c.cbb.git_cache_dir = '/b/cros_git_cache'
 
 
 @config_ctx(includes=['cros'])

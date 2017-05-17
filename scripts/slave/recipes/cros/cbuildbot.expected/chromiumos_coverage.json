@@ -96,7 +96,7 @@
       "--config_repo",
       "https://example.com/repo.git",
       "--git-cache-dir",
-      "/b/cros_git_cache",
+      "[CACHE]/cros_git_cache",
       "--goma_dir",
       "[CACHE]/goma_client",
       "--goma_client_json",

@@ -93,6 +93,8 @@
       "571",
       "--config_repo",
       "https://android.googlesource.com/toolchain/ndk_chromite_config",
+      "--git-cache-dir",
+      "[CACHE]/cros_git_cache",
       "--goma_dir",
       "[CACHE]/goma_client",
       "--goma_client_json",

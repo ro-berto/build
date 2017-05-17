@@ -307,14 +307,12 @@ class ChromiteApi(recipe_api.RecipeApi):
     if self.c.cbb.buildbucket_id:
       cbb_args.extend(['--buildbucket-id', self.c.cbb.buildbucket_id])
 
-    # These flags are mutually exclusive.
-    # TODO(nxia): Remove "repo_cache" support after "git_cache" has rolled out.
-    if self.c.cbb.git_cache_dir:
-      cbb_args.extend(['--git-cache-dir', self.c.cbb.git_cache_dir])
-
     # Set the build ID, if specified.
     if self.c.cbb.build_id:
       cbb_args.extend(['--master-build-id', self.c.cbb.build_id])
+
+    cbb_args.extend(['--git-cache-dir',
+                    self.m.path['cache'].join('cros_git_cache')])
 
     # Update or install goma client via cipd.
     goma_dir = self.m.goma.ensure_goma()
