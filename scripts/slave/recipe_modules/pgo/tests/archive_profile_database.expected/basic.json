@@ -1,0 +1,92 @@
+[
+  {
+    "cmd": [],
+    "name": "archive profile database"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport glob\nimport sys\nwith open(sys.argv[1], 'w') as f:\n  f.write('\\n'.join(glob.glob(sys.argv[2])))\n",
+      "/path/to/tmp/",
+      "None\\out\\Release\\*.pgd"
+    ],
+    "name": "archive profile database.list PGD files",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "cipd.bat",
+      "create",
+      "-pkg-def",
+      "{\"data\": [{\"file\": \"test.pgd\"}], \"install_mode\": \"copy\", \"package\": \"chromium/pgo/profiles/profile_database/windows-386\", \"root\": \"None\\\\out\\\\Release\"}",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "name": "archive profile database.create chromium/pgo/profiles/profile_database/windows-386",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@</br>pkg: chromium/pgo/profiles/profile_database/windows-386</br>id: 40-chars-fake-of-the-package-instance_id@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"instance_id\": \"40-chars-fake-of-the-package-instance_id\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"package\": \"chromium/pgo/profiles/profile_database/windows-386\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\bootstrap\\win\\git_bootstrap.py",
+      "--verbose"
+    ],
+    "cwd": "RECIPE_PACKAGE_REPO[depot_tools]",
+    "infra_step": true,
+    "name": "archive profile database.ensure git tooling on windows",
+    "timeout": 300,
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[depot_tools]\\git.bat",
+      "notes",
+      "--ref",
+      "refs/notes/pgo/profile_database/windows-386",
+      "add",
+      "-m",
+      "instance-id:40-chars-fake-of-the-package-instance_id git-revision:fake_revision"
+    ],
+    "cwd": "None",
+    "infra_step": true,
+    "name": "archive profile database.git notes",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[depot_tools]\\git.bat",
+      "push",
+      "origin",
+      "refs/notes/pgo/profile_database/windows-386"
+    ],
+    "cwd": "None",
+    "infra_step": true,
+    "name": "archive profile database.git push",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]

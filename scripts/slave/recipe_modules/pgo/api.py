@@ -125,6 +125,8 @@ class PGOApi(recipe_api.RecipeApi):
     if bot_config.get('archive_pgd', False):
       self.archive_profile_database(
           update_step.presentation.properties['got_revision'])
+      step_result = self.m.step.active_result
+      step_result.presentation.status = self.m.step.WARNING
 
     # Third step: Compilation of the optimized build, this will use the
     #     profile data files produced by the previous step.
@@ -135,33 +137,41 @@ class PGOApi(recipe_api.RecipeApi):
     Archive the profile database into a cloud bucket and use 'git notes' to
     annotate the current commit with the URL to this file.
     """
-    with self.m.step.nest("archive profile database"):
-      assert self.m.platform.is_win
-      target_arch = {
-          'ia32': '386',
-          'x64': 'amd64',
-      }[self.m.chromium.c.gyp_env.GYP_DEFINES['target_arch']]
-      package_name = "chromium/pgo/profiles/profile_database/windows-%s" % (
-          target_arch)
-      pkg = self.m.cipd.PackageDefinition(package_name,
-                                          self.m.chromium.output_dir,
-                                          'copy')
+    # Temporarily turn any failure during this step into a warning until the
+    # permissions issues have been fixed.
+    # TODO(sebmarchand): Remove the try/except once it works.
+    try:
+      with self.m.step.nest("archive profile database"):
+        assert self.m.platform.is_win
+        target_arch = {
+            'ia32': '386',
+            'x64': 'amd64',
+        }[self.m.chromium.c.gyp_env.GYP_DEFINES['target_arch']]
+        package_name = "chromium/pgo/profiles/profile_database/windows-%s" % (
+            target_arch)
+        pkg = self.m.cipd.PackageDefinition(package_name,
+                                            self.m.chromium.output_dir,
+                                            'copy')
 
-      # Copy the pgd files in a temp directory so cipd can pick them up.
-      for f in self.m.file.glob('list PGD files',
-                                self.m.chromium.output_dir.join('*.pgd'),
-                                test_data=[
-                                    self.m.chromium.output_dir.join('test.pgd')
-                                ]):
-        pkg.add_file(f)
+        # Copy the pgd files in a temp directory so cipd can pick them up.
+        for f in self.m.file.glob('list PGD files',
+                                  self.m.chromium.output_dir.join('*.pgd'),
+                                  test_data=[
+                                      self.m.chromium.output_dir.join('test.pgd')
+                                  ]):
+          pkg.add_file(f)
 
-      pkg_json = self.m.cipd.create_from_pkg(pkg)
-      instance_id = pkg_json['instance_id']
+        pkg_json = self.m.cipd.create_from_pkg(pkg)
+        instance_id = pkg_json['instance_id']
 
-      # Add the git notes for this profile database.
-      git_notes_ref = 'refs/notes/pgo/profile_database/windows-%s' % target_arch
-      git_notes_msg = 'instance-id:%s git-revision:%s' % (instance_id, revision)
-      self.m.git('notes', '--ref', git_notes_ref,
-                 'add', '-m', git_notes_msg)
+        # Add the git notes for this profile database.
+        git_notes_ref = 'refs/notes/pgo/profile_database/windows-%s' % target_arch
+        git_notes_msg = 'instance-id:%s git-revision:%s' % (instance_id, revision)
+        self.m.git('notes', '--ref', git_notes_ref,
+                   'add', '-m', git_notes_msg)
 
-      self.m.git('push', 'origin', git_notes_ref)
+        self.m.git('push', 'origin', git_notes_ref)
+    except self.m.step.StepFailure:
+      step_result = self.m.step.active_result
+      step_result.presentation.status = self.m.step.WARNING
+
