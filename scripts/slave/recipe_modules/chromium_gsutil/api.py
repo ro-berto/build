@@ -22,4 +22,4 @@ class ChromiumGSUtilApi(recipe_api.RecipeApi):
             '--dst', destination,
             '--partial-name', partial_name]
     with self.m.context(cwd=self.m.path['start_dir']):
-      return self.m.python(name, gsutil_download_path, args)
+      return self.m.build.python(name, gsutil_download_path, args)
