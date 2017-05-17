@@ -932,33 +932,47 @@ class SwarmingApi(recipe_api.RecipeApi):
         self.test_api.canned_summary_output(task.shards) +
         isolated_script_results_test_data)
 
+    masked_exception = None
+    masked_exception_text = None
     try:
-      return self._default_collect_step(
-          task, step_test_data=step_test_data, **kwargs)
-    finally:
-      # Regardless of the outcome of the test (pass or fail), we try to parse
-      # the results. If any error occurs while parsing results, then we set them
-      # to None, which caller should treat as invalid results.
-      # Note that try-except block below will not mask the
-      # recipe_api.StepFailure exception from the collect step above. Instead
-      # it is being allowed to propagate after the results have been parsed.
       try:
-        step_result = self.m.step.active_result
-
-        outdir = filter_outdir(
-            self.m.json.dumps, step_result.raw_io.output_dir)
-        outdir_json = self.m.json.dumps(outdir, indent=2)
-        step_result.presentation.logs['outdir_json'] = outdir_json.splitlines()
-
-        step_result.isolated_script_results = step_result.json.output
-
-        # Obtain chartjson results if present
-        step_result.isolated_script_chartjson_results = \
-          self._merge_isolated_script_chartjson_output_shards(task, step_result)
-
+        return self._default_collect_step(
+            task, step_test_data=step_test_data, **kwargs)
       except Exception as e:
-        self.m.step.active_result.presentation.logs['no_isolated_results_exc'] = [str(e)]
-        self.m.step.active_result.isolated_script_results = None
+        masked_exception = e
+        masked_exception_text = traceback.format_exc()
+        raise
+      finally:
+        # Regardless of the outcome of the test (pass or fail), we try to parse
+        # the results. If any error occurs while parsing results, then we set
+        # them to None, which caller should treat as invalid results.
+        # Note that try-except block below will not mask the
+        # recipe_api.StepFailure exception from the collect step above. Instead
+        # it is being allowed to propagate after the results have been parsed.
+        try:
+          step_result = self.m.step.active_result
+
+          outdir = filter_outdir(
+              self.m.json.dumps, step_result.raw_io.output_dir)
+          outdir_json = self.m.json.dumps(outdir, indent=2)
+          step_result.presentation.logs['outdir_json'] = \
+              outdir_json.splitlines()
+
+          step_result.isolated_script_results = step_result.json.output
+
+          # Obtain chartjson results if present
+          step_result.isolated_script_chartjson_results = \
+            self._merge_isolated_script_chartjson_output_shards(
+                task, step_result)
+
+        except Exception as e:
+          self.m.step.active_result.presentation.logs[
+              'no_isolated_results_exc'] = [str(e)]
+          self.m.step.active_result.isolated_script_results = None
+    except Exception as e:  # pragma: no cover
+      if masked_exception and e != masked_exception:
+        print 'DEBUG_DEBUG_DEBUG marker\n' + masked_exception_text
+      raise
 
   def get_step_name(self, prefix, task):
     """SwarmingTask -> name of a step of a waterfall.
