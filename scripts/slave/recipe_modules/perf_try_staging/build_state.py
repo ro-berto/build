@@ -102,7 +102,7 @@ class BuildState(object):
 
     if self.with_patch:
       properties_to_update = []
-      if self.api.m.properties['patch_project'] == 'gerrit':  # pragma: no cover
+      if self.api.m.properties['patch_storage'] == 'gerrit':  # pragma: no cover
         properties_to_update = [
           'patch_gerrit_url', 'patch_issue', 'patch_project', 'patch_ref',
           'patch_repository_url', 'patch_set', 'patch_storage']
