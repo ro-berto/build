@@ -68,7 +68,7 @@ def GenTests(api):
 
   def generate_builder(mastername, buildername, revision,
                        parent_got_revision=None, failing_test=None,
-                       suffix=None):
+                       suffix=None, gerrit=False):
     suffix = suffix or ''
     bot_config = builders[mastername]['builders'][buildername]
     bot_type = bot_config.get('bot_type', 'builder_tester')
@@ -105,8 +105,15 @@ def GenTests(api):
       test += api.step_data(failing_test, retcode=1)
 
     if mastername.startswith('tryserver'):
-      test += api.properties(issue=666666, patchset=1,
-                             rietveld='https://fake.rietveld.url')
+      if gerrit:
+        test += api.properties.tryserver(
+            mastername=mastername,
+            buildername=buildername,
+            gerrit_project='external/webrtc',
+        )
+      else:
+        test += api.properties(issue=666666, patchset=1,
+                               rietveld='https://fake.rietveld.url')
       test += api.override_step_data('listdir checkout root',
                                      api.json.output(['src']))
     test += api.properties(buildnumber=1337)
@@ -134,6 +141,12 @@ def GenTests(api):
     master_config = builders[mastername]
     for buildername in master_config['builders'].keys():
       yield generate_builder(mastername, buildername, revision='12345')
+
+  # Test gerrit.
+  mastername = 'tryserver.webrtc'
+  buildername = 'linux_dbg'
+  yield generate_builder(mastername, buildername, revision='12345', gerrit=True,
+                         suffix='_gerrit')
 
   # Forced builds (not specifying any revision) and test failures.
   mastername = 'client.webrtc'
