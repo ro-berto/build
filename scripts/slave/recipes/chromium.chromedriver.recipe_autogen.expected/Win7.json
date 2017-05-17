@@ -3,6 +3,10 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/kill_processes.py"
     ],
     "name": "taskkill"
@@ -87,6 +91,10 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runhooks_wrapper.py"
     ],
     "env": {

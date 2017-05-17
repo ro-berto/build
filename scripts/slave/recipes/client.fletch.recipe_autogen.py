@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
+    "build",
     "depot_tools/bot_update",
     "depot_tools/gclient",
     "recipe_engine/context",
@@ -34,8 +35,8 @@ def target_dartino_linux_debug_arm_dev_steps(api):
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
   with api.context(env=env):
-    api.python("gclient runhooks wrapper",
-               api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
+    api.build.python("gclient runhooks wrapper",
+        api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
   with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
@@ -84,8 +85,8 @@ def dartino_mac_debug_asan_x86_dev_steps(api):
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
   with api.context(env=env):
-    api.python("gclient runhooks wrapper",
-               api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
+    api.build.python("gclient runhooks wrapper",
+        api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
   with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
@@ -127,8 +128,8 @@ def target_dartino_linux_release_arm_dev_steps(api):
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
   with api.context(env=env):
-    api.python("gclient runhooks wrapper",
-               api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
+    api.build.python("gclient runhooks wrapper",
+        api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
   with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
@@ -177,8 +178,8 @@ def dartino_lk_debug_arm_qemu_dev_steps(api):
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
   with api.context(env=env):
-    api.python("gclient runhooks wrapper",
-               api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
+    api.build.python("gclient runhooks wrapper",
+        api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
   with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
@@ -227,8 +228,8 @@ def dartino_linux_release_asan_x86_steps(api):
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
   with api.context(env=env):
-    api.python("gclient runhooks wrapper",
-               api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
+    api.build.python("gclient runhooks wrapper",
+        api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
   with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
@@ -277,8 +278,8 @@ def dartino_mac_release_x86_dev_steps(api):
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
   with api.context(env=env):
-    api.python("gclient runhooks wrapper",
-               api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
+    api.build.python("gclient runhooks wrapper",
+        api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
   with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
@@ -320,8 +321,8 @@ def cross_dartino_linux_arm_steps(api):
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
   with api.context(env=env):
-    api.python("gclient runhooks wrapper",
-               api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
+    api.build.python("gclient runhooks wrapper",
+        api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
   with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
@@ -374,8 +375,8 @@ def dartino_mac_release_asan_x86_steps(api):
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
   with api.context(env=env):
-    api.python("gclient runhooks wrapper",
-               api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
+    api.build.python("gclient runhooks wrapper",
+        api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
   with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
@@ -417,8 +418,8 @@ def cross_dartino_linux_arm_dev_steps(api):
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
   with api.context(env=env):
-    api.python("gclient runhooks wrapper",
-               api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
+    api.build.python("gclient runhooks wrapper",
+        api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
   with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
@@ -471,8 +472,8 @@ def dartino_free_rtos_steps(api):
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
   with api.context(env=env):
-    api.python("gclient runhooks wrapper",
-               api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
+    api.build.python("gclient runhooks wrapper",
+        api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
   with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
@@ -521,8 +522,8 @@ def dartino_mac_release_x64_sdk_steps(api):
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
   with api.context(env=env):
-    api.python("gclient runhooks wrapper",
-               api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
+    api.build.python("gclient runhooks wrapper",
+        api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
   with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
@@ -564,8 +565,8 @@ def dartino_free_rtos_dev_steps(api):
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
   with api.context(env=env):
-    api.python("gclient runhooks wrapper",
-               api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
+    api.build.python("gclient runhooks wrapper",
+        api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
   with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
@@ -614,8 +615,8 @@ def dartino_mac_debug_asan_x86_steps(api):
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
   with api.context(env=env):
-    api.python("gclient runhooks wrapper",
-               api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
+    api.build.python("gclient runhooks wrapper",
+        api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
   with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
@@ -657,8 +658,8 @@ def dartino_mac_debug_x86_steps(api):
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
   with api.context(env=env):
-    api.python("gclient runhooks wrapper",
-               api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
+    api.build.python("gclient runhooks wrapper",
+        api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
   with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
@@ -700,8 +701,8 @@ def target_dartino_linux_debug_arm_steps(api):
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
   with api.context(env=env):
-    api.python("gclient runhooks wrapper",
-               api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
+    api.build.python("gclient runhooks wrapper",
+        api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
   with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
@@ -735,8 +736,8 @@ def dartino_win_debug_x86_steps(api):
   # svnkill step; not necessary in recipes
   # update scripts step; implicitly run by recipe engine.
   # extra taskkill step
-  api.python("taskkill", api.package_repo_resource("scripts", "slave",
-                                                "kill_processes.py"))
+  api.build.python("taskkill",
+      api.package_repo_resource("scripts", "slave", "kill_processes.py"))
   # bot_update step
   src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
@@ -754,8 +755,8 @@ def dartino_win_debug_x86_steps(api):
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
   with api.context(env=env):
-    api.python("gclient runhooks wrapper",
-               api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
+    api.build.python("gclient runhooks wrapper",
+        api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
   with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
@@ -798,8 +799,8 @@ def dartino_linux_release_x86_dev_steps(api):
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
   with api.context(env=env):
-    api.python("gclient runhooks wrapper",
-               api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
+    api.build.python("gclient runhooks wrapper",
+        api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
   with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
@@ -848,8 +849,8 @@ def dartino_mac_debug_x86_dev_steps(api):
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
   with api.context(env=env):
-    api.python("gclient runhooks wrapper",
-               api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
+    api.build.python("gclient runhooks wrapper",
+        api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
   with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
@@ -891,8 +892,8 @@ def dartino_linux_release_x64_sdk_dev_steps(api):
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
   with api.context(env=env):
-    api.python("gclient runhooks wrapper",
-               api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
+    api.build.python("gclient runhooks wrapper",
+        api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
   with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
@@ -944,8 +945,8 @@ def dartino_linux_debug_asan_x86_dev_steps(api):
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
   with api.context(env=env):
-    api.python("gclient runhooks wrapper",
-               api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
+    api.build.python("gclient runhooks wrapper",
+        api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
   with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
@@ -994,8 +995,8 @@ def dartino_linux_debug_asan_x86_steps(api):
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
   with api.context(env=env):
-    api.python("gclient runhooks wrapper",
-               api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
+    api.build.python("gclient runhooks wrapper",
+        api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
   with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
@@ -1044,8 +1045,8 @@ def dartino_mac_release_asan_x86_dev_steps(api):
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
   with api.context(env=env):
-    api.python("gclient runhooks wrapper",
-               api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
+    api.build.python("gclient runhooks wrapper",
+        api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
   with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
@@ -1087,8 +1088,8 @@ def target_dartino_linux_release_arm_steps(api):
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
   with api.context(env=env):
-    api.python("gclient runhooks wrapper",
-               api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
+    api.build.python("gclient runhooks wrapper",
+        api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
   with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
@@ -1137,8 +1138,8 @@ def dartino_mac_release_x86_steps(api):
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
   with api.context(env=env):
-    api.python("gclient runhooks wrapper",
-               api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
+    api.build.python("gclient runhooks wrapper",
+        api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
   with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
@@ -1180,8 +1181,8 @@ def dartino_linux_release_x64_sdk_steps(api):
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
   with api.context(env=env):
-    api.python("gclient runhooks wrapper",
-               api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
+    api.build.python("gclient runhooks wrapper",
+        api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
   with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
@@ -1233,8 +1234,8 @@ def dartino_lk_debug_arm_qemu_steps(api):
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
   with api.context(env=env):
-    api.python("gclient runhooks wrapper",
-               api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
+    api.build.python("gclient runhooks wrapper",
+        api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
   with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
@@ -1283,8 +1284,8 @@ def dartino_mac_release_x64_sdk_dev_steps(api):
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
   with api.context(env=env):
-    api.python("gclient runhooks wrapper",
-               api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
+    api.build.python("gclient runhooks wrapper",
+        api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
   with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
@@ -1326,8 +1327,8 @@ def dartino_linux_release_asan_x86_dev_steps(api):
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
   with api.context(env=env):
-    api.python("gclient runhooks wrapper",
-               api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
+    api.build.python("gclient runhooks wrapper",
+        api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
   with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
@@ -1376,8 +1377,8 @@ def dartino_linux_debug_x86_steps(api):
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
   with api.context(env=env):
-    api.python("gclient runhooks wrapper",
-               api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
+    api.build.python("gclient runhooks wrapper",
+        api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
   with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
@@ -1426,8 +1427,8 @@ def dartino_linux_release_x86_steps(api):
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
   with api.context(env=env):
-    api.python("gclient runhooks wrapper",
-               api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
+    api.build.python("gclient runhooks wrapper",
+        api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
   with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
@@ -1476,8 +1477,8 @@ def dartino_linux_debug_x86_dev_steps(api):
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
   with api.context(env=env):
-    api.python("gclient runhooks wrapper",
-               api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
+    api.build.python("gclient runhooks wrapper",
+        api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
   with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
@@ -1511,8 +1512,8 @@ def dartino_win_debug_x86_dev_steps(api):
   # svnkill step; not necessary in recipes
   # update scripts step; implicitly run by recipe engine.
   # extra taskkill step
-  api.python("taskkill", api.package_repo_resource("scripts", "slave",
-                                                "kill_processes.py"))
+  api.build.python("taskkill",
+      api.package_repo_resource("scripts", "slave", "kill_processes.py"))
   # bot_update step
   src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
@@ -1530,8 +1531,8 @@ def dartino_win_debug_x86_dev_steps(api):
          "LANDMINES_VERBOSE": "1",
          "DEPOT_TOOLS_UPDATE": "0"}
   with api.context(env=env):
-    api.python("gclient runhooks wrapper",
-               api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
+    api.build.python("gclient runhooks wrapper",
+        api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
   with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       # taskkill step
