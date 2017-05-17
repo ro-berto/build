@@ -103,6 +103,7 @@
       "binhost-pre-cq"
     ],
     "env": {
+      "LANG": "en_US.UTF-8",
       "PATH": "[START_DIR]/depot_tools:%(PATH)s"
     },
     "name": "cbuildbot [binhost-pre-cq]"

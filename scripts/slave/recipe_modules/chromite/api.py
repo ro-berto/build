@@ -325,9 +325,11 @@ class ChromiteApi(recipe_api.RecipeApi):
     # Run cbuildbot.
     # TODO(dgarrett): stop adjusting path here, and pass into cbuildbot_launcher
     # instead.
+    # TODO(dgarrett): Move LANG var setting into cbuildbot_launcher.
     with self.m.context(
         cwd=self.m.path['start_dir'],
-        env={'PATH': str(self.depot_tools_path) + ':%(PATH)s'}):
+        env={'PATH': str(self.depot_tools_path) + ':%(PATH)s',
+             'LANG': 'en_US.UTF-8'}):
       return self.cbuildbot(str('cbuildbot [%s]' % (self.c.cbb.config,)),
                             self.c.cbb.config,
                             args=cbb_args)
