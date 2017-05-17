@@ -1018,7 +1018,7 @@ class LayoutTestResultsHandler(JSONResultsHandler):
     # TODO(phajdan.jr): Pass gs_acl as a parameter, not build property.
     if api.properties.get('gs_acl'):
       archive_layout_test_args.extend(['--gs-acl', api.properties['gs_acl']])
-    archive_result = api.python(
+    archive_result = api.build.python(
       'archive_webkit_tests_results',
       archive_layout_test_results,
       archive_layout_test_args)
