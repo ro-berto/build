@@ -91,7 +91,7 @@
       "--buildbucket-id",
       "12345",
       "--git-cache-dir",
-      "[CACHE]/cros_git_cache",
+      "[CACHE]/git",
       "--goma_dir",
       "[CACHE]/goma_client",
       "--goma_client_json",

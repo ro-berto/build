@@ -96,7 +96,7 @@
       "--master-build-id",
       "24601",
       "--git-cache-dir",
-      "[CACHE]/cros_git_cache",
+      "[CACHE]/git",
       "--goma_dir",
       "[CACHE]/goma_client",
       "--goma_client_json",

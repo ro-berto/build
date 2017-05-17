@@ -94,7 +94,7 @@
       "--chrome_version",
       "b8819267417da248aa4fe829c5fcf0965e17b0c3",
       "--git-cache-dir",
-      "[CACHE]/cros_git_cache",
+      "[CACHE]/git",
       "--goma_dir",
       "[CACHE]/goma_client",
       "--goma_client_json",
