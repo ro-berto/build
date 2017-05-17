@@ -1,4 +1,5 @@
 DEPS = [
+  'build',
   'depot_tools/bot_update',
   'chromium',
   'file',

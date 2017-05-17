@@ -123,7 +123,7 @@ PATCH=1
         'scripts', 'slave', 'syzygy', 'gsutil_cp_dir.py')
     dst_dir = '%s/%s' % (self._SYZYGY_GS, dst_rel_path)
     args = ['--public-read', src_dir, dst_dir]
-    return self.m.python(step_name, gsutil_cp_dir_py, args)
+    return self.m.build.python(step_name, gsutil_cp_dir_py, args)
 
   def _gen_step_gs_util_cp(self, step_name, src_path, dst_rel_path):
     """Returns a gsutil.py step. Internal use only.

@@ -146,6 +146,10 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "--show-path",
+      "--",
+      "python",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\syzygy\\gsutil_cp_dir.py",
       "--public-read",
       "[START_DIR]\\src\\out\\Coverage\\cov",
