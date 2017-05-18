@@ -1211,26 +1211,16 @@ class SwarmingTest(Test):
           sys.exit(1)
           """,
           args=[self.target_name])
-    masked_exception = None
-    masked_exception_text = None
-    try:
-      try:
-        api.swarming.collect_task(self._tasks[suffix])
-      except Exception as e:
-        masked_exception = e
-        masked_exception_text = traceback.format_exc()
-        raise
-      finally:
-        valid, failures = self.validate_task_results(api, api.step.active_result)
-        self._results[suffix] = {'valid': valid, 'failures': failures}
 
-        api.step.active_result.presentation.logs['step_metadata'] = (
-            json.dumps(self.step_metadata(api, suffix), sort_keys=True, indent=2)
-        ).splitlines()
-    except Exception as e:  # pragma: no cover
-      if masked_exception and e != masked_exception:
-        print 'DEBUG_DEBUG_DEBUG marker\n' + masked_exception_text
-      raise
+    try:
+      api.swarming.collect_task(self._tasks[suffix])
+    finally:
+      valid, failures = self.validate_task_results(api, api.step.active_result)
+      self._results[suffix] = {'valid': valid, 'failures': failures}
+
+      api.step.active_result.presentation.logs['step_metadata'] = (
+          json.dumps(self.step_metadata(api, suffix), sort_keys=True, indent=2)
+      ).splitlines()
 
   def has_valid_results(self, api, suffix):
     # Test wasn't triggered or wasn't collected.
