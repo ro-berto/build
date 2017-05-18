@@ -101,12 +101,16 @@ class BuildState(object):
         properties.update({'patch_project': patch_project})
 
     if self.with_patch:
-      properties.update({
-        'issue': self.api.m.properties['issue'],
-        'patch_storage': self.api.m.properties['patch_storage'],
-        'patchset': self.api.m.properties['patchset'],
-        'rietveld': self.api.m.properties['rietveld']
-      })
+      properties_to_update = []
+      if self.api.m.properties['patch_storage'] == 'gerrit':  # pragma: no cover
+        properties_to_update = [
+          'patch_gerrit_url', 'patch_issue', 'patch_project', 'patch_ref',
+          'patch_repository_url', 'patch_set', 'patch_storage']
+      else:
+        properties_to_update = [
+          'issue', 'patch_storage', 'patchset', 'rietveld']
+      for p in properties_to_update:
+        properties.update({p: self.api.m.properties[p]})
     bot_name = self.get_builder_bot_for_this_platform()
     if self.api.m.properties.get('is_test'):
       client_operation_id = '123456'
