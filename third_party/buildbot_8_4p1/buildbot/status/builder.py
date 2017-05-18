@@ -284,14 +284,14 @@ class BuilderStatus(styles.Versioned):
             return  # too early
 
         def onSuccess(pruned):
-            log.msg("pruned %d files" % pruned)
+            log.msg("pruned %d files in %s" % (pruned, self.basedir))
 
         def onCompletion():
             # Executed even in case of an exception.
             self._deferred_pruning = None
             self._last_pruned_time = datetime.datetime.now()
 
-        log.msg('starting pruning asynchronously')
+        log.msg('starting pruning asynchronously in %s' % self.basedir)
         self._deferred_pruning = threads.deferToThread(
             self._prune_files, self.basedir, set(self.buildCache.cache),
             earliest_build, earliest_log)
