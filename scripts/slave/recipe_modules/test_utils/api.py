@@ -173,8 +173,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
           for t in failing_tests:
             self._summarize_retried_test(caller_api, t)
     except Exception as e:  # pragma: no cover
-      if (masked_exception and e != masked_exception and
-          caller_api.properties.get('builder') == 'linux_chromium_rel_ng'):
+      if masked_exception and e != masked_exception:
         print 'THIS IS DEBUG_DEBUG_DEBUG MARKER\n' + masked_exception_text
       raise
 

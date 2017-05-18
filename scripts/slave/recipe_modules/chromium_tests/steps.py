@@ -1228,8 +1228,7 @@ class SwarmingTest(Test):
             json.dumps(self.step_metadata(api, suffix), sort_keys=True, indent=2)
         ).splitlines()
     except Exception as e:  # pragma: no cover
-      if (masked_exception and e != masked_exception and
-          api.properties.get('builder') == 'linux_chromium_rel_ng'):
+      if masked_exception and e != masked_exception:
         print 'DEBUG_DEBUG_DEBUG marker\n' + masked_exception_text
       raise
 
