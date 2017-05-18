@@ -1031,6 +1031,21 @@ BUILDERS = {
         ],
         'testing': {'platform': 'linux'},
       },
+      'V8 Linux64 TSAN - concurrent marking': {
+        'chromium_apply_config': [
+          'v8_ninja', 'clang', 'tsan2', 'goma', 'mb'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'enable_swarming': True,
+        'tests': [
+          V8Testing_3,
+          Test262_2,
+        ],
+        'testing': {'platform': 'linux'},
+      },
       'V8 Linux - arm64 - sim - MSAN': {
         # 'simulate_arm' is actually implied by 'msan'. We still set it
         # explicitly for the sake of consistency.
@@ -2107,6 +2122,49 @@ BUILDERS = {
         'tests': [
           V8Testing_4,
           V8TestingExtra_2,
+          Test262_2,
+        ],
+        'testing': {'platform': 'linux'},
+      },
+      'v8_linux64_tsan_concurrent_marking_rel_ng': {
+        'chromium_apply_config': [
+          'v8_ninja',
+          'clang',
+          'tsan2',
+          'goma',
+          'mb',
+          'no_dcheck',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'enable_swarming': True,
+        'slim_swarming_builder': True,
+        'triggers': [
+          'v8_linux64_tsan_concurrent_marking_rel_ng_triggered',
+        ],
+        'testing': {'platform': 'linux'},
+      },
+      'v8_linux64_tsan_concurrent_marking_rel_ng_triggered': {
+        'chromium_apply_config': [
+          'v8_ninja',
+          'clang',
+          'tsan2',
+          'goma',
+          'mb',
+          'no_dcheck',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'v8_linux64_tsan_concurrent_marking_rel_ng',
+        'enable_swarming': True,
+        'tests': [
+          V8Testing_4,
           Test262_2,
         ],
         'testing': {'platform': 'linux'},
