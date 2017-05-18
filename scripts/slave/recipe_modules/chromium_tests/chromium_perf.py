@@ -192,11 +192,6 @@ _AddBuildSpec(
   force_exparchive=True)
 
 
-# 32 bit android
-_AddTestSpec('Android One Perf', 'android-one', 'android',
-             target_bits=32, num_device_shards=7, num_host_shards=3,
-             parent_buildername='Android Compile')
-
 # 32 bit android swarming
 _AddIsolatedTestSpec('Android Nexus5X Perf', 'android-nexus5X', 'android',
                      parent_buildername='Android Compile', target_bits=32)
@@ -206,13 +201,15 @@ _AddIsolatedTestSpec('Android Nexus6 Perf', 'android-nexus6', 'android',
                      target_bits=32, parent_buildername='Android Compile')
 _AddIsolatedTestSpec('Android Nexus7v2 Perf', 'android-nexus7v2', 'android',
                      target_bits=32, parent_buildername='Android Compile')
+_AddIsolatedTestSpec('Android One Perf', 'android-one', 'android',
+                     target_bits=32, parent_buildername='Android Compile')
 
 # Webview
 _AddTestSpec('Android Nexus5X WebView Perf', 'android-webview-nexus5X',
-             'android', num_device_shards=7, num_host_shards=3,
-             replace_webview=True, parent_buildername='Android arm64 Compile')
+             'android', replace_webview=True,
+             parent_buildername='Android arm64 Compile')
 _AddTestSpec('Android Nexus6 WebView Perf', 'android-webview-nexus6',
-             'android', num_device_shards=7, num_host_shards=3, target_bits=32,
+             'android', target_bits=32,
              replace_webview=True, parent_buildername='Android Compile')
 
 
