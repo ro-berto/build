@@ -72,12 +72,6 @@ _KITCHEN_CONFIG = {
     ],
     is_blacklist=False,
   ),
-  'tryserver.chromium.win': KitchenConfig(
-    builders=[
-      'win10_chromium_x64_rel_ng_exp',
-    ],
-    is_blacklist=False,
-  ),
 
   'chromium.fyi': _ALL_BUILDERS,
   'chromium.swarm': _ALL_BUILDERS,
