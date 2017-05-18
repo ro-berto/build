@@ -382,3 +382,34 @@ def GenTests(api):
     )
   )
 
+  yield (
+    api.test('patch_failure')
+    + api.platform('mac', 64)
+    + api.properties(
+      buildername='ios-simulator',
+      buildnumber='0',
+      issue=123456,
+      mastername='tryserver.fake',
+      patchset=1,
+      rietveld='fake://rietveld.url',
+      bot_id='fake-vm',
+      path_config='kitchen',
+      fail_patch='apply',
+    )
+    + api.ios.make_test_build_config({
+      'xcode version': 'fake xcode version',
+      'gn_args': [
+        'is_debug=true',
+        'target_cpu="x86"',
+      ],
+      'tests': [
+        {
+          'app': 'fake tests',
+          'device type': 'fake device',
+          'os': '8.1',
+          'xctest': True,
+        },
+      ],
+    })
+    + api.step_data('bot_update', retcode=87)
+  )
