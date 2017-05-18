@@ -349,10 +349,10 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def spawn_logcat_monitor(self):
     with self.m.context(env=self.m.chromium.get_env()):
-      self.m.step(
+      self.m.build.python(
           'spawn_logcat_monitor',
-          [self.package_repo_resource('scripts', 'slave', 'daemonizer.py'),
-           '--', self.c.cr_build_android.join('adb_logcat_monitor.py'),
+          self.package_repo_resource('scripts', 'slave', 'daemonizer.py'),
+          ['--', self.c.cr_build_android.join('adb_logcat_monitor.py'),
            self.m.chromium.c.build_dir.join('logcat'),
            self.m.adb.adb_path()],
           infra_step=True)
@@ -368,7 +368,7 @@ class AndroidApi(recipe_api.RecipeApi):
         '--adb-path', self.m.adb.adb_path(),
         '--blacklist-file', self.blacklist_file
     ]
-    self.m.python('spawn_device_monitor', script, args, infra_step=True)
+    self.m.build.python('spawn_device_monitor', script, args, infra_step=True)
 
   def shutdown_device_monitor(self):
     script = self.package_repo_resource('scripts', 'slave', 'daemonizer.py')
@@ -376,7 +376,8 @@ class AndroidApi(recipe_api.RecipeApi):
         '--action', 'stop',
         '--pid-file-path', '/tmp/device_monitor.pid',
     ]
-    self.m.python('shutdown_device_monitor', script, args, infra_step=True)
+    self.m.build.python('shutdown_device_monitor', script, args,
+                        infra_step=True)
 
   def authorize_adb_devices(self):
     script = self.package_repo_resource(

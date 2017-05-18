@@ -47,10 +47,10 @@ class EmulatorApi(recipe_api.RecipeApi):
     if sdcard_size:
       args += ['--sdcard-size', sdcard_size]
 
-    self.m.step(
+    self.m.build.python(
         launch_step_name,
-        [self.package_repo_resource('scripts', 'slave', 'daemonizer.py'), '--',
-         self.c.avd_script_path] + args,
+        self.package_repo_resource('scripts', 'slave', 'daemonizer.py'),
+        ['--', self.c.avd_script_path] + args,
         **kwargs)
 
     try:

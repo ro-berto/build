@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
+    'build',
     'chromium_android',
     'recipe_engine/path',
     'recipe_engine/python',
