@@ -116,13 +116,11 @@
     "env": {
       "GOMA_CACHE_DIR": "[CACHE]/goma/test_buildername",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
-      "GOMA_ENABLE_REMOTE_LINK": "true",
       "GOMA_FAIL_FAST": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_LOCAL_OUTPUT_CACHE_DIR": "[CACHE]/goma/localoutputcache",
       "GOMA_MAX_ACTIVE_FAIL_FALLBACK_TASKS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "GOMA_STORE_LOCAL_RUN_OUTPUT": "true"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start_goma",

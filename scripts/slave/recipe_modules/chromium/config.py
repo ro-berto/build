@@ -41,8 +41,6 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       goma_canary = Single(bool, empty_val=False, required=False),
       show_ninja_stats = Single(bool, empty_val=False, required=False),
       goma_hermetic = Single(basestring, required=False),
-      goma_enable_remote_link = Single(bool, empty_val=False, required=False),
-      goma_store_local_run_output = Single(bool, empty_val=False, required=False),
       goma_failfast = Single(bool, empty_val=False, required=False),
       goma_max_active_fail_fallback_tasks = Single(int, empty_val=None, required=False),
       goma_enable_localoutputcache = Single(bool, empty_val=False, required=False),
@@ -274,11 +272,6 @@ def goma_staging(c):
 @config_ctx()
 def goma_hermetic_fallback(c):
   c.compile_py.goma_hermetic = 'fallback'
-
-@config_ctx()
-def goma_linktest(c):
-  c.compile_py.goma_enable_remote_link = True
-  c.compile_py.goma_store_local_run_output = True
 
 @config_ctx()
 def goma_localoutputcache(c):

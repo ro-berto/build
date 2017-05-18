@@ -15,7 +15,6 @@ def RunSteps(api):
       TARGET_CROS_BOARD=api.properties.get('target_cros_board'))
   api.chromium.apply_config('goma_hermetic_fallback')
   api.chromium.apply_config('goma_high_parallel')
-  api.chromium.apply_config('goma_linktest')
   api.chromium.apply_config('goma_localoutputcache')
 
   for config in api.properties.get('chromium_apply_config', []):
