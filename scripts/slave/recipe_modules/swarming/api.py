@@ -6,7 +6,6 @@ import datetime
 import functools
 import hashlib
 import logging
-import traceback
 import os.path
 
 from recipe_engine import config_types
@@ -823,57 +822,45 @@ class SwarmingApi(recipe_api.RecipeApi):
     step_test_data = (
         self.test_api.canned_summary_output(shards=task.shards)
         + gtest_results_test_data)
-
-    masked_exception = None
-    masked_exception_text = None
     try:
-      try:
-        return self._default_collect_step(
-            task,
-            merged_test_output=merged_test_output,
-            step_test_data=step_test_data,
-            allow_subannotations=True,
-            **kwargs)
-      except Exception as e:
-        masked_exception = e
-        masked_exception_text = traceback.format_exc()
-        raise
-      finally:
-        # HACK: it is assumed that caller used 'api.test_utils.gtest_results'
-        # placeholder for 'test_launcher_summary_output' parameter when calling
-        # gtest_task(...). It's not enforced in any way.
-        step_result = self.m.step.active_result
+      return self._default_collect_step(
+          task,
+          merged_test_output=merged_test_output,
+          step_test_data=step_test_data,
+          allow_subannotations=True,
+          **kwargs)
+    finally:
+      # HACK: it is assumed that caller used 'api.test_utils.gtest_results'
+      # placeholder for 'test_launcher_summary_output' parameter when calling
+      # gtest_task(...). It's not enforced in any way.
+      step_result = self.m.step.active_result
 
-        gtest_results = getattr(step_result.test_utils, 'gtest_results', None)
-        if gtest_results and gtest_results.raw:
-          p = step_result.presentation
-          missing_shards = gtest_results.raw.get('missing_shards') or []
-          if missing_shards:
-            step_result.presentation.status = self.m.step.EXCEPTION
-            for index in missing_shards:
-              p.links['missing shard #%d' % index] = \
-                  task.get_shard_view_url(index)
-          if gtest_results.valid:
-            p.step_text += self.m.test_utils.format_step_text([
-              ['failures:', gtest_results.failures]
-            ])
-            for failure in gtest_results.failures:
-              p.logs[failure] = gtest_results.logs[failure]
-          swarming_summary = step_result.swarming.summary
-          self._display_pending(swarming_summary, step_result.presentation)
+      gtest_results = getattr(step_result.test_utils, 'gtest_results', None)
+      if gtest_results and gtest_results.raw:
+        p = step_result.presentation
+        missing_shards = gtest_results.raw.get('missing_shards') or []
+        if missing_shards:
+          step_result.presentation.status = self.m.step.EXCEPTION
+          for index in missing_shards:
+            p.links['missing shard #%d' % index] = \
+                task.get_shard_view_url(index)
+        if gtest_results.valid:
+          p.step_text += self.m.test_utils.format_step_text([
+            ['failures:', gtest_results.failures]
+          ])
+          for failure in gtest_results.failures:
+            p.logs[failure] = gtest_results.logs[failure]
+        swarming_summary = step_result.swarming.summary
+        self._display_pending(swarming_summary, step_result.presentation)
 
-          # Show any remaining isolated outputs (such as logcats).
-          # Note that collect_task.py uses the default summary.json, which
-          # only has 'outputs_ref' instead of the deprecated 'isolated_out'.
-          for index, shard in enumerate(swarming_summary.get('shards', [])):
-            outputs_ref = shard.get('outputs_ref')
-            if outputs_ref:
-              link_name = 'shard #%d isolated out' % index
-              p.links[link_name] = outputs_ref['view_url']
-    except Exception as e:  # pragma: no cover
-      if masked_exception and e != masked_exception:
-        print 'DEBUG_DEBUG_DEBUG marker\n' + masked_exception_text
-      raise
+        # Show any remaining isolated outputs (such as logcats).
+        # Note that collect_task.py uses the default summary.json, which
+        # only has 'outputs_ref' instead of the deprecated 'isolated_out'.
+        for index, shard in enumerate(swarming_summary.get('shards', [])):
+          outputs_ref = shard.get('outputs_ref')
+          if outputs_ref:
+            link_name = 'shard #%d isolated out' % index
+            p.links[link_name] = outputs_ref['view_url']
 
   def _merge_isolated_script_chartjson_output_shards(self, task, step_result):
     # Taken from third_party/catapult/telemetry/telemetry/internal/results/
