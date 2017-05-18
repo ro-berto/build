@@ -2,8 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import traceback
-
 from recipe_engine import recipe_api
 from recipe_engine import util as recipe_util
 
@@ -149,33 +147,14 @@ class TestUtilsApi(recipe_api.RecipeApi):
     if not failing_tests:
       return
 
-    masked_exception = None
-    masked_exception_text = None
     try:
-      try:
-        result = deapply_patch_fn(failing_tests)
-        self.run_tests(caller_api, failing_tests, 'without patch')
-        return result
-      except Exception as e:
-        # Any exception occuring here might get masked by the finally block
-        # below which in turn very likly raises. Just print this as we might
-        # not be able to access the last step's results object if the step
-        # failed.
-        # We also don't want to create a logging step as the logic in the
-        # finally clause uses active_result to reference the test step.
-        # TODO(tandrii): remove this block and perhaps rewrite this method
-        # (http://crbug.com/721466)
-        masked_exception = e
-        masked_exception_text = traceback.format_exc()
-        raise
-      finally:
-        with self.m.step.defer_results():
-          for t in failing_tests:
-            self._summarize_retried_test(caller_api, t)
-    except Exception as e:  # pragma: no cover
-      if masked_exception and e != masked_exception:
-        print masked_exception_text
-      raise
+      result = deapply_patch_fn(failing_tests)
+      self.run_tests(caller_api, failing_tests, 'without patch')
+      return result
+    finally:
+      with self.m.step.defer_results():
+        for t in failing_tests:
+          self._summarize_retried_test(caller_api, t)
 
   def _invalid_test_results(self, test):
     self.m.tryserver.set_invalid_test_results_tryjob_result()
