@@ -32,6 +32,12 @@ def GenTests(api):
   )
 
   yield (
+      api.test('cronet_official') +
+      api.properties(chromium_config='cronet_official') +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
       api.test('non_device_wipe_provisioning') +
       api.properties(chromium_config='non_device_wipe_provisioning') +
       api.post_process(post_process.DropExpectation)

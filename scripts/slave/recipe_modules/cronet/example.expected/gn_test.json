@@ -221,7 +221,7 @@
       "--root=[START_DIR]/src",
       "gen",
       "//out/Debug",
-      "--args=is_official_build=true disable_file_support=true disable_ftp_support=true enable_websockets=false use_platform_icu_alternatives=true use_partition_alloc=false is_debug=true target_os=\"android\" target_cpu=\"arm\" use_goma=true goma_dir=\"[CACHE]/goma_client\""
+      "--args=disable_file_support=true disable_ftp_support=true enable_websockets=false use_platform_icu_alternatives=true use_partition_alloc=false is_debug=true target_os=\"android\" target_cpu=\"arm\" use_goma=true goma_dir=\"[CACHE]/goma_client\""
     ],
     "cwd": "[START_DIR]/src",
     "name": "gn"
@@ -331,9 +331,7 @@
       "cronet_smoketests_platform_only_instrumentation_apk",
       "cronet_test_instrumentation_apk",
       "cronet_unittests",
-      "cronet_unittests_apk",
-      "net_unittests",
-      "net_unittests_apk"
+      "net_unittests"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
@@ -426,7 +424,7 @@
       "--ninja-log-outdir",
       "[START_DIR]/src/out/Debug",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/Debug', '-j', 50, 'cronet_package', 'cronet_perf_test_apk', 'cronet_sample_test_apk', 'cronet_smoketests_missing_native_library_instrumentation_apk', 'cronet_smoketests_platform_only_instrumentation_apk', 'cronet_test_instrumentation_apk', 'cronet_unittests', 'cronet_unittests_apk', 'net_unittests', 'net_unittests_apk']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/Debug', '-j', 50, 'cronet_package', 'cronet_perf_test_apk', 'cronet_sample_test_apk', 'cronet_smoketests_missing_native_library_instrumentation_apk', 'cronet_smoketests_platform_only_instrumentation_apk', 'cronet_test_instrumentation_apk', 'cronet_unittests', 'net_unittests']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",

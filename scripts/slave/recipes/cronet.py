@@ -47,6 +47,7 @@ BUILDERS = freeze({
     'cronet_kwargs': {
       'PERF_ID': 'android_cronet_builder',
     },
+    'chromium_apply_config': ['cronet_official'],
   },
   'Android Cronet Lollipop Builder': {
     'recipe_config': 'main_builder_mb',
@@ -58,6 +59,7 @@ BUILDERS = freeze({
     'cronet_kwargs': {
       'PERF_ID': 'android_cronet_l_builder',
     },
+    'chromium_apply_config': ['cronet_official'],
   },
   'Android Cronet Marshmallow 64bit Builder': {
     'recipe_config': 'arm64_builder_mb',
@@ -69,6 +71,7 @@ BUILDERS = freeze({
     'cronet_kwargs': {
       'PERF_ID': 'android_cronet_m64_builder',
     },
+    'chromium_apply_config': ['cronet_official'],
   },
   'Android Cronet Builder Asan': {
     'recipe_config': 'base_config',
@@ -91,7 +94,8 @@ BUILDERS = freeze({
     },
     'gyp_defs': {
       'arm_version': 6
-    }
+    },
+    'chromium_apply_config': ['cronet_official'],
   },
   'Android Cronet ARM64 Builder': {
     'recipe_config': 'arm64_builder_mb',
@@ -102,6 +106,7 @@ BUILDERS = freeze({
     'kwargs': {
       'BUILD_CONFIG': 'Release',
     },
+    'chromium_apply_config': ['cronet_official'],
   },
   'Android Cronet ARM64 Builder (dbg)': {
     'recipe_config': 'arm64_builder_mb',
@@ -122,6 +127,7 @@ BUILDERS = freeze({
     'kwargs': {
       'BUILD_CONFIG': 'Release',
     },
+    'chromium_apply_config': ['cronet_official'],
   },
   'Android Cronet x86 Builder (dbg)': {
     'recipe_config': 'x86_builder_mb',
@@ -142,6 +148,7 @@ BUILDERS = freeze({
     'kwargs': {
       'BUILD_CONFIG': 'Release',
     },
+    'chromium_apply_config': ['cronet_official'],
   },
   'android_cronet_tester': {
     'recipe_config': 'main_builder_mb',
@@ -164,7 +171,8 @@ BUILDERS = freeze({
     },
     'gyp_defs': {
       'enable_data_reduction_proxy_support': 1,
-    }
+    },
+    'chromium_apply_config': ['cronet_official'],
   },
   'Android Cronet Marshmallow 64bit Perf': {
     'recipe_config': 'arm64_builder_mb',
@@ -176,6 +184,7 @@ BUILDERS = freeze({
     'cronet_kwargs': {
       'PERF_ID': 'android_cronet_m64_perf',
     },
+    'chromium_apply_config': ['cronet_official'],
   },
 })
 

@@ -69,14 +69,11 @@ def mipsel_builder_mb(c):
 
 @CONFIG_CTX(includes=['clobber'])
 def cronet_builder(c):
-  c.gn_args.append('is_official_build=true')
   c.gn_args.append('disable_file_support=true')
   c.gn_args.append('disable_ftp_support=true')
   c.gn_args.append('enable_websockets=false')
   c.gn_args.append('use_platform_icu_alternatives=true')
   c.gn_args.append('use_partition_alloc=false')
-  # TODO(jbudorick): Remove {cronet,net}_unittests_apk targets after
-  # gn switch is finished.
   c.compile_py.default_targets=['cronet_package',
                                 'cronet_perf_test_apk',
                                 'cronet_sample_test_apk',
@@ -84,9 +81,11 @@ def cronet_builder(c):
                                 'cronet_smoketests_platform_only_instrumentation_apk',
                                 'cronet_test_instrumentation_apk',
                                 'cronet_unittests',
-                                'cronet_unittests_apk',
-                                'net_unittests',
-                                'net_unittests_apk',]
+                                'net_unittests']
+
+@CONFIG_CTX()
+def cronet_official(c):
+  c.gn_args.append('is_official_build=true')
 
 @CONFIG_CTX(includes=['main_builder'],
             config_vars={'BUILD_CONFIG': 'Release'})
