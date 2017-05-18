@@ -178,8 +178,6 @@ class RemoteRunExecTest(unittest.TestCase):
         '-temp-dir', self._tp('t'),
         '-checkout-dir', self._tp('rw'),
         '-workdir', self._tp('w'),
-        '-python-path', os.path.join(remote_run.BUILD_ROOT, 'scripts'),
-        '-python-path', os.path.join(remote_run.BUILD_ROOT, 'site_config'),
     ]
 
     self.recipe_args = [
@@ -287,6 +285,8 @@ class RemoteRunExecTest(unittest.TestCase):
     self.assertEqual(rv, 0)
 
     kitchen_args = self.kitchen_args + [
+        '-python-path', os.path.join(remote_run.BUILD_ROOT, 'scripts'),
+        '-python-path', os.path.join(remote_run.BUILD_ROOT, 'site_config'),
         '-revision', 'refs/heads/somebranch',
     ]
     kitchen_env = os.environ.copy()
@@ -489,6 +489,8 @@ class RemoteRunExecTest(unittest.TestCase):
     self.assertEqual(rv, 0)
 
     kitchen_args = self.kitchen_args + [
+        '-python-path', os.path.join(remote_run.BUILD_ROOT, 'scripts'),
+        '-python-path', os.path.join(remote_run.BUILD_ROOT, 'site_config'),
         '-logdog-annotation-url', logdog_bootstrap.get_annotation_url(cfg),
         '-logdog-tag', 'foo=bar',
         '-logdog-tag', 'baz',

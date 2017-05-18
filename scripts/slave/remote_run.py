@@ -240,7 +240,7 @@ def _cleanup_old_layouts(using_kitchen, properties, buildbot_build_dir,
         LOGGER.exception('Failed to cleanup path: %s', path)
 
 
-def _remote_run_with_kitchen(args, stream, _is_canary, kitchen_version,
+def _remote_run_with_kitchen(args, stream, is_canary, kitchen_version,
                              properties, tempdir, basedir, cache_dir):
   # Write our build properties to a JSON file.
   properties_file = os.path.join(tempdir, 'remote_run_properties.json')
@@ -284,11 +284,12 @@ def _remote_run_with_kitchen(args, stream, _is_canary, kitchen_version,
   # Add additional system Python paths. Ideally, none of these would be
   # required, since our remote checkout should be self-sufficient. Each of these
   # should be viewed as a hermetic breach.
-  for python_path in [
-      os.path.join(BUILD_ROOT, 'scripts'),
-      os.path.join(BUILD_ROOT, 'site_config'),
-      ]:
-    kitchen_cmd += ['-python-path', python_path]
+  if not is_canary:
+    for python_path in [
+        os.path.join(BUILD_ROOT, 'scripts'),
+        os.path.join(BUILD_ROOT, 'site_config'),
+        ]:
+      kitchen_cmd += ['-python-path', python_path]
 
   # Master "remote_run" factory has been changed to pass "refs/heads/master" as
   # a default instead of "origin/master". However, this is a master-side change,
