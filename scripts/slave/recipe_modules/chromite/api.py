@@ -283,9 +283,9 @@ class ChromiteApi(recipe_api.RecipeApi):
       self.load_manifest_config(repository, revision)
 
     try:
-      buildroot = self.m.path['root'].join('cbuild', 'repository')
+      buildroot = self.m.path['root'].join('cbuild')
     except KeyError:
-      buildroot = self.m.path['cache'].join('cbuild', 'repository')
+      buildroot = self.m.path['cache'].join('cbuild')
 
     cbb_args = [
         '--buildroot', buildroot,
