@@ -102,7 +102,6 @@
       "x86-generic-full"
     ],
     "env": {
-      "LANG": "en_US.UTF-8",
       "PATH": "[START_DIR]/depot_tools:%(PATH)s"
     },
     "name": "cbuildbot [x86-generic-full]"
