@@ -142,6 +142,8 @@
       "--write-debug-log",
       "--write-test-outcome-log",
       "--builder-tag=win7",
+      "-j6",
+      "--timeout=120",
       "html",
       "pkg",
       "samples"
@@ -169,6 +171,8 @@
       "--write-debug-log",
       "--write-test-outcome-log",
       "--builder-tag=win7",
+      "-j6",
+      "--timeout=120",
       "--append_logs",
       "co19"
     ],
@@ -195,6 +199,8 @@
       "--write-debug-log",
       "--write-test-outcome-log",
       "--builder-tag=win7",
+      "-j6",
+      "--timeout=120",
       "--fast-startup",
       "--append_logs",
       "html",
@@ -224,6 +230,8 @@
       "--write-debug-log",
       "--write-test-outcome-log",
       "--builder-tag=win7",
+      "-j6",
+      "--timeout=120",
       "--fast-startup",
       "--append_logs",
       "co19"

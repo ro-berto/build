@@ -140,6 +140,7 @@ def RunSteps(api):
         test_args.append('--builder-tag=%s' % system)
 
       if runtime in ['ie10', 'ie11']:
+        test_args.extend(['-j6', '--timeout=120'])  # Issue 28955, IE is slow.
         test_specs = [{'name': 'dart2js %s tests' % runtime,
                        'tests': ['html', 'pkg', 'samples']},
                       {'name': 'dart2js %s co19 tests' % runtime,
