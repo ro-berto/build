@@ -202,7 +202,7 @@
       "samples"
     ],
     "cwd": "[START_DIR]\\sdk",
-    "name": "dart2js ie10 fast-startup tests"
+    "name": "dart2js ie10-fast-startup tests"
   },
   {
     "cmd": [
@@ -229,7 +229,7 @@
       "co19"
     ],
     "cwd": "[START_DIR]\\sdk",
-    "name": "dart2js ie10 co19 fast-startup tests"
+    "name": "dart2js ie10 co19-fast-startup tests"
   },
   {
     "cmd": [

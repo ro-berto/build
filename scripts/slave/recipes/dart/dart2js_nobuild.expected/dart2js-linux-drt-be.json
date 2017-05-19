@@ -149,7 +149,7 @@
       "--exclude-suite=observatory_ui,co19"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js drt tests"
+    "name": "dart2js-drt tests"
   },
   {
     "cmd": [
@@ -179,7 +179,7 @@
       "pkg"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js drt package tests"
+    "name": "dart2js-drt-package tests"
   },
   {
     "cmd": [
@@ -209,7 +209,7 @@
       "observatory_ui"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js drt observatory_ui tests"
+    "name": "dart2js-drt-observatory_ui tests"
   },
   {
     "cmd": [
@@ -240,7 +240,7 @@
       "dart2js_native"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js drt extra tests"
+    "name": "dart2js-drt-extra tests"
   },
   {
     "cmd": [
@@ -270,7 +270,7 @@
       "co19"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js drt co19 tests"
+    "name": "dart2js-drt-co19 tests"
   },
   {
     "cmd": [
@@ -301,7 +301,7 @@
       "--exclude-suite=observatory_ui,co19"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js drt fast-startup tests"
+    "name": "dart2js-drt-fast-startup tests"
   },
   {
     "cmd": [
@@ -332,7 +332,7 @@
       "pkg"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js drt package fast-startup tests"
+    "name": "dart2js-drt-package-fast-startup tests"
   },
   {
     "cmd": [
@@ -363,7 +363,7 @@
       "observatory_ui"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js drt observatory_ui fast-startup tests"
+    "name": "dart2js-drt-observatory_ui-fast-startup tests"
   },
   {
     "cmd": [
@@ -395,7 +395,7 @@
       "dart2js_native"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js drt extra fast-startup tests"
+    "name": "dart2js-drt-extra-fast-startup tests"
   },
   {
     "cmd": [
@@ -426,7 +426,7 @@
       "co19"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js drt co19 fast-startup tests"
+    "name": "dart2js-drt-co19-fast-startup tests"
   },
   {
     "cmd": [
@@ -458,7 +458,7 @@
       "--exclude-suite=observatory_ui,co19"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js drt fast-startup checked tests"
+    "name": "dart2js-drt-fast-startup-checked tests"
   },
   {
     "cmd": [
@@ -490,7 +490,7 @@
       "pkg"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js drt package fast-startup checked tests"
+    "name": "dart2js-drt-package-fast-startup-checked tests"
   },
   {
     "cmd": [
@@ -522,7 +522,7 @@
       "observatory_ui"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js drt observatory_ui fast-startup checked tests"
+    "name": "dart2js-drt-observatory_ui-fast-startup-checked tests"
   },
   {
     "cmd": [
@@ -555,7 +555,7 @@
       "dart2js_native"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js drt extra fast-startup checked tests"
+    "name": "dart2js-drt-extra-fast-startup-checked tests"
   },
   {
     "cmd": [
@@ -587,7 +587,7 @@
       "co19"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js drt co19 fast-startup checked tests"
+    "name": "dart2js-drt-co19-fast-startup-checked tests"
   },
   {
     "cmd": [

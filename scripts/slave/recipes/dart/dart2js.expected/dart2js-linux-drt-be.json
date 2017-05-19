@@ -102,7 +102,7 @@
       "--exclude-suite=observatory_ui,co19"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js drt tests"
+    "name": "dart2js-drt tests"
   },
   {
     "cmd": [
@@ -131,7 +131,7 @@
       "pkg"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js drt package tests"
+    "name": "dart2js-drt-package tests"
   },
   {
     "cmd": [
@@ -160,7 +160,7 @@
       "observatory_ui"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js drt observatory_ui tests"
+    "name": "dart2js-drt-observatory-ui tests"
   },
   {
     "cmd": [
@@ -190,7 +190,7 @@
       "dart2js_native"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js drt extra tests"
+    "name": "dart2js-drt-extra tests"
   },
   {
     "cmd": [
@@ -219,7 +219,7 @@
       "co19"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js drt co19 tests"
+    "name": "dart2js-drt-co19 tests"
   },
   {
     "cmd": [
@@ -249,7 +249,7 @@
       "--exclude-suite=observatory_ui,co19"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js drt checked tests"
+    "name": "dart2js-drt-checked tests"
   },
   {
     "cmd": [
@@ -279,7 +279,7 @@
       "pkg"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js drt package checked tests"
+    "name": "dart2js-drt-package-checked tests"
   },
   {
     "cmd": [
@@ -309,7 +309,7 @@
       "observatory_ui"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js drt observatory_ui checked tests"
+    "name": "dart2js-drt-observatory-ui-checked tests"
   },
   {
     "cmd": [
@@ -340,7 +340,7 @@
       "dart2js_native"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js drt extra checked tests"
+    "name": "dart2js-drt-extra-checked tests"
   },
   {
     "cmd": [
@@ -370,7 +370,7 @@
       "co19"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js drt co19 checked tests"
+    "name": "dart2js-drt-co19-checked tests"
   },
   {
     "cmd": [

@@ -69,7 +69,7 @@
       "python",
       "-u",
       "[START_DIR]\\sdk\\tools\\build.py",
-      "-mrelease",
+      "-mdebug",
       "--arch=ia32",
       "dart2js_bot"
     ],
@@ -81,7 +81,7 @@
       "python",
       "-u",
       "[START_DIR]\\sdk\\tools\\test.py",
-      "--mode=release",
+      "--mode=debug",
       "--arch=ia32",
       "--compiler=dart2js",
       "--dart2js-batch",
@@ -100,14 +100,14 @@
       "samples"
     ],
     "cwd": "[START_DIR]\\sdk",
-    "name": "dart2js ie10 tests"
+    "name": "dart2js-ie10 tests"
   },
   {
     "cmd": [
       "python",
       "-u",
       "[START_DIR]\\sdk\\tools\\test.py",
-      "--mode=release",
+      "--mode=debug",
       "--arch=ia32",
       "--compiler=dart2js",
       "--dart2js-batch",
@@ -125,7 +125,7 @@
       "co19"
     ],
     "cwd": "[START_DIR]\\sdk",
-    "name": "dart2js ie10 co19 tests"
+    "name": "dart2js-ie10-co19 tests"
   },
   {
     "cmd": [

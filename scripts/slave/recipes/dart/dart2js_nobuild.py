@@ -29,7 +29,7 @@ all_options = {'hostchecked': '--host-checked',
                'minified': '--minified',
                'cps': '--cps-ir',
                'csp': '--csp'}
-build_directories= {'linux': 'out/ReleaseX64',
+build_directories = {'linux': 'out/ReleaseX64',
                     'win': 'out/ReleaseX64',
                     'mac': 'xcodebuild/ReleaseX64'}
 
@@ -68,7 +68,6 @@ def sdk_url(channel, platform, arch, mode, revision):
      % (channel, revision, platform, arch, mode))
 
 def RunSteps(api):
-  global IsFirstTestStep
   builder_name = str(api.properties.get('buildername')) # Convert from unicode.
   builder_fragments = builder_name.split('-')
   assert len(builder_fragments) > 3
@@ -115,21 +114,6 @@ def RunSteps(api):
     api.zip.unzip('Unzip sdk', zipfile, build_dir)
 
   with api.step.defer_results():
-    # Special hard-coded steps with compiler=none, run on selected runtimes
-    if runtime == 'jsshell' and system == 'linux' and sharded:
-      IsFirstTestStep = False
-      with api.context(cwd=api.path['checkout']):
-        api.python('dart2js unit tests',
-                   api.path['checkout'].join('tools', 'test.py'),
-                   args=["--mode=release", "--compiler=none", "--runtime=vm",
-                         "--arch=x64", "--time", "--use-sdk", "--report",
-                         "--write-debug-log", "--write-test-outcome-log",
-                         "--progress=buildbot", "-v",
-                         "--reset-browser-configuration",
-                         "--shards=%s" % num_shards, "--shard=%s" % shard,
-                         "--checked", "dart2js"])
-
-    # Standard test steps, run on all runtimes.
     runtimes = multiple_runtimes.get(runtime, [runtime])
     for runtime in runtimes:
       # TODO(whesse): Call a script that prints the runtime version.
@@ -162,15 +146,15 @@ def RunSteps(api):
                        'tests': ['co19']}]
       else:
         test_specs = [
-          {'name': 'dart2js %s tests' % runtime,
+          {'name': 'dart2js-%s tests' % runtime,
            'tests': ['--exclude-suite=observatory_ui,co19']},
-          {'name': 'dart2js %s package tests' % runtime,
+          {'name': 'dart2js-%s-package tests' % runtime,
            'tests': ['pkg']},
-          {'name': 'dart2js %s observatory_ui tests' % runtime,
+          {'name': 'dart2js-%s-observatory_ui tests' % runtime,
            'tests': ['observatory_ui']},
-          {'name': 'dart2js %s extra tests' % runtime,
+          {'name': 'dart2js-%s-extra tests' % runtime,
            'tests': ['dart2js_extra', 'dart2js_native']},
-          {'name': 'dart2js %s co19 tests' % runtime,
+          {'name': 'dart2js-%s-co19 tests' % runtime,
            'tests': ['co19']},
         ]
 
@@ -181,21 +165,20 @@ def RunSteps(api):
       if runtime == 'd8':
         kernel_test_args = test_args + ['--dart2js-with-kernel']
         kernel_test_specs = [{
-            'name': 'dart2js-with-kernel d8 tests',
+            'name': 'dart2js-with-kernel-d8 tests',
             'tests': ['language', 'corelib', 'dart2js_extra', 'dart2js_native']
         }]
         RunTests(api, kernel_test_args, kernel_test_specs, use_xvfb=needs_xvfb)
 
       test_args.append('--fast-startup')
       for spec in test_specs:
-        spec['name'] = spec['name'].replace(' tests', ' fast-startup tests')
+        spec['name'] = spec['name'].replace(' tests', '-fast-startup tests')
       RunTests(api, test_args, test_specs, use_xvfb=needs_xvfb)
-
 
       if runtime in ['d8', 'drt']:
         test_args.append('--checked')
         for spec in test_specs:
-          spec['name'] = spec['name'].replace(' tests', ' checked tests')
+          spec['name'] = spec['name'].replace(' tests', '-checked tests')
         RunTests(api, test_args, test_specs, use_xvfb=needs_xvfb)
 
     with api.context(cwd=api.path['checkout']):

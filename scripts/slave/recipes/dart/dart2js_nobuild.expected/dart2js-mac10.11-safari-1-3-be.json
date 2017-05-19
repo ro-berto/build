@@ -146,7 +146,7 @@
       "--exclude-suite=observatory_ui,co19"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js safari tests"
+    "name": "dart2js-safari tests"
   },
   {
     "cmd": [
@@ -173,7 +173,7 @@
       "pkg"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js safari package tests"
+    "name": "dart2js-safari-package tests"
   },
   {
     "cmd": [
@@ -200,7 +200,7 @@
       "observatory_ui"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js safari observatory_ui tests"
+    "name": "dart2js-safari-observatory_ui tests"
   },
   {
     "cmd": [
@@ -228,7 +228,7 @@
       "dart2js_native"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js safari extra tests"
+    "name": "dart2js-safari-extra tests"
   },
   {
     "cmd": [
@@ -255,7 +255,7 @@
       "co19"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js safari co19 tests"
+    "name": "dart2js-safari-co19 tests"
   },
   {
     "cmd": [
@@ -283,7 +283,7 @@
       "--exclude-suite=observatory_ui,co19"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js safari fast-startup tests"
+    "name": "dart2js-safari-fast-startup tests"
   },
   {
     "cmd": [
@@ -311,7 +311,7 @@
       "pkg"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js safari package fast-startup tests"
+    "name": "dart2js-safari-package-fast-startup tests"
   },
   {
     "cmd": [
@@ -339,7 +339,7 @@
       "observatory_ui"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js safari observatory_ui fast-startup tests"
+    "name": "dart2js-safari-observatory_ui-fast-startup tests"
   },
   {
     "cmd": [
@@ -368,7 +368,7 @@
       "dart2js_native"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js safari extra fast-startup tests"
+    "name": "dart2js-safari-extra-fast-startup tests"
   },
   {
     "cmd": [
@@ -396,7 +396,7 @@
       "co19"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js safari co19 fast-startup tests"
+    "name": "dart2js-safari-co19-fast-startup tests"
   },
   {
     "cmd": [
