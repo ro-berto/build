@@ -210,6 +210,13 @@ Build #{{ b.getNumber() }}
 <table class="info BuildProperties" width="100%">
 <tr><th>Name</th><th>Value</th><th>Source</th></tr>
 
+{% set review_url = [] %}
+{% for p in properties %}
+  {% if p.name == 'rietveld' and review_url.append(p.value) %}
+  {% elif p.name == 'patch_gerrit_url' and review_url.append(p.value) %}
+  {% endif %}
+{% endfor %}
+
 {% for p in properties %}
   <tr class="{{ loop.cycle('alt', '') }}">
     <td class="left">{{ p.name|e }}</td>
@@ -221,6 +228,8 @@ Build #{{ b.getNumber() }}
       {% endif %}">
     {% if p.short_value %}
       {{ p.short_value|e }} .. [property value too long]
+    {% elif (p.name == 'issue' or p.name == 'patch_issue') and review_url %}
+      <a style="color: red" href="{{ (review_url[0] + '/' + p.value)|e }} ">{{ p.value|e }}</a>
     {% else %}
       {{ p.value|e }}
     {% endif %}

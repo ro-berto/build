@@ -30,7 +30,7 @@ Build #{{ b.getNumber() }}
   {% endif %}
 
   {{ current_step }}
-  
+
   {% if authz.advertiseAction('stopBuild') %}
     <h2>Stop Build</h2>
     {{ forms.stop_build(build_url+"/stop", authz, on_all=False, short=False, label='This Build') }}
@@ -38,10 +38,10 @@ Build #{{ b.getNumber() }}
 {% else %}
   <h2>Results:</h2>
 
-  <p class="{{ result_css }} result">   
+  <p class="{{ result_css }} result">
     {{ b.getText()|join(' ')|capitalize }}
   </p>
-   
+
   {% if b.getTestResults() %}
     <h3><a href="{{ tests_link }}"/></h3>
   {% endif %}
@@ -90,13 +90,13 @@ Build #{{ b.getNumber() }}
  # TODO: turn this into a table, or some other sort of definition-list
  # that doesn't take up quite so much vertical space
  #}
-   
+
 <h2>BuildSlave:</h2>
-  
-{% if slave_url %}  
+
+{% if slave_url %}
   <a href="{{ slave_url|e }}">{{ b.getSlavename()|e }}</a>
 {% else %}
-  {{ b.getSlavename()|e }} 
+  {{ b.getSlavename()|e }}
 {% endif %}
 
 <h2>Reason:</h2>
@@ -137,7 +137,7 @@ Build #{{ b.getNumber() }}
   {% set nest_level = step_nest %}
 
     <div class="{{ s.css_class }} result">
-      <a href="{{ s.link }}">{{ s.name }}</a> 
+      <a href="{{ s.link }}">{{ s.name }}</a>
       {{ s.text }}&nbsp;<span style="float:right">{{ '( ' + s.time_to_run + ' )' if s.time_to_run else '' }}</span>
     </div>
 
@@ -159,7 +159,7 @@ Build #{{ b.getNumber() }}
       {% else %}
         <li class="{{ item_class.next() }}">- no logs -</li>
       {% endfor %}
-    
+
       {% for u in s.urls %}
         <li class="{{ item_class.next() }}">
           <a href="{{ u.url }}">{{ u.logname }}</a>
@@ -170,7 +170,7 @@ Build #{{ b.getNumber() }}
           {% endif %}
         </li>
       {% endfor %}
-    </ul>  
+    </ul>
   </li>
 {% endfor %}
 
@@ -192,6 +192,13 @@ Build #{{ b.getNumber() }}
 <table class="info BuildProperties" width="100%">
 <tr><th>Name</th><th>Value</th><th>Source</th></tr>
 
+{% set review_url = [] %}
+{% for p in properties %}
+  {% if p.name == 'rietveld' and review_url.append(p.value) %}
+  {% elif p.name == 'patch_gerrit_url' and review_url.append(p.value) %}
+  {% endif %}
+{% endfor %}
+
 {% for p in properties %}
   <tr class="{{ loop.cycle('alt', '') }}">
     <td class="left">{{ p.name|e }}</td>
@@ -203,6 +210,8 @@ Build #{{ b.getNumber() }}
       {% endif %}">
     {% if p.short_value %}
       {{ p.short_value|e }} .. [property value too long]
+    {% elif (p.name == 'issue' or p.name == 'patch_issue') and review_url %}
+      <a style="color: red" href="{{ (review_url[0] + '/' + p.value)|e }} ">{{ p.value|e }}</a>
     {% else %}
       {{ p.value|e }}
     {% endif %}
@@ -243,7 +252,7 @@ Build #{{ b.getNumber() }}
 </div>
 
 <br style="clear:both"/>
-  
+
 {% if ss.changes %}
 <div class="column">
   <h2>All Changes:</h2>
@@ -254,9 +263,9 @@ Build #{{ b.getNumber() }}
     </li>
   {% else %}
     <li>no changes</li>
-  {% endfor %}  
+  {% endfor %}
   </ol>
-</div> 
+</div>
 {% endif %}
 
 {% endblock %}
