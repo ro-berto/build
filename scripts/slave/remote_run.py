@@ -281,16 +281,6 @@ def _remote_run_with_kitchen(args, stream, is_canary, kitchen_version,
       '-workdir', os.path.join(tempdir, 'w'),
   ]
 
-  # Add additional system Python paths. Ideally, none of these would be
-  # required, since our remote checkout should be self-sufficient. Each of these
-  # should be viewed as a hermetic breach.
-  if not is_canary:
-    for python_path in [
-        os.path.join(BUILD_ROOT, 'scripts'),
-        os.path.join(BUILD_ROOT, 'site_config'),
-        ]:
-      kitchen_cmd += ['-python-path', python_path]
-
   # Master "remote_run" factory has been changed to pass "refs/heads/master" as
   # a default instead of "origin/master". However, this is a master-side change,
   # and requires a master restart. Rather than restarting all masters, we will
