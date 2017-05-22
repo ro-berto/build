@@ -405,6 +405,18 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::file]\\resources\\fileutil.py",
+      "rmwildcard",
+      "[START_DIR]\\src\\out\\Release",
+      "test1!*.pgc"
+    ],
+    "infra_step": true,
+    "name": "rmwildcard test1!*.pgc in [START_DIR]\\src\\out\\Release"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[START_DIR]\\src\\build\\win\\merge_pgc_files.py",
       "--checkout-dir",
       "[START_DIR]\\src",
@@ -416,6 +428,18 @@
       "test2"
     ],
     "name": "Merge the pgc files for test2."
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::file]\\resources\\fileutil.py",
+      "rmwildcard",
+      "[START_DIR]\\src\\out\\Release",
+      "test2!*.pgc"
+    ],
+    "infra_step": true,
+    "name": "rmwildcard test2!*.pgc in [START_DIR]\\src\\out\\Release"
   },
   {
     "name": "$result",

@@ -92,6 +92,8 @@ class PGOApi(recipe_api.RecipeApi):
       args = base_args + ['--binary-name', binary_name]
       self.m.python('Merge the pgc files for %s.' % binary_name,
                     merge_script, args)
+      self.m.file.rmwildcard('%s!*.pgc' % binary_name,
+                             str(self.m.chromium.output_dir))
 
   def compile_pgo(self, bot_config):
     """
