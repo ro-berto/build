@@ -201,8 +201,8 @@ def check_builds(master_builds, master_jsons, gatekeeper_config):
           build_json['results'] == FAILURE and respect_build_status):
         unsatisfied_steps.add('[overall build status]')
 
-      buildbot_url = master_jsons[master_url]['project']['buildbotURL']
-      project_name = master_jsons[master_url]['project']['title']
+      buildbot_url = master_url
+      project_name = master_url.split('/')[-1]
 
       if unsatisfied_steps:
         failed_builds.append(({'base_url': buildbot_url,

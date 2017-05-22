@@ -1213,7 +1213,7 @@ class GatekeeperTest(unittest.TestCase):
       'builder_name': 'my builder',
       'buildnumber': 1337,
       'got_webkit_revision': 100,
-      'project_name': 'Chromium FYI',
+      'project_name': 'chromium.fyi',
       'revision': 72453,
       'unsatisfied': 'step1',
       'result': 'warnings',
@@ -1272,7 +1272,7 @@ class GatekeeperTest(unittest.TestCase):
         self.masters[0].url))
 
     self.assertEquals(mailer_data['build_url'], unicode(build_url))
-    self.assertEquals(mailer_data['project_name'], unicode('Chromium FYI'))
+    self.assertEquals(mailer_data['project_name'], unicode('chromium.fyi'))
     self.assertEquals(mailer_data['from_addr'], 'buildbot@chromium.org')
     self.assertEquals(mailer_data['subject_template'],
                       unicode(subject_template))
