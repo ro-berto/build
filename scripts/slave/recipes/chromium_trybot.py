@@ -78,19 +78,6 @@ def GenTests(api):
         })
     )
 
-  # While not strictly required for coverage, record expectations for each
-  # of the configs so we can see when and how they change.
-  for mastername, master_config in api.chromium_tests.trybots.iteritems():
-    for buildername, bot_config in master_config['builders'].iteritems():
-      test_name = 'full_%s_%s' % (_sanitize_nonalpha(mastername),
-                                  _sanitize_nonalpha(buildername))
-      yield (
-        api.test(test_name) +
-        api.chromium_tests.platform(bot_config['bot_ids']) +
-        suppress_analyze() +
-        props(mastername=mastername, buildername=buildername)
-      )
-
   yield (
     api.test('chromeos_analyze') +
     api.platform.name('linux') +
