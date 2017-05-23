@@ -29,7 +29,6 @@ SPEC = {
 @CHROMIUM_CONFIG_CTX(includes=['chromium', 'official', 'mb'])
 def chromium_perf(c):
   c.clobber_before_runhooks = False
-  pass
 
 
 def _BaseSpec(bot_type, config_name, platform, target_bits, tests,
@@ -63,11 +62,10 @@ def _BaseSpec(bot_type, config_name, platform, target_bits, tests,
 
 def BuildSpec(
   config_name, perf_id, platform, target_bits, enable_swarming=False,
-  extra_compile_targets=None, force_exparchive=False):
-  if platform == 'android':
+  extra_compile_targets=None, force_exparchive=False, run_sizes=True):
+  tests = []
     # TODO: Run sizes on Android.
-    tests = []
-  else:
+  if run_sizes and not platform == 'android':
     tests = [steps.SizesStep('https://chromeperf.appspot.com', perf_id)]
 
   spec = _BaseSpec(

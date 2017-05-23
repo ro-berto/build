@@ -11,41 +11,7 @@ GCLIENT_CONFIG_CTX = DEPS['gclient'].CONFIG_CTX
 
 
 SPEC = {
-  'builders': {
-    'Battor Agent Linux': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'builder',
-      'testing': { 'platform': 'linux' },
-    },
-    'Battor Agent Mac': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'builder',
-      'testing': { 'platform': 'mac' },
-    },
-    'Battor Agent Win': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'builder',
-      'testing': { 'platform': 'win' },
-    },
-  },
+  'builders': {},
   'settings': chromium_perf.SPEC['settings'],
 }
 
@@ -62,11 +28,12 @@ def chromium_perf_clang(c):
 
 def _AddBuildSpec(name, perf_id, platform, config_name='chromium_perf',
                   target_bits=64, enable_swarming=False,
-                  extra_compile_targets=None, force_exparchive=False):
+                  extra_compile_targets=None, force_exparchive=False,
+                  run_sizes=True):
   SPEC['builders'][name] = chromium_perf.BuildSpec(
       config_name, perf_id, platform, target_bits, enable_swarming,
       extra_compile_targets=extra_compile_targets,
-      force_exparchive=force_exparchive)
+      force_exparchive=force_exparchive, run_sizes=run_sizes)
 
 
 def _AddTestSpec(name, perf_id, platform, num_device_shards=1,
@@ -136,3 +103,7 @@ _AddTestSpec('Win Clang Perf Ref', 'chromium-win-clang-ref', 'win',
              parent_buildername='Win Builder FYI', target_bits=32)
 
 _AddTestSpec('Mojo Linux Perf', 'mojo-linux-perf', 'linux')
+
+_AddBuildSpec('Battor Agent Linux', 'linux', 'linux', run_sizes=False)
+_AddBuildSpec('Battor Agent Mac', 'mac', 'mac', run_sizes=False)
+_AddBuildSpec('Battor Agent Win', 'win', 'win', run_sizes=False)
