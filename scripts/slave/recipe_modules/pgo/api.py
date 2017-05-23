@@ -145,6 +145,8 @@ class PGOApi(recipe_api.RecipeApi):
     try:
       with self.m.step.nest("archive profile database"):
         assert self.m.platform.is_win
+        self.m.cipd.set_service_account_credentials(
+            "C:\\creds\\service_accounts\\service-account-pgo-bot.json")
         target_arch = {
             'ia32': '386',
             'x64': 'amd64',

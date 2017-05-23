@@ -23,7 +23,9 @@
       "-pkg-def",
       "{\"data\": [{\"file\": \"test.pgd\"}], \"install_mode\": \"copy\", \"package\": \"chromium/pgo/profiles/profile_database/windows-386\", \"root\": \"None\\\\out\\\\Release\"}",
       "-json-output",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "-service-account-json",
+      "C:\\creds\\service_accounts\\service-account-pgo-bot.json"
     ],
     "name": "archive profile database.create chromium/pgo/profiles/profile_database/windows-386",
     "~followup_annotations": [
