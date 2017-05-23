@@ -15,14 +15,17 @@ class CodesearchApi(recipe_api.RecipeApi):
       'CHECKOUT_PATH': self.m.path['checkout'],
     }
 
-  def generate_compilation_database(self, targets, platform):
+  def generate_compilation_database(self, targets, platform, mb_config_path=None):
     mastername = self.m.properties['mastername']
     buildername = self.m.properties['buildername']
+    mb_config_path = mb_config_path or self.c.CHECKOUT_PATH.join('tools', 'mb',
+                                                                 'mb_config.pyl')
     self.m.chromium.run_mb(mastername,
                            buildername,
                            build_dir=self.c.debug_path,
                            phase=platform,
-                           name='generate build files for %s' % platform)
+                           name='generate build files for %s' % platform,
+                           mb_config_path=mb_config_path)
 
     command = ['ninja', '-C', self.c.debug_path] + list(targets)
     # Add the parameters for creating the compilation database.
