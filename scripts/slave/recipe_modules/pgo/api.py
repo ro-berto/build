@@ -159,7 +159,8 @@ class PGOApi(recipe_api.RecipeApi):
         for f in self.m.file.glob('list PGD files',
                                   self.m.chromium.output_dir.join('*.pgd'),
                                   test_data=[
-                                      self.m.chromium.output_dir.join('test.pgd')
+                                      self.m.chromium.output_dir.join(
+                                          'test.pgd')
                                   ]):
           pkg.add_file(f)
 
@@ -167,10 +168,11 @@ class PGOApi(recipe_api.RecipeApi):
         instance_id = pkg_json['instance_id']
 
         # Add the git notes for this profile database.
-        git_notes_ref = 'refs/notes/pgo/profile_database/windows-%s' % target_arch
-        git_notes_msg = 'instance-id:%s git-revision:%s' % (instance_id, revision)
+        git_notes_ref = ('refs/notes/pgo/profile_database/windows-%s' %
+            target_arch)
         self.m.git('notes', '--ref', git_notes_ref,
-                   'add', '-m', git_notes_msg)
+                   'add', '-m', instance_id,
+                   '-c', revision)
 
         self.m.git('push', 'origin', git_notes_ref)
     except self.m.step.StepFailure:

@@ -61,7 +61,9 @@
       "refs/notes/pgo/profile_database/windows-386",
       "add",
       "-m",
-      "instance-id:40-chars-fake-of-the-package-instance_id git-revision:fake_revision"
+      "40-chars-fake-of-the-package-instance_id",
+      "-c",
+      "fake_revision"
     ],
     "cwd": "None",
     "infra_step": true,

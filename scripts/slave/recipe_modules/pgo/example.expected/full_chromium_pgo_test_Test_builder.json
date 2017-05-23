@@ -276,7 +276,9 @@
       "refs/notes/pgo/profile_database/windows-386",
       "add",
       "-m",
-      "instance-id:40-chars-fake-of-the-package-instance_id git-revision:f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
+      "40-chars-fake-of-the-package-instance_id",
+      "-c",
+      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
     ],
     "cwd": "[START_DIR]\\src",
     "infra_step": true,
