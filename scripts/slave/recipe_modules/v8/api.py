@@ -417,10 +417,7 @@ class V8Api(recipe_api.RecipeApi):
             verbose=True,
             set_swarm_hashes=False,
         )
-        if self.should_upload_build:
-          # TODO(machenbach): Deprecate in favor of method below.
-          self.upload_isolated_json()
-        self.upload_isolated_json_generic()
+        self.upload_isolated_json()
 
   def _update_build_environment(self, mb_output):
     """Sets the build_environment property based on gyp or gn properties in mb
@@ -569,26 +566,19 @@ class V8Api(recipe_api.RecipeApi):
           archive,
           src_dir='v8')
 
-  # TODO(machenbach): Deprecate in favor of method below.
-  def upload_isolated_json(self):
-    archive = self.GS_ARCHIVES[self.bot_config['build_gs_archive']]
-    name = self.get_archive_name_pattern(use_swarming=True) % self.revision
-    self.m.gsutil.upload(
-        self.m.json.input(self.m.isolate.isolated_tests),
-        # The gsutil module wants bucket paths without gs:// prefix.
-        archive[len('gs://'):],
-        name,
-        args=['-a', 'public-read'],
+  @property
+  def isolated_archive_path(self):
+    buildername = (self.m.properties.get('parent_buildername') or
+                   self.m.properties['buildername'])
+    return 'chromium-v8/isolated/%s/%s' % (
+        self.m.properties['mastername'],
+        buildername,
     )
 
-  def upload_isolated_json_generic(self):
-    archive = 'chromium-v8/isolated/%s/%s' % (
-        self.m.properties['mastername'],
-        self.m.properties['buildername'],
-    )
+  def upload_isolated_json(self):
     self.m.gsutil.upload(
         self.m.json.input(self.m.isolate.isolated_tests),
-        archive,
+        self.isolated_archive_path,
         '%s.json' % self.revision,
         args=['-a', 'public-read'],
     )
@@ -618,7 +608,7 @@ class V8Api(recipe_api.RecipeApi):
           src_dir='v8')
 
   def download_isolated_json(self, revision):
-    archive = self.get_archive_url_pattern(use_swarming=True) % revision
+    archive = 'gs://' + self.isolated_archive_path + '/%s.json' % revision
     self.m.gsutil.download_url(
         archive,
         self.m.json.output(),
@@ -1234,25 +1224,9 @@ class V8Api(recipe_api.RecipeApi):
         [commit['commit'] for commit in reversed(commits[:-1])],
     )
 
-  def get_archive_name_pattern(self, use_swarming):
-    # For tests run on swarming, only lookup the json file with the isolate
-    # hashes.
-    suffix = 'json' if use_swarming else 'zip'
-
-    return 'full-build-%s_%%s.%s' % (
-        self.m.archive.legacy_platform_name(),
-        suffix,
-    )
-
-  def get_archive_url_pattern(self, use_swarming):
-    return '%s/%s' % (
-        self.GS_ARCHIVES[self.bot_config['build_gs_archive']],
-        self.get_archive_name_pattern(use_swarming),
-    )
-
   def get_available_range(self, bisect_range, use_swarming=False):
     assert self.bot_type == 'tester'
-    archive_url_pattern = self.get_archive_url_pattern(use_swarming)
+    archive_url_pattern = 'gs://' + self.isolated_archive_path + '/%s.json'
     # TODO(machenbach): Maybe parallelize this in a wrapper script.
     args = ['ls']
     available_range = []

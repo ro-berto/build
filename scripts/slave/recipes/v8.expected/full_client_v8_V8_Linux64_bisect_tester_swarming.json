@@ -1547,7 +1547,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "ls",
-      "gs://chromium-v8/v8-linux64-rel/full-build-linux_a1.json"
+      "gs://chromium-v8/isolated/client.v8/V8 Linux64 - builder/a1.json"
     ],
     "infra_step": true,
     "name": "Bisect.gsutil check build a1",
@@ -1565,7 +1565,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "ls",
-      "gs://chromium-v8/v8-linux64-rel/full-build-linux_a2.json"
+      "gs://chromium-v8/isolated/client.v8/V8 Linux64 - builder/a2.json"
     ],
     "infra_step": true,
     "name": "Bisect.gsutil check build a2",
@@ -1587,7 +1587,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "gs://chromium-v8/v8-linux64-rel/full-build-linux_a0.json",
+      "gs://chromium-v8/isolated/client.v8/V8 Linux64 - builder/a0.json",
       "/path/to/tmp/json"
     ],
     "infra_step": true,
@@ -1764,7 +1764,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "gs://chromium-v8/v8-linux64-rel/full-build-linux_a1.json",
+      "gs://chromium-v8/isolated/client.v8/V8 Linux64 - builder/a1.json",
       "/path/to/tmp/json"
     ],
     "infra_step": true,
