@@ -583,21 +583,6 @@ BUILDERS = freeze({
       'build_gs_bucket': 'chromium-webrtc',
     },
     'builders':  {
-      'Win (swarming)': {
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'win'},
-        'use_isolate': True,
-        'enable_swarming': True,
-        'swarming_dimensions': {
-          'os': 'Windows-7-SP1',
-          'cpu': 'x86-64',
-        }
-      },
       'Win64 Debug (Win8)': {
         'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
@@ -625,36 +610,6 @@ BUILDERS = freeze({
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-10',
-          'cpu': 'x86-64',
-        }
-      },
-      'Mac (swarming)': {
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'mac'},
-        'use_isolate': True,
-        'enable_swarming': True,
-        'swarming_dimensions': {
-          'os': 'Mac-10.11',
-          'cpu': 'x86-64',
-        }
-      },
-      'Linux (swarming)': {
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'linux'},
-        'use_isolate': True,
-        'enable_swarming': True,
-        'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
           'cpu': 'x86-64',
         }
       },
