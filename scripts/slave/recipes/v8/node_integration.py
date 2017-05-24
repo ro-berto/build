@@ -20,6 +20,7 @@ DEPS = [
   'recipe_engine/properties',
   'recipe_engine/python',
   'recipe_engine/step',
+  'trigger',
   'v8',
   'zip',
 ]
@@ -34,6 +35,9 @@ BUILDERS = freeze({
         },
       },
       'V8 - node.js integration': {
+        'triggers': [
+          'v8_node_linux64_haswell_perf',
+        ],
         'testing': {
           'platform': 'linux',
         },
@@ -155,6 +159,21 @@ def RunSteps(api):
 
   # Build and upload node.js distribution with the checked-out v8.
   _build_and_upload(api)
+
+  # Trigger performance bots.
+  api.trigger(*[{
+    'builder_name': builder_name,
+    'bucket': 'master.internal.client.v8',
+    'properties': {
+      'revision': api.v8.revision,
+      'parent_got_revision': api.v8.revision,
+      'parent_got_revision_cp': api.v8.revision_cp,
+    },
+    'buildbot_changes': [{
+      'author': 'node.js',
+      'revision': api.v8.revision,
+    }]
+  } for builder_name in api.v8.bot_config['triggers']])
 
 
 def _sanitize_nonalpha(*chunks):
