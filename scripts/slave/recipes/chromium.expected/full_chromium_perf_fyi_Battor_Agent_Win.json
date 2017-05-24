@@ -371,7 +371,7 @@
       "[BUILDER_CACHE]\\Battor_Agent_Win\\src\\out\\Release_x64",
       "-j",
       "50",
-      "chromium_builder_perf"
+      "battor_agent"
     ],
     "cwd": "[BUILDER_CACHE]\\Battor_Agent_Win\\src",
     "env": {
@@ -471,7 +471,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]\\Battor_Agent_Win\\src\\out\\Release_x64",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]\\\\Battor_Agent_Win\\\\src\\\\out\\\\Release_x64', '-j', 50, 'chromium_builder_perf']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]\\\\Battor_Agent_Win\\\\src\\\\out\\\\Release_x64', '-j', 50, 'battor_agent']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",

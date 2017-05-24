@@ -28,10 +28,11 @@ def chromium_perf_clang(c):
 
 def _AddBuildSpec(name, perf_id, platform, config_name='chromium_perf',
                   target_bits=64, enable_swarming=False,
-                  extra_compile_targets=None, force_exparchive=False,
-                  run_sizes=True):
+                  compile_targets=None, extra_compile_targets=None,
+                  force_exparchive=False, run_sizes=True):
   SPEC['builders'][name] = chromium_perf.BuildSpec(
       config_name, perf_id, platform, target_bits, enable_swarming,
+      compile_targets=compile_targets,
       extra_compile_targets=extra_compile_targets,
       force_exparchive=force_exparchive, run_sizes=run_sizes)
 
@@ -104,6 +105,9 @@ _AddTestSpec('Win Clang Perf Ref', 'chromium-win-clang-ref', 'win',
 
 _AddTestSpec('Mojo Linux Perf', 'mojo-linux-perf', 'linux')
 
-_AddBuildSpec('Battor Agent Linux', 'linux', 'linux', run_sizes=False)
-_AddBuildSpec('Battor Agent Mac', 'mac', 'mac', run_sizes=False)
-_AddBuildSpec('Battor Agent Win', 'win', 'win', run_sizes=False)
+_AddBuildSpec('Battor Agent Linux', 'linux', 'linux', run_sizes=False,
+              compile_targets=['battor_agent'])
+_AddBuildSpec('Battor Agent Mac', 'mac', 'mac', run_sizes=False,
+              compile_targets=['battor_agent'])
+_AddBuildSpec('Battor Agent Win', 'win', 'win', run_sizes=False,
+              compile_targets=['battor_agent'])
