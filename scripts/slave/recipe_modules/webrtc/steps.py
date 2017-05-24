@@ -80,6 +80,14 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
   build_out_dir = api.m.path['checkout'].join(
       'out', api.m.chromium.c.build_config_fs)
   GTestTest = api.m.chromium_tests.steps.GTestTest
+  isac_fix_test = BaremetalTest(
+      'isac_fix_test',
+      revision=revision,
+      args=['32000', api.m.path['checkout'].join('resources',
+                                                 'speech_and_misc_wb.pcm'),
+            'isac_speech_and_misc_wb.pcm'],
+      perf_test=not api.m.tryserver.is_tryserver)
+
   SwarmingTest = api.m.chromium_tests.steps.SwarmingIsolatedScriptTest
   if test_suite == 'webrtc':
     for test, extra_args in sorted(NORMAL_TESTS.items()):
@@ -99,20 +107,19 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
         BaremetalTest('video_capture_tests', revision=revision),
     ])
 
-    if api.m.tryserver.is_tryserver and not api.m.platform.is_mac:
-      tests.append(BaremetalTest('webrtc_perf_tests', revision=revision,
-          args=['--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/']))
+    # Cover tests only running on perf tests on our trybots:
+    if api.m.tryserver.is_tryserver:
+      if api.m.platform.is_linux:
+        tests.append(isac_fix_test)
+
+      # TODO(kjellander): Enable on Mac when bugs.webrtc.org/7322 is fixed.
+      if not api.m.platform.is_mac:
+        tests.append(BaremetalTest('webrtc_perf_tests', revision=revision,
+            args=['--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/']))
   elif test_suite == 'desktop_perf':
     assert api.c.PERF_ID
     if api.m.platform.is_linux:
-      f = api.m.path['checkout'].join
-      tests.append(
-          PerfTest('isac_fix_test',
-                   revision=revision,
-                   args=['32000', f('resources', 'speech_and_misc_wb.pcm'),
-                         'isac_speech_and_misc_wb.pcm']),
-      )
-
+      tests.append(isac_fix_test)
     tests.append(PerfTest('webrtc_perf_tests', revision=revision))
 
     tests.append(PerfTest(
