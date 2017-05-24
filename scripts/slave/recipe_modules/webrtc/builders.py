@@ -277,6 +277,16 @@ BUILDERS = freeze({
           'cpu': 'x86',
         }
       },
+      'Linux32 Debug (ARM)': {
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'linux'},
+      },
       'Linux32 Release (ARM)': {
         'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
@@ -612,16 +622,6 @@ BUILDERS = freeze({
           'os': 'Windows-10',
           'cpu': 'x86-64',
         }
-      },
-      'Linux32 Debug (ARM)': {
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'linux'},
       },
       'Linux64 GCC': {
         'recipe_config': 'webrtc',

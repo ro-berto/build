@@ -153,7 +153,7 @@
       "[BUILDER_CACHE]/Linux32_Debug__ARM_/src/tools_webrtc/mb/mb.py",
       "gen",
       "-m",
-      "client.webrtc.fyi",
+      "client.webrtc",
       "-b",
       "Linux32 Debug (ARM)",
       "--config-file",
@@ -364,7 +364,7 @@
       "--buildbot-buildername",
       "Linux32 Debug (ARM)",
       "--buildbot-mastername",
-      "client.webrtc.fyi",
+      "client.webrtc",
       "--buildbot-slavename",
       "bot_id"
     ],

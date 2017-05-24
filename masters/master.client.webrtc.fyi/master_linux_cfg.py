@@ -30,7 +30,6 @@ def Update(c):
                             branch='master',
                             treeStableTimer=0,
                             builderNames=[
-                                'Linux32 Debug (ARM)',
                                 'Linux64 GCC',
       ]),
       # Run WebRTC DEPS roller every 3 hours.
@@ -43,7 +42,6 @@ def Update(c):
   ])
 
   specs = [
-    {'name': 'Linux32 Debug (ARM)', 'slavebuilddir': 'linux_arm'},
     {'name': 'Linux64 GCC', 'slavebuilddir': 'linux_gcc'},
     {
       'name': 'Auto-roll - WebRTC DEPS',

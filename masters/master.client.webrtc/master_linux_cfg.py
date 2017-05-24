@@ -33,6 +33,7 @@ def Update(c):
           'Linux32 Release',
           'Linux64 Debug',
           'Linux64 Release',
+          'Linux32 Debug (ARM)',
           'Linux32 Release (ARM)',
           'Linux64 Debug (ARM)',
           'Linux64 Release (ARM)',
@@ -51,6 +52,7 @@ def Update(c):
   # 'slavebuilddir' below is used to reduce the number of checkouts since some
   # of the builders are pooled over multiple slave machines.
   specs = [
+    {'name': 'Linux32 Debug (ARM)', 'slavebuilddir': 'linux_arm'},
     {'name': 'Linux32 Release (ARM)', 'slavebuilddir': 'linux_arm'},
     {'name': 'Linux32 Debug', 'slavebuilddir': 'linux32'},
     {'name': 'Linux32 Release', 'slavebuilddir': 'linux32'},
