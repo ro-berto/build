@@ -43,13 +43,13 @@ def RunSteps(api):
              'pub': 'pub',
              'debianpackage': 'linux_distribution_support',
              'androidvm': 'android',
-             'versionchecker': 'version-checker'}
-  if builder in scripts:
-    script = scripts[builder]
-    api.python('%s script' % script,
-        api.path['checkout'].join('tools', 'bots','%s.py' % script),
-        allow_subannotations=True)
-        
+             'versionchecker': 'version_checker'}
+  assert builder in scripts
+  script = scripts[builder]
+  api.python('%s script' % script,
+      api.path['checkout'].join('tools', 'bots','%s.py' % script),
+      allow_subannotations=True)
+
   with api.context(cwd=api.path['checkout']):
     api.python('taskkill after testing',
                api.path['checkout'].join('tools', 'task_kill.py'),

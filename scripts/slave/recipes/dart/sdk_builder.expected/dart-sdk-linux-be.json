@@ -95,64 +95,124 @@
     "name": "trigger",
     "trigger_specs": [
       {
-        "builder_name": "analyze-linux-be"
+        "builder_name": "analyze-linux-be",
+        "properties": {
+          "revision": "abcd1234efef5656"
+        }
       },
       {
-        "builder_name": "analyzer-linux-release-be"
+        "builder_name": "analyzer-linux-release-be",
+        "properties": {
+          "revision": "abcd1234efef5656"
+        }
       },
       {
-        "builder_name": "analyzer-linux-release-strong-be"
+        "builder_name": "analyzer-linux-release-strong-be",
+        "properties": {
+          "revision": "abcd1234efef5656"
+        }
       },
       {
-        "builder_name": "dart2js-linux-chromeff-1-4-be"
+        "builder_name": "dart2js-linux-chromeff-1-4-be",
+        "properties": {
+          "revision": "abcd1234efef5656"
+        }
       },
       {
-        "builder_name": "dart2js-linux-chromeff-2-4-be"
+        "builder_name": "dart2js-linux-chromeff-2-4-be",
+        "properties": {
+          "revision": "abcd1234efef5656"
+        }
       },
       {
-        "builder_name": "dart2js-linux-chromeff-3-4-be"
+        "builder_name": "dart2js-linux-chromeff-3-4-be",
+        "properties": {
+          "revision": "abcd1234efef5656"
+        }
       },
       {
-        "builder_name": "dart2js-linux-chromeff-4-4-be"
+        "builder_name": "dart2js-linux-chromeff-4-4-be",
+        "properties": {
+          "revision": "abcd1234efef5656"
+        }
       },
       {
-        "builder_name": "dart2js-linux-d8-minified-1-5-be"
+        "builder_name": "dart2js-linux-d8-minified-1-5-be",
+        "properties": {
+          "revision": "abcd1234efef5656"
+        }
       },
       {
-        "builder_name": "dart2js-linux-d8-minified-2-5-be"
+        "builder_name": "dart2js-linux-d8-minified-2-5-be",
+        "properties": {
+          "revision": "abcd1234efef5656"
+        }
       },
       {
-        "builder_name": "dart2js-linux-d8-minified-3-5-be"
+        "builder_name": "dart2js-linux-d8-minified-3-5-be",
+        "properties": {
+          "revision": "abcd1234efef5656"
+        }
       },
       {
-        "builder_name": "dart2js-linux-d8-minified-4-5-be"
+        "builder_name": "dart2js-linux-d8-minified-4-5-be",
+        "properties": {
+          "revision": "abcd1234efef5656"
+        }
       },
       {
-        "builder_name": "dart2js-linux-d8-minified-5-5-be"
+        "builder_name": "dart2js-linux-d8-minified-5-5-be",
+        "properties": {
+          "revision": "abcd1234efef5656"
+        }
       },
       {
-        "builder_name": "dart2js-linux-drt-1-2-be"
+        "builder_name": "dart2js-linux-drt-1-2-be",
+        "properties": {
+          "revision": "abcd1234efef5656"
+        }
       },
       {
-        "builder_name": "dart2js-linux-drt-2-2-be"
+        "builder_name": "dart2js-linux-drt-2-2-be",
+        "properties": {
+          "revision": "abcd1234efef5656"
+        }
       },
       {
-        "builder_name": "dart2js-linux-drt-csp-minified-be"
+        "builder_name": "dart2js-linux-drt-csp-minified-be",
+        "properties": {
+          "revision": "abcd1234efef5656"
+        }
       },
       {
-        "builder_name": "dart2js-linux-jsshell-1-4-be"
+        "builder_name": "dart2js-linux-jsshell-1-4-be",
+        "properties": {
+          "revision": "abcd1234efef5656"
+        }
       },
       {
-        "builder_name": "dart2js-linux-jsshell-2-4-be"
+        "builder_name": "dart2js-linux-jsshell-2-4-be",
+        "properties": {
+          "revision": "abcd1234efef5656"
+        }
       },
       {
-        "builder_name": "dart2js-linux-jsshell-3-4-be"
+        "builder_name": "dart2js-linux-jsshell-3-4-be",
+        "properties": {
+          "revision": "abcd1234efef5656"
+        }
       },
       {
-        "builder_name": "dart2js-linux-jsshell-4-4-be"
+        "builder_name": "dart2js-linux-jsshell-4-4-be",
+        "properties": {
+          "revision": "abcd1234efef5656"
+        }
       },
       {
-        "builder_name": "pkg-linux-release-be"
+        "builder_name": "pkg-linux-release-be",
+        "properties": {
+          "revision": "abcd1234efef5656"
+        }
       }
     ],
     "~followup_annotations": [

@@ -2,16 +2,24 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from recipe_engine.recipe_api import Property
+
 DEPS = [
   'depot_tools/bot_update',
   'depot_tools/gclient',
   'recipe_engine/context',
   'recipe_engine/path',
+  'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/python',
   'recipe_engine/step',
   'trigger',
 ]
+
+PROPERTIES = {
+  'revision': Property(help="SDK builder must be triggered with a revision"),
+  'buildername': Property(help="Should end in -[channel]"),
+}
 
 def BuildBuilderNames(name, channel, shards=None):
   if not shards:
@@ -19,12 +27,9 @@ def BuildBuilderNames(name, channel, shards=None):
   return ['%s-%s-%s-%s' % (name, i, shards, channel)
           for i in range(1, shards + 1)]
 
-def RunSteps(api):
-  (buildername, _, channel) = api.properties.get('buildername').rpartition('-')
+def RunSteps(api, revision, buildername):
+  (_, _, channel) = buildername.rpartition('-')
   assert channel in ['be', 'dev', 'stable']
-
-  (_, _, os) = buildername.rpartition('-')
-  assert os in ['linux', 'windows', 'mac']
 
   # Step 1) Get the SDK checkout.
   api.gclient.set_config('dart')
@@ -74,7 +79,7 @@ def RunSteps(api):
         BuildBuilderNames('dart2js-linux-jsshell', channel, 4) +
         BuildBuilderNames('pkg-linux-release', channel)
     ),
-    'windows' : (
+    'win' : (
         BuildBuilderNames('analyzer-win7-release', channel) +
         BuildBuilderNames('analyzer-win7-release-strong', channel) +
         BuildBuilderNames('dart2js-win7-chrome', channel, 4) +
@@ -89,25 +94,27 @@ def RunSteps(api):
         BuildBuilderNames('dart2js-mac10.11-safari', channel, 3) +
         BuildBuilderNames('pkg-mac10.11-release', channel)
     ),
-  }[os]
+  }[api.platform.name]
 
-  triggers = [{'builder_name': name} for name in buildernames]
+  triggers = [{'builder_name': name,
+               'properties': { 'revision': revision },
+               } for name in buildernames]
   api.trigger(*triggers)
 
 
 def GenTests(api):
   yield (
-    api.test('dart-sdk-linux-be') +
+    api.test('dart-sdk-linux-be') + api.platform('linux', 64) +
     api.properties.generic(mastername='client.dart',
                            buildername='dart-sdk-linux-be',
                            revision='abcd1234efef5656'))
   yield (
-    api.test('dart-sdk-windows-dev') +
+    api.test('dart-sdk-windows-dev') + api.platform('win', 32) +
     api.properties.generic(mastername='client.dart',
                            buildername='dart-sdk-windows-dev',
                            revision='abcd1234efef5656'))
   yield (
-    api.test('dart-sdk-mac-stable') +
+    api.test('dart-sdk-mac-stable') + api.platform('mac', 64) +
     api.properties.generic(mastername='client.dart',
                            buildername='dart-sdk-mac-stable',
                            revision='abcd1234efef5656'))
