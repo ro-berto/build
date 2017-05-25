@@ -409,32 +409,7 @@ class AndroidApi(recipe_api.RecipeApi):
     blacklisted_devices = step_result.json.output
     return [s for s in self.devices if s not in blacklisted_devices]
 
-  def revert_device_file_format(self):
-    # If current device file is jsonified, revert it back to original format.
-    if self.m.path.exists(self.known_devices_file):
-      with self.m.step.nest('fix_device_file_format'):
-        file_contents = self.m.file.read(
-            'read_device_file', self.known_devices_file,
-            test_data='device1\ndevice2\ndevice3')
-        try:
-          devices = [entry.encode('utf-8')
-                     for entry in json.loads(file_contents)]
-          self.m.step.active_result.presentation.step_text += (
-              'file format is json, reverting')
-          old_format = '\n'.join(devices)
-          # TODO(iannucci): is it correct to just cast old_format to str?
-          self.m.file.write(
-              'revert_device_file', self.known_devices_file, str(old_format))
-        except ValueError:
-          # File wasn't json, so no need to revert.
-          self.m.step.active_result.presentation.step_text += (
-              'file format is compatible')
-
   def device_status_check(self, restart_usb=False, **kwargs):
-    # TODO(bpastene): Remove once chromium revisions prior to
-    # crrev.com/1faecde0c03013b6cd725da413339c60223f8948 are no longer tested.
-    # See crbug.com/619707 for context.
-    self.revert_device_file_format()
     self.device_recovery()
     return self.device_status()
 

@@ -373,11 +373,6 @@ def GenTests(api):
         revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
         internal=True, **({'event.patchSet.ref':'refs/changes/50/176150/1'})))
 
-  yield (api.test('device_file_format_mismatch') +
-         properties_for('tester') +
-         api.override_step_data('fix_device_file_format.read_device_file',
-             api.raw_io.output_text('["device1", "device2"]')))
-
   yield (api.test('tombstones_m53') +
          properties_for('tester') +
          api.override_step_data(

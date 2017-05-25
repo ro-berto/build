@@ -495,24 +495,6 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "fix_device_file_format"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[HOME]/.android/known_devices.json",
-      "/path/to/tmp/"
-    ],
-    "name": "fix_device_file_format.read_device_file",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@file format is compatible@@@"
-    ]
-  },
-  {
     "cmd": [
       "[START_DIR]/src/third_party/catapult/devil/devil/android/tools/device_recovery.py",
       "--blacklist-file",
