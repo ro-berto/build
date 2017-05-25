@@ -1329,7 +1329,7 @@ SPEC = {
       'android_config': 'main_builder',
       'compile_targets': [
         'chromedriver_webview_shell_apk',
-        'gn_all',
+        'all',
         'chrome',
       ],
       'goma_canary': True,
