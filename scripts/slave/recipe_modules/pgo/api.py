@@ -174,7 +174,8 @@ class PGOApi(recipe_api.RecipeApi):
             target_arch)
         self.m.git('notes', '--ref', git_notes_ref,
                    'add', '-m', instance_id, revision)
-        self.m.git('push', 'origin', git_notes_ref)
+        self.m.git('push', 'https://chromium.googlesource.com/chromium/src.git',
+                   git_notes_ref)
     except self.m.step.StepFailure:
       step_result = self.m.step.active_result
       step_result.presentation.status = self.m.step.WARNING
