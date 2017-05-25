@@ -64,7 +64,6 @@
       "add",
       "-m",
       "40-chars-fake-of-the-package-instance_id",
-      "-c",
       "fake_revision"
     ],
     "cwd": "None",

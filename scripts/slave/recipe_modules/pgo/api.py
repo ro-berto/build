@@ -173,9 +173,7 @@ class PGOApi(recipe_api.RecipeApi):
         git_notes_ref = ('refs/notes/pgo/profile_database/windows-%s' %
             target_arch)
         self.m.git('notes', '--ref', git_notes_ref,
-                   'add', '-m', instance_id,
-                   '-c', revision)
-
+                   'add', '-m', instance_id, revision)
         self.m.git('push', 'origin', git_notes_ref)
     except self.m.step.StepFailure:
       step_result = self.m.step.active_result
