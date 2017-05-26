@@ -9,7 +9,7 @@ DEPS = [
 
 def RunSteps(api):
   api.codesearch.set_config('base')
-  api.codesearch.build_clang_tool()
+  api.codesearch.run_clang_tool()
 
 
 def GenTests(api):

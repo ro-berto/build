@@ -99,8 +99,8 @@ def RunSteps(api, buildername):
   # Copy the created output to the correct directory.
   api.codesearch.copy_compilation_output(result)
 
-  # Compile and build the clang tool
-  api.codesearch.build_clang_tool()
+  # Download and run the clang tool.
+  api.codesearch.run_clang_tool()
 
   # Create the kythe index pack and upload it to google storage.
   api.codesearch.create_and_upload_kythe_index_pack()

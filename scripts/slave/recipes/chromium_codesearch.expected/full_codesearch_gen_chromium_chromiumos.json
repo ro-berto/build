@@ -1012,14 +1012,10 @@
   },
   {
     "cmd": [
-      "tools/clang/scripts/update.py",
-      "--force-local-build",
-      "--without-android",
-      "--extra-tools",
-      "translation_unit"
+      "build/download_translation_unit_tool.py"
     ],
     "cwd": "[START_DIR]/src",
-    "name": "compile translation_unit clang tool"
+    "name": "download translation_unit clang tool"
   },
   {
     "cmd": [

@@ -76,15 +76,14 @@ class CodesearchApi(recipe_api.RecipeApi):
                          '--compdb-filter', self.m.raw_io.input_text(data=result.stdout),
                          '--compdb-output', compile_file])
 
-  def build_clang_tool(self):
-    """Compile and build the clang tool.
+  def run_clang_tool(self):
+    """Download and run the clang tool.
     """
-    # Compile the clang tool.
-    script_path = self.m.path.sep.join(['tools', 'clang', 'scripts', 'update.py'])
+    # Download the clang tool.
+    script_path = self.m.path.sep.join(['build', 'download_translation_unit_tool.py'])
     with self.m.context(cwd=self.m.path['checkout']):
-      self.m.step('compile translation_unit clang tool',
-                  [script_path, '--force-local-build', '--without-android',
-                   '--extra-tools', 'translation_unit'])
+      self.m.step('download translation_unit clang tool', [script_path])
+
     # Run the clang tool
     args = ['--tool', self.m.path['checkout'].join('third_party', 'llvm-build',
                                                    'Release+Asserts', 'bin',
@@ -117,7 +116,7 @@ class CodesearchApi(recipe_api.RecipeApi):
       return commit
 
   def create_and_upload_kythe_index_pack(self):
-    """Create the the kythe index pack and upload it to google storage.
+    """Create the kythe index pack and upload it to google storage.
     """
     commit_position = self._get_commit_position()
     index_pack_kythe_name = 'index_pack_%s_kythe.zip' % self.c.PLATFORM
