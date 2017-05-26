@@ -128,7 +128,9 @@ def update_scripts():
                    # these two need to both be here to actually get
                    # `git checkout --force` to happen.
                    '--force', '--delete_unversioned_trees',
-                   '--break_repo_locks', '--verbose', '--jobs=2']
+                   '--break_repo_locks', '--verbose', '--jobs=2',
+                   # TODO(phajdan.jr): enable syntax validation (crbug/570091).
+                   '--disable-syntax-validation']
     try:
       fd, output_json = tempfile.mkstemp()
       os.close(fd)

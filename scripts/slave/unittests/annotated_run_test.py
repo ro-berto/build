@@ -183,7 +183,8 @@ class AnnotatedRunExecTest(unittest.TestCase):
     update_scripts_run_command.assert_has_calls([
         mock.call([gclient_path, 'sync',
                    '--force', '--delete_unversioned_trees',
-                   '--break_repo_locks', '--verbose', '--jobs=2'],
+                   '--break_repo_locks', '--verbose', '--jobs=2',
+                   '--disable-syntax-validation'],
                   cwd=env.Build),
         ])
     self.assertFalse(main.called)
