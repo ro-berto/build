@@ -277,7 +277,8 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
     else:
       return self.m.json.output(per_shard_results[0])
 
-  def simulated_gtest_output(self, failed_test_names=(), passed_test_names=()):
+  def simulated_gtest_output(self, failed_test_names=(), passed_test_names=(),
+                             flaky_test_names=()):
     cur_iteration_data = {}
     for test_name in failed_test_names:
       cur_iteration_data[test_name] = [{
@@ -291,6 +292,20 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
           'output_snippet': ':)',
           'status': 'SUCCESS',
       }]
+
+    for test_name in flaky_test_names:
+      cur_iteration_data[test_name] = [
+          {
+              'elapsed_time_ms': 0,
+              'output_snippet': ':)',
+              'status': 'SUCCESS',
+          },
+          {
+              'elapsed_time_ms': 0,
+              'output_snippet': ':(',
+              'status': 'FAILURE',
+          }
+      ]
 
     canned_jsonish = {
         'per_iteration_data': [cur_iteration_data]

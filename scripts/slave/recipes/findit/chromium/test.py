@@ -84,13 +84,33 @@ def _get_reduced_test_dict(original_test_dict, failed_tests_dict):
     return original_test_dict
   reduced_dict = defaultdict(list)
   for step, tests in original_test_dict.iteritems():
-    if step in failed_tests_dict:
-      for test in tests:
-        if test not in failed_tests_dict[step]:
-          reduced_dict[step].append(test)
-    else:
-      reduced_dict[step].extend(tests)
+    remain_tests = list(set(tests) - set(failed_tests_dict.get(step, [])))
+    if remain_tests:
+      reduced_dict[step] = remain_tests
   return reduced_dict
+
+
+def _get_flaky_tests(test_results):
+  # Uses pass_fail_count to get flaky tests.
+  flaky_tests = defaultdict(list)
+  if not test_results:
+    return flaky_tests
+
+  for step, result in test_results.iteritems():
+    pass_fail_counts = result.get('pass_fail_counts')
+    if not pass_fail_counts:
+      continue
+    for test, test_counts in pass_fail_counts.iteritems():
+      if test_counts.get('pass_count') and test_counts.get('fail_count'):
+        flaky_tests[step].append(test)
+
+  return flaky_tests
+
+
+def _consolidate_flaky_tests(all_flakes, new_flakes):
+  for step, tests in new_flakes.iteritems():
+    all_flakes[step] = list(set(all_flakes[step]) | set(tests))
+
 
 def RunSteps(api, target_mastername, target_testername, good_revision,
              bad_revision, tests, buildbucket, use_analyze,
@@ -175,11 +195,16 @@ def RunSteps(api, target_mastername, target_testername, good_revision,
       else:
         tests_failed_in_potential_green = {}
 
+      # Looks for reliably failed tests.
+      flaky_tests_in_potential_green = _get_flaky_tests(test_results.get(
+          potential_green_rev))
+      _consolidate_flaky_tests(flakes, flaky_tests_in_potential_green)
       tests_passed_in_potential_green = _get_reduced_test_dict(
-         tests_have_not_found_culprit, tests_failed_in_potential_green)
+          tests_have_not_found_culprit, tests_failed_in_potential_green
+      )
 
       # Culprits for tests that failed in potential green should be earlier, so
-      # removes passed tests and only runs failed ones in following revisions.
+      # removes failed tests and only runs passed ones in following revisions.
       if tests_passed_in_potential_green:
         tests_to_run = tests_passed_in_potential_green
         for revision in following_revisions:
@@ -192,6 +217,10 @@ def RunSteps(api, target_mastername, target_testername, good_revision,
                   api, target_mastername, target_buildername, target_testername,
                   revision, tests_to_run, use_analyze, test_repeat_count))
 
+          flaky_tests_in_revision = _get_flaky_tests(test_results[revision])
+          reliable_failed_tests_in_revision = _get_reduced_test_dict(
+            tests_failed_in_revision, flaky_tests_in_revision)
+          _consolidate_flaky_tests(flakes, flaky_tests_in_revision)
           # Removes tests that passed in potential green and failed in
           # following revisions: culprits have been found for them.
           tests_have_not_found_culprit = _get_reduced_test_dict(
@@ -202,7 +231,7 @@ def RunSteps(api, target_mastername, target_testername, good_revision,
               tests_to_run, tests_failed_in_revision)
 
           # Records found culprits.
-          for step, test_list in tests_failed_in_revision.iteritems():
+          for step, test_list in reliable_failed_tests_in_revision.iteritems():
             for test in test_list:
               culprits[step][test] = revision
 
@@ -233,7 +262,7 @@ def RunSteps(api, target_mastername, target_testername, good_revision,
                 continue
               new_culprits[step][test] = test_culprit
           culprits = new_culprits
-          flakes = tests_failed_in_revision
+          _consolidate_flaky_tests(flakes, tests_failed_in_revision)
 
     found = bool(culprits)
 
@@ -1293,4 +1322,54 @@ def GenTests(api):
           api.swarming.canned_summary_output(failure=True) +
           api.test_utils.simulated_gtest_output(
               failed_test_names=['Test.One']))
+  )
+
+  yield (
+      api.test('remove_culprits_for_flaky_failures') +
+      props(
+          {'gl_tests': ['Test.One', 'Test.Two']},
+          'mac', 'Mac10.9 Tests', use_analyze=False,
+           good_revision='r0', bad_revision='r6',
+           suspected_revisions=['r4']) +
+      api.override_step_data(
+        'test r3.read test spec (chromium.mac.json)',
+        api.json.output({
+          'Mac10.9 Tests': {
+            'gtest_tests': [
+              {
+                'test': 'gl_tests',
+                'swarming': {'can_use_on_swarming_builders': True},
+              },
+            ],
+          },
+        })
+      ) +
+      api.override_step_data(
+          'test r4.read test spec (chromium.mac.json)',
+          api.json.output({
+              'Mac10.9 Tests': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          })
+      ) +
+      api.override_step_data(
+          'git commits in range',
+          api.raw_io.stream_output(
+              '\n'.join('r%d' % i for i in reversed(range(1, 7))))) +
+      api.override_step_data(
+          'test r3.gl_tests (r3)',
+          api.swarming.canned_summary_output(failure=True) +
+          api.test_utils.simulated_gtest_output(
+              passed_test_names=['Test.One', 'Test.Two'])) +
+      api.override_step_data(
+          'test r4.gl_tests (r4)',
+          api.swarming.canned_summary_output(failure=True) +
+          api.test_utils.simulated_gtest_output(
+              flaky_test_names=['Test.One'],
+              failed_test_names=['Test.Two']))
   )
