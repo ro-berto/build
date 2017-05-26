@@ -172,7 +172,9 @@ class PGOApi(recipe_api.RecipeApi):
         # Add the git notes for this profile database.
         git_notes_ref = ('refs/notes/pgo/profile_database/windows-%s' %
             target_arch)
-        self.m.git('notes', '--ref', git_notes_ref,
+        self.m.git('-c', 'user.email=pgo-bot@chromium.org',
+                   '-c', 'user.name="PGO notes"',
+                   'notes', '--ref', git_notes_ref,
                    'add', '-m', instance_id, revision)
         self.m.git('push', 'https://chromium.googlesource.com/chromium/src.git',
                    git_notes_ref)

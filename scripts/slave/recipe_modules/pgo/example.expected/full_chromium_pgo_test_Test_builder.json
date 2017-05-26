@@ -273,6 +273,10 @@
   {
     "cmd": [
       "RECIPE_PACKAGE_REPO[depot_tools]\\git.bat",
+      "-c",
+      "user.email=pgo-bot@chromium.org",
+      "-c",
+      "user.name=\"PGO notes\"",
       "notes",
       "--ref",
       "refs/notes/pgo/profile_database/windows-386",
@@ -283,7 +287,7 @@
     ],
     "cwd": "[START_DIR]\\src",
     "infra_step": true,
-    "name": "archive profile database.git notes",
+    "name": "archive profile database.git -c",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
