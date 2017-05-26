@@ -47,7 +47,6 @@ SPEC = freeze({
       # Compile targets used by the 'Linux ChromiumOS Full' builder (2016-12-16)
       'compile_targets': [
         'app_list_unittests',
-        'aura_builder',
         'base_unittests',
         'browser_tests',
         'cacheinvalidation_unittests',

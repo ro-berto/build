@@ -24,7 +24,6 @@ SPEC = {
       'bot_type': 'builder_tester',
       'compile_targets': [
         'app_list_unittests',
-        'aura_builder',
         'base_unittests',
         'browser_tests',
         'cacheinvalidation_unittests',
@@ -77,7 +76,6 @@ SPEC = {
       },
       'bot_type': 'builder',
       'compile_targets': [
-        'aura_builder',
       ],
       'testing': {
         'platform': 'linux',
@@ -110,7 +108,6 @@ SPEC = {
       },
       'bot_type': 'builder',
       'compile_targets': [
-        'aura_builder',
       ],
       'testing': {
         'platform': 'linux',
@@ -143,7 +140,6 @@ SPEC = {
       },
       'bot_type': 'builder',
       'compile_targets': [
-        'aura_builder',
       ],
       'testing': {
         'platform': 'linux',
