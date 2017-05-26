@@ -4,8 +4,15 @@
 
 import json
 from collections import defaultdict
+import re
 
 from recipe_engine import recipe_api
+
+
+# This has no special meaning, just a placeholder for expectations data.
+_GIT_LS_REMOTE_OUTPUT = ('1234567123456712345671234567888812345678'
+                         '\trefs/heads/master')
+_GIT_REV_PARSE_OUTPUT = '1234567123456712345671234567888812345678'
 
 
 class FinditApi(recipe_api.RecipeApi):
@@ -333,6 +340,7 @@ class FinditApi(recipe_api.RecipeApi):
 
     api.chromium.apply_config('goma_failfast')
 
+    (checked_out_revision, cached_revision) = self.record_previous_revision(api)
     # Configure to match the test config on the tester, as builders don't have
     # the settings for swarming tests.
     if target_buildername != target_testername:
@@ -347,4 +355,63 @@ class FinditApi(recipe_api.RecipeApi):
         bot_config,
         root_solution_revision=revision)
 
-    return tests, target_buildername
+    return tests, target_buildername, checked_out_revision, cached_revision
+
+  def record_previous_revision(self, api):
+    """Records the latest checked out and cached revisions.
+
+    Examines the checkout and records the latest available revision for the
+    first gclient solution.
+
+    This also records the latest revision available in the local git cache.
+
+    Args:
+      api (RecipeApi): With the dependencies injected by the calling recipe
+    Returns:
+      A pair of revisions (checked_out_revision, cached_revision), or None, None
+      if the checkout directory does not exist.
+    """
+    # api.path['checkout'] is not set yet, hence we assemble it from
+    # api.path['start_dir'].
+    checkout_path = api.gclient.c.src_root or api.gclient.c.solutions[0].name
+    full_checkout_path = api.path['start_dir'].join(checkout_path)
+    if not api.path.exists(full_checkout_path):
+      return None, None
+    with api.context(cwd=full_checkout_path):
+      previously_checked_out_revision_step = api.git(
+          'rev-parse', 'HEAD',
+          stdout=api.raw_io.output(),
+          name='record previously checked-out revision',
+          can_fail_build=False,
+          step_test_data=lambda: api.raw_io.test_api.stream_output(
+              _GIT_REV_PARSE_OUTPUT))
+      checked_out_revision = None
+      if previously_checked_out_revision_step.stdout:
+        # Sample output:
+        # `d4316eba6ba2b9e88eba8d805babcdfdbbc6e74a`
+        matches = re.match(
+            '(?P<revision>[a-fA-f0-9]{40})',
+             previously_checked_out_revision_step.stdout.strip())
+        if matches:
+          checked_out_revision = matches.group('revision')
+          previously_checked_out_revision_step.presentation.properties[
+              'previously_checked_out_revision'] = checked_out_revision
+
+      previously_cached_revision_step = api.git(
+          'ls-remote', 'origin', 'refs/heads/master',
+          stdout=api.raw_io.output(),
+          name='record previously cached revision',
+          can_fail_build=False,
+          step_test_data=lambda: api.raw_io.test_api.stream_output(
+              _GIT_LS_REMOTE_OUTPUT))
+      cached_revision = None
+      if previously_cached_revision_step.stdout:
+        # Sample output:
+        # `d4316eba6ba2b9e88eba8d805babcdfdbbc6e74a  refs/heads/master`
+        matches = re.match('(?P<revision>[a-fA-f0-9]{40})\s*\S*',
+                           previously_cached_revision_step.stdout.strip())
+        if matches:
+          cached_revision = matches.group('revision')
+          previously_cached_revision_step.presentation.properties[
+          'previously_cached_revision'] = cached_revision
+      return checked_out_revision, cached_revision

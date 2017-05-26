@@ -20,10 +20,12 @@ DEPS = [
     'chromium_swarming',
     'chromium_tests',
     'commit_position',
+    'depot_tools/gclient',
+    'depot_tools/git',
     'filter',
     'findit',
-    'depot_tools/gclient',
     'isolate',
+    'recipe_engine/context',
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/platform',
@@ -94,9 +96,9 @@ def RunSteps(api, target_mastername, target_testername, good_revision,
              bad_revision, tests, buildbucket, use_analyze,
              suspected_revisions, test_on_good_revision, test_repeat_count):
 
-  tests, target_buildername = api.findit.configure_and_sync(
-      api, tests, buildbucket, target_mastername, target_testername,
-      bad_revision)
+  tests, target_buildername, checked_out_revision, cached_revision = (
+      api.findit.configure_and_sync(api, tests, buildbucket, target_mastername,
+                                    target_testername, bad_revision))
 
   # retrieve revisions in the regression range.
   revisions_to_check = api.findit.revisions_between(good_revision, bad_revision)
@@ -140,7 +142,9 @@ def RunSteps(api, target_mastername, target_testername, good_revision,
   }
   report = {
       'result': test_results,
-      'metadata': try_job_metadata
+      'metadata': try_job_metadata,
+      'previously_checked_out_revision': checked_out_revision,
+      'previously_cached_revision': cached_revision
   }
 
   revision_being_checked = None

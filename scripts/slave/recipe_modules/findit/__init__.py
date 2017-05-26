@@ -6,6 +6,7 @@ DEPS = [
   'buildbucket',
   'chromium',
   'depot_tools/depot_tools',
+  'depot_tools/gclient',
   'depot_tools/git',
   'recipe_engine/context',
   'recipe_engine/json',

@@ -4530,6 +4530,8 @@
       "@@@STEP_LOG_LINE@report@      \"Test.Two\": \"r3\"@@@",
       "@@@STEP_LOG_LINE@report@    }@@@",
       "@@@STEP_LOG_LINE@report@  }, @@@",
+      "@@@STEP_LOG_LINE@report@  \"previously_cached_revision\": null, @@@",
+      "@@@STEP_LOG_LINE@report@  \"previously_checked_out_revision\": null, @@@",
       "@@@STEP_LOG_LINE@report@  \"result\": {@@@",
       "@@@STEP_LOG_LINE@report@    \"r4\": {@@@",
       "@@@STEP_LOG_LINE@report@      \"gl_tests\": {@@@",

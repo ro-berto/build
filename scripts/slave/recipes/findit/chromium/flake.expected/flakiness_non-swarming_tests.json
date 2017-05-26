@@ -875,6 +875,8 @@
     "name": "report",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@report@{@@@",
+      "@@@STEP_LOG_LINE@report@  \"previously_cached_revision\": null, @@@",
+      "@@@STEP_LOG_LINE@report@  \"previously_checked_out_revision\": null, @@@",
       "@@@STEP_LOG_LINE@report@  \"result\": {@@@",
       "@@@STEP_LOG_LINE@report@    \"r0\": {@@@",
       "@@@STEP_LOG_LINE@report@      \"gl_tests\": {@@@",

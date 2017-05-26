@@ -14,16 +14,18 @@ from recipe_engine.recipe_api import Property
 DEPS = [
     'adb',
     'buildbucket',
-    'depot_tools/bot_update',
     'chromium',
     'chromium_android',
     'chromium_swarming',
     'chromium_tests',
     'commit_position',
+    'depot_tools/bot_update',
+    'depot_tools/gclient',
+    'depot_tools/git',
     'filter',
     'findit',
-    'depot_tools/gclient',
     'isolate',
+    'recipe_engine/context',
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/platform',
@@ -67,20 +69,23 @@ PROPERTIES = {
 def RunSteps(api, target_mastername, target_testername,
              test_revision, tests, buildbucket, test_repeat_count):
 
-  tests, target_buildername = api.findit.configure_and_sync(
-      api, tests, buildbucket, target_mastername, target_testername,
-      test_revision)
+  tests, target_buildername, checked_out_revision, cached_revision  = (
+      api.findit.configure_and_sync(api, tests, buildbucket, target_mastername,
+                                    target_testername, test_revision))
 
   test_results = {}
   report = {
       'result': test_results,
-      'metadata': {}
+      'metadata': {},
+      'previously_cached_revision': cached_revision,
+      'previously_checked_out_revision': checked_out_revision
   }
 
   try:
-    test_results[test_revision], _ = api.findit.compile_and_test_at_revision(
-        api, target_mastername, target_buildername, target_testername,
-        test_revision, tests, False, test_repeat_count)
+    test_results[test_revision], _  = (
+        api.findit.compile_and_test_at_revision(
+          api, target_mastername, target_buildername, target_testername,
+          test_revision, tests, False, test_repeat_count))
   except api.step.InfraFailure:
     test_results[test_revision] = api.findit.TestResult.INFRA_FAILED
     report['metadata']['infra_failure'] = True

@@ -16,6 +16,8 @@ DEPS = [
     'filter',
     'findit',
     'depot_tools/gclient',
+    'depot_tools/git',
+    'recipe_engine/context',
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/platform',
@@ -157,6 +159,8 @@ def RunSteps(api, target_mastername, target_buildername,
 
   api.chromium.apply_config('goma_failfast')
 
+  (checked_out_revision, cached_revision) = api.findit.record_previous_revision(
+      api)
   # Sync to bad revision, and retrieve revisions in the regression range.
   api.chromium_tests.prepare_checkout(
       bot_config,
@@ -234,6 +238,8 @@ def RunSteps(api, target_mastername, target_buildername,
   report = {
       'result': compile_results,
       'metadata': try_job_metadata,
+      'previously_checked_out_revision': checked_out_revision,
+      'previously_cached_revision': cached_revision,
   }
 
   culprit_candidate = None
@@ -368,7 +374,8 @@ def GenTests(api):
       properties['suspected_revisions'] = suspected_revisions
     if buildbucket:
       properties['buildbucket'] = buildbucket
-    return api.properties(**properties) + api.platform.name('linux')
+    return (api.properties(**properties) + api.platform.name('linux') +
+            api.path.exists(api.path['start_dir'].join('src')))
 
   def simulated_buildbucket_output(additional_build_parameters):
     buildbucket_output = {
@@ -530,6 +537,29 @@ def GenTests(api):
       props(use_analyze=True,
             buildbucket=json.dumps({'build': {'id': 'id1'}})) +
       simulated_buildbucket_output({}) +
+      api.override_step_data('record previously checked-out revision',
+                             api.raw_io.output('')) +
+      api.override_step_data('record previously cached revision',
+                             api.raw_io.output('')) +
+      api.override_step_data(
+          'test r1.analyze',
+          api.json.output({
+              'status': 'No dependencies',
+              'compile_targets': [],
+              'test_targets': [],
+          })
+      )
+  )
+
+  yield (
+      api.test('previous_revision_error') +
+      props(use_analyze=True,
+            buildbucket=json.dumps({'build': {'id': 'id1'}})) +
+      simulated_buildbucket_output({}) +
+      api.override_step_data('record previously checked-out revision',
+                             api.raw_io.output('SegmentationFault')) +
+      api.override_step_data('record previously cached revision',
+                             api.raw_io.output('SegmentationFault')) +
       api.override_step_data(
           'test r1.analyze',
           api.json.output({

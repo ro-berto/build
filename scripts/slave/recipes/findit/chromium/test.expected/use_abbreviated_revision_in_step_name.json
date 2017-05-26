@@ -1135,6 +1135,8 @@
       "@@@STEP_LOG_LINE@report@      \"Test.One\": \"gfedcba0987654321\"@@@",
       "@@@STEP_LOG_LINE@report@    }@@@",
       "@@@STEP_LOG_LINE@report@  }, @@@",
+      "@@@STEP_LOG_LINE@report@  \"previously_cached_revision\": null, @@@",
+      "@@@STEP_LOG_LINE@report@  \"previously_checked_out_revision\": null, @@@",
       "@@@STEP_LOG_LINE@report@  \"result\": {@@@",
       "@@@STEP_LOG_LINE@report@    \"gfedcba0987654321\": {@@@",
       "@@@STEP_LOG_LINE@report@      \"gl_tests\": {@@@",
