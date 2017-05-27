@@ -44,9 +44,6 @@
     "builder_shared": {
       "amd64-generic-asan": [
         "build263-m2"
-      ], 
-      "x86-generic-asan": [
-        "build326-m2"
       ]
     }, 
     "floating": {
@@ -58,6 +55,7 @@
   }, 
   "unallocated": [
     "build245-m2", 
+    "build326-m2", 
     "build333-m2"
   ]
 }
