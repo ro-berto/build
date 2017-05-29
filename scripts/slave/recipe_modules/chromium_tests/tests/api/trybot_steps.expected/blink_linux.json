@@ -289,7 +289,7 @@
       "linux_chromium_rel_ng",
       "-v",
       "//out/Release",
-      "{\"additional_compile_targets\": [\"chromium_swarm_tests\"], \"files\": [\"third_party/WebKit/foo.cc\"], \"test_targets\": []}",
+      "{\"additional_compile_targets\": [\"chromium_swarm_tests\"], \"files\": [\"third_party/WebKit/foo.cc\"], \"test_targets\": [\"webkit_layout_tests_exparchive\"]}",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -311,7 +311,9 @@
       "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.test_targets\": [], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"test_targets\": []@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"test_targets\": [@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"webkit_layout_tests_exparchive\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  ]@@@",
       "@@@STEP_LOG_LINE@analyze_details@}@@@",
       "@@@STEP_LOG_END@analyze_details@@@"
     ]
@@ -435,7 +437,8 @@
       "[START_DIR]/src/out/Release",
       "-j",
       "50",
-      "blink_tests"
+      "All",
+      "chromium_builder_tests"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
@@ -452,7 +455,8 @@
       "[START_DIR]/src/out/Release",
       "-j",
       "50",
-      "blink_tests",
+      "All",
+      "chromium_builder_tests",
       "-d",
       "explain",
       "-n"
@@ -548,7 +552,7 @@
       "--ninja-log-outdir",
       "[START_DIR]/src/out/Release",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/Release', '-j', 50, 'blink_tests']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/Release', '-j', 50, 'All', 'chromium_builder_tests']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",
@@ -655,120 +659,6 @@
       "@@@STEP_LOG_LINE@json.output@  \"valid\": true@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
-      "--target",
-      "Release",
-      "--no-xvfb",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"branch\": \"\", \"buildername\": \"linux_chromium_rel_ng\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium.linux\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"chromium_tests:tests/api/trybot_steps\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"branch\": \"\", \"buildername\": \"linux_chromium_rel_ng\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium.linux\", \"patch_project\": \"chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"chromium_tests:tests/api/trybot_steps\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--step-name=webkit_tests (with patch)",
-      "--builder-name=linux_chromium_rel_ng",
-      "--slave-name=test_bot",
-      "--build-number=571",
-      "--run-python-script",
-      "[START_DIR]/src/third_party/WebKit/Tools/Scripts/run-webkit-tests",
-      "--target",
-      "Release",
-      "--results-directory",
-      "[START_DIR]/layout-test-results",
-      "--build-dir",
-      "[START_DIR]/src/out",
-      "--json-test-results",
-      "/path/to/tmp/json",
-      "--master-name",
-      "tryserver.chromium.linux",
-      "--build-number",
-      "571",
-      "--builder-name",
-      "linux_chromium_rel_ng",
-      "--step-name",
-      "webkit_tests (with patch)",
-      "--no-show-results",
-      "--full-results-html",
-      "--clobber-old-results",
-      "--exit-after-n-failures",
-      "5000",
-      "--exit-after-n-crashes-or-timeouts",
-      "100",
-      "--debug-rwt-logging"
-    ],
-    "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "webkit_tests (with patch)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>Total tests: 5<br/>* Passed: 4 (4 expected, 0 unexpected)<br/>* Skipped: 0 (0 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 0 (0 expected, 0 unexpected)<br/>@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
-      "--input-json",
-      "{\"num_passes\": 9001, \"num_regressions\": 0, \"path_separator\": \"/\", \"tests\": {\"bad\": {\"totally-bad-probably.html\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}}, \"bad/totally-bad-probably.html\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"flake\": {\"slow.html\": {\"actual\": \"SLOW\", \"expected\": \"SLOW\"}, \"timeout-then-crash.html\": {\"actual\": \"CRASH\", \"expected\": \"CRASH\"}, \"totally-flakey.html\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}}, \"flake/slow.html\": {\"actual\": \"SLOW\", \"expected\": \"SLOW\"}, \"flake/timeout-then-crash.html\": {\"actual\": \"CRASH\", \"expected\": \"CRASH\"}, \"flake/totally-flakey.html\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"tricky\": {\"totally-maybe-not-awesome.html\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}}, \"tricky/totally-maybe-not-awesome.html\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}}, \"version\": 3}",
-      "--master-name",
-      "tryserver.chromium.linux",
-      "--builder-name",
-      "linux_chromium_rel_ng",
-      "--build-number",
-      "571",
-      "--test-type",
-      "webkit_tests (with patch)",
-      "--test-results-server",
-      "test-results.appspot.com",
-      "--chrome-revision",
-      "170242"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "Upload to test-results [webkit_tests (with patch)]"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/archive_layout_test_results.py",
-      "--results-dir",
-      "[START_DIR]/layout-test-results",
-      "--build-dir",
-      "[START_DIR]/src/out",
-      "--build-number",
-      "571",
-      "--builder-name",
-      "linux_chromium_rel_ng",
-      "--gs-bucket",
-      "gs://chromium-layout-test-archives",
-      "--staging-dir",
-      "[CACHE]/chrome_staging",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
-    ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "archive_webkit_tests_results",
-    "~followup_annotations": [
-      "@@@STEP_LINK@layout_test_results@https://storage.googleapis.com/chromium-layout-test-archives/linux_chromium_rel_ng/571/layout-test-results/results.html@@@",
-      "@@@STEP_LINK@(zip)@https://storage.googleapis.com/chromium-layout-test-archives/linux_chromium_rel_ng/571/layout-test-results.zip@@@"
     ]
   },
   {

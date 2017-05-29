@@ -33,9 +33,7 @@ CHROMIUM_BLINK_TESTS_BUILDERS = freeze([
 
 # If we are running layout tests, we run on swarming if the buildername is in this list.
 LAYOUT_TESTS_SWARMING_BUILDERS = freeze([
-  # TODO(crbug.com/721466) reenable once we understand what's going on with
-  # the merge script and make sure things are working.
-  # 'linux_chromium_rel_ng',
+  'linux_chromium_rel_ng',
 ])
 
 
@@ -908,10 +906,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     layout_tests_strategy = _layout_tests_strategy(
         tests, buildername, add_blink_tests)
 
-    # Before layout tests on swarming is rolled out to run on all CLs, blink
-    # layout tests needs to be manually added to the analyze list.
-    # TODO(crbug.com/721466) - remove pragma no cover once this is re-enabled.
-    if layout_tests_strategy == 'add_swarmed':  # pragma: no cover
+    # Before layout tests on swarming is rolled out to run on all CLs, blink layout tests needs
+    # to be manually added to the analyze list.
+    if layout_tests_strategy == 'add_swarmed':
       merge = {
           'script': self.m.path['checkout'].join(
               'third_party', 'WebKit', 'Tools', 'Scripts',
