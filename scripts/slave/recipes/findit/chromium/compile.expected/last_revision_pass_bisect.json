@@ -717,7 +717,8 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "NINJA_STATUS": "%e [%s/%t %p - %r running, current %c p/s, overall %o p/s] "
     },
     "name": "test r6.compile",
     "~followup_annotations": [
@@ -740,7 +741,8 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "NINJA_STATUS": "%e [%s/%t %p - %r running, current %c p/s, overall %o p/s] "
     },
     "name": "test r6.compile confirm no-op",
     "stdout": "/path/to/tmp/",
@@ -1288,7 +1290,8 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "NINJA_STATUS": "%e [%s/%t %p - %r running, current %c p/s, overall %o p/s] "
     },
     "name": "test r7.compile",
     "~followup_annotations": [
@@ -1311,7 +1314,8 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "NINJA_STATUS": "%e [%s/%t %p - %r running, current %c p/s, overall %o p/s] "
     },
     "name": "test r7.compile confirm no-op",
     "stdout": "/path/to/tmp/",
@@ -1859,7 +1863,8 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "NINJA_STATUS": "%e [%s/%t %p - %r running, current %c p/s, overall %o p/s] "
     },
     "name": "test r9.compile",
     "~followup_annotations": [
@@ -1882,7 +1887,8 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "NINJA_STATUS": "%e [%s/%t %p - %r running, current %c p/s, overall %o p/s] "
     },
     "name": "test r9.compile confirm no-op",
     "stdout": "/path/to/tmp/",
@@ -2430,7 +2436,8 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "NINJA_STATUS": "%e [%s/%t %p - %r running, current %c p/s, overall %o p/s] "
     },
     "name": "test r10.compile",
     "~followup_annotations": [
@@ -2453,7 +2460,8 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "NINJA_STATUS": "%e [%s/%t %p - %r running, current %c p/s, overall %o p/s] "
     },
     "name": "test r10.compile confirm no-op",
     "stdout": "/path/to/tmp/",
