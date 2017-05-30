@@ -69,7 +69,7 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/dart/third_party/package_bots/annotated_steps.py"
+      "[START_DIR]/dart/third_party/package-bots/annotated_steps.py"
     ],
     "cwd": "[START_DIR]/dart",
     "name": "package_bots annotated steps"

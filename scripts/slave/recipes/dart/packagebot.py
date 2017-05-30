@@ -49,7 +49,7 @@ def RunSteps(api, target, repo):
     api.python(
       'package_bots annotated steps',
       api.path['dart'].join(
-        'third_party', 'package_bots', 'annotated_steps.py'),
+        'third_party', 'package-bots', 'annotated_steps.py'),
       allow_subannotations=True)
     api.python(
       'taskkill after testing',
