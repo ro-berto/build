@@ -231,7 +231,6 @@
     "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "NINJA_STATUS": "%e [%s/%t %p - %r running, current %c p/s, overall %o p/s] ",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
     "name": "compile"
@@ -468,7 +467,6 @@
     "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "NINJA_STATUS": "%e [%s/%t %p - %r running, current %c p/s, overall %o p/s] ",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
     "name": "compile (2)"
@@ -705,7 +703,6 @@
     "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "NINJA_STATUS": "%e [%s/%t %p - %r running, current %c p/s, overall %o p/s] ",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
     "name": "compile (3)"
@@ -942,7 +939,6 @@
     "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "NINJA_STATUS": "%e [%s/%t %p - %r running, current %c p/s, overall %o p/s] ",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
     "name": "compile (4)"
@@ -1179,7 +1175,6 @@
     "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "NINJA_STATUS": "%e [%s/%t %p - %r running, current %c p/s, overall %o p/s] ",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
     "name": "compile (5)"
@@ -1416,7 +1411,6 @@
     "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "NINJA_STATUS": "%e [%s/%t %p - %r running, current %c p/s, overall %o p/s] ",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
     "name": "compile (6)"
@@ -1653,7 +1647,6 @@
     "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "NINJA_STATUS": "%e [%s/%t %p - %r running, current %c p/s, overall %o p/s] ",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
     "name": "compile (7)"
@@ -1890,7 +1883,6 @@
     "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "NINJA_STATUS": "%e [%s/%t %p - %r running, current %c p/s, overall %o p/s] ",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:%(PATH)s"
     },
     "name": "compile (8)"
