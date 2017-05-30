@@ -11,7 +11,6 @@ forgiving_steps = ['update_scripts', 'update', 'svnkill', 'taskkill',
                    'gclient_revert']
 
 vtunejit_categories_steps = {'vtunejit': ['runhooks', 'compile']}
-clusterfuzz_categories_steps = {'clusterfuzz': ['check clusterfuzz']}
 
 class V8Notifier(chromium_notifier.ChromiumNotifier):
   def isInterestingStep(self, build_status, step_status, results):
@@ -27,19 +26,6 @@ def Update(config, active_master, c):
       relayhost=config.Master.smtp,
       sendToInterestedUsers=False,
       extraRecipients=['chunyang.dai@intel.com'],
-      status_header='buildbot failure in %(project)s on %(builder)s, %(steps)s',
-      lookup=master_utils.FilterDomain(),
-      forgiving_steps=forgiving_steps))
-  c['status'].append(V8Notifier(
-      fromaddr=active_master.from_address,
-      categories_steps=clusterfuzz_categories_steps,
-      exclusions={},
-      relayhost=config.Master.smtp,
-      sendToInterestedUsers=False,
-      extraRecipients=[
-        'v8-clusterfuzz-sheriff@chromium.org',
-        'machenbach@chromium.org',
-      ],
       status_header='buildbot failure in %(project)s on %(builder)s, %(steps)s',
       lookup=master_utils.FilterDomain(),
       forgiving_steps=forgiving_steps))

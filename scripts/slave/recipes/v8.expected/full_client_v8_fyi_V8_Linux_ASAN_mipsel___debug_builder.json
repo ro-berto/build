@@ -63,7 +63,7 @@
       "-root",
       "[CACHE]/goma_client",
       "-ensure-file",
-      "infra/tools/cloudtail/linux-amd64 goma_recipe_module\ninfra_internal/goma/client/linux-amd64 release",
+      "infra/tools/cloudtail/linux-386 goma_recipe_module\ninfra_internal/goma/client/linux-386 release",
       "-json-output",
       "/path/to/tmp/json",
       "-service-account-json",
@@ -77,16 +77,27 @@
       "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-goma_recipe_modu\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/cloudtail/linux-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/cloudtail/linux-386\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/linux-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/linux-386\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::file]/resources/fileutil.py",
+      "rmtree",
+      "[START_DIR]/v8/out/Debug"
+    ],
+    "infra_step": true,
+    "name": "rmtree clobber"
   },
   {
     "cmd": [
@@ -99,7 +110,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "clang=1 gomadir='[CACHE]/goma_client' target_arch=x64 use_goma=1 v8_target_arch=x64",
+      "GYP_DEFINES": "asan=1 clang=1 gomadir='[CACHE]/goma_client' sanitizer_coverage=trace-pc-guard target_arch=ia32 use_goma=1 v8_enable_slow_dchecks=1 v8_optimized_debug=1 v8_target_arch=mipsel",
       "GYP_GENERATORS": "ninja",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -112,15 +123,15 @@
       "[START_DIR]/v8/tools/mb/mb.py",
       "gen",
       "-m",
-      "client.v8",
+      "client.v8.fyi",
       "-b",
-      "V8 Linux64 - cf release builder",
+      "V8 Linux ASAN mipsel - debug builder",
       "--config-file",
       "[START_DIR]/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma_client",
       "--gyp-script=gypfiles/gyp_v8",
-      "//out/Release"
+      "//out/Debug"
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
@@ -174,9 +185,9 @@
       "[START_DIR]/v8/tools/mb/mb.py",
       "gen",
       "-m",
-      "client.v8",
+      "client.v8.fyi",
       "-b",
-      "V8 Linux64 - cf release builder",
+      "V8 Linux ASAN mipsel - debug builder",
       "--config-file",
       "[mb config]",
       "--goma-dir",
@@ -195,7 +206,7 @@
       "-u",
       "[START_DIR]/v8/tools/gyp_flag_compare.py",
       "[START_DIR]/v8/out/gn",
-      "[START_DIR]/v8/out/Release",
+      "[START_DIR]/v8/out/Debug",
       "all",
       "all"
     ],
@@ -262,7 +273,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[CACHE]/goma/V8_Linux64___cf_release_builder",
+      "[CACHE]/goma/V8_Linux_ASAN_mipsel___debug_builder",
       "511"
     ],
     "cwd": "[START_DIR]/v8",
@@ -291,7 +302,7 @@
     "cwd": "[START_DIR]/v8",
     "env": {
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/V8_Linux64___cf_release_builder",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/V8_Linux_ASAN_mipsel___debug_builder",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -331,7 +342,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]/v8/out/Release",
+      "[START_DIR]/v8/out/Debug",
       "-j",
       "50",
       "v8_clusterfuzz"
@@ -424,17 +435,17 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[START_DIR]/v8/out/Release",
+      "[START_DIR]/v8/out/Debug",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/v8/out/Release', '-j', 50, 'v8_clusterfuzz']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/v8/out/Debug', '-j', 50, 'v8_clusterfuzz']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",
       "goma-clang",
       "--buildbot-buildername",
-      "V8 Linux64 - cf release builder",
+      "V8 Linux ASAN mipsel - debug builder",
       "--buildbot-mastername",
-      "client.v8",
+      "client.v8.fyi",
       "--buildbot-slavename",
       "test_bot"
     ],
@@ -477,7 +488,7 @@
       "-u",
       "RECIPE_MODULE[build::archive]/resources/filter_build_files.py",
       "--dir",
-      "[START_DIR]/v8/out/Release",
+      "[START_DIR]/v8/out/Debug",
       "--platform",
       "linux",
       "--output",
@@ -499,9 +510,9 @@
       "-u",
       "RECIPE_MODULE[build::archive]/resources/zip_archive.py",
       "[TMP_BASE]/chrome_staging_tmp_1",
-      "d8-linux-release-v8-component-50110",
+      "d8-mipsel-asan-linux-debug-v8-component-50110",
       "[\"file1\", \"file2\"]",
-      "[START_DIR]/v8/out/Release"
+      "[START_DIR]/v8/out/Debug"
     ],
     "infra_step": true,
     "name": "zipping"
@@ -521,13 +532,13 @@
       "cp",
       "-a",
       "public-read",
-      "[TMP_BASE]/chrome_staging_tmp_1/d8-linux-release-v8-component-50110.zip",
-      "gs://v8-asan/linux-release/d8-linux-release-v8-component-50110.zip"
+      "[TMP_BASE]/chrome_staging_tmp_1/d8-mipsel-asan-linux-debug-v8-component-50110.zip",
+      "gs://v8-asan/linux-debug/d8-mipsel-asan-linux-debug-v8-component-50110.zip"
     ],
     "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/v8-asan/linux-release/d8-linux-release-v8-component-50110.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/v8-asan/linux-debug/d8-mipsel-asan-linux-debug-v8-component-50110.zip@@@"
     ]
   },
   {
@@ -535,9 +546,9 @@
       "python",
       "-u",
       "\nimport os\nimport sys\nos.remove(sys.argv[1])\n",
-      "[TMP_BASE]/chrome_staging_tmp_1/d8-linux-release-v8-component-50110.zip"
+      "[TMP_BASE]/chrome_staging_tmp_1/d8-mipsel-asan-linux-debug-v8-component-50110.zip"
     ],
-    "name": "d8-linux-release-v8-component-50110.zip",
+    "name": "d8-mipsel-asan-linux-debug-v8-component-50110.zip",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os@@@",
