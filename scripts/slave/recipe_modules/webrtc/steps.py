@@ -141,7 +141,8 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
         revision=revision))
 
     # Skip video_quality_loopback_test on Android K bot (not supported).
-    if 'kitkat' not in api.c.PERF_ID:
+    # TODO(oprypin): Re-enable on Nexus 4 once webrtc:7724 is fixed.
+    if 'kitkat' not in api.c.PERF_ID and 'nexus4' not in api.c.PERF_ID:
       tests.append(PerfTest(
           str(api.m.path['checkout'].join('webrtc', 'examples', 'androidtests',
                                           'video_quality_loopback_test.py')),
