@@ -17,6 +17,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'chrome_with_codecs',
+        'goma_high_parallel',
         'mb',
         'ninja_confirm_noop',
       ],
