@@ -58,10 +58,25 @@
   {
     "cmd": [
       "RECIPE_PACKAGE_REPO[depot_tools]\\git.bat",
+      "fetch",
+      "-f",
+      "https://chromium.googlesource.com/chromium/src.git",
+      "refs/notes/pgo/profile_database/windows-386:refs/notes/pgo/profile_database/windows-386"
+    ],
+    "cwd": "None",
+    "infra_step": true,
+    "name": "archive profile database.git fetch",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[depot_tools]\\git.bat",
       "-c",
       "user.email=pgo-bot@chromium.org",
       "-c",
-      "user.name=\"PGO notes\"",
+      "user.name=PGO bot",
       "notes",
       "--ref",
       "refs/notes/pgo/profile_database/windows-386",
@@ -72,7 +87,7 @@
     ],
     "cwd": "None",
     "infra_step": true,
-    "name": "archive profile database.git -c",
+    "name": "archive profile database.git notes",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
