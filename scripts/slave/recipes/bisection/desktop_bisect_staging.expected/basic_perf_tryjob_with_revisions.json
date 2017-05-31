@@ -43,7 +43,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@HEAD"
+      "src@HEAD",
+      "--disable-syntax-validation"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "env": {

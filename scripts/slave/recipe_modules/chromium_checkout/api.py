@@ -59,7 +59,9 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
       files[i] = path[len(relative_to):]
     return files
 
-  def ensure_checkout(self, bot_config, root_solution_revision=None):
+  def ensure_checkout(
+      self, bot_config, root_solution_revision=None,
+      disable_syntax_validation=False):
     """Wrapper for bot_update.ensure_checkout with chromium-specific additions.
     """
     if self.m.platform.is_win:
@@ -72,7 +74,8 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
       update_step = self.m.bot_update.ensure_checkout(
           patch_root=bot_config.get('patch_root'),
           root_solution_revision=root_solution_revision,
-          clobber=bot_config.get('clobber', False))
+          clobber=bot_config.get('clobber', False),
+          disable_syntax_validation=disable_syntax_validation)
 
       # Run a non-fatal gclient validation step, allowing us to collect
       # metrics using event_mon.

@@ -79,7 +79,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@1111111"
+      "src@1111111",
+      "--disable-syntax-validation"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
@@ -966,7 +967,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@0000000000000000000000000000000000000000"
+      "src@0000000000000000000000000000000000000000",
+      "--disable-syntax-validation"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
@@ -1898,7 +1900,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@fc6dfc7ff5b1073408499478969261b826441144"
+      "src@fc6dfc7ff5b1073408499478969261b826441144",
+      "--disable-syntax-validation"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
@@ -2863,7 +2866,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@0000000000000000000000000000000000000000"
+      "src@0000000000000000000000000000000000000000",
+      "--disable-syntax-validation"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
@@ -3482,7 +3486,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@fc6dfc7ff5b1073408499478969261b826441144"
+      "src@fc6dfc7ff5b1073408499478969261b826441144",
+      "--disable-syntax-validation"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
@@ -4101,7 +4106,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@0000000000000000000000000000000000000000"
+      "src@0000000000000000000000000000000000000000",
+      "--disable-syntax-validation"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
@@ -4948,7 +4954,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@fc6dfc7ff5b1073408499478969261b826441144"
+      "src@fc6dfc7ff5b1073408499478969261b826441144",
+      "--disable-syntax-validation"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
@@ -5795,7 +5802,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@0000000000000000000000000000000000000000"
+      "src@0000000000000000000000000000000000000000",
+      "--disable-syntax-validation"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
@@ -6993,7 +7001,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@e28dc0d49c331def2a3bbf3ddd0096eb51551155"
+      "src@e28dc0d49c331def2a3bbf3ddd0096eb51551155",
+      "--disable-syntax-validation"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
@@ -10330,7 +10339,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@0000000000000000000000000000000000000000"
+      "src@0000000000000000000000000000000000000000",
+      "--disable-syntax-validation"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
@@ -11262,7 +11272,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@fc6dfc7ff5b1073408499478969261b826441144"
+      "src@fc6dfc7ff5b1073408499478969261b826441144",
+      "--disable-syntax-validation"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
@@ -12227,7 +12238,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@0000000000000000000000000000000000000000"
+      "src@0000000000000000000000000000000000000000",
+      "--disable-syntax-validation"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
@@ -12846,7 +12858,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@fc6dfc7ff5b1073408499478969261b826441144"
+      "src@fc6dfc7ff5b1073408499478969261b826441144",
+      "--disable-syntax-validation"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
@@ -13465,7 +13478,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@0000000000000000000000000000000000000000"
+      "src@0000000000000000000000000000000000000000",
+      "--disable-syntax-validation"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
@@ -14312,7 +14326,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@fc6dfc7ff5b1073408499478969261b826441144"
+      "src@fc6dfc7ff5b1073408499478969261b826441144",
+      "--disable-syntax-validation"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
@@ -15159,7 +15174,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@0000000000000000000000000000000000000000"
+      "src@0000000000000000000000000000000000000000",
+      "--disable-syntax-validation"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
@@ -16357,7 +16373,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@e28dc0d49c331def2a3bbf3ddd0096eb51551155"
+      "src@e28dc0d49c331def2a3bbf3ddd0096eb51551155",
+      "--disable-syntax-validation"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
@@ -19481,7 +19498,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@1111111"
+      "src@1111111",
+      "--disable-syntax-validation"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {

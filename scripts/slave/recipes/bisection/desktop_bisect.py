@@ -28,7 +28,8 @@ def RunSteps(api):
   api.gclient.apply_config('perf')
   # TODO(robertocn): remove do_not_nest_wait_for_revision once downstream
   # expectations have been fixed, and make it behave like this by default.
-  update_step, bot_db = api.chromium_tests.prepare_checkout(bot_config)
+  update_step, bot_db = api.chromium_tests.prepare_checkout(
+      bot_config, disable_syntax_validation=True)
   api.path.c.dynamic_paths['catapult'] = api.path['start_dir'].join(
       'catapult')
   api.path.c.dynamic_paths['bisect_results'] = api.path['start_dir'].join(

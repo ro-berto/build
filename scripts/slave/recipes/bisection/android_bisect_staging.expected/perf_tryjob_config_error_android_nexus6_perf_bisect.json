@@ -79,7 +79,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@HEAD"
+      "src@HEAD",
+      "--disable-syntax-validation"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "env": {
@@ -551,7 +552,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@HEAD"
+      "src@HEAD",
+      "--disable-syntax-validation"
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "env": {

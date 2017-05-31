@@ -475,7 +475,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@a6298e4afedbf2cd461755ea6f45b0ad64222222"
+      "src@a6298e4afedbf2cd461755ea6f45b0ad64222222",
+      "--disable-syntax-validation"
     ],
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
@@ -1283,7 +1284,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111"
+      "src@00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
+      "--disable-syntax-validation"
     ],
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
@@ -2254,7 +2256,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@dcdcdc0ff1122212323134879ddceeb1240b0988"
+      "src@dcdcdc0ff1122212323134879ddceeb1240b0988",
+      "--disable-syntax-validation"
     ],
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
@@ -3525,7 +3528,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@a6298e4afedbf2cd461755ea6f45b0ad64222222"
+      "src@a6298e4afedbf2cd461755ea6f45b0ad64222222",
+      "--disable-syntax-validation"
     ],
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
@@ -4074,7 +4078,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111"
+      "src@00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
+      "--disable-syntax-validation"
     ],
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
@@ -4623,7 +4628,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@dcdcdc0ff1122212323134879ddceeb1240b0988"
+      "src@dcdcdc0ff1122212323134879ddceeb1240b0988",
+      "--disable-syntax-validation"
     ],
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
@@ -5384,7 +5390,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@a6298e4afedbf2cd461755ea6f45b0ad64222222"
+      "src@a6298e4afedbf2cd461755ea6f45b0ad64222222",
+      "--disable-syntax-validation"
     ],
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
@@ -6145,7 +6152,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111"
+      "src@00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
+      "--disable-syntax-validation"
     ],
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
@@ -6906,7 +6914,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@dcdcdc0ff1122212323134879ddceeb1240b0988"
+      "src@dcdcdc0ff1122212323134879ddceeb1240b0988",
+      "--disable-syntax-validation"
     ],
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
@@ -8084,7 +8093,8 @@
       "--revision",
       "src@a6298e4afedbf2cd461755ea6f45b0ad64222222",
       "--revision",
-      "src/v8@003"
+      "src/v8@003",
+      "--disable-syntax-validation"
     ],
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
@@ -11497,7 +11507,8 @@
       "--revision",
       "src@a6298e4afedbf2cd461755ea6f45b0ad64222222",
       "--revision",
-      "src/v8@002"
+      "src/v8@002",
+      "--disable-syntax-validation"
     ],
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",

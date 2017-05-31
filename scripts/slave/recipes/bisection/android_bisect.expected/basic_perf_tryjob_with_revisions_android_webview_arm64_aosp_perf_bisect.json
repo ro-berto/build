@@ -79,7 +79,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@HEAD"
+      "src@HEAD",
+      "--disable-syntax-validation"
     ],
     "cwd": "[BUILDER_CACHE]/android_webview_arm64_aosp_perf_bisect",
     "env": {
@@ -1457,7 +1458,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@d49c331def2a3bbf3ddd0096eb51551155"
+      "src@d49c331def2a3bbf3ddd0096eb51551155",
+      "--disable-syntax-validation"
     ],
     "cwd": "[BUILDER_CACHE]/android_webview_arm64_aosp_perf_bisect",
     "env": {

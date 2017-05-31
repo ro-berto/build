@@ -202,6 +202,7 @@ class AutoBisectStagingApi(recipe_api.RecipeApi):
         skip_download=skip_download, **kwargs)
 
   def ensure_checkout(self, *args, **kwargs):
+    kwargs.setdefault('disable_syntax_validation', True)
     with self.m.context(cwd=self.m.context.cwd or self.working_dir):
       return self.m.bot_update.ensure_checkout(*args, **kwargs)
 

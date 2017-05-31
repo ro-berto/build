@@ -45,7 +45,8 @@
       "--revision",
       "src@HEAD",
       "--revision",
-      "src/v8@feeedbeed"
+      "src/v8@feeedbeed",
+      "--disable-syntax-validation"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "env": {
