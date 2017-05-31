@@ -20,6 +20,7 @@ PER_TARGET_SWARMING_DIMS.update({
 
 MASTER_SWARMING_PRIORITIES = collections.defaultdict(lambda: 25)
 MASTER_SWARMING_PRIORITIES.update({
+    'chromium.android.fyi': 35,
     'chromium.fyi': 35,  # This should be lower than the CQ.
     'client.v8.chromium': 35,
     'client.v8.fyi': 35,
