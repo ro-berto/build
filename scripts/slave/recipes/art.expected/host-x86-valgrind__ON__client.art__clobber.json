@@ -41,7 +41,7 @@
       "HOST_PREFER_32_BIT": "true",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
-      "PATH": "/usr/lib/jvm/java-8-openjdk-amd64/bin/:%(PATH)s",
+      "PATH": "/usr/lib/jvm/java-8-openjdk-amd64/bin/:<PATH>",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "sdk"

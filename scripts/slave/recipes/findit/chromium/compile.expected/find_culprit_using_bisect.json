@@ -72,7 +72,7 @@
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
     "name": "bot_update",
@@ -160,7 +160,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux",
     "env": {
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
     "name": "gclient validate"
@@ -226,7 +226,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "component=static_library fetch_telemetry_dependencies=1 ffmpeg_branding=Chrome gomadir='[CACHE]/goma_client' proprietary_codecs=1 target_arch=x64 use_goma=1",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
   },
@@ -340,7 +340,7 @@
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
     "name": "test r6.bot_update",
@@ -429,7 +429,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux",
     "env": {
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
     "name": "test r6.gclient validate",
@@ -488,7 +488,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "component=static_library fetch_telemetry_dependencies=1 ffmpeg_branding=Chrome gomadir='[CACHE]/goma_client' proprietary_codecs=1 target_arch=x64 use_goma=1",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "test r6.gclient runhooks",
     "~followup_annotations": [
@@ -907,7 +907,7 @@
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
     "name": "test r4.bot_update",
@@ -996,7 +996,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux",
     "env": {
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
     "name": "test r4.gclient validate",
@@ -1055,7 +1055,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "component=static_library fetch_telemetry_dependencies=1 ffmpeg_branding=Chrome gomadir='[CACHE]/goma_client' proprietary_codecs=1 target_arch=x64 use_goma=1",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "test r4.gclient runhooks",
     "~followup_annotations": [
@@ -1201,7 +1201,7 @@
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
     "name": "test r5.bot_update",
@@ -1290,7 +1290,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux",
     "env": {
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
     "name": "test r5.gclient validate",
@@ -1349,7 +1349,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "component=static_library fetch_telemetry_dependencies=1 ffmpeg_branding=Chrome gomadir='[CACHE]/goma_client' proprietary_codecs=1 target_arch=x64 use_goma=1",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "test r5.gclient runhooks",
     "~followup_annotations": [

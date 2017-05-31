@@ -10,7 +10,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "None/third_party/android_tools/sdk/platform-tools:None/build/android:%(PATH)s"
+      "PATH": "None/third_party/android_tools/sdk/platform-tools:None/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "create adb symlink"
@@ -31,7 +31,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "None/third_party/android_tools/sdk/platform-tools:None/build/android:%(PATH)s"
+      "PATH": "None/third_party/android_tools/sdk/platform-tools:None/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "spawn_logcat_monitor"
@@ -58,7 +58,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "None/third_party/android_tools/sdk/platform-tools:None/build/android:%(PATH)s"
+      "PATH": "None/third_party/android_tools/sdk/platform-tools:None/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "spawn_device_monitor"
@@ -78,7 +78,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "None/third_party/android_tools/sdk/platform-tools:None/build/android:%(PATH)s"
+      "PATH": "None/third_party/android_tools/sdk/platform-tools:None/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "authorize_adb_devices"
@@ -96,7 +96,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "None/third_party/android_tools/sdk/platform-tools:None/build/android:%(PATH)s"
+      "PATH": "None/third_party/android_tools/sdk/platform-tools:None/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "device_recovery"
@@ -117,7 +117,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "None/third_party/android_tools/sdk/platform-tools:None/build/android:%(PATH)s"
+      "PATH": "None/third_party/android_tools/sdk/platform-tools:None/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "provision_devices"
@@ -140,7 +140,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "None/third_party/android_tools/sdk/platform-tools:None/build/android:%(PATH)s"
+      "PATH": "None/third_party/android_tools/sdk/platform-tools:None/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "device_status",
@@ -255,7 +255,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "None/third_party/android_tools/sdk/platform-tools:None/build/android:%(PATH)s"
+      "PATH": "None/third_party/android_tools/sdk/platform-tools:None/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "shutdown_device_monitor"
@@ -271,7 +271,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "None/third_party/android_tools/sdk/platform-tools:None/build/android:%(PATH)s"
+      "PATH": "None/third_party/android_tools/sdk/platform-tools:None/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "logcat_dump"
@@ -296,7 +296,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "None/third_party/android_tools/sdk/platform-tools:None/build/android:%(PATH)s"
+      "PATH": "None/third_party/android_tools/sdk/platform-tools:None/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "gsutil upload",
@@ -315,7 +315,7 @@
     "env": {
       "CHROMIUM_OUTPUT_DIR": "None/out/Release",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "None/third_party/android_tools/sdk/platform-tools:None/build/android:%(PATH)s"
+      "PATH": "None/third_party/android_tools/sdk/platform-tools:None/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "stack_tool_with_logcat_dump"
@@ -330,7 +330,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "None/third_party/android_tools/sdk/platform-tools:None/build/android:%(PATH)s"
+      "PATH": "None/third_party/android_tools/sdk/platform-tools:None/build/android:<PATH>"
     },
     "name": "get version"
   },
@@ -344,7 +344,7 @@
     "env": {
       "CHROMIUM_OUTPUT_DIR": "None/out/Release",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "None/third_party/android_tools/sdk/platform-tools:None/build/android:%(PATH)s"
+      "PATH": "None/third_party/android_tools/sdk/platform-tools:None/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "stack_tool_for_tombstones"
@@ -358,7 +358,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "None/third_party/android_tools/sdk/platform-tools:None/build/android:%(PATH)s"
+      "PATH": "None/third_party/android_tools/sdk/platform-tools:None/build/android:<PATH>"
     },
     "name": "test_report",
     "~followup_annotations": [

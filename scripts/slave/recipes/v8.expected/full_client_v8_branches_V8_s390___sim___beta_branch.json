@@ -22,7 +22,7 @@
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
     "name": "bot_update",
@@ -123,7 +123,7 @@
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "gomadir='[CACHE]/goma_client' target_arch=ia32 use_goma=1 v8_target_arch=s390",
       "GYP_GENERATORS": "ninja",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
   },

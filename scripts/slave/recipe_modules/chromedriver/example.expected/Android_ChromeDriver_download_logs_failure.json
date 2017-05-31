@@ -20,7 +20,7 @@
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
     "name": "bot_update",
@@ -204,7 +204,7 @@
       "chrome_shell"
     ],
     "env": {
-      "PATH": "%(PATH)s:[START_DIR]/src/chrome/test/chromedriver/chrome"
+      "PATH": "<PATH>:[START_DIR]/src/chrome/test/chromedriver/chrome"
     },
     "name": "python_tests chrome_shell.Run Tests",
     "~followup_annotations": [
@@ -261,7 +261,7 @@
       "chrome_shell"
     ],
     "env": {
-      "PATH": "%(PATH)s:[START_DIR]/src/chrome/test/chromedriver/chrome"
+      "PATH": "<PATH>:[START_DIR]/src/chrome/test/chromedriver/chrome"
     },
     "name": "java_tests chrome_shell.Run Tests",
     "~followup_annotations": [
@@ -319,7 +319,7 @@
       "chrome_stable"
     ],
     "env": {
-      "PATH": "%(PATH)s:[START_DIR]/src/chrome/test/chromedriver/chrome"
+      "PATH": "<PATH>:[START_DIR]/src/chrome/test/chromedriver/chrome"
     },
     "name": "python_tests chrome_stable.Run Tests",
     "~followup_annotations": [
@@ -376,7 +376,7 @@
       "chrome_stable"
     ],
     "env": {
-      "PATH": "%(PATH)s:[START_DIR]/src/chrome/test/chromedriver/chrome"
+      "PATH": "<PATH>:[START_DIR]/src/chrome/test/chromedriver/chrome"
     },
     "name": "java_tests chrome_stable.Run Tests",
     "~followup_annotations": [
@@ -434,7 +434,7 @@
       "chrome_beta"
     ],
     "env": {
-      "PATH": "%(PATH)s:[START_DIR]/src/chrome/test/chromedriver/chrome"
+      "PATH": "<PATH>:[START_DIR]/src/chrome/test/chromedriver/chrome"
     },
     "name": "python_tests chrome_beta.Run Tests",
     "~followup_annotations": [
@@ -491,7 +491,7 @@
       "chrome_beta"
     ],
     "env": {
-      "PATH": "%(PATH)s:[START_DIR]/src/chrome/test/chromedriver/chrome"
+      "PATH": "<PATH>:[START_DIR]/src/chrome/test/chromedriver/chrome"
     },
     "name": "java_tests chrome_beta.Run Tests",
     "~followup_annotations": [
@@ -549,7 +549,7 @@
       "chromedriver_webview_shell"
     ],
     "env": {
-      "PATH": "%(PATH)s:[START_DIR]/src/chrome/test/chromedriver/chrome"
+      "PATH": "<PATH>:[START_DIR]/src/chrome/test/chromedriver/chrome"
     },
     "name": "python_tests chromedriver_webview_shell.Run Tests",
     "~followup_annotations": [
@@ -606,7 +606,7 @@
       "chromedriver_webview_shell"
     ],
     "env": {
-      "PATH": "%(PATH)s:[START_DIR]/src/chrome/test/chromedriver/chrome"
+      "PATH": "<PATH>:[START_DIR]/src/chrome/test/chromedriver/chrome"
     },
     "name": "java_tests chromedriver_webview_shell.Run Tests",
     "~followup_annotations": [

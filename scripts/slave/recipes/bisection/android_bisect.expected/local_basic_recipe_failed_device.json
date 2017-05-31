@@ -86,7 +86,7 @@
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
     "name": "bot_update",
@@ -257,7 +257,7 @@
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "spawn_logcat_monitor"
@@ -302,7 +302,7 @@
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "authorize_adb_devices"
@@ -322,7 +322,7 @@
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "device_recovery"
@@ -350,7 +350,7 @@
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "provision_devices"
@@ -374,7 +374,7 @@
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "device_status",
@@ -486,7 +486,7 @@
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[CACHE]/goma_client' target_arch=arm use_goma=1",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
   },
@@ -558,7 +558,7 @@
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "device_status (2)",
@@ -876,7 +876,7 @@
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
     "name": "Gathering reference values.bot_update",
@@ -1015,7 +1015,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.get version",
     "~followup_annotations": [
@@ -1035,7 +1035,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "Gathering reference values.install ChromePublic.apk",
@@ -1047,7 +1047,7 @@
     "cmd": [],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.test_pre_run",
     "~followup_annotations": [
@@ -1064,7 +1064,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.makedirs results directory",
     "~followup_annotations": [
@@ -1120,7 +1120,7 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.Performance Test 1 of 6",
     "stderr": "/path/to/tmp/",
@@ -1140,7 +1140,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.write buildbot output to disk",
     "~followup_annotations": [
@@ -1157,7 +1157,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.Reading valueset results",
     "~followup_annotations": [
@@ -1178,7 +1178,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.makedirs results directory (2)",
     "~followup_annotations": [
@@ -1234,7 +1234,7 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.Performance Test 2 of 6",
     "stderr": "/path/to/tmp/",
@@ -1254,7 +1254,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.write buildbot output to disk (2)",
     "~followup_annotations": [
@@ -1271,7 +1271,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.Reading valueset results (2)",
     "~followup_annotations": [
@@ -1292,7 +1292,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.makedirs results directory (3)",
     "~followup_annotations": [
@@ -1348,7 +1348,7 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.Performance Test 3 of 6",
     "stderr": "/path/to/tmp/",
@@ -1368,7 +1368,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.write buildbot output to disk (3)",
     "~followup_annotations": [
@@ -1385,7 +1385,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.Reading valueset results (3)",
     "~followup_annotations": [
@@ -1406,7 +1406,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.makedirs results directory (4)",
     "~followup_annotations": [
@@ -1462,7 +1462,7 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.Performance Test 4 of 6",
     "stderr": "/path/to/tmp/",
@@ -1482,7 +1482,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.write buildbot output to disk (4)",
     "~followup_annotations": [
@@ -1499,7 +1499,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.Reading valueset results (4)",
     "~followup_annotations": [
@@ -1520,7 +1520,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.makedirs results directory (5)",
     "~followup_annotations": [
@@ -1576,7 +1576,7 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.Performance Test 5 of 6",
     "stderr": "/path/to/tmp/",
@@ -1596,7 +1596,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.write buildbot output to disk (5)",
     "~followup_annotations": [
@@ -1613,7 +1613,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.Reading valueset results (5)",
     "~followup_annotations": [
@@ -1634,7 +1634,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.makedirs results directory (6)",
     "~followup_annotations": [
@@ -1690,7 +1690,7 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.Performance Test 6 of 6",
     "stderr": "/path/to/tmp/",
@@ -1710,7 +1710,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.write buildbot output to disk (6)",
     "~followup_annotations": [
@@ -1727,7 +1727,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.Reading valueset results (6)",
     "~followup_annotations": [
@@ -1747,7 +1747,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.test_report",
     "~followup_annotations": [
@@ -1809,7 +1809,7 @@
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
     "name": "Gathering reference values.bot_update (2)",
@@ -1948,7 +1948,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.get version (2)",
     "~followup_annotations": [
@@ -1968,7 +1968,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "Gathering reference values.install ChromePublic.apk (2)",
@@ -1980,7 +1980,7 @@
     "cmd": [],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.test_pre_run (2)",
     "~followup_annotations": [
@@ -1997,7 +1997,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.makedirs results directory (7)",
     "~followup_annotations": [
@@ -2053,7 +2053,7 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.Performance Test 1 of 6 (2)",
     "stderr": "/path/to/tmp/",
@@ -2073,7 +2073,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.write buildbot output to disk (7)",
     "~followup_annotations": [
@@ -2090,7 +2090,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.Reading valueset results (7)",
     "~followup_annotations": [
@@ -2111,7 +2111,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.makedirs results directory (8)",
     "~followup_annotations": [
@@ -2167,7 +2167,7 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.Performance Test 2 of 6 (2)",
     "stderr": "/path/to/tmp/",
@@ -2187,7 +2187,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.write buildbot output to disk (8)",
     "~followup_annotations": [
@@ -2204,7 +2204,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.Reading valueset results (8)",
     "~followup_annotations": [
@@ -2225,7 +2225,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.makedirs results directory (9)",
     "~followup_annotations": [
@@ -2281,7 +2281,7 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.Performance Test 3 of 6 (2)",
     "stderr": "/path/to/tmp/",
@@ -2301,7 +2301,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.write buildbot output to disk (9)",
     "~followup_annotations": [
@@ -2318,7 +2318,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.Reading valueset results (9)",
     "~followup_annotations": [
@@ -2339,7 +2339,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.makedirs results directory (10)",
     "~followup_annotations": [
@@ -2395,7 +2395,7 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.Performance Test 4 of 6 (2)",
     "stderr": "/path/to/tmp/",
@@ -2415,7 +2415,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.write buildbot output to disk (10)",
     "~followup_annotations": [
@@ -2432,7 +2432,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.Reading valueset results (10)",
     "~followup_annotations": [
@@ -2453,7 +2453,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.makedirs results directory (11)",
     "~followup_annotations": [
@@ -2509,7 +2509,7 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.Performance Test 5 of 6 (2)",
     "stderr": "/path/to/tmp/",
@@ -2529,7 +2529,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.write buildbot output to disk (11)",
     "~followup_annotations": [
@@ -2546,7 +2546,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.Reading valueset results (11)",
     "~followup_annotations": [
@@ -2567,7 +2567,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.makedirs results directory (12)",
     "~followup_annotations": [
@@ -2623,7 +2623,7 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.Performance Test 6 of 6 (2)",
     "stderr": "/path/to/tmp/",
@@ -2643,7 +2643,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.write buildbot output to disk (12)",
     "~followup_annotations": [
@@ -2660,7 +2660,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.Reading valueset results (12)",
     "~followup_annotations": [
@@ -2680,7 +2680,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Gathering reference values.test_report (2)",
     "~followup_annotations": [
@@ -2775,7 +2775,7 @@
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
     "name": "Re-testing reference range.Retesting GOOD revision.bot_update",
@@ -2914,7 +2914,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.get version",
     "~followup_annotations": [
@@ -2934,7 +2934,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "Re-testing reference range.Retesting GOOD revision.install ChromePublic.apk",
@@ -2946,7 +2946,7 @@
     "cmd": [],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.test_pre_run",
     "~followup_annotations": [
@@ -2963,7 +2963,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.makedirs results directory",
     "~followup_annotations": [
@@ -3019,7 +3019,7 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 1 of 3",
     "stderr": "/path/to/tmp/",
@@ -3039,7 +3039,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.write buildbot output to disk",
     "~followup_annotations": [
@@ -3056,7 +3056,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Reading valueset results",
     "~followup_annotations": [
@@ -3077,7 +3077,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.makedirs results directory (2)",
     "~followup_annotations": [
@@ -3133,7 +3133,7 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 2 of 3",
     "stderr": "/path/to/tmp/",
@@ -3153,7 +3153,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.write buildbot output to disk (2)",
     "~followup_annotations": [
@@ -3170,7 +3170,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Reading valueset results (2)",
     "~followup_annotations": [
@@ -3191,7 +3191,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.makedirs results directory (3)",
     "~followup_annotations": [
@@ -3247,7 +3247,7 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 3 of 3",
     "stderr": "/path/to/tmp/",
@@ -3267,7 +3267,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.write buildbot output to disk (3)",
     "~followup_annotations": [
@@ -3284,7 +3284,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Reading valueset results (3)",
     "~followup_annotations": [
@@ -3304,7 +3304,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.test_report",
     "~followup_annotations": [
@@ -3395,7 +3395,7 @@
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
     "name": "Re-testing reference range.Retesting BAD revision.bot_update",
@@ -3534,7 +3534,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting BAD revision.get version",
     "~followup_annotations": [
@@ -3554,7 +3554,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "Re-testing reference range.Retesting BAD revision.install ChromePublic.apk",
@@ -3566,7 +3566,7 @@
     "cmd": [],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting BAD revision.test_pre_run",
     "~followup_annotations": [
@@ -3583,7 +3583,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting BAD revision.makedirs results directory",
     "~followup_annotations": [
@@ -3639,7 +3639,7 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting BAD revision.Performance Test 1 of 3",
     "stderr": "/path/to/tmp/",
@@ -3659,7 +3659,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting BAD revision.write buildbot output to disk",
     "~followup_annotations": [
@@ -3676,7 +3676,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting BAD revision.Reading valueset results",
     "~followup_annotations": [
@@ -3697,7 +3697,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting BAD revision.makedirs results directory (2)",
     "~followup_annotations": [
@@ -3753,7 +3753,7 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting BAD revision.Performance Test 2 of 3",
     "stderr": "/path/to/tmp/",
@@ -3773,7 +3773,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting BAD revision.write buildbot output to disk (2)",
     "~followup_annotations": [
@@ -3790,7 +3790,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting BAD revision.Reading valueset results (2)",
     "~followup_annotations": [
@@ -3811,7 +3811,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting BAD revision.makedirs results directory (3)",
     "~followup_annotations": [
@@ -3867,7 +3867,7 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting BAD revision.Performance Test 3 of 3",
     "stderr": "/path/to/tmp/",
@@ -3887,7 +3887,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting BAD revision.write buildbot output to disk (3)",
     "~followup_annotations": [
@@ -3904,7 +3904,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting BAD revision.Reading valueset results (3)",
     "~followup_annotations": [
@@ -3924,7 +3924,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting BAD revision.test_report",
     "~followup_annotations": [
@@ -4015,7 +4015,7 @@
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
     "name": "Re-testing reference range.Retesting GOOD revision.bot_update (2)",
@@ -4154,7 +4154,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.get version (2)",
     "~followup_annotations": [
@@ -4174,7 +4174,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "Re-testing reference range.Retesting GOOD revision.install ChromePublic.apk (2)",
@@ -4186,7 +4186,7 @@
     "cmd": [],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.test_pre_run (2)",
     "~followup_annotations": [
@@ -4203,7 +4203,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.makedirs results directory (4)",
     "~followup_annotations": [
@@ -4259,7 +4259,7 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 1 of 5",
     "stderr": "/path/to/tmp/",
@@ -4279,7 +4279,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.write buildbot output to disk (4)",
     "~followup_annotations": [
@@ -4296,7 +4296,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Reading valueset results (4)",
     "~followup_annotations": [
@@ -4317,7 +4317,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.makedirs results directory (5)",
     "~followup_annotations": [
@@ -4373,7 +4373,7 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 2 of 5",
     "stderr": "/path/to/tmp/",
@@ -4393,7 +4393,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.write buildbot output to disk (5)",
     "~followup_annotations": [
@@ -4410,7 +4410,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Reading valueset results (5)",
     "~followup_annotations": [
@@ -4431,7 +4431,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.makedirs results directory (6)",
     "~followup_annotations": [
@@ -4487,7 +4487,7 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 3 of 5",
     "stderr": "/path/to/tmp/",
@@ -4507,7 +4507,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.write buildbot output to disk (6)",
     "~followup_annotations": [
@@ -4524,7 +4524,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Reading valueset results (6)",
     "~followup_annotations": [
@@ -4545,7 +4545,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.makedirs results directory (7)",
     "~followup_annotations": [
@@ -4601,7 +4601,7 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 4 of 5",
     "stderr": "/path/to/tmp/",
@@ -4621,7 +4621,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.write buildbot output to disk (7)",
     "~followup_annotations": [
@@ -4638,7 +4638,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Reading valueset results (7)",
     "~followup_annotations": [
@@ -4659,7 +4659,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.makedirs results directory (8)",
     "~followup_annotations": [
@@ -4715,7 +4715,7 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 5 of 5",
     "stderr": "/path/to/tmp/",
@@ -4735,7 +4735,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.write buildbot output to disk (8)",
     "~followup_annotations": [
@@ -4752,7 +4752,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Reading valueset results (8)",
     "~followup_annotations": [
@@ -4772,7 +4772,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.test_report (2)",
     "~followup_annotations": [
@@ -4863,7 +4863,7 @@
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
     "name": "Re-testing reference range.Retesting BAD revision.bot_update (2)",
@@ -5002,7 +5002,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting BAD revision.get version (2)",
     "~followup_annotations": [
@@ -5022,7 +5022,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "Re-testing reference range.Retesting BAD revision.install ChromePublic.apk (2)",
@@ -5034,7 +5034,7 @@
     "cmd": [],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting BAD revision.test_pre_run (2)",
     "~followup_annotations": [
@@ -5051,7 +5051,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting BAD revision.makedirs results directory (4)",
     "~followup_annotations": [
@@ -5107,7 +5107,7 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting BAD revision.Performance Test 1 of 5",
     "stderr": "/path/to/tmp/",
@@ -5127,7 +5127,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting BAD revision.write buildbot output to disk (4)",
     "~followup_annotations": [
@@ -5144,7 +5144,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting BAD revision.Reading valueset results (4)",
     "~followup_annotations": [
@@ -5165,7 +5165,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting BAD revision.makedirs results directory (5)",
     "~followup_annotations": [
@@ -5221,7 +5221,7 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting BAD revision.Performance Test 2 of 5",
     "stderr": "/path/to/tmp/",
@@ -5241,7 +5241,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting BAD revision.write buildbot output to disk (5)",
     "~followup_annotations": [
@@ -5258,7 +5258,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting BAD revision.Reading valueset results (5)",
     "~followup_annotations": [
@@ -5279,7 +5279,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting BAD revision.makedirs results directory (6)",
     "~followup_annotations": [
@@ -5335,7 +5335,7 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting BAD revision.Performance Test 3 of 5",
     "stderr": "/path/to/tmp/",
@@ -5355,7 +5355,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting BAD revision.write buildbot output to disk (6)",
     "~followup_annotations": [
@@ -5372,7 +5372,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting BAD revision.Reading valueset results (6)",
     "~followup_annotations": [
@@ -5393,7 +5393,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting BAD revision.makedirs results directory (7)",
     "~followup_annotations": [
@@ -5449,7 +5449,7 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting BAD revision.Performance Test 4 of 5",
     "stderr": "/path/to/tmp/",
@@ -5469,7 +5469,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting BAD revision.write buildbot output to disk (7)",
     "~followup_annotations": [
@@ -5486,7 +5486,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting BAD revision.Reading valueset results (7)",
     "~followup_annotations": [
@@ -5507,7 +5507,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting BAD revision.makedirs results directory (8)",
     "~followup_annotations": [
@@ -5563,7 +5563,7 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting BAD revision.Performance Test 5 of 5",
     "stderr": "/path/to/tmp/",
@@ -5583,7 +5583,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting BAD revision.write buildbot output to disk (8)",
     "~followup_annotations": [
@@ -5600,7 +5600,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting BAD revision.Reading valueset results (8)",
     "~followup_annotations": [
@@ -5620,7 +5620,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting BAD revision.test_report (2)",
     "~followup_annotations": [
@@ -5711,7 +5711,7 @@
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
     "name": "Re-testing reference range.Retesting GOOD revision.bot_update (3)",
@@ -5850,7 +5850,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.get version (3)",
     "~followup_annotations": [
@@ -5870,7 +5870,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "Re-testing reference range.Retesting GOOD revision.install ChromePublic.apk (3)",
@@ -5882,7 +5882,7 @@
     "cmd": [],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.test_pre_run (3)",
     "~followup_annotations": [
@@ -5899,7 +5899,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.makedirs results directory (9)",
     "~followup_annotations": [
@@ -5955,7 +5955,7 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 1 of 7",
     "stderr": "/path/to/tmp/",
@@ -5975,7 +5975,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.write buildbot output to disk (9)",
     "~followup_annotations": [
@@ -5992,7 +5992,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Reading valueset results (9)",
     "~followup_annotations": [
@@ -6013,7 +6013,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.makedirs results directory (10)",
     "~followup_annotations": [
@@ -6069,7 +6069,7 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 2 of 7",
     "stderr": "/path/to/tmp/",
@@ -6089,7 +6089,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.write buildbot output to disk (10)",
     "~followup_annotations": [
@@ -6106,7 +6106,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Reading valueset results (10)",
     "~followup_annotations": [
@@ -6127,7 +6127,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.makedirs results directory (11)",
     "~followup_annotations": [
@@ -6183,7 +6183,7 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 3 of 7",
     "stderr": "/path/to/tmp/",
@@ -6203,7 +6203,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.write buildbot output to disk (11)",
     "~followup_annotations": [
@@ -6220,7 +6220,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Reading valueset results (11)",
     "~followup_annotations": [
@@ -6241,7 +6241,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.makedirs results directory (12)",
     "~followup_annotations": [
@@ -6297,7 +6297,7 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 4 of 7",
     "stderr": "/path/to/tmp/",
@@ -6317,7 +6317,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.write buildbot output to disk (12)",
     "~followup_annotations": [
@@ -6334,7 +6334,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Reading valueset results (12)",
     "~followup_annotations": [
@@ -6355,7 +6355,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.makedirs results directory (13)",
     "~followup_annotations": [
@@ -6411,7 +6411,7 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 5 of 7",
     "stderr": "/path/to/tmp/",
@@ -6431,7 +6431,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.write buildbot output to disk (13)",
     "~followup_annotations": [
@@ -6448,7 +6448,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Reading valueset results (13)",
     "~followup_annotations": [
@@ -6469,7 +6469,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.makedirs results directory (14)",
     "~followup_annotations": [
@@ -6525,7 +6525,7 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 6 of 7",
     "stderr": "/path/to/tmp/",
@@ -6545,7 +6545,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.write buildbot output to disk (14)",
     "~followup_annotations": [
@@ -6562,7 +6562,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Reading valueset results (14)",
     "~followup_annotations": [
@@ -6583,7 +6583,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.makedirs results directory (15)",
     "~followup_annotations": [
@@ -6639,7 +6639,7 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 7 of 7",
     "stderr": "/path/to/tmp/",
@@ -6659,7 +6659,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.write buildbot output to disk (15)",
     "~followup_annotations": [
@@ -6676,7 +6676,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.Reading valueset results (15)",
     "~followup_annotations": [
@@ -6696,7 +6696,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Re-testing reference range.Retesting GOOD revision.test_report (3)",
     "~followup_annotations": [
@@ -6811,7 +6811,7 @@
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "device_status (3)",
@@ -7003,7 +7003,7 @@
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
     "name": "bot_update (2)",
@@ -7150,7 +7150,7 @@
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "stack_tool_with_logcat_dump"
@@ -7177,7 +7177,7 @@
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_one_perf_bisect/src/out/Release",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "stack_tool_for_tombstones"

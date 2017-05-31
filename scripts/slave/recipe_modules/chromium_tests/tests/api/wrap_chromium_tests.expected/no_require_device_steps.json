@@ -9,7 +9,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "None/third_party/android_tools/sdk/platform-tools:None/build/android:%(PATH)s"
+      "PATH": "None/third_party/android_tools/sdk/platform-tools:None/build/android:<PATH>"
     },
     "name": "List adb devices",
     "~followup_annotations": [
@@ -29,7 +29,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "None/third_party/android_tools/sdk/platform-tools:None/build/android:%(PATH)s"
+      "PATH": "None/third_party/android_tools/sdk/platform-tools:None/build/android:<PATH>"
     },
     "name": "Root devices",
     "~followup_annotations": [
@@ -54,7 +54,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "None/third_party/android_tools/sdk/platform-tools:None/build/android:%(PATH)s"
+      "PATH": "None/third_party/android_tools/sdk/platform-tools:None/build/android:<PATH>"
     },
     "name": "test_report",
     "~followup_annotations": [

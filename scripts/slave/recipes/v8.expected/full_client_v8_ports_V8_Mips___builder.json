@@ -21,7 +21,7 @@
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
     "name": "bot_update",
@@ -92,7 +92,7 @@
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "target_arch=mips v8_enable_i18n_support=0 v8_target_arch=mips v8_use_snapshot=false",
       "LINK": "[START_DIR]/mips-mti-linux-gnu/2015.01-7/bin/mips-mti-linux-gnu-g++",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]",
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]",
       "RANLIB": "[START_DIR]/mips-mti-linux-gnu/2015.01-7/bin/mips-mti-linux-gnu-ranlib"
     },
     "name": "gclient runhooks"

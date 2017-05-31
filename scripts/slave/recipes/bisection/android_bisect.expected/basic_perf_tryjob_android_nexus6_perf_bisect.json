@@ -86,7 +86,7 @@
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
     "name": "bot_update",
@@ -257,7 +257,7 @@
     "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus6_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus6_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "spawn_logcat_monitor"
@@ -302,7 +302,7 @@
     "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus6_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus6_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "authorize_adb_devices"
@@ -322,7 +322,7 @@
     "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus6_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus6_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "device_recovery"
@@ -350,7 +350,7 @@
     "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus6_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus6_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "provision_devices"
@@ -374,7 +374,7 @@
     "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus6_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus6_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "device_status",
@@ -486,7 +486,7 @@
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[CACHE]/goma_client' target_arch=arm use_goma=1",
-      "PATH": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus6_perf_bisect/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus6_perf_bisect/src/build/android:<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
   },
@@ -725,7 +725,7 @@
     "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus6_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus6_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "Running WITH patch.install ChromePublic.apk",
@@ -836,7 +836,7 @@
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
     "name": "De-applying patch.bot_update (without patch)",
@@ -915,7 +915,7 @@
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[CACHE]/goma_client' target_arch=arm use_goma=1",
-      "PATH": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus6_perf_bisect/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus6_perf_bisect/src/build/android:<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "De-applying patch.gclient runhooks (without patch)",
     "~followup_annotations": [
@@ -1135,7 +1135,7 @@
     "cwd": "[BUILDER_CACHE]/android_nexus6_perf_bisect",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus6_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus6_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "Running WITHOUT patch.install ChromePublic.apk",
@@ -1276,7 +1276,7 @@
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
     "name": "bot_update (2)",
@@ -1423,7 +1423,7 @@
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/out/Release",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus6_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus6_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "stack_tool_with_logcat_dump"
@@ -1450,7 +1450,7 @@
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/out/Release",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus6_perf_bisect/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus6_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "stack_tool_for_tombstones"

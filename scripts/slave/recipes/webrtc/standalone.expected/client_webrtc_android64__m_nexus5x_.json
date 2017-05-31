@@ -53,7 +53,7 @@
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
     "name": "bot_update",
@@ -177,7 +177,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[CACHE]/goma_client' target_arch=arm64 use_goma=1",
-      "PATH": "[BUILDER_CACHE]/Android64__M_Nexus5X_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android64__M_Nexus5X_/src/build/android:%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "[BUILDER_CACHE]/Android64__M_Nexus5X_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android64__M_Nexus5X_/src/build/android:<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
   },
@@ -296,7 +296,7 @@
       "GOMA_CACHE_DIR": "[GOMA_CACHE]/Android64__M_Nexus5X_",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android64__M_Nexus5X_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android64__M_Nexus5X_/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android64__M_Nexus5X_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android64__M_Nexus5X_/src/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start_goma",
@@ -341,7 +341,7 @@
     "cwd": "[BUILDER_CACHE]/Android64__M_Nexus5X_/src",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android64__M_Nexus5X_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android64__M_Nexus5X_/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android64__M_Nexus5X_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android64__M_Nexus5X_/src/build/android:<PATH>"
     },
     "name": "compile"
   },
@@ -2076,7 +2076,7 @@
     "cwd": "[BUILDER_CACHE]/Android64__M_Nexus5X_",
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[BUILDER_CACHE]/Android64__M_Nexus5X_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android64__M_Nexus5X_/src/build/android:%(PATH)s"
+      "PATH": "[BUILDER_CACHE]/Android64__M_Nexus5X_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android64__M_Nexus5X_/src/build/android:<PATH>"
     },
     "name": "android_junit_tests"
   },
