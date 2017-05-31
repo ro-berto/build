@@ -46,9 +46,6 @@ def sanitizer_bb_coverage(c):
 def cfi(c):
   c.gyp_env.GYP_DEFINES['cfi_vptr'] = 1
   c.gyp_env.GYP_DEFINES['cfi_diag'] = 1
-  c.gyp_env.GYP_DEFINES['release_extra_cflags'] = (
-      "-O1 -fno-inline-functions -fno-inline"
-  )
 
 
 @CONFIG_CTX(includes=['v8'])

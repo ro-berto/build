@@ -120,7 +120,7 @@
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "cfi_diag=1 cfi_vptr=1 gomadir='[CACHE]/goma_client' release_extra_cflags='-O1 -fno-inline-functions -fno-inline' target_arch=x64 use_goma=1 v8_target_arch=x64",
+      "GYP_DEFINES": "cfi_diag=1 cfi_vptr=1 gomadir='[CACHE]/goma_client' target_arch=x64 use_goma=1 v8_target_arch=x64",
       "GYP_GENERATORS": "ninja",
       "PATH": "%(PATH)s:RECIPE_PACKAGE_REPO[depot_tools]"
     },
