@@ -477,14 +477,12 @@
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[START_DIR]/v8/out/Debug/bot_default.isolated.gen.json",
-      "[START_DIR]/v8/out/Debug/mozilla.isolated.gen.json"
+      "[START_DIR]/v8/out/Debug/bot_default.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"bot_default\": \"[dummy hash for bot_default]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"mozilla\": \"[dummy hash for mozilla]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"bot_default\": \"[dummy hash for bot_default]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -500,7 +498,7 @@
       "cp",
       "-a",
       "public-read",
-      "{\"bot_default\": \"[dummy hash for bot_default]\", \"mozilla\": \"[dummy hash for mozilla]\"}",
+      "{\"bot_default\": \"[dummy hash for bot_default]\"}",
       "gs://chromium-v8/isolated/client.v8/V8 Linux - nosnap debug builder/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json"
     ],
     "infra_step": true,
@@ -554,8 +552,7 @@
           "parent_got_swarming_client_revision": "e4fee0b18f8163be6097c9c571640038896debc4",
           "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "swarm_hashes": {
-            "bot_default": "[dummy hash for bot_default]",
-            "mozilla": "[dummy hash for mozilla]"
+            "bot_default": "[dummy hash for bot_default]"
           }
         }
       }
