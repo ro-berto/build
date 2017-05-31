@@ -1,4 +1,5 @@
 DEPS = [
+    'build',
     'commit_position',
     'recipe_engine/python',
     'recipe_engine/json',

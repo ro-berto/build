@@ -820,6 +820,10 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
       "RECIPE_MODULE[build::crrev]/resources/crrev_client.py",
       "get_numbering",
       "--params-file",
@@ -842,6 +846,10 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
       "RECIPE_MODULE[build::crrev]/resources/crrev_client.py",
       "get_numbering",
       "--params-file",
