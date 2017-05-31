@@ -39,13 +39,16 @@ class SwarmingClientApi(recipe_api.RecipeApi):
     if revision is None:
       revision = self.m.properties['parent_got_swarming_client_revision']
     self._client_path = self.m.path['start_dir'].join('swarming.client')
-    self.m.git.checkout(
-        url='https://chromium.googlesource.com/external/swarming.client.git',
-        ref=revision,
-        dir_path=self._client_path,
-        step_suffix='swarming_client',
-        curl_trace_file=curl_trace_file,
-        can_fail_build=can_fail_build)
+    try:
+      self.m.git.checkout(
+          url='https://chromium.googlesource.com/external/swarming.client.git',
+          ref=revision,
+          dir_path=self._client_path,
+          step_suffix='swarming_client',
+          curl_trace_file=curl_trace_file)
+    except self.m.step.StepFailure:
+      if can_fail_build:
+        raise
 
   @property
   def path(self):

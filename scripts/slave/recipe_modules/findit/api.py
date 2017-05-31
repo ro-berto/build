@@ -378,15 +378,15 @@ class FinditApi(recipe_api.RecipeApi):
     if not api.path.exists(full_checkout_path):
       return None, None
     with api.context(cwd=full_checkout_path):
-      previously_checked_out_revision_step = api.git(
-          'rev-parse', 'HEAD',
-          stdout=api.raw_io.output(),
-          name='record previously checked-out revision',
-          can_fail_build=False,
-          step_test_data=lambda: api.raw_io.test_api.stream_output(
-              _GIT_REV_PARSE_OUTPUT))
       checked_out_revision = None
-      if previously_checked_out_revision_step.stdout:
+      try:
+        previously_checked_out_revision_step = api.git(
+            'rev-parse', 'HEAD',
+            stdout=api.raw_io.output(),
+            name='record previously checked-out revision',
+            step_test_data=lambda: api.raw_io.test_api.stream_output(
+                _GIT_REV_PARSE_OUTPUT))
+
         # Sample output:
         # `d4316eba6ba2b9e88eba8d805babcdfdbbc6e74a`
         matches = re.match(
@@ -396,16 +396,18 @@ class FinditApi(recipe_api.RecipeApi):
           checked_out_revision = matches.group('revision')
           previously_checked_out_revision_step.presentation.properties[
               'previously_checked_out_revision'] = checked_out_revision
+      except api.step.StepFailure: # pragma: no cover
+        pass
 
-      previously_cached_revision_step = api.git(
-          'ls-remote', 'origin', 'refs/heads/master',
-          stdout=api.raw_io.output(),
-          name='record previously cached revision',
-          can_fail_build=False,
-          step_test_data=lambda: api.raw_io.test_api.stream_output(
-              _GIT_LS_REMOTE_OUTPUT))
       cached_revision = None
-      if previously_cached_revision_step.stdout:
+      try:
+        previously_cached_revision_step = api.git(
+            'ls-remote', 'origin', 'refs/heads/master',
+            stdout=api.raw_io.output(),
+            name='record previously cached revision',
+            step_test_data=lambda: api.raw_io.test_api.stream_output(
+                _GIT_LS_REMOTE_OUTPUT))
+
         # Sample output:
         # `d4316eba6ba2b9e88eba8d805babcdfdbbc6e74a  refs/heads/master`
         matches = re.match('(?P<revision>[a-fA-f0-9]{40})\s*\S*',
@@ -414,4 +416,6 @@ class FinditApi(recipe_api.RecipeApi):
           cached_revision = matches.group('revision')
           previously_cached_revision_step.presentation.properties[
           'previously_cached_revision'] = cached_revision
+      except api.step.StepFailure: # pragma: no cover
+        pass
       return checked_out_revision, cached_revision
