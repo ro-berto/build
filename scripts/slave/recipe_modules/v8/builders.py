@@ -1197,6 +1197,56 @@ BUILDERS = {
         'cf_archive_name': 'd8-mipsel-asan',
         'testing': {'platform': 'linux'},
       },
+      'V8 Linux MSAN no origins': {
+        'chromium_apply_config': [
+          'v8_ninja',
+          'clang',
+          'default_target_v8_clusterfuzz',
+          # TODO(machenbach): The following three are set by MB, but are
+          # required for hooks in gyp_defines until http://crbug.com/570091 is
+          # resolved.
+          'msan',
+          'msan_no_origin_tracking',
+          'prebuilt_instrumented_libraries',
+          'goma',
+          'mb',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'cf_archive_build': True,
+        'cf_gs_bucket': 'v8-asan',
+        'cf_gs_acl': 'public-read',
+        'cf_archive_name': 'd8-msan-no-origins',
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux MSAN chained origins': {
+        'chromium_apply_config': [
+          'v8_ninja',
+          'clang',
+          'default_target_v8_clusterfuzz',
+          # TODO(machenbach): The following three are set by MB, but are
+          # required for hooks in gyp_defines until http://crbug.com/570091 is
+          # resolved.
+          'msan',
+          'msan_full_origin_tracking',
+          'prebuilt_instrumented_libraries',
+          'goma',
+          'mb',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'cf_archive_build': True,
+        'cf_gs_bucket': 'v8-asan',
+        'cf_gs_acl': 'public-read',
+        'cf_archive_name': 'd8-msan-chained-origins',
+        'testing': {'platform': 'linux'},
+      },
     },
   },
 ####### Waterfall: client.v8.ports
