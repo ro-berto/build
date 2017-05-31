@@ -105,7 +105,7 @@
     "x86 Cloud Tester": {
       "recipe": "chromium",
       "use_remote_run": True,
-      "scheduler": "chromium_commits",
+      "scheduler": None,
       "slave_pools": ["cloud_ccompute_launcher"],
       "category": "2Testers",
       "mergeRequests": True,
