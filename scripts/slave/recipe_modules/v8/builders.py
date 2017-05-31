@@ -279,6 +279,7 @@ BUILDERS = {
         ],
         'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
+        'swarming_properties': SWARMING_FYI_PROPS,
       },
       'V8 Linux - nosnap - debug': {
         'v8_apply_config': ['no_snapshot'],
@@ -293,9 +294,7 @@ BUILDERS = {
         'tests': [V8Testing_7, Mozilla],
         'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
-        'swarming_properties': {
-          'default_hard_timeout': 60 * 60,
-        },
+        'swarming_properties': SWARMING_FYI_PROPS,
       },
       'V8 Linux - interpreted regexp': {
         'chromium_apply_config': [
@@ -307,6 +306,7 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'tests': [V8Testing],
         'testing': {'platform': 'linux'},
+        'swarming_properties': SWARMING_FYI_PROPS,
       },
       'V8 Linux - noi18n - debug': {
         'v8_apply_config': ['no_i18n'],
@@ -784,6 +784,7 @@ BUILDERS = {
         'build_gs_archive': 'linux64_dbg_archive',
         'tests': [Fuzz],
         'testing': {'platform': 'linux'},
+        'swarming_properties': SWARMING_FYI_PROPS,
       },
       'V8 Deopt Fuzzer': {
         'v8_apply_config': ['deopt_fuzz_normal'],
@@ -798,6 +799,7 @@ BUILDERS = {
         'tests': [Deopt],
         'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
+        'swarming_properties': SWARMING_FYI_PROPS,
       },
       'V8 Linux - gc stress': {
         'v8_apply_config': ['gc_stress'],
@@ -1032,12 +1034,10 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'swarming_properties': {
-          'default_hard_timeout': 4 * 60 * 60,
-        },
         'tests': [Deopt],
         'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
+        'swarming_properties': SWARMING_FYI_PROPS,
       },
     },
   },
