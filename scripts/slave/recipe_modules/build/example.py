@@ -12,7 +12,8 @@ def RunSteps(api):
   with api.build.gsutil_py_env():
     api.build.python(
         'runtest',
-        api.build.package_repo_resource('scripts', 'slave', 'runtest.py'))
+        api.build.package_repo_resource('scripts', 'slave', 'runtest.py'),
+        args=['--foo', '--bar'])
 
 
 def GenTests(api):

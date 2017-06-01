@@ -12,7 +12,7 @@ class CrrevApi(recipe_api.RecipeApi):
 
   def __call__(self, step_name, request_path, request_params=None, attempts=3,
                **kwargs):
-    step_result = self.m.python(
+    step_result = self.m.build.python(
         step_name,
         self.resource('crrev_client.py'),
         [
@@ -20,7 +20,9 @@ class CrrevApi(recipe_api.RecipeApi):
             '--params-file', self.m.json.input(request_params or {}),
             '--attempts', str(attempts),
         ],
-        stdout=self.m.json.output(), **kwargs)
+        show_path=False, # Can't dump path, since we use STDOUT.
+        stdout=self.m.json.output(),
+        **kwargs)
     return step_result.stdout
 
   def to_commit_hash(

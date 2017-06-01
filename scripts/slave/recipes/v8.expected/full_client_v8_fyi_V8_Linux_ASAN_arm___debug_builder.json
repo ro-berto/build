@@ -508,6 +508,10 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
       "RECIPE_MODULE[build::archive]/resources/zip_archive.py",
       "[TMP_BASE]/chrome_staging_tmp_1",
       "d8-arm-asan-linux-debug-v8-component-50110",

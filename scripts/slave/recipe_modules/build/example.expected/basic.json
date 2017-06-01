@@ -7,7 +7,9 @@
       "--show-path",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py"
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "--foo",
+      "--bar"
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"

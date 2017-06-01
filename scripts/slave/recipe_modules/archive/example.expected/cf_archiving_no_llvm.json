@@ -24,6 +24,10 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
       "RECIPE_MODULE[build::archive]/resources/zip_archive.py",
       "[TMP_BASE]/chrome_staging_tmp_1",
       "chrome-asan-linux-release-refs_heads_B1-123456",
