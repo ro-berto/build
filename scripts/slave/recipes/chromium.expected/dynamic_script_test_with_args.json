@@ -301,7 +301,7 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython",
       "-u",
       "[START_DIR]/src/testing/scripts/gtest_perf_test.py",
       "--build-config-fs",

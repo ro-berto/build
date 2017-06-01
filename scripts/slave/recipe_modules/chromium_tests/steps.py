@@ -266,6 +266,7 @@ class ScriptTest(Test):  # pylint: disable=W0232
                 script_args +
                 ['run', '--output', api.json.output()] +
                 run_args),
+          venv=True,
           step_test_data=lambda: api.json.test_api.output(
               {'valid': True, 'failures': []}))
     finally:

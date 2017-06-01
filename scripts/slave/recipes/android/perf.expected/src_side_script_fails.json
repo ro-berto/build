@@ -588,7 +588,7 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython",
       "-u",
       "[START_DIR]/src/testing/scripts/host_info.py",
       "--build-config-fs",

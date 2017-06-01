@@ -297,7 +297,7 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython",
       "-u",
       "[START_DIR]/src/testing/scripts/test_script_with_broken_tests.py",
       "--build-config-fs",
