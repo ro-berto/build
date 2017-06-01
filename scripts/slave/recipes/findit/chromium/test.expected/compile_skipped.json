@@ -602,7 +602,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python",
       "-u",
       "[BUILDER_CACHE]\\win\\src\\testing\\scripts\\checkperms.py",
       "--build-config-fs",

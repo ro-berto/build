@@ -886,7 +886,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python",
       "-u",
       "[BUILDER_CACHE]/linux/src/testing/scripts/webkit_lint.py",
       "--build-config-fs",
@@ -916,7 +916,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python",
       "-u",
       "[BUILDER_CACHE]/linux/src/testing/scripts/webkit_python_tests.py",
       "--build-config-fs",

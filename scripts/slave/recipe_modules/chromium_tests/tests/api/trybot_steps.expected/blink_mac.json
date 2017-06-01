@@ -666,7 +666,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python",
       "-u",
       "[START_DIR]/src/testing/scripts/webkit_lint.py",
       "--build-config-fs",
@@ -695,7 +695,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python",
       "-u",
       "[START_DIR]/src/testing/scripts/webkit_python_tests.py",
       "--build-config-fs",

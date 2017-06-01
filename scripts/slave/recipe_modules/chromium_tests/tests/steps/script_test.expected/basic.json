@@ -1,7 +1,7 @@
 [
   {
     "cmd": [
-      "vpython",
+      "python",
       "-u",
       "None/testing/scripts/script.py",
       "--build-config-fs",
