@@ -169,6 +169,9 @@
       "rmtree",
       "[START_DIR]/src/out/Release"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "rmtree clobber"
   },
@@ -181,6 +184,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "component=static_library gomadir='[CACHE]/goma_client' linux_dump_symbols=0 target_arch=x64 test_isolation_mode=noop use_goma=1",
@@ -250,6 +254,9 @@
       "--mode",
       "dev"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "archive_build"
   },

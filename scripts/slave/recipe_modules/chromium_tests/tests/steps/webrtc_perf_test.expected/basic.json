@@ -34,7 +34,8 @@
       "args"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "CHROME_HEADLESS": "1"
     },
     "name": "test_name"
   },

@@ -106,6 +106,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[CACHE]/goma_client' target_arch=arm use_goma=1",
@@ -124,6 +125,9 @@
       "--args=is_debug=true target_os=\"android\" target_cpu=\"arm\" use_goma=true goma_dir=\"[CACHE]/goma_client\""
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "gn",
     "~followup_annotations": [
       "@@@STEP_TEXT@gn (minimal)@@@"
@@ -142,11 +146,17 @@
       "--file-path",
       "/path/to/tmp/"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "calculate the number of recommended jobs"
   },
   {
     "cmd": [],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "preprocess_for_goma"
   },
   {
@@ -158,6 +168,9 @@
       "511"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "preprocess_for_goma.makedirs goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -182,6 +195,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]/goma/Android32__more_configs_",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
@@ -212,6 +226,9 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
@@ -230,6 +247,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
@@ -238,6 +256,9 @@
   {
     "cmd": [],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "postprocess_for_goma"
   },
   {
@@ -250,6 +271,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_jsonstatus",
@@ -277,6 +299,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_stat",
@@ -293,6 +316,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.stop_goma",
@@ -332,6 +356,9 @@
       "test_bot"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -358,6 +385,9 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
@@ -375,6 +405,9 @@
       "--args=rtc_enable_intelligibility_enhancer=true is_debug=true target_os=\"android\" target_cpu=\"arm\" use_goma=true goma_dir=\"[CACHE]/goma_client\""
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "gn (2)",
     "~followup_annotations": [
       "@@@STEP_TEXT@gn (rtc_enable_intelligibility_enhancer=true)@@@"
@@ -383,6 +416,9 @@
   {
     "cmd": [],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "preprocess_for_goma (2)"
   },
   {
@@ -394,6 +430,9 @@
       "511"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "preprocess_for_goma.makedirs goma cache directory (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -418,6 +457,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]/goma/Android32__more_configs_",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
@@ -448,6 +488,9 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail (2)",
     "~followup_annotations": [
@@ -466,6 +509,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
@@ -474,6 +518,9 @@
   {
     "cmd": [],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "postprocess_for_goma (2)"
   },
   {
@@ -486,6 +533,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_jsonstatus (2)",
@@ -513,6 +561,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_stat (2)",
@@ -529,6 +578,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.stop_goma (2)",
@@ -568,6 +618,9 @@
       "test_bot"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "postprocess_for_goma.upload_log (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -594,6 +647,9 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail (2)",
     "~followup_annotations": [
@@ -611,6 +667,9 @@
       "--args=rtc_include_tests=false is_debug=true target_os=\"android\" target_cpu=\"arm\" use_goma=true goma_dir=\"[CACHE]/goma_client\""
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "gn (3)",
     "~followup_annotations": [
       "@@@STEP_TEXT@gn (rtc_include_tests=false)@@@"
@@ -619,6 +678,9 @@
   {
     "cmd": [],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "preprocess_for_goma (3)"
   },
   {
@@ -630,6 +692,9 @@
       "511"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "preprocess_for_goma.makedirs goma cache directory (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -654,6 +719,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]/goma/Android32__more_configs_",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
@@ -684,6 +750,9 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail (3)",
     "~followup_annotations": [
@@ -702,6 +771,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
@@ -710,6 +780,9 @@
   {
     "cmd": [],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "postprocess_for_goma (3)"
   },
   {
@@ -722,6 +795,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_jsonstatus (3)",
@@ -749,6 +823,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_stat (3)",
@@ -765,6 +840,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.stop_goma (3)",
@@ -804,6 +880,9 @@
       "test_bot"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "postprocess_for_goma.upload_log (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -830,6 +909,9 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail (3)",
     "~followup_annotations": [
@@ -847,6 +929,9 @@
       "--args=rtc_enable_protobuf=false is_debug=true target_os=\"android\" target_cpu=\"arm\" use_goma=true goma_dir=\"[CACHE]/goma_client\""
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "gn (4)",
     "~followup_annotations": [
       "@@@STEP_TEXT@gn (rtc_enable_protobuf=false)@@@"
@@ -855,6 +940,9 @@
   {
     "cmd": [],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "preprocess_for_goma (4)"
   },
   {
@@ -866,6 +954,9 @@
       "511"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "preprocess_for_goma.makedirs goma cache directory (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -890,6 +981,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]/goma/Android32__more_configs_",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
@@ -920,6 +1012,9 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail (4)",
     "~followup_annotations": [
@@ -938,6 +1033,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
@@ -946,6 +1042,9 @@
   {
     "cmd": [],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "postprocess_for_goma (4)"
   },
   {
@@ -958,6 +1057,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_jsonstatus (4)",
@@ -985,6 +1085,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_stat (4)",
@@ -1001,6 +1102,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.stop_goma (4)",
@@ -1040,6 +1142,9 @@
       "test_bot"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "postprocess_for_goma.upload_log (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1066,6 +1171,9 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail (4)",
     "~followup_annotations": [
@@ -1083,6 +1191,9 @@
       "--args=rtc_enable_bwe_test_logging=true is_debug=true target_os=\"android\" target_cpu=\"arm\" use_goma=true goma_dir=\"[CACHE]/goma_client\""
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "gn (5)",
     "~followup_annotations": [
       "@@@STEP_TEXT@gn (rtc_enable_bwe_test_logging=true)@@@"
@@ -1091,6 +1202,9 @@
   {
     "cmd": [],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "preprocess_for_goma (5)"
   },
   {
@@ -1102,6 +1216,9 @@
       "511"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "preprocess_for_goma.makedirs goma cache directory (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1126,6 +1243,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]/goma/Android32__more_configs_",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
@@ -1156,6 +1274,9 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail (5)",
     "~followup_annotations": [
@@ -1174,6 +1295,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
@@ -1182,6 +1304,9 @@
   {
     "cmd": [],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "postprocess_for_goma (5)"
   },
   {
@@ -1194,6 +1319,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_jsonstatus (5)",
@@ -1221,6 +1347,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_stat (5)",
@@ -1237,6 +1364,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.stop_goma (5)",
@@ -1276,6 +1404,9 @@
       "test_bot"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "postprocess_for_goma.upload_log (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1302,6 +1433,9 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail (5)",
     "~followup_annotations": [
@@ -1319,6 +1453,9 @@
       "--args=rtc_use_dummy_audio_file_devices=true is_debug=true target_os=\"android\" target_cpu=\"arm\" use_goma=true goma_dir=\"[CACHE]/goma_client\""
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "gn (6)",
     "~followup_annotations": [
       "@@@STEP_TEXT@gn (rtc_use_dummy_audio_file_devices=true)@@@"
@@ -1327,6 +1464,9 @@
   {
     "cmd": [],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "preprocess_for_goma (6)"
   },
   {
@@ -1338,6 +1478,9 @@
       "511"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "preprocess_for_goma.makedirs goma cache directory (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1362,6 +1505,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]/goma/Android32__more_configs_",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
@@ -1392,6 +1536,9 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail (6)",
     "~followup_annotations": [
@@ -1410,6 +1557,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
@@ -1418,6 +1566,9 @@
   {
     "cmd": [],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "postprocess_for_goma (6)"
   },
   {
@@ -1430,6 +1581,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_jsonstatus (6)",
@@ -1457,6 +1609,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_stat (6)",
@@ -1473,6 +1626,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.stop_goma (6)",
@@ -1512,6 +1666,9 @@
       "test_bot"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "postprocess_for_goma.upload_log (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1538,6 +1695,9 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail (6)",
     "~followup_annotations": [
@@ -1555,6 +1715,9 @@
       "--args=use_rtti=true is_debug=true target_os=\"android\" target_cpu=\"arm\" use_goma=true goma_dir=\"[CACHE]/goma_client\""
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "gn (7)",
     "~followup_annotations": [
       "@@@STEP_TEXT@gn (use_rtti=true)@@@"
@@ -1563,6 +1726,9 @@
   {
     "cmd": [],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "preprocess_for_goma (7)"
   },
   {
@@ -1574,6 +1740,9 @@
       "511"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "preprocess_for_goma.makedirs goma cache directory (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1598,6 +1767,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]/goma/Android32__more_configs_",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
@@ -1628,6 +1798,9 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail (7)",
     "~followup_annotations": [
@@ -1646,6 +1819,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
@@ -1654,6 +1828,9 @@
   {
     "cmd": [],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "postprocess_for_goma (7)"
   },
   {
@@ -1666,6 +1843,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_jsonstatus (7)",
@@ -1693,6 +1871,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_stat (7)",
@@ -1709,6 +1888,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.stop_goma (7)",
@@ -1748,6 +1928,9 @@
       "test_bot"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "postprocess_for_goma.upload_log (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1774,6 +1957,9 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail (7)",
     "~followup_annotations": [
@@ -1791,6 +1977,9 @@
       "--args=rtc_enable_sctp=false is_debug=true target_os=\"android\" target_cpu=\"arm\" use_goma=true goma_dir=\"[CACHE]/goma_client\""
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "gn (8)",
     "~followup_annotations": [
       "@@@STEP_TEXT@gn (rtc_enable_sctp=false)@@@"
@@ -1799,6 +1988,9 @@
   {
     "cmd": [],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "preprocess_for_goma (8)"
   },
   {
@@ -1810,6 +2002,9 @@
       "511"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "preprocess_for_goma.makedirs goma cache directory (8)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1834,6 +2029,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]/goma/Android32__more_configs_",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
@@ -1864,6 +2060,9 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail (8)",
     "~followup_annotations": [
@@ -1882,6 +2081,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
@@ -1890,6 +2090,9 @@
   {
     "cmd": [],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "postprocess_for_goma (8)"
   },
   {
@@ -1902,6 +2105,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_jsonstatus (8)",
@@ -1929,6 +2133,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_stat (8)",
@@ -1945,6 +2150,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.stop_goma (8)",
@@ -1984,6 +2190,9 @@
       "test_bot"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "postprocess_for_goma.upload_log (8)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2010,6 +2219,9 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail (8)",
     "~followup_annotations": [

@@ -18,6 +18,7 @@
       "src@HEAD"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -107,6 +108,7 @@
       "validate"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
@@ -114,6 +116,9 @@
   },
   {
     "cmd": [],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "ensure_goma"
   },
   {
@@ -129,6 +134,9 @@
       "-service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
@@ -155,6 +163,9 @@
       "[START_DIR]/src/tools/swarming_client/swarming.py",
       "--version"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -170,6 +181,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
@@ -193,6 +205,9 @@
       "--properties",
       "{\"bot_id\": \"test_bot\", \"buildername\": \"Lollipop Phone Tester\", \"buildnumber\": 571, \"mastername\": \"chromium.android\", \"slavename\": \"test_bot\", \"target_platform\": \"android\"}"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "get compile targets for scripts",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -207,6 +222,9 @@
       "[START_DIR]/src/testing/buildbot/chromium.android.json",
       "/path/to/tmp/json"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "read test spec (chromium.android.json)",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [START_DIR]/src/testing/buildbot/chromium.android.json@@@",
@@ -232,6 +250,9 @@
       "[START_DIR]/src/out/build_product.zip",
       "[START_DIR]/src"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "clean local files",
     "~followup_annotations": [
@@ -256,6 +277,9 @@
       "[START_DIR]/src",
       "src"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "tree truth steps"
   },
   {
@@ -266,6 +290,9 @@
       "rmtree",
       "[START_DIR]/src/out/Debug"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "rmtree build directory"
   },
@@ -295,6 +322,9 @@
       "--build-number",
       "571"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "extract build"
   },
@@ -308,6 +338,7 @@
       "~/adb"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
@@ -329,6 +360,7 @@
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
@@ -356,6 +388,7 @@
       "[START_DIR]/src/out/bad_devices.json"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
@@ -376,6 +409,7 @@
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
@@ -394,6 +428,7 @@
       "-v"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
@@ -415,6 +450,7 @@
       "Debug"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
@@ -438,6 +474,7 @@
       "--overwrite-known-devices-files"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
@@ -541,6 +578,7 @@
   {
     "cmd": [],
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
@@ -560,6 +598,7 @@
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
@@ -586,6 +625,7 @@
       "refs/heads/master@{#170242}"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
@@ -606,6 +646,7 @@
       "/tmp/device_monitor.pid"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
@@ -622,6 +663,7 @@
       "[START_DIR]/src/out/logcat"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
@@ -645,6 +687,7 @@
       "gs://chromium-android/logcat_dumps/Lollipop Phone Tester/571"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
@@ -663,6 +706,7 @@
       "[START_DIR]/src/out/Debug/full_log"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Debug",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
@@ -679,6 +723,7 @@
       "/path/to/tmp/"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
@@ -692,6 +737,7 @@
       "-w"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Debug",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
@@ -707,6 +753,7 @@
       "[START_DIR]/src/out/Debug/test_logs/*.log"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
@@ -728,6 +775,7 @@
       "Missing: [START_DIR]/src/out/Debug/lib.unstripped/libchrome.so [START_DIR]/src/out/Debug/microdump_stackwalk [START_DIR]/src/out/Debug/dump_syms"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },

@@ -15,6 +15,7 @@
       "/path/to/tmp/json"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "clang_revision",
@@ -37,6 +38,7 @@
     ],
     "cwd": "None",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "compile"
@@ -62,6 +64,9 @@
       "--ninja-log-compiler",
       "goma-clang"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "upload_ninja_log"
   },
   {
@@ -97,6 +102,9 @@
       "--platform",
       "linux"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "sizes"
   },
   {

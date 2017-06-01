@@ -194,6 +194,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
@@ -449,6 +450,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
@@ -544,6 +546,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -570,6 +573,7 @@
       "/path/to/tmp/json"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -595,6 +599,9 @@
       "--file-path",
       "/path/to/tmp/"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "test gfedcba.calculate the number of recommended jobs",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -603,6 +610,9 @@
   {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]/mac/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "test gfedcba.preprocess_for_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -617,6 +627,9 @@
       "511"
     ],
     "cwd": "[BUILDER_CACHE]/mac/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "test gfedcba.preprocess_for_goma.makedirs goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -641,6 +654,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_CACHE_DIR": "[GOMA_CACHE]/mac_chromium_variable",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
@@ -671,6 +685,9 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[BUILDER_CACHE]/mac/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "test gfedcba.preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
@@ -690,6 +707,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -714,6 +732,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -726,6 +745,9 @@
   {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]/mac/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "test gfedcba.postprocess_for_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -741,6 +763,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "test gfedcba.postprocess_for_goma.goma_jsonstatus",
@@ -768,6 +791,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "test gfedcba.postprocess_for_goma.goma_stat",
@@ -784,6 +808,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "test gfedcba.postprocess_for_goma.stop_goma",
@@ -823,6 +848,9 @@
       "build1-a1"
     ],
     "cwd": "[BUILDER_CACHE]/mac/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "test gfedcba.postprocess_for_goma.upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -849,6 +877,9 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[BUILDER_CACHE]/mac/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "test gfedcba.postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [

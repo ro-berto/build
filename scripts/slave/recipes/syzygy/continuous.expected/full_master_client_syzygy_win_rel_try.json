@@ -74,6 +74,7 @@
     ],
     "cwd": "[START_DIR]\\src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_DEFINES": "target_arch=ia32",
       "GYP_GENERATORS": "msvs-ninja,ninja",
@@ -92,6 +93,7 @@
     ],
     "cwd": "[START_DIR]\\src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "name": "compile"
@@ -110,6 +112,7 @@
     ],
     "cwd": "[START_DIR]\\src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "name": "compile confirm no-op",
@@ -136,6 +139,9 @@
       "--ninja-log-compiler",
       "unknown"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "upload_ninja_log"
   },
   {
@@ -186,7 +192,8 @@
       "--gtest_print_time"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "CHROME_HEADLESS": "1"
     },
     "name": "bar_unittests"
   },
@@ -216,7 +223,8 @@
       "--gtest_print_time"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "CHROME_HEADLESS": "1"
     },
     "name": "baz_unittests"
   },
@@ -246,7 +254,8 @@
       "--gtest_print_time"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "CHROME_HEADLESS": "1"
     },
     "name": "foo_unittests"
   },

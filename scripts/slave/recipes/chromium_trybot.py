@@ -38,7 +38,8 @@ def RunSteps(api):
         api.properties['dump_builders'])
     return
 
-  return api.chromium_tests.trybot_steps()
+  with api.chromium.chromium_layout():
+    return api.chromium_tests.trybot_steps()
 
 def _sanitize_nonalpha(text):
   return ''.join(c if c.isalnum() else '_' for c in text)

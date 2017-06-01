@@ -18,6 +18,7 @@
       "src@HEAD"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -107,6 +108,7 @@
       "validate"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
@@ -114,6 +116,9 @@
   },
   {
     "cmd": [],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "ensure_goma"
   },
   {
@@ -129,6 +134,9 @@
       "-service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
@@ -155,6 +163,9 @@
       "[START_DIR]/src/tools/swarming_client/swarming.py",
       "--version"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -170,6 +181,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_DEFINES": "clang=1 component=static_library gomadir='[CACHE]/goma_client' msan=1 target_arch=x64 use_goma=1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -192,6 +204,9 @@
       "--properties",
       "{\"bot_id\": \"test_bot\", \"buildername\": \"Linux MSan Tests\", \"buildnumber\": 571, \"mastername\": \"chromium.memory\", \"slavename\": \"test_bot\", \"target_platform\": \"linux\"}"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "get compile targets for scripts",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -206,6 +221,9 @@
       "[START_DIR]/src/testing/buildbot/chromium.memory.json",
       "/path/to/tmp/json"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "read test spec (chromium.memory.json)",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [START_DIR]/src/testing/buildbot/chromium.memory.json@@@",
@@ -230,6 +248,9 @@
       "rmtree",
       "[START_DIR]/src/out/Release"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "rmtree build directory"
   },
@@ -259,12 +280,16 @@
       "--build-number",
       "571"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "extract build"
   },
   {
     "cmd": [],
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "test_pre_run"
@@ -304,6 +329,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "base_unittests"

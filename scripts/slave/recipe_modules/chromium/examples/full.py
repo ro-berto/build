@@ -21,28 +21,29 @@ def RunSteps(api):
   failfast = api.properties.get('failfast', False);
   ninja_confirm_noop = api.properties.get('ninja_confirm_noop', False)
 
-  bot_config = api.chromium_tests.create_bot_config_object(
-      mastername, buildername)
-  api.chromium_tests.configure_build(bot_config)
+  with api.chromium.chromium_layout():
+    bot_config = api.chromium_tests.create_bot_config_object(
+        mastername, buildername)
+    api.chromium_tests.configure_build(bot_config)
 
-  if failfast:
-    api.chromium.apply_config('goma_failfast')
+    if failfast:
+      api.chromium.apply_config('goma_failfast')
 
-  if ninja_confirm_noop:
-    api.chromium.apply_config('ninja_confirm_noop')
+    if ninja_confirm_noop:
+      api.chromium.apply_config('ninja_confirm_noop')
 
-  api.chromium_tests.prepare_checkout(bot_config)
+    api.chromium_tests.prepare_checkout(bot_config)
 
-  mb_config_path = api.properties.get('mb_config_path')
+    mb_config_path = api.properties.get('mb_config_path')
 
-  api.chromium.run_mb(mastername, buildername, use_goma=True,
-                      mb_config_path=mb_config_path,
-                      android_version_code=3,
-                      android_version_name="example")
+    api.chromium.run_mb(mastername, buildername, use_goma=True,
+                        mb_config_path=mb_config_path,
+                        android_version_code=3,
+                        android_version_name="example")
 
-  api.chromium.compile(
-      targets=['All'], out_dir=out_dir,
-      use_goma_module=use_goma_module)
+    api.chromium.compile(
+        targets=['All'], out_dir=out_dir,
+        use_goma_module=use_goma_module)
 
 
 def GenTests(api):

@@ -5,6 +5,9 @@
       "-u",
       "None/tools/clang/scripts/update.py"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "update_clang"
   },
   {

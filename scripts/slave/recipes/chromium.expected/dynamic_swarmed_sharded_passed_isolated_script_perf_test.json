@@ -9,6 +9,9 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\kill_processes.py"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "taskkill"
   },
@@ -31,6 +34,7 @@
       "src@HEAD"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
@@ -120,6 +124,7 @@
       "validate"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
@@ -127,6 +132,9 @@
   },
   {
     "cmd": [],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "ensure_goma"
   },
   {
@@ -142,6 +150,9 @@
       "-service-account-json",
       "C:\\creds\\service_accounts\\service-account-goma-client.json"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
@@ -168,6 +179,9 @@
       "[START_DIR]\\src\\tools\\swarming_client\\swarming.py",
       "--version"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -183,6 +197,7 @@
     ],
     "cwd": "[START_DIR]\\src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library fastbuild=1 gomadir='[CACHE]\\goma_client' target_arch=x64 use_goma=1",
@@ -205,6 +220,9 @@
       "--properties",
       "{\"bot_id\": \"test_bot\", \"buildername\": \"Win 10 Low-End Perf Tests\", \"buildnumber\": \"1234\", \"mastername\": \"chromium.perf.fyi\", \"perf-id\": \"win-10-low-end\", \"results-url\": \"https://chromeperf.appspot.com\", \"slavename\": \"test_bot\", \"target_platform\": \"win\"}"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "get compile targets for scripts",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -219,6 +237,9 @@
       "[START_DIR]\\src\\testing\\buildbot\\chromium.perf.fyi.json",
       "/path/to/tmp/json"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "read test spec (chromium.perf.fyi.json)",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [START_DIR]\\src\\testing\\buildbot\\chromium.perf.fyi.json@@@",
@@ -256,6 +277,9 @@
       "rmtree",
       "[START_DIR]\\src\\out\\Release_x64"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "rmtree build directory"
   },
@@ -285,6 +309,9 @@
       "--build-number",
       "1234"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "extract build"
   },
@@ -299,6 +326,7 @@
       "/path/to/tmp/json"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "name": "find isolated tests",
@@ -314,6 +342,7 @@
   {
     "cmd": [],
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "name": "test_pre_run"
@@ -386,6 +415,7 @@
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "infra_step": true,
@@ -447,6 +477,7 @@
       "/path/to/tmp/json"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "name": "benchmark on Intel GPU on Windows on Windows-10-10586",
@@ -595,6 +626,7 @@
       "801ada225ddc271c132c3a35f03975671d43e399"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "name": "benchmark Dashboard Upload",
@@ -636,6 +668,7 @@
       "Release_x64"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "infra_step": true,

@@ -487,6 +487,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/android_webview_nexus6_aosp_perf_bisect/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
@@ -836,6 +837,7 @@
     "cwd": "[BUILDER_CACHE]/android_webview_nexus6_aosp_perf_bisect",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "CHROME_HEADLESS": "1",
       "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_webview_nexus6_aosp_perf_bisect/src/out/Release"
     },
     "name": "Running WITH patch.Performance Test (With Patch) 1 of 1",
@@ -992,6 +994,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/android_webview_nexus6_aosp_perf_bisect/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
@@ -1283,6 +1286,7 @@
     "cwd": "[BUILDER_CACHE]/android_webview_nexus6_aosp_perf_bisect",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "CHROME_HEADLESS": "1",
       "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_webview_nexus6_aosp_perf_bisect/src/out/Release"
     },
     "name": "Running WITHOUT patch.Performance Test (Without Patch) 1 of 1",

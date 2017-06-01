@@ -82,10 +82,7 @@ def RunSteps(api, buildername):
 
   api.chromium.set_config('codesearch', BUILD_CONFIG='Debug')
   api.chromium.ensure_goma()
-  # CHROME_HEADLESS makes sure that running 'gclient runhooks' doesn't require
-  # entering 'y' to agree to a license.
-  with api.context(env={'CHROME_HEADLESS': '1'}):
-    api.chromium.runhooks()
+  api.chromium.runhooks()
 
   result = api.codesearch.generate_compilation_database(targets, platform)
 

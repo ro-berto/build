@@ -2,6 +2,9 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import collections
+import contextlib
+import functools
 import re
 
 from recipe_engine import recipe_api
@@ -23,9 +26,54 @@ class TestLauncherFilterFileInputPlaceholder(recipe_util.InputPlaceholder):
 
 
 class ChromiumApi(recipe_api.RecipeApi):
+
+  Layout = collections.namedtuple('Layout', ('env',))
+
   def __init__(self, *args, **kwargs):
     super(ChromiumApi, self).__init__(*args, **kwargs)
     self._build_properties = None
+    self._layout = None
+
+  def ensure_chromium_layout(self):
+    """Ensures that Chromium build layout is installed.
+
+    Note: the layout must be installed into the engine context. The
+    "chromium_layout" context manager is probably a better way to access this.
+
+    Returns (ChromiumApi.Layout): The configured Chromium build layout.
+    """
+    env = {
+        # CHROME_HEADLESS makes sure that running 'gclient runhooks' and other
+        # tools don't require user interaction.
+        'CHROME_HEADLESS': '1',
+    }
+
+    return self.Layout(
+        env=env,
+    )
+
+  @contextlib.contextmanager
+  def chromium_layout(self):
+    """Context manager that must be entered prior to performing any Chromium
+    recipe operations. This is responsible for basic enviornment initialization.
+
+    See "ensure_chromium_layout" for more information.
+    """
+    with self.m.context(env=self.ensure_chromium_layout().env):
+      yield
+
+  def _with_chromium_layout(fn):
+    """Decorator which applies "ensure_chromium_layout" to bound ChromiumApi
+    functions.
+
+    This is an INTERNAL method, and specifically decorates ChromiumApi member
+    functions. DO NOT USE this outside of this class and module.
+    """
+    @functools.wraps(fn)
+    def inner(self, *args, **kwargs):
+      with self.chromium_layout():
+        return fn(self, *args, **kwargs)
+    return inner
 
   def get_config_defaults(self):
     defaults = {
@@ -250,10 +298,10 @@ class ChromiumApi(recipe_api.RecipeApi):
 
   # TODO(tikuta): Remove use_goma_module.
   # Decrease the number of ways configuring with or without goma.
+  @_with_chromium_layout
   def compile(self, targets=None, name=None, out_dir=None,
               target=None, use_goma_module=False, **kwargs):
     """Return a compile.py invocation."""
-
     targets = targets or self.c.compile_py.default_targets.as_jsonish()
     assert isinstance(targets, (list, tuple))
 
@@ -411,6 +459,7 @@ class ChromiumApi(recipe_api.RecipeApi):
   def test_launcher_filter(self, tests):
     return TestLauncherFilterFileInputPlaceholder(self, tests)
 
+  @_with_chromium_layout
   def runtest(self, test, args=None, xvfb=False, name=None, annotate=None,
               results_url=None, perf_dashboard_id=None, test_type=None,
               python_mode=False, parallel=False,
@@ -538,6 +587,7 @@ class ChromiumApi(recipe_api.RecipeApi):
         **kwargs
       )
 
+  @_with_chromium_layout
   def sizes(self, results_url=None, perf_id=None, platform=None, **kwargs):
     """Return a sizes.py invocation.
     This uses runtests.py to upload the results to the perf dashboard."""
@@ -580,6 +630,7 @@ class ChromiumApi(recipe_api.RecipeApi):
         'sizes', self.package_repo_resource('scripts', 'slave', 'runtest.py'),
         full_args, allow_subannotations=True, **kwargs)
 
+  @_with_chromium_layout
   def get_clang_version(self, **kwargs):
     with self.m.context(env=self.get_env()):
       step_result = self.m.build.python(
@@ -592,7 +643,6 @@ class ChromiumApi(recipe_api.RecipeApi):
           allow_subannotations=True,
           **kwargs)
     return step_result.json.output['clang_revision']
-
 
   def get_cros_chrome_sdk_wrapper(self, clean=False):
     """Returns: a wrapper command for 'cros chrome-sdk'
@@ -652,6 +702,7 @@ class ChromiumApi(recipe_api.RecipeApi):
         self.m.properties.get('clobber') is not None):
       self.m.file.rmtree('clobber', self.output_dir)
 
+  @_with_chromium_layout
   def runhooks(self, env=None, **kwargs):
     """Run the build-configuration hooks for chromium."""
 
@@ -681,6 +732,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       self.m.gclient.runhooks(**kwargs)
 
   # No cover because internal recipes use this.
+  @_with_chromium_layout
   def run_gyp_chromium(self): # pragma: no cover
     gyp_chromium_path = self.m.path['checkout'].join('build', 'gyp_chromium.py')
     env = self.get_env()
@@ -688,6 +740,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     with self.m.context(env=env):
       self.m.python(name='gyp_chromium', script=gyp_chromium_path)
 
+  @_with_chromium_layout
   def run_gn(self, use_goma=False, gn_path=None, build_dir=None, **kwargs):
     if not gn_path:
       gn_path = self.m.depot_tools.gn_py_path
@@ -744,6 +797,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       else:
         self.m.step(name='gn', cmd=[gn_path] + step_args, **kwargs)
 
+  @_with_chromium_layout
   def run_mb(self, mastername, buildername, use_goma=True, mb_path=None,
              mb_config_path=None, isolated_targets=None, name=None,
              build_dir=None, android_version_code=None,
@@ -835,6 +889,7 @@ class ChromiumApi(recipe_api.RecipeApi):
           sorted_isolated_targets)
 
 
+  @_with_chromium_layout
   def update_clang(self):
     # The hooks in DEPS call `update.py --if-needed`, which updates clang by
     # default on Mac and Linux, or if clang=1 is in GYP_DEFINES.  This step
@@ -862,6 +917,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     except self.m.step.InfraFailure:
       pass
 
+  @_with_chromium_layout
   def apply_syzyasan(self):
     args = [
         '--src-dir', self.m.path['checkout'],
@@ -873,6 +929,7 @@ class ChromiumApi(recipe_api.RecipeApi):
           'scripts', 'slave', 'chromium', 'win_apply_syzyasan.py'),
       args)
 
+  @_with_chromium_layout
   def archive_build(self, step_name, gs_bucket, gs_acl=None, mode=None,
                     **kwargs):
     """Returns a step invoking archive_build.py to archive a Chromium build."""
@@ -913,6 +970,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       infra_step=True,
       **kwargs)
 
+  @_with_chromium_layout
   def list_perf_tests(self, browser, num_shards, device=None):
     args = ['list', '--browser', browser, '--json-output',
             self.m.json.output(), '--num-shards', num_shards]
@@ -956,6 +1014,7 @@ class ChromiumApi(recipe_api.RecipeApi):
   def get_annotate_by_test_name(self, test_name):
     return 'graphing'
 
+  @_with_chromium_layout
   def download_lto_plugin(self):
     return self.m.python(
         name='download LTO plugin',

@@ -176,6 +176,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "component=static_library fetch_telemetry_dependencies=1 ffmpeg_branding=Chrome gomadir='[CACHE]/goma_client' proprietary_codecs=1 target_arch=x64 use_goma=1",
@@ -539,6 +540,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "component=static_library fetch_telemetry_dependencies=1 ffmpeg_branding=Chrome gomadir='[CACHE]/goma_client' proprietary_codecs=1 target_arch=x64 use_goma=1",
@@ -580,6 +582,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "generate_build_files (without patch)",
@@ -602,6 +605,7 @@
       "/path/to/tmp/"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "calculate the number of recommended jobs"
@@ -609,6 +613,7 @@
   {
     "cmd": [],
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "preprocess_for_goma"
@@ -622,6 +627,7 @@
       "511"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "preprocess_for_goma.makedirs goma cache directory",
@@ -647,6 +653,7 @@
       "restart"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_CACHE_DIR": "[CACHE]/goma/linux_chromium_rel_ng",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_FAIL_FAST": "true",
@@ -676,6 +683,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "infra_step": true,
@@ -696,6 +704,7 @@
       "base_unittests"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "compile (without patch)"
@@ -715,6 +724,7 @@
       "-n"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "compile (without patch) confirm no-op",
@@ -723,6 +733,7 @@
   {
     "cmd": [],
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma"
@@ -736,6 +747,7 @@
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_jsonstatus",
@@ -762,6 +774,7 @@
       "stat"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_stat",
@@ -777,6 +790,7 @@
       "stop"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.stop_goma",
@@ -816,6 +830,7 @@
       "test_bot"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.upload_log",
@@ -844,6 +859,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "infra_step": true,

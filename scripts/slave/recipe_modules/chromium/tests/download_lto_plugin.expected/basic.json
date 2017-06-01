@@ -5,6 +5,9 @@
       "-u",
       "None/build/download_gold_plugin.py"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "download LTO plugin"
   },
   {

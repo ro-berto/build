@@ -487,6 +487,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/android_webview_arm64_aosp_perf_bisect/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",

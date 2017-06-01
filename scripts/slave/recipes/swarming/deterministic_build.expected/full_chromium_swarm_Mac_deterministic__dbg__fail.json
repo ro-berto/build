@@ -161,6 +161,9 @@
       "rmtree",
       "[START_DIR]/src/out/Release"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "rmtree clobber"
   },
@@ -173,6 +176,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_DEFINES": "clang=1 component=static_library gomadir='[CACHE]/goma_client' target_arch=ia32 use_goma=1",
@@ -198,6 +202,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -219,6 +224,7 @@
       "/path/to/tmp/json"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -243,11 +249,17 @@
       "--file-path",
       "/path/to/tmp/"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "calculate the number of recommended jobs"
   },
   {
     "cmd": [],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "preprocess_for_goma"
   },
   {
@@ -259,6 +271,9 @@
       "511"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "preprocess_for_goma.makedirs goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -283,6 +298,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]/goma/Mac_deterministic__dbg_",
@@ -313,6 +329,9 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
@@ -332,6 +351,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -340,6 +360,9 @@
   {
     "cmd": [],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "postprocess_for_goma"
   },
   {
@@ -352,6 +375,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_jsonstatus",
@@ -379,6 +403,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_stat",
@@ -395,6 +420,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.stop_goma",
@@ -434,6 +460,9 @@
       "test_bot"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -460,6 +489,9 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
@@ -542,6 +574,9 @@
       "rmtree",
       "[START_DIR]/src/out/Release"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "rmtree clobber (2)"
   },
@@ -554,6 +589,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_DEFINES": "clang=1 component=static_library gomadir='[CACHE]/goma_client' target_arch=ia32 use_goma=1",
@@ -579,6 +615,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -600,6 +637,7 @@
       "/path/to/tmp/json"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -614,6 +652,9 @@
   {
     "cmd": [],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "preprocess_for_goma (2)"
   },
   {
@@ -625,6 +666,9 @@
       "511"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "preprocess_for_goma.makedirs goma cache directory (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -649,6 +693,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]/goma/Mac_deterministic__dbg_",
@@ -679,6 +724,9 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail (2)",
     "~followup_annotations": [
@@ -698,6 +746,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -706,6 +755,9 @@
   {
     "cmd": [],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "postprocess_for_goma (2)"
   },
   {
@@ -718,6 +770,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_jsonstatus (2)",
@@ -745,6 +798,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_stat (2)",
@@ -761,6 +815,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.stop_goma (2)",
@@ -800,6 +855,9 @@
       "test_bot"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "postprocess_for_goma.upload_log (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -826,6 +884,9 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail (2)",
     "~followup_annotations": [

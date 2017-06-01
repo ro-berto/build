@@ -7,6 +7,9 @@
       "[BUILDER_CACHE]/Linux_remote_run_Builder",
       "511"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "makedirs checkout path",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -41,6 +44,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/Linux_remote_run_Builder",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -131,6 +135,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/Linux_remote_run_Builder",
     "env": {
+      "CHROME_HEADLESS": "1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
@@ -138,6 +143,9 @@
   },
   {
     "cmd": [],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "ensure_goma"
   },
   {
@@ -153,6 +161,9 @@
       "-service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [

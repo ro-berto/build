@@ -18,6 +18,7 @@
       "src@HEAD"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -107,6 +108,7 @@
       "validate"
     ],
     "env": {
+      "CHROME_HEADLESS": "1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
@@ -114,6 +116,9 @@
   },
   {
     "cmd": [],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "ensure_goma"
   },
   {
@@ -129,6 +134,9 @@
       "-service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
@@ -155,6 +163,9 @@
       "[START_DIR]/src/tools/swarming_client/swarming.py",
       "--version"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -170,6 +181,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
@@ -194,6 +206,9 @@
       "--properties",
       "{\"bot_id\": \"build1-a1\", \"buildername\": \"Android Builder (dbg)\", \"buildnumber\": \"77457\", \"mastername\": \"chromium.linux\", \"slavename\": \"build1-a1\", \"target_platform\": \"android\"}"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "get compile targets for scripts",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -208,6 +223,9 @@
       "[START_DIR]/src/testing/buildbot/chromium.linux.json",
       "/path/to/tmp/json"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "read test spec (chromium.linux.json)",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [START_DIR]/src/testing/buildbot/chromium.linux.json@@@",
@@ -235,6 +253,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "generate_build_files"
@@ -252,11 +271,17 @@
       "--file-path",
       "/path/to/tmp/"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "calculate the number of recommended jobs"
   },
   {
     "cmd": [],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "preprocess_for_goma",
     "~followup_annotations": [
       "@@@STEP_EXCEPTION@@@"
@@ -271,6 +296,9 @@
       "511"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "preprocess_for_goma.makedirs goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -295,6 +323,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_CACHE_DIR": "[CACHE]/goma/Android_Builder__dbg_",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_FAIL_FAST": "true",
@@ -319,6 +348,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "preprocess_for_goma.goma_jsonstatus",
@@ -343,6 +373,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "preprocess_for_goma.stop_goma (start failure)",
@@ -374,6 +405,9 @@
       "build1-a1"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "preprocess_for_goma.upload_goma_start_failed_logs",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",

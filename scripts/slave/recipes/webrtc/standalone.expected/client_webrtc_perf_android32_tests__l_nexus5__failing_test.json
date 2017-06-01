@@ -127,6 +127,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "component=static_library target_arch=arm",
@@ -445,7 +446,8 @@
     ],
     "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_",
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "CHROME_HEADLESS": "1"
     },
     "name": "webrtc_perf_tests",
     "~followup_annotations": [
@@ -494,7 +496,8 @@
     ],
     "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_",
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "CHROME_HEADLESS": "1"
     },
     "name": "low_bandwidth_audio_test"
   },
@@ -537,7 +540,8 @@
     ],
     "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_",
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "CHROME_HEADLESS": "1"
     },
     "name": "video_quality_loopback_test"
   },

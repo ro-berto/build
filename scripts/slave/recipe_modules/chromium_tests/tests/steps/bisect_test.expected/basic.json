@@ -53,7 +53,8 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "CHROME_HEADLESS": "1"
     },
     "name": "Performance Test 1 of 2",
     "stderr": "/path/to/tmp/",
@@ -131,7 +132,8 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "CHROME_HEADLESS": "1"
     },
     "name": "Performance Test 2 of 2",
     "stderr": "/path/to/tmp/",

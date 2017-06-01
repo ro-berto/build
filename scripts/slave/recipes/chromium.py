@@ -47,7 +47,8 @@ def RunSteps(api):
         api.json.dumps(api.chromium_tests.builders, default=ignore_undumpable))
     return
 
-  api.chromium_tests.main_waterfall_steps()
+  with api.chromium.chromium_layout():
+    api.chromium_tests.main_waterfall_steps()
 
 
 def GenTests(api):

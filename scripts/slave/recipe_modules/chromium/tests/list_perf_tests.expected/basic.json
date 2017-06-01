@@ -14,6 +14,9 @@
       "--device",
       "device-id"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "List Perf Tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",

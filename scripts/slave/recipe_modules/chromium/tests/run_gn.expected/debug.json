@@ -10,6 +10,9 @@
       "--args=is_debug=true target_cpu=\"x64\" use_goma=true goma_dir=\"None\""
     ],
     "cwd": "None",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "gn"
   },
   {

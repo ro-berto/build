@@ -9,6 +9,9 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\kill_processes.py"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "taskkill"
   },
@@ -20,6 +23,9 @@
       "[BUILDER_CACHE]\\win",
       "511"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "makedirs checkout path",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -60,6 +66,7 @@
     ],
     "cwd": "[BUILDER_CACHE]\\win",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
@@ -150,6 +157,7 @@
     ],
     "cwd": "[BUILDER_CACHE]\\win",
     "env": {
+      "CHROME_HEADLESS": "1",
       "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
@@ -157,6 +165,9 @@
   },
   {
     "cmd": [],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "ensure_goma"
   },
   {
@@ -172,6 +183,9 @@
       "-service-account-json",
       "C:\\creds\\service_accounts\\service-account-goma-client.json"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
@@ -198,6 +212,9 @@
       "[BUILDER_CACHE]\\win\\src\\tools\\swarming_client\\swarming.py",
       "--version"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -213,6 +230,7 @@
     ],
     "cwd": "[BUILDER_CACHE]\\win\\src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 ffmpeg_branding=Chrome gomadir='[CACHE]\\goma_client' proprietary_codecs=1 target_arch=ia32 use_goma=1",
@@ -234,6 +252,9 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\kill_processes.py"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "taskkill (2)"
   },
@@ -259,6 +280,7 @@
     ],
     "cwd": "[BUILDER_CACHE]\\win",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
@@ -335,6 +357,7 @@
     ],
     "cwd": "[BUILDER_CACHE]\\win\\src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 ffmpeg_branding=Chrome gomadir='[CACHE]\\goma_client' proprietary_codecs=1 target_arch=ia32 use_goma=1",
@@ -352,6 +375,9 @@
       "-u",
       "import sys; sys.exit(0)"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "mark: before_tests",
     "~followup_annotations": [
       "@@@SET_BUILD_PROPERTY@failure_hash@\"c18cfb87382155d691c887ecad8e8bf7cdf0fab3\"@@@"

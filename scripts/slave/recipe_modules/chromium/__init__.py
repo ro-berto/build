@@ -3,6 +3,7 @@ DEPS = [
   'depot_tools/depot_tools',
   # in order to have set_config automatically populate gclient
   'depot_tools/gclient',
+  'depot_tools/git',
   'depot_tools/tryserver',
 
   'adb',

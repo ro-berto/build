@@ -7,6 +7,9 @@
       "[BUILDER_CACHE]/linux_layout",
       "511"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "makedirs checkout path",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -47,6 +50,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux_layout",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -137,6 +141,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux_layout",
     "env": {
+      "CHROME_HEADLESS": "1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
@@ -144,6 +149,9 @@
   },
   {
     "cmd": [],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "ensure_goma"
   },
   {
@@ -159,6 +167,9 @@
       "-service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
@@ -185,6 +196,9 @@
       "[BUILDER_CACHE]/linux_layout/src/tools/swarming_client/swarming.py",
       "--version"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -200,6 +214,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux_layout/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[CACHE]/goma_client' target_arch=x64 use_goma=1",
@@ -222,6 +237,9 @@
       "--properties",
       "{\"bot_id\": \"test_bot\", \"buildername\": \"linux_trusty_blink_rel\", \"buildnumber\": 571, \"mastername\": \"tryserver.blink\", \"slavename\": \"test_bot\", \"target_platform\": \"linux\"}"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "get compile targets for scripts",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -236,6 +254,9 @@
       "[BUILDER_CACHE]/linux_layout/src/testing/buildbot/chromium.webkit.json",
       "/path/to/tmp/json"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "read test spec (chromium.webkit.json)",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [BUILDER_CACHE]/linux_layout/src/testing/buildbot/chromium.webkit.json@@@",
@@ -251,6 +272,9 @@
       "--name-only"
     ],
     "cwd": "[BUILDER_CACHE]/linux_layout/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "git diff to analyze patch",
     "stdout": "/path/to/tmp/",
@@ -268,6 +292,9 @@
       "[BUILDER_CACHE]/linux_layout/src/testing/buildbot/trybot_analyze_config.json",
       "/path/to/tmp/json"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "read filter exclusion spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: 'testing/buildbot/trybot_analyze_config.json'@@@",
@@ -290,6 +317,9 @@
       "-u",
       "import sys; sys.exit(0)"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "analyze",
     "~followup_annotations": [
       "@@@STEP_TEXT@Analyze disabled: matched exclusion@@@",
@@ -331,6 +361,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux_layout/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "generate_build_files (with patch)"
@@ -348,11 +379,17 @@
       "--file-path",
       "/path/to/tmp/"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "calculate the number of recommended jobs"
   },
   {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]/linux_layout/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "preprocess_for_goma"
   },
   {
@@ -364,6 +401,9 @@
       "511"
     ],
     "cwd": "[BUILDER_CACHE]/linux_layout/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "preprocess_for_goma.makedirs goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -388,6 +428,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux_layout/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_CACHE_DIR": "[GOMA_CACHE]/linux_trusty_blink_rel",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_FAIL_FAST": "true",
@@ -417,6 +458,9 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[BUILDER_CACHE]/linux_layout/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
@@ -436,6 +480,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux_layout/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "compile (with patch)"
@@ -456,6 +501,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux_layout/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "compile (with patch) confirm no-op",
@@ -464,6 +510,9 @@
   {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]/linux_layout/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "postprocess_for_goma"
   },
   {
@@ -476,6 +525,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux_layout/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_jsonstatus",
@@ -503,6 +553,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux_layout/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_stat",
@@ -519,6 +570,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux_layout/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.stop_goma",
@@ -558,6 +610,9 @@
       "test_bot"
     ],
     "cwd": "[BUILDER_CACHE]/linux_layout/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -584,6 +639,9 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[BUILDER_CACHE]/linux_layout/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
@@ -596,6 +654,9 @@
       "-u",
       "import sys; sys.exit(0)"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "mark: before_tests"
   },
   {
@@ -648,6 +709,7 @@
     "cwd": "[BUILDER_CACHE]/linux_layout",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "webkit_tests (with patch)",
@@ -679,6 +741,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux_layout",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Upload to test-results [webkit_tests (with patch)]"
@@ -709,6 +772,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux_layout",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "archive_webkit_tests_results",
@@ -739,6 +803,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux_layout",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -816,6 +881,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux_layout/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[CACHE]/goma_client' target_arch=x64 use_goma=1",
@@ -841,6 +907,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux_layout/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "generate_build_files (without patch)"
@@ -849,6 +916,7 @@
     "cmd": [],
     "cwd": "[BUILDER_CACHE]/linux_layout",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "preprocess_for_goma (2)"
@@ -863,6 +931,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux_layout",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "preprocess_for_goma.makedirs goma cache directory (2)",
@@ -889,6 +958,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux_layout",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_CACHE_DIR": "[GOMA_CACHE]/linux_trusty_blink_rel",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_FAIL_FAST": "true",
@@ -919,6 +989,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux_layout",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "infra_step": true,
@@ -940,6 +1011,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux_layout",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "compile (without patch)"
@@ -960,6 +1032,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux_layout",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "compile (without patch) confirm no-op",
@@ -969,6 +1042,7 @@
     "cmd": [],
     "cwd": "[BUILDER_CACHE]/linux_layout",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma (2)"
@@ -983,6 +1057,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux_layout",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_jsonstatus (2)",
@@ -1010,6 +1085,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux_layout",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_stat (2)",
@@ -1026,6 +1102,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux_layout",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.stop_goma (2)",
@@ -1066,6 +1143,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux_layout",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.upload_log (2)",
@@ -1095,6 +1173,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux_layout",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "infra_step": true,
@@ -1157,6 +1236,7 @@
     "cwd": "[BUILDER_CACHE]/linux_layout",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "webkit_tests (without patch)",
@@ -1172,6 +1252,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux_layout",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "webkit_tests (retry summary)",
@@ -1204,6 +1285,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux_layout",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "archive_retry_summary",

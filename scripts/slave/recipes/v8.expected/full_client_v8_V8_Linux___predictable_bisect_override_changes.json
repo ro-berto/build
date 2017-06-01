@@ -97,6 +97,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "gomadir='[CACHE]/goma_client' target_arch=ia32 use_goma=1 v8_enable_verify_predictable=1 v8_target_arch=ia32",
@@ -124,6 +125,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "generate_build_files",
@@ -185,6 +187,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "generate_build_files with gn (fyi)"
@@ -224,11 +227,17 @@
       "--file-path",
       "/path/to/tmp/"
     ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "calculate the number of recommended jobs"
   },
   {
     "cmd": [],
     "cwd": "[START_DIR]/v8",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "preprocess_for_goma"
   },
   {
@@ -240,6 +249,9 @@
       "511"
     ],
     "cwd": "[START_DIR]/v8",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "preprocess_for_goma.makedirs goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -264,6 +276,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]/goma/V8_Linux___predictable",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
@@ -293,6 +306,9 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/v8",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
@@ -311,6 +327,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "compile"
@@ -318,6 +335,9 @@
   {
     "cmd": [],
     "cwd": "[START_DIR]/v8",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "postprocess_for_goma"
   },
   {
@@ -330,6 +350,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_jsonstatus",
@@ -357,6 +378,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_stat",
@@ -373,6 +395,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.stop_goma",
@@ -412,6 +435,9 @@
       "test_bot"
     ],
     "cwd": "[START_DIR]/v8",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -438,6 +464,9 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/v8",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
@@ -819,6 +848,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "gomadir='[CACHE]/goma_client' target_arch=ia32 use_goma=1 v8_enable_verify_predictable=1 v8_target_arch=ia32",
@@ -849,6 +879,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisect a0.generate_build_files",
@@ -915,6 +946,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisect a0.generate_build_files with gn (fyi)",
@@ -953,6 +985,9 @@
   {
     "cmd": [],
     "cwd": "[START_DIR]/v8",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "Bisect a0.preprocess_for_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -967,6 +1002,9 @@
       "511"
     ],
     "cwd": "[START_DIR]/v8",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "Bisect a0.preprocess_for_goma.makedirs goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -991,6 +1029,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]/goma/V8_Linux___predictable",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
@@ -1020,6 +1059,9 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/v8",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "Bisect a0.preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
@@ -1039,6 +1081,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisect a0.compile",
@@ -1049,6 +1092,9 @@
   {
     "cmd": [],
     "cwd": "[START_DIR]/v8",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "Bisect a0.postprocess_for_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1064,6 +1110,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisect a0.postprocess_for_goma.goma_jsonstatus",
@@ -1091,6 +1138,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisect a0.postprocess_for_goma.goma_stat",
@@ -1107,6 +1155,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisect a0.postprocess_for_goma.stop_goma",
@@ -1146,6 +1195,9 @@
       "test_bot"
     ],
     "cwd": "[START_DIR]/v8",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "Bisect a0.postprocess_for_goma.upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -1172,6 +1224,9 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/v8",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "Bisect a0.postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
@@ -1334,6 +1389,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "gomadir='[CACHE]/goma_client' target_arch=ia32 use_goma=1 v8_enable_verify_predictable=1 v8_target_arch=ia32",
@@ -1364,6 +1420,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisect a2.generate_build_files",
@@ -1430,6 +1487,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisect a2.generate_build_files with gn (fyi)",
@@ -1468,6 +1526,9 @@
   {
     "cmd": [],
     "cwd": "[START_DIR]/v8",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "Bisect a2.preprocess_for_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1482,6 +1543,9 @@
       "511"
     ],
     "cwd": "[START_DIR]/v8",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "Bisect a2.preprocess_for_goma.makedirs goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -1506,6 +1570,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]/goma/V8_Linux___predictable",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
@@ -1535,6 +1600,9 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/v8",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "Bisect a2.preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
@@ -1554,6 +1622,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisect a2.compile",
@@ -1564,6 +1633,9 @@
   {
     "cmd": [],
     "cwd": "[START_DIR]/v8",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "Bisect a2.postprocess_for_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1579,6 +1651,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisect a2.postprocess_for_goma.goma_jsonstatus",
@@ -1606,6 +1679,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisect a2.postprocess_for_goma.goma_stat",
@@ -1622,6 +1696,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisect a2.postprocess_for_goma.stop_goma",
@@ -1661,6 +1736,9 @@
       "test_bot"
     ],
     "cwd": "[START_DIR]/v8",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "Bisect a2.postprocess_for_goma.upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -1687,6 +1765,9 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/v8",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "Bisect a2.postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
@@ -1882,6 +1963,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "gomadir='[CACHE]/goma_client' target_arch=ia32 use_goma=1 v8_enable_verify_predictable=1 v8_target_arch=ia32",
@@ -1912,6 +1994,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisect a1.generate_build_files",
@@ -1978,6 +2061,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisect a1.generate_build_files with gn (fyi)",
@@ -2016,6 +2100,9 @@
   {
     "cmd": [],
     "cwd": "[START_DIR]/v8",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "Bisect a1.preprocess_for_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2030,6 +2117,9 @@
       "511"
     ],
     "cwd": "[START_DIR]/v8",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "Bisect a1.preprocess_for_goma.makedirs goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -2054,6 +2144,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]/goma/V8_Linux___predictable",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
@@ -2083,6 +2174,9 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/v8",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "Bisect a1.preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
@@ -2102,6 +2196,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisect a1.compile",
@@ -2112,6 +2207,9 @@
   {
     "cmd": [],
     "cwd": "[START_DIR]/v8",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "Bisect a1.postprocess_for_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2127,6 +2225,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisect a1.postprocess_for_goma.goma_jsonstatus",
@@ -2154,6 +2253,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisect a1.postprocess_for_goma.goma_stat",
@@ -2170,6 +2270,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "Bisect a1.postprocess_for_goma.stop_goma",
@@ -2209,6 +2310,9 @@
       "test_bot"
     ],
     "cwd": "[START_DIR]/v8",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "Bisect a1.postprocess_for_goma.upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -2235,6 +2339,9 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/v8",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "Bisect a1.postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
