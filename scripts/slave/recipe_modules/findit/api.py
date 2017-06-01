@@ -340,7 +340,8 @@ class FinditApi(recipe_api.RecipeApi):
 
     api.chromium.apply_config('goma_failfast')
 
-    (checked_out_revision, cached_revision) = self.record_previous_revision(api)
+    (checked_out_revision, cached_revision) = self.record_previous_revision(
+        api, bot_config)
     # Configure to match the test config on the tester, as builders don't have
     # the settings for swarming tests.
     if target_buildername != target_testername:
@@ -357,7 +358,7 @@ class FinditApi(recipe_api.RecipeApi):
 
     return tests, target_buildername, checked_out_revision, cached_revision
 
-  def record_previous_revision(self, api):
+  def record_previous_revision(self, api, bot_config):
     """Records the latest checked out and cached revisions.
 
     Examines the checkout and records the latest available revision for the
@@ -371,12 +372,10 @@ class FinditApi(recipe_api.RecipeApi):
       A pair of revisions (checked_out_revision, cached_revision), or None, None
       if the checkout directory does not exist.
     """
-    # api.path['checkout'] is not set yet, hence we assemble it from
-    # api.path['start_dir'].
-    checkout_path = api.gclient.c.src_root or api.gclient.c.solutions[0].name
-    full_checkout_path = api.path['start_dir'].join(checkout_path)
-    if not api.path.exists(full_checkout_path):
-      return None, None
+    src_root = api.gclient.c.src_root or api.gclient.c.solutions[0].name
+    # api.path['checkout'] is not set yet, so we get it from chromium_checkout.
+    checkout_dir = api.chromium_checkout.get_checkout_dir(bot_config)
+    full_checkout_path = checkout_dir.join(src_root)
     with api.context(cwd=full_checkout_path):
       checked_out_revision = None
       try:

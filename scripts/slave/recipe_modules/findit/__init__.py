@@ -5,6 +5,7 @@
 DEPS = [
   'buildbucket',
   'chromium',
+  'chromium_checkout',
   'depot_tools/depot_tools',
   'depot_tools/gclient',
   'depot_tools/git',

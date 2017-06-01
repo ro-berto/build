@@ -16,6 +16,7 @@ DEPS = [
     'buildbucket',
     'chromium',
     'chromium_android',
+    'chromium_checkout',
     'chromium_swarming',
     'chromium_tests',
     'commit_position',

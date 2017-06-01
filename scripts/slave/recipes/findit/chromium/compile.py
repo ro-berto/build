@@ -12,6 +12,7 @@ from recipe_engine.recipe_api import Property
 DEPS = [
     'buildbucket',
     'chromium',
+    'chromium_checkout',
     'chromium_tests',
     'filter',
     'findit',
@@ -160,7 +161,7 @@ def RunSteps(api, target_mastername, target_buildername,
   api.chromium.apply_config('goma_failfast')
 
   (checked_out_revision, cached_revision) = api.findit.record_previous_revision(
-      api)
+      api, bot_config)
   # Sync to bad revision, and retrieve revisions in the regression range.
   api.chromium_tests.prepare_checkout(
       bot_config,
@@ -374,8 +375,7 @@ def GenTests(api):
       properties['suspected_revisions'] = suspected_revisions
     if buildbucket:
       properties['buildbucket'] = buildbucket
-    return (api.properties(**properties) + api.platform.name('linux') +
-            api.path.exists(api.path['start_dir'].join('src')))
+    return api.properties(**properties) + api.platform.name('linux')
 
   def simulated_buildbucket_output(additional_build_parameters):
     buildbucket_output = {
