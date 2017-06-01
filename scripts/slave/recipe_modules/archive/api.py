@@ -242,7 +242,7 @@ class ArchiveApi(recipe_api.RecipeApi):
                                             sortkey_path)
     zip_file_name = '%s.zip' % zip_file_base_name
 
-    self.m.build.python(
+    self.m.python(
         'zipping',
         self.resource('zip_archive.py'),
         [

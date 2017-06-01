@@ -12,7 +12,7 @@ class CrrevApi(recipe_api.RecipeApi):
 
   def __call__(self, step_name, request_path, request_params=None, attempts=3,
                **kwargs):
-    step_result = self.m.build.python(
+    step_result = self.m.python(
         step_name,
         self.resource('crrev_client.py'),
         [
