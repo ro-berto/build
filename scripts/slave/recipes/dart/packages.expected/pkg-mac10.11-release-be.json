@@ -137,7 +137,6 @@
       "-v",
       "--report",
       "--time",
-      "--failure-summary",
       "--write-debug-log",
       "--write-test-outcome-log",
       "pkg"
@@ -163,7 +162,6 @@
       "-v",
       "--report",
       "--time",
-      "--failure-summary",
       "--write-debug-log",
       "--write-test-outcome-log",
       "--append_logs",
@@ -190,7 +188,6 @@
       "-v",
       "--report",
       "--time",
-      "--failure-summary",
       "--write-debug-log",
       "--write-test-outcome-log",
       "--append_logs",

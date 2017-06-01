@@ -99,7 +99,6 @@ def RunSteps(api):
                    '--progress=buildbot',
                    '--report',
                    '--time',
-                   '--failure-summary',
                    '--write-debug-log',
                    '--write-test-outcome-log',
                    '--copy-coredumps']
@@ -135,7 +134,6 @@ def RunSteps(api):
                  '-v',
                  '--report',
                  '--time',
-                 '--failure-summary',
                  '--write-debug-log',
                  '--write-test-outcome-log']
     if system in ['win7', 'win8', 'win10']:

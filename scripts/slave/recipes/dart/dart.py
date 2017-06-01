@@ -47,7 +47,6 @@ def RunSteps(api):
                    '--progress=line',
                    '--report',
                    '--time',
-                   '--failure-summary',
                    '--write-debug-log',
                    '--write-test-outcome-log']
       test_args.extend(extra_test_args)

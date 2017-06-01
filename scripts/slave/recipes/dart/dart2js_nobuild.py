@@ -128,7 +128,6 @@ def RunSteps(api):
                    '--reset-browser-configuration',
                    '--report',
                    '--time',
-                   '--failure-summary',
                    '--write-debug-log',
                    '--write-test-outcome-log']
       for option in options:

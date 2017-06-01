@@ -77,7 +77,6 @@
       "--progress=line",
       "--report",
       "--time",
-      "--failure-summary",
       "--write-debug-log",
       "--write-test-outcome-log"
     ],

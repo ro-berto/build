@@ -182,7 +182,6 @@ def RunSteps(api):
                    '--progress=line',
                    '--report',
                    '--time',
-                   '--failure-summary',
                    '--write-debug-log',
                    '--write-test-outcome-log']
       if b.get('archive_core_dumps', False):
