@@ -14,6 +14,7 @@ DEPS = [
   'depot_tools/git',
   'file',
   'goma',
+  'recipe_engine/context',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/properties',
@@ -83,7 +84,7 @@ def RunSteps(api, buildername):
   api.chromium.ensure_goma()
   # CHROME_HEADLESS makes sure that running 'gclient runhooks' doesn't require
   # entering 'y' to agree to a license.
-  with api.step.context({'env': {'CHROME_HEADLESS': '1'}}):
+  with api.context(env={'CHROME_HEADLESS': '1'}):
     api.chromium.runhooks()
 
   result = api.codesearch.generate_compilation_database(targets, platform)
