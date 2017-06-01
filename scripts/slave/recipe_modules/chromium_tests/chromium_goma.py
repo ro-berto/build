@@ -51,5 +51,20 @@ SPEC = {
        'platform': 'win',
      },
    },
+   'Chromium Linux Goma GCE Staging': {
+     'chromium_config': 'chromium',
+     'chromium_apply_config': ['goma_staging', 'clobber', 'mb'],
+     'gclient_config': 'chromium',
+     'chromium_config_kwargs': {
+       'BUILD_CONFIG': 'Release',
+       'TARGET_BITS': 64,
+     },
+     'compile_targets': [ 'chromium_builder_tests' ],
+     'tests': steps.GOMA_TESTS,
+     'goma_staging': True,
+     'testing': {
+       'platform': 'linux',
+     },
+   },
  },
 }

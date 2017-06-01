@@ -33,6 +33,13 @@
        "slave_pools": ["win_win8"],
        "category": "0builders",
      },
+     "Chromium Linux Goma GCE Staging": {
+       "recipe": "chromium",
+       "use_remote_run": True,
+       "scheduler": "chromium_src_commits",
+       "slave_pools": ["linux_trusty_gce"],
+       "category": "gce",
+     },
   },
 
   "schedulers": {
@@ -50,6 +57,14 @@
         "version": "trusty",
       },
       "slaves": ["slave11-c1"],
+    },
+    "linux_trusty_gce": {
+      "slave_data": {
+        "bits": 64,
+        "os": "linux",
+        "version": "trusty",
+      },
+      "slaves": ["slave156-c1"],
     },
     "mac_10.11": {
       "slave_data": {
