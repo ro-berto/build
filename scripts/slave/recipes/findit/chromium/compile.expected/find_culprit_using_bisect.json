@@ -757,8 +757,7 @@
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "NINJA_STATUS": "%e [%s/%t %p - %r running, current %c p/s, overall %o p/s] "
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "test r6.compile",
     "~followup_annotations": [
@@ -1629,8 +1628,7 @@
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "NINJA_STATUS": "%e [%s/%t %p - %r running, current %c p/s, overall %o p/s] "
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "test r5.compile",
     "~followup_annotations": [
