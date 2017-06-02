@@ -13,11 +13,39 @@
   "default_remote_run_repository": "https://chromium.googlesource.com/chromium/tools/build.git",
 
   "builders": {
+    "V8 Linux64 - release builder": {
+      "recipe": "v8",
+      "use_remote_run": False,
+      "scheduler": "v8_commits",
+      "mergeRequests": False,
+      "slave_pools": ["linux1"],
+      "category": "0Linux",
+    },
+    "V8 Linux64 - debug builder": {
+      "recipe": "v8",
+      "use_remote_run": False,
+      "scheduler": "v8_commits",
+      "mergeRequests": False,
+      "slave_pools": ["linux1"],
+      "category": "0Linux",
+    },
   },
 
   "schedulers": {
+    "v8_commits": {
+      "type": "git_poller",
+      "git_repo_url": "https://chromium.googlesource.com/v8/v8",
+    },
   },
 
   "slave_pools": {
+    "linux1": {
+      "slave_data": {
+        "bits": 64,
+        "os": "linux",
+        "version": "trusty",
+      },
+      "slaves": ["slave252-c3"],
+    },
   },
 }
