@@ -313,6 +313,10 @@ class ChromiumApi(recipe_api.RecipeApi):
     goma_env.update(self.m.context.env)
     ninja_env = goma_env.copy()
 
+    # Set the ninja status so we can see where the compile time is going.
+    ninja_env['NINJA_STATUS'] = (
+        '%%e [%%s/%%t %%p - %%r running, current %%c p/s, overall %%o p/s] ')
+
     goma_env['GOMA_CACHE_DIR'] = self.m.goma.default_cache_path
 
     # Enable goma DepsCache

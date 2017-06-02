@@ -271,6 +271,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "NINJA_STATUS": "%e [%s/%t %p - %r running, current %c p/s, overall %o p/s] ",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "name": "compile",
