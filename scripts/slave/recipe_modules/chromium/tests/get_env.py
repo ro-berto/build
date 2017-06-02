@@ -16,6 +16,7 @@ def RunSteps(api):
   api.chromium.apply_config('clang_tot')
   api.chromium.apply_config('force_mac_toolchain_override')
   api.chromium.apply_config('goma_staging')
+  api.chromium.apply_config('goma_gce')
 
   api.chromium.c.env.ADB_VENDOR_KEYS = api.path['start_dir'].join('.adb_key')
 

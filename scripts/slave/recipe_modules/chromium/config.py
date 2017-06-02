@@ -70,6 +70,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       ADB_VENDOR_KEYS = Single(Path, required=False),
       LLVM_FORCE_HEAD_REVISION = Single(basestring, required=False),
       GOMA_STUBBY_PROXY_IP_ADDRESS = Single(basestring, required=False),
+      GOMA_SETTINGS_SERVER = Single(basestring, required=False),
       FORCE_MAC_TOOLCHAIN = Single(int, required=False),
       FORCE_MAC_TOOLCHAIN_REVISION_OVERRIDE = Single(basestring, required=False),
     ),
@@ -268,6 +269,12 @@ def goma_canary(c):
 def goma_staging(c):
   c.compile_py.goma_failfast = True
   c.env.GOMA_STUBBY_PROXY_IP_ADDRESS = 'sandbox.google.com'
+
+@config_ctx()
+def goma_gce(c):
+  c.compile_py.goma_failfast = True
+  c.env.GOMA_SETTINGS_SERVER = \
+    'https://cxx-compiler-service.appspot.com/settings'
 
 @config_ctx()
 def goma_hermetic_fallback(c):

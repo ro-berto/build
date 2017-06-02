@@ -53,7 +53,7 @@ SPEC = {
    },
    'Chromium Linux Goma GCE Staging': {
      'chromium_config': 'chromium',
-     'chromium_apply_config': ['goma_staging', 'clobber', 'mb'],
+     'chromium_apply_config': ['goma_gce', 'clobber', 'mb'],
      'gclient_config': 'chromium',
      'chromium_config_kwargs': {
        'BUILD_CONFIG': 'Release',
