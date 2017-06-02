@@ -272,6 +272,7 @@ def RunSteps(api, target_mastername, target_testername, good_revision,
     report['metadata']['infra_failure'] = True
     raise
   finally:
+    report['last_checked_out_revision'] = api.properties.get('got_revision')
     if found:
       report['culprits'] = culprits
 

@@ -2091,7 +2091,7 @@
     "name": "report",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@report@{@@@",
-      "@@@STEP_LOG_LINE@report@  \"previously_checked_out_revision\": \"1234567123456712345671234567888812345678\", @@@",
+      "@@@STEP_LOG_LINE@report@  \"last_checked_out_revision\": null, @@@",
       "@@@STEP_LOG_LINE@report@  \"previously_cached_revision\": \"1234567123456712345671234567888812345678\", @@@",
       "@@@STEP_LOG_LINE@report@  \"flakes\": {@@@",
       "@@@STEP_LOG_LINE@report@    \"gl_tests\": [@@@",
@@ -2173,6 +2173,7 @@
       "@@@STEP_LOG_LINE@report@      \"Test.Two\": \"r4\"@@@",
       "@@@STEP_LOG_LINE@report@    }@@@",
       "@@@STEP_LOG_LINE@report@  }, @@@",
+      "@@@STEP_LOG_LINE@report@  \"previously_checked_out_revision\": \"1234567123456712345671234567888812345678\", @@@",
       "@@@STEP_LOG_LINE@report@  \"metadata\": {@@@",
       "@@@STEP_LOG_LINE@report@    \"regression_range_size\": 6@@@",
       "@@@STEP_LOG_LINE@report@  }@@@",

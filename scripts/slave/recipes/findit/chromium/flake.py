@@ -92,6 +92,7 @@ def RunSteps(api, target_mastername, target_testername,
     report['metadata']['infra_failure'] = True
     raise
   finally:
+    report['last_checked_out_revision'] = api.properties.get('got_revision')
     # Give the full report including test results and metadata.
     api.python.succeeding_step(
         'report', [json.dumps(report, indent=2)], as_log='report')
