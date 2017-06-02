@@ -29,12 +29,69 @@
       "slave_pools": ["linux1"],
       "category": "0Linux",
     },
+    "V8 Linux64 ASAN no inline - release builder": {
+      "recipe": "v8",
+      "use_remote_run": False,
+      "scheduler": "v8_commits",
+      "mergeRequests": False,
+      "slave_pools": ["linux2"],
+      "category": "0Linux",
+    },
+    "V8 Linux64 ASAN - debug builder": {
+      "recipe": "v8",
+      "use_remote_run": False,
+      "scheduler": "v8_commits",
+      "mergeRequests": False,
+      "slave_pools": ["linux2"],
+      "category": "0Linux",
+    },
+    "V8 Linux64 ASAN arm64 - debug builder": {
+      "recipe": "v8",
+      "use_remote_run": False,
+      "scheduler": "v8_commits",
+      "mergeRequests": False,
+      "slave_pools": ["linux2"],
+      "category": "0Linux",
+    },
+    "V8 Linux ASAN arm - debug builder": {
+      "recipe": "v8",
+      "use_remote_run": False,
+      "scheduler": "v8_commits",
+      "mergeRequests": False,
+      "slave_pools": ["linux3"],
+      "category": "0Linux",
+    },
+    "V8 Linux ASAN mipsel - debug builder": {
+      "recipe": "v8",
+      "use_remote_run": False,
+      "scheduler": "v8_commits",
+      "mergeRequests": False,
+      "slave_pools": ["linux3"],
+      "category": "0Linux",
+    },
+    "V8 Linux MSAN no origins": {
+      "recipe": "v8",
+      "use_remote_run": False,
+      "scheduler": "v8_commits",
+      "mergeRequests": False,
+      "slave_pools": ["linux3"],
+      "category": "0Linux",
+    },
+    "V8 Linux MSAN chained origins": {
+      "recipe": "v8",
+      "use_remote_run": False,
+      "scheduler": "v8_commits",
+      "mergeRequests": False,
+      "slave_pools": ["linux3"],
+      "category": "0Linux",
+    },
   },
 
   "schedulers": {
     "v8_commits": {
       "type": "git_poller",
       "git_repo_url": "https://chromium.googlesource.com/v8/v8",
+      "treeStableTimer": 10,
     },
   },
 
@@ -46,6 +103,22 @@
         "version": "trusty",
       },
       "slaves": ["slave252-c3"],
+    },
+    "linux2": {
+      "slave_data": {
+        "bits": 64,
+        "os": "linux",
+        "version": "trusty",
+      },
+      "slaves": ["vm124-m3"],
+    },
+    "linux3": {
+      "slave_data": {
+        "bits": 64,
+        "os": "linux",
+        "version": "trusty",
+      },
+      "slaves": ["slave4-c3"],
     },
   },
 }

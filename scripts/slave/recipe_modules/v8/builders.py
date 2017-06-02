@@ -1082,11 +1082,6 @@ BUILDERS = {
         'cf_archive_name': 'd8',
         'testing': {'platform': 'linux'},
       },
-    },
-  },
-####### Waterfall: client.v8.fyi
-  'client.v8.fyi': {
-    'builders': {
       'V8 Linux64 ASAN no inline - release builder': {
         'chromium_apply_config': [
           'clang',
