@@ -27,7 +27,6 @@ SPEC = {
       'root_devices': True,
       'tests': [
         steps.GTestTest('gfx_unittests'),
-        steps.AndroidInstrumentationTest('WebViewUiTest'),
       ],
       'test_results_config': 'staging_server',
       'testing': {

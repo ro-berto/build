@@ -270,6 +270,7 @@ SPEC = {
       'android_apply_config': ['remove_all_system_webviews'],
       'tests': [
         steps.AndroidInstrumentationTest('SystemWebViewShellLayoutTest'),
+        steps.AndroidInstrumentationTest('WebViewUiTest'),
         steps.WebViewCTSTest('M'),
       ],
       'testing': {
