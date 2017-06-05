@@ -323,6 +323,8 @@
       "dupbuild=err",
       "-C",
       "[BUILDER_CACHE]\\Win64_Debug\\src\\out\\Debug_x64",
+      "-l",
+      "2",
       "-j",
       "50"
     ],
@@ -422,7 +424,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]\\Win64_Debug\\src\\out\\Debug_x64",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]\\\\Win64_Debug\\\\src\\\\out\\\\Debug_x64', '-j', 50]",
+      "['RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]\\\\Win64_Debug\\\\src\\\\out\\\\Debug_x64', '-l', 2, '-j', 50]",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",

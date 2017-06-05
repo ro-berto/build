@@ -373,6 +373,9 @@ class ChromiumApi(recipe_api.RecipeApi):
     # TODO(tikuta): Remove this and let goma module set '-j'
     #               inside build_with_goma.
     if use_goma_module:
+      # Set -l not to invoke too many tasks not handled by goma.
+      command += ['-l', max(int(self.m.platform.cpu_count * 0.9), 2)]
+
       # Set -j just before 'with self.m.goma.build_with_goma('
       # for ninja_log_command being set correctly if starting goma
       # fails.

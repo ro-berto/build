@@ -361,6 +361,8 @@
       "dupbuild=err",
       "-C",
       "[START_DIR]/src/out/Release",
+      "-l",
+      "2",
       "-j",
       "50",
       "base_unittests"
@@ -463,7 +465,7 @@
       "--ninja-log-outdir",
       "[START_DIR]/src/out/Release",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/Release', '-j', 50, 'base_unittests']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/Release', '-l', 2, '-j', 50, 'base_unittests']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",

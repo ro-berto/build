@@ -387,6 +387,8 @@
       "dupbuild=err",
       "-C",
       "[BUILDER_CACHE]/linux_ubsan/src/out/Release",
+      "-l",
+      "2",
       "-j",
       "50"
     ],
@@ -486,7 +488,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/linux_ubsan/src/out/Release",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/linux_ubsan/src/out/Release', '-j', 50]",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/linux_ubsan/src/out/Release', '-l', 2, '-j', 50]",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",

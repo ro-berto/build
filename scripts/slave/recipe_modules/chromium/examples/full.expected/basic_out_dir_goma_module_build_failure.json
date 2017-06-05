@@ -366,6 +366,8 @@
       "dupbuild=err",
       "-C",
       "/tmp/Debug",
+      "-l",
+      "2",
       "-j",
       "50",
       "All"
@@ -471,7 +473,7 @@
       "--ninja-log-outdir",
       "/tmp/Debug",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '/tmp/Debug', '-j', 50, 'All']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '/tmp/Debug', '-l', 2, '-j', 50, 'All']",
       "--ninja-log-exit-status",
       "1",
       "--ninja-log-compiler",
