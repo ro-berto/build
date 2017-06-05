@@ -560,13 +560,8 @@ def DetermineGomaJobs():
   # For safety, we'd like to set the upper limit to 200.
   #
   # Note that currently most try-bot build slaves have 8 processors.
-  if chromium_utils.IsMac():
+  if chromium_utils.IsMac() or chromium_utils.IsWindows():
     return min(10 * number_of_processors, 200)
-  # TODO(goma): To mitigate crbug.com/728954, let's decrease the max job number
-  # from 200 to 120. After the problem has been fixed, we will make this back
-  # to 200.
-  if chromium_utils.IsWindows():
-    return min(10 * number_of_processors, 120)
 
   # For Linux, we also would like to use 10 * cpu. However, not sure
   # backend resource is enough, so let me set Linux and Linux x64 builder
