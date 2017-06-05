@@ -183,7 +183,6 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_DEFINES": "clang=1 component=static_library gomadir='[CACHE]/goma_client' target_arch=x64 use_goma=1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -313,8 +312,7 @@
     ],
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "find isolated tests",
     "~followup_annotations": [
@@ -330,8 +328,7 @@
     "cmd": [],
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "test_pre_run"
   },
@@ -404,8 +401,7 @@
     ],
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "infra_step": true,
     "name": "test_pre_run.[trigger] gl_tests on Intel GPU on Mac on Mac-10.10",
@@ -495,8 +491,7 @@
     ],
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "infra_step": true,
     "name": "test_pre_run.[trigger] gl_tests on NVIDIA GPU on Mac Retina",
@@ -553,8 +548,7 @@
     ],
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "gl_tests on Intel GPU on Mac on Mac-10.10",
     "~followup_annotations": [
@@ -644,8 +638,7 @@
     ],
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "Upload to test-results [gl_tests on Intel GPU on Mac on Mac-10.10]"
   },
@@ -685,8 +678,7 @@
     ],
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "gl_tests on NVIDIA GPU on Mac Retina",
     "~followup_annotations": [
@@ -776,8 +768,7 @@
     ],
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "Upload to test-results [gl_tests on NVIDIA GPU on Mac Retina]"
   },

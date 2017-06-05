@@ -209,7 +209,6 @@
     "cwd": "[START_DIR]/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "component=static_library gomadir='[CACHE]/goma_client' target_arch=x64 use_goma=1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -370,8 +369,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "compile"
   },
@@ -558,9 +556,6 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
     "name": "find isolated tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -572,9 +567,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
     "name": "test_pre_run"
   },
   {
@@ -640,9 +632,6 @@
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
     "infra_step": true,
     "name": "test_pre_run.[trigger] browser_tests on Ubuntu",
     "~followup_annotations": [
@@ -701,9 +690,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
     "name": "browser_tests on Ubuntu",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
@@ -794,9 +780,6 @@
       "--chrome-revision",
       "170242"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
     "name": "Upload to test-results [browser_tests on Ubuntu]"
   },
   {

@@ -256,7 +256,6 @@
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus5X_perf_bisect",
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_nexus5X_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus5X_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
@@ -301,7 +300,6 @@
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus5X_perf_bisect",
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_nexus5X_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus5X_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
@@ -321,7 +319,6 @@
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus5X_perf_bisect",
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_nexus5X_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus5X_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
@@ -349,7 +346,6 @@
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus5X_perf_bisect",
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_nexus5X_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus5X_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
@@ -373,7 +369,6 @@
     ],
     "cwd": "[BUILDER_CACHE]/android_nexus5X_perf_bisect",
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_nexus5X_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus5X_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
@@ -483,7 +478,6 @@
     "cwd": "[BUILDER_CACHE]/android_nexus5X_perf_bisect/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[CACHE]/goma_client' target_arch=arm64 use_goma=1",
@@ -545,7 +539,6 @@
       "/path/to/tmp/"
     ],
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_nexus5X_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus5X_perf_bisect/src/build/android:<PATH>"
     },
     "name": "get version"
@@ -562,7 +555,6 @@
       "--release"
     ],
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_nexus5X_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus5X_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
@@ -571,7 +563,6 @@
   {
     "cmd": [],
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_nexus5X_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus5X_perf_bisect/src/build/android:<PATH>"
     },
     "name": "test_pre_run"
@@ -585,7 +576,6 @@
       "511"
     ],
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_nexus5X_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus5X_perf_bisect/src/build/android:<PATH>"
     },
     "name": "makedirs results directory",
@@ -639,7 +629,6 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_nexus5X_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus5X_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Performance Test 1 of 2",
@@ -657,7 +646,6 @@
       "/path/to/tmp/json"
     ],
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_nexus5X_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus5X_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Reading valueset results",
@@ -677,7 +665,6 @@
       "511"
     ],
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_nexus5X_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus5X_perf_bisect/src/build/android:<PATH>"
     },
     "name": "makedirs results directory (2)",
@@ -731,7 +718,6 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_nexus5X_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus5X_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Performance Test 2 of 2",
@@ -749,7 +735,6 @@
       "/path/to/tmp/json"
     ],
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_nexus5X_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus5X_perf_bisect/src/build/android:<PATH>"
     },
     "name": "Reading valueset results (2)",
@@ -768,7 +753,6 @@
       "[BUILDER_CACHE]/android_nexus5X_perf_bisect/src/out/Release/test_logs/*.log"
     ],
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_nexus5X_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus5X_perf_bisect/src/build/android:<PATH>"
     },
     "name": "test_report",
@@ -958,7 +942,6 @@
     "cwd": "[BUILDER_CACHE]/android_nexus5X_perf_bisect",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_nexus5X_perf_bisect/src/out/Release",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_nexus5X_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus5X_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
@@ -985,7 +968,6 @@
     "cwd": "[BUILDER_CACHE]/android_nexus5X_perf_bisect",
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/android_nexus5X_perf_bisect/src/out/Release",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_nexus5X_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus5X_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,

@@ -151,7 +151,6 @@
     "cwd": "[BUILDER_CACHE]\\Win32_Release\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_DEFINES": "component=static_library fastbuild=1 gomadir='[CACHE]\\goma_client' target_arch=ia32 use_goma=1",
       "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -329,8 +328,7 @@
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Release\\src",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "compile"
   },

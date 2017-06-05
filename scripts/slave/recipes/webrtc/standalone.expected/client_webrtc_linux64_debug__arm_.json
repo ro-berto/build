@@ -140,7 +140,6 @@
     "cwd": "[BUILDER_CACHE]/Linux64_Debug__ARM_/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "component=shared_library gomadir='[CACHE]/goma_client' target_arch=arm64 use_goma=1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -283,8 +282,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/Linux64_Debug__ARM_/src",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "compile"
   },

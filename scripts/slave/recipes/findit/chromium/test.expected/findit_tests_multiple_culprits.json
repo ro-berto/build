@@ -247,7 +247,6 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "clang=1 component=static_library fetch_telemetry_dependencies=1 ffmpeg_branding=Chrome gomadir='[CACHE]/goma_client' proprietary_codecs=1 target_arch=x64 use_goma=1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -508,7 +507,6 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "clang=1 component=static_library fetch_telemetry_dependencies=1 ffmpeg_branding=Chrome gomadir='[CACHE]/goma_client' proprietary_codecs=1 target_arch=x64 use_goma=1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -630,8 +628,7 @@
     ],
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "test r4.clang_revision",
     "~followup_annotations": [
@@ -764,8 +761,7 @@
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "test r4.compile",
     "~followup_annotations": [
@@ -789,8 +785,7 @@
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "test r4.compile confirm no-op",
     "stdout": "/path/to/tmp/",
@@ -1048,8 +1043,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/mac",
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "infra_step": true,
     "name": "test r4.[trigger] gl_tests (r4)",
@@ -1105,8 +1099,7 @@
       "/path/to/tmp/json"
     ],
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "test r4.gl_tests (r4)",
     "~followup_annotations": [
@@ -1200,8 +1193,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/mac",
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "test r4.Upload to test-results [test r4.gl_tests (r4)]",
     "~followup_annotations": [
@@ -1404,7 +1396,6 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "clang=1 component=static_library fetch_telemetry_dependencies=1 ffmpeg_branding=Chrome gomadir='[CACHE]/goma_client' proprietary_codecs=1 target_arch=x64 use_goma=1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -1526,8 +1517,7 @@
     ],
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "test r5.clang_revision",
     "~followup_annotations": [
@@ -1639,8 +1629,7 @@
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "test r5.compile",
     "~followup_annotations": [
@@ -1664,8 +1653,7 @@
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "test r5.compile confirm no-op",
     "stdout": "/path/to/tmp/",
@@ -1923,8 +1911,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/mac",
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "infra_step": true,
     "name": "test r5.[trigger] gl_tests (r5)",
@@ -1980,8 +1967,7 @@
       "/path/to/tmp/json"
     ],
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "test r5.gl_tests (r5)",
     "~followup_annotations": [
@@ -2075,8 +2061,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/mac",
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "test r5.Upload to test-results [test r5.gl_tests (r5)]",
     "~followup_annotations": [
@@ -2279,7 +2264,6 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "clang=1 component=static_library fetch_telemetry_dependencies=1 ffmpeg_branding=Chrome gomadir='[CACHE]/goma_client' proprietary_codecs=1 target_arch=x64 use_goma=1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -2401,8 +2385,7 @@
     ],
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "test r6.clang_revision",
     "~followup_annotations": [
@@ -2514,8 +2497,7 @@
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "test r6.compile",
     "~followup_annotations": [
@@ -2539,8 +2521,7 @@
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "test r6.compile confirm no-op",
     "stdout": "/path/to/tmp/",
@@ -2798,8 +2779,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/mac",
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "infra_step": true,
     "name": "test r6.[trigger] gl_tests (r6)",
@@ -2855,8 +2835,7 @@
       "/path/to/tmp/json"
     ],
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "test r6.gl_tests (r6)",
     "~followup_annotations": [
@@ -2950,8 +2929,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/mac",
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "test r6.Upload to test-results [test r6.gl_tests (r6)]",
     "~followup_annotations": [
@@ -3154,7 +3132,6 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "clang=1 component=static_library fetch_telemetry_dependencies=1 ffmpeg_branding=Chrome gomadir='[CACHE]/goma_client' proprietary_codecs=1 target_arch=x64 use_goma=1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -3276,8 +3253,7 @@
     ],
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "test r2.clang_revision",
     "~followup_annotations": [
@@ -3389,8 +3365,7 @@
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "test r2.compile",
     "~followup_annotations": [
@@ -3414,8 +3389,7 @@
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "test r2.compile confirm no-op",
     "stdout": "/path/to/tmp/",
@@ -3673,8 +3647,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/mac",
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "infra_step": true,
     "name": "test r2.[trigger] gl_tests (r2)",
@@ -3730,8 +3703,7 @@
       "/path/to/tmp/json"
     ],
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "test r2.gl_tests (r2)",
     "~followup_annotations": [
@@ -3821,8 +3793,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/mac",
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "test r2.Upload to test-results [test r2.gl_tests (r2)]",
     "~followup_annotations": [
@@ -4025,7 +3996,6 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "clang=1 component=static_library fetch_telemetry_dependencies=1 ffmpeg_branding=Chrome gomadir='[CACHE]/goma_client' proprietary_codecs=1 target_arch=x64 use_goma=1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -4147,8 +4117,7 @@
     ],
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "test r3.clang_revision",
     "~followup_annotations": [
@@ -4260,8 +4229,7 @@
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "test r3.compile",
     "~followup_annotations": [
@@ -4285,8 +4253,7 @@
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "test r3.compile confirm no-op",
     "stdout": "/path/to/tmp/",
@@ -4544,8 +4511,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/mac",
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "infra_step": true,
     "name": "test r3.[trigger] gl_tests (r3)",
@@ -4601,8 +4567,7 @@
       "/path/to/tmp/json"
     ],
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "test r3.gl_tests (r3)",
     "~followup_annotations": [
@@ -4696,8 +4661,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/mac",
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "test r3.Upload to test-results [test r3.gl_tests (r3)]",
     "~followup_annotations": [

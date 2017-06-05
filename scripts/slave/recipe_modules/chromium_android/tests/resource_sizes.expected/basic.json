@@ -20,8 +20,7 @@
     ],
     "cwd": "None",
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "None/out/Release",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "CHROMIUM_OUTPUT_DIR": "None/out/Release"
     },
     "name": "Sharded Perf Tests"
   },
@@ -69,8 +68,7 @@
       "None/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "None/out/Release",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "CHROMIUM_OUTPUT_DIR": "None/out/Release"
     },
     "name": "get perf test list",
     "~followup_annotations": [
@@ -133,8 +131,7 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1",
-      "CHROMIUM_OUTPUT_DIR": "None/out/Release",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "CHROMIUM_OUTPUT_DIR": "None/out/Release"
     },
     "name": "page_cycler.foo",
     "~followup_annotations": [
@@ -181,8 +178,7 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1",
-      "CHROMIUM_OUTPUT_DIR": "None/out/Release",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "CHROMIUM_OUTPUT_DIR": "None/out/Release"
     },
     "name": "perf_test.foo",
     "~followup_annotations": [
@@ -229,8 +225,7 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1",
-      "CHROMIUM_OUTPUT_DIR": "None/out/Release",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "CHROMIUM_OUTPUT_DIR": "None/out/Release"
     },
     "name": "perf_test.foo.reference",
     "~followup_annotations": [

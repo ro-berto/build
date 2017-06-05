@@ -8,7 +8,6 @@
       "/path/to/tmp/json"
     ],
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "None/third_party/android_tools/sdk/platform-tools:None/build/android:<PATH>"
     },
     "name": "List adb devices",
@@ -28,7 +27,6 @@
       "014E1F310401C009"
     ],
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "None/third_party/android_tools/sdk/platform-tools:None/build/android:<PATH>"
     },
     "name": "Root devices",
@@ -53,7 +51,6 @@
       "None/out/Release/test_logs/*.log"
     ],
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "None/third_party/android_tools/sdk/platform-tools:None/build/android:<PATH>"
     },
     "name": "test_report",

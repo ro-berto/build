@@ -140,7 +140,6 @@
     "cwd": "[BUILDER_CACHE]\\Win64_Release__Clang_\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_DEFINES": "clang=1 component=static_library gomadir='[CACHE]\\goma_client' target_arch=x64 use_goma=1",
       "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -185,8 +184,7 @@
       "/path/to/tmp/json"
     ],
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "clang_revision",
     "~followup_annotations": [
@@ -309,8 +307,7 @@
     ],
     "cwd": "[BUILDER_CACHE]\\Win64_Release__Clang_\\src",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "compile"
   },

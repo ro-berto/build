@@ -128,7 +128,6 @@
     "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "component=static_library target_arch=arm",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -203,9 +202,6 @@
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
     "infra_step": true,
     "name": "spawn_logcat_monitor"
   },
@@ -247,9 +243,6 @@
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
     "infra_step": true,
     "name": "authorize_adb_devices"
   },
@@ -265,9 +258,6 @@
       "-v"
     ],
     "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
     "infra_step": true,
     "name": "device_recovery"
   },
@@ -286,9 +276,6 @@
       "Release"
     ],
     "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
     "infra_step": true,
     "name": "provision_devices"
   },
@@ -309,9 +296,6 @@
       "--overwrite-known-devices-files"
     ],
     "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
     "infra_step": true,
     "name": "device_status",
     "~followup_annotations": [
@@ -609,8 +593,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_",
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/Release",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/Release"
     },
     "infra_step": true,
     "name": "stack_tool_with_logcat_dump"
@@ -626,8 +609,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_",
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/Release",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/Release"
     },
     "infra_step": true,
     "name": "stack_tool_for_tombstones"

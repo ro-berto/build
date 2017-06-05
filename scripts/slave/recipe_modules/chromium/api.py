@@ -121,8 +121,6 @@ class ChromiumApi(recipe_api.RecipeApi):
     if self.c.env.GOMA_SETTINGS_SERVER:
       ret['GOMA_SETTINGS_SERVER'] = \
         self.c.env.GOMA_SETTINGS_SERVER
-    ret['GOMA_SERVICE_ACCOUNT_JSON_FILE'] = \
-        self.m.goma.service_account_json_path
     if self.c.env.FORCE_MAC_TOOLCHAIN:
       ret['FORCE_MAC_TOOLCHAIN'] = self.c.env.FORCE_MAC_TOOLCHAIN
     if self.c.env.FORCE_MAC_TOOLCHAIN_REVISION_OVERRIDE:

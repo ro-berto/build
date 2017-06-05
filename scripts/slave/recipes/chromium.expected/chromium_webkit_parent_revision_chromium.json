@@ -198,7 +198,6 @@
     "cwd": "[START_DIR]\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "component=static_library fastbuild=1 gomadir='[CACHE]\\goma_client' target_arch=ia32 use_goma=1",
       "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
@@ -296,8 +295,7 @@
   {
     "cmd": [],
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "test_pre_run"
   },
@@ -332,8 +330,7 @@
       "--debug-rwt-logging"
     ],
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "webkit_tests",
     "~followup_annotations": [
@@ -361,8 +358,7 @@
       "170242"
     ],
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Upload to test-results [webkit_tests]"
   },
@@ -391,8 +387,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
     ],
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "archive_webkit_tests_results",
     "~followup_annotations": [
@@ -413,8 +408,7 @@
       "Release"
     ],
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
     "name": "process_dumps"

@@ -175,7 +175,6 @@
     "env": {
       "ADB_VENDOR_KEYS": "[START_DIR]/.adb_key",
       "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 target_arch=arm",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -213,7 +212,6 @@
     ],
     "env": {
       "ADB_VENDOR_KEYS": "[START_DIR]/.adb_key",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "infra_step": true,
@@ -352,7 +350,6 @@
     ],
     "env": {
       "ADB_VENDOR_KEYS": "[START_DIR]/.adb_key",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "infra_step": true,
@@ -371,7 +368,6 @@
     ],
     "env": {
       "ADB_VENDOR_KEYS": "[START_DIR]/.adb_key",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "infra_step": true,
@@ -395,7 +391,6 @@
     ],
     "env": {
       "ADB_VENDOR_KEYS": "[START_DIR]/.adb_key",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "infra_step": true,
@@ -508,7 +503,6 @@
     ],
     "env": {
       "ADB_VENDOR_KEYS": "[START_DIR]/.adb_key",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "infra_step": true,
@@ -532,7 +526,6 @@
     ],
     "env": {
       "ADB_VENDOR_KEYS": "[START_DIR]/.adb_key",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "infra_step": true,
@@ -650,7 +643,6 @@
     ],
     "env": {
       "ADB_VENDOR_KEYS": "[START_DIR]/.adb_key",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "infra_step": true,
@@ -684,7 +676,6 @@
     ],
     "env": {
       "ADB_VENDOR_KEYS": "[START_DIR]/.adb_key",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "infra_step": true,
@@ -728,7 +719,6 @@
     ],
     "env": {
       "ADB_VENDOR_KEYS": "[START_DIR]/.adb_key",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "infra_step": true,
@@ -747,7 +737,6 @@
     ],
     "env": {
       "ADB_VENDOR_KEYS": "[START_DIR]/.adb_key",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "infra_step": true,
@@ -770,7 +759,6 @@
     ],
     "env": {
       "ADB_VENDOR_KEYS": "[START_DIR]/.adb_key",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "infra_step": true,
@@ -794,7 +782,6 @@
     ],
     "env": {
       "ADB_VENDOR_KEYS": "[START_DIR]/.adb_key",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "infra_step": true,
@@ -959,7 +946,6 @@
     ],
     "env": {
       "ADB_VENDOR_KEYS": "[START_DIR]/.adb_key",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "name": "unittests"
@@ -1008,7 +994,6 @@
     "env": {
       "ADB_VENDOR_KEYS": "[START_DIR]/.adb_key",
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "infra_step": true,
@@ -1034,7 +1019,6 @@
     "env": {
       "ADB_VENDOR_KEYS": "[START_DIR]/.adb_key",
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "infra_step": true,
@@ -1049,7 +1033,6 @@
     "env": {
       "ADB_VENDOR_KEYS": "[START_DIR]/.adb_key",
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "infra_step": true,

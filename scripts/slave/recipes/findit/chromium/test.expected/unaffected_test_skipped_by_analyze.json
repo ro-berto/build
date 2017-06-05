@@ -271,7 +271,6 @@
     "cwd": "[BUILDER_CACHE]\\win\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "component=static_library fastbuild=1 ffmpeg_branding=Chrome gomadir='[CACHE]\\goma_client' proprietary_codecs=1 target_arch=ia32 use_goma=1",
       "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
@@ -542,7 +541,6 @@
     "cwd": "[BUILDER_CACHE]\\win\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "component=static_library fastbuild=1 ffmpeg_branding=Chrome gomadir='[CACHE]\\goma_client' proprietary_codecs=1 target_arch=ia32 use_goma=1",
       "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
@@ -872,8 +870,7 @@
     ],
     "cwd": "[BUILDER_CACHE]\\win\\src",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "test r1.compile",
     "~followup_annotations": [
@@ -897,8 +894,7 @@
     ],
     "cwd": "[BUILDER_CACHE]\\win\\src",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "test r1.compile confirm no-op",
     "stdout": "/path/to/tmp/",
@@ -1155,9 +1151,6 @@
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[BUILDER_CACHE]\\win",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "infra_step": true,
     "name": "test r1.[trigger] affected_tests (r1)",
     "~followup_annotations": [
@@ -1211,9 +1204,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "test r1.affected_tests (r1)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1301,9 +1291,6 @@
       "170242"
     ],
     "cwd": "[BUILDER_CACHE]\\win",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "test r1.Upload to test-results [test r1.affected_tests (r1)]",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1322,9 +1309,6 @@
       "Release"
     ],
     "cwd": "[BUILDER_CACHE]\\win",
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "infra_step": true,
     "name": "test r1.process_dumps",
     "~followup_annotations": [

@@ -184,7 +184,6 @@
     "cwd": "[START_DIR]\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library fastbuild=1 gomadir='[CACHE]\\goma_client' target_arch=x64 use_goma=1",
       "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
@@ -934,9 +933,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Gathering reference values.test_pre_run",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -950,9 +946,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Gathering reference values.makedirs results directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1001,8 +994,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Gathering reference values.Performance Test 1 of 6",
     "stderr": "/path/to/tmp/",
@@ -1020,9 +1012,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Gathering reference values.write buildbot output to disk",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1036,9 +1025,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Gathering reference values.Reading valueset results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1056,9 +1042,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Gathering reference values.makedirs results directory (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1107,8 +1090,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Gathering reference values.Performance Test 2 of 6",
     "stderr": "/path/to/tmp/",
@@ -1126,9 +1108,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Gathering reference values.write buildbot output to disk (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1142,9 +1121,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Gathering reference values.Reading valueset results (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1162,9 +1138,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Gathering reference values.makedirs results directory (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1213,8 +1186,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Gathering reference values.Performance Test 3 of 6",
     "stderr": "/path/to/tmp/",
@@ -1232,9 +1204,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Gathering reference values.write buildbot output to disk (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1248,9 +1217,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Gathering reference values.Reading valueset results (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1268,9 +1234,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Gathering reference values.makedirs results directory (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1319,8 +1282,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Gathering reference values.Performance Test 4 of 6",
     "stderr": "/path/to/tmp/",
@@ -1338,9 +1300,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Gathering reference values.write buildbot output to disk (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1354,9 +1313,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Gathering reference values.Reading valueset results (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1374,9 +1330,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Gathering reference values.makedirs results directory (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1425,8 +1378,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Gathering reference values.Performance Test 5 of 6",
     "stderr": "/path/to/tmp/",
@@ -1444,9 +1396,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Gathering reference values.write buildbot output to disk (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1460,9 +1409,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Gathering reference values.Reading valueset results (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1480,9 +1426,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Gathering reference values.makedirs results directory (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1531,8 +1474,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Gathering reference values.Performance Test 6 of 6",
     "stderr": "/path/to/tmp/",
@@ -1550,9 +1492,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Gathering reference values.write buildbot output to disk (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1566,9 +1505,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Gathering reference values.Reading valueset results (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1590,9 +1526,6 @@
       "--target",
       "Release_x64"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "infra_step": true,
     "name": "Gathering reference values.process_dumps",
     "~followup_annotations": [
@@ -1780,9 +1713,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Gathering reference values.test_pre_run (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1796,9 +1726,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Gathering reference values.makedirs results directory (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1847,8 +1774,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Gathering reference values.Performance Test 1 of 6 (2)",
     "stderr": "/path/to/tmp/",
@@ -1866,9 +1792,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Gathering reference values.write buildbot output to disk (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1882,9 +1805,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Gathering reference values.Reading valueset results (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1902,9 +1822,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Gathering reference values.makedirs results directory (8)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1953,8 +1870,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Gathering reference values.Performance Test 2 of 6 (2)",
     "stderr": "/path/to/tmp/",
@@ -1972,9 +1888,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Gathering reference values.write buildbot output to disk (8)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1988,9 +1901,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Gathering reference values.Reading valueset results (8)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2008,9 +1918,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Gathering reference values.makedirs results directory (9)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2059,8 +1966,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Gathering reference values.Performance Test 3 of 6 (2)",
     "stderr": "/path/to/tmp/",
@@ -2078,9 +1984,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Gathering reference values.write buildbot output to disk (9)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2094,9 +1997,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Gathering reference values.Reading valueset results (9)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2114,9 +2014,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Gathering reference values.makedirs results directory (10)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2165,8 +2062,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Gathering reference values.Performance Test 4 of 6 (2)",
     "stderr": "/path/to/tmp/",
@@ -2184,9 +2080,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Gathering reference values.write buildbot output to disk (10)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2200,9 +2093,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Gathering reference values.Reading valueset results (10)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2220,9 +2110,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Gathering reference values.makedirs results directory (11)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2271,8 +2158,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Gathering reference values.Performance Test 5 of 6 (2)",
     "stderr": "/path/to/tmp/",
@@ -2290,9 +2176,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Gathering reference values.write buildbot output to disk (11)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2306,9 +2189,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Gathering reference values.Reading valueset results (11)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2326,9 +2206,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Gathering reference values.makedirs results directory (12)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2377,8 +2254,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Gathering reference values.Performance Test 6 of 6 (2)",
     "stderr": "/path/to/tmp/",
@@ -2396,9 +2272,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Gathering reference values.write buildbot output to disk (12)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2412,9 +2285,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Gathering reference values.Reading valueset results (12)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2436,9 +2306,6 @@
       "--target",
       "Release_x64"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "infra_step": true,
     "name": "Gathering reference values.process_dumps (2)",
     "~followup_annotations": [
@@ -2791,9 +2658,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.test_pre_run",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2807,9 +2671,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.makedirs results directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2858,8 +2719,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisecting revision.Performance Test 1 of 6",
     "stderr": "/path/to/tmp/",
@@ -2877,9 +2737,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.write buildbot output to disk",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2893,9 +2750,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.Reading valueset results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2913,9 +2767,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.makedirs results directory (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2964,8 +2815,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisecting revision.Performance Test 2 of 6",
     "stderr": "/path/to/tmp/",
@@ -2983,9 +2833,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.write buildbot output to disk (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2999,9 +2846,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.Reading valueset results (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -3019,9 +2863,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.makedirs results directory (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -3070,8 +2911,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisecting revision.Performance Test 3 of 6",
     "stderr": "/path/to/tmp/",
@@ -3089,9 +2929,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.write buildbot output to disk (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -3105,9 +2942,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.Reading valueset results (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -3125,9 +2959,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.makedirs results directory (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -3176,8 +3007,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisecting revision.Performance Test 4 of 6",
     "stderr": "/path/to/tmp/",
@@ -3195,9 +3025,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.write buildbot output to disk (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -3211,9 +3038,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.Reading valueset results (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -3231,9 +3055,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.makedirs results directory (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -3282,8 +3103,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisecting revision.Performance Test 5 of 6",
     "stderr": "/path/to/tmp/",
@@ -3301,9 +3121,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.write buildbot output to disk (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -3317,9 +3134,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.Reading valueset results (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -3337,9 +3151,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.makedirs results directory (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -3388,8 +3199,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisecting revision.Performance Test 6 of 6",
     "stderr": "/path/to/tmp/",
@@ -3407,9 +3217,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.write buildbot output to disk (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -3423,9 +3230,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.Reading valueset results (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -3447,9 +3251,6 @@
       "--target",
       "Release_x64"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "infra_step": true,
     "name": "Bisecting revision.process_dumps",
     "~followup_annotations": [
@@ -3554,9 +3355,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.test_pre_run (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -3570,9 +3368,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.makedirs results directory (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -3621,8 +3416,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisecting revision.Performance Test 1 of 3",
     "stderr": "/path/to/tmp/",
@@ -3640,9 +3434,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.write buildbot output to disk (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -3656,9 +3447,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.Reading valueset results (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -3676,9 +3464,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.makedirs results directory (8)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -3727,8 +3512,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisecting revision.Performance Test 2 of 3",
     "stderr": "/path/to/tmp/",
@@ -3746,9 +3530,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.write buildbot output to disk (8)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -3762,9 +3543,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.Reading valueset results (8)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -3782,9 +3560,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.makedirs results directory (9)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -3833,8 +3608,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisecting revision.Performance Test 3 of 3",
     "stderr": "/path/to/tmp/",
@@ -3852,9 +3626,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.write buildbot output to disk (9)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -3868,9 +3639,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.Reading valueset results (9)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -3892,9 +3660,6 @@
       "--target",
       "Release_x64"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "infra_step": true,
     "name": "Bisecting revision.process_dumps (2)",
     "~followup_annotations": [
@@ -4145,9 +3910,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.test_pre_run (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -4161,9 +3923,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.makedirs results directory (10)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -4212,8 +3971,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisecting revision.Performance Test 1 of 3 (2)",
     "stderr": "/path/to/tmp/",
@@ -4231,9 +3989,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.write buildbot output to disk (10)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -4247,9 +4002,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.Reading valueset results (10)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -4267,9 +4019,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.makedirs results directory (11)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -4318,8 +4067,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisecting revision.Performance Test 2 of 3 (2)",
     "stderr": "/path/to/tmp/",
@@ -4337,9 +4085,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.write buildbot output to disk (11)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -4353,9 +4098,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.Reading valueset results (11)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -4373,9 +4115,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.makedirs results directory (12)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -4424,8 +4163,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisecting revision.Performance Test 3 of 3 (2)",
     "stderr": "/path/to/tmp/",
@@ -4443,9 +4181,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.write buildbot output to disk (12)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -4459,9 +4194,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.Reading valueset results (12)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -4483,9 +4215,6 @@
       "--target",
       "Release_x64"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "infra_step": true,
     "name": "Bisecting revision.process_dumps (3)",
     "~followup_annotations": [
@@ -4736,9 +4465,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.test_pre_run (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -4752,9 +4478,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.makedirs results directory (13)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -4803,8 +4526,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisecting revision.Performance Test 1 of 3 (3)",
     "stderr": "/path/to/tmp/",
@@ -4822,9 +4544,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.write buildbot output to disk (13)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -4838,9 +4557,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.Reading valueset results (13)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -4858,9 +4574,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.makedirs results directory (14)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -4909,8 +4622,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisecting revision.Performance Test 2 of 3 (3)",
     "stderr": "/path/to/tmp/",
@@ -4928,9 +4640,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.write buildbot output to disk (14)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -4944,9 +4653,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.Reading valueset results (14)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -4964,9 +4670,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.makedirs results directory (15)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -5015,8 +4718,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisecting revision.Performance Test 3 of 3 (3)",
     "stderr": "/path/to/tmp/",
@@ -5034,9 +4736,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.write buildbot output to disk (15)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -5050,9 +4749,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.Reading valueset results (15)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -5074,9 +4770,6 @@
       "--target",
       "Release_x64"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "infra_step": true,
     "name": "Bisecting revision.process_dumps (4)",
     "~followup_annotations": [
@@ -5327,9 +5020,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.test_pre_run (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -5343,9 +5033,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.makedirs results directory (16)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -5394,8 +5081,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisecting revision.Performance Test 1 of 5",
     "stderr": "/path/to/tmp/",
@@ -5413,9 +5099,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.write buildbot output to disk (16)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -5429,9 +5112,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.Reading valueset results (16)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -5449,9 +5129,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.makedirs results directory (17)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -5500,8 +5177,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisecting revision.Performance Test 2 of 5",
     "stderr": "/path/to/tmp/",
@@ -5519,9 +5195,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.write buildbot output to disk (17)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -5535,9 +5208,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.Reading valueset results (17)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -5555,9 +5225,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.makedirs results directory (18)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -5606,8 +5273,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisecting revision.Performance Test 3 of 5",
     "stderr": "/path/to/tmp/",
@@ -5625,9 +5291,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.write buildbot output to disk (18)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -5641,9 +5304,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.Reading valueset results (18)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -5661,9 +5321,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.makedirs results directory (19)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -5712,8 +5369,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisecting revision.Performance Test 4 of 5",
     "stderr": "/path/to/tmp/",
@@ -5731,9 +5387,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.write buildbot output to disk (19)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -5747,9 +5400,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.Reading valueset results (19)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -5767,9 +5417,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.makedirs results directory (20)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -5818,8 +5465,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisecting revision.Performance Test 5 of 5",
     "stderr": "/path/to/tmp/",
@@ -5837,9 +5483,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.write buildbot output to disk (20)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -5853,9 +5496,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.Reading valueset results (20)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -5877,9 +5517,6 @@
       "--target",
       "Release_x64"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "infra_step": true,
     "name": "Bisecting revision.process_dumps (5)",
     "~followup_annotations": [
@@ -6130,9 +5767,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.test_pre_run (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -6146,9 +5780,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.makedirs results directory (21)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -6197,8 +5828,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisecting revision.Performance Test 1 of 5 (2)",
     "stderr": "/path/to/tmp/",
@@ -6216,9 +5846,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.write buildbot output to disk (21)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -6232,9 +5859,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.Reading valueset results (21)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -6252,9 +5876,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.makedirs results directory (22)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -6303,8 +5924,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisecting revision.Performance Test 2 of 5 (2)",
     "stderr": "/path/to/tmp/",
@@ -6322,9 +5942,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.write buildbot output to disk (22)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -6338,9 +5955,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.Reading valueset results (22)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -6358,9 +5972,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.makedirs results directory (23)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -6409,8 +6020,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisecting revision.Performance Test 3 of 5 (2)",
     "stderr": "/path/to/tmp/",
@@ -6428,9 +6038,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.write buildbot output to disk (23)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -6444,9 +6051,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.Reading valueset results (23)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -6464,9 +6068,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.makedirs results directory (24)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -6515,8 +6116,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisecting revision.Performance Test 4 of 5 (2)",
     "stderr": "/path/to/tmp/",
@@ -6534,9 +6134,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.write buildbot output to disk (24)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -6550,9 +6147,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.Reading valueset results (24)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -6570,9 +6164,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.makedirs results directory (25)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -6621,8 +6212,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisecting revision.Performance Test 5 of 5 (2)",
     "stderr": "/path/to/tmp/",
@@ -6640,9 +6230,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.write buildbot output to disk (25)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -6656,9 +6243,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.Reading valueset results (25)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -6680,9 +6264,6 @@
       "--target",
       "Release_x64"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "infra_step": true,
     "name": "Bisecting revision.process_dumps (6)",
     "~followup_annotations": [
@@ -6933,9 +6514,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.test_pre_run (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -6949,9 +6527,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.makedirs results directory (26)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -7000,8 +6575,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisecting revision.Performance Test 1 of 5 (3)",
     "stderr": "/path/to/tmp/",
@@ -7019,9 +6593,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.write buildbot output to disk (26)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -7035,9 +6606,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.Reading valueset results (26)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -7055,9 +6623,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.makedirs results directory (27)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -7106,8 +6671,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisecting revision.Performance Test 2 of 5 (3)",
     "stderr": "/path/to/tmp/",
@@ -7125,9 +6689,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.write buildbot output to disk (27)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -7141,9 +6702,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.Reading valueset results (27)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -7161,9 +6719,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.makedirs results directory (28)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -7212,8 +6767,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisecting revision.Performance Test 3 of 5 (3)",
     "stderr": "/path/to/tmp/",
@@ -7231,9 +6785,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.write buildbot output to disk (28)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -7247,9 +6798,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.Reading valueset results (28)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -7267,9 +6815,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.makedirs results directory (29)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -7318,8 +6863,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisecting revision.Performance Test 4 of 5 (3)",
     "stderr": "/path/to/tmp/",
@@ -7337,9 +6881,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.write buildbot output to disk (29)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -7353,9 +6894,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.Reading valueset results (29)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -7373,9 +6911,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.makedirs results directory (30)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -7424,8 +6959,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisecting revision.Performance Test 5 of 5 (3)",
     "stderr": "/path/to/tmp/",
@@ -7443,9 +6977,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.write buildbot output to disk (30)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -7459,9 +6990,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.Reading valueset results (30)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -7483,9 +7011,6 @@
       "--target",
       "Release_x64"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "infra_step": true,
     "name": "Bisecting revision.process_dumps (7)",
     "~followup_annotations": [
@@ -7736,9 +7261,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.test_pre_run (8)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -7752,9 +7274,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.makedirs results directory (31)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -7803,8 +7322,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisecting revision.Performance Test 1 of 7",
     "stderr": "/path/to/tmp/",
@@ -7822,9 +7340,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.write buildbot output to disk (31)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -7838,9 +7353,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.Reading valueset results (31)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -7858,9 +7370,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.makedirs results directory (32)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -7909,8 +7418,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisecting revision.Performance Test 2 of 7",
     "stderr": "/path/to/tmp/",
@@ -7928,9 +7436,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.write buildbot output to disk (32)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -7944,9 +7449,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.Reading valueset results (32)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -7964,9 +7466,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.makedirs results directory (33)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -8015,8 +7514,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisecting revision.Performance Test 3 of 7",
     "stderr": "/path/to/tmp/",
@@ -8034,9 +7532,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.write buildbot output to disk (33)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -8050,9 +7545,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.Reading valueset results (33)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -8070,9 +7562,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.makedirs results directory (34)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -8121,8 +7610,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisecting revision.Performance Test 4 of 7",
     "stderr": "/path/to/tmp/",
@@ -8140,9 +7628,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.write buildbot output to disk (34)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -8156,9 +7641,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.Reading valueset results (34)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -8176,9 +7658,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.makedirs results directory (35)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -8227,8 +7706,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisecting revision.Performance Test 5 of 7",
     "stderr": "/path/to/tmp/",
@@ -8246,9 +7724,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.write buildbot output to disk (35)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -8262,9 +7737,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.Reading valueset results (35)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -8282,9 +7754,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.makedirs results directory (36)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -8333,8 +7802,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisecting revision.Performance Test 6 of 7",
     "stderr": "/path/to/tmp/",
@@ -8352,9 +7820,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.write buildbot output to disk (36)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -8368,9 +7833,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.Reading valueset results (36)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -8388,9 +7850,6 @@
       "[START_DIR]\\bisect_results\\dummy",
       "511"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.makedirs results directory (37)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -8439,8 +7898,7 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisecting revision.Performance Test 7 of 7",
     "stderr": "/path/to/tmp/",
@@ -8458,9 +7916,6 @@
       "benchmark text",
       "[START_DIR]\\bisect_results\\dummy\\results.txt"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.write buildbot output to disk (37)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -8474,9 +7929,6 @@
       "[START_DIR]\\bisect_results\\dummy\\results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "name": "Bisecting revision.Reading valueset results (37)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -8498,9 +7950,6 @@
       "--target",
       "Release_x64"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
     "infra_step": true,
     "name": "Bisecting revision.process_dumps (8)",
     "~followup_annotations": [

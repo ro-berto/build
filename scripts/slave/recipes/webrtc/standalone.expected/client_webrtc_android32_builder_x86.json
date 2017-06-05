@@ -164,7 +164,6 @@
     "cwd": "[BUILDER_CACHE]/Android32_Builder_x86/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[CACHE]/goma_client' target_arch=ia32 use_goma=1",
       "PATH": "[BUILDER_CACHE]/Android32_Builder_x86/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Builder_x86/src/build/android:<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -309,7 +308,6 @@
     "cwd": "[BUILDER_CACHE]/Android32_Builder_x86/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/Android32_Builder_x86/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32_Builder_x86/src/build/android:<PATH>"
     },
     "name": "compile"

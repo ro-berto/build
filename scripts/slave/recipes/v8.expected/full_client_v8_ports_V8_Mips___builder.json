@@ -88,7 +88,6 @@
       "CC": "[START_DIR]/mips-mti-linux-gnu/2015.01-7/bin/mips-mti-linux-gnu-gcc",
       "CHROME_HEADLESS": "1",
       "CXX": "[START_DIR]/mips-mti-linux-gnu/2015.01-7/bin/mips-mti-linux-gnu-g++",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "0",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "target_arch=mips v8_enable_i18n_support=0 v8_target_arch=mips v8_use_snapshot=false",
@@ -183,8 +182,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "compile"
   },

@@ -177,7 +177,6 @@
     "cwd": "[START_DIR]/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "component=static_library fetch_telemetry_dependencies=1 ffmpeg_branding=Chrome gomadir='[CACHE]/goma_client' proprietary_codecs=1 target_arch=x64 use_goma=1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -292,9 +291,6 @@
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
     "infra_step": true,
     "name": "[trigger] base_unittests (with patch)",
     "~followup_annotations": [
@@ -347,9 +343,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
     "name": "base_unittests (with patch)",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
@@ -437,9 +430,6 @@
       "--chrome-revision",
       "170242"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
     "name": "Upload to test-results [base_unittests (with patch)]"
   },
   {
@@ -465,7 +455,6 @@
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
@@ -541,7 +530,6 @@
     "cwd": "[START_DIR]/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "component=static_library fetch_telemetry_dependencies=1 ffmpeg_branding=Chrome gomadir='[CACHE]/goma_client' proprietary_codecs=1 target_arch=x64 use_goma=1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -557,9 +545,6 @@
       "[START_DIR]/src/out/Release",
       "--clean-isolated-files"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
     "name": "clean isolated files"
   },
   {
@@ -605,16 +590,14 @@
       "/path/to/tmp/"
     ],
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "calculate the number of recommended jobs"
   },
   {
     "cmd": [],
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "preprocess_for_goma"
   },
@@ -627,8 +610,7 @@
       "511"
     ],
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "preprocess_for_goma.makedirs goma cache directory",
     "~followup_annotations": [
@@ -683,8 +665,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail",
@@ -704,8 +685,7 @@
       "base_unittests"
     ],
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "compile (without patch)"
   },
@@ -724,8 +704,7 @@
       "-n"
     ],
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "compile (without patch) confirm no-op",
     "stdout": "/path/to/tmp/"
@@ -733,8 +712,7 @@
   {
     "cmd": [],
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "postprocess_for_goma"
   },
@@ -830,8 +808,7 @@
       "test_bot"
     ],
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [
@@ -859,8 +836,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail",
@@ -876,9 +852,6 @@
       "/path/to/tmp/",
       "[START_DIR]/src/out/Release/*.isolated.gen.json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
     "name": "find isolated targets"
   },
   {
@@ -896,9 +869,6 @@
       "[START_DIR]/src/out/Release/dummy_target_1.isolated.gen.json",
       "[START_DIR]/src/out/Release/dummy_target_2.isolated.gen.json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -966,9 +936,6 @@
       "--gtest_filter=Test.Two",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
     "infra_step": true,
     "name": "[trigger] base_unittests (without patch)",
     "~followup_annotations": [
@@ -1021,9 +988,6 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
     "name": "base_unittests (without patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>swarming pending 71s<br>swarming pending 71s@@@",
@@ -1107,9 +1071,6 @@
       "--chrome-revision",
       "170242"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
     "name": "Upload to test-results [base_unittests (without patch)]"
   },
   {
@@ -1118,9 +1079,6 @@
       "-u",
       "import sys; sys.exit(1)"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
     "name": "base_unittests (retry summary)",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",

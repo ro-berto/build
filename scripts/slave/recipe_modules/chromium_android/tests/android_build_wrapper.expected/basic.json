@@ -25,9 +25,6 @@
       "None/out/logcat",
       "None/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
     "infra_step": true,
     "name": "spawn_logcat_monitor"
   },
@@ -67,9 +64,6 @@
       "--adb-path",
       "None/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
     "infra_step": true,
     "name": "authorize_adb_devices"
   },
@@ -85,9 +79,6 @@
       "-v",
       "--enable-usb-reset"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
     "infra_step": true,
     "name": "device_recovery"
   },
@@ -111,9 +102,6 @@
       "--max-battery-temp",
       "350"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
     "infra_step": true,
     "name": "provision_devices"
   },
@@ -133,9 +121,6 @@
       "-v",
       "--overwrite-known-devices-files"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
     "infra_step": true,
     "name": "device_status",
     "~followup_annotations": [
@@ -294,8 +279,7 @@
       "07a00ca4"
     ],
     "env": {
-      "ADB": "None/third_party/android_tools/sdk/platform-tools/adb",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "ADB": "None/third_party/android_tools/sdk/platform-tools/adb"
     },
     "infra_step": true,
     "name": "Set up ASAN on devices.07a00ca4",
@@ -331,7 +315,6 @@
     "cwd": "None",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_DEFINES": "asan=1 clang=1 component=static_library lsan=1 target_arch=x64",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -397,8 +380,7 @@
       "None/out/Release/full_log"
     ],
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "None/out/Release",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "CHROMIUM_OUTPUT_DIR": "None/out/Release"
     },
     "infra_step": true,
     "name": "stack_tool_with_logcat_dump"
@@ -421,8 +403,7 @@
       "-w"
     ],
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "None/out/Release",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "CHROMIUM_OUTPUT_DIR": "None/out/Release"
     },
     "infra_step": true,
     "name": "stack_tool_for_tombstones"
@@ -439,8 +420,7 @@
       "07a00ca4"
     ],
     "env": {
-      "ADB": "None/third_party/android_tools/sdk/platform-tools/adb",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "ADB": "None/third_party/android_tools/sdk/platform-tools/adb"
     },
     "infra_step": true,
     "name": "Tear down ASAN on devices.07a00ca4",

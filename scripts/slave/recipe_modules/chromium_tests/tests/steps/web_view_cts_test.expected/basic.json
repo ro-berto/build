@@ -20,9 +20,6 @@
       "None/third_party/android_tools/sdk/platform-tools/adb",
       "--release"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
     "infra_step": true,
     "name": "install SystemWebView.apk"
   },

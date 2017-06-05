@@ -75,7 +75,6 @@
     "cwd": "[START_DIR]\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GYP_DEFINES": "target_arch=ia32",
       "GYP_GENERATORS": "msvs-ninja,ninja",
       "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"

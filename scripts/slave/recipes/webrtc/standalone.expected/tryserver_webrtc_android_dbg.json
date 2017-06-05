@@ -213,7 +213,6 @@
     "cwd": "[BUILDER_CACHE]/android_dbg/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[CACHE]/goma_client' target_arch=arm use_goma=1",
       "PATH": "[BUILDER_CACHE]/android_dbg/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_dbg/src/build/android:<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -395,7 +394,6 @@
     "cwd": "[BUILDER_CACHE]/android_dbg/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_dbg/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_dbg/src/build/android:<PATH>"
     },
     "name": "compile"
@@ -2239,7 +2237,6 @@
     ],
     "cwd": "[BUILDER_CACHE]/android_dbg",
     "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_dbg/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_dbg/src/build/android:<PATH>"
     },
     "name": "android_junit_tests"

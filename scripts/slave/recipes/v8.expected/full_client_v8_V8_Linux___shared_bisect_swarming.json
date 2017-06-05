@@ -119,7 +119,6 @@
     "cwd": "[START_DIR]/v8",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "component=shared_library gomadir='[CACHE]/goma_client' target_arch=ia32 use_goma=1 v8_enable_verify_heap=1 v8_target_arch=ia32",
       "GYP_GENERATORS": "ninja",
@@ -348,8 +347,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "compile"
   },
@@ -1176,7 +1174,6 @@
     "cwd": "[START_DIR]/v8",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "component=shared_library gomadir='[CACHE]/goma_client' target_arch=ia32 use_goma=1 v8_enable_verify_heap=1 v8_target_arch=ia32",
       "GYP_GENERATORS": "ninja",
@@ -1408,8 +1405,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisect a0.compile",
     "~followup_annotations": [
@@ -1871,7 +1867,6 @@
     "cwd": "[START_DIR]/v8",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "component=shared_library gomadir='[CACHE]/goma_client' target_arch=ia32 use_goma=1 v8_enable_verify_heap=1 v8_target_arch=ia32",
       "GYP_GENERATORS": "ninja",
@@ -2103,8 +2098,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisect a2.compile",
     "~followup_annotations": [
@@ -2599,7 +2593,6 @@
     "cwd": "[START_DIR]/v8",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "component=shared_library gomadir='[CACHE]/goma_client' target_arch=ia32 use_goma=1 v8_enable_verify_heap=1 v8_target_arch=ia32",
       "GYP_GENERATORS": "ninja",
@@ -2831,8 +2824,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisect a1.compile",
     "~followup_annotations": [

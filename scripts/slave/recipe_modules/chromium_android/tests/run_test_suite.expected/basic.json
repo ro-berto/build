@@ -12,9 +12,6 @@
       "--adb-path",
       "None/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "env": {
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
     "name": "test_suite"
   },
   {
