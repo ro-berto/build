@@ -133,20 +133,6 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
-      "validate"
-    ],
-    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
-    "env": {
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
-    },
-    "infra_step": true,
-    "name": "gclient validate"
-  },
-  {
     "cmd": [],
     "name": "ensure_goma"
   },

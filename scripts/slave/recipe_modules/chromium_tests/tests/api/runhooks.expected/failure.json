@@ -110,19 +110,6 @@
       "python",
       "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
-      "validate"
-    ],
-    "env": {
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
-    },
-    "infra_step": true,
-    "name": "gclient validate"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
     "cwd": "[START_DIR]/src",

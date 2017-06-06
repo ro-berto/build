@@ -133,21 +133,6 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
-      "validate"
-    ],
-    "cwd": "[BUILDER_CACHE]/linux_clobber",
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
-    },
-    "infra_step": true,
-    "name": "gclient validate"
-  },
-  {
     "cmd": [],
     "env": {
       "CHROME_HEADLESS": "1"
