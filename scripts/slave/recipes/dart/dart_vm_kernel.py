@@ -29,7 +29,7 @@ builders = {
   },
 }
 
-for platform in ['linux']:
+for platform in ['linux', 'mac']:
   for arch in ['x64']:
     for mode in ['debug', 'release']:
       for checked in ['-checked', '']:
