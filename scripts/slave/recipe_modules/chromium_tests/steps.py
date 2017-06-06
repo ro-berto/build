@@ -487,10 +487,15 @@ def get_args_for_test(api, chromium_tests_api, test_spec, bot_update_step):
   """
 
   args = test_spec.get('args', [])
+  extra_args = None
   if chromium_tests_api.is_precommit_mode():
-    args = args + test_spec.get('precommit_args', [])
+    extra_args = test_spec.get('precommit_args', [])
   else:
-    args = args + test_spec.get('non_precommit_args', [])
+    extra_args = test_spec.get('non_precommit_args', [])
+  # Only add the extra args if there were any to prevent cases of mixed
+  # tuple/list concatenation caused by assuming type
+  if extra_args:
+    args = args + extra_args
   # Perform substitution of known variables.
   substitutions = {
     'buildername': api.properties.get('buildername'),

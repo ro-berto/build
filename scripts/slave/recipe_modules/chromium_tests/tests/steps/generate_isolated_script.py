@@ -131,3 +131,17 @@ def GenTests(api):
           },
       })
   )
+
+  yield (
+      api.test('precommit_args') +
+      api.properties(single_spec={
+          'name': 'base_unittests',
+          'isolate_name': 'base_unittests_run',
+          'args': [
+              '--should-be-in-output',
+          ],
+          'precommit_args': [
+              '--should-also-be-in-output',
+          ],
+      })
+  )
