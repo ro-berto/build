@@ -64,7 +64,7 @@ for platform in ['linux', 'mac', 'win']:
       'archive_core_dumps': True,
     }
 
-for arch in ['simmips', 'simarm', 'simarm64']:
+for arch in ['simarm', 'simarm64']:
   for mode in ['debug', 'release']:
     builders['vm-linux-%s-%s' % (mode, arch)] = {
       'mode': mode,

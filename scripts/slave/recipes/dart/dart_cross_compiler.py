@@ -23,12 +23,6 @@ builders = {
   'cross-arm-vm-linux-release': {
     'mode': 'release',
     'target_arch': 'arm'},
-  'cross-mips-box-linux-release': {
-    'mode': 'release',
-    'target_arch': 'mips'},
-  'cross-mips-board-linux-release': {
-    'mode': 'release',
-    'target_arch': 'mips'},
   'test-coverage': {
     'mode': 'release',
     'target_arch': 'x64',
@@ -45,7 +39,7 @@ def RunSteps(api):
   revision = update_step.json.output['fixed_revisions']['sdk']
 
   api.path['tools'] = api.path['checkout'].join('tools')
-  buildername = str(api.properties.get('buildername')) # Convert from unicode.
+  buildername = api.properties.get('buildername')
   (buildername, _, channel) = buildername.rpartition('-')
   assert channel in ['be', 'dev', 'stable', 'integration']
   buildername = buildername.replace('-recipe', '')
