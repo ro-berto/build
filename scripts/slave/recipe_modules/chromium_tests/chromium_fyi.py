@@ -2225,9 +2225,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder_tester',
-      'tests': [
-        steps.BlinkTest(["--additional-driver-flag=--enable-network-service"]),
-      ],
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux',
