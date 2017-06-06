@@ -1,0 +1,23 @@
+{
+  "master_base_class": "Master3a",
+  "master_port": 21304,
+  "master_port_alt": 26304,
+  "slave_port": 31304,
+  "pubsub_service_account_file": "service-account-luci-milo.json",
+  "templates": ['../master.client.v8/templates',
+                '../master.chromium/templates'],
+
+  "default_remote_run_properties": {
+    "path_config": "kitchen",
+  },
+  "default_remote_run_repository": "https://chromium.googlesource.com/chromium/tools/build.git",
+
+  "builders": {
+  },
+
+  "schedulers": {
+  },
+
+  "slave_pools": {
+  },
+}

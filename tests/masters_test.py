@@ -270,6 +270,7 @@ def main(argv):
       'master.client.v8.chromium': 'V8Chromium',
       'master.client.v8.clusterfuzz': 'ClientV8Clusterfuzz',
       'master.client.v8.fyi': 'V8FYI',
+      'master.client.v8.official': 'ClientV8Official',
       'master.client.v8.ports': 'V8Ports',
       'master.client.wasm.llvm': 'WasmLlvm',
       'master.client.webrtc': 'WebRTC',
