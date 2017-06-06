@@ -27,6 +27,16 @@
         }
       }
     ],
+    "https://build.chromium.org/p/client.v8.clusterfuzz": [
+      {
+        "categories": [
+          "v8_all"
+        ],
+        "builders": {
+          "*": {}
+        }
+      }
+    ],
     "https://build.chromium.org/p/client.v8.ports": [
       {
         "categories": [
