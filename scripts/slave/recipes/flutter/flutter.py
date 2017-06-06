@@ -85,12 +85,8 @@ def BuildExamples(api, git_hash, flutter_executable):
   BuildAndArchive(api, 'examples/flutter_gallery', 'Gallery.apk')
 
 
-def RunFindXcode(api, step_name, target_version=None):
-  """Runs the `build/scripts/slave/ios/find_xcode.py` utility.
-
-     Retrieves information about xcode installations and to activate a specific
-     version of Xcode.
-  """
+def RunFindXcode(api, ios_tools_path, step_name, target_version=None):
+  """Locates and switches to a version of Xcode matching target_version."""
   args = ['--json-file', api.json.output()]
 
   if target_version is not None:
@@ -98,14 +94,22 @@ def RunFindXcode(api, step_name, target_version=None):
 
   result = api.build.python(
       step_name,
-      api.package_repo_resource('scripts', 'slave', 'ios', 'find_xcode.py'),
+      ios_tools_path.join('build', 'bots', 'scripts', 'find_xcode.py'),
       args)
 
   return result.json.output
 
 
 def SetupXcode(api):
-  xcode_json = RunFindXcode(api, 'enumerate_xcode_installations')
+  # Clone the chromium iOS tools to ios/ subdir.
+  # NOTE: nothing special about the ref other than to pin for stability.
+  ios_tools_path = api.path['start_dir'].join('ios')
+  api.git.checkout(
+      'https://chromium.googlesource.com/chromium/src/ios',
+      ref='69b7c1b160e7107a6a98d948363772dc9caea46f',
+      dir_path=ios_tools_path, recursive=True, step_suffix='_ios_tools')
+
+  xcode_json = RunFindXcode(api, ios_tools_path, 'enumerate_xcode_installations')
   installations = xcode_json["installations"]
   activate_version = None
   for key in installations:
@@ -115,7 +119,7 @@ def SetupXcode(api):
       break
   if not activate_version:
     raise api.step.StepFailure('Xcode version 7 or above not found')
-  RunFindXcode(api, 'set_xcode_version', target_version=activate_version)
+  RunFindXcode(api, ios_tools_path, 'set_xcode_version', target_version=activate_version)
 
 
 def InstallGradle(api, checkout):
