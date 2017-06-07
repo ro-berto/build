@@ -355,6 +355,25 @@ SPEC = {
         'platform': 'linux',
       },
     },
+    'Fuchsia (dbg)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['fuchsia'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder',
+      'compile_targets': [
+        'base_unittests',
+      ],
+      'checkout_dir': 'linux',
+      'test_results_config': 'staging_server',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
     'LTO Linux': {
       'chromium_config': 'chromium_official',
       'chromium_apply_config': ['mb'],
