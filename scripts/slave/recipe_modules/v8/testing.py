@@ -107,7 +107,7 @@ TEST_CONFIGS = freeze({
     'name': 'Mjsunit - sp frame access',
     'tests': ['mjsunit'],
     'test_args': ['--extra-flags=--turbo_sp_frame_access'],
-    'variants': V8Variant('turbofan'),
+    'variants': V8Variant('default'),
   },
   'mozilla': {
     'name': 'Mozilla',

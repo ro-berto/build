@@ -772,7 +772,7 @@
       "--timeout=200",
       "--random-seed=-1743232531",
       "mjsunit/regression/*",
-      "--variants=turbofan",
+      "--variants=default",
       "--extra-flags",
       "--turbo_sp_frame_access --trace_gc --turbo_stats",
       "--dcheck-always-on",

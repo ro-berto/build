@@ -758,7 +758,7 @@
       "--random-seed=-677923763",
       "mjsunit",
       "--extra-flags=--turbo_sp_frame_access",
-      "--variants=turbofan",
+      "--variants=default",
       "--dcheck-always-on",
       "--rerun-failures-count=2",
       "--swarming",

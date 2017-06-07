@@ -1149,7 +1149,7 @@
       "--random-seed=1748305910",
       "mjsunit",
       "--extra-flags=--turbo_sp_frame_access",
-      "--variants=turbofan",
+      "--variants=default",
       "--rerun-failures-count=2",
       "--swarming",
       "--json-test-results",
