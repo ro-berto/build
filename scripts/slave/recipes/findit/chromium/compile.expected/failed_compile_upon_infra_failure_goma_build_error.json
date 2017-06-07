@@ -709,8 +709,6 @@
       "dupbuild=err",
       "-C",
       "[BUILDER_CACHE]/linux/src/out/Release",
-      "-l",
-      "2",
       "-j",
       "50",
       "target_name"
@@ -819,7 +817,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/linux/src/out/Release",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/linux/src/out/Release', '-l', 2, '-j', 50, 'target_name']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/linux/src/out/Release', '-j', 50, 'target_name']",
       "--ninja-log-exit-status",
       "1",
       "--ninja-log-compiler",
