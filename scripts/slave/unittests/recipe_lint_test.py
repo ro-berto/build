@@ -7,6 +7,9 @@ import os
 import sys
 
 MODULES_WHITELIST = [
+  # TODO(martiniss): Move skia modules into recipe resources
+  r'common\.skia\..*',
+  r'slave\.skia\..*',
   r'slave\.recipe_modules\.swarming\.resources\..*'
 ]
 

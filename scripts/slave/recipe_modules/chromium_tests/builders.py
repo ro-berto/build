@@ -24,6 +24,7 @@ from . import chromium_webkit
 from . import chromium_webrtc
 from . import chromium_webrtc_fyi
 from . import chromium_win
+from . import client_skia
 from . import client_v8_chromium
 from . import client_v8_fyi
 from . import tryserver_chromium_mac
@@ -50,6 +51,7 @@ BUILDERS = freeze({
   'chromium.webrtc': chromium_webrtc.SPEC,
   'chromium.webrtc.fyi': chromium_webrtc_fyi.SPEC,
   'chromium.win': chromium_win.SPEC,
+  'client.skia': client_skia.SPEC,
   'client.v8.chromium': client_v8_chromium.SPEC,
   'client.v8.fyi': client_v8_fyi.SPEC,
   'tryserver.chromium.mac': tryserver_chromium_mac.SPEC,
