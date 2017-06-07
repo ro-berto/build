@@ -31,7 +31,6 @@ Mjsunit_2 = TestStepConfig('mjsunit', shards=2)
 Mjsunit_3 = TestStepConfig('mjsunit', shards=3)
 Mjsunit_4 = TestStepConfig('mjsunit', shards=4)
 Mjsunit_5 = TestStepConfig('mjsunit', shards=5)
-MjsunitExtra_3 = TestStepConfig('mjsunit_extra', shards=3)
 MjsunitSPFrameAccess = TestStepConfig('mjsunit_sp_frame_access')
 Mozilla = TestStepConfig('mozilla')
 Mozilla_2 = TestStepConfig('mozilla', shards=2)
@@ -41,7 +40,6 @@ SimpleLeak = TestStepConfig('simpleleak')
 Test262 = TestStepConfig('test262')
 Test262_2 = TestStepConfig('test262', shards=2)
 Test262_4 = TestStepConfig('test262', shards=4)
-Test262Extra_2 = TestStepConfig('test262_extra', shards=2)
 Test262Variants = TestStepConfig('test262_variants')
 Test262Variants_2 = TestStepConfig('test262_variants', shards=2)
 Test262Variants_3 = TestStepConfig('test262_variants', shards=3)
@@ -55,8 +53,6 @@ V8Testing_3 = TestStepConfig('v8testing', shards=3)
 V8Testing_4 = TestStepConfig('v8testing', shards=4)
 V8Testing_5 = TestStepConfig('v8testing', shards=5)
 V8Testing_7 = TestStepConfig('v8testing', shards=7)
-V8TestingExtra = TestStepConfig('v8testing_extra')
-V8TestingExtra_2 = TestStepConfig('v8testing_extra', shards=2)
 Webkit = TestStepConfig('webkit')
 
 
@@ -168,11 +164,9 @@ BUILDERS = {
         'tests': [
           V8Initializers,
           V8Testing,
-          V8TestingExtra,
           OptimizeForSize,
           Benchmarks,
           Test262Variants_2,
-          Test262Extra_2,
           Mozilla,
           MjsunitSPFrameAccess,
           GCMole,
@@ -207,10 +201,8 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing_2,
-          V8TestingExtra_2,
           Benchmarks,
           Test262Variants_3,
-          Test262Extra_2,
           Mozilla,
           MjsunitSPFrameAccess,
         ] + with_test_args(
@@ -402,10 +394,8 @@ BUILDERS = {
         'tests': [
           V8Initializers,
           V8Testing,
-          V8TestingExtra,
           OptimizeForSize,
           Test262Variants_2,
-          Test262Extra_2,
           Mozilla,
           MjsunitSPFrameAccess,
           SimpleLeak,
@@ -443,10 +433,8 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing_2,
-          V8TestingExtra,
           OptimizeForSize,
           Test262Variants_5,
-          Test262Extra_2,
           Mozilla,
           MjsunitSPFrameAccess,
           SimpleLeak,
@@ -572,8 +560,7 @@ BUILDERS = {
         'build_gs_archive': 'win32_rel_archive',
         'parent_buildername': 'V8 Win32 - builder',
         'enable_swarming': True,
-        'tests': [
-          V8Testing, V8TestingExtra, Test262, Mozilla],
+        'tests': [V8Testing, Test262, Mozilla],
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
@@ -596,7 +583,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing_2, V8TestingExtra_2],
+        'tests': [V8Testing_2],
         'variants': V8NoExhaustiveVariants(),
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
@@ -615,7 +602,6 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing_3,
-          V8TestingExtra_2,
           Test262,
           Mozilla,
         ],
@@ -643,7 +629,6 @@ BUILDERS = {
         },
         'tests': [
           V8Testing,
-          V8TestingExtra,
           Test262,
           Mozilla,
         ],
@@ -667,7 +652,6 @@ BUILDERS = {
         },
         'tests': [
           V8Testing_3,
-          V8TestingExtra_2,
           Test262,
           Mozilla,
         ],
@@ -699,7 +683,6 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing,
-          V8TestingExtra,
           Test262,
           Mozilla,
         ],
@@ -720,7 +703,6 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing_2,
-          V8TestingExtra_2,
           Test262,
           Mozilla,
         ],
@@ -741,7 +723,6 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing,
-          V8TestingExtra,
           Test262,
           Mozilla,
         ],
@@ -762,7 +743,6 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing_2,
-          V8TestingExtra_2,
           Test262,
           Mozilla,
         ],
@@ -811,11 +791,7 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
         'enable_swarming': True,
-        'tests': [
-          Mjsunit_4,
-          MjsunitExtra_3,
-          Webkit,
-        ],
+        'tests': [Mjsunit_4, Webkit],
         'testing': {'platform': 'linux'},
       },
       'V8 Mac GC Stress': {
@@ -878,7 +854,6 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing_2,
-          V8TestingExtra_2,
           Test262Variants_3,
         ],
         'testing': {'platform': 'linux'},
@@ -894,7 +869,6 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing_3,
-          V8TestingExtra_2,
           Test262_2,
         ],
         'testing': {'platform': 'linux'},
@@ -935,7 +909,6 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing_4,
-          V8TestingExtra_2,
           Test262_2,
         ],
         'testing': {'platform': 'linux'},
@@ -951,7 +924,6 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing,
-          V8TestingExtra_2,
           OptimizeForSize,
           Benchmarks,
           Test262,
@@ -968,7 +940,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing_5, V8TestingExtra_2],
+        'tests': [V8Testing_5],
         'swarming_dimensions': {
           'os': 'Mac-10.9',
           'cpu': 'x86-64',
@@ -1388,9 +1360,7 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing_4,
-          V8TestingExtra,
           Test262,
-          Test262Extra_2,
           Mozilla,
           MjsunitSPFrameAccess,
         ] + with_test_args(
@@ -1414,9 +1384,7 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing_4,
-          V8TestingExtra,
           Test262,
-          Test262Extra_2,
           Mozilla,
           MjsunitSPFrameAccess,
         ] + with_test_args(
@@ -1459,9 +1427,7 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing_3,
-          V8TestingExtra_2,
           Test262,
-          Test262Extra_2,
           Mozilla,
           MjsunitSPFrameAccess,
         ],
@@ -1478,9 +1444,7 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing_4,
-          V8TestingExtra_2,
           Test262,
-          Test262Extra_2,
           Mozilla,
           MjsunitSPFrameAccess,
         ],
@@ -1738,10 +1702,8 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing,
-          V8TestingExtra,
           OptimizeForSize,
           Test262Variants_4,
-          Test262Extra_2,
           Mozilla,
           Benchmarks,
           MjsunitSPFrameAccess,
@@ -1819,9 +1781,7 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing,
-          V8TestingExtra,
           Test262Variants_2,
-          Test262Extra_2,
           Mozilla,
           Benchmarks,
         ],
@@ -1852,7 +1812,6 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing_2,
-          V8TestingExtra_2,
           Test262,
           Mozilla,
           Benchmarks,
@@ -1979,10 +1938,8 @@ BUILDERS = {
         'tests': [
           V8Initializers,
           V8Testing,
-          V8TestingExtra,
           OptimizeForSize,
           Test262Variants_4,
-          Test262Extra_2,
           MjsunitSPFrameAccess,
           SimpleLeak,
         ],
@@ -2103,7 +2060,6 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           Mjsunit_4,
-          MjsunitExtra_3,
           Webkit,
         ],
         'testing': {'platform': 'linux'},
@@ -2146,7 +2102,6 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing_3,
-          V8TestingExtra_2,
           Test262Variants_5,
         ],
         'testing': {'platform': 'linux'},
@@ -2173,7 +2128,6 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing_5,
-          V8TestingExtra_2,
           Test262_2,
         ],
         'testing': {'platform': 'linux'},
@@ -2195,7 +2149,6 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing_4,
-          V8TestingExtra_2,
           Test262_2,
         ],
         'testing': {'platform': 'linux'},
@@ -2288,7 +2241,6 @@ BUILDERS = {
         },
         'tests': [
           V8Testing_3,
-          V8TestingExtra_2,
           Mozilla,
         ],
         'testing': {'platform': 'win'},
@@ -2341,7 +2293,7 @@ BUILDERS = {
           'os': 'Windows-7-SP1',
           'cpu': 'x86-64',
         },
-        'tests': [V8Testing, V8TestingExtra, Test262],
+        'tests': [V8Testing, Test262],
         'testing': {'platform': 'linux'},
       },
       'v8_win_nosnap_shared_rel_ng': {
@@ -2384,7 +2336,7 @@ BUILDERS = {
           'os': 'Windows-7-SP1',
           'cpu': 'x86-64',
         },
-        'tests': [V8Testing_3, V8TestingExtra_2],
+        'tests': [V8Testing_3],
         'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
       },
@@ -2422,7 +2374,7 @@ BUILDERS = {
           'os': 'Windows-7-SP1',
           'cpu': 'x86-64',
         },
-        'tests': [V8Testing, V8TestingExtra, Test262],
+        'tests': [V8Testing, Test262],
         'testing': {'platform': 'linux'},
       },
       'v8_win64_dbg': {
@@ -2443,7 +2395,6 @@ BUILDERS = {
         },
         'tests': [
           V8Testing_3,
-          V8TestingExtra_2,
           Test262_2,
           Mozilla,
         ],
@@ -2478,7 +2429,6 @@ BUILDERS = {
         },
         'tests': [
           V8Testing,
-          V8TestingExtra,
           Test262,
           Mozilla,
         ],
@@ -2495,7 +2445,6 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing_2,
-          V8TestingExtra_2,
           Test262,
           Mozilla,
         ],
@@ -2516,7 +2465,6 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing,
-          V8TestingExtra,
           Test262,
           Mozilla,
         ],
@@ -2537,7 +2485,6 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing_2,
-          V8TestingExtra_2,
           Test262,
           Mozilla,
         ],
@@ -2612,9 +2559,7 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing_7,
-          V8TestingExtra_2,
           Test262,
-          Test262Extra_2,
           Mozilla,
           MjsunitSPFrameAccess,
         ],
@@ -2631,9 +2576,7 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing_5,
-          V8TestingExtra_2,
           Test262,
-          Test262Extra_2,
           Mozilla,
           MjsunitSPFrameAccess,
         ],
@@ -2691,9 +2634,7 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing_5,
-          V8TestingExtra_2,
           Test262,
-          Test262Extra_2,
           Mozilla,
           MjsunitSPFrameAccess,
         ],
@@ -2710,9 +2651,7 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing_4,
-          V8TestingExtra_2,
           Test262,
-          Test262Extra_2,
           Mozilla,
           MjsunitSPFrameAccess,
         ],
