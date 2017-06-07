@@ -5,11 +5,13 @@
 import contextlib
 
 DEPS = [
+  'build',
   'depot_tools/bot_update',
   'depot_tools/gclient',
   'file',
   'depot_tools/gsutil',
   'recipe_engine/context',
+  'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
@@ -202,6 +204,27 @@ def TestEngine(api):
     api.step('engine unit tests', test_cmd)
 
 
+def RunFindXcode(api, ios_tools_path, target_version):
+  """Locates and switches to a version of Xcode matching target_version."""
+  args = [
+      '--json-file', api.json.output(),
+      '--version', target_version,
+  ]
+  result = api.build.python(
+      'set_xcode_version',
+      ios_tools_path.join('build', 'bots', 'scripts', 'find_xcode.py'),
+      args)
+  return result.json.output
+
+
+def SetupXcode(api):
+  ios_tools_path = api.path['start_dir'].join('src', 'ios_tools')
+  target_version = '7.0'
+  xcode_json = RunFindXcode(api, ios_tools_path, target_version)
+  if not xcode_json['matches']:
+    raise api.step.StepFailure('Xcode %s not found' % target_version)
+
+
 def BuildMac(api):
   RunGN(api, '--runtime-mode', 'debug', '--unoptimized')
   RunGN(api, '--runtime-mode', 'profile', '--android')
@@ -367,6 +390,7 @@ def RunSteps(api):
       BuildJavadoc(api)
 
     if api.platform.is_mac:
+      SetupXcode(api)
       BuildMac(api)
       BuildIOS(api)
 
@@ -377,7 +401,26 @@ def RunSteps(api):
 def GenTests(api):
   # A valid commit to flutter/engine, to make the gsutil urls look real.
   for platform in ('mac', 'linux', 'win'):
-    yield (api.test(platform) + api.platform(platform, 64)
+    test = (api.test(platform) + api.platform(platform, 64)
         + api.properties(mastername='client.flutter',
               buildername='%s Engine' % platform.capitalize(),
               bot_id='fake-m1', clobber=''))
+    if platform == 'mac':
+      test += (
+        api.step_data('set_xcode_version', api.json.output({
+          'matches': {
+            '/Applications/Xcode7.0.app': '7.0 (7A220)'
+          }
+        }))
+      )
+    yield test
+
+  yield (
+    api.test('mac_cannot_find_xcode') +
+    api.platform('mac', 64) +
+    api.properties(revision='1234abcd') +
+    api.properties(clobber='') +
+    api.step_data('set_xcode_version', api.json.output({
+      'matches': {}
+    }))
+  )
