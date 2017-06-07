@@ -267,36 +267,9 @@
       "python",
       "[START_DIR]/ios/build/bots/scripts/find_xcode.py",
       "--json-file",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
-      "PUB_CACHE": "[START_DIR]/.pub-cache"
-    },
-    "name": "enumerate_xcode_installations",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"installations\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"/some/path\": \"7.2.1 build_number\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--",
-      "python",
-      "[START_DIR]/ios/build/bots/scripts/find_xcode.py",
-      "--json-file",
       "/path/to/tmp/json",
       "--version",
-      "7.2.1"
+      "7.0"
     ],
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
@@ -305,7 +278,11 @@
     },
     "name": "set_xcode_version",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"matches\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"/Applications/Xcode7.0.app\": \"7.0 (7A220)\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },

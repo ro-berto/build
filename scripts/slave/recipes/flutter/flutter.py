@@ -85,18 +85,16 @@ def BuildExamples(api, git_hash, flutter_executable):
   BuildAndArchive(api, 'examples/flutter_gallery', 'Gallery.apk')
 
 
-def RunFindXcode(api, ios_tools_path, step_name, target_version=None):
+def RunFindXcode(api, ios_tools_path, target_version):
   """Locates and switches to a version of Xcode matching target_version."""
-  args = ['--json-file', api.json.output()]
-
-  if target_version is not None:
-    args.extend(['--version', target_version])
-
+  args = [
+      '--json-file', api.json.output(),
+      '--version', target_version,
+  ]
   result = api.build.python(
-      step_name,
+      'set_xcode_version',
       ios_tools_path.join('build', 'bots', 'scripts', 'find_xcode.py'),
       args)
-
   return result.json.output
 
 
@@ -109,17 +107,10 @@ def SetupXcode(api):
       ref='69b7c1b160e7107a6a98d948363772dc9caea46f',
       dir_path=ios_tools_path, recursive=True, step_suffix='_ios_tools')
 
-  xcode_json = RunFindXcode(api, ios_tools_path, 'enumerate_xcode_installations')
-  installations = xcode_json["installations"]
-  activate_version = None
-  for key in installations:
-    version = installations[key].split()[0]
-    if version.startswith('7.'):
-      activate_version = version
-      break
-  if not activate_version:
-    raise api.step.StepFailure('Xcode version 7 or above not found')
-  RunFindXcode(api, ios_tools_path, 'set_xcode_version', target_version=activate_version)
+  target_version = '7.0'
+  xcode_json = RunFindXcode(api, ios_tools_path, target_version)
+  if not xcode_json['matches']:
+    raise api.step.StepFailure('Xcode %s not found' % target_version)
 
 
 def InstallGradle(api, checkout):
@@ -195,17 +186,14 @@ def GenTests(api):
   for platform in ('mac', 'linux', 'win'):
     test = (api.test(platform) + api.platform(platform, 64) +
         api.properties(clobber=''))
-
     if platform == 'mac':
       test += (
-        api.step_data('enumerate_xcode_installations', api.json.output({
-          'installations': {
-            '/some/path': '7.2.1 build_number'
+        api.step_data('set_xcode_version', api.json.output({
+          'matches': {
+            '/Applications/Xcode7.0.app': '7.0 (7A220)'
           }
-        })) +
-        api.step_data('set_xcode_version', api.json.output({}))
+        }))
       )
-
     yield test
 
   yield (
@@ -213,7 +201,7 @@ def GenTests(api):
     api.platform('mac', 64) +
     api.properties(revision='1234abcd') +
     api.properties(clobber='') +
-    api.step_data('enumerate_xcode_installations', api.json.output({
-      'installations': {}
+    api.step_data('set_xcode_version', api.json.output({
+      'matches': {}
     }))
   )

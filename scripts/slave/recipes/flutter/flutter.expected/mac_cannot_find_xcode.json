@@ -267,24 +267,26 @@
       "python",
       "[START_DIR]/ios/build/bots/scripts/find_xcode.py",
       "--json-file",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "--version",
+      "7.0"
     ],
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/.pub-cache"
     },
-    "name": "enumerate_xcode_installations",
+    "name": "set_xcode_version",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"installations\": {}@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"matches\": {}@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
     "name": "$result",
-    "reason": "Xcode version 7 or above not found",
+    "reason": "Xcode 7.0 not found",
     "recipe_result": null,
     "status_code": 1
   }
