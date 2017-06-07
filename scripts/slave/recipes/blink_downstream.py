@@ -78,8 +78,6 @@ BUILDERS = freeze({
       'V8-Blink Mac': V8Builder('Release', 64, 'mac'),
       'V8-Blink Linux 64': V8Builder('Release', 64, 'linux'),
       'V8-Blink Linux 64 - future': V8Builder('Release', 64, 'linux'),
-      # TODO(machenbach): Remove this after master restart.
-      'V8-Blink Linux 64 - ignition': V8Builder('Release', 64, 'linux'),
       'V8-Blink Linux 64 (dbg)': V8Builder('Debug', 64, 'linux'),
     },
   },
@@ -186,7 +184,7 @@ def RunSteps(api):
       api.chromium_tests.steps.BlinkTest(extra_args=extra_args),
     ]
 
-    if 'ignition' in buildername or 'future' in buildername:
+    if 'future' in buildername:
       determine_new_future_failures(api, extra_args)
     else:
       api.test_utils.determine_new_failures(api, tests, component_pinned_fn)
