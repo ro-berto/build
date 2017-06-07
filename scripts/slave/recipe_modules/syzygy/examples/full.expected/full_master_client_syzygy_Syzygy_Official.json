@@ -73,7 +73,8 @@
       "[START_DIR]\\src\\out\\Release"
     ],
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "infra_step": true,
     "name": "rmtree clobber"
@@ -88,6 +89,7 @@
     "cwd": "[START_DIR]\\src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GYP_DEFINES": "official_build=1 target_arch=ia32",
       "GYP_GENERATORS": "msvs-ninja,ninja",
       "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
@@ -105,7 +107,8 @@
     ],
     "cwd": "[START_DIR]\\src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "compile"
   },
@@ -123,7 +126,8 @@
     ],
     "cwd": "[START_DIR]\\src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "compile confirm no-op",
     "stdout": "/path/to/tmp/"
@@ -150,7 +154,8 @@
       "unknown"
     ],
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "upload_ninja_log"
   },
@@ -203,7 +208,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "bar_unittests"
   },
@@ -234,7 +240,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "baz_unittests"
   },
@@ -265,7 +272,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "foo_unittests"
   },

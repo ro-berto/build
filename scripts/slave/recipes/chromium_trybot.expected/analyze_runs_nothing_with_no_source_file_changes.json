@@ -10,7 +10,8 @@
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\kill_processes.py"
     ],
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "infra_step": true,
     "name": "taskkill"
@@ -41,6 +42,7 @@
     ],
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
@@ -125,7 +127,8 @@
   {
     "cmd": [],
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "ensure_goma"
   },
@@ -143,7 +146,8 @@
       "C:\\creds\\service_accounts\\service-account-goma-client.json"
     ],
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "infra_step": true,
     "name": "ensure_goma.ensure_installed",
@@ -172,7 +176,8 @@
       "--version"
     ],
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
@@ -190,6 +195,7 @@
     "cwd": "[START_DIR]\\src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 ffmpeg_branding=Chrome gomadir='[CACHE]\\goma_client' proprietary_codecs=1 target_arch=ia32 use_goma=1",
       "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
@@ -213,7 +219,8 @@
       "{\"bot_id\": \"test_bot\", \"buildername\": \"win_chromium_rel_ng\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.win\", \"slavename\": \"test_bot\", \"target_platform\": \"win\"}"
     ],
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -230,7 +237,8 @@
       "/path/to/tmp/json"
     ],
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "read test spec (chromium.gpu.json)",
     "~followup_annotations": [
@@ -248,7 +256,8 @@
       "/path/to/tmp/json"
     ],
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "read test spec (chromium.win.json)",
     "~followup_annotations": [
@@ -266,7 +275,8 @@
     ],
     "cwd": "RECIPE_PACKAGE_REPO[depot_tools]",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "infra_step": true,
     "name": "ensure git tooling on windows",
@@ -281,7 +291,8 @@
     ],
     "cwd": "[START_DIR]\\src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "infra_step": true,
     "name": "git diff to analyze patch",
@@ -302,7 +313,8 @@
       "/path/to/tmp/json"
     ],
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "read filter exclusion spec",
     "~followup_annotations": [
@@ -338,6 +350,7 @@
     ],
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "name": "analyze",
@@ -371,7 +384,8 @@
       "import sys; sys.exit(0)"
     ],
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "mark: before_tests"
   },

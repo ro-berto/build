@@ -140,6 +140,7 @@
     "cwd": "[BUILDER_CACHE]\\Win7\\src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GYP_DEFINES": "component=static_library fastbuild=1 gomadir='[CACHE]\\goma_client' target_arch=ia32 use_goma=1",
       "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -164,6 +165,7 @@
     "cwd": "[BUILDER_CACHE]\\Win7\\src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "name": "generate_build_files"
@@ -182,7 +184,8 @@
       "/path/to/tmp/"
     ],
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "calculate the number of recommended jobs"
   },
@@ -190,7 +193,8 @@
     "cmd": [],
     "cwd": "[BUILDER_CACHE]\\Win7\\src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "preprocess_for_goma"
   },
@@ -204,7 +208,8 @@
     ],
     "cwd": "[BUILDER_CACHE]\\Win7\\src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "preprocess_for_goma.makedirs goma cache directory",
     "~followup_annotations": [
@@ -231,6 +236,7 @@
     "cwd": "[BUILDER_CACHE]\\Win7\\src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[GOMA_CACHE]\\Win7",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
@@ -261,7 +267,8 @@
     ],
     "cwd": "[BUILDER_CACHE]\\Win7\\src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail",
@@ -284,7 +291,8 @@
     ],
     "cwd": "[BUILDER_CACHE]\\Win7\\src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "compile"
   },
@@ -292,7 +300,8 @@
     "cmd": [],
     "cwd": "[BUILDER_CACHE]\\Win7\\src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "postprocess_for_goma"
   },
@@ -307,6 +316,7 @@
     "cwd": "[BUILDER_CACHE]\\Win7\\src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_jsonstatus",
@@ -335,6 +345,7 @@
     "cwd": "[BUILDER_CACHE]\\Win7\\src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_stat",
@@ -352,6 +363,7 @@
     "cwd": "[BUILDER_CACHE]\\Win7\\src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.stop_goma",
@@ -392,7 +404,8 @@
     ],
     "cwd": "[BUILDER_CACHE]\\Win7\\src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [
@@ -421,7 +434,8 @@
     ],
     "cwd": "[BUILDER_CACHE]\\Win7\\src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail",
@@ -462,7 +476,8 @@
     "cwd": "[BUILDER_CACHE]\\Win7",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "webrtc_perf_tests"
   },
@@ -502,7 +517,8 @@
     "cwd": "[BUILDER_CACHE]\\Win7",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "low_bandwidth_audio_test"
   },

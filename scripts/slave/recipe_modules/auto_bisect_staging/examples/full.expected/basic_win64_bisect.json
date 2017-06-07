@@ -171,6 +171,7 @@
     "cwd": "[START_DIR]\\src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library fastbuild=1 gomadir='[CACHE]\\goma_client' target_arch=x64 use_goma=1",
       "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
@@ -981,7 +982,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Gathering reference values.Performance Test 1 of 6",
     "stderr": "/path/to/tmp/",
@@ -1077,7 +1079,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Gathering reference values.Performance Test 2 of 6",
     "stderr": "/path/to/tmp/",
@@ -1173,7 +1176,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Gathering reference values.Performance Test 3 of 6",
     "stderr": "/path/to/tmp/",
@@ -1269,7 +1273,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Gathering reference values.Performance Test 4 of 6",
     "stderr": "/path/to/tmp/",
@@ -1365,7 +1370,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Gathering reference values.Performance Test 5 of 6",
     "stderr": "/path/to/tmp/",
@@ -1461,7 +1467,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Gathering reference values.Performance Test 6 of 6",
     "stderr": "/path/to/tmp/",
@@ -1761,7 +1768,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Gathering reference values.Performance Test 1 of 6 (2)",
     "stderr": "/path/to/tmp/",
@@ -1857,7 +1865,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Gathering reference values.Performance Test 2 of 6 (2)",
     "stderr": "/path/to/tmp/",
@@ -1953,7 +1962,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Gathering reference values.Performance Test 3 of 6 (2)",
     "stderr": "/path/to/tmp/",
@@ -2049,7 +2059,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Gathering reference values.Performance Test 4 of 6 (2)",
     "stderr": "/path/to/tmp/",
@@ -2145,7 +2156,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Gathering reference values.Performance Test 5 of 6 (2)",
     "stderr": "/path/to/tmp/",
@@ -2241,7 +2253,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Gathering reference values.Performance Test 6 of 6 (2)",
     "stderr": "/path/to/tmp/",
@@ -2706,7 +2719,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Bisecting revision.Performance Test 1 of 6",
     "stderr": "/path/to/tmp/",
@@ -2802,7 +2816,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Bisecting revision.Performance Test 2 of 6",
     "stderr": "/path/to/tmp/",
@@ -2898,7 +2913,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Bisecting revision.Performance Test 3 of 6",
     "stderr": "/path/to/tmp/",
@@ -2994,7 +3010,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Bisecting revision.Performance Test 4 of 6",
     "stderr": "/path/to/tmp/",
@@ -3090,7 +3107,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Bisecting revision.Performance Test 5 of 6",
     "stderr": "/path/to/tmp/",
@@ -3186,7 +3204,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Bisecting revision.Performance Test 6 of 6",
     "stderr": "/path/to/tmp/",
@@ -3403,7 +3422,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Bisecting revision.Performance Test 1 of 3",
     "stderr": "/path/to/tmp/",
@@ -3499,7 +3519,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Bisecting revision.Performance Test 2 of 3",
     "stderr": "/path/to/tmp/",
@@ -3595,7 +3616,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Bisecting revision.Performance Test 3 of 3",
     "stderr": "/path/to/tmp/",
@@ -3958,7 +3980,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Bisecting revision.Performance Test 1 of 3 (2)",
     "stderr": "/path/to/tmp/",
@@ -4054,7 +4077,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Bisecting revision.Performance Test 2 of 3 (2)",
     "stderr": "/path/to/tmp/",
@@ -4150,7 +4174,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Bisecting revision.Performance Test 3 of 3 (2)",
     "stderr": "/path/to/tmp/",
@@ -4513,7 +4538,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Bisecting revision.Performance Test 1 of 3 (3)",
     "stderr": "/path/to/tmp/",
@@ -4609,7 +4635,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Bisecting revision.Performance Test 2 of 3 (3)",
     "stderr": "/path/to/tmp/",
@@ -4705,7 +4732,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Bisecting revision.Performance Test 3 of 3 (3)",
     "stderr": "/path/to/tmp/",
@@ -5068,7 +5096,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Bisecting revision.Performance Test 1 of 5",
     "stderr": "/path/to/tmp/",
@@ -5164,7 +5193,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Bisecting revision.Performance Test 2 of 5",
     "stderr": "/path/to/tmp/",
@@ -5260,7 +5290,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Bisecting revision.Performance Test 3 of 5",
     "stderr": "/path/to/tmp/",
@@ -5356,7 +5387,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Bisecting revision.Performance Test 4 of 5",
     "stderr": "/path/to/tmp/",
@@ -5452,7 +5484,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Bisecting revision.Performance Test 5 of 5",
     "stderr": "/path/to/tmp/",
@@ -5815,7 +5848,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Bisecting revision.Performance Test 1 of 5 (2)",
     "stderr": "/path/to/tmp/",
@@ -5911,7 +5945,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Bisecting revision.Performance Test 2 of 5 (2)",
     "stderr": "/path/to/tmp/",
@@ -6007,7 +6042,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Bisecting revision.Performance Test 3 of 5 (2)",
     "stderr": "/path/to/tmp/",
@@ -6103,7 +6139,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Bisecting revision.Performance Test 4 of 5 (2)",
     "stderr": "/path/to/tmp/",
@@ -6199,7 +6236,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Bisecting revision.Performance Test 5 of 5 (2)",
     "stderr": "/path/to/tmp/",
@@ -6562,7 +6600,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Bisecting revision.Performance Test 1 of 5 (3)",
     "stderr": "/path/to/tmp/",
@@ -6658,7 +6697,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Bisecting revision.Performance Test 2 of 5 (3)",
     "stderr": "/path/to/tmp/",
@@ -6754,7 +6794,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Bisecting revision.Performance Test 3 of 5 (3)",
     "stderr": "/path/to/tmp/",
@@ -6850,7 +6891,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Bisecting revision.Performance Test 4 of 5 (3)",
     "stderr": "/path/to/tmp/",
@@ -6946,7 +6988,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Bisecting revision.Performance Test 5 of 5 (3)",
     "stderr": "/path/to/tmp/",
@@ -7309,7 +7352,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Bisecting revision.Performance Test 1 of 7",
     "stderr": "/path/to/tmp/",
@@ -7405,7 +7449,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Bisecting revision.Performance Test 2 of 7",
     "stderr": "/path/to/tmp/",
@@ -7501,7 +7546,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Bisecting revision.Performance Test 3 of 7",
     "stderr": "/path/to/tmp/",
@@ -7597,7 +7643,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Bisecting revision.Performance Test 4 of 7",
     "stderr": "/path/to/tmp/",
@@ -7693,7 +7740,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Bisecting revision.Performance Test 5 of 7",
     "stderr": "/path/to/tmp/",
@@ -7789,7 +7837,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Bisecting revision.Performance Test 6 of 7",
     "stderr": "/path/to/tmp/",
@@ -7885,7 +7934,8 @@
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Bisecting revision.Performance Test 7 of 7",
     "stderr": "/path/to/tmp/",

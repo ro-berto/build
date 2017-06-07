@@ -10,7 +10,8 @@
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\kill_processes.py"
     ],
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "infra_step": true,
     "name": "taskkill"
@@ -35,6 +36,7 @@
     ],
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
       "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
@@ -119,7 +121,8 @@
   {
     "cmd": [],
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "ensure_goma"
   },
@@ -137,7 +140,8 @@
       "C:\\creds\\service_accounts\\service-account-goma-client.json"
     ],
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "infra_step": true,
     "name": "ensure_goma.ensure_installed",
@@ -166,7 +170,8 @@
       "--version"
     ],
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
@@ -184,6 +189,7 @@
     "cwd": "[START_DIR]\\src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "component=static_library fastbuild=1 gomadir='[CACHE]\\goma_client' target_arch=ia32 use_goma=1",
       "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
@@ -206,7 +212,8 @@
       "{\"bot_id\": \"test_bot\", \"buildername\": \"WebKit Win7\", \"buildnumber\": 571, \"mastername\": \"chromium.webkit\", \"slavename\": \"test_bot\", \"target_platform\": \"win\"}"
     ],
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -223,7 +230,8 @@
       "/path/to/tmp/json"
     ],
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "read test spec (chromium.webkit.json)",
     "~followup_annotations": [
@@ -241,7 +249,8 @@
       "[START_DIR]\\src\\out\\Release"
     ],
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "infra_step": true,
     "name": "rmtree build directory"
@@ -273,7 +282,8 @@
       "571"
     ],
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "infra_step": true,
     "name": "extract build"
@@ -281,7 +291,8 @@
   {
     "cmd": [],
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "test_pre_run"
   },
@@ -316,7 +327,8 @@
       "--debug-rwt-logging"
     ],
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "webkit_tests",
     "~followup_annotations": [
@@ -344,7 +356,8 @@
       "170242"
     ],
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Upload to test-results [webkit_tests]"
   },
@@ -373,7 +386,8 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
     ],
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "archive_webkit_tests_results",
     "~followup_annotations": [
@@ -394,7 +408,8 @@
       "Release"
     ],
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "infra_step": true,
     "name": "process_dumps"

@@ -132,6 +132,7 @@
     "cwd": "[START_DIR]\\v8",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "fastbuild=1 gomadir='[CACHE]\\goma_client' target_arch=ia32 use_goma=1 v8_target_arch=ia32",
       "GYP_GENERATORS": "ninja",
@@ -159,6 +160,7 @@
     "cwd": "[START_DIR]\\v8",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "name": "generate_build_files",
@@ -221,6 +223,7 @@
     "cwd": "[START_DIR]\\v8",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "name": "generate_build_files with gn (fyi)"
@@ -261,7 +264,8 @@
       "/path/to/tmp/"
     ],
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "calculate the number of recommended jobs"
   },
@@ -269,7 +273,8 @@
     "cmd": [],
     "cwd": "[START_DIR]\\v8",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "preprocess_for_goma"
   },
@@ -283,7 +288,8 @@
     ],
     "cwd": "[START_DIR]\\v8",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "preprocess_for_goma.makedirs goma cache directory",
     "~followup_annotations": [
@@ -310,6 +316,7 @@
     "cwd": "[START_DIR]\\v8",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\V8_Win32___builder",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
@@ -340,7 +347,8 @@
     ],
     "cwd": "[START_DIR]\\v8",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail",
@@ -360,7 +368,8 @@
     ],
     "cwd": "[START_DIR]\\v8",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "compile"
   },
@@ -368,7 +377,8 @@
     "cmd": [],
     "cwd": "[START_DIR]\\v8",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "postprocess_for_goma"
   },
@@ -383,6 +393,7 @@
     "cwd": "[START_DIR]\\v8",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_jsonstatus",
@@ -411,6 +422,7 @@
     "cwd": "[START_DIR]\\v8",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_stat",
@@ -428,6 +440,7 @@
     "cwd": "[START_DIR]\\v8",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.stop_goma",
@@ -468,7 +481,8 @@
     ],
     "cwd": "[START_DIR]\\v8",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [
@@ -497,7 +511,8 @@
     ],
     "cwd": "[START_DIR]\\v8",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail",
