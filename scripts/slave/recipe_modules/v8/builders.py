@@ -39,6 +39,7 @@ Presubmit = TestStepConfig('presubmit')
 SimpleLeak = TestStepConfig('simpleleak')
 Test262 = TestStepConfig('test262')
 Test262_2 = TestStepConfig('test262', shards=2)
+Test262_3 = TestStepConfig('test262', shards=3)
 Test262_4 = TestStepConfig('test262', shards=4)
 Test262Variants = TestStepConfig('test262_variants')
 Test262Variants_2 = TestStepConfig('test262_variants', shards=2)
@@ -883,8 +884,8 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [
-          V8Testing_3,
-          Test262_2,
+          V8Testing_2,
+          Test262_3,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -2191,8 +2192,8 @@ BUILDERS = {
         'parent_buildername': 'v8_linux64_tsan_concurrent_marking_rel_ng',
         'enable_swarming': True,
         'tests': [
-          V8Testing_4,
-          Test262_2,
+          V8Testing_3,
+          Test262_4,
         ],
         'testing': {'platform': 'linux'},
       },
