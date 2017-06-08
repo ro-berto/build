@@ -408,10 +408,6 @@ def main(argv):
     build_data_dir = _ensure_directory(tdir, 'build_data')
     properties['build_data_dir'] = build_data_dir
 
-    # Create a cleanup directory so that the recipe engine can assume that it
-    # exists.
-    _ensure_directory(_builder_dir(), 'build.dead')
-
     # path_config property defines what paths a build uses for checkout, git
     # cache, goma cache, etc.
     # Unless it is explicitly specified by a builder, use paths for buildbot
@@ -428,6 +424,10 @@ def main(argv):
     # Cleanup system and temporary directories.
     from slave import cleanup_temp
     cleanup_temp.Cleanup(B_DIR)
+
+    # Create a cleanup directory so that the recipe engine can assume that it
+    # exists.
+    _ensure_directory(_builder_dir(), 'build.dead')
 
     # Execute our recipe.
     return _exec_recipe(rt, opts, stream, basedir, tdir, properties)

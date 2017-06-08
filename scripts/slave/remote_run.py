@@ -617,16 +617,16 @@ def main(argv, stream):
     # or persistent directories should do so explicitly.
     basedir = tempfile.gettempdir()
 
+  # Cleanup system and temporary directories.
+  from slave import cleanup_temp
+  cleanup_temp.Cleanup(b_dir=basedir)
+
   # BuildBot automatically purges "build.dead", and recipe engine uses this as
   # its cleanup directory (see "infra_paths" recipe module). Make sure that it
   # exists, and retain it so that we can use it to perform "annotated_run" to
   # "remote_run" path cleanup.
   buildbot_cleanup_dir = _ensure_directory(
       os.path.dirname(buildbot_build_dir), 'build.dead')
-
-  # Cleanup system and temporary directories.
-  from slave import cleanup_temp
-  cleanup_temp.Cleanup(b_dir=basedir)
 
   # Choose a tempdir prefix. If we have no active subdir, we will use a prefix
   # of "rr". If we have an active subdir, we will use "rs/<subdir>". This way,
