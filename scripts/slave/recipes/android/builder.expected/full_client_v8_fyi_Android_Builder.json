@@ -48,6 +48,8 @@
       "{\"got_angle_revision\": \"src/third_party/angle\", \"got_buildtools_revision\": \"src/buildtools\", \"got_cr_revision\": \"src\", \"got_nacl_revision\": \"src/native_client\", \"got_revision\": \"src/v8\", \"got_swarming_client_revision\": \"src/tools/swarming_client\", \"got_webrtc_revision\": \"src/third_party/webrtc\"}",
       "--git-cache-dir",
       "[CACHE]/git",
+      "--cleanup-dir",
+      "[CLEANUP]/bot_update",
       "--issue",
       "8675309",
       "--patchset",

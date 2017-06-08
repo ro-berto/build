@@ -76,6 +76,8 @@
       "{\"got_revision\": \"src\"}",
       "--git-cache-dir",
       "[GIT_CACHE]",
+      "--cleanup-dir",
+      "[CLEANUP]/bot_update",
       "--issue",
       "666666",
       "--patchset",

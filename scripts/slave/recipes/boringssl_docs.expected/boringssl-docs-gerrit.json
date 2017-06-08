@@ -12,6 +12,8 @@
       "{}",
       "--git-cache-dir",
       "[CACHE]/git",
+      "--cleanup-dir",
+      "[CLEANUP]/bot_update",
       "--gerrit_repo",
       "https://boringssl.googlesource.com/boringssl",
       "--gerrit_ref",

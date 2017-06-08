@@ -25,6 +25,8 @@
       "{\"got_revision\": \"v8\", \"got_swarming_client_revision\": \"v8/tools/swarming_client\"}",
       "--git-cache-dir",
       "[CACHE]\\git",
+      "--cleanup-dir",
+      "[CLEANUP]\\bot_update",
       "--issue",
       "12853011",
       "--patchset",

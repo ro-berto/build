@@ -12,6 +12,8 @@
       "{\"got_revision\": \"depot_tools\"}",
       "--git-cache-dir",
       "[CACHE]/git",
+      "--cleanup-dir",
+      "[CLEANUP]/bot_update",
       "--gerrit_repo",
       "https://chromium.googlesource.com/chromium/tools/depot_tools",
       "--gerrit_ref",

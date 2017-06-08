@@ -23,6 +23,8 @@
       "{\"got_engine_revision\": \"src/flutter\"}",
       "--git-cache-dir",
       "[CACHE]\\git",
+      "--cleanup-dir",
+      "[CLEANUP]\\bot_update",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
