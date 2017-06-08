@@ -87,7 +87,7 @@
       "--json-file",
       "/path/to/tmp/json",
       "--version",
-      "7.0"
+      "8.0"
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
@@ -102,7 +102,7 @@
   },
   {
     "name": "$result",
-    "reason": "Xcode 7.0 not found",
+    "reason": "Xcode 8.0 not found",
     "recipe_result": null,
     "status_code": 1
   }
