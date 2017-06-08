@@ -106,9 +106,9 @@ def SetupXcode(api):
   api.git.checkout(
       'https://chromium.googlesource.com/chromium/src/ios',
       ref='69b7c1b160e7107a6a98d948363772dc9caea46f',
-      dir_path=ios_tools_path, recursive=True, step_suffix='_ios_tools')
+      dir_path=ios_tools_path, recursive=True, step_suffix='ios_tools')
 
-  target_version = '7.0'
+  target_version = '8.0'
   xcode_json = RunFindXcode(api, ios_tools_path, target_version)
   if not xcode_json['matches']:
     raise api.step.StepFailure('Xcode %s not found' % target_version)
@@ -191,7 +191,7 @@ def GenTests(api):
       test += (
         api.step_data('set_xcode_version', api.json.output({
           'matches': {
-            '/Applications/Xcode7.0.app': '7.0 (7A220)'
+            "/Applications/Xcode8.0.app": "8.0 (8A218a)"
           }
         }))
       )

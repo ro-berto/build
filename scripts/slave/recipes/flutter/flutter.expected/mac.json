@@ -154,7 +154,7 @@
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/.pub-cache"
     },
-    "name": "git setup (_ios_tools)"
+    "name": "git setup (ios_tools)"
   },
   {
     "cmd": [
@@ -171,7 +171,7 @@
       "PUB_CACHE": "[START_DIR]/.pub-cache"
     },
     "infra_step": true,
-    "name": "git fetch (_ios_tools)"
+    "name": "git fetch (ios_tools)"
   },
   {
     "cmd": [
@@ -187,7 +187,7 @@
       "PUB_CACHE": "[START_DIR]/.pub-cache"
     },
     "infra_step": true,
-    "name": "git checkout (_ios_tools)"
+    "name": "git checkout (ios_tools)"
   },
   {
     "cmd": [
@@ -223,7 +223,7 @@
       "PUB_CACHE": "[START_DIR]/.pub-cache"
     },
     "infra_step": true,
-    "name": "git clean (_ios_tools)"
+    "name": "git clean (ios_tools)"
   },
   {
     "cmd": [
@@ -238,7 +238,7 @@
       "PUB_CACHE": "[START_DIR]/.pub-cache"
     },
     "infra_step": true,
-    "name": "submodule sync (_ios_tools)"
+    "name": "submodule sync (ios_tools)"
   },
   {
     "cmd": [
@@ -255,7 +255,7 @@
       "PUB_CACHE": "[START_DIR]/.pub-cache"
     },
     "infra_step": true,
-    "name": "submodule update (_ios_tools)"
+    "name": "submodule update (ios_tools)"
   },
   {
     "cmd": [
@@ -269,7 +269,7 @@
       "--json-file",
       "/path/to/tmp/json",
       "--version",
-      "7.0"
+      "8.0"
     ],
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
@@ -280,7 +280,7 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"matches\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"/Applications/Xcode7.0.app\": \"7.0 (7A220)\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"/Applications/Xcode8.0.app\": \"8.0 (8A218a)\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
