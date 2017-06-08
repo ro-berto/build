@@ -122,6 +122,13 @@ _CANARY_CIPD_PINS = CipdPins(
       kitchen='git_revision:626f893e5822aa2fbea113c0c2e023f2a601c463')
 
 
+def _ensure_directory(*path):
+  path = os.path.join(*path)
+  if not os.path.isdir(path):
+    os.makedirs(path)
+  return path
+
+
 def _get_is_canary(mastername):
   return mastername in _CANARY_MASTERS
 
@@ -188,8 +195,21 @@ def _call(cmd, **kwargs):
 
 
 def _cleanup_old_layouts(using_kitchen, properties, buildbot_build_dir,
-                         cache_dir):
-  cleanup_paths = []
+                         cleanup_dir, cache_dir):
+  cleanup_paths = [
+      # All remote_run instances no longer use "//build/slave/cache_dir" or
+      # "//build/slave/goma_cache", preferring to use cache directories
+      # instead (see "infra_paths" recipe module).
+      os.path.join(BUILD_ROOT, 'slave', 'cache_dir'),
+      os.path.join(BUILD_ROOT, 'slave', 'goma_cache'),
+
+      # "bot_update" uses "build.dead" as a way to automatically purge
+      # directories. While this is being handled differently, existing
+      # "build.dead" directories currently exist under "[CACHE]/b/build.dead"
+      # due to the previous logic.
+      os.path.join(cache_dir, 'b', 'build.dead'),
+  ]
+
 
   # Make switching to remote_run easier: we do not use buildbot workdir,
   # and it takes disk space leading to out of disk errors.
@@ -232,15 +252,22 @@ def _cleanup_old_layouts(using_kitchen, properties, buildbot_build_dir,
   if cleanup_paths:
     LOGGER.info('Cleaning up %d old layout path(s)...', len(cleanup_paths))
 
+    # We remove files by moving them to the cleanup directory. This causes them
+    # to be deleted in between builds.
+    #
+    # We rely on "cleanup_dir" to be on the same filesystem as the source
+    # directories, which is the case for BuildBot builds.
     for path in cleanup_paths:
       LOGGER.info('Removing path from previous layout: %s', path)
       try:
-        chromium_utils.RemovePath(path)
+        base = os.path.basename(path)
+        target_dir = tempfile.mkdtemp(prefix=base, dir=cleanup_dir)
+        os.rename(path, os.path.join(target_dir, base))
       except Exception:
         LOGGER.exception('Failed to cleanup path: %s', path)
 
 
-def _remote_run_with_kitchen(args, stream, is_canary, kitchen_version,
+def _remote_run_with_kitchen(args, stream, _is_canary, kitchen_version,
                              properties, tempdir, basedir, cache_dir):
   # Write our build properties to a JSON file.
   properties_file = os.path.join(tempdir, 'remote_run_properties.json')
@@ -248,8 +275,7 @@ def _remote_run_with_kitchen(args, stream, is_canary, kitchen_version,
     json.dump(properties, f)
 
   # Create our directory structure.
-  recipe_temp_dir = os.path.join(tempdir, 't')
-  os.makedirs(recipe_temp_dir)
+  recipe_temp_dir = _ensure_directory(tempdir, 't')
 
   # Use CIPD to download Kitchen to a root within the temporary directory.
   cipd_root = os.path.join(basedir, '.remote_run_cipd')
@@ -359,7 +385,8 @@ def _remote_run_with_kitchen(args, stream, is_canary, kitchen_version,
   return return_code
 
 
-def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir):
+def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir,
+                 buildbot_cleanup_dir):
   tempdir = rt.tempdir(basedir)
   LOGGER.info('Using temporary directory: [%s].', tempdir)
 
@@ -429,7 +456,9 @@ def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir):
   cache_dir = os.path.join(BUILDBOT_ROOT, 'c')
 
   # Cleanup data from old builds.
-  _cleanup_old_layouts(is_kitchen, properties, buildbot_build_dir, cache_dir)
+  _cleanup_old_layouts(
+      is_kitchen, properties, buildbot_build_dir, buildbot_cleanup_dir,
+      cache_dir)
 
   # (Canary) Use Kitchen if configured.
   # TODO(dnj): Make this the only path once we move to Kitchen.
@@ -553,7 +582,7 @@ def main(argv, stream):
 
   args = parser.parse_args(argv[1:])
 
-  buildbot_build_dir = os.getcwd()
+  buildbot_build_dir = os.path.abspath(os.getcwd())
   try:
     basedir = chromium_utils.FindUpward(buildbot_build_dir, 'b')
   except chromium_utils.PathNotFound as e:
@@ -562,6 +591,13 @@ def main(argv, stream):
     # one (cwd), the paths get too long. Recipes which need different paths
     # or persistent directories should do so explicitly.
     basedir = tempfile.gettempdir()
+
+  # BuildBot automatically purges "build.dead", and recipe engine uses this as
+  # its cleanup directory (see "infra_paths" recipe module). Make sure that it
+  # exists, and retain it so that we can use it to perform "annotated_run" to
+  # "remote_run" path cleanup.
+  buildbot_cleanup_dir = _ensure_directory(
+      os.path.dirname(buildbot_build_dir), 'build.dead')
 
   # Cleanup system and temporary directories.
   from slave import cleanup_temp
@@ -581,7 +617,8 @@ def main(argv, stream):
     # Explicitly clean up possibly leaked temporary directories
     # from previous runs.
     rt.cleanup(basedir)
-    return _exec_recipe(args, rt, stream, basedir, buildbot_build_dir)
+    return _exec_recipe(args, rt, stream, basedir, buildbot_build_dir,
+                        buildbot_cleanup_dir)
 
 
 def shell_main(argv):

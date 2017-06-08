@@ -134,7 +134,10 @@ class RemoteRunExecTest(unittest.TestCase):
     self.stream = annotator.StructuredAnnotationStream(
         stream=self.stream_output)
     self.basedir = self.rt.tempdir()
-    self.buildbot_build_dir = self.rt.tempdir()
+
+    build_root = self.rt.tempdir()
+    self.buildbot_build_dir = os.path.join(build_root, 'build')
+    self.buildbot_cleanup_dir = os.path.join(build_root, 'build.dead')
     self.tempdir = self.rt.tempdir()
     self.build_data_dir = self.rt.tempdir()
     self.opts = MockOptions(
@@ -261,8 +264,9 @@ class RemoteRunExecTest(unittest.TestCase):
     self.recipe_result = {}
     self._write_recipe_result()
 
-    rv = remote_run._exec_recipe(self.opts, self.rt, self.stream, self.basedir,
-                                 self.buildbot_build_dir)
+    rv = remote_run._exec_recipe(
+        self.opts, self.rt, self.stream, self.basedir, self.buildbot_build_dir,
+        self.buildbot_cleanup_dir)
     self.assertEqual(rv, 0)
 
     args = self.recipe_remote_args + ['--'] + self.recipe_args
@@ -281,8 +285,9 @@ class RemoteRunExecTest(unittest.TestCase):
     self._write_kitchen_result()
 
     opts = self.opts._replace(revision='refs/heads/somebranch')
-    rv = remote_run._exec_recipe(opts, self.rt, self.stream, self.basedir,
-                                 self.buildbot_build_dir)
+    rv = remote_run._exec_recipe(
+        opts, self.rt, self.stream, self.basedir, self.buildbot_build_dir,
+        self.buildbot_cleanup_dir)
     self.assertEqual(rv, 0)
 
     kitchen_args = self.kitchen_args + [
@@ -308,8 +313,9 @@ class RemoteRunExecTest(unittest.TestCase):
     self._write_kitchen_result()
 
     opts = self.opts._replace(revision='refs/heads/somebranch')
-    rv = remote_run._exec_recipe(opts, self.rt, self.stream, self.basedir,
-                                 self.buildbot_build_dir)
+    rv = remote_run._exec_recipe(
+        opts, self.rt, self.stream, self.basedir, self.buildbot_build_dir,
+        self.buildbot_cleanup_dir)
     self.assertEqual(rv, 0)
 
     kitchen_args = self.kitchen_args + [
@@ -344,8 +350,9 @@ class RemoteRunExecTest(unittest.TestCase):
     self.recipe_result = {}
     self._write_recipe_result()
 
-    rv = remote_run._exec_recipe(self.opts, self.rt, self.stream, self.basedir,
-                                 self.buildbot_build_dir)
+    rv = remote_run._exec_recipe(
+        self.opts, self.rt, self.stream, self.basedir, self.buildbot_build_dir,
+        self.buildbot_cleanup_dir)
     self.assertEqual(rv, 0)
 
     remote_run._call.assert_called_once_with(bootstrap.return_value.cmd)
@@ -392,8 +399,9 @@ class RemoteRunExecTest(unittest.TestCase):
     }
     self._write_recipe_result()
 
-    rv = remote_run._exec_recipe(self.opts, self.rt, self.stream, self.basedir,
-                                 self.buildbot_build_dir)
+    rv = remote_run._exec_recipe(
+        self.opts, self.rt, self.stream, self.basedir, self.buildbot_build_dir,
+        self.buildbot_cleanup_dir)
     self.assertEqual(rv, 255)
 
     remote_run._call.assert_called_once_with(bootstrap.return_value.cmd)
@@ -437,8 +445,9 @@ class RemoteRunExecTest(unittest.TestCase):
     self.recipe_result = {}
     self._write_recipe_result()
 
-    rv = remote_run._exec_recipe(self.opts, self.rt, self.stream, self.basedir,
-                                 self.buildbot_build_dir)
+    rv = remote_run._exec_recipe(
+        self.opts, self.rt, self.stream, self.basedir, self.buildbot_build_dir,
+        self.buildbot_cleanup_dir)
     self.assertEqual(rv, 0)
 
     remote_run._call.assert_called_once_with(bootstrap.return_value.cmd)
@@ -483,8 +492,9 @@ class RemoteRunExecTest(unittest.TestCase):
     self._write_kitchen_result()
 
     opts = self.opts._replace(revision='origin/master')
-    rv = remote_run._exec_recipe(opts, self.rt, self.stream, self.basedir,
-                                 self.buildbot_build_dir)
+    rv = remote_run._exec_recipe(
+        opts, self.rt, self.stream, self.basedir, self.buildbot_build_dir,
+        self.buildbot_cleanup_dir)
     self.assertEqual(rv, 0)
 
     kitchen_args = self.kitchen_args + [

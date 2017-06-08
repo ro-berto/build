@@ -49,6 +49,7 @@ _ENGINE_FLAGS = {
   },
 }
 
+
 def _get_engine_flags(mastername):
   return  _ENGINE_FLAGS.get(mastername, _ENGINE_FLAGS[None])
 
@@ -59,15 +60,19 @@ _REMOTE_RUN_PASSTHROUGH = {
   ],
 }
 
+
 def _is_remote_run_passthrough(properties):
   builders = _REMOTE_RUN_PASSTHROUGH.get(properties.get('mastername'), [])
   return properties.get('buildername') in builders
 
+
 def _build_dir():
   return BUILD_DIR
 
+
 def _builder_dir():
   return BUILDER_DIR
+
 
 def _ensure_directory(*path):
   path = os.path.join(*path)
@@ -402,6 +407,10 @@ def main(argv):
     # Setup monitoring directory and send a monitoring event.
     build_data_dir = _ensure_directory(tdir, 'build_data')
     properties['build_data_dir'] = build_data_dir
+
+    # Create a cleanup directory so that the recipe engine can assume that it
+    # exists.
+    _ensure_directory(_builder_dir(), 'build.dead')
 
     # path_config property defines what paths a build uses for checkout, git
     # cache, goma cache, etc.
