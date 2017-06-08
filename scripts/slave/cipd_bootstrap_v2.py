@@ -51,11 +51,11 @@ AUX_BINARY_PACKAGES = {
     STAGING: (
       cipd.CipdPackage(
           name='infra/tools/luci/vpython/${platform}',
-          version='git_revision:4e890ddbd1d716d72696eb9d88be1410bf7b0335'),
+          version='git_revision:c6dbc470acfd836494db899bc6aebe0f3d2df593'),
 
       cipd.CipdPackage(
           name='infra/tools/git/${platform}',
-          version='git_revision:4e890ddbd1d716d72696eb9d88be1410bf7b0335'),
+          version='git_revision:c6dbc470acfd836494db899bc6aebe0f3d2df593'),
     ),
 
     CANARY: (
