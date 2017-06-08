@@ -138,6 +138,8 @@ def RunSteps(api):
                  '--write-test-outcome-log']
     if system in ['win7', 'win8', 'win10']:
       test_args.append('--builder-tag=%s' % system)
+    if system == 'linux' and builder_type == 'pkg':
+      test_args.append('--builder-tag=no_ipv6')
 
     if builder_type == 'analyzer':
       test_specs = [
@@ -194,4 +196,10 @@ def GenTests(api):
       api.properties.generic(
         mastername='client.dart',
         buildername='pkg-mac10.11-release-be',
+        revision='hash_of_revision'))
+   yield (
+      api.test('pkg-linux-release-stable') + api.platform('linux', 64) +
+      api.properties.generic(
+        mastername='client.dart',
+        buildername='pkg-linux-release-stable',
         revision='hash_of_revision'))
