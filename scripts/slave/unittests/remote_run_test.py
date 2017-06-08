@@ -136,8 +136,9 @@ class RemoteRunExecTest(unittest.TestCase):
     self.basedir = self.rt.tempdir()
 
     build_root = self.rt.tempdir()
-    self.buildbot_build_dir = os.path.join(build_root, 'build')
-    self.buildbot_cleanup_dir = os.path.join(build_root, 'build.dead')
+    self.buildbot_build_dir = remote_run._ensure_directory(build_root, 'build')
+    self.buildbot_cleanup_dir = remote_run._ensure_directory(
+        build_root, 'build.dead')
     self.tempdir = self.rt.tempdir()
     self.build_data_dir = self.rt.tempdir()
     self.opts = MockOptions(

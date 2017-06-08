@@ -129,6 +129,33 @@ def _ensure_directory(*path):
   return path
 
 
+def _try_cleanup(src, buildbot_cleanup_dir):
+  """Stages the "src" file or directory for removal via "cleanup_dir".
+
+  The "buildbot_cleanup_dir" is a BuildBot-provided facility that deletes files
+  in between builds. Moving files into this directory completes instantly. As
+  opposed to deleting in "remote_run" or a lower layer, deletions via
+  "buildbot_cleanup_dir" happen in between builds, meaning that the overhead and
+  expense aren't subject to I/O timeout and don't affect actual build times.
+
+  NOTE: We rely on "cleanup_dir" to be on the same filesystem as the source
+  directories, which is the case for BuildBot builds.
+  """
+  if not os.path.isdir(buildbot_cleanup_dir):
+    LOGGER.warning('Cleanup directory does not exist: %r', buildbot_cleanup_dir)
+    return
+
+  base = os.path.basename(src)
+  target_dir = tempfile.mkdtemp(prefix=base, dir=buildbot_cleanup_dir)
+  dst = os.path.join(target_dir, base)
+
+  LOGGER.info('Moving file to cleanup directory %r => %r', src, dst)
+  try:
+    os.rename(src, dst)
+  except Exception:
+    LOGGER.exception('Failed to cleanup path %r', src)
+
+
 def _get_is_canary(mastername):
   return mastername in _CANARY_MASTERS
 
@@ -254,17 +281,9 @@ def _cleanup_old_layouts(using_kitchen, properties, buildbot_build_dir,
 
     # We remove files by moving them to the cleanup directory. This causes them
     # to be deleted in between builds.
-    #
-    # We rely on "cleanup_dir" to be on the same filesystem as the source
-    # directories, which is the case for BuildBot builds.
     for path in cleanup_paths:
-      LOGGER.info('Removing path from previous layout: %s', path)
-      try:
-        base = os.path.basename(path)
-        target_dir = tempfile.mkdtemp(prefix=base, dir=cleanup_dir)
-        os.rename(path, os.path.join(target_dir, base))
-      except Exception:
-        LOGGER.exception('Failed to cleanup path: %s', path)
+      LOGGER.info('Removing path from previous layout: %r', path)
+      _try_cleanup(path, cleanup_dir)
 
 
 def _remote_run_with_kitchen(args, stream, _is_canary, kitchen_version,
@@ -388,10 +407,10 @@ def _remote_run_with_kitchen(args, stream, _is_canary, kitchen_version,
 def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir,
                  buildbot_cleanup_dir):
   tempdir = rt.tempdir(basedir)
-  LOGGER.info('Using temporary directory: [%s].', tempdir)
+  LOGGER.info('Using temporary directory: %r.', tempdir)
 
   build_data_dir = rt.tempdir(basedir)
-  LOGGER.info('Using build data directory: [%s].', build_data_dir)
+  LOGGER.info('Using build data directory: %r.', build_data_dir)
 
   # Construct our properties.
   properties = copy.copy(args.factory_properties)
@@ -442,7 +461,7 @@ def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir,
     path_config = properties.pop('path_config', None)
     if path_config and path_config != 'kitchen':
       raise ValueError("Users of 'remote_run.py' MUST specify either 'kitchen' "
-                       "or no 'path_config', not [%s]." % (path_config,))
+                       "or no 'path_config', not %r." % (path_config,))
 
   LOGGER.info('Using properties: %r', properties)
 
@@ -463,9 +482,15 @@ def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir,
   # (Canary) Use Kitchen if configured.
   # TODO(dnj): Make this the only path once we move to Kitchen.
   if is_kitchen:
-    return _remote_run_with_kitchen(
-        args, stream, is_canary, pins.kitchen, properties, tempdir, basedir,
-        cache_dir)
+    # We don't want to pay the cost of purging Kitchen's temporary directory as
+    # part of "remote_run" execution.
+    kitchen_tempdir = _ensure_directory(tempdir, 'k')
+    try:
+      return _remote_run_with_kitchen(
+          args, stream, is_canary, pins.kitchen, properties, tempdir, basedir,
+          cache_dir)
+    finally:
+      _try_cleanup(kitchen_tempdir, buildbot_cleanup_dir)
 
   ##
   # Classic Remote Run
