@@ -57,21 +57,22 @@ def BuildExamples(api, git_hash, flutter_executable):
       api.step('flutter build apk %s' % api.path.basename(app_dir),
           [flutter_executable, '-v', 'build', 'apk'])
 
-      if api.platform.is_mac:
-        app_name = api.path.basename(app_dir)
-        # Disable codesigning since this bot has no developer cert.
-        api.step(
-          'flutter build ios %s' % app_name,
-          [flutter_executable, '-v', 'build', 'ios', '--no-codesign'],
-        )
-        api.step(
-          'flutter build ios debug %s' % app_name,
-          [flutter_executable, '-v', 'build', 'ios', '--no-codesign', '--debug'],
-        )
-        api.step(
-          'flutter build ios simulator %s' % app_name,
-          [flutter_executable, '-v', 'build', 'ios', '--simulator'],
-        )
+      # TODO(cbracken): re-enable once cocoapods is installed on the Mac bots.
+      #if api.platform.is_mac:
+      #  app_name = api.path.basename(app_dir)
+      #  # Disable codesigning since this bot has no developer cert.
+      #  api.step(
+      #    'flutter build ios %s' % app_name,
+      #    [flutter_executable, '-v', 'build', 'ios', '--no-codesign'],
+      #  )
+      #  api.step(
+      #    'flutter build ios debug %s' % app_name,
+      #    [flutter_executable, '-v', 'build', 'ios', '--no-codesign', '--debug'],
+      #  )
+      #  api.step(
+      #    'flutter build ios simulator %s' % app_name,
+      #    [flutter_executable, '-v', 'build', 'ios', '--simulator'],
+      #  )
 
     # This is linux just to have only one bot archive at once.
     if api.platform.is_linux:

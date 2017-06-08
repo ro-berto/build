@@ -345,55 +345,6 @@
       "flutter",
       "-v",
       "build",
-      "ios",
-      "--no-codesign"
-    ],
-    "cwd": "[START_DIR]/flutter/examples/stocks",
-    "env": {
-      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
-      "PUB_CACHE": "[START_DIR]/.pub-cache"
-    },
-    "name": "flutter build ios stocks"
-  },
-  {
-    "cmd": [
-      "flutter",
-      "-v",
-      "build",
-      "ios",
-      "--no-codesign",
-      "--debug"
-    ],
-    "cwd": "[START_DIR]/flutter/examples/stocks",
-    "env": {
-      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
-      "PUB_CACHE": "[START_DIR]/.pub-cache"
-    },
-    "name": "flutter build ios debug stocks"
-  },
-  {
-    "cmd": [
-      "flutter",
-      "-v",
-      "build",
-      "ios",
-      "--simulator"
-    ],
-    "cwd": "[START_DIR]/flutter/examples/stocks",
-    "env": {
-      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
-      "PUB_CACHE": "[START_DIR]/.pub-cache"
-    },
-    "name": "flutter build ios simulator stocks"
-  },
-  {
-    "cmd": [
-      "flutter",
-      "-v",
-      "build",
       "apk"
     ],
     "cwd": "[START_DIR]/flutter/examples/flutter_gallery",
@@ -403,55 +354,6 @@
       "PUB_CACHE": "[START_DIR]/.pub-cache"
     },
     "name": "flutter build apk flutter_gallery"
-  },
-  {
-    "cmd": [
-      "flutter",
-      "-v",
-      "build",
-      "ios",
-      "--no-codesign"
-    ],
-    "cwd": "[START_DIR]/flutter/examples/flutter_gallery",
-    "env": {
-      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
-      "PUB_CACHE": "[START_DIR]/.pub-cache"
-    },
-    "name": "flutter build ios flutter_gallery"
-  },
-  {
-    "cmd": [
-      "flutter",
-      "-v",
-      "build",
-      "ios",
-      "--no-codesign",
-      "--debug"
-    ],
-    "cwd": "[START_DIR]/flutter/examples/flutter_gallery",
-    "env": {
-      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
-      "PUB_CACHE": "[START_DIR]/.pub-cache"
-    },
-    "name": "flutter build ios debug flutter_gallery"
-  },
-  {
-    "cmd": [
-      "flutter",
-      "-v",
-      "build",
-      "ios",
-      "--simulator"
-    ],
-    "cwd": "[START_DIR]/flutter/examples/flutter_gallery",
-    "env": {
-      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
-      "PUB_CACHE": "[START_DIR]/.pub-cache"
-    },
-    "name": "flutter build ios simulator flutter_gallery"
   },
   {
     "name": "$result",
