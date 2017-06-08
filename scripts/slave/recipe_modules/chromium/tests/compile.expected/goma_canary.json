@@ -124,6 +124,7 @@
     "cwd": "None",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[CACHE]/goma/test_buildername",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_FAIL_FAST": "true",
