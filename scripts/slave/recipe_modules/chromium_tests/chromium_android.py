@@ -120,6 +120,7 @@ SPEC = {
     },
 
     'KitKat Tablet Tester': {
+      'enable_swarming': True,
       'chromium_config': 'android',
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
@@ -176,6 +177,7 @@ SPEC = {
     },
 
     'Lollipop Tablet Tester': {
+      'enable_swarming': True,
       'chromium_config': 'android',
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
@@ -194,6 +196,7 @@ SPEC = {
     },
 
     'Marshmallow Tablet Tester': {
+      'enable_swarming': True,
       'chromium_config': 'android',
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],

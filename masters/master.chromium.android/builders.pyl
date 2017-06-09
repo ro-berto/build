@@ -321,7 +321,7 @@
         "version": "trusty",
         "bits": "64",
       },
-      "slaves": ["build42-b1"],
+      "slaves": ["slave216-c1"],
     },
     "lollipop_phone": {
       "slave_data": {
@@ -337,7 +337,7 @@
         "version": "trusty",
         "bits": "64",
       },
-      "slaves": ["build43-b1"],
+      "slaves": ["slave217-c1"],
     },
     "main_n5x_builder": {
       "slave_data": {
@@ -361,7 +361,7 @@
         "version": "trusty",
         "bits": "64",
       },
-      "slaves": ["build44-b1"],
+      "slaves": ["slave218-c1"],
     },
     "mips_builder": {
       "slave_data": {
