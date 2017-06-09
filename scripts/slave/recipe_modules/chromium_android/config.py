@@ -78,9 +78,9 @@ def clang_builder(c):  # pragma: no cover
 def clang_builder_mb(c):
   pass
 
-@config_ctx(config_vars={'BUILD_CONFIG': 'Release'})
+@config_ctx(config_vars={'BUILD_CONFIG': 'Release'},
+            includes=['asan_symbolize'])
 def clang_asan_tot_release_builder(c):  # pragma: no cover
-  c.asan_symbolize = True
   c.env.LLVM_FORCE_HEAD_REVISION = 'YES'
 
 @config_ctx(config_vars={'BUILD_CONFIG': 'Debug'})
@@ -204,10 +204,9 @@ def instrumentation_tests(c):  # pragma: no cover
 def main_tests(c):
   pass  # pragma: no cover
 
-@config_ctx(includes=['tests_base'])
+@config_ctx(includes=['asan_symbolize', 'tests_base'])
 def clang_tests(c):  # pragma: no cover
   c.tests.append('smoke_instrumentation_tests')
-  c.asan_symbolize = True
 
 @config_ctx(includes=['tests_base'])
 def enormous_tests(c):  # pragma: no cover
@@ -277,3 +276,8 @@ def remove_system_chrome(c):
     'remove_system_webview_shell'])
 def remove_all_system_webviews(c):
   pass
+
+@config_ctx()
+def asan_symbolize(c):  # pragma: no cover
+  c.asan_symbolize = True
+
