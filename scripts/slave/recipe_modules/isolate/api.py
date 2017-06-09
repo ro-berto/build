@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import itertools
+import sys
 from recipe_engine import recipe_api
 
 
@@ -85,7 +86,7 @@ class IsolateApi(recipe_api.RecipeApi):
       step_result.presentation.status = self.m.step.WARNING
 
   def isolate_tests(self, build_dir, targets=None, verbose=False,
-                    set_swarm_hashes=True, always_use_exparchive=False,
+                    set_swarm_hashes=True, use_exparchive=False,
                     **kwargs):
     """Archives prepared tests in |build_dir| to isolate server.
 
@@ -97,12 +98,39 @@ class IsolateApi(recipe_api.RecipeApi):
     amount of work. Tests share many common files, and such files are processed
     only once.
 
-    Assigns the dict {target name -> *.isolated file hash} to the swarm_hashes
-    build property (also accessible as 'isolated_tests' property). This implies
-    this step can currently only be run once per recipe.
+    Args:
+        targets: List of targets to use instead of finding .isolated.gen.json
+            files.
+        verbose (bool): Isolate command should be verbose in output.
+        set_swarm_hashes (bool): On true, assigns the dict
+            {target name -> *.isolated file hash} to the swarm_hashes build
+            property (also accessible as 'isolated_tests' property). This
+            implies this step can currently only be run once per recipe.
+        use_exparchive (bool, int, float, long): Provide a boolean to
+            enable/disable exparchive, or provide a number (between 0 and 100)
+            to have n% of builds run with exparchive.
     """
     # TODO(tansell): Make all steps in this function nested under one overall
     # 'isolate tests' master step.
+
+    # Work out a modulus for the build number to allow exparchive experiments.
+    if use_exparchive is False:
+      use_exparchive_mod = sys.maxint
+    elif use_exparchive is True:
+      use_exparchive_mod = 1
+    else:
+      assert use_exparchive >= 0 and use_exparchive <= 100, (
+            'use_exparchive should be between 0 and 100, not %s' %
+            use_exparchive)
+      try:
+        use_exparchive_mod = int(100.0/use_exparchive)
+      except (ValueError, ZeroDivisionError):
+        use_exparchive_mod = sys.maxint
+    assert use_exparchive_mod > 0
+
+    buildnumber = self.m.properties.get('buildnumber', 1)
+    assert buildnumber > 0, 'buildnumber %s should be > 0' % buildnumber
+    use_exparchive_for_all_targets = (buildnumber % use_exparchive_mod) == 0
 
     # TODO(vadimsh): Always require |targets| to be passed explicitly. Currently
     # chromium_trybot, blink_trybot and swarming/canary recipes rely on targets
@@ -130,7 +158,7 @@ class IsolateApi(recipe_api.RecipeApi):
     batch_targets = []
     exparchive_targets = []
     for t in targets:
-      if t.endswith('_exparchive') or always_use_exparchive:
+      if t.endswith('_exparchive') or use_exparchive_for_all_targets:
         exparchive_targets.append(t)
       else:
         batch_targets.append(t)
