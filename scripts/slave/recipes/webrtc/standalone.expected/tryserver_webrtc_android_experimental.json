@@ -35,38 +35,6 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport json, os, sys\nif os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):\n  with open(sys.argv[2], 'w') as f:\n    json.dump(os.listdir(sys.argv[1]), f)\n",
-      "[BUILDER_CACHE]/android_experimental",
-      "/path/to/tmp/json"
-    ],
-    "name": "listdir checkout root",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"src\"@@@",
-      "@@@STEP_LOG_LINE@json.output@]@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import json, os, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[1]) and os.path.isdir(sys.argv[1]):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  with open(sys.argv[2], 'w') as f:@@@",
-      "@@@STEP_LOG_LINE@python.inline@    json.dump(os.listdir(sys.argv[1]), f)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "reset",
-      "--hard"
-    ],
-    "cwd": "[BUILDER_CACHE]/android_experimental/src",
-    "infra_step": true,
-    "name": "reset checkout [crbug.com/677823]"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec",
       "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/webrtc'}, {'deps_file': 'DEPS', 'managed': True, 'name': 'webrtc-limited', 'url': 'https://chrome-internal.googlesource.com/chrome/deps/webrtc-limited'}]\ntarget_os = ['android']",

@@ -114,8 +114,6 @@ def GenTests(api):
       else:
         test += api.properties(issue=666666, patchset=1,
                                rietveld='https://fake.rietveld.url')
-      test += api.override_step_data('listdir checkout root',
-                                     api.json.output(['src']))
     test += api.properties(buildnumber=1337)
 
     if (chromium_kwargs.get('TARGET_PLATFORM') != 'android' and
