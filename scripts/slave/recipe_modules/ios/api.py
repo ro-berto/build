@@ -61,9 +61,13 @@ class iOSApi(recipe_api.RecipeApi):
       self._checkout_dir = self.m.chromium_checkout.get_checkout_dir({})
     return self._checkout_dir
 
-  def checkout(self, **kwargs):
+  def checkout(self, gclient_apply_config=None, **kwargs):
     """Checks out Chromium."""
     self.m.gclient.set_config('ios')
+
+    gclient_apply_config = gclient_apply_config or []
+    for config in gclient_apply_config:
+      self.m.gclient.apply_config(config)
 
     checkout_dir = self._ensure_checkout_dir()
 

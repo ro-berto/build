@@ -7,9 +7,13 @@ from buildbot.scheduler import Periodic
 from buildbot.schedulers.basic import SingleBranchScheduler
 
 from master.factory import remote_run_factory
+from master.factory import annotator_factory
 
 import master_site_config
 ActiveMaster = master_site_config.ChromiumWebRTCFYI
+
+
+m_annotator = annotator_factory.AnnotatorFactory()
 
 
 def m_remote_run(recipe, **kwargs):
@@ -28,6 +32,8 @@ def Update(c):
     'Android Builder ARM64 (dbg)',
     'Linux Builder',
     'Mac Builder',
+    'ios-device',
+    'ios-simulator',
   ]
   win_builders = [
     'Win Builder',
@@ -55,6 +61,16 @@ def Update(c):
     {'name': 'Win10 Tester', 'category': 'win'},
     {'name': 'Mac Builder', 'category': 'mac'},
     {'name': 'Mac Tester', 'category': 'mac'},
+    {
+      'name': 'ios-device',
+      'category': 'ios',
+      'recipe': 'webrtc/chromium_ios',
+    },
+    {
+      'name': 'ios-simulator',
+      'category': 'ios',
+      'recipe': 'webrtc/chromium_ios',
+    },
     {'name': 'Linux Builder', 'category': 'linux'},
     {'name': 'Linux Tester', 'category': 'linux'},
     {'name': 'Android Builder', 'category': 'android'},
@@ -72,9 +88,11 @@ def Update(c):
   ]
 
   for spec in specs:
+    recipe = spec.get('recipe', 'chromium')
     builder_dict = {
       'name': spec['name'],
-      'factory': m_remote_run('chromium'),
+      'factory': m_annotator.BaseFactory(recipe) if 'ios' in recipe else
+          m_remote_run(recipe),
       'category': spec['category'],
       'notify_on_missing': True,
     }
