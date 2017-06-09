@@ -129,24 +129,24 @@ def _ensure_directory(*path):
   return path
 
 
-def _try_cleanup(src, buildbot_cleanup_dir):
+def _try_cleanup(src, cleanup_dir):
   """Stages the "src" file or directory for removal via "cleanup_dir".
 
-  The "buildbot_cleanup_dir" is a BuildBot-provided facility that deletes files
+  The "cleanup_dir" is a BuildBot-provided facility that deletes files
   in between builds. Moving files into this directory completes instantly. As
   opposed to deleting in "remote_run" or a lower layer, deletions via
-  "buildbot_cleanup_dir" happen in between builds, meaning that the overhead and
+  "cleanup_dir" happen in between builds, meaning that the overhead and
   expense aren't subject to I/O timeout and don't affect actual build times.
 
   NOTE: We rely on "cleanup_dir" to be on the same filesystem as the source
   directories, which is the case for BuildBot builds.
   """
-  if not os.path.isdir(buildbot_cleanup_dir):
-    LOGGER.warning('Cleanup directory does not exist: %r', buildbot_cleanup_dir)
+  if not os.path.isdir(cleanup_dir):
+    LOGGER.warning('Cleanup directory does not exist: %r', cleanup_dir)
     return
 
   base = os.path.basename(src)
-  target_dir = tempfile.mkdtemp(prefix=base, dir=buildbot_cleanup_dir)
+  target_dir = tempfile.mkdtemp(prefix=base, dir=cleanup_dir)
   dst = os.path.join(target_dir, base)
 
   LOGGER.info('Moving file to cleanup directory %r => %r', src, dst)
@@ -221,8 +221,10 @@ def _call(cmd, **kwargs):
   return exit_code
 
 
-def _cleanup_old_layouts(using_kitchen, properties, buildbot_build_dir,
-                         cleanup_dir, cache_dir):
+def _cleanup_old_layouts(buildbot_build_dir, cleanup_dir, cache_dir,
+                         properties=None, using_kitchen=None):
+  properties = properties or {}
+
   cleanup_paths = [
       # All remote_run instances no longer use "//build/slave/cache_dir" or
       # "//build/slave/goma_cache", preferring to use cache directories
@@ -236,7 +238,6 @@ def _cleanup_old_layouts(using_kitchen, properties, buildbot_build_dir,
       # due to the previous logic.
       os.path.join(cache_dir, 'b', 'build.dead'),
   ]
-
 
   # Make switching to remote_run easier: we do not use buildbot workdir,
   # and it takes disk space leading to out of disk errors.
@@ -259,21 +260,25 @@ def _cleanup_old_layouts(using_kitchen, properties, buildbot_build_dir,
       # on optional cleanup.
       LOGGER.exception('Buildbot workdir cleanup failed: %s', buildbot_workdir)
 
-  if using_kitchen:
-    # We want to delete the 'git_cache' cache directory, which was used by the
-    # legacy "remote" code path.
-    cleanup_paths.append(os.path.join(cache_dir, 'git_cache'))
+  # "using_kitchen" will be None if we're doing a high-level emergency cleanup.
+  # At this point, we don't know if we're using Kitchen, so we can't make any
+  # cleanup decisions based on that..
+  if using_kitchen is not None:
+    if using_kitchen:
+      # We want to delete the 'git_cache' cache directory, which was used by the
+      # legacy "remote" code path.
+      cleanup_paths.append(os.path.join(cache_dir, 'git_cache'))
 
-    # We want to delete "<cache>/b", the legacy build cache directory. We will
-    # use "<cache>/builder" from the "generic" infra configuration setup.
-    cleanup_paths.append(os.path.join(cache_dir, 'b'))
-  else:
-    # If we have a 'git' cache directory from a previous Kitchen run, we should
-    # delete that in favor of the 'git_cache' cache directory.
-    cleanup_paths.append(os.path.join(cache_dir, 'git'))
+      # We want to delete "<cache>/b", the legacy build cache directory. We will
+      # use "<cache>/builder" from the "generic" infra configuration setup.
+      cleanup_paths.append(os.path.join(cache_dir, 'b'))
+    else:
+      # If we have a 'git' cache directory from a previous Kitchen run, we
+      # should delete that in favor of the 'git_cache' cache directory.
+      cleanup_paths.append(os.path.join(cache_dir, 'git'))
 
-    # We want to delete "<cache>/builder" from the Kitchen run.
-    cleanup_paths.append(os.path.join(cache_dir, 'builder'))
+      # We want to delete "<cache>/builder" from the Kitchen run.
+      cleanup_paths.append(os.path.join(cache_dir, 'builder'))
 
   cleanup_paths = [p for p in cleanup_paths if os.path.exists(p)]
   if cleanup_paths:
@@ -404,8 +409,8 @@ def _remote_run_with_kitchen(args, stream, _is_canary, kitchen_version,
   return return_code
 
 
-def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir,
-                 buildbot_cleanup_dir):
+def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir, cleanup_dir,
+                 cache_dir):
   tempdir = rt.tempdir(basedir)
   LOGGER.info('Using temporary directory: %r.', tempdir)
 
@@ -459,7 +464,7 @@ def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir,
 
     # Set our cleanup directory to be "build.dead" so that BuildBot manages it.
     properties['$recipe_engine/path'] = {
-        'cleanup_dir': buildbot_cleanup_dir,
+        'cleanup_dir': cleanup_dir,
     }
   else:
     # If we're using Kitchen, our "path_config" must be empty or "kitchen".
@@ -476,13 +481,10 @@ def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir,
   from slave import cipd_bootstrap_v2
   cipd_bootstrap_v2.high_level_ensure_cipd_client(basedir, mastername)
 
-  # "/b/c" as a cache directory.
-  cache_dir = os.path.join(BUILDBOT_ROOT, 'c')
-
   # Cleanup data from old builds.
   _cleanup_old_layouts(
-      is_kitchen, properties, buildbot_build_dir, buildbot_cleanup_dir,
-      cache_dir)
+      buildbot_build_dir, cleanup_dir, cache_dir,
+      properties=properties, using_kitchen=is_kitchen)
 
   # (Canary) Use Kitchen if configured.
   # TODO(dnj): Make this the only path once we move to Kitchen.
@@ -495,7 +497,7 @@ def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir,
           args, stream, is_canary, pins.kitchen, properties, tempdir, basedir,
           cache_dir)
     finally:
-      _try_cleanup(kitchen_tempdir, buildbot_cleanup_dir)
+      _try_cleanup(kitchen_tempdir, cleanup_dir)
 
   ##
   # Classic Remote Run
@@ -622,16 +624,33 @@ def main(argv, stream):
     # or persistent directories should do so explicitly.
     basedir = tempfile.gettempdir()
 
-  # Cleanup system and temporary directories.
-  from slave import cleanup_temp
-  cleanup_temp.Cleanup(b_dir=basedir)
+  # "/b/c" as a cache directory.
+  cache_dir = os.path.join(BUILDBOT_ROOT, 'c')
 
   # BuildBot automatically purges "build.dead", and recipe engine uses this as
   # its cleanup directory (see "infra_paths" recipe module). Make sure that it
   # exists, and retain it so that we can use it to perform "annotated_run" to
   # "remote_run" path cleanup.
-  buildbot_cleanup_dir = _ensure_directory(
+  cleanup_dir = os.path.join(
       os.path.dirname(buildbot_build_dir), 'build.dead')
+
+  # Cleanup system and temporary directories.
+  from slave import cleanup_temp
+  try:
+    # Note that this will delete "cleanup_dir", so we will need to
+    # recreate it afterwards.
+    cleanup_temp.Cleanup(b_dir=basedir)
+  except cleanup_temp.FullDriveException:
+    LOGGER.error('Buildslave disk is full! Please contact the trooper.')
+
+    # Our cleanup failed because the disk is full! Do a best-effort cleanup in
+    # hopes that the next run, we can get farther than this.
+    _ensure_directory(cleanup_dir)
+    _cleanup_old_layouts(buildbot_build_dir, cleanup_dir, cache_dir)
+    raise
+
+  # Ensure that "cleanup_dir" exists; our recipes expect this to be the case.
+  _ensure_directory(cleanup_dir)
 
   # Choose a tempdir prefix. If we have no active subdir, we will use a prefix
   # of "rr". If we have an active subdir, we will use "rs/<subdir>". This way,
@@ -648,7 +667,7 @@ def main(argv, stream):
     # from previous runs.
     rt.cleanup(basedir)
     return _exec_recipe(args, rt, stream, basedir, buildbot_build_dir,
-                        buildbot_cleanup_dir)
+                        cleanup_dir, cache_dir)
 
 
 def shell_main(argv):

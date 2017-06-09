@@ -137,8 +137,8 @@ class RemoteRunExecTest(unittest.TestCase):
 
     build_root = self.rt.tempdir()
     self.buildbot_build_dir = remote_run._ensure_directory(build_root, 'build')
-    self.buildbot_cleanup_dir = remote_run._ensure_directory(
-        build_root, 'build.dead')
+    self.cleanup_dir = remote_run._ensure_directory(build_root, 'build.dead')
+    self.cache_dir = remote_run._ensure_directory(build_root, 'cache')
     self.tempdir = self.rt.tempdir()
     self.build_data_dir = self.rt.tempdir()
     self.opts = MockOptions(
@@ -178,7 +178,7 @@ class RemoteRunExecTest(unittest.TestCase):
         '-properties-file', self._tp('remote_run_properties.json'),
         '-recipe', self.opts.recipe,
         '-repository', self.opts.repository,
-        '-cache-dir', os.path.join(remote_run.BUILDBOT_ROOT, 'c'),
+        '-cache-dir', self.cache_dir,
         '-temp-dir', self._tp('t'),
         '-checkout-dir', self._tp('rw'),
         '-workdir', self._tp('w'),
@@ -267,7 +267,7 @@ class RemoteRunExecTest(unittest.TestCase):
 
     rv = remote_run._exec_recipe(
         self.opts, self.rt, self.stream, self.basedir, self.buildbot_build_dir,
-        self.buildbot_cleanup_dir)
+        self.cleanup_dir, self.cache_dir)
     self.assertEqual(rv, 0)
 
     args = self.recipe_remote_args + ['--'] + self.recipe_args
@@ -288,7 +288,7 @@ class RemoteRunExecTest(unittest.TestCase):
     opts = self.opts._replace(revision='refs/heads/somebranch')
     rv = remote_run._exec_recipe(
         opts, self.rt, self.stream, self.basedir, self.buildbot_build_dir,
-        self.buildbot_cleanup_dir)
+        self.cleanup_dir, self.cache_dir)
     self.assertEqual(rv, 0)
 
     kitchen_args = self.kitchen_args + [
@@ -316,7 +316,7 @@ class RemoteRunExecTest(unittest.TestCase):
     opts = self.opts._replace(revision='refs/heads/somebranch')
     rv = remote_run._exec_recipe(
         opts, self.rt, self.stream, self.basedir, self.buildbot_build_dir,
-        self.buildbot_cleanup_dir)
+        self.cleanup_dir, self.cache_dir)
     self.assertEqual(rv, 0)
 
     kitchen_args = self.kitchen_args + [
@@ -353,7 +353,7 @@ class RemoteRunExecTest(unittest.TestCase):
 
     rv = remote_run._exec_recipe(
         self.opts, self.rt, self.stream, self.basedir, self.buildbot_build_dir,
-        self.buildbot_cleanup_dir)
+        self.cleanup_dir, self.cache_dir)
     self.assertEqual(rv, 0)
 
     remote_run._call.assert_called_once_with(bootstrap.return_value.cmd)
@@ -402,7 +402,7 @@ class RemoteRunExecTest(unittest.TestCase):
 
     rv = remote_run._exec_recipe(
         self.opts, self.rt, self.stream, self.basedir, self.buildbot_build_dir,
-        self.buildbot_cleanup_dir)
+        self.cleanup_dir, self.cache_dir)
     self.assertEqual(rv, 255)
 
     remote_run._call.assert_called_once_with(bootstrap.return_value.cmd)
@@ -448,7 +448,7 @@ class RemoteRunExecTest(unittest.TestCase):
 
     rv = remote_run._exec_recipe(
         self.opts, self.rt, self.stream, self.basedir, self.buildbot_build_dir,
-        self.buildbot_cleanup_dir)
+        self.cleanup_dir, self.cache_dir)
     self.assertEqual(rv, 0)
 
     remote_run._call.assert_called_once_with(bootstrap.return_value.cmd)
@@ -495,7 +495,7 @@ class RemoteRunExecTest(unittest.TestCase):
     opts = self.opts._replace(revision='origin/master')
     rv = remote_run._exec_recipe(
         opts, self.rt, self.stream, self.basedir, self.buildbot_build_dir,
-        self.buildbot_cleanup_dir)
+        self.cleanup_dir, self.cache_dir)
     self.assertEqual(rv, 0)
 
     kitchen_args = self.kitchen_args + [
