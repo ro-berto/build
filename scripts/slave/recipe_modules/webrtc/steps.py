@@ -122,12 +122,14 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
       tests.append(isac_fix_test)
     tests.append(PerfTest('webrtc_perf_tests', revision=revision))
 
-    tests.append(PerfTest(
-        str(api.m.path['checkout'].join('webrtc', 'audio', 'test',
-                                        'low_bandwidth_audio_test.py')),
-        name='low_bandwidth_audio_test',
-        args=[api.m.chromium.output_dir, '--remove'],
-        revision=revision))
+    # TODO(kjellander): Re-enable when https://crbug.com/731717 is fixed.
+    if not api.m.platform.is_win:
+      tests.append(PerfTest(
+          str(api.m.path['checkout'].join('webrtc', 'audio', 'test',
+                                          'low_bandwidth_audio_test.py')),
+          name='low_bandwidth_audio_test',
+          args=[api.m.chromium.output_dir, '--remove'],
+          revision=revision))
   elif test_suite == 'android_perf' and api.c.PERF_ID:
     # TODO(kjellander): Fix the Android ASan bot so we can have an assert here.
     tests.append(AndroidPerfTest('webrtc_perf_tests', revision=revision))
