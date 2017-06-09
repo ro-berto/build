@@ -1341,11 +1341,6 @@ SPEC = {
         'TARGET_PLATFORM': 'android',
       },
       'android_config': 'main_builder',
-      'compile_targets': [
-        'chromedriver_webview_shell_apk',
-        'all',
-        'chrome',
-      ],
       'goma_canary': True,
       'test_results_config': 'staging_server',
       'testing': {
