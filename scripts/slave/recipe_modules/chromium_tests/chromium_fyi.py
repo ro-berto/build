@@ -1082,9 +1082,7 @@ SPEC = {
     'CrWinGoma(loc)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['clobber', 'goma_canary', 'shared_library',
-                                # Temporarily disable due to crbug.com/721849
-                                # 'goma_localoutputcache',
-                                'mb'],
+                                'goma_localoutputcache', 'mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -1225,9 +1223,7 @@ SPEC = {
     'Chromium Linux Goma Canary LocalOutputCache': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['clobber', 'goma_canary',
-                                # Temporarily disable due to crbug.com/721849
-                                # 'goma_localoutputcache',
-                                'mb'],
+                                'goma_localoutputcache', 'mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -1318,8 +1314,7 @@ SPEC = {
       'chromium_apply_config': [
         'clobber',
         'goma_canary',
-        # Temporarily disable due to crbug.com/721849
-        # 'goma_localoutputcache',
+        'goma_localoutputcache',
         'mb',
       ],
       'gclient_config': 'chromium',
