@@ -456,6 +456,11 @@ def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir,
     # somehow involved int his path config.
     properties['path_config'] = 'kitchen'
     properties['bot_id'] = properties['slavename']
+
+    # Set our cleanup directory to be "build.dead" so that BuildBot manages it.
+    properties['$recipe_engine/path'] = {
+        'cleanup_dir': buildbot_cleanup_dir,
+    }
   else:
     # If we're using Kitchen, our "path_config" must be empty or "kitchen".
     path_config = properties.pop('path_config', None)
