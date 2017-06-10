@@ -16,7 +16,6 @@ DEPS = [
   'depot_tools/tryserver',
   'file',
   'recipe_engine/context',
-  'recipe_engine/generator_script',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/properties',
