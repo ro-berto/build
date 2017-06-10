@@ -202,11 +202,6 @@
     'client.wasm.llvm': {},
     'tryserver.nacl': {},
 
-    # SKIA
-    'client.skia': {},
-    'client.skia.android': {},
-    'client.skia.fyi': {},
-
     # Syzygy
     'client.syzygy': {},
     'tryserver.client.syzygy': {},
