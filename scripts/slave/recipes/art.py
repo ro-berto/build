@@ -42,6 +42,16 @@ _TARGET_DEVICE_MAP = {
       'make_jobs': 4,
       'product': 'armv8',
       },
+    'bullhead-armv8': {
+      'bitness': 64,
+      'make_jobs': 4,
+      'product': 'armv8',
+      },
+    'bullhead-armv7': {
+      'bitness': 32,
+      'make_jobs': 4,
+      'product': 'arm_krait',
+      },
     }
 
 _ANDROID_CLEAN_DIRS = ['/data/local/tmp', '/data/art-test',
@@ -166,7 +176,8 @@ def setup_target(api,
     debug,
     device,
     concurrent_collector=True,
-    heap_poisoning=False):
+    heap_poisoning=False,
+    gcstress=False):
   build_top_dir = api.path['start_dir']
   art_tools = api.path['start_dir'].join('art', 'tools')
   android_root = '/data/local/tmp/system'
@@ -260,38 +271,34 @@ def setup_target(api,
     if not debug and device == 'fugu':
       optimizing_make_jobs = 1
 
+    common_options = ['--target', '--verbose']
+    if gcstress:
+      common_options += ['--gcstress']
+
     with api.context(env=test_env):
       api.step('test optimizing', ['./art/test/testrunner/testrunner.py',
                                    '-j%d' % (optimizing_make_jobs),
                                    '--optimizing',
                                    '--debuggable',
-                                   '--ndebuggable',
-                                   '--target',
-                                   '--verbose'])
+                                   '--ndebuggable'] + common_options)
     test_logging(api, 'test optimizing')
 
     with api.context(env=test_env):
       api.step('test interpreter', ['./art/test/testrunner/testrunner.py',
                                     '-j%d' % (make_jobs),
-                                    '--interpreter',
-                                    '--target',
-                                    '--verbose'])
+                                    '--interpreter'] + common_options)
     test_logging(api, 'test interpreter')
 
     with api.context(env=test_env):
       api.step('test jit', ['./art/test/testrunner/testrunner.py',
                             '-j%d' % (make_jobs),
-                            '--jit',
-                            '--target',
-                            '--verbose'])
+                            '--jit'] + common_options)
     test_logging(api, 'test jit')
 
     with api.context(env=test_env):
       api.step('test speed-profile', ['./art/test/testrunner/testrunner.py',
                                       '-j%d' % (make_jobs),
-                                      '--speed-profile',
-                                      '--target',
-                                      '--verbose'])
+                                      '--speed-profile'] + common_options)
     test_logging(api, 'test speed-profile')
 
     libcore_command = [art_tools.join('run-libcore-tests.sh'),
@@ -299,6 +306,9 @@ def setup_target(api,
                        '--variant=X%d' % bitness]
     if debug:
       libcore_command.append('--debug')
+    if gcstress:
+      libcore_command += ['--vm-arg', '-Xgc:gcstress']
+
     with api.context(env=test_env):
       api.step('test libcore', libcore_command)
     test_logging(api, 'test libcore')
@@ -308,6 +318,9 @@ def setup_target(api,
                     '--variant=X%d' % bitness]
     if debug:
       jdwp_command.append('--debug')
+    if gcstress:
+      jdwp_command += ['--vm-arg', '-Xgc:gcstress']
+
     with api.context(env=test_env):
       api.step('test jdwp jit', jdwp_command)
     test_logging(api, 'test jdwp jit')
@@ -318,6 +331,9 @@ def setup_target(api,
                     '--no-jit']
     if debug:
       jdwp_command.append('--debug')
+    if gcstress:
+      jdwp_command += ['--vm-arg', '-Xgc:gcstress']
+
     with api.context(env=test_env):
       api.step('test jdwp aot', jdwp_command)
     test_logging(api, 'test jdwp aot')
@@ -467,6 +483,27 @@ _CONFIG_MAP = {
         'device': 'angler-armv8',
         'debug': True,
         'concurrent_collector': False,
+      },
+      'bullhead-armv8-gcstress-ndebug': {
+        'serial': '00d96a14bbc93e47',
+        'device': 'bullhead-armv8',
+        'debug': False,
+        'gcstress': True,
+        'concurrent_collector': True,
+      },
+      'bullhead-armv8-gcstress-debug': {
+        'serial': '01e0c128ccf732ca',
+        'device': 'bullhead-armv8',
+        'debug': True,
+        'gcstress': True,
+        'concurrent_collector': True,
+      },
+      'bullhead-armv7-gcstress-ndebug': {
+        'serial': '02022c7ec2834126',
+        'device': 'bullhead-armv7',
+        'debug': False,
+        'gcstress': True,
+        'concurrent_collector': True,
       },
     },
 
