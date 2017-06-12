@@ -182,6 +182,7 @@ def _fresh_download(client_path, version):
     'version': version,
     'platform': plat,
   }, stream=True)
+  r.raise_for_status()
 
   # use fixed tmp file to avoid cleanup issues.
   tmp_client = client_path+'.tmp'
