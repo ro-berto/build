@@ -24,6 +24,8 @@ class TestGet(unittest.TestCase):
 
     for plat, mach, arch, result in (
         ('linux1', 'armv7l', '32bit', ('linux', 'armv6l', 32)),
+        ('linux1', 'arm64', '64bit', ('linux', 'arm64', 64)),
+        ('linux1', 'aarch64', '64bit', ('linux', 'arm64', 64)),
         ('linux1', 'AMD64', '64bit', ('linux', 'x86_64', 64)),
         ('windows', 'i386', '32bit', ('win', 'x86', 32)),
         ('darwin', 'x86_64', '64bit', ('mac', 'x86_64', 64)),

@@ -47,12 +47,11 @@ def get():
     raise ValueError("Don't understand platform [%s]" % (plat,))
 
   # Normalize "machine".
-  if machine.startswith('arm'):
-    if any(machine.startswith(x) for x in ('arm64', 'aarch64')):
-      machine = 'arm64'
-    elif machine.endswith('l'):
-      # 32-bit ARM: Standardize on ARM v6 baseline.
-      machine = 'armv6l'
+  if any(machine.startswith(x) for x in ('arm64', 'aarch64')):
+    machine = 'arm64'
+  elif machine.startswith('arm') and machine.endswith('l'):
+    # 32-bit ARM: Standardize on ARM v6 baseline.
+    machine = 'armv6l'
   elif machine in ('amd64',):
     machine = 'x86_64'
   elif machine in ('i386', 'i686'):
