@@ -48,7 +48,7 @@ def get():
 
   # Normalize "machine".
   if machine.startswith('arm'):
-    if machine.startswith('arm64'):
+    if any(machine.startswith(x) for x in ('arm64', 'aarch64')):
       machine = 'arm64'
     elif machine.endswith('l'):
       # 32-bit ARM: Standardize on ARM v6 baseline.

@@ -175,10 +175,12 @@ def _fresh_download(client_path, version):
   don't complicate the code here to account for it, but it's something to watch
   out for.
   """
-  LOGGER.info('Bootstrapping fresh %s', client_path)
+  plat = infra_platform.cipd_platform()
+  LOGGER.info('Bootstrapping fresh %s for version [%s] on platform [%s]',
+              client_path, version, plat)
   r = requests.get('https://chrome-infra-packages.appspot.com/client', params={
     'version': version,
-    'platform': infra_platform.cipd_platform(),
+    'platform': plat,
   }, stream=True)
 
   # use fixed tmp file to avoid cleanup issues.
