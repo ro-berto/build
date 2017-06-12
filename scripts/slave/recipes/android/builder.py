@@ -36,11 +36,11 @@ BUILDERS = freeze({
         'path': lambda api: ('Android Builder/full-build-linux_%s.zip'
                              % api.properties['revision']),
       },
-      'resource_sizes_configs': [
-        {'apk_name': 'ChromeModernPublic.apk', 'estimate_patch_size': False},
-        {'apk_name': 'ChromePublic.apk', 'estimate_patch_size': False},
-        {'apk_name': 'MonochromePublic.apk', 'estimate_patch_size': True},
-        {'apk_name': 'SystemWebView.apk', 'estimate_patch_size': False},
+      'resource_sizes_apks': [
+        'ChromeModernPublic.apk',
+        'ChromePublic.apk',
+        'MonochromePublic.apk',
+        'SystemWebView.apk',
       ],
       'run_mb': True,
       'targets': [
@@ -72,10 +72,10 @@ BUILDERS = freeze({
             'Android arm64 Builder/full-build-linux_%s.zip'
             % api.properties['revision']),
       },
-      'resource_sizes_configs': [
-        {'apk_name': 'ChromeModernPublic.apk', 'estimate_patch_size': True},
-        {'apk_name': 'ChromePublic.apk', 'estimate_patch_size': False},
-        {'apk_name': 'SystemWebView.apk', 'estimate_patch_size': False},
+      'resource_sizes_apks': [
+        'ChromeModernPublic.apk',
+        'ChromePublic.apk',
+        'SystemWebView.apk',
       ],
       'run_mb': True,
       'targets': [
@@ -253,13 +253,10 @@ def _RunStepsInternal(api, mastername, buildername, revision):
       api, mastername, buildername, update_step)
   api.chromium.compile(targets, use_goma_module=True)
 
-  resource_sizes_configs = bot_config.get('resource_sizes_configs', ())
-  for config in resource_sizes_configs:
-    apk_path = api.chromium_android.apk_path(config['apk_name'])
-    size_path = api.chromium_android.apk_path(config['apk_name'] + '.size')
-    estimate_patch_size = config['estimate_patch_size']
-    api.chromium_android.resource_sizes(
-        apk_path, chartjson_file=True, estimate_patch_size=estimate_patch_size)
+  for apk_name in bot_config.get('resource_sizes_apks', ()):
+    apk_path = api.chromium_android.apk_path(apk_name)
+    size_path = api.chromium_android.apk_path(apk_name + '.size')
+    api.chromium_android.resource_sizes(apk_path, chartjson_file=True)
     api.chromium_android.create_supersize_archive(apk_path, size_path)
 
   upload_for_bisect = bot_config.get('upload_for_bisect')

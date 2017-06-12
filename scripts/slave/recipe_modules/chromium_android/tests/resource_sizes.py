@@ -14,8 +14,7 @@ def RunSteps(api):
   api.chromium.set_config('chromium')
   api.chromium_android.set_config('main_builder')
   api.chromium_android.resource_sizes(
-      apk_path=api.path['start_dir'].join('test.apk'),
-      estimate_patch_size=True)
+      apk_path=api.path['start_dir'].join('test.apk'))
 
 
 def GenTests(api):

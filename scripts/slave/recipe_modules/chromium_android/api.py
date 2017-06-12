@@ -205,14 +205,10 @@ class AndroidApi(recipe_api.RecipeApi):
           **kwargs)
 
   def resource_sizes(self, apk_path, chartjson_file=False,
-                     upload_archives_to_bucket=None, perf_id=None,
-                     estimate_patch_size=False):
+                     upload_archives_to_bucket=None, perf_id=None):
     cmd = ['build/android/resource_sizes.py', str(apk_path)]
     if chartjson_file:
       cmd.append('--chartjson')
-    if estimate_patch_size:
-      cmd.extend(['--estimate-patch-size', '--reference-apk-builder',
-                  self.m.properties['buildername']])
 
     config = {
         'steps': {
