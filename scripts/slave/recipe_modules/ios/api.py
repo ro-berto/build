@@ -12,9 +12,11 @@ class iOSApi(recipe_api.RecipeApi):
   # Mapping of common names of supported iOS devices to product types
   # exposed by the Swarming server.
   PRODUCT_TYPES = {
-    'iPad Air': 'iPad4,1',
-    'iPhone 5s': 'iPhone6,1',
-    'iPhone 6s': 'iPhone8,1',
+    'iPad 4 GSM CDMA': 'iPad3,6',
+    'iPad Air':        'iPad4,1',
+    'iPhone 5':        'iPhone5,1',
+    'iPhone 5s':       'iPhone6,1',
+    'iPhone 6s':       'iPhone8,1',
   }
 
   def __init__(self, *args, **kwargs):
