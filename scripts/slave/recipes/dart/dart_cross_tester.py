@@ -22,6 +22,9 @@ builders = {
   'target-arm-vm-linux-release': {
     'mode': 'release',
     'target_arch': 'arm'},
+  'target-arm64-vm-linux-release': {
+    'mode': 'release',
+    'target_arch': 'arm64'},
 }
 
 def tarball_name(arch, mode, revision):

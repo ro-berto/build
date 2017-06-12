@@ -23,6 +23,9 @@ builders = {
   'cross-arm-vm-linux-release': {
     'mode': 'release',
     'target_arch': 'arm'},
+  'cross-arm64-vm-linux-release': {
+    'mode': 'release',
+    'target_arch': 'arm64'},
   'test-coverage': {
     'mode': 'release',
     'target_arch': 'x64',
