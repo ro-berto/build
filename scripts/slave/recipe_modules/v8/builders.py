@@ -20,6 +20,10 @@ class TestStepConfig(object):
     self.test_args = test_args or []
     self.variants = variants
 
+  def __call__(self, shards):
+    return TestStepConfig(self.name, shards, self.swarming, self.suffix,
+                          self.test_args, self.variants)
+
 
 # Top-level test configs for convenience.
 Benchmarks = TestStepConfig('benchmarks')
@@ -27,33 +31,16 @@ Deopt = TestStepConfig('deopt')
 Fuzz = TestStepConfig('jsfunfuzz')
 GCMole = TestStepConfig('gcmole')
 Mjsunit = TestStepConfig('mjsunit')
-Mjsunit_2 = TestStepConfig('mjsunit', shards=2)
-Mjsunit_3 = TestStepConfig('mjsunit', shards=3)
-Mjsunit_4 = TestStepConfig('mjsunit', shards=4)
-Mjsunit_5 = TestStepConfig('mjsunit', shards=5)
 MjsunitSPFrameAccess = TestStepConfig('mjsunit_sp_frame_access')
 Mozilla = TestStepConfig('mozilla')
-Mozilla_2 = TestStepConfig('mozilla', shards=2)
 OptimizeForSize = TestStepConfig('optimize_for_size')
 Presubmit = TestStepConfig('presubmit')
 SimpleLeak = TestStepConfig('simpleleak')
 Test262 = TestStepConfig('test262')
-Test262_2 = TestStepConfig('test262', shards=2)
-Test262_3 = TestStepConfig('test262', shards=3)
-Test262_4 = TestStepConfig('test262', shards=4)
 Test262Variants = TestStepConfig('test262_variants')
-Test262Variants_2 = TestStepConfig('test262_variants', shards=2)
-Test262Variants_3 = TestStepConfig('test262_variants', shards=3)
-Test262Variants_4 = TestStepConfig('test262_variants', shards=4)
-Test262Variants_5 = TestStepConfig('test262_variants', shards=5)
 Unittests = TestStepConfig('unittests')
 V8Initializers = TestStepConfig('v8initializers')
 V8Testing = TestStepConfig('v8testing')
-V8Testing_2 = TestStepConfig('v8testing', shards=2)
-V8Testing_3 = TestStepConfig('v8testing', shards=3)
-V8Testing_4 = TestStepConfig('v8testing', shards=4)
-V8Testing_5 = TestStepConfig('v8testing', shards=5)
-V8Testing_7 = TestStepConfig('v8testing', shards=7)
 Webkit = TestStepConfig('webkit')
 
 
@@ -167,7 +154,7 @@ BUILDERS = {
           V8Testing,
           OptimizeForSize,
           Benchmarks,
-          Test262Variants_2,
+          Test262Variants(2),
           Mozilla,
           MjsunitSPFrameAccess,
           GCMole,
@@ -201,23 +188,23 @@ BUILDERS = {
         'build_gs_archive': 'linux_dbg_archive',
         'enable_swarming': True,
         'tests': [
-          V8Testing_2,
+          V8Testing(2),
           Benchmarks,
-          Test262Variants_3,
+          Test262Variants(3),
           Mozilla,
           MjsunitSPFrameAccess,
         ] + with_test_args(
             'isolates',
             ['--isolates'],
-            [V8Testing_2],
+            [V8Testing(2)],
         ) + with_test_args(
             'nosse3',
             ['--extra-flags', '--noenable-sse3 --noenable-avx'],
-            [V8Testing_2, Test262, Mozilla],
+            [V8Testing(2), Test262, Mozilla],
         ) + with_test_args(
             'nosse4',
             ['--extra-flags', '--noenable-sse4-1 --noenable-avx'],
-            [V8Testing_2, Test262, Mozilla],
+            [V8Testing(2), Test262, Mozilla],
         ) + with_test_args(
             'code serializer',
             ['--extra-flags', '--serialize-toplevel --cache=code'],
@@ -266,8 +253,8 @@ BUILDERS = {
         'build_gs_archive': 'linux_nosnap_rel_archive',
         'enable_swarming': True,
         'tests': [
-          V8Testing_3,
-          Test262_2,
+          V8Testing(3),
+          Test262(2),
           Mozilla,
         ],
         'variants': V8NoExhaustiveVariants(),
@@ -284,7 +271,7 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - nosnap debug builder',
         'build_gs_archive': 'linux_nosnap_dbg_archive',
         'enable_swarming': True,
-        'tests': [V8Testing_7],
+        'tests': [V8Testing(7)],
         'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
         'swarming_properties': SWARMING_FYI_PROPS,
@@ -396,7 +383,7 @@ BUILDERS = {
           V8Initializers,
           V8Testing,
           OptimizeForSize,
-          Test262Variants_2,
+          Test262Variants(2),
           Mozilla,
           MjsunitSPFrameAccess,
           SimpleLeak,
@@ -433,9 +420,9 @@ BUILDERS = {
         'build_gs_archive': 'linux64_dbg_archive',
         'enable_swarming': True,
         'tests': [
-          V8Testing_2,
+          V8Testing(2),
           OptimizeForSize,
-          Test262Variants_5,
+          Test262Variants(5),
           Mozilla,
           MjsunitSPFrameAccess,
           SimpleLeak,
@@ -452,7 +439,7 @@ BUILDERS = {
         'build_gs_archive': 'linux64_dbg_archive',
         'enable_swarming': True,
         'tests': [
-          V8Testing_2,
+          V8Testing(2),
           Benchmarks,
           Mozilla,
         ],
@@ -584,7 +571,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing_2],
+        'tests': [V8Testing(2)],
         'variants': V8NoExhaustiveVariants(),
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
@@ -602,7 +589,7 @@ BUILDERS = {
         'parent_buildername': 'V8 Win32 - debug builder',
         'enable_swarming': True,
         'tests': [
-          V8Testing_3,
+          V8Testing(3),
           Test262,
           Mozilla,
         ],
@@ -652,7 +639,7 @@ BUILDERS = {
           'os': 'Windows-7-SP1',
         },
         'tests': [
-          V8Testing_3,
+          V8Testing(3),
           Test262,
           Mozilla,
         ],
@@ -703,7 +690,7 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [
-          V8Testing_2,
+          V8Testing(2),
           Test262,
           Mozilla,
         ],
@@ -743,7 +730,7 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [
-          V8Testing_2,
+          V8Testing(2),
           Test262,
           Mozilla,
         ],
@@ -792,7 +779,7 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
         'enable_swarming': True,
-        'tests': [Mjsunit_4, Webkit],
+        'tests': [Mjsunit(4), Webkit],
         'testing': {'platform': 'linux'},
       },
       'V8 Mac GC Stress': {
@@ -805,7 +792,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [Mjsunit_3, Webkit],
+        'tests': [Mjsunit(3), Webkit],
         'swarming_dimensions': {
           'os': 'Mac-10.9',
           'cpu': 'x86-64',
@@ -822,7 +809,7 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux64 - custom snapshot - debug builder',
         'build_gs_archive': 'linux64_custom_snapshot_dbg_archive',
         'enable_swarming': True,
-        'tests': [Mjsunit_3],
+        'tests': [Mjsunit(3)],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux gcc 4.8': {
@@ -854,8 +841,8 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [
-          V8Testing_2,
-          Test262Variants_3,
+          V8Testing(2),
+          Test262Variants(3),
         ],
         'testing': {'platform': 'linux'},
       },
@@ -869,8 +856,8 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [
-          V8Testing_3,
-          Test262_2,
+          V8Testing(3),
+          Test262(2),
         ],
         'testing': {'platform': 'linux'},
       },
@@ -884,8 +871,8 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [
-          V8Testing_2,
-          Test262_3,
+          V8Testing(2),
+          Test262(3),
         ],
         'testing': {'platform': 'linux'},
       },
@@ -909,8 +896,8 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [
-          V8Testing_4,
-          Test262_2,
+          V8Testing(4),
+          Test262(2),
         ],
         'testing': {'platform': 'linux'},
       },
@@ -941,7 +928,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing_5],
+        'tests': [V8Testing(5)],
         'swarming_dimensions': {
           'os': 'Mac-10.9',
           'cpu': 'x86-64',
@@ -1286,7 +1273,7 @@ BUILDERS = {
         'build_gs_archive': 'arm_rel_archive',
         'parent_buildername': 'V8 Arm - builder',
         'tests': [
-          V8Testing_2,
+          V8Testing(2),
           Benchmarks,
           OptimizeForSize,
         ],
@@ -1312,7 +1299,7 @@ BUILDERS = {
         'build_gs_archive': 'arm_dbg_archive',
         'parent_buildername': 'V8 Arm - debug builder',
         'tests': [
-          V8Testing_3,
+          V8Testing(3),
           OptimizeForSize,
         ],
         'variants': V8NoExhaustiveVariants(),
@@ -1337,7 +1324,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'build_gs_archive': 'arm_dbg_archive',
         'parent_buildername': 'V8 Arm - debug builder',
-        'tests': [Mjsunit_2, Webkit],
+        'tests': [Mjsunit(2), Webkit],
         'variants': V8Variant('default'),
         'enable_swarming': True,
         'swarming_properties': {
@@ -1360,18 +1347,18 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [
-          V8Testing_4,
+          V8Testing(4),
           Test262,
           Mozilla,
           MjsunitSPFrameAccess,
         ] + with_test_args(
             'armv8-a',
             ['--extra-flags', '--enable-armv8'],
-            [V8Testing_4, Test262, Mozilla],
+            [V8Testing(4), Test262, Mozilla],
         ) + with_test_args(
             'novfp3',
             ['--novfp3'],
-            [V8Testing_4, Test262, Mozilla],
+            [V8Testing(4), Test262, Mozilla],
         ),
         'testing': {'platform': 'linux'},
       },
@@ -1384,18 +1371,18 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [
-          V8Testing_4,
+          V8Testing(4),
           Test262,
           Mozilla,
           MjsunitSPFrameAccess,
         ] + with_test_args(
             'armv8-a',
             ['--extra-flags', '--enable-armv8'],
-            [V8Testing_4, Test262, Mozilla],
+            [V8Testing(4), Test262, Mozilla],
         ) + with_test_args(
             'novfp3',
             ['--novfp3'],
-            [V8Testing_4, Test262, Mozilla],
+            [V8Testing(4), Test262, Mozilla],
             V8NoExhaustiveVariants(),
         ),
         'testing': {'platform': 'linux'},
@@ -1427,7 +1414,7 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [
-          V8Testing_3,
+          V8Testing(3),
           Test262,
           Mozilla,
           MjsunitSPFrameAccess,
@@ -1444,7 +1431,7 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [
-          V8Testing_4,
+          V8Testing(4),
           Test262,
           Mozilla,
           MjsunitSPFrameAccess,
@@ -1462,7 +1449,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing_7],
+        'tests': [V8Testing(7)],
         'variants': V8Variant('default'),
         'testing': {'platform': 'linux'},
         'swarming_properties': {
@@ -1486,7 +1473,7 @@ BUILDERS = {
           'default_hard_timeout': 2 * 60 * 60,
           'default_priority': 35,
         },
-        'tests': [Mjsunit_4, Webkit],
+        'tests': [Mjsunit(4), Webkit],
         'testing': {'platform': 'linux'},
       },
 ####### Category: MIPS
@@ -1575,7 +1562,7 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - mipsel - sim - builder',
         'build_gs_archive': 'mipsel_sim_rel_archive',
         'enable_swarming': True,
-        'tests': [V8Testing_4, Test262],
+        'tests': [V8Testing(4), Test262],
         'testing': {'platform': 'linux'},
         'swarming_properties': {
           'default_expiration': 2 * 60 * 60,
@@ -1593,7 +1580,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing_3],
+        'tests': [V8Testing(3)],
         'testing': {'platform': 'linux'},
         'swarming_properties': SWARMING_FYI_PROPS,
       },
@@ -1606,7 +1593,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing_3],
+        'tests': [V8Testing(3)],
         'testing': {'platform': 'linux'},
         'swarming_properties': SWARMING_FYI_PROPS,
       },
@@ -1620,7 +1607,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing_3],
+        'tests': [V8Testing(3)],
         'testing': {'platform': 'linux'},
         'swarming_properties': SWARMING_FYI_PROPS,
       },
@@ -1633,7 +1620,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing_3],
+        'tests': [V8Testing(3)],
         'testing': {'platform': 'linux'},
         'swarming_properties': SWARMING_FYI_PROPS,
       },
@@ -1664,7 +1651,7 @@ BUILDERS = {
         'enable_swarming': True,
         'parent_buildername': 'V8 Linux - x87 - nosnap - debug builder',
         'build_gs_archive': 'linux_x87_dbg_archive',
-        'tests': [V8Testing_4],
+        'tests': [V8Testing(4)],
         'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
         'swarming_properties': {
@@ -1704,7 +1691,7 @@ BUILDERS = {
         'tests': [
           V8Testing,
           OptimizeForSize,
-          Test262Variants_4,
+          Test262Variants(4),
           Mozilla,
           Benchmarks,
           MjsunitSPFrameAccess,
@@ -1748,7 +1735,7 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [
-          V8Testing_2,
+          V8Testing(2),
         ],
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
@@ -1782,7 +1769,7 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing,
-          Test262Variants_2,
+          Test262Variants(2),
           Mozilla,
           Benchmarks,
         ],
@@ -1812,7 +1799,7 @@ BUILDERS = {
         'parent_buildername': 'v8_linux_dbg_ng',
         'enable_swarming': True,
         'tests': [
-          V8Testing_2,
+          V8Testing(2),
           Test262,
           Mozilla,
           Benchmarks,
@@ -1845,7 +1832,7 @@ BUILDERS = {
         'parent_buildername': 'v8_linux_noi18n_rel_ng',
         'enable_swarming': True,
         'tests': [
-          V8Testing_2,
+          V8Testing(2),
           Test262,
           Mozilla,
         ],
@@ -1861,7 +1848,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing_4],
+        'tests': [V8Testing(4)],
         'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
       },
@@ -1874,7 +1861,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing_5],
+        'tests': [V8Testing(5)],
         'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
         'swarming_properties': {
@@ -1940,7 +1927,7 @@ BUILDERS = {
           V8Initializers,
           V8Testing,
           OptimizeForSize,
-          Test262Variants_4,
+          Test262Variants(4),
           MjsunitSPFrameAccess,
           SimpleLeak,
         ],
@@ -2041,7 +2028,7 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [
-          V8Testing_2,
+          V8Testing(2),
         ],
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
@@ -2060,7 +2047,7 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [
-          Mjsunit_4,
+          Mjsunit(4),
           Webkit,
         ],
         'testing': {'platform': 'linux'},
@@ -2102,8 +2089,8 @@ BUILDERS = {
         'parent_buildername': 'v8_linux64_asan_rel_ng',
         'enable_swarming': True,
         'tests': [
-          V8Testing_3,
-          Test262Variants_5,
+          V8Testing(3),
+          Test262Variants(5),
         ],
         'testing': {'platform': 'linux'},
       },
@@ -2128,8 +2115,8 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [
-          V8Testing_5,
-          Test262_2,
+          V8Testing(5),
+          Test262(2),
         ],
         'testing': {'platform': 'linux'},
       },
@@ -2149,8 +2136,8 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [
-          V8Testing_4,
-          Test262_2,
+          V8Testing(4),
+          Test262(2),
         ],
         'testing': {'platform': 'linux'},
       },
@@ -2192,8 +2179,8 @@ BUILDERS = {
         'parent_buildername': 'v8_linux64_tsan_concurrent_marking_rel_ng',
         'enable_swarming': True,
         'tests': [
-          V8Testing_3,
-          Test262_4,
+          V8Testing(3),
+          Test262(4),
         ],
         'testing': {'platform': 'linux'},
       },
@@ -2217,7 +2204,7 @@ BUILDERS = {
         'enable_swarming': True,
         'sanitizer_coverage_folder': 'linux64',
         'tests': [
-          V8Testing_3,
+          V8Testing(3),
           OptimizeForSize,
           MjsunitSPFrameAccess,
         ],
@@ -2241,7 +2228,7 @@ BUILDERS = {
           'cpu': 'x86-64',
         },
         'tests': [
-          V8Testing_3,
+          V8Testing(3),
           Mozilla,
         ],
         'testing': {'platform': 'win'},
@@ -2337,7 +2324,7 @@ BUILDERS = {
           'os': 'Windows-7-SP1',
           'cpu': 'x86-64',
         },
-        'tests': [V8Testing_3],
+        'tests': [V8Testing(3)],
         'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
       },
@@ -2395,8 +2382,8 @@ BUILDERS = {
           'os': 'Windows-7-SP1',
         },
         'tests': [
-          V8Testing_3,
-          Test262_2,
+          V8Testing(3),
+          Test262(2),
           Mozilla,
         ],
         'testing': {'platform': 'win'},
@@ -2445,7 +2432,7 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [
-          V8Testing_2,
+          V8Testing(2),
           Test262,
           Mozilla,
         ],
@@ -2485,7 +2472,7 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [
-          V8Testing_2,
+          V8Testing(2),
           Test262,
           Mozilla,
         ],
@@ -2505,7 +2492,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [Mjsunit_3, Webkit],
+        'tests': [Mjsunit(3), Webkit],
         'swarming_dimensions': {
           'os': 'Mac-10.9',
           'cpu': 'x86-64',
@@ -2527,7 +2514,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing_4],
+        'tests': [V8Testing(4)],
         'swarming_dimensions': {
           'os': 'Mac-10.9',
           'cpu': 'x86-64',
@@ -2559,7 +2546,7 @@ BUILDERS = {
         'parent_buildername': 'v8_linux_arm_rel_ng',
         'enable_swarming': True,
         'tests': [
-          V8Testing_7,
+          V8Testing(7),
           Test262,
           Mozilla,
           MjsunitSPFrameAccess,
@@ -2576,7 +2563,7 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [
-          V8Testing_5,
+          V8Testing(5),
           Test262,
           Mozilla,
           MjsunitSPFrameAccess,
@@ -2593,7 +2580,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing_3, Test262, Mozilla],
+        'tests': [V8Testing(3), Test262, Mozilla],
         'testing': {'platform': 'linux'},
       },
       'v8_linux_arm_armv8a_dbg': {
@@ -2606,7 +2593,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [V8Testing_3, Test262, Mozilla],
+        'tests': [V8Testing(3), Test262, Mozilla],
         'testing': {'platform': 'linux'},
       },
       'v8_linux_arm64_rel_ng': {
@@ -2634,7 +2621,7 @@ BUILDERS = {
         'parent_buildername': 'v8_linux_arm64_rel_ng',
         'enable_swarming': True,
         'tests': [
-          V8Testing_5,
+          V8Testing(5),
           Test262,
           Mozilla,
           MjsunitSPFrameAccess,
@@ -2651,7 +2638,7 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [
-          V8Testing_4,
+          V8Testing(4),
           Test262,
           Mozilla,
           MjsunitSPFrameAccess,
@@ -2668,7 +2655,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [Mjsunit_5, Webkit],
+        'tests': [Mjsunit(5), Webkit],
         'testing': {'platform': 'linux'},
       },
       'v8_android_arm_compile_rel': {
@@ -2744,9 +2731,9 @@ def AddBranchBuilder(name, build_config, bits, presubmit=False,
     tests.append(Unittests)
   else:
     if build_config == 'Debug':
-      tests.append(V8Testing_3)
+      tests.append(V8Testing(3))
     elif 'arm' in name:
-      tests.append(V8Testing_2)
+      tests.append(V8Testing(2))
     else:
       tests.append(V8Testing)
     tests.extend([Test262, Mozilla])
