@@ -13,7 +13,7 @@ from recipe_engine.config_types import Path
 # pylint: disable=E1123
 
 HOST_PLATFORMS = ('linux', 'win', 'mac')
-TARGET_PLATFORMS = HOST_PLATFORMS + ('ios', 'android', 'chromeos')
+TARGET_PLATFORMS = HOST_PLATFORMS + ('ios', 'android', 'chromeos', 'fuchsia')
 HOST_TARGET_BITS = (32, 64)
 HOST_ARCHS = ('intel',)
 TARGET_ARCHS = HOST_ARCHS + ('arm', 'mips', 'mipsel')
@@ -133,7 +133,7 @@ def BASE(c):
     elif plat in ('win', 'mac'):
       if arch != 'intel':  # pragma: no cover
         raise BadConf('%s arch is not supported on %s' % (arch, plat))
-    elif plat in ('chromeos', 'android', 'linux'):
+    elif plat in ('chromeos', 'android', 'linux', 'fuchsia'):
       pass  # no arch restrictions
     else:  # pragma: no cover
       assert False, "Not covering a platform: %s" % plat
@@ -142,7 +142,7 @@ def BASE(c):
     # host -> potential target platforms
     'win':   ('win',),
     'mac':   ('mac', 'ios'),
-    'linux': ('linux', 'chromeos', 'android'),
+    'linux': ('linux', 'chromeos', 'android', 'fuchsia'),
   }.get(c.HOST_PLATFORM)
 
   if not potential_platforms:  # pragma: no cover

@@ -367,6 +367,7 @@ class LocalGTestTest(Test):
     # the local copy.
     args = self._args[:]
     is_android = api.chromium.c.TARGET_PLATFORM == 'android'
+    is_fuchsia = api.chromium.c.TARGET_PLATFORM == 'fuchsia'
     options = self.test_options
     test_filter = options.test_filter
 
@@ -405,6 +406,10 @@ class LocalGTestTest(Test):
     try:
       if is_android:
         api.chromium_android.run_test_suite(self.target_name, **kwargs)
+      elif is_fuchsia:
+        script = api.chromium.output_dir.join('bin',
+                                              'run_%s' % self.target_name)
+        api.python(self.target_name, script, args)
       else:
         api.chromium.runtest(self.target_name, revision=self._revision,
                              webkit_revision=self._webkit_revision, **kwargs)

@@ -344,6 +344,7 @@ SPEC = {
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
+        'TARGET_PLATFORM': 'fuchsia',
       },
       'bot_type': 'builder_tester',
       'checkout_dir': 'linux',
@@ -360,6 +361,7 @@ SPEC = {
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
+        'TARGET_PLATFORM': 'fuchsia',
       },
       'bot_type': 'builder',
       'checkout_dir': 'linux',

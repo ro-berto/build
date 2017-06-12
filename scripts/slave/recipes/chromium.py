@@ -1701,6 +1701,24 @@ def GenTests(api):
   )
 
   yield (
+    api.test('dynamic_gtest_fuchsia') +
+    api.properties.generic(mastername='chromium.fyi',
+                           buildername='Fuchsia') +
+    api.platform('linux', 64) +
+    api.override_step_data(
+        'read test spec (chromium.fyi.json)',
+        api.json.output({
+            'Fuchsia': {
+                'gtest_tests': [
+                    {
+                      'test': 'base_unittests',
+                    }
+                ],
+            },
+        }))
+  )
+
+  yield (
     api.test('dynamic_gtest_asan_android') +
     api.properties.generic(mastername='chromium.fyi',
                            buildername='ClangToTAndroidASan') +
