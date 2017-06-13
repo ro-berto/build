@@ -265,7 +265,7 @@ def _ComputeChangeSourceAndTagComparator(builders):
     branches = scheduler_config.get('branch', 'master')
     if isinstance(branches, list):
       # Treat lists as lists of regular expressions.
-      branches = [re.compile(r) for r in branch]
+      branches = [re.compile(r) for r in branches]
     change_source.append(
         gitiles_poller.GitilesPoller(
             scheduler_config['git_repo_url'],

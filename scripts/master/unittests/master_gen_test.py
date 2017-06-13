@@ -196,6 +196,7 @@ class PopulateBuildmasterConfigTest(unittest.TestCase):
       self.assertEqual(c['builders'][4]['name'], 'Test Linux Build Everything')
 
       self.assertEqual(len(c['change_source']), 2)
+      self.assertEqual(len(c['change_source'][1].branches), 2)
       self.assertEqual(len(c['schedulers']), 3)
 
       self.assertEqual(c['schedulers'][1].name, 'test_all')
