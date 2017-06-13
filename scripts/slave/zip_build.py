@@ -396,11 +396,6 @@ def Archive(options):
 
   zip_file_list = [f for f in root_files if path_filter.Match(f)]
 
-  # Include mojo public JS library.
-  mojo_bindings = os.path.join(build_dir, 'gen/mojo/public/js/mojo_bindings.js')
-  print 'Include mojo public JS library: %s' % mojo_bindings
-  zip_file_list.extend(mojo_bindings)
-
   # TODO(yzshen): Switch layout tests to use files from 'gen/layout_test_data'
   # and remove this.
   mojom_files = _MojomFiles(build_dir, ['.mojom.js', '_mojom.py'])
