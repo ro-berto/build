@@ -149,7 +149,7 @@ def GenTests(api):
       api.properties(platforms=('win', 'linux', 'mac')))
 
   yield (
-      api.test('trybot') +
+      api.test('rietveld_trybot') +
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
@@ -157,6 +157,16 @@ def GenTests(api):
           rietveld='https://codereview.chromium.org',
           issue='123',
           patchset='1001'))
+
+  yield (
+      api.test('gerrit_trybot') +
+      api.step_data(
+          'archive for win',
+          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
+      api.properties(
+          patch_gerrit_url='https://chromium-review.googlesource.com',
+          patch_issue='123',
+          patch_set='1'))
 
   yield (
       api.test('show_shards_in_collect_step') +
