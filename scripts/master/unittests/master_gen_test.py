@@ -13,6 +13,8 @@ import unittest
 # This adjusts sys.path, so it must be imported before the other modules.
 import test_env  # pylint: disable=W0403
 
+from buildbot.schedulers.basic import AnyBranchScheduler
+
 from master import master_gen
 
 
@@ -64,7 +66,17 @@ SAMPLE_WATERFALL_PYL = """\
       "bot_pools": ["main"],
       "botbuilddir": "test",
       "category": "0nightly"
-    }
+    },
+    "Test Linux Build Everything": {
+      "properties": {
+        "config": "Release"
+      },
+      "recipe": "test_recipe",
+      "scheduler": "test_all",
+      "bot_pools": ["main"],
+      "botbuilddir": "test",
+      "category": "1all"
+    },
   },
 
   "schedulers": {
@@ -76,6 +88,11 @@ SAMPLE_WATERFALL_PYL = """\
     "test_repo": {
       "type": "git_poller",
       "git_repo_url": "https://chromium.googlesource.com/test/test.git",
+    },
+    "test_all": {
+      "type": "git_poller_any",
+      "git_repo_url": "https://chromium.googlesource.com/test/test.git",
+      "branch": [r"refs/branch\-heads/\d+\.\d+", r"refs/heads/.*"],
     },
   },
 
@@ -166,7 +183,7 @@ class PopulateBuildmasterConfigTest(unittest.TestCase):
       master_gen.PopulateBuildmasterConfig(c, fp.name, _FakeMaster)
       c['builders'] = sorted(c['builders'])
 
-      self.assertEqual(len(c['builders']), 4)
+      self.assertEqual(len(c['builders']), 5)
       self.assertEqual(c['builders'][0]['name'], 'Test Linux')
       self.verify_timeouts(c['builders'][0])
 
@@ -176,8 +193,13 @@ class PopulateBuildmasterConfigTest(unittest.TestCase):
       self.assertEqual(c['builders'][2]['name'], 'Test Linux Remote Run')
       self.verify_timeouts(c['builders'][2])
 
-      self.assertEqual(len(c['change_source']), 1)
-      self.assertEqual(len(c['schedulers']), 2)
+      self.assertEqual(c['builders'][4]['name'], 'Test Linux Build Everything')
+
+      self.assertEqual(len(c['change_source']), 2)
+      self.assertEqual(len(c['schedulers']), 3)
+
+      self.assertEqual(c['schedulers'][1].name, 'test_all')
+      self.assertTrue(isinstance(c['schedulers'][1], AnyBranchScheduler))
     finally:
       os.remove(fp.name)
 

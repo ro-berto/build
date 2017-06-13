@@ -4,9 +4,11 @@
 
 import ast
 import os
+import re
 
 from buildbot.changes.filter import ChangeFilter
 from buildbot.process.properties import WithProperties
+from buildbot.schedulers.basic import AnyBranchScheduler
 from buildbot.schedulers.basic import SingleBranchScheduler
 from buildbot.schedulers.timed import Nightly
 from buildbot import util
@@ -189,13 +191,25 @@ def _ComputeSchedulers(builders):
     builder_names = scheduler_to_builders[scheduler_name]
 
     if scheduler_type == 'git_poller':
-      # git_poller pollers group changes, so we match on our specific repository
+      # git_poller polls group changes, so we match on our specific repository
       # to ensure that we only pick up changes from our poller.
       schedulers.append(SingleBranchScheduler(
           name=scheduler_name,
           change_filter=ChangeFilter(
               repository=scheduler_values['git_repo_url'],
               branch=scheduler_values.get('branch', 'master'),
+          ),
+          treeStableTimer=scheduler_values.get('treeStableTimer', 60),
+          builderNames=builder_names))
+
+    elif scheduler_type == 'git_poller_any':
+      # When polling multiple branches, we use separate change sources with
+      # a category set to the scheduler name.
+      schedulers.append(AnyBranchScheduler(
+          name=scheduler_name,
+          change_filter=ChangeFilter(
+              repository=scheduler_values['git_repo_url'],
+              category=scheduler_name,
           ),
           treeStableTimer=scheduler_values.get('treeStableTimer', 60),
           builderNames=builder_names))
@@ -242,6 +256,21 @@ def _ComputeChangeSourceAndTagComparator(builders):
   for url, branches in git_urls_to_branches.iteritems():
     change_source.append(
         gitiles_poller.GitilesPoller(url, branches=list(branches)))
+
+  # Each AnyBranchScheduler gets a separate poller.
+  for scheduler_name, scheduler_config in builders['schedulers'].iteritems():
+    if scheduler_config['type'] != 'git_poller_any':
+      continue
+
+    branches = scheduler_config.get('branch', 'master')
+    if isinstance(branches, list):
+      # Treat lists as lists of regular expressions.
+      branches = [re.compile(r) for r in branch]
+    change_source.append(
+        gitiles_poller.GitilesPoller(
+            scheduler_config['git_repo_url'],
+            branches=list(branches),
+            category=scheduler_name))
 
   for scheduler_name, scheduler_config in builders['schedulers'].iteritems():
     if scheduler_config['type'] != 'repo_poller':
