@@ -397,11 +397,11 @@ def Archive(options):
   zip_file_list = [f for f in root_files if path_filter.Match(f)]
 
   # Include mojo public JS library.
-  mojo_bindings = os.path.join(
+  mojo_bindings_path = os.path.join(
       build_dir, 'gen', 'mojo', 'public', 'js', 'mojo_bindings.js')
-  if (os.path.exists(mojo_bindings)):
-    print 'Include mojo public JS library: %s' % mojo_bindings
-    zip_file_list.extend(mojo_bindings)
+  if (os.path.exists(mojo_bindings_path)):
+    print 'Include mojo public JS library: %s' % mojo_bindings_path
+    zip_file_list.extend(os.path.relpath(mojo_bindings_path, build_dir))
 
   # TODO(yzshen): Switch layout tests to use files from 'gen/layout_test_data'
   # and remove this.
