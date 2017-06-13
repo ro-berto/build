@@ -48,7 +48,8 @@ BUILDERS = freeze({
       },
       'Libfuzzer Upload Linux MSan': {
         'chromium_config': 'chromium_clang',
-        'chromium_apply_config': ['msan', 'msan_full_origin_tracking',
+        'chromium_apply_config': ['clobber', 'msan',
+                                  'msan_full_origin_tracking',
                                   'prebuilt_instrumented_libraries',
                                   'proprietary_codecs' ],
         'chromium_config_kwargs': {
