@@ -75,7 +75,8 @@ _AddTestSpec('Android Power Nexus 5X Perf', 'fyi-android-power-nexus-5x',
              'android', target_bits=32, num_device_shards=7,
              parent_buildername='Android Builder FYI')
 
-_AddIsolatedTestSpec('Android Swarming N5X Tester', 'fyi-android-swarming-n5x',
+
+_AddIsolatedTestSpec('Android Nexus5X WebView Perf', 'fyi-android-swarming-n5x',
                      'android', parent_buildername='Android Builder FYI',
                      target_bits=32)
 
