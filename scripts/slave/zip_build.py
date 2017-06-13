@@ -399,8 +399,9 @@ def Archive(options):
   # Include mojo public JS library.
   mojo_bindings = os.path.join(
       build_dir, 'gen', 'mojo', 'public', 'js', 'mojo_bindings.js')
-  print 'Include mojo public JS library: %s' % mojo_bindings
-  zip_file_list.extend(mojo_bindings)
+  if (os.path.exists(mojo_bindings)):
+    print 'Include mojo public JS library: %s' % mojo_bindings
+    zip_file_list.extend(mojo_bindings)
 
   # TODO(yzshen): Switch layout tests to use files from 'gen/layout_test_data'
   # and remove this.
