@@ -42,35 +42,6 @@
   },
   {
     "cmd": [
-      "git",
-      "rev-parse",
-      "HEAD"
-    ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
-    "infra_step": true,
-    "name": "record previously checked-out revision",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@SET_BUILD_PROPERTY@previously_checked_out_revision@\"1234567123456712345671234567888812345678\"@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "ls-remote",
-      "origin",
-      "refs/heads/master"
-    ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
-    "infra_step": true,
-    "name": "record previously cached revision",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@SET_BUILD_PROPERTY@previously_cached_revision@\"1234567123456712345671234567888812345678\"@@@"
-    ]
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
@@ -1177,8 +1148,8 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@report@{@@@",
       "@@@STEP_LOG_LINE@report@  \"last_checked_out_revision\": null, @@@",
-      "@@@STEP_LOG_LINE@report@  \"previously_cached_revision\": \"1234567123456712345671234567888812345678\", @@@",
-      "@@@STEP_LOG_LINE@report@  \"previously_checked_out_revision\": \"1234567123456712345671234567888812345678\", @@@",
+      "@@@STEP_LOG_LINE@report@  \"previously_cached_revision\": null, @@@",
+      "@@@STEP_LOG_LINE@report@  \"previously_checked_out_revision\": null, @@@",
       "@@@STEP_LOG_LINE@report@  \"result\": {@@@",
       "@@@STEP_LOG_LINE@report@    \"r0\": {@@@",
       "@@@STEP_LOG_LINE@report@      \"gl_tests\": {@@@",

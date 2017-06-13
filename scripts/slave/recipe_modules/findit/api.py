@@ -376,6 +376,8 @@ class FinditApi(recipe_api.RecipeApi):
     # api.path['checkout'] is not set yet, so we get it from chromium_checkout.
     checkout_dir = api.chromium_checkout.get_checkout_dir(bot_config)
     full_checkout_path = checkout_dir.join(src_root)
+    if not api.path.exists(full_checkout_path):
+      return None, None
     with api.context(cwd=full_checkout_path):
       checked_out_revision = None
       try:
@@ -395,7 +397,7 @@ class FinditApi(recipe_api.RecipeApi):
           checked_out_revision = matches.group('revision')
           previously_checked_out_revision_step.presentation.properties[
               'previously_checked_out_revision'] = checked_out_revision
-      except (api.step.StepFailure, OSError): # pragma: no cover
+      except (api.step.StepFailure, OSError):
         # This is expected if the directory or the git repo do not exist.
         pass
 
@@ -416,7 +418,7 @@ class FinditApi(recipe_api.RecipeApi):
           cached_revision = matches.group('revision')
           previously_cached_revision_step.presentation.properties[
           'previously_cached_revision'] = cached_revision
-      except (api.step.StepFailure, OSError): # pragma: no cover
+      except (api.step.StepFailure, OSError):
         # This is expected if the directory or the git repo do not exist.
         pass
       return checked_out_revision, cached_revision

@@ -538,6 +538,7 @@ def GenTests(api):
       props(use_analyze=True,
             buildbucket=json.dumps({'build': {'id': 'id1'}})) +
       simulated_buildbucket_output({}) +
+      api.path.exists(api.path['builder_cache'].join('linux','src')) +
       api.override_step_data('record previously checked-out revision',
                              api.raw_io.output('')) +
       api.override_step_data('record previously cached revision',
@@ -553,14 +554,66 @@ def GenTests(api):
   )
 
   yield (
-      api.test('previous_revision_error') +
+      api.test('previous_revision_directory_does_not_exist') +
       props(use_analyze=True,
             buildbucket=json.dumps({'build': {'id': 'id1'}})) +
       simulated_buildbucket_output({}) +
+      api.override_step_data(
+          'test r1.analyze',
+          api.json.output({
+              'status': 'No dependencies',
+              'compile_targets': [],
+              'test_targets': [],
+          })
+      )
+  )
+
+  yield (
+      api.test('previous_revision_error_code') +
+      props(use_analyze=True,
+            buildbucket=json.dumps({'build': {'id': 'id1'}})) +
+      simulated_buildbucket_output({}) +
+      api.path.exists(api.path['builder_cache'].join('linux','src')) +
+      api.override_step_data('record previously checked-out revision',
+                             api.raw_io.output('SegmentationFault'),
+                             retcode=255) +
+      api.override_step_data('record previously cached revision',
+                             api.raw_io.output('SegmentationFault'),
+                             retcode=255) +
+      api.override_step_data(
+          'test r1.analyze',
+          api.json.output({
+              'status': 'No dependencies',
+              'compile_targets': [],
+              'test_targets': [],
+          })
+      )
+  )
+  yield (
+      api.test('previous_revision_bad_output') +
+      props(use_analyze=True,
+            buildbucket=json.dumps({'build': {'id': 'id1'}})) +
+      simulated_buildbucket_output({}) +
+      api.path.exists(api.path['builder_cache'].join('linux','src')) +
       api.override_step_data('record previously checked-out revision',
                              api.raw_io.output('SegmentationFault')) +
       api.override_step_data('record previously cached revision',
                              api.raw_io.output('SegmentationFault')) +
+      api.override_step_data(
+          'test r1.analyze',
+          api.json.output({
+              'status': 'No dependencies',
+              'compile_targets': [],
+              'test_targets': [],
+          })
+      )
+  )
+  yield (
+      api.test('previous_revision_valid') +
+      props(use_analyze=True,
+            buildbucket=json.dumps({'build': {'id': 'id1'}})) +
+      simulated_buildbucket_output({}) +
+      api.path.exists(api.path['builder_cache'].join('linux','src')) +
       api.override_step_data(
           'test r1.analyze',
           api.json.output({
