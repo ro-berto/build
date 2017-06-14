@@ -858,6 +858,8 @@ BUILDERS = {
         'tests': [
           V8Testing(3),
           Test262(2),
+          Mozilla,
+          Benchmarks,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -873,6 +875,8 @@ BUILDERS = {
         'tests': [
           V8Testing(2),
           Test262(3),
+          Mozilla,
+          Benchmarks,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -2138,6 +2142,8 @@ BUILDERS = {
         'tests': [
           V8Testing(4),
           Test262(2),
+          Mozilla,
+          Benchmarks,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -2181,6 +2187,8 @@ BUILDERS = {
         'tests': [
           V8Testing(3),
           Test262(4),
+          Mozilla,
+          Benchmarks,
         ],
         'testing': {'platform': 'linux'},
       },

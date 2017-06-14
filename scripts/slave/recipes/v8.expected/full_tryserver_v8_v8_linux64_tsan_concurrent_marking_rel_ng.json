@@ -538,13 +538,17 @@
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
+      "[START_DIR]/v8/out/Release/benchmarks.isolated.gen.json",
       "[START_DIR]/v8/out/Release/bot_default.isolated.gen.json",
+      "[START_DIR]/v8/out/Release/mozilla.isolated.gen.json",
       "[START_DIR]/v8/out/Release/test262.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"benchmarks\": \"[dummy hash for benchmarks]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"bot_default\": \"[dummy hash for bot_default]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"mozilla\": \"[dummy hash for mozilla]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"test262\": \"[dummy hash for test262]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -561,7 +565,7 @@
       "cp",
       "-a",
       "public-read",
-      "{\"bot_default\": \"[dummy hash for bot_default]\", \"test262\": \"[dummy hash for test262]\"}",
+      "{\"benchmarks\": \"[dummy hash for benchmarks]\", \"bot_default\": \"[dummy hash for bot_default]\", \"mozilla\": \"[dummy hash for mozilla]\", \"test262\": \"[dummy hash for test262]\"}",
       "gs://chromium-v8/isolated/tryserver.v8/v8_linux64_tsan_concurrent_marking_rel_ng/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json"
     ],
     "infra_step": true,
@@ -594,7 +598,9 @@
           "revision": "12345",
           "rietveld": "https://codereview.chromium.org",
           "swarm_hashes": {
+            "benchmarks": "[dummy hash for benchmarks]",
             "bot_default": "[dummy hash for bot_default]",
+            "mozilla": "[dummy hash for mozilla]",
             "test262": "[dummy hash for test262]"
           }
         }
