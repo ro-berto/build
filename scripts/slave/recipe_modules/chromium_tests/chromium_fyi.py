@@ -2267,5 +2267,57 @@ SPEC = {
       },
       'enable_swarming': True,
     },
-  },
+
+    # There are no slaves for the following "dummy builders" and they
+    # do not appear on the actual continuous waterfall; these configurations
+    # are here so that trybots can be added.
+    'ChromiumOS amd64-generic Dummy Builder': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['chromeos', 'mb', 'ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_PLATFORM': 'chromeos',
+        'TARGET_CROS_BOARD': 'amd64-generic',
+      },
+      'bot_type': 'builder_tester',
+      'compile_targets': [
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+    'ChromiumOS daisy Dummy Builder': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['chromeos', 'mb', 'ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_PLATFORM': 'chromeos',
+        'TARGET_CROS_BOARD': 'daisy',
+      },
+      'bot_type': 'builder_tester',
+      'compile_targets': [
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+    'ChromiumOS x86-generic Dummy Builder': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['chromeos', 'mb', 'ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_PLATFORM': 'chromeos',
+        'TARGET_CROS_BOARD': 'x86-generic',
+      },
+      'bot_type': 'builder_tester',
+      'compile_targets': [
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+  }
 }
