@@ -20,6 +20,7 @@ DEPS = [
   'recipe_engine/properties',
   'recipe_engine/raw_io',
   'recipe_engine/step',
+  'webrtc',
 ]
 
 SPEC = freeze({
@@ -32,6 +33,7 @@ SPEC = freeze({
   # - gen_repo_branch: Which branch in the generated files repo to sync to.
   'builders': {
     'codesearch-gen-chromium-linux': {
+      'gclient_config': 'chromium',
       'compile_targets': [
         'all',
       ],
@@ -41,7 +43,19 @@ SPEC = freeze({
       'gen_repo_branch': 'master',
       'corpus': 'chromium-linux',
     },
+    'codesearch-gen-webrtc-linux': {
+      'gclient_config': 'webrtc',
+      'compile_targets': [
+        'all',
+      ],
+      'package_filename': 'webrtc-src',
+      'platform': 'linux',
+      'sync_generated_files': False,
+      'gen_repo_branch': 'master',
+      'corpus': 'webrtc-linux',
+    },
     'codesearch-gen-chromium-chromiumos': {
+      'gclient_config': 'chromium',
       # TODO(emso): Get the below compile targets.
       # from the chromium_tests recipe module.
       # Compile targets used by the 'Linux ChromiumOS Full' builder (2016-12-16)
@@ -85,6 +99,7 @@ SPEC = freeze({
       'corpus': 'chromium-chromeos',
     },
     'codesearch-gen-chromium-android': {
+      'gclient_config': 'chromium',
       'compile_targets': [
         'all',
       ],
@@ -117,7 +132,8 @@ def RunSteps(api):
 
   # Checkout the repositories that are either directly needed or should be
   # included in the source archive.
-  gclient_config = api.gclient.make_config('chromium')
+  assert bot_config.get('gclient_config'), 'gclient_config is required'
+  gclient_config = api.gclient.make_config(bot_config['gclient_config'])
   if platform == 'android':
     gclient_config.target_os = ['android']
   for name, url in api.codesearch.c.additional_repos.iteritems():
@@ -141,7 +157,14 @@ def RunSteps(api):
   with api.context(env={'CHROME_HEADLESS': '1'}):
     api.chromium.runhooks()
 
-  result = api.codesearch.generate_compilation_database(targets, platform)
+  mb_config_path = None  # Defaults to Chromium's location.
+  # TODO(kjellander): Refactor WebRTC into its own recipe once more logic has
+  # moved into the codesearch recipe module. This is the only thing different
+  # between Chromium and WebRTC as of now.
+  if 'webrtc' in buildername:
+    mb_config_path = api.path['checkout'].join('tools_webrtc', 'mb')
+  result = api.codesearch.generate_compilation_database(
+      targets, platform, mb_config_path=mb_config_path)
 
   try:
     api.chromium.compile(targets, use_goma_module=True)
