@@ -149,7 +149,6 @@ def GenTests(api):
     api.post_process(post_process.DropExpectation)
   )
 
-
   # See comment for supresses_swarming_layout_tests_via_src_side_config.
   yield (
     api.test('add_swarming_layout_tests_via_src_side_config') +
@@ -180,3 +179,71 @@ def GenTests(api):
         post_process.MustRun, 'webkit_layout_tests (with patch)') +
     api.post_process(post_process.DropExpectation)
   )
+
+  # Check the 5% experiment for exparchive only runs on 5% of builds. It uses
+  # the buildnumber to determine when to be enabled. When enabled you get
+  # individual isolate steps for each test, when disabled you get a single
+  # isolate step for all tests.
+  yield (
+    api.test('exparchive_5percent_experiment_enabled') +
+    api.properties.tryserver(
+        mastername='tryserver.chromium.linux',
+        buildername='linux_chromium_rel_ng',
+        buildnumber=1020, # 5% is (x % 100/5 == 0)
+        swarm_hashes = {
+          'base_unittests':
+          '[dummy hash for base_unittests]'}) +
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'gtest_tests': [
+                    {
+                        'test': 'base_unittests',
+                        'swarming': {
+                            'can_use_on_swarming_builders': True,
+                        }
+                    }
+                ],
+            },
+        })
+    ) +
+    api.filter.suppress_analyze() +
+    api.post_process(
+        post_process.DoesNotRun, 'isolate tests)') +
+    api.post_process(
+        post_process.MustRun, 'isolate base_unittests') +
+    api.post_process(post_process.DropExpectation)
+  )
+  for i in range(1, 20):
+    yield (
+      api.test('exparchive_5percent_experiment_disabled_%i' % i) +
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='linux_chromium_rel_ng',
+          buildnumber=1020 + i,
+          swarm_hashes = {
+            'base_unittests':
+            '[dummy hash for base_unittests]'}) +
+      api.override_step_data(
+          'read test spec (chromium.linux.json)',
+          api.json.output({
+              'Linux Tests': {
+                  'gtest_tests': [
+                      {
+                          'test': 'base_unittests',
+                          'swarming': {
+                              'can_use_on_swarming_builders': True,
+                          }
+                      }
+                  ],
+              },
+          })
+      ) +
+      api.filter.suppress_analyze() +
+      api.post_process(
+          post_process.MustRun, 'isolate tests') +
+      api.post_process(
+          post_process.DoesNotRun, 'isolate base_unittests') +
+      api.post_process(post_process.DropExpectation)
+    )
