@@ -14,21 +14,12 @@ DEPS = [
   'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/raw_io',
-  'recipe_engine/step',
 ]
-
 
 def RunSteps(api):
   api.ios.checkout(gclient_apply_config=['chromium_webrtc_tot'])
-
-  # TODO(kjellander): Remove when https://crbug.com/730481 is fixed.
-  step_result = api.step('Disabled: see https://crbug.com/730481', cmd=None)
-  step_result.presentation.status = api.step.WARNING
-  return
-
-  #api.ios.read_build_config()
-  #api.ios.build()
-
+  api.ios.read_build_config()
+  api.ios.build()
 
 def GenTests(api):
   yield (
