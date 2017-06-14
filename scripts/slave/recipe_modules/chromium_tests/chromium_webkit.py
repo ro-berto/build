@@ -317,9 +317,7 @@ SPEC['builders'] = {
     'compile_targets': [
       'blink_tests',
     ],
-    'tests': [
-      steps.BlinkTest(),
-    ],
+    'tests': [],
     'testing': {
       'platform': 'linux',
     },
@@ -334,15 +332,7 @@ SPEC['builders'] = {
       'BUILD_CONFIG': 'Release',
       'TARGET_BITS': 64,
     },
-    'tests': [
-      steps.BlinkTest(extra_args=[
-          '--additional-expectations',
-          'src/third_party/WebKit/LayoutTests/ASANExpectations',
-          # ASAN is roughly 8x slower than Release.
-          '--time-out-ms', '48000',
-          '--enable-sanitizer',
-      ]),
-    ],
+    'tests': [],
     'testing': {
       'platform': 'linux',
     },
@@ -362,16 +352,7 @@ SPEC['builders'] = {
       'BUILD_CONFIG': 'Release',
       'TARGET_BITS': 64,
     },
-    'tests': [
-      steps.BlinkTest(extra_args=[
-          '--additional-expectations',
-          'src/third_party/WebKit/LayoutTests/MSANExpectations',
-          # Because JS code is run on a simulator, the slowdown in JS-heavy
-          # tests will be much higher than MSan's average of 3x.
-          '--time-out-ms', '66000',
-          '--enable-sanitizer',
-      ]),
-    ],
+    'tests': [],
     'testing': {
       'platform': 'linux',
     },
@@ -386,9 +367,7 @@ SPEC['builders'] = {
       'BUILD_CONFIG': 'Debug',
       'TARGET_BITS': 64,
     },
-    'tests': [
-      steps.BlinkTest(),
-    ],
+    'tests': [],
     'testing': {
       'platform': 'linux',
     },
@@ -445,13 +424,7 @@ SPEC['builders'] = {
     'compile_targets': [
       'blink_tests',
     ],
-    'tests': [
-      steps.BlinkTest(extra_args=[
-          '--additional-expectations',
-          'src/third_party/WebKit/LayoutTests/LeakExpectations',
-          '--enable-leak-detection',
-      ]),
-    ],
+    'tests': [],
     'testing': {
       'platform': 'linux',
     },

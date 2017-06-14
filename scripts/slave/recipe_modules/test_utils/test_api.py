@@ -54,12 +54,6 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
             t.raw['num_regressions'], TestUtilsApi.MAX_FAILURES_EXIT_STATUS)
     return ret
 
-  def raw_test_output(self, jsonish, retcode):
-    t = TestResults(jsonish)
-    ret = self.test_results(t)
-    ret.retcode = retcode
-    return ret
-
   @recipe_test_api.placeholder_step_data
   def gtest_results(self, test_results, retcode=None, name=None):
     return self.m.json.output(test_results.as_jsonish(), retcode, name)

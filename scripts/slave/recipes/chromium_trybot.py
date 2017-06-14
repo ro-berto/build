@@ -795,80 +795,6 @@ def GenTests(api):
     )
   )
 
-  webkit_tests = (
-    api.test('blink_minimal_pass_continues') +
-    props(mastername='tryserver.blink',
-          buildername='linux_trusty_blink_rel') +
-    suppress_analyze() +
-    api.platform.name('linux')
-  )
-
-  # This tests that if the first fails, but the second pass succeeds
-  # that we fail the whole build.
-  yield (
-    api.test('webkit_tests_minimal_pass_continues') +
-    webkit_tests +
-    api.override_step_data('webkit_tests (with patch)',
-        api.test_utils.canned_test_output(passing=False)) +
-    api.override_step_data('webkit_tests (without patch)',
-        api.test_utils.canned_test_output(passing=True, minimal=True))
-  )
-
-  yield (
-    api.test('webkit_tests_compile_without_patch_fails') +
-    webkit_tests +
-    api.override_step_data('webkit_tests (with patch)',
-        api.test_utils.canned_test_output(passing=False)) +
-    api.override_step_data('compile (without patch)', retcode=1)
-  )
-
-  # This tests what happens if something goes horribly wrong in
-  # run-webkit-tests and we return an internal error; the step should
-  # be considered a hard failure and we shouldn't try to compare the
-  # lists of failing tests.
-  # 255 == test_run_results.UNEXPECTED_ERROR_EXIT_STATUS in run-webkit-tests.
-  yield (
-    api.test('webkit_tests_unexpected_error') +
-    webkit_tests +
-    api.override_step_data('webkit_tests (with patch)',
-        api.test_utils.canned_test_output(passing=False, retcode=255))
-  )
-
-  # TODO(dpranke): crbug.com/357866 . This tests what happens if we exceed the
-  # number of failures specified with --exit-after-n-crashes-or-times or
-  # --exit-after-n-failures; the step should be considered a hard failure and
-  # we shouldn't try to compare the lists of failing tests.
-  # 130 == test_run_results.INTERRUPTED_EXIT_STATUS in run-webkit-tests.
-  yield (
-    api.test('webkit_tests_interrupted') +
-    webkit_tests +
-    api.override_step_data('webkit_tests (with patch)',
-        api.test_utils.canned_test_output(passing=False, retcode=130))
-  )
-
-  # This tests what happens if we don't trip the thresholds listed
-  # above, but fail more tests than we can safely fit in a return code.
-  # (this should be a soft failure and we can still retry w/o the patch
-  # and compare the lists of failing tests).
-  yield (
-    api.test('webkit_tests_too_many_failures_for_retcode') +
-    webkit_tests +
-    api.override_step_data('webkit_tests (with patch)',
-        api.test_utils.canned_test_output(passing=False,
-                                          num_additional_failures=125)) +
-    api.override_step_data('webkit_tests (without patch)',
-        api.test_utils.canned_test_output(passing=True, minimal=True))
-  )
-
-  yield (
-    api.test('webkit_tests_with_and_without_patch_fail') +
-    webkit_tests +
-    api.override_step_data('webkit_tests (with patch)',
-        api.test_utils.canned_test_output(passing=False)) +
-    api.override_step_data('webkit_tests (without patch)',
-        api.test_utils.canned_test_output(passing=False, minimal=True))
-  )
-
   swarmed_webkit_tests = (
     props(extra_swarmed_tests=['webkit_layout_tests']) +
     api.platform.name('linux') +
@@ -1010,19 +936,6 @@ def GenTests(api):
           buildername='mac10.9_blink_rel',
           patch_project='v8') +
     api.platform.name('mac')
-  )
-
-  yield (
-    api.test('use_v8_patch_on_blink_trybot_test_failures') +
-    props(mastername='tryserver.v8',
-          buildername='v8_linux_blink_rel',
-          patch_project='v8') +
-    api.platform.name('linux') +
-    suppress_analyze(more_exclusions=['v8/f.*']) +
-    api.override_step_data('webkit_tests (with patch)',
-        api.test_utils.canned_test_output(passing=False)) +
-    api.override_step_data('webkit_tests (without patch)',
-        api.test_utils.canned_test_output(passing=True, minimal=True))
   )
 
   yield (
