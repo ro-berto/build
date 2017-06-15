@@ -283,7 +283,17 @@ class ChromiteApi(recipe_api.RecipeApi):
       self.load_manifest_config(repository, revision)
 
     try:
-      buildroot = self.m.path['root'].join('cbuild')
+      # Test if we're running in BuildBot ('root' is only defined for BuildBot).
+      self.m.path['root']
+
+      # TODO(dnj): This is the hard-coded version of:
+      # self.m.path['cache'].join('cbuild')
+      #
+      # ... for builds running in "remote_run". Currently, CrOS is running in
+      # "annotated_run", so this expression of the path is invalid. Delete this
+      # and use the proper expression once we've transitioned from
+      # "annotated_run" to "remote_run" (crbug.com/733790).
+      buildroot = '/b/c/cbuild'
     except KeyError:
       buildroot = self.m.path['cache'].join('cbuild')
 
