@@ -41,7 +41,7 @@ AUX_BINARY_PACKAGES = {
     None: (
       cipd.CipdPackage(
           name='infra/tools/luci/vpython/${platform}',
-          version='git_revision:cea2b0eb174d6d8e6b628020e3986cb251ea2d97'),
+          version='git_revision:d147cd8b9062f3699759612ef96c4fe4bd49f87d'),
 
       cipd.CipdPackage(
           name='infra/tools/git/${platform}',
