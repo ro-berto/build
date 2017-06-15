@@ -13,7 +13,7 @@ import os
 import urllib
 import urllib2
 
-from slave import slave_utils
+from common import chromium_utils # pylint: disable=W0611
 
 # The paths in the results dashboard URLs for sending and viewing results.
 SEND_RESULTS_PATH = '/add_point'
@@ -176,7 +176,7 @@ def MakeListOfPoints(charts, bot, test_name, buildername,
 
   # The master name used for the dashboard is the CamelCase name returned by
   # GetActiveMaster(), and not the canonical master name with dots.
-  master = slave_utils.GetActiveMaster()
+  master = chromium_utils.GetActiveMaster()
 
   for chart_name, chart_data in sorted(charts.items()):
     point_id, revision_columns = _RevisionNumberColumns(
@@ -241,7 +241,7 @@ def MakeDashboardJsonV1(chart_json, revision_dict, test_name, bot, buildername,
 
   # The master name used for the dashboard is the CamelCase name returned by
   # GetActiveMaster(), and not the canonical master name with dots.
-  master = slave_utils.GetActiveMaster()
+  master = chromium_utils.GetActiveMaster()
   point_id, versions = _RevisionNumberColumns(revision_dict, prefix='')
 
   supplemental = {}

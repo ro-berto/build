@@ -18,7 +18,7 @@ import urllib2
 import test_env  # pylint: disable=W0403,W0611
 
 from slave import results_dashboard
-from slave import slave_utils
+from common import chromium_utils
 from testing_support.super_mox import mox
 
 
@@ -48,8 +48,8 @@ class ResultsDashboardFormatTest(unittest.TestCase):
     self.internal_Test_MakeDashboardJsonV1(False)
 
   def internal_Test_MakeDashboardJsonV1(self, enabled=True):
-    self.mox.StubOutWithMock(slave_utils, 'GetActiveMaster')
-    slave_utils.GetActiveMaster().AndReturn('ChromiumPerf')
+    self.mox.StubOutWithMock(chromium_utils, 'GetActiveMaster')
+    chromium_utils.GetActiveMaster().AndReturn('ChromiumPerf')
     self.mox.StubOutWithMock(results_dashboard, '_GetTimestamp')
     # pylint: disable=W0212
     results_dashboard._GetTimestamp().AndReturn(307226)
@@ -97,8 +97,8 @@ class ResultsDashboardFormatTest(unittest.TestCase):
 
     # The master name is gotten when making the list of points,
     # so it must be stubbed out here.
-    self.mox.StubOutWithMock(slave_utils, 'GetActiveMaster')
-    slave_utils.GetActiveMaster().AndReturn('MyMaster')
+    self.mox.StubOutWithMock(chromium_utils, 'GetActiveMaster')
+    chromium_utils.GetActiveMaster().AndReturn('MyMaster')
     self.mox.ReplayAll()
 
     actual_points = results_dashboard.MakeListOfPoints(
@@ -132,8 +132,8 @@ class ResultsDashboardFormatTest(unittest.TestCase):
 
     # The master name is gotten when making the list of points,
     # so it must be stubbed out here.
-    self.mox.StubOutWithMock(slave_utils, 'GetActiveMaster')
-    slave_utils.GetActiveMaster().AndReturn('MyMaster')
+    self.mox.StubOutWithMock(chromium_utils, 'GetActiveMaster')
+    chromium_utils.GetActiveMaster().AndReturn('MyMaster')
     self.mox.ReplayAll()
 
     actual_points = results_dashboard.MakeListOfPoints(
@@ -166,8 +166,8 @@ class ResultsDashboardFormatTest(unittest.TestCase):
     """A test of making a list of points, including all optional data."""
     # The master name is gotten when making the list of points,
     # so it must be stubbed out here.
-    self.mox.StubOutWithMock(slave_utils, 'GetActiveMaster')
-    slave_utils.GetActiveMaster().AndReturn('MyMaster')
+    self.mox.StubOutWithMock(chromium_utils, 'GetActiveMaster')
+    chromium_utils.GetActiveMaster().AndReturn('MyMaster')
     self.mox.ReplayAll()
 
     actual_points = results_dashboard.MakeListOfPoints(
@@ -260,8 +260,8 @@ class ResultsDashboardFormatTest(unittest.TestCase):
     """Tests sending data with a git hash as "revision"."""
     self.mox.StubOutWithMock(datetime, 'datetime')
     datetime.datetime.utcnow().AndReturn(FakeDateTime())
-    self.mox.StubOutWithMock(slave_utils, 'GetActiveMaster')
-    slave_utils.GetActiveMaster().AndReturn('ChromiumPerf')
+    self.mox.StubOutWithMock(chromium_utils, 'GetActiveMaster')
+    chromium_utils.GetActiveMaster().AndReturn('ChromiumPerf')
     self.mox.ReplayAll()
 
     actual_points = results_dashboard.MakeListOfPoints(
@@ -295,8 +295,8 @@ class ResultsDashboardFormatTest(unittest.TestCase):
   def test_GetStdioUri(self):
     self.mox.StubOutWithMock(datetime, 'datetime')
     datetime.datetime.utcnow().AndReturn(FakeDateTime())
-    self.mox.StubOutWithMock(slave_utils, 'GetActiveMaster')
-    slave_utils.GetActiveMaster().AndReturn('ChromiumPerf')
+    self.mox.StubOutWithMock(chromium_utils, 'GetActiveMaster')
+    chromium_utils.GetActiveMaster().AndReturn('ChromiumPerf')
     self.mox.ReplayAll()
 
     expected_supplemental_column = {
