@@ -18,9 +18,10 @@ DEPS = [
 PROPERTIES = {
     'target': Property(help='the package to check out and test'),
     'repo': Property(help='the repository URL where the package is located'),
+    'project': Property(help='the changesource that triggered this build'),
   }
 
-def RunSteps(api, target, repo):
+def RunSteps(api, target, repo, project):
   api.gclient.set_config('dart')
   s = api.gclient.c.solutions[0]
   # package-bots is checked out in two locations:
@@ -31,6 +32,8 @@ def RunSteps(api, target, repo):
     'dart/third_party/pkg/%s' % target: repo,
     'dart/third_party/package-bots':
       'https://dart.googlesource.com/package-bots.git'}
+  if project != 'package-bots':
+    s.revision = 'HEAD'
 
   api.path.c.dynamic_paths['tools'] = None
   api.path.c.dynamic_paths['dart'] = None
@@ -64,6 +67,7 @@ def GenTests(api):
         mastername='client.dart.packages',
         buildername='packages-linux-async',
         revision='hash_of_revision',
+        project='package-bots',
         target='async',
         repo='https://github.com/dart-lang/async.git'))
   yield (
@@ -72,5 +76,6 @@ def GenTests(api):
         mastername='client.dart.packages',
         buildername='packages-windows-intl',
         revision='hash_of_revision',
+        project='args',
         target='intl',
         repo='https://github.com/dart-lang/intl.git'))
