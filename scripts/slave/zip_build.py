@@ -23,6 +23,9 @@ from common import chromium_utils
 from slave import build_directory
 from slave import slave_utils
 
+# Mojo JS bindings path relative to the build directory.
+MOJO_BINDINGS_PATH = 'gen/mojo/public/js/mojo_bindings.js'
+
 # A list of mojom search paths relative to the build directory.
 MOJOM_SEARCH_DIRS = [
   'gen/components',
@@ -402,13 +405,9 @@ def Archive(options):
   zip_file_list = [f for f in root_files if path_filter.Match(f)]
 
   # Include mojo public JS library.
-  mojo_bindings_path = os.path.join(
-      build_dir, 'gen', 'mojo', 'public', 'js', 'mojo_bindings.js')
-  if (os.path.exists(mojo_bindings_path)):
-    print 'Include mojo public JS library: %s' % mojo_bindings_path
-    mojo_bindings_relpath = os.path.relpath(mojo_bindings_path, build_dir)
-    print 'Mojo bindings relative path: %s' % mojo_bindings_relpath
-    #zip_file_list.extend(mojo_bindings_relpath)
+  if (os.path.exists(os.path.join(build_dir, MOJO_BINDINGS_PATH))):
+    print 'Include mojo public JS library: %s' % MOJO_BINDINGS_PATH
+    zip_file_list.append(MOJO_BINDINGS_PATH)
 
   # TODO(yzshen): Switch layout tests to use files from 'gen/layout_test_data'
   # and remove this.

@@ -32,10 +32,16 @@ def _setup_testdir(testdir):
 
   build_dir = _build_dir(options)
   os.makedirs(build_dir)
+  # Create mojo bindings file.
+  mojo_bindings_path = os.path.join(build_dir, zip_build.MOJO_BINDINGS_PATH)
+  mojo_bindings_dir = os.path.dirname(mojo_bindings_path)
+  os.makedirs(mojo_bindings_dir)
+  open(mojo_bindings_path, 'w').close()
   # Generate fake mojom files.
   for search_dir in zip_build.MOJOM_SEARCH_DIRS:
     search_path = os.path.join(build_dir, search_dir)
-    os.makedirs(search_path)
+    if not os.path.exists(search_path):
+      os.makedirs(search_path)
     tempfile.mkstemp(suffix='.mojom.js', dir=search_path)
     tempfile.mkstemp(suffix='_mojom.py', dir=search_path)
   # Generate a fake layout test data file.
