@@ -584,7 +584,7 @@ def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir, cleanup_dir,
   return recipe_return_code
 
 
-def main(argv, stream):
+def _main_impl(argv, stream):
   parser = argparse.ArgumentParser()
   parser.add_argument('--repository', required=True,
       help='URL of a git repository to fetch.')
@@ -670,6 +670,22 @@ def main(argv, stream):
                         cleanup_dir, cache_dir)
 
 
+def main(argv, stream, passthrough=False):
+  exc_info = None
+  try:
+    return _main_impl(argv, stream)
+  except Exception:
+    exc_info = sys.exc_info()
+
+  # Report on the "remote_run" execution. If an exception (infra failure)
+  # occurred, raise it so that the build and the step turn purple.
+  with stream.step('remote_run_result') as s:
+    if passthrough:
+      s.step_text('(passthrough)')
+    if exc_info is not None:
+      raise exc_info[0], exc_info[1], exc_info[2]
+
+
 def shell_main(argv):
   logging.basicConfig(
       level=(logging.DEBUG if '--verbose' in argv else logging.INFO))
@@ -679,17 +695,7 @@ def shell_main(argv):
     return _call([sys.executable] + argv)
 
   stream = annotator.StructuredAnnotationStream()
-  exc_info = None
-  try:
-    return main(argv, stream)
-  except Exception:
-    exc_info = sys.exc_info()
-
-  # Report on the "remote_run" execution. If an exception (infra failure)
-  # occurred, raise it so that the build and the step turn purple.
-  with stream.step('remote_run_result'):
-    if exc_info is not None:
-      raise exc_info[0], exc_info[1], exc_info[2]
+  return main(argv, stream)
 
 
 if __name__ == '__main__':

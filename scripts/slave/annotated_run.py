@@ -288,6 +288,12 @@ def _remote_run_passthrough(opts, properties, stream):
   recipe = properties.pop('recipe')
   _, recipe_repository = _locate_recipe(recipe)
 
+  with stream.step('remote_run passthrough') as s:
+    s.step_text('<br>'.join([
+      'recipe: %s' % (recipe,),
+      'recipe_repository: %s' % (recipe_repository,),
+    ]))
+
   cmd = [
     'annotated_run', # argv[0]
     '--repository', recipe_repository,
@@ -300,7 +306,10 @@ def _remote_run_passthrough(opts, properties, stream):
     cmd += ['--verbose']
   if opts.leak:
     cmd += ['--leak']
-  return remote_run.main(cmd, stream)
+
+  LOGGER.info('Configured for "remote_run" passthrough w/ translated argv: %s',
+              cmd)
+  return remote_run.main(cmd, stream, passthrough=True)
 
 
 def _exec_recipe(rt, opts, stream, basedir, tdir, properties):
@@ -438,8 +447,7 @@ def shell_main(argv):
     # Re-execute with the updated annotated_run.py.
     rv, _ = _run_command([sys.executable] + argv)
     return rv
-  else:
-    return main(argv[1:])
+  return main(argv[1:])
 
 
 if __name__ == '__main__':
