@@ -407,45 +407,28 @@ def main_win(options, args):
   Returns the first non-zero exit status of any command it executes,
   or zero on success.
   """
+  files = [
+    'chrome.dll',
+    'chrome_child.dll',
+    'chrome.exe',
+    'mini_installer.exe',
+    'resources.pak',
+    'setup.exe',
+    'libEGL.dll',
+    'libGLESv2.dll',
+    'swiftshader\\libEGL.dll',
+    'swiftshader\\libGLESv2.dll',
+  ]
+
   build_dir = build_directory.GetBuildOutputDirectory()
   target_dir = os.path.join(build_dir, options.target)
-  chrome_dll = os.path.join(target_dir, 'chrome.dll')
-  chrome_child_dll = os.path.join(target_dir, 'chrome_child.dll')
-  chrome_exe = os.path.join(target_dir, 'chrome.exe')
-  mini_installer_exe = os.path.join(target_dir, 'mini_installer.exe')
-  resources_pak = os.path.join(target_dir, 'resources.pak')
-  setup_exe = os.path.join(target_dir, 'setup.exe')
-  lib_egl_dll = os.path.join(target_dir, 'libEGL.dll')
-  lib_glesv2_dll = os.path.join(target_dir, 'libGLESv2.dll')
 
-  result = 0
+  for f in files:
+    p = os.path.join(target_dir, f)
+    if os.path.isfile(p):
+      print 'RESULT %s: %s= %s bytes' % (f, f, get_size(p))
 
-  print 'RESULT chrome.dll: chrome.dll= %s bytes' % get_size(chrome_dll)
-
-  if os.path.exists(chrome_child_dll):
-    fmt = 'RESULT chrome_child.dll: chrome_child.dll= %s bytes'
-    print fmt % get_size(chrome_child_dll)
-
-  print 'RESULT chrome.exe: chrome.exe= %s bytes' % get_size(chrome_exe)
-
-  if os.path.exists(mini_installer_exe):
-    fmt = 'RESULT mini_installer.exe: mini_installer.exe= %s bytes'
-    print fmt % get_size(mini_installer_exe)
-
-  if os.path.exists(resources_pak):
-    fmt = 'RESULT resources.pak: resources.pak= %s bytes'
-    print fmt % get_size(resources_pak)
-
-  if os.path.exists(setup_exe):
-    print 'RESULT setup.exe: setup.exe= %s bytes' % get_size(setup_exe)
-
-  if os.path.exists(lib_egl_dll):
-    print 'RESULT libEGL.dll: libEGL.dll= %s bytes' % get_size(lib_egl_dll)
-
-  if os.path.exists(lib_glesv2_dll):
-    print 'RESULT libGLESv2.dll: libGLESv2.dll= %s bytes' % get_size(lib_glesv2_dll)
-
-  return result
+  return 0
 
 
 def main():
