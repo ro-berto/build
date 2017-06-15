@@ -23,6 +23,26 @@ from common import chromium_utils
 from slave import build_directory
 from slave import slave_utils
 
+# A list of mojom search paths relative to the build directory.
+MOJOM_SEARCH_DIRS = [
+  'gen/components',
+  'gen/content/test/data',
+  'gen/device',
+  'gen/gpu/ipc/common/',
+  'gen/media/capture/mojo',
+  'gen/media/mojo/interfaces/',
+  'gen/mojo',
+  'gen/services',
+  'gen/skia/public/interfaces',
+  'gen/third_party/WebKit/public',
+  'gen/third_party/WebKit/Source',
+  'gen/url/mojo',
+  'gen/ui',
+]
+
+# Layout test data directory relative to the build directory.
+LAYOUT_TEST_DATA_DIR = 'gen/layout_test_data'
+
 class StagingError(Exception): pass
 
 
@@ -120,23 +140,8 @@ def _MojomFiles(build_dir, suffixes):
     A list of mojom file paths which are relative to the build
     directory.
   """
-  walk_dirs = [
-    'gen/components',
-    'gen/content/test/data',
-    'gen/device',
-    'gen/gpu/ipc/common/',
-    'gen/media/capture/mojo',
-    'gen/media/mojo/interfaces/',
-    'gen/mojo',
-    'gen/services',
-    'gen/skia/public/interfaces',
-    'gen/third_party/WebKit/public',
-    'gen/third_party/WebKit/Source',
-    'gen/url/mojo',
-    'gen/ui',
-  ]
   mojom_files = []
-  for walk_dir in walk_dirs:
+  for walk_dir in MOJOM_SEARCH_DIRS:
     walk_dir = os.path.join(build_dir, walk_dir)
     for path, _, files in os.walk(walk_dir):
       rel_path = os.path.relpath(path, build_dir)
@@ -156,7 +161,7 @@ def _LayoutTestFiles(build_dir):
     A list of file paths which are relative to the build directory.
   """
   results = []
-  layout_test_data_dir = os.path.join(build_dir, 'gen/layout_test_data')
+  layout_test_data_dir = os.path.join(build_dir, LAYOUT_TEST_DATA_DIR)
   for path, _, files in os.walk(layout_test_data_dir):
     rel_path = os.path.relpath(path, build_dir)
     for entry in files:
@@ -452,8 +457,7 @@ def Archive(options):
   return urls
 
 
-def main(argv):
-  option_parser = optparse.OptionParser()
+def AddOptions(option_parser):
   option_parser.add_option('--target',
                            help='build target to archive (Debug or Release)')
   option_parser.add_option('--src-dir', default='src',
@@ -518,6 +522,11 @@ def main(argv):
                                 'slave\'s build directory.')
   option_parser.add_option('--gsutil-py-path',
                            help='Specify path to gsutil.py script.')
+
+
+def main(argv):
+  option_parser = optparse.OptionParser()
+  AddOptions(option_parser)
   chromium_utils.AddPropertiesOptions(option_parser)
   slave_utils_callback = slave_utils.AddOpts(option_parser)
 
