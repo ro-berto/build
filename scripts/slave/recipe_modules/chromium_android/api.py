@@ -1491,7 +1491,8 @@ class AndroidApi(recipe_api.RecipeApi):
                   command_line_script_args)
 
   def run_webview_cts(self, command_line_args=None, suffix=None,
-                      android_platform='L', arch='arm_64'):
+                      android_platform='L', arch='arm_64',
+                      result_details=False):
     suffix = ' (%s)' % suffix if suffix else ''
     if command_line_args:
       self._set_webview_command_line(command_line_args)
@@ -1522,6 +1523,12 @@ class AndroidApi(recipe_api.RecipeApi):
         step_result.presentation.step_text += (
             self.m.test_utils.format_step_text(
                 [['failures:', gtest_results.failures]]))
+        if result_details:
+          json_results = self.m.json.input(
+                step_result.test_utils.gtest_results.raw)
+          details_link = self.create_result_details('CTS',
+                                                    json_results)
+          step_result.presentation.links['result_details'] = details_link
 
   def coverage_report(self, upload=True, **kwargs):
     """Creates an EMMA HTML report and optionally uploads it to storage bucket.

@@ -2364,7 +2364,8 @@ class WebViewCTSTest(Test):
   def run(self, api, suffix):
     api.chromium_android.adb_install_apk(
         api.chromium_android.apk_path('SystemWebView.apk'))
-    api.chromium_android.run_webview_cts(android_platform=self._platform)
+    api.chromium_android.run_webview_cts(android_platform=self._platform,
+                                         result_details=True)
 
 
 class IncrementalCoverageTest(Test):

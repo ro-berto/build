@@ -47,6 +47,27 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "None/build/android/pylib/results/presentation/test_results_presentation.py",
+      "--json-file",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":(\", \"status\": \"FAILURE\"}]}]}",
+      "--test-name",
+      "CTS",
+      "--builder-name",
+      "test_buildername",
+      "--build-number",
+      "123",
+      "--cs-base-url",
+      "http://cs.chromium.org",
+      "--bucket",
+      "chromium-result-details"
+    ],
+    "name": "CTS: generate result details",
+    "stdout": "/path/to/tmp/"
+  },
+  {
     "cmd": [],
     "name": "details",
     "~followup_annotations": [

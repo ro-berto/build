@@ -13,6 +13,7 @@ DEPS = [
 
 def RunSteps(api):
   api.chromium.set_config('chromium')
+  api.chromium_android.set_config('main_builder')
 
   test = api.chromium_tests.steps.WebViewCTSTest()
 
@@ -27,4 +28,11 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield api.test('basic')
+  yield (
+      api.test('basic') +
+      api.properties(
+          mastername='test_mastername',
+          buildername='test_buildername',
+          bot_id='test_bot_id',
+          buildnumber=123)
+  )
