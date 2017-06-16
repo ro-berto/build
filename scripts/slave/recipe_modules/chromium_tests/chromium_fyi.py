@@ -1310,8 +1310,7 @@ SPEC = {
       'chromium_apply_config': [
         'clobber',
         'goma_canary',
-        # Temporarily disable due to crbug.com/721849
-        # 'goma_localoutputcache',
+        'goma_localoutputcache',
         'mb',
       ],
       'gclient_config': 'chromium',
