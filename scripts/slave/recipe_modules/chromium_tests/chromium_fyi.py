@@ -114,11 +114,7 @@ SPEC = {
       'compile_targets': [
         'blink_tests',
       ],
-      'tests': [
-        steps.BlinkTest(extra_args=[
-          '--additional-driver-flag=--enable-slimming-paint-v2',
-        ]),
-      ],
+      'tests': [],
       'test_results_config': 'staging_server',
       'testing': {
           'platform': 'linux',
@@ -136,11 +132,7 @@ SPEC = {
       'compile_targets': [
         'blink_tests',
       ],
-      'tests': [
-        steps.BlinkTest(extra_args=[
-          '--additional-driver-flag=--enable-blink-features=LayoutNG',
-        ]),
-      ],
+      'tests': [],
       'test_results_config': 'staging_server',
       'testing': {
           'platform': 'linux',
@@ -499,15 +491,6 @@ SPEC = {
         'content_unittests',
         'content_browsertests',
       ],
-      'tests': [
-        steps.BlinkTest(extra_args=[
-          '--additional-driver-flag',
-          '--site-per-process',
-          '--additional-expectations',
-          'src/third_party/WebKit/LayoutTests/FlagExpectations/site-per-process',
-          'http/tests',
-        ]),
-      ],
       'checkout_dir': 'linux',
       'test_results_config': 'staging_server',
       'testing': {
@@ -558,9 +541,6 @@ SPEC = {
       'compile_targets': [
         'content_unittests',
         'content_browsertests',
-      ],
-      'tests': [
-        steps.BlinkTest(["--additional-driver-flag=--enable-browser-side-navigation"]),
       ],
       'test_results_config': 'staging_server',
       'testing': {
