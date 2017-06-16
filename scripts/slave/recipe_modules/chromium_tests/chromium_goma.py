@@ -66,5 +66,20 @@ SPEC = {
        'platform': 'linux',
      },
    },
+   'Chromium Mac Goma GCE Staging': {
+     'chromium_config': 'chromium',
+     'chromium_apply_config': ['goma_gce', 'clobber', 'mb'],
+     'gclient_config': 'chromium',
+     'chromium_config_kwargs': {
+       'BUILD_CONFIG': 'Release',
+       'TARGET_BITS': 64,
+     },
+     'compile_targets': [ 'chrome', 'chromium_builder_tests' ],
+     'tests': steps.GOMA_TESTS,
+     'goma_staging': True,
+     'testing': {
+       'platform': 'mac',
+     },
+   },
  },
 }
