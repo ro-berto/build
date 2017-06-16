@@ -88,6 +88,7 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
       build_config=build_config)
 
   spec['parent_buildername'] = parent_builder
+  spec['test_results_config'] = 'public_server'
 
   if platform == 'android':
     spec['root_devices'] = True
