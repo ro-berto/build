@@ -953,3 +953,10 @@ def GenTests(api):
     ) +
     suppress_analyze()
   )
+
+  yield (
+    api.test('webkit_mac_trybot_no_hermetic_toolchain') +
+    props(mastername='tryserver.blink',
+          buildername='mac10.9_blink_rel') +
+    api.platform.name('mac')
+  )

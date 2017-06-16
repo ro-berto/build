@@ -247,3 +247,11 @@ def GenTests(api):
           post_process.DoesNotRun, 'isolate base_unittests') +
       api.post_process(post_process.DropExpectation)
     )
+
+  yield (
+    api.test('webkit_mac_trybot_no_hermetic_toolchain') +
+    api.properties.tryserver(
+          mastername='tryserver.blink',
+          buildername='mac10.9_blink_rel') +
+    api.platform.name('mac')
+  )
