@@ -3,18 +3,18 @@
 # found in the LICENSE file.
 
 from master import master_config
-from master.factory import annotator_factory, chromeos_factory
+from master.factory.chromeos_factory import ChromiteRecipeFactory
 
 from buildbot.schedulers.basic import SingleBranchScheduler as Scheduler
 
-def Builder(factory_obj, board):
+def Builder(active_master, board):
   config = '%s-tot-chromium-pfq-informational' % (board,)
   builder = {
       'name': config,
       'builddir': config,
       'category': '2chromium',
-      'factory': chromeos_factory.ChromiteRecipeFactory(
-          factory_obj, 'cros/cbuildbot'),
+      'factory': ChromiteRecipeFactory.remote(
+          active_master, ChromiteRecipeFactory.PUBLIC, 'cros/cbuildbot'),
       'gatekeeper': 'pfq',
       'scheduler': 'chromium_cros',
       'notify_on_missing': True,
@@ -26,13 +26,10 @@ def Builder(factory_obj, board):
 
 
 def Update(_config, active_master, c):
-  factory_obj = annotator_factory.AnnotatorFactory(
-      active_master=active_master)
-
   builders = [
-      Builder(factory_obj, 'x86-generic'),
-      Builder(factory_obj, 'amd64-generic'),
-      Builder(factory_obj, 'daisy'),
+      Builder(active_master, 'x86-generic'),
+      Builder(active_master, 'amd64-generic'),
+      Builder(active_master, 'daisy'),
   ]
 
   c['schedulers'] += [
