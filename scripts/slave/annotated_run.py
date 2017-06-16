@@ -58,6 +58,9 @@ _REMOTE_RUN_PASSTHROUGH = {
   'chromium.fyi': [
     'ios-simulator',
   ],
+  'chromeos': [
+    'chell-incremental',
+  ],
 }
 
 
