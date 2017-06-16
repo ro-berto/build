@@ -341,5 +341,31 @@ class AnnotatedRunExecTest(unittest.TestCase):
     self.assertEqual(rv, 13)
 
 
+  @mock.patch.dict('slave.annotated_run._REMOTE_RUN_PASSTHROUGH', {
+    'all': annotated_run._REMOTE_RUN_PASSTHROUGH_ALL,
+    'some': [
+      'buildername',
+    ],
+  })
+  def test_is_remote_run_passthrough(self):
+    for mastername, buildername in (
+        ('all', 'anything'),
+        ('some', 'buildername'),
+        ):
+      props = {'mastername': mastername, 'buildername': buildername}
+      self.assertTrue(annotated_run._is_remote_run_passthrough(props),
+            '(%(mastername)s, %(buildername)s) should be passthrough, '
+            'but was not' % props)
+
+    for mastername, buildername in (
+        ('some', 'not_included'),
+        ('nonexist', 'any'),
+        ):
+      props = {'mastername': mastername, 'buildername': buildername}
+      self.assertFalse(annotated_run._is_remote_run_passthrough(props),
+            '(%(mastername)s, %(buildername)s) should not be passthrough, '
+            'but was' % props)
+
+
 if __name__ == '__main__':
   unittest.main()

@@ -54,19 +54,28 @@ def _get_engine_flags(mastername):
   return  _ENGINE_FLAGS.get(mastername, _ENGINE_FLAGS[None])
 
 # List of bots that automatically get run through "remote_run".
+_REMOTE_RUN_PASSTHROUGH_ALL = '*'
 _REMOTE_RUN_PASSTHROUGH = {
   'chromium.fyi': [
     'ios-simulator',
   ],
-  'chromeos': [
-    'chell-incremental',
-  ],
+
+  # CrOS enrolled (crbug.com/733790)
+  'chromiumos': _REMOTE_RUN_PASSTHROUGH_ALL,
+  'chromiumos.tryserver': _REMOTE_RUN_PASSTHROUGH_ALL,
+  'chromeos': _REMOTE_RUN_PASSTHROUGH_ALL,
+  'chromeos.chrome': _REMOTE_RUN_PASSTHROUGH_ALL,
+  'chromeos.continuous': _REMOTE_RUN_PASSTHROUGH_ALL,
+  'chromeos.branch': _REMOTE_RUN_PASSTHROUGH_ALL,
+  'chromeos_release': _REMOTE_RUN_PASSTHROUGH_ALL,
+  'chromeos.infra': _REMOTE_RUN_PASSTHROUGH_ALL,
 }
 
 
 def _is_remote_run_passthrough(properties):
-  builders = _REMOTE_RUN_PASSTHROUGH.get(properties.get('mastername'), [])
-  return properties.get('buildername') in builders
+  builders = _REMOTE_RUN_PASSTHROUGH.get(properties.get('mastername'))
+  return (builders is _REMOTE_RUN_PASSTHROUGH_ALL or
+          builders and properties.get('buildername') in builders)
 
 
 def _build_dir():
