@@ -87,7 +87,7 @@
     "cmd": [
       "[START_DIR]/chromite/scripts/cbuildbot_launch",
       "--buildroot",
-      "/b/c/cbuild",
+      "[CACHE]/cbuild",
       "--branch",
       "master",
       "--git-cache-dir",
