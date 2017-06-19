@@ -1528,7 +1528,8 @@ class AndroidApi(recipe_api.RecipeApi):
                 step_result.test_utils.gtest_results.raw)
           details_link = self.create_result_details('CTS',
                                                     json_results)
-          step_result.presentation.links['result_details'] = details_link
+          self.m.step.active_result.presentation.links['result_details'] = details_link
+
 
   def coverage_report(self, upload=True, **kwargs):
     """Creates an EMMA HTML report and optionally uploads it to storage bucket.

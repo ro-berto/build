@@ -354,7 +354,8 @@ SPEC = {
       'android_apply_config': ['remove_all_system_webviews'],
       'test_results_config': 'public_server',
       'tests': [
-        steps.AndroidInstrumentationTest('SystemWebViewShellLayoutTest'),
+        steps.AndroidInstrumentationTest('SystemWebViewShellLayoutTest',
+                                         result_details=True),
         steps.WebViewCTSTest('L'),
       ],
       'testing': {
@@ -376,8 +377,10 @@ SPEC = {
       'test_results_config': 'public_server',
       'android_apply_config': ['remove_all_system_webviews'],
       'tests': [
-        steps.AndroidInstrumentationTest('SystemWebViewShellLayoutTest'),
-        steps.AndroidInstrumentationTest('WebViewUiTest'),
+        steps.AndroidInstrumentationTest('SystemWebViewShellLayoutTest',
+                                         result_details=True),
+        steps.AndroidInstrumentationTest('WebViewUiTest',
+                                         result_details=True),
         steps.WebViewCTSTest('M'),
       ],
       'testing': {
@@ -399,7 +402,8 @@ SPEC = {
       'test_results_config': 'public_server',
       'android_apply_config': ['remove_all_system_webviews'],
       'tests': [
-        steps.AndroidInstrumentationTest('SystemWebViewShellLayoutTest'),
+        steps.AndroidInstrumentationTest('SystemWebViewShellLayoutTest',
+                                         result_details=True),
         steps.WebViewCTSTest('N'),
       ],
       'testing': {
