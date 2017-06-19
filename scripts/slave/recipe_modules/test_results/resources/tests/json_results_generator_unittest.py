@@ -22,6 +22,18 @@ from test_result import canonical_name
 from test_result import TestResult
 
 
+MOCK_LOCATION_DATA = {
+  'AlignedMemoryTest.StackAlignment': {
+    'file': 'foo/bar/allocation_test.cc',
+    'line': 789,
+  },
+  'AlignedMemoryTest.StaticAlignment': {
+    'file': 'foo/bar/allocation_test.cc',
+    'line': 12,
+  },
+}
+
+
 class JSONGeneratorTest(unittest.TestCase):
 
   def setUp(self):
@@ -60,7 +72,8 @@ class JSONGeneratorTest(unittest.TestCase):
         '',
         test_results_map,
         svn_revisions=[('blink', '12345')],
-        file_writer=mock_writer)
+        file_writer=mock_writer,
+        test_locations=MOCK_LOCATION_DATA)
 
     results_json = generator.get_full_results_json()
     self._verify_full_json_results(results_json, tests_set, PASS_tests,
@@ -94,6 +107,8 @@ class JSONGeneratorTest(unittest.TestCase):
 
     self.assertEqual(self.builder_name, results[JRG.BUILDER_NAME])
     self.assertEqual(self.build_number, results[JRG.BUILD_NUMBER])
+
+    self.assertEqual(MOCK_LOCATION_DATA, results[JRG.TEST_LOCATIONS])
 
     expected_tests_count = len(all_tests)
     self.assertEqual(expected_tests_count, len(test_results))

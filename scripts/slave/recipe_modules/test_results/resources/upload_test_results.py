@@ -26,14 +26,12 @@ FULL_RESULTS_FILENAME = 'full_results.json'
 TIMES_MS_FILENAME = 'times_ms.json'
 
 
-def get_results_map_from_json(gtest_json):
-  """Returns a map of test results given a gtest json string.
+def get_results_map_from(contents):
+  """Returns a map of test results given a gtest json.
 
   Returns:
     {'Test.Name': [TestResult, TestResult, ...], 'Test.Name2': [...]}
   """
-  contents = json.loads(gtest_json)
-
   test_results_map = {}
   for test in contents.get('disabled_tests', []):
     test_results_map[test_result.canonical_name(test)] = [
@@ -88,7 +86,8 @@ def generate_json_results_file_for_gtest(
     elements: the first represent the full test results file, and the
     second is is the times_ms.json file.
   """
-  test_results_map = get_results_map_from_json(gtest_json)
+  contents = json.loads(gtest_json)
+  test_results_map = get_results_map_from(contents)
   if not os.path.exists(results_directory):
     os.makedirs(results_directory)
 
@@ -108,7 +107,8 @@ def generate_json_results_file_for_gtest(
       results_directory,
       test_results_map,
       svn_revisions=[('chromium', chrome_revision)],
-      master_name=master_name)
+      master_name=master_name,
+      test_locations=contents.get('test_locations'))
   generator.generate_json_output()
   generator.generate_times_ms_file()
   return [(f, os.path.join(results_directory, f)) for f in

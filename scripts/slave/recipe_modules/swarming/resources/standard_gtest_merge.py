@@ -60,6 +60,7 @@ def merge_shard_results(summary_json, jsons_to_merge):
     'missing_shards': [],
     'per_iteration_data': [],
     'swarming_summary': summary,
+    'test_locations': {},
   }
   for index, result in enumerate(summary['shards']):
     if result is not None:
@@ -82,6 +83,10 @@ def merge_shard_results(summary_json, jsons_to_merge):
           # Set-like fields.
           for key in ('all_tests', 'disabled_tests', 'global_tags'):
             merged[key].update(json_data.get(key), [])
+
+          # Dict-like fields.
+          for key in ('test_locations',):
+            merged[key].update(json_data.get(key, {}))
 
           # 'per_iteration_data' is a list of dicts. Dicts should be merged
           # together, not the 'per_iteration_data' list itself.

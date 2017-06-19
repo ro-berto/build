@@ -59,6 +59,22 @@ GOOD_GTEST_JSON_0 = {
       'status': 'SUCCESS',
     }],
   }],
+  'test_locations': {
+    'AlignedMemoryTest.DynamicAllocation': {
+      'file': 'foo/bar/allocation_test.cc',
+      'line': 123,
+    },
+    'AlignedMemoryTest.ScopedDynamicAllocation': {
+      'file': 'foo/bar/allocation_test.cc',
+      'line': 456,
+    },
+    # This is a test from a different shard, but this happens in practice and we
+    # should not fail if information is repeated.
+    'AlignedMemoryTest.StaticAlignment': {
+      'file': 'foo/bar/allocation_test.cc',
+      'line': 12,
+    },
+  },
 }
 
 
@@ -92,6 +108,16 @@ GOOD_GTEST_JSON_1 = {
       'status': 'SUCCESS',
     }],
   }],
+  'test_locations': {
+    'AlignedMemoryTest.StackAlignment': {
+      'file': 'foo/bar/allocation_test.cc',
+      'line': 789,
+    },
+    'AlignedMemoryTest.StaticAlignment': {
+      'file': 'foo/bar/allocation_test.cc',
+      'line': 12,
+    },
+  },
 }
 
 
@@ -150,6 +176,24 @@ GOOD_GTEST_JSON_MERGED = {
       }
       ],
   },
+  'test_locations': {
+    'AlignedMemoryTest.StackAlignment': {
+      'file': 'foo/bar/allocation_test.cc',
+      'line': 789,
+    },
+    'AlignedMemoryTest.StaticAlignment': {
+      'file': 'foo/bar/allocation_test.cc',
+      'line': 12,
+    },
+    'AlignedMemoryTest.DynamicAllocation': {
+      'file': 'foo/bar/allocation_test.cc',
+      'line': 123,
+    },
+    'AlignedMemoryTest.ScopedDynamicAllocation': {
+      'file': 'foo/bar/allocation_test.cc',
+      'line': 456,
+    },
+  },
 }
 
 
@@ -190,6 +234,16 @@ BAD_GTEST_JSON_ONLY_1_SHARD = {
       'status': 'SUCCESS',
     }],
   }],
+  'test_locations': {
+    'AlignedMemoryTest.StackAlignment': {
+      'file': 'foo/bar/allocation_test.cc',
+      'line': 789,
+    },
+    'AlignedMemoryTest.StaticAlignment': {
+      'file': 'foo/bar/allocation_test.cc',
+      'line': 12,
+    },
+  },
 }
 
 

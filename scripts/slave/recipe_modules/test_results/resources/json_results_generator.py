@@ -82,6 +82,7 @@ class JSONResultsGenerator(object):
   TESTS = 'tests'
   VERSION = 'version'
   VERSION_NUMBER = 3
+  TEST_LOCATIONS = 'test_locations'
 
   RESULTS_FILENAME = 'results.json'
   TIMES_MS_FILENAME = 'times_ms.json'
@@ -92,7 +93,8 @@ class JSONResultsGenerator(object):
                test_results_map, svn_revisions=None,
                master_name='',
                path_delimiter='/',
-               file_writer=None):
+               file_writer=None,
+               test_locations=None):
     """Modifies the results.json file. Grabs it off the archive directory
     if it is not found locally.
 
@@ -111,12 +113,14 @@ class JSONResultsGenerator(object):
       file_writer: If given, the parameter is used to write JSON data to a file.
           The parameter must be the function that takes two arguments,
           'file_path' and 'data' to be written into the file_path.
+      test_locations: Dictionary mapping test names to a dict like this:
+          {'file': 'path/to/file', 'line': 123}.
     """
     self._builder_name = builder_name
     self._build_number = build_number
     self._path_delimiter = path_delimiter
     self._results_directory = results_file_base_path
-
+    self._test_locations = test_locations
     self._test_results_map = test_results_map
 
     self._svn_revisions = svn_revisions
@@ -154,6 +158,7 @@ class JSONResultsGenerator(object):
       tests[test_name] = self._make_test_data(test_name)
 
     self._insert_failure_map(results)
+    results[self.TEST_LOCATIONS] = self._test_locations
 
     return results
 

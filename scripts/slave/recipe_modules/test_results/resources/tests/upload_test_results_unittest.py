@@ -29,8 +29,7 @@ class UploadTestResultsTest(unittest.TestCase):
     pass
 
   def test_no_test_data(self):
-    results = upload_test_results.get_results_map_from_json(
-        json.dumps({}))
+    results = upload_test_results.get_results_map_from({})
     self.assertEquals({}, results)
 
   def test_multiple_results(self):
@@ -42,8 +41,7 @@ class UploadTestResultsTest(unittest.TestCase):
             ],
         }],
     }
-    results = upload_test_results.get_results_map_from_json(
-        json.dumps(contents))
+    results = upload_test_results.get_results_map_from(contents)
     self.assertEquals('FAIL', results['Fake.Test'][0].status)
     self.assertEquals(1, results['Fake.Test'][0].test_run_time)
     self.assertEquals('PASS', results['Fake.Test'][1].status)
@@ -57,8 +55,7 @@ class UploadTestResultsTest(unittest.TestCase):
             ],
         }],
     }
-    results = upload_test_results.get_results_map_from_json(
-        json.dumps(contents))
+    results = upload_test_results.get_results_map_from(contents)
     self.assertEquals('UNKNOWN', results['Fake.Test'][0].status)
     self.assertEquals(1, results['Fake.Test'][0].test_run_time)
 
@@ -73,8 +70,7 @@ class UploadTestResultsTest(unittest.TestCase):
             ],
         }],
     }
-    results = upload_test_results.get_results_map_from_json(
-        json.dumps(contents))
+    results = upload_test_results.get_results_map_from(contents)
     self.assertEquals(results['Disabled.Test'][0].DISABLED,
                       results['Disabled.Test'][0].modifier)
     self.assertEquals(results['Disabled.Test'][0].DISABLED,
