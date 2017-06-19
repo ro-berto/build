@@ -59,7 +59,7 @@ SPEC = {
        'BUILD_CONFIG': 'Release',
        'TARGET_BITS': 64,
      },
-     'compile_targets': [ 'chromium_builder_tests' ],
+     'compile_targets': [ 'chrome', 'chromium_builder_tests' ],
      'tests': steps.GOMA_TESTS,
      'goma_staging': True,
      'testing': {
