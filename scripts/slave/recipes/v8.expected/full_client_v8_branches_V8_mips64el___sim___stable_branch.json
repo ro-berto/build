@@ -506,8 +506,6 @@
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "--eventlog-endpoint",
-      "prod",
       "--verbose",
       "[START_DIR]/v8/out/Release/unittests.isolated.gen.json"
     ],

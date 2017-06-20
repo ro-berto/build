@@ -512,8 +512,6 @@
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "--eventlog-endpoint",
-      "prod",
       "[BUILDER_CACHE]/android_experimental/src/out/Release/AppRTCMobileTestStubbedVideoIO.isolated.gen.json"
     ],
     "name": "isolate tests",

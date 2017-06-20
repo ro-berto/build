@@ -528,8 +528,6 @@
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "--eventlog-endpoint",
-      "prod",
       "[BUILDER_CACHE]/linux_ubsan_vptr/src/out/Release/audio_decoder_unittests.isolated.gen.json",
       "[BUILDER_CACHE]/linux_ubsan_vptr/src/out/Release/common_audio_unittests.isolated.gen.json",
       "[BUILDER_CACHE]/linux_ubsan_vptr/src/out/Release/common_video_unittests.isolated.gen.json",

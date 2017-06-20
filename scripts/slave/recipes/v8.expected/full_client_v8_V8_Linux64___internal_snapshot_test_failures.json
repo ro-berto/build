@@ -505,8 +505,6 @@
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "--eventlog-endpoint",
-      "prod",
       "--verbose",
       "[START_DIR]/v8/out/Release/bot_default.isolated.gen.json"
     ],
@@ -1738,8 +1736,6 @@
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "--eventlog-endpoint",
-      "prod",
       "--verbose",
       "[START_DIR]/v8/out/Release/bot_default.isolated.gen.json"
     ],
@@ -2431,8 +2427,6 @@
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "--eventlog-endpoint",
-      "prod",
       "--verbose",
       "[START_DIR]/v8/out/Release/bot_default.isolated.gen.json"
     ],

@@ -500,8 +500,6 @@
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "--eventlog-endpoint",
-      "prod",
       "[BUILDER_CACHE]/linux_dbg/src/out/Debug/audio_decoder_unittests.isolated.gen.json",
       "[BUILDER_CACHE]/linux_dbg/src/out/Debug/common_audio_unittests.isolated.gen.json",
       "[BUILDER_CACHE]/linux_dbg/src/out/Debug/common_video_unittests.isolated.gen.json",

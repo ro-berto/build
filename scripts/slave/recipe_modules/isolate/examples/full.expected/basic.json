@@ -130,8 +130,6 @@
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver-dev.appspot.com",
-      "--eventlog-endpoint",
-      "prod",
       "RECIPE_PACKAGE_REPO[build]/test1.isolated.gen.json",
       "RECIPE_PACKAGE_REPO[build]/test2.isolated.gen.json"
     ],

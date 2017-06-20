@@ -713,8 +713,6 @@
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "--eventlog-endpoint",
-      "prod",
       "--verbose",
       "[BUILDER_CACHE]/linux/src/out/Release/telemetry_gpu_unittests.isolated.gen.json"
     ],

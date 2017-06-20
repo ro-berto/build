@@ -193,7 +193,6 @@ class IsolateApi(recipe_api.RecipeApi):
             'batcharchive',
             '--dump-json', self.m.json.output(),
             '--isolate-server', self._isolate_server,
-            '--eventlog-endpoint', 'prod',
         ] + (['--verbose'] if verbose else []) +  [
             build_dir.join('%s.isolated.gen.json' % t) for t in batch_targets
         ]

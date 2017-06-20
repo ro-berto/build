@@ -905,8 +905,6 @@
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "--eventlog-endpoint",
-      "prod",
       "--verbose",
       "[BUILDER_CACHE]/mac/src/out/Release/gl_tests.isolated.gen.json"
     ],
@@ -1756,8 +1754,6 @@
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "--eventlog-endpoint",
-      "prod",
       "--verbose",
       "[BUILDER_CACHE]/mac/src/out/Release/gl_tests.isolated.gen.json"
     ],
@@ -2607,8 +2603,6 @@
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "--eventlog-endpoint",
-      "prod",
       "--verbose",
       "[BUILDER_CACHE]/mac/src/out/Release/gl_tests.isolated.gen.json"
     ],

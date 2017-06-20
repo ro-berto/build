@@ -530,8 +530,6 @@
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "--eventlog-endpoint",
-      "prod",
       "[BUILDER_CACHE]/android_rel/src/out/Release/AppRTCMobileTest.isolated.gen.json",
       "[BUILDER_CACHE]/android_rel/src/out/Release/android_junit_tests.isolated.gen.json",
       "[BUILDER_CACHE]/android_rel/src/out/Release/audio_decoder_unittests.isolated.gen.json",

@@ -714,8 +714,6 @@
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "--eventlog-endpoint",
-      "prod",
       "--verbose",
       "[BUILDER_CACHE]/linux/src/out/Release/webkit_layout_tests.isolated.gen.json"
     ],

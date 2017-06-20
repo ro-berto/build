@@ -522,8 +522,6 @@
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "--eventlog-endpoint",
-      "prod",
       "[BUILDER_CACHE]/Mac_Asan/src/out/Release/audio_decoder_unittests.isolated.gen.json",
       "[BUILDER_CACHE]/Mac_Asan/src/out/Release/common_audio_unittests.isolated.gen.json",
       "[BUILDER_CACHE]/Mac_Asan/src/out/Release/common_video_unittests.isolated.gen.json",
