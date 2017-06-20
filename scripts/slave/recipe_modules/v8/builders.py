@@ -874,11 +874,12 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing(2),
-          Test262(3),
+          Test262(4),
           Mozilla,
           Benchmarks,
         ],
         'testing': {'platform': 'linux'},
+        'swarming_properties': SWARMING_FYI_PROPS,
       },
       'V8 Linux - arm64 - sim - MSAN': {
         # 'simulate_arm' is actually implied by 'msan'. We still set it
@@ -2186,7 +2187,7 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing(3),
-          Test262(4),
+          Test262(5),
           Mozilla,
           Benchmarks,
         ],
