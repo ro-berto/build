@@ -59,16 +59,6 @@ _REMOTE_RUN_PASSTHROUGH = {
   'chromium.fyi': [
     'ios-simulator',
   ],
-
-  # CrOS enrolled (crbug.com/733790)
-  'chromiumos': _REMOTE_RUN_PASSTHROUGH_ALL,
-  'chromiumos.tryserver': _REMOTE_RUN_PASSTHROUGH_ALL,
-  'chromeos': _REMOTE_RUN_PASSTHROUGH_ALL,
-  'chromeos.chrome': _REMOTE_RUN_PASSTHROUGH_ALL,
-  'chromeos.continuous': _REMOTE_RUN_PASSTHROUGH_ALL,
-  'chromeos.branch': _REMOTE_RUN_PASSTHROUGH_ALL,
-  'chromeos_release': _REMOTE_RUN_PASSTHROUGH_ALL,
-  'chromeos.infra': _REMOTE_RUN_PASSTHROUGH_ALL,
 }
 
 
