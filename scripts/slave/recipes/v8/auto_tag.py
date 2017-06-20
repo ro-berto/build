@@ -59,7 +59,8 @@ class V8Version(object):
             self.patch == other.patch)
 
   def __str__(self):
-    return '%s.%s.%s.%s' % (self.major, self.minor, self.build, self.patch)
+    patch_str = '.%s' % self.patch if self.patch and self.patch != '0' else ''
+    return '%s.%s.%s%s' % (self.major, self.minor, self.build, patch_str)
 
   def with_incremented_patch(self):
     return V8Version(
