@@ -146,15 +146,18 @@ for mode in ['debug', 'release', 'product']:
 
 
 def RunSteps(api):
+  buildername = str(api.properties.get('buildername')) # Convert from unicode.
+  (buildername, _, channel) = buildername.rpartition('-')
+  assert channel in ['be', 'dev', 'stable', 'integration', 'try']
+  b = builders[buildername]
+
   api.gclient.set_config('dart')
+  if channel == 'try':
+    api.gclient.c.solutions[0].url = 'https://dart.googlesource.com/sdk.git'
+
   api.path.c.dynamic_paths['tools'] = None
   api.bot_update.ensure_checkout()
   api.path['tools'] = api.path['checkout'].join('tools')
-  buildername = str(api.properties.get('buildername')) # Convert from unicode.
-  (buildername, _, channel) = buildername.rpartition('-')
-  assert channel in ['be', 'dev', 'stable', 'integration']
-  b = builders[buildername]
-
   # buildbot sets 'clobber' to the empty string which is falsey, check with 'in'
   if 'clobber' in api.properties:
     with api.context(cwd=api.path['checkout']):
@@ -222,3 +225,7 @@ def GenTests(api):
       api.test('precomp-linux-debug-x64') + api.platform('linux', 64) +
       api.properties.generic(mastername='client.dart',
                              buildername='precomp-linux-debug-x64-be'))
+   yield (
+      api.test('vm-mac-debug-x64-try') + api.platform('mac', 64) +
+      api.properties.generic(mastername='client.dart',
+                             buildername='vm-mac-debug-x64-try'))
