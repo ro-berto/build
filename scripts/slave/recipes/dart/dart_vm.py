@@ -119,7 +119,7 @@ for mode in ['debug', 'release', 'product']:
     'mode': mode,
     'target_arch': 'x64',
     'env': default_envs['linux'],
-    'test_args': ['-cprecompiler', '-rdart_precompiled', '--use-blobs',
+    'test_args': ['-cprecompiler', '-rdart_precompiled',
                   '--builder-tag=no_ipv6'],
     'build_args': ['runtime_precompiled'],
     'archive_core_dumps': True,

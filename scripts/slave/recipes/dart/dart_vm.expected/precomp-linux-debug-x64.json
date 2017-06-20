@@ -94,7 +94,6 @@
       "--copy-coredumps",
       "-cprecompiler",
       "-rdart_precompiled",
-      "--use-blobs",
       "--builder-tag=no_ipv6"
     ],
     "cwd": "[START_DIR]/sdk",
