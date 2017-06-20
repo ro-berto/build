@@ -139,7 +139,7 @@ SPEC['builders'] = {
   },
   'WebKit Mac Builder': {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb'],
+    'chromium_apply_config': ['mb', 'force_mac_toolchain_off'],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
@@ -157,7 +157,7 @@ SPEC['builders'] = {
   },
   'WebKit Mac10.11 (retina)': {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb'],
+    'chromium_apply_config': ['mb', 'force_mac_toolchain_off'],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
@@ -180,7 +180,7 @@ SPEC['builders'] = {
   },
   'WebKit Mac10.9': {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb'],
+    'chromium_apply_config': ['mb', 'force_mac_toolchain_off'],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
@@ -202,7 +202,7 @@ SPEC['builders'] = {
   },
   'WebKit Mac10.10': {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb'],
+    'chromium_apply_config': ['mb', 'force_mac_toolchain_off'],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
@@ -224,7 +224,7 @@ SPEC['builders'] = {
   },
   'WebKit Mac10.11': {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb'],
+    'chromium_apply_config': ['mb', 'force_mac_toolchain_off'],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
@@ -246,7 +246,7 @@ SPEC['builders'] = {
   },
   'WebKit Mac10.12': {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb'],
+    'chromium_apply_config': ['mb', 'force_mac_toolchain_off'],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
@@ -268,7 +268,7 @@ SPEC['builders'] = {
   },
   'WebKit Mac Builder (dbg)': {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb'],
+    'chromium_apply_config': ['mb', 'force_mac_toolchain_off'],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Debug',
@@ -286,7 +286,7 @@ SPEC['builders'] = {
   },
   'WebKit Mac10.11 (dbg)': {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb'],
+    'chromium_apply_config': ['mb', 'force_mac_toolchain_off'],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Debug',

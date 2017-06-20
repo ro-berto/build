@@ -872,9 +872,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     self.set_precommit_mode()
     self.configure_build(bot_config_object, override_bot_type='builder_tester')
 
-    if bot_config.get('force_mac_toolchain_off', False):
-      self.m.chromium.apply_config('force_mac_toolchain_off')
-
     self.m.chromium_swarming.configure_swarming('chromium', precommit=True)
 
     self.m.chromium.apply_config('trybot_flavor')

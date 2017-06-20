@@ -5,11 +5,10 @@
 from recipe_engine.types import freeze
 
 
-def simple_bot(bot_id, analyze_mode=None, force_mac_toolchain_off=False):
+def simple_bot(bot_id, analyze_mode=None):
   return {
     'bot_ids': [bot_id],
     'analyze_mode': analyze_mode,
-    'force_mac_toolchain_off': force_mac_toolchain_off
   }
 
 
@@ -36,41 +35,41 @@ TRYBOTS = freeze({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Mac Builder (dbg)',
         'tester': 'WebKit Mac10.11 (dbg)',
-      }, force_mac_toolchain_off=True),
+      }),
       'mac10.9_blink_rel': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Mac Builder',
         'tester': 'WebKit Mac10.9',
-      }, force_mac_toolchain_off=True),
+      }),
       'mac10.9_blink_compile_dbg': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Mac Builder (dbg)',
         'tester': 'WebKit Mac10.11 (dbg)',
-      }, analyze_mode='compile', force_mac_toolchain_off=True),
+      }, analyze_mode='compile'),
       'mac10.9_blink_compile_rel': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Mac Builder',
         'tester': 'WebKit Mac10.9',
-      }, analyze_mode='compile', force_mac_toolchain_off=True),
+      }, analyze_mode='compile'),
       'mac10.10_blink_rel': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Mac Builder',
         'tester': 'WebKit Mac10.10',
-      }, force_mac_toolchain_off=True),
+      }),
       'mac10.11_blink_rel': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Mac Builder',
         'tester': 'WebKit Mac10.11',
-      }, force_mac_toolchain_off=True),
+      }),
       'mac10.11_retina_blink_rel': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Mac10.11 (retina)',
-      }, force_mac_toolchain_off=True),
+      }),
       'mac10.12_blink_rel': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Mac Builder',
         'tester': 'WebKit Mac10.12',
-      }, force_mac_toolchain_off=True),
+      }),
       'win7_blink_dbg': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Win Builder (dbg)',
