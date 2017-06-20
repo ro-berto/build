@@ -740,6 +740,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
         'triggers': [
           'Android64 Tests (L Nexus9)',
+          'Android64 Tests (N Pixel)',
         ],
       },
       'Android32 Tests (L Nexus4)': {
@@ -842,6 +843,21 @@ BUILDERS = freeze({
         },
         'webrtc_config_kwargs': {
           'PERF_ID': 'webrtc-android-tests-nexus9',
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'Android64 Builder',
+        'testing': {'platform': 'linux'},
+      },
+      'Android64 Tests (N Pixel)': {
+        'recipe_config': 'webrtc_android_perf',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 64,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'webrtc-android-tests-pixel-nougat',
         },
         'bot_type': 'tester',
         'parent_buildername': 'Android64 Builder',

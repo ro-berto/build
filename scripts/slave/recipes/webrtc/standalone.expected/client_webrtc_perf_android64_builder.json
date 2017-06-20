@@ -499,10 +499,18 @@
           "parent_got_revision_cp": "refs/heads/master@{#170242}",
           "revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
         }
+      },
+      {
+        "builder_name": "Android64 Tests (N Pixel)",
+        "properties": {
+          "parent_got_revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+          "parent_got_revision_cp": "refs/heads/master@{#170242}",
+          "revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
+        }
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Android64 Tests (L Nexus9)@@@"
+      "@@@STEP_TEXT@Android64 Tests (L Nexus9)<br />Android64 Tests (N Pixel)@@@"
     ]
   },
   {
