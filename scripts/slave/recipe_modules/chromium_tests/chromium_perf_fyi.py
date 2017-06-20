@@ -70,6 +70,14 @@ _AddBuildSpec('Android Builder FYI', 'android', 'android', target_bits=32,
                                      'push_apps_to_background_apk',
                                      'system_webview_apk',
                                      'system_webview_shell_apk',])
+_AddBuildSpec('Android arm64 Builder FYI', 'android', 'android',
+              extra_compile_targets=['android_tools',
+                                     'cc_perftests',
+                                     'chrome_public_apk',
+                                     'gpu_perftests',
+                                     'push_apps_to_background_apk',
+                                     'system_webview_apk',
+                                     'system_webview_shell_apk',])
 
 _AddTestSpec('Android Power Nexus 5X Perf', 'fyi-android-power-nexus-5x',
              'android', target_bits=32, num_device_shards=7,
@@ -77,7 +85,7 @@ _AddTestSpec('Android Power Nexus 5X Perf', 'fyi-android-power-nexus-5x',
 
 
 _AddIsolatedTestSpec('Android Nexus5X WebView Perf', 'fyi-android-swarming-n5x',
-                     'android', parent_buildername='Android Builder FYI',
+                     'android', parent_buildername='Android arm64 Builder FYI',
                      target_bits=32)
 
 _AddBuildSpec('Win Builder FYI', 'win', 'win', enable_swarming=True,
