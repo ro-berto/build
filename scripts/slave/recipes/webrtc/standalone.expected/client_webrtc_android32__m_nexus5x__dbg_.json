@@ -523,6 +523,8 @@
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
+      "--eventlog-endpoint",
+      "prod",
       "[BUILDER_CACHE]/Android32__M_Nexus5X__dbg_/src/out/Debug/AppRTCMobileTest.isolated.gen.json",
       "[BUILDER_CACHE]/Android32__M_Nexus5X__dbg_/src/out/Debug/android_junit_tests.isolated.gen.json",
       "[BUILDER_CACHE]/Android32__M_Nexus5X__dbg_/src/out/Debug/audio_decoder_unittests.isolated.gen.json",

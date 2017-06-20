@@ -618,6 +618,8 @@
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
+      "--eventlog-endpoint",
+      "prod",
       "--verbose",
       "[START_DIR]/src/out/Release/chrome_public_test_apk.isolated.gen.json"
     ],

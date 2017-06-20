@@ -543,6 +543,8 @@
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
+      "--eventlog-endpoint",
+      "prod",
       "[START_DIR]\\src\\out\\Release\\dummy_target_1.isolated.gen.json",
       "[START_DIR]\\src\\out\\Release\\dummy_target_2.isolated.gen.json"
     ],
@@ -941,6 +943,8 @@
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
+      "--eventlog-endpoint",
+      "prod",
       "[START_DIR]\\src\\out\\Release\\dummy_target_1.isolated.gen.json",
       "[START_DIR]\\src\\out\\Release\\dummy_target_2.isolated.gen.json"
     ],

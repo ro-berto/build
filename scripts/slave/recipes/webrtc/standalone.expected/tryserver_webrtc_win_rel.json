@@ -516,6 +516,8 @@
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
+      "--eventlog-endpoint",
+      "prod",
       "[BUILDER_CACHE]\\win_rel\\src\\out\\Release\\audio_decoder_unittests.isolated.gen.json",
       "[BUILDER_CACHE]\\win_rel\\src\\out\\Release\\common_audio_unittests.isolated.gen.json",
       "[BUILDER_CACHE]\\win_rel\\src\\out\\Release\\common_video_unittests.isolated.gen.json",

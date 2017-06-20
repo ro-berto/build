@@ -582,6 +582,8 @@
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
+      "--eventlog-endpoint",
+      "prod",
       "--verbose",
       "[START_DIR]/src/out/Release/tab_capture_end2end_tests.isolated.gen.json"
     ],
