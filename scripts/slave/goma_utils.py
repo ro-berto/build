@@ -21,6 +21,7 @@ import subprocess
 import sys
 import tempfile
 import time
+import zipfile
 
 from common import chromium_utils
 from slave import slave_utils
@@ -204,13 +205,37 @@ def UploadGomaCompilerProxyInfo(override_gsutil=None,
 
   gomacc_logs = GetListOfGomaccInfoAfterCompilerProxyStart()
   if gomacc_logs:
-    for log in gomacc_logs:
-      UploadToGomaLogGS(
-          log, os.path.basename(log),
-          metadata=metadata,
-          override_gsutil=override_gsutil)
-
+    UploadGomaccInfo(gomacc_logs,
+                     metadata=metadata,
+                     override_gsutil=override_gsutil)
   return viewer_url
+
+
+def UploadGomaccInfo(gomacc_logs,
+                     metadata=None,
+                     override_gsutil=None):
+  """Upload gomacc logs if any
+
+  Args:
+    gomacc_logs: An array that contains paths to gomacc logs
+    override_gsutil: gsutil path to override
+    metadata: metadata which will be attached as gs metadata
+  """
+
+  zipfile_path = tempfile.NamedTemporaryFile(delete=False)
+  try:
+    with zipfile.ZipFile(zipfile_path, 'w') as zf:
+      for log in gomacc_logs:
+        zf.write(log, arcname=os.path.basename(log))
+
+    # Taking the first name as gomacc log filename on gs.
+    gs_zipfile_name = os.path.basename(gomacc_logs[0]) + '.zip'
+    UploadToGomaLogGS(zipfile_path.name, gs_zipfile_name,
+                      metadata=metadata,
+                      override_gsutil=override_gsutil)
+  finally:
+    os.remove(zipfile_path.name)
+
 
 def UploadNinjaLog(
     outdir, compiler, command, exit_status, override_gsutil=None):
