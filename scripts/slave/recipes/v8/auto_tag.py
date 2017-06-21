@@ -33,61 +33,7 @@ DEPS = [
 
 REPO = 'https://chromium.googlesource.com/v8/v8'
 BRANCH_RE = re.compile(r'^\d+\.\d+$')
-VERSION_FILE = 'include/v8-version.h'
-VERSION_LINE_RE = r'^#define %s\s+(\d*)$'
-VERSION_LINE_REPLACEMENT = '#define %s %s'
-V8_MAJOR = 'V8_MAJOR_VERSION'
-V8_MINOR = 'V8_MINOR_VERSION'
-V8_BUILD = 'V8_BUILD_NUMBER'
-V8_PATCH = 'V8_PATCH_LEVEL'
 MAX_COMMIT_WAIT_RETRIES = 5
-
-
-class V8Version(object):
-  """A v8 version as used for tagging (with patch level), e.g. '3.4.5.1'."""
-
-  def __init__(self, major, minor, build, patch):
-    self.major = major
-    self.minor = minor
-    self.build = build
-    self.patch = patch
-
-  def __eq__(self, other):
-    return (self.major == other.major and
-            self.minor == other.minor and
-            self.build == other.build and
-            self.patch == other.patch)
-
-  def __str__(self):
-    patch_str = '.%s' % self.patch if self.patch and self.patch != '0' else ''
-    return '%s.%s.%s%s' % (self.major, self.minor, self.build, patch_str)
-
-  def with_incremented_patch(self):
-    return V8Version(
-        self.major, self.minor, self.build, str(int(self.patch) + 1))
-
-  def update_version_file_blob(self, blob):
-    """Takes a version file's text and returns it with this object's version.
-    """
-    def sub(label, value, text):
-      return re.sub(
-          VERSION_LINE_RE % label,
-          VERSION_LINE_REPLACEMENT % (label, value),
-          text,
-          flags=re.M,
-      )
-    blob = sub(V8_MAJOR, self.major, blob)
-    blob = sub(V8_MINOR, self.minor, blob)
-    blob = sub(V8_BUILD, self.build, blob)
-    return sub(V8_PATCH, self.patch, blob)
-
-  @staticmethod
-  def from_version_file(blob):
-    major = re.search(VERSION_LINE_RE % V8_MAJOR, blob, re.M).group(1)
-    minor = re.search(VERSION_LINE_RE % V8_MINOR, blob, re.M).group(1)
-    build = re.search(VERSION_LINE_RE % V8_BUILD, blob, re.M).group(1)
-    patch = re.search(VERSION_LINE_RE % V8_PATCH, blob, re.M).group(1)
-    return V8Version(major, minor, build, patch)
 
 
 def InitClean(api):
@@ -106,14 +52,6 @@ def Git(api, *args, **kwargs):
         stdout=api.raw_io.output_text(),
         **kwargs
     ).stdout
-
-
-def GetVersionContent(api, ref, desc):
-  """Read the content of the version file at a paricular ref."""
-  return Git(
-      api, 'show', '%s:%s' % (ref, VERSION_FILE),
-      name='Check %s version file' % desc,
-  )
 
 
 def GetCommitForRef(api, repo, ref):
@@ -170,7 +108,7 @@ def IncrementVersion(api, ref, latest_version, latest_version_file):
   # Write file to disk.
   api.file.write(
       'Increment version',
-      api.path['checkout'].join(VERSION_FILE),
+      api.path['checkout'].join(api.v8.VERSION_FILE),
       latest_version_file,
   )
 
@@ -189,8 +127,7 @@ def IncrementVersion(api, ref, latest_version, latest_version_file):
   def has_landed():
     with api.context(cwd=api.path['checkout']):
       api.git('fetch', REPO, 'refs/branch-heads/*:refs/remotes/branch-heads/*')
-    real_latest_version = V8Version.from_version_file(
-        GetVersionContent(api, ref, 'committed'))
+    real_latest_version = api.v8.read_version_from_ref(ref, 'committed')
     return real_latest_version == latest_version
 
   # Wait for commit to land (i.e. wait for gnumbd).
@@ -228,13 +165,11 @@ def RunSteps(api):
   InitClean(api)
 
   # Check the last two versions.
-  latest_version_file = GetVersionContent(
-      api, local_branch_ref, 'latest')
-  latest_version = V8Version.from_version_file(latest_version_file)
+  latest_version_file = api.v8.read_version_file(local_branch_ref, 'latest')
+  latest_version = api.v8.version_from_file(latest_version_file)
 
-  previous_version_file = GetVersionContent(
-      api, local_branch_ref + '~1', 'previous')
-  previous_version = V8Version.from_version_file(previous_version_file)
+  previous_version = api.v8.read_version_from_ref(
+      local_branch_ref + '~1', 'previous')
 
   # If the last two commits have the same version, we need to create a version
   # increment.
@@ -253,8 +188,7 @@ def RunSteps(api):
   # If fetching the version change from above has timed out, we don't want
   # to set the wrong tag.
   head = Git(api, 'log', '-n1', '--format=%H', local_branch_ref).strip()
-  head_version = V8Version.from_version_file(
-      GetVersionContent(api, head, 'head'))
+  head_version = api.v8.read_version_from_ref(head, 'head')
   tag = Git(api, 'describe', '--tags', head).strip()
 
   if tag != str(head_version):
@@ -279,14 +213,6 @@ def RunSteps(api):
     LogStep(api, 'There is no new lkgr.')
 
 
-# Excerpt of the v8 version file.
-VERSION_FILE_TMPL = """
-#define V8_MAJOR_VERSION 3
-#define V8_MINOR_VERSION 4
-#define V8_BUILD_NUMBER 3
-#define V8_PATCH_LEVEL %d
-"""
-
 def GenTests(api):
   hsh_old = '74882b7a8e55268d1658f83efefa1c2585cee723'
   hsh_new = 'c1a7fd0c98a80c52fcf6763850d2ee1c41cfe8d6'
@@ -294,21 +220,6 @@ def GenTests(api):
   def stdout(step_name, text):
     return api.override_step_data(
         step_name, api.raw_io.stream_output(text, stream='stdout'))
-
-  def wait_for_commit(patch_level, count, found_commit):
-    """Simulate waiting for the commit to show up after gnumbd processing.
-
-    Args:
-      patch_level: The version patch level from before committing.
-      count: The 'count'th time we wait for the commit. Assume count > 0.
-      found_commit: Indicates that the commit has been found.
-    """
-    # Recipe step name disambiguation.
-    suffix = " (%d)" % count if count > 1 else ""
-    return stdout(
-        'Check committed version file' + suffix,
-        VERSION_FILE_TMPL % (patch_level + bool(found_commit)),
-    )
 
   def test(name, patch_level_previous, patch_level_latest,
            patch_level_after_commit, current_lkgr, head, head_tag,
@@ -318,18 +229,9 @@ def GenTests(api):
         api.properties.generic(mastername='client.v8.fyi',
                                buildername='Auto-tag',
                                branch='3.4') +
-        stdout(
-            'Check latest version file',
-            VERSION_FILE_TMPL % patch_level_latest,
-        ) +
-        stdout(
-            'Check previous version file',
-            VERSION_FILE_TMPL % patch_level_previous,
-        ) +
-        stdout(
-            'Check head version file',
-            VERSION_FILE_TMPL % patch_level_after_commit,
-        ) +
+        api.v8.version_file(patch_level_latest, 'latest') +
+        api.v8.version_file(patch_level_previous, 'previous') +
+        api.v8.version_file(patch_level_after_commit, 'head') +
         stdout('git log', head) +
         stdout('git describe', head_tag) +
         stdout(
@@ -342,8 +244,11 @@ def GenTests(api):
     else:
       # Test data for the loop waiting for the version-increment commit.
       for count in range(1, wait_count + 1):
-        test_data += wait_for_commit(
-            patch_level_latest, count, count == commit_found_count)
+        test_data += api.v8.version_file(
+            patch_level_latest + bool(count == commit_found_count),
+            'committed',
+            count,
+        )
     return test_data
 
   # Test where version, the tag at HEAD and the lkgr are up-to-date.

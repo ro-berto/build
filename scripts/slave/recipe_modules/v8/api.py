@@ -43,6 +43,52 @@ MIPS_DIR = 'mips-mti-linux-gnu/2015.01-7'
 TEST_RUNNER_PARSER = argparse.ArgumentParser()
 TEST_RUNNER_PARSER.add_argument('--extra-flags')
 
+VERSION_LINE_RE = r'^#define %s\s+(\d*)$'
+VERSION_LINE_REPLACEMENT = '#define %s %s'
+V8_MAJOR = 'V8_MAJOR_VERSION'
+V8_MINOR = 'V8_MINOR_VERSION'
+V8_BUILD = 'V8_BUILD_NUMBER'
+V8_PATCH = 'V8_PATCH_LEVEL'
+
+
+class V8Version(object):
+  """A v8 version as used for tagging (with patch level), e.g. '3.4.5.1'."""
+
+  def __init__(self, major, minor, build, patch):
+    self.major = major
+    self.minor = minor
+    self.build = build
+    self.patch = patch
+
+  def __eq__(self, other):
+    return (self.major == other.major and
+            self.minor == other.minor and
+            self.build == other.build and
+            self.patch == other.patch)
+
+  def __str__(self):
+    patch_str = '.%s' % self.patch if self.patch and self.patch != '0' else ''
+    return '%s.%s.%s%s' % (self.major, self.minor, self.build, patch_str)
+
+  def with_incremented_patch(self):
+    return V8Version(
+        self.major, self.minor, self.build, str(int(self.patch) + 1))
+
+  def update_version_file_blob(self, blob):
+    """Takes a version file's text and returns it with this object's version.
+    """
+    def sub(label, value, text):
+      return re.sub(
+          VERSION_LINE_RE % label,
+          VERSION_LINE_REPLACEMENT % (label, value),
+          text,
+          flags=re.M,
+      )
+    blob = sub(V8_MAJOR, self.major, blob)
+    blob = sub(V8_MINOR, self.minor, blob)
+    blob = sub(V8_BUILD, self.build, blob)
+    return sub(V8_PATCH, self.patch, blob)
+
 
 class V8Api(recipe_api.RecipeApi):
   BUILDERS = builders.BUILDERS
@@ -71,6 +117,8 @@ class V8Api(recipe_api.RecipeApi):
     'win32_dbg_archive': 'gs://chromium-v8/v8-win32-dbg',
     'v8_for_dart_archive': 'gs://chromium-v8/v8-for-dart-rel',
   }
+
+  VERSION_FILE = 'include/v8-version.h'
 
   def apply_bot_config(self, builders, tryserver_check=True):
     """Entry method for using the v8 api.
@@ -1285,3 +1333,24 @@ class V8Api(recipe_api.RecipeApi):
     step_result = self.m.step(text, cmd=None)
     for culprit in culprit_range:
       step_result.presentation.links[culprit[:8]] = COMMIT_TEMPLATE % culprit
+
+  def read_version_file(self, ref, step_name_desc):
+    """Read and return the version-file content at a paricular ref."""
+    with self.m.context(cwd=self.m.path['checkout']):
+      return self.m.git(
+          'show', '%s:%s' % (ref, self.VERSION_FILE),
+          name='Check %s version file' % step_name_desc,
+          stdout=self.m.raw_io.output_text(),
+      ).stdout
+
+  def read_version_from_ref(self, ref, step_name_desc):
+    """Read and return the version at a paricular ref."""
+    return V8Api.version_from_file(self.read_version_file(ref, step_name_desc))
+
+  @staticmethod
+  def version_from_file(blob):
+    major = re.search(VERSION_LINE_RE % V8_MAJOR, blob, re.M).group(1)
+    minor = re.search(VERSION_LINE_RE % V8_MINOR, blob, re.M).group(1)
+    build = re.search(VERSION_LINE_RE % V8_BUILD, blob, re.M).group(1)
+    patch = re.search(VERSION_LINE_RE % V8_PATCH, blob, re.M).group(1)
+    return V8Version(major, minor, build, patch)

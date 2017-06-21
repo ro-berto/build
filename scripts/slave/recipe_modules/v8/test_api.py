@@ -15,6 +15,14 @@ from . import testing
 STABLE_BRANCH = '4.2'
 BETA_BRANCH = '4.3'
 
+# Excerpt of the v8 version file.
+VERSION_FILE_TMPL = """
+#define V8_MAJOR_VERSION 3
+#define V8_MINOR_VERSION 4
+#define V8_BUILD_NUMBER 3
+#define V8_PATCH_LEVEL %d
+"""
+
 
 def _sanitize_nonalpha(text):
   return ''.join(c if c.isalnum() else '_' for c in text)
@@ -332,6 +340,16 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         {'commit': '[child1 hsh]', 'parents': ['[master-branch-point hsh]']},
       ],
     })
+
+  def version_file(self, patch_level, desc, count=1):
+    # Recipe step name disambiguation.
+    suffix = ' (%d)' % count if count > 1 else ''
+    return self.override_step_data(
+        'Check %s version file%s' % (desc, suffix),
+        self.m.raw_io.stream_output(
+            VERSION_FILE_TMPL % patch_level,
+            stream='stdout'),
+    )
 
   def _get_test_branch_name(self, mastername, buildername):
     if mastername == 'client.dart.fyi':
