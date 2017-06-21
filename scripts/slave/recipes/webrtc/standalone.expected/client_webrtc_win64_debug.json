@@ -510,6 +510,8 @@
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
+      "--eventlog-endpoint",
+      "prod",
       "[BUILDER_CACHE]\\Win64_Debug\\src\\out\\Debug_x64\\audio_decoder_unittests.isolated.gen.json",
       "[BUILDER_CACHE]\\Win64_Debug\\src\\out\\Debug_x64\\common_audio_unittests.isolated.gen.json",
       "[BUILDER_CACHE]\\Win64_Debug\\src\\out\\Debug_x64\\common_video_unittests.isolated.gen.json",

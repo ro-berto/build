@@ -1030,6 +1030,8 @@
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
+      "--eventlog-endpoint",
+      "prod",
       "--verbose",
       "[BUILDER_CACHE]\\win\\src\\out\\Release\\affected_tests.isolated.gen.json"
     ],

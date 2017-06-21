@@ -533,6 +533,8 @@
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
+      "--eventlog-endpoint",
+      "prod",
       "--verbose",
       "[START_DIR]\\v8\\out\\Debug_x64\\bot_default.isolated.gen.json",
       "[START_DIR]\\v8\\out\\Debug_x64\\mozilla.isolated.gen.json",
