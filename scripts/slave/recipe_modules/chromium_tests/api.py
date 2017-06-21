@@ -34,7 +34,6 @@ CHROMIUM_BLINK_TESTS_BUILDERS = freeze([
 # If we are running layout tests, we run on swarming if the buildername is in this list.
 LAYOUT_TESTS_SWARMING_BUILDERS = freeze([
   'linux_chromium_rel_ng',
-  'mac_chromium_rel_ng',
 ])
 
 
@@ -929,25 +928,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
               'got_revision_cp',
             ],
       }
-
-      if buildername == 'linux_chromium_rel_ng':
-        layout_test_extra_args = {
-            'shards': 6,
-            'dimensions': {'os': 'Ubuntu-14.04'},
-        }
-      elif buildername == 'mac_chromium_rel_ng':
-        layout_test_extra_args = {
-            'shards': 8,
-            'dimensions': {'os': 'Mac-10.12'},
-        }
-      else:
-        layout_test_extra_args = {}  # pragma: no cover
-
       add_tests([
           self.steps.SwarmingIsolatedScriptTest(
               name='webkit_layout_tests',
               args=[],
               target_name='webkit_layout_tests_exparchive',
+              shards=6,
+              dimensions={'os': 'Ubuntu-14.04'},
               override_compile_targets=None,
               priority=None,
               expiration=None,
@@ -960,7 +947,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
               waterfall_buildername=buildername,
               merge=merge,
               results_handler=self.steps.LayoutTestResultsHandler(),
-              **layout_test_extra_args
           ),
       ])
 
@@ -998,7 +984,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # TODO(tansell): Remove this once all builders are running layout tests
     # via analyze.
     if layout_tests_strategy == 'add_local':
-        nonanalyze_blink_tests.append(self.steps.BlinkTest())  # pragma: no cover
+        nonanalyze_blink_tests.append(self.steps.BlinkTest())
 
     # Blink tests have to bypass "analyze", see below.
     if compile_targets or nonanalyze_blink_tests:
