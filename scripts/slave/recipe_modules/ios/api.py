@@ -687,7 +687,7 @@ class iOSApi(recipe_api.RecipeApi):
 
     return tasks
 
-  def collect(self, tasks):
+  def collect(self, tasks, upload_test_results=True):
     """Collects the given Swarming task results."""
     failures = set()
     infra_failure = False
@@ -783,7 +783,7 @@ class iOSApi(recipe_api.RecipeApi):
             step_result.presentation.step_text, test_summary_json['step_text'])
 
       # Upload test results JSON to the flakiness dashboard.
-      if self.m.bot_update.last_returned_properties:
+      if self.m.bot_update.last_returned_properties and upload_test_results:
         test_results = self.m.path.join(
           task['task'].task_output_dir, '0', 'full_results.json')
         if self.m.path.exists(test_results):
@@ -803,7 +803,8 @@ class iOSApi(recipe_api.RecipeApi):
         failure = self.m.step.InfraFailure
       raise failure('Failed %s.' % ', '.join(sorted(failures)))
 
-  def test_swarming(self, scripts_dir='src/ios/build/bots/scripts'):
+  def test_swarming(self, scripts_dir='src/ios/build/bots/scripts',
+                    upload_test_results=True):
     """Runs tests on Swarming as instructed by this bot's build config."""
     assert self.__config
 
@@ -823,7 +824,7 @@ class iOSApi(recipe_api.RecipeApi):
       with self.m.step.nest('trigger'):
         self.trigger(tasks)
 
-      self.collect(tasks)
+      self.collect(tasks, upload_test_results)
 
   @property
   def most_recent_app_path(self):
