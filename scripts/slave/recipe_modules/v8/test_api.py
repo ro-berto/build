@@ -48,8 +48,8 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     },
   ]
 
-  def iter_builders(self):
-    return builders.iter_builders()
+  def iter_builders(self, recipe):
+    return builders.iter_builders(recipe)
 
   def output_json(self, has_failures=False, wrong_results=False, flakes=False,
                   unmarked_slow_test=False):
@@ -380,14 +380,15 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         for target in gen_isolate_targets(test_config)
     )
 
-
-  def test(self, mastername, buildername, suffix='', **kwargs):
-    name = '_'.join(filter(bool, [
+  def test_name(self, mastername, buildername, suffix=''):
+    return '_'.join(filter(bool, [
       'full',
       _sanitize_nonalpha(mastername),
       _sanitize_nonalpha(buildername),
       suffix,
     ]))
+
+  def test(self, mastername, buildername, suffix='', **kwargs):
     builders_list = builders.BUILDERS[mastername]['builders']
     bot_config = builders_list[buildername]
     v8_config_kwargs = bot_config.get('v8_config_kwargs', {})
@@ -403,7 +404,8 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       properties_fn = self.m.properties.generic
 
     test = (
-        recipe_test_api.RecipeTestApi.test(name) +
+        recipe_test_api.RecipeTestApi.test(
+            self.test_name(mastername, buildername, suffix)) +
         properties_fn(
             mastername=mastername,
             buildername=buildername,

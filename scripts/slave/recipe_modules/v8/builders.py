@@ -1667,6 +1667,21 @@ BUILDERS = {
       },
     },
   },
+####### Waterfall: client.v8.official
+  'client.v8.official': {
+    'builders': {
+      'V8 Linux64': {
+        'recipe': 'v8/archive',
+        'chromium_apply_config': [
+          'default_compiler', 'v8_ninja', 'goma', 'mb'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'testing': {'platform': 'linux'},
+      },
+    },
+  },
 ####### Waterfall: tryserver.v8
   'tryserver.v8': {
     'builders': {
@@ -2825,8 +2840,15 @@ BUILDERS['client.dart.fyi'] = {'builders': {
 BUILDERS = freeze(BUILDERS)
 BRANCH_BUILDERS = freeze(BRANCH_BUILDERS)
 
-def iter_builders():
+def iter_builders(recipe='v8'):
+  """Iterates tuples of (mastername, builders, buildername, bot_config).
+
+  Args:
+    recipe: Limits iteration to a specific recipe (default: v8).
+  """
   for mastername, master_config in BUILDERS.iteritems():
     builders = master_config['builders']
     for buildername, bot_config in builders.iteritems():
+      if bot_config.get('recipe', 'v8') != recipe:
+        continue
       yield mastername, builders, buildername, bot_config

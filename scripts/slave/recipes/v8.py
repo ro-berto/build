@@ -109,7 +109,7 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  for mastername, _, buildername, _ in api.v8.iter_builders():
+  for mastername, _, buildername, _ in api.v8.iter_builders('v8'):
     yield api.v8.test(mastername, buildername)
 
   yield (
