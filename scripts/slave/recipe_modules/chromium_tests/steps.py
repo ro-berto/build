@@ -2301,7 +2301,7 @@ class BlinkTest(Test):
 
         self.results_handler.upload_results(api, results, step_name, suffix)
 
-  def has_valid_results(self, api, suffix):
+  def has_valid_results(self, api, suffix):  # pragma: no cover
     if suffix not in self._test_runs:
       return False
     step = self._test_runs[suffix]
