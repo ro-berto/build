@@ -1860,7 +1860,8 @@ def GetMasterDevParameters(filename='master_cfg_params.json'):
 
 
 def FileExclusions():
-  all_platforms = ['.landmines', 'obj', 'gen', '.ninja_deps', '.ninja_log']
+  all_platforms = ['.landmines', 'obj', 'gen', '.ninja_deps', '.ninja_log',
+                   'thinlto-cache']
   # Skip files that the testers don't care about. Mostly directories.
   if IsWindows():
     # Remove obj or lib dir entries
