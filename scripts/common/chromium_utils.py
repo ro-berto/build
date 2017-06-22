@@ -1961,6 +1961,7 @@ def ParseBuildersFileContents(path, contents):
   builders['pubsub_service_account_file_str'] = repr(
       builders['pubsub_service_account_file'])
   builders['pubsub_topic_str'] = repr(builders['pubsub_topic'])
+  builders.setdefault('bot_pools', {})
 
   # Handle backwards-compatibility of old 'slaves' nomenclature.
   # TODO: Remove this once all builders.pyl files have been upgraded.
@@ -1972,10 +1973,141 @@ def ParseBuildersFileContents(path, contents):
       if 'slavebuilddir' in builders:
         builder_data['botbuilddir'] = builder_data.pop('slavebuilddir')
     for bot_pool in builders['bot_pools'].values():
-      bot_pool['bot_data'] = bot_pool.pop('slave_data')
+      bot_pool['bits'] = bot_pool['slave_data']['bits']
+      bot_pool['os'] = bot_pool['slave_data']['os']
+      bot_pool['version'] = bot_pool['slave_data']['version']
+      bot_pool.pop('slave_data')
       bot_pool['bots'] = bot_pool.pop('slaves')
 
+  # This validates and expands the builders and bot_pools keys, but we
+  # do no validation of the top-level keys or the schedulers; should we?
+  errors = []
+  NormalizeBuilders(builders, errors)
+  NormalizeBotPools(builders, errors)
+  errors = set(errors)
+  assert not errors, ('Errors in "%s":\n%s\n' % (path, '\n'.join(errors)))
   return builders
+
+
+BOT_KEYS = ('bot', 'bots', 'bot_pool', 'bot_pools')
+
+
+def NormalizeBuilders(builders, errors):
+  builder_defaults = builders.setdefault('builder_defaults', {})
+  bot_pools = builders['bot_pools']
+
+  if 'mixins' in builder_defaults:
+    errors.append('builder_defaults may not contain mixins.')
+
+  builders.setdefault('builders', {})
+  if not builders['builders']:
+    errors.append('No builders specified in file.')
+
+  for builder_name, builder_data in builders['builders'].items():
+    builder_errors = []
+
+    vals = builder_defaults.copy()
+    for mixin in builder_data.get('mixins', []):
+      _ApplyMixin(builders, mixin, vals, builder_errors)
+
+    builder_has_bot_keys_already = any(k in BOT_KEYS
+                                       for k in builder_data.keys())
+    for k, v in vals.items():
+      if k not in BOT_KEYS or not builder_has_bot_keys_already:
+        builder_data.setdefault(k, v)
+
+    _ValidateBuilder(builder_name, builder_data, bot_pools, builder_errors)
+
+    if (('bots' in builder_data or 'bot' in builder_data)
+        and not builder_errors):
+      _AddBotPoolForBuilder(builder_name, builder_data, bot_pools)
+
+    errors.extend(builder_errors)
+
+  return builders
+
+
+def NormalizeBotPools(builders, errors):
+  for name, data in builders['bot_pools'].items():
+    data.setdefault('bits', 64)
+    for key in ('os', 'version'):
+      if not key in data:
+        if 'bot_data' in data and key in data['bot_data']:
+          data[key] = data['bot_data'][key]
+        else:
+          errors.append('bot pool "%s" is missing an "%s" key.' % (name, key))
+    if isinstance(data['bots'], basestring):
+      data['bots'] = [data['bots']]
+
+
+def _ApplyMixin(builders, mixin_name, vals, errors):
+  if not mixin_name in builders['mixins']:
+    errors.append('Unknown mixin "%s"' % mixin_name)
+    return
+
+  # Do a post-order traversal of the mixins so that keys directly
+  # specified in the mixin take precedence over any sub-mixins.
+  mixin_data = builders['mixins'][mixin_name]
+  for submixin in mixin_data.get('mixins', []):
+     _ApplyMixin(builders, submixin, vals, errors)
+  for key in mixin_data:
+    # Any of the bot keys will override all existing keys.
+    if key in BOT_KEYS:
+      for old_key in BOT_KEYS:
+        if old_key in vals:
+          vals.pop(old_key)
+
+    if key != 'mixins':
+      vals[key] = mixin_data[key]
+
+
+def _ValidateBuilder(builder_name, builder_data, bot_pools, errors):
+  bot_keys = [k for k in BOT_KEYS if k in builder_data]
+  if len(bot_keys) == 0:
+    errors.append('builder["%s"] has neither bots nor bot_pools' %
+                  builder_name)
+  elif len(bot_keys) > 1:
+    errors.append('builder["%s"] has mutually exclusive keys: %s'
+                  % (builder_name, ', '.join(bot_keys)))
+
+  if 'bot_pool' in builder_data:
+    builder_data['bot_pools'] = [builder_data['bot_pool']]
+  if 'bot_pools' in builder_data:
+    for pool_name in builder_data['bot_pools']:
+      if not pool_name in bot_pools:
+        errors.append('Unknown bot_pool "%s"' % pool_name)
+  else:
+    if builder_name in bot_pools:
+      errors.append('There is already a bot pool with the name "%s", '
+                    'you cannot use an inline bot for that builder' %
+                    builder_name)
+    for key in ('os', 'version'):
+      if not key in builder_data:
+        errors.append('Must specify a "%s" for the inline bots '
+                    'for "%s"' % (key, builder_name))
+    if 'bot' in builder_data and '..' in builder_data['bot']:
+      errors.append('The "bot" key for "%s" must contain only a single '
+                    'hostname' % builder_name)
+
+
+def _AddBotPoolForBuilder(builder_name, builder_data, bot_pools):
+  assert builder_name not in bot_pools
+  assert 'bot_pools' not in builder_data
+
+  if 'bots' in builder_data:
+    if isinstance(builder_data['bots'], basestring):
+      bots = [builder_data['bots']]
+    else:
+      bots = builder_data['bots']
+  else:
+    bots = [builder_data['bot']]
+  bot_pools[builder_name] = {
+    'bits': builder_data.get('bits', 64),
+    'os': builder_data['os'],
+    'version': builder_data['version'],
+    'bots': bots,
+  }
+  builder_data['bot_pools'] = [builder_name]
 
 
 def GetBotsFromBuildersFile(builders_path):
@@ -2013,7 +2145,6 @@ def GetBotsFromBuilders(builders):
   # Now we can generate the list of bots using the above lookup table.
   bots = []
   for pool_name, pool_data in builders['bot_pools'].items():
-    bot_data = pool_data['bot_data']
     builder_names = sorted(builders_in_pool[pool_name])
     for entry in pool_data['bots']:
       for name in ExpandBotsEntry(entry):
@@ -2021,9 +2152,9 @@ def GetBotsFromBuilders(builders):
             'hostname': name,
             'builder': builder_names,
             'master': builders['master_classname'],
-            'os': bot_data['os'],
-            'version': bot_data['version'],
-            'bits': bot_data['bits'],
+            'os': pool_data['os'],
+            'version': pool_data['version'],
+            'bits': pool_data['bits'],
         })
 
   return bots
@@ -2031,12 +2162,12 @@ def GetBotsFromBuilders(builders):
 
 def GetBotNamesForBuilder(builders, builder_name):
   """Returns a list of bot hostnames for the given builder name."""
-  bots = []
+  hostnames = []
   pool_names = builders['builders'][builder_name]['bot_pools']
   for pool_name in pool_names:
     for entry in builders['bot_pools'][pool_name]['bots']:
-      bots.extend(ExpandBotsEntry(entry))
-  return bots
+      hostnames.extend(ExpandBotsEntry(entry))
+  return hostnames
 
 
 def ExpandBotsEntry(entry):

@@ -26,8 +26,6 @@ FAKE_MASTER_CFG_TEMPLATE = """\
 %(buildbot_url)s
 """
 
-# This is a fake file; a real builders.pyl contains 'builders'
-# and 'bot_pools' entries, but buildbot_tool doesn't care about those.
 FAKE_BUILDERS_PYL = """\
 {
   "git_repo_url": "git://example.com/example.git",
@@ -37,6 +35,13 @@ FAKE_BUILDERS_PYL = """\
   "master_type": "waterfall",
   "bot_port": 30999,
   "templates": ["templates"],
+  "builders": {
+    "fake builder": {
+      "os": "linux",
+      "version": "trusty",
+      "bot": "vm1",
+    },
+  },
 }
 """
 
