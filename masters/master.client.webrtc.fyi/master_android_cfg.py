@@ -26,14 +26,12 @@ def Update(c):
                             treeStableTimer=0,
                             builderNames=[
           'Android Archive',
-          'Android (swarming)',
           'Android ASan (swarming)',
       ]),
   ])
 
   specs = [
     {'name': 'Android Archive', 'recipe': 'webrtc/android_archive'},
-    {'name': 'Android (swarming)'},
     {'name': 'Android ASan (swarming)'},
   ]
 
