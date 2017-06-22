@@ -36,9 +36,6 @@
       ], 
       "x86-generic-incremental": [
         "build323-m2"
-      ], 
-      "x86-generic-paladin": [
-        "build174-m2"
       ]
     }, 
     "builder_shared": {
@@ -54,6 +51,7 @@
     }
   }, 
   "unallocated": [
+    "build174-m2", 
     "build245-m2", 
     "build326-m2", 
     "build333-m2"
