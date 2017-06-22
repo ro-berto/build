@@ -1247,6 +1247,15 @@ BUILDERS = freeze({
           'cpu': 'x86-64',
         }
       },
+      'linux_gcc_rel': {
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'linux'},
+      },
       'linux_memcheck': {
         'recipe_config': 'webrtc',
         'chromium_apply_config': ['memcheck'],
