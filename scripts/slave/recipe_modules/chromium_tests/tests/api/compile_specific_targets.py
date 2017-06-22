@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from recipe_engine.post_process import Filter
+
 DEPS = [
     'chromium_tests',
     'depot_tools/tryserver',
@@ -17,14 +19,15 @@ def RunSteps(api):
   if api.properties.get('swarming_gtest'):
     tests.append(api.chromium_tests.steps.SwarmingGTestTest('base_unittests'))
 
-  if api.tryserver.is_tryserver:
+  mastername = api.properties['mastername']
+  if api.tryserver.is_tryserver and mastername in api.chromium_tests.trybots:
     bot_config = api.chromium_tests.trybots[
-        api.properties['mastername']]['builders'][api.properties['buildername']]
+        mastername]['builders'][api.properties['buildername']]
     bot_config_object = api.chromium_tests.create_generalized_bot_config_object(
         bot_config['bot_ids'])
   else:
     bot_config_object = api.chromium_tests.create_bot_config_object(
-        api.properties['mastername'], api.properties['buildername'])
+        mastername, api.properties['buildername'])
   api.chromium_tests.configure_build(bot_config_object)
   update_step, bot_db = api.chromium_tests.prepare_checkout(bot_config_object)
   api.chromium_tests.compile_specific_targets(
@@ -65,7 +68,22 @@ def GenTests(api):
       api.properties.generic(
           mastername='chromium.perf',
           buildername='Linux Builder',
-          swarming_gtest=True)
+          swarming_gtest=True) +
+          api.post_process(Filter('pinpoint isolate upload'))
+  )
+
+  yield (
+      api.test('perf_isolate_lookup_tryserver') +
+      api.properties.tryserver(
+          mastername='tryserver.chromium.perf',
+          buildername='Mac Builder',
+          deps_revision_overrides={'src': '1234567890abcdef'},
+          patch_storage='rietveld',
+          rietveld='https://codereview.chromium.org',
+          issue=123456000,
+          patchset=1,
+          swarming_gtest=True) +
+          api.post_process(Filter('pinpoint isolate upload'))
   )
 
   yield (

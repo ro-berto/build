@@ -74,15 +74,15 @@ class PerfDashboardApi(recipe_api.RecipeApi):
                      '%s/post_bisect_results' % _BASE_URL,
                      {'data': json.dumps(data)}, halt_on_failure)
 
-  def upload_isolated(self, builder_name, git_hash, isolated_map,
-                      halt_on_failure=False):
+  def upload_isolate(self, builder_name, change, isolate_map,
+                     halt_on_failure=False):
     data = {
         'builder_name': builder_name,
-        'git_hash': git_hash,
-        'isolated_map': json.dumps(isolated_map),
+        'change': json.dumps(change),
+        'isolate_map': json.dumps(isolate_map),
     }
     return self.post('pinpoint isolate upload',
-                     '%s/isolated' % _PINPOINT_BASE_URL, data, halt_on_failure)
+                     '%s/isolate' % _PINPOINT_BASE_URL, data, halt_on_failure)
 
   def post(self, name, url, data, halt_on_failure):
     """Send a POST request to a URL with a payload.

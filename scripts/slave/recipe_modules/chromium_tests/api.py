@@ -451,11 +451,35 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             verbose=True,
             set_swarm_hashes=False,
             use_exparchive=bot_config.get('force_exparchive', False))
+
         if bot_config.get('perf_isolate_lookup'):
-          self.m.perf_dashboard.set_default_config()
-          self.m.perf_dashboard.upload_isolated(
+          change = {
+              'base_commit': {
+                  'repository': 'chromium',
+                  'git_hash':
+                      update_step.presentation.properties['got_revision'],
+              }
+          }
+
+          # FIXME: Move this property into a recipe module.
+          deps_revision_overrides = self.m.properties.get(
+              'deps_revision_overrides')
+          if deps_revision_overrides:
+            change['deps'] = [{'repository': repository, 'git_hash': git_hash}
+                              for repository, git_hash
+                              in sorted(deps_revision_overrides.iteritems())]
+
+          # FIXME: Support Gerrit patches.
+          if self.m.tryserver.can_apply_issue:
+            change['patch'] = {
+                'server': self.m.properties['rietveld'],
+                'issue': self.m.properties['issue'],
+                'patchset': self.m.properties['patchset'],
+            }
+
+          self.m.perf_dashboard.upload_isolate(
               self.m.properties['buildername'],
-              update_step.presentation.properties['got_revision'],
+              change,
               self.m.isolate.isolated_tests)
 
   def archive_build(self, mastername, buildername, update_step, bot_db):
