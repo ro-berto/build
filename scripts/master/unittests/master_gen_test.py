@@ -26,29 +26,45 @@ SAMPLE_WATERFALL_PYL = """\
   "bot_port": 30999,
   "templates": ["templates"],
 
-  "builder_defaults": {
-    "recipe": "test_recipe",
-    "properties": {
-      "config": "Release",
-    },
-    "scheduler": "test_repo",
-    "bot_pool": "main",
-    "botbuilddir": "test",
-  },
-
   "builders": {
     "Test Linux": {
+      "properties": {
+        "config": "Release"
+      },
+      "recipe": "test_recipe",
+      "scheduler": "test_repo",
+      "bot_pools": ["main"],
+      "botbuilddir": "test"
     },
     "Test Linux Timeouts": {
+      "properties": {
+        "config": "Release"
+      },
+      "recipe": "test_recipe",
+      "scheduler": "test_repo",
+      "bot_pools": ["main"],
+      "botbuilddir": "test",
       "builder_timeout_s": 7200,
       "no_output_timeout_s": 3600,
     },
     "Test Linux Remote Run": {
+      "properties": {
+        "config": "Release"
+      },
+      "recipe": "test_recipe",
+      "scheduler": "test_repo",
+      "bot_pools": ["main"],
+      "botbuilddir": "test",
       "use_remote_run": True,
     },
     "Test Linux Nightly": {
+      "properties": {
+        "config": "Release"
+      },
       "recipe": "test_nightly_recipe",
       "scheduler": "nightly",
+      "bot_pools": ["main"],
+      "botbuilddir": "test",
       "category": "0nightly"
     },
     "Test Linux Build Everything": {
@@ -82,9 +98,12 @@ SAMPLE_WATERFALL_PYL = """\
 
   "bot_pools": {
     "main": {
-      "os":  "linux",
-      "version": "precise",
-      "bots": "vm9999-m1",
+      "bot_data": {
+        "bits": 64,
+        "os":  "linux",
+        "version": "precise"
+      },
+      "bots": ["vm9999-m1"],
     },
   },
 }
@@ -117,9 +136,12 @@ SAMPLE_TRYSERVER_PYL = """\
 
   "bot_pools": {
     "main": {
-      "os":  "linux",
-      "version": "precise",
-      "bots": "vm{9998..9999}-m1",
+      "bot_data": {
+        "bits": 64,
+        "os":  "linux",
+        "version": "precise"
+      },
+      "bots": ["vm{9998..9999}-m1"],
     },
   },
 }
