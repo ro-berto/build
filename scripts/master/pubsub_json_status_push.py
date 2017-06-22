@@ -155,6 +155,7 @@ class StatusPush(StatusReceiverMultiService):
   """
 
   DEFAULT_PUSH_INTERVAL_SEC = 30
+  DEFAULT_PURGE_INTERVAL_SEC = 600
 
   # Perform verbose logging.
   verbose = True
@@ -212,6 +213,7 @@ class StatusPush(StatusReceiverMultiService):
     self._updated_builds = set()
     self._pushTimer = None
     self._splits = 1
+    self._last_purge = None
     log.msg('Creating PubSub service.')
     # Pending build database.
     # Key: builder name.
@@ -469,11 +471,20 @@ class StatusPush(StatusReceiverMultiService):
     defer.returnValue(result)
 
   @defer.inlineCallbacks
-  def _getBuilderData(self, name, builder):
-    # This requires a deferred call since the data is queried from
-    # the postgres DB (sigh).
-    # TODO(hinoka): Maybe sort this by ID?
-    pending = self._pending_builds.get(name, {}).values()
+  def _getBuilderData(self, name, builder, purge):
+    builder_pending = self._pending_builds.get(name, {})
+    if purge:
+      # This is a list of interfaces.IBuildRequestStatus
+      # Query this to clear out possibly stale pending builds that may have
+      # missed its observer subscription callback.
+      db_pending = yield builder.getPendingBuildRequestStatuses()
+      db_pending_set = {br.brid for br in db_pending}
+      for brid in builder_pending.keys():
+        if brid not in db_pending_set:
+          log.msg('PubSub: Build request %s expired, removing' % brid)
+          builder_pending.pop(brid)
+    pending = builder_pending.values()
+
     # Optimization cheat: only get the first 25 pending builds.
     # This caps the amount of postgres db calls and json size for really out
     # of control builders
@@ -515,19 +526,26 @@ class StatusPush(StatusReceiverMultiService):
         else:
           log.msg('PubSub: ERROR failed to resolve deferred for pending')
 
+    # If its been more than 10 minutes since the last full purge
+    # of pending builds, force a purge.
+    purge = (not self._last_purge
+        or time.time() - self._last_purge > self.DEFAULT_PURGE_INTERVAL_SEC)
+
     builders = {builder_name: self._status.getBuilder(builder_name)
                 for builder_name in self._status.getBuilderNames()}
     builder_infos = {}
 
     # Fetch all builder info in parallel.
     builder_info_list = yield defer.DeferredList([
-        self._getBuilderData(name, builder)
+        self._getBuilderData(name, builder, purge)
         for name, builder in builders.iteritems()])
     builder_infos = {
         data[0]: data[1] for success, data in builder_info_list if success}
 
     slaves = {slave_name: self._status.getSlave(slave_name).asDict()
               for slave_name in self._status.getSlaveNames()}
+    if purge:
+      self._last_purge = time.time()
     defer.returnValue({
         'builders': builder_infos, 'slaves': slaves, 'name': self.name})
 
