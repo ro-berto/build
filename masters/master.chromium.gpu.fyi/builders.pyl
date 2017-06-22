@@ -103,6 +103,16 @@
       "builder_timeout_s": 21600,
       "category": "0Windows",
     },
+    "Win10 Release (Intel HD 630)": {
+      "recipe": "chromium",
+      "use_remote_run": True,
+      "scheduler": None,
+      # It's crucial to merge build requests on the testers.
+      "mergeRequests": True,
+      "slave_pools": ["win10_rel_intel_hd_630"],
+      "builder_timeout_s": 21600,
+      "category": "0Windows",
+    },
     "Win10 Debug (Intel HD 530)": {
       "recipe": "chromium",
       "use_remote_run": True,
@@ -562,6 +572,14 @@
         "version": "win10",
       },
       "slaves": ["build159-b1"],
+    },
+    "win10_rel_intel_hd_630": {
+      "slave_data": {
+        "bits": 64,
+        "os": "win",
+        "version": "win10",
+      },
+      "slaves": ["build21-b1"],
     },
     "win10_dbg_intel_hd_530": {
       "slave_data": {

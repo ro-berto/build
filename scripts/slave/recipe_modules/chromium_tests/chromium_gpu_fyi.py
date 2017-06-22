@@ -190,6 +190,23 @@ SPEC = {
       # This new hardware is being tested for reliability.
       'enable_swarming': False,
     },
+    'Win10 Release (Intel HD 630)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU Win Builder',
+      'testing': {
+        'platform': 'win',
+      },
+      # Swarming is deliberately NOT enabled on this one-off configuration.
+      # This new hardware is being tested for reliability.
+      'enable_swarming': False,
+    },
     'Win10 Debug (Intel HD 530)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
