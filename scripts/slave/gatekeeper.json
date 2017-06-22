@@ -722,7 +722,7 @@
           },
           "CFI Linux": {
             "tree_notify": [
-              "krasin@chromium.org"
+              "pcc@chromium.org"
             ],
             "forgive_all": "true",
             "forgiving_optional": ["*"],
@@ -730,7 +730,7 @@
           },
           "CFI Linux ToT": {
             "tree_notify": [
-              "krasin@chromium.org"
+              "pcc@chromium.org"
             ],
             "forgive_all": "true",
             "forgiving_optional": ["*"],
@@ -738,7 +738,7 @@
           },
           "CFI Linux CF": {
             "tree_notify": [
-              "krasin@chromium.org"
+              "pcc@chromium.org"
             ],
             "forgive_all": "true",
             "forgiving_optional": ["*"],
