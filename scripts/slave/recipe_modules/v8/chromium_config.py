@@ -54,6 +54,11 @@ def default_target_v8_clusterfuzz(c):
 
 
 @CONFIG_CTX(includes=['v8'])
+def default_target_v8_archive(c):
+  c.compile_py.default_targets = ['v8_archive']
+
+
+@CONFIG_CTX(includes=['v8'])
 def disassembler(c):
   c.gyp_env.GYP_DEFINES['v8_enable_disassembler'] = 1
 
@@ -180,6 +185,11 @@ def simulate_s390(c):
     c.gyp_env.GYP_DEFINES['v8_target_arch'] = 's390x'
   else:
     c.gyp_env.GYP_DEFINES['v8_target_arch'] = 's390'
+
+
+@CONFIG_CTX(includes=['v8'])
+def v8_static_library(c):
+  c.gn_args.append('v8_static_library=true')
 
 
 @CONFIG_CTX(includes=['v8'])

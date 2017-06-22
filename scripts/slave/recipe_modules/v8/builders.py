@@ -1673,7 +1673,8 @@ BUILDERS = {
       'V8 Linux64': {
         'recipe': 'v8/archive',
         'chromium_apply_config': [
-          'default_compiler', 'v8_ninja', 'goma', 'mb'],
+          'clobber', 'default_compiler', 'default_target_v8_archive',
+          'v8_static_library', 'v8_ninja', 'goma', 'gn'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,

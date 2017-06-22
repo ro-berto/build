@@ -531,9 +531,9 @@ class V8Api(recipe_api.RecipeApi):
       self.m.perf_dashboard.add_point(points)
 
   def compile(self, **kwargs):
+    use_goma = (self.m.chromium.c.compile_py.compiler and
+                'goma' in self.m.chromium.c.compile_py.compiler)
     if self.m.chromium.c.project_generator.tool == 'mb':
-      use_goma = (self.m.chromium.c.compile_py.compiler and
-                  'goma' in self.m.chromium.c.compile_py.compiler)
       def step_test_data():
         # Fake gyp flags.
         # TODO(machenbach): Replace with gn args after the gn migration.
@@ -561,8 +561,11 @@ class V8Api(recipe_api.RecipeApi):
       # Update the build environment dictionary, which is printed to the
       # user on test failures for easier build reproduction.
       self._update_build_environment(self.m.step.active_result.stdout)
+    elif self.m.chromium.c.project_generator.tool == 'gn':
+      self.m.chromium.run_gn(use_goma=use_goma)
 
-    self.peek_gn()
+    if self.m.chromium.c.project_generator.tool != 'gn':
+      self.peek_gn()
     if self.m.properties['buildername'] != 'V8 Mips - builder':
       kwargs['use_goma_module'] = True
     self.m.chromium.compile(**kwargs)
