@@ -110,33 +110,32 @@ class TestRunCommand(unittest.TestCase):
 
 SAMPLE_BUILDERS_PY = """\
 {
-  "builders": {
-    "Test Linux": {
-      "properties": {
-        "config": "Release"
-      },
-      "recipe": "test_recipe",
-      "bot_pools": ["main"],
-      "botbuilddir": "test"
-    }
-  },
-  "git_repo_url": "https://chromium.googlesource.com/test/test.git",
   "master_base_class": "_FakeBaseMaster",
   "master_classname": "_FakeMaster",
   "master_port": 20999,
   "master_port_alt": 40999,
   "bot_port": 30999,
-  "bot_pools": {
-    "main": {
-      "bot_data": {
-        "bits": 64,
-        "os":  "linux",
-        "version": "precise"
+  "templates": ["templates"],
+
+  "builders": {
+    "Test Linux": {
+      "recipe": "test_recipe",
+      "properties": {
+        "config": "Release"
       },
-      "bots": ["vm9999-m1"],
+      "scheduler": "test_repo",
+      "os":  "linux",
+      "version": "precise",
+      "bot": "vm9999-m1",
+      "botbuilddir": "test"
+    }
+  },
+  "schedulers": {
+    "test_repo": {
+      "type": "git_poller",
+      "git_repo_url": "https://chromium.googlesource.com/test/test.git",
     },
   },
-  "templates": ["templates"],
 }
 """
 
@@ -161,11 +160,12 @@ class GetBotsFromBuilders(unittest.TestCase):
       os.remove(fp.name)
 
   def test_range(self):
-    # This tests that bash-style range expansion works for builder names.
+    # This tests that bash-style range expansion works for hostnames.
     # The interval should be fully closed, i.e., x..y includes both x and y.
     try:
       fp = tempfile.NamedTemporaryFile(delete=False)
-      fp.write(SAMPLE_BUILDERS_PY.replace('vm9999-m1', 'vm{1..3}-m1'))
+      fp.write(SAMPLE_BUILDERS_PY.replace('"bot": "vm9999-m1"',
+                                          '"bots": "vm{1..3}-m1"'))
       fp.close()
       bots = chromium_utils.GetBotsFromBuildersFile(fp.name)
       self.assertEqual([
@@ -195,7 +195,6 @@ class GetBotsFromBuilders(unittest.TestCase):
         }], bots)
     finally:
       os.remove(fp.name)
-
 
   def test_hostname_syntax_and_expansion(self):
     expand = chromium_utils.ExpandBotsEntry
@@ -227,6 +226,189 @@ class GetBotsFromBuilders(unittest.TestCase):
     # Spaces are not allowed.
     self.assertRaises(ValueError, expand, 'vm{2 ,4}')
 
+  def test_normalize_builders_with_mixins(self):
+    builders = {
+      'mixins': {
+        'main_pool': {'os': 'linux', 'version': 'precise', 'bots': 'vm{1..4}'},
+        'foo_recipe': {'recipe': 'foo'},
+        'bar_recipe': {'recipe': 'bar'},
+        'special_pool': {'bot': 'vm10'},
+      },
+      'builders': {
+        'foo': {
+          'mixins': ['foo_recipe', 'main_pool'],
+        },
+        'bar': {
+          'mixins': ['bar_recipe', 'main_pool'],
+        },
+        'special_builder': {
+          # This is a dumb example (you shouldn't override values), but it
+          # is legal to do so.
+          'mixins': ['main_pool', 'special_pool'],
+        }
+      },
+      'bot_pools': {},
+    }
+    errors = []
+    chromium_utils.NormalizeBuilders(builders, errors)
+    self.assertEqual(errors, [])
+    self.assertEqual(builders['bot_pools']['special_builder']['bots'],
+                     ['vm10'])
+
+  def assertBadBuilders(self, builders):
+    errors = []
+    chromium_utils.NormalizeBuilders(builders, errors)
+    self.assertNotEqual(errors, [])
+
+  def test_submixins(self):
+    errors = []
+    builders = {
+      'mixins': {
+        'precise': {
+          'mixins': ['linux'],
+          'version': 'precise',
+        },
+        'trusty': {
+          'mixins': ['linux'],
+          'version': 'trusty',
+        },
+        'linux': {
+          'os': 'linux',
+        },
+      },
+      'builders': {
+        'trusty': {
+          'mixins': ['trusty'],
+          'bot': 'vm1',
+        },
+      },
+      'bot_pools': {
+      },
+    }
+    chromium_utils.NormalizeBuilders(builders, errors)
+    self.assertEqual(errors, [])
+    self.assertEqual(builders['builders']['trusty']['os'], 'linux')
+    self.assertEqual(builders['builders']['trusty']['version'], 'trusty')
+
+  def test_bot_list(self):
+    errors = []
+    builders = {
+      'builders': {
+        'trusty': {
+          'os': 'linux',
+          'version': 'precise',
+          'bots': ['vm1', 'vm{10..12}'],
+        },
+      },
+      'bot_pools': {
+      },
+    }
+    chromium_utils.NormalizeBuilders(builders, errors)
+    self.assertEqual(errors, [])
+    self.assertEqual(['vm1', 'vm10', 'vm11', 'vm12'],
+                     chromium_utils.GetBotNamesForBuilder(builders, 'trusty'))
+
+  def test_builder_must_have_bots(self):
+    self.assertBadBuilders({
+      'builders': {
+        'no_bots': {},
+      },
+      'bot_pools': {},
+    })
+
+  def test_too_many_bot_fields(self):
+    self.assertBadBuilders({
+      'builders': {
+        'too_many_bot_fields': {
+          'os': 'linux',
+          'version': 'precise',
+          'bot': 'vm1',
+          'bots': 'vm{2..3}'
+        }
+      },
+      'bot_pools': {},
+    })
+
+  def test_builder_and_bot_pool_with_same_name(self):
+    self.assertBadBuilders({
+      'builders': {
+        'linux': {
+          'os': 'linux',
+          'version': 'precise',
+          'bot': 'vm1',
+        }
+      },
+      'bot_pools': {
+        'linux': {
+          'os': 'linux',
+          'version': 'precise',
+          'bots': 'vm{1..10}',
+        },
+      },
+    })
+
+  def test_missing_mixin(self):
+    self.assertBadBuilders({
+      'mixins': {},
+      'builders': {
+        'missing_mixin_builder': {
+          'mixins': ['missing'],
+          'os': 'linux',
+          'version': 'precise',
+          'bot': 'vm1',
+        },
+      },
+      'bot_pools': {},
+    })
+
+  def test_missing_bot_pool(self):
+    self.assertBadBuilders({
+      'builders': {
+        'missing_bot_pool': {
+          'bot_pool': 'missing',
+        },
+      },
+      'bot_pools': {},
+    })
+
+  def test_no_mixins_in_builder_defaults(self):
+    self.assertBadBuilders({
+      'builder_defaults': {
+        'mixins': ['illegal_mixin'],
+        'os': 'linux',
+      },
+      'builders': {
+        'foo': {
+          'bot': 'vm1',
+        },
+      },
+      'bot_pools': {},
+    })
+
+  def test_bad_bot_string(self):
+    self.assertBadBuilders({
+      'builders': {
+        'bad_bot_string': {
+          'bot': 'vm{1..3}',
+        },
+      },
+      'bot_pools': {},
+    })
+
+  def test_bot_pool_missing_os(self):
+    errors = []
+    builders = {
+      'builders': {
+        'sample': {
+          'bot_pool': 'main',
+        },
+      },
+      'bot_pools': {
+        'main': {'bots': 'vm{1..3}'},
+      },
+    }
+    chromium_utils.NormalizeBotPools(builders, errors)
+    self.assertNotEqual(errors, [])
 
 
 if __name__ == '__main__':
