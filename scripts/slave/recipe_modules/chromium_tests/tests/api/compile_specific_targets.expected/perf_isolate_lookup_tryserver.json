@@ -4,7 +4,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py",
-      "https://pinpoint-dot-chromeperf.appspot.com/isolate",
+      "https://pinpoint-dot-chromeperf.appspot.com/api/isolate",
       "-i",
       "{\"builder_name\": \"Mac Builder\", \"change\": \"{\\\"base_commit\\\": {\\\"git_hash\\\": \\\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\\\", \\\"repository\\\": \\\"chromium\\\"}, \\\"deps\\\": [{\\\"git_hash\\\": \\\"1234567890abcdef\\\", \\\"repository\\\": \\\"src\\\"}], \\\"patch\\\": {\\\"patchset\\\": 1, \\\"issue\\\": 123456000, \\\"server\\\": \\\"https://codereview.chromium.org\\\"}}\", \"isolate_map\": \"{\\\"base_unittests\\\": \\\"[dummy hash for base_unittests]\\\"}\"}",
       "-o",

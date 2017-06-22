@@ -82,7 +82,8 @@ class PerfDashboardApi(recipe_api.RecipeApi):
         'isolate_map': json.dumps(isolate_map),
     }
     return self.post('pinpoint isolate upload',
-                     '%s/isolate' % _PINPOINT_BASE_URL, data, halt_on_failure)
+                     '%s/api/isolate' % _PINPOINT_BASE_URL,
+                     data, halt_on_failure)
 
   def post(self, name, url, data, halt_on_failure):
     """Send a POST request to a URL with a payload.
