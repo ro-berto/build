@@ -222,10 +222,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     bot_db = bdb_module.BotConfigAndTestDB()
     bot_config.initialize_bot_db(self, bot_db, update_step)
 
-    if self.m.chromium.c.lto and \
-        not self.m.chromium.c.env.LLVM_FORCE_HEAD_REVISION:
-      self.m.chromium.download_lto_plugin()
-
     return update_step, bot_db
 
   @property

@@ -1020,10 +1020,3 @@ class ChromiumApi(recipe_api.RecipeApi):
 
   def get_annotate_by_test_name(self, test_name):
     return 'graphing'
-
-  @_with_chromium_layout
-  def download_lto_plugin(self):
-    return self.m.python(
-        name='download LTO plugin',
-        script=self.m.path['checkout'].join(
-            'build', 'download_gold_plugin.py'))

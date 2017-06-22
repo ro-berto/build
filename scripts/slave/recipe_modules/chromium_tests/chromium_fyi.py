@@ -249,7 +249,7 @@ SPEC = {
       },
     },
     'CFI Linux': {
-      'chromium_config': 'chromium_cfi',
+      'chromium_config': 'chromium',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -263,7 +263,7 @@ SPEC = {
       },
     },
     'CFI Linux Full': {
-      'chromium_config': 'chromium_cfi',
+      'chromium_config': 'chromium',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -278,7 +278,7 @@ SPEC = {
       'enable_swarming': True,
     },
     'CFI Linux ToT': {
-      'chromium_config': 'chromium_cfi',
+      'chromium_config': 'clang_tot_linux',
       'chromium_apply_config': ['clang_tot', 'mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -292,7 +292,7 @@ SPEC = {
       },
     },
     'CFI Linux CF': {
-      'chromium_config': 'chromium_cfi',
+      'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'clobber'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {

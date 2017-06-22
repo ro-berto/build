@@ -254,12 +254,6 @@ def GenTests(api):
   )
 
   yield (
-      api.test('chromium_cfi') +
-      api.properties(chromium_config='chromium_cfi') +
-      api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
       api.test('chromium_official_linux') +
       api.properties(
           chromium_config='chromium_official',

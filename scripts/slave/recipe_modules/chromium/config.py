@@ -60,7 +60,6 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       GYP_GENERATORS = Set(basestring, ','.join),
       GYP_GENERATOR_FLAGS = Dict(equal_fn, ' '.join, (basestring,int)),
       GYP_INCLUDE_LAST = Single(Path, required=False),
-      GYP_LINK_CONCURRENCY = Single(int, required=False),
       GYP_MSVS_VERSION = Single(basestring, required=False),
       GYP_USE_SEPARATE_MSPDBSRV = Single(int, jsonish_fn=str, required=False),
       LLVM_DOWNLOAD_GOLD_PLUGIN = Single(int, required=False),
@@ -113,7 +112,6 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
 
     gn_args = List(basestring),
 
-    lto = Single(bool, empty_val=False, required=False),
     clobber_before_runhooks = Single(bool, empty_val=False,
                                      required=False, hidden=False),
   )
@@ -507,15 +505,6 @@ def syzyasan(c):
   gyp_defs['chromium_win_pch'] = 0
 
 @config_ctx()
-def lto(c):
-  c.lto = True
-
-@config_ctx(includes=['lto'])
-def cfi_vptr(c):
-  c.gyp_env.GYP_DEFINES['cfi_vptr'] = 1
-  c.gyp_env.GYP_LINK_CONCURRENCY = 8
-
-@config_ctx()
 def trybot_flavor(c):
   fastbuild(c, optional=True)
   dcheck(c, optional=True)
@@ -689,10 +678,6 @@ def chromium_chromeos_ozone(c):  # pragma: no cover
 @config_ctx(includes=['ninja', 'clang', 'goma'])
 def chromium_clang(c):
   c.compile_py.default_targets = ['All', 'chromium_builder_tests']
-
-@config_ctx(includes=['ninja', 'clang', 'cfi_vptr'])
-def chromium_cfi(c):
-  c.compile_py.default_targets = ['All']
 
 @config_ctx(includes=['chromium', 'official'])
 def chromium_official(c):

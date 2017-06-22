@@ -13,9 +13,6 @@ def RunSteps(api):
   bot_config_object = api.chromium_tests.create_bot_config_object(
       api.properties['mastername'], api.properties['buildername'])
   api.chromium_tests.configure_build(bot_config_object)
-
-  api.chromium.apply_config('lto')
-
   api.chromium_tests.prepare_checkout(bot_config_object)
 
 

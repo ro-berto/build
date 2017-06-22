@@ -204,17 +204,6 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/src/build/download_gold_plugin.py"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "download LTO plugin"
-  },
-  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0
