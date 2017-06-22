@@ -166,7 +166,7 @@ SPEC = {
 }
 
 # Simple Chrome compile-only builders.
-for board in ('x86-generic', 'amd64-generic', 'daisy'):
+for board in ('amd64-generic', 'daisy'):
   SPEC['builders']['ChromiumOS %s Compile' % (board,)] = {
     'chromium_config': 'chromium',
     'chromium_apply_config': ['chromeos', 'mb', 'ninja_confirm_noop'],

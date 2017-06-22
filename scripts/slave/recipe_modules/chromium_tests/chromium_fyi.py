@@ -2282,21 +2282,5 @@ SPEC = {
         'platform': 'linux',
       },
     },
-    'ChromiumOS x86-generic Dummy Builder': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['chromeos', 'mb', 'ninja_confirm_noop'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_PLATFORM': 'chromeos',
-        'TARGET_CROS_BOARD': 'x86-generic',
-      },
-      'bot_type': 'builder_tester',
-      'compile_targets': [
-      ],
-      'testing': {
-        'platform': 'linux',
-      },
-    },
   }
 }

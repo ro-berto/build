@@ -342,14 +342,6 @@ TRYBOTS = freeze({
         'buildername': 'Linux Chromium OS ASan LSan Builder',
         'tester': 'Linux Chromium OS ASan LSan Tests (1)',
       }),
-      'chromeos_x86-generic': simple_bot({
-        'mastername': 'chromium.fyi',
-        'buildername': 'ChromiumOS x86-generic Dummy Builder',
-      }, analyze_mode='compile'),
-      'chromeos_x86-generic_chromium_compile_only_ng': simple_bot({
-        'mastername': 'chromium.chromiumos',
-        'buildername': 'ChromiumOS x86-generic Compile',
-      }, analyze_mode='compile'),
       'chromeos_amd64-generic': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'ChromiumOS amd64-generic Dummy Builder',

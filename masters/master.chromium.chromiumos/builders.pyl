@@ -68,14 +68,6 @@
       "category": "4debug",
     },
 
-    # Simplechrome CrOS builders.
-    "ChromiumOS x86-generic Compile": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": "chromium",
-      "slave_pools": ["linux_simplechrome_x86_generic"],
-      "category": "5simplechrome",
-    },
     "ChromiumOS amd64-generic Compile": {
       "recipe": "chromium",
       "use_remote_run": True,
@@ -158,14 +150,6 @@
       "slaves": ["slave117-c1", "slave118-c1"],
     },
 
-    "linux_simplechrome_x86_generic": {
-      "slave_data": {
-        "os": "linux",
-        "version": "precise",
-        "bits": 64,
-      },
-      "slaves": ["slave23-c1"],
-    },
     "linux_simplechrome_amd64_generic": {
       "slave_data": {
         "os": "linux",
