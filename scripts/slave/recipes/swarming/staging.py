@@ -54,6 +54,10 @@ def RunSteps(api, buildername, mastername):
   api.swarming.set_default_dimension(
       'os',
       api.swarming.prefered_os_dimension(api.platform.name).split('-', 1)[0])
+  if api.platform.is_win:
+    # Force os:Windows-10 instead of os:Windows which may trigger on Windows 7.
+    api.swarming.set_default_dimension('os', 'Windows-10')
+
   api.swarming.set_default_dimension('pool', 'Chrome')
   api.swarming.add_default_tag('project:chromium')
   api.swarming.add_default_tag('purpose:staging')
@@ -142,5 +146,38 @@ def GenTests(api):
             passing=False,
             minimal=True,
             extra_json={'missing_shards': [1]})
+    )
+  )
+
+  yield (
+    api.test('windows') +
+    api.properties(
+        buildername='Windows Swarm',
+        mastername='chromium.swarm',
+        bot_id='TestSlave',
+        buildnumber=123) +
+    api.platform('win', 64) +
+    api.override_step_data(
+        'read test spec (chromium.swarm.json)',
+        api.json.output({
+            'Windows Swarm': {
+                'gtest_tests': [
+                    {
+                        'test': 'browser_tests',
+                        'swarming': {
+                            'can_use_on_swarming_builders': True,
+                            'shards': 2,
+                         }
+                    },
+                ],
+            },
+        }
+      )
+    ) +
+    api.override_step_data(
+        'find isolated tests',
+        api.json.output({
+            'browser_tests': 'deadbeef',
+        })
     )
   )
