@@ -103,6 +103,7 @@
       "scheduler": None,
       "slave_pools": ["webview_l"],
       "category": "1Webview",
+      "mergeRequests": True,
     },
     "Android WebView M (dbg)": {
       "recipe": "chromium",
@@ -110,6 +111,7 @@
       "scheduler": None,
       "slave_pools": ["webview_m"],
       "category": "1Webview",
+      "mergeRequests": True,
     },
     "Android WebView N (dbg)": {
       "recipe": "chromium",
@@ -117,6 +119,7 @@
       "scheduler": None,
       "slave_pools": ["webview_n"],
       "category": "1Webview",
+      "mergeRequests": True,
     },
     "Android MIPS Builder (dbg)": {
       "recipe": "chromium",
