@@ -392,7 +392,7 @@ TRYBOTS = freeze({
       }),
       'linux_chromium_cfi_rel_ng': simple_bot({
         'mastername': 'chromium.fyi',
-        'buildername': 'CFI Linux',
+        'buildername': 'CFI Linux Full',
       }),
       'linux_chromium_ubsan_rel_ng': simple_bot({
         'mastername': 'chromium.fyi',

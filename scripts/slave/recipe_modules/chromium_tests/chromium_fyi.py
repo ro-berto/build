@@ -275,6 +275,7 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
+      'enable_swarming': True,
     },
     'CFI Linux ToT': {
       'chromium_config': 'chromium_cfi',
