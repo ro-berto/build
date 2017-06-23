@@ -161,14 +161,7 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'compile_targets': [
-        'blink_tests',
-      ],
-      'tests': [
-        steps.BlinkTest(extra_args=[
-          '--seed=4',
-        ]),
-      ],
+      'test_results_config': 'staging_server',
       'testing': {
           'platform': 'mac',
       },
