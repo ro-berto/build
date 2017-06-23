@@ -147,7 +147,8 @@ def main():
 
   args = parser.parse_args()
   if args.verbose:
-    logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+    fmt = '%(asctime)s - %(name)s: [%(levelname)s] %(message)s'
+    logging.basicConfig(stream=sys.stdout, level=logging.DEBUG, format=fmt)
 
   return collect_task(
       args.collect_cmd,
