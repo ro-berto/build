@@ -279,7 +279,7 @@
       "mac_chromium_rel_ng",
       "-v",
       "//out/Release",
-      "{\"additional_compile_targets\": [\"chromium_builder_tests\"], \"files\": [\"third_party/WebKit/foo.cc\"], \"test_targets\": []}",
+      "{\"additional_compile_targets\": [], \"files\": [\"third_party/WebKit/foo.cc\"], \"test_targets\": []}",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -296,9 +296,7 @@
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@analyze_details@{@@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"additional_compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"chromium_builder_tests\"@@@",
-      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"additional_compile_targets\": [], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.test_targets\": [], @@@",

@@ -27,9 +27,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder',
-      'compile_targets': [
-        'chromium_builder_tests',
-      ],
       'testing': {
         'platform': 'mac',
       },
@@ -121,9 +118,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder',
-      'compile_targets': [
-        'chromium_builder_tests',
-      ],
       'testing': {
         'platform': 'mac',
       },

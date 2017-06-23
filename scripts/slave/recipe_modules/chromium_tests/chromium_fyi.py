@@ -1909,9 +1909,6 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'builder',
-      'compile_targets': [
-        'chromium_builder_tests',
-      ],
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
