@@ -38,6 +38,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "true",
       "HOST_PREFER_32_BIT": "true",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",

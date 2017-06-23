@@ -27,6 +27,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "false",
       "ART_USE_READ_BARRIER": "false",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
@@ -44,6 +45,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "false",
       "ART_USE_READ_BARRIER": "false",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
@@ -62,6 +64,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "false",
       "ART_USE_READ_BARRIER": "false",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
@@ -79,6 +82,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "false",
       "ART_USE_READ_BARRIER": "false",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
@@ -97,6 +101,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "false",
       "ART_USE_READ_BARRIER": "false",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
@@ -114,6 +119,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "false",
       "ART_USE_READ_BARRIER": "false",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
@@ -132,6 +138,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "false",
       "ART_USE_READ_BARRIER": "false",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
@@ -149,6 +156,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "false",
       "ART_USE_READ_BARRIER": "false",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",

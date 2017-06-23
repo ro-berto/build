@@ -74,7 +74,7 @@ def clobber(api):
     api.file.rmtree('clobber', api.path['start_dir'].join('out'))
 
 def setup_host_x86(api, debug, bitness, concurrent_collector=True,
-    heap_poisoning=False):
+    heap_poisoning=False, javac=False):
   with api.step.defer_results():
     checkout(api)
     clobber(api)
@@ -114,6 +114,10 @@ def setup_host_x86(api, debug, bitness, concurrent_collector=True,
     else:
       env.update({ 'ART_HEAP_POISONING' : 'false' })
 
+    if javac:
+      env.update({ 'ANDROID_COMPILE_WITH_JACK' : 'false'})
+    else:
+      env.update({ 'ANDROID_COMPILE_WITH_JACK' : 'true'})
 
     with api.context(env=env):
       api.step('build sdk-eng',
@@ -177,7 +181,8 @@ def setup_target(api,
     device,
     concurrent_collector=True,
     heap_poisoning=False,
-    gcstress=False):
+    gcstress=False,
+    javac=False):
   build_top_dir = api.path['start_dir']
   art_tools = api.path['start_dir'].join('art', 'tools')
   android_root = '/data/local/tmp/system'
@@ -199,7 +204,9 @@ def setup_target(api,
          'ART_TEST_ANDROID_ROOT': android_root,
          'USE_DEX2OAT_DEBUG': 'false',
          'ART_BUILD_HOST_DEBUG': 'false',
-         'ART_TEST_KEEP_GOING': 'true'}
+         'ART_TEST_KEEP_GOING': 'true',
+         'ANDROID_COMPILE_WITH_JACK': 'false' if javac else 'true'
+         }
 
   if not debug:
     env.update({ 'ART_TEST_RUN_TEST_NDEBUG' : 'true' })
@@ -338,7 +345,7 @@ def setup_target(api,
       api.step('test jdwp aot', jdwp_command)
     test_logging(api, 'test jdwp aot')
 
-def setup_aosp_builder(api, read_barrier):
+def setup_aosp_builder(api, read_barrier, javac=False):
   full_checkout(api)
   clobber(api)
   builds = ['x86', 'x86_64', 'arm', 'arm64']
@@ -354,12 +361,13 @@ def setup_aosp_builder(api, read_barrier):
               'JACK_SERVER': 'false',
               'JACK_REPOSITORY': str(build_top_dir.join('prebuilts', 'sdk',
                                                         'tools', 'jacks')),
+              'ANDROID_COMPILE_WITH_JACK': 'false' if javac else 'true',
               'ART_USE_READ_BARRIER': 'true' if read_barrier else 'false'}
       with api.context(env=env):
         api.step('Clean oat %s' % build, ['make', '-j8', 'clean-oat-host'])
         api.step('build %s' % build, ['make', '-j8'])
 
-def setup_valgrind_runner(api, bitness):
+def setup_valgrind_runner(api, bitness, javac=False):
   checkout(api)
   clobber(api)
   build_top_dir = api.path['start_dir']
@@ -373,7 +381,9 @@ def setup_valgrind_runner(api, bitness):
                     api.path.pathsep + '%(PATH)s',
             'JACK_SERVER': 'false',
             'JACK_REPOSITORY': str(build_top_dir.join('prebuilts', 'sdk',
-                                                      'tools', 'jacks')) }
+                                                      'tools', 'jacks')),
+            'ANDROID_COMPILE_WITH_JACK': 'false' if javac else 'true'
+            }
     if bitness == 32:
       env.update({ 'HOST_PREFER_32_BIT' : 'true' })
 
@@ -405,11 +415,13 @@ _CONFIG_MAP = {
         'debug': True,
         'bitness': 32,
         'concurrent_collector': False,
+        'javac': True,
       },
       'host-x86_64-cms': {
         'debug': True,
         'bitness': 64,
         'concurrent_collector': False,
+        'javac': True,
       },
       'host-x86-poison-debug': {
         'debug': True,
@@ -467,6 +479,7 @@ _CONFIG_MAP = {
         'device': 'angler-armv7',
         'debug': True,
         'concurrent_collector': False,
+        'javac': True,
       },
       'angler-armv8-ndebug': {
         'serial': '84B7N16728001142',
@@ -483,6 +496,7 @@ _CONFIG_MAP = {
         'device': 'angler-armv8',
         'debug': True,
         'concurrent_collector': False,
+        'javac': True,
       },
       'bullhead-armv8-gcstress-ndebug': {
         'serial': '00d96a14bbc93e47',
@@ -509,7 +523,8 @@ _CONFIG_MAP = {
 
     'aosp': {
       'aosp-builder-cms': {
-        'read_barrier': False
+        'read_barrier': False,
+        'javac': True,
       },
       'aosp-builder-cc': {
         'read_barrier': True

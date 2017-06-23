@@ -27,6 +27,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -54,6 +55,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -89,6 +91,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -117,6 +120,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -146,6 +150,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "HT591JT00517",
@@ -179,6 +184,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -206,6 +212,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -235,6 +242,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -268,6 +276,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "HT591JT00517",
@@ -301,6 +310,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -328,6 +338,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -357,6 +368,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -388,6 +400,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "HT591JT00517",
@@ -421,6 +434,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -448,6 +462,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -477,6 +492,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -508,6 +524,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "HT591JT00517",
@@ -541,6 +558,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -568,6 +586,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -597,6 +616,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -628,6 +648,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "HT591JT00517",
@@ -661,6 +682,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -688,6 +710,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -717,6 +740,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -747,6 +771,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "HT591JT00517",
@@ -780,6 +805,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -807,6 +833,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -836,6 +863,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -866,6 +894,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "HT591JT00517",
@@ -899,6 +928,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -926,6 +956,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -955,6 +986,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -986,6 +1018,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "HT591JT00517",
@@ -1019,6 +1052,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -1046,6 +1080,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -1075,6 +1110,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
       "ANDROID_SERIAL": "HT591JT00517",
       "ART_BUILD_HOST_DEBUG": "false",
