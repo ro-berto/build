@@ -64,7 +64,7 @@ def RunSteps(api):
       [
         '--dir', build_dir,
         '--platform', api.chromium.c.TARGET_PLATFORM,
-        '--output', api.json.output(),
+        '--json-output', api.json.output(),
       ],
       infra_step=True,
       step_test_data=lambda: api.json.test_api.output(file_list_test_data),
