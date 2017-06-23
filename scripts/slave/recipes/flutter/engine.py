@@ -351,6 +351,22 @@ def BuildJavadoc(api):
                     name='upload javadoc')
 
 
+def BuildObjcDoc(api):
+  """Builds documentation for the Objective-C variant of engine."""
+  checkout = api.path['start_dir'].join('src')
+  with MakeTempDir(api, 'BuildObjcDoc') as temp_dir:
+    objcdoc_cmd = [checkout.join('flutter/tools/gen_objcdoc.sh'), temp_dir]
+    with api.context(cwd=checkout.join('flutter')):
+      api.step('build obj-c doc', objcdoc_cmd)
+    api.zip.directory('archive obj-c doc', temp_dir,
+                      checkout.join('out/ios-objcdoc.zip'))
+
+  api.gsutil.upload(checkout.join('out/ios-objcdoc.zip'),
+                    BUCKET_NAME,
+                    GetCloudPath(api, 'ios-objcdoc.zip'),
+                    name='upload obj-c doc')
+
+
 def GetCheckout(api):
   src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
@@ -393,6 +409,7 @@ def RunSteps(api):
       SetupXcode(api)
       BuildMac(api)
       BuildIOS(api)
+      BuildObjcDoc(api)
 
     if api.platform.is_win:
       BuildWindows(api)
