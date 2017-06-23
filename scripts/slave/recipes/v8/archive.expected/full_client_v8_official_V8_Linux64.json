@@ -65,7 +65,7 @@
     "cmd": [],
     "name": "archive link",
     "~followup_annotations": [
-      "@@@STEP_LINK@download@https://storage.googleapis.com/chromium-v8/official/v8-linux64-rel-3.4.3.17.zip@@@"
+      "@@@STEP_LINK@download@https://storage.googleapis.com/chromium-v8/official/3.4/v8-linux64-rel-3.4.3.17.zip@@@"
     ]
   }
 ]

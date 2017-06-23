@@ -27,7 +27,7 @@ DEPS = [
   'zip',
 ]
 
-ARCHIVE_LINK = 'https://storage.googleapis.com/chromium-v8/official/%s'
+ARCHIVE_LINK = 'https://storage.googleapis.com/chromium-v8/official/%s/%s'
 BRANCH_RE = re.compile(r'^\d+\.\d+(?:\.\d+)?$')
 RELEASE_BRANCH_RE = re.compile(r'^\d+\.\d+$')
 
@@ -91,7 +91,7 @@ def RunSteps(api):
 
   api.step('archive link', cmd=None)
   api.step.active_result.presentation.links['download'] = (
-      ARCHIVE_LINK % archive_name)
+      ARCHIVE_LINK % (gs_path_suffix, archive_name))
 
   # Clean up.
   api.file.remove('cleanup archive', zip_file)
