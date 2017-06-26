@@ -225,8 +225,7 @@ BUILDERS = {
         'tests': [V8Testing, Benchmarks, Mozilla],
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
-          'pool': 'V8-AVX2',
-          'gpu': '102b',
+          'cpu': 'x86-64-avx2',
         },
       },
       'V8 Linux - shared': {
@@ -418,8 +417,7 @@ BUILDERS = {
         ],
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
-          'pool': 'V8-AVX2',
-          'gpu': '102b',
+          'cpu': 'x86-64-avx2',
         },
       },
       'V8 Linux64 - debug': {
@@ -457,8 +455,7 @@ BUILDERS = {
         ],
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
-          'pool': 'V8-AVX2',
-          'gpu': '102b',
+          'cpu': 'x86-64-avx2',
         },
       },
       'V8 Linux64 - internal snapshot': {
@@ -1772,8 +1769,7 @@ BUILDERS = {
         ],
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
-          'pool': 'V8-AVX2',
-          'gpu': '102b',
+          'cpu': 'x86-64-avx2',
         },
       },
       'v8_linux_nodcheck_rel_ng': {
@@ -2047,8 +2043,7 @@ BUILDERS = {
         ],
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
-          'pool': 'V8-AVX2',
-          'gpu': '102b',
+          'cpu': 'x86-64-avx2',
         },
       },
       'v8_linux64_avx2_dbg': {
@@ -2065,8 +2060,7 @@ BUILDERS = {
         ],
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
-          'pool': 'V8-AVX2',
-          'gpu': '102b',
+          'cpu': 'x86-64-avx2',
         },
       },
       'v8_linux_gc_stress_dbg': {
