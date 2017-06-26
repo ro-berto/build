@@ -347,6 +347,16 @@ BUILDERS = freeze({
         'bot_type': 'builder',
         'testing': {'platform': 'linux'},
       },
+      'Linux64 Release (GCC)': {
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'linux'},
+      },
+
       'Linux Asan': {
         'recipe_config': 'webrtc_clang',
         'chromium_apply_config': ['asan', 'lsan'],
@@ -622,15 +632,6 @@ BUILDERS = freeze({
           'os': 'Windows-10',
           'cpu': 'x86-64',
         }
-      },
-      'Linux64 GCC': {
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'linux'},
       },
       'Android ASan (swarming)': {
         'recipe_config': 'webrtc_android_asan',

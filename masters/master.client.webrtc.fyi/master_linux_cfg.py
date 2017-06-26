@@ -26,12 +26,6 @@ m_annotator = annotator_factory.AnnotatorFactory()
 
 def Update(c):
   c['schedulers'].extend([
-      SingleBranchScheduler(name='webrtc_linux_scheduler',
-                            branch='master',
-                            treeStableTimer=0,
-                            builderNames=[
-                                'Linux64 GCC',
-      ]),
       # Run WebRTC DEPS roller every 3 hours.
       Periodic(
           name='webrtc_deps',
@@ -42,7 +36,6 @@ def Update(c):
   ])
 
   specs = [
-    {'name': 'Linux64 GCC', 'slavebuilddir': 'linux_gcc'},
     {
       'name': 'Auto-roll - WebRTC DEPS',
       'recipe': 'webrtc/auto_roll_webrtc_deps',
