@@ -19,6 +19,7 @@ class GomaApi(recipe_api.RecipeApi):
     self._goma_jobs = None
     self._jsonstatus = None
     self._goma_jsonstatus_called = False
+    self._cloudtail_running = False
 
   @property
   def service_account_json_path(self):
@@ -85,6 +86,13 @@ class GomaApi(recipe_api.RecipeApi):
     self._goma_jobs = int(step_result.raw_io.output_text)
 
     return self._goma_jobs
+
+  def set_goma_dir_for_local_test(self, goma_dir):
+    """
+    This function is made for local recipe test only.
+    Do not use in recipes used by buildbots.
+    """
+    self._goma_dir = goma_dir
 
   def ensure_goma(self, canary=False):
     with self.m.step.nest('ensure_goma'):
@@ -156,6 +164,7 @@ class GomaApi(recipe_api.RecipeApi):
       step_test_data=(
           lambda: self.m.raw_io.test_api.output_text('12345')),
       infra_step=True)
+    self._cloudtail_running = True
 
   def _run_jsonstatus(self):
     with self.m.context(env=self._goma_ctl_env):
@@ -189,7 +198,7 @@ class GomaApi(recipe_api.RecipeApi):
         args=['stop', '--killed-pid-file', self.cloudtail_pid_file],
         infra_step=True)
 
-  def start(self, env=None, **kwargs):
+  def start(self, env=None, use_cloudtail=True, **kwargs):
     """Start goma compiler_proxy.
 
     A user MUST execute ensure_goma beforehand.
@@ -233,8 +242,8 @@ class GomaApi(recipe_api.RecipeApi):
               script=self.goma_ctl,
               args=['restart'], infra_step=True, **kwargs)
         self._goma_started = True
-
-        self._start_cloudtail()
+        if use_cloudtail:
+          self._start_cloudtail()
 
       except self.m.step.InfraFailure as e:
         with self.m.step.defer_results():
@@ -274,7 +283,8 @@ class GomaApi(recipe_api.RecipeApi):
                           args=['stop'], **kwargs)
           self._upload_logs(ninja_log_outdir, ninja_log_compiler,
                             ninja_log_command, ninja_log_exit_status)
-          self._stop_cloudtail()
+          if self._cloudtail_running:
+            self._stop_cloudtail()
 
         self._goma_started = False
         self._goma_ctl_env = {}
@@ -367,7 +377,7 @@ class GomaApi(recipe_api.RecipeApi):
 
   def build_with_goma(self, ninja_command, name=None, ninja_log_outdir=None,
                       ninja_log_compiler=None, goma_env=None, ninja_env=None,
-                      **kwargs):
+                      use_cloudtail=True, **kwargs):
     """Build with ninja_command using goma
 
     Args:
@@ -379,6 +389,7 @@ class GomaApi(recipe_api.RecipeApi):
       ninja_log_compiler: Compiler used in ninja. (e.g. "clang")
       goma_env: Environment controlling goma behavior.
       ninja_env: Environment for ninja.
+      use_cloudtail(bool): Use coudtail if it is True.
 
     Returns:
       TODO(tikuta): return step_result
@@ -396,7 +407,7 @@ class GomaApi(recipe_api.RecipeApi):
 
     # TODO(tikuta): Remove -j flag from ninja_command and set appropriate value.
 
-    self.start(goma_env)
+    self.start(goma_env, use_cloudtail=use_cloudtail)
 
     try:
       with self.m.context(env=ninja_env):

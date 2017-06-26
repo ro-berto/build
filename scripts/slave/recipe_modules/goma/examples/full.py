@@ -10,16 +10,39 @@ DEPS = [
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
+  'recipe_engine/python',
   'recipe_engine/step',
 ]
 
 def RunSteps(api):
-  api.goma.ensure_goma()
+  goma_local = api.properties.get('local_run_goma_recipe', False)
+  env = {}
+
+  if goma_local:
+    goma_dir = '/home/goma/goma'
+    api.python.inline('check gomacc file',"""
+    import os.path
+    if os.path.exists(os.path.join('%s','gomacc')):
+      exit(0)
+    exit(1)
+    """ % goma_dir)
+    api.goma.set_goma_dir_for_local_test(goma_dir)
+
+    goma_config_file = '/home/goma/.goma_oauth2_config'
+    api.python.inline('check oauth2 file',"""
+    import os.path
+    if os.path.exists('%s'):
+      exit(0)
+    exit(1)
+    """ % goma_config_file)
+    env['GOMA_OAUTH2_CONFIG_FILE'] = goma_config_file
+  else:
+    api.goma.ensure_goma()
+
   api.step('gn', ['gn', 'gen', 'out/Release',
                   '--args=use_goma=true goma_dir=%s' % api.goma.goma_dir])
 
   command = list(api.properties.get('build_command'))
-  env = {}
   if api.properties.get('custom_tmp_dir'):
     env['GOMA_TMP_DIR'] = api.properties.get('custom_tmp_dir')
 
@@ -28,7 +51,8 @@ def RunSteps(api):
       ninja_log_outdir=api.properties.get('ninja_log_outdir'),
       ninja_log_compiler=api.properties.get('ninja_log_compiler'),
       ninja_command=command,
-      goma_env=env)
+      goma_env=env,
+      use_cloudtail=not goma_local)
 
 
 def GenTests(api):
@@ -66,4 +90,8 @@ def GenTests(api):
   yield (api.test('linux_invalid_goma_jsonstatus') + api.platform.name('linux') +
          api.step_data('postprocess_for_goma.goma_jsonstatus',
                        api.json.output(data=None)) +
+         api.properties.generic(**properties))
+
+  yield (api.test('linux_local_run_goma_recipe') + api.platform.name('linux') +
+         api.properties(local_run_goma_recipe=True) +
          api.properties.generic(**properties))
