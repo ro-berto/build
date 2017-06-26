@@ -225,7 +225,6 @@
       "@@@STEP_LOG_LINE@json.output@          \"omg_so_many_apks\"@@@",
       "@@@STEP_LOG_LINE@json.output@        ], @@@",
       "@@@STEP_LOG_LINE@json.output@        \"apk_under_test\": \"second_apk\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"render_results_dir\": \"chrome/test/data/android/render_tests\", @@@",
       "@@@STEP_LOG_LINE@json.output@        \"test\": \"ChromePublicTest\", @@@",
       "@@@STEP_LOG_LINE@json.output@        \"test_apk\": \"one_apk\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
@@ -652,31 +651,6 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
       "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/src/build/android/render_tests/process_render_test_results.py",
-      "--output-html-file",
-      "/path/to/tmp/",
-      "--buildername",
-      "Android Tests",
-      "--build-number",
-      "571",
-      "--render-results-dir",
-      "chrome/test/data/android/render_tests"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
-    },
-    "name": "ChromePublicTest.[Render Tests] Upload Results",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@render results@<!DOCTYPE html><html></html>@@@",
-      "@@@STEP_LOG_END@render results@@@"
     ]
   },
   {

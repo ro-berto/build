@@ -1043,7 +1043,6 @@ class AndroidApi(recipe_api.RecipeApi):
                                 wrapper_script_suite_name=None,
                                 result_details=False,
                                 store_tombstones=False,
-                                render_results_dir=None,
                                 args=None,
                                 **kwargs):
     args = args or []
@@ -1099,8 +1098,6 @@ class AndroidApi(recipe_api.RecipeApi):
           **kwargs)
     finally:
       result_step = self.m.step.active_result
-      if render_results_dir:
-        self._upload_render_test_failures(render_results_dir)
       if result_details:
         if (hasattr(result_step, 'test_utils') and
             hasattr(result_step.test_utils, 'gtest_results')):
@@ -1143,23 +1140,6 @@ class AndroidApi(recipe_api.RecipeApi):
     except self.m.step.StepFailure as f:
       return ('https://storage.googleapis.com/chromium-result-details/'
               'UploadQuietFailure.txt')
-
-  def _upload_render_test_failures(self, render_results_dir):
-    """Uploads render test results. Generates HTML file displaying results."""
-    args = ['--output-html-file', self.m.raw_io.output_text(),
-            '--buildername', self.m.properties['buildername'],
-            '--build-number', self.m.properties['buildnumber'],
-            '--render-results-dir', render_results_dir]
-    step_result = self.m.python(
-        name='[Render Tests] Upload Results',
-        script=self.m.path['checkout'].join(
-            'build', 'android', 'render_tests',
-            'process_render_test_results.py'),
-        args=args,
-        step_test_data=lambda: self.m.raw_io.test_api.output_text(
-            '<!DOCTYPE html><html></html>'))
-    step_result.presentation.logs['render results'] = (
-        step_result.raw_io.output_text.splitlines())
 
   def logcat_dump(self, gs_bucket=None):
     if gs_bucket:

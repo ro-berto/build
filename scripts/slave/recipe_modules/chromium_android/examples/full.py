@@ -94,9 +94,6 @@ BUILDERS = freeze({
     'json_results_file': {
         'json_results_file': 'json_results_file',
     },
-    'render_results': {
-        'render_results_dir': 'chrome/test/data/android/render_tests',
-    },
     'result_details': {
         'result_details': True,
         'store_tombstones': True,
@@ -238,8 +235,7 @@ def RunSteps(api, buildername):
       device_flags=config.get('device_flags'),
       json_results_file=config.get('json_results_file'),
       result_details=config.get('result_details'),
-      store_tombstones=config.get('store_tombstones'),
-      render_results_dir=config.get('render_results_dir'))
+      store_tombstones=config.get('store_tombstones'))
   api.chromium_android.run_test_suite(
       'unittests',
       gtest_filter='WebRtc*',

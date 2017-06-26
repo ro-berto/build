@@ -1486,7 +1486,6 @@ def GenTests(api):
                             'another_apk',
                             'omg_so_many_apks',
                         ],
-                        'render_results_dir': 'chrome/test/data/android/render_tests',
                     }
                 ],
             },

@@ -640,7 +640,6 @@ def generate_instrumentation_test(api, chromium_tests_api, mastername,
       yield AndroidInstrumentationTest(
           test_name,
           compile_targets=test.get('override_compile_targets'),
-          render_results_dir=test.get('render_results_dir'),
           timeout_scale=test.get('timeout_scale'),
           result_details=True,
           store_tombstones=True,
@@ -2153,8 +2152,7 @@ class AndroidInstrumentationTest(AndroidTest):
                test_apk=None, timeout_scale=None, annotation=None,
                except_annotation=None, screenshot=False, verbose=True,
                tool=None, additional_apks=None, store_tombstones=False,
-               result_details=False, render_results_dir=None,
-               args=None, waterfall_mastername=None,
+               result_details=False, args=None, waterfall_mastername=None,
                waterfall_buildername=None):
     suite_defaults = (
         AndroidInstrumentationTest._DEFAULT_SUITES.get(name)
@@ -2184,7 +2182,6 @@ class AndroidInstrumentationTest(AndroidTest):
     self._wrapper_script_suite_name = compile_targets[0]
     self._store_tombstones = store_tombstones
     self._result_details = result_details
-    self._render_results_dir = render_results_dir
     self._args = args
 
   @property
@@ -2208,7 +2205,6 @@ class AndroidInstrumentationTest(AndroidTest):
         result_details=self._result_details,
         store_tombstones=self._store_tombstones,
         wrapper_script_suite_name=self._wrapper_script_suite_name,
-        render_results_dir=self._render_results_dir,
         step_test_data=lambda: api.test_utils.test_api.canned_gtest_output(False),
         args=self._args)
 
