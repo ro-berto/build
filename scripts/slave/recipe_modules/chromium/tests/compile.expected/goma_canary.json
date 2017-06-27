@@ -178,7 +178,7 @@
       "-j",
       "150",
       "All",
-      "chromium_builder_tests"
+      "all"
     ],
     "cwd": "None",
     "env": {
@@ -276,7 +276,7 @@
       "--ninja-log-outdir",
       "None/out/Release",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', 'None/out/Release', '-d', 'stats', '-j', 150, 'All', 'chromium_builder_tests']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', 'None/out/Release', '-d', 'stats', '-j', 150, 'All', 'all']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",
