@@ -248,6 +248,53 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::zip]/resources/zip.py"
+    ],
+    "env": {
+      "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
+    },
+    "name": "Zip flutter_patched_sdk",
+    "stdin": "{\"entries\": [{\"path\": \"[START_DIR]/src/out/host_debug_unopt/flutter_patched_sdk\", \"type\": \"dir\"}], \"output\": \"[TMP_BASE]/tmp_tmp_2/flutter_patched_sdk.zip\", \"root\": \"[START_DIR]/src/out/host_debug_unopt\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[TMP_BASE]/tmp_tmp_2/flutter_patched_sdk.zip",
+      "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/flutter_patched_sdk.zip"
+    ],
+    "env": {
+      "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
+    },
+    "infra_step": true,
+    "name": "gsutil upload flutter_patched_sdk.zip",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/flutter_patched_sdk.zip@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::file]/resources/fileutil.py",
+      "rmtree",
+      "[TMP_BASE]/tmp_tmp_2"
+    ],
+    "env": {
+      "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
+    },
+    "infra_step": true,
+    "name": "rmtree temp dir for Upload Flutter patched sdk"
+  },
+  {
+    "cmd": [
       "dart",
       "[START_DIR]/src/flutter/shell/testing/observatory/test.dart",
       "[START_DIR]/src/out/host_debug_unopt/flutter_tester",
@@ -313,7 +360,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
     },
     "name": "Zip android-arm artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"flutter.jar\", \"path\": \"[START_DIR]/src/out/android_debug/flutter.jar\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_2/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"flutter.jar\", \"path\": \"[START_DIR]/src/out/android_debug/flutter.jar\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_3/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -324,7 +371,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/tmp_tmp_2/artifacts.zip",
+      "[TMP_BASE]/tmp_tmp_3/artifacts.zip",
       "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm/artifacts.zip"
     ],
     "env": {
@@ -342,7 +389,7 @@
       "-u",
       "RECIPE_MODULE[build::file]/resources/fileutil.py",
       "rmtree",
-      "[TMP_BASE]/tmp_tmp_2"
+      "[TMP_BASE]/tmp_tmp_3"
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
@@ -360,7 +407,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
     },
     "name": "Zip android-arm symbols.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"libflutter.so\", \"path\": \"[START_DIR]/src/out/android_debug/libflutter.so\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_3/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"libflutter.so\", \"path\": \"[START_DIR]/src/out/android_debug/libflutter.so\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_4/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -371,7 +418,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/tmp_tmp_3/artifacts.zip",
+      "[TMP_BASE]/tmp_tmp_4/artifacts.zip",
       "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm/symbols.zip"
     ],
     "env": {
@@ -389,7 +436,7 @@
       "-u",
       "RECIPE_MODULE[build::file]/resources/fileutil.py",
       "rmtree",
-      "[TMP_BASE]/tmp_tmp_3"
+      "[TMP_BASE]/tmp_tmp_4"
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
@@ -430,7 +477,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
     },
     "name": "Zip android-arm-profile artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"dart_io_entries.txt\", \"path\": \"[START_DIR]/src/dart/runtime/bin/dart_io_entries.txt\", \"type\": \"file\"}, {\"archive_name\": \"dart_vm_entry_points.txt\", \"path\": \"[START_DIR]/src/flutter/runtime/dart_vm_entry_points.txt\", \"type\": \"file\"}, {\"archive_name\": \"flutter.jar\", \"path\": \"[START_DIR]/src/out/android_profile/flutter.jar\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_4/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"dart_io_entries.txt\", \"path\": \"[START_DIR]/src/dart/runtime/bin/dart_io_entries.txt\", \"type\": \"file\"}, {\"archive_name\": \"dart_vm_entry_points.txt\", \"path\": \"[START_DIR]/src/flutter/runtime/dart_vm_entry_points.txt\", \"type\": \"file\"}, {\"archive_name\": \"flutter.jar\", \"path\": \"[START_DIR]/src/out/android_profile/flutter.jar\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_5/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -441,7 +488,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/tmp_tmp_4/artifacts.zip",
+      "[TMP_BASE]/tmp_tmp_5/artifacts.zip",
       "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm-profile/artifacts.zip"
     ],
     "env": {
@@ -459,7 +506,7 @@
       "-u",
       "RECIPE_MODULE[build::file]/resources/fileutil.py",
       "rmtree",
-      "[TMP_BASE]/tmp_tmp_4"
+      "[TMP_BASE]/tmp_tmp_5"
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
@@ -477,7 +524,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
     },
     "name": "Zip android-arm-profile linux-x64.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot\", \"path\": \"[START_DIR]/src/out/android_profile/clang_x86/gen_snapshot\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_5/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot\", \"path\": \"[START_DIR]/src/out/android_profile/clang_x86/gen_snapshot\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_6/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -488,7 +535,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/tmp_tmp_5/artifacts.zip",
+      "[TMP_BASE]/tmp_tmp_6/artifacts.zip",
       "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm-profile/linux-x64.zip"
     ],
     "env": {
@@ -506,7 +553,7 @@
       "-u",
       "RECIPE_MODULE[build::file]/resources/fileutil.py",
       "rmtree",
-      "[TMP_BASE]/tmp_tmp_5"
+      "[TMP_BASE]/tmp_tmp_6"
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
@@ -524,7 +571,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
     },
     "name": "Zip android-arm-profile symbols.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"libflutter.so\", \"path\": \"[START_DIR]/src/out/android_profile/libflutter.so\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_6/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"libflutter.so\", \"path\": \"[START_DIR]/src/out/android_profile/libflutter.so\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_7/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -535,7 +582,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/tmp_tmp_6/artifacts.zip",
+      "[TMP_BASE]/tmp_tmp_7/artifacts.zip",
       "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm-profile/symbols.zip"
     ],
     "env": {
@@ -553,7 +600,7 @@
       "-u",
       "RECIPE_MODULE[build::file]/resources/fileutil.py",
       "rmtree",
-      "[TMP_BASE]/tmp_tmp_6"
+      "[TMP_BASE]/tmp_tmp_7"
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
@@ -594,7 +641,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
     },
     "name": "Zip android-arm-release artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"dart_io_entries.txt\", \"path\": \"[START_DIR]/src/dart/runtime/bin/dart_io_entries.txt\", \"type\": \"file\"}, {\"archive_name\": \"dart_vm_entry_points.txt\", \"path\": \"[START_DIR]/src/flutter/runtime/dart_vm_entry_points.txt\", \"type\": \"file\"}, {\"archive_name\": \"flutter.jar\", \"path\": \"[START_DIR]/src/out/android_release/flutter.jar\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_7/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"dart_io_entries.txt\", \"path\": \"[START_DIR]/src/dart/runtime/bin/dart_io_entries.txt\", \"type\": \"file\"}, {\"archive_name\": \"dart_vm_entry_points.txt\", \"path\": \"[START_DIR]/src/flutter/runtime/dart_vm_entry_points.txt\", \"type\": \"file\"}, {\"archive_name\": \"flutter.jar\", \"path\": \"[START_DIR]/src/out/android_release/flutter.jar\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_8/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -605,7 +652,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/tmp_tmp_7/artifacts.zip",
+      "[TMP_BASE]/tmp_tmp_8/artifacts.zip",
       "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm-release/artifacts.zip"
     ],
     "env": {
@@ -623,7 +670,7 @@
       "-u",
       "RECIPE_MODULE[build::file]/resources/fileutil.py",
       "rmtree",
-      "[TMP_BASE]/tmp_tmp_7"
+      "[TMP_BASE]/tmp_tmp_8"
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
@@ -641,7 +688,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
     },
     "name": "Zip android-arm-release linux-x64.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot\", \"path\": \"[START_DIR]/src/out/android_release/clang_x86/gen_snapshot\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_8/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot\", \"path\": \"[START_DIR]/src/out/android_release/clang_x86/gen_snapshot\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_9/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -652,7 +699,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/tmp_tmp_8/artifacts.zip",
+      "[TMP_BASE]/tmp_tmp_9/artifacts.zip",
       "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm-release/linux-x64.zip"
     ],
     "env": {
@@ -670,7 +717,7 @@
       "-u",
       "RECIPE_MODULE[build::file]/resources/fileutil.py",
       "rmtree",
-      "[TMP_BASE]/tmp_tmp_8"
+      "[TMP_BASE]/tmp_tmp_9"
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
@@ -688,7 +735,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
     },
     "name": "Zip android-arm-release symbols.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"libflutter.so\", \"path\": \"[START_DIR]/src/out/android_release/libflutter.so\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_9/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"libflutter.so\", \"path\": \"[START_DIR]/src/out/android_release/libflutter.so\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_10/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -699,7 +746,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/tmp_tmp_9/artifacts.zip",
+      "[TMP_BASE]/tmp_tmp_10/artifacts.zip",
       "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm-release/symbols.zip"
     ],
     "env": {
@@ -717,7 +764,7 @@
       "-u",
       "RECIPE_MODULE[build::file]/resources/fileutil.py",
       "rmtree",
-      "[TMP_BASE]/tmp_tmp_9"
+      "[TMP_BASE]/tmp_tmp_10"
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
@@ -734,8 +781,8 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
     },
-    "name": "Zip sky_engine Package",
-    "stdin": "{\"entries\": [{\"path\": \"[START_DIR]/src/out/android_debug/dist/packages/sky_engine\", \"type\": \"dir\"}], \"output\": \"[TMP_BASE]/tmp_tmp_10/sky_engine.zip\", \"root\": \"[START_DIR]/src/out/android_debug/dist/packages\"}"
+    "name": "Zip sky_engine",
+    "stdin": "{\"entries\": [{\"path\": \"[START_DIR]/src/out/android_debug/dist/packages/sky_engine\", \"type\": \"dir\"}], \"output\": \"[TMP_BASE]/tmp_tmp_11/sky_engine.zip\", \"root\": \"[START_DIR]/src/out/android_debug/dist/packages\"}"
   },
   {
     "cmd": [
@@ -746,7 +793,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/tmp_tmp_10/sky_engine.zip",
+      "[TMP_BASE]/tmp_tmp_11/sky_engine.zip",
       "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/sky_engine.zip"
     ],
     "env": {
@@ -764,7 +811,7 @@
       "-u",
       "RECIPE_MODULE[build::file]/resources/fileutil.py",
       "rmtree",
-      "[TMP_BASE]/tmp_tmp_10"
+      "[TMP_BASE]/tmp_tmp_11"
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
@@ -805,7 +852,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
     },
     "name": "Zip android-x64 artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"flutter.jar\", \"path\": \"[START_DIR]/src/out/android_debug_x64/flutter.jar\", \"type\": \"file\"}, {\"archive_name\": \"libflutter.so\", \"path\": \"[START_DIR]/src/out/android_debug_x64/lib.stripped/libflutter.so\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_11/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"flutter.jar\", \"path\": \"[START_DIR]/src/out/android_debug_x64/flutter.jar\", \"type\": \"file\"}, {\"archive_name\": \"libflutter.so\", \"path\": \"[START_DIR]/src/out/android_debug_x64/lib.stripped/libflutter.so\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_12/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -816,7 +863,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/tmp_tmp_11/artifacts.zip",
+      "[TMP_BASE]/tmp_tmp_12/artifacts.zip",
       "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-x64/artifacts.zip"
     ],
     "env": {
@@ -834,7 +881,7 @@
       "-u",
       "RECIPE_MODULE[build::file]/resources/fileutil.py",
       "rmtree",
-      "[TMP_BASE]/tmp_tmp_11"
+      "[TMP_BASE]/tmp_tmp_12"
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
@@ -852,7 +899,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
     },
     "name": "Zip android-x64 symbols.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"libflutter.so\", \"path\": \"[START_DIR]/src/out/android_debug_x64/libflutter.so\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_12/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"libflutter.so\", \"path\": \"[START_DIR]/src/out/android_debug_x64/libflutter.so\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_13/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -863,7 +910,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/tmp_tmp_12/artifacts.zip",
+      "[TMP_BASE]/tmp_tmp_13/artifacts.zip",
       "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-x64/symbols.zip"
     ],
     "env": {
@@ -881,7 +928,7 @@
       "-u",
       "RECIPE_MODULE[build::file]/resources/fileutil.py",
       "rmtree",
-      "[TMP_BASE]/tmp_tmp_12"
+      "[TMP_BASE]/tmp_tmp_13"
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
@@ -922,7 +969,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
     },
     "name": "Zip android-x86 artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"flutter.jar\", \"path\": \"[START_DIR]/src/out/android_debug_x86/flutter.jar\", \"type\": \"file\"}, {\"archive_name\": \"libflutter.so\", \"path\": \"[START_DIR]/src/out/android_debug_x86/lib.stripped/libflutter.so\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_13/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"flutter.jar\", \"path\": \"[START_DIR]/src/out/android_debug_x86/flutter.jar\", \"type\": \"file\"}, {\"archive_name\": \"libflutter.so\", \"path\": \"[START_DIR]/src/out/android_debug_x86/lib.stripped/libflutter.so\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_14/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -933,7 +980,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/tmp_tmp_13/artifacts.zip",
+      "[TMP_BASE]/tmp_tmp_14/artifacts.zip",
       "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-x86/artifacts.zip"
     ],
     "env": {
@@ -951,7 +998,7 @@
       "-u",
       "RECIPE_MODULE[build::file]/resources/fileutil.py",
       "rmtree",
-      "[TMP_BASE]/tmp_tmp_13"
+      "[TMP_BASE]/tmp_tmp_14"
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
@@ -969,7 +1016,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
     },
     "name": "Zip android-x86 symbols.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"libflutter.so\", \"path\": \"[START_DIR]/src/out/android_debug_x86/libflutter.so\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_14/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"libflutter.so\", \"path\": \"[START_DIR]/src/out/android_debug_x86/libflutter.so\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_15/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -980,7 +1027,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/tmp_tmp_14/artifacts.zip",
+      "[TMP_BASE]/tmp_tmp_15/artifacts.zip",
       "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-x86/symbols.zip"
     ],
     "env": {
@@ -998,7 +1045,7 @@
       "-u",
       "RECIPE_MODULE[build::file]/resources/fileutil.py",
       "rmtree",
-      "[TMP_BASE]/tmp_tmp_14"
+      "[TMP_BASE]/tmp_tmp_15"
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
@@ -1010,7 +1057,7 @@
     "cmd": [
       "[START_DIR]/src/flutter/tools/gen_javadoc.py",
       "--out-dir",
-      "[TMP_BASE]/tmp_tmp_15"
+      "[TMP_BASE]/tmp_tmp_16"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
@@ -1028,7 +1075,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
     },
     "name": "archive javadoc",
-    "stdin": "{\"entries\": [{\"path\": \"[TMP_BASE]/tmp_tmp_15\", \"type\": \"dir\"}], \"output\": \"[START_DIR]/src/out/android_javadoc.zip\", \"root\": \"[TMP_BASE]/tmp_tmp_15\"}"
+    "stdin": "{\"entries\": [{\"path\": \"[TMP_BASE]/tmp_tmp_16\", \"type\": \"dir\"}], \"output\": \"[START_DIR]/src/out/android_javadoc.zip\", \"root\": \"[TMP_BASE]/tmp_tmp_16\"}"
   },
   {
     "cmd": [
@@ -1036,7 +1083,7 @@
       "-u",
       "RECIPE_MODULE[build::file]/resources/fileutil.py",
       "rmtree",
-      "[TMP_BASE]/tmp_tmp_15"
+      "[TMP_BASE]/tmp_tmp_16"
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"

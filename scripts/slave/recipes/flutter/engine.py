@@ -82,20 +82,33 @@ def UploadArtifacts(api, platform, file_paths, archive_name='artifacts.zip'):
         name='upload "%s"' % remote_name)
 
 
-def UploadDartPackage(api, package_name):
-  dir_label = 'UploadDartPackage %s' % package_name
+def UploadFolder(api, dir_label, parent_dir, folder_name, zip_name):
   with MakeTempDir(api, dir_label) as temp_dir:
-    local_zip = temp_dir.join('%s.zip' % package_name)
-    remote_name = '%s.zip' % package_name
+    local_zip = temp_dir.join(zip_name)
+    remote_name = zip_name
     remote_zip = GetCloudPath(api, remote_name)
-    parent_dir = api.path['start_dir'].join(
-        'src/out/android_debug/dist/packages')
+    parent_dir = api.path['start_dir'].join(parent_dir)
     pkg = api.zip.make_package(parent_dir, local_zip)
-    pkg.add_directory(parent_dir.join(package_name))
-    pkg.zip('Zip %s Package' % package_name)
+    pkg.add_directory(parent_dir.join(folder_name))
+    pkg.zip('Zip %s' % folder_name)
     api.gsutil.upload(local_zip, BUCKET_NAME, remote_zip,
         name='upload %s' % remote_name)
 
+
+def UploadDartPackage(api, package_name):
+  UploadFolder(api,
+    'UploadDartPackage %s' % package_name, # dir_label
+    'src/out/android_debug/dist/packages', # parent_dir
+    package_name, # folder_name
+    "%s.zip" % package_name) # zip_name
+
+
+def UploadFlutterPatchedSdk(api):
+  UploadFolder(api,
+    'Upload Flutter patched sdk', # dir_label
+    'src/out/host_debug_unopt', # parent_dir
+    'flutter_patched_sdk', # folder_name
+    'flutter_patched_sdk.zip') # zip_name
 
 # TODO(eseidel): Would be nice to have this on api.path or api.file.
 @contextlib.contextmanager
@@ -184,6 +197,7 @@ def BuildLinux(api):
     'out/host_debug_unopt/gen/flutter/lib/snapshot/isolate_snapshot.bin',
     'out/host_debug_unopt/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
   ])
+  UploadFlutterPatchedSdk(api)
 
 
 def TestObservatory(api):
