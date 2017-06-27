@@ -291,16 +291,15 @@ SPEC = {
       'enable_swarming': True,
       'serialize_tests': True,
     },
-    'Linux TSAN Release - concurrent marking (NVIDIA)': {
+    'Linux Release - concurrent marking (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
+        'chrome_with_codecs',
         'mb',
         'ninja_confirm_noop',
-        'fetch_telemetry_dependencies',
       ],
       'gclient_config': 'chromium',
       'gclient_apply_config': [
-        'chrome_internal',
         'v8_tot',
         'chromium_lkcr',
         'show_v8_revision',
