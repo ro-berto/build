@@ -2236,8 +2236,6 @@ BUILDERS = {
         'sanitizer_coverage_folder': 'linux64',
         'tests': [
           V8Testing(3),
-          OptimizeForSize,
-          MjsunitSPFrameAccess,
         ],
         'testing': {'platform': 'linux'},
       },
