@@ -657,6 +657,18 @@ def generate_junit_test(api, chromium_tests_api, mastername, buildername,
         waterfall_mastername=mastername, waterfall_buildername=buildername)
 
 
+def generate_cts_test(api, chromium_tests_api, mastername, buildername,
+                      test_spec, bot_update_step, enable_swarming=False,
+                      swarming_dimensions=None,
+                      scripts_compile_targets=None):
+  for test in test_spec.get(buildername, {}).get('cts_tests', []):
+    yield WebViewCTSTest(
+        platform=str(test['platform']),
+        command_line_args=test.get('command_line_args'),
+        arch=test.get('arch', 'arm64'),
+        waterfall_mastername=mastername, waterfall_buildername=buildername)
+
+
 def generate_script(api, chromium_tests_api, mastername, buildername, test_spec,
                     bot_update_step, enable_swarming=False,
                     swarming_dimensions=None, scripts_compile_targets=None):
@@ -2340,9 +2352,13 @@ class MiniInstallerTest(PythonBasedTest):  # pylint: disable=W0232
 
 class WebViewCTSTest(Test):
 
-  # TODO(yolandyan): create a generator and move specifications to src/
-  def __init__(self, platform='L'):
-    super(WebViewCTSTest, self).__init__()
+  def __init__(self, platform, arch, command_line_args=None,
+               waterfall_mastername=None, waterfall_buildername=None):
+    super(WebViewCTSTest, self).__init__(
+        waterfall_mastername=None,
+        waterfall_buildername=None)
+    self._arch = arch
+    self._command_line_args = command_line_args
     self._platform = platform
 
   @property
@@ -2360,8 +2376,11 @@ class WebViewCTSTest(Test):
   def run(self, api, suffix):
     api.chromium_android.adb_install_apk(
         api.chromium_android.apk_path('SystemWebView.apk'))
-    api.chromium_android.run_webview_cts(android_platform=self._platform,
-                                         result_details=True)
+    api.chromium_android.run_webview_cts(
+        android_platform=self._platform,
+        command_line_args=self._command_line_args,
+        arch=self._arch,
+        result_details=True)
 
 
 class IncrementalCoverageTest(Test):

@@ -356,7 +356,7 @@ SPEC = {
       'tests': [
         steps.AndroidInstrumentationTest('SystemWebViewShellLayoutTest',
                                          result_details=True),
-        steps.WebViewCTSTest('L'),
+        steps.WebViewCTSTest('L', arch='arm64'),
       ],
       'testing': {
         'platform': 'linux',
@@ -381,7 +381,7 @@ SPEC = {
                                          result_details=True),
         steps.AndroidInstrumentationTest('WebViewUiTest',
                                          result_details=True),
-        steps.WebViewCTSTest('M'),
+        steps.WebViewCTSTest('M', arch='arm64'),
       ],
       'testing': {
         'platform': 'linux',
@@ -404,7 +404,7 @@ SPEC = {
       'tests': [
         steps.AndroidInstrumentationTest('SystemWebViewShellLayoutTest',
                                          result_details=True),
-        steps.WebViewCTSTest('N'),
+        steps.WebViewCTSTest('N', arch='arm64'),
       ],
       'testing': {
         'platform': 'linux',

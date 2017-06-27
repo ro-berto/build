@@ -976,7 +976,7 @@
       "-u",
       "[START_DIR]/src/android_webview/tools/run_cts.py",
       "--arch",
-      "arm_64",
+      "arm64",
       "--platform",
       "L",
       "--skip-expected-failures",

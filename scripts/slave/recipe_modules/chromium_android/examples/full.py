@@ -256,8 +256,11 @@ def RunSteps(api, buildername):
         size_path=api.chromium_android.apk_path('Example.apk.size'))
 
   if config.get('run_webview_cts'):
-    api.chromium_android.run_webview_cts(command_line_args=[
-        '--webview_arg_1', '--webview_arg_2'], result_details=True)
+    api.chromium_android.run_webview_cts(
+        android_platform='L',
+        arch='arm64',
+        command_line_args=['--webview_arg_1', '--webview_arg_2'],
+        result_details=True)
 
   if config.get('run_telemetry_browser_tests'):
     api.chromium_android.run_telemetry_browser_test('PopularUrlsTest')

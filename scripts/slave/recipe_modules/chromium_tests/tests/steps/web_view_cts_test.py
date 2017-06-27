@@ -15,7 +15,7 @@ def RunSteps(api):
   api.chromium.set_config('chromium')
   api.chromium_android.set_config('main_builder')
 
-  test = api.chromium_tests.steps.WebViewCTSTest()
+  test = api.chromium_tests.steps.WebViewCTSTest('M', arch='arm64')
 
   try:
     test.run(api, '')

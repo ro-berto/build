@@ -76,6 +76,7 @@ class BotConfig(object):
           chromium_tests_api.get_compile_targets_for_scripts()
 
     test_generators = [
+      chromium_tests_api.steps.generate_cts_test,
       chromium_tests_api.steps.generate_gtest,
       chromium_tests_api.steps.generate_instrumentation_test,
       chromium_tests_api.steps.generate_junit_test,

@@ -1470,8 +1470,8 @@ class AndroidApi(recipe_api.RecipeApi):
                       'build', 'android', 'adb_command_line.py'),
                   command_line_script_args)
 
-  def run_webview_cts(self, command_line_args=None, suffix=None,
-                      android_platform='L', arch='arm_64',
+  def run_webview_cts(self, android_platform, arch,
+                      command_line_args=None, suffix=None,
                       result_details=False):
     suffix = ' (%s)' % suffix if suffix else ''
     if command_line_args:
