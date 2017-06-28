@@ -177,7 +177,7 @@ def RunSteps(api):
       api.git(*args, **kwargs)
       api.git(
           'cl', 'upload', '-f', '--use-commit-queue', '--bypass-hooks',
-          '--email', 'v8-autoroll@chromium.org', '--gerrit',
+          '--email', 'v8-autoroll@chromium.org', '--gerrit', '--send-mail',
       )
 
 
