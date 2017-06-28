@@ -1679,6 +1679,43 @@ BUILDERS = {
 ####### Waterfall: client.v8.official
   'client.v8.official': {
     'builders': {
+      'V8 Android Arm32': {
+        'recipe': 'v8/archive',
+        'chromium_apply_config': [
+          'clobber', 'default_compiler', 'default_target_v8_archive',
+          'v8_android', 'v8_static_library', 'v8_ninja', 'goma', 'gn'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+          'TARGET_PLATFORM': 'android',
+        },
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Android Arm64': {
+        'recipe': 'v8/archive',
+        'chromium_apply_config': [
+          'clobber', 'default_compiler', 'default_target_v8_archive',
+          'v8_android', 'v8_static_library', 'v8_ninja', 'goma', 'gn'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 64,
+          'TARGET_PLATFORM': 'android',
+        },
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux32': {
+        'recipe': 'v8/archive',
+        'chromium_apply_config': [
+          'clobber', 'default_compiler', 'default_target_v8_archive',
+          'v8_static_library', 'v8_ninja', 'goma', 'gn'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'testing': {'platform': 'linux'},
+      },
       'V8 Linux64': {
         'recipe': 'v8/archive',
         'chromium_apply_config': [

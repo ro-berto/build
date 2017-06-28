@@ -77,9 +77,16 @@ def RunSteps(api):
   package.zip('zipping')
 
   # Upload to google storage bucket.
+  if api.chromium.c.TARGET_ARCH != 'intel':
+    # Only disambiguate non-intel architectures. This is closest to our naming
+    # conventions.
+    arch_name = '-%s' % api.chromium.c.TARGET_ARCH
+  else:
+    arch_name = ''
   archive_name = (
-      'v8-%s%s-rel-%s.zip' %
-      (api.chromium.c.TARGET_PLATFORM, api.chromium.c.TARGET_BITS, version)
+      'v8-%s%s%s-rel-%s.zip' %
+      (api.chromium.c.TARGET_PLATFORM, arch_name, api.chromium.c.TARGET_BITS,
+       version)
   )
   gs_path_suffix = branch if RELEASE_BRANCH_RE.match(branch) else 'canary'
   api.gsutil.upload(
@@ -104,8 +111,8 @@ def GenTests(api):
   for mastername, _, buildername, _ in api.v8.iter_builders('v8/archive'):
     yield (
         api.test(api.v8.test_name(mastername, buildername)) +
-        api.properties.generic(mastername='client.v8.official',
-                               buildername='V8 Linux64',
+        api.properties.generic(mastername=mastername,
+                               buildername=buildername,
                                branch='3.4',
                                revision='deadbeef') +
         api.v8.version_file(17, 'head') +

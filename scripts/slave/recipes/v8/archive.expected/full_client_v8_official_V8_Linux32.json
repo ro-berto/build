@@ -1,0 +1,71 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gn.py",
+      "--root=[START_DIR]/v8",
+      "gen",
+      "//out/Release",
+      "--args=v8_static_library=true is_debug=false target_cpu=\"x86\" use_goma=true goma_dir=\"[CACHE]/goma_client\""
+    ],
+    "cwd": "[START_DIR]/v8",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "gn"
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[START_DIR]/v8/out/Release",
+      "-j",
+      "50",
+      "v8_archive"
+    ],
+    "cwd": "[START_DIR]/v8",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "compile"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::zip]/resources/zip.py"
+    ],
+    "name": "zipping",
+    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[START_DIR]/v8/out/Release/d8\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[START_DIR]/v8/out/Release/icudtl.dat\", \"type\": \"file\"}], \"output\": \"[START_DIR]/archive.zip\", \"root\": \"[START_DIR]/v8/out/Release\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "-a",
+      "public-read",
+      "[START_DIR]/archive.zip",
+      "gs://chromium-v8/official/3.4/v8-linux32-rel-3.4.3.17.zip"
+    ],
+    "infra_step": true,
+    "name": "gsutil upload",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/official/3.4/v8-linux32-rel-3.4.3.17.zip@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "archive link",
+    "~followup_annotations": [
+      "@@@STEP_LINK@download@https://storage.googleapis.com/chromium-v8/official/3.4/v8-linux32-rel-3.4.3.17.zip@@@"
+    ]
+  }
+]

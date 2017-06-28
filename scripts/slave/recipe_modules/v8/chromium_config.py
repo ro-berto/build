@@ -188,6 +188,12 @@ def simulate_s390(c):
 
 
 @CONFIG_CTX(includes=['v8'])
+def v8_android(c):
+  c.gn_args.append('symbol_level=1')
+  c.gn_args.append('v8_android_log_stdout=true')
+
+
+@CONFIG_CTX(includes=['v8'])
 def v8_static_library(c):
   c.gn_args.append('v8_static_library=true')
 

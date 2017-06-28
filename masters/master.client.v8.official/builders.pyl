@@ -13,12 +13,36 @@
   "default_remote_run_repository": "https://chromium.googlesource.com/chromium/tools/build.git",
 
   "builders": {
+    "V8 Android Arm32": {
+      "recipe": "v8/archive",
+      "use_remote_run": False,
+      "scheduler": "v8_commits",
+      "mergeRequests": False,
+      "slave_pools": ["linux"],
+      "category": "0Linux",
+    },
+    "V8 Android Arm64": {
+      "recipe": "v8/archive",
+      "use_remote_run": False,
+      "scheduler": "v8_commits",
+      "mergeRequests": False,
+      "slave_pools": ["linux"],
+      "category": "0Linux",
+    },
+    "V8 Linux32": {
+      "recipe": "v8/archive",
+      "use_remote_run": False,
+      "scheduler": "v8_commits",
+      "mergeRequests": False,
+      "slave_pools": ["linux"],
+      "category": "0Linux",
+    },
     "V8 Linux64": {
       "recipe": "v8/archive",
       "use_remote_run": False,
       "scheduler": "v8_commits",
       "mergeRequests": False,
-      "slave_pools": ["linux1"],
+      "slave_pools": ["linux"],
       "category": "0Linux",
     },
   },
@@ -32,13 +56,13 @@
   },
 
   "slave_pools": {
-    "linux1": {
+    "linux": {
       "slave_data": {
         "bits": 64,
         "os": "linux",
         "version": "trusty",
       },
-      "slaves": ["slave47-c3"],
+      "slaves": ["slave47-c3", "slave86-c3"],
     },
   },
 }
