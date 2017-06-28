@@ -66,12 +66,6 @@ _KITCHEN_CONFIG = {
     ],
     is_blacklist=False,
   ),
-  'tryserver.chromium.mac': KitchenConfig(
-    builders=[
-      'mac_chromium_10.10_rel_ng',
-    ],
-    is_blacklist=False,
-  ),
 
   'chromium.fyi': _ALL_BUILDERS,
   'chromium.swarm': _ALL_BUILDERS,
