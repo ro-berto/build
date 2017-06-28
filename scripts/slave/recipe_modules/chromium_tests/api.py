@@ -957,7 +957,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         }
       elif buildername == 'mac_chromium_rel_ng':
         layout_test_extra_args = {
-            'shards': 8,
+            'shards': 12,
             'dimensions': {'os': 'Mac-10.12', 'gpu': '8086:0a2e'},
         }
       else:
