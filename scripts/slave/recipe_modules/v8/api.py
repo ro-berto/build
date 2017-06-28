@@ -210,7 +210,12 @@ class V8Api(recipe_api.RecipeApi):
     return seed
 
   def init_tryserver(self):
-    self.m.chromium.apply_config('trybot_flavor')
+    if self.m.chromium.c.BUILD_CONFIG != 'Debug':
+      # TODO(machenbach): This is only for passing --dchecks-always-on to
+      # the test driver. All real build flags are passed by MB on the V8 side.
+      # This can be removed after the GN switch is complete as the test
+      # driver auto-detects it for GN.
+      self.m.chromium.apply_config('trybot_flavor')
 
   def checkout(self, revision=None, **kwargs):
     # Set revision for bot_update.
