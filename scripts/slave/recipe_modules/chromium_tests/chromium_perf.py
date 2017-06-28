@@ -50,8 +50,6 @@ def _BaseSpec(bot_type, config_name, platform, target_bits, tests,
   if platform == 'android':
     spec['android_config'] = 'chromium_perf'
     spec['android_apply_config'] = ['use_devil_adb']
-    if remove_system_webview:
-      spec['android_apply_config'].append('remove_all_system_webviews')
     spec['chromium_apply_config'] = ['android']
     spec['chromium_config_kwargs']['TARGET_ARCH'] = 'arm'
     spec['chromium_config_kwargs']['TARGET_PLATFORM'] = 'android'
@@ -145,21 +143,6 @@ def _AddBuildSpec(
     SPEC['settings']['bisect_builders'].append(name)
 
 
-def _AddTestSpec(name, perf_id, platform, target_bits=64,
-                 num_host_shards=1, num_device_shards=1,
-                 parent_buildername=None, replace_webview=False):
-  for shard_index in xrange(num_host_shards):
-    builder_name = '%s (%d)' % (name, shard_index + 1)
-    tests = [steps.DynamicPerfTests(
-        perf_id, platform, target_bits, num_device_shards=num_device_shards,
-        num_host_shards=num_host_shards, shard_index=shard_index,
-        replace_webview=replace_webview)]
-    SPEC['builders'][builder_name] = TestSpec(
-        'chromium_perf', perf_id, platform, target_bits, tests=tests,
-        parent_buildername=parent_buildername,
-        remove_system_webview=replace_webview)
-
-
 _AddBuildSpec('Android Builder', 'android', target_bits=32)
 _AddBuildSpec('Android arm64 Builder', 'android')
 _AddBuildSpec('Android Compile', 'android', target_bits=32,
@@ -207,12 +190,11 @@ _AddIsolatedTestSpec('Android One Perf', 'android-one', 'android',
                      target_bits=32, parent_buildername='Android Compile')
 
 # Webview
-_AddTestSpec('Android Nexus5X WebView Perf', 'android-webview-nexus5X',
-             'android', num_device_shards=7, num_host_shards=3,
-             replace_webview=True, parent_buildername='Android arm64 Compile')
-_AddTestSpec('Android Nexus6 WebView Perf', 'android-webview-nexus6',
-             'android', num_device_shards=7, num_host_shards=3, target_bits=32,
-             replace_webview=True, parent_buildername='Android Compile')
+_AddIsolatedTestSpec('Android Nexus5X WebView Perf', 'android-webview-nexus5X',
+                     'android', parent_buildername='Android arm64 Compile')
+_AddIsolatedTestSpec('Android Nexus6 WebView Perf', 'android-webview-nexus6',
+                     'android', target_bits=32,
+                     parent_buildername='Android Compile')
 
 
 _AddIsolatedTestSpec('Win Zenbook Perf', 'win-zenbook', 'win')
