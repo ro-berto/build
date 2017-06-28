@@ -331,7 +331,10 @@ class ChromiumApi(recipe_api.RecipeApi):
         # Official builds are always Google Chrome.
         ninja_env['CHROME_BUILD_TYPE'] = '_official'
 
-    if self.c.compile_py.goma_canary:
+    if self.c.compile_py.goma_canary or (
+        self.m.platform.is_linux and self.m.tryserver.is_tryserver):
+      # TODO(tikuta): remove this after disabled by default in goma
+      #               crbug.com/730962
       goma_env['GOMA_BACKEND_SOFT_STICKINESS'] = 'false'
 
     if self.c.compile_py.goma_hermetic:
