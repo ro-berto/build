@@ -1910,6 +1910,27 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py",
+      "https://chromeperf.appspot.com/add_point",
+      "-i",
+      "{\"data\": \"[{\\\"buildnumber\\\": \\\"0\\\", \\\"masterid\\\": \\\"chromium.fake\\\", \\\"units\\\": \\\"seconds\\\", \\\"master\\\": \\\"chromium.fake\\\", \\\"buildername\\\": \\\"ios\\\", \\\"test\\\": \\\"chrome_ios_perf/startup test/become_active\\\", \\\"bot\\\": \\\"ios\\\", \\\"value\\\": 0.68, \\\"revision\\\": \\\"refs/heads/master@{#170242}\\\"}, {\\\"buildnumber\\\": \\\"0\\\", \\\"masterid\\\": \\\"chromium.fake\\\", \\\"units\\\": \\\"seconds\\\", \\\"master\\\": \\\"chromium.fake\\\", \\\"buildername\\\": \\\"ios\\\", \\\"test\\\": \\\"chrome_ios_perf/startup test/finish_launching\\\", \\\"bot\\\": \\\"ios\\\", \\\"value\\\": 0.55, \\\"revision\\\": \\\"refs/heads/master@{#170242}\\\"}]\"}",
+      "-o",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[START_DIR]/src",
+    "name": "perf dashboard post",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Failed to post to Perf Dashboard. Error response: None@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@",
+      "@@@STEP_WARNINGS@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--",

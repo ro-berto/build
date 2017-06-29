@@ -798,11 +798,50 @@ class iOSApi(recipe_api.RecipeApi):
             test_results_server='test-results.appspot.com',
           )
 
+      # Upload performance data result to the perf dashboard.
+      perf_results = self.m.path.join(
+        task['task'].task_output_dir, '0', 'perf_result.json')
+      if self.m.path.exists(perf_results):
+        data = self.get_perftest_data(perf_results)
+        data_decode = data['Perf Data']
+        data_result = []
+        for testcase in data_decode:
+          for trace in data_decode[testcase]['value']:
+            data_point = self.m.perf_dashboard.get_skeleton_point(
+              'chrome_ios_perf/%s/%s' % (testcase, trace),
+              self.m.bot_update.last_returned_properties.get(
+                'got_revision_cp', 'x@{#0}'),
+              data_decode[testcase]['value'][trace]
+            )
+            data_point['units'] = data_decode[testcase]['unit']
+            data_result.extend([data_point])
+        self.m.perf_dashboard.set_default_config()
+        self.m.perf_dashboard.add_point(data_result)
+
     if failures:
       failure = self.m.step.StepFailure
       if infra_failure:
         failure = self.m.step.InfraFailure
       raise failure('Failed %s.' % ', '.join(sorted(failures)))
+
+  def get_perftest_data(self, path):
+    # Use fake data for recipe testing.
+    if self._test_data.enabled:
+      data = {
+        'Perf Data' : {
+          'startup test' : {
+            'unit' : 'seconds',
+            'value' : {
+              'finish_launching' : 0.55,
+              'become_active' : 0.68,
+            }
+          }
+        }
+      }
+    else:
+      with open(path) as f: # pragma: no cover
+        data = self.m.json.loads(f.read())
+    return data
 
   def test_swarming(self, scripts_dir='src/ios/build/bots/scripts',
                     upload_test_results=True):
