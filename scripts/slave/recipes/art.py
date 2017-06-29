@@ -175,8 +175,6 @@ def setup_host_x86(api, debug, bitness, concurrent_collector=True,
         jdwp_command.append('--debug')
       api.step('test jdwp aot', jdwp_command)
 
-      api.step('test dx', ['./dalvik/dx/tests/run-all-tests'])
-
 def setup_target(api,
     serial,
     debug,
