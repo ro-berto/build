@@ -396,6 +396,8 @@ class LocalGTestTest(Test):
       kwargs['json_results_file'] = gtest_results_file
       kwargs['shard_timeout'] = self._android_shard_timeout
       kwargs['tool'] = self._android_tool
+    elif is_fuchsia:
+      kwargs['test_launcher_summary_output'] = gtest_results_file
     else:
       kwargs['xvfb'] = self._use_xvfb
       kwargs['test_type'] = self.name
