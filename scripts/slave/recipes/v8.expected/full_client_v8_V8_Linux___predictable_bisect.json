@@ -20,10 +20,10 @@
       "v8@20123",
       "--no_shallow"
     ],
-    "env": {
-      "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
-      "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "infra_step": true,
     "name": "bot_update",
@@ -767,10 +767,10 @@
       "v8@a0",
       "--no_shallow"
     ],
-    "env": {
-      "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
-      "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "infra_step": true,
     "name": "Bisect a0.bot_update",
@@ -1308,10 +1308,10 @@
       "v8@a2",
       "--no_shallow"
     ],
-    "env": {
-      "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
-      "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "infra_step": true,
     "name": "Bisect a2.bot_update",
@@ -1882,10 +1882,10 @@
       "v8@a1",
       "--no_shallow"
     ],
-    "env": {
-      "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
-      "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "infra_step": true,
     "name": "Bisect a1.bot_update",

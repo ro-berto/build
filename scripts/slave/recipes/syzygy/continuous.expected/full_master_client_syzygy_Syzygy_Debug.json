@@ -32,10 +32,10 @@
       "--revision",
       "src@0e9f25b1098271be2b096fd1c095d6d907cf86f7"
     ],
-    "env": {
-      "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
-      "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "infra_step": true,
     "name": "bot_update",

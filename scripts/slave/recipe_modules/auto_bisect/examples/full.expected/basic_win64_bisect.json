@@ -32,10 +32,10 @@
       "--revision",
       "src@HEAD"
     ],
-    "env": {
-      "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
-      "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "infra_step": true,
     "name": "bot_update",
@@ -794,10 +794,10 @@
       "src@a6298e4afedbf2cd461755ea6f45b0ad64222222",
       "--disable-syntax-validation"
     ],
-    "env": {
-      "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
-      "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "infra_step": true,
     "name": "Gathering reference values.bot_update",
@@ -1582,10 +1582,10 @@
       "src@00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
       "--disable-syntax-validation"
     ],
-    "env": {
-      "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
-      "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "infra_step": true,
     "name": "Gathering reference values.bot_update (2)",
@@ -2535,10 +2535,10 @@
       "src@dcdcdc0ff1122212323134879ddceeb1240b0988",
       "--disable-syntax-validation"
     ],
-    "env": {
-      "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
-      "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "infra_step": true,
     "name": "Bisecting revision.bot_update",
@@ -3798,10 +3798,10 @@
       "src@a6298e4afedbf2cd461755ea6f45b0ad64222222",
       "--disable-syntax-validation"
     ],
-    "env": {
-      "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
-      "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "infra_step": true,
     "name": "Bisecting revision.bot_update (2)",
@@ -4358,10 +4358,10 @@
       "src@00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
       "--disable-syntax-validation"
     ],
-    "env": {
-      "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
-      "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "infra_step": true,
     "name": "Bisecting revision.bot_update (3)",
@@ -4918,10 +4918,10 @@
       "src@dcdcdc0ff1122212323134879ddceeb1240b0988",
       "--disable-syntax-validation"
     ],
-    "env": {
-      "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
-      "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "infra_step": true,
     "name": "Bisecting revision.bot_update (4)",
@@ -5672,10 +5672,10 @@
       "src@a6298e4afedbf2cd461755ea6f45b0ad64222222",
       "--disable-syntax-validation"
     ],
-    "env": {
-      "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
-      "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "infra_step": true,
     "name": "Bisecting revision.bot_update (5)",
@@ -6426,10 +6426,10 @@
       "src@00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111",
       "--disable-syntax-validation"
     ],
-    "env": {
-      "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
-      "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "infra_step": true,
     "name": "Bisecting revision.bot_update (6)",
@@ -7180,10 +7180,10 @@
       "src@dcdcdc0ff1122212323134879ddceeb1240b0988",
       "--disable-syntax-validation"
     ],
-    "env": {
-      "GIT_HTTP_LOW_SPEED_LIMIT": "1000",
-      "GIT_HTTP_LOW_SPEED_TIME": "300",
-      "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "infra_step": true,
     "name": "Bisecting revision.bot_update (7)",
