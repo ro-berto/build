@@ -36,6 +36,30 @@
     "cmd": [
       "python",
       "-u",
+      "[START_DIR]/v8/tools/release/filter_build_files.py",
+      "--dir",
+      "[START_DIR]/v8/out/Release",
+      "--platform",
+      "linux",
+      "--type",
+      "exe",
+      "--json-output",
+      "/path/to/tmp/json"
+    ],
+    "infra_step": true,
+    "name": "filter build files",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"[START_DIR]/v8/out/Release/d8\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"[START_DIR]/v8/out/Release/icudtl.dat\"@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "name": "zipping",
@@ -66,6 +90,66 @@
     "name": "archive link",
     "~followup_annotations": [
       "@@@STEP_LINK@download@https://storage.googleapis.com/chromium-v8/official/3.4/v8-linux64-rel-3.4.3.17.zip@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/v8/tools/release/filter_build_files.py",
+      "--dir",
+      "[START_DIR]/v8/out/Release",
+      "--platform",
+      "linux",
+      "--type",
+      "lib",
+      "--json-output",
+      "/path/to/tmp/json"
+    ],
+    "infra_step": true,
+    "name": "filter build files (libs)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"[START_DIR]/v8/out/Release/d8\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"[START_DIR]/v8/out/Release/icudtl.dat\"@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::zip]/resources/zip.py"
+    ],
+    "name": "zipping (libs)",
+    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[START_DIR]/v8/out/Release/d8\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[START_DIR]/v8/out/Release/icudtl.dat\", \"type\": \"file\"}], \"output\": \"[START_DIR]/archive.zip\", \"root\": \"[START_DIR]/v8/out/Release\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "-a",
+      "public-read",
+      "[START_DIR]/archive.zip",
+      "gs://chromium-v8/official/3.4/v8-linux64-libs-rel-3.4.3.17.zip"
+    ],
+    "infra_step": true,
+    "name": "gsutil upload (libs)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/official/3.4/v8-linux64-libs-rel-3.4.3.17.zip@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "archive link (libs)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@download@https://storage.googleapis.com/chromium-v8/official/3.4/v8-linux64-libs-rel-3.4.3.17.zip@@@"
     ]
   }
 ]

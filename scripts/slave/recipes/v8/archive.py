@@ -32,6 +32,59 @@ BRANCH_RE = re.compile(r'^\d+\.\d+(?:\.\d+)?$')
 RELEASE_BRANCH_RE = re.compile(r'^\d+\.\d+$')
 
 
+def make_archive(api, branch, version, archive_type, step_suffix='',
+                 archive_suffix=''):
+  # Make a list of files to archive.
+  build_dir = api.chromium.c.build_dir.join(api.chromium.c.build_config_fs)
+  file_list_test_data = map(str, map(build_dir.join, ['d8', 'icudtl.dat']))
+  file_list = api.python(
+      'filter build files' + step_suffix,
+      api.path['checkout'].join('tools', 'release', 'filter_build_files.py'),
+      [
+        '--dir', build_dir,
+        '--platform', api.chromium.c.TARGET_PLATFORM,
+        '--type', archive_type,
+        '--json-output', api.json.output(),
+      ],
+      infra_step=True,
+      step_test_data=lambda: api.json.test_api.output(file_list_test_data),
+  ).json.output
+
+  # Zip build.
+  zip_file = api.path['start_dir'].join('archive.zip')
+  package = api.zip.make_package(build_dir, zip_file)
+  map(package.add_file, map(api.path.abs_to_path, file_list))
+  package.zip('zipping' + step_suffix)
+
+  # Upload to google storage bucket.
+  if api.chromium.c.TARGET_ARCH != 'intel':
+    # Only disambiguate non-intel architectures. This is closest to our naming
+    # conventions.
+    arch_name = '-%s' % api.chromium.c.TARGET_ARCH
+  else:
+    arch_name = ''
+  archive_name = (
+      'v8-%s%s%s%s-rel-%s.zip' %
+      (api.chromium.c.TARGET_PLATFORM, arch_name, api.chromium.c.TARGET_BITS,
+       archive_suffix, version)
+  )
+  gs_path_suffix = branch if RELEASE_BRANCH_RE.match(branch) else 'canary'
+  api.gsutil.upload(
+    zip_file,
+    'chromium-v8/official/%s' % gs_path_suffix,
+    archive_name,
+    args=['-a', 'public-read'],
+    name='upload' + step_suffix,
+  )
+
+  api.step('archive link' + step_suffix, cmd=None)
+  api.step.active_result.presentation.links['download'] = (
+      ARCHIVE_LINK % (gs_path_suffix, archive_name))
+
+  # Clean up.
+  api.file.remove('cleanup archive' + step_suffix, zip_file)
+
+
 def RunSteps(api):
   # Ensure a proper branch is specified.
   branch = api.properties.get('branch')
@@ -55,53 +108,8 @@ def RunSteps(api):
   api.v8.runhooks()
   api.v8.compile()
 
-  # Make a list of files to archive.
-  build_dir = api.chromium.c.build_dir.join(api.chromium.c.build_config_fs)
-  file_list_test_data = map(str, map(build_dir.join, ['d8', 'icudtl.dat']))
-  file_list = api.python(
-      'filter build files',
-      api.path['checkout'].join('tools', 'release', 'filter_build_files.py'),
-      [
-        '--dir', build_dir,
-        '--platform', api.chromium.c.TARGET_PLATFORM,
-        '--json-output', api.json.output(),
-      ],
-      infra_step=True,
-      step_test_data=lambda: api.json.test_api.output(file_list_test_data),
-  ).json.output
-
-  # Zip build.
-  zip_file = api.path['start_dir'].join('archive.zip')
-  package = api.zip.make_package(build_dir, zip_file)
-  map(package.add_file, map(api.path.abs_to_path, file_list))
-  package.zip('zipping')
-
-  # Upload to google storage bucket.
-  if api.chromium.c.TARGET_ARCH != 'intel':
-    # Only disambiguate non-intel architectures. This is closest to our naming
-    # conventions.
-    arch_name = '-%s' % api.chromium.c.TARGET_ARCH
-  else:
-    arch_name = ''
-  archive_name = (
-      'v8-%s%s%s-rel-%s.zip' %
-      (api.chromium.c.TARGET_PLATFORM, arch_name, api.chromium.c.TARGET_BITS,
-       version)
-  )
-  gs_path_suffix = branch if RELEASE_BRANCH_RE.match(branch) else 'canary'
-  api.gsutil.upload(
-    zip_file,
-    'chromium-v8/official/%s' % gs_path_suffix,
-    archive_name,
-    args=['-a', 'public-read'],
-  )
-
-  api.step('archive link', cmd=None)
-  api.step.active_result.presentation.links['download'] = (
-      ARCHIVE_LINK % (gs_path_suffix, archive_name))
-
-  # Clean up.
-  api.file.remove('cleanup archive', zip_file)
+  make_archive(api, branch, version, 'exe')
+  make_archive(api, branch, version, 'lib', ' (libs)', '-libs')
 
 
 def GenTests(api):
@@ -130,7 +138,9 @@ def GenTests(api):
           'bot_update', '--spec', 'target_os = [\'android\']')
 
     test += api.post_process(Filter(
-        'gn', 'compile', 'zipping', 'gsutil upload', 'archive link'))
+        'gn', 'compile', 'filter build files', 'zipping', 'gsutil upload',
+        'archive link', 'filter build files (libs)', 'zipping (libs)',
+        'gsutil upload (libs)', 'archive link (libs)'))
 
     yield test
 
