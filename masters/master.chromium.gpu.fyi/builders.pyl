@@ -40,7 +40,7 @@
       # It's crucial to merge build requests on the testers.
       "mergeRequests": True,
       "slave_pools": ["win7_rel_nvidia"],
-      "builder_timeout_s": 10800,
+      "builder_timeout_s": 14400,
       "category": "0Windows",
     },
     "Win7 Debug (NVIDIA)": {
