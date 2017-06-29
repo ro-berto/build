@@ -105,11 +105,8 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  def check_bot_update(check, steps):
-    check('v8@refs/branch-heads/3.4:deadbeef' in steps['bot_update']['cmd'])
-
   for mastername, _, buildername, _ in api.v8.iter_builders('v8/archive'):
-    yield (
+    test = (
         api.test(api.v8.test_name(mastername, buildername)) +
         api.properties.generic(mastername=mastername,
                                buildername=buildername,
@@ -118,13 +115,24 @@ def GenTests(api):
         api.v8.version_file(17, 'head') +
         api.override_step_data(
             'git describe', api.raw_io.stream_output('3.4.3.17')) +
-        api.post_process(check_bot_update) +
+        api.v8.check_param_equals(
+            'bot_update', '--revision', 'v8@refs/branch-heads/3.4:deadbeef') +
+        api.v8.check_param_equals(
+            'bot_update', '--with_branch_heads', True) +
         api.post_process(
             MustRun, 'rmtree clobber', 'gclient runhooks', 'gn', 'compile',
-            'zipping', 'gsutil upload', 'archive link') +
-        api.post_process(Filter(
-            'gn', 'compile', 'zipping', 'gsutil upload', 'archive link'))
+            'zipping', 'gsutil upload', 'archive link')
     )
+
+    if 'android' in buildername.lower():
+      # Make sure bot_update specifies target_os on Android builders.
+      test += api.v8.check_in_param(
+          'bot_update', '--spec', 'target_os = [\'android\']')
+
+    test += api.post_process(Filter(
+        'gn', 'compile', 'zipping', 'gsutil upload', 'archive link'))
+
+    yield test
 
   # Test bailout on missing branch.
   mastername = 'client.v8.official'

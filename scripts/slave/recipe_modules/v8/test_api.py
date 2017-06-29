@@ -4,6 +4,8 @@
 
 # Exposes the builder and recipe configurations to GenTests in recipes.
 
+
+import argparse
 import re
 
 from recipe_engine import recipe_test_api
@@ -453,3 +455,34 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
   def fail(self, step_name, variant='default'):
     return self.override_step_data(
         step_name, self.failures_example(variant=variant))
+
+  @staticmethod
+  def _get_param(check, steps, step, param, action=None):
+    """Returns the value of the given step's cmd-line parameter."""
+    check(step in steps)
+    parser = argparse.ArgumentParser()
+    if action:
+      parser.add_argument(param, dest='param', action=action)
+    else:
+      parser.add_argument(param, dest='param')
+    options, _ = parser.parse_known_args(steps[step]['cmd'])
+    check(options)
+    return options.param
+
+  @staticmethod
+  def _check_param_equals(check, steps, step, param, value):
+    action = 'store_true' if value in [True, False] else None
+    check(value == V8TestApi._get_param(check, steps, step, param, action))
+
+  @staticmethod
+  def _check_in_param(check, steps, step, param, value):
+    check(value in V8TestApi._get_param(check, steps, step, param))
+
+  def check_param_equals(self, step, param, value):
+    """Check if a step has a particular parmeter matching a given value."""
+    return self.post_process(
+        V8TestApi._check_param_equals, step, param, value)
+
+  def check_in_param(self, step, param, value):
+    """Check if a given value is a substring of a step's parmeter."""
+    return self.post_process(V8TestApi._check_in_param, step, param, value)
