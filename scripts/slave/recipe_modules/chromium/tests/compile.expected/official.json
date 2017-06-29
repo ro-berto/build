@@ -126,7 +126,7 @@
       "CHROME_HEADLESS": "1",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]/goma/test_buildername",
-      "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
+      "GOMA_DEPS_CACHE_FILE": "goma_deps_cache_131",
       "GOMA_HERMETIC": "fallback",
       "GOMA_LOCAL_OUTPUT_CACHE_DIR": "[CACHE]/goma/localoutputcache",
       "GOMA_MAX_ACTIVE_FAIL_FALLBACK_TASKS": "1",

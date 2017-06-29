@@ -301,7 +301,7 @@
       "CHROME_HEADLESS": "1",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]/goma/V8_Linux64___internal_snapshot",
-      "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
+      "GOMA_DEPS_CACHE_FILE": "goma_deps_cache_131",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "infra_step": true,
@@ -1524,7 +1524,7 @@
       "CHROME_HEADLESS": "1",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]/goma/V8_Linux64___internal_snapshot",
-      "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
+      "GOMA_DEPS_CACHE_FILE": "goma_deps_cache_131",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "infra_step": true,
@@ -2214,7 +2214,7 @@
       "CHROME_HEADLESS": "1",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]/goma/V8_Linux64___internal_snapshot",
-      "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
+      "GOMA_DEPS_CACHE_FILE": "goma_deps_cache_131",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "infra_step": true,

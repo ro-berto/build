@@ -266,7 +266,7 @@
       "CHROME_HEADLESS": "1",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[GOMA_CACHE]/android_compile_x64_dbg",
-      "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
+      "GOMA_DEPS_CACHE_FILE": "goma_deps_cache_131",
       "GOMA_FAIL_FAST": "true",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[BUILDER_CACHE]/android_compile_x64_dbg/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_compile_x64_dbg/src/build/android:<PATH>"
