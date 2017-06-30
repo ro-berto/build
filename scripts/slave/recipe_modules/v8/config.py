@@ -97,5 +97,10 @@ def predictable(c):
 
 
 @config_ctx()
+def stress_incremental_marking(c):
+  c.testing.test_args.append('--extra-flags=--stress-incremental-marking')
+
+
+@config_ctx()
 def verify_heap_skip_remembered_set(c):
   c.testing.test_args.append('--extra-flags=--verify-heap-skip-remembered-set')

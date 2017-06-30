@@ -875,6 +875,7 @@ BUILDERS = {
       'V8 Linux64 TSAN - concurrent marking': {
         'chromium_apply_config': [
           'v8_ninja', 'clang', 'tsan2', 'goma', 'mb'],
+        'v8_apply_config': ['stress_incremental_marking'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -2195,6 +2196,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_tsan_concurrent_marking_rel_ng_triggered': {
+        'v8_apply_config': ['stress_incremental_marking'],
         'chromium_apply_config': [
           'v8_ninja',
           'clang',
