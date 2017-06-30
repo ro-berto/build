@@ -76,23 +76,28 @@ def RunSteps(api):
   base_dir = api.chromium_checkout.get_checkout_dir(bot_config)
   checkout_dir = base_dir.join(api.gclient.c.solutions[0].name)
 
-  # Most recent commit in local checkout
-  with api.context(cwd=checkout_dir):
-    step_result = api.git(
-        'log', '-1', '--pretty=format:%ct', 'refs/remotes/origin/master',
-        stdout=api.raw_io.output_text(),
-        step_test_data=lambda: api.raw_io.test_api.stream_output('1333700000'))
-  last_commit_ts = float(step_result.stdout)
-  checkout_age_seconds = api.time.time() - last_commit_ts
-  step_result.presentation.logs[
-      'Checkout is ~%f seconds old' % checkout_age_seconds] = []
-  if checkout_age_seconds > NOT_FRESH:
+  refresh_checkout = True
+  if api.path.exists(checkout_dir):
+    # Most recent commit in local checkout
+    with api.context(cwd=checkout_dir):
+      step_result = api.git(
+          'log', '-1', '--pretty=format:%ct', 'refs/remotes/origin/master',
+          stdout=api.raw_io.output_text(),
+          step_test_data=lambda: api.raw_io.test_api.stream_output(
+              '1333700000'))
+    last_commit_ts = float(step_result.stdout)
+    checkout_age_seconds = api.time.time() - last_commit_ts
+    step_result.presentation.logs[
+        'Checkout is ~%f seconds old' % checkout_age_seconds] = []
+    refresh_checkout = checkout_age_seconds > NOT_FRESH
+  if refresh_checkout:
     api.chromium_tests.prepare_checkout(bot_config)
 
 
 def GenTests(api):
   yield (
       api.test('linux') +
+      api.path.exists(api.path['start_dir'].join('src')) +
       api.properties(**{
           'mastername': 'tryserver.chromium.linux',
           'buildername': 'linux_chromium_variable',
@@ -102,6 +107,7 @@ def GenTests(api):
   )
   yield (
       api.test('win') +
+      api.path.exists(api.path['start_dir'].join('src')) +
       api.properties(**{
           'mastername': 'tryserver.chromium.win',
           'buildername': 'win_chromium_variable',
@@ -111,9 +117,19 @@ def GenTests(api):
   )
   yield (
       api.test('mac') +
+      api.path.exists(api.path['start_dir'].join('src')) +
       api.properties(**{
           'mastername': 'tryserver.chromium.mac',
           'buildername': 'mac_chromium_variable',
+          'bot_id': 'build1-a1',
+          'buildnumber': '1',
+      })
+  )
+  yield (
+      api.test('linux_new') +
+      api.properties(**{
+          'mastername': 'tryserver.chromium.linux',
+          'buildername': 'linux_chromium_variable',
           'bot_id': 'build1-a1',
           'buildnumber': '1',
       })
