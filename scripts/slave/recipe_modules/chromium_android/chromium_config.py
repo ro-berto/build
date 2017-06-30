@@ -71,6 +71,7 @@ def mipsel_builder_mb(c):
 def cronet_builder(c):
   c.gn_args.append('disable_file_support=true')
   c.gn_args.append('disable_ftp_support=true')
+  c.gn_args.append('enable_reporting=false')
   c.gn_args.append('enable_websockets=false')
   c.gn_args.append('use_platform_icu_alternatives=true')
   c.gn_args.append('use_partition_alloc=false')
