@@ -49,7 +49,7 @@
           "V8 Linux - ppc - sim",
           "V8 Linux - ppc64 - sim",
           "V8 Linux - s390 - sim",
-          "V8 Linux - s390x - sim",
+          "V8 Linux - s390x - sim"
         ],
         "builders": {
           "*": {}
