@@ -21,18 +21,4 @@ def Update(config, active_master, c):
           'machenbach@chromium.org',
         ],
     ),
-    V8Notifier(
-        config,
-        active_master,
-        categories_steps={
-          'x87': [],
-        },
-        extraRecipients=[
-          'weiliang.lin@intel.com',
-          'chunyang.dai@intel.com',
-          'zhengxing.li@intel.com',
-          # TODO(machenbach): Remove after verifying that it works.
-          'machenbach@chromium.org',
-        ],
-    ),
   ])

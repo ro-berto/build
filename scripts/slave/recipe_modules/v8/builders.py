@@ -1638,42 +1638,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
         'swarming_properties': SWARMING_FYI_PROPS,
       },
-####### Category: X87
-      'V8 Linux - x87 - nosnap - debug builder': {
-        'chromium_apply_config': [
-          'v8_ninja', 'default_compiler', 'goma', 'x87', 'mb'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder',
-        'enable_swarming': True,
-        'build_gs_archive': 'linux_x87_dbg_archive',
-        'testing': {'platform': 'linux'},
-        'triggers': [
-          'V8 Linux - x87 - nosnap - debug',
-        ],
-      },
-      'V8 Linux - x87 - nosnap - debug': {
-        'chromium_apply_config': [
-          'v8_ninja', 'default_compiler', 'goma', 'x87'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'tester',
-        'enable_swarming': True,
-        'parent_buildername': 'V8 Linux - x87 - nosnap - debug builder',
-        'build_gs_archive': 'linux_x87_dbg_archive',
-        'tests': [V8Testing(4)],
-        'variants': V8NoExhaustiveVariants(),
-        'testing': {'platform': 'linux'},
-        'swarming_properties': {
-          'default_expiration': 3 * 60 * 60,
-          'default_hard_timeout': 3 * 60 * 60,
-          'default_priority': 35,
-        },
-      },
     },
   },
 ####### Waterfall: client.v8.official

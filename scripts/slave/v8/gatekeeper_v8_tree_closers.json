@@ -50,8 +50,6 @@
           "V8 Linux - ppc64 - sim",
           "V8 Linux - s390 - sim",
           "V8 Linux - s390x - sim",
-          "V8 Linux - x87 - nosnap - debug builder",
-          "V8 Linux - x87 - nosnap - debug"
         ],
         "builders": {
           "*": {}
