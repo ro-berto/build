@@ -56,6 +56,7 @@ _KITCHEN_CONFIG = {
   'chromium.infra': _ALL_BUILDERS,
   'chromium.infra.cron': _ALL_BUILDERS,
   'internal.infra': _ALL_BUILDERS,
+  'internal.official.tryserver': _ALL_BUILDERS,
 
   ## Not whitelisted b/c of recipe roller, see: crbug.com/703352
   #'internal.infra.cron': _ALL_BUILDERS,
