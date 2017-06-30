@@ -4,7 +4,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
-      "--spec",
+      "--spec-path",
       "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_deps': {'dart/third_party/package-bots': 'https://dart.googlesource.com/package-bots.git', 'dart/third_party/pkg/async': 'https://github.com/dart-lang/async.git'}, 'deps_file': 'DEPS', 'managed': False, 'name': 'package-bots', 'url': 'https://dart.googlesource.com/package-bots.git'}]",
       "--patch_root",
       "package-bots",

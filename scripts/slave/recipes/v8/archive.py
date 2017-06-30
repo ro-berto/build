@@ -135,7 +135,7 @@ def GenTests(api):
     if 'android' in buildername.lower():
       # Make sure bot_update specifies target_os on Android builders.
       test += api.v8.check_in_param(
-          'bot_update', '--spec', 'target_os = [\'android\']')
+          'bot_update', '--spec-path', 'target_os = [\'android\']')
 
     test += api.post_process(Filter(
         'gn', 'compile', 'filter build files', 'zipping', 'gsutil upload',
