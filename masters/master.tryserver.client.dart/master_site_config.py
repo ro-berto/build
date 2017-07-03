@@ -19,8 +19,8 @@ class DartTryServer(Master.Master4a):
   master_port_alt = 26402
   buildbot_url = 'https://build.chromium.org/p/tryserver.client.dart/'
   buildbucket_bucket = 'master.tryserver.client.dart'
-  service_account_file = 'service-account-dart-trybots.json'
+  service_account_file = 'service-account-v8.json'
   # To enable outbound pubsub event streaming.
-  pubsub_service_account_file = 'luci-milo'
+  pubsub_service_account_file = 'service-account-luci-milo.json'
   pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
   name = 'tryserver.client.dart'

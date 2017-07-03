@@ -6,8 +6,8 @@
   "templates": ["../master.chromium/templates"],
   "bot_port": 31402,
   "buildbucket_bucket": "master.tryserver.client.dart",
-  "pubsub_service_account_file": "luci-milo",
-  "service_account_file": "service-account-dart-trybots.json",
+  "pubsub_service_account_file": "service-account-luci-milo.json",
+  "service_account_file": "service-account-v8.json",
 
   "builders": {
      "vm-win-debug-x64-try": {
