@@ -29,7 +29,7 @@ _TARGET_DEVICE_MAP = {
       },
     'fugu': {
       'bitness': 32,
-      'make_jobs': 4,
+      'make_jobs': 2,
       'product': 'silvermont',
       },
     'mips32': {
