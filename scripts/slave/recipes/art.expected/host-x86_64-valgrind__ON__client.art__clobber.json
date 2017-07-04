@@ -46,7 +46,8 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "sdk"
     },
-    "name": "run valgrind tests"
+    "name": "run valgrind tests",
+    "timeout": 21600
   },
   {
     "name": "$result",
