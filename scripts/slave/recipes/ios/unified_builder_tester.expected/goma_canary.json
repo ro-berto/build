@@ -566,11 +566,15 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "{'conditions': [['OS == \"ios\"', {'variables': {'files': ['<(app_path)/', 'src/ios/build/bots/scripts/'], 'command': ['src/ios/build/bots/scripts/run.py', '--app', '<(app_path)', '--args-json', '{\"test_args\": <(test_args), \"xctest\": <(xctest)}', '--out-dir', '${ISOLATED_OUTDIR}', '--retries', '3', '--xcode-version', '<(xcode_version)']}}]]}",
       "[BUILDER_CACHE]/ios/template.isolate"
     ],
     "cwd": "[BUILDER_CACHE]/ios/src",
+    "infra_step": true,
     "name": "isolate.generate template.isolate",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",

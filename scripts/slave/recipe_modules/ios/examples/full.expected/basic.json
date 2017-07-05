@@ -295,10 +295,14 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "is_debug=true\ntarget_cpu=\"x64\"\nuse_goma=true\ngoma_dir=\"[CACHE]/goma_client\"\n",
       "[START_DIR]/src/out/Debug-iphonesimulator/args.gn"
     ],
+    "infra_step": true,
     "name": "write args.gn",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br />is_debug=true<br />target_cpu=\"x64\"<br />use_goma=true<br />goma_dir=\"[CACHE]/goma_client\"@@@"
@@ -691,11 +695,15 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "{'conditions': [['OS == \"ios\"', {'variables': {'files': ['<(app_path)/', 'src/ios/build/bots/scripts/', 'src/out/Debug-iphonesimulator/iossim'], 'command': ['src/ios/build/bots/scripts/run.py', '--app', '<(app_path)', '--args-json', '{\"test_args\": <(test_args), \"xctest\": <(xctest)}', '--out-dir', '${ISOLATED_OUTDIR}', '--retries', '3', '--xcode-version', '<(xcode_version)', '--iossim', 'src/out/Debug-iphonesimulator/iossim', '--platform', '<(platform)', '--version', '<(version)']}}]]}",
       "[START_DIR]/template.isolate"
     ],
     "cwd": "[START_DIR]/src",
+    "infra_step": true,
     "name": "isolate.generate template.isolate",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -741,11 +749,15 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake test 1.app\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[\\\"--fake-arg-1\\\", \\\"--fake-arg-2\\\"]\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"6.1.1\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--isolate\", \n    \"[START_DIR]/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_1/0.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake test 1.app\", \n    \"--config-variable\", \n    \"platform\", \n    \"fake device 1\", \n    \"--config-variable\", \n    \"version\", \n    \"8.1\"\n  ], \n  \"dir\": \"[START_DIR]\", \n  \"version\": 1\n}",
       "[TMP_BASE]/isolate_tmp_1/0.isolate.gen.json"
     ],
     "cwd": "[START_DIR]/src",
+    "infra_step": true,
     "name": "isolate.generate 0.isolate.gen.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -791,11 +803,15 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake included test 1.app\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"6.1.1\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--isolate\", \n    \"[START_DIR]/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_1/1.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake included test 1.app\", \n    \"--config-variable\", \n    \"platform\", \n    \"fake device 1\", \n    \"--config-variable\", \n    \"version\", \n    \"8.1\"\n  ], \n  \"dir\": \"[START_DIR]\", \n  \"version\": 1\n}",
       "[TMP_BASE]/isolate_tmp_1/1.isolate.gen.json"
     ],
     "cwd": "[START_DIR]/src",
+    "infra_step": true,
     "name": "isolate.generate 1.isolate.gen.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -841,11 +857,15 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake included test 2.app\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"6.1.1\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--isolate\", \n    \"[START_DIR]/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_1/2.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake included test 2.app\", \n    \"--config-variable\", \n    \"platform\", \n    \"fake device 1\", \n    \"--config-variable\", \n    \"version\", \n    \"8.1\"\n  ], \n  \"dir\": \"[START_DIR]\", \n  \"version\": 1\n}",
       "[TMP_BASE]/isolate_tmp_1/2.isolate.gen.json"
     ],
     "cwd": "[START_DIR]/src",
+    "infra_step": true,
     "name": "isolate.generate 2.isolate.gen.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -891,11 +911,15 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake test 2.app\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"6.1.1\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--isolate\", \n    \"[START_DIR]/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_1/3.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake test 2.app\", \n    \"--config-variable\", \n    \"platform\", \n    \"fake device 2\", \n    \"--config-variable\", \n    \"version\", \n    \"7.1\"\n  ], \n  \"dir\": \"[START_DIR]\", \n  \"version\": 1\n}",
       "[TMP_BASE]/isolate_tmp_1/3.isolate.gen.json"
     ],
     "cwd": "[START_DIR]/src",
+    "infra_step": true,
     "name": "isolate.generate 3.isolate.gen.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -941,11 +965,15 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake included test 1.app\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"6.1.1\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--isolate\", \n    \"[START_DIR]/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_1/4.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake included test 1.app\", \n    \"--config-variable\", \n    \"platform\", \n    \"fake device 2\", \n    \"--config-variable\", \n    \"version\", \n    \"7.1\"\n  ], \n  \"dir\": \"[START_DIR]\", \n  \"version\": 1\n}",
       "[TMP_BASE]/isolate_tmp_1/4.isolate.gen.json"
     ],
     "cwd": "[START_DIR]/src",
+    "infra_step": true,
     "name": "isolate.generate 4.isolate.gen.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -991,11 +1019,15 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake included test 2.app\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"6.1.1\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--isolate\", \n    \"[START_DIR]/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_1/5.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake included test 2.app\", \n    \"--config-variable\", \n    \"platform\", \n    \"fake device 2\", \n    \"--config-variable\", \n    \"version\", \n    \"7.1\"\n  ], \n  \"dir\": \"[START_DIR]\", \n  \"version\": 1\n}",
       "[TMP_BASE]/isolate_tmp_1/5.isolate.gen.json"
     ],
     "cwd": "[START_DIR]/src",
+    "infra_step": true,
     "name": "isolate.generate 5.isolate.gen.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1041,11 +1073,15 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake child test 1.app\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"6.1.1\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--isolate\", \n    \"[START_DIR]/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_1/6.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake child test 1.app\", \n    \"--config-variable\", \n    \"platform\", \n    \"fake child device 1\", \n    \"--config-variable\", \n    \"version\", \n    \"8.1\"\n  ], \n  \"dir\": \"[START_DIR]\", \n  \"version\": 1\n}",
       "[TMP_BASE]/isolate_tmp_1/6.isolate.gen.json"
     ],
     "cwd": "[START_DIR]/src",
+    "infra_step": true,
     "name": "isolate.generate 6.isolate.gen.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1091,11 +1127,15 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake included test 1.app\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"6.1.1\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--isolate\", \n    \"[START_DIR]/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_1/7.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake included test 1.app\", \n    \"--config-variable\", \n    \"platform\", \n    \"fake child device 2\", \n    \"--config-variable\", \n    \"version\", \n    \"9.0\"\n  ], \n  \"dir\": \"[START_DIR]\", \n  \"version\": 1\n}",
       "[TMP_BASE]/isolate_tmp_1/7.isolate.gen.json"
     ],
     "cwd": "[START_DIR]/src",
+    "infra_step": true,
     "name": "isolate.generate 7.isolate.gen.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1141,11 +1181,15 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake included test 2.app\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"6.1.1\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--isolate\", \n    \"[START_DIR]/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_1/8.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake included test 2.app\", \n    \"--config-variable\", \n    \"platform\", \n    \"fake child device 2\", \n    \"--config-variable\", \n    \"version\", \n    \"9.0\"\n  ], \n  \"dir\": \"[START_DIR]\", \n  \"version\": 1\n}",
       "[TMP_BASE]/isolate_tmp_1/8.isolate.gen.json"
     ],
     "cwd": "[START_DIR]/src",
+    "infra_step": true,
     "name": "isolate.generate 8.isolate.gen.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1229,11 +1273,15 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "[{\"buildername\": \"ios\", \"isolate.gen\": \"[TMP_BASE]/isolate_tmp_1/0.isolate.gen.json\", \"isolated hash\": \"fake-hash-0\", \"skip\": false, \"step name\": \"fake test 1 (fake device 1 iOS 8.1)\", \"task\": null, \"test\": {\"app\": \"fake test 1\", \"device type\": \"fake device 1\", \"id\": \"0\", \"os\": \"8.1\", \"test args\": [\"--fake-arg-1\", \"--fake-arg-2\"]}, \"tmp dir\": null}, {\"buildername\": \"ios\", \"isolate.gen\": \"[TMP_BASE]/isolate_tmp_1/1.isolate.gen.json\", \"isolated hash\": \"fake-hash-1\", \"skip\": false, \"step name\": \"fake included test 1 (fake device 1 iOS 8.1)\", \"task\": null, \"test\": {\"app\": \"fake included test 1\", \"device type\": \"fake device 1\", \"id\": \"1\", \"os\": \"8.1\"}, \"tmp dir\": null}, {\"buildername\": \"ios\", \"isolate.gen\": \"[TMP_BASE]/isolate_tmp_1/2.isolate.gen.json\", \"isolated hash\": \"fake-hash-2\", \"skip\": false, \"step name\": \"fake included test 2 (fake device 1 iOS 8.1)\", \"task\": null, \"test\": {\"app\": \"fake included test 2\", \"device type\": \"fake device 1\", \"id\": \"2\", \"os\": \"8.1\"}, \"tmp dir\": null}, {\"buildername\": \"ios\", \"isolate.gen\": \"[TMP_BASE]/isolate_tmp_1/3.isolate.gen.json\", \"isolated hash\": \"fake-hash-3\", \"skip\": false, \"step name\": \"fake test 2 (fake device 2 iOS 7.1)\", \"task\": null, \"test\": {\"app\": \"fake test 2\", \"device type\": \"fake device 2\", \"id\": \"3\", \"os\": \"7.1\"}, \"tmp dir\": null}, {\"buildername\": \"ios\", \"isolate.gen\": \"[TMP_BASE]/isolate_tmp_1/4.isolate.gen.json\", \"isolated hash\": \"fake-hash-4\", \"skip\": false, \"step name\": \"fake included test 1 (fake device 2 iOS 7.1)\", \"task\": null, \"test\": {\"app\": \"fake included test 1\", \"device type\": \"fake device 2\", \"id\": \"4\", \"os\": \"7.1\"}, \"tmp dir\": null}, {\"buildername\": \"ios\", \"isolate.gen\": \"[TMP_BASE]/isolate_tmp_1/5.isolate.gen.json\", \"isolated hash\": \"fake-hash-5\", \"skip\": false, \"step name\": \"fake included test 2 (fake device 2 iOS 7.1)\", \"task\": null, \"test\": {\"app\": \"fake included test 2\", \"device type\": \"fake device 2\", \"id\": \"5\", \"os\": \"7.1\"}, \"tmp dir\": null}, {\"buildername\": \"fake child 1\", \"isolate.gen\": \"[TMP_BASE]/isolate_tmp_1/6.isolate.gen.json\", \"isolated hash\": \"fake-hash-6\", \"skip\": false, \"step name\": \"fake child test 1 (fake child device 1 iOS 8.1)\", \"task\": null, \"test\": {\"app\": \"fake child test 1\", \"device type\": \"fake child device 1\", \"id\": \"6\", \"os\": \"8.1\"}, \"tmp dir\": null}, {\"buildername\": \"fake child 2\", \"isolate.gen\": \"[TMP_BASE]/isolate_tmp_1/7.isolate.gen.json\", \"isolated hash\": \"fake-hash-7\", \"skip\": false, \"step name\": \"fake included test 1 (fake child device 2 iOS 9.0)\", \"task\": null, \"test\": {\"app\": \"fake included test 1\", \"device type\": \"fake child device 2\", \"id\": \"7\", \"os\": \"9.0\"}, \"tmp dir\": null}, {\"buildername\": \"fake child 2\", \"isolate.gen\": \"[TMP_BASE]/isolate_tmp_1/8.isolate.gen.json\", \"isolated hash\": \"fake-hash-8\", \"skip\": false, \"step name\": \"fake included test 2 (fake child device 2 iOS 9.0)\", \"task\": null, \"test\": {\"app\": \"fake included test 2\", \"device type\": \"fake child device 2\", \"id\": \"8\", \"os\": \"9.0\"}, \"tmp dir\": null}]",
       "[START_DIR]/isolated_tasks.json"
     ],
     "cwd": "[START_DIR]/src",
+    "infra_step": true,
     "name": "isolate.generate isolated_tasks.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"

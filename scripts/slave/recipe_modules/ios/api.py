@@ -76,7 +76,7 @@ class iOSApi(recipe_api.RecipeApi):
     # Support for legacy buildbot clobber. If the "clobber" property is
     # present at all with any value, clobber the whole checkout.
     if 'clobber' in self.m.properties:
-      self.m.file.rmcontents('checkout', checkout_dir)
+      self.m.file.rmcontents('rmcontents checkout', checkout_dir)
 
     with self.m.context(cwd=kwargs.get('cwd', checkout_dir)):
       return self.m.bot_update.ensure_checkout(**kwargs)
@@ -281,7 +281,7 @@ class iOSApi(recipe_api.RecipeApi):
     cwd = self.m.path['checkout'].join('out', build_sub_path)
 
     if self.__config['clobber']:
-      self.m.file.rmcontents('out', cwd)
+      self.m.file.rmcontents('rmcontents out', cwd)
 
     with self.m.context(cwd=self.m.path['checkout'], env=env):
       self.m.gclient.runhooks(name='runhooks' + suffix)
@@ -313,12 +313,12 @@ class iOSApi(recipe_api.RecipeApi):
       if self.use_goma:
         self.__config['gn_args'].append('goma_dir="%s"' % self.m.goma.goma_dir)
 
-      step_result = self.m.file.write(
+      self.m.file.write_text(
         'write args.gn' + suffix,
         self.m.path['checkout'].join('out', build_sub_path, 'args.gn'),
         '%s\n' % '\n'.join(self.__config['gn_args']),
       )
-      step_result.presentation.step_text = (
+      self.m.step.active_result.presentation.step_text = (
         '<br />%s' % '<br />'.join(self.__config['gn_args']))
       with self.m.context(
           cwd=self.m.path['checkout'].join('out', build_sub_path),
@@ -516,14 +516,15 @@ class iOSApi(recipe_api.RecipeApi):
       'version': 1,
     }, indent=2)
     try:
-      step_result = self.m.file.write(
+      self.m.file.write_text(
         'generate %s.isolate.gen.json' % test['id'],
         task['isolate.gen'],
         isolate_gen_file_contents,
       )
-      step_result.presentation.logs['%s.isolate.gen.json' % test['id']] = (
+      pres = self.m.step.active_result.presentation
+      pres.logs['%s.isolate.gen.json' % test['id']] = (
         isolate_gen_file_contents.splitlines())
-      step_result.presentation.step_text = task['step name']
+      pres.step_text = task['step name']
     except self.m.step.StepFailure as f:
       f.result.presentation.status = self.m.step.EXCEPTION
       task['isolate.gen'] = None
@@ -570,12 +571,12 @@ class iOSApi(recipe_api.RecipeApi):
     }
 
     isolate_template = self._ensure_checkout_dir().join('template.isolate')
-    step_result = self.m.file.write(
+    self.m.file.write_text(
       'generate template.isolate',
       isolate_template,
       str(isolate_template_contents),
     )
-    step_result.presentation.logs['template.isolate'] = (
+    self.m.step.active_result.presentation.logs['template.isolate'] = (
       self.m.json.dumps(isolate_template_contents, indent=2).splitlines())
 
     tmp_dir = self.m.path.mkdtemp('isolate')
@@ -815,7 +816,7 @@ class iOSApi(recipe_api.RecipeApi):
       with self.m.step.nest('isolate'):
         tasks = self.isolate(scripts_dir=scripts_dir)
         if self.__config['triggered bots']:
-          self.m.file.write(
+          self.m.file.write_text(
               'generate isolated_tasks.json',
               self._ensure_checkout_dir().join('isolated_tasks.json'),
               self.m.json.dumps(tasks),

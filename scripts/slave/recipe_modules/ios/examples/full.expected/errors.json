@@ -173,10 +173,14 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "is_debug=false\ntarget_cpu=\"arm64\"\n",
       "[START_DIR]/src/out/Release-iphoneos/args.gn"
     ],
+    "infra_step": true,
     "name": "write args.gn",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br />is_debug=false<br />target_cpu=\"arm64\"@@@"
@@ -348,11 +352,15 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "{'conditions': [['OS == \"ios\"', {'variables': {'files': ['<(app_path)/', 'src/ios/build/bots/scripts/'], 'command': ['src/ios/build/bots/scripts/run.py', '--app', '<(app_path)', '--args-json', '{\"test_args\": <(test_args), \"xctest\": <(xctest)}', '--out-dir', '${ISOLATED_OUTDIR}', '--retries', '3', '--xcode-version', '<(xcode_version)']}}]]}",
       "[START_DIR]/template.isolate"
     ],
     "cwd": "[START_DIR]/src",
+    "infra_step": true,
     "name": "isolate.generate template.isolate",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -391,11 +399,15 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/fake test 1.app\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"6.1.1\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--isolate\", \n    \"[START_DIR]/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_1/0.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/fake test 1.app\"\n  ], \n  \"dir\": \"[START_DIR]\", \n  \"version\": 1\n}",
       "[TMP_BASE]/isolate_tmp_1/0.isolate.gen.json"
     ],
     "cwd": "[START_DIR]/src",
+    "infra_step": true,
     "name": "isolate.generate 0.isolate.gen.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -407,11 +419,15 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/fake test 2.app\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"6.1.1\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--isolate\", \n    \"[START_DIR]/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_1/1.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/fake test 2.app\"\n  ], \n  \"dir\": \"[START_DIR]\", \n  \"version\": 1\n}",
       "[TMP_BASE]/isolate_tmp_1/1.isolate.gen.json"
     ],
     "cwd": "[START_DIR]/src",
+    "infra_step": true,
     "name": "isolate.generate 1.isolate.gen.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -451,11 +467,15 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/fake test 3.app\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"6.1.1\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--isolate\", \n    \"[START_DIR]/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_1/2.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/fake test 3.app\"\n  ], \n  \"dir\": \"[START_DIR]\", \n  \"version\": 1\n}",
       "[TMP_BASE]/isolate_tmp_1/2.isolate.gen.json"
     ],
     "cwd": "[START_DIR]/src",
+    "infra_step": true,
     "name": "isolate.generate 2.isolate.gen.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -495,11 +515,15 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/fake test 4.app\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"6.1.1\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--isolate\", \n    \"[START_DIR]/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_1/3.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/fake test 4.app\"\n  ], \n  \"dir\": \"[START_DIR]\", \n  \"version\": 1\n}",
       "[TMP_BASE]/isolate_tmp_1/3.isolate.gen.json"
     ],
     "cwd": "[START_DIR]/src",
+    "infra_step": true,
     "name": "isolate.generate 3.isolate.gen.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",

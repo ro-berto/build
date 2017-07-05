@@ -5,7 +5,6 @@
 DEPS = [
   'build/chromium',
   'build/chromium_checkout',
-  'build/file',
   'build/filter',
   'build/goma',
   'depot_tools/gsutil',
@@ -17,6 +16,7 @@ DEPS = [
   'depot_tools/gclient',
   'depot_tools/tryserver',
   'recipe_engine/context',
+  'recipe_engine/file',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/properties',
