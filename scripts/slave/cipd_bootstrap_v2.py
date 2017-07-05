@@ -18,7 +18,7 @@ from slave import cipd
 CLIENT_NAME = 'cipd' + infra_platform.exe_suffix()
 
 
-DEFAULT_CIPD_VERSION = 'git_revision:05f9a685b72ee556899506ffd965dca91bd60efa'
+DEFAULT_CIPD_VERSION = 'git_revision:5cf65fdf804a9b3f3023f79d5b3cab2a88ccd09e'
 STAGING_CIPD_VERSION = 'git_revision:5cf65fdf804a9b3f3023f79d5b3cab2a88ccd09e'
 
 STAGING = 'staging'
@@ -41,11 +41,11 @@ AUX_BINARY_PACKAGES = {
     None: (
       cipd.CipdPackage(
           name='infra/tools/luci/vpython/${platform}',
-          version='git_revision:d147cd8b9062f3699759612ef96c4fe4bd49f87d'),
+          version='git_revision:5cf65fdf804a9b3f3023f79d5b3cab2a88ccd09e'),
 
       cipd.CipdPackage(
           name='infra/tools/git/${platform}',
-          version='git_revision:cea2b0eb174d6d8e6b628020e3986cb251ea2d97'),
+          version='git_revision:5cf65fdf804a9b3f3023f79d5b3cab2a88ccd09e'),
     ),
 
     STAGING: (
