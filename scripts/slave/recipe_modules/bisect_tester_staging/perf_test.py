@@ -84,7 +84,7 @@ def _is_gtest_with_buildbot_output(command):
 def _make_results_dir(api):
   new_dir = 'dummy' if api._test_data.enabled else str(uuid.uuid4())
   full_path = api.m.path['bisect_results'].join(new_dir)
-  api.m.file.makedirs('results directory', full_path)
+  api.m.file.ensure_directory('results directory', full_path)
   return full_path
 
 def run_perf_test(api, test_config, **kwargs):
@@ -150,7 +150,7 @@ def run_perf_test(api, test_config, **kwargs):
     if out:
       # Write stdout to a local temp location for possible buildbot parsing
       stdout_path = temp_dir.join('results.txt')
-      api.m.file.write('write buildbot output to disk', stdout_path, out)
+      api.m.file.write_text('write buildbot output to disk', stdout_path, out)
 
       if use_buildbot:
         results['stdout_paths'].append(stdout_path)

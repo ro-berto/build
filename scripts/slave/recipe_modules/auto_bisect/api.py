@@ -380,7 +380,7 @@ class AutoBisectStagingApi(recipe_api.RecipeApi):
             with api.m.step.nest('Clearing results directory'):
               results_dir = self.m.path['bisect_results']
               self.m.file.rmtree('old results directory', results_dir)
-              self.m.file.makedirs('new results directory', results_dir)
+              self.m.file.ensure_directory('new results directory', results_dir)
             local_bisect.perform_bisect(self, **flags)
           else:
             api.step('***SINGLE TEST (deprecated)***', [])
