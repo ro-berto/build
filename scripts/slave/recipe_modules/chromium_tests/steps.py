@@ -2127,16 +2127,6 @@ class AndroidInstrumentationTest(AndroidTest):
     },
     'SystemWebViewShellLayoutTest': {
       'compile_target': 'system_webview_shell_layout_test_apk',
-      # TODO(agrieve): These should be listed as deps for
-      #     system_webview_shell_layout_test_apk.
-      'additional_compile_targets': [
-        'system_webview_apk',
-        'android_tools'
-      ],
-      # TODO(jbudorick): Remove this once it's handled by the generated script.
-      'additional_apks': [
-        'SystemWebView.apk',
-      ],
     },
     'WebViewInstrumentationTest': {
       'compile_target': 'webview_instrumentation_test_apk',
