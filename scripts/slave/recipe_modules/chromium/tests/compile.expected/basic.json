@@ -185,28 +185,6 @@
     "name": "compile"
   },
   {
-    "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
-      "-w",
-      "dupbuild=err",
-      "-C",
-      "None/out/Release",
-      "-j",
-      "150",
-      "All",
-      "all",
-      "-d",
-      "explain",
-      "-n"
-    ],
-    "cwd": "None",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "compile confirm no-op",
-    "stdout": "/path/to/tmp/"
-  },
-  {
     "cmd": [],
     "cwd": "None",
     "env": {

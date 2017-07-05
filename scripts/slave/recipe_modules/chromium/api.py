@@ -228,7 +228,8 @@ class ChromiumApi(recipe_api.RecipeApi):
     with self.m.context(env=ninja_env):
       self.m.step(name or 'compile', ninja_command, **kwargs)
 
-    assert ninja_confirm_noop
+    if not ninja_confirm_noop:
+      return
 
     ninja_command_explain = ninja_command + ['-d', 'explain', '-n']
 
