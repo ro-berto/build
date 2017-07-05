@@ -349,7 +349,7 @@ Run an ADB command.
 &mdash; **def [set\_adb\_path](/scripts/slave/recipe_modules/adb/api.py#20)(self, adb_path):**
 ### *recipe_modules* / [archive](/scripts/slave/recipe_modules/archive)
 
-[DEPS](/scripts/slave/recipe_modules/archive/__init__.py#5): [build](#recipe_modules-build), [commit\_position](#recipe_modules-commit_position), [file](#recipe_modules-file), [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/archive/__init__.py#5): [build](#recipe_modules-build), [commit\_position](#recipe_modules-commit_position), [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 #### **class [ArchiveApi](/scripts/slave/recipe_modules/archive/api.py#22)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
@@ -1915,7 +1915,7 @@ Module for Gatekeeper NG.
 &mdash; **def [\_\_call\_\_](/scripts/slave/recipe_modules/gatekeeper/api.py#10)(self, gatekeeper_default_json, gatekeeper_trees_json):**
 ### *recipe_modules* / [git\_clone\_bundler](/scripts/slave/recipe_modules/git_clone_bundler)
 
-[DEPS](/scripts/slave/recipe_modules/git_clone_bundler/__init__.py#1): [file](#recipe_modules-file), [repo](#recipe_modules-repo), [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/git_clone_bundler/__init__.py#1): [repo](#recipe_modules-repo), [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 #### **class [GitCloneBundlerApi](/scripts/slave/recipe_modules/git_clone_bundler/api.py#14)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
@@ -5181,7 +5181,7 @@ Example of using the Syzygy recipe module.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/syzygy/tests/upload_kasko_symbols.py#11)(api):**
 ### *recipes* / [tar:examples/full](/scripts/slave/recipe_modules/tar/examples/full.py)
 
-[DEPS](/scripts/slave/recipe_modules/tar/examples/full.py#5): [file](#recipe_modules-file), [tar](#recipe_modules-tar), [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/tar/examples/full.py#5): [tar](#recipe_modules-tar), [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/tar/examples/full.py#14)(api):**
 ### *recipes* / [test\_results:examples/full](/scripts/slave/recipe_modules/test_results/examples/full.py)
@@ -5390,6 +5390,7 @@ The changes are:
 [depot_tools/recipe_modules/rietveld]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/6a1ab84339cdd312fee2193f22d1f1acf83e2c7f/recipes/README.recipes.md#recipe_modules-rietveld
 [depot_tools/recipe_modules/tryserver]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/6a1ab84339cdd312fee2193f22d1f1acf83e2c7f/recipes/README.recipes.md#recipe_modules-tryserver
 [recipe_engine/recipe_modules/context]: https://github.com/luci/recipes-py/blob/9419a0e2ea6ab618b33a1e962ce62b36664e5234/README.recipes.md#recipe_modules--context
+[recipe_engine/recipe_modules/file]: https://github.com/luci/recipes-py/blob/9419a0e2ea6ab618b33a1e962ce62b36664e5234/README.recipes.md#recipe_modules--file
 [recipe_engine/recipe_modules/generator_script]: https://github.com/luci/recipes-py/blob/9419a0e2ea6ab618b33a1e962ce62b36664e5234/README.recipes.md#recipe_modules--generator_script
 [recipe_engine/recipe_modules/json]: https://github.com/luci/recipes-py/blob/9419a0e2ea6ab618b33a1e962ce62b36664e5234/README.recipes.md#recipe_modules--json
 [recipe_engine/recipe_modules/path]: https://github.com/luci/recipes-py/blob/9419a0e2ea6ab618b33a1e962ce62b36664e5234/README.recipes.md#recipe_modules--path

@@ -3,20 +3,28 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "None/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer",
       "[START_DIR]/src/out/Release/llvm-symbolizer"
     ],
+    "infra_step": true,
     "name": "Copy llvm-symbolizer"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "None/third_party/llvm-build/Release+Asserts/bin/sancov",
       "[START_DIR]/src/out/Release/sancov"
     ],
+    "infra_step": true,
     "name": "Copy sancov"
   },
   {
@@ -87,17 +95,14 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport os\nimport sys\nos.remove(sys.argv[1])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
       "[TMP_BASE]/chrome_staging_tmp_1/chrome-asan-linux-release-refs_heads_B1-123456.zip"
     ],
-    "name": "chrome-asan-linux-release-refs_heads_B1-123456.zip",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@os.remove(sys.argv[1])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
+    "infra_step": true,
+    "name": "chrome-asan-linux-release-refs_heads_B1-123456.zip"
   },
   {
     "name": "$result",

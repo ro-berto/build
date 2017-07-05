@@ -3,8 +3,8 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'file',
   'recipe_engine/context',
+  'recipe_engine/file',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/step',
@@ -16,7 +16,7 @@ def RunSteps(api):
   temp = api.path.mkdtemp('tar-example')
   api.step('touch a', ['touch', temp.join('a')])
   api.step('touch b', ['touch', temp.join('b')])
-  api.file.makedirs('mkdirs', temp.join('sub', 'dir'))
+  api.file.ensure_directory('mkdirs', temp.join('sub', 'dir'))
   api.step('touch c', ['touch', temp.join('sub', 'dir', 'c')])
 
   # Build tar using 'tar.directory'.
