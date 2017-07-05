@@ -9,8 +9,8 @@ DEPS = [
   'depot_tools/bot_update',
   'depot_tools/depot_tools',
   'depot_tools/gclient',
-  'file',
   'recipe_engine/context',
+  'recipe_engine/file',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
@@ -180,7 +180,7 @@ def RunSteps(api, buildername):
   # CMake is stateful, so do a clean build. BoringSSL builds quickly enough that
   # this isn't a concern.
   api.shutil.rmtree(build_dir, name='clean')
-  api.file.makedirs('mkdir', build_dir)
+  api.file.ensure_directory('mkdir', build_dir)
 
   # If building with MSVC, all commands must run with an environment wrapper.
   # This is necessary both to find the toolchain and the runtime dlls. Rather
