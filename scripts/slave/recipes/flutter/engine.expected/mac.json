@@ -3,12 +3,14 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "rmcontents",
       "[START_DIR]"
     ],
     "infra_step": true,
-    "name": "rmcontents everything"
+    "name": "everything"
   },
   {
     "cmd": [
@@ -291,7 +293,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "rmtree",
       "[TMP_BASE]/tmp_tmp_1"
     ],
@@ -299,7 +303,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
-    "name": "rmtree temp dir for darwin-x64 UploadArtifacts artifacts.zip"
+    "name": "temp dir for darwin-x64 UploadArtifacts artifacts.zip"
   },
   {
     "cmd": [
@@ -338,7 +342,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "rmtree",
       "[TMP_BASE]/tmp_tmp_2"
     ],
@@ -346,7 +352,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
-    "name": "rmtree temp dir for android-arm-profile UploadArtifacts darwin-x64.zip"
+    "name": "temp dir for android-arm-profile UploadArtifacts darwin-x64.zip"
   },
   {
     "cmd": [
@@ -385,7 +391,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "rmtree",
       "[TMP_BASE]/tmp_tmp_3"
     ],
@@ -393,7 +401,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
-    "name": "rmtree temp dir for android-arm-release UploadArtifacts darwin-x64.zip"
+    "name": "temp dir for android-arm-release UploadArtifacts darwin-x64.zip"
   },
   {
     "cmd": [
@@ -557,7 +565,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "rmtree",
       "[TMP_BASE]/tmp_tmp_4"
     ],
@@ -565,7 +575,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
-    "name": "rmtree temp dir for ios UploadArtifacts artifacts.zip"
+    "name": "temp dir for ios UploadArtifacts artifacts.zip"
   },
   {
     "cmd": [
@@ -632,7 +642,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "rmtree",
       "[TMP_BASE]/tmp_tmp_5"
     ],
@@ -640,7 +652,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
-    "name": "rmtree temp dir for ios-profile UploadArtifacts artifacts.zip"
+    "name": "temp dir for ios-profile UploadArtifacts artifacts.zip"
   },
   {
     "cmd": [
@@ -707,7 +719,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "rmtree",
       "[TMP_BASE]/tmp_tmp_6"
     ],
@@ -715,7 +729,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
-    "name": "rmtree temp dir for ios-release UploadArtifacts artifacts.zip"
+    "name": "temp dir for ios-release UploadArtifacts artifacts.zip"
   },
   {
     "cmd": [
@@ -744,7 +758,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "rmtree",
       "[TMP_BASE]/tmp_tmp_7"
     ],
@@ -752,7 +768,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
-    "name": "rmtree temp dir for BuildObjcDoc"
+    "name": "temp dir for BuildObjcDoc"
   },
   {
     "cmd": [

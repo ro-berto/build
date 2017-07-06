@@ -3,12 +3,14 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "rmcontents",
       "[START_DIR]"
     ],
     "infra_step": true,
-    "name": "rmcontents everything"
+    "name": "everything"
   },
   {
     "cmd": [
@@ -236,7 +238,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "rmtree",
       "[TMP_BASE]/tmp_tmp_1"
     ],
@@ -244,7 +248,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
-    "name": "rmtree temp dir for linux-x64 UploadArtifacts artifacts.zip"
+    "name": "temp dir for linux-x64 UploadArtifacts artifacts.zip"
   },
   {
     "cmd": [
@@ -283,7 +287,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "rmtree",
       "[TMP_BASE]/tmp_tmp_2"
     ],
@@ -291,7 +297,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
-    "name": "rmtree temp dir for Upload Flutter patched sdk"
+    "name": "temp dir for Upload Flutter patched sdk"
   },
   {
     "cmd": [
@@ -387,7 +393,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "rmtree",
       "[TMP_BASE]/tmp_tmp_3"
     ],
@@ -395,7 +403,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
-    "name": "rmtree temp dir for android-arm UploadArtifacts artifacts.zip"
+    "name": "temp dir for android-arm UploadArtifacts artifacts.zip"
   },
   {
     "cmd": [
@@ -434,7 +442,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "rmtree",
       "[TMP_BASE]/tmp_tmp_4"
     ],
@@ -442,7 +452,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
-    "name": "rmtree temp dir for android-arm UploadArtifacts symbols.zip"
+    "name": "temp dir for android-arm UploadArtifacts symbols.zip"
   },
   {
     "cmd": [
@@ -504,7 +514,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "rmtree",
       "[TMP_BASE]/tmp_tmp_5"
     ],
@@ -512,7 +524,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
-    "name": "rmtree temp dir for android-arm-profile UploadArtifacts artifacts.zip"
+    "name": "temp dir for android-arm-profile UploadArtifacts artifacts.zip"
   },
   {
     "cmd": [
@@ -551,7 +563,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "rmtree",
       "[TMP_BASE]/tmp_tmp_6"
     ],
@@ -559,7 +573,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
-    "name": "rmtree temp dir for android-arm-profile UploadArtifacts linux-x64.zip"
+    "name": "temp dir for android-arm-profile UploadArtifacts linux-x64.zip"
   },
   {
     "cmd": [
@@ -598,7 +612,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "rmtree",
       "[TMP_BASE]/tmp_tmp_7"
     ],
@@ -606,7 +622,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
-    "name": "rmtree temp dir for android-arm-profile UploadArtifacts symbols.zip"
+    "name": "temp dir for android-arm-profile UploadArtifacts symbols.zip"
   },
   {
     "cmd": [
@@ -668,7 +684,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "rmtree",
       "[TMP_BASE]/tmp_tmp_8"
     ],
@@ -676,7 +694,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
-    "name": "rmtree temp dir for android-arm-release UploadArtifacts artifacts.zip"
+    "name": "temp dir for android-arm-release UploadArtifacts artifacts.zip"
   },
   {
     "cmd": [
@@ -715,7 +733,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "rmtree",
       "[TMP_BASE]/tmp_tmp_9"
     ],
@@ -723,7 +743,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
-    "name": "rmtree temp dir for android-arm-release UploadArtifacts linux-x64.zip"
+    "name": "temp dir for android-arm-release UploadArtifacts linux-x64.zip"
   },
   {
     "cmd": [
@@ -762,7 +782,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "rmtree",
       "[TMP_BASE]/tmp_tmp_10"
     ],
@@ -770,7 +792,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
-    "name": "rmtree temp dir for android-arm-release UploadArtifacts symbols.zip"
+    "name": "temp dir for android-arm-release UploadArtifacts symbols.zip"
   },
   {
     "cmd": [
@@ -809,7 +831,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "rmtree",
       "[TMP_BASE]/tmp_tmp_11"
     ],
@@ -817,7 +841,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
-    "name": "rmtree temp dir for UploadDartPackage sky_engine"
+    "name": "temp dir for UploadDartPackage sky_engine"
   },
   {
     "cmd": [
@@ -879,7 +903,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "rmtree",
       "[TMP_BASE]/tmp_tmp_12"
     ],
@@ -887,7 +913,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
-    "name": "rmtree temp dir for android-x64 UploadArtifacts artifacts.zip"
+    "name": "temp dir for android-x64 UploadArtifacts artifacts.zip"
   },
   {
     "cmd": [
@@ -926,7 +952,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "rmtree",
       "[TMP_BASE]/tmp_tmp_13"
     ],
@@ -934,7 +962,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
-    "name": "rmtree temp dir for android-x64 UploadArtifacts symbols.zip"
+    "name": "temp dir for android-x64 UploadArtifacts symbols.zip"
   },
   {
     "cmd": [
@@ -996,7 +1024,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "rmtree",
       "[TMP_BASE]/tmp_tmp_14"
     ],
@@ -1004,7 +1034,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
-    "name": "rmtree temp dir for android-x86 UploadArtifacts artifacts.zip"
+    "name": "temp dir for android-x86 UploadArtifacts artifacts.zip"
   },
   {
     "cmd": [
@@ -1043,7 +1073,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "rmtree",
       "[TMP_BASE]/tmp_tmp_15"
     ],
@@ -1051,7 +1083,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
-    "name": "rmtree temp dir for android-x86 UploadArtifacts symbols.zip"
+    "name": "temp dir for android-x86 UploadArtifacts symbols.zip"
   },
   {
     "cmd": [
@@ -1081,7 +1113,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "rmtree",
       "[TMP_BASE]/tmp_tmp_16"
     ],
@@ -1089,7 +1123,7 @@
       "PATH": "[START_DIR]/src/third_party/dart-sdk/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
-    "name": "rmtree temp dir for BuildJavadoc"
+    "name": "temp dir for BuildJavadoc"
   },
   {
     "cmd": [

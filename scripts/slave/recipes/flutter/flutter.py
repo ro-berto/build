@@ -7,9 +7,9 @@ import contextlib
 DEPS = [
   'build',
   'depot_tools/git',
-  'file',
   'depot_tools/gsutil',
   'recipe_engine/context',
+  'recipe_engine/file',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/platform',
