@@ -158,13 +158,15 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::file]\\resources\\fileutil.py",
-      "rmwildcard",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmglob",
       "[START_DIR]\\src\\out\\Release",
       "*.pg[cd]"
     ],
     "infra_step": true,
-    "name": "rmwildcard *.pg[cd] in [START_DIR]\\src\\out\\Release"
+    "name": "remove previous profiles"
   },
   {
     "cmd": [
@@ -232,13 +234,20 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport glob\nimport sys\nwith open(sys.argv[1], 'w') as f:\n  f.write('\\n'.join(glob.glob(sys.argv[2])))\n",
-      "/path/to/tmp/",
-      "[START_DIR]\\src\\out\\Release\\*.pgd"
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "glob",
+      "[START_DIR]\\src\\out\\Release",
+      "*.pgd"
     ],
+    "infra_step": true,
     "name": "archive profile database.list PGD files",
+    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@glob@[START_DIR]\\src\\out\\Release\\test.pgd@@@",
+      "@@@STEP_LOG_END@glob@@@"
     ]
   },
   {

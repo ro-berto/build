@@ -166,10 +166,14 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "[START_DIR]\\src\\syzygy\\kasko\\unittests.gypi",
       "/path/to/tmp/"
     ],
+    "infra_step": true,
     "name": "read_unittests_gypi"
   },
   {
@@ -272,10 +276,14 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "[START_DIR]\\src\\syzygy\\kasko\\VERSION",
       "/path/to/tmp/"
     ],
+    "infra_step": true,
     "name": "read_version"
   },
   {

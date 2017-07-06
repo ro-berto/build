@@ -76,8 +76,8 @@ PATCH=1
     # Only read the value if it hasn't yet been read.
     if not self._version:
       version = self.c.version_file
-      version = self.m.file.read('read_version', version,
-                                 test_data=self._FAKE_VERSION_DATA)
+      version = self.m.file.read_text('read_version', version,
+                                      test_data=self._FAKE_VERSION_DATA)
       d = {}
       for l in version.splitlines():
         # Look for a 'NAME=VALUE' pair.
@@ -173,8 +173,8 @@ PATCH=1
   def read_unittests_gypi(self):
     """Reads and parses unittests.gypi from the checkout, returning a list."""
     gypi = self.c.unittests_gypi
-    gypi = self.m.file.read('read_unittests_gypi', gypi,
-                            test_data=self._FAKE_UNITTESTS_GYPI_DATA)
+    gypi = self.m.file.read_text('read_unittests_gypi', gypi,
+                                 test_data=self._FAKE_UNITTESTS_GYPI_DATA)
     gypi = ast.literal_eval(gypi)
     unittests = [t.split(':')[1] for t in gypi['variables']['unittests']]
     return sorted(unittests)
@@ -289,7 +289,8 @@ PATCH=1
   def clobber_metrics(self):
     """Returns a step that clobbers an existing metrics file."""
     # TODO(chrisha): Make this whole thing use the JSON output mechanism.
-    return self.m.file.rmwildcard('metrics.csv', self.m.chromium.output_dir)
+    return self.m.file.rmglob('clobber metrics', self.m.chromium.output_dir,
+                              'metrics.csv')
 
   def archive_metrics(self):
     """Returns a step that archives any metrics collected by the unittests.

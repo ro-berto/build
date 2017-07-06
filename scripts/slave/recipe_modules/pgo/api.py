@@ -27,7 +27,8 @@ class PGOApi(recipe_api.RecipeApi):
         use_goma=False,
         phase=1)
     # Remove the profile files from the previous builds.
-    self.m.file.rmwildcard('*.pg[cd]', str(self.m.chromium.output_dir))
+    self.m.file.rmglob(
+      'remove previous profiles', self.m.chromium.output_dir, '*.pg[cd]')
     self.m.chromium.compile(name='Compile: Instrumentation phase.')
 
   def _run_pgo_benchmarks(self):
@@ -82,18 +83,15 @@ class PGOApi(recipe_api.RecipeApi):
         '--build-dir', self.m.chromium.output_dir,
     ]
 
-    for f in self.m.file.glob('list PGD files',
-                              self.m.chromium.output_dir.join('*.pgd'),
-                              test_data=[
-                                  self.m.chromium.output_dir.join('test1.pgd'),
-                                  self.m.chromium.output_dir.join('test2.pgd'),
-                              ]):
+    for f in self.m.file.glob_paths('list PGD files',
+                                    self.m.chromium.output_dir, '*.pgd',
+                                    test_data=['test1.pgd', 'test2.pgd']):
       binary_name = self.m.path.splitext(self.m.path.basename(f))[0]
       args = base_args + ['--binary-name', binary_name]
       self.m.python('Merge the pgc files for %s.' % binary_name,
                     merge_script, args)
-      self.m.file.rmwildcard('%s!*.pgc' % binary_name,
-                             str(self.m.chromium.output_dir))
+      self.m.file.rmglob('remove pgc files', self.m.chromium.output_dir,
+                         '%s!*.pgc' % binary_name)
 
   def compile_pgo(self, bot_config):
     """
@@ -158,12 +156,9 @@ class PGOApi(recipe_api.RecipeApi):
                                             'copy')
 
         # Copy the pgd files in a temp directory so cipd can pick them up.
-        for f in self.m.file.glob('list PGD files',
-                                  self.m.chromium.output_dir.join('*.pgd'),
-                                  test_data=[
-                                      self.m.chromium.output_dir.join(
-                                          'test.pgd')
-                                  ]):
+        for f in self.m.file.glob_paths('list PGD files',
+                                        self.m.chromium.output_dir, '*.pgd',
+                                        test_data=['test.pgd']):
           pkg.add_file(f)
 
         pkg_json = self.m.cipd.create_from_pkg(pkg)

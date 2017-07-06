@@ -164,13 +164,15 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::file]\\resources\\fileutil.py",
-      "rmwildcard",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmglob",
       "[START_DIR]\\src\\out\\Release",
       "*.pg[cd]"
     ],
     "infra_step": true,
-    "name": "rmwildcard *.pg[cd] in [START_DIR]\\src\\out\\Release"
+    "name": "remove previous profiles"
   },
   {
     "cmd": [

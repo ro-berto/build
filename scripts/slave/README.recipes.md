@@ -2549,7 +2549,7 @@ This is meant to be used by tryjobs with a metric.
 Entry point pert tryjob or CQ tryjob.
 ### *recipe_modules* / [pgo](/scripts/slave/recipe_modules/pgo)
 
-[DEPS](/scripts/slave/recipe_modules/pgo/__init__.py#1): [chromium](#recipe_modules-chromium), [file](#recipe_modules-file), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/cipd][depot_tools/recipe_modules/cipd], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/pgo/__init__.py#1): [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/cipd][depot_tools/recipe_modules/cipd], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 #### **class [PGOApi](/scripts/slave/recipe_modules/pgo/api.py#8)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
@@ -2557,12 +2557,12 @@ PGOApi encapsulate the various step involved in a PGO build.
 
 &mdash; **def [\_\_init\_\_](/scripts/slave/recipe_modules/pgo/api.py#13)(self, \*\*kwargs):**
 
-&mdash; **def [archive\_profile\_database](/scripts/slave/recipe_modules/pgo/api.py#137)(self, revision):**
+&mdash; **def [archive\_profile\_database](/scripts/slave/recipe_modules/pgo/api.py#135)(self, revision):**
 
 Archive the profile database into a cloud bucket and use 'git notes' to
 annotate the current commit with the URL to this file.
 
-&mdash; **def [compile\_pgo](/scripts/slave/recipe_modules/pgo/api.py#98)(self, bot_config):**
+&mdash; **def [compile\_pgo](/scripts/slave/recipe_modules/pgo/api.py#96)(self, bot_config):**
 
 Do a PGO build. This takes care of building an instrumented image, profiling
 it and then compiling the optimized version of it.
@@ -2936,7 +2936,7 @@ Defines support to run automated heartbeat.
 Runs job_runs_fine.py to run an heartbeat check.
 ### *recipe_modules* / [syzygy](/scripts/slave/recipe_modules/syzygy)
 
-[DEPS](/scripts/slave/recipe_modules/syzygy/__init__.py#1): [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [file](#recipe_modules-file), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/syzygy/__init__.py#1): [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 #### **class [SyzygyApi](/scripts/slave/recipe_modules/syzygy/api.py#12)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
@@ -2954,7 +2954,7 @@ Returns a step that archives the coverage report.
 
 Only meant to be called from the 'Coverage' configuration.
 
-&mdash; **def [archive\_metrics](/scripts/slave/recipe_modules/syzygy/api.py#294)(self):**
+&mdash; **def [archive\_metrics](/scripts/slave/recipe_modules/syzygy/api.py#295)(self):**
 
 Returns a step that archives any metrics collected by the unittests.
 This can be called from any build configuration.
@@ -2985,7 +2985,7 @@ Returns a step that clobbers an existing metrics file.
 
 Generates a step to compile the project.
 
-&mdash; **def [download\_binaries](/scripts/slave/recipe_modules/syzygy/api.py#311)(self):**
+&mdash; **def [download\_binaries](/scripts/slave/recipe_modules/syzygy/api.py#312)(self):**
 
 Returns a step that downloads the current official binaries.
 
@@ -3018,7 +3018,7 @@ is not yet set, then simply returns an empty string.
 
 &mdash; **def [runhooks](/scripts/slave/recipe_modules/syzygy/api.py#165)(self):**
 
-&mdash; **def [smoke\_test](/scripts/slave/recipe_modules/syzygy/api.py#322)(self):**
+&mdash; **def [smoke\_test](/scripts/slave/recipe_modules/syzygy/api.py#323)(self):**
 
 Returns a step that launches the smoke test script.
 
