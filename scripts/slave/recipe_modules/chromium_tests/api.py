@@ -850,7 +850,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         step_test_data=lambda: self.m.json.test_api.output({}))
     return result.json.output
 
-  def main_waterfall_steps(self):
+  def main_waterfall_steps(self, mb_config_path=None):
     mastername = self.m.properties.get('mastername')
     buildername = self.m.properties.get('buildername')
 
@@ -862,7 +862,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         bot_config, bot_db, tests_including_triggered)
     self.compile_specific_targets(
         bot_config, update_step, bot_db,
-        compile_targets, tests_including_triggered)
+        compile_targets, tests_including_triggered,
+        mb_config_path=mb_config_path)
     self.archive_build(
         mastername, buildername, update_step, bot_db)
     self.download_and_unzip_build(mastername, buildername, update_step, bot_db)
