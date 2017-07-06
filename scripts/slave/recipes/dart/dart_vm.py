@@ -5,7 +5,6 @@
 DEPS = [
   'depot_tools/bot_update',
   'depot_tools/gclient',
-  'file',
   'recipe_engine/context',
   'recipe_engine/path',
   'recipe_engine/platform',

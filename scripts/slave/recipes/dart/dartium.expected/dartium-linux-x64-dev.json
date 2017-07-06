@@ -108,12 +108,14 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "rmtree",
       "[START_DIR]/src/out"
     ],
     "infra_step": true,
-    "name": "rmtree clobber"
+    "name": "clobber"
   },
   {
     "name": "$result",

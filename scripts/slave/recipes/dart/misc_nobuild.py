@@ -6,8 +6,8 @@ DEPS = [
   'depot_tools/bot_update',
   'depot_tools/gclient',
   'depot_tools/gsutil',
-  'file',
   'recipe_engine/context',
+  'recipe_engine/file',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
@@ -61,7 +61,7 @@ def RunSteps(api):
     api.gsutil(['cp', url, zipfile], name='Download sdk')
   build_dir = api.path['checkout'].join(build_directories[api.platform.name])
   build_dir = api.path.abspath(build_dir)
-  api.file.makedirs('Create build directory', build_dir)
+  api.file.ensure_directory('Create build directory', build_dir)
   api.file.rmtree('Clean build directory', build_dir)
   api.zip.unzip('Unzip sdk', zipfile, build_dir)
 
