@@ -237,27 +237,22 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[CACHE]/goma/Deterministic_Linux",
-      "511"
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]/goma/Deterministic_Linux"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "preprocess_for_goma.makedirs goma cache directory",
+    "infra_step": true,
+    "name": "preprocess_for_goma.goma cache directory",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
-      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
-      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
-      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
-      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
-      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -485,11 +480,21 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport glob\nimport sys\nwith open(sys.argv[1], 'w') as f:\n  f.write('\\n'.join(glob.glob(sys.argv[2])))\n",
-      "/path/to/tmp/",
-      "[START_DIR]/src/out/Release/*.isolated.gen.json"
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "glob",
+      "[START_DIR]/src/out/Release",
+      "*.isolated.gen.json"
     ],
-    "name": "find isolated targets"
+    "infra_step": true,
+    "name": "find isolated targets",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@glob@[START_DIR]/src/out/Release/dummy_target_1.isolated.gen.json@@@",
+      "@@@STEP_LOG_LINE@glob@[START_DIR]/src/out/Release/dummy_target_2.isolated.gen.json@@@",
+      "@@@STEP_LOG_END@glob@@@"
+    ]
   },
   {
     "cmd": [
@@ -601,27 +606,22 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[CACHE]/goma/Deterministic_Linux",
-      "511"
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]/goma/Deterministic_Linux"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "preprocess_for_goma.makedirs goma cache directory (2)",
+    "infra_step": true,
+    "name": "preprocess_for_goma.goma cache directory (2)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
-      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
-      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
-      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
-      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
-      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -845,11 +845,21 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport glob\nimport sys\nwith open(sys.argv[1], 'w') as f:\n  f.write('\\n'.join(glob.glob(sys.argv[2])))\n",
-      "/path/to/tmp/",
-      "[START_DIR]/src/out/Release/*.isolated.gen.json"
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "glob",
+      "[START_DIR]/src/out/Release",
+      "*.isolated.gen.json"
     ],
-    "name": "find isolated targets (2)"
+    "infra_step": true,
+    "name": "find isolated targets (2)",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@glob@[START_DIR]/src/out/Release/dummy_target_1.isolated.gen.json@@@",
+      "@@@STEP_LOG_LINE@glob@[START_DIR]/src/out/Release/dummy_target_2.isolated.gen.json@@@",
+      "@@@STEP_LOG_END@glob@@@"
+    ]
   },
   {
     "cmd": [
