@@ -4,11 +4,11 @@
 
 DEPS = [
   'depot_tools/bot_update',
-  'file',
   'depot_tools/gclient',
   'depot_tools/git',
   'depot_tools/gsutil',
   'recipe_engine/context',
+  'recipe_engine/file',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/properties',
@@ -57,10 +57,10 @@ def PushRef(api, repo, ref, hsh):
   ref_log_path = api.path['start_dir'].join(ref_log_file_name)
   log = []
   if api.path.exists(ref_log_path):
-    log.append(api.file.read(
+    log.append(api.file.read_text(
       'Read %s' % ref_log_file_name, ref_log_path, test_data=''))
   log.append('%s %s' % (hsh, str(api.time.time())))
-  api.file.write('Write %s' % ref_log_file_name, ref_log_path, '\n'.join(log))
+  api.file.write_text('Write %s' % ref_log_file_name, ref_log_path, '\n'.join(log))
   api.gsutil.upload(
       ref_log_path,
       'chromium-v8-auto-roll',
@@ -70,14 +70,14 @@ def PushRef(api, repo, ref, hsh):
 
 def ReadTimeStamp(api, name):
   return int(float(
-      api.file.read(
+      api.file.read_text(
           name,
           api.path['start_dir'].join('timestamp.txt'),
       ).strip()))
 
 
 def WriteTimeStamp(api, name, timestamp):
-  api.file.write(
+  api.file.write_text(
       name,
       api.path['start_dir'].join('timestamp.txt'),
       str(timestamp),
@@ -211,7 +211,7 @@ def GenTests(api):
         ) +
         api.override_step_data(
             'check timestamp',
-            api.raw_io.output_text(current_date),
+            api.file.read_text(current_date),
         ) +
         api.time.seed(int(float(new_date))) +
         api.time.step(2) +
@@ -262,4 +262,4 @@ def GenTests(api):
       date_recent,
       hsh_new,
       date_new,
-  ) + api.override_step_data('check timestamp', retcode=1)
+  ) + api.override_step_data('check timestamp', api.file.errno('ENOENT'))

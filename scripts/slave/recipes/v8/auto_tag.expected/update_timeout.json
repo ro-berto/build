@@ -175,10 +175,14 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "\n#define V8_MAJOR_VERSION 3\n#define V8_MINOR_VERSION 4\n#define V8_BUILD_NUMBER 3\n#define V8_PATCH_LEVEL 3\n",
       "[START_DIR]/v8/include/v8-version.h"
     ],
+    "infra_step": true,
     "name": "Increment version"
   },
   {

@@ -164,10 +164,14 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "[START_DIR]/timestamp.txt",
       "/path/to/tmp/"
     ],
+    "infra_step": true,
     "name": "check timestamp"
   },
   {
@@ -223,10 +227,14 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "0df953c9e12c1e3b0e37f2d4ef1ef8c319e095cb 396006",
       "[START_DIR]/refs_heads_roll.log"
     ],
+    "infra_step": true,
     "name": "Write refs_heads_roll.log"
   },
   {

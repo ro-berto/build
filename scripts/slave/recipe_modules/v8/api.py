@@ -353,7 +353,7 @@ class V8Api(recipe_api.RecipeApi):
   @contextlib.contextmanager
   def _temp_dir(self, path):
     try:
-      self.m.file.makedirs('for peeking gn', path)
+      self.m.file.ensure_directory('for peeking gn', path)
       yield
     finally:
       self.m.shutil.rmtree(path, infra_step=True)
@@ -598,7 +598,7 @@ class V8Api(recipe_api.RecipeApi):
   # TODO(machenbach): This should move to a dynamorio module as soon as one
   # exists.
   def dr_compile(self):
-    self.m.file.makedirs(
+    self.m.file.ensure_directory(
       'Create Build Dir',
       self.m.path['start_dir'].join('dynamorio', 'build'))
     with self.m.context(

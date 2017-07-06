@@ -125,20 +125,28 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "[START_DIR]/refs_heads_lkgr.log",
       "/path/to/tmp/"
     ],
+    "infra_step": true,
     "name": "Read refs_heads_lkgr.log"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "\nc1a7fd0c98a80c52fcf6763850d2ee1c41cfe8d6 396004",
       "[START_DIR]/refs_heads_lkgr.log"
     ],
+    "infra_step": true,
     "name": "Write refs_heads_lkgr.log"
   },
   {
@@ -217,13 +225,17 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "[START_DIR]/timestamp.txt",
       "/path/to/tmp/"
     ],
+    "infra_step": true,
     "name": "check timestamp",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@file command encountered system error ENOENT@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
@@ -231,10 +243,14 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "396006",
       "[START_DIR]/timestamp.txt"
     ],
+    "infra_step": true,
     "name": "init timestamp"
   },
   {

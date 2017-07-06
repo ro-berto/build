@@ -19,10 +19,10 @@ The recipe will:
 import re
 
 DEPS = [
-  'file',
   'depot_tools/gclient',
   'depot_tools/git',
   'recipe_engine/context',
+  'recipe_engine/file',
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/python',
@@ -106,7 +106,7 @@ def IncrementVersion(api, ref, latest_version, latest_version_file):
       latest_version_file)
 
   # Write file to disk.
-  api.file.write(
+  api.file.write_text(
       'Increment version',
       api.path['checkout'].join(api.v8.VERSION_FILE),
       latest_version_file,

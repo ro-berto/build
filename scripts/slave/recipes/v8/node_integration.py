@@ -12,8 +12,8 @@ DEPS = [
   'depot_tools/gclient',
   'depot_tools/gsutil',
   'depot_tools/tryserver',
-  'file',
   'recipe_engine/context',
+  'recipe_engine/file',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/platform',
@@ -93,7 +93,7 @@ def _build_and_upload(api):
   zip_file = api.path['start_dir'].join(archive_name)
 
   # Make archive directory.
-  api.file.makedirs('install directory', archive_dir)
+  api.file.ensure_directory('install directory', archive_dir)
 
   # Build and install.
   with api.context(cwd=api.path['start_dir'].join('node.js')):
