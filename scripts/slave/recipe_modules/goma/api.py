@@ -144,7 +144,7 @@ class GomaApi(recipe_api.RecipeApi):
   def _make_goma_cache_dir(self, goma_cache_dir):
     """Ensure goma_cache_dir exist. Make it if not exists."""
 
-    self.m.file.ensure_directory('goma cache directory', goma_cache_dir)
+    self.m.file.makedirs('goma cache directory', goma_cache_dir)
 
   def _start_cloudtail(self):
     """Start cloudtail to upload compiler_proxy.INFO

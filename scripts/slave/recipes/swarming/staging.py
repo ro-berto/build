@@ -19,6 +19,7 @@ DEPS = [
   'chromium',
   'chromium_tests',
   'commit_position',
+  'file',
   'depot_tools/gclient',
   'isolate',
   'recipe_engine/json',
