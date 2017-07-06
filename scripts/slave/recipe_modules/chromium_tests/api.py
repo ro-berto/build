@@ -167,14 +167,24 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       # (1) the revision of the builder if this is a tester,
       # (2) 'revision' from the waterfall, or
       # (3) 'HEAD' for forced builds with unspecified 'revision'.
-      # TODO(machenbach): Use parent_got_cr_revision on testers with component
-      # builds to match also the chromium revision from the builder.
       component_rev = self.m.properties.get('revision') or 'HEAD'
+
       if bot_type == 'tester':
         component_rev = self.m.properties.get(
             'parent_got_revision', component_rev)
       dep = bot_config.get('set_component_rev')
       self.m.gclient.c.revisions[dep['name']] = dep['rev_str'] % component_rev
+
+      # Allow bots to configure a list of additional directories of which
+      # the revision information will be stored into a build property.
+      # This is mainly to make it possible for testers to sync the same revision
+      # as the builder for multiple directories.
+      for repo_dir, revision_property_name in bot_config.get(
+          'extra_got_revision_properties', []):
+        revision_property = self.m.properties.get(revision_property_name)
+        if revision_property:
+          self.m.gclient.c.revisions[repo_dir] = revision_property
+
 
   def set_up_swarming(self, bot_config):
     self.m.swarming.check_client_version()

@@ -20,6 +20,15 @@ SPEC = {
   'builders': {},
 }
 
+# The bots in chromium.webrtc.fyi are synced to both Chromium ToT and WebRTC
+# ToT, where the former is stored as got_cr_revision and the latter is passed as
+# got_revision. By setting the Chromium revision to variables that are supported
+# by the Perf dashboard, we can still get correct blame lists for the Chrome
+# changes.
+PERF_CONFIG_MAPPINGS = {
+  'r_chromium': 'got_cr_revision',
+  'r_chromium_commit_pos': 'got_cr_revision_cp',
+}
 
 # Remaining builders are WebRTC-specific builders that compile and run tests
 # that are focused on testing WebRTC functionality. Some of these tests are
@@ -48,6 +57,8 @@ def AddTestSpec(name, perf_id, platform, target_bits=64,
       platform,
       target_bits,
       build_config,
+      perf_config_mappings=PERF_CONFIG_MAPPINGS,
+      commit_position_property='got_cr_revision_cp',
       gclient_config='chromium_webrtc_tot',
       test_spec_file='chromium.webrtc.fyi.json')
   _ConfigureSyncingWebRTCToT(spec)
@@ -59,6 +70,9 @@ def _ConfigureSyncingWebRTCToT(spec):
     'name': 'src/third_party/webrtc',
     'rev_str': '%s',
   }
+  spec['extra_got_revision_properties'] = [
+    ('src', 'parent_got_cr_revision'),
+  ]
 
 
 AddBuildSpec('Win Builder', 'win', target_bits=32)

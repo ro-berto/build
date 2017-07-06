@@ -296,8 +296,9 @@ class LocalGTestTest(Test):
                revision=None, webkit_revision=None,
                android_shard_timeout=None, android_tool=None,
                override_compile_targets=None, override_isolate_target=None,
-               use_xvfb=True, waterfall_mastername=None,
-               waterfall_buildername=None, **runtest_kwargs):
+               commit_position_property='got_revision_cp', use_xvfb=True,
+               waterfall_mastername=None, waterfall_buildername=None,
+               **runtest_kwargs):
     """Constructs an instance of LocalGTestTest.
 
     Args:
@@ -312,6 +313,8 @@ class LocalGTestTest(Test):
           (for tests that don't follow target naming conventions).
       override_isolate_target: List of isolate targets for this test
           (for tests that don't follow target naming conventions).
+      commit_position_property: Property to get Chromium's commit position.
+          Defaults to 'got_revision_cp'.
       use_xvfb: whether to use the X virtual frame buffer. Only has an
           effect on Linux. Defaults to True. Mostly harmless to
           specify this, except on GPU bots.
@@ -331,6 +334,7 @@ class LocalGTestTest(Test):
     self._android_tool = android_tool
     self._override_compile_targets = override_compile_targets
     self._override_isolate_target = override_isolate_target
+    self._commit_position_property = commit_position_property
     self._use_xvfb = use_xvfb
     self._runtest_kwargs = runtest_kwargs
     self._gtest_results = {}
@@ -437,7 +441,7 @@ class LocalGTestTest(Test):
               api.json.input(r.raw),
               test_type=self.name,
               chrome_revision=api.bot_update.last_returned_properties.get(
-                  'got_revision_cp', 'x@{#0}'))
+                  self._commit_position_property, 'x@{#0}'))
 
 
     return step_result
@@ -2457,8 +2461,23 @@ class WebRTCPerfTest(LocalGTestTest):
   WebRTC is the only project that runs correctness tests with perf reporting
   enabled at the same time, which differs from the chromium.perf bots.
   """
-  def __init__(self, name, args, perf_id, **runtest_kwargs):
+  def __init__(self, name, args, perf_id, perf_config_mappings,
+               commit_position_property, **runtest_kwargs):
+    """Construct a WebRTC Perf test.
+
+    Args:
+      name: Name of the test.
+      args: Command line argument list.
+      perf_id: String identifier (preferably unique per machine).
+      perf_config_mappings: A dict that maps revision keys to be put in the perf
+        config to revision properties coming from the bot_update step.
+      commit_position_property: Commit position property for the Chromium
+        checkout. It's needed because for chromium.webrtc.fyi 'got_revision_cp'
+        refers to WebRTC's commit position instead of Chromium's, so we have to
+        use 'got_cr_revision_cp' instead.
+    """
     assert perf_id
+    self._perf_config_mappings = perf_config_mappings or {}
     # TODO(kjellander): See if it's possible to rely on the build spec
     # properties 'perf-id' and 'results-url' as set in the
     # chromium_tests/chromium_perf.py. For now, set these to get an exact
@@ -2469,16 +2488,27 @@ class WebRTCPerfTest(LocalGTestTest):
     # TODO(kjellander): See if perf_dashboard_id is still needed.
     runtest_kwargs['perf_dashboard_id'] = name
     runtest_kwargs['annotate'] = 'graphing'
-    super(WebRTCPerfTest, self).__init__(name, args, **runtest_kwargs)
+
+    super(WebRTCPerfTest, self).__init__(
+        name, args, commit_position_property=commit_position_property,
+        **runtest_kwargs)
 
   def run(self, api, suffix):
-    webrtc_subtree_git_hash = api.bot_update.last_returned_properties.get(
-        'got_webrtc_revision', 'deadbeef')
-    self._runtest_kwargs['perf_config'] = {
-        # TODO(kjellander: Change to r_webrtc_git after crbug.com/611808.
-        'r_webrtc_subtree_git': webrtc_subtree_git_hash,
-        'a_default_rev': 'r_webrtc_subtree_git',
-    }
+    props = api.bot_update.last_returned_properties
+    perf_config = { 'a_default_rev': 'r_webrtc_subtree_git' }
+
+    for revision_key, revision_prop in self._perf_config_mappings.iteritems():
+      perf_config[revision_key] = props[revision_prop]
+
+    # 'got_webrtc_revision' property is present for bots in both chromium.webrtc
+    # and chromium.webrtc.fyi in reality, but due to crbug.com/713356, the
+    # latter don't get properly simulated. Fallback to got_revision then.
+    webrtc_rev = props.get('got_webrtc_revision', props['got_revision'])
+
+    # TODO(kjellander: Change to 'r_webrtc_git' after crbug.com/611808.
+    perf_config['r_webrtc_subtree_git'] = webrtc_rev
+
+    self._runtest_kwargs['perf_config'] = perf_config
     LocalGTestTest.run(self, api, suffix)
 
 

@@ -77,7 +77,9 @@ def BuildSpec(platform, target_bits, build_config='Release',
 
 
 def TestSpec(parent_builder, perf_id, platform, target_bits,
-             build_config='Release', gclient_config='chromium_webrtc',
+             build_config='Release', perf_config_mappings=None,
+             commit_position_property='got_revision_cp',
+             gclient_config='chromium_webrtc',
              test_spec_file='chromium.webrtc.json'):
   spec = BaseSpec(
       bot_type='tester',
@@ -105,7 +107,9 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
           args=['--gtest_filter=WebRtc*', '--run-manual',
                 '--test-launcher-print-test-stdio=always',
                 '--test-launcher-bot-mode'],
-          perf_id=perf_id),
+          perf_id=perf_id,
+          perf_config_mappings=perf_config_mappings,
+          commit_position_property=commit_position_property),
       steps.WebRTCPerfTest(
           'browser_tests',
           # These tests needs --test-launcher-jobs=1 since some of them are
@@ -116,7 +120,9 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
                 '--test-launcher-jobs=1',
                 '--test-launcher-bot-mode',
                 '--test-launcher-print-test-stdio=always'],
-          perf_id=perf_id),
+          perf_id=perf_id,
+          perf_config_mappings=perf_config_mappings,
+          commit_position_property=commit_position_property),
 
       # Run capture unittests as well since our bots have real webcams.
       steps.GTestTest('capture_unittests',
