@@ -138,13 +138,10 @@ class IsolateApi(recipe_api.RecipeApi):
     # deprecated in favor of to *_ng builders, that pass targets explicitly.
     if targets is None:
       # Ninja builds <target>.isolated.gen.json files via isolate_driver.py.
-      paths = self.m.file.glob(
+      paths = self.m.file.glob_paths(
           'find isolated targets',
-          build_dir.join('*.isolated.gen.json'),
-          test_data=[
-              build_dir.join('dummy_target_%d.isolated.gen.json' % i)
-              for i in (1, 2)
-          ])
+          build_dir, '*.isolated.gen.json',
+          test_data=['dummy_target_%d.isolated.gen.json' % i for i in (1, 2)])
       targets = []
       for p in paths:
         name = self.m.path.basename(p)

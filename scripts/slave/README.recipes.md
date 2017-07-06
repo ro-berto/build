@@ -1963,7 +1963,7 @@ Returns: (dict) If 'remote_name' is supplied, a dictionary mapping the
     that repository's bundle was uploaded.
 ### *recipe_modules* / [goma](/scripts/slave/recipe_modules/goma)
 
-[DEPS](/scripts/slave/recipe_modules/goma/__init__.py#1): [build](#recipe_modules-build), [file](#recipe_modules-file), [service\_account](#recipe_modules-service_account), [depot\_tools/cipd][depot_tools/recipe_modules/cipd], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/shutil][recipe_engine/recipe_modules/shutil], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/goma/__init__.py#1): [build](#recipe_modules-build), [service\_account](#recipe_modules-service_account), [depot\_tools/cipd][depot_tools/recipe_modules/cipd], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/shutil][recipe_engine/recipe_modules/shutil], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 #### **class [GomaApi](/scripts/slave/recipe_modules/goma/api.py#10)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
@@ -2168,7 +2168,7 @@ Args:
 &emsp; **@property**<br>&mdash; **def [use\_goma](/scripts/slave/recipe_modules/ios/api.py#56)(self):**
 ### *recipe_modules* / [isolate](/scripts/slave/recipe_modules/isolate)
 
-[DEPS](/scripts/slave/recipe_modules/isolate/__init__.py#5): [chromium](#recipe_modules-chromium), [file](#recipe_modules-file), [swarming\_client](#recipe_modules-swarming_client), [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tempfile][recipe_engine/recipe_modules/tempfile]
+[DEPS](/scripts/slave/recipe_modules/isolate/__init__.py#5): [chromium](#recipe_modules-chromium), [swarming\_client](#recipe_modules-swarming_client), [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tempfile][recipe_engine/recipe_modules/tempfile]
 
 #### **class [IsolateApi](/scripts/slave/recipe_modules/isolate/api.py#10)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
@@ -2176,7 +2176,7 @@ APIs for interacting with isolates.
 
 &mdash; **def [\_\_init\_\_](/scripts/slave/recipe_modules/isolate/api.py#13)(self, \*\*kwargs):**
 
-&mdash; **def [archive\_differences](/scripts/slave/recipe_modules/isolate/api.py#297)(self, first_dir, second_dir, values):**
+&mdash; **def [archive\_differences](/scripts/slave/recipe_modules/isolate/api.py#294)(self, first_dir, second_dir, values):**
 
 Archive different files of 2 builds.
 
@@ -2187,7 +2187,7 @@ preparation for the compile. Needed in order to ensure isolates
 are rebuilt properly because their dependencies are currently not
 completely described to gyp.
 
-&mdash; **def [compare\_build\_artifacts](/scripts/slave/recipe_modules/isolate/api.py#326)(self, first_dir, second_dir):**
+&mdash; **def [compare\_build\_artifacts](/scripts/slave/recipe_modules/isolate/api.py#323)(self, first_dir, second_dir):**
 
 Compare the artifacts from 2 builds.
 
@@ -2234,18 +2234,18 @@ Args:
         enable/disable exparchive, or provide a number (between 0 and 100)
         to have n% of builds run with exparchive.
 
-&emsp; **@property**<br>&mdash; **def [isolated\_tests](/scripts/slave/recipe_modules/isolate/api.py#244)(self):**
+&emsp; **@property**<br>&mdash; **def [isolated\_tests](/scripts/slave/recipe_modules/isolate/api.py#241)(self):**
 
 The dictionary of 'target name -> isolated hash' for this run.
 
 These come either from the incoming swarm_hashes build property,
 or from calling find_isolated_tests, above, at some point during the run.
 
-&mdash; **def [remove\_build\_metadata](/scripts/slave/recipe_modules/isolate/api.py#278)(self):**
+&mdash; **def [remove\_build\_metadata](/scripts/slave/recipe_modules/isolate/api.py#275)(self):**
 
 Removes the build metadata embedded in the build artifacts.
 
-&mdash; **def [run\_isolated](/scripts/slave/recipe_modules/isolate/api.py#266)(self, name, isolate_hash, args=None, \*\*kwargs):**
+&mdash; **def [run\_isolated](/scripts/slave/recipe_modules/isolate/api.py#263)(self, name, isolate_hash, args=None, \*\*kwargs):**
 
 Runs an isolated test.
 ### *recipe_modules* / [legion](/scripts/slave/recipe_modules/legion)
@@ -5049,7 +5049,7 @@ Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 &mdash; **def [RunSteps](/scripts/slave/recipes/swarming/heartbeat.py#19)(api):**
 ### *recipes* / [swarming/staging](/scripts/slave/recipes/swarming/staging.py)
 
-[DEPS](/scripts/slave/recipes/swarming/staging.py#17): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [commit\_position](#recipe_modules-commit_position), [file](#recipe_modules-file), [isolate](#recipe_modules-isolate), [swarming](#recipe_modules-swarming), [swarming\_client](#recipe_modules-swarming_client), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/swarming/staging.py#17): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [commit\_position](#recipe_modules-commit_position), [isolate](#recipe_modules-isolate), [swarming](#recipe_modules-swarming), [swarming\_client](#recipe_modules-swarming_client), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 Swarming staging recipe: runs tests for HEAD of chromium using HEAD of
 swarming_client toolset on Swarming staging server instances
@@ -5060,10 +5060,10 @@ full roll out.
 
 Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/swarming/staging.py#43)(api, buildername, mastername):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/swarming/staging.py#42)(api, buildername, mastername):**
 ### *recipes* / [swarming:examples/full](/scripts/slave/recipe_modules/swarming/examples/full.py)
 
-[DEPS](/scripts/slave/recipe_modules/swarming/examples/full.py#7): [file](#recipe_modules-file), [isolate](#recipe_modules-isolate), [swarming](#recipe_modules-swarming), [swarming\_client](#recipe_modules-swarming_client), [test\_utils](#recipe_modules-test_utils), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/swarming/examples/full.py#7): [isolate](#recipe_modules-isolate), [swarming](#recipe_modules-swarming), [swarming\_client](#recipe_modules-swarming_client), [test\_utils](#recipe_modules-test_utils), [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/swarming/examples/full.py#32)(api, platforms, show_isolated_out_in_collect_step, show_shards_in_collect_step, gtest_task, isolated_script_task, merge):**
 ### *recipes* / [swarming\_client:examples/full](/scripts/slave/recipe_modules/swarming_client/examples/full.py)
@@ -5376,7 +5376,7 @@ The changes are:
 &mdash; **def [RunSteps](/scripts/slave/recipes/win_analyze.py#27)(api):**
 ### *recipes* / [zip:examples/full](/scripts/slave/recipe_modules/zip/examples/full.py)
 
-[DEPS](/scripts/slave/recipe_modules/zip/examples/full.py#5): [file](#recipe_modules-file), [zip](#recipe_modules-zip), [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/zip/examples/full.py#5): [zip](#recipe_modules-zip), [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/zip/examples/full.py#14)(api):**
 
