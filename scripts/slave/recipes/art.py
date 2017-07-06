@@ -390,7 +390,7 @@ def setup_valgrind_runner(api, bitness, javac=False):
       env.update({ 'HOST_PREFER_32_BIT' : 'true' })
 
     with api.context(env=env):
-      api.step('run valgrind tests', [run, '-j8', 'art-gtest-valgrind%d' % bitness], timeout=21600)
+      api.step('run valgrind tests', [run, '-j8', 'art-gtest-valgrind%d' % bitness])
 
 
 _CONFIG_MAP = {
