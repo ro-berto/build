@@ -1158,7 +1158,7 @@ SPEC = {
       'goma_canary': True,
       'tests': steps.GOMA_TESTS,
     },
-    'Chromium Win 10': {
+    'Chromium Win 10 GCE Tests': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'chrome_with_codecs',
