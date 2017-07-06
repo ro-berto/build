@@ -3,12 +3,12 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'file',
   'recipe_engine/context',
+  'recipe_engine/file',
   'recipe_engine/path',
   'recipe_engine/properties',
-  'repo',
   'recipe_engine/step',
+  'repo',
 ]
 
 _TARGET_DEVICE_MAP = {
