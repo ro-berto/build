@@ -1024,6 +1024,28 @@ SPEC = {
       },
       'enable_swarming': True,
     },
+
+    # This machine doesn't really exist either; it is a separate
+    # configuration because we don't have the capacity to run all of
+    # the Win AMD bot's tests on the win_angle_rel_ng tryserver.
+    'Win7 ANGLE Tryserver (AMD)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU Win Builder',
+      'testing': {
+        'platform': 'win',
+      },
+      'enable_swarming': True,
+      'serialize_tests': True,
+    },
+
+    # The following machines do exist.
     'Linux ChromiumOS Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
