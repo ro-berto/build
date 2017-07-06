@@ -6,10 +6,10 @@ DEPS = [
   'depot_tools/bot_update',
   'depot_tools/depot_tools',
   'depot_tools/gclient',
-  'file',
   'goma',
   'depot_tools/gsutil',
   'recipe_engine/context',
+  'recipe_engine/file',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/platform',
@@ -331,15 +331,15 @@ def upload_dm_results(api, results_dir, revision):
   builder_name = api.m.properties['buildername'].strip()
 
   # Upload the images.
-  img_glob = results_dir.join("*.png")
-  files_to_upload = api.file.glob(
+  files_to_upload = api.file.glob_paths(
       'find images',
-      img_glob,
-      test_data=[api.path['start_dir'].join('someimage.png')],
-      infra_step=True)
+      results_dir,
+      '*.png',
+      test_data=['someimage.png'])
 
   if len(files_to_upload) > 0:
-    gs_cp(api, 'images', img_glob, 'dm-images-v1', multithreaded=True)
+    gs_cp(api, 'images', results_dir.join('*.png'), 'dm-images-v1',
+          multithreaded=True)
 
   # Upload the JSON summary and verbose.log.
   sec_str = str(int(api.time.time()))
