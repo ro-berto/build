@@ -1637,7 +1637,7 @@ class AndroidApi(recipe_api.RecipeApi):
     file_changes = {}
     new_files = self.staged_files_matching_filter('A')
     for new_file in new_files:
-      lines = self.m.file.read(
+      lines = self.m.file.read_text(
           ('Finding lines changed in added file %s' % new_file),
           new_file,
           test_data='int n = 0;\nn++;\nfor (int i = 0; i < n; i++) {'
@@ -1659,7 +1659,7 @@ class AndroidApi(recipe_api.RecipeApi):
       file_changes[changed_file] = [i + 1 for i, line in enumerate(blame_lines)
                                     if line.startswith(blame_cached_revision)]
 
-    self.m.file.write(
+    self.m.file.write_text(
         'Saving changed lines for revision.',
         self.file_changes_path,
         self.m.json.dumps(file_changes)

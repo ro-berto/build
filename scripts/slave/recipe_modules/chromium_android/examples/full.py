@@ -9,10 +9,10 @@ DEPS = [
     'build',
     'chromium',
     'chromium_android',
+    'recipe_engine/file',
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/properties',
-    'recipe_engine/raw_io',
     'recipe_engine/step',
 ]
 
@@ -378,8 +378,7 @@ def GenTests(api):
          properties_for('tester') +
          api.override_step_data(
              'get version (2)',
-             api.raw_io.output_text(
-                 'MAJOR=53\nMINOR=0\nBUILD=2800\nPATCH=0\n')))
+             api.file.read_text('MAJOR=53\nMINOR=0\nBUILD=2800\nPATCH=0\n')))
 
   yield (api.test('telemetry_browser_tests_failures') +
          properties_for('telemetry_browser_tests_tester') +
