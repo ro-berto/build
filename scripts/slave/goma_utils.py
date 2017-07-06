@@ -19,6 +19,7 @@ import signal
 import socket
 import subprocess
 import sys
+import tarfile
 import tempfile
 import time
 
@@ -204,13 +205,43 @@ def UploadGomaCompilerProxyInfo(override_gsutil=None,
 
   gomacc_logs = GetListOfGomaccInfoAfterCompilerProxyStart()
   if gomacc_logs:
-    for log in gomacc_logs:
-      UploadToGomaLogGS(
-          log, os.path.basename(log),
-          metadata=metadata,
-          override_gsutil=override_gsutil)
-
+    UploadGomaccInfo(gomacc_logs,
+                     metadata=metadata,
+                     override_gsutil=override_gsutil)
   return viewer_url
+
+
+def UploadGomaccInfo(gomacc_logs,
+                     metadata=None,
+                     override_gsutil=None):
+  """Upload gomacc logs if any
+
+  Args:
+    gomacc_logs: An array that contains paths to gomacc logs
+    override_gsutil: gsutil path to override
+    metadata: metadata which will be attached as gs metadata
+  """
+
+  temp_file = tempfile.NamedTemporaryFile(delete=False)
+  try:
+    with tarfile.TarFile(fileobj=temp_file, mode='w') as tf:
+      for log in gomacc_logs:
+        tf.add(log, arcname=os.path.basename(log))
+
+    # Taking the first name as gomacc log filename on gs.
+    gs_tarfile_name = os.path.basename(gomacc_logs[0]) + '.tar'
+
+    # Since UploadToGomaLogGS opens temp_file.name, we have to
+    # close the file here. Otherwise this will fail on Win.
+    temp_file.close()
+
+    UploadToGomaLogGS(temp_file.name, gs_tarfile_name,
+                      metadata=metadata,
+                      override_gsutil=override_gsutil)
+  finally:
+    if not temp_file.closed:
+      temp_file.close()
+    os.remove(temp_file.name)
 
 def UploadNinjaLog(
     outdir, compiler, command, exit_status, override_gsutil=None):
