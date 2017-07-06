@@ -140,12 +140,14 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "rmtree",
       "[BUILDER_CACHE]/Android64_Tests__L_Nexus9_/src/out/Release"
     ],
     "infra_step": true,
-    "name": "rmtree build directory"
+    "name": "build directory"
   },
   {
     "cmd": [
