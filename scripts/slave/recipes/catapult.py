@@ -8,7 +8,6 @@ DEPS = [
   'depot_tools/cipd',
   'depot_tools/gclient',
   'depot_tools/gitiles',
-  'file',
   'gae_sdk',
   'recipe_engine/generator_script',
   'recipe_engine/path',

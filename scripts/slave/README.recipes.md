@@ -25,7 +25,6 @@
   * [crrev](#recipe_modules-crrev)
   * [disk](#recipe_modules-disk)
   * [emulator](#recipe_modules-emulator)
-  * [file](#recipe_modules-file)
   * [filter](#recipe_modules-filter)
   * [findit](#recipe_modules-findit)
   * [gae_sdk](#recipe_modules-gae_sdk)
@@ -227,7 +226,6 @@
   * [emulator:examples/full](#recipes-emulator_examples_full)
   * [example/defer_no_fail](#recipes-example_defer_no_fail)
   * [example/hierarchical](#recipes-example_hierarchical)
-  * [file:examples/full](#recipes-file_examples_full)
   * [filter:examples/full](#recipes-filter_examples_full)
   * [filter:tests/analyze](#recipes-filter_tests_analyze)
   * [filter:tests/analyze_mac](#recipes-filter_tests_analyze_mac)
@@ -1635,71 +1633,6 @@ Returns:
 &emsp; **@contextlib.contextmanager**<br>&mdash; **def [launch\_emulator](/scripts/slave/recipe_modules/emulator/api.py#31)(self, abi, api_level, amount=1, partition_size=None, sdcard_size=None, \*\*kwargs):**
 
 &mdash; **def [wait\_for\_emulator](/scripts/slave/recipe_modules/emulator/api.py#23)(self, num, \*\*kwargs):**
-### *recipe_modules* / [file](/scripts/slave/recipe_modules/file)
-
-[DEPS](/scripts/slave/recipe_modules/file/__init__.py#5): [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-#### **class [FileApi](/scripts/slave/recipe_modules/file/api.py#8)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
-
-FileApi contains helper functions for reading and writing files.
-
-&mdash; **def [\_\_init\_\_](/scripts/slave/recipe_modules/file/api.py#11)(self, \*\*kwargs):**
-
-&mdash; **def [copy](/scripts/slave/recipe_modules/file/api.py#26)(self, name, source, dest, step_test_data=None, \*\*kwargs):**
-
-Copy a file.
-
-&mdash; **def [copytree](/scripts/slave/recipe_modules/file/api.py#41)(self, name, source, dest, symlinks=False, \*\*kwargs):**
-
-Run shutil.copytree in a step.
-
-&mdash; **def [glob](/scripts/slave/recipe_modules/file/api.py#91)(self, name, pattern, test_data=None, \*\*kwargs):**
-
-Performs glob search on a directory.
-
-Returns list of Path objects for all files found.
-
-&mdash; **def [listdir](/scripts/slave/recipe_modules/file/api.py#128)(self, name, path, step_test_data=None, \*\*kwargs):**
-
-Wrapper for os.listdir.
-
-&mdash; **def [makedirs](/scripts/slave/recipe_modules/file/api.py#143)(self, name, path, mode=511, \*\*kwargs):**
-
-Like os.makedirs, except that if the directory exists, then there is no
-error.
-
-&mdash; **def [move](/scripts/slave/recipe_modules/file/api.py#55)(self, name, source, dest, \*\*kwargs):**
-
-Run shutil.move in a step.
-
-&mdash; **def [read](/scripts/slave/recipe_modules/file/api.py#69)(self, name, path, test_data=None, \*\*kwargs):**
-
-Read a file and return its contents.
-
-&mdash; **def [remove](/scripts/slave/recipe_modules/file/api.py#115)(self, name, path, \*\*kwargs):**
-
-Remove the given file.
-
-&mdash; **def [rmcontents](/scripts/slave/recipe_modules/file/api.py#174)(self, name, path, \*\*kwargs):**
-
-Similar to rmtree, but removes only contents not the directory.
-
-This is useful e.g. when removing contents of current working directory.
-Deleting current working directory makes all further getcwd calls fail
-until chdir is called. chdir would be tricky in recipes, so we provide
-a call that doesn't delete the directory itself.
-
-&mdash; **def [rmtree](/scripts/slave/recipe_modules/file/api.py#166)(self, name, path, \*\*kwargs):**
-
-Wrapper for chromium_utils.RemoveDirectory.
-
-&mdash; **def [rmwildcard](/scripts/slave/recipe_modules/file/api.py#189)(self, pattern, path, \*\*kwargs):**
-
-Removes all files in the subtree of path matching the glob pattern.
-
-&mdash; **def [write](/scripts/slave/recipe_modules/file/api.py#77)(self, name, path, data, \*\*kwargs):**
-
-Write the given data to a file.
 ### *recipe_modules* / [filter](/scripts/slave/recipe_modules/filter)
 
 [DEPS](/scripts/slave/recipe_modules/filter/__init__.py#5): [chromium](#recipe_modules-chromium), [goma](#recipe_modules-goma), [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/rietveld][depot_tools/recipe_modules/rietveld], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -1906,7 +1839,7 @@ Args:
 &emsp; **@property**<br>&mdash; **def [platforms](/scripts/slave/recipe_modules/gae_sdk/api.py#60)(self):**
 ### *recipe_modules* / [gatekeeper](/scripts/slave/recipe_modules/gatekeeper)
 
-[DEPS](/scripts/slave/recipe_modules/gatekeeper/__init__.py#1): [build](#recipe_modules-build), [file](#recipe_modules-file), [service\_account](#recipe_modules-service_account), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/gatekeeper/__init__.py#1): [build](#recipe_modules-build), [service\_account](#recipe_modules-service_account), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 #### **class [Gatekeeper](/scripts/slave/recipe_modules/gatekeeper/api.py#8)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
@@ -3702,9 +3635,9 @@ This file is a recipe demonstrating the buildbucket recipe module.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/buildbucket/tests/put.py#12)(api):**
 ### *recipes* / [catapult](/scripts/slave/recipes/catapult.py)
 
-[DEPS](/scripts/slave/recipes/catapult.py#5): [chromium](#recipe_modules-chromium), [file](#recipe_modules-file), [gae\_sdk](#recipe_modules-gae_sdk), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/cipd][depot_tools/recipe_modules/cipd], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [recipe\_engine/generator\_script][recipe_engine/recipe_modules/generator_script], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python]
+[DEPS](/scripts/slave/recipes/catapult.py#5): [chromium](#recipe_modules-chromium), [gae\_sdk](#recipe_modules-gae_sdk), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/cipd][depot_tools/recipe_modules/cipd], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [recipe\_engine/generator\_script][recipe_engine/recipe_modules/generator_script], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/catapult.py#57)(api, platform):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/catapult.py#56)(api, platform):**
 ### *recipes* / [catapult\_cron](/scripts/slave/recipes/catapult_cron.py)
 
 [DEPS](/scripts/slave/recipes/catapult_cron.py#5): [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python]
@@ -4581,11 +4514,6 @@ Generates the sequence of steps that will be run by the slave.
 [DEPS](/scripts/slave/recipes/example/hierarchical.py#6): [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/example/hierarchical.py#12)(api):**
-### *recipes* / [file:examples/full](/scripts/slave/recipe_modules/file/examples/full.py)
-
-[DEPS](/scripts/slave/recipe_modules/file/examples/full.py#7): [file](#recipe_modules-file), [depot\_tools/infra\_paths][depot_tools/recipe_modules/infra_paths], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/file/examples/full.py#27)(api):**
 ### *recipes* / [filter:examples/full](/scripts/slave/recipe_modules/filter/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/filter/examples/full.py#5): [chromium](#recipe_modules-chromium), [filter](#recipe_modules-filter), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
