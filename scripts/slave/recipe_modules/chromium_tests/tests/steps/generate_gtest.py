@@ -5,6 +5,7 @@
 DEPS = [
     'chromium',
     'chromium_tests',
+    'commit_position',
     'depot_tools/bot_update',
     'depot_tools/gclient',
     'isolate',
@@ -43,7 +44,9 @@ def RunSteps(api):
       update_step,
       enable_swarming=True):
     try:
+      test.pre_run(api, '')
       test.run(api, '')
+      test.post_run(api, '')
     finally:
       api.step('details', [])
       api.step.active_result.presentation.logs['details'] = [
@@ -92,6 +95,9 @@ def GenTests(api):
           buildername='test_buildername',
           buildnumber=123,
           bot_id='test_bot_id',
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
       )
   )
 
