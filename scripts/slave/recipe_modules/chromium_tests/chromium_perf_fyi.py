@@ -55,10 +55,15 @@ def _AddTestSpec(name, perf_id, platform, num_device_shards=1,
 
 
 def _AddIsolatedTestSpec(name, perf_id, platform,
-                         parent_buildername, target_bits=64):
+                         parent_buildername=None, target_bits=64):
   spec = chromium_perf.TestSpec('chromium_perf', perf_id, platform, target_bits,
                                 parent_buildername=parent_buildername)
+  if not parent_buildername:
+    spec['parent_mastername'] = 'chromium.perf'
+  else:
+    spec['parent_mastername'] = 'chromium.perf.fyi'
   spec['enable_swarming'] = True
+
   SPEC['builders'][name] = spec
 
 
@@ -112,7 +117,7 @@ _AddTestSpec('Win Clang Perf', 'chromium-win-clang', 'win',
 _AddTestSpec('Win Clang Perf Ref', 'chromium-win-clang-ref', 'win',
              parent_buildername='Win Builder FYI', target_bits=32)
 
-_AddTestSpec('Mojo Linux Perf', 'mojo-linux-perf', 'linux')
+_AddIsolatedTestSpec('Mojo Linux Perf', 'mojo-linux-perf', 'linux')
 
 _AddBuildSpec('Battor Agent Linux', 'linux', 'linux', run_sizes=False,
               compile_targets=['battor_agent'])
