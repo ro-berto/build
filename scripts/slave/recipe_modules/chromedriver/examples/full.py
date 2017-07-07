@@ -13,6 +13,7 @@ DEPS = [
   'commit_position',
   'depot_tools/bot_update',
   'depot_tools/gclient',
+  'recipe_engine/file',
   'recipe_engine/json',
   'recipe_engine/platform',
   'recipe_engine/properties',
@@ -95,7 +96,7 @@ def GenTests(api):
           parent_build_archive_url='gs://test-domain/test-archive.zip',
           got_revision_cp='refs/heads/master@{#3333333333}') +
       api.step_data('Download Test Results Log.read results log file',
-                    api.raw_io.output_text('{"3333333333": true}')))
+                    api.file.read_text('{"3333333333": true}')))
 
   yield (
       api.test('%s_download_logs_failure' % sanitize('Android ChromeDriver')) +
@@ -117,5 +118,5 @@ def GenTests(api):
           parent_build_archive_url='gs://test-domain/test-archive.zip',
           got_revision_cp='refs/heads/master@{#3333333333}') +
       api.step_data(
-          'Download Prebuilts.listdir get prebuilt filename',
-          api.json.output(['rNone.zip'])))
+          'Download Prebuilts.get prebuilt filename',
+          api.file.listdir(['rNone.zip'])))

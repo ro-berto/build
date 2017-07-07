@@ -788,13 +788,13 @@ Returns:
   returned by buildbucket.
 ### *recipe_modules* / [chromedriver](/scripts/slave/recipe_modules/chromedriver)
 
-[DEPS](/scripts/slave/recipe_modules/chromedriver/__init__.py#5): [chromium](#recipe_modules-chromium), [chromium\_gsutil](#recipe_modules-chromium_gsutil), [file](#recipe_modules-file), [zip](#recipe_modules-zip), [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/shutil][recipe_engine/recipe_modules/shutil], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tempfile][recipe_engine/recipe_modules/tempfile]
+[DEPS](/scripts/slave/recipe_modules/chromedriver/__init__.py#5): [chromium](#recipe_modules-chromium), [chromium\_gsutil](#recipe_modules-chromium_gsutil), [zip](#recipe_modules-zip), [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/shutil][recipe_engine/recipe_modules/shutil], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tempfile][recipe_engine/recipe_modules/tempfile]
 
 #### **class [ChromedriverApi](/scripts/slave/recipe_modules/chromedriver/api.py#18)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
 &mdash; **def [\_\_init\_\_](/scripts/slave/recipe_modules/chromedriver/api.py#20)(self, \*args, \*\*kwargs):**
 
-&mdash; **def [archive\_server\_log](/scripts/slave/recipe_modules/chromedriver/api.py#50)(self, server_log):**
+&mdash; **def [archive\_server\_log](/scripts/slave/recipe_modules/chromedriver/api.py#49)(self, server_log):**
 
 Uploads chromedriver server log to Google storage.
 
@@ -805,7 +805,7 @@ Args:
 
 Downloads the most recent prebuilts from Google storage.
 
-&mdash; **def [download\_test\_results\_log](/scripts/slave/recipe_modules/chromedriver/api.py#62)(self, chromedriver_platform):**
+&mdash; **def [download\_test\_results\_log](/scripts/slave/recipe_modules/chromedriver/api.py#61)(self, chromedriver_platform):**
 
 Downloads the test results log for the given Chromedriver platform.
 
@@ -816,19 +816,19 @@ Returns:
   A dictionary where the keys are commit positions and the values are
   booleans indicating whether the tests passed.
 
-&mdash; **def [run\_all\_tests](/scripts/slave/recipe_modules/chromedriver/api.py#198)(self, android_packages=None, archive_server_logs=True):**
+&mdash; **def [run\_all\_tests](/scripts/slave/recipe_modules/chromedriver/api.py#196)(self, android_packages=None, archive_server_logs=True):**
 
 Run all Chromedriver tests.
 
-&mdash; **def [run\_java\_tests](/scripts/slave/recipe_modules/chromedriver/api.py#182)(self, chromedriver, chrome_version_name=None, android_package=None, verbose=False, archive_server_log=True, env=None, \*\*kwargs):**
+&mdash; **def [run\_java\_tests](/scripts/slave/recipe_modules/chromedriver/api.py#180)(self, chromedriver, chrome_version_name=None, android_package=None, verbose=False, archive_server_log=True, env=None, \*\*kwargs):**
 
 Run the Chromedriver Java tests.
 
-&mdash; **def [run\_python\_tests](/scripts/slave/recipe_modules/chromedriver/api.py#166)(self, chromedriver, ref_chromedriver, chrome_version_name=None, android_package=None, archive_server_log=True, env=None, \*\*kwargs):**
+&mdash; **def [run\_python\_tests](/scripts/slave/recipe_modules/chromedriver/api.py#164)(self, chromedriver, ref_chromedriver, chrome_version_name=None, android_package=None, archive_server_log=True, env=None, \*\*kwargs):**
 
 Run the Chromedriver Python tests.
 
-&mdash; **def [update\_test\_results\_log](/scripts/slave/recipe_modules/chromedriver/api.py#104)(self, chromedriver_platform, commit_position, passed):**
+&mdash; **def [update\_test\_results\_log](/scripts/slave/recipe_modules/chromedriver/api.py#102)(self, chromedriver_platform, commit_position, passed):**
 
 Updates the test results log stored in GS for the given platform.
 
@@ -838,7 +838,7 @@ Args:
   passed: Boolean indicating whether the tests passed at this
       commit position.
 
-&mdash; **def [upload\_test\_results\_log](/scripts/slave/recipe_modules/chromedriver/api.py#89)(self, chromedriver_platform, test_results_log):**
+&mdash; **def [upload\_test\_results\_log](/scripts/slave/recipe_modules/chromedriver/api.py#87)(self, chromedriver_platform, test_results_log):**
 
 Uploads the given test results log to Google storage.
 ### *recipe_modules* / [chromite](/scripts/slave/recipe_modules/chromite)
@@ -3717,9 +3717,9 @@ This file is a recipe demonstrating the buildbucket recipe module.
 &mdash; **def [RunSteps](/scripts/slave/recipes/chromedriver.py#45)(api):**
 ### *recipes* / [chromedriver:examples/full](/scripts/slave/recipe_modules/chromedriver/examples/full.py)
 
-[DEPS](/scripts/slave/recipe_modules/chromedriver/examples/full.py#8): [archive](#recipe_modules-archive), [chromedriver](#recipe_modules-chromedriver), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [commit\_position](#recipe_modules-commit_position), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/chromedriver/examples/full.py#8): [archive](#recipe_modules-archive), [chromedriver](#recipe_modules-chromedriver), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [commit\_position](#recipe_modules-commit_position), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromedriver/examples/full.py#37)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromedriver/examples/full.py#38)(api):**
 ### *recipes* / [chromite:examples/full](/scripts/slave/recipe_modules/chromite/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromite/examples/full.py#5): [chromite](#recipe_modules-chromite), [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]

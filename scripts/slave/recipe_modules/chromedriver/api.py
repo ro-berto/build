@@ -32,20 +32,19 @@ class ChromedriverApi(recipe_api.RecipeApi):
             destination=prebuilt_dir,
             name='download latest prebuilt')
         file_list = self.m.file.listdir(
-            name='get prebuilt filename',
-            path=prebuilt_dir,
-            step_test_data=lambda: self.m.json.test_api.output(['r111111.zip']))
+            'get prebuilt filename',
+            prebuilt_dir,
+            test_data=['r111111.zip'])
         prebuilt_file = file_list[0]
-        if not PREBUILT_FILE_RE.match(prebuilt_file):
+        if not PREBUILT_FILE_RE.match(prebuilt_file.pieces[-1]):
           raise self.m.step.StepFailure('Unexpected prebuilt filename: %s'
                                         % prebuilt_file)
         self.m.zip.unzip(step_name='unzip prebuilt',
-                         zip_file=prebuilt_dir.join(prebuilt_file),
+                         zip_file=prebuilt_file,
                          output=unzip_dir)
-        self.m.file.move(name='move prebuilt',
-                         source=unzip_dir.join('chromedriver'),
-                         dest=self.m.chromium.output_dir,
-                         infra_step=False)
+        self.m.file.move('move prebuilt',
+                         unzip_dir.join('chromedriver'),
+                         self.m.chromium.output_dir)
 
   def archive_server_log(self, server_log):
     """Uploads chromedriver server log to Google storage.
@@ -78,9 +77,8 @@ class ChromedriverApi(recipe_api.RecipeApi):
                                  source=log_name,
                                  bucket=GS_CHROMEDRIVER_DATA_BUCKET,
                                  dest=temp_log_file)
-          json_data = self.m.file.read(name='read results log file',
-                                       path=temp_log_file,
-                                       test_data='{}')
+          json_data = self.m.file.read_text(
+            'read results log file', temp_log_file, test_data='{}')
           json_dict = self.m.json.loads(json_data)
         except self.m.step.StepFailure:
           json_dict = {}
@@ -92,9 +90,9 @@ class ChromedriverApi(recipe_api.RecipeApi):
       with self.m.tempfile.temp_dir('results_log') as temp_log_dir:
         log_name = TEST_LOG_FORMAT % chromedriver_platform
         temp_log_file = temp_log_dir.join(log_name)
-        self.m.file.write(name='write results log to file %s' % log_name,
-                          path=temp_log_file,
-                          data=self.m.json.dumps(test_results_log))
+        self.m.file.write_text(
+          'write results log to file %s' % log_name, temp_log_file,
+          self.m.json.dumps(test_results_log))
         self.m.gsutil.upload(name='upload results log %s' % log_name,
                              source=temp_log_file,
                              bucket=GS_CHROMEDRIVER_DATA_BUCKET,
