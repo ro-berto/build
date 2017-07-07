@@ -34,6 +34,10 @@ def RunSteps(api):
   api.gclient.c.with_branch_heads = True
   api.bot_update.ensure_checkout()
 
+  # 'clobber' is the empty string when true, so check with 'in'
+  if 'clobber' in api.properties or '-inc-' not in builder_name:
+    build_dir = api.path.abspath(api.path['checkout'].join('out'))
+    api.file.rmtree('clobber', build_dir)
   with api.context(env={
       'GYP_GENERATORS': 'ninja',
       'GYP_DEFINES': ' '.join(gyp_defines),
@@ -45,20 +49,20 @@ def RunSteps(api):
   # gclient api sets Path('[CHECKOUT]') to build/src/dart.  We prefer build/src.
   api.path['checkout'] = api.path['start_dir'].join('src')
 
-  with api.step.defer_results():
-    with api.context(cwd=api.path['checkout']):
+  with api.context(cwd=api.path['checkout']):
+    api.python(
+      'taskkill before building',
+      api.path['checkout'].join('dart', 'tools', 'task_kill.py'),
+      args=['--kill_browsers=True'],
+      ok_ret='any')
+    with api.context(env={
+        'GYP_GENERATORS': 'ninja',
+        'GYP_DEFINES': ' '.join(gyp_defines)}):
       api.python(
-        'taskkill before building',
-        api.path['checkout'].join('dart', 'tools', 'task_kill.py'),
-        args=['--kill_browsers=True'],
-        ok_ret='any')
-      with api.context(env={
-          'GYP_GENERATORS': 'ninja',
-          'GYP_DEFINES': ' '.join(gyp_defines)}):
-        api.python(
-          'build dartium',
-          api.path['checkout'].join('dart', 'tools', 'dartium', 'build.py'),
-          args=['--mode=Release'])
+        'build dartium',
+        api.path['checkout'].join('dart', 'tools', 'dartium', 'build.py'),
+        args=['--mode=Release'])
+    with api.step.defer_results():
       api.python(
         'annotated steps',
         api.path['checkout'].join(
@@ -70,17 +74,14 @@ def RunSteps(api):
         args=['--kill_browsers=True'],
         ok_ret='any')
 
-    if '-inc-' not in builder_name:
-      build_dir = api.path.abspath(api.path['checkout'].join('out'))
-      api.file.rmtree('clobber', build_dir)
-
 def GenTests(api):
   yield (
-    api.test('dartium-win-ia32-be') +
+    api.test('dartium-win-ia32-inc-be') +
     api.properties.generic(
       mastername='client.dart',
-      buildername='dartium-win-ia32-be',
-      revision='12345') +
+      buildername='dartium-win-ia32-inc-be',
+      revision='12345',
+      clobber='') +
     api.platform('win', 32))
   yield (
     api.test('dartium-linux-x64-dev') +
