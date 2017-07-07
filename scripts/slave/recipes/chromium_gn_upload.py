@@ -8,8 +8,8 @@ DEPS = [
   'chromium',
   'depot_tools/bot_update',
   'depot_tools/depot_tools',
-  'file',
   'depot_tools/gsutil',
+  'recipe_engine/file',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
@@ -92,8 +92,8 @@ def RunSteps(api):
              api.depot_tools.upload_to_google_storage_path,
              ['-b', 'chromium-gn', path_to_binary])
 
-  sha1 = api.file.read('gn sha1', path_to_binary + '.sha1',
-                       test_data='0123456789abcdeffedcba987654321012345678')
+  sha1 = api.file.read_text('gn sha1', path_to_binary + '.sha1',
+                            test_data='0123456789abcdeffedcba987654321012345678')
   api.step.active_result.presentation.step_text = sha1
 
 

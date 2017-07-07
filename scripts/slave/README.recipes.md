@@ -3844,11 +3844,11 @@ This file is a recipe demonstrating the buildbucket recipe module.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium/tests/update_clang.py#10)(api):**
 ### *recipes* / [chromium\_afl](/scripts/slave/recipes/chromium_afl.py)
 
-[DEPS](/scripts/slave/recipes/chromium_afl.py#7): [archive](#recipe_modules-archive), [chromium](#recipe_modules-chromium), [file](#recipe_modules-file), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/chromium_afl.py#7): [archive](#recipe_modules-archive), [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_afl.py#56)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_afl.py#55)(api):**
 
-&mdash; **def [gn\_refs](/scripts/slave/recipes/chromium_afl.py#42)(api, step_name, args):**
+&mdash; **def [gn\_refs](/scripts/slave/recipes/chromium_afl.py#41)(api, step_name, args):**
 
 Runs gn refs with given additional arguments.
 Returns: the list of matched targets.
@@ -3959,7 +3959,7 @@ Returns: the list of matched targets.
 &mdash; **def [RunSteps](/scripts/slave/recipes/chromium_codesearch.py#115)(api):**
 ### *recipes* / [chromium\_gn\_upload](/scripts/slave/recipes/chromium_gn_upload.py)
 
-[DEPS](/scripts/slave/recipes/chromium_gn_upload.py#7): [chromium](#recipe_modules-chromium), [file](#recipe_modules-file), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/chromium_gn_upload.py#7): [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/chromium_gn_upload.py#64)(api):**
 ### *recipes* / [chromium\_gsutil:examples/full](/scripts/slave/recipe_modules/chromium_gsutil/examples/full.py)
@@ -3969,19 +3969,19 @@ Returns: the list of matched targets.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_gsutil/examples/full.py#11)(api):**
 ### *recipes* / [chromium\_libfuzzer](/scripts/slave/recipes/chromium_libfuzzer.py)
 
-[DEPS](/scripts/slave/recipes/chromium_libfuzzer.py#8): [archive](#recipe_modules-archive), [chromium](#recipe_modules-chromium), [file](#recipe_modules-file), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/chromium_libfuzzer.py#8): [archive](#recipe_modules-archive), [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_libfuzzer.py#104)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_libfuzzer.py#103)(api):**
 
-&mdash; **def [gn\_refs](/scripts/slave/recipes/chromium_libfuzzer.py#90)(api, step_name, args):**
+&mdash; **def [gn\_refs](/scripts/slave/recipes/chromium_libfuzzer.py#89)(api, step_name, args):**
 
 Runs gn refs with given additional arguments.
 Returns: the list of matched targets.
 ### *recipes* / [chromium\_libfuzzer\_clang\_tot](/scripts/slave/recipes/chromium_libfuzzer_clang_tot.py)
 
-[DEPS](/scripts/slave/recipes/chromium_libfuzzer_clang_tot.py#8): [archive](#recipe_modules-archive), [chromium](#recipe_modules-chromium), [file](#recipe_modules-file), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/chromium_libfuzzer_clang_tot.py#8): [archive](#recipe_modules-archive), [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_libfuzzer_clang_tot.py#40)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_libfuzzer_clang_tot.py#39)(api):**
 ### *recipes* / [chromium\_pgo](/scripts/slave/recipes/chromium_pgo.py)
 
 [DEPS](/scripts/slave/recipes/chromium_pgo.py#7): [chromium](#recipe_modules-chromium), [pgo](#recipe_modules-pgo), [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -4219,9 +4219,9 @@ Returns: the list of matched targets.
 &mdash; **def [RunSteps](/scripts/slave/recipes/chromium_trybot.py#32)(api):**
 ### *recipes* / [chromium\_upload\_clang](/scripts/slave/recipes/chromium_upload_clang.py)
 
-[DEPS](/scripts/slave/recipes/chromium_upload_clang.py#7): [chromium](#recipe_modules-chromium), [file](#recipe_modules-file), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/chromium_upload_clang.py#7): [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_upload_clang.py#62)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_upload_clang.py#61)(api):**
 ### *recipes* / [client.drmemory.recipe\_autogen](/scripts/slave/recipes/client.drmemory.recipe_autogen.py)
 
 [DEPS](/scripts/slave/recipes/client.drmemory.recipe_autogen.py#5): [chromium](#recipe_modules-chromium), [file](#recipe_modules-file), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
