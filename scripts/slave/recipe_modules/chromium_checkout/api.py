@@ -39,7 +39,7 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
         c if c.isalnum() else '_' for c in self.m.properties['buildername'])
     checkout_dir = builder_cache.join(
         bot_config.get('checkout_dir', checkout_name))
-    self.m.shutil.makedirs('checkout path', checkout_dir)
+    self.m.file.ensure_directory('makedirs checkout path', checkout_dir)
     return checkout_dir
 
   def get_files_affected_by_patch(self, relative_to='src/', cwd=None):
