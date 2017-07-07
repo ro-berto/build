@@ -6,9 +6,9 @@ DEPS = [
     'chromium',
     'depot_tools/bot_update',
     'depot_tools/gclient',
-    'file',
     'depot_tools/gsutil',
     'recipe_engine/context',
+    'recipe_engine/file',
     'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
@@ -442,9 +442,11 @@ def win_builder_steps(api):
     # line (we sorted by date with /O-D):
     basename = step_result.stdout.split()[0][:-4]
     # Delete prior sfx archive step
-    api.file.remove("Delete prior sfx archive",
-        api.path["start_dir"].join(basename + "-sfx.exe"),
-        ok_ret=(0,1))
+    try:
+      api.file.remove("Delete prior sfx archive",
+          api.path["start_dir"].join(basename + "-sfx.exe"))
+    except api.file.Error:  # pragma: no cover
+      pass
     # Create sfx archive step
     lastdir = api.path.basename(api.path["start_dir"])
     with api.context(
