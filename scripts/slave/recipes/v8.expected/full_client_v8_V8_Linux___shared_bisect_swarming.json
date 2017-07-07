@@ -223,7 +223,10 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
       "[START_DIR]/v8/out/gn"
     ],
     "infra_step": true,
@@ -1278,7 +1281,10 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
       "[START_DIR]/v8/out/gn"
     ],
     "infra_step": true,
@@ -1963,7 +1969,10 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
       "[START_DIR]/v8/out/gn"
     ],
     "infra_step": true,
@@ -2681,7 +2690,10 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
       "[START_DIR]/v8/out/gn"
     ],
     "infra_step": true,
