@@ -12,17 +12,17 @@ from recipe_engine.recipe_api import Property
 from recipe_engine.types import freeze
 
 DEPS = [
-  'depot_tools/bot_update',
   'chromium',
   'chromium_android',
+  'depot_tools/bot_update',
   'depot_tools/gclient',
   'isolate',
+  'recipe_engine/file',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/python',
-  'recipe_engine/shutil',
   'recipe_engine/step',
 ]
 
@@ -167,8 +167,9 @@ def RunSteps(api, buildername):
     api.chromium_android.init_and_sync()
 
   # Since disk lacks in Mac, we need to remove files before build.
-  api.shutil.rmtree(str(api.chromium.output_dir).rstrip('\\/') + '.1')
-  api.shutil.rmtree(str(api.chromium.output_dir).rstrip('\\/') + '.2')
+  for ext in '12':
+    p = str(api.chromium.output_dir).rstrip('\\/') + '.' + ext
+    api.file.rmtree('rmtree %s' % p, p)
 
   # Do a first build and move the build artifact to the temp directory.
   api.chromium.ensure_goma()

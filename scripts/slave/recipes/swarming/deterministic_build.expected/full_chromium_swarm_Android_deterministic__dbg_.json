@@ -157,18 +157,26 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
       "[START_DIR]/src/out/Debug.1"
     ],
+    "infra_step": true,
     "name": "rmtree [START_DIR]/src/out/Debug.1"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
       "[START_DIR]/src/out/Debug.2"
     ],
+    "infra_step": true,
     "name": "rmtree [START_DIR]/src/out/Debug.2"
   },
   {
