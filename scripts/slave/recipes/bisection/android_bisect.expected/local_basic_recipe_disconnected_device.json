@@ -1100,13 +1100,17 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
       "/path/to/tmp/"
     ],
     "env": {
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
+    "infra_step": true,
     "name": "Gathering reference values.get version",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2009,13 +2013,17 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
       "/path/to/tmp/"
     ],
     "env": {
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
+    "infra_step": true,
     "name": "Gathering reference values.get version (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2951,13 +2959,17 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
       "/path/to/tmp/"
     ],
     "env": {
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
+    "infra_step": true,
     "name": "Re-testing reference range.Retesting GOOD revision.get version",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -3559,13 +3571,17 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
       "/path/to/tmp/"
     ],
     "env": {
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
+    "infra_step": true,
     "name": "Re-testing reference range.Retesting BAD revision.get version",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -4167,13 +4183,17 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
       "/path/to/tmp/"
     ],
     "env": {
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
+    "infra_step": true,
     "name": "Re-testing reference range.Retesting GOOD revision.get version (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -4995,13 +5015,17 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
       "/path/to/tmp/"
     ],
     "env": {
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
+    "infra_step": true,
     "name": "Re-testing reference range.Retesting BAD revision.get version (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -5823,13 +5847,17 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
       "/path/to/tmp/"
     ],
     "env": {
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
+    "infra_step": true,
     "name": "Re-testing reference range.Retesting GOOD revision.get version (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -6994,13 +7022,17 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
       "/path/to/tmp/"
     ],
     "env": {
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
+    "infra_step": true,
     "name": "Bisecting revision.get version",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -10239,13 +10271,17 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
       "/path/to/tmp/"
     ],
     "env": {
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
+    "infra_step": true,
     "name": "Gathering reference values.get version (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -11148,13 +11184,17 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
       "/path/to/tmp/"
     ],
     "env": {
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
+    "infra_step": true,
     "name": "Gathering reference values.get version (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -12090,13 +12130,17 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
       "/path/to/tmp/"
     ],
     "env": {
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
+    "infra_step": true,
     "name": "Re-testing reference range.Retesting GOOD revision.get version (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -12698,13 +12742,17 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
       "/path/to/tmp/"
     ],
     "env": {
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
+    "infra_step": true,
     "name": "Re-testing reference range.Retesting BAD revision.get version (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -13306,13 +13354,17 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
       "/path/to/tmp/"
     ],
     "env": {
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
+    "infra_step": true,
     "name": "Re-testing reference range.Retesting GOOD revision.get version (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -14134,13 +14186,17 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
       "/path/to/tmp/"
     ],
     "env": {
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
+    "infra_step": true,
     "name": "Re-testing reference range.Retesting BAD revision.get version (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -14962,13 +15018,17 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
       "/path/to/tmp/"
     ],
     "env": {
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
+    "infra_step": true,
     "name": "Re-testing reference range.Retesting GOOD revision.get version (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -16133,13 +16193,17 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
       "/path/to/tmp/"
     ],
     "env": {
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
+    "infra_step": true,
     "name": "Bisecting revision.get version (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -19188,11 +19252,15 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
       "/path/to/tmp/"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
+    "infra_step": true,
     "name": "get version"
   },
   {

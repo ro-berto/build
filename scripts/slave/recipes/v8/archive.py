@@ -128,7 +128,7 @@ def GenTests(api):
         api.v8.check_param_equals(
             'bot_update', '--with_branch_heads', True) +
         api.post_process(
-            MustRun, 'rmtree clobber', 'gclient runhooks', 'gn', 'compile',
+            MustRun, 'clobber', 'gclient runhooks', 'gn', 'compile',
             'zipping', 'gsutil upload', 'archive link')
     )
 

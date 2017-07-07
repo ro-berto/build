@@ -313,13 +313,17 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "None/chrome/VERSION",
       "/path/to/tmp/"
     ],
     "env": {
       "PATH": "None/third_party/android_tools/sdk/platform-tools:None/build/android:<PATH>"
     },
+    "infra_step": true,
     "name": "get version"
   },
   {

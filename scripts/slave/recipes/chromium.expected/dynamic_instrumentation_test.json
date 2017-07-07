@@ -282,7 +282,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "rmtree",
       "[START_DIR]/src/out/Release"
     ],
@@ -290,7 +292,7 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "rmtree build directory"
+    "name": "build directory"
   },
   {
     "cmd": [
@@ -796,7 +798,10 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "[START_DIR]/src/chrome/VERSION",
       "/path/to/tmp/"
     ],
@@ -804,6 +809,7 @@
       "CHROME_HEADLESS": "1",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
+    "infra_step": true,
     "name": "get version"
   },
   {

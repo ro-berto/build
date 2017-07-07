@@ -6,15 +6,15 @@ DEPS = [
   'adb',
   'bisect_tester',
   'build',
-  'depot_tools/bot_update',
   'chromium',
   'chromium_android',
   'chromium_swarming',
   'chromium_tests',
   'commit_position',
-  'file',
-  'isolate',
+  'depot_tools/bot_update',
   'depot_tools/gsutil',
+  'isolate',
+  'recipe_engine/file',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/platform',
@@ -42,7 +42,7 @@ def RunSteps(api):
   # build/tests/masters_recipes_tests.py needs to manipulate the BUILDERS
   # dict, so we provide an API to dump it here.
   if api.properties.get('dump_builders'):  # pragma: no cover
-    api.file.write(
+    api.file.write_text(
         'Dump BUILDERS dict', api.properties['dump_builders'],
         api.json.dumps(api.chromium_tests.builders, default=ignore_undumpable))
     return

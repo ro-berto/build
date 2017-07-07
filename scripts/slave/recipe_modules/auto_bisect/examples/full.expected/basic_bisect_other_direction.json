@@ -551,12 +551,14 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "rmtree",
       "[START_DIR]/src/out/Release"
     ],
     "infra_step": true,
-    "name": "Gathering reference values.rmtree build directory",
+    "name": "Gathering reference values.build directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -1299,12 +1301,14 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "rmtree",
       "[START_DIR]/src/out/Release"
     ],
     "infra_step": true,
-    "name": "Gathering reference values.rmtree build directory (2)",
+    "name": "Gathering reference values.build directory (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -2208,12 +2212,14 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "rmtree",
       "[START_DIR]/src/out/Release"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.rmtree build directory",
+    "name": "Bisecting revision.build directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -3378,12 +3384,14 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "rmtree",
       "[START_DIR]/src/out/Release"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.rmtree build directory (2)",
+    "name": "Bisecting revision.build directory (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -3893,12 +3901,14 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "rmtree",
       "[START_DIR]/src/out/Release"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.rmtree build directory (3)",
+    "name": "Bisecting revision.build directory (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4408,12 +4418,14 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "rmtree",
       "[START_DIR]/src/out/Release"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.rmtree build directory (4)",
+    "name": "Bisecting revision.build directory (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -5115,12 +5127,14 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "rmtree",
       "[START_DIR]/src/out/Release"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.rmtree build directory (5)",
+    "name": "Bisecting revision.build directory (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -5822,12 +5836,14 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "rmtree",
       "[START_DIR]/src/out/Release"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.rmtree build directory (6)",
+    "name": "Bisecting revision.build directory (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -6529,12 +6545,14 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "rmtree",
       "[START_DIR]/src/out/Release"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.rmtree build directory (7)",
+    "name": "Bisecting revision.build directory (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]

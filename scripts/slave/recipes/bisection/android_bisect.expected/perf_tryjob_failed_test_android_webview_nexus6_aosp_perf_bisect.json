@@ -706,11 +706,15 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "[BUILDER_CACHE]/android_webview_nexus6_aosp_perf_bisect/src/chrome/VERSION",
       "/path/to/tmp/"
     ],
     "cwd": "[BUILDER_CACHE]/android_webview_nexus6_aosp_perf_bisect",
+    "infra_step": true,
     "name": "Running WITH patch.get version",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1134,11 +1138,15 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "[BUILDER_CACHE]/android_webview_nexus6_aosp_perf_bisect/src/chrome/VERSION",
       "/path/to/tmp/"
     ],
     "cwd": "[BUILDER_CACHE]/android_webview_nexus6_aosp_perf_bisect",
+    "infra_step": true,
     "name": "Running WITHOUT patch.get version",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1543,11 +1551,15 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
       "[BUILDER_CACHE]/android_webview_nexus6_aosp_perf_bisect/src/chrome/VERSION",
       "/path/to/tmp/"
     ],
     "cwd": "[BUILDER_CACHE]/android_webview_nexus6_aosp_perf_bisect",
+    "infra_step": true,
     "name": "get version"
   },
   {
