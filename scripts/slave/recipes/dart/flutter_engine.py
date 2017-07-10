@@ -90,7 +90,7 @@ def RunSteps(api):
   GetCheckout(api)
 
   checkout = api.path['start_dir'].join('src')
-  dart_bin = checkout.join('third_party', 'dart-sdk', 'dart-sdk', 'bin')
+  dart_bin = checkout.join('dart', 'tools', 'sdks', 'linux', 'dart-sdk', 'bin')
   env = { 'PATH': api.path.pathsep.join((str(dart_bin), '%(PATH)s')) }
 
   # The context adds dart to the path, only needed for the analyze step for now.
