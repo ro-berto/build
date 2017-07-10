@@ -68,9 +68,6 @@ def RunSteps(api):
           update_properties['got_swarming_client_revision'])
 
     v8.set_up_swarming()
-
-    if v8.c.mips_cross_compile:
-      v8.setup_mips_toolchain()
     v8.runhooks()
 
     if v8.generate_gcov_coverage:

@@ -1493,9 +1493,8 @@ BUILDERS = {
       },
 ####### Category: MIPS
       'V8 Mips - builder': {
-        # TODO(machenbach): Switch this bot manually to gn.
-        'chromium_apply_config': ['no_snapshot', 'no_i18n'],
-        'v8_apply_config': ['mips_cross_compile', 'no_snapshot', 'no_i18n'],
+        'chromium_apply_config': ['gn', 'no_snapshot', 'no_i18n'],
+        'v8_apply_config': ['no_snapshot', 'no_i18n'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_ARCH': 'mips',

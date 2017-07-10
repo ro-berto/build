@@ -14,15 +14,6 @@ def BaseConfig(**_kwargs):
   assert shard_run <= shard_count
 
   return ConfigGroup(
-    gyp_env = ConfigGroup(
-      AR = Single(basestring, required=False),
-      CC = Single(basestring, required=False),
-      CXX = Single(basestring, required=False),
-      CXX_host = Single(basestring, required=False),
-      LINK = Single(basestring, required=False),
-      RANLIB = Single(basestring, required=False),
-    ),
-    mips_cross_compile = Single(bool, empty_val=False, required=False),
     # Test configuration that is the equal for all tests of a builder. It
     # might be refined later in the test runner for distinct tests.
     testing = ConfigGroup(
@@ -69,11 +60,6 @@ def gc_stress(c):
 @config_ctx()
 def gcov_coverage(c):
   c.testing.test_args.extend(['--gcov-coverage'])
-
-
-@config_ctx()
-def mips_cross_compile(c):
-  c.mips_cross_compile = True
 
 
 @config_ctx()
