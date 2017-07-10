@@ -64,7 +64,7 @@
       "--limit",
       "1",
       "-p",
-      "id=123",
+      "change=123",
       "-p",
       "label=Commit-Queue=2"
     ],

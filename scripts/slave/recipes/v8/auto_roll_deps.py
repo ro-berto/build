@@ -82,7 +82,7 @@ def RunSteps(api):
       cq_commits = api.gerrit.get_changes(
         'https://chromium-review.googlesource.com/a',
         query_params=[
-          ('id', commits[0]['_number']),
+          ('change', commits[0]['_number']),
           ('label', 'Commit-Queue=2'),
         ],
         limit=1,
