@@ -20,19 +20,67 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::url]/resources/pycurl.py",
-      "--url",
-      "https://codereview.chromium.org/search?owner=v8-autoroll%40chromium.org&limit=30&closed=3&format=json",
-      "--status-json",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gerrit_client.py",
+      "changes",
+      "--host",
+      "https://chromium-review.googlesource.com",
+      "--json_file",
       "/path/to/tmp/json",
-      "--outfile",
-      "/path/to/tmp/json"
+      "--limit",
+      "1",
+      "-p",
+      "project=chromium/src",
+      "-p",
+      "owner=v8-autoroll@chromium.org",
+      "-p",
+      "status=open"
     ],
-    "name": "check active roll",
+    "env": {
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+    },
+    "infra_step": true,
+    "name": "gerrit changes",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Active rolls found.@@@"
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"_number\": \"123\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gerrit_client.py",
+      "changes",
+      "--host",
+      "https://chromium-review.googlesource.com/a",
+      "--json_file",
+      "/path/to/tmp/json",
+      "--limit",
+      "1",
+      "-p",
+      "id=123",
+      "-p",
+      "label=Commit-Queue=2"
+    ],
+    "env": {
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+    },
+    "infra_step": true,
+    "name": "gerrit changes (2)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Active rolls found.@@@",
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"_number\": \"123\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {

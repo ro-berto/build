@@ -8,6 +8,7 @@ DEPS = [
   'chromium',
   'depot_tools/bot_update',
   'depot_tools/gclient',
+  'depot_tools/gerrit',
   'depot_tools/git',
   'depot_tools/gitiles',
   'recipe_engine/context',
@@ -34,20 +35,6 @@ deps = {
 
 # Location of the infra-python package's run script.
 _RUN_PY = '/opt/infra-python/run.py'
-
-def ContainsChromiumRoll(changes):
-  for change in changes:
-    if change['subject'].startswith('Update V8 to'):
-      return True
-  return False
-
-def ExtractStaleRoll(changes, api):
-  for change in changes:
-    if change['subject'].startswith('Update V8 to'):
-      is_in_cq = change['commit']
-      if not is_in_cq:
-        return change['issue']
-  return None
 
 def ResubmitToCQ(issue_id, api):
   api.step(
@@ -79,30 +66,35 @@ def RunSteps(api):
     else:
       api.step.active_result.presentation.step_text = 'Rolling activated'
 
-    params = {
-      'closed': 3,
-      'owner': 'v8-autoroll@chromium.org',
-      'limit': 30,
-      'format': 'json',
-    }
+    # Check for an open auto-roller CL. There should be at most one CL in the
+    # chromium project, which is the last roll.
+    commits = api.gerrit.get_changes(
+        'https://chromium-review.googlesource.com',
+      query_params=[
+        ('project', 'chromium/src'),
+        ('owner', 'v8-autoroll@chromium.org'),
+        ('status', 'open'),
+      ],
+      limit=1,
+    )
 
-    params = api.url.urlencode(params)
-    search_url = 'https://codereview.chromium.org/search?' + params
+    if commits:
+      cq_commits = api.gerrit.get_changes(
+        'https://chromium-review.googlesource.com/a',
+        query_params=[
+          ('id', commits[0]['_number']),
+          ('label', 'Commit-Queue=2'),
+        ],
+        limit=1,
+      )
 
-    results = api.url.get_json(
-        search_url,
-        step_name='check active roll',
-    ).output['results']
-
-    if ContainsChromiumRoll(results):
-      stale_roll = ExtractStaleRoll(results, api)
-
-      if stale_roll:
-        ResubmitToCQ(stale_roll, api)
+      if not cq_commits:
+        ResubmitToCQ(commits[0]['_number'], api)
         api.step.active_result.presentation.step_text = (
             'Stale roll found. Resubmitted to CQ.')
         monitoring_state = 'stale_roll'
       else:
+        assert cq_commits[0]['_number'] == commits[0]['_number']
         api.step.active_result.presentation.step_text = 'Active rolls found.'
         monitoring_state = 'active_roll'
 
@@ -182,36 +174,29 @@ def RunSteps(api):
 def GenTests(api):
   yield (api.test('standard') + api.properties.generic(
       mastername='client.v8.fyi') +
-      api.url.json('check active roll', {'results': []}))
+      api.override_step_data('gerrit changes', api.json.output([]))
+    )
   yield (api.test('rolling_deactivated') +
       api.properties.generic(mastername='client.v8') +
       api.url.text('check roll status', '0')
     )
   yield (api.test('active_roll') +
       api.properties.generic(mastername='client.v8') +
-      api.url.json('check active roll', {
-          'results': [{
-            'subject': 'Update V8 to foo',
-            'issue': 123456,
-            'commit': True,
-          }],
-      })
+      api.override_step_data(
+          'gerrit changes', api.json.output([{'_number': '123'}])) +
+      api.override_step_data(
+          'gerrit changes (2)', api.json.output([{'_number': '123'}]))
     )
   yield (api.test('stale_roll') +
       api.properties.generic(mastername='client.v8') +
-      api.url.json('check active roll', {
-          'results': [{
-            'subject': 'Update V8 to foo',
-            'issue': 123456,
-            'commit': False,
-          }],
-      })
+      api.override_step_data(
+          'gerrit changes', api.json.output([{'_number': '123'}])) +
+      api.override_step_data('gerrit changes (2)', api.json.output([]))
     )
   yield (api.test('inconsistent_state') +
       api.properties.generic(mastername='client.v8') +
-      api.url.json('check active roll', {'results': []}) +
+      api.override_step_data('gerrit changes', api.json.output([])) +
       api.override_step_data(
           'git cat-file', api.raw_io.stream_output(
               TEST_DEPS_FILE % 'beefdead'))
     )
-
