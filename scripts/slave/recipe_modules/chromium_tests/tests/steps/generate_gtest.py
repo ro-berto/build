@@ -8,6 +8,7 @@ DEPS = [
     'commit_position',
     'depot_tools/bot_update',
     'depot_tools/gclient',
+    'depot_tools/gsutil',
     'isolate',
     'recipe_engine/json',
     'recipe_engine/path',
@@ -131,4 +132,44 @@ def GenTests(api):
           buildnumber=123,
           bot_id='test_bot_id',
       )
+  )
+
+  yield (
+      api.test('gsutil_upload_swarming') +
+      api.properties(
+          single_spec={
+              "swarming": {
+                  "can_use_on_swarming_builders": True,
+                  "shards": 5
+              },
+              "test": "browser_tests",
+              "upload_to_flake_predictor": "flake-predictor-data"
+          },
+          mastername='test_mastername',
+          buildername='test_buildername',
+          buildnumber=123,
+          bot_id='test_bot_id',
+          swarm_hashes={
+            'browser_tests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }) +
+      api.step_data(
+          'browser_tests',
+          retcode=1)
+  )
+
+  yield (
+      api.test('gsutil_upload_local') +
+      api.properties(
+          single_spec={
+              "test": "browser_tests",
+              "upload_to_flake_predictor": "flake-predictor-data"
+          },
+          mastername='test_mastername',
+          buildername='test_buildername',
+          buildnumber=123,
+          bot_id='test_bot_id',
+      ) +
+      api.step_data(
+          'browser_tests',
+          retcode=1)
   )

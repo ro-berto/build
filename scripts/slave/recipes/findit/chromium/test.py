@@ -23,6 +23,7 @@ DEPS = [
     'commit_position',
     'depot_tools/gclient',
     'depot_tools/git',
+    'depot_tools/gsutil',
     'filter',
     'findit',
     'isolate',
