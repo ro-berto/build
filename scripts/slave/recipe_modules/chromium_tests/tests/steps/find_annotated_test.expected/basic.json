@@ -51,7 +51,10 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::shutil]/resources/rmtree.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
       "[TMP_BASE]/annotated_tests_json_tmp_1"
     ],
     "infra_step": true,
