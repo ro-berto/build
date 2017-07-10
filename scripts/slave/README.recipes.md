@@ -5142,11 +5142,9 @@ Recipe for archiving officially tagged v8 builds.
 
 [DEPS](/scripts/slave/recipes/v8/auto_roll_deps.py#7): [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gerrit][depot_tools/recipe_modules/gerrit], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/url][recipe_engine/recipe_modules/url]
 
-&mdash; **def [ResubmitToCQ](/scripts/slave/recipes/v8/auto_roll_deps.py#39)(issue_id, api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/v8/auto_roll_deps.py#45)(api):**
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/v8/auto_roll_deps.py#50)(api):**
-
-&mdash; **def [V8RevisionFrom](/scripts/slave/recipes/v8/auto_roll_deps.py#45)(deps):**
+&mdash; **def [V8RevisionFrom](/scripts/slave/recipes/v8/auto_roll_deps.py#40)(deps):**
 ### *recipes* / [v8/auto\_roll\_push](/scripts/slave/recipes/v8/auto_roll_push.py)
 
 [DEPS](/scripts/slave/recipes/v8/auto_roll_push.py#5): [chromium](#recipe_modules-chromium), [v8](#recipe_modules-v8), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/url][recipe_engine/recipe_modules/url]

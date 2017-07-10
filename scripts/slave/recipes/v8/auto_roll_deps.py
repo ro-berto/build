@@ -36,11 +36,6 @@ deps = {
 # Location of the infra-python package's run script.
 _RUN_PY = '/opt/infra-python/run.py'
 
-def ResubmitToCQ(issue_id, api):
-  api.step(
-      'send issue to CQ',
-      ['commit_queue', 'set', '-i', issue_id]
-  )
 
 def V8RevisionFrom(deps):
   Var = lambda var: '%s'  # pylint: disable=W0612
@@ -89,7 +84,7 @@ def RunSteps(api):
       )
 
       if not cq_commits:
-        ResubmitToCQ(commits[0]['_number'], api)
+        api.git('cl', 'set-commit', '--gerrit', '-i', commits[0]['_number'])
         api.step.active_result.presentation.step_text = (
             'Stale roll found. Resubmitted to CQ.')
         monitoring_state = 'stale_roll'

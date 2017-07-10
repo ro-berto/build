@@ -80,12 +80,16 @@
   },
   {
     "cmd": [
-      "commit_queue",
-      "set",
+      "git",
+      "cl",
+      "set-commit",
+      "--gerrit",
       "-i",
       "123"
     ],
-    "name": "send issue to CQ",
+    "cwd": "None",
+    "infra_step": true,
+    "name": "git cl",
     "~followup_annotations": [
       "@@@STEP_TEXT@Stale roll found. Resubmitted to CQ.@@@"
     ]
