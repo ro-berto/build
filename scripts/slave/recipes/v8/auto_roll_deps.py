@@ -84,10 +84,11 @@ def RunSteps(api):
       )
 
       if not cq_commits:
-        api.git('cl', 'set-commit', '--gerrit', '-i', commits[0]['_number'])
-        api.step.active_result.presentation.step_text = (
+        with api.context(cwd=api.path['start_dir']):
+          api.git('cl', 'set-commit', '--gerrit', '-i', commits[0]['_number'])
+          api.step.active_result.presentation.step_text = (
             'Stale roll found. Resubmitted to CQ.')
-        monitoring_state = 'stale_roll'
+          monitoring_state = 'stale_roll'
       else:
         assert cq_commits[0]['_number'] == commits[0]['_number']
         api.step.active_result.presentation.step_text = 'Active rolls found.'

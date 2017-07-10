@@ -87,7 +87,6 @@
       "-i",
       "123"
     ],
-    "cwd": "None",
     "infra_step": true,
     "name": "git cl",
     "~followup_annotations": [
