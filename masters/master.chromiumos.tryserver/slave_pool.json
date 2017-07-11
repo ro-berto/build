@@ -88,6 +88,7 @@
         "build296-m2"
       ], 
       "gce": [
+        "cros-standard0-c2", 
         "cros-standard1-c2", 
         "cros-standard10-c2", 
         "cros-standard100-c2", 
