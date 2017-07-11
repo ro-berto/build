@@ -1641,7 +1641,7 @@ Returns:
 
 &mdash; **def [\_\_init\_\_](/scripts/slave/recipe_modules/filter/api.py#14)(self, \*\*kwargs):**
 
-&mdash; **def [analyze](/scripts/slave/recipe_modules/filter/api.py#255)(self, affected_files, test_targets, additional_compile_targets, config_file_name, mb_mastername=None, mb_buildername=None, additional_names=None):**
+&mdash; **def [analyze](/scripts/slave/recipe_modules/filter/api.py#259)(self, affected_files, test_targets, additional_compile_targets, config_file_name, mb_mastername=None, mb_buildername=None, additional_names=None):**
 
 Runs "analyze" step to determine targets affected by the patch.
 

@@ -137,23 +137,16 @@ class FilterApi(recipe_api.RecipeApi):
         'additional_compile_targets': additional_compile_targets,
     }
 
-    # Check the path of each file against the exclusion list. If found, no need
-    # to check dependencies.
+    # Check the path of each file against the exclusion list. If found, we
+    # should ignore the dependency check, because it might be wrong.
     exclusion_regexs = [re.compile(exclusion) for exclusion in exclusions]
     ignore_regexs = [re.compile(ignore) for ignore in ignores]
     ignored = True
+    matched_exclusion = False
     for path in self.paths:
       first_match = self.__is_path_in_regex_list(path, exclusion_regexs)
       if first_match:
-        analyze_result = 'Analyze disabled: matched exclusion'
-        # TODO(phajdan.jr): consider using plain api.step here, not python.
-        step_result = self.m.python.succeeding_step('analyze', analyze_result)
-        step_result.presentation.logs.setdefault('excluded_files', []).append(
-            '%s (regex = \'%s\')' % (path, first_match))
-        self._compile_targets = sorted(all_targets)
-        self._test_targets = sorted(test_targets)
-        self._report_analyze_result(analyze_input, {'status': analyze_result})
-        return
+        matched_exclusion = True
 
       if not self.__is_path_in_regex_list(path, ignore_regexs):
         ignored = False
@@ -233,7 +226,17 @@ class FilterApi(recipe_api.RecipeApi):
         raise self.m.step.StepFailure('Error, following targets were not '
             'found: ' + ', '.join(step_result.json.output['invalid_targets']))
 
-      if (step_result.json.output['status'] in (
+      if matched_exclusion:
+        analyze_result = 'Analyze disabled: matched exclusion'
+        # TODO(phajdan.jr): consider using plain api.step here, not python.
+        step_result = self.m.python.succeeding_step('analyze_matched_exclusion',
+            analyze_result)
+        step_result.presentation.logs.setdefault('excluded_files', []).append(
+            '%s (regex = \'%s\')' % (path, first_match))
+        self._compile_targets = sorted(all_targets)
+        self._test_targets = sorted(test_targets)
+        self._report_analyze_result(analyze_input, {'status': analyze_result})
+      elif (step_result.json.output['status'] in (
           'Found dependency', 'Found dependency (all)')):
         self._compile_targets = step_result.json.output['compile_targets']
         self._test_targets = step_result.json.output['test_targets']
@@ -249,7 +252,8 @@ class FilterApi(recipe_api.RecipeApi):
       else:
         step_result.presentation.step_text = 'No compile necessary'
     finally:
-      self._report_analyze_result(analyze_input, step_result.json.output)
+      if not matched_exclusion:
+        self._report_analyze_result(analyze_input, step_result.json.output)
 
   # TODO(phajdan.jr): Merge with does_patch_require_compile.
   def analyze(self, affected_files, test_targets, additional_compile_targets,

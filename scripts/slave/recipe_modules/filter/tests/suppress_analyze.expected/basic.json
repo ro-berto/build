@@ -27,12 +27,35 @@
     "cmd": [
       "python",
       "-u",
-      "import sys; sys.exit(0)"
+      "None/build/gyp_chromium",
+      "--analyzer",
+      "{\"additional_compile_targets\": [\"compile1\", \"compile2\"], \"files\": [\"file1\", \"file2\"], \"test_targets\": [\"test1\", \"test2\"]}",
+      "/path/to/tmp/json"
     ],
+    "env": {
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "GYP_DEFINES": "component=static_library target_arch=x64"
+    },
     "name": "analyze",
     "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"compile_targets\": [], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"status\": \"No dependency\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_targets\": []@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "name": "analyze_matched_exclusion",
+    "~followup_annotations": [
       "@@@STEP_TEXT@Analyze disabled: matched exclusion@@@",
-      "@@@STEP_LOG_LINE@excluded_files@file1 (regex = 'f.*')@@@",
+      "@@@STEP_LOG_LINE@excluded_files@file2 (regex = 'f.*')@@@",
       "@@@STEP_LOG_END@excluded_files@@@",
       "@@@STEP_LOG_LINE@analyze_details@{@@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"additional_compile_targets\": [@@@",
