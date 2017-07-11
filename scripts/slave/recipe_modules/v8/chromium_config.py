@@ -130,14 +130,11 @@ def no_dcheck(c):
 
 @CONFIG_CTX(includes=['v8'])
 def no_i18n(c):
-  c.gn_args.append('v8_enable_i18n_support=false')
-  c.gn_args.append('icu_use_data_file=false')
   c.gyp_env.GYP_DEFINES['v8_enable_i18n_support'] = 0
 
 
 @CONFIG_CTX(includes=['v8'])
 def no_snapshot(c):
-  c.gn_args.append('v8_use_snapshot=false')
   c.gyp_env.GYP_DEFINES['v8_use_snapshot'] = 'false'
 
 

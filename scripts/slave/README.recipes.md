@@ -959,9 +959,9 @@ Used by the internal goma recipe.
 
 &mdash; **def [\_\_init\_\_](/scripts/slave/recipe_modules/chromium/api.py#32)(self, \*args, \*\*kwargs):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [apply\_syzyasan](/scripts/slave/recipe_modules/chromium/api.py#932)(self):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [apply\_syzyasan](/scripts/slave/recipe_modules/chromium/api.py#931)(self):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [archive\_build](/scripts/slave/recipe_modules/chromium/api.py#944)(self, step_name, gs_bucket, gs_acl=None, mode=None, \*\*kwargs):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [archive\_build](/scripts/slave/recipe_modules/chromium/api.py#943)(self, step_name, gs_bucket, gs_acl=None, mode=None, \*\*kwargs):**
 
 Returns a step invoking archive_build.py to archive a Chromium build.
 
@@ -1007,7 +1007,7 @@ Returns (ChromiumApi.Layout): The configured Chromium build layout.
 
 &mdash; **def [ensure\_goma](/scripts/slave/recipe_modules/chromium/api.py#688)(self, canary=False):**
 
-&mdash; **def [get\_annotate\_by\_test\_name](/scripts/slave/recipe_modules/chromium/api.py#1026)(self, test_name):**
+&mdash; **def [get\_annotate\_by\_test\_name](/scripts/slave/recipe_modules/chromium/api.py#1025)(self, test_name):**
 
 &emsp; **@_with_chromium_layout**<br>&mdash; **def [get\_clang\_version](/scripts/slave/recipe_modules/chromium/api.py#644)(self, \*\*kwargs):**
 
@@ -1027,19 +1027,19 @@ Args:
 
 &mdash; **def [get\_version](/scripts/slave/recipe_modules/chromium/api.py#156)(self):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [list\_perf\_tests](/scripts/slave/recipe_modules/chromium/api.py#985)(self, browser, num_shards, device=None):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [list\_perf\_tests](/scripts/slave/recipe_modules/chromium/api.py#984)(self, browser, num_shards, device=None):**
 
 &emsp; **@property**<br>&mdash; **def [output\_dir](/scripts/slave/recipe_modules/chromium/api.py#138)(self):**
 
 Return the path to the built executable directory.
 
-&mdash; **def [process\_dumps](/scripts/slave/recipe_modules/chromium/api.py#920)(self, \*\*kwargs):**
+&mdash; **def [process\_dumps](/scripts/slave/recipe_modules/chromium/api.py#919)(self, \*\*kwargs):**
 
 &emsp; **@_with_chromium_layout**<br>&mdash; **def [run\_gn](/scripts/slave/recipe_modules/chromium/api.py#754)(self, use_goma=False, gn_path=None, build_dir=None, \*\*kwargs):**
 
 &emsp; **@_with_chromium_layout**<br>&mdash; **def [run\_gyp\_chromium](/scripts/slave/recipe_modules/chromium/api.py#746)(self):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [run\_mb](/scripts/slave/recipe_modules/chromium/api.py#812)(self, mastername, buildername, use_goma=True, mb_path=None, mb_config_path=None, isolated_targets=None, name=None, build_dir=None, android_version_code=None, android_version_name=None, gyp_script=None, phase=None, \*\*kwargs):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [run\_mb](/scripts/slave/recipe_modules/chromium/api.py#811)(self, mastername, buildername, use_goma=True, mb_path=None, mb_config_path=None, isolated_targets=None, name=None, build_dir=None, android_version_code=None, android_version_name=None, gyp_script=None, phase=None, \*\*kwargs):**
 
 &emsp; **@_with_chromium_layout**<br>&mdash; **def [runhooks](/scripts/slave/recipe_modules/chromium/api.py#716)(self, env=None, \*\*kwargs):**
 
@@ -1056,11 +1056,11 @@ Return a runtest.py invocation.
 Return a sizes.py invocation.
 This uses runtests.py to upload the results to the perf dashboard.
 
-&mdash; **def [taskkill](/scripts/slave/recipe_modules/chromium/api.py#914)(self):**
+&mdash; **def [taskkill](/scripts/slave/recipe_modules/chromium/api.py#913)(self):**
 
 &emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_launcher\_filter](/scripts/slave/recipe_modules/chromium/api.py#469)(self, tests):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [update\_clang](/scripts/slave/recipe_modules/chromium/api.py#904)(self):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [update\_clang](/scripts/slave/recipe_modules/chromium/api.py#903)(self):**
 
 &emsp; **@property**<br>&mdash; **def [version](/scripts/slave/recipe_modules/chromium/api.py#143)(self):**
 
@@ -3213,20 +3213,20 @@ Examples:
 
 [DEPS](/scripts/slave/recipe_modules/v8/__init__.py#1): [archive](#recipe_modules-archive), [chromium](#recipe_modules-chromium), [commit\_position](#recipe_modules-commit_position), [isolate](#recipe_modules-isolate), [perf\_dashboard](#recipe_modules-perf_dashboard), [swarming](#recipe_modules-swarming), [swarming\_client](#recipe_modules-swarming_client), [test\_utils](#recipe_modules-test_utils), [trigger](#recipe_modules-trigger), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tempfile][recipe_engine/recipe_modules/tempfile], [recipe\_engine/time][recipe_engine/recipe_modules/time], [recipe\_engine/url][recipe_engine/recipe_modules/url]
 
-#### **class [V8Api](/scripts/slave/recipe_modules/v8/api.py#89)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
+#### **class [V8Api](/scripts/slave/recipe_modules/v8/api.py#93)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [apply\_bot\_config](/scripts/slave/recipe_modules/v8/api.py#119)(self, builders, tryserver_check=True):**
+&mdash; **def [apply\_bot\_config](/scripts/slave/recipe_modules/v8/api.py#123)(self, builders, tryserver_check=True):**
 
 Entry method for using the v8 api.
 
 Requires the presence of a bot_config dict for any master/builder pair.
 This bot_config will be used to refine other api methods.
 
-&emsp; **@property**<br>&mdash; **def [bot\_type](/scripts/slave/recipe_modules/v8/api.py#380)(self):**
+&emsp; **@property**<br>&mdash; **def [bot\_type](/scripts/slave/recipe_modules/v8/api.py#412)(self):**
 
-&emsp; **@property**<br>&mdash; **def [build\_output\_dir](/scripts/slave/recipe_modules/v8/api.py#648)(self):**
+&emsp; **@property**<br>&mdash; **def [build\_output\_dir](/scripts/slave/recipe_modules/v8/api.py#680)(self):**
 
-&mdash; **def [calc\_missing\_values\_in\_sequence](/scripts/slave/recipe_modules/v8/api.py#1277)(self, sequence, subsequence, value):**
+&mdash; **def [calc\_missing\_values\_in\_sequence](/scripts/slave/recipe_modules/v8/api.py#1309)(self, sequence, subsequence, value):**
 
 Calculate a list of missing values from a subsequence.
 
@@ -3239,105 +3239,107 @@ Returns: A subsequence from sequence [a..b], where b is the value and
          a-1 is either in subsequence or value was the first
          element in subsequence.
 
-&mdash; **def [calculate\_patch\_base\_gerrit](/scripts/slave/recipe_modules/v8/api.py#264)(self):**
+&mdash; **def [calculate\_patch\_base\_gerrit](/scripts/slave/recipe_modules/v8/api.py#268)(self):**
 
 Calculates the commit hash a gerrit patch was branched off.
 
-&mdash; **def [calculate\_patch\_base\_rietveld](/scripts/slave/recipe_modules/v8/api.py#244)(self):**
+&mdash; **def [calculate\_patch\_base\_rietveld](/scripts/slave/recipe_modules/v8/api.py#248)(self):**
 
 Calculates the latest commit hash that fits the patch.
 
-&mdash; **def [checkout](/scripts/slave/recipe_modules/v8/api.py#215)(self, revision=None, \*\*kwargs):**
+&mdash; **def [checkout](/scripts/slave/recipe_modules/v8/api.py#219)(self, revision=None, \*\*kwargs):**
 
-&mdash; **def [compile](/scripts/slave/recipe_modules/v8/api.py#508)(self, \*\*kwargs):**
+&mdash; **def [compile](/scripts/slave/recipe_modules/v8/api.py#540)(self, \*\*kwargs):**
 
-&mdash; **def [create\_coverage\_context](/scripts/slave/recipe_modules/v8/api.py#724)(self):**
+&mdash; **def [create\_coverage\_context](/scripts/slave/recipe_modules/v8/api.py#756)(self):**
 
-&mdash; **def [create\_test](/scripts/slave/recipe_modules/v8/api.py#730)(self, test):**
+&mdash; **def [create\_test](/scripts/slave/recipe_modules/v8/api.py#762)(self, test):**
 
 Wrapper that allows to shortcut common tests with their names.
 
 Returns: A runnable test instance.
 
-&mdash; **def [create\_tests](/scripts/slave/recipe_modules/v8/api.py#737)(self):**
+&mdash; **def [create\_tests](/scripts/slave/recipe_modules/v8/api.py#769)(self):**
 
-&mdash; **def [download\_build](/scripts/slave/recipe_modules/v8/api.py#624)(self, name_suffix='', archive=None):**
+&mdash; **def [download\_build](/scripts/slave/recipe_modules/v8/api.py#656)(self, name_suffix='', archive=None):**
 
-&mdash; **def [download\_isolated\_json](/scripts/slave/recipe_modules/v8/api.py#636)(self, revision):**
+&mdash; **def [download\_isolated\_json](/scripts/slave/recipe_modules/v8/api.py#668)(self, revision):**
 
-&mdash; **def [dr\_compile](/scripts/slave/recipe_modules/v8/api.py#568)(self):**
+&mdash; **def [dr\_compile](/scripts/slave/recipe_modules/v8/api.py#600)(self):**
 
-&emsp; **@property**<br>&mdash; **def [extra\_flags](/scripts/slave/recipe_modules/v8/api.py#1035)(self):**
+&emsp; **@property**<br>&mdash; **def [extra\_flags](/scripts/slave/recipe_modules/v8/api.py#1067)(self):**
 
-&emsp; **@staticmethod**<br>&mdash; **def [format\_duration](/scripts/slave/recipe_modules/v8/api.py#899)(duration_in_seconds):**
+&emsp; **@staticmethod**<br>&mdash; **def [format\_duration](/scripts/slave/recipe_modules/v8/api.py#931)(duration_in_seconds):**
 
-&emsp; **@property**<br>&mdash; **def [generate\_gcov\_coverage](/scripts/slave/recipe_modules/v8/api.py#655)(self):**
+&emsp; **@property**<br>&mdash; **def [generate\_gcov\_coverage](/scripts/slave/recipe_modules/v8/api.py#687)(self):**
 
-&emsp; **@property**<br>&mdash; **def [generate\_sanitizer\_coverage](/scripts/slave/recipe_modules/v8/api.py#720)(self):**
+&emsp; **@property**<br>&mdash; **def [generate\_sanitizer\_coverage](/scripts/slave/recipe_modules/v8/api.py#752)(self):**
 
-&mdash; **def [get\_available\_range](/scripts/slave/recipe_modules/v8/api.py#1253)(self, bisect_range, use_swarming=False):**
+&mdash; **def [get\_available\_range](/scripts/slave/recipe_modules/v8/api.py#1285)(self, bisect_range, use_swarming=False):**
 
-&mdash; **def [get\_change\_range](/scripts/slave/recipe_modules/v8/api.py#1206)(self):**
+&mdash; **def [get\_change\_range](/scripts/slave/recipe_modules/v8/api.py#1238)(self):**
 
-&mdash; **def [init\_gcov\_coverage](/scripts/slave/recipe_modules/v8/api.py#659)(self):**
+&mdash; **def [init\_gcov\_coverage](/scripts/slave/recipe_modules/v8/api.py#691)(self):**
 
 Delete all gcov counter files.
 
-&mdash; **def [init\_tryserver](/scripts/slave/recipe_modules/v8/api.py#207)(self):**
+&mdash; **def [init\_tryserver](/scripts/slave/recipe_modules/v8/api.py#211)(self):**
 
-&mdash; **def [is\_pure\_swarming\_tester](/scripts/slave/recipe_modules/v8/api.py#740)(self, tests):**
+&mdash; **def [is\_pure\_swarming\_tester](/scripts/slave/recipe_modules/v8/api.py#772)(self, tests):**
 
-&mdash; **def [isolate\_tests](/scripts/slave/recipe_modules/v8/api.py#405)(self):**
+&mdash; **def [isolate\_tests](/scripts/slave/recipe_modules/v8/api.py#437)(self):**
 
-&emsp; **@property**<br>&mdash; **def [isolated\_archive\_path](/scripts/slave/recipe_modules/v8/api.py#595)(self):**
+&emsp; **@property**<br>&mdash; **def [isolated\_archive\_path](/scripts/slave/recipe_modules/v8/api.py#627)(self):**
 
-&emsp; **@property**<br>&mdash; **def [isolated\_tests](/scripts/slave/recipe_modules/v8/api.py#177)(self):**
+&emsp; **@property**<br>&mdash; **def [isolated\_tests](/scripts/slave/recipe_modules/v8/api.py#181)(self):**
 
-&mdash; **def [log\_available\_range](/scripts/slave/recipe_modules/v8/api.py#1299)(self, available_bisect_range):**
+&mdash; **def [log\_available\_range](/scripts/slave/recipe_modules/v8/api.py#1331)(self, available_bisect_range):**
 
-&mdash; **def [maybe\_bisect](/scripts/slave/recipe_modules/v8/api.py#800)(self, test_results):**
+&mdash; **def [maybe\_bisect](/scripts/slave/recipe_modules/v8/api.py#832)(self, test_results):**
 
 Build-local bisection for one failure.
 
-&mdash; **def [maybe\_create\_clusterfuzz\_archive](/scripts/slave/recipe_modules/v8/api.py#612)(self, update_step):**
+&mdash; **def [maybe\_create\_clusterfuzz\_archive](/scripts/slave/recipe_modules/v8/api.py#644)(self, update_step):**
 
-&mdash; **def [maybe\_trigger](/scripts/slave/recipe_modules/v8/api.py#1135)(self, \*\*additional_properties):**
+&mdash; **def [maybe\_trigger](/scripts/slave/recipe_modules/v8/api.py#1167)(self, \*\*additional_properties):**
 
-&mdash; **def [peek\_gn](/scripts/slave/recipe_modules/v8/api.py#346)(self):**
+&mdash; **def [peek\_gn](/scripts/slave/recipe_modules/v8/api.py#361)(self):**
 
 Runs gn and compares flags with gyp (fyi only).
 
-&mdash; **def [read\_version\_file](/scripts/slave/recipe_modules/v8/api.py#1315)(self, ref, step_name_desc):**
+&mdash; **def [read\_version\_file](/scripts/slave/recipe_modules/v8/api.py#1347)(self, ref, step_name_desc):**
 
 Read and return the version-file content at a paricular ref.
 
-&mdash; **def [read\_version\_from\_ref](/scripts/slave/recipe_modules/v8/api.py#1324)(self, ref, step_name_desc):**
+&mdash; **def [read\_version\_from\_ref](/scripts/slave/recipe_modules/v8/api.py#1356)(self, ref, step_name_desc):**
 
 Read and return the version at a paricular ref.
 
-&emsp; **@property**<br>&mdash; **def [relative\_path\_to\_d8](/scripts/slave/recipe_modules/v8/api.py#401)(self):**
+&emsp; **@property**<br>&mdash; **def [relative\_path\_to\_d8](/scripts/slave/recipe_modules/v8/api.py#433)(self):**
 
-&mdash; **def [report\_culprits](/scripts/slave/recipe_modules/v8/api.py#1304)(self, culprit_range):**
+&mdash; **def [report\_culprits](/scripts/slave/recipe_modules/v8/api.py#1336)(self, culprit_range):**
 
-&emsp; **@property**<br>&mdash; **def [run\_dynamorio](/scripts/slave/recipe_modules/v8/api.py#583)(self):**
+&emsp; **@property**<br>&mdash; **def [run\_dynamorio](/scripts/slave/recipe_modules/v8/api.py#615)(self):**
 
-&mdash; **def [runhooks](/scripts/slave/recipe_modules/v8/api.py#325)(self, \*\*kwargs):**
+&mdash; **def [runhooks](/scripts/slave/recipe_modules/v8/api.py#329)(self, \*\*kwargs):**
 
-&mdash; **def [runtests](/scripts/slave/recipe_modules/v8/api.py#745)(self, tests):**
+&mdash; **def [runtests](/scripts/slave/recipe_modules/v8/api.py#777)(self, tests):**
 
-&mdash; **def [set\_up\_swarming](/scripts/slave/recipe_modules/v8/api.py#280)(self):**
+&mdash; **def [set\_up\_swarming](/scripts/slave/recipe_modules/v8/api.py#284)(self):**
 
-&emsp; **@property**<br>&mdash; **def [should\_build](/scripts/slave/recipe_modules/v8/api.py#384)(self):**
+&mdash; **def [setup\_mips\_toolchain](/scripts/slave/recipe_modules/v8/api.py#395)(self):**
 
-&emsp; **@property**<br>&mdash; **def [should\_download\_build](/scripts/slave/recipe_modules/v8/api.py#397)(self):**
+&emsp; **@property**<br>&mdash; **def [should\_build](/scripts/slave/recipe_modules/v8/api.py#416)(self):**
 
-&emsp; **@property**<br>&mdash; **def [should\_test](/scripts/slave/recipe_modules/v8/api.py#388)(self):**
+&emsp; **@property**<br>&mdash; **def [should\_download\_build](/scripts/slave/recipe_modules/v8/api.py#429)(self):**
 
-&emsp; **@property**<br>&mdash; **def [should\_upload\_build](/scripts/slave/recipe_modules/v8/api.py#392)(self):**
+&emsp; **@property**<br>&mdash; **def [should\_test](/scripts/slave/recipe_modules/v8/api.py#420)(self):**
 
-&emsp; **@property**<br>&mdash; **def [test\_filter](/scripts/slave/recipe_modules/v8/api.py#1061)(self):**
+&emsp; **@property**<br>&mdash; **def [should\_upload\_build](/scripts/slave/recipe_modules/v8/api.py#424)(self):**
 
-&mdash; **def [testing\_random\_seed](/scripts/slave/recipe_modules/v8/api.py#187)(self):**
+&emsp; **@property**<br>&mdash; **def [test\_filter](/scripts/slave/recipe_modules/v8/api.py#1093)(self):**
+
+&mdash; **def [testing\_random\_seed](/scripts/slave/recipe_modules/v8/api.py#191)(self):**
 
 Return a random seed suitable for v8 testing.
 
@@ -3345,15 +3347,15 @@ If there are isolate hashes, build a random seed based on the hashes.
 Otherwise use the system's PRNG. This uses a deterministic seed for
 recipe simulation.
 
-&mdash; **def [upload\_build](/scripts/slave/recipe_modules/v8/api.py#587)(self, name_suffix='', archive=None):**
+&mdash; **def [upload\_build](/scripts/slave/recipe_modules/v8/api.py#619)(self, name_suffix='', archive=None):**
 
-&mdash; **def [upload\_gcov\_coverage\_report](/scripts/slave/recipe_modules/v8/api.py#666)(self):**
+&mdash; **def [upload\_gcov\_coverage\_report](/scripts/slave/recipe_modules/v8/api.py#698)(self):**
 
 Capture coverage data and upload a report.
 
-&mdash; **def [upload\_isolated\_json](/scripts/slave/recipe_modules/v8/api.py#604)(self):**
+&mdash; **def [upload\_isolated\_json](/scripts/slave/recipe_modules/v8/api.py#636)(self):**
 
-&emsp; **@staticmethod**<br>&mdash; **def [version\_from\_file](/scripts/slave/recipe_modules/v8/api.py#1328)(blob):**
+&emsp; **@staticmethod**<br>&mdash; **def [version\_from\_file](/scripts/slave/recipe_modules/v8/api.py#1360)(blob):**
 ### *recipe_modules* / [webrtc](/scripts/slave/recipe_modules/webrtc)
 
 [DEPS](/scripts/slave/recipe_modules/webrtc/__init__.py#1): [adb](#recipe_modules-adb), [archive](#recipe_modules-archive), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [commit\_position](#recipe_modules-commit_position), [isolate](#recipe_modules-isolate), [swarming](#recipe_modules-swarming), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [trigger](#recipe_modules-trigger), [zip](#recipe_modules-zip), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]

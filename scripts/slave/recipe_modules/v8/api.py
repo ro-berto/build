@@ -36,6 +36,10 @@ MAX_FAILURE_LOGS = 10
 # ongoing build's total.
 BISECT_DURATION_FACTOR = 5
 
+MIPS_TOOLCHAIN = ('Codescape.GNU.Tools.Package.2015.01-7.for.MIPS.MTI.Linux'
+                  '.CentOS-5.x86_64.tar.gz')
+MIPS_DIR = 'mips-mti-linux-gnu/2015.01-7'
+
 TEST_RUNNER_PARSER = argparse.ArgumentParser()
 TEST_RUNNER_PARSER.add_argument('--extra-flags')
 
@@ -329,6 +333,17 @@ class V8Api(recipe_api.RecipeApi):
       # that don't support the goma executables.
       self.m.chromium.ensure_goma()
     env = {}
+    # TODO(machenbach): Remove this after mb migration.
+    if self.c.gyp_env.AR:
+      env['AR'] = self.c.gyp_env.AR
+    if self.c.gyp_env.CC:
+      env['CC'] = self.c.gyp_env.CC
+    if self.c.gyp_env.CXX:
+      env['CXX'] = self.c.gyp_env.CXX
+    if self.c.gyp_env.LINK:
+      env['LINK'] = self.c.gyp_env.LINK
+    if self.c.gyp_env.RANLIB:
+      env['RANLIB'] = self.c.gyp_env.RANLIB
     if self.m.chromium.c.project_generator.tool != 'gyp':
       env['GYP_CHROMIUM_NO_ACTION'] = 1
     else:
@@ -376,6 +391,23 @@ class V8Api(recipe_api.RecipeApi):
           [gn_build_dir, gyp_build_dir, 'all', 'all'],
           ok_ret='any',
       )
+
+  def setup_mips_toolchain(self):
+    mips_dir = self.m.path['start_dir'].join(MIPS_DIR, 'bin')
+    if not self.m.path.exists(mips_dir):
+      self.m.gsutil.download_url(
+          'gs://chromium-v8/%s' % MIPS_TOOLCHAIN,
+          self.m.path['start_dir'],
+          name='bootstrapping mips toolchain')
+      with self.m.context(cwd=self.m.path['start_dir']):
+        self.m.step('unzipping', ['tar', 'xf', MIPS_TOOLCHAIN])
+
+    self.c.gyp_env.CC = self.m.path.join(mips_dir, 'mips-mti-linux-gnu-gcc')
+    self.c.gyp_env.CXX = self.m.path.join(mips_dir, 'mips-mti-linux-gnu-g++')
+    self.c.gyp_env.AR = self.m.path.join(mips_dir, 'mips-mti-linux-gnu-ar')
+    self.c.gyp_env.RANLIB = self.m.path.join(
+        mips_dir, 'mips-mti-linux-gnu-ranlib')
+    self.c.gyp_env.LINK = self.m.path.join(mips_dir, 'mips-mti-linux-gnu-g++')
 
   @property
   def bot_type(self):
@@ -541,7 +573,7 @@ class V8Api(recipe_api.RecipeApi):
 
     if self.m.chromium.c.project_generator.tool != 'gn':
       self.peek_gn()
-    if use_goma:
+    if self.m.properties['buildername'] != 'V8 Mips - builder':
       kwargs['use_goma_module'] = True
     self.m.chromium.compile(**kwargs)
 
