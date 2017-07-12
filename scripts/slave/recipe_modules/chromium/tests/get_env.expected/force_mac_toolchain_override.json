@@ -3,7 +3,8 @@
     "cmd": [],
     "env": {
       "ADB_VENDOR_KEYS": "[START_DIR]/.adb_key",
-      "FORCE_MAC_TOOLCHAIN": "1"
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "MAC_TOOLCHAIN_REVISION": "8C1002-2"
     },
     "name": "test"
   },

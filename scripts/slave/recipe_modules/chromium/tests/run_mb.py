@@ -48,3 +48,17 @@ def GenTests(api):
       api.platform('mac', 64) +
       api.properties(target_platform='mac')
   )
+
+  yield (
+      api.test('mac_force_toolchain_off_10_10') +
+      api.platform('mac', 64) +
+      api.properties(target_platform='mac',
+                     chromium_apply_config=['force_mac_toolchain_off_10_10'])
+  )
+
+  yield (
+      api.test('mac_force_toolchain_off_10_11') +
+      api.platform('mac', 64) +
+      api.properties(target_platform='mac',
+                     chromium_apply_config=['force_mac_toolchain_off_10_11'])
+  )

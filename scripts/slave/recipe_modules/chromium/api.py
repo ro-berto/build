@@ -129,6 +129,8 @@ class ChromiumApi(recipe_api.RecipeApi):
     if self.c.env.FORCE_MAC_TOOLCHAIN_REVISION_OVERRIDE:
       ret['MAC_TOOLCHAIN_REVISION'] = \
           self.c.env.FORCE_MAC_TOOLCHAIN_REVISION_OVERRIDE
+    if self.c.env.FORCE_MAC_SDK_MIN:
+      ret['FORCE_MAC_SDK_MIN'] = self.c.env.FORCE_MAC_SDK_MIN
     return ret
 
   @property
@@ -870,6 +872,8 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     if self.c.env.FORCE_MAC_TOOLCHAIN:
       env['FORCE_MAC_TOOLCHAIN'] = self.c.env.FORCE_MAC_TOOLCHAIN
+    if self.c.env.FORCE_MAC_SDK_MIN:
+      env['FORCE_MAC_SDK_MIN'] = self.c.env.FORCE_MAC_SDK_MIN
 
     if self.c.gyp_env.GYP_MSVS_VERSION:
       # TODO(machenbach): Remove this as soon as it's not read anymore by
