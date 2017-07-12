@@ -11,7 +11,6 @@ DEPS = [
   'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/python',
-  'depot_tools/tryserver',
 ]
 
 
@@ -20,7 +19,6 @@ def RunSteps(api):
   api.chromium.apply_config('mb')
   api.gclient.set_config('chromium')
   api.bot_update.ensure_checkout()
-  api.tryserver.maybe_apply_issue()
   api.chromium.ensure_goma()
   api.chromium.runhooks()
   api.chromium.run_mb(
