@@ -300,6 +300,7 @@
     "cwd": "[BUILDER_CACHE]/mac_rel/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[GOMA_CACHE]/mac_rel",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache_131",
       "GOMA_FAIL_FAST": "true",
@@ -373,6 +374,7 @@
     "cwd": "[BUILDER_CACHE]/mac_rel/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_jsonstatus",
@@ -401,6 +403,7 @@
     "cwd": "[BUILDER_CACHE]/mac_rel/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_stat",
@@ -418,6 +421,7 @@
     "cwd": "[BUILDER_CACHE]/mac_rel/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.stop_goma",

@@ -728,6 +728,7 @@
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "test r6.postprocess_for_goma.goma_jsonstatus",
@@ -756,6 +757,7 @@
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "test r6.postprocess_for_goma.goma_stat",
@@ -773,6 +775,7 @@
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "test r6.postprocess_for_goma.stop_goma",
@@ -1299,6 +1302,7 @@
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "test r7.postprocess_for_goma.goma_jsonstatus",
@@ -1327,6 +1331,7 @@
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "test r7.postprocess_for_goma.goma_stat",
@@ -1344,6 +1349,7 @@
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "test r7.postprocess_for_goma.stop_goma",
@@ -1870,6 +1876,7 @@
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "test r9.postprocess_for_goma.goma_jsonstatus",
@@ -1898,6 +1905,7 @@
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "test r9.postprocess_for_goma.goma_stat",
@@ -1915,6 +1923,7 @@
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "test r9.postprocess_for_goma.stop_goma",
@@ -2441,6 +2450,7 @@
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "test r10.postprocess_for_goma.goma_jsonstatus",
@@ -2469,6 +2479,7 @@
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "test r10.postprocess_for_goma.goma_stat",
@@ -2486,6 +2497,7 @@
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "test r10.postprocess_for_goma.stop_goma",

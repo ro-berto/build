@@ -220,6 +220,8 @@ class GomaApi(recipe_api.RecipeApi):
       self._goma_ctl_env['GOMA_SERVICE_ACCOUNT_JSON_FILE'] = (
           self.service_account_json_path)
 
+      self._goma_ctl_env['GOMA_BACKEND_SOFT_STICKINESS'] = 'false'
+
       # GLOG_log_dir should not be set.
       assert 'GLOG_log_dir' not in env
 
