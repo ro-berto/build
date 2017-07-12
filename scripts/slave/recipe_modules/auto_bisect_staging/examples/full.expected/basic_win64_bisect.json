@@ -218,19 +218,7 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\bootstrap\\win\\git_bootstrap.py",
-      "--verbose"
-    ],
-    "cwd": "RECIPE_PACKAGE_REPO[depot_tools]",
-    "infra_step": true,
-    "name": "ensure git tooling on windows",
-    "timeout": 300
-  },
-  {
-    "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]\\git.bat",
+      "git",
       "diff",
       "--cached",
       "--name-only"
@@ -288,7 +276,7 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]\\git.bat",
+      "git",
       "update-ref",
       "refs/heads/master",
       "refs/remotes/origin/master"
@@ -299,7 +287,7 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]\\git.bat",
+      "git",
       "checkout",
       "master"
     ],
@@ -2355,7 +2343,7 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]\\git.bat",
+      "git",
       "footers",
       "--position",
       "dcdcdc0ff1122212323134879ddceeb1240b0988"
@@ -2370,7 +2358,7 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]\\git.bat",
+      "git",
       "footers",
       "--position",
       "a6298e4afedbf2cd461755ea6f45b0ad64222222"
@@ -2385,7 +2373,7 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]\\git.bat",
+      "git",
       "footers",
       "--position",
       "00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111"
@@ -8065,7 +8053,7 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]\\git.bat",
+      "git",
       "show",
       "--name-only",
       "--pretty=format:",

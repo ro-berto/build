@@ -16,31 +16,17 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\bootstrap\\win\\git_bootstrap.py",
-      "--verbose"
-    ],
-    "cwd": "RECIPE_PACKAGE_REPO[depot_tools]",
-    "infra_step": true,
-    "name": "ensure git tooling on windows",
-    "timeout": 300
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[depot_tools::git]\\resources\\git_setup.py",
       "--path",
       "[START_DIR]\\flutter",
       "--url",
-      "https://chromium.googlesource.com/external/github.com/flutter/flutter",
-      "--git_cmd_path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\git.bat"
+      "https://chromium.googlesource.com/external/github.com/flutter/flutter"
     ],
     "name": "git setup"
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]\\git.bat",
+      "git",
       "retry",
       "fetch",
       "origin",
@@ -56,7 +42,7 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]\\git.bat",
+      "git",
       "checkout",
       "-f",
       "FETCH_HEAD"
@@ -67,7 +53,7 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]\\git.bat",
+      "git",
       "rev-parse",
       "HEAD"
     ],
@@ -82,7 +68,7 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]\\git.bat",
+      "git",
       "clean",
       "-f",
       "-d",
@@ -94,7 +80,7 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]\\git.bat",
+      "git",
       "submodule",
       "sync"
     ],
@@ -104,7 +90,7 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]\\git.bat",
+      "git",
       "submodule",
       "update",
       "--init",

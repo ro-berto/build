@@ -276,22 +276,7 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\bootstrap\\win\\git_bootstrap.py",
-      "--verbose"
-    ],
-    "cwd": "RECIPE_PACKAGE_REPO[depot_tools]",
-    "infra_step": true,
-    "name": "archive profile database.ensure git tooling on windows",
-    "timeout": 300,
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]\\git.bat",
+      "git",
       "fetch",
       "-f",
       "https://chromium.googlesource.com/chromium/src.git",
@@ -306,7 +291,7 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]\\git.bat",
+      "git",
       "-c",
       "user.email=pgo-bot@chromium.org",
       "-c",
@@ -328,7 +313,7 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]\\git.bat",
+      "git",
       "push",
       "https://chromium.googlesource.com/chromium/src.git",
       "refs/notes/pgo/profile_database/windows-amd64"
