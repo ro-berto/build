@@ -217,6 +217,9 @@ class V8Api(recipe_api.RecipeApi):
       self.m.chromium.apply_config('trybot_flavor')
 
   def checkout(self, revision=None, **kwargs):
+    # Allow development on feature branches.
+    self.m.bot_update.enable_destination_branch_check()
+
     # Set revision for bot_update.
     revision = revision or self.m.properties.get(
         'parent_got_revision', self.m.properties.get('revision', 'HEAD'))
