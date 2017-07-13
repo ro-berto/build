@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from recipe_engine.post_process import Filter
+
 DEPS = [
   'build',
   'chromium',
@@ -12,6 +14,7 @@ DEPS = [
   'commit_position',
   'depot_tools/bot_update',
   'depot_tools/gclient',
+  'depot_tools/gerrit',
   'depot_tools/tryserver',
   'filter',
   'isolate',
@@ -37,6 +40,12 @@ def RunSteps(api):
         api.json.input(api.chromium_tests.trybots),
         api.properties['dump_builders'])
     return
+
+  # Allow development on feature branches.
+  # TODO(machenbach): The condition is for a gradual roll-out. This can be
+  # removed as soon as the check is on by default.
+  if api.properties.get('patch_project') == 'v8/v8':
+    api.bot_update.enable_destination_branch_check()
 
   with api.chromium.chromium_layout():
     return api.chromium_tests.trybot_steps()
@@ -637,6 +646,23 @@ def GenTests(api):
           mastername='tryserver.chromium.win',
           patch_project='v8') +
     api.platform.name('win')
+  )
+
+  yield (
+    api.test('use_v8_patch_on_chromium_trybot_gerrit_feature_branch') +
+    props(buildername='win_chromium_rel_ng',
+          mastername='tryserver.chromium.win',
+          gerrit_project='v8/v8') +
+    api.platform.name('win') +
+    api.step_data(
+      'gerrit get_patch_destination_branch',
+      api.gerrit.get_one_change_response_data(branch='experimental/feature'),
+    ) +
+    api.step_data('compile (with patch)', retcode=1) +
+    api.post_process(
+        Filter('gerrit get_patch_destination_branch',
+               'bot_update',
+               'bot_update (without patch)'))
   )
 
   yield (
