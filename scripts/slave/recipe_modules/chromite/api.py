@@ -320,10 +320,14 @@ class ChromiteApi(recipe_api.RecipeApi):
     # Run cbuildbot.
     # TODO(dgarrett): stop adjusting path here, and pass into cbuildbot_launcher
     # instead.
-    # TODO(dgarrett): Move LANG var setting into cbuildbot_launcher.
+    #
+    # Set "DEPOT_TOOLS_UPDATE" to prevent any invocations of "depot_tools"
+    # scripts that call "//update_depot_tools" (e.g., "gclient") from trying
+    # to self-update from their pinned version (crbug.com/736890).
     with self.m.context(
         cwd=self.m.path['start_dir'],
-        env={'PATH': str(self.depot_tools_path) + ':%(PATH)s'}):
+        env_prefixes={'PATH': [self.depot_tools_path]},
+        env={'DEPOT_TOOLS_UPDATE': '0'}):
       return self.cbuildbot(str('cbuildbot [%s]' % (self.c.cbb.config,)),
                             self.c.cbb.config,
                             args=cbb_args)

@@ -104,7 +104,12 @@
       "x86-generic-tot-chrome-pfq-informational"
     ],
     "env": {
-      "PATH": "[START_DIR]/depot_tools:<PATH>"
+      "DEPOT_TOOLS_UPDATE": "0"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/depot_tools"
+      ]
     },
     "name": "cbuildbot [x86-generic-tot-chrome-pfq-informational]"
   },

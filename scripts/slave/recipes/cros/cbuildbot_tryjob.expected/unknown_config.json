@@ -103,7 +103,12 @@
       "xxx-fakeboard-fakebuild"
     ],
     "env": {
-      "PATH": "[START_DIR]/depot_tools:<PATH>"
+      "DEPOT_TOOLS_UPDATE": "0"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/depot_tools"
+      ]
     },
     "name": "cbuildbot [xxx-fakeboard-fakebuild]"
   },
