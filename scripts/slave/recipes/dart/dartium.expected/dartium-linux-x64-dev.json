@@ -52,7 +52,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[START_DIR]/src/dart/out"
+      "[START_DIR]/src/out"
     ],
     "infra_step": true,
     "name": "clobber"

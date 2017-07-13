@@ -36,7 +36,7 @@ def RunSteps(api):
 
   # 'clobber' is the empty string when true, so check with 'in'
   if 'clobber' in api.properties or '-inc-' not in builder_name:
-    build_dir = api.path.abspath(api.path['checkout'].join('out'))
+    build_dir = api.path.abspath(api.path['start_dir'].join('src/out'))
     api.file.rmtree('clobber', build_dir)
   with api.context(env={
       'GYP_GENERATORS': 'ninja',
