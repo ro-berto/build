@@ -170,10 +170,6 @@ BUILDERS = {
             'nosse4',
             ['--extra-flags', '--noenable-sse4-1 --noenable-avx'],
             [V8Testing, Mozilla],
-        ) + with_test_args(
-            'deadcode',
-            ['--extra-flags=--dead-code-elimination'],
-            [V8Testing, Test262, Mozilla],
         ),
         'testing': {'platform': 'linux'},
         'enable_swarming': True,
