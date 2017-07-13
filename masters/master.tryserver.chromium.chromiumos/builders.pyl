@@ -1,0 +1,64 @@
+{
+  "master_base_class": "Master4b",
+  "master_classname": "TryserverChromiumChromiumOS",
+  "master_port": 21706,
+  "master_port_alt": 41706,
+  "bot_port": 31706,
+
+  "buildbucket_bucket": "master.tryserver.chromium.chromiumos",
+  "default_remote_run_properties": {
+    "path_config": "kitchen",
+  },
+  "default_remote_run_repository": "https://chromium.googlesource.com/chromium/tools/build.git",
+  "service_account_file": "service-account-chromium-tryserver.json",
+  "templates": ["../master.chromium/templates"],
+
+  "builder_defaults": {
+    "recipe": "chromium_trybot",
+    "use_remote_run": True,
+    "scheduler": None,
+  },
+
+  "builders": {
+    "chromeos_amd64-generic": {
+      "bot_pool": "optional",
+    },
+    "chromeos_amd64-generic_chromium_compile_only": {
+      "bot_pool": "cq",
+    },
+    "chromeos_daisy": {
+      "bot_pool": "optional",
+    },
+    "chromeos_daisy_chromium_compile_only": {
+      "bot_pool": "cq",
+    },
+    "linux_chromium_chromeos_compile_dbg": {
+      "bot_pool": "cq",
+    },
+    "linux_chromium_chromeos_dbg": {
+      "bot_pool": "optional",
+    },
+    "linux_chromium_chromiumos_rel": {
+      "bot_pool": "cq",
+    },
+  },
+
+  "schedulers": {},
+
+  "bot_pools": {
+    "cq": {
+      "os": "linux",
+      "version": "trusty",
+      "bots": [
+        "slave{1290..1335}-c4",
+      ],
+    },
+    "optional": {
+      "os": "linux",
+      "version": "trusty",
+      "bots": [
+        "slave{1336..1339}-c4",
+      ],
+    },
+  },
+}

@@ -275,6 +275,7 @@ def main(argv):
       'master.client.webrtc.perf': 'WebRTCPerf',
       'master.tryserver.chromium.android': 'TryserverChromiumAndroid',
       'master.tryserver.chromium.angle': 'TryServerANGLE',
+      'master.tryserver.chromium.chromiumos': 'TryserverChromiumChromiumOS',
       'master.tryserver.chromium.linux': 'TryServerChromiumLinux',
       'master.tryserver.chromium.mac': 'TryServerChromiumMac',
       'master.tryserver.chromium.win': 'TryServerChromiumWin',

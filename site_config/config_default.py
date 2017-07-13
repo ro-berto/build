@@ -236,6 +236,14 @@ class Master(object):
     from_address = 'tryserver@chromium.org'
     code_review_site = 'https://codereview.chromium.org'
 
+  class Master4b(Base):
+    """Try server master."""
+    master_host = 'master4b.golo.chromium.org'
+    master_port_base = 17
+    tree_closing_notification_recipients = []
+    from_address = 'tryserver@chromium.org'
+    code_review_site = 'https://codereview.chromium.org'
+
   ## Native Client related
 
   class NaClBase(Master3):
