@@ -42,10 +42,9 @@ def RunSteps(api):
     return
 
   # Allow development on feature branches.
-  # TODO(machenbach): The condition is for a gradual roll-out. This can be
-  # removed as soon as the check is on by default.
-  if api.properties.get('patch_project') == 'v8/v8':
-    api.bot_update.enable_destination_branch_check()
+  # TODO(machenbach): This can be removed as soon as the check is on by
+  # default.
+  api.bot_update.enable_destination_branch_check()
 
   with api.chromium.chromium_layout():
     return api.chromium_tests.trybot_steps()
@@ -659,6 +658,24 @@ def GenTests(api):
       api.gerrit.get_one_change_response_data(branch='experimental/feature'),
     ) +
     api.step_data('compile (with patch)', retcode=1) +
+    api.post_process(
+        Filter('gerrit get_patch_destination_branch',
+               'bot_update',
+               'bot_update (without patch)'))
+  )
+
+  yield (
+    api.test('chromium_trybot_gerrit_feature_branch') +
+    api.platform('linux', 64) +
+    props(mastername='tryserver.chromium.linux',
+          buildername='linux_chromium_rel_ng',
+          gerrit_project='chromium/src') +
+    suppress_analyze() +
+    api.step_data('compile (with patch)', retcode=1) +
+    api.step_data(
+      'gerrit get_patch_destination_branch',
+      api.gerrit.get_one_change_response_data(branch='experimental/feature'),
+     ) +
     api.post_process(
         Filter('gerrit get_patch_destination_branch',
                'bot_update',
