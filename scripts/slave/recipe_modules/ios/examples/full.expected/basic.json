@@ -395,6 +395,28 @@
       "fake included test 1",
       "fake included test 2",
       "fake test 1",
+      "fake test 2",
+      "-d",
+      "explain",
+      "-n"
+    ],
+    "cwd": "[START_DIR]/src/out/Debug-iphonesimulator",
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "LANDMINES_VERBOSE": "1"
+    },
+    "name": "explain compile"
+  },
+  {
+    "cmd": [
+      "ninja",
+      "-C",
+      "[START_DIR]/src/out/Debug-iphonesimulator",
+      "-j",
+      "50",
+      "fake included test 1",
+      "fake included test 2",
+      "fake test 1",
       "fake test 2"
     ],
     "cwd": "[START_DIR]/src/out/Debug-iphonesimulator",

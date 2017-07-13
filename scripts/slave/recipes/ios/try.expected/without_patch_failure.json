@@ -293,6 +293,23 @@
       "ninja",
       "-C",
       "[BUILDER_CACHE]/ios/src/out/Debug-iphonesimulator",
+      "fake tests",
+      "-d",
+      "explain",
+      "-n"
+    ],
+    "cwd": "[BUILDER_CACHE]/ios/src/out/Debug-iphonesimulator",
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "LANDMINES_VERBOSE": "1"
+    },
+    "name": "explain compile (with patch)"
+  },
+  {
+    "cmd": [
+      "ninja",
+      "-C",
+      "[BUILDER_CACHE]/ios/src/out/Debug-iphonesimulator",
       "fake tests"
     ],
     "cwd": "[BUILDER_CACHE]/ios/src/out/Debug-iphonesimulator",
@@ -433,6 +450,23 @@
       "LANDMINES_VERBOSE": "1"
     },
     "name": "generate build files (mb) (without patch)"
+  },
+  {
+    "cmd": [
+      "ninja",
+      "-C",
+      "[BUILDER_CACHE]/ios/src/out/Debug-iphonesimulator",
+      "fake tests",
+      "-d",
+      "explain",
+      "-n"
+    ],
+    "cwd": "[BUILDER_CACHE]/ios/src/out/Debug-iphonesimulator",
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "LANDMINES_VERBOSE": "1"
+    },
+    "name": "explain compile (without patch)"
   },
   {
     "cmd": [

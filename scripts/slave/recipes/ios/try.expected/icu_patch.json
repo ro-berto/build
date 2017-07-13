@@ -277,6 +277,22 @@
     "cmd": [
       "ninja",
       "-C",
+      "[BUILDER_CACHE]/ios_simulator/src/out/Debug-iphonesimulator",
+      "-d",
+      "explain",
+      "-n"
+    ],
+    "cwd": "[BUILDER_CACHE]/ios_simulator/src/out/Debug-iphonesimulator",
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "LANDMINES_VERBOSE": "1"
+    },
+    "name": "explain compile (with patch)"
+  },
+  {
+    "cmd": [
+      "ninja",
+      "-C",
       "[BUILDER_CACHE]/ios_simulator/src/out/Debug-iphonesimulator"
     ],
     "cwd": "[BUILDER_CACHE]/ios_simulator/src/out/Debug-iphonesimulator",

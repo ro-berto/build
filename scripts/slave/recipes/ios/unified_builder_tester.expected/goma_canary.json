@@ -285,6 +285,24 @@
       "-C",
       "[BUILDER_CACHE]/ios/src/out/Release-iphoneos",
       "-j",
+      "50",
+      "-d",
+      "explain",
+      "-n"
+    ],
+    "cwd": "[BUILDER_CACHE]/ios/src/out/Release-iphoneos",
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "LANDMINES_VERBOSE": "1"
+    },
+    "name": "explain compile"
+  },
+  {
+    "cmd": [
+      "ninja",
+      "-C",
+      "[BUILDER_CACHE]/ios/src/out/Release-iphoneos",
+      "-j",
       "50"
     ],
     "cwd": "[BUILDER_CACHE]/ios/src/out/Release-iphoneos",

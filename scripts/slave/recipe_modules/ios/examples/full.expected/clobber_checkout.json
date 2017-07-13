@@ -196,6 +196,22 @@
     "cmd": [
       "ninja",
       "-C",
+      "[START_DIR]/src/out/Debug-iphonesimulator",
+      "-d",
+      "explain",
+      "-n"
+    ],
+    "cwd": "[START_DIR]/src/out/Debug-iphonesimulator",
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "LANDMINES_VERBOSE": "1"
+    },
+    "name": "explain compile"
+  },
+  {
+    "cmd": [
+      "ninja",
+      "-C",
       "[START_DIR]/src/out/Debug-iphonesimulator"
     ],
     "cwd": "[START_DIR]/src/out/Debug-iphonesimulator",
