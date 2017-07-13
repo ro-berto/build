@@ -24,6 +24,9 @@ from common import env
 LOGGER = logging.getLogger('update_scripts')
 
 
+IS_WINDOWS = sys.platform.startswith('win')
+
+
 def _run_command(cmd, **kwargs):
   LOGGER.debug('Executing command: %s', cmd)
   kwargs.setdefault('stderr', subprocess.STDOUT)
@@ -65,8 +68,10 @@ GITILES_COMMIT_TEMPLATE = 'https://chromium.googlesource.com/%s/+/%s'
 GITILES_LOG_TEMPLATE = 'https://chromium.googlesource.com/%s/+log/%s..%s'
 
 def get_repo_head(path):
+  # On Windows, we need to run this in a shell so "cmd.exe" can resolve "git"
+  # into something on PATH (likely "git.bat").
   cmd = ['git', 'rev-parse', 'HEAD']
-  return _run_command(cmd, cwd=path, stdout=subprocess.PIPE)
+  return _run_command(cmd, cwd=path, stdout=subprocess.PIPE, shell=IS_WINDOWS)
 
 
 def add_revision_links(s, repos_to_old_hashes):
