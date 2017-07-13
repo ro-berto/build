@@ -649,6 +649,14 @@
               "compile_v2"
             ]
           },
+          "Fuchsia": {
+            "tree_notify": [
+              "kmarshall+fuchsia-bot@chromium.org",
+              "sergeyu+fuchsia-bot@chromium.org",
+              "wez+fuchsia-bot@chromium.org"
+            ],
+            "forgiving_optional": ["*"]
+          },
           "Mojo Linux": {
             "tree_notify": [
               "network-service-dev+bot@chromium.org"
