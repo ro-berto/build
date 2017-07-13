@@ -391,8 +391,8 @@ TRYBOTS = freeze({
         'buildername': 'Headless Linux (dbg)',
       }),
       'linux_chromium_cfi_rel_ng': simple_bot({
-        'mastername': 'chromium.fyi',
-        'buildername': 'CFI Linux Full',
+        'mastername': 'chromium.memory',
+        'buildername': 'Linux CFI',
       }),
       'linux_chromium_ubsan_rel_ng': simple_bot({
         'mastername': 'chromium.fyi',

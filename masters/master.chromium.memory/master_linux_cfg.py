@@ -28,6 +28,7 @@ def Update(_config, active_master, c):
                 treeStableTimer=60,
                 builderNames=[
           'Linux ASan LSan Builder',
+          'Linux CFI',
           'Linux ChromiumOS MSan Builder',
           'Linux MSan Builder',
           'Linux TSan Builder',
@@ -56,6 +57,10 @@ def Update(_config, active_master, c):
     {
       'name': 'Linux ASan Tests (sandboxed)',
       'category': '1linux asan lsan msan',
+    },
+    {
+      'name': 'Linux CFI',
+      'category': '1linux cfi',
     },
     {
       'name': 'Linux ChromiumOS MSan Builder',
