@@ -219,27 +219,6 @@
       "[BUILDER_CACHE]/ios/src/out/Debug-iphonesimulator",
       "fake tests 1",
       "fake tests 2",
-      "fake_eg_test_host",
-      "-d",
-      "explain",
-      "-n"
-    ],
-    "cwd": "[BUILDER_CACHE]/ios/src/out/Debug-iphonesimulator",
-    "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "LANDMINES_VERBOSE": "1",
-      "fake env var 1": "fake env value 1",
-      "fake env var 2": "fake env value 2"
-    },
-    "name": "explain compile"
-  },
-  {
-    "cmd": [
-      "ninja",
-      "-C",
-      "[BUILDER_CACHE]/ios/src/out/Debug-iphonesimulator",
-      "fake tests 1",
-      "fake tests 2",
       "fake_eg_test_host"
     ],
     "cwd": "[BUILDER_CACHE]/ios/src/out/Debug-iphonesimulator",

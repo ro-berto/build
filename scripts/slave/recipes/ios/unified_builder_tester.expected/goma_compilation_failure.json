@@ -275,25 +275,6 @@
       "[START_DIR]/src/out/Release-iphoneos",
       "-j",
       "50",
-      "fake test",
-      "-d",
-      "explain",
-      "-n"
-    ],
-    "cwd": "[START_DIR]/src/out/Release-iphoneos",
-    "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "LANDMINES_VERBOSE": "1"
-    },
-    "name": "explain compile"
-  },
-  {
-    "cmd": [
-      "ninja",
-      "-C",
-      "[START_DIR]/src/out/Release-iphoneos",
-      "-j",
-      "50",
       "fake test"
     ],
     "cwd": "[START_DIR]/src/out/Release-iphoneos",
