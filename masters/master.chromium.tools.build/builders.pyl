@@ -6,10 +6,9 @@
   "pubsub_service_account_file": "service-account-luci-milo.json",
   "templates": ["templates", "../master.chromium/templates"],
 
-  "default_remote_run_properties": {
-    "path_config": "kitchen",
+  "builder_defaults": {
+    "remote_run_repository": "https://chromium.googlesource.com/chromium/tools/build.git",
   },
-  "default_remote_run_repository": "https://chromium.googlesource.com/infra/infra.git",
 
   "builders": {
     "v8-linux-end-to-end": {

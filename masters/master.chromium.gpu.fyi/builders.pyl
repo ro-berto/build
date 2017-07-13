@@ -9,10 +9,9 @@
   # Enable compression for any stdio log file larger than 10 MB.
   "logCompressionLimit": 10485760,
 
-  "default_remote_run_properties": {
-    "path_config": "kitchen",
+  "builder_defaults": {
+    "remote_run_repository": "https://chromium.googlesource.com/chromium/tools/build.git",
   },
-  "default_remote_run_repository": "https://chromium.googlesource.com/chromium/tools/build.git",
 
   # This is organized first by platform, then builders, followed by
   # testers.

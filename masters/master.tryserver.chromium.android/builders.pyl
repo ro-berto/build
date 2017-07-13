@@ -8,10 +8,9 @@
   "service_account_file": "service-account-chromium-tryserver.json",
   "buildbucket_bucket": "master.tryserver.chromium.android",
 
-  "default_remote_run_properties": {
-    "path_config": "kitchen",
+  "builder_defaults": {
+    "remote_run_repository": "https://chromium.googlesource.com/chromium/tools/build.git",
   },
-  "default_remote_run_repository": "https://chromium.googlesource.com/chromium/tools/build.git",
 
   # This is sorted first alphabetically by slave pool, and then alphabetically
   # by builder name

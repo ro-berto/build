@@ -126,8 +126,6 @@ def _ComputeBuilders(builders, m_annotator, active_master_cls):
 
     props = {}
     props.update(builders.get('default_properties', {}).copy())
-    if builder_data.get('use_remote_run'):
-      props.update(builders.get('default_remote_run_properties', {}).copy())
     props.update(builder_data.get('properties', {}))
 
     # Only pass timeout if 'no_output_timeout_s' is specified, to avoid
@@ -139,15 +137,16 @@ def _ComputeBuilders(builders, m_annotator, active_master_cls):
     if builder_data.get('use_remote_run'):
       factory = remote_run_factory.RemoteRunFactory(
           active_master=active_master_cls,
-          repository=builder_data.get(
-              'repository', builders.get('default_remote_run_repository')),
+          # TODO(dpranke): Remove 'repository' and
+          # 'default_remote_run_repository' once callers have been updated.
+          repository=builder_data.get('remote_run_repository',
+              builder_data.get('repository',
+                  builders.get('default_remote_run_repository'))),
           recipe=builder_data['recipe'],
-          revision=(
-              _revision_getter if builder_data.get('remote_run_sync_revision')
-                               else None),
+          revision=None,
           max_time=builder_data.get('builder_timeout_s'),
           factory_properties=props,
-          use_gitiles=builder_data.get('remote_run_use_gitiles', False),
+          use_gitiles=False,
           **kwargs
       )
     else:

@@ -7,10 +7,9 @@
   "templates": ['../master.client.v8/templates',
                 '../master.chromium/templates'],
 
-  "default_remote_run_properties": {
-    "path_config": "kitchen",
+  "builder_defaults": {
+    "remote_run_repository": "https://chromium.googlesource.com/chromium/tools/build.git",
   },
-  "default_remote_run_repository": "https://chromium.googlesource.com/chromium/tools/build.git",
 
   "builders": {
     "V8 Android Arm32": {
