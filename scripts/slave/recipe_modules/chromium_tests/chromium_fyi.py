@@ -1158,7 +1158,32 @@ SPEC = {
       'goma_canary': True,
       'tests': steps.GOMA_TESTS,
     },
-    'Chromium Win 10 GCE Tests': {
+    'Chromium Win 10 GCE Tests (Win 7 Build)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'chrome_with_codecs',
+        'goma_high_parallel',
+        'mb',
+        'ninja_confirm_noop',
+      ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'win',
+      },
+      'enable_swarming': True,
+      'swarming_dimensions': {
+        'cpu': 'x86-64',
+        'machine_type': 'n1-standard-16',
+        'os': 'Windows-10',
+      },
+      'checkout_dir': 'win',
+    },
+    'Chromium Win 10 GCE Tests (Win 10 Build)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'chrome_with_codecs',
