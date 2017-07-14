@@ -181,13 +181,13 @@ def HotPatchSlaveBuilder(is_testing):
       if os.path.isdir(possible_build_dead):
         Log('Deleting unwanted directory %s' % possible_build_dead)
         if not is_testing:
-          chromium_utils.RemoveDirectory(possible_build_dead)
+          MaybeDestroyPath(possible_build_dead)
 
       # Delete old slave directories.
       if d not in wanted_dirs:
         Log('Deleting unwanted directory %s' % d)
         if not is_testing:
-          chromium_utils.RemoveDirectory(os.path.join(self.basedir, d))
+          MaybeDestroyPath(os.path.join(self.basedir, d))
     return retval
   Bot.new_remote_setBuilderList = cleanup
   Bot.remote_setBuilderList = Bot.new_remote_setBuilderList
@@ -203,6 +203,43 @@ def GetActiveMasterClass(master_class_name, slave_bootstrap, config_bootstrap):
     config_bootstrap.Master.active_master = master
     return master
   raise RuntimeError('*** Failed to detect the active master')
+
+
+def MaybeDestroyPath(path):
+  """Best-effort attempt to recursively remove "path".
+
+  If running on a Linux system, "sudo" will be used to escalate privilege, and
+  "rm" will be used to destroy the path. If the "sudo" fails (likely due to
+  required interactivity), a non-"sudo" version of "rm" will be used.
+
+  If these fail, or if the current system is not Linux, the standard catch-all
+  "chromium_utils.RemoveDirectory" will be used.
+
+  If, after everything, the path could not be removed, this function will return
+  without raising any exceptions.
+  """
+  path = os.path.abspath(path)
+  if not os.path.exists(path):
+    return
+
+  # If we're on Linux, try and use "rm -rf".
+  if chromium_utils.IsLinux():
+    for try_sudo in (True, False):
+      cmd = []
+      if try_sudo:
+        cmd += ['sudo', '--non-interactive', '--']
+      cmd += ['rm', '--recursive', '--force', path]
+      try:
+        subprocess.check_call(cmd, stdout=os.devnull, stderr=os.devnull)
+        return
+      except Exception:
+        pass
+
+  # Fall back on common method.
+  try:
+    chromium_utils.RemoveDirectory(path)
+  except Exception as e:
+    Log('Failed to destory path %r: %r' % (path, e))
 
 
 def GetRoot():
