@@ -233,6 +233,10 @@ def RunSteps(api, buildername):
       runner_args = ['-pipe']
       if _HasToken(buildername, 'fuzz'):
         runner_args += ['-fuzzer', '-shim-config', 'fuzzer_mode.json']
+      # Limit the number of workers on Mac, to avoid flakiness.
+      # https://crbug.com/boringssl/199
+      if api.platform.is_mac:
+        runner_args += ['-num-workers', '1']
       if _HasToken(buildername, 'android'):
         with api.context(cwd=api.path['checkout'], env=env):
           deferred = api.python('ssl tests', go_env, [

@@ -175,7 +175,9 @@
       "test",
       "-json-output",
       "/path/to/tmp/json",
-      "-pipe"
+      "-pipe",
+      "-num-workers",
+      "1"
     ],
     "cwd": "[START_DIR]/boringssl/ssl/test/runner",
     "name": "ssl tests",
