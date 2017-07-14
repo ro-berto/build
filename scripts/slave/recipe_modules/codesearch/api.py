@@ -106,6 +106,10 @@ class CodesearchApi(recipe_api.RecipeApi):
     """Returns the commit position of the project.
     """
     got_revision_cp = self.m.chromium.build_properties.get('got_revision_cp')
+    if not got_revision_cp:
+      # For some downstream bots, the build properties 'got_revision_cp' are not
+      # generated. To resolve this issue, use 'got_revision' property here instead.
+      return self._get_revision()
     return self.m.commit_position.parse_revision(got_revision_cp)
 
   def _get_revision(self):

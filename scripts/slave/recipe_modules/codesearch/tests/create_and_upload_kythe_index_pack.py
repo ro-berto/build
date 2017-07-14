@@ -14,7 +14,10 @@ DEPS = [
 def RunSteps(api):
   api.gclient.set_config('chromium')
   update_step = api.bot_update.ensure_checkout()
-  api.chromium.set_build_properties(update_step.json.output['properties'])
+  properties = update_step.json.output['properties']
+  if api.properties.get('set_got_revision_cp_to_none'):
+    properties.pop('got_revision_cp', 0)
+  api.chromium.set_build_properties(properties)
   api.codesearch.set_config(
       api.properties.get('codesearch_config', 'chromium'),
       COMPILE_TARGETS=api.properties.get('compile_targets', ['all']),
@@ -36,4 +39,9 @@ def GenTests(api):
       api.test('bucket_name_not_set_failed') +
       api.properties(codesearch_config='base') +
       api.expect_exception('AssertionError')
+  )
+
+  yield (
+      api.test('basic_without_got_revision_cp') +
+      api.properties(set_got_revision_cp_to_none=True)
   )
