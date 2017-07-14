@@ -114,15 +114,17 @@ class TestUtilsApi(recipe_api.RecipeApi):
     return failed_tests
 
   def run_tests_with_patch(self, caller_api, tests):
-    self.run_tests(caller_api, tests, 'with patch')
-
-    failing_tests = []
+    failing_tests = self.run_tests(caller_api, tests, 'with patch')
+    failing_test_names = set(f.name for f in failing_tests)
     with self.m.step.defer_results():
       for t in tests:
         if not t.has_valid_results(caller_api, 'with patch'):
           self._invalid_test_results(t)
+          failing_test_names.discard(t)
         elif t.failures(caller_api, 'with patch'):
-          failing_tests.append(t)
+          if t.name not in failing_test_names:
+            failing_tests.append(t)
+            failing_test_names.add(t.name)
     return failing_tests
 
   def determine_new_failures(self, caller_api, tests, deapply_patch_fn):

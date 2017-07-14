@@ -70,3 +70,18 @@ def GenTests(api):
           api.swarming.canned_summary_output(failure=True) +
           api.test_utils.canned_gtest_output(False))
   )
+
+  yield (
+      api.test('nonzero_exit_code_no_gtest_output') +
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='linux_chromium_rel_ng',
+          affected_files=['testing/buildbot/chromium.linux.json'],
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }) +
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.swarming.canned_summary_output(failure=True) +
+          api.test_utils.raw_gtest_output({'per_iteration_data': []}, 1))
+  )

@@ -3061,11 +3061,11 @@ Returns:
 
 #### **class [TestUtilsApi](/scripts/slave/recipe_modules/test_utils/api.py#27)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [create\_results\_from\_json](/scripts/slave/recipe_modules/test_utils/api.py#216)(self, data):**
+&mdash; **def [create\_results\_from\_json](/scripts/slave/recipe_modules/test_utils/api.py#218)(self, data):**
 
-&mdash; **def [create\_results\_from\_json\_if\_needed](/scripts/slave/recipe_modules/test_utils/api.py#219)(self, data):**
+&mdash; **def [create\_results\_from\_json\_if\_needed](/scripts/slave/recipe_modules/test_utils/api.py#221)(self, data):**
 
-&mdash; **def [determine\_new\_failures](/scripts/slave/recipe_modules/test_utils/api.py#128)(self, caller_api, tests, deapply_patch_fn):**
+&mdash; **def [determine\_new\_failures](/scripts/slave/recipe_modules/test_utils/api.py#130)(self, caller_api, tests, deapply_patch_fn):**
 
 Utility function for running steps with a patch applied, and retrying
 failing steps without the patch. Failures from the run without the patch are
@@ -3093,7 +3093,7 @@ Args:
        and the second one is an iterable of content lines; if there are
        no contents, the whole section is not displayed
 
-&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [gtest\_results](/scripts/slave/recipe_modules/test_utils/api.py#236)(self, add_json_log=True):**
+&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [gtest\_results](/scripts/slave/recipe_modules/test_utils/api.py#238)(self, add_json_log=True):**
 
 A placeholder which will expand to
 '--test-launcher-summary-output=/tmp/file'.
@@ -3120,7 +3120,7 @@ Returns:
 
 &mdash; **def [run\_tests\_with\_patch](/scripts/slave/recipe_modules/test_utils/api.py#116)(self, caller_api, tests):**
 
-&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_results](/scripts/slave/recipe_modules/test_utils/api.py#226)(self, add_json_log=True):**
+&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_results](/scripts/slave/recipe_modules/test_utils/api.py#228)(self, add_json_log=True):**
 
 A placeholder which will expand to '/tmp/file'.
 
