@@ -2166,7 +2166,7 @@
       "--slave-name=bot_id",
       "--build-number=1337",
       "--run-python-script",
-      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\tools_webrtc\\gtest-parallel-wrapper.py",
+      "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\third_party\\gtest-parallel\\gtest-parallel",
       "[BUILDER_CACHE]\\Win64_Debug__Win10_\\src\\out\\Debug_x64\\modules_tests",
       "--gtest_filter=ScreenCapturerIntegrationTest.*",
       "--gtest_also_run_disabled_tests"

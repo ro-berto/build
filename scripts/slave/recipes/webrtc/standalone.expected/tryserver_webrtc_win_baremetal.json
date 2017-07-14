@@ -450,6 +450,7 @@
     "name": "webcam_check"
   },
   {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -464,17 +465,14 @@
       "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"buildername\": \"win_baremetal\", \"buildnumber\": 1337, \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"bot_id\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"buildername\": \"win_baremetal\", \"buildnumber\": 1337, \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"bot_id\"}",
+      "--annotate=gtest",
       "--test-type=voe_auto_test",
       "--step-name=voe_auto_test",
       "--builder-name=win_baremetal",
       "--slave-name=bot_id",
       "--build-number=1337",
-      "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "[BUILDER_CACHE]\\win_baremetal\\src\\tools_webrtc\\gtest-parallel-wrapper.py",
-      "[BUILDER_CACHE]\\win_baremetal\\src\\out\\Release\\voe_auto_test",
-      "--workers=1",
-      "--",
+      "voe_auto_test.exe",
       "--automated"
     ],
     "cwd": "[BUILDER_CACHE]\\win_baremetal",
@@ -486,6 +484,7 @@
     "name": "voe_auto_test"
   },
   {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -500,16 +499,14 @@
       "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"buildername\": \"win_baremetal\", \"buildnumber\": 1337, \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"bot_id\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"buildername\": \"win_baremetal\", \"buildnumber\": 1337, \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"bot_id\"}",
+      "--annotate=gtest",
       "--test-type=video_capture_tests",
       "--step-name=video_capture_tests",
       "--builder-name=win_baremetal",
       "--slave-name=bot_id",
       "--build-number=1337",
-      "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "[BUILDER_CACHE]\\win_baremetal\\src\\tools_webrtc\\gtest-parallel-wrapper.py",
-      "[BUILDER_CACHE]\\win_baremetal\\src\\out\\Release\\video_capture_tests",
-      "--workers=1"
+      "video_capture_tests.exe"
     ],
     "cwd": "[BUILDER_CACHE]\\win_baremetal",
     "env": {
@@ -520,6 +517,7 @@
     "name": "video_capture_tests"
   },
   {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -534,17 +532,14 @@
       "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"buildername\": \"win_baremetal\", \"buildnumber\": 1337, \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"bot_id\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"buildername\": \"win_baremetal\", \"buildnumber\": 1337, \"issue\": 666666, \"mastername\": \"tryserver.webrtc\", \"patchset\": 1, \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"rietveld\": \"https://fake.rietveld.url\", \"slavename\": \"bot_id\"}",
+      "--annotate=gtest",
       "--test-type=webrtc_perf_tests",
       "--step-name=webrtc_perf_tests",
       "--builder-name=win_baremetal",
       "--slave-name=bot_id",
       "--build-number=1337",
-      "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "[BUILDER_CACHE]\\win_baremetal\\src\\tools_webrtc\\gtest-parallel-wrapper.py",
-      "[BUILDER_CACHE]\\win_baremetal\\src\\out\\Release\\webrtc_perf_tests",
-      "--workers=1",
-      "--",
+      "webrtc_perf_tests.exe",
       "--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/"
     ],
     "cwd": "[BUILDER_CACHE]\\win_baremetal",

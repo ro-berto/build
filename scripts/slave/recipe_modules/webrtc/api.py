@@ -205,7 +205,7 @@ class WebRTCApi(recipe_api.RecipeApi):
 
   def add_test(self, test, name=None, args=None, revision=None, env=None,
                python_mode=False, perf_test=False, perf_dashboard_id=None,
-               gtest_args=None, parallel=True):
+               parallel=True):
     """Helper function to invoke chromium.runtest().
 
     Notice that the name parameter should be the same as the test executable in
@@ -213,9 +213,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     """
     name = name or test
     args = args or []
-    gtest_args = gtest_args or []
     if perf_test and self.c.PERF_ID:
-      args = gtest_args + args
       perf_dashboard_id = perf_dashboard_id or name
       assert self.revision_number, (
           'A revision number must be specified for perf tests as they upload '
@@ -231,21 +229,22 @@ class WebRTCApi(recipe_api.RecipeApi):
             revision=self.revision_number, perf_id=self.c.PERF_ID,
             perf_config=perf_config)
     else:
-      if not parallel:
-        gtest_args.append('--workers=1')
-      if args:
-        args = ['--'] + args
-      args = gtest_args + args
-
+      annotate = 'gtest'
       test_type = test
-      test_executable = self.m.chromium.c.build_dir.join(
-        self.m.chromium.c.build_config_fs, test)
-      args = [test_executable] + args
-      test = self.m.path['checkout'].join('tools_webrtc',
-                                          'gtest-parallel-wrapper.py')
-      python_mode = True
-      annotate = None  # The parallel script doesn't output gtest format.
-      flakiness_dash = False
+      flakiness_dash = (not self.m.tryserver.is_tryserver and
+                        not self.m.chromium.c.runtests.enable_memcheck)
+
+      # Memcheck uses special scripts that don't play well with
+      # the gtest-parallel script.
+      if parallel and not self.m.chromium.c.runtests.enable_memcheck:
+        test_executable = self.m.chromium.c.build_dir.join(
+          self.m.chromium.c.build_config_fs, test)
+        args = [test_executable] + args
+        test = self.m.path['checkout'].join('third_party', 'gtest-parallel',
+                                            'gtest-parallel')
+        python_mode = True
+        annotate = None  # The parallel script doesn't output gtest format.
+        flakiness_dash = False
 
       with self.m.context(env=env):
         self.m.chromium.runtest(

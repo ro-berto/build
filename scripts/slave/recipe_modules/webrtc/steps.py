@@ -96,8 +96,8 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
       tests.append(WebRTCTest(
           'modules_tests',
           name='modules_tests (screen capture disabled tests)',
-          gtest_args=['--gtest_filter=ScreenCapturerIntegrationTest.*',
-                      '--gtest_also_run_disabled_tests'],
+          args=['--gtest_filter=ScreenCapturerIntegrationTest.*',
+                '--gtest_also_run_disabled_tests'],
           parallel=True))
   elif test_suite == 'webrtc_baremetal':
     api.virtual_webcam_check()  # Needed for video_capture_tests below.
