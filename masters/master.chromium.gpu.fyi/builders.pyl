@@ -388,6 +388,16 @@
       "builder_timeout_s": 21600,
       "category": "2Linux",
     },
+    "Linux Release (Intel HD 630)": {
+      "recipe": "chromium",
+      "use_remote_run": True,
+      "scheduler": None,
+      # It's crucial to merge build requests on the testers.
+      "mergeRequests": True,
+      "slave_pools": ["linux_rel_intel_hd_630"],
+      "builder_timeout_s": 21600,
+      "category": "2Linux",
+    },
     "Linux Debug (Intel HD 530)": {
       "recipe": "chromium",
       "use_remote_run": True,
@@ -803,6 +813,14 @@
         "version": "trusty",
       },
       "slaves": ["build156-b1"],
+    },
+    "linux_rel_intel_hd_630": {
+      "slave_data": {
+        "bits": 64,
+        "os": "linux",
+        "version": "trusty",
+      },
+      "slaves": ["build22-b1"],
     },
     "linux_dbg_intel_hd_530": {
       "slave_data": {
