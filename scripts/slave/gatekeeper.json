@@ -728,14 +728,6 @@
             ],
             "subject_template": "buildbot %(result)s in %(project_name)s on %(builder_name)s, revision %(revision)s"
           },
-          "CFI Linux": {
-            "tree_notify": [
-              "pcc@chromium.org"
-            ],
-            "forgive_all": "true",
-            "forgiving_optional": ["*"],
-            "subject_template": "buildbot %(result)s in %(project_name)s on %(builder_name)s, revision %(revision)s"
-          },
           "CFI Linux ToT": {
             "tree_notify": [
               "pcc@chromium.org"

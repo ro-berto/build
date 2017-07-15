@@ -248,35 +248,6 @@ SPEC = {
         'platform': 'win',
       },
     },
-    'CFI Linux': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'builder_tester',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-    'CFI Linux Full': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'builder_tester',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'linux',
-      },
-      'enable_swarming': True,
-    },
     'CFI Linux ToT': {
       'chromium_config': 'clang_tot_linux',
       'chromium_apply_config': ['mb'],
@@ -337,37 +308,6 @@ SPEC = {
       },
       'bot_type': 'builder',
       'checkout_dir': 'linux',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-    'LTO Linux': {
-      'chromium_config': 'chromium_official',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'builder_tester',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-    'LTO Linux Perf': {
-      'chromium_config': 'chromium_official',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'builder',
-      'compile_targets': [ 'chromium_builder_perf' ],
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux',
