@@ -335,7 +335,8 @@ def _exec_recipe(rt, opts, stream, basedir, tdir, properties):
     engine_args = ['--operational-args-path', engine_flags_path]
 
   recipe_cmd = [
-      sys.executable, '-u', recipe_runner,] + engine_args + [
+      remote_run.find_python(), '-u', recipe_runner,
+  ] + engine_args + [
       '--verbose',
       'run',
       '--workdir=%s' % _build_dir(),

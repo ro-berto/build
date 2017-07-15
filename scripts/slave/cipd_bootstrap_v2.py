@@ -56,6 +56,22 @@ AUX_BINARY_PACKAGES = {
       cipd.CipdPackage(
           name='infra/tools/git/${platform}',
           version='git_revision:5cf65fdf804a9b3f3023f79d5b3cab2a88ccd09e'),
+
+      # The Python package installs its binaries into "bin/".
+      #
+      # Currently, we only install Python on Windows, since we believe that
+      # other platforms make assumptions about package availability.
+      cipd.CipdPackage(
+          name='infra/python/cpython/${os=windows}-${arch=386,amd64}',
+          version='version:2.7.13.chromium7'),
+
+      # The Git package installs its binaries into "bin/".
+      #
+      # Currently, we only install Git on x86 and amd64 platforms because we
+      # don't have cross-compile support for Git packages yet.
+      cipd.CipdPackage(
+          name='infra/git/${os}-${arch=386,amd64}',
+          version='version:2.13.3.chromium10'),
     ),
 
     CANARY: (
@@ -226,10 +242,13 @@ def _fresh_download(client_path, version):
 
 
 def _add_to_path(path):
-  """Adds `path` to $PATH if it's not already in there.
+  """Adds `path` to $PATH if it exists and is not already in there.
 
   If it's already in $PATH, it will be moved to the front.
   """
+  if not os.path.isdir(path):
+    return
+
   cur_path = os.environ.get('PATH', '').split(os.path.pathsep)
   cur_path = [x for x in cur_path if os.path.realpath(x) != path]
   cur_path.insert(0, path)
@@ -314,6 +333,11 @@ def install_auxiliary_path_packages(dest, selected):
       os.makedirs(dest)
 
     install_cipd_packages(dest, *packages)
+
+    # Add the packages to PATH. Add "/bin" first, since it's where raw
+    # Python/Git reside. Add "dest" second so that wrappers will be preferred
+    # to underlying binaries.
+    _add_to_path(os.path.join(dest, 'bin'))
     _add_to_path(dest)
 
 

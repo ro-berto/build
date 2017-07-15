@@ -4,8 +4,10 @@
 # found in the LICENSE file.
 
 import argparse
+import collections
 import logging
 import os
+import re
 import string
 import subprocess
 import sys
@@ -20,6 +22,10 @@ import slave.robust_tempdir
 
 # Instance-wide logger.
 LOGGER = logging.getLogger('cipd_presubmit')
+
+
+# Regular expression for a CIPD package name template.
+RE_TEMPLATE = re.compile(r'\${(?P<name>\w+)(=(?P<constraints>[^}]+))?}')
 
 
 CIPD_CLIENT = 'cipd'
@@ -80,12 +86,37 @@ def run_presubmit(basedir):
   _add_packages(remote_run.all_cipd_packages)
 
   # Validate the set of packages.
+  #
+  # Since packages may have constraints (e.g., ${os=windows,mac}), we will
+  # manually parse the constraint parameters and decide if a given OS/Arch
+  # matches the package's constraints.
   all_packages = set()
   for base_pkg in packages:
+    constraint_map = collections.defaultdict(set)
+    for t in RE_TEMPLATE.finditer(base_pkg.name):
+      constraints = t.group('constraints')
+      if not constraints:
+        continue
+      constraint_map[t.group('name')].update(constraints.split(','))
+
+    # Replace constrained templated parameters with non-constrained
+    # versions (e.g., "${os=mac,windows}" => "${os}").
+    unconstrained_name = RE_TEMPLATE.sub(r'${\g<name>}', base_pkg.name)
+    name_template = string.Template(unconstrained_name)
+
     for os_name, arch in slave.infra_platform.cipd_all_targets():
-      pkg = base_pkg._replace(name=string.Template(base_pkg.name).substitute(
-          os=os_name, arch=arch, platform='%s-%s' % (os_name, arch)))
-      all_packages.add(pkg)
+      subst = {
+          'os': os_name,
+          'arch': arch,
+          'platform': '%s-%s' % (os_name, arch),
+      }
+      for k, v in subst.iteritems():
+        constraints = constraint_map.get(k, ())
+        if constraints and v not in constraints:
+          break
+      else:
+        pkg = base_pkg._replace(name=name_template.substitute(**subst))
+        all_packages.add(pkg)
 
   # Fire up a thread pool to execute our resolutions in parallel.
   tp = ThreadPool(processes=10)

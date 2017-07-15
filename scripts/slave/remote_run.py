@@ -166,6 +166,23 @@ def _get_is_kitchen(mastername, buildername):
   return buildername in kc.builders
 
 
+def find_python():
+  if sys.platform == 'win32':
+    candidates = ['python.exe', 'python.bat']
+  else:
+    candidates = ['python']
+
+  path_env = os.environ.get('PATH', '')
+  for base in path_env.split(os.pathsep):
+    for c in candidates:
+      path = os.path.join(base, c)
+      if os.path.isfile(path) and os.access(path, os.F_OK|os.X_OK):
+        return os.path.abspath(path)
+
+  LOGGER.warning('Could not find Python in PATH: %r', path_env)
+  return sys.executable
+
+
 def get_is_opt_in(properties):
   """Returns True if properties describes an opt-in user.
 
@@ -525,7 +542,7 @@ def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir, cleanup_dir,
 
   recipe_result_path = os.path.join(tempdir, 'recipe_result.json')
   recipe_cmd = [
-      sys.executable,
+      find_python(),
       os.path.join(cipd_path, 'recipes.py'),] + engine_args + [
       '--verbose',
       'remote',
