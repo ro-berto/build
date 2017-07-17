@@ -410,8 +410,8 @@ def main(argv):
         opts.remote_run_passthrough):
       return _remote_run_passthrough(opts, properties, stream)
 
-    # put client in /b/cipd_client. Do import here to avoid ImportErrors
-    # tanking the update_scripts mechanism.
+    # Ensure that the CIPD client and base tooling is installed and available on
+    # PATH.
     from slave import cipd_bootstrap_v2
     cipd_bootstrap_v2.high_level_ensure_cipd_client(
       B_DIR, properties.get('mastername'))

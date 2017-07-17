@@ -21,6 +21,7 @@ CLIENT_NAME = 'cipd' + infra_platform.exe_suffix()
 DEFAULT_CIPD_VERSION = 'git_revision:5cf65fdf804a9b3f3023f79d5b3cab2a88ccd09e'
 STAGING_CIPD_VERSION = 'git_revision:5cf65fdf804a9b3f3023f79d5b3cab2a88ccd09e'
 
+PROD = None
 STAGING = 'staging'
 CANARY = 'canary'
 
@@ -321,13 +322,14 @@ def install_cipd_packages(dest, *packages):
         proc.returncode,))
 
 
-def install_auxiliary_path_packages(dest, selected):
+def install_auxiliary_path_packages(dest, track):
   """Installs the set of auxiliary binary packages into PATH.
 
   Args:
     dest (str): The CIPD root directory to install into and add to PATH.
+    track (str): The track to use, either STAGING, CANARY, or None (PROD).
   """
-  packages = AUX_BINARY_PACKAGES.get(selected, AUX_BINARY_PACKAGES[None])
+  packages = AUX_BINARY_PACKAGES.get(track, AUX_BINARY_PACKAGES[None])
   if packages:
     if not os.path.isdir(dest):
       os.makedirs(dest)
@@ -341,7 +343,7 @@ def install_auxiliary_path_packages(dest, selected):
     _add_to_path(dest)
 
 
-def high_level_ensure_cipd_client(b_dir, mastername):
+def high_level_ensure_cipd_client(b_dir, mastername, track=None):
   """Ensures that <b_dir>/cipd_client/ contains the cipd (or cipd.exe) client.
 
   Also sets the $CIPD_CACHE_DIR envvar to <b_dir>/c/cipd.
@@ -350,17 +352,24 @@ def high_level_ensure_cipd_client(b_dir, mastername):
   MASTER_VERSION in this module to see how the version lookup works.
 
   Raises an exception if this fails.
+
+  Args:
+    b_dir (str): The path to the "/b" directory.
+    mastername (str): The master name, used to determine automatic track.
+    track (str): Explicitly specify which track to use, either STAGING, CANARY,
+        or PROD (None) to automatically choose a track based on |mastername|.
   """
   LOGGER.info('bootstrapping CIPD')
 
   b_dir = os.path.abspath(b_dir)
   cipd_dir = os.path.join(b_dir, 'cipd_client')
   cipd_version = DEFAULT_CIPD_VERSION
-  selected = MASTER_VERSION.get(mastername)
-  if selected == STAGING:
+  if not track:
+    track = MASTER_VERSION.get(mastername)
+  if track == STAGING:
     LOGGER.info("using staging revision")
     cipd_version = STAGING_CIPD_VERSION
-  elif selected == CANARY:
+  elif track == CANARY:
     LOGGER.info("using canary revision (latest)")
     cipd_version = 'latest'
 
@@ -368,5 +377,5 @@ def high_level_ensure_cipd_client(b_dir, mastername):
   ensure_cipd_client(cipd_dir, cipd_version)
 
   install_auxiliary_path_packages(os.path.join(b_dir, 'cipd_path_tools'),
-                                  selected)
+                                  track)
   os.environ['VPYTHON_VIRTUALENV_ROOT'] = os.path.join(b_dir, 'c', 'vpython')

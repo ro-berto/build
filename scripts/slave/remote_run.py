@@ -489,9 +489,12 @@ def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir, cleanup_dir,
 
   monitoring_utils.write_build_monitoring_event(build_data_dir, properties)
 
-  # Ensure that the CIPD client is installed and available on PATH.
+  # Ensure that the CIPD client and base tooling is installed and available on
+  # PATH.
   from slave import cipd_bootstrap_v2
-  cipd_bootstrap_v2.high_level_ensure_cipd_client(basedir, mastername)
+  track = cipd_bootstrap_v2.STAGING if is_opt_in else cipd_bootstrap_v2.PROD
+  cipd_bootstrap_v2.high_level_ensure_cipd_client(
+      basedir, mastername, track=track)
 
   # Cleanup data from old builds.
   _cleanup_old_layouts(
