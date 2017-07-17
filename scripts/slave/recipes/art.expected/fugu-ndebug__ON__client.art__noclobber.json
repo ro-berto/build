@@ -153,7 +153,7 @@
   {
     "cmd": [
       "make",
-      "-j2",
+      "-j1",
       "test-art-target-gtest32"
     ],
     "env": {
@@ -417,7 +417,7 @@
   {
     "cmd": [
       "./art/test/testrunner/testrunner.py",
-      "-j2",
+      "-j1",
       "--interpreter",
       "--target",
       "--verbose"
@@ -549,7 +549,7 @@
   {
     "cmd": [
       "./art/test/testrunner/testrunner.py",
-      "-j2",
+      "-j1",
       "--jit",
       "--target",
       "--verbose"
@@ -681,7 +681,7 @@
   {
     "cmd": [
       "./art/test/testrunner/testrunner.py",
-      "-j2",
+      "-j1",
       "--speed-profile",
       "--target",
       "--verbose"

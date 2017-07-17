@@ -29,7 +29,7 @@ _TARGET_DEVICE_MAP = {
       },
     'fugu': {
       'bitness': 32,
-      'make_jobs': 2,
+      'make_jobs': 1,
       'product': 'silvermont',
       },
     'mips32': {
@@ -484,7 +484,7 @@ _CONFIG_MAP = {
         'javac': True,
       },
       'angler-armv8-ndebug': {
-        'serial': '84B7N16728001142',
+        'serial': '84B7N16728001299',
         'device': 'angler-armv8',
         'debug': False,
       },
