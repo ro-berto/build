@@ -109,7 +109,7 @@
         "os": "linux",
         "version": "trusty",
       },
-      "slaves": ["slave252-c3"],
+      "slaves": ["slave4-c3"],
     },
     "linux2": {
       "slave_data": {
@@ -117,7 +117,7 @@
         "os": "linux",
         "version": "trusty",
       },
-      "slaves": ["vm124-m3"],
+      "slaves": ["slave252-c3"],
     },
     "linux3": {
       "slave_data": {
@@ -125,7 +125,7 @@
         "os": "linux",
         "version": "trusty",
       },
-      "slaves": ["slave4-c3"],
+      "slaves": ["slave253-c3"],
     },
     "linux4": {
       "slave_data": {
@@ -133,7 +133,7 @@
         "os": "linux",
         "version": "trusty",
       },
-      "slaves": ["slave253-c3"],
+      "slaves": ["slave254-c3"],
     },
   },
 }
