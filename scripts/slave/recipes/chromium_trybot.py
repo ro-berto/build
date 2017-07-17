@@ -41,11 +41,6 @@ def RunSteps(api):
         api.properties['dump_builders'])
     return
 
-  # Allow development on feature branches.
-  # TODO(machenbach): This can be removed as soon as the check is on by
-  # default.
-  api.bot_update.enable_destination_branch_check()
-
   with api.chromium.chromium_layout():
     return api.chromium_tests.trybot_steps()
 
