@@ -82,6 +82,10 @@ def CommonChecks(input_api, output_api):
         black_list=GetBlackList(input_api),
         disabled_warnings=disabled_warnings))
 
+  # TODO(crbug.com/732748) enable after the files have been synced up.
+  # output.extend(CheckExternalBuildersPylMastersAreInSync(input_api,
+  # output_api))
+
   return output
 
 
@@ -207,6 +211,19 @@ def BuildInternalCheck(output, input_api, output_api):
           'Updating it may resolve some issues.')]
   return []
 
+def CheckExternalBuildersPylMastersAreInSync(input_api, output_api):
+  script_path = input_api.os.path.join('scripts', 'tools', 'buildbot_tool.py')
+  proc = input_api.subprocess.Popen([
+      input_api.python_interpreter,
+      script_path,
+      'check',
+      '--external-only'
+      ], stdout=input_api.subprocess.PIPE, stderr=input_api.subprocess.STDOUT)
+  out, _ = proc.communicate()
+  if proc.retcode or out:
+    return [output_api.PresubmitError('`scripts/slave/buildbot_tool.py '
+                                      'check --external-only` returned '
+                                      '%d:\n%s\n' % (proc.retcode, out))]
 
 def CheckChangeOnUpload(input_api, output_api):
   return CommonChecks(input_api, output_api)

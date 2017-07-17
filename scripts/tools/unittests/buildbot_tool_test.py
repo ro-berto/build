@@ -45,118 +45,125 @@ FAKE_BUILDERS_PYL = """\
 }
 """
 
+GEN_MASTER_CFG = textwrap.dedent("""\
+    # master_classname
+    Test
 
-def _trap_output():
-  orig_output = (sys.stdout, sys.stderr)
-  sys.stdout = StringIO.StringIO()
-  sys.stderr = StringIO.StringIO()
-  return orig_output
-
-
-def _restore_output(orig_output):
-  out, err = sys.stdout.getvalue(), sys.stderr.getvalue()
-  sys.stdout, sys.stderr = orig_output
-  return out, err
+    # buildbot_url
+    https://build.chromium.org/p/test/
+    """)
 
 
-def _stub_constants(new_values):
-  orig = {}
-  for k, v in new_values.items():
-    orig[k] = getattr(buildbot_tool, k)
-    setattr(buildbot_tool, k, v)
-  return orig
-
-
-def _restore_constants(orig_values):
-  for k, v in orig_values.items():
-    setattr(buildbot_tool, k, v)
+class FakeTool(buildbot_tool.Tool):
+  def __init__(self, files):
+    super(FakeTool, self).__init__(fake_filesystem.FakeFilesystem(files),
+                                   StringIO.StringIO(), StringIO.StringIO())
+    self.build_dir = '/build'
+    self.build_internal_dir = '/build_internal'
 
 
 class GenTest(unittest.TestCase):
-  def _run_gen(self, builders_pyl, master_cfg=FAKE_MASTER_CFG_TEMPLATE):
+  def test_one_master(self):
     files = {
-      '/build/templates/master.cfg': master_cfg,
-      '/build/masters/master.test/builders.pyl': builders_pyl,
+      '/build/scripts/tools/buildbot_tool_templates/master.cfg':
+          FAKE_MASTER_CFG_TEMPLATE,
+      '/build/masters/master.test/builders.pyl': FAKE_BUILDERS_PYL,
     }
-    fs = fake_filesystem.FakeFilesystem(files=files.copy())
+    tool = FakeTool(files)
 
-    orig_output = _trap_output()
-    orig_constants = _stub_constants({
-      'BASE_DIR': '/build',
-      'TEMPLATE_SUBPATH': 'templates',
-      'TEMPLATE_DIR': '/build/templates',
-    })
+    # Check that no files have been written.
+    ret = tool.main(['check', '/build/masters/master.test'])
+    self.assertEqual(ret, 1)
 
-    try:
-      ret = buildbot_tool.main(['gen', '/build/masters/master.test'], fs)
-    finally:
-      out, err = _restore_output(orig_output)
-      _restore_constants(orig_constants)
-
-    return ret, out, err, files, fs
-
-
-  def test_normal(self):
-    ret, out, err, files, fs = self._run_gen(FAKE_BUILDERS_PYL)
+    # Check that we generate the files correctly.
+    ret = tool.main(['gen', '/build/masters/master.test'])
     self.assertEqual(ret, 0)
-    self.assertEqual(err, '')
-    self.assertNotEqual(out, '')
-    self.assertEqual(set(fs.files.keys()),
-                     set(files.keys() +
-                         ['/build/masters/master.test/master.cfg']))
+    self.assertNotEqual(tool.stdout.getvalue(), '')
+    self.assertEqual(tool.stderr.getvalue(), '')
+    self.assertEqual(
+        set(tool.fs.files.keys()),
+        set(files.keys() + ['/build/masters/master.test/master.cfg']))
+    self.assertMultiLineEqual(
+        tool.fs.read_text_file('/build/masters/master.test/master.cfg'),
+        GEN_MASTER_CFG)
 
+    # Check that now everything is up to date.
+    ret = tool.main(['check', '/build/masters/master.test'])
+    self.assertEqual(ret, 0)
+
+  def test_gen_all_masters(self):
+    files = {
+      '/build/scripts/tools/buildbot_tool_templates/master.cfg':
+          FAKE_MASTER_CFG_TEMPLATE,
+      '/build/masters/master.test/builders.pyl': FAKE_BUILDERS_PYL,
+      '/build_internal/masters/master.internal/builders.pyl': FAKE_BUILDERS_PYL,
+    }
+    tool = FakeTool(files)
+    fs = tool.fs
+    ret = tool.main(['gen'])
+    self.assertEqual(ret, 0)
+    self.assertNotEqual(tool.stdout.getvalue(), '')
+    self.assertEqual(tool.stderr.getvalue(), '')
+    self.assertEqual(
+        set(fs.files.keys()),
+        set(files.keys() + [
+            '/build/masters/master.test/master.cfg',
+            '/build_internal/masters/master.internal/master.cfg']))
     self.assertMultiLineEqual(
         fs.read_text_file('/build/masters/master.test/master.cfg'),
-        textwrap.dedent("""\
-            # master_classname
-            Test
+        GEN_MASTER_CFG)
+    self.assertMultiLineEqual(
+        fs.read_text_file('/build_internal/masters/master.internal/master.cfg'),
+        GEN_MASTER_CFG.replace('p/test', 'p/internal').replace(
+            'Test', 'Internal'))
 
-            # buildbot_url
-            https://build.chromium.org/p/test/
-            """))
+    ret = tool.main(['check'])
+    self.assertEqual(ret, 0)
 
   def test_not_found(self):
-    ret, out, err, _, _ = self._run_gen(None)
+    files = {
+      '/build/masters/master.test/builders.pyl': None,
+    }
+    tool = FakeTool(files)
+    ret = tool.main(['gen', '/build/masters/master.test'])
     self.assertEqual(ret, 1)
-    self.assertEqual(out, '')
-    self.assertEqual(err,
+    self.assertEqual(tool.stdout.getvalue(), '')
+    self.assertEqual(tool.stderr.getvalue(),
                      '/build/masters/master.test/builders.pyl not found\n')
+
+  def test_no_masters(self):
+    files = {}
+    tool = FakeTool(files)
+    ret = tool.main(['gen'])
+    self.assertEqual(ret, 1)
+    self.assertEqual(tool.stdout.getvalue(), '')
+    self.assertEqual(tool.stderr.getvalue(), 'No builders.pyl files found.\n')
 
   def test_bad_template(self):
     files = {
-      '/build/templates/master.cfg': '%(unknown_key)s',
+      '/build/scripts/tools/buildbot_tool_templates/master.cfg':
+        '%(unknown_key)s',
       '/build/masters/master.test/builders.pyl': FAKE_BUILDERS_PYL,
     }
-    fs = fake_filesystem.FakeFilesystem(files=files.copy())
-
-    orig_output = _trap_output()
-    orig_constants = _stub_constants({
-      'BASE_DIR': '/build',
-      'TEMPLATE_SUBPATH': 'templates',
-      'TEMPLATE_DIR': '/build/templates',
-    })
-
-    try:
-      self.assertRaises(KeyError,
-                        buildbot_tool.main,
-                        ['gen', '/build/masters/master.test'],
-                        fs)
-    finally:
-      _restore_output(orig_output)
-      _restore_constants(orig_constants)
+    tool = FakeTool(files)
+    self.assertRaises(KeyError, tool.main,
+                      ['gen', '/build/masters/master.test'])
 
 
 class HelpTest(unittest.TestCase):
   def test_help(self):
-    orig_output = _trap_output()
-    fs = fake_filesystem.FakeFilesystem()
+    # We do not care what the output is, just that the commands run.
+    # We have to capture the output because argparse failures are written
+    # directly to sys.stdout.
+    tool = FakeTool({})
+    orig_stdout = sys.stdout
+    sys.stdout = StringIO.StringIO()
     try:
-      # We do not care what the output is, just that the commands run.
-      self.assertRaises(SystemExit, buildbot_tool.main, ['--help'], fs)
-      self.assertRaises(SystemExit, buildbot_tool.main, ['help'], fs)
-      self.assertRaises(SystemExit, buildbot_tool.main, ['help', 'gen'], fs)
+      self.assertRaises(SystemExit, tool.main, ['--help'])
+      self.assertRaises(SystemExit, tool.main, ['help'])
+      self.assertRaises(SystemExit, tool.main, ['help', 'gen'])
     finally:
-      _restore_output(orig_output)
+      sys.stdout = orig_stdout
 
 
 if __name__ == '__main__':

@@ -15,7 +15,12 @@ class FakeFilesystem(object):
     self.sep = '/'
     self.cwd = cwd
     self.files = files or {}
-    self.dirs = set(self.dirname(f) for f in self.files)
+    self.dirs = set()
+    for f in self.files:
+      d = self.dirname(f)
+      while d:
+        self.dirs.add(d)
+        d = self.dirname(d)
 
   def abspath(self, relpath):
     if relpath.startswith(self.sep):
@@ -32,6 +37,10 @@ class FakeFilesystem(object):
     path = self.abspath(*comps)
     return ((path in self.files and self.files[path] is not None) or
              path in self.dirs)
+
+  def isdir(self, *comps):
+    path = self.abspath(*comps)
+    return path in self.dirs
 
   def join(self, *comps):
     p = ''
@@ -55,6 +64,10 @@ class FakeFilesystem(object):
       comps = comps[:idx-1] + comps[idx+1:]
       p = self.sep.join(comps)
     return p
+
+  def listdirs(self, path):
+    path = self.abspath(path)
+    return list(set([d for d in self.dirs if self.dirname(d) == path]))
 
   def listfiles(self, path):
     return [filepath.replace(path + self.sep, '') for filepath in self.files
