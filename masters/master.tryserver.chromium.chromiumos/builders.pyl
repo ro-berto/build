@@ -1,21 +1,20 @@
 {
   "master_base_class": "Master4b",
   "master_classname": "TryserverChromiumChromiumOS",
-  "master_port": 21706,
-  "master_port_alt": 41706,
-  "bot_port": 31706,
+  "master_port": 22406,
+  "master_port_alt": 27406,
+  "bot_port": 32406,
 
   "buildbucket_bucket": "master.tryserver.chromium.chromiumos",
-  "default_remote_run_properties": {
-    "path_config": "kitchen",
-  },
-  "default_remote_run_repository": "https://chromium.googlesource.com/chromium/tools/build.git",
+  "pubsub_service_account_file": "service-account-luci-milo.json",
+  "pubsub_topic": "projects/luci-milo/topics/public-buildbot",
   "service_account_file": "service-account-chromium-tryserver.json",
   "templates": ["../master.chromium/templates"],
 
   "builder_defaults": {
     "recipe": "chromium_trybot",
     "use_remote_run": True,
+    "remote_run_repository": "https://chromium.googlesource.com/chromium/tools/build.git",
     "scheduler": None,
   },
 

@@ -14,13 +14,13 @@ from config_bootstrap import Master
 
 class TryserverChromiumChromiumOS(Master.Master4b):
   project_name = 'TryserverChromiumChromiumOS'
-  master_port = 21706
-  slave_port = 31706
-  master_port_alt = 41706
+  master_port = 22406
+  slave_port = 32406
+  master_port_alt = 27406
   buildbot_url = 'https://build.chromium.org/p/tryserver.chromium.chromiumos/'
   buildbucket_bucket = 'master.tryserver.chromium.chromiumos'
   service_account_file = 'service-account-chromium-tryserver.json'
   # To enable outbound pubsub event streaming.
-  pubsub_service_account_file = None
-  pubsub_topic = None
+  pubsub_service_account_file = 'service-account-luci-milo.json'
+  pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
   name = 'tryserver.chromium.chromiumos'
