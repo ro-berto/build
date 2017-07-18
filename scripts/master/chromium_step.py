@@ -1062,7 +1062,10 @@ class AnnotationObserver(buildstep.LogLineObserver):
     # Handle initial setup here, as step_status might not exist yet at init.
     self.initialSection()
 
-    annotator.MatchAnnotation(line.rstrip(), self)
+    try:
+      annotator.MatchAnnotation(line.rstrip(), self)
+    except annotator.BadAnnotation as ex:
+      logging.warning('failed to match annotation: %s', ex)
 
   def addLogLines(self, log_label, log_lines):
     self.cursor['annotated_logs'].setdefault(log_label, []).extend(log_lines)

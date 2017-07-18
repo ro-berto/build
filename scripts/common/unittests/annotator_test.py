@@ -214,9 +214,9 @@ class TestMatchAnnotation(unittest.TestCase):
     ])
 
   def testZeroAnnotatedCruft(self):
-    with self.assertRaisesRegexp(Exception, 'cruft "@"'):
+    with self.assertRaisesRegexp(Exception, "cruft '@'"):
       annotator.MatchAnnotation('@@@STEP_WARNINGS@@@@', self.c)
-    with self.assertRaisesRegexp(Exception, 'cruft " "'):
+    with self.assertRaisesRegexp(Exception, "cruft ' '"):
       annotator.MatchAnnotation('@@@STEP_WARNINGS @@@', self.c)
 
   def testZeroCruft(self):

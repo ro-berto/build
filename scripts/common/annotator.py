@@ -271,6 +271,10 @@ class StructuredAnnotationStream(AnnotationPrinter):
                                     flush_before=self.flush_before)
 
 
+class BadAnnotation(Exception):
+  pass
+
+
 def MatchAnnotation(line, callback_implementor):
   """Call back into |callback_implementor| if line contains an annotation.
 
@@ -296,30 +300,33 @@ def MatchAnnotation(line, callback_implementor):
 
   field_count = ALL_ANNOTATIONS.get(cmd)
   if field_count is None:
-    raise Exception('Unrecognized annotator command "%s"' % cmd_text)
+    raise BadAnnotation('Unrecognized annotator command %r' % cmd_text)
 
   if field_count:
     if idx == len(line):
-      raise Exception('Annotator command "%s" expects %d args, got 0.'
-                      % (cmd_text, field_count))
+      raise BadAnnotation(
+        'Annotator command %r expects %d args, got 0.'
+        % (cmd_text, field_count))
 
     line = line[idx+1:]
 
     args = line.split('@', field_count-1)
     if len(args) != field_count:
-      raise Exception('Annotator command "%s" expects %d args, got %d.'
-                      % (cmd_text, field_count, len(args)))
+      raise BadAnnotation(
+        'Annotator command %r expects %d args, got %d.'
+        % (cmd_text, field_count, len(args)))
   else:
     line = line[len(cmd_text):]
     if line:
-      raise Exception('Annotator command "%s" expects no args, got cruft "%s".'
-                      % (cmd_text, line))
+      raise BadAnnotation(
+        'Annotator command %r expects no args, got cruft %r.'
+        % (cmd_text, line))
     args = []
 
   fn = getattr(callback_implementor, cmd, None)
   if fn is None:
-    raise Exception('"%s" does not implement "%s"'
-                    % (callback_implementor, cmd))
+    raise BadAnnotation('%r does not implement %r'
+                        % (callback_implementor, cmd))
 
   fn(*args)
 
