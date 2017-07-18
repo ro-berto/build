@@ -334,8 +334,6 @@
 
 Run an ADB command.
 
-&mdash; **def [\_\_init\_\_](/scripts/slave/recipe_modules/adb/api.py#8)(self, \*\*kwargs):**
-
 &mdash; **def [adb\_path](/scripts/slave/recipe_modules/adb/api.py#23)(self):**
 
 &emsp; **@property**<br>&mdash; **def [devices](/scripts/slave/recipe_modules/adb/api.py#44)(self):**
@@ -438,8 +436,6 @@ platform for any test that can be run via buildbot, perf or otherwise.
 #### **class [AutoBisectStagingApi](/scripts/slave/recipe_modules/auto_bisect/api.py#22)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
 A module for bisect specific functions.
-
-&mdash; **def [\_\_init\_\_](/scripts/slave/recipe_modules/auto_bisect/api.py#38)(self, \*args, \*\*kwargs):**
 
 &mdash; **def [create\_bisector](/scripts/slave/recipe_modules/auto_bisect/api.py#76)(self, bisect_config_dict, dummy_mode=False, \*\*flags):**
 
@@ -561,8 +557,6 @@ platform for any test that can be run via buildbot, perf or otherwise.
 
 A module for bisect specific functions.
 
-&mdash; **def [\_\_init\_\_](/scripts/slave/recipe_modules/auto_bisect_staging/api.py#38)(self, \*args, \*\*kwargs):**
-
 &mdash; **def [create\_bisector](/scripts/slave/recipe_modules/auto_bisect_staging/api.py#76)(self, bisect_config_dict, dummy_mode=False, \*\*flags):**
 
 Passes the api and the config dictionary to the Bisector constructor.
@@ -678,8 +672,6 @@ Returns:
 
 A module for the bisect tester bot using the chromium recipe.
 
-&mdash; **def [\_\_init\_\_](/scripts/slave/recipe_modules/bisect_tester/api.py#18)(self, \*\*kwargs):**
-
 &emsp; **@device_to_test.setter**<br>&mdash; **def [device\_to\_test](/scripts/slave/recipe_modules/bisect_tester/api.py#26)(self, value):**
 
 &mdash; **def [load\_config\_from\_dict](/scripts/slave/recipe_modules/bisect_tester/api.py#30)(self, bisect_config):**
@@ -696,8 +688,6 @@ Exposes perf tests implementation.
 #### **class [BisectTesterApi](/scripts/slave/recipe_modules/bisect_tester_staging/api.py#15)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
 A module for the bisect tester bot using the chromium recipe.
-
-&mdash; **def [\_\_init\_\_](/scripts/slave/recipe_modules/bisect_tester_staging/api.py#18)(self, \*\*kwargs):**
 
 &emsp; **@device_to_test.setter**<br>&mdash; **def [device\_to\_test](/scripts/slave/recipe_modules/bisect_tester_staging/api.py#26)(self, value):**
 
@@ -752,8 +742,6 @@ this module allows slaves to directly post requests to buildbucket.
 
 A module for interacting with buildbucket.
 
-&mdash; **def [\_\_init\_\_](/scripts/slave/recipe_modules/buildbucket/api.py#21)(self, buildername, buildnumber, \*args, \*\*kwargs):**
-
 &mdash; **def [cancel\_build](/scripts/slave/recipe_modules/buildbucket/api.py#112)(self, build_id, service_account=None, \*\*kwargs):**
 
 &mdash; **def [get\_build](/scripts/slave/recipe_modules/buildbucket/api.py#115)(self, build_id, service_account=None, \*\*kwargs):**
@@ -789,8 +777,6 @@ Returns:
 [DEPS](/scripts/slave/recipe_modules/chromedriver/__init__.py#5): [chromium](#recipe_modules-chromium), [chromium\_gsutil](#recipe_modules-chromium_gsutil), [zip](#recipe_modules-zip), [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tempfile][recipe_engine/recipe_modules/tempfile]
 
 #### **class [ChromedriverApi](/scripts/slave/recipe_modules/chromedriver/api.py#18)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
-
-&mdash; **def [\_\_init\_\_](/scripts/slave/recipe_modules/chromedriver/api.py#20)(self, \*args, \*\*kwargs):**
 
 &mdash; **def [archive\_server\_log](/scripts/slave/recipe_modules/chromedriver/api.py#49)(self, server_log):**
 
@@ -957,8 +943,6 @@ Used by the internal goma recipe.
 
 #### **class [ChromiumApi](/scripts/slave/recipe_modules/chromium/api.py#28)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [\_\_init\_\_](/scripts/slave/recipe_modules/chromium/api.py#32)(self, \*args, \*\*kwargs):**
-
 &emsp; **@_with_chromium_layout**<br>&mdash; **def [apply\_syzyasan](/scripts/slave/recipe_modules/chromium/api.py#929)(self):**
 
 &emsp; **@_with_chromium_layout**<br>&mdash; **def [archive\_build](/scripts/slave/recipe_modules/chromium/api.py#941)(self, step_name, gs_bucket, gs_acl=None, mode=None, \*\*kwargs):**
@@ -1072,8 +1056,6 @@ Returns a version dictionary (after get_version()), e.g.
 [DEPS](/scripts/slave/recipe_modules/chromium_android/__init__.py#5): [adb](#recipe_modules-adb), [archive](#recipe_modules-archive), [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [commit\_position](#recipe_modules-commit_position), [test\_utils](#recipe_modules-test_utils), [zip](#recipe_modules-zip), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tempfile][recipe_engine/recipe_modules/tempfile], [recipe\_engine/time][recipe_engine/recipe_modules/time], [recipe\_engine/url][recipe_engine/recipe_modules/url]
 
 #### **class [AndroidApi](/scripts/slave/recipe_modules/chromium_android/api.py#22)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
-
-&mdash; **def [\_\_init\_\_](/scripts/slave/recipe_modules/chromium_android/api.py#23)(self, \*\*kwargs):**
 
 &mdash; **def [adb\_install\_apk](/scripts/slave/recipe_modules/chromium_android/api.py#649)(self, apk, allow_downgrade=False, keep_data=False, devices=None):**
 
@@ -1296,8 +1278,6 @@ Uploads android apks for functional bisects.
 
 #### **class [ChromiumCheckoutApi](/scripts/slave/recipe_modules/chromium_checkout/api.py#8)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [\_\_init\_\_](/scripts/slave/recipe_modules/chromium_checkout/api.py#9)(self, \*args, \*\*kwargs):**
-
 &mdash; **def [ensure\_checkout](/scripts/slave/recipe_modules/chromium_checkout/api.py#62)(self, bot_config, root_solution_revision=None, disable_syntax_validation=False):**
 
 Wrapper for bot_update.ensure_checkout with chromium-specific additions.
@@ -1359,8 +1339,6 @@ Args:
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/__init__.py#1): [adb](#recipe_modules-adb), [archive](#recipe_modules-archive), [bisect\_tester](#recipe_modules-bisect_tester), [bisect\_tester\_staging](#recipe_modules-bisect_tester_staging), [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_swarming](#recipe_modules-chromium_swarming), [commit\_position](#recipe_modules-commit_position), [filter](#recipe_modules-filter), [goma](#recipe_modules-goma), [isolate](#recipe_modules-isolate), [perf\_dashboard](#recipe_modules-perf_dashboard), [swarming](#recipe_modules-swarming), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [trigger](#recipe_modules-trigger), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tempfile][recipe_engine/recipe_modules/tempfile]
 
 #### **class [ChromiumTestsApi](/scripts/slave/recipe_modules/chromium_tests/api.py#69)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
-
-&mdash; **def [\_\_init\_\_](/scripts/slave/recipe_modules/chromium_tests/api.py#70)(self, \*args, \*\*kwargs):**
 
 &mdash; **def [add\_builders](/scripts/slave/recipe_modules/chromium_tests/api.py#88)(self, builders):**
 
@@ -1562,8 +1540,6 @@ Common steps for recipes that sync/build Cronet sources.
 
 #### **class [CronetApi](/scripts/slave/recipe_modules/cronet/api.py#10)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [\_\_init\_\_](/scripts/slave/recipe_modules/cronet/api.py#11)(self, \*\*kwargs):**
-
 &mdash; **def [build](/scripts/slave/recipe_modules/cronet/api.py#57)(self, use_revision=True, use_goma=True):**
 
 &mdash; **def [get\_version](/scripts/slave/recipe_modules/cronet/api.py#75)(self):**
@@ -1582,8 +1558,6 @@ Common steps for recipes that sync/build Cronet sources.
 #### **class [CrrevApi](/scripts/slave/recipe_modules/crrev/api.py#10)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
 Recipe module for making requests to crrev.com.
-
-&mdash; **def [\_\_call\_\_](/scripts/slave/recipe_modules/crrev/api.py#13)(self, step_name, request_path, request_params=None, attempts=3, \*\*kwargs):**
 
 &mdash; **def [to\_commit\_hash](/scripts/slave/recipe_modules/crrev/api.py#28)(self, commit_position, project='chromium', repo='chromium/src', attempts=3, step_name=None, \*\*kwargs):**
 
@@ -1638,8 +1612,6 @@ Returns:
 [DEPS](/scripts/slave/recipe_modules/filter/__init__.py#5): [chromium](#recipe_modules-chromium), [goma](#recipe_modules-goma), [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/rietveld][depot_tools/recipe_modules/rietveld], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 #### **class [FilterApi](/scripts/slave/recipe_modules/filter/api.py#13)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
-
-&mdash; **def [\_\_init\_\_](/scripts/slave/recipe_modules/filter/api.py#14)(self, \*\*kwargs):**
 
 &mdash; **def [analyze](/scripts/slave/recipe_modules/filter/api.py#259)(self, affected_files, test_targets, additional_compile_targets, config_file_name, mb_mastername=None, mb_buildername=None, additional_names=None):**
 
@@ -1844,8 +1816,6 @@ Args:
 #### **class [Gatekeeper](/scripts/slave/recipe_modules/gatekeeper/api.py#8)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
 Module for Gatekeeper NG.
-
-&mdash; **def [\_\_call\_\_](/scripts/slave/recipe_modules/gatekeeper/api.py#10)(self, gatekeeper_default_json, gatekeeper_trees_json):**
 ### *recipe_modules* / [git\_clone\_bundler](/scripts/slave/recipe_modules/git_clone_bundler)
 
 [DEPS](/scripts/slave/recipe_modules/git_clone_bundler/__init__.py#1): [repo](#recipe_modules-repo), [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -1853,8 +1823,6 @@ Module for Gatekeeper NG.
 #### **class [GitCloneBundlerApi](/scripts/slave/recipe_modules/git_clone_bundler/api.py#14)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
 Provides methods to encapsulate repo operations.
-
-&mdash; **def [\_\_init\_\_](/scripts/slave/recipe_modules/git_clone_bundler/api.py#17)(self, \*\*kwargs):**
 
 &emsp; **@property**<br>&mdash; **def [base\_path](/scripts/slave/recipe_modules/git_clone_bundler/api.py#20)(self):**
 
@@ -1901,8 +1869,6 @@ Returns: (dict) If 'remote_name' is supplied, a dictionary mapping the
 #### **class [GomaApi](/scripts/slave/recipe_modules/goma/api.py#10)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
 GomaApi contains helper functions for using goma.
-
-&mdash; **def [\_\_init\_\_](/scripts/slave/recipe_modules/goma/api.py#13)(self, \*\*kwargs):**
 
 &emsp; **@property**<br>&mdash; **def [build\_data\_dir](/scripts/slave/recipe_modules/goma/api.py#140)(self):**
 
@@ -1991,8 +1957,6 @@ Return a failing step with the given message.
 [DEPS](/scripts/slave/recipe_modules/ios/__init__.py#5): [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [filter](#recipe_modules-filter), [goma](#recipe_modules-goma), [isolate](#recipe_modules-isolate), [perf\_dashboard](#recipe_modules-perf_dashboard), [swarming](#recipe_modules-swarming), [swarming\_client](#recipe_modules-swarming_client), [test\_results](#recipe_modules-test_results), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 #### **class [iOSApi](/scripts/slave/recipe_modules/ios/api.py#10)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
-
-&mdash; **def [\_\_init\_\_](/scripts/slave/recipe_modules/ios/api.py#22)(self, \*args, \*\*kwargs):**
 
 &mdash; **def [bootstrap\_swarming](/scripts/slave/recipe_modules/ios/api.py#468)(self):**
 
@@ -2106,8 +2070,6 @@ Args:
 #### **class [IsolateApi](/scripts/slave/recipe_modules/isolate/api.py#10)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
 APIs for interacting with isolates.
-
-&mdash; **def [\_\_init\_\_](/scripts/slave/recipe_modules/isolate/api.py#13)(self, \*\*kwargs):**
 
 &mdash; **def [archive\_differences](/scripts/slave/recipe_modules/isolate/api.py#294)(self, first_dir, second_dir, values):**
 
@@ -2231,8 +2193,6 @@ Returns the path to legion.py.
 
 #### **class [LibyuvApi](/scripts/slave/recipe_modules/libyuv/api.py#9)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [\_\_init\_\_](/scripts/slave/recipe_modules/libyuv/api.py#13)(self, \*\*kwargs):**
-
 &mdash; **def [apply\_bot\_config](/scripts/slave/recipe_modules/libyuv/api.py#16)(self, builders, recipe_configs, perf_config=None):**
 
 &mdash; **def [checkout](/scripts/slave/recipe_modules/libyuv/api.py#75)(self):**
@@ -2259,8 +2219,6 @@ Add a suite of test steps.
 [DEPS](/scripts/slave/recipe_modules/luci_config/__init__.py#1): [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/url][recipe_engine/recipe_modules/url]
 
 #### **class [LuciConfigApi](/scripts/slave/recipe_modules/luci_config/api.py#12)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
-
-&mdash; **def [\_\_init\_\_](/scripts/slave/recipe_modules/luci_config/api.py#13)(self, \*\*kwargs):**
 
 &mdash; **def [get\_config\_defaults](/scripts/slave/recipe_modules/luci_config/api.py#17)(self):**
 
@@ -2433,8 +2391,6 @@ platform for any test that can be run via buildbot, perf or otherwise.
 
 #### **class [PerfTryJobApi](/scripts/slave/recipe_modules/perf_try/api.py#40)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [\_\_init\_\_](/scripts/slave/recipe_modules/perf_try/api.py#42)(self, \*args, \*\*kwargs):**
-
 &mdash; **def [get\_result](/scripts/slave/recipe_modules/perf_try/api.py#328)(self, config, results_without_patch, results_with_patch, labels):**
 
 Returns the results as a dict.
@@ -2463,8 +2419,6 @@ platform for any test that can be run via buildbot, perf or otherwise.
 
 #### **class [PerfTryJobApi](/scripts/slave/recipe_modules/perf_try_staging/api.py#40)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [\_\_init\_\_](/scripts/slave/recipe_modules/perf_try_staging/api.py#42)(self, \*args, \*\*kwargs):**
-
 &mdash; **def [get\_result](/scripts/slave/recipe_modules/perf_try_staging/api.py#328)(self, config, results_without_patch, results_with_patch, labels):**
 
 Returns the results as a dict.
@@ -2489,8 +2443,6 @@ Entry point pert tryjob or CQ tryjob.
 #### **class [PGOApi](/scripts/slave/recipe_modules/pgo/api.py#8)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
 PGOApi encapsulate the various step involved in a PGO build.
-
-&mdash; **def [\_\_init\_\_](/scripts/slave/recipe_modules/pgo/api.py#13)(self, \*\*kwargs):**
 
 &mdash; **def [archive\_profile\_database](/scripts/slave/recipe_modules/pgo/api.py#135)(self, revision):**
 
@@ -2521,8 +2473,6 @@ Args:
   kwargs: Keyword arguments to pass to the 'step' call.
 Returns:
   See 'step.__call__'.
-
-&mdash; **def [\_\_init\_\_](/scripts/slave/recipe_modules/repo/api.py#20)(self, \*\*kwargs):**
 
 &mdash; **def [clean](/scripts/slave/recipe_modules/repo/api.py#58)(self, \*args, \*\*kwargs):**
 
@@ -2584,8 +2534,6 @@ General usage:
      by calling 'collect_task(...)'.
 
 See also example.py for concrete code.
-
-&mdash; **def [\_\_init\_\_](/scripts/slave/recipe_modules/swarming/api.py#140)(self, \*\*kwargs):**
 
 &mdash; **def [add\_default\_tag](/scripts/slave/recipe_modules/swarming/api.py#335)(self, tag):**
 
@@ -2812,8 +2760,6 @@ Both swarming and isolate scripts live in a single repository called
 existing swarming client checkout, fetching a new one, getting version of
 a swarming script, etc.
 
-&mdash; **def [\_\_init\_\_](/scripts/slave/recipe_modules/swarming_client/api.py#17)(self, \*\*kwargs):**
-
 &mdash; **def [checkout](/scripts/slave/recipe_modules/swarming_client/api.py#22)(self, revision=None, curl_trace_file=None, can_fail_build=True):**
 
 Returns a step to checkout swarming client into a separate directory.
@@ -2874,8 +2820,6 @@ Runs job_runs_fine.py to run an heartbeat check.
 [DEPS](/scripts/slave/recipe_modules/syzygy/__init__.py#1): [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 #### **class [SyzygyApi](/scripts/slave/recipe_modules/syzygy/api.py#12)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
-
-&mdash; **def [\_\_init\_\_](/scripts/slave/recipe_modules/syzygy/api.py#46)(self, \*args, \*\*kwargs):**
 
 &mdash; **def [archive\_binaries](/scripts/slave/recipe_modules/syzygy/api.py#246)(self):**
 
@@ -3207,8 +3151,6 @@ Examples:
             'when_timestamp': 1416859562,
         }]
     })
-
-&mdash; **def [\_\_init\_\_](/scripts/slave/recipe_modules/trigger/api.py#16)(self, \*\*kwargs):**
 ### *recipe_modules* / [v8](/scripts/slave/recipe_modules/v8)
 
 [DEPS](/scripts/slave/recipe_modules/v8/__init__.py#1): [archive](#recipe_modules-archive), [chromium](#recipe_modules-chromium), [commit\_position](#recipe_modules-commit_position), [isolate](#recipe_modules-isolate), [perf\_dashboard](#recipe_modules-perf_dashboard), [swarming](#recipe_modules-swarming), [swarming\_client](#recipe_modules-swarming_client), [test\_utils](#recipe_modules-test_utils), [trigger](#recipe_modules-trigger), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tempfile][recipe_engine/recipe_modules/tempfile], [recipe\_engine/time][recipe_engine/recipe_modules/time], [recipe\_engine/url][recipe_engine/recipe_modules/url]
@@ -3361,8 +3303,6 @@ Capture coverage data and upload a report.
 [DEPS](/scripts/slave/recipe_modules/webrtc/__init__.py#1): [adb](#recipe_modules-adb), [archive](#recipe_modules-archive), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [commit\_position](#recipe_modules-commit_position), [isolate](#recipe_modules-isolate), [swarming](#recipe_modules-swarming), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [trigger](#recipe_modules-trigger), [zip](#recipe_modules-zip), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 #### **class [WebRTCApi](/scripts/slave/recipe_modules/webrtc/api.py#10)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
-
-&mdash; **def [\_\_init\_\_](/scripts/slave/recipe_modules/webrtc/api.py#11)(self, \*\*kwargs):**
 
 &mdash; **def [add\_test](/scripts/slave/recipe_modules/webrtc/api.py#206)(self, test, name=None, args=None, revision=None, env=None, python_mode=False, perf_test=False, perf_dashboard_id=None, parallel=True):**
 
@@ -5302,30 +5242,30 @@ The changes are:
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/zip/examples/full.py#14)(api):**
 
-[depot_tools/recipe_modules/bot_update]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/cfbb775f9401c47dd78d521be52a3fcda34d449d/recipes/README.recipes.md#recipe_modules-bot_update
-[depot_tools/recipe_modules/cipd]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/cfbb775f9401c47dd78d521be52a3fcda34d449d/recipes/README.recipes.md#recipe_modules-cipd
-[depot_tools/recipe_modules/depot_tools]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/cfbb775f9401c47dd78d521be52a3fcda34d449d/recipes/README.recipes.md#recipe_modules-depot_tools
-[depot_tools/recipe_modules/gclient]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/cfbb775f9401c47dd78d521be52a3fcda34d449d/recipes/README.recipes.md#recipe_modules-gclient
-[depot_tools/recipe_modules/gerrit]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/cfbb775f9401c47dd78d521be52a3fcda34d449d/recipes/README.recipes.md#recipe_modules-gerrit
-[depot_tools/recipe_modules/git]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/cfbb775f9401c47dd78d521be52a3fcda34d449d/recipes/README.recipes.md#recipe_modules-git
-[depot_tools/recipe_modules/gitiles]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/cfbb775f9401c47dd78d521be52a3fcda34d449d/recipes/README.recipes.md#recipe_modules-gitiles
-[depot_tools/recipe_modules/gsutil]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/cfbb775f9401c47dd78d521be52a3fcda34d449d/recipes/README.recipes.md#recipe_modules-gsutil
-[depot_tools/recipe_modules/infra_paths]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/cfbb775f9401c47dd78d521be52a3fcda34d449d/recipes/README.recipes.md#recipe_modules-infra_paths
-[depot_tools/recipe_modules/presubmit]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/cfbb775f9401c47dd78d521be52a3fcda34d449d/recipes/README.recipes.md#recipe_modules-presubmit
-[depot_tools/recipe_modules/rietveld]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/cfbb775f9401c47dd78d521be52a3fcda34d449d/recipes/README.recipes.md#recipe_modules-rietveld
-[depot_tools/recipe_modules/tryserver]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/cfbb775f9401c47dd78d521be52a3fcda34d449d/recipes/README.recipes.md#recipe_modules-tryserver
-[recipe_engine/recipe_modules/context]: https://github.com/luci/recipes-py/blob/de3238ca6d8320585f5dbcf051cd96cbc72d4684/README.recipes.md#recipe_modules--context
-[recipe_engine/recipe_modules/file]: https://github.com/luci/recipes-py/blob/de3238ca6d8320585f5dbcf051cd96cbc72d4684/README.recipes.md#recipe_modules--file
-[recipe_engine/recipe_modules/generator_script]: https://github.com/luci/recipes-py/blob/de3238ca6d8320585f5dbcf051cd96cbc72d4684/README.recipes.md#recipe_modules--generator_script
-[recipe_engine/recipe_modules/json]: https://github.com/luci/recipes-py/blob/de3238ca6d8320585f5dbcf051cd96cbc72d4684/README.recipes.md#recipe_modules--json
-[recipe_engine/recipe_modules/path]: https://github.com/luci/recipes-py/blob/de3238ca6d8320585f5dbcf051cd96cbc72d4684/README.recipes.md#recipe_modules--path
-[recipe_engine/recipe_modules/platform]: https://github.com/luci/recipes-py/blob/de3238ca6d8320585f5dbcf051cd96cbc72d4684/README.recipes.md#recipe_modules--platform
-[recipe_engine/recipe_modules/properties]: https://github.com/luci/recipes-py/blob/de3238ca6d8320585f5dbcf051cd96cbc72d4684/README.recipes.md#recipe_modules--properties
-[recipe_engine/recipe_modules/python]: https://github.com/luci/recipes-py/blob/de3238ca6d8320585f5dbcf051cd96cbc72d4684/README.recipes.md#recipe_modules--python
-[recipe_engine/recipe_modules/raw_io]: https://github.com/luci/recipes-py/blob/de3238ca6d8320585f5dbcf051cd96cbc72d4684/README.recipes.md#recipe_modules--raw_io
-[recipe_engine/recipe_modules/step]: https://github.com/luci/recipes-py/blob/de3238ca6d8320585f5dbcf051cd96cbc72d4684/README.recipes.md#recipe_modules--step
-[recipe_engine/recipe_modules/tempfile]: https://github.com/luci/recipes-py/blob/de3238ca6d8320585f5dbcf051cd96cbc72d4684/README.recipes.md#recipe_modules--tempfile
-[recipe_engine/recipe_modules/time]: https://github.com/luci/recipes-py/blob/de3238ca6d8320585f5dbcf051cd96cbc72d4684/README.recipes.md#recipe_modules--time
-[recipe_engine/recipe_modules/url]: https://github.com/luci/recipes-py/blob/de3238ca6d8320585f5dbcf051cd96cbc72d4684/README.recipes.md#recipe_modules--url
-[recipe_engine/wkt/RecipeApi]: https://github.com/luci/recipes-py/blob/de3238ca6d8320585f5dbcf051cd96cbc72d4684/recipe_engine/recipe_api.py#L884
-[recipe_engine/wkt/returns_placeholder]: https://github.com/luci/recipes-py/blob/de3238ca6d8320585f5dbcf051cd96cbc72d4684/recipe_engine/util.py#L119
+[depot_tools/recipe_modules/bot_update]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/ff9a5dec769174a9f3b6366c7b99debba07e2270/recipes/README.recipes.md#recipe_modules-bot_update
+[depot_tools/recipe_modules/cipd]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/ff9a5dec769174a9f3b6366c7b99debba07e2270/recipes/README.recipes.md#recipe_modules-cipd
+[depot_tools/recipe_modules/depot_tools]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/ff9a5dec769174a9f3b6366c7b99debba07e2270/recipes/README.recipes.md#recipe_modules-depot_tools
+[depot_tools/recipe_modules/gclient]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/ff9a5dec769174a9f3b6366c7b99debba07e2270/recipes/README.recipes.md#recipe_modules-gclient
+[depot_tools/recipe_modules/gerrit]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/ff9a5dec769174a9f3b6366c7b99debba07e2270/recipes/README.recipes.md#recipe_modules-gerrit
+[depot_tools/recipe_modules/git]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/ff9a5dec769174a9f3b6366c7b99debba07e2270/recipes/README.recipes.md#recipe_modules-git
+[depot_tools/recipe_modules/gitiles]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/ff9a5dec769174a9f3b6366c7b99debba07e2270/recipes/README.recipes.md#recipe_modules-gitiles
+[depot_tools/recipe_modules/gsutil]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/ff9a5dec769174a9f3b6366c7b99debba07e2270/recipes/README.recipes.md#recipe_modules-gsutil
+[depot_tools/recipe_modules/infra_paths]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/ff9a5dec769174a9f3b6366c7b99debba07e2270/recipes/README.recipes.md#recipe_modules-infra_paths
+[depot_tools/recipe_modules/presubmit]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/ff9a5dec769174a9f3b6366c7b99debba07e2270/recipes/README.recipes.md#recipe_modules-presubmit
+[depot_tools/recipe_modules/rietveld]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/ff9a5dec769174a9f3b6366c7b99debba07e2270/recipes/README.recipes.md#recipe_modules-rietveld
+[depot_tools/recipe_modules/tryserver]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/ff9a5dec769174a9f3b6366c7b99debba07e2270/recipes/README.recipes.md#recipe_modules-tryserver
+[recipe_engine/recipe_modules/context]: https://github.com/luci/recipes-py/blob/00799cc803d08da72548d3a5dc441771576cd72a/README.recipes.md#recipe_modules--context
+[recipe_engine/recipe_modules/file]: https://github.com/luci/recipes-py/blob/00799cc803d08da72548d3a5dc441771576cd72a/README.recipes.md#recipe_modules--file
+[recipe_engine/recipe_modules/generator_script]: https://github.com/luci/recipes-py/blob/00799cc803d08da72548d3a5dc441771576cd72a/README.recipes.md#recipe_modules--generator_script
+[recipe_engine/recipe_modules/json]: https://github.com/luci/recipes-py/blob/00799cc803d08da72548d3a5dc441771576cd72a/README.recipes.md#recipe_modules--json
+[recipe_engine/recipe_modules/path]: https://github.com/luci/recipes-py/blob/00799cc803d08da72548d3a5dc441771576cd72a/README.recipes.md#recipe_modules--path
+[recipe_engine/recipe_modules/platform]: https://github.com/luci/recipes-py/blob/00799cc803d08da72548d3a5dc441771576cd72a/README.recipes.md#recipe_modules--platform
+[recipe_engine/recipe_modules/properties]: https://github.com/luci/recipes-py/blob/00799cc803d08da72548d3a5dc441771576cd72a/README.recipes.md#recipe_modules--properties
+[recipe_engine/recipe_modules/python]: https://github.com/luci/recipes-py/blob/00799cc803d08da72548d3a5dc441771576cd72a/README.recipes.md#recipe_modules--python
+[recipe_engine/recipe_modules/raw_io]: https://github.com/luci/recipes-py/blob/00799cc803d08da72548d3a5dc441771576cd72a/README.recipes.md#recipe_modules--raw_io
+[recipe_engine/recipe_modules/step]: https://github.com/luci/recipes-py/blob/00799cc803d08da72548d3a5dc441771576cd72a/README.recipes.md#recipe_modules--step
+[recipe_engine/recipe_modules/tempfile]: https://github.com/luci/recipes-py/blob/00799cc803d08da72548d3a5dc441771576cd72a/README.recipes.md#recipe_modules--tempfile
+[recipe_engine/recipe_modules/time]: https://github.com/luci/recipes-py/blob/00799cc803d08da72548d3a5dc441771576cd72a/README.recipes.md#recipe_modules--time
+[recipe_engine/recipe_modules/url]: https://github.com/luci/recipes-py/blob/00799cc803d08da72548d3a5dc441771576cd72a/README.recipes.md#recipe_modules--url
+[recipe_engine/wkt/RecipeApi]: https://github.com/luci/recipes-py/blob/00799cc803d08da72548d3a5dc441771576cd72a/recipe_engine/recipe_api.py#L884
+[recipe_engine/wkt/returns_placeholder]: https://github.com/luci/recipes-py/blob/00799cc803d08da72548d3a5dc441771576cd72a/recipe_engine/util.py#L119
