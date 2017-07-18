@@ -1,12 +1,14 @@
 {
   "master_base_class": "Master4a",
   "master_port": 21401,
-  "master_port_alt": 41401,
+  "master_port_alt": 26401,
   "slave_port": 31401,
   "templates": ["templates", "../master.chromium/templates"],
 
-  "service_account_file": "service-account-chromium-tryserver.json",
   "buildbucket_bucket": "master.tryserver.chromium.android",
+  "pubsub_service_account_file": "service-account-luci-milo.json",
+  "pubsub_topic": "projects/luci-milo/topics/public-buildbot",
+  "service_account_file": "service-account-chromium-tryserver.json",
 
   "builder_defaults": {
     "remote_run_repository": "https://chromium.googlesource.com/chromium/tools/build.git",

@@ -6,8 +6,10 @@
   "slave_port": 31400,
   "templates": ["../master.chromium/templates"],
 
-  "service_account_file": "service-account-chromium-tryserver.json",
   "buildbucket_bucket": "master.tryserver.client.catapult",
+  "pubsub_service_account_file": "service-account-luci-milo.json",
+  "pubsub_topic": "projects/luci-milo/topics/public-buildbot",
+  "service_account_file": "service-account-chromium-tryserver.json",
 
   "builders": {
     "Catapult Presubmit": {

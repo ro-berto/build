@@ -10,6 +10,8 @@
   "slave_port": 30400,
   "buildbucket_bucket": "master.tryserver.client.custom_tabs_client",
   "service_account_file": "service-account-chromium-tryserver.json",
+  "pubsub_service_account_file": "service-account-luci-milo.json",
+  "pubsub_topic": "projects/luci-milo/topics/public-buildbot",
   "templates": ["templates", "../master.chromium/templates"],
 
   "builders": {

@@ -2,9 +2,12 @@
   "master_base_class": "Master3",
   "master_classname": "Pdfium",
   "master_port": 20310,
-  "master_port_alt": 40310,
+  "master_port_alt": 25310,
   "slave_port": 30310,
   "templates": ["templates", "../master.chromium/templates"],
+
+  "pubsub_service_account_file": "service-account-luci-milo.json",
+  "pubsub_topic": "projects/luci-milo/topics/public-buildbot",
 
   "builders": {
     "android": {

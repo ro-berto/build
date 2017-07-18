@@ -2,11 +2,13 @@
   "master_base_class": "Master3",
   "master_classname": "GYP",
   "master_port": 20302,
-  "master_port_alt": 40302,
+  "master_port_alt": 25302,
   "slave_port": 30302,
   "templates": ["templates", "../master.chromium/templates"],
 
   "buildbucket_bucket": "master.client.gyp",
+  "pubsub_service_account_file": "service-account-luci-milo.json",
+  "pubsub_topic": "projects/luci-milo/topics/public-buildbot",
   "service_account_file": "service-account-gyp.json",
 
   "builders": {

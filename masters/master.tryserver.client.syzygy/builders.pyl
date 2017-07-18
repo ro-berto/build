@@ -2,11 +2,14 @@
   "master_base_class": "Master4a",
   "master_classname": "SyzygyTryserver",
   "master_port": 21404,
-  "master_port_alt": 41404,
+  "master_port_alt": 26404,
   "slave_port": 31404,
   "templates": ["templates", "../master.chromium/templates"],
-  "service_account_file": "service-account-chromium-tryserver.json",
+
   "buildbucket_bucket": "master.tryserver.client.syzygy",
+  "pubsub_service_account_file": "service-account-luci-milo.json",
+  "pubsub_topic": "projects/luci-milo/topics/public-buildbot",
+  "service_account_file": "service-account-chromium-tryserver.json",
 
   "builders": {
     "win_cov_try": {

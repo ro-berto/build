@@ -20,6 +20,7 @@ class TryserverChromiumAndroid(Master.Master4a):
   buildbot_url = 'https://build.chromium.org/p/tryserver.chromium.android/'
   buildbucket_bucket = 'master.tryserver.chromium.android'
   service_account_file = 'service-account-chromium-tryserver.json'
+  # To enable outbound pubsub event streaming.
   pubsub_service_account_file = 'service-account-luci-milo.json'
   pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
   name = 'tryserver.chromium.android'

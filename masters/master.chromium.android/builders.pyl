@@ -3,8 +3,11 @@
   "master_port": 20101,
   "master_port_alt": 25101,
   "slave_port": 30101,
-  "pubsub_service_account_file": "service-account-luci-milo.json",
   "templates": ["templates", "../master.chromium/templates"],
+
+  "pubsub_service_account_file": "service-account-luci-milo.json",
+  "pubsub_topic": "projects/luci-milo/topics/public-buildbot",
+  "service_account_file": "service-account-chromium.json",
 
   "builder_defaults": {
     "remote_run_repository": "https://chromium.googlesource.com/chromium/tools/build.git",

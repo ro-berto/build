@@ -18,6 +18,7 @@ class ChromiumAndroid(Master.Master1):
   slave_port = 30101
   master_port_alt = 25101
   buildbot_url = 'https://build.chromium.org/p/chromium.android/'
+  buildbucket_bucket = None
   service_account_file = 'service-account-chromium.json'
   # To enable outbound pubsub event streaming.
   pubsub_service_account_file = 'service-account-luci-milo.json'

@@ -16,10 +16,11 @@ class CustomTabsClientTryserver(Master.Master4a):
   project_name = 'CustomTabsClientTryserver'
   master_port = 20400
   slave_port = 30400
-  master_port_alt = 25400
+  master_port_alt = 40400
   buildbot_url = 'https://build.chromium.org/p/tryserver.client.custom_tabs_client/'
   buildbucket_bucket = 'master.tryserver.client.custom_tabs_client'
   service_account_file = 'service-account-chromium-tryserver.json'
+  # To enable outbound pubsub event streaming.
   pubsub_service_account_file = 'service-account-luci-milo.json'
   pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
   name = 'tryserver.client.custom_tabs_client'
