@@ -1450,7 +1450,7 @@
       "--slave-name=test_bot",
       "--build-number=571",
       "--run-python-script",
-      "[START_DIR]/src/tools_webrtc/gtest-parallel-wrapper.py",
+      "[START_DIR]/src/third_party/gtest-parallel/gtest-parallel",
       "[START_DIR]/src/out/Debug/bwe_simulations_tests",
       "--gtest_filter=VideoSendersTest/BweSimulation.Choke1000kbps500kbps1000kbps/1"
     ],
@@ -2256,7 +2256,7 @@
       "--slave-name=test_bot",
       "--build-number=571",
       "--run-python-script",
-      "[START_DIR]/src/tools_webrtc/gtest-parallel-wrapper.py",
+      "[START_DIR]/src/third_party/gtest-parallel/gtest-parallel",
       "[START_DIR]/src/out/Debug/peerconnection_unittests"
     ],
     "env": {
