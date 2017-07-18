@@ -930,6 +930,18 @@ BUILDERS = {
         ],
         'testing': {'platform': 'linux'},
       },
+      'V8 Linux64 UBSanVptr': {
+        'chromium_apply_config': [
+          'v8_ninja', 'default_compiler', 'goma', 'mb'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'enable_swarming': True,
+        'tests': [V8Testing],
+        'testing': {'platform': 'linux'},
+      },
       'V8 Mac64 ASAN': {
         'chromium_apply_config': [
           'v8_ninja', 'clang', 'asan', 'goma', 'mb'],
@@ -2234,6 +2246,42 @@ BUILDERS = {
           Mozilla,
           Benchmarks,
         ],
+        'testing': {'platform': 'linux'},
+      },
+      'v8_linux64_ubsan_rel_ng': {
+        'chromium_apply_config': [
+          'v8_ninja',
+          'clang',
+          'goma',
+          'mb',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'enable_swarming': True,
+        'slim_swarming_builder': True,
+        'triggers': [
+          'v8_linux64_ubsan_rel_ng_triggered',
+        ],
+        'testing': {'platform': 'linux'},
+      },
+      'v8_linux64_ubsan_rel_ng_triggered': {
+        'chromium_apply_config': [
+          'v8_ninja',
+          'clang',
+          'goma',
+          'no_dcheck',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'v8_linux64_ubsan_rel_ng',
+        'enable_swarming': True,
+        'tests': [V8Testing(2)],
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_sanitizer_coverage_rel': {
