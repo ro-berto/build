@@ -444,6 +444,7 @@
     "name": "webcam_check"
   },
   {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -458,17 +459,17 @@
       "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"buildername\": \"Win32 Release [large tests]\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"bot_id\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"buildername\": \"Win32 Release [large tests]\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"bot_id\"}",
+      "--annotate=gtest",
       "--test-type=voe_auto_test",
       "--step-name=voe_auto_test",
+      "--generate-json-file",
+      "-o",
+      "gtest-results/voe_auto_test.exe",
       "--builder-name=Win32 Release [large tests]",
       "--slave-name=bot_id",
       "--build-number=1337",
-      "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "[BUILDER_CACHE]\\Win32_Release__large_tests_\\src\\tools_webrtc\\gtest-parallel-wrapper.py",
-      "[BUILDER_CACHE]\\Win32_Release__large_tests_\\src\\out\\Release\\voe_auto_test.exe",
-      "--workers=1",
-      "--",
+      "voe_auto_test.exe",
       "--automated"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Release__large_tests_",
@@ -480,6 +481,7 @@
     "name": "voe_auto_test"
   },
   {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -494,16 +496,17 @@
       "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"buildername\": \"Win32 Release [large tests]\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"bot_id\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"buildername\": \"Win32 Release [large tests]\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"bot_id\"}",
+      "--annotate=gtest",
       "--test-type=video_capture_tests",
       "--step-name=video_capture_tests",
+      "--generate-json-file",
+      "-o",
+      "gtest-results/video_capture_tests.exe",
       "--builder-name=Win32 Release [large tests]",
       "--slave-name=bot_id",
       "--build-number=1337",
-      "--run-python-script",
       "--revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "[BUILDER_CACHE]\\Win32_Release__large_tests_\\src\\tools_webrtc\\gtest-parallel-wrapper.py",
-      "[BUILDER_CACHE]\\Win32_Release__large_tests_\\src\\out\\Release\\video_capture_tests.exe",
-      "--workers=1"
+      "video_capture_tests.exe"
     ],
     "cwd": "[BUILDER_CACHE]\\Win32_Release__large_tests_",
     "env": {
