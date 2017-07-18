@@ -706,13 +706,17 @@ def notify_failures(failed_builds, sheriff_url, default_from_email,
     if email_app_url and watchers:
       emails_to_send.append((watchers, json.dumps(build_data, sort_keys=True)))
 
-    buildnum = failed_build['build']['number']
-    steps = failed_build['unsatisfied']
     builder = failed_build['build']['builderName']
+    buildnum = failed_build['build']['number']
+    result = failed_build['build'].get('results')
+    steps = failed_build['unsatisfied']
     logging.info(
-        'to %s: failure in %s build %s: %s' % (', '.join(watchers),
-                                                        builder, buildnum,
-                                                        list(steps)))
+        'to %s: failure with result %s in %s build %s: %s' % (
+            ', '.join(watchers),
+            result,
+            builder,
+            buildnum,
+            list(steps)))
     if not email_app_url:
       logging.warn('no email_app_url specified, no email sent!')
 
