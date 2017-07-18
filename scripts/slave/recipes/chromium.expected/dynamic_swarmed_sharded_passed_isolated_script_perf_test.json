@@ -653,7 +653,8 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": \"Win 10 Low-End Perf Tests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": \"chromium.perf.fyi\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
-      "@@@STEP_LOG_END@step_metadata@@@"
+      "@@@STEP_LOG_END@step_metadata@@@",
+      "@@@STEP_LINK@Results Dashboard@https://chromeperf.appspot.com/report?rev=170242&masters=chromium.perf.fyi&tests=benchmark&bots=win-10-low-end@@@"
     ]
   },
   {

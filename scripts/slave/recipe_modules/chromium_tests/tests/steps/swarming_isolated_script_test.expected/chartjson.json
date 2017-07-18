@@ -266,7 +266,8 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
-      "@@@STEP_LOG_END@step_metadata@@@"
+      "@@@STEP_LOG_END@step_metadata@@@",
+      "@@@STEP_LINK@Results Dashboard@https://chromeperf.appspot.com/report?rev=0&masters=test_mastername&tests=test-perf-dashboard-id&bots=test-perf-id@@@"
     ]
   },
   {

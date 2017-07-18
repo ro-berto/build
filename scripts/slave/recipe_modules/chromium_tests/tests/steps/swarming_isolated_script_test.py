@@ -9,6 +9,7 @@ DEPS = [
     'commit_position',
     'depot_tools/bot_update',
     'isolate',
+    'perf_dashboard',
     'recipe_engine/json',
     'recipe_engine/platform',
     'recipe_engine/properties',
