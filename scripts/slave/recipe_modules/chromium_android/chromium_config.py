@@ -73,8 +73,9 @@ def cronet_builder(c):
   c.gn_args.append('disable_ftp_support=true')
   c.gn_args.append('enable_reporting=false')
   c.gn_args.append('enable_websockets=false')
-  c.gn_args.append('use_platform_icu_alternatives=true')
+  c.gn_args.append('include_transport_security_state_preload_list=false')
   c.gn_args.append('use_partition_alloc=false')
+  c.gn_args.append('use_platform_icu_alternatives=true')
   c.compile_py.default_targets=['cronet_package',
                                 'cronet_perf_test_apk',
                                 'cronet_sample_test_apk',
