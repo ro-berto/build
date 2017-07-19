@@ -221,6 +221,8 @@ def RunSteps(api, target_mastername, target_buildername,
     remaining_revisions = all_revisions[:]
     for index in sorted(suspected_revision_index, reverse=True):
       if index > 0:
+        # try job will not run linearly, sets use_analyze to False.
+        use_analyze = False
         sub_ranges.append(remaining_revisions[index - 1:])
         remaining_revisions = remaining_revisions[:index - 1]
     # None is a placeholder for the last known good revision.
@@ -273,6 +275,8 @@ def RunSteps(api, target_mastername, target_buildername,
 
       if compile_targets and use_bisect:
         # Could bisect only when failed compile targets are given.
+        # Could not use analyze if bisect.
+        use_analyze = False
         while remaining_revisions:
           if remaining_revisions[0] in suspected_revisions:
             # In this case, we test the suspected revision before real bisect.
@@ -299,10 +303,16 @@ def RunSteps(api, target_mastername, target_buildername,
             remaining_revisions = remaining_revisions[index + 1:]
       else:
         for revision in remaining_revisions:
+          if all_revisions.index(revision) == 0:
+            # Make sure compile the first revision in range to reduce
+            # false positives.
+            use_analyze_for_this_revision = False
+          else:
+            use_analyze_for_this_revision = use_analyze
           revision_being_checked = revision
           compile_result = _run_compile_at_revision(
               api, target_mastername, target_buildername,
-              revision, compile_targets, use_analyze)
+              revision, compile_targets, use_analyze_for_this_revision)
           compile_results[revision] = compile_result
           if compile_result == CompileResult.FAILED:
             # First failure after a series of pass.
@@ -536,15 +546,21 @@ def GenTests(api):
   yield (
       api.test('compile_skipped') +
       props(use_analyze=True,
-            buildbucket=json.dumps({'build': {'id': 'id1'}})) +
+            buildbucket=json.dumps({'build': {'id': 'id1'}}),
+            good_revision='r0',
+            bad_revision='r2') +
       simulated_buildbucket_output({}) +
+      api.override_step_data(
+          'git commits in range',
+          api.raw_io.stream_output(
+              '\n'.join('r%d' % i for i in reversed(range(1, 3))))) +
       api.path.exists(api.path['builder_cache'].join('linux','src')) +
       api.override_step_data('record previously checked-out revision',
                              api.raw_io.output('')) +
       api.override_step_data('record previously cached revision',
                              api.raw_io.output('')) +
       api.override_step_data(
-          'test r1.analyze',
+          'test r2.analyze',
           api.json.output({
               'status': 'No dependencies',
               'compile_targets': [],
@@ -556,10 +572,16 @@ def GenTests(api):
   yield (
       api.test('previous_revision_directory_does_not_exist') +
       props(use_analyze=True,
-            buildbucket=json.dumps({'build': {'id': 'id1'}})) +
+            buildbucket=json.dumps({'build': {'id': 'id1'}}),
+            good_revision='r0',
+            bad_revision='r2') +
       simulated_buildbucket_output({}) +
       api.override_step_data(
-          'test r1.analyze',
+          'git commits in range',
+          api.raw_io.stream_output(
+              '\n'.join('r%d' % i for i in reversed(range(1, 3))))) +
+      api.override_step_data(
+          'test r2.analyze',
           api.json.output({
               'status': 'No dependencies',
               'compile_targets': [],
@@ -571,8 +593,14 @@ def GenTests(api):
   yield (
       api.test('previous_revision_error_code') +
       props(use_analyze=True,
-            buildbucket=json.dumps({'build': {'id': 'id1'}})) +
+            buildbucket=json.dumps({'build': {'id': 'id1'}}),
+            good_revision='r0',
+            bad_revision='r2') +
       simulated_buildbucket_output({}) +
+      api.override_step_data(
+          'git commits in range',
+          api.raw_io.stream_output(
+              '\n'.join('r%d' % i for i in reversed(range(1, 3))))) +
       api.path.exists(api.path['builder_cache'].join('linux','src')) +
       api.override_step_data('record previously checked-out revision',
                              api.raw_io.output('SegmentationFault'),
@@ -581,7 +609,7 @@ def GenTests(api):
                              api.raw_io.output('SegmentationFault'),
                              retcode=255) +
       api.override_step_data(
-          'test r1.analyze',
+          'test r2.analyze',
           api.json.output({
               'status': 'No dependencies',
               'compile_targets': [],
@@ -592,15 +620,21 @@ def GenTests(api):
   yield (
       api.test('previous_revision_bad_output') +
       props(use_analyze=True,
-            buildbucket=json.dumps({'build': {'id': 'id1'}})) +
+            buildbucket=json.dumps({'build': {'id': 'id1'}}),
+            good_revision='r0',
+            bad_revision='r2') +
       simulated_buildbucket_output({}) +
+      api.override_step_data(
+          'git commits in range',
+          api.raw_io.stream_output(
+              '\n'.join('r%d' % i for i in reversed(range(1, 3))))) +
       api.path.exists(api.path['builder_cache'].join('linux','src')) +
       api.override_step_data('record previously checked-out revision',
                              api.raw_io.output('SegmentationFault')) +
       api.override_step_data('record previously cached revision',
                              api.raw_io.output('SegmentationFault')) +
       api.override_step_data(
-          'test r1.analyze',
+          'test r2.analyze',
           api.json.output({
               'status': 'No dependencies',
               'compile_targets': [],
@@ -611,11 +645,17 @@ def GenTests(api):
   yield (
       api.test('previous_revision_valid') +
       props(use_analyze=True,
-            buildbucket=json.dumps({'build': {'id': 'id1'}})) +
+            buildbucket=json.dumps({'build': {'id': 'id1'}}),
+            good_revision='r0',
+            bad_revision='r2') +
       simulated_buildbucket_output({}) +
+      api.override_step_data(
+          'git commits in range',
+          api.raw_io.stream_output(
+              '\n'.join('r%d' % i for i in reversed(range(1, 3))))) +
       api.path.exists(api.path['builder_cache'].join('linux','src')) +
       api.override_step_data(
-          'test r1.analyze',
+          'test r2.analyze',
           api.json.output({
               'status': 'No dependencies',
               'compile_targets': [],
@@ -627,9 +667,15 @@ def GenTests(api):
   yield (
       api.test('compile_affected_targets_only') +
       props(use_analyze=True,
-            buildbucket=json.dumps({'build': {'id': 'id1'}})) +
+            buildbucket=json.dumps({'build': {'id': 'id1'}}),
+            good_revision='r0',
+            bad_revision='r2') +
       simulated_buildbucket_output({}) +
-      api.override_step_data('test r1.read test spec (chromium.linux.json)',
+      api.override_step_data(
+        'git commits in range',
+        api.raw_io.stream_output(
+          '\n'.join('r%d' % i for i in reversed(range(1, 3))))) +
+      api.override_step_data('test r2.read test spec (chromium.linux.json)',
                              api.json.output({
                                  'Linux Builder': {
                                      'additional_compile_targets': [
@@ -639,7 +685,7 @@ def GenTests(api):
                                  }
                              })) +
       api.override_step_data(
-          'test r1.analyze',
+          'test r2.analyze',
           api.json.output({
               'status': 'Found dependency',
               'compile_targets': ['a', 'a_run'],
