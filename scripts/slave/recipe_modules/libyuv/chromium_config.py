@@ -28,7 +28,6 @@ def libyuv_clang(c):
 
 @CONFIG_CTX(includes=['ninja', 'gcc', 'goma'])
 def libyuv_gcc(c):
-  c.gn_args.append('use_sysroot=false')
   _libyuv_common(c)
 
 @CONFIG_CTX(includes=['android'])
