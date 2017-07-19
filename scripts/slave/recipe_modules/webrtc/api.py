@@ -200,54 +200,10 @@ class WebRTCApi(recipe_api.RecipeApi):
                 force_latest_version=True)
 
 
-  def add_test(self, test, name=None, args=None, revision=None, env=None,
-               python_mode=False, perf_test=False, perf_dashboard_id=None,
-               parallel=True):
-    """Helper function to invoke chromium.runtest().
-
-    Notice that the name parameter should be the same as the test executable in
-    order to get the stdio links in the perf dashboard to become correct.
-    """
-    name = name or test
+  def run_baremetal_test(self, test, name=None, args=None, parallel=True):
     args = args or []
-    if perf_test and self.c.PERF_ID:
-      perf_dashboard_id = perf_dashboard_id or name
-      assert self.revision_number, (
-          'A revision number must be specified for perf tests as they upload '
-          'data to the perf dashboard.')
-      perf_config = self.PERF_CONFIG
-      perf_config['r_webrtc_git'] = self.revision
-      with self.m.context(env=env):
-        self.m.chromium.runtest(
-            test=test, args=args, name=name,
-            results_url=self.DASHBOARD_UPLOAD_URL, annotate='graphing',
-            xvfb=True, perf_dashboard_id=perf_dashboard_id,
-            test_type=perf_dashboard_id, python_mode=python_mode,
-            revision=self.revision_number, perf_id=self.c.PERF_ID,
-            perf_config=perf_config)
-    else:
-      annotate = 'gtest'
-      test_type = test
-      flakiness_dash = (not self.m.tryserver.is_tryserver and
-                        not self.m.chromium.c.runtests.enable_memcheck)
-
-      # Memcheck uses special scripts that don't play well with
-      # the gtest-parallel script.
-      if parallel and not self.m.chromium.c.runtests.enable_memcheck:
-        test_executable = self.m.chromium.c.build_dir.join(
-          self.m.chromium.c.build_config_fs, test)
-        args = [test_executable] + args
-        test = self.m.path['checkout'].join('third_party', 'gtest-parallel',
-                                            'gtest-parallel')
-        python_mode = True
-        annotate = None  # The parallel script doesn't output gtest format.
-        flakiness_dash = False
-
-      with self.m.context(env=env):
-        self.m.chromium.runtest(
-            test=test, args=args, name=name, annotate=annotate, xvfb=True,
-            flakiness_dash=flakiness_dash, python_mode=python_mode,
-            revision=revision, test_type=test_type)
+    steps.BaremetalTest(test, name, args=args, parallel=parallel).run(
+        self, suffix='')
 
   def maybe_trigger(self):
     triggers = self.bot_config.get('triggers')

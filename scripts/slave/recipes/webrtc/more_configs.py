@@ -99,7 +99,7 @@ def RunSteps(api):
   BuildSteps(api, gn_arg='rtc_enable_bwe_test_logging=true')
   if (api.chromium.c.TARGET_PLATFORM == 'linux'):
     # Sanity check for the rtc_enable_bwe_test_logging=true build.
-    api.webrtc.add_test('bwe_simulations_tests',
+    api.webrtc.run_baremetal_test('bwe_simulations_tests',
         args=['--gtest_filter=VideoSendersTest/'
                'BweSimulation.Choke1000kbps500kbps1000kbps/1'])
   BuildSteps(api, gn_arg='rtc_use_dummy_audio_file_devices=true')
@@ -107,7 +107,7 @@ def RunSteps(api):
   BuildSteps(api, gn_arg='rtc_enable_sctp=false')
   if (api.chromium.c.TARGET_PLATFORM == 'linux'):
     # Sanity check for the rtc_enable_sctp=false build.
-    api.webrtc.add_test('peerconnection_unittests')
+    api.webrtc.run_baremetal_test('peerconnection_unittests')
 
 
 def GenTests(api):

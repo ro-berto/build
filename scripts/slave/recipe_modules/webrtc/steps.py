@@ -76,20 +76,13 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
   build_out_dir = api.m.path['checkout'].join(
       'out', api.m.chromium.c.build_config_fs)
   GTestTest = api.m.chromium_tests.steps.GTestTest
-  isac_fix_test = BaremetalTest(
-      'isac_fix_test',
-      revision=revision,
-      args=['32000', api.m.path['checkout'].join('resources',
-                                                 'speech_and_misc_wb.pcm'),
-            'isac_speech_and_misc_wb.pcm'],
-      perf_test=not api.m.tryserver.is_tryserver)
 
   SwarmingTest = api.m.chromium_tests.steps.SwarmingIsolatedScriptTest
   if test_suite == 'webrtc':
     for test, extra_args in sorted(NORMAL_TESTS.items()):
       tests.append(SwarmingTest(test, **extra_args))
     if api.mastername == 'client.webrtc.fyi' and api.m.platform.is_win:
-      tests.append(WebRTCTest(
+      tests.append(BaremetalTest(
           'modules_tests',
           name='modules_tests (screen capture disabled tests)',
           args=['--gtest_filter=ScreenCapturerIntegrationTest.*',
@@ -106,7 +99,13 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
     # Cover tests only running on perf tests on our trybots:
     if api.m.tryserver.is_tryserver:
       if api.m.platform.is_linux:
-        tests.append(isac_fix_test)
+        tests.append(BaremetalTest(
+            'isac_fix_test',
+            revision=revision,
+            args=[
+                '32000', api.m.path['checkout'].join(
+                    'resources', 'speech_and_misc_wb.pcm'),
+                'isac_speech_and_misc_wb.pcm']))
 
       # TODO(kjellander): Enable on Mac when bugs.webrtc.org/7322 is fixed.
       if not api.m.platform.is_mac:
@@ -115,7 +114,13 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
   elif test_suite == 'desktop_perf':
     assert api.c.PERF_ID
     if api.m.platform.is_linux:
-      tests.append(isac_fix_test)
+      tests.append(PerfTest(
+          'isac_fix_test',
+          revision=revision,
+          args=[
+              '32000', api.m.path['checkout'].join(
+                  'resources', 'speech_and_misc_wb.pcm'),
+              'isac_speech_and_misc_wb.pcm']))
     tests.append(PerfTest('webrtc_perf_tests', revision=revision))
 
     # TODO(kjellander): Re-enable when https://crbug.com/731717 is fixed.
@@ -200,28 +205,46 @@ class Test(object):
 class WebRTCTest(Test):
   """A normal WebRTC desktop test."""
   def __init__(self, test, name=None, revision=None, enable_swarming=False,
-               shards=1, parallel=True, perf_test=False,
-               **runtest_kwargs):
+               shards=1, parallel=True, perf_test=False, **runtest_kwargs):
     super(WebRTCTest, self).__init__(test, name, enable_swarming, shards)
     self._revision = revision
     self._parallel = parallel
     self._perf_test = perf_test
     self._runtest_kwargs = runtest_kwargs
 
-  def run(self, api, suffix):
-    api.add_test(self._test, name=self._name, revision=self._revision,
-                 parallel=self._parallel, perf_test=self._perf_test,
-                 **self._runtest_kwargs)
-
 class BaremetalTest(WebRTCTest):
   """A WebRTC test that uses audio and/or video devices."""
-  def __init__(self, test, name=None, revision=None, perf_test=False, **kwargs):
-    # Tests accessing hardware devices shouldn't be run in parallel.
+  def __init__(self, test, name=None, revision=None, perf_test=False,
+               parallel=False, **kwargs):
     super(BaremetalTest, self).__init__(test, name, revision=revision,
-                                        parallel=False, perf_test=perf_test,
+                                        parallel=parallel, perf_test=perf_test,
                                         **kwargs)
-    if perf_test:
-      assert revision, 'Revision is mandatory for perf tests'
+
+  def run(self, api, suffix):
+    args = self._runtest_kwargs.pop('args', [])
+    python_mode = False
+
+    annotate = 'gtest'
+    test_type = self._test
+    flakiness_dash = (not api.m.tryserver.is_tryserver and
+                      not api.m.chromium.c.runtests.enable_memcheck)
+
+    # Memcheck uses special scripts that don't play well with
+    # the gtest-parallel script.
+    if self._parallel and not api.m.chromium.c.runtests.enable_memcheck:
+      test_executable = api.m.chromium.c.build_dir.join(
+        api.m.chromium.c.build_config_fs, self._test)
+      args = [test_executable] + args
+      self._test = api.m.path['checkout'].join('third_party', 'gtest-parallel',
+                                               'gtest-parallel')
+      python_mode = True
+      annotate = None  # The parallel script doesn't output gtest format.
+      flakiness_dash = False
+
+    api.m.chromium.runtest(
+        test=self._test, args=args, name=self._name, annotate=annotate,
+        xvfb=True, flakiness_dash=flakiness_dash, python_mode=python_mode,
+        revision=self._revision, test_type=test_type, **self._runtest_kwargs)
 
 class PythonTest(Test):
   def __init__(self, test, script, args):
@@ -232,11 +255,25 @@ class PythonTest(Test):
   def run(self, api, suffix):
     api.m.python(self._test, self._script, self._args)
 
-class PerfTest(BaremetalTest):
+class PerfTest(WebRTCTest):
   """A WebRTC test that needs consistent hardware performance."""
   def __init__(self, test, name=None, revision=None, **kwargs):
     super(PerfTest, self).__init__(test, name, revision=revision,
                                    perf_test=True, **kwargs)
+    assert revision, 'Revision is mandatory for perf tests'
+
+  def run(self, api, suffix):
+    perf_dashboard_id = self._name
+    assert api.revision_number, (
+        'A revision number must be specified for perf tests as they upload '
+        'data to the perf dashboard.')
+    perf_config = api.PERF_CONFIG
+    perf_config['r_webrtc_git'] = api.revision
+    api.m.chromium.runtest(
+        test=self._test, name=self._name, results_url=api.DASHBOARD_UPLOAD_URL,
+        annotate='graphing', xvfb=True, perf_dashboard_id=perf_dashboard_id,
+        test_type=perf_dashboard_id, revision=api.revision_number,
+        perf_id=api.c.PERF_ID, perf_config=perf_config, **self._runtest_kwargs)
 
 class AndroidJunitTest(Test):
   """Runs an Android Junit test."""
@@ -259,12 +296,7 @@ class AndroidPerfTest(PerfTest):
   def run(self, api, suffix):
     wrapper_script = api.m.chromium.output_dir.join('bin',
                                                     'run_%s' % self._name)
-    args = ['--verbose']
-    api.add_test(name=self._name,
-                 test=wrapper_script,
-                 args=args,
-                 revision=self._revision,
-                 python_mode=True,
-                 perf_test=self._perf_test,
-                 perf_dashboard_id=self._name)
-
+    self._test = wrapper_script
+    self._runtest_kwargs['python_mode'] = True
+    self._runtest_kwargs['args'] = ['--verbose']
+    super(AndroidPerfTest, self).run(api, suffix)
