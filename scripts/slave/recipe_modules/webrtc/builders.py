@@ -55,13 +55,6 @@ RECIPE_CONFIGS = freeze({
     'gclient_apply_config': ['android'],
     'test_suite': 'android',
   },
-  'webrtc_android_experimental': {
-    'chromium_config': 'android',
-    'chromium_android_config': 'webrtc',
-    'gclient_config': 'webrtc',
-    'gclient_apply_config': ['android'],
-    'test_suite': 'android_experimental',
-  },
 })
 
 BUILDERS = freeze({
@@ -1491,24 +1484,6 @@ BUILDERS = freeze({
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'linux'},
-        'use_isolate': True,
-        'enable_swarming': True,
-        'swarming_dimensions': {
-          'device_type': 'bullhead', # Nexus 5X
-          'device_os': 'M',
-          'os': 'Android',
-        }
-      },
-      'android_experimental': {
-        'recipe_config': 'webrtc_android_experimental',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},

@@ -63,10 +63,6 @@ ANDROID_JUNIT_TESTS = (
   'android_junit_tests',
 )
 
-ANDROID_EXPERIMENTAL_TESTS = (
-  'AppRTCMobileTestStubbedVideoIO',
-)
-
 ANDROID_CIPD_PACKAGES = [
     ("bin",
      "infra/tools/luci/logdog/butler/${platform}",
@@ -178,11 +174,6 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
           override_isolate_target='webrtc_perf_tests',
           cipd_packages=ANDROID_CIPD_PACKAGES,
           args=['--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/']))
-  elif test_suite == 'android_experimental':
-    for test in ANDROID_EXPERIMENTAL_TESTS:
-      tests.append(GTestTest(test, enable_swarming=enable_swarming,
-                             override_isolate_target=test,
-                             cipd_packages=ANDROID_CIPD_PACKAGES))
 
   return tests
 
