@@ -91,8 +91,6 @@ def _GNGenBuilds(api, memory_tool, skia, xfa, v8, target_cpu, clang, rel,
   ]
   if api.platform.is_win and not memory_tool:
     args.append('symbol_level=1')
-  if api.platform.is_linux:
-    args.append('use_sysroot=false')
   if clang:
     args.append('is_clang=true')
   if memory_tool == 'asan':

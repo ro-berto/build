@@ -110,7 +110,7 @@
       "--root=[START_DIR]/pdfium",
       "gen",
       "//out/debug",
-      "--args=is_debug=true is_component_build=false pdf_enable_v8=false pdf_enable_xfa=false pdf_use_skia=false pdf_is_standalone=true use_goma=true goma_dir=\"[CACHE]/goma_client\" use_sysroot=false target_os=\"android\""
+      "--args=is_debug=true is_component_build=false pdf_enable_v8=false pdf_enable_xfa=false pdf_use_skia=false pdf_is_standalone=true use_goma=true goma_dir=\"[CACHE]/goma_client\" target_os=\"android\""
     ],
     "cwd": "[START_DIR]/pdfium",
     "name": "gn gen"
