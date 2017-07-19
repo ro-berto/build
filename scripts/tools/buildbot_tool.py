@@ -9,6 +9,7 @@ import argparse
 import os
 import re
 import sys
+import traceback
 
 TOOLS_DIR = os.path.abspath(os.path.dirname(__file__))
 SCRIPTS_DIR = os.path.dirname(TOOLS_DIR)
@@ -23,10 +24,10 @@ from common import filesystem
 
 
 class Tool(object):
-  def __init__(self, fs, stdout, stderr):
-    self.fs = fs
-    self.stdout = stdout
-    self.stderr = stderr
+  def __init__(self):
+    self.fs = filesystem.Filesystem()
+    self.stdout = sys.stdout
+    self.stderr = sys.stderr
     self.build_dir = env.Build
     self.build_internal_dir = env.BuildInternal
 
@@ -88,9 +89,21 @@ class Tool(object):
   def _generate(self, args):
     files_to_write = {}
     paths = self._builders_paths(args)
+    failed = False
     for path in paths:
-      self._process_one_builders_file(path, files_to_write)
-    return files_to_write, 0 if paths else 1
+      try:
+        self._process_one_builders_file(path, files_to_write)
+      except SyntaxError as e:
+        msg = ''.join(traceback.format_exception_only(type(e), e))
+        self.print_(msg)
+        failed = True
+      except chromium_utils.BuildersFileError as e:
+        self.print_(e)
+        failed = True
+
+    if failed or not paths:
+      return {}, 1
+    return files_to_write, 0
 
   def _builders_paths(self, args):
     builders_paths = []
@@ -108,7 +121,7 @@ class Tool(object):
       masters_dirs = []
       if not args.internal_only:
         masters_dirs.append(fs.join(self.build_dir, 'masters'))
-      if not args.external_only:
+      if not args.external_only and self.build_internal_dir:
         masters_dirs.append(fs.join(self.build_internal_dir, 'masters'))
 
       for masters_dir in masters_dirs:
@@ -160,5 +173,5 @@ class Tool(object):
 
 
 if __name__ == '__main__':  # pragma: no cover
-  tool = Tool(filesystem.Filesystem(), env.Build, env.BuildInternal)
+  tool = Tool()
   sys.exit(tool.main(sys.argv[1:]))

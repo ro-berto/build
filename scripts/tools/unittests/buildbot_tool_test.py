@@ -56,8 +56,10 @@ GEN_MASTER_CFG = textwrap.dedent("""\
 
 class FakeTool(buildbot_tool.Tool):
   def __init__(self, files):
-    super(FakeTool, self).__init__(fake_filesystem.FakeFilesystem(files),
-                                   StringIO.StringIO(), StringIO.StringIO())
+    super(FakeTool, self).__init__()
+    self.fs = fake_filesystem.FakeFilesystem(files)
+    self.stdout = StringIO.StringIO()
+    self.stderr = StringIO.StringIO()
     self.build_dir = '/build'
     self.build_internal_dir = '/build_internal'
 

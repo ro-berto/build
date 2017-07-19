@@ -1926,8 +1926,23 @@ def ReadBuildersFile(builders_path):
   return ParseBuildersFileContents(builders_path, contents)
 
 
+class BuildersFileError(ValueError):
+  def __init__(self, path, errors):
+    message = '  File "%s":\n    %s\n' % (path, '\n    '.join(errors))
+    super(BuildersFileError, self).__init__(message)
+    self.path = path
+    self.errors = errors
+
+  def __str__(self):
+    return self.message
+
+  def __repr__(self):
+    return self.message
+
+
 def ParseBuildersFileContents(path, contents):
-  builders = ast.literal_eval(contents)
+  node = ast.parse(contents, path, 'eval')
+  builders = ast.literal_eval(node)
 
   # Set some additional derived fields that are derived from the
   # file's location in the filesystem.
@@ -1984,8 +1999,8 @@ def ParseBuildersFileContents(path, contents):
   errors = []
   NormalizeBuilders(builders, errors)
   NormalizeBotPools(builders, errors)
-  errors = set(errors)
-  assert not errors, ('Errors in "%s":\n%s\n' % (path, '\n'.join(errors)))
+  if errors:
+    raise BuildersFileError(path, errors)
   return builders
 
 
