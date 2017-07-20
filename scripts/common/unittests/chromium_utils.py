@@ -236,18 +236,21 @@ class GetBotsFromBuilders(unittest.TestCase):
       },
       'builders': {
         'foo': {
+          'scheduler': None,
           'mixins': ['foo_recipe', 'main_pool'],
         },
         'bar': {
+          'scheduler': None,
           'mixins': ['bar_recipe', 'main_pool'],
         },
         'special_builder': {
           # This is a dumb example (you shouldn't override values), but it
           # is legal to do so.
+          'recipe': 'test_recipe',
+          'scheduler': None,
           'mixins': ['main_pool', 'special_pool'],
         }
       },
-      'bot_pools': {},
     }
     errors = []
     chromium_utils.NormalizeBuilders(builders, errors)
@@ -278,11 +281,11 @@ class GetBotsFromBuilders(unittest.TestCase):
       },
       'builders': {
         'trusty': {
+          'recipe': 'test_recipe',
+          'scheduler': None,
           'mixins': ['trusty'],
           'bot': 'vm1',
         },
-      },
-      'bot_pools': {
       },
     }
     chromium_utils.NormalizeBuilders(builders, errors)
@@ -295,12 +298,12 @@ class GetBotsFromBuilders(unittest.TestCase):
     builders = {
       'builders': {
         'trusty': {
+          'recipe': 'test_recipe',
+          'scheduler': None,
           'os': 'linux',
           'version': 'precise',
           'bots': ['vm1', 'vm{10..12}'],
         },
-      },
-      'bot_pools': {
       },
     }
     chromium_utils.NormalizeBuilders(builders, errors)
@@ -313,26 +316,28 @@ class GetBotsFromBuilders(unittest.TestCase):
       'builders': {
         'no_bots': {},
       },
-      'bot_pools': {},
     })
 
   def test_too_many_bot_fields(self):
     self.assertBadBuilders({
       'builders': {
         'too_many_bot_fields': {
+          'recipe': 'test_recipe',
+          'scheduler': None,
           'os': 'linux',
           'version': 'precise',
           'bot': 'vm1',
           'bots': 'vm{2..3}'
         }
       },
-      'bot_pools': {},
     })
 
   def test_builder_and_bot_pool_with_same_name(self):
     self.assertBadBuilders({
       'builders': {
         'linux': {
+          'recipe': 'test_recipe',
+          'scheduler': None,
           'os': 'linux',
           'version': 'precise',
           'bot': 'vm1',
@@ -352,23 +357,25 @@ class GetBotsFromBuilders(unittest.TestCase):
       'mixins': {},
       'builders': {
         'missing_mixin_builder': {
+          'recipe': 'test_recipe',
+          'scheduler': None,
           'mixins': ['missing'],
           'os': 'linux',
           'version': 'precise',
           'bot': 'vm1',
         },
       },
-      'bot_pools': {},
     })
 
   def test_missing_bot_pool(self):
     self.assertBadBuilders({
       'builders': {
         'missing_bot_pool': {
+          'recipe': 'test_recipe',
+          'scheduler': None,
           'bot_pool': 'missing',
         },
       },
-      'bot_pools': {},
     })
 
   def test_no_mixins_in_builder_defaults(self):
@@ -379,20 +386,22 @@ class GetBotsFromBuilders(unittest.TestCase):
       },
       'builders': {
         'foo': {
+          'recipe': 'test_recipe',
+          'scheduler': None,
           'bot': 'vm1',
         },
       },
-      'bot_pools': {},
     })
 
   def test_bad_bot_string(self):
     self.assertBadBuilders({
       'builders': {
         'bad_bot_string': {
+          'recipe': 'test_recipe',
+          'scheduler': None,
           'bot': 'vm{1..3}',
         },
       },
-      'bot_pools': {},
     })
 
   def test_bot_pool_missing_os(self):
@@ -400,6 +409,8 @@ class GetBotsFromBuilders(unittest.TestCase):
     builders = {
       'builders': {
         'sample': {
+          'recipe': 'test_recipe',
+          'scheduler': None,
           'bot_pool': 'main',
         },
       },
@@ -409,6 +420,44 @@ class GetBotsFromBuilders(unittest.TestCase):
     }
     chromium_utils.NormalizeBotPools(builders, errors)
     self.assertNotEqual(errors, [])
+
+  def test_no_recipe(self):
+    self.assertBadBuilders({
+      'builders': {
+        'missing_recipe': {
+          'scheduler': None,
+          'os': 'linux',
+          'version': 'trusty',
+          'bot': 'vm1',
+        },
+      },
+    })
+
+  def test_no_remote_run_repository(self):
+    self.assertBadBuilders({
+      'builders': {
+        'missing_remote_run_repository': {
+          'recipe': 'test_recipe',
+          'scheduler': None,
+          'use_remote_run': True,
+          'os': 'linux',
+          'version': 'trusty',
+          'bot': 'vm1',
+        },
+      },
+    })
+
+  def test_no_scheduler(self):
+    self.assertBadBuilders({
+      'builders': {
+        'missing_scheduler': {
+          'recipe': 'test_recipe',
+          'os': 'linux',
+          'version': 'trusty',
+          'bot': 'vm1',
+        },
+      },
+    })
 
 
 if __name__ == '__main__':
