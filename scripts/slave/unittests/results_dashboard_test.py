@@ -430,12 +430,11 @@ class ResultsDashboardTest(unittest.TestCase):
 
   # Testing private method.
   # pylint: disable=W0212
-  def test_LinkAnnotation_WithData(self):
+  def test_DashboardUrl_WithData(self):
     self.assertEqual(
-        ('@@@STEP_LINK@Results Dashboard@'
-         'https://chromeperf.appspot.com/report'
-         '?masters=MyMaster&bots=b&tests=sunspider&rev=1234@@@'),
-        results_dashboard._LinkAnnotation(
+        ('https://chromeperf.appspot.com/report'
+         '?masters=MyMaster&bots=b&tests=sunspider&rev=1234'),
+        results_dashboard._DashboardUrl(
             'https://chromeperf.appspot.com',
             [{
                 'master': 'MyMaster',
@@ -445,8 +444,8 @@ class ResultsDashboardTest(unittest.TestCase):
                 'value': 10,
             }]))
 
-  def test_LinkAnnotation_UnexpectedData(self):
-    self.assertIsNone(results_dashboard._LinkAnnotation('', {}))
+  def test_DashboardUrl_UnexpectedData(self):
+    self.assertIsNone(results_dashboard._DashboardUrl('', {}))
 
 
 if __name__ == '__main__':

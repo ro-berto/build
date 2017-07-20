@@ -1628,6 +1628,8 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
         '--name', self._perf_dashboard_id,
         '--buildername', api.properties['buildername'],
         '--buildnumber', api.properties['buildnumber'],
+        '--output-json-dashboard-url', api.json.output(
+            add_json_log=False, name='dashboard_url')
     ]
     if api.chromium.c.build_dir:
       args.extend(['--build-dir', api.chromium.c.build_dir])
@@ -1651,17 +1653,13 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
         step_name,
         api.chromium.package_repo_resource(
             'scripts', 'slave', 'upload_perf_dashboard_results.py'),
-        args)
-
-    chrome_revision_cp = api.bot_update.last_returned_properties.get(
-        'got_revision_cp', 'x@{#0}')
-    chrome_revision = str(api.commit_position.parse_revision(
-        chrome_revision_cp))
-    api.perf_dashboard.add_dashboard_link(
-        presentation=step_result.presentation,
-        test=self._perf_dashboard_id,
-        revision=chrome_revision,
-        bot=self._perf_id)
+        args,
+        step_test_data=(
+            lambda: api.json.test_api.output('chromeperf.appspot.com',
+                                             name='dashboard_url') +
+                    api.json.test_api.output({})))
+    step_result.presentation.links['Results Dashboard'] = (
+        step_result.json.outputs.get('dashboard_url', ''))
 
     return step_result
 

@@ -613,6 +613,8 @@
       "Win 10 Low-End Perf Tests",
       "--buildnumber",
       "1234",
+      "--output-json-dashboard-url",
+      "/path/to/tmp/json",
       "--build-dir",
       "[START_DIR]\\src\\out",
       "--got-revision-cp",
@@ -632,9 +634,8 @@
     },
     "name": "benchmark Dashboard Upload",
     "~followup_annotations": [
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@step_metadata@{@@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"benchmark\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",
@@ -654,7 +655,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": \"chromium.perf.fyi\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
-      "@@@STEP_LINK@Results Dashboard@https://chromeperf.appspot.com/report?rev=170242&masters=chromium.perf.fyi&tests=benchmark&bots=win-10-low-end@@@"
+      "@@@STEP_LINK@Results Dashboard@chromeperf.appspot.com@@@"
     ]
   },
   {

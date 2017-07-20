@@ -234,6 +234,8 @@
       "test_buildername",
       "--buildnumber",
       "123",
+      "--output-json-dashboard-url",
+      "/path/to/tmp/json",
       "--build-dir",
       "None/out",
       "--got-revision-cp",
@@ -249,9 +251,8 @@
     ],
     "name": "test-perf-dashboard-id Dashboard Upload",
     "~followup_annotations": [
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@step_metadata@{@@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"base_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",
@@ -268,7 +269,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
-      "@@@STEP_LINK@Results Dashboard@https://chromeperf.appspot.com/report?rev=0&masters=test_mastername&tests=test-perf-dashboard-id&bots=test-perf-id@@@"
+      "@@@STEP_LINK@Results Dashboard@chromeperf.appspot.com@@@"
     ]
   },
   {

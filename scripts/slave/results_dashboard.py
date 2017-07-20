@@ -25,7 +25,7 @@ CACHE_DIR = 'results_dashboard'
 CACHE_FILENAME = 'results_to_retry'
 
 
-def SendResults(data, url, build_dir):
+def SendResults(data, url, build_dir, json_url_file=None):
   """Sends results to the Chrome Performance Dashboard.
 
   This function tries to send the given data to the dashboard, in addition to
@@ -47,10 +47,15 @@ def SendResults(data, url, build_dir):
   # Send all the results from this run and the previous cache to the dashboard.
   fatal_error, errors = _SendResultsFromCache(cache_file_name, url)
 
-  # Print out a Buildbot link annotation.
-  link_annotation = _LinkAnnotation(url, data)
-  if link_annotation:
-    print link_annotation
+  # Dump dashboard url to file.
+  dashboard_url = _DashboardUrl(url, data)
+  if json_url_file:
+    with open(json_url_file, 'w') as f:
+      json.dump(dashboard_url if dashboard_url else '', f)
+  else:
+    if dashboard_url:
+      print '@@@STEP_LINK@%s@%s@@@' % ('Results Dashboard', dashboard_url)
+
 
   # Print any errors; if there was a fatal error, it should be an exception.
   for error in errors:
@@ -408,9 +413,8 @@ def _SendResultsJson(url, results_json):
     return 'HTTPException for JSON %s\n' % results_json
   return None
 
-
-def _LinkAnnotation(url, data):
-  """Prints a link annotation with a link to the dashboard if possible.
+def _DashboardUrl(url, data):
+  """Returns link to the dashboard if possible.
 
   Args:
     url: The Performance Dashboard URL, e.g. "https://chromeperf.appspot.com"
@@ -431,4 +435,4 @@ def _LinkAnnotation(url, data):
   results_link = url + RESULTS_LINK_PATH % (
       urllib.quote(master), urllib.quote(bot), urllib.quote(test.split('/')[0]),
       revision)
-  return '@@@STEP_LINK@%s@%s@@@' % ('Results Dashboard', results_link)
+  return results_link

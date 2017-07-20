@@ -46,6 +46,7 @@ def main(args):
   parser.add_option('--got-v8-revision')
   parser.add_option('--version')
   parser.add_option('--git-revision')
+  parser.add_option('--output-json-dashboard-url')
   options, extra_args = parser.parse_args(args)
 
   # Validate options.
@@ -78,12 +79,13 @@ def main(args):
       {}, reference_build)
   if dashboard_json:
     if options.output_json_file:
-      with open (options.output_json_file, 'w') as output_file:
+      with open(options.output_json_file, 'w') as output_file:
         json.dump(dashboard_json, output_file)
     if not results_dashboard.SendResults(
         dashboard_json,
         options.results_url,
-        options.build_dir):
+        options.build_dir,
+        options.output_json_dashboard_url):
       return 1
   else:
     print 'Error: No perf dashboard JSON was produced.'
