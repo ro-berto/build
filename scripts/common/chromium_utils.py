@@ -1943,39 +1943,25 @@ class BuildersFileError(ValueError):
 def ParseBuildersFileContents(path, contents):
   node = ast.parse(contents, path, 'eval')
   builders = ast.literal_eval(node)
-  errors = []
 
-  REQUIRED_KEYS = (
-      'master_base_class', 'master_port', 'master_port_alt',
-      'builders', 'templates',
-  )
-
-  for key in REQUIRED_KEYS:
-    if not key in builders:
-      errors.append('Missing required field "%s"' % key)
-
-  # Set some additional optional fields that are derived from the
+  # Set some additional derived fields that are derived from the
   # file's location in the filesystem.
   basedir = os.path.dirname(os.path.abspath(path))
+  repodir = os.path.basename(os.path.dirname(os.path.dirname(basedir)))
   master_dirname = os.path.basename(basedir)
   master_name_comps = master_dirname.split('.')[1:]
   buildbot_path =  '.'.join(master_name_comps)
   master_classname =  ''.join(c[0].upper() + c[1:] for c in master_name_comps)
+  builders['master_dirname'] = master_dirname
   builders.setdefault('master_classname', master_classname)
+  builders['name'] = '.'.join(master_name_comps)
   builders.setdefault('buildbot_url',
                       'https://build.chromium.org/p/%s/' % buildbot_path)
 
-  # Set fields that are unconditionally derived from the location in the
-  # filesystem.
-  builders['master_dirname'] = master_dirname
-  builders['name'] = '.'.join(master_name_comps)
-
-  # Set remaining defaults for optional fields.
   builders.setdefault('buildbucket_bucket', None)
   builders.setdefault('service_account_file', None)
   builders.setdefault('pubsub_service_account_file', None)
   pubsub_topic = None
-  repodir = os.path.basename(os.path.dirname(os.path.dirname(basedir)))
   if builders['pubsub_service_account_file']:
     pubsub_topic = 'projects/luci-milo/topics/private-buildbot'
     if repodir == 'build':
@@ -1990,6 +1976,7 @@ def ParseBuildersFileContents(path, contents):
   builders['pubsub_service_account_file_str'] = repr(
       builders['pubsub_service_account_file'])
   builders['pubsub_topic_str'] = repr(builders['pubsub_topic'])
+  builders.setdefault('bot_pools', {})
 
   # Handle backwards-compatibility of old 'slaves' nomenclature.
   # TODO: Remove this once all builders.pyl files have been upgraded.
@@ -2007,11 +1994,9 @@ def ParseBuildersFileContents(path, contents):
       bot_pool.pop('slave_data')
       bot_pool['bots'] = bot_pool.pop('slaves')
 
-  if not 'bot_port' in builders:
-    errors.append('Missing required field "bot_port"')
-
   # This validates and expands the builders and bot_pools keys, but we
   # do no validation of the top-level keys or the schedulers; should we?
+  errors = []
   NormalizeBuilders(builders, errors)
   NormalizeBotPools(builders, errors)
   if errors:
@@ -2024,12 +2009,12 @@ BOT_KEYS = ('bot', 'bots', 'bot_pool', 'bot_pools')
 
 def NormalizeBuilders(builders, errors):
   builder_defaults = builders.setdefault('builder_defaults', {})
-  builders.setdefault('mixins', {})
-  bot_pools = builders.setdefault('bot_pools', {})
+  bot_pools = builders['bot_pools']
 
   if 'mixins' in builder_defaults:
     errors.append('builder_defaults may not contain mixins.')
 
+  builders.setdefault('builders', {})
   if not builders['builders']:
     errors.append('No builders specified in file.')
 
@@ -2058,8 +2043,7 @@ def NormalizeBuilders(builders, errors):
 
 
 def NormalizeBotPools(builders, errors):
-  bot_pools = builders.setdefault('bot_pools', {})
-  for name, data in bot_pools.items():
+  for name, data in builders['bot_pools'].items():
     data.setdefault('bits', 64)
     for key in ('os', 'version'):
       if not key in data:
@@ -2093,15 +2077,6 @@ def _ApplyMixin(builders, mixin_name, vals, errors):
 
 
 def _ValidateBuilder(builder_name, builder_data, bot_pools, errors):
-  if not builder_data.get('recipe'):
-    errors.append('builder["%s"] did not specify a recipe' % builder_name)
-  if 'scheduler' not in builder_data:
-    errors.append('builder["%s"] did not specify a scheduler' % builder_name)
-  if builder_data.get('use_remote_run'):
-    if not builder_data.get('remote_run_repository'):
-      errors.append(('builder["%s"] wants to use remote run but did not '
-                     'set remote_run_repository') % builder_name)
-
   bot_keys = [k for k in BOT_KEYS if k in builder_data]
   if len(bot_keys) == 0:
     errors.append('builder["%s"] has neither bots nor bot_pools' %
