@@ -63,8 +63,8 @@ AUX_BINARY_PACKAGES = {
       # Currently, we only install Python on Windows, since we believe that
       # other platforms make assumptions about package availability.
       cipd.CipdPackage(
-          name='infra/python/cpython/${os=windows}-${arch=386,amd64}',
-          version='version:2.7.13.chromium7'),
+          name='infra/python/cpython/${os}-${arch=386,amd64}',
+          version='version:2.7.13.chromium8'),
 
       # The Git package installs its binaries into "bin/".
       #
