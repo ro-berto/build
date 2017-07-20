@@ -42,7 +42,6 @@ def _AddBuildSpec(name, platform, target_bits=64, enable_swarming=False):
   SPEC['builders'][name] = chromium_perf.BuildSpec(
       'tryserver_chromium_perf', None, platform, target_bits,
       enable_swarming=enable_swarming, force_exparchive=enable_swarming)
-  SPEC['builders'][name]['use_triggered_tests_from_master'] = 'chromium.perf'
 
 
 def _AddTestSpec(name, platform, target_bits=64):
@@ -51,9 +50,6 @@ def _AddTestSpec(name, platform, target_bits=64):
    SPEC['builders'][name] = chromium_perf.TestSpec(
        'tryserver_chromium_perf', None, platform, target_bits,
        parent_buildername='dummy')
-
-
-_AddBuildSpec('Mac Builder', 'mac', enable_swarming=True)
 
 
 _AddBuildSpec('android_perf_bisect_builder', 'android', target_bits=32)

@@ -552,6 +552,14 @@ TRYBOTS = freeze({
       },
     },
   },
+  'tryserver.chromium.perf': {
+    'builders': {
+      'Mac Builder': simple_bot({
+        'mastername': 'chromium.perf',
+        'buildername': 'Mac Builder',
+      }),
+    },
+  },
   'tryserver.chromium.win': {
     'builders': {
       'win_archive': simple_bot({
