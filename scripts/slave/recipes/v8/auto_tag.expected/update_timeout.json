@@ -200,13 +200,29 @@
     "cmd": [
       "git",
       "cl",
+      "upload",
+      "-f",
+      "--bypass-hooks",
+      "--send-mail",
+      "--private",
+      "--tbrs",
+      "machenbach@chromium.org"
+    ],
+    "cwd": "[START_DIR]/v8",
+    "infra_step": true,
+    "name": "git cl"
+  },
+  {
+    "cmd": [
+      "git",
+      "cl",
       "land",
       "-f",
       "--bypass-hooks"
     ],
     "cwd": "[START_DIR]/v8",
     "infra_step": true,
-    "name": "git cl"
+    "name": "git cl land"
   },
   {
     "cmd": [

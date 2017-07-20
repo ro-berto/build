@@ -121,7 +121,11 @@ def IncrementVersion(api, ref, latest_version, latest_version_file):
     return
 
   with api.context(cwd=api.path['checkout']):
-    api.git('cl', 'land', '-f', '--bypass-hooks')
+    api.git('cl', 'upload', '-f', '--bypass-hooks', '--send-mail',
+            '--private', '--tbrs', 'machenbach@chromium.org')
+
+  with api.context(cwd=api.path['checkout']):
+    api.git('cl', 'land', '-f', '--bypass-hooks', name='git cl land')
 
   # Function to check if commit has landed.
   def has_landed():
