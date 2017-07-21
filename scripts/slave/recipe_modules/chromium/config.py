@@ -281,7 +281,9 @@ def goma_staging(c):
 
 @config_ctx()
 def goma_gce(c):
-  c.compile_py.goma_failfast = True
+  # TODO(tikuta): re-enable failfast after implementing
+  #               appropriate frontend restart handling (b/62889773).
+  c.compile_py.goma_failfast = False
   c.env.GOMA_SETTINGS_SERVER = \
     'https://cxx-compiler-service.appspot.com/settings'
 
