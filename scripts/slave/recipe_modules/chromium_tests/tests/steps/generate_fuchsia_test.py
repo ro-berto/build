@@ -20,6 +20,7 @@ DEPS = [
 def RunSteps(api):
   api.gclient.set_config('chromium')
   api.chromium.set_config('chromium', TARGET_PLATFORM='fuchsia')
+  api.test_results.set_config('staging_server')
 
   update_step = api.bot_update.ensure_checkout()
 

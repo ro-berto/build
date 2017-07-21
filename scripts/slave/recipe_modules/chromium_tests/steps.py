@@ -402,8 +402,6 @@ class LocalGTestTest(Test):
       kwargs['json_results_file'] = gtest_results_file
       kwargs['shard_timeout'] = self._android_shard_timeout
       kwargs['tool'] = self._android_tool
-    elif is_fuchsia:
-      kwargs['test_launcher_summary_output'] = gtest_results_file
     else:
       kwargs['xvfb'] = self._use_xvfb
       kwargs['test_type'] = self.name
@@ -417,7 +415,9 @@ class LocalGTestTest(Test):
       elif is_fuchsia:
         script = api.chromium.output_dir.join('bin',
                                               'run_%s' % self.target_name)
-        api.python(self.target_name, script, args)
+        api.python(
+            self.target_name, script,
+            args + ['--test_launcher_summary_output', gtest_results_file])
       else:
         api.chromium.runtest(self.target_name, revision=self._revision,
                              webkit_revision=self._webkit_revision, **kwargs)
