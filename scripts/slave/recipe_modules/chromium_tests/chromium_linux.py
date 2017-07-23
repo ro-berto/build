@@ -27,9 +27,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder',
-      'compile_targets': [
-        'chromium_swarm_tests',
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -67,10 +64,6 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'builder',
-      'compile_targets': [
-        'google_apis_unittests',
-        'sync_integration_tests',
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -250,9 +243,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'compile_targets': [
-        'cast_shell',
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -265,9 +255,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'compile_targets': [
-        'cast_shell',
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -277,9 +264,6 @@ SPEC = {
       'chromium_apply_config': ['chrome_with_codecs', 'mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
-      'compile_targets': [
-        'cast_shell_apk',
-      ],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 32,

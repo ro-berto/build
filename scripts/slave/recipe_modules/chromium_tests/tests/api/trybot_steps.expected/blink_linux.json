@@ -278,7 +278,7 @@
       "linux_chromium_rel_ng",
       "-v",
       "//out/Release",
-      "{\"additional_compile_targets\": [\"chromium_swarm_tests\"], \"files\": [\"third_party/WebKit/foo.cc\"], \"test_targets\": [\"webkit_layout_tests_exparchive\"]}",
+      "{\"additional_compile_targets\": [], \"files\": [\"third_party/WebKit/foo.cc\"], \"test_targets\": [\"webkit_layout_tests_exparchive\"]}",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -294,9 +294,7 @@
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@analyze_details@{@@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"additional_compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"chromium_swarm_tests\"@@@",
-      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"additional_compile_targets\": [], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.test_targets\": [], @@@",

@@ -82,6 +82,16 @@ def GenTests(api):
         })
     )
 
+  def base_unittests_additional_compile_target():
+    return api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'gtest_tests': ['base_unittests'],
+            },
+        })
+    )
+
   yield (
     api.test('chromeos_analyze') +
     api.platform.name('linux') +
@@ -118,14 +128,7 @@ def GenTests(api):
     api.test('invalid_results') +
     props() +
     api.platform.name('linux') +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
-            'Linux Tests': {
-                'gtest_tests': ['base_unittests'],
-            },
-        })
-    ) +
+    base_unittests_additional_compile_target() +
     suppress_analyze() +
     api.override_step_data('base_unittests (with patch)',
                            canned_test(passing=False)) +
@@ -430,6 +433,7 @@ def GenTests(api):
     props(mastername='tryserver.chromium.linux',
           buildername='linux_chromium_rel_ng') +
     suppress_analyze() +
+    base_unittests_additional_compile_target() +
     api.step_data('compile (with patch)', retcode=1)
   )
 
@@ -459,6 +463,7 @@ def GenTests(api):
     props(mastername='tryserver.chromium.linux',
           buildername='linux_chromium_rel_ng') +
     suppress_analyze() +
+    base_unittests_additional_compile_target() +
     api.step_data('compile (with patch)', retcode=1) +
     api.step_data('compile (without patch)', retcode=1)
   )
@@ -666,6 +671,7 @@ def GenTests(api):
           buildername='linux_chromium_rel_ng',
           gerrit_project='chromium/src') +
     suppress_analyze() +
+    base_unittests_additional_compile_target() +
     api.step_data('compile (with patch)', retcode=1) +
     api.step_data(
       'gerrit get_patch_destination_branch',
@@ -687,6 +693,7 @@ def GenTests(api):
     api.test('use_webrtc_patch_on_chromium_trybot_compile_failure') +
     props(patch_project='webrtc') +
     api.platform.name('linux') +
+    base_unittests_additional_compile_target() +
     suppress_analyze(more_exclusions=['third_party/webrtc/f.*']) +
     api.step_data('compile (with patch)', retcode=1)
   )

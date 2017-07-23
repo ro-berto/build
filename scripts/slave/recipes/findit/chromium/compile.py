@@ -399,6 +399,17 @@ def GenTests(api):
         'buildbucket.get',
         stdout=api.raw_io.output_text(json.dumps(buildbucket_output)))
 
+  def base_unittests_additional_compile_target():
+    return api.override_step_data(
+        'test r1.read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Builder': {
+                'additional_compile_targets': [
+                    'base_unittests',
+                ],
+            }
+        }))
+
   yield (
       api.test('compile_specified_targets') +
       props(compile_targets=['target_name']) +
@@ -455,6 +466,7 @@ def GenTests(api):
       api.test('compile_succeeded') +
       props(buildbucket=json.dumps({'build': {'id': 'id1'}})) +
       simulated_buildbucket_output({}) +
+      base_unittests_additional_compile_target() +
       api.override_step_data('test r1.compile', retcode=0)
   )
 
@@ -462,6 +474,7 @@ def GenTests(api):
       api.test('compile_succeeded_non_json_buildbucket') +
       props(buildbucket={'build': {'id': 'id1'}}) +
       simulated_buildbucket_output({}) +
+      base_unittests_additional_compile_target() +
       api.override_step_data('test r1.compile', retcode=0)
   )
 
@@ -469,6 +482,7 @@ def GenTests(api):
       api.test('compile_failed') +
       props(buildbucket=json.dumps({'build': {'id': 'id1'}})) +
       simulated_buildbucket_output({}) +
+      base_unittests_additional_compile_target() +
       api.override_step_data('test r1.compile', retcode=1)
   )
 

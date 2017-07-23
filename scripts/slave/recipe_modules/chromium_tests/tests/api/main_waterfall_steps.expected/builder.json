@@ -332,7 +332,8 @@
       "[START_DIR]/src/out/Release",
       "-j",
       "50",
-      "chromium_swarm_tests"
+      "All",
+      "all"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
@@ -349,7 +350,8 @@
       "[START_DIR]/src/out/Release",
       "-j",
       "50",
-      "chromium_swarm_tests",
+      "All",
+      "all",
       "-d",
       "explain",
       "-n"
@@ -454,7 +456,7 @@
       "--ninja-log-outdir",
       "[START_DIR]/src/out/Release",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/Release', '-j', 50, 'chromium_swarm_tests']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/Release', '-j', 50, 'All', 'all']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",

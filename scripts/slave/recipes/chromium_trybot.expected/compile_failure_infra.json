@@ -329,7 +329,7 @@
       "linux_chromium_rel_ng",
       "-v",
       "//out/Release",
-      "{\"additional_compile_targets\": [\"chromium_swarm_tests\"], \"files\": [\"foo.cc\"], \"test_targets\": [\"base_unittests\"]}",
+      "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": [\"base_unittests\"]}",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -361,16 +361,12 @@
       "@@@STEP_LOG_LINE@excluded_files@foo.cc (regex = 'f.*')@@@",
       "@@@STEP_LOG_END@excluded_files@@@",
       "@@@STEP_LOG_LINE@analyze_details@{@@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"additional_compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"chromium_swarm_tests\"@@@",
-      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"additional_compile_targets\": [], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"base_unittests\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"chromium_swarm_tests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"base_unittests\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"base_unittests\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"chromium_swarm_tests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"base_unittests\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.test_targets\": [@@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"base_unittests\"@@@",
@@ -511,8 +507,7 @@
       "[BUILDER_CACHE]/linux/src/out/Release",
       "-j",
       "50",
-      "base_unittests",
-      "chromium_swarm_tests"
+      "base_unittests"
     ],
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
@@ -616,7 +611,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/linux/src/out/Release",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/linux/src/out/Release', '-j', 50, 'base_unittests', 'chromium_swarm_tests']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/linux/src/out/Release', '-j', 50, 'base_unittests']",
       "--ninja-log-exit-status",
       "1",
       "--ninja-log-compiler",
@@ -889,8 +884,7 @@
       "[BUILDER_CACHE]/linux/src/out/Release",
       "-j",
       "50",
-      "base_unittests",
-      "chromium_swarm_tests"
+      "base_unittests"
     ],
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
@@ -908,7 +902,6 @@
       "-j",
       "50",
       "base_unittests",
-      "chromium_swarm_tests",
       "-d",
       "explain",
       "-n"
@@ -1013,7 +1006,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/linux/src/out/Release",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/linux/src/out/Release', '-j', 50, 'base_unittests', 'chromium_swarm_tests']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/linux/src/out/Release', '-j', 50, 'base_unittests']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",
