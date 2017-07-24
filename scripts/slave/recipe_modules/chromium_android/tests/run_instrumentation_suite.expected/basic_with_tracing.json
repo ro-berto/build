@@ -1,0 +1,60 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "None/build/android/test_runner.py",
+      "instrumentation",
+      "--blacklist-file",
+      "None/out/bad_devices.json",
+      "--tool=test_tool",
+      "--verbose",
+      "--num-retries",
+      "5",
+      "--release",
+      "--trace-output",
+      "/path/to/tmp/",
+      "--trace-all",
+      "--adb-path",
+      "None/third_party/android_tools/sdk/platform-tools/adb"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "None/out/Release"
+    },
+    "name": "test_suite"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "None/third_party/catapult/tracing/bin/trace2html",
+      "",
+      "--output",
+      "/path/to/tmp/"
+    ],
+    "name": "Convert trace to HTML for test_suite"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "",
+      "gs://chromium-testrunner-trace/test_buildername/trace_1337_test_suite.html"
+    ],
+    "infra_step": true,
+    "name": "gsutil Upload test trace for test_suite",
+    "~followup_annotations": [
+      "@@@STEP_LINK@Test Trace@https://storage.cloud.google.com/chromium-testrunner-trace/test_buildername/trace_1337_test_suite.html@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]
