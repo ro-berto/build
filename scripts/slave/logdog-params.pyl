@@ -198,7 +198,11 @@
     'client.v8.fyi': {},
     'client.v8.official': {},
     'client.v8.ports': {},
-    'tryserver.v8': {},
+    'tryserver.v8': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
 
     # NaCl / WASM
     'client.nacl': {},
