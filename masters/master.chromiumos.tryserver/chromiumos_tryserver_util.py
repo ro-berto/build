@@ -152,18 +152,6 @@ class NextSlaveAndBuild(object):
     """
     return self.testing_slave_pool.is_testing_slave(slave.slavename)
 
-  def FilterSlaves(self, cbb_config, slaves):
-    """Filters |slaves| to only contain valid slaves for |cbb_config|.
-
-    Args:
-      cbb_config (ChromiteTarget): The config to filter for.
-      slaves: List of BuildSlave objects to filter to filter.
-    """
-    if (not cbb_config or cbb_config.HasVmTests() or
-        cbb_config.HasHwTests()):
-      slaves = [s for s in slaves if not builder_config.IsGCESlave(s.getName())]
-    return slaves
-
   def __call__(self, slaves, buildrequests):
     """Called by master to determine which job to run and which slave to use.
 
@@ -217,10 +205,7 @@ class NextSlaveAndBuild(object):
           -int(builder_config.IsGCESlave(s.slave.slavename)))
 
       # Iterate through slaves and choose the appropriate one.
-      cbb_config_name = br.properties.getProperty('cbb_config', None)
-      cbb_config = configs.get(cbb_config_name)
-      builder = br.master.status.getBuilder(br.buildername)
-      slaves = self.FilterSlaves(cbb_config, builder.getSlaves())
+      slaves = br.master.status.getBuilder(br.buildername).getSlaves()
       for s in normal_slaves:
         for builder_slave in slaves:
           if s.slave.slavename == builder_slave.getName():
