@@ -34,26 +34,6 @@ SPEC = {
       },
     },
 
-    'Test Run with Tracing': {
-      'chromium_config': 'android',
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
-        'TARGET_PLATFORM': 'android',
-      },
-      'bot_type': 'tester',
-      'parent_mastername': 'chromium.android',
-      'parent_buildername': 'Android arm Builder (dbg)',
-      'android_config': 'non_device_wipe_provisioning',
-      'root_devices': True,
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-
     'Jelly Bean Tester': {
       'chromium_config': 'android',
       'gclient_config': 'chromium',

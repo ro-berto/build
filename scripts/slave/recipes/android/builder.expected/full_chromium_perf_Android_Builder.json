@@ -530,7 +530,7 @@
       "0",
       "--collect-chartjson-data",
       "--trace-output",
-      "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.json",
+      "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.html",
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
@@ -545,29 +545,18 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/third_party/catapult/tracing/bin/trace2html",
-      "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.json",
-      "--output",
-      "/path/to/tmp/"
-    ],
-    "name": "Convert trace to HTML for perf"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "",
-      "gs://chromium-testrunner-trace/Android Builder/trace_257_perf.html"
+      "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.html",
+      "gs://chromium-testrunner-trace/Android Builder/trace_257.html"
     ],
     "infra_step": true,
-    "name": "gsutil Upload test trace for perf",
+    "name": "gsutil Upload Test Trace",
     "~followup_annotations": [
-      "@@@STEP_LINK@Test Trace@https://storage.cloud.google.com/chromium-testrunner-trace/Android Builder/trace_257_perf.html@@@"
+      "@@@STEP_LINK@Test Trace@https://storage.cloud.google.com/chromium-testrunner-trace/Android Builder/trace_257.html@@@"
     ]
   },
   {
@@ -815,7 +804,7 @@
       "0",
       "--collect-chartjson-data",
       "--trace-output",
-      "[TMP_BASE]/test_runner_trace_tmp_2/test_trace.json",
+      "[TMP_BASE]/test_runner_trace_tmp_2/test_trace.html",
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
@@ -830,29 +819,18 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/third_party/catapult/tracing/bin/trace2html",
-      "[TMP_BASE]/test_runner_trace_tmp_2/test_trace.json",
-      "--output",
-      "/path/to/tmp/"
-    ],
-    "name": "Convert trace to HTML for perf (2)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "",
-      "gs://chromium-testrunner-trace/Android Builder/trace_257_perf.html"
+      "[TMP_BASE]/test_runner_trace_tmp_2/test_trace.html",
+      "gs://chromium-testrunner-trace/Android Builder/trace_257.html"
     ],
     "infra_step": true,
-    "name": "gsutil Upload test trace for perf (2)",
+    "name": "gsutil Upload Test Trace (2)",
     "~followup_annotations": [
-      "@@@STEP_LINK@Test Trace@https://storage.cloud.google.com/chromium-testrunner-trace/Android Builder/trace_257_perf.html@@@"
+      "@@@STEP_LINK@Test Trace@https://storage.cloud.google.com/chromium-testrunner-trace/Android Builder/trace_257.html@@@"
     ]
   },
   {
@@ -1100,7 +1078,7 @@
       "0",
       "--collect-chartjson-data",
       "--trace-output",
-      "[TMP_BASE]/test_runner_trace_tmp_3/test_trace.json",
+      "[TMP_BASE]/test_runner_trace_tmp_3/test_trace.html",
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
@@ -1115,29 +1093,18 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/third_party/catapult/tracing/bin/trace2html",
-      "[TMP_BASE]/test_runner_trace_tmp_3/test_trace.json",
-      "--output",
-      "/path/to/tmp/"
-    ],
-    "name": "Convert trace to HTML for perf (3)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "",
-      "gs://chromium-testrunner-trace/Android Builder/trace_257_perf.html"
+      "[TMP_BASE]/test_runner_trace_tmp_3/test_trace.html",
+      "gs://chromium-testrunner-trace/Android Builder/trace_257.html"
     ],
     "infra_step": true,
-    "name": "gsutil Upload test trace for perf (3)",
+    "name": "gsutil Upload Test Trace (3)",
     "~followup_annotations": [
-      "@@@STEP_LINK@Test Trace@https://storage.cloud.google.com/chromium-testrunner-trace/Android Builder/trace_257_perf.html@@@"
+      "@@@STEP_LINK@Test Trace@https://storage.cloud.google.com/chromium-testrunner-trace/Android Builder/trace_257.html@@@"
     ]
   },
   {
@@ -1385,7 +1352,7 @@
       "0",
       "--collect-chartjson-data",
       "--trace-output",
-      "[TMP_BASE]/test_runner_trace_tmp_4/test_trace.json",
+      "[TMP_BASE]/test_runner_trace_tmp_4/test_trace.html",
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
@@ -1400,29 +1367,18 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/third_party/catapult/tracing/bin/trace2html",
-      "[TMP_BASE]/test_runner_trace_tmp_4/test_trace.json",
-      "--output",
-      "/path/to/tmp/"
-    ],
-    "name": "Convert trace to HTML for perf (4)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "",
-      "gs://chromium-testrunner-trace/Android Builder/trace_257_perf.html"
+      "[TMP_BASE]/test_runner_trace_tmp_4/test_trace.html",
+      "gs://chromium-testrunner-trace/Android Builder/trace_257.html"
     ],
     "infra_step": true,
-    "name": "gsutil Upload test trace for perf (4)",
+    "name": "gsutil Upload Test Trace (4)",
     "~followup_annotations": [
-      "@@@STEP_LINK@Test Trace@https://storage.cloud.google.com/chromium-testrunner-trace/Android Builder/trace_257_perf.html@@@"
+      "@@@STEP_LINK@Test Trace@https://storage.cloud.google.com/chromium-testrunner-trace/Android Builder/trace_257.html@@@"
     ]
   },
   {
