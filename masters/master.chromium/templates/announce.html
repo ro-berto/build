@@ -352,36 +352,6 @@
               return type + search(content);
             }
 
-            /**
-             * Callback to replace the LKGR link with one that identifies
-             * the current revision for the LKGR.
-             */
-            function DisplayLKGR() {
-              var xmlHttp = new XMLHttpRequest();
-              var lkgrPath = c.status_lkgr +
-                             '/json/builders/Linux%20x64/builds/-1?as_text=1';
-              var lkgrLink = document.getElementById('LKGRLink');
-              xmlHttp.open('GET', lkgrPath, false);
-              xmlHttp.send(null);
-              if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-                var buildData;
-                if (typeof (JSON) !== 'undefined' &&
-                    typeof (JSON.parse) === 'function') {
-                  buildData = JSON.parse(xmlHttp.responseText);
-                } else {
-                  buildData = eval('(' + xmlHttp.responseText + ')');
-                }
-                var properties = buildData['properties'];
-                for (var i = 0; i < properties.length; i++) {
-                  if (properties[i][0] == 'got_revision') {
-                    var revision = properties[i][1].substring(0,12);
-                    lkgrLink.innerHTML = 'LKGR<br>(' + revision + ')';
-                    return;
-                  }
-                }
-              }
-            }
-
             c.default_iframe_properties = [
                 'width="100%"',
                 'height="20"',
@@ -478,7 +448,7 @@
                 HTMLBaseBar(c.status_perf, c.bar_perf, c.perf,
                             'Perf', 'width="75%"', '') +
                 HTMLBaseBar(c.status_lkgr, c.bar_lkgr, c.lkgr,
-                            'LKGR', 'width="25%"', 'id="LKGRLink"')));
+                            'LKGR', 'width="25%"', '')));
 
             document.write(tr(td(
                 'colspan=4',
@@ -489,8 +459,6 @@
                                     'GPU', 'width="50%"', '') +
                         HTMLBaseBar(c.status_gpu_fyi, c.bar_gpu_fyi, c.gpu_fyi,
                                     'GPU FYI', 'width="50%"', ''))))));
-
-            setTimeout('DisplayLKGR()', 100);
           </script>
         </table>
       </td>
