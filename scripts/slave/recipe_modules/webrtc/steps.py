@@ -186,12 +186,9 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
 # TODO(kjellander): Continue refactoring an integrate the classes in the
 # chromium_tests recipe module instead (if possible).
 class Test(object):
-  def __init__(self, test, name=None, enable_swarming=False, shards=1):
+  def __init__(self, test, name=None):
     self._test = test
     self._name = name or test
-    self._enable_swarming = enable_swarming
-    self._swarming_task = None
-    self._shards = shards
 
   def pre_run(self, api, suffix):
     return []
@@ -202,39 +199,27 @@ class Test(object):
   def post_run(self, api, suffix):
     return []
 
-class WebRTCTest(Test):
-  """A normal WebRTC desktop test."""
-  def __init__(self, test, name=None, revision=None, enable_swarming=False,
-               shards=1, parallel=True, perf_test=False, **runtest_kwargs):
-    super(WebRTCTest, self).__init__(test, name, enable_swarming, shards)
-    self._revision = revision
+class BaremetalTest(Test):
+  """A WebRTC test that uses audio and/or video devices."""
+  def __init__(self, test, name=None, revision=None, parallel=False, args=None,
+               **runtest_kwargs):
+    super(BaremetalTest, self).__init__(test, name)
     self._parallel = parallel
-    self._perf_test = perf_test
+    self._args = args or []
+    self._revision = revision
     self._runtest_kwargs = runtest_kwargs
 
-class BaremetalTest(WebRTCTest):
-  """A WebRTC test that uses audio and/or video devices."""
-  def __init__(self, test, name=None, revision=None, perf_test=False,
-               parallel=False, **kwargs):
-    super(BaremetalTest, self).__init__(test, name, revision=revision,
-                                        parallel=parallel, perf_test=perf_test,
-                                        **kwargs)
-
   def run(self, api, suffix):
-    args = self._runtest_kwargs.pop('args', [])
     python_mode = False
 
     annotate = 'gtest'
     test_type = self._test
-    flakiness_dash = (not api.m.tryserver.is_tryserver and
-                      not api.m.chromium.c.runtests.enable_memcheck)
+    flakiness_dash = not api.m.tryserver.is_tryserver
 
-    # Memcheck uses special scripts that don't play well with
-    # the gtest-parallel script.
-    if self._parallel and not api.m.chromium.c.runtests.enable_memcheck:
+    if self._parallel:
       test_executable = api.m.chromium.c.build_dir.join(
         api.m.chromium.c.build_config_fs, self._test)
-      args = [test_executable] + args
+      self._args = [test_executable] + self._args
       self._test = api.m.path['checkout'].join('third_party', 'gtest-parallel',
                                                'gtest-parallel')
       python_mode = True
@@ -242,7 +227,7 @@ class BaremetalTest(WebRTCTest):
       flakiness_dash = False
 
     api.m.chromium.runtest(
-        test=self._test, args=args, name=self._name, annotate=annotate,
+        test=self._test, args=self._args, name=self._name, annotate=annotate,
         xvfb=True, flakiness_dash=flakiness_dash, python_mode=python_mode,
         revision=self._revision, test_type=test_type, **self._runtest_kwargs)
 
@@ -255,12 +240,15 @@ class PythonTest(Test):
   def run(self, api, suffix):
     api.m.python(self._test, self._script, self._args)
 
-class PerfTest(WebRTCTest):
+class PerfTest(Test):
   """A WebRTC test that needs consistent hardware performance."""
-  def __init__(self, test, name=None, revision=None, **kwargs):
-    super(PerfTest, self).__init__(test, name, revision=revision,
-                                   perf_test=True, **kwargs)
+  def __init__(self, test, name=None, args=None, revision=None,
+               **runtest_kwargs):
+    super(PerfTest, self).__init__(test, name)
     assert revision, 'Revision is mandatory for perf tests'
+    self._revision = revision
+    self._args = args or []
+    self._runtest_kwargs = runtest_kwargs
 
   def run(self, api, suffix):
     perf_dashboard_id = self._name
@@ -270,10 +258,11 @@ class PerfTest(WebRTCTest):
     perf_config = api.PERF_CONFIG
     perf_config['r_webrtc_git'] = api.revision
     api.m.chromium.runtest(
-        test=self._test, name=self._name, results_url=api.DASHBOARD_UPLOAD_URL,
-        annotate='graphing', xvfb=True, perf_dashboard_id=perf_dashboard_id,
-        test_type=perf_dashboard_id, revision=api.revision_number,
-        perf_id=api.c.PERF_ID, perf_config=perf_config, **self._runtest_kwargs)
+        test=self._test, name=self._name, args=self._args,
+        results_url=api.DASHBOARD_UPLOAD_URL, annotate='graphing', xvfb=True,
+        perf_dashboard_id=perf_dashboard_id, test_type=perf_dashboard_id,
+        revision=api.revision_number, perf_id=api.c.PERF_ID,
+        perf_config=perf_config, **self._runtest_kwargs)
 
 class AndroidJunitTest(Test):
   """Runs an Android Junit test."""
@@ -291,12 +280,11 @@ class AndroidPerfTest(PerfTest):
   """
 
   def __init__(self, test, name=None, revision=None):
-    super(AndroidPerfTest, self).__init__(test, name, revision)
+    super(AndroidPerfTest, self).__init__(test, name, args=['--verbose'],
+                                          revision=revision, python_mode=True)
 
   def run(self, api, suffix):
     wrapper_script = api.m.chromium.output_dir.join('bin',
                                                     'run_%s' % self._name)
     self._test = wrapper_script
-    self._runtest_kwargs['python_mode'] = True
-    self._runtest_kwargs['args'] = ['--verbose']
     super(AndroidPerfTest, self).run(api, suffix)
