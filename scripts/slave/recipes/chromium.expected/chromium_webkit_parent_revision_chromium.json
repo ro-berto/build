@@ -324,7 +324,6 @@
       "--step-name",
       "webkit_tests",
       "--no-show-results",
-      "--full-results-html",
       "--clobber-old-results",
       "--exit-after-n-failures",
       "5000",

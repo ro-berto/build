@@ -2298,7 +2298,6 @@ class BlinkTest(Test):
         '--builder-name', api.properties['buildername'],
         '--step-name', step_name,
         '--no-show-results',
-        '--full-results-html',    # For the dashboards.
         '--clobber-old-results',  # Clobber test results before each run.
         '--exit-after-n-failures', '5000',
         '--exit-after-n-crashes-or-timeouts', '100',
