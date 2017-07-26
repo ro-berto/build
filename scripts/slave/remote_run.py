@@ -95,7 +95,7 @@ _OPT_IN_USERS = set([
           # WebRTC Infrastructure Team Members
           'kjellander', 'ehmaldonado', 'oprypin', 'mbonadei',
         ),
-        ('chromium.org', 'google.com')
+        ('chromium.org', 'google.com', 'webrtc.org')
       )
 ])
 
