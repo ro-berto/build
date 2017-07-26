@@ -1147,6 +1147,24 @@ SPEC = {
       },
       'checkout_dir': 'win',
     },
+    # followed amd64-generic config in chromium_tests/chromium_chromiumos.py
+    'ChromeOS amd64 Chromium Goma Canary': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['chromeos', 'goma_canary', 'mb',
+                                'ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_PLATFORM': 'chromeos',
+        'TARGET_CROS_BOARD': 'amd64-generic',
+      },
+      'compile_targets': [ 'chromiumos_preflight' ],
+      'goma_canary': True,
+      'test_results_config': 'staging_server',
+      'testing': {
+        'platform': 'linux'
+      }
+    },
     'Chromium Linux Goma Canary': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['goma_canary', 'mb'],
