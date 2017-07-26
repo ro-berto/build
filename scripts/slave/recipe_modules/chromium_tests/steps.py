@@ -1695,6 +1695,8 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
         swarming_expiration = swarming_spec.get('expiration')
         swarming_hard_timeout = swarming_spec.get('hard_timeout')
         swarming_io_timeout = swarming_spec.get('io_timeout')
+        swarming_upload_test_results = (
+            swarming_spec.get('upload_test_results', True))
     name = str(spec['name'])
     # The variable substitution and precommit/non-precommit arguments
     # could be supported for the other test types too, but that wasn't
@@ -1756,7 +1758,8 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
               override_compile_targets=override_compile_targets,
               ignore_task_failure=swarming_ignore_task_failure,
               priority=swarming_priority, expiration=swarming_expiration,
-              hard_timeout=swarming_hard_timeout, perf_id=perf_id,
+              hard_timeout=swarming_hard_timeout,
+              upload_test_results=swarming_upload_test_results, perf_id=perf_id,
               results_url=results_url, perf_dashboard_id=perf_dashboard_id,
               io_timeout=swarming_io_timeout,
               waterfall_mastername=mastername,
@@ -1769,7 +1772,8 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
             override_compile_targets=override_compile_targets,
             ignore_task_failure=swarming_ignore_task_failure,
             priority=swarming_priority, expiration=swarming_expiration,
-            hard_timeout=swarming_hard_timeout, perf_id=perf_id,
+            hard_timeout=swarming_hard_timeout,
+            upload_test_results=swarming_upload_test_results, perf_id=perf_id,
             results_url=results_url, perf_dashboard_id=perf_dashboard_id,
             io_timeout=swarming_io_timeout,
             waterfall_mastername=mastername, waterfall_buildername=buildername,
