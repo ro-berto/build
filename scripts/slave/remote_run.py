@@ -88,7 +88,13 @@ _CANARY_MASTERS = set((
 # usernames, the build will automatically opt-in to Kitchen.
 _OPT_IN_USERS = set([
       'user:%s@%s' % (ldap, domain) for ldap, domain in itertools.product(
-        ('dnj', 'iannucci', 'hinoka', 'nodir', 'vadimsh', 'estaab', 'smut'),
+        (
+          # Chrome Infrastructure Team Members
+          'dnj', 'iannucci', 'hinoka', 'nodir', 'vadimsh', 'estaab', 'smut',
+
+          # WebRTC Infrastructure Team Members
+          'kjellander', 'ehmaldonado', 'oprypin', 'mbonadei',
+        ),
         ('chromium.org', 'google.com')
       )
 ])
