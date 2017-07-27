@@ -19,7 +19,11 @@ CLIENT_NAME = 'cipd' + infra_platform.exe_suffix()
 
 
 DEFAULT_CIPD_VERSION = 'git_revision:5cf65fdf804a9b3f3023f79d5b3cab2a88ccd09e'
-STAGING_CIPD_VERSION = 'git_revision:5cf65fdf804a9b3f3023f79d5b3cab2a88ccd09e'
+STAGING_CIPD_VERSION = 'git_revision:e2a98b41adb3403b5b7771c4101b42a55dc2dd9e'
+
+# Latest Git bundle versions for packages that don't have a "latest" ref.
+LATEST_PYTHON_BUNDLE_VERSION = 'version:2.7.13.chromium7'
+LATEST_GIT_BUNDLE_VERSION = 'version:2.13.3.chromium10'
 
 PROD = None
 STAGING = 'staging'
@@ -64,7 +68,7 @@ AUX_BINARY_PACKAGES = {
       # other platforms make assumptions about package availability.
       cipd.CipdPackage(
           name='infra/python/cpython/${os=windows}-${arch=386,amd64}',
-          version='version:2.7.13.chromium7'),
+          version=LATEST_PYTHON_BUNDLE_VERSION),
 
       # The Git package installs its binaries into "bin/".
       #
@@ -72,7 +76,7 @@ AUX_BINARY_PACKAGES = {
       # don't have cross-compile support for Git packages yet.
       cipd.CipdPackage(
           name='infra/git/${os}-${arch=386,amd64}',
-          version='version:2.13.3.chromium10'),
+          version=LATEST_GIT_BUNDLE_VERSION),
     ),
 
     CANARY: (
@@ -83,6 +87,22 @@ AUX_BINARY_PACKAGES = {
       cipd.CipdPackage(
           name='infra/tools/git/${platform}',
           version='latest'),
+
+      # The Python package installs its binaries into "bin/".
+      #
+      # Currently, we only install Python on Windows, since we believe that
+      # other platforms make assumptions about package availability.
+      cipd.CipdPackage(
+          name='infra/python/cpython/${os=windows}-${arch=386,amd64}',
+          version=LATEST_PYTHON_BUNDLE_VERSION),
+
+      # The Git package installs its binaries into "bin/".
+      #
+      # Currently, we only install Git on x86 and amd64 platforms because we
+      # don't have cross-compile support for Git packages yet.
+      cipd.CipdPackage(
+          name='infra/git/${os}-${arch=386,amd64}',
+          version=LATEST_GIT_BUNDLE_VERSION),
     ),
 }
 
