@@ -10,6 +10,7 @@ DEPS = [
   'depot_tools/bot_update',
   'depot_tools/depot_tools',
   'chromium',
+  'recipe_engine/context',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/platform',
@@ -60,17 +61,18 @@ def RunSteps(api):
   api.chromium.runhooks()
   webrtc.run_mb()
 
-  step_result = api.python('calculate targets',
-          api.depot_tools.gn_py_path,
-          ['--root=%s' % str(api.path['checkout']),
-           'refs',
-           str(api.chromium.output_dir),
-           '--all',
-           '--type=executable',
-           '--as=output',
-           '//webrtc/test/fuzzers:webrtc_fuzzer_main',
-          ],
-          stdout=api.raw_io.output_text())
+  with api.context(cwd=api.path['checkout']):
+    step_result = api.python('calculate targets',
+                             api.depot_tools.gn_py_path,
+                             ['--root=%s' % str(api.path['checkout']),
+                              'refs',
+                              str(api.chromium.output_dir),
+                              '--all',
+                              '--type=executable',
+                              '--as=output',
+                              '//webrtc/test/fuzzers:webrtc_fuzzer_main',
+                              ],
+                             stdout=api.raw_io.output_text())
 
   targets = step_result.stdout.split()
   api.step.active_result.presentation.logs['targets'] = targets

@@ -156,6 +156,7 @@
       "--as=output",
       "//webrtc/test/fuzzers:webrtc_fuzzer_main"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "calculate targets",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
