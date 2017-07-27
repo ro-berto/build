@@ -911,7 +911,7 @@
       "flake_fakes.json",
       "--collect-json-data",
       "--trace-output",
-      "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.html",
+      "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.json",
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
@@ -926,18 +926,29 @@
     "cmd": [
       "python",
       "-u",
+      "[START_DIR]/src/third_party/catapult/tracing/bin/trace2html",
+      "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.json",
+      "--output",
+      "/path/to/tmp/"
+    ],
+    "name": "Convert trace to HTML for perf"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.html",
-      "gs://chromium-testrunner-trace/perf_runner_disable_location/trace_571.html"
+      "test data",
+      "gs://chromium-testrunner-trace/perf_runner_disable_location/trace_571_perf.html"
     ],
     "infra_step": true,
-    "name": "gsutil Upload Test Trace",
+    "name": "gsutil Upload test trace for perf",
     "~followup_annotations": [
-      "@@@STEP_LINK@Test Trace@https://storage.cloud.google.com/chromium-testrunner-trace/perf_runner_disable_location/trace_571.html@@@"
+      "@@@STEP_LINK@Test Trace@https://storage.cloud.google.com/chromium-testrunner-trace/perf_runner_disable_location/trace_571_perf.html@@@"
     ]
   },
   {

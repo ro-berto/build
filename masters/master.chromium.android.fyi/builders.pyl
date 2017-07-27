@@ -23,6 +23,14 @@
       "category": "2Testers",
       "mergeRequests": True,
     },
+    "Android Tests with Tracing": {
+      "recipe": "chromium",
+      "use_remote_run": True,
+      "scheduler": None,
+      "slave_pools": ["trial_device_slave"],
+      "category": "2Testers",
+      "mergeRequests": True,
+    },
     "Jelly Bean Tester": {
       "recipe": "chromium",
       "use_remote_run": True,

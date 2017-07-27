@@ -786,6 +786,33 @@ class AndroidApi(recipe_api.RecipeApi):
           args,
           **kwargs)
 
+  def _upload_trace_results(self, trace_json_path, test_name):
+    dest = '{builder}/trace_{buildnumber}_{name}.html'.format(
+        builder=self.m.properties['buildername'],
+        buildnumber=self.m.properties['buildnumber'],
+        name=test_name)
+
+    test_data = lambda: self.m.raw_io.test_api.output_text('test data',
+                                                           name='trace_html')
+    step_result = self.m.python(
+        name='Convert trace to HTML for %s' % test_name,
+        script=self.m.path['checkout'].join('third_party', 'catapult',
+                                            'tracing', 'bin',
+                                            'trace2html'),
+        args=[trace_json_path, '--output',
+              self.m.raw_io.output_text(name='trace_html')],
+        step_test_data=test_data)
+
+    trace_html = step_result.raw_io.output_texts['trace_html']
+    trace_html_path = self.m.raw_io.input_text(trace_html)
+
+    self.m.gsutil.upload(
+        name='Upload test trace for %s' % test_name,
+        source=trace_html_path,
+        bucket='chromium-testrunner-trace',
+        dest=dest,
+        link_name='Test Trace')
+
   def run_sharded_perf_tests(self, config, flaky_config=None, perf_id=None,
                              test_type_transform=lambda x: x,
                              chartjson_file=False, max_battery_temp=None,
@@ -814,7 +841,7 @@ class AndroidApi(recipe_api.RecipeApi):
     """
 
     with self.m.tempfile.temp_dir('test_runner_trace') as trace_dir:
-      test_trace_path = self.m.path.join(trace_dir, 'test_trace.html')
+      test_trace_path = self.m.path.join(trace_dir, 'test_trace.json')
 
       # TODO(jbudorick): Remove pass_adb_path once telemetry can use a
       # configurable adb path.
@@ -830,16 +857,7 @@ class AndroidApi(recipe_api.RecipeApi):
                               num_retries=num_retries,
                               test_trace=test_trace_path, **kwargs)
 
-      # now upload test trace.
-      dest = '{builder}/trace_{buildno}.html'.format(
-          builder=self.m.properties['buildername'],
-          buildno=self.m.properties['buildnumber'])
-      self.m.gsutil.upload(
-          name='Upload Test Trace',
-          source=test_trace_path,
-          bucket='chromium-testrunner-trace',
-          dest=dest,
-          link_name='Test Trace')
+      self._upload_trace_results(test_trace_path, 'perf')
 
     # now obtain the list of tests that were executed.
     with self.m.context(env=self.m.chromium.get_env()):
@@ -993,11 +1011,11 @@ class AndroidApi(recipe_api.RecipeApi):
                   [['Device Affinity: %s' % test_data['device_affinity']]]))
 
       if archive:
-        dest = '{builder}/{test}/{timestamp}_build_{buildno}.zip'.format(
+        dest = '{builder}/{test}/{timestamp}_build_{buildnumber}.zip'.format(
           builder=self.m.properties['buildername'],
           test=test_name,
           timestamp=_TimestampToIsoFormat(test_end_time),
-          buildno=self.m.properties['buildnumber'])
+          buildnumber=self.m.properties['buildnumber'])
         self.m.gsutil.upload(
           name='upload %s output dir archive' % test_name,
           source=archive,
@@ -1043,6 +1061,7 @@ class AndroidApi(recipe_api.RecipeApi):
                                 wrapper_script_suite_name=None,
                                 result_details=False,
                                 store_tombstones=False,
+                                trace_output=False,
                                 args=None,
                                 **kwargs):
     args = args or []
@@ -1090,8 +1109,15 @@ class AndroidApi(recipe_api.RecipeApi):
     step_name = '%s%s' % (
         annotation or name, ' (%s)' % suffix if suffix else '')
 
+    if trace_output:
+      args.extend([
+          '--trace-output', self.m.json.output(name='trace'), '--trace-all'])
+      test_data = lambda: self.m.json.test_api.output('{"test data"}',
+                                                      name='trace')
+      kwargs['step_test_data'] = test_data
+
     try:
-      step_result = self.test_runner(
+      self.test_runner(
           step_name,
           args=args,
           wrapper_script_suite_name=wrapper_script_suite_name,
@@ -1107,11 +1133,17 @@ class AndroidApi(recipe_api.RecipeApi):
                                                     json_results)
           self.m.step.active_result.presentation.links['result_details'] = (
               details_link)
+
+      if trace_output:
+        trace_json = result_step.json.outputs['trace']
+        trace_json_path = self.m.json.input(trace_json)
+        self._upload_trace_results(trace_json_path, name)
+
       # Need to copy gtest results over. A few places call
       # |run_instrumentation_suite| function and then look for results in
       # the active_result.
       self.copy_gtest_results(result_step, self.m.step.active_result)
-    return step_result
+    return result_step
 
   def copy_gtest_results(self, result_step, active_step):
     if (hasattr(result_step, 'test_utils') and
