@@ -129,6 +129,11 @@ class V8Api(recipe_api.RecipeApi):
 
     mastername = self.m.properties.get('mastername')
     buildername = self.m.properties.get('buildername')
+
+    # Strip of LUCI prefix of corresponding bots.
+    if buildername.startswith('LUCI '):  # pragma: no cover
+      buildername = buildername[len('LUCI '):]
+
     master_dict = builders.get(mastername, {})
     self.bot_config = master_dict.get('builders', {}).get(buildername)
     assert self.bot_config, (
