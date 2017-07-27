@@ -200,7 +200,6 @@ def angle_top_of_tree(c):  # pragma: no cover
   Sets up ToT instead of the DEPS-pinned revision for ANGLE.
   """
   # TODO(tandrii): I think patch_projects in bare_chromium fixed this.
-  c.solutions[0].revision = 'HEAD'
   c.revisions['src/third_party/angle'] = 'HEAD'
 
 # TODO(phajdan.jr): Move to proper repo and add coverage.
