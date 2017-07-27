@@ -25,6 +25,7 @@
       "--revision",
       "skia@HEAD"
     ],
+    "cwd": "[CACHE]/builder",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -71,7 +72,7 @@
       "-m",
       "Committed patch"
     ],
-    "cwd": "[START_DIR]/skia",
+    "cwd": "[CACHE]/builder/skia",
     "name": "commit-git-patch"
   },
   {
@@ -89,7 +90,7 @@
       "--rietveld_email",
       "",
       "--root",
-      "[START_DIR]/skia",
+      "[CACHE]/builder/skia",
       "--commit",
       "--verbose",
       "--verbose",
@@ -102,6 +103,7 @@
       "--upstream",
       "9046e2e693bb92a76e972b694580e5d17ad10748"
     ],
+    "cwd": "[CACHE]/builder",
     "env": {
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },

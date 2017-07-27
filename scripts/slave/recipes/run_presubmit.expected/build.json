@@ -25,6 +25,7 @@
       "--revision",
       "build@HEAD"
     ],
+    "cwd": "[CACHE]/builder",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -71,7 +72,7 @@
       "-m",
       "Committed patch"
     ],
-    "cwd": "[START_DIR]/build",
+    "cwd": "[CACHE]/builder/build",
     "name": "commit-git-patch"
   },
   {
@@ -89,7 +90,7 @@
       "--rietveld_email",
       "",
       "--root",
-      "[START_DIR]/build",
+      "[CACHE]/builder/build",
       "--commit",
       "--verbose",
       "--verbose",
@@ -102,6 +103,7 @@
       "--upstream",
       "80754af91bfb6d1073585b046fe0a474ce868509"
     ],
+    "cwd": "[CACHE]/builder",
     "env": {
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]",
       "PYTHONPATH": ""

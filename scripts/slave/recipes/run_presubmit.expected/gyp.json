@@ -25,6 +25,7 @@
       "--revision",
       "gyp@HEAD"
     ],
+    "cwd": "[CACHE]/builder",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -71,7 +72,7 @@
       "-m",
       "Committed patch"
     ],
-    "cwd": "[START_DIR]/gyp",
+    "cwd": "[CACHE]/builder/gyp",
     "name": "commit-git-patch"
   },
   {
@@ -89,7 +90,7 @@
       "--rietveld_email",
       "",
       "--root",
-      "[START_DIR]/gyp",
+      "[CACHE]/builder/gyp",
       "--commit",
       "--verbose",
       "--verbose",
@@ -102,6 +103,7 @@
       "--upstream",
       "6719c46a0a0a18abfb6c3dbce45c7ccd772b243d"
     ],
+    "cwd": "[CACHE]/builder",
     "env": {
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },

@@ -25,6 +25,7 @@
       "--revision",
       "depot_tools@HEAD"
     ],
+    "cwd": "[CACHE]/builder",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -71,7 +72,7 @@
       "-m",
       "Committed patch"
     ],
-    "cwd": "[START_DIR]/depot_tools",
+    "cwd": "[CACHE]/builder/depot_tools",
     "name": "commit-git-patch"
   },
   {
@@ -89,7 +90,7 @@
       "--rietveld_email",
       "",
       "--root",
-      "[START_DIR]/depot_tools",
+      "[CACHE]/builder/depot_tools",
       "--commit",
       "--verbose",
       "--verbose",
@@ -102,6 +103,7 @@
       "--upstream",
       "59bbfb4465019d8ed83bfe88fef566922953452a"
     ],
+    "cwd": "[CACHE]/builder",
     "env": {
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },

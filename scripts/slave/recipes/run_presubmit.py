@@ -48,7 +48,7 @@ def _RunStepsInternal(api):
   upstream = bot_update_step.json.output['properties'].get(
       got_revision_properties[0])
 
-  abs_root = api.path['start_dir'].join(relative_root)
+  abs_root = api.context.cwd.join(relative_root)
   with api.context(cwd=abs_root):
     # TODO(hinoka): Extract email/name from issue?
     api.git('-c', 'user.email=commit-bot@chromium.org',
@@ -119,8 +119,9 @@ def _RunStepsInternal(api):
 
 
 def RunSteps(api):
-  with api.tryserver.set_failure_hash():
-    return _RunStepsInternal(api)
+  with api.context(cwd=api.path['cache'].join('builder')):
+    with api.tryserver.set_failure_hash():
+      return _RunStepsInternal(api)
 
 
 def GenTests(api):
