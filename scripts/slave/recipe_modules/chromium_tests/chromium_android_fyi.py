@@ -34,7 +34,7 @@ SPEC = {
       },
     },
 
-    'Test Run with Tracing': {
+    'Android Tests with Tracing': {
       'chromium_config': 'android',
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
