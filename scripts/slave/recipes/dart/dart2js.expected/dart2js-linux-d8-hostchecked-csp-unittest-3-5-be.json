@@ -64,6 +64,11 @@
       "--kill_browsers=True"
     ],
     "cwd": "[START_DIR]/sdk",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "name": "taskkill before building"
   },
   {
@@ -77,6 +82,11 @@
       "patched_dart2js_sdk"
     ],
     "cwd": "[START_DIR]/sdk",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "name": "build dart"
   },
   {
@@ -103,6 +113,11 @@
       "--exclude-suite=observatory_ui,co19"
     ],
     "cwd": "[START_DIR]/sdk",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "name": "dart2js-d8 tests"
   },
   {
@@ -130,6 +145,11 @@
       "pkg"
     ],
     "cwd": "[START_DIR]/sdk",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "name": "dart2js-d8-package tests"
   },
   {
@@ -157,6 +177,11 @@
       "observatory_ui"
     ],
     "cwd": "[START_DIR]/sdk",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "name": "dart2js-d8-observatory-ui tests"
   },
   {
@@ -185,6 +210,11 @@
       "dart2js_native"
     ],
     "cwd": "[START_DIR]/sdk",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "name": "dart2js-d8-extra tests"
   },
   {
@@ -212,6 +242,11 @@
       "co19"
     ],
     "cwd": "[START_DIR]/sdk",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "name": "dart2js-d8-co19 tests"
   },
   {
@@ -240,6 +275,11 @@
       "--exclude-suite=observatory_ui,co19"
     ],
     "cwd": "[START_DIR]/sdk",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "name": "dart2js-d8-checked tests"
   },
   {
@@ -268,6 +308,11 @@
       "pkg"
     ],
     "cwd": "[START_DIR]/sdk",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "name": "dart2js-d8-package-checked tests"
   },
   {
@@ -296,6 +341,11 @@
       "observatory_ui"
     ],
     "cwd": "[START_DIR]/sdk",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "name": "dart2js-d8-observatory-ui-checked tests"
   },
   {
@@ -325,6 +375,11 @@
       "dart2js_native"
     ],
     "cwd": "[START_DIR]/sdk",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "name": "dart2js-d8-extra-checked tests"
   },
   {
@@ -353,6 +408,11 @@
       "co19"
     ],
     "cwd": "[START_DIR]/sdk",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "name": "dart2js-d8-co19-checked tests"
   },
   {

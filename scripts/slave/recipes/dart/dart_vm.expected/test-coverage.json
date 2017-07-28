@@ -89,6 +89,11 @@
     "env": {
       "LOGONSERVER": "\\\\AD1"
     },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "name": "build dart"
   },
   {

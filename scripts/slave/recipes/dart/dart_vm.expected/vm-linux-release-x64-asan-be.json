@@ -84,6 +84,11 @@
       "ASAN_SYMBOLIZER_PATH": "third_party/clang/linux/bin/llvm-symbolizer",
       "DART_USE_ASAN": "1"
     },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "name": "build dart"
   },
   {

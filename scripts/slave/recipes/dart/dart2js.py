@@ -4,6 +4,7 @@
 
 DEPS = [
   'depot_tools/bot_update',
+  'depot_tools/depot_tools',
   'depot_tools/gclient',
   'recipe_engine/context',
   'recipe_engine/path',
@@ -41,7 +42,8 @@ def RunTests(api, test_args, test_specs, use_xvfb=False):
       args.append('--append_logs')
     args.extend(test_spec['tests'])
 
-    with api.context(cwd=api.path['checkout']):
+    with api.context(cwd=api.path['checkout'],
+                     env_prefixes={'PATH':[api.depot_tools.root]}):
       if use_xvfb:
         xvfb_cmd = ['xvfb-run', '-a', '--server-args=-screen 0 1024x768x24']
         xvfb_cmd.extend(['python', '-u', './tools/test.py'])
@@ -62,7 +64,7 @@ def RunSteps(api):
   runtime = builder_fragments[2]
   assert runtime in all_runtimes
   channel = builder_fragments[-1]
-  assert channel in ['be', 'dev', 'stable', 'integration']
+  assert channel in ['be', 'dev', 'stable', 'integration', 'try']
   try:
     num_shards = int(builder_fragments[-2])
     shard = int(builder_fragments[-3])
@@ -82,7 +84,8 @@ def RunSteps(api):
 
   api.gclient.runhooks()
 
-  with api.context(cwd=api.path['checkout']):
+  with api.context(cwd=api.path['checkout'],
+                   env_prefixes={'PATH':[api.depot_tools.root]}):
     api.python('taskkill before building',
                api.path['checkout'].join('tools', 'task_kill.py'),
                args=['--kill_browsers=True'])

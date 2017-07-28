@@ -64,6 +64,11 @@
       "--kill_browsers=True"
     ],
     "cwd": "[START_DIR]\\sdk",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "name": "taskkill before building"
   },
   {
@@ -76,6 +81,11 @@
       "dart2js_bot"
     ],
     "cwd": "[START_DIR]\\sdk",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "name": "build dart"
   },
   {
@@ -101,6 +111,11 @@
       "samples"
     ],
     "cwd": "[START_DIR]\\sdk",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "name": "dart2js-ie10 tests"
   },
   {
@@ -125,6 +140,11 @@
       "co19"
     ],
     "cwd": "[START_DIR]\\sdk",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "name": "dart2js-ie10-co19 tests"
   },
   {

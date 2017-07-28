@@ -4,6 +4,7 @@
 
 DEPS = [
   'depot_tools/bot_update',
+  'depot_tools/depot_tools',
   'depot_tools/gclient',
   'recipe_engine/context',
   'recipe_engine/path',
@@ -173,7 +174,8 @@ def RunSteps(api):
 
     build_args = ['-m%s' % b['mode'], '--arch=%s' % b['target_arch'], 'runtime']
     build_args.extend(b.get('build_args', []))
-    with api.context(env=b['env']):
+    with api.context(env=b['env'],
+                     env_prefixes={'PATH':[api.depot_tools.root]}):
       api.python('build dart',
                  api.path['checkout'].join('tools', 'build.py'),
                  args=build_args)
