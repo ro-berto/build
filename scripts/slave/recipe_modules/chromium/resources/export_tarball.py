@@ -55,6 +55,7 @@ TEST_DIRS = (
     'chrome/test/data',
     'content/test/data',
     'courgette/testdata',
+    'extensions/test/data',
     'media/test/data',
     'native_client/src/trusted/service_runtime/testdata',
 )
