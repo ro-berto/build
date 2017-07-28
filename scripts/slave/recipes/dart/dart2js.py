@@ -78,10 +78,10 @@ def RunSteps(api):
     assert all_options.has_key(option)
   mode = 'debug' if 'debug' in options else 'release'
   api.gclient.set_config('dart')
-  api.path.c.dynamic_paths['tools'] = None
-  api.bot_update.ensure_checkout()
-  api.path['tools'] = api.path['checkout'].join('tools')
+  if channel == 'try':
+    api.gclient.c.solutions[0].url = 'https://dart.googlesource.com/sdk.git'
 
+  api.bot_update.ensure_checkout()
   api.gclient.runhooks()
 
   with api.context(cwd=api.path['checkout'],
@@ -175,10 +175,10 @@ def RunSteps(api):
 
 def GenTests(api):
    yield (
-      api.test('dart2js-linux-d8-hostchecked-csp-unittest-3-5-be') +
+      api.test('dart2js-linux-d8-hostchecked-csp-unittest-3-5-try') +
       api.platform('linux', 64) +
-      api.properties.generic(mastername='client.dart',
-          buildername='dart2js-linux-d8-hostchecked-csp-unittest-3-5-be'))
+      api.properties.generic(mastername='luci.dart.try',
+          buildername='dart2js-linux-d8-hostchecked-csp-unittest-3-5-try'))
    yield (
       api.test('dart2js-win7-ie10-debug-dev') + api.platform('win', 32) +
       api.properties.generic(mastername='client.dart',

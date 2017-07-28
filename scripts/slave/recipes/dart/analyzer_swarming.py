@@ -52,6 +52,8 @@ def RunSteps(api):
   assert channel in ['be', 'dev', 'stable', 'integration', 'try']
 
   api.gclient.set_config('dart', GIT_MODE=True)
+  if channel == 'try':
+    api.gclient.c.solutions[0].url = 'https://dart.googlesource.com/sdk.git'
   with api.context(cwd=api.path['cache'].join('builder')):
     api.bot_update.ensure_checkout()
     api.gclient.runhooks()
