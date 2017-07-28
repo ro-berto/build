@@ -19,7 +19,7 @@ CLIENT_NAME = 'cipd' + infra_platform.exe_suffix()
 
 
 DEFAULT_CIPD_VERSION = 'git_revision:e2a98b41adb3403b5b7771c4101b42a55dc2dd9e'
-STAGING_CIPD_VERSION = 'git_revision:e2a98b41adb3403b5b7771c4101b42a55dc2dd9e'
+STAGING_CIPD_VERSION = 'git_revision:b482bfa19d3fa79b4b40dd5ac7a34479052e3df1'
 
 # Latest Git bundle versions for packages that don't have a "latest" ref.
 LATEST_PYTHON_BUNDLE_VERSION = 'version:2.7.13.chromium7'
