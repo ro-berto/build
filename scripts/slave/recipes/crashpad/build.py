@@ -77,8 +77,6 @@ def GenTests(api):
       'crashpad_try_mac_rel',
       'crashpad_try_win_x64_dbg',
       'crashpad_win_x64_rel',
-      'crashpad_win_x86_dbg',
-      'crashpad_try_win_x86_rel',
       'crashpad_try_win_x86_wow64_dbg',
       'crashpad_win_x86_wow64_rel',
   ]
