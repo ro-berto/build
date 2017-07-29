@@ -123,10 +123,12 @@ def RunSteps(api, platforms, show_isolated_out_in_collect_step,
     step_result = api.swarming.collect_task(task)
     data = step_result.swarming.summary
 
-    state = data['shards'][0]['state']
-    if api.swarming.State.COMPLETED == state:
-      state_name = api.swarming.State.to_string(state)
-      assert 'Completed' == state_name, state_name
+    shard = data['shards'][0]
+    if shard:
+      state = shard['state']
+      if api.swarming.State.COMPLETED == state:
+        state_name = api.swarming.State.to_string(state)
+        assert 'Completed' == state_name, state_name
     assert step_result.swarming_task in tasks
 
   # Cleanup.
@@ -351,3 +353,26 @@ def GenTests(api):
           merge={
             'script': '//fake_custom_merge_script.py',
           }))
+
+  summary_data = {
+    'shards': [
+      None,
+      {
+        'state': 0x70, # COMPLETED
+        'internal_failure': False,
+        'exit_code': '0',
+      },
+    ]
+  }
+  yield (
+      api.test('isolated_script_with_null_shard') +
+      api.step_data(
+          'archive for linux',
+          stdout=api.raw_io.output('hash_for_linux hello_world.isolated')) +
+      api.step_data(
+          'hello_world',
+          api.raw_io.output_dir({'summary.json': json.dumps(summary_data)}),
+          api.swarming.summary(summary_data)) +
+      api.properties(
+          platforms=('linux',),
+          show_shards_in_collect_step=True))

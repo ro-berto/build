@@ -717,7 +717,8 @@ class SwarmingApi(recipe_api.RecipeApi):
     pending_times = [
       (parse_time(shard['started_ts']) -
         parse_time(shard['created_ts'])).total_seconds()
-      for shard in summary_json.get('shards', []) if shard.get('started_ts')
+      for shard in summary_json.get('shards', [])
+      if shard and shard.get('started_ts')
     ]
     max_pending = max(pending_times) if pending_times else 0
 
@@ -1004,7 +1005,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       elif self._get_exit_code(shard) != '0':
         display_text = 'shard #%d (failed)' % index
 
-      if self.show_isolated_out_in_collect_step:
+      if shard and self.show_isolated_out_in_collect_step:
         isolated_out = shard.get('isolated_out')
         if isolated_out:
           link_name = 'shard #%d isolated out' % index
