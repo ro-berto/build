@@ -5,11 +5,14 @@
 """Buildbot recipe definition for the various Crashpad continuous builders.
 """
 
+import ast
+
 DEPS = [
   'depot_tools/bot_update',
   'depot_tools/gclient',
   'recipe_engine/context',
   'recipe_engine/file',
+  'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
@@ -17,6 +20,21 @@ DEPS = [
   'recipe_engine/step',
 ]
 
+
+FAKE_SWARMING_TEST_SPEC = """\
+[
+  {
+    'builders': ['crashpad_win_x86_wow64_rel'],
+    'step_name': 'run_tests_on_x86',
+    'isolate': 'out/Debug/run_tests.isolate',
+    'args': [
+       '-d', 'os', 'Windows-7',
+       '-d', 'os', 'x86-32',
+       '-d', 'os', 'Chrome',
+    ],
+  },
+]
+"""
 
 def RunSteps(api):
   """Generates the sequence of steps that will be run by the slave."""
@@ -64,6 +82,30 @@ def RunSteps(api):
              args=[path],
              timeout=5*60)
 
+  try:
+    file_contents = api.file.read_text(
+        'read swarming_test_spec',
+        api.path['checkout'].join('build', 'swarming_test_spec.pyl'),
+        test_data=FAKE_SWARMING_TEST_SPEC)
+  except api.file.Error:  # pragma: no cover
+    # TODO(crbug.com/743139) figure out how to handle different kinds of
+    # errors cleanly.
+    file_contents = '[]'
+
+  try:
+    swarming_test_spec = ast.literal_eval(file_contents)
+  except api.file.Error:  # pragma: no cover
+    # TODO(crbug.com/743139) figure out how to handle different kinds of
+    # errors cleanly.
+    api.step.fail()
+
+  for spec in swarming_test_spec:
+    if buildername in spec['builders']:
+      api.python(
+          spec['step_name'],
+          api.path['checkout'].join('build', 'run_on_swarming.py'),
+          args=[api.path['checkout'].join(spec['isolate'][2:])] + spec['args'])
+
 
 def GenTests(api):
   # Only test a single clobber case.
@@ -71,7 +113,6 @@ def GenTests(api):
   yield(api.test(test + '_clobber') +
         api.properties.generic(buildername=test, clobber=True))
 
-  # Every other test is a trybot.
   tests = [
       test,
       'crashpad_try_mac_rel',
@@ -82,4 +123,3 @@ def GenTests(api):
   ]
   for t in tests:
     yield(api.test(t) + api.properties.generic(buildername=t))
-
