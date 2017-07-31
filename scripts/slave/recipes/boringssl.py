@@ -28,7 +28,7 @@ def _GetHostToolSuffix(platform):
     return 'mac'
   elif platform.is_win:
     return 'win32'
-  # TODO(davidben): Add other host platforms as needed.
+  raise ValueError('unknown platform')  # pragma: no cover
 
 
 def _GetHostExeSuffix(platform):
@@ -112,6 +112,10 @@ def _GetTargetCMakeArgs(buildername, checkout, ninja_path):
   if _HasToken(buildername, 'fuzz'):
     args['FUZZ'] = '1'
     args['LIBFUZZER_FROM_DEPS'] = '1'
+  # Pick one builder to build with the C++ runtime allowed. The default
+  # configuration does not compile-check pure virtuals.
+  if buildername == 'linux':
+    args['BORINGSSL_ALLOW_CXX_RUNTIME'] = '1'
   return args
 
 
@@ -205,6 +209,16 @@ def RunSteps(api, buildername):
     return
 
   with api.step.defer_results():
+    # The default Linux build may not depend on the C++ runtime. This is easy
+    # to check when building shared libraries.
+    if buildername == 'linux_shared':
+      api.python('check imported libraries', go_env, [
+          'go', 'run', api.path['checkout'].join('util',
+                                                 'check_imported_libraries.go'),
+          build_dir.join('crypto', 'libcrypto.so'),
+          build_dir.join('ssl', 'libssl.so')
+      ])
+
     env = _GetTargetEnv(buildername, bot_utils)
 
     # Run the unit tests.
@@ -327,6 +341,18 @@ def GenTests(api):
       api.override_step_data('unit tests',
                              api.test_utils.canned_test_output(True))
     )
+
+  yield (
+    api.test('failed_imported_libraries') +
+    api.platform('linux', 64) +
+    api.properties.generic(mastername='client.boringssl',
+                           buildername='linux_shared', bot_id='bot_id') +
+    api.override_step_data('check imported libraries', retcode=1) +
+    api.override_step_data('unit tests',
+                           api.test_utils.canned_test_output(True)) +
+    api.override_step_data('ssl tests',
+                           api.test_utils.canned_test_output(True))
+  )
 
   yield (
     api.test('failed_unit_tests') +

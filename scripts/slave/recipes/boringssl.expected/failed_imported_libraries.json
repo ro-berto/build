@@ -91,7 +91,7 @@
       "[START_DIR]/boringssl/util/bot/go/env.py",
       "[START_DIR]/boringssl/util/bot/cmake-linux64/bin/cmake",
       "-GNinja",
-      "-DBORINGSSL_ALLOW_CXX_RUNTIME=1",
+      "-DBUILD_SHARED_LIBS=1",
       "-DCMAKE_MAKE_PROGRAM=RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "[START_DIR]/boringssl"
     ],
@@ -116,6 +116,23 @@
       "[START_DIR]/boringssl/util/bot/go/env.py",
       "go",
       "run",
+      "[START_DIR]/boringssl/util/check_imported_libraries.go",
+      "[START_DIR]/boringssl/build/crypto/libcrypto.so",
+      "[START_DIR]/boringssl/build/ssl/libssl.so"
+    ],
+    "name": "check imported libraries",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/boringssl/util/bot/go/env.py",
+      "go",
+      "run",
       "util/all_tests.go",
       "-json-output",
       "/path/to/tmp/json"
@@ -123,35 +140,29 @@
     "cwd": "[START_DIR]/boringssl",
     "name": "unit tests",
     "~followup_annotations": [
-      "step returned non-zero exit code: 5",
-      "@@@STEP_TEXT@<br/>unexpected_failures:<br/>bad/totally-bad-probably.html<br/>tricky/totally-maybe-not-awesome.html<br/>@@@",
       "@@@STEP_LOG_LINE@test_utils.test_results@{@@@",
       "@@@STEP_LOG_LINE@test_utils.test_results@  \"num_passes\": 9001, @@@",
-      "@@@STEP_LOG_LINE@test_utils.test_results@  \"num_regressions\": 5, @@@",
+      "@@@STEP_LOG_LINE@test_utils.test_results@  \"num_regressions\": 0, @@@",
       "@@@STEP_LOG_LINE@test_utils.test_results@  \"path_separator\": \"/\", @@@",
       "@@@STEP_LOG_LINE@test_utils.test_results@  \"tests\": {@@@",
       "@@@STEP_LOG_LINE@test_utils.test_results@    \"bad\": {@@@",
       "@@@STEP_LOG_LINE@test_utils.test_results@      \"totally-bad-probably.html\": {@@@",
-      "@@@STEP_LOG_LINE@test_utils.test_results@        \"actual\": \"FAIL\", @@@",
-      "@@@STEP_LOG_LINE@test_utils.test_results@        \"expected\": \"PASS\", @@@",
-      "@@@STEP_LOG_LINE@test_utils.test_results@        \"is_unexpected\": true@@@",
+      "@@@STEP_LOG_LINE@test_utils.test_results@        \"actual\": \"PASS\", @@@",
+      "@@@STEP_LOG_LINE@test_utils.test_results@        \"expected\": \"PASS\"@@@",
       "@@@STEP_LOG_LINE@test_utils.test_results@      }@@@",
       "@@@STEP_LOG_LINE@test_utils.test_results@    }, @@@",
       "@@@STEP_LOG_LINE@test_utils.test_results@    \"flake\": {@@@",
       "@@@STEP_LOG_LINE@test_utils.test_results@      \"slow.html\": {@@@",
-      "@@@STEP_LOG_LINE@test_utils.test_results@        \"actual\": \"TIMEOUT SLOW\", @@@",
-      "@@@STEP_LOG_LINE@test_utils.test_results@        \"expected\": \"SLOW\", @@@",
-      "@@@STEP_LOG_LINE@test_utils.test_results@        \"is_unexpected\": true@@@",
+      "@@@STEP_LOG_LINE@test_utils.test_results@        \"actual\": \"SLOW\", @@@",
+      "@@@STEP_LOG_LINE@test_utils.test_results@        \"expected\": \"SLOW\"@@@",
       "@@@STEP_LOG_LINE@test_utils.test_results@      }, @@@",
       "@@@STEP_LOG_LINE@test_utils.test_results@      \"timeout-then-crash.html\": {@@@",
-      "@@@STEP_LOG_LINE@test_utils.test_results@        \"actual\": \"TIMEOUT CRASH\", @@@",
-      "@@@STEP_LOG_LINE@test_utils.test_results@        \"expected\": \"CRASH\", @@@",
-      "@@@STEP_LOG_LINE@test_utils.test_results@        \"is_unexpected\": true@@@",
+      "@@@STEP_LOG_LINE@test_utils.test_results@        \"actual\": \"CRASH\", @@@",
+      "@@@STEP_LOG_LINE@test_utils.test_results@        \"expected\": \"CRASH\"@@@",
       "@@@STEP_LOG_LINE@test_utils.test_results@      }, @@@",
       "@@@STEP_LOG_LINE@test_utils.test_results@      \"totally-flakey.html\": {@@@",
-      "@@@STEP_LOG_LINE@test_utils.test_results@        \"actual\": \"TIMEOUT PASS\", @@@",
-      "@@@STEP_LOG_LINE@test_utils.test_results@        \"expected\": \"PASS\", @@@",
-      "@@@STEP_LOG_LINE@test_utils.test_results@        \"is_unexpected\": true@@@",
+      "@@@STEP_LOG_LINE@test_utils.test_results@        \"actual\": \"PASS\", @@@",
+      "@@@STEP_LOG_LINE@test_utils.test_results@        \"expected\": \"PASS\"@@@",
       "@@@STEP_LOG_LINE@test_utils.test_results@      }@@@",
       "@@@STEP_LOG_LINE@test_utils.test_results@    }, @@@",
       "@@@STEP_LOG_LINE@test_utils.test_results@    \"good\": {@@@",
@@ -162,16 +173,14 @@
       "@@@STEP_LOG_LINE@test_utils.test_results@    }, @@@",
       "@@@STEP_LOG_LINE@test_utils.test_results@    \"tricky\": {@@@",
       "@@@STEP_LOG_LINE@test_utils.test_results@      \"totally-maybe-not-awesome.html\": {@@@",
-      "@@@STEP_LOG_LINE@test_utils.test_results@        \"actual\": \"FAIL\", @@@",
-      "@@@STEP_LOG_LINE@test_utils.test_results@        \"expected\": \"PASS\", @@@",
-      "@@@STEP_LOG_LINE@test_utils.test_results@        \"is_unexpected\": true@@@",
+      "@@@STEP_LOG_LINE@test_utils.test_results@        \"actual\": \"PASS\", @@@",
+      "@@@STEP_LOG_LINE@test_utils.test_results@        \"expected\": \"PASS\"@@@",
       "@@@STEP_LOG_LINE@test_utils.test_results@      }@@@",
       "@@@STEP_LOG_LINE@test_utils.test_results@    }@@@",
       "@@@STEP_LOG_LINE@test_utils.test_results@  }, @@@",
       "@@@STEP_LOG_LINE@test_utils.test_results@  \"version\": 3@@@",
       "@@@STEP_LOG_LINE@test_utils.test_results@}@@@",
-      "@@@STEP_LOG_END@test_utils.test_results@@@",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_LOG_END@test_utils.test_results@@@"
     ]
   },
   {
@@ -233,7 +242,7 @@
   },
   {
     "name": "$result",
-    "reason": "1 out of 2 aggregated steps failed. Failures: Step('unit tests') failed with return_code 5",
+    "reason": "1 out of 3 aggregated steps failed. Failures: Step('check imported libraries') failed with return_code 1",
     "recipe_result": null,
     "status_code": 1
   }

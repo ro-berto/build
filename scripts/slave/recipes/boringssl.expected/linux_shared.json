@@ -116,6 +116,19 @@
       "[START_DIR]/boringssl/util/bot/go/env.py",
       "go",
       "run",
+      "[START_DIR]/boringssl/util/check_imported_libraries.go",
+      "[START_DIR]/boringssl/build/crypto/libcrypto.so",
+      "[START_DIR]/boringssl/build/ssl/libssl.so"
+    ],
+    "name": "check imported libraries"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/boringssl/util/bot/go/env.py",
+      "go",
+      "run",
       "util/all_tests.go",
       "-json-output",
       "/path/to/tmp/json"

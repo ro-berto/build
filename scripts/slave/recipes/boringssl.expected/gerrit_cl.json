@@ -139,6 +139,7 @@
       "[START_DIR]/boringssl/util/bot/go/env.py",
       "[START_DIR]/boringssl/util/bot/cmake-linux64/bin/cmake",
       "-GNinja",
+      "-DBORINGSSL_ALLOW_CXX_RUNTIME=1",
       "-DCMAKE_MAKE_PROGRAM=RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "[START_DIR]/boringssl"
     ],
