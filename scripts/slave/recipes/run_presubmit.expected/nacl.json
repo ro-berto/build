@@ -25,7 +25,6 @@
       "--revision",
       "native_client@HEAD"
     ],
-    "cwd": "[CACHE]/builder",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -72,7 +71,7 @@
       "-m",
       "Committed patch"
     ],
-    "cwd": "[CACHE]/builder/native_client",
+    "cwd": "[START_DIR]/native_client",
     "name": "commit-git-patch"
   },
   {
@@ -90,7 +89,7 @@
       "--rietveld_email",
       "",
       "--root",
-      "[CACHE]/builder/native_client",
+      "[START_DIR]/native_client",
       "--commit",
       "--verbose",
       "--verbose",
@@ -103,7 +102,6 @@
       "--upstream",
       "a95eb4c044a154d692a53fdfa564ee8de7aeea5b"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },

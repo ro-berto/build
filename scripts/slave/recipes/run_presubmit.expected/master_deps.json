@@ -25,7 +25,6 @@
       "--revision",
       "build_internal/master.DEPS@HEAD"
     ],
-    "cwd": "[CACHE]/builder",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -72,7 +71,7 @@
       "-m",
       "Committed patch"
     ],
-    "cwd": "[CACHE]/builder/build_internal/master.DEPS",
+    "cwd": "[START_DIR]/build_internal/master.DEPS",
     "name": "commit-git-patch"
   },
   {
@@ -90,7 +89,7 @@
       "--rietveld_email",
       "",
       "--root",
-      "[CACHE]/builder/build_internal/master.DEPS",
+      "[START_DIR]/build_internal/master.DEPS",
       "--commit",
       "--verbose",
       "--verbose",
@@ -103,7 +102,6 @@
       "--upstream",
       "a555a5c944862aefc99e357258e54e9d53747145"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },

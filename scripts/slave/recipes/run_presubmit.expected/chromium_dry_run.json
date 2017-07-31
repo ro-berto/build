@@ -25,7 +25,6 @@
       "--revision",
       "src@HEAD"
     ],
-    "cwd": "[CACHE]/builder",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -120,7 +119,7 @@
       "-m",
       "Committed patch"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[START_DIR]/src",
     "name": "commit-git-patch"
   },
   {
@@ -139,7 +138,7 @@
       "",
       "--dry_run",
       "--root",
-      "[CACHE]/builder/src",
+      "[START_DIR]/src",
       "--commit",
       "--verbose",
       "--verbose",
@@ -152,7 +151,6 @@
       "--upstream",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },

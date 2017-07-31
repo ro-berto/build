@@ -25,7 +25,6 @@
       "--revision",
       "build_internal/scripts/slave@HEAD"
     ],
-    "cwd": "[CACHE]/builder",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -80,7 +79,7 @@
       "-m",
       "Committed patch"
     ],
-    "cwd": "[CACHE]/builder/build_internal/scripts/slave",
+    "cwd": "[START_DIR]/build_internal/scripts/slave",
     "name": "commit-git-patch"
   },
   {
@@ -98,7 +97,7 @@
       "--rietveld_email",
       "",
       "--root",
-      "[CACHE]/builder/build_internal/scripts/slave",
+      "[START_DIR]/build_internal/scripts/slave",
       "--commit",
       "--verbose",
       "--verbose",
@@ -111,7 +110,6 @@
       "--upstream",
       "3faf12c8131337a86e669cc1a1bd8d2dfe8cc86d"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]",
       "PYTHONPATH": ""

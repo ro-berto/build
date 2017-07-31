@@ -27,7 +27,6 @@
       "--revision",
       "infra/recipes-py@HEAD"
     ],
-    "cwd": "[CACHE]/builder",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -75,7 +74,7 @@
       "-m",
       "Committed patch"
     ],
-    "cwd": "[CACHE]/builder/infra/recipes-py",
+    "cwd": "[START_DIR]/infra/recipes-py",
     "name": "commit-git-patch"
   },
   {
@@ -85,7 +84,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[START_DIR]/infra",
     "env": {
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -106,7 +105,7 @@
       "--rietveld_email",
       "",
       "--root",
-      "[CACHE]/builder/infra/recipes-py",
+      "[START_DIR]/infra/recipes-py",
       "--commit",
       "--verbose",
       "--verbose",
@@ -119,7 +118,6 @@
       "--upstream",
       "566be4c6bf5a619a0f53810d649ca87525be7d24"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },

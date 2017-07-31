@@ -25,7 +25,6 @@
       "--revision",
       "build_internal/slave.DEPS@HEAD"
     ],
-    "cwd": "[CACHE]/builder",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -72,7 +71,7 @@
       "-m",
       "Committed patch"
     ],
-    "cwd": "[CACHE]/builder/build_internal/slave.DEPS",
+    "cwd": "[START_DIR]/build_internal/slave.DEPS",
     "name": "commit-git-patch"
   },
   {
@@ -90,7 +89,7 @@
       "--rietveld_email",
       "",
       "--root",
-      "[CACHE]/builder/build_internal/slave.DEPS",
+      "[START_DIR]/build_internal/slave.DEPS",
       "--commit",
       "--verbose",
       "--verbose",
@@ -103,7 +102,6 @@
       "--upstream",
       "a6b2a23900c876d4bcc03a18710abb26cb95996d"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
