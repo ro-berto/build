@@ -320,7 +320,7 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
                     order_console_by_time=False,
                     tagComparator=None,
                     customEndpoints=None,
-                    enable_http_status_push=False,
+                    enable_http_status_push=False,  # DEPRECATED (NO-OP)
                     console_repo_filter=None,
                     console_builder_filter=None,
                     web_template_globals=None):
@@ -371,33 +371,6 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
     c['status'].append(pubsub_pusher)
   else:
     log.msg('Pubsub not enabled.')
-
-  # For all production masters, notify our health-monitoring webapp.
-  if enable_http_status_push:
-    blacklist = (
-        'buildETAUpdate',
-        #'buildFinished',
-        'buildStarted',
-        'buildedRemoved',
-        'builderAdded',
-        'builderChangedState',
-        'buildsetSubmitted',
-        'changeAdded',
-        'logFinished',
-        'logStarted',
-        'requestCancelled',
-        'requestSubmitted',
-        'slaveConnected',
-        'slaveDisconnected',
-        'stepETAUpdate',
-        'stepFinished',
-        'stepStarted',
-        'stepText2Changed',
-        'stepTextChanged',
-    )
-    c['status'].append(HttpStatusPush(
-        'https://chromium-build-logs.appspot.com/status_receiver',
-        blackList=blacklist))
 
   # Enable Chrome Build Extract status push if configured. This requires the
   # configuration file to be defined and valid for this master.
