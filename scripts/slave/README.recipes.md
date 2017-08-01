@@ -1871,9 +1871,9 @@ Returns: (dict) If 'remote_name' is supplied, a dictionary mapping the
 
 GomaApi contains helper functions for using goma.
 
-&emsp; **@property**<br>&mdash; **def [build\_data\_dir](/scripts/slave/recipe_modules/goma/api.py#146)(self):**
+&emsp; **@property**<br>&mdash; **def [build\_data\_dir](/scripts/slave/recipe_modules/goma/api.py#147)(self):**
 
-&mdash; **def [build\_with\_goma](/scripts/slave/recipe_modules/goma/api.py#389)(self, ninja_command, name=None, ninja_log_outdir=None, ninja_log_compiler=None, goma_env=None, ninja_env=None, use_cloudtail=True, \*\*kwargs):**
+&mdash; **def [build\_with\_goma](/scripts/slave/recipe_modules/goma/api.py#390)(self, ninja_command, name=None, ninja_log_outdir=None, ninja_log_compiler=None, goma_env=None, ninja_env=None, use_cloudtail=True, \*\*kwargs):**
 
 Build with ninja_command using goma
 
@@ -1895,47 +1895,47 @@ Raises:
   StepFailure or InfraFailure if it fails to build or
   occurs something failure on goma steps.
 
-&emsp; **@property**<br>&mdash; **def [cloudtail\_path](/scripts/slave/recipe_modules/goma/api.py#38)(self):**
+&emsp; **@property**<br>&mdash; **def [cloudtail\_path](/scripts/slave/recipe_modules/goma/api.py#39)(self):**
 
-&emsp; **@property**<br>&mdash; **def [cloudtail\_pid\_file](/scripts/slave/recipe_modules/goma/api.py#43)(self):**
+&emsp; **@property**<br>&mdash; **def [cloudtail\_pid\_file](/scripts/slave/recipe_modules/goma/api.py#44)(self):**
 
-&emsp; **@property**<br>&mdash; **def [cloudtail\_service\_account\_json\_path](/scripts/slave/recipe_modules/goma/api.py#34)(self):**
+&emsp; **@property**<br>&mdash; **def [cloudtail\_service\_account\_json\_path](/scripts/slave/recipe_modules/goma/api.py#35)(self):**
 
-&emsp; **@property**<br>&mdash; **def [default\_cache\_path](/scripts/slave/recipe_modules/goma/api.py#66)(self):**
+&emsp; **@property**<br>&mdash; **def [default\_cache\_path](/scripts/slave/recipe_modules/goma/api.py#67)(self):**
 
-&emsp; **@property**<br>&mdash; **def [default\_cache\_path\_per\_slave](/scripts/slave/recipe_modules/goma/api.py#57)(self):**
+&emsp; **@property**<br>&mdash; **def [default\_cache\_path\_per\_slave](/scripts/slave/recipe_modules/goma/api.py#58)(self):**
 
-&mdash; **def [ensure\_goma](/scripts/slave/recipe_modules/goma/api.py#103)(self, canary=False):**
+&mdash; **def [ensure\_goma](/scripts/slave/recipe_modules/goma/api.py#104)(self, canary=False):**
 
-&emsp; **@property**<br>&mdash; **def [goma\_ctl](/scripts/slave/recipe_modules/goma/api.py#137)(self):**
+&emsp; **@property**<br>&mdash; **def [goma\_ctl](/scripts/slave/recipe_modules/goma/api.py#138)(self):**
 
-&emsp; **@property**<br>&mdash; **def [goma\_dir](/scripts/slave/recipe_modules/goma/api.py#141)(self):**
+&emsp; **@property**<br>&mdash; **def [goma\_dir](/scripts/slave/recipe_modules/goma/api.py#142)(self):**
 
-&emsp; **@property**<br>&mdash; **def [json\_path](/scripts/slave/recipe_modules/goma/api.py#47)(self):**
+&emsp; **@property**<br>&mdash; **def [json\_path](/scripts/slave/recipe_modules/goma/api.py#48)(self):**
 
-&emsp; **@property**<br>&mdash; **def [jsonstatus](/scripts/slave/recipe_modules/goma/api.py#52)(self):**
+&emsp; **@property**<br>&mdash; **def [jsonstatus](/scripts/slave/recipe_modules/goma/api.py#53)(self):**
 
-&emsp; **@property**<br>&mdash; **def [recommended\_goma\_jobs](/scripts/slave/recipe_modules/goma/api.py#72)(self):**
+&emsp; **@property**<br>&mdash; **def [recommended\_goma\_jobs](/scripts/slave/recipe_modules/goma/api.py#73)(self):**
 
 Return the recommended number of jobs for parallel build using Goma.
 
 This function caches the _goma_jobs.
 
-&emsp; **@property**<br>&mdash; **def [service\_account\_json\_path](/scripts/slave/recipe_modules/goma/api.py#30)(self):**
+&emsp; **@property**<br>&mdash; **def [service\_account\_json\_path](/scripts/slave/recipe_modules/goma/api.py#31)(self):**
 
-&mdash; **def [set\_goma\_dir\_for\_local\_test](/scripts/slave/recipe_modules/goma/api.py#96)(self, goma_dir):**
+&mdash; **def [set\_goma\_dir\_for\_local\_test](/scripts/slave/recipe_modules/goma/api.py#97)(self, goma_dir):**
 
 This function is made for local recipe test only.
 Do not use in recipes used by buildbots.
 
-&mdash; **def [start](/scripts/slave/recipe_modules/goma/api.py#207)(self, env=None, use_cloudtail=True, \*\*kwargs):**
+&mdash; **def [start](/scripts/slave/recipe_modules/goma/api.py#208)(self, env=None, use_cloudtail=True, \*\*kwargs):**
 
 Start goma compiler_proxy.
 
 A user MUST execute ensure_goma beforehand.
 It is user's responsibility to handle failure of starting compiler_proxy.
 
-&mdash; **def [stop](/scripts/slave/recipe_modules/goma/api.py#272)(self, ninja_log_outdir=None, ninja_log_compiler=None, ninja_log_command=None, ninja_log_exit_status=None, \*\*kwargs):**
+&mdash; **def [stop](/scripts/slave/recipe_modules/goma/api.py#273)(self, ninja_log_outdir=None, ninja_log_compiler=None, ninja_log_command=None, ninja_log_exit_status=None, \*\*kwargs):**
 
 Stop goma compiler_proxy.
 
@@ -3534,7 +3534,7 @@ in a forced build with no revision provided).
 
 [DEPS](/scripts/slave/recipes/boringssl.py#7): [chromium](#recipe_modules-chromium), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/boringssl.py#151)(api, buildername):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/boringssl.py#155)(api, buildername):**
 ### *recipes* / [boringssl\_docs](/scripts/slave/recipes/boringssl_docs.py)
 
 [DEPS](/scripts/slave/recipes/boringssl_docs.py#8): [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -5245,18 +5245,18 @@ The changes are:
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/zip/examples/full.py#14)(api):**
 
-[depot_tools/recipe_modules/bot_update]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/8038dfe3be2580dbff0d8065ea1fb04fbf2720ab/recipes/README.recipes.md#recipe_modules-bot_update
-[depot_tools/recipe_modules/cipd]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/8038dfe3be2580dbff0d8065ea1fb04fbf2720ab/recipes/README.recipes.md#recipe_modules-cipd
-[depot_tools/recipe_modules/depot_tools]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/8038dfe3be2580dbff0d8065ea1fb04fbf2720ab/recipes/README.recipes.md#recipe_modules-depot_tools
-[depot_tools/recipe_modules/gclient]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/8038dfe3be2580dbff0d8065ea1fb04fbf2720ab/recipes/README.recipes.md#recipe_modules-gclient
-[depot_tools/recipe_modules/gerrit]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/8038dfe3be2580dbff0d8065ea1fb04fbf2720ab/recipes/README.recipes.md#recipe_modules-gerrit
-[depot_tools/recipe_modules/git]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/8038dfe3be2580dbff0d8065ea1fb04fbf2720ab/recipes/README.recipes.md#recipe_modules-git
-[depot_tools/recipe_modules/gitiles]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/8038dfe3be2580dbff0d8065ea1fb04fbf2720ab/recipes/README.recipes.md#recipe_modules-gitiles
-[depot_tools/recipe_modules/gsutil]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/8038dfe3be2580dbff0d8065ea1fb04fbf2720ab/recipes/README.recipes.md#recipe_modules-gsutil
-[depot_tools/recipe_modules/infra_paths]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/8038dfe3be2580dbff0d8065ea1fb04fbf2720ab/recipes/README.recipes.md#recipe_modules-infra_paths
-[depot_tools/recipe_modules/presubmit]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/8038dfe3be2580dbff0d8065ea1fb04fbf2720ab/recipes/README.recipes.md#recipe_modules-presubmit
-[depot_tools/recipe_modules/rietveld]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/8038dfe3be2580dbff0d8065ea1fb04fbf2720ab/recipes/README.recipes.md#recipe_modules-rietveld
-[depot_tools/recipe_modules/tryserver]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/8038dfe3be2580dbff0d8065ea1fb04fbf2720ab/recipes/README.recipes.md#recipe_modules-tryserver
+[depot_tools/recipe_modules/bot_update]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/e1054034a265f5abbeeda0173c62c75b46817a6e/recipes/README.recipes.md#recipe_modules-bot_update
+[depot_tools/recipe_modules/cipd]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/e1054034a265f5abbeeda0173c62c75b46817a6e/recipes/README.recipes.md#recipe_modules-cipd
+[depot_tools/recipe_modules/depot_tools]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/e1054034a265f5abbeeda0173c62c75b46817a6e/recipes/README.recipes.md#recipe_modules-depot_tools
+[depot_tools/recipe_modules/gclient]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/e1054034a265f5abbeeda0173c62c75b46817a6e/recipes/README.recipes.md#recipe_modules-gclient
+[depot_tools/recipe_modules/gerrit]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/e1054034a265f5abbeeda0173c62c75b46817a6e/recipes/README.recipes.md#recipe_modules-gerrit
+[depot_tools/recipe_modules/git]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/e1054034a265f5abbeeda0173c62c75b46817a6e/recipes/README.recipes.md#recipe_modules-git
+[depot_tools/recipe_modules/gitiles]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/e1054034a265f5abbeeda0173c62c75b46817a6e/recipes/README.recipes.md#recipe_modules-gitiles
+[depot_tools/recipe_modules/gsutil]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/e1054034a265f5abbeeda0173c62c75b46817a6e/recipes/README.recipes.md#recipe_modules-gsutil
+[depot_tools/recipe_modules/infra_paths]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/e1054034a265f5abbeeda0173c62c75b46817a6e/recipes/README.recipes.md#recipe_modules-infra_paths
+[depot_tools/recipe_modules/presubmit]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/e1054034a265f5abbeeda0173c62c75b46817a6e/recipes/README.recipes.md#recipe_modules-presubmit
+[depot_tools/recipe_modules/rietveld]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/e1054034a265f5abbeeda0173c62c75b46817a6e/recipes/README.recipes.md#recipe_modules-rietveld
+[depot_tools/recipe_modules/tryserver]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/e1054034a265f5abbeeda0173c62c75b46817a6e/recipes/README.recipes.md#recipe_modules-tryserver
 [recipe_engine/recipe_modules/context]: https://github.com/luci/recipes-py/blob/8e8339afbdb986a9195a97cb2c173984bdd4b758/README.recipes.md#recipe_modules--context
 [recipe_engine/recipe_modules/file]: https://github.com/luci/recipes-py/blob/8e8339afbdb986a9195a97cb2c173984bdd4b758/README.recipes.md#recipe_modules--file
 [recipe_engine/recipe_modules/generator_script]: https://github.com/luci/recipes-py/blob/8e8339afbdb986a9195a97cb2c173984bdd4b758/README.recipes.md#recipe_modules--generator_script
