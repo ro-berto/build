@@ -238,10 +238,14 @@ class V8Api(recipe_api.RecipeApi):
     # Bot_update maintains the properties independent of the UI
     # presentation.
     self.revision = self.m.bot_update.last_returned_properties['got_revision']
+
+    # Note, a commit position might not be available on feature branches.
     self.revision_cp = (
-        self.m.bot_update.last_returned_properties['got_revision_cp'])
-    self.revision_number = str(self.m.commit_position.parse_revision(
-        self.revision_cp))
+        self.m.bot_update.last_returned_properties.get('got_revision_cp'))
+    self.revision_number = None
+    if self.revision_cp:
+      self.revision_number = str(self.m.commit_position.parse_revision(
+          self.revision_cp))
 
     return update_step
 
@@ -1173,8 +1177,9 @@ class V8Api(recipe_api.RecipeApi):
       # whitelisted or their name should be prefixed with 'parent_'.
       properties = {
         'parent_got_revision': self.revision,
-        'parent_got_revision_cp': self.revision_cp,
       }
+      if self.revision_cp:
+        properties['parent_got_revision_cp'] = self.revision_cp
       if self.m.tryserver.is_tryserver:
         properties.update(
           category=self.m.properties.get('category', 'manual_ts'),
