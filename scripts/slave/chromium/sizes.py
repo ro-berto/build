@@ -409,13 +409,15 @@ def main_win(options, args):
   """
   files = [
     'chrome.dll',
-    'chrome_child.dll',
     'chrome.exe',
+    'chrome_child.dll',
+    'chrome_elf.dll',
+    'chrome_watcher.dll',
+    'libEGL.dll',
+    'libGLESv2.dll',
     'mini_installer.exe',
     'resources.pak',
     'setup.exe',
-    'libEGL.dll',
-    'libGLESv2.dll',
     'swiftshader\\libEGL.dll',
     'swiftshader\\libGLESv2.dll',
   ]
