@@ -48,7 +48,7 @@ def _RunStepsInternal(api):
   upstream = bot_update_step.json.output['properties'].get(
       got_revision_properties[0])
 
-  abs_root = api.path['start_dir'].join(relative_root)
+  abs_root = api.context.cwd.join(relative_root)
   with api.context(cwd=abs_root):
     # TODO(hinoka): Extract email/name from issue?
     api.git('-c', 'user.email=commit-bot@chromium.org',
@@ -57,7 +57,8 @@ def _RunStepsInternal(api):
             name='commit-git-patch', infra_step=False)
 
   if api.properties.get('runhooks'):
-    api.gclient.runhooks()
+    with api.context(cwd=api.path['checkout']):
+      api.gclient.runhooks()
 
   if patch_storage == 'rietveld':
     presubmit_args = [
@@ -119,8 +120,15 @@ def _RunStepsInternal(api):
 
 
 def RunSteps(api):
-  with api.tryserver.set_failure_hash():
-    return _RunStepsInternal(api)
+  if api.properties.get('use_cache', False):
+    cwd = api.path['cache'].join('builder', api.properties['buildername'])
+  else:
+    # TODO(machenbach): Remove this case when all builders using this recipe
+    # migrated to LUCI.
+    cwd = api.path['start_dir']
+  with api.context(cwd=cwd):
+    with api.tryserver.set_failure_hash():
+      return _RunStepsInternal(api)
 
 
 def GenTests(api):
@@ -243,4 +251,15 @@ def GenTests(api):
         solution_name='skia') +
     api.step_data('presubmit',
                   api.json.output([['chromium_presubmit', ['compile']]]))
+  )
+
+  yield (
+    api.test('v8_with_cache') +
+    api.properties.tryserver(
+        mastername='tryserver.v8',
+        buildername='v8_presubmit',
+        repo_name='v8',
+        patch_project='v8',
+        runhooks=True,
+        use_cache=True)
   )
