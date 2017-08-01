@@ -8,6 +8,7 @@ DEPS = [
   'depot_tools/git',
   'depot_tools/presubmit',
   'recipe_engine/context',
+  'recipe_engine/file',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/properties',
@@ -122,6 +123,7 @@ def _RunStepsInternal(api):
 def RunSteps(api):
   if api.properties.get('use_cache', False):
     cwd = api.path['cache'].join('builder', api.properties['buildername'])
+    api.file.ensure_directory('ensure builder cache dir', cwd)
   else:
     # TODO(machenbach): Remove this case when all builders using this recipe
     # migrated to LUCI.
