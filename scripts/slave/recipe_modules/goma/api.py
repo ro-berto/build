@@ -4,6 +4,7 @@
 
 import json
 import re
+import socket
 
 from recipe_engine import recipe_api
 
@@ -20,6 +21,12 @@ class GomaApi(recipe_api.RecipeApi):
     self._jsonstatus = None
     self._goma_jsonstatus_called = False
     self._cloudtail_running = False
+
+    if self._test_data.enabled:
+      self._hostname = 'fakevm999-m9'
+    else:  #pragma: no cover
+      # TODO(tikuta): find a recipe way to get hostname
+      self._hostname = socket.gethostname()
 
   @property
   def service_account_json_path(self):
@@ -239,10 +246,13 @@ class GomaApi(recipe_api.RecipeApi):
       try:
         self._make_goma_cache_dir(self.default_cache_path)
         with self.m.context(env=goma_ctl_start_env):
-          self.m.python(
+          result = self.m.python(
               name='start_goma',
               script=self.goma_ctl,
               args=['restart'], infra_step=True, **kwargs)
+          if use_cloudtail:
+            result.presentation.links['cloudtail'] = 'https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%%2Finstance_id%%2F%s&timestamp=%s' % (self._hostname, self.m.time.utcnow().isoformat())
+
         self._goma_started = True
         if use_cloudtail:
           self._start_cloudtail()

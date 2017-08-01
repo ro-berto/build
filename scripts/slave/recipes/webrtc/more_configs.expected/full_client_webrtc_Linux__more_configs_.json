@@ -200,7 +200,8 @@
     "infra_step": true,
     "name": "preprocess_for_goma.start_goma",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9&timestamp=2012-05-14T12:53:21.500000@@@"
     ]
   },
   {
@@ -458,7 +459,8 @@
     "infra_step": true,
     "name": "preprocess_for_goma.start_goma (2)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9&timestamp=2012-05-14T12:53:23@@@"
     ]
   },
   {
@@ -716,7 +718,8 @@
     "infra_step": true,
     "name": "preprocess_for_goma.start_goma (3)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9&timestamp=2012-05-14T12:53:24.500000@@@"
     ]
   },
   {
@@ -974,7 +977,8 @@
     "infra_step": true,
     "name": "preprocess_for_goma.start_goma (4)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9&timestamp=2012-05-14T12:53:26@@@"
     ]
   },
   {
@@ -1232,7 +1236,8 @@
     "infra_step": true,
     "name": "preprocess_for_goma.start_goma (5)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9&timestamp=2012-05-14T12:53:27.500000@@@"
     ]
   },
   {
@@ -1522,7 +1527,8 @@
     "infra_step": true,
     "name": "preprocess_for_goma.start_goma (6)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9&timestamp=2012-05-14T12:53:29@@@"
     ]
   },
   {
@@ -1780,7 +1786,8 @@
     "infra_step": true,
     "name": "preprocess_for_goma.start_goma (7)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9&timestamp=2012-05-14T12:53:30.500000@@@"
     ]
   },
   {
@@ -2038,7 +2045,8 @@
     "infra_step": true,
     "name": "preprocess_for_goma.start_goma (8)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9&timestamp=2012-05-14T12:53:32@@@"
     ]
   },
   {

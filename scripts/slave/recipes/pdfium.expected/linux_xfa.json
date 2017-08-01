@@ -167,7 +167,8 @@
     "infra_step": true,
     "name": "preprocess_for_goma.start_goma",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9&timestamp=2012-05-14T12:53:21.500000@@@"
     ]
   },
   {
@@ -477,7 +478,7 @@
       "-z",
       "json,log",
       "[START_DIR]/pdfium/out/debug_xfa_v8/gold_output/dm.json",
-      "gs://skia-pdfium-gm/dm-json-v1/2012/05/14/12/d69d97171c17fdb12a52f78847e2ee2f0594eff1/linux_xfa/1337000001/dm.json"
+      "gs://skia-pdfium-gm/dm-json-v1/2012/05/14/12/d69d97171c17fdb12a52f78847e2ee2f0594eff1/linux_xfa/1337000003/dm.json"
     ],
     "infra_step": true,
     "name": "gsutil upload JSON"
