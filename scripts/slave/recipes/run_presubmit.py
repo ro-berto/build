@@ -6,6 +6,7 @@ DEPS = [
   'depot_tools/bot_update',
   'depot_tools/gclient',
   'depot_tools/git',
+  'depot_tools/infra_paths',
   'depot_tools/presubmit',
   'recipe_engine/context',
   'recipe_engine/file',
@@ -121,10 +122,12 @@ def _RunStepsInternal(api):
 
 
 def RunSteps(api):
-  if api.properties.get('use_cache', False):
-    cwd = api.path['cache'].join('builder', api.properties['buildername'])
+  try:
+    cwd = api.path['builder_cache']
     api.file.ensure_directory('ensure builder cache dir', cwd)
-  else:
+  except KeyError:
+    # No explicit builder cache directory defined. Use the "start_dir"
+    # directory.
     # TODO(machenbach): Remove this case when all builders using this recipe
     # migrated to LUCI.
     cwd = api.path['start_dir']
@@ -263,5 +266,5 @@ def GenTests(api):
         repo_name='v8',
         patch_project='v8',
         runhooks=True,
-        use_cache=True)
+        path_config='generic')
   )
