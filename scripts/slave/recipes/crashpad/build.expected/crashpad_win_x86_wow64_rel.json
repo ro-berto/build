@@ -76,6 +76,38 @@
     "timeout": 300
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/crashpad/build/swarming_test_spec.pyl",
+      "/path/to/tmp/"
+    ],
+    "infra_step": true,
+    "name": "read swarming_test_spec"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/crashpad/build/run_on_swarming.py",
+      "[START_DIR]/crashpad/t/Debug/run_tests.isolate",
+      "-d",
+      "os",
+      "Windows-7",
+      "-d",
+      "os",
+      "x86-32",
+      "-d",
+      "os",
+      "Chrome"
+    ],
+    "name": "run_tests_on_x86"
+  },
+  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0

@@ -5,11 +5,14 @@
 """Buildbot recipe definition for the various Crashpad continuous builders.
 """
 
+import ast
+
 DEPS = [
   'depot_tools/bot_update',
   'depot_tools/gclient',
   'recipe_engine/context',
   'recipe_engine/file',
+  'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
@@ -17,6 +20,21 @@ DEPS = [
   'recipe_engine/step',
 ]
 
+
+FAKE_SWARMING_TEST_SPEC = """\
+[
+  {
+    'builders': ['crashpad_win_x86_wow64_rel'],
+    'step_name': 'run_tests_on_x86',
+    'isolate': 'out/Debug/run_tests.isolate',
+    'args': [
+       '-d', 'os', 'Windows-7',
+       '-d', 'os', 'x86-32',
+       '-d', 'os', 'Chrome',
+    ],
+  },
+]
+"""
 
 def RunSteps(api):
   """Generates the sequence of steps that will be run by the slave."""
@@ -64,6 +82,26 @@ def RunSteps(api):
              args=[path],
              timeout=5*60)
 
+  test_spec_path = api.path['checkout'].join('build', 'swarming_test_spec.pyl')
+  if api.path.exists(test_spec_path):
+    file_contents = api.file.read_text('read swarming_test_spec',
+        test_spec_path, test_data=FAKE_SWARMING_TEST_SPEC)
+
+    try:
+      swarming_test_spec = ast.literal_eval(file_contents)
+    except Exception: # pragma: no cover
+      # TODO(crbug.com/743139) figure out how to handle different kinds of
+      # errors cleanly.
+      api.step.fail()
+      return
+
+    for spec in swarming_test_spec:
+      if buildername in spec['builders']:
+        api.python(
+            spec['step_name'],
+            api.path['checkout'].join('build', 'run_on_swarming.py'),
+            args=[api.path['checkout'].join(spec['isolate'][2:])] + spec['args'])
+
 
 def GenTests(api):
   # Only test a single clobber case.
@@ -71,7 +109,6 @@ def GenTests(api):
   yield(api.test(test + '_clobber') +
         api.properties.generic(buildername=test, clobber=True))
 
-  # Every other test is a trybot.
   tests = [
       test,
       'crashpad_try_mac_rel',
@@ -81,5 +118,7 @@ def GenTests(api):
       'crashpad_win_x86_wow64_rel',
   ]
   for t in tests:
-    yield(api.test(t) + api.properties.generic(buildername=t))
-
+    yield(api.test(t) +
+          api.properties.generic(buildername=t) +
+          api.path.exists(api.path['checkout'].join(
+              'build', 'swarming_test_spec.pyl')))
