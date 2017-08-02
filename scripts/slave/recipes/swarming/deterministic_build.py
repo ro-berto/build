@@ -151,7 +151,7 @@ def RunSteps(api, buildername):
   recipe_config = DETERMINISTIC_BUILDERS[buildername]
   enable_isolate = True
 
-  targets = recipe_config.get('targets', ['chromium_swarm_tests'])
+  targets = recipe_config['targets']
   if recipe_config.get('chromium_config_kwargs'):
     target_platform = recipe_config['chromium_config_kwargs'].get(
         'TARGET_PLATFORM')

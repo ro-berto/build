@@ -25,7 +25,7 @@ SPEC = {
       },
       'bot_type': 'builder_tester',
       'compile_targets': [
-        'chromium_swarm_tests',
+        'all',
       ],
       'testing': {
         'platform': 'linux',
