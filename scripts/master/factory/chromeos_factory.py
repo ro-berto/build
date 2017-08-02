@@ -29,7 +29,7 @@ class _ChromiteRecipeFactoryFunc(object):
   # The default Chromite recipe timeout.
   _CHROMITE_TIMEOUT = 9000
   # The default maximum build time.
-  _DEFAULT_MAX_TIME = 16 * 60 * 60
+  _DEFAULT_MAX_TIME = 20 * 60 * 60
 
   @classmethod
   def _apply_defaults(cls, kwargs):
