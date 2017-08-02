@@ -227,8 +227,14 @@ class ChromiumApi(recipe_api.RecipeApi):
       occurs something failure on goma steps.
     """
 
+    script = self.resource('ninja_wrapper.py')
+
+    script_args = ['--']
+    script_args.extend(ninja_command)
+
     with self.m.context(env=ninja_env):
-      self.m.step(name or 'compile', ninja_command, **kwargs)
+      self.m.python(name=name or 'compile', script=script,
+                    args=script_args, **kwargs)
 
     if not ninja_confirm_noop:
       return
