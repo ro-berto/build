@@ -40,7 +40,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "00d96a14bbc93e47",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -70,7 +69,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "00d96a14bbc93e47",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -108,7 +106,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "00d96a14bbc93e47",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -139,7 +136,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "00d96a14bbc93e47",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -171,7 +167,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "00d96a14bbc93e47",
@@ -207,7 +202,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "00d96a14bbc93e47",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -237,7 +231,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "00d96a14bbc93e47",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -269,7 +262,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "00d96a14bbc93e47",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -306,7 +298,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "00d96a14bbc93e47",
@@ -342,7 +333,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "00d96a14bbc93e47",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -372,7 +362,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "00d96a14bbc93e47",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -404,7 +393,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "00d96a14bbc93e47",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -439,7 +427,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "00d96a14bbc93e47",
@@ -475,7 +462,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "00d96a14bbc93e47",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -505,7 +491,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "00d96a14bbc93e47",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -537,7 +522,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "00d96a14bbc93e47",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -572,7 +556,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "00d96a14bbc93e47",
@@ -608,7 +591,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "00d96a14bbc93e47",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -638,7 +620,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "00d96a14bbc93e47",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -670,7 +651,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "00d96a14bbc93e47",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -705,7 +685,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "00d96a14bbc93e47",
@@ -741,7 +720,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "00d96a14bbc93e47",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -771,7 +749,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "00d96a14bbc93e47",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -803,7 +780,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "00d96a14bbc93e47",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -837,7 +813,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "00d96a14bbc93e47",
@@ -873,7 +848,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "00d96a14bbc93e47",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -903,7 +877,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "00d96a14bbc93e47",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -935,7 +908,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "00d96a14bbc93e47",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -969,7 +941,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "00d96a14bbc93e47",
@@ -1005,7 +976,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "00d96a14bbc93e47",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -1035,7 +1005,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "00d96a14bbc93e47",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -1067,7 +1036,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "00d96a14bbc93e47",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -1102,7 +1070,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "00d96a14bbc93e47",
@@ -1138,7 +1105,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "00d96a14bbc93e47",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -1168,7 +1134,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "00d96a14bbc93e47",
       "ART_BUILD_HOST_DEBUG": "false",
@@ -1200,7 +1165,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "00d96a14bbc93e47",
       "ART_BUILD_HOST_DEBUG": "false",

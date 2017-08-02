@@ -40,7 +40,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
@@ -67,7 +66,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
@@ -98,7 +96,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
@@ -127,7 +124,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
@@ -156,7 +152,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
@@ -185,7 +180,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
@@ -212,7 +206,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
@@ -239,7 +232,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
@@ -267,7 +259,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
@@ -292,7 +283,6 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_COMPILE_WITH_JACK": "true",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
