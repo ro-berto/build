@@ -1,0 +1,288 @@
+# Copyright 2017 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+import textwrap
+import unittest
+import mock
+
+import ninja_wrapper
+
+_NINJA_STDOUT_CXX_RULE = """[35792/53672] CXX successful/a.o
+[35793/53672] CXX a.o b.o
+FAILED: a.o b.o
+failed edge output line 1
+failed edge output line 2
+failed edge output line 3
+[35794/53672] CXX successful/b.o
+[35795/53672] CXX c.o
+FAILED: c.o
+failed edge output line 1
+failed edge output line 2
+ninja: build stopped: subcommand failed."""
+
+
+_NINJA_STDOUT_NON_CXX_RULE = """[2893/2900] LINK ./a.exe
+FAILED: a.exe
+failed edge output line 1
+[2894/2900] AR ./b.o
+FAILED: b.0
+failed edge output line 1
+failed edge output line 2
+[2895/2900] STAMP ./c.o
+FAILED: c.o
+failed edge output line 1
+failed edge output line 2
+failed edge output line 3
+[2898/2900] ACTION ./d.o
+FAILED: d.o
+failed edge output line 1
+failed edge output line 2
+failed edge output line 3
+failed edge output line 4
+ninja: build stopped: subcommand failed."""
+
+
+_NINJA_STDOUT_MIXED_RULE = """[2893/2900] CXX ./a.o
+FAILED: a.o
+failed edge output line 1
+[2894/2900] CXX ./b.o
+FAILED: b.o
+failed edge output line 1
+failed edge output line 2
+[2898/2900] ACTION ./c.o
+FAILED: c.o
+failed edge output line 1
+failed edge output line 2
+failed edge output line 3
+ninja: build stopped: subcommand failed."""
+
+
+_GRAPH_RETURN = """digraph ninja {
+rankdir="LR"
+node [fontsize=10, shape=box, height=0.25]
+edge [fontsize=10]
+"node_id1" [label="gen/b.cc"]
+"edge_id1" [label="edge_rule1", shape=ellipse]
+"edge_id1" -> "node_id1"
+"edge_id1" -> "node_id2"
+"node_id3" -> "edge_id1" [arrowhead=none]
+"node_id6" -> "edge_id1" [arrowhead=none style=dotted]
+"node_id2" [label="flag.h"]
+"node_id4" -> "node_id2" [label="edge_rule2"]
+"node_id4" [label="../../flag.py"]
+"node_id3" [label="b.o"]
+"node_id5" -> "node_id3" [label="edge_rule3"]
+"node_id5" [label="../../b.cc"]
+"node_id6" [label="../../order.h"]
+}"""
+
+
+_DEPS_RETURN = """a.o: #deps 4, deps mtime 1 (STALE)
+    ../../base/a.cc
+    ../../base/a.h
+    gen/b.cc
+    ../../build/bd.h
+
+b.o: #deps 3, deps mtime 1 (VALID)
+    ../../base/b.cc
+    ../../base/b.h
+    gen/b.cc
+
+c.o: #deps 1, deps mtime 1 (STALE)
+    ../../base/b.cc
+
+"""
+
+
+_DEPS_NOT_FOUND_RETURN = """a.o: deps not found
+b.o: #deps 3, deps mtime 1 (VALID)
+    ../../base/b.cc
+    ../../base/b.h
+    gen/b.cc
+
+"""
+
+
+_DEPS_ERROR_RETURN = """ninja: error: unknown target 'obj/e.o'"""
+
+
+class NinjaWrapperTestCase(unittest.TestCase):
+
+  def testParseNinjaStdoutCXX(self):
+    ninja_parser = ninja_wrapper.NinjaBuildOutputStreamingParser()
+    for line in _NINJA_STDOUT_CXX_RULE.splitlines():
+      ninja_parser.parse(line)
+    expected_list = [{
+        'output_nodes': ['a.o', 'b.o'],
+        'rule': 'CXX',
+        'output': textwrap.dedent("""\
+                                  failed edge output line 1
+                                  failed edge output line 2
+                                  failed edge output line 3
+                                  """),
+        'dependencies': []
+    }, {
+        'output_nodes': ['c.o'],
+        'rule': 'CXX',
+        'output': textwrap.dedent("""\
+                                  failed edge output line 1
+                                  failed edge output line 2
+                                  """),
+        'dependencies': []
+    }]
+    self.assertListEqual(ninja_parser.failed_target_list, expected_list)
+
+  def testParseDeps(self):
+    target_dict = ninja_wrapper.parse_ninja_deps(_DEPS_RETURN)
+    source_deps_a = ['../../base/a.cc', '../../base/a.h',
+                     '../../build/bd.h']
+    auto_generated_deps_a = ['gen/b.cc']
+    self.assertListEqual(target_dict['a.o'].source_deps, source_deps_a)
+    self.assertListEqual(target_dict['a.o'].auto_generated_deps,
+                         auto_generated_deps_a)
+
+    source_deps_b = ['../../base/b.cc', '../../base/b.h']
+    auto_generated_deps_b = ['gen/b.cc']
+    self.assertListEqual(target_dict['b.o'].source_deps, source_deps_b)
+    self.assertListEqual(target_dict['b.o'].auto_generated_deps,
+                         auto_generated_deps_b)
+
+  def testParseNinjaDepsNotFound(self):
+    target_dict = ninja_wrapper.parse_ninja_deps(_DEPS_NOT_FOUND_RETURN)
+    source_deps_b = ['../../base/b.cc', '../../base/b.h']
+    auto_generated_deps_b = ['gen/b.cc']
+
+    self.assertListEqual(target_dict['a.o'].source_deps, [])
+    self.assertListEqual(target_dict['a.o'].auto_generated_deps, [])
+    self.assertListEqual(target_dict['b.o'].source_deps, source_deps_b)
+    self.assertListEqual(target_dict['b.o'].auto_generated_deps,
+                         auto_generated_deps_b)
+
+  def testParseNinjaGraph(self):
+    graph = ninja_wrapper.Graph.build_graph(_GRAPH_RETURN)
+    graph_dict = graph.get_root_deps(['gen/b.cc'])
+    expected_dict = {'gen/b.cc': ['../../b.cc']}
+    self.assertDictEqual(graph_dict, expected_dict)
+
+  def testCheckAutoGeneratedTrue(self):
+    file_name = 'gen/123123'
+    self.assertTrue(ninja_wrapper.is_auto_generated(file_name))
+
+  def testCheckAutoGeneratedFalse(self):
+    file_name = '../../123123'
+    self.assertFalse(ninja_wrapper.is_auto_generated(file_name))
+
+  @mock.patch('ninja_wrapper.run_ninja_tool',
+              side_effect=[_DEPS_RETURN, _GRAPH_RETURN])
+  def testGetDetailedInfo(self, _):
+    failed_target_list = [{
+        'output_nodes': ['a.o', 'b.o'],
+        'rule': 'CXX',
+        'output': textwrap.dedent("""\
+                                  failed edge output line 1
+                                  failed edge output line 2
+                                  failed edge output line 3
+                                  """),
+        'dependencies': []
+    }, {
+        'output_nodes': ['c.o'],
+        'rule': 'CXX',
+        'output': textwrap.dedent("""\
+                                  failed edge output line 1
+                                  failed edge output line 2
+                                  """),
+        'dependencies': []
+    }, {
+        'output_nodes': ['d.o'],
+        'rule': 'LINK',
+        'output': textwrap.dedent("""\
+                                  failed edge output line 1
+                                  failed edge output line 2
+                                  """),
+        'dependencies': []
+    }]
+    expected_deps1 = set(['../../base/a.cc', '../../base/a.h',
+                          '../../build/bd.h', '../../base/b.cc',
+                          '../../base/b.h', '../../b.cc'])
+    expected_deps2 = set(['../../base/b.cc'])
+    expected_deps3 = set([])
+    target_dict = ninja_wrapper.get_detailed_info('', '', failed_target_list)
+    self.assertSetEqual(set(target_dict['failures'][0]['dependencies']),
+                        expected_deps1)
+    self.assertSetEqual(set(target_dict['failures'][1]['dependencies']),
+                        expected_deps2)
+    self.assertSetEqual(set(target_dict['failures'][2]['dependencies']),
+                        expected_deps3)
+
+  @mock.patch('ninja_wrapper.run_ninja_tool',
+              side_effect=['', _GRAPH_RETURN])
+  def testGetDetailedInfoErrorDeps(self, _):
+    failed_target_list = [{
+        'output_nodes': ['a.o', 'b.o'],
+        'rule': 'CXX',
+        'output': textwrap.dedent("""\
+                                  failed edge output line 1
+                                  failed edge output line 2
+                                  failed edge output line 3
+                                  """),
+        'dependencies': []
+    }, {
+        'output_nodes': ['c.o'],
+        'rule': 'CXX',
+        'output': textwrap.dedent("""\
+                                  failed edge output line 1
+                                  failed edge output line 2
+                                  """),
+        'dependencies': []
+    }]
+    expected_deps1 = set([])
+    expected_deps2 = set([])
+    target_dict = ninja_wrapper.get_detailed_info('', '', failed_target_list)
+    self.assertSetEqual(set(target_dict['failures'][0]['dependencies']),
+                        expected_deps1)
+    self.assertSetEqual(set(target_dict['failures'][1]['dependencies']),
+                        expected_deps2)
+
+  def testGetDetailedInfoNonCXXRules(self):
+    ninja_parser = ninja_wrapper.NinjaBuildOutputStreamingParser()
+    for line in _NINJA_STDOUT_NON_CXX_RULE.splitlines():
+      ninja_parser.parse(line)
+    failed_target_list = ninja_parser.failed_target_list
+    target_dict = ninja_wrapper.get_detailed_info('', '', failed_target_list)
+
+    expected_deps1 = set([])
+    expected_deps2 = set([])
+    expected_deps3 = set([])
+    expected_deps4 = set([])
+    self.assertSetEqual(set(target_dict['failures'][0]['dependencies']),
+                        expected_deps1)
+    self.assertSetEqual(set(target_dict['failures'][1]['dependencies']),
+                        expected_deps2)
+    self.assertSetEqual(set(target_dict['failures'][2]['dependencies']),
+                        expected_deps3)
+    self.assertSetEqual(set(target_dict['failures'][3]['dependencies']),
+                        expected_deps4)
+
+  @mock.patch('ninja_wrapper.run_ninja_tool',
+              side_effect=[_DEPS_NOT_FOUND_RETURN, _GRAPH_RETURN])
+  def testGetDetailedInfoMixedRules(self, _):
+    ninja_parser = ninja_wrapper.NinjaBuildOutputStreamingParser()
+    for line in _NINJA_STDOUT_MIXED_RULE.splitlines():
+      ninja_parser.parse(line)
+    failed_target_list = ninja_parser.failed_target_list
+    target_dict = ninja_wrapper.get_detailed_info('', '', failed_target_list)
+
+    expected_deps1 = set([])
+    expected_deps2 = set(['../../base/b.cc', '../../base/b.h', '../../b.cc'])
+    expected_deps3 = set([])
+    self.assertSetEqual(set(target_dict['failures'][0]['dependencies']),
+                        expected_deps1)
+    self.assertSetEqual(set(target_dict['failures'][1]['dependencies']),
+                        expected_deps2)
+    self.assertSetEqual(set(target_dict['failures'][2]['dependencies']),
+                        expected_deps3)
+
+
+if __name__ == '__main__':
+  unittest.main()
