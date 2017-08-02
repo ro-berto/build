@@ -226,12 +226,22 @@ class V8Api(recipe_api.RecipeApi):
     if RELEASE_BRANCH_RE.match(branch):
       revision = 'refs/branch-heads/%s:%s' % (branch, revision)
       needs_branch_heads = True
-
     solution.revision = revision
-    update_step = self.m.bot_update.ensure_checkout(
-        no_shallow=True,
-        with_branch_heads=needs_branch_heads,
-        **kwargs)
+
+    try:
+      cwd = self.m.path['builder_cache'].join(self.m.properties['buildername'])
+      self.m.file.ensure_directory('ensure builder cache dir', cwd)
+    except KeyError:
+      # No explicit builder cache directory defined. Use the "start_dir"
+      # directory.
+      # TODO(machenbach): Remove this case when all builders using this recipe
+      # migrated to LUCI.
+      cwd = self.m.path['start_dir']
+    with self.m.context(cwd=cwd):
+      update_step = self.m.bot_update.ensure_checkout(
+          no_shallow=True,
+          with_branch_heads=needs_branch_heads,
+          **kwargs)
 
     assert update_step.json.output['did_run']
 
@@ -397,6 +407,7 @@ class V8Api(recipe_api.RecipeApi):
       )
 
   def setup_mips_toolchain(self):
+    # TODO(machenbach): Deprecate this before migrating to LUCI.
     mips_dir = self.m.path['start_dir'].join(MIPS_DIR, 'bin')
     if not self.m.path.exists(mips_dir):
       self.m.gsutil.download_url(
@@ -602,6 +613,8 @@ class V8Api(recipe_api.RecipeApi):
   # TODO(machenbach): This should move to a dynamorio module as soon as one
   # exists.
   def dr_compile(self):
+    # TODO(machenbach): Figure out where to put this before the corresponding
+    # bot migrates to LUCI.
     self.m.file.ensure_directory(
       'Create Build Dir',
       self.m.path['start_dir'].join('dynamorio', 'build'))
@@ -1148,6 +1161,7 @@ class V8Api(recipe_api.RecipeApi):
     full_args = self._with_extra_flags(full_args)
 
     if self.run_dynamorio:
+      # TODO(machenbach): Needs to use cache for LUCI migration.
       drrun = self.m.path['start_dir'].join(
           'dynamorio', 'build', 'bin64', 'drrun')
       full_args += [
