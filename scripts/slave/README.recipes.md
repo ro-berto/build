@@ -1614,7 +1614,7 @@ Returns:
 
 #### **class [FilterApi](/scripts/slave/recipe_modules/filter/api.py#13)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [analyze](/scripts/slave/recipe_modules/filter/api.py#259)(self, affected_files, test_targets, additional_compile_targets, config_file_name, mb_mastername=None, mb_buildername=None, additional_names=None):**
+&mdash; **def [analyze](/scripts/slave/recipe_modules/filter/api.py#262)(self, affected_files, test_targets, additional_compile_targets, config_file_name, mb_mastername=None, mb_buildername=None, additional_names=None):**
 
 Runs "analyze" step to determine targets affected by the patch.
 
@@ -4464,9 +4464,9 @@ Generates the sequence of steps that will be run by the slave.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/filter/examples/full.py#16)(api):**
 ### *recipes* / [filter:tests/analyze](/scripts/slave/recipe_modules/filter/tests/analyze.py)
 
-[DEPS](/scripts/slave/recipe_modules/filter/tests/analyze.py#5): [chromium](#recipe_modules-chromium), [filter](#recipe_modules-filter), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+[DEPS](/scripts/slave/recipe_modules/filter/tests/analyze.py#5): [chromium](#recipe_modules-chromium), [filter](#recipe_modules-filter), [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/filter/tests/analyze.py#12)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/filter/tests/analyze.py#13)(api):**
 ### *recipes* / [filter:tests/analyze\_mac](/scripts/slave/recipe_modules/filter/tests/analyze_mac.py)
 
 [DEPS](/scripts/slave/recipe_modules/filter/tests/analyze_mac.py#5): [chromium](#recipe_modules-chromium), [filter](#recipe_modules-filter), [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
