@@ -270,6 +270,11 @@ TRYBOTS = freeze({
         'mastername': 'chromium.fyi',
         'buildername': 'Fuchsia',
       }),
+      'fuchsia_compile': simple_bot({
+        # TODO(jbudorick): Move this off of FYI once stable.
+        'mastername': 'chromium.fyi',
+        'buildername': 'Fuchsia Compile',
+      }, analyze_mode='compile'),
       'linux_arm': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'Linux ARM',
