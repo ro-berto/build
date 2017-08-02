@@ -123,7 +123,7 @@ def _RunStepsInternal(api):
 
 def RunSteps(api):
   try:
-    cwd = api.path['builder_cache']
+    cwd = api.path['builder_cache'].join(api.properties['buildername'])
     api.file.ensure_directory('ensure builder cache dir', cwd)
   except KeyError:
     # No explicit builder cache directory defined. Use the "start_dir"
