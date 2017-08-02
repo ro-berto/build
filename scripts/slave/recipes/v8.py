@@ -8,7 +8,6 @@ DEPS = [
   'archive',
   'chromium',
   'depot_tools/gclient',
-  'depot_tools/infra_paths',
   'recipe_engine/context',
   'recipe_engine/json',
   'recipe_engine/path',
@@ -453,19 +452,6 @@ def GenTests(api):
         requester='commit-bot@chromium.org',
         gerrit_project='v8/v8',
         blamelist=['dude@chromium.org'],
-    )
-  )
-
-  # Test tryjob with named cache.
-  yield (
-    api.v8.test(
-        'tryserver.v8',
-        'v8_linux_rel_ng',
-        'with_cache',
-        requester='commit-bot@chromium.org',
-        gerrit_project='v8/v8',
-        blamelist=['dude@chromium.org'],
-        path_config='generic',
     )
   )
 
