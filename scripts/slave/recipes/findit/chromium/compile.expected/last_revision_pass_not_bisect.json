@@ -660,6 +660,10 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
+      "--",
       "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "-w",
       "dupbuild=err",
@@ -1235,6 +1239,10 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
+      "--",
       "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "-w",
       "dupbuild=err",

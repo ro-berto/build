@@ -227,8 +227,20 @@ class ChromiumApi(recipe_api.RecipeApi):
       occurs something failure on goma steps.
     """
 
-    with self.m.context(env=ninja_env):
-      self.m.step(name or 'compile', ninja_command, **kwargs)
+    # TODO(https://crbug.com/752212) Remove this condition after fixing the bug.
+    # This bug makes ninja wrapper can't parse arguments correctly.
+    if kwargs.get('wrapper'):
+      with self.m.context(env=ninja_env):
+        self.m.step(name or 'compile', ninja_command, **kwargs)
+    else:
+      script = self.resource('ninja_wrapper.py')
+
+      script_args = ['--']
+      script_args.extend(ninja_command)
+
+      with self.m.context(env=ninja_env):
+        self.m.python(name or 'compile', script=script,
+                      args=script_args, **kwargs)
 
     if not ninja_confirm_noop:
       return
