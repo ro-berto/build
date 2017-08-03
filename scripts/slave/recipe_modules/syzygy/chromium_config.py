@@ -36,8 +36,7 @@ def syzygy(c):
 def syzygy_x64(c):
   assert 'official_build' not in c.gyp_env.GYP_DEFINES
   c.compile_py.default_targets.clear()
-  # TODO(sebmarchand): Add a 'build_all_x64' config to Syzygy.
-  c.compile_py.default_targets.add('syzyasan_rtl_unittests')
+  c.compile_py.default_targets.add('build_all')
 
 
 @CONFIG_CTX(includes=['_syzygy', 'clobber'],

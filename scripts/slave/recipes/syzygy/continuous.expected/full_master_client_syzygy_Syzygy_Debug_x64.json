@@ -91,7 +91,7 @@
       "dupbuild=err",
       "-C",
       "[START_DIR]\\src\\out\\Debug_x64",
-      "syzyasan_rtl_unittests"
+      "build_all"
     ],
     "cwd": "[START_DIR]\\src",
     "env": {
@@ -107,7 +107,7 @@
       "dupbuild=err",
       "-C",
       "[START_DIR]\\src\\out\\Debug_x64",
-      "syzyasan_rtl_unittests",
+      "build_all",
       "-d",
       "explain",
       "-n"
@@ -135,7 +135,7 @@
       "--ninja-log-outdir",
       "[START_DIR]\\src\\out\\Debug_x64",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe', '-w', 'dupbuild=err', '-C', '[START_DIR]\\\\src\\\\out\\\\Debug_x64', 'syzyasan_rtl_unittests']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe', '-w', 'dupbuild=err', '-C', '[START_DIR]\\\\src\\\\out\\\\Debug_x64', 'build_all']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",
