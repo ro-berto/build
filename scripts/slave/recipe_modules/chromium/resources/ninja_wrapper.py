@@ -373,7 +373,7 @@ def get_detailed_info(ninja_path, build_path, failed_target_list):
   return {'failures': failed_target_list}
 
 
-def parse_args():
+def parse_args(args):
   """Parse arguments."""
   parser = argparse.ArgumentParser()
   parser.add_argument('-o', '--ninja_info_output',
@@ -382,12 +382,12 @@ def parse_args():
                       help=('Ninja build command, e.g., '
                             '/absolute/path/to/ninja -C build/path '
                             'build_target'))
-  options = parser.parse_args()
+  options = parser.parse_args(args)
   return options
 
 
 def main():
-  options = parse_args()
+  options = parse_args(sys.argv[1:])
   ninja_cmd = options.ninja_cmd
 
   # If first argument isn't file's name, calls ninja directly.

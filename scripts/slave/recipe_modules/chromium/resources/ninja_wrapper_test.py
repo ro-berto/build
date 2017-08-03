@@ -283,6 +283,37 @@ class NinjaWrapperTestCase(unittest.TestCase):
     self.assertSetEqual(set(target_dict['failures'][2]['dependencies']),
                         expected_deps3)
 
+  def testParseArgs(self):
+    expected_file_name = 'file.json'
+    expected_ninja_cmd = ['ninja', '-w', 'dupbuild=err', '-C',
+                          'build/path', 'target1', 'target2', '-o', 'target3']
+    args = ['-o', expected_file_name]
+    args.append('--')
+    args.extend(expected_ninja_cmd)
+    options = ninja_wrapper.parse_args(args)
+    self.assertListEqual(expected_ninja_cmd, options.ninja_cmd)
+    self.assertEqual(expected_file_name, options.ninja_info_output)
+
+  def testParseArgsFullName(self):
+    expected_file_name = 'file.json'
+    expected_ninja_cmd = ['ninja', '-w', 'dupbuild=err', '-C',
+                          'build/path', 'target1', 'target2', '-o', 'target3']
+    args = ['--ninja_info_output', expected_file_name]
+    args.append('--')
+    args.extend(expected_ninja_cmd)
+    options = ninja_wrapper.parse_args(args)
+    self.assertListEqual(expected_ninja_cmd, options.ninja_cmd)
+    self.assertEqual(expected_file_name, options.ninja_info_output)
+
+  def testParseArgsWithoutFile(self):
+    expected_ninja_cmd = ['ninja', '-w', 'dupbuild=err', '-C',
+                          'build/path', 'target1', 'target2']
+    args = []
+    args.append('--')
+    args.extend(expected_ninja_cmd)
+    options = ninja_wrapper.parse_args(args)
+    self.assertListEqual(expected_ninja_cmd, options.ninja_cmd)
+    self.assertIsNone(options.ninja_info_output)
 
 if __name__ == '__main__':
   unittest.main()
