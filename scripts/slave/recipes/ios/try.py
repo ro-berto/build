@@ -81,6 +81,40 @@ def GenTests(api):
   )
 
   yield (
+    api.test('no_compilation')
+    + api.platform('mac', 64)
+    + api.properties(
+      buildername='ios-simulator',
+      buildnumber='0',
+      issue=123456,
+      mastername='tryserver.fake',
+      patchset=1,
+      rietveld='fake://rietveld.url',
+      bot_id='fake-vm',
+      path_config='kitchen',
+    )
+    + api.ios.make_test_build_config({
+      'xcode version': 'fake xcode version',
+      'gn_args': [
+        'is_debug=true',
+        'target_cpu="x86"',
+      ],
+      'tests': [
+        {
+          'app': 'fake tests',
+          'device type': 'fake device',
+          'os': '8.1',
+          'xctest': True,
+        },
+      ],
+    })
+    + api.step_data(
+        'bootstrap swarming.swarming.py --version',
+        stdout=api.raw_io.output_text('1.2.3'),
+    )
+  )
+
+  yield (
     api.test('no_tests')
     + api.platform('mac', 64)
     + api.properties(
@@ -107,39 +141,6 @@ def GenTests(api):
         stdout=api.raw_io.output_text('1.2.3'),
     )
     + suppress_analyze()
-  )
-
-  yield (
-    api.test('swarming_tests_skipped')
-    + api.platform('mac', 64)
-    + api.properties(
-      buildername='ios-simulator-swarming',
-      buildnumber='0',
-      issue=123456,
-      mastername='tryserver.fake',
-      patchset=1,
-      rietveld='fake://rietveld.url',
-      bot_id='fake-vm',
-      path_config='kitchen',
-    )
-    + api.ios.make_test_build_config({
-      'xcode version': 'fake xcode version',
-      'gn_args': [
-        'is_debug=true',
-        'target_cpu="x86"',
-      ],
-      'tests': [
-        {
-          'app': 'fake test',
-          'device type': 'fake device',
-          'os': '8.1',
-        },
-      ],
-    })
-    + api.step_data(
-        'bootstrap swarming.swarming.py --version',
-        stdout=api.raw_io.output_text('1.2.3'),
-    )
   )
 
   # The same test as above but applying an icu patch.
@@ -380,6 +381,7 @@ def GenTests(api):
         'bootstrap swarming.swarming.py --version',
         stdout=api.raw_io.output_text('1.2.3'),
     )
+    + suppress_analyze()
   )
 
   yield (

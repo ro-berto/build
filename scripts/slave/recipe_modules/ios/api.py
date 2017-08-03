@@ -362,6 +362,9 @@ class iOSApi(recipe_api.RecipeApi):
         for test in self.__config['tests']:
           if test['app'] not in test_targets:
             test['skip'] = True
+
+        if not self.compilation_targets:
+          return
       else:
         self.compilation_targets = []
         self.compilation_targets.extend(tests)

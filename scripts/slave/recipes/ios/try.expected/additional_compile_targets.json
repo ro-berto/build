@@ -232,7 +232,9 @@
       "@@@STEP_TEXT@path: 'testing/buildbot/trybot_analyze_config.json'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"f.*\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"chromium\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
@@ -264,19 +266,35 @@
     },
     "name": "analyze",
     "~followup_annotations": [
-      "@@@STEP_TEXT@No compile necessary@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"compile_targets\": [], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"status\": \"No dependency\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"test_targets\": []@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "name": "analyze_matched_exclusion",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Analyze disabled: matched exclusion@@@",
+      "@@@STEP_LOG_LINE@excluded_files@foo.cc (regex = 'f.*')@@@",
+      "@@@STEP_LOG_END@excluded_files@@@",
       "@@@STEP_LOG_LINE@analyze_details@{@@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"additional_compile_targets\": [@@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"fake_target\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"fake_target\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"fake_target\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.test_targets\": [], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"test_targets\": []@@@",
       "@@@STEP_LOG_LINE@analyze_details@}@@@",
@@ -287,7 +305,8 @@
     "cmd": [
       "ninja",
       "-C",
-      "[BUILDER_CACHE]/ios_simulator/src/out/Debug-iphonesimulator"
+      "[BUILDER_CACHE]/ios_simulator/src/out/Debug-iphonesimulator",
+      "fake_target"
     ],
     "cwd": "[BUILDER_CACHE]/ios_simulator/src/out/Debug-iphonesimulator",
     "env": {

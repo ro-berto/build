@@ -9,7 +9,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[BUILDER_CACHE]/ios_simulator_swarming"
+      "[BUILDER_CACHE]/ios_simulator"
     ],
     "infra_step": true,
     "name": "makedirs checkout path"
@@ -25,7 +25,7 @@
       "update-index",
       "--refresh"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator_swarming",
+    "cwd": "[BUILDER_CACHE]/ios_simulator",
     "env": {
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -58,7 +58,7 @@
       "--revision",
       "src@HEAD"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator_swarming",
+    "cwd": "[BUILDER_CACHE]/ios_simulator",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -146,7 +146,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/ios_simulator_swarming/src/ios/build/bots/chromium.mac/ios-simulator-swarming.json",
+      "[BUILDER_CACHE]/ios_simulator/src/ios/build/bots/chromium.mac/ios-simulator.json",
       "/path/to/tmp/json"
     ],
     "name": "read build config",
@@ -158,9 +158,10 @@
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"app\": \"fake test\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"app\": \"fake tests\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"device type\": \"fake device\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"os\": \"8.1\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"os\": \"8.1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"xctest\": true@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"xcode version\": \"fake xcode version\"@@@",
@@ -175,7 +176,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator_swarming/src",
+    "cwd": "[BUILDER_CACHE]/ios_simulator/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "LANDMINES_VERBOSE": "1",
@@ -187,17 +188,17 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/ios_simulator_swarming/src/tools/mb/mb.py",
+      "[BUILDER_CACHE]/ios_simulator/src/tools/mb/mb.py",
       "gen",
       "-m",
       "chromium.mac",
       "-b",
-      "ios-simulator-swarming",
+      "ios-simulator",
       "--config-file",
-      "[BUILDER_CACHE]/ios_simulator_swarming/src/tools/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/ios_simulator/src/tools/mb/mb_config.pyl",
       "//out/Debug-iphonesimulator"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator_swarming/src",
+    "cwd": "[BUILDER_CACHE]/ios_simulator/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -213,7 +214,7 @@
       "--cached",
       "--name-only"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator_swarming/src",
+    "cwd": "[BUILDER_CACHE]/ios_simulator/src",
     "infra_step": true,
     "name": "git diff to analyze patch",
     "stdout": "/path/to/tmp/",
@@ -227,7 +228,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/ios_simulator_swarming/src/testing/buildbot/trybot_analyze_config.json",
+      "[BUILDER_CACHE]/ios_simulator/src/testing/buildbot/trybot_analyze_config.json",
       "/path/to/tmp/json"
     ],
     "name": "read filter exclusion spec",
@@ -251,15 +252,15 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/ios_simulator_swarming/src/tools/mb/mb.py",
+      "[BUILDER_CACHE]/ios_simulator/src/tools/mb/mb.py",
       "analyze",
       "-m",
       "chromium.mac",
       "-b",
-      "ios-simulator-swarming",
+      "ios-simulator",
       "-v",
       "//out/None",
-      "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": [\"fake test\"]}",
+      "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": [\"fake tests\"]}",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -280,28 +281,15 @@
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.test_targets\": [], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"test_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"fake test\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"fake tests\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ]@@@",
       "@@@STEP_LOG_LINE@analyze_details@}@@@",
       "@@@STEP_LOG_END@analyze_details@@@"
     ]
   },
   {
-    "cmd": [
-      "ninja",
-      "-C",
-      "[BUILDER_CACHE]/ios_simulator_swarming/src/out/Debug-iphonesimulator"
-    ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator_swarming/src/out/Debug-iphonesimulator",
-    "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "LANDMINES_VERBOSE": "1"
-    },
-    "name": "compile (with patch)"
-  },
-  {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/ios_simulator_swarming/src",
+    "cwd": "[BUILDER_CACHE]/ios_simulator/src",
     "name": "bootstrap swarming"
   },
   {
@@ -314,7 +302,7 @@
       "--url",
       "https://chromium.googlesource.com/external/swarming.client.git"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator_swarming/src",
+    "cwd": "[BUILDER_CACHE]/ios_simulator/src",
     "name": "bootstrap swarming.git setup (swarming_client)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -417,7 +405,7 @@
       "[START_DIR]/swarming.client/swarming.py",
       "--version"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator_swarming/src",
+    "cwd": "[BUILDER_CACHE]/ios_simulator/src",
     "name": "bootstrap swarming.swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -427,7 +415,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/ios_simulator_swarming/src",
+    "cwd": "[BUILDER_CACHE]/ios_simulator/src",
     "name": "isolate"
   },
   {
@@ -439,9 +427,9 @@
       "/path/to/tmp/json",
       "copy",
       "{'conditions': [['OS == \"ios\"', {'variables': {'files': ['<(app_path)/', 'src/ios/build/bots/scripts/', 'src/out/Debug-iphonesimulator/iossim'], 'command': ['src/ios/build/bots/scripts/run.py', '--app', '<(app_path)', '--args-json', '{\"test_args\": <(test_args), \"xctest\": <(xctest)}', '--out-dir', '${ISOLATED_OUTDIR}', '--retries', '3', '--xcode-version', '<(xcode_version)', '--iossim', 'src/out/Debug-iphonesimulator/iossim', '--platform', '<(platform)', '--version', '<(version)']}}]]}",
-      "[BUILDER_CACHE]/ios_simulator_swarming/template.isolate"
+      "[BUILDER_CACHE]/ios_simulator/template.isolate"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator_swarming/src",
+    "cwd": "[BUILDER_CACHE]/ios_simulator/src",
     "infra_step": true,
     "name": "isolate.generate template.isolate",
     "~followup_annotations": [
@@ -486,13 +474,13 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/ios_simulator_swarming/src",
+    "cwd": "[BUILDER_CACHE]/ios_simulator/src",
     "name": "trigger"
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/ios_simulator_swarming/src",
-    "name": "[skipped] fake test (fake device iOS 8.1)",
+    "cwd": "[BUILDER_CACHE]/ios_simulator/src",
+    "name": "[skipped] fake tests (fake device iOS 8.1)",
     "~followup_annotations": [
       "@@@STEP_TEXT@This test was skipped because it was not affected.@@@"
     ]
