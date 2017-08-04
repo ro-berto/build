@@ -226,7 +226,6 @@ class IndexPack(object):
           # statement.
           if '//' in fname:
             path = fname.split('//')
-            include_paths.add('-isystem%s' % os.path.normpath(path[0]))
             fname = '/'.join(path)
           fname_fullpath = os.path.join(entry['directory'], fname)
           if fname_fullpath not in self.filesizes:

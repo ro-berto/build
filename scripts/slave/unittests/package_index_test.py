@@ -147,8 +147,7 @@ class PackageIndexTest(unittest.TestCase):
         self.assertEquals(
             compilation_unit_dictionary['argument'],
             (
-                ['-isystem%s' % INCLUDE_PATH] + real_compile_arguments +
-                ['-w', '-nostdinc++']
+                real_compile_arguments + ['-w', '-nostdinc++']
             ))
 
   def testGenerateUnitFilesKythe(self):
@@ -216,8 +215,7 @@ class PackageIndexTest(unittest.TestCase):
         self.assertEquals(
             compilation_unit_dictionary['argument'],
             (
-                ['-isystem%s' % INCLUDE_PATH] + real_compile_arguments +
-                ['-w', '-nostdinc++']
+                real_compile_arguments + ['-w', '-nostdinc++']
             ))
 
 if __name__ == '__main__':
