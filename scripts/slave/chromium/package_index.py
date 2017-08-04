@@ -186,6 +186,7 @@ class IndexPack(object):
       unit_dictionary = {}
 
       print 'Generating Translation Unit data for %s' % entry['file']
+      print 'Compile command: %s' % entry['command']
 
       command_list = entry['command'].split()
       # The |command_list| starts with the compiler that was used for the
@@ -277,6 +278,8 @@ class IndexPack(object):
           list(include_paths) + command_list + ['-w', '-nostdinc++']
       )
       unit_dictionary['required_input'] = required_inputs
+
+      print "Unit argument: %s" % unit_dictionary['argument']
 
       wrapper = {
           'format': self.index_pack_format,
