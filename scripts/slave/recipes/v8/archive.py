@@ -51,6 +51,7 @@ def make_archive(api, branch, version, archive_type, step_suffix='',
   ).json.output
 
   # Zip build.
+  # TODO(machenbach): Remove usage of start_dir. Use a temp dir instead.
   zip_file = api.path['start_dir'].join('archive.zip')
   package = api.zip.make_package(build_dir, zip_file)
   map(package.add_file, map(api.path.abs_to_path, file_list))

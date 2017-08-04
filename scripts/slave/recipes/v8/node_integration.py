@@ -60,10 +60,10 @@ ARCHIVE_LINK = ('https://storage.googleapis.com'
 
 
 def _build_and_test(api, suffix=''):
-  with api.context(cwd=api.path['start_dir'].join('node.js')):
+  with api.context(cwd=api.v8.checkout_root.join('node.js')):
     api.step(
       'configure node.js%s' % suffix,
-      [api.path['start_dir'].join('node.js', 'configure')],
+      [api.v8.checkout_root.join('node.js', 'configure')],
     )
 
     api.step(
@@ -77,16 +77,18 @@ def _build_and_test(api, suffix=''):
     )
 
 def _build_and_upload(api):
-  with api.context(cwd=api.path['start_dir'].join('node.js')):
+  with api.context(cwd=api.v8.checkout_root.join('node.js')):
     api.step(
       'configure node.js - install',
       [
-        api.path['start_dir'].join('node.js', 'configure'),
+        api.v8.checkout_root.join('node.js', 'configure'),
         '--prefix=/',
         '--tag=v8-build-%s' % api.v8.revision,
       ],
     )
 
+  # TODO(machenbach): Use a proper temp dir for putting archive-build and the
+  # zip file to not depend on start_dir.
   archive_dir = api.path['start_dir'].join('archive-build')
   archive_name = ('node-linux-rel-%s-%s.zip' %
                   (api.v8.revision_number, api.v8.revision))
@@ -96,7 +98,7 @@ def _build_and_upload(api):
   api.file.ensure_directory('install directory', archive_dir)
 
   # Build and install.
-  with api.context(cwd=api.path['start_dir'].join('node.js')):
+  with api.context(cwd=api.v8.checkout_root.join('node.js')):
     api.step(
       'build and install node.js',
       ['make', '-j8', 'install', 'DESTDIR=%s' % archive_dir],
@@ -135,8 +137,8 @@ def RunSteps(api):
     return
 
   args = [
-    api.path['start_dir'].join('v8'),
-    api.path['start_dir'].join('node.js'),
+    api.v8.checkout_root.join('v8'),
+    api.v8.checkout_root.join('node.js'),
   ]
 
   if api.tryserver.is_tryserver:
@@ -145,7 +147,7 @@ def RunSteps(api):
   # Update V8.
   api.python(
       name='update v8',
-      script=api.path['start_dir'].join(
+      script=api.v8.checkout_root.join(
           'v8', 'tools', 'release', 'update_node.py'),
       args=args,
   )
