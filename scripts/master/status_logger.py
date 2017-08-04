@@ -238,7 +238,7 @@ class StatusEventLogger(StatusReceiverMultiService):
                        bot_name, builder_name, build_number, build_scheduled_ts,
                        step_name=None, step_text=None, step_number=None,
                        result=None, extra_result_code=None, patch_url=None,
-                       bbucket_id=None, category=None,
+                       bbucket_id=None, category=None, fail_type=None,
                        head_revision_git_hash=None):
     """Log a build/step event for event_mon."""
 
@@ -268,6 +268,8 @@ class StatusEventLogger(StatusReceiverMultiService):
         d['build-event-bbucket-id'] = bbucket_id
       if category:
         d['build-event-category'] = category
+      if fail_type:
+        d['build-event-fail-type'] = fail_type
       if head_revision_git_hash:
         d['build-event-head-revision-git-hash'] = head_revision_git_hash
 
@@ -514,6 +516,7 @@ class StatusEventLogger(StatusReceiverMultiService):
         patch_url=self._get_patch_url(properties),
         bbucket_id=self._get_bbucket_id(properties),
         category=properties.getProperty('category'),
+        fail_type=properties.getProperty('fail_type'),
         head_revision_git_hash=self._get_head_revision_git_hash(properties))
 
     pre_test_time_s = None
