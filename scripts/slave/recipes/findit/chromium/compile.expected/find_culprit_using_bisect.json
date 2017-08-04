@@ -668,6 +668,8 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
+      "--ninja_info_output",
+      "/path/to/tmp/json",
       "--",
       "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "-w",
@@ -686,6 +688,9 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
+      "@@@STEP_LOG_END@json.output[ninja_info] (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info] (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output[ninja_info] (exception)@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
@@ -1500,6 +1505,8 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
+      "--ninja_info_output",
+      "/path/to/tmp/json",
       "--",
       "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "-w",
@@ -1518,6 +1525,9 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
+      "@@@STEP_LOG_END@json.output[ninja_info] (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info] (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output[ninja_info] (exception)@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },

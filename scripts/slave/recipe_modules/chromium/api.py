@@ -235,12 +235,27 @@ class ChromiumApi(recipe_api.RecipeApi):
     else:
       script = self.resource('ninja_wrapper.py')
 
-      script_args = ['--']
+      script_args = [
+          '--ninja_info_output',
+          self.m.json.output(add_json_log='on_failure', name='ninja_info')
+      ]
+      script_args.append('--')
       script_args.extend(ninja_command)
+
+      example_json = {'failures': [{
+          'output_nodes': ['a.o'],
+          'rule': 'CXX',
+          'output': 'error info',
+          'dependencies': ['b/a.cc']
+      }]}
+      step_test_data = (lambda: self.m.json.test_api.output(
+                            example_json, name='ninja_info'))
 
       with self.m.context(env=ninja_env):
         self.m.python(name or 'compile', script=script,
-                      args=script_args, **kwargs)
+                      args=script_args,
+                      step_test_data=step_test_data,
+                      **kwargs)
 
     if not ninja_confirm_noop:
       return
