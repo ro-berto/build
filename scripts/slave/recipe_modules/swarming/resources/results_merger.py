@@ -58,6 +58,7 @@ def merge_test_results(shard_results_list):
     a dictionary that represent the merged results. Its format follow the same
     format of all results in |shard_results_list|.
   """
+  shard_results_list = [x for x in shard_results_list if x]
   if not shard_results_list:
     return {}
 
