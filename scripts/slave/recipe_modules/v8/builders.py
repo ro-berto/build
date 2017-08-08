@@ -76,6 +76,10 @@ BUILDERS = {
         'testing': {
           'platform': 'linux',
         },
+        'binary_size_tracking': {
+          'path_pieces_list': [['d8']],
+          'category': 'linux32'
+        },
         'triggers': [
           'V8 Deopt Fuzzer',
           'V8 Linux',
@@ -236,6 +240,10 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [V8Testing, Test262, Mozilla],
         'testing': {'platform': 'linux'},
+        'binary_size_tracking': {
+          'path_pieces_list': [['libv8.so']],
+          'category': 'linux32'
+        },
       },
       'V8 Linux - nosnap': {
         'v8_apply_config': ['no_snapshot'],
@@ -323,6 +331,10 @@ BUILDERS = {
         'enable_swarming': True,
         'testing': {'platform': 'linux'},
         'track_build_dependencies': True,
+        'binary_size_tracking': {
+          'path_pieces_list': [['d8']],
+          'category': 'linux64'
+        },
         'triggers': [
           'V8 Linux64',
           'V8 Linux64 - avx2',

@@ -558,6 +558,44 @@ class V8Api(recipe_api.RecipeApi):
     if points:
       self.m.perf_dashboard.add_point(points)
 
+  def _track_binary_size(self, path_pieces_list, category):
+    """Track and upload binary size of configured binaries.
+
+    Args:
+      path_pieces_list: List of path pieces to be joined to the build output
+          folder respectively. Each path should point to a binary to track.
+      category: ChromePerf category for qualifying the graph names, e.g.
+          linux32 or linux64.
+    """
+    files = [
+      self.m.chromium.c.build_dir.join(
+          *([self.m.chromium.c.build_config_fs] + list(path_pieces)))
+      for path_pieces in path_pieces_list
+    ]
+
+    sizes = self.m.file.filesizes('Check binary size', files)
+
+    point_defaults = {
+      'units': 'bytes',
+      'supplemental_columns': {
+        'a_default_rev': 'r_v8_git',
+        'r_v8_git': self.revision,
+      },
+    }
+    trace_prefix = ['v8.infra', 'binary_size']
+
+    points = []
+    for path_pieces, size in zip(path_pieces_list, sizes):
+      p = self.m.perf_dashboard.get_skeleton_point(
+          '/'.join(trace_prefix + [path_pieces[-1]]),
+          self.revision_number,
+          str(size),
+          bot=category,
+      )
+      p.update(point_defaults)
+      points.append(p)
+    self.m.perf_dashboard.add_point(points)
+
   def compile(self, **kwargs):
     use_goma = (self.m.chromium.c.compile_py.compiler and
                 'goma' in self.m.chromium.c.compile_py.compiler)
@@ -613,6 +651,14 @@ class V8Api(recipe_api.RecipeApi):
       ).json.output
       if deps:
         self._upload_build_dependencies(deps)
+
+    # Track binary size if specified.
+    tracking_config = self.bot_config.get('binary_size_tracking', {})
+    if tracking_config:
+      self._track_binary_size(
+        tracking_config['path_pieces_list'],
+        tracking_config['category'],
+      )
 
     self.isolate_tests()
 
