@@ -3,6 +3,21 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[BUILDER_CACHE]/v8_linux_rel_ng"
+    ],
+    "infra_step": true,
+    "name": "ensure builder cache dir"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
       "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
@@ -24,6 +39,7 @@
       "v8@12345",
       "--no_shallow"
     ],
+    "cwd": "[BUILDER_CACHE]/v8_linux_rel_ng",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -70,7 +86,7 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/v8/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/v8_linux_rel_ng/v8/tools/swarming_client/swarming.py",
       "--version"
     ],
     "name": "swarming.py --version",
@@ -122,7 +138,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/v8_linux_rel_ng/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GYP_CHROMIUM_NO_ACTION": "1",
@@ -136,20 +152,20 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/v8/tools/mb/mb.py",
+      "[BUILDER_CACHE]/v8_linux_rel_ng/v8/tools/mb/mb.py",
       "gen",
       "-m",
       "tryserver.v8",
       "-b",
       "v8_linux_rel_ng",
       "--config-file",
-      "[START_DIR]/v8/infra/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/v8_linux_rel_ng/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma_client",
       "--gyp-script=gypfiles/gyp_v8",
       "//out/Release"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/v8_linux_rel_ng/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -173,7 +189,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[START_DIR]/v8/out/gn"
+      "[BUILDER_CACHE]/v8_linux_rel_ng/v8/out/gn"
     ],
     "infra_step": true,
     "name": "for peeking gn"
@@ -183,7 +199,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::v8]/resources/patch_mb_config.py",
-      "[START_DIR]/v8/infra/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/v8_linux_rel_ng/v8/infra/mb/mb_config.pyl",
       "/path/to/tmp/"
     ],
     "name": "patch mb config (fyi)"
@@ -192,7 +208,7 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/v8/tools/mb/mb.py",
+      "[BUILDER_CACHE]/v8_linux_rel_ng/v8/tools/mb/mb.py",
       "gen",
       "-m",
       "tryserver.v8",
@@ -202,9 +218,9 @@
       "[mb config]",
       "--goma-dir",
       "[CACHE]/goma_client",
-      "[START_DIR]/v8/out/gn"
+      "[BUILDER_CACHE]/v8_linux_rel_ng/v8/out/gn"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/v8_linux_rel_ng/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -215,9 +231,9 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/v8/tools/gyp_flag_compare.py",
-      "[START_DIR]/v8/out/gn",
-      "[START_DIR]/v8/out/Release",
+      "[BUILDER_CACHE]/v8_linux_rel_ng/v8/tools/gyp_flag_compare.py",
+      "[BUILDER_CACHE]/v8_linux_rel_ng/v8/out/gn",
+      "[BUILDER_CACHE]/v8_linux_rel_ng/v8/out/Release",
       "all",
       "all"
     ],
@@ -231,10 +247,10 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[START_DIR]/v8/out/gn"
+      "[BUILDER_CACHE]/v8_linux_rel_ng/v8/out/gn"
     ],
     "infra_step": true,
-    "name": "rmtree [START_DIR]/v8/out/gn"
+    "name": "rmtree [BUILDER_CACHE]/v8_linux_rel_ng/v8/out/gn"
   },
   {
     "cmd": [
@@ -256,7 +272,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/v8_linux_rel_ng/v8",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -274,7 +290,7 @@
       "0777",
       "[GOMA_CACHE]/v8_linux_rel_ng"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/v8_linux_rel_ng/v8",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -291,7 +307,7 @@
       "[CACHE]/goma_client/goma_ctl.py",
       "restart"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/v8_linux_rel_ng/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
@@ -324,7 +340,7 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/v8_linux_rel_ng/v8",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -346,11 +362,11 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]/v8/out/Release",
+      "[BUILDER_CACHE]/v8_linux_rel_ng/v8/out/Release",
       "-j",
       "50"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/v8_linux_rel_ng/v8",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -358,7 +374,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/v8_linux_rel_ng/v8",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -372,7 +388,7 @@
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/v8_linux_rel_ng/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
@@ -401,7 +417,7 @@
       "[CACHE]/goma_client/goma_ctl.py",
       "stat"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/v8_linux_rel_ng/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
@@ -419,7 +435,7 @@
       "[CACHE]/goma_client/goma_ctl.py",
       "stop"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/v8_linux_rel_ng/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
@@ -447,9 +463,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[START_DIR]/v8/out/Release",
+      "[BUILDER_CACHE]/v8_linux_rel_ng/v8/out/Release",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/v8/out/Release', '-j', 50]",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/v8_linux_rel_ng/v8/out/Release', '-j', 50]",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",
@@ -461,7 +477,7 @@
       "--buildbot-slavename",
       "test_bot"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/v8_linux_rel_ng/v8",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -490,7 +506,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/v8_linux_rel_ng/v8",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -505,7 +521,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[START_DIR]/v8/tools/swarming_client",
+      "[BUILDER_CACHE]/v8_linux_rel_ng/v8/tools/swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
@@ -514,13 +530,13 @@
       "--eventlog-endpoint",
       "prod",
       "--verbose",
-      "[START_DIR]/v8/out/Release/benchmarks.isolated.gen.json",
-      "[START_DIR]/v8/out/Release/bot_default.isolated.gen.json",
-      "[START_DIR]/v8/out/Release/mjsunit.isolated.gen.json",
-      "[START_DIR]/v8/out/Release/mozilla.isolated.gen.json",
-      "[START_DIR]/v8/out/Release/optimize_for_size.isolated.gen.json",
-      "[START_DIR]/v8/out/Release/run-gcmole.isolated.gen.json",
-      "[START_DIR]/v8/out/Release/test262.isolated.gen.json"
+      "[BUILDER_CACHE]/v8_linux_rel_ng/v8/out/Release/benchmarks.isolated.gen.json",
+      "[BUILDER_CACHE]/v8_linux_rel_ng/v8/out/Release/bot_default.isolated.gen.json",
+      "[BUILDER_CACHE]/v8_linux_rel_ng/v8/out/Release/mjsunit.isolated.gen.json",
+      "[BUILDER_CACHE]/v8_linux_rel_ng/v8/out/Release/mozilla.isolated.gen.json",
+      "[BUILDER_CACHE]/v8_linux_rel_ng/v8/out/Release/optimize_for_size.isolated.gen.json",
+      "[BUILDER_CACHE]/v8_linux_rel_ng/v8/out/Release/run-gcmole.isolated.gen.json",
+      "[BUILDER_CACHE]/v8_linux_rel_ng/v8/out/Release/test262.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [

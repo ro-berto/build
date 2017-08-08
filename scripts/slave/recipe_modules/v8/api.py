@@ -229,15 +229,12 @@ class V8Api(recipe_api.RecipeApi):
     solution.revision = revision
 
     try:
-      # TODO(machenbach): Uncomment after removing dependencies to start_dir
-      # everywhere.
-      # safe_buildername = ''.join(
-      #     c if c.isalnum() else '_' for c in self.m.properties['buildername'])
-      # self.checkout_root = self.m.path['builder_cache'].join(safe_buildername)
-      self.checkout_root = self.m.path['start_dir']
-      # self.m.file.ensure_directory(
-      #     'ensure builder cache dir', self.checkout_root)
-    except KeyError:  # pragma: no cover
+      safe_buildername = ''.join(
+          c if c.isalnum() else '_' for c in self.m.properties['buildername'])
+      self.checkout_root = self.m.path['builder_cache'].join(safe_buildername)
+      self.m.file.ensure_directory(
+          'ensure builder cache dir', self.checkout_root)
+    except KeyError:
       # No explicit builder cache directory defined. Use the "start_dir"
       # directory.
       # TODO(machenbach): Remove this case when all builders using this recipe
