@@ -13277,6 +13277,22 @@
     "name": "Check bisect finished on revision chromium@a6298e4afe,v8@002"
   },
   {
+    "cmd": [
+      "git",
+      "show",
+      "--name-only",
+      "--pretty=format:",
+      "002"
+    ],
+    "cwd": "[START_DIR]/src/v8",
+    "infra_step": true,
+    "name": "Check bisect finished on revision chromium@a6298e4afe,v8@002.Checking DEPS for 002",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
     "cmd": [],
     "name": "Debug Info"
   },
