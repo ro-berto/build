@@ -85,10 +85,8 @@
       "./art/test/testrunner/testrunner.py",
       "-j8",
       "--optimizing",
-      "--debuggable",
-      "--ndebuggable",
-      "--host",
-      "--verbose"
+      "--verbose",
+      "--host"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -111,10 +109,37 @@
   {
     "cmd": [
       "./art/test/testrunner/testrunner.py",
+      "-j8",
+      "--optimizing",
+      "--debuggable",
+      "--verbose",
+      "--host"
+    ],
+    "env": {
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ART_HEAP_POISONING": "true",
+      "ART_TEST_FULL": "false",
+      "ART_TEST_KEEP_GOING": "true",
+      "ART_TEST_RUN_TEST_2ND_ARCH": "false",
+      "ART_USE_READ_BARRIER": "true",
+      "HOST_PREFER_32_BIT": "true",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
+      "JACK_SERVER": "false",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:<PATH>",
+      "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "sdk"
+    },
+    "name": "test debuggable"
+  },
+  {
+    "cmd": [
+      "./art/test/testrunner/testrunner.py",
       "-j5",
       "--interpreter",
-      "--host",
-      "--verbose"
+      "--verbose",
+      "--host"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -139,8 +164,8 @@
       "./art/test/testrunner/testrunner.py",
       "-j8",
       "--jit",
-      "--host",
-      "--verbose"
+      "--verbose",
+      "--host"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -165,8 +190,8 @@
       "./art/test/testrunner/testrunner.py",
       "-j8",
       "--speed-profile",
-      "--host",
-      "--verbose"
+      "--verbose",
+      "--host"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",

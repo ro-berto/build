@@ -21,6 +21,19 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[START_DIR]/out"
+    ],
+    "infra_step": true,
+    "name": "clobber"
+  },
+  {
+    "cmd": [
       "[START_DIR]/art/tools/buildbot-build.sh",
       "-j8",
       "--host"
@@ -31,9 +44,8 @@
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
-      "ART_TEST_RUN_TEST_DEBUG": "false",
-      "ART_TEST_RUN_TEST_NDEBUG": "true",
       "ART_USE_READ_BARRIER": "true",
+      "HOST_PREFER_32_BIT": "true",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:<PATH>",
@@ -48,7 +60,7 @@
     "cmd": [
       "make",
       "-j8",
-      "test-art-host-gtest64"
+      "test-art-host-gtest32"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -56,9 +68,8 @@
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
-      "ART_TEST_RUN_TEST_DEBUG": "false",
-      "ART_TEST_RUN_TEST_NDEBUG": "true",
       "ART_USE_READ_BARRIER": "true",
+      "HOST_PREFER_32_BIT": "true",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:<PATH>",
@@ -75,7 +86,8 @@
       "-j8",
       "--optimizing",
       "--verbose",
-      "--host"
+      "--host",
+      "--gcstress"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -83,9 +95,8 @@
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
-      "ART_TEST_RUN_TEST_DEBUG": "false",
-      "ART_TEST_RUN_TEST_NDEBUG": "true",
       "ART_USE_READ_BARRIER": "true",
+      "HOST_PREFER_32_BIT": "true",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:<PATH>",
@@ -103,7 +114,8 @@
       "--optimizing",
       "--debuggable",
       "--verbose",
-      "--host"
+      "--host",
+      "--gcstress"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -111,9 +123,8 @@
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
-      "ART_TEST_RUN_TEST_DEBUG": "false",
-      "ART_TEST_RUN_TEST_NDEBUG": "true",
       "ART_USE_READ_BARRIER": "true",
+      "HOST_PREFER_32_BIT": "true",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:<PATH>",
@@ -130,7 +141,8 @@
       "-j5",
       "--interpreter",
       "--verbose",
-      "--host"
+      "--host",
+      "--gcstress"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -138,9 +150,8 @@
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
-      "ART_TEST_RUN_TEST_DEBUG": "false",
-      "ART_TEST_RUN_TEST_NDEBUG": "true",
       "ART_USE_READ_BARRIER": "true",
+      "HOST_PREFER_32_BIT": "true",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:<PATH>",
@@ -157,7 +168,8 @@
       "-j8",
       "--jit",
       "--verbose",
-      "--host"
+      "--host",
+      "--gcstress"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -165,9 +177,8 @@
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
-      "ART_TEST_RUN_TEST_DEBUG": "false",
-      "ART_TEST_RUN_TEST_NDEBUG": "true",
       "ART_USE_READ_BARRIER": "true",
+      "HOST_PREFER_32_BIT": "true",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:<PATH>",
@@ -184,7 +195,8 @@
       "-j8",
       "--speed-profile",
       "--verbose",
-      "--host"
+      "--host",
+      "--gcstress"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -192,9 +204,8 @@
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
-      "ART_TEST_RUN_TEST_DEBUG": "false",
-      "ART_TEST_RUN_TEST_NDEBUG": "true",
       "ART_USE_READ_BARRIER": "true",
+      "HOST_PREFER_32_BIT": "true",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:<PATH>",
@@ -209,7 +220,10 @@
     "cmd": [
       "[START_DIR]/art/tools/run-libcore-tests.sh",
       "--mode=host",
-      "--variant=X64"
+      "--variant=X32",
+      "--debug",
+      "--vm-arg",
+      "-Xgc:gcstress"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -217,9 +231,8 @@
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
-      "ART_TEST_RUN_TEST_DEBUG": "false",
-      "ART_TEST_RUN_TEST_NDEBUG": "true",
       "ART_USE_READ_BARRIER": "true",
+      "HOST_PREFER_32_BIT": "true",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:<PATH>",
@@ -234,7 +247,10 @@
     "cmd": [
       "[START_DIR]/art/tools/run-jdwp-tests.sh",
       "--mode=host",
-      "--variant=X64"
+      "--variant=X32",
+      "--debug",
+      "--vm-arg",
+      "-Xgc:gcstress"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -242,9 +258,8 @@
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
-      "ART_TEST_RUN_TEST_DEBUG": "false",
-      "ART_TEST_RUN_TEST_NDEBUG": "true",
       "ART_USE_READ_BARRIER": "true",
+      "HOST_PREFER_32_BIT": "true",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:<PATH>",
@@ -259,8 +274,11 @@
     "cmd": [
       "[START_DIR]/art/tools/run-jdwp-tests.sh",
       "--mode=host",
-      "--variant=X64",
-      "--no-jit"
+      "--variant=X32",
+      "--no-jit",
+      "--debug",
+      "--vm-arg",
+      "-Xgc:gcstress"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -268,9 +286,8 @@
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
-      "ART_TEST_RUN_TEST_DEBUG": "false",
-      "ART_TEST_RUN_TEST_NDEBUG": "true",
       "ART_USE_READ_BARRIER": "true",
+      "HOST_PREFER_32_BIT": "true",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:<PATH>",
@@ -291,9 +308,8 @@
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
-      "ART_TEST_RUN_TEST_DEBUG": "false",
-      "ART_TEST_RUN_TEST_NDEBUG": "true",
       "ART_USE_READ_BARRIER": "true",
+      "HOST_PREFER_32_BIT": "true",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
       "PATH": "[START_DIR]/out/host/linux-x86/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin/:<PATH>",

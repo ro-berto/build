@@ -74,7 +74,8 @@ def clobber(api):
     api.file.rmtree('clobber', api.path['start_dir'].join('out'))
 
 def setup_host_x86(api, debug, bitness, concurrent_collector=True,
-    heap_poisoning=False):
+    heap_poisoning=False,
+    gcstress=False):
   checkout(api)
   clobber(api)
 
@@ -113,6 +114,10 @@ def setup_host_x86(api, debug, bitness, concurrent_collector=True,
   else:
     env.update({ 'ART_HEAP_POISONING' : 'false' })
 
+  common_options = ['--verbose', '--host']
+  if gcstress:
+    common_options += ['--gcstress']
+
   with api.context(env=env):
     api.step('build sdk-eng',
              [art_tools.join('buildbot-build.sh'), '-j8', '--host'])
@@ -123,52 +128,60 @@ def setup_host_x86(api, debug, bitness, concurrent_collector=True,
 
       api.step('test optimizing', ['./art/test/testrunner/testrunner.py',
                                    '-j8',
+                                   '--optimizing'] + common_options)
+
+      api.step('test debuggable', ['./art/test/testrunner/testrunner.py',
+                                   '-j8',
                                    '--optimizing',
-                                   '--debuggable',
-                                   '--ndebuggable',
-                                   '--host',
-                                   '--verbose'])
+                                   '--debuggable'] + common_options)
+
       # Use a lower -j number for interpreter, some tests take a long time
       # to run on it.
       api.step('test interpreter', ['./art/test/testrunner/testrunner.py',
                                     '-j5',
-                                    '--interpreter',
-                                    '--host',
-                                    '--verbose'])
+                                    '--interpreter'] + common_options)
 
       api.step('test jit', ['./art/test/testrunner/testrunner.py',
                             '-j8',
-                            '--jit',
-                            '--host',
-                            '--verbose'])
+                            '--jit'] + common_options)
 
       api.step('test speed-profile', ['./art/test/testrunner/testrunner.py',
                                       '-j8',
-                                      '--speed-profile',
-                                      '--host',
-                                      '--verbose'])
+                                      '--speed-profile'] + common_options)
 
       libcore_command = [art_tools.join('run-libcore-tests.sh'),
                          '--mode=host',
                          '--variant=X%d' % bitness]
       if debug:
         libcore_command.append('--debug')
+
+      if gcstress:
+        libcore_command += ['--vm-arg', '-Xgc:gcstress']
+
       api.step('test libcore', libcore_command)
 
-      jdwp_command = [art_tools.join('run-jdwp-tests.sh'),
+      jdwp_jit_command = [art_tools.join('run-jdwp-tests.sh'),
                       '--mode=host',
                       '--variant=X%d' % bitness]
       if debug:
-        jdwp_command.append('--debug')
-      api.step('test jdwp jit', jdwp_command)
+        jdwp_jit_command.append('--debug')
 
-      jdwp_command = [art_tools.join('run-jdwp-tests.sh'),
+      if gcstress:
+        jdwp_jit_command += ['--vm-arg', '-Xgc:gcstress']
+
+      api.step('test jdwp jit', jdwp_jit_command)
+
+      jdwp_aot_command = [art_tools.join('run-jdwp-tests.sh'),
                       '--mode=host',
                       '--variant=X%d' % bitness,
                       '--no-jit']
       if debug:
-        jdwp_command.append('--debug')
-      api.step('test jdwp aot', jdwp_command)
+        jdwp_aot_command.append('--debug')
+
+      if gcstress:
+        jdwp_aot_command += ['--vm-arg', '-Xgc:gcstress']
+
+      api.step('test jdwp aot', jdwp_aot_command)
 
       api.step('test dx', ['./dalvik/dx/tests/run-all-tests'])
 
@@ -362,6 +375,8 @@ def setup_aosp_builder(api, read_barrier):
         api.step('build %s' % build, ['make', '-j8'])
 
 def setup_valgrind_runner(api, bitness):
+  # ART doesn't support valgrind host 32 anymore.
+  assert bitness == 64
   checkout(api)
   clobber(api)
   build_top_dir = api.path['start_dir']
@@ -376,8 +391,6 @@ def setup_valgrind_runner(api, bitness):
             'JACK_SERVER': 'false',
             'JACK_REPOSITORY': str(build_top_dir.join('prebuilts', 'sdk',
                                                       'tools', 'jacks')) }
-    if bitness == 32:
-      env.update({ 'HOST_PREFER_32_BIT' : 'true' })
 
     with api.context(env=env):
       api.step('run valgrind tests', [run, '-j8', 'art-gtest-valgrind%d' % bitness])
@@ -422,6 +435,11 @@ _CONFIG_MAP = {
         'debug': True,
         'bitness': 64,
         'heap_poisoning': True,
+      },
+      'host-x86-gcstress-debug': {
+        'bitness': 32,
+        'debug': True,
+        'gcstress': True,
       },
     },
 
@@ -519,9 +537,6 @@ _CONFIG_MAP = {
     },
 
     'valgrind': {
-      'host-x86-valgrind': {
-        'bitness': 32
-      },
       'host-x86_64-valgrind': {
         'bitness': 64
       },
