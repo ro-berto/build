@@ -75,50 +75,49 @@ def clobber(api):
 
 def setup_host_x86(api, debug, bitness, concurrent_collector=True,
     heap_poisoning=False):
-  with api.step.defer_results():
-    checkout(api)
-    clobber(api)
+  checkout(api)
+  clobber(api)
 
-    build_top_dir = api.path['start_dir']
-    art_tools = api.path['start_dir'].join('art', 'tools')
-    env = { 'TARGET_PRODUCT': 'sdk',
-            'TARGET_BUILD_VARIANT': 'eng',
-            'TARGET_BUILD_TYPE': 'release',
-            'SOONG_ALLOW_MISSING_DEPENDENCIES': 'true',
-            'ANDROID_BUILD_TOP': build_top_dir,
-            'JACK_SERVER': 'false',
-            'JACK_REPOSITORY': str(build_top_dir.join('prebuilts', 'sdk',
-                                                      'tools', 'jacks')),
-            'PATH': str(build_top_dir.join('out', 'host', 'linux-x86', 'bin')) +
-                        api.path.pathsep +
-                        '/usr/lib/jvm/java-8-openjdk-amd64/bin/' +
-                        api.path.pathsep + '%(PATH)s',
-            'ART_TEST_RUN_TEST_2ND_ARCH': 'false',
-            'ART_TEST_FULL': 'false',
-            'ART_TEST_KEEP_GOING': 'true' }
+  build_top_dir = api.path['start_dir']
+  art_tools = api.path['start_dir'].join('art', 'tools')
+  env = { 'TARGET_PRODUCT': 'sdk',
+          'TARGET_BUILD_VARIANT': 'eng',
+          'TARGET_BUILD_TYPE': 'release',
+          'SOONG_ALLOW_MISSING_DEPENDENCIES': 'true',
+          'ANDROID_BUILD_TOP': build_top_dir,
+          'JACK_SERVER': 'false',
+          'JACK_REPOSITORY': str(build_top_dir.join('prebuilts', 'sdk',
+                                                    'tools', 'jacks')),
+          'PATH': str(build_top_dir.join('out', 'host', 'linux-x86', 'bin')) +
+                      api.path.pathsep +
+                      '/usr/lib/jvm/java-8-openjdk-amd64/bin/' +
+                      api.path.pathsep + '%(PATH)s',
+          'ART_TEST_RUN_TEST_2ND_ARCH': 'false',
+          'ART_TEST_FULL': 'false',
+          'ART_TEST_KEEP_GOING': 'true' }
 
-    if bitness == 32:
-      env.update({ 'HOST_PREFER_32_BIT' : 'true' })
+  if bitness == 32:
+    env.update({ 'HOST_PREFER_32_BIT' : 'true' })
 
-    if not debug:
-      env.update({ 'ART_TEST_RUN_TEST_NDEBUG' : 'true' })
-      env.update({ 'ART_TEST_RUN_TEST_DEBUG' : 'false' })
+  if not debug:
+    env.update({ 'ART_TEST_RUN_TEST_NDEBUG' : 'true' })
+    env.update({ 'ART_TEST_RUN_TEST_DEBUG' : 'false' })
 
-    if concurrent_collector:
-      env.update({ 'ART_USE_READ_BARRIER' : 'true' })
-    else:
-      env.update({ 'ART_USE_READ_BARRIER' : 'false' })
+  if concurrent_collector:
+    env.update({ 'ART_USE_READ_BARRIER' : 'true' })
+  else:
+    env.update({ 'ART_USE_READ_BARRIER' : 'false' })
 
-    if heap_poisoning:
-      env.update({ 'ART_HEAP_POISONING' : 'true' })
-    else:
-      env.update({ 'ART_HEAP_POISONING' : 'false' })
+  if heap_poisoning:
+    env.update({ 'ART_HEAP_POISONING' : 'true' })
+  else:
+    env.update({ 'ART_HEAP_POISONING' : 'false' })
 
+  with api.context(env=env):
+    api.step('build sdk-eng',
+             [art_tools.join('buildbot-build.sh'), '-j8', '--host'])
 
-    with api.context(env=env):
-      api.step('build sdk-eng',
-               [art_tools.join('buildbot-build.sh'), '-j8', '--host'])
-
+    with api.step.defer_results():
       api.step('test gtest',
           ['make', '-j8', 'test-art-host-gtest%d' % bitness])
 
@@ -238,11 +237,12 @@ def setup_target(api,
   if debug and device == 'fugu':
     make_jobs = 1
 
+  with api.context(env=env):
+    api.step('build target', [art_tools.join('buildbot-build.sh'),
+                              '-j8', '--target'])
+
   with api.step.defer_results():
     with api.context(env=env):
-      api.step('build target', [art_tools.join('buildbot-build.sh'),
-                                '-j8', '--target'])
-
       api.step('setup device', [art_tools.join('setup-buildbot-device.sh')])
 
       api.step('device cleanup', ['adb', 'shell', 'rm', '-rf'] +

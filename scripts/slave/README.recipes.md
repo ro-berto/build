@@ -3460,7 +3460,7 @@ Checks that properties get to recipes from annotated_run properly
 
 &mdash; **def [setup\_host\_x86](/scripts/slave/recipes/art.py#76)(api, debug, bitness, concurrent_collector=True, heap_poisoning=False):**
 
-&mdash; **def [setup\_target](/scripts/slave/recipes/art.py#176)(api, serial, debug, device, concurrent_collector=True, heap_poisoning=False, gcstress=False):**
+&mdash; **def [setup\_target](/scripts/slave/recipes/art.py#175)(api, serial, debug, device, concurrent_collector=True, heap_poisoning=False, gcstress=False):**
 
 &mdash; **def [setup\_valgrind\_runner](/scripts/slave/recipes/art.py#364)(api, bitness):**
 ### *recipes* / [auto\_bisect:examples/full](/scripts/slave/recipe_modules/auto_bisect/examples/full.py)
