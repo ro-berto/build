@@ -1111,9 +1111,10 @@ class AndroidApi(recipe_api.RecipeApi):
 
     if trace_output:
       args.extend([
-          '--trace-output', self.m.json.output(name='trace'), '--trace-all'])
-      test_data = lambda: self.m.json.test_api.output('{"test data"}',
-                                                      name='trace')
+          '--trace-output', self.m.raw_io.output_text(name='trace_json'),
+          '--trace-all'])
+      test_data = lambda: self.m.raw_io.test_api.output_text('{"test data"}',
+                                                             name='trace_json')
       kwargs['step_test_data'] = test_data
 
     try:
@@ -1135,8 +1136,8 @@ class AndroidApi(recipe_api.RecipeApi):
               details_link)
 
       if trace_output:
-        trace_json = result_step.json.outputs['trace']
-        trace_json_path = self.m.json.input(trace_json)
+        trace_json = result_step.raw_io.output_texts['trace_json']
+        trace_json_path = self.m.raw_io.input_text(trace_json)
         self._upload_trace_results(trace_json_path, name)
 
       # Need to copy gtest results over. A few places call

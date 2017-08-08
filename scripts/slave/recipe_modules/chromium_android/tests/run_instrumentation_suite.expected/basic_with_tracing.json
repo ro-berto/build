@@ -13,7 +13,7 @@
       "5",
       "--release",
       "--trace-output",
-      "/path/to/tmp/json",
+      "/path/to/tmp/",
       "--trace-all",
       "--adb-path",
       "None/third_party/android_tools/sdk/platform-tools/adb"
@@ -21,18 +21,14 @@
     "env": {
       "CHROMIUM_OUTPUT_DIR": "None/out/Release"
     },
-    "name": "test_suite",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output[trace]@\"{\\\"test data\\\"}\"@@@",
-      "@@@STEP_LOG_END@json.output[trace]@@@"
-    ]
+    "name": "test_suite"
   },
   {
     "cmd": [
       "python",
       "-u",
       "None/third_party/catapult/tracing/bin/trace2html",
-      "\"{\\\"test data\\\"}\"",
+      "{\"test data\"}",
       "--output",
       "/path/to/tmp/"
     ],
