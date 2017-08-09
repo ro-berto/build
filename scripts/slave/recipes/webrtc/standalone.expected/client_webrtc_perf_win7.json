@@ -445,6 +445,22 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[TMP_BASE]\\webrtc_perf_tests_test_output_tmp_1\\test_output"
+    ],
+    "cwd": "[BUILDER_CACHE]\\Win7",
+    "infra_step": true,
+    "name": "ensure test_output"
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -472,7 +488,9 @@
       "--slave-name=bot_id",
       "--build-number=1337",
       "--revision=170242",
-      "webrtc_perf_tests.exe"
+      "webrtc_perf_tests.exe",
+      "--test_output_dir",
+      "[TMP_BASE]\\webrtc_perf_tests_test_output_tmp_1\\test_output"
     ],
     "cwd": "[BUILDER_CACHE]\\Win7",
     "env": {
@@ -481,6 +499,51 @@
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "webrtc_perf_tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::zip]\\resources\\zip.py"
+    ],
+    "cwd": "[BUILDER_CACHE]\\Win7",
+    "name": "zip webrtc_perf_tests_test_output",
+    "stdin": "{\"entries\": [{\"path\": \"[TMP_BASE]\\\\webrtc_perf_tests_test_output_tmp_1\\\\test_output\", \"type\": \"dir\"}], \"output\": \"[TMP_BASE]\\\\webrtc_perf_tests_test_output_tmp_1\\\\webrtc_perf_tests_test_output.zip\", \"root\": \"[TMP_BASE]\\\\webrtc_perf_tests_test_output_tmp_1\\\\test_output\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "----",
+      "cp",
+      "-a",
+      "public-read",
+      "[TMP_BASE]\\webrtc_perf_tests_test_output_tmp_1\\webrtc_perf_tests_test_output.zip",
+      "gs://chromium-webrtc/client.webrtc.perf/Win7/webrtc_perf_tests_test_output_170242.zip"
+    ],
+    "cwd": "[BUILDER_CACHE]\\Win7",
+    "infra_step": true,
+    "name": "gsutil upload",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.googleapis.com/chromium-webrtc/client.webrtc.perf/Win7/webrtc_perf_tests_test_output_170242.zip@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[TMP_BASE]\\webrtc_perf_tests_test_output_tmp_1"
+    ],
+    "cwd": "[BUILDER_CACHE]\\Win7",
+    "infra_step": true,
+    "name": "rmtree [TMP_BASE]\\webrtc_perf_tests_test_output_tmp_1"
   },
   {
     "name": "$result",
