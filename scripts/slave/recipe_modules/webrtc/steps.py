@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 from recipe_engine.types import freeze
+from recipe_engine.recipe_api import composite_step
 
 
 NORMAL_TESTS = freeze({
@@ -252,6 +253,7 @@ class PerfTest(Test):
     self._runtest_kwargs = runtest_kwargs
     self._upload_test_output = upload_test_output
 
+  @composite_step
   def run(self, api, suffix):
     perf_dashboard_id = self._name
     assert api.revision_number, (

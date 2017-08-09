@@ -9,7 +9,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[BUILDER_CACHE]/Mac_10_11"
+      "[BUILDER_CACHE]/Linux_Trusty"
     ],
     "infra_step": true,
     "name": "makedirs checkout path"
@@ -19,7 +19,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::webrtc]/resources/cleanup_symlinks.py",
-      "[BUILDER_CACHE]/Mac_10_11"
+      "[BUILDER_CACHE]/Linux_Trusty"
     ],
     "infra_step": true,
     "name": "clean symlinks"
@@ -44,7 +44,7 @@
       "--revision",
       "src@12345"
     ],
-    "cwd": "[BUILDER_CACHE]/Mac_10_11",
+    "cwd": "[BUILDER_CACHE]/Linux_Trusty",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -84,7 +84,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::webrtc]/resources/cleanup_files.py",
-      "[BUILDER_CACHE]/Mac_10_11/src/out"
+      "[BUILDER_CACHE]/Linux_Trusty/src/out"
     ],
     "infra_step": true,
     "name": "clean test output files"
@@ -100,7 +100,7 @@
       "-root",
       "[CACHE]/goma_client",
       "-ensure-file",
-      "infra/tools/cloudtail/mac-amd64 goma_recipe_module\ninfra_internal/goma/client/mac-amd64 release",
+      "infra/tools/cloudtail/linux-amd64 goma_recipe_module\ninfra_internal/goma/client/linux-amd64 release",
       "-json-output",
       "/path/to/tmp/json",
       "-service-account-json",
@@ -114,11 +114,11 @@
       "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-goma_recipe_modu\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/cloudtail/mac-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/cloudtail/linux-amd64\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/mac-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/linux-amd64\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -132,11 +132,10 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/Mac_10_11/src",
+    "cwd": "[BUILDER_CACHE]/Linux_Trusty/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_SDK_MIN": "10.11",
-      "GYP_DEFINES": "clang=1 component=static_library gomadir='[CACHE]/goma_client' target_arch=x64 use_goma=1",
+      "GYP_DEFINES": "component=static_library gomadir='[CACHE]/goma_client' target_arch=x64 use_goma=1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -145,52 +144,24 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Mac_10_11/src/tools_webrtc/mb/mb.py",
+      "[BUILDER_CACHE]/Linux_Trusty/src/tools_webrtc/mb/mb.py",
       "gen",
       "-m",
       "client.webrtc.perf",
       "-b",
-      "Mac 10.11",
+      "Linux Trusty",
       "--config-file",
-      "[BUILDER_CACHE]/Mac_10_11/src/tools_webrtc/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/Linux_Trusty/src/tools_webrtc/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma_client",
       "//out/Release"
     ],
-    "cwd": "[BUILDER_CACHE]/Mac_10_11/src",
+    "cwd": "[BUILDER_CACHE]/Linux_Trusty/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_SDK_MIN": "10.11",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "generate_build_files"
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
-      "--src-dir",
-      "[BUILDER_CACHE]/Mac_10_11/src",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "FORCE_MAC_SDK_MIN": "10.11"
-    },
-    "name": "clang_revision",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
   },
   {
     "cmd": [
@@ -212,7 +183,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/Mac_10_11/src",
+    "cwd": "[BUILDER_CACHE]/Linux_Trusty/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -228,9 +199,9 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[GOMA_CACHE]/Mac_10_11"
+      "[GOMA_CACHE]/Linux_Trusty"
     ],
-    "cwd": "[BUILDER_CACHE]/Mac_10_11/src",
+    "cwd": "[BUILDER_CACHE]/Linux_Trusty/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -247,13 +218,12 @@
       "[CACHE]/goma_client/goma_ctl.py",
       "restart"
     ],
-    "cwd": "[BUILDER_CACHE]/Mac_10_11/src",
+    "cwd": "[BUILDER_CACHE]/Linux_Trusty/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_SDK_MIN": "10.11",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]/Mac_10_11",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/Linux_Trusty",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache_131",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -281,7 +251,7 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[BUILDER_CACHE]/Mac_10_11/src",
+    "cwd": "[BUILDER_CACHE]/Linux_Trusty/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -303,23 +273,22 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/Mac_10_11/src/out/Release",
+      "[BUILDER_CACHE]/Linux_Trusty/src/out/Release",
       "-j",
       "50",
       "isac_fix_test",
       "low_bandwidth_audio_test",
       "webrtc_perf_tests"
     ],
-    "cwd": "[BUILDER_CACHE]/Mac_10_11/src",
+    "cwd": "[BUILDER_CACHE]/Linux_Trusty/src",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "FORCE_MAC_SDK_MIN": "10.11"
+      "CHROME_HEADLESS": "1"
     },
     "name": "compile"
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/Mac_10_11/src",
+    "cwd": "[BUILDER_CACHE]/Linux_Trusty/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -333,7 +302,7 @@
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
-    "cwd": "[BUILDER_CACHE]/Mac_10_11/src",
+    "cwd": "[BUILDER_CACHE]/Linux_Trusty/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
@@ -362,7 +331,7 @@
       "[CACHE]/goma_client/goma_ctl.py",
       "stat"
     ],
-    "cwd": "[BUILDER_CACHE]/Mac_10_11/src",
+    "cwd": "[BUILDER_CACHE]/Linux_Trusty/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
@@ -380,7 +349,7 @@
       "[CACHE]/goma_client/goma_ctl.py",
       "stop"
     ],
-    "cwd": "[BUILDER_CACHE]/Mac_10_11/src",
+    "cwd": "[BUILDER_CACHE]/Linux_Trusty/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
@@ -408,21 +377,21 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[BUILDER_CACHE]/Mac_10_11/src/out/Release",
+      "[BUILDER_CACHE]/Linux_Trusty/src/out/Release",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Mac_10_11/src/out/Release', '-j', 50, 'isac_fix_test', 'low_bandwidth_audio_test', 'webrtc_perf_tests']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Linux_Trusty/src/out/Release', '-j', 50, 'isac_fix_test', 'low_bandwidth_audio_test', 'webrtc_perf_tests']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",
-      "goma-clang",
+      "goma",
       "--buildbot-buildername",
-      "Mac 10.11",
+      "Linux Trusty",
       "--buildbot-mastername",
       "client.webrtc.perf",
       "--buildbot-slavename",
       "bot_id"
     ],
-    "cwd": "[BUILDER_CACHE]/Mac_10_11/src",
+    "cwd": "[BUILDER_CACHE]/Linux_Trusty/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -451,7 +420,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[BUILDER_CACHE]/Mac_10_11/src",
+    "cwd": "[BUILDER_CACHE]/Linux_Trusty/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -460,6 +429,61 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--xvfb",
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"buildername\": \"Linux Trusty\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.perf\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"bot_id\"}",
+      "--build-properties",
+      "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"buildername\": \"Linux Trusty\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.perf\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"bot_id\"}",
+      "--annotate=graphing",
+      "--results-url=https://chromeperf.appspot.com",
+      "--perf-dashboard-id=isac_fix_test",
+      "--perf-id=webrtc-linux-large-tests",
+      "--perf-config",
+      "{\"a_default_rev\": \"r_webrtc_git\", \"r_webrtc_git\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"}",
+      "--test-type=isac_fix_test",
+      "--step-name=isac_fix_test",
+      "--builder-name=Linux Trusty",
+      "--slave-name=bot_id",
+      "--build-number=1337",
+      "--revision=170242",
+      "isac_fix_test",
+      "32000",
+      "[BUILDER_CACHE]/Linux_Trusty/src/resources/speech_and_misc_wb.pcm",
+      "isac_speech_and_misc_wb.pcm"
+    ],
+    "cwd": "[BUILDER_CACHE]/Linux_Trusty",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "isac_fix_test"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[TMP_BASE]/isac_fix_test_test_output_tmp_1"
+    ],
+    "cwd": "[BUILDER_CACHE]/Linux_Trusty",
+    "infra_step": true,
+    "name": "rmtree [TMP_BASE]/isac_fix_test_test_output_tmp_1"
   },
   {
     "cmd": [
@@ -471,9 +495,9 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[TMP_BASE]/webrtc_perf_tests_test_output_tmp_1/test_output"
+      "[TMP_BASE]/webrtc_perf_tests_test_output_tmp_2/test_output"
     ],
-    "cwd": "[BUILDER_CACHE]/Mac_10_11",
+    "cwd": "[BUILDER_CACHE]/Linux_Trusty",
     "infra_step": true,
     "name": "ensure test_output"
   },
@@ -489,27 +513,28 @@
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
+      "--xvfb",
       "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"buildername\": \"Mac 10.11\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.perf\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"bot_id\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"buildername\": \"Linux Trusty\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.perf\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"bot_id\"}",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"buildername\": \"Mac 10.11\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.perf\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"bot_id\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"buildername\": \"Linux Trusty\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.perf\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"bot_id\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=webrtc_perf_tests",
-      "--perf-id=webrtc-mac-large-tests",
+      "--perf-id=webrtc-linux-large-tests",
       "--perf-config",
       "{\"a_default_rev\": \"r_webrtc_git\", \"r_webrtc_git\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"}",
       "--test-type=webrtc_perf_tests",
       "--step-name=webrtc_perf_tests",
-      "--builder-name=Mac 10.11",
+      "--builder-name=Linux Trusty",
       "--slave-name=bot_id",
       "--build-number=1337",
       "--revision=170242",
       "webrtc_perf_tests",
       "--test_output_dir",
-      "[TMP_BASE]/webrtc_perf_tests_test_output_tmp_1/test_output"
+      "[TMP_BASE]/webrtc_perf_tests_test_output_tmp_2/test_output"
     ],
-    "cwd": "[BUILDER_CACHE]/Mac_10_11",
+    "cwd": "[BUILDER_CACHE]/Linux_Trusty",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
@@ -524,14 +549,46 @@
       "--json-output",
       "/path/to/tmp/json",
       "listdir",
-      "[TMP_BASE]/webrtc_perf_tests_test_output_tmp_1/test_output"
+      "[TMP_BASE]/webrtc_perf_tests_test_output_tmp_2/test_output"
     ],
-    "cwd": "[BUILDER_CACHE]/Mac_10_11",
+    "cwd": "[BUILDER_CACHE]/Linux_Trusty",
     "infra_step": true,
     "name": "listdir webrtc_perf_tests_test_output",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
+      "@@@STEP_LOG_LINE@listdir@[TMP_BASE]/webrtc_perf_tests_test_output_tmp_2/test_output/some file@@@",
       "@@@STEP_LOG_END@listdir@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::zip]/resources/zip.py"
+    ],
+    "cwd": "[BUILDER_CACHE]/Linux_Trusty",
+    "name": "zip webrtc_perf_tests_test_output",
+    "stdin": "{\"entries\": [{\"path\": \"[TMP_BASE]/webrtc_perf_tests_test_output_tmp_2/test_output\", \"type\": \"dir\"}], \"output\": \"[TMP_BASE]/webrtc_perf_tests_test_output_tmp_2/webrtc_perf_tests_test_output.zip\", \"root\": \"[TMP_BASE]/webrtc_perf_tests_test_output_tmp_2/test_output\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "-a",
+      "public-read",
+      "[TMP_BASE]/webrtc_perf_tests_test_output_tmp_2/webrtc_perf_tests_test_output.zip",
+      "gs://chromium-webrtc/client.webrtc.perf/Linux Trusty/webrtc_perf_tests_test_output_170242.zip"
+    ],
+    "cwd": "[BUILDER_CACHE]/Linux_Trusty",
+    "infra_step": true,
+    "name": "gsutil upload",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.googleapis.com/chromium-webrtc/client.webrtc.perf/Linux Trusty/webrtc_perf_tests_test_output_170242.zip@@@"
     ]
   },
   {
@@ -542,11 +599,11 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[TMP_BASE]/webrtc_perf_tests_test_output_tmp_1"
+      "[TMP_BASE]/webrtc_perf_tests_test_output_tmp_2"
     ],
-    "cwd": "[BUILDER_CACHE]/Mac_10_11",
+    "cwd": "[BUILDER_CACHE]/Linux_Trusty",
     "infra_step": true,
-    "name": "rmtree [TMP_BASE]/webrtc_perf_tests_test_output_tmp_1"
+    "name": "rmtree [TMP_BASE]/webrtc_perf_tests_test_output_tmp_2"
   },
   {
     "allow_subannotations": true,
@@ -560,28 +617,29 @@
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
+      "--xvfb",
       "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"buildername\": \"Mac 10.11\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.perf\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"bot_id\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"buildername\": \"Linux Trusty\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.perf\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"bot_id\"}",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"buildername\": \"Mac 10.11\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.perf\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"bot_id\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"buildername\": \"Linux Trusty\", \"buildnumber\": 1337, \"mastername\": \"client.webrtc.perf\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"bot_id\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=low_bandwidth_audio_test",
-      "--perf-id=webrtc-mac-large-tests",
+      "--perf-id=webrtc-linux-large-tests",
       "--perf-config",
       "{\"a_default_rev\": \"r_webrtc_git\", \"r_webrtc_git\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"}",
       "--test-type=low_bandwidth_audio_test",
       "--step-name=low_bandwidth_audio_test",
-      "--builder-name=Mac 10.11",
+      "--builder-name=Linux Trusty",
       "--slave-name=bot_id",
       "--build-number=1337",
       "--run-python-script",
       "--revision=170242",
-      "[BUILDER_CACHE]/Mac_10_11/src/webrtc/audio/test/low_bandwidth_audio_test.py",
-      "[BUILDER_CACHE]/Mac_10_11/src/out/Release",
+      "[BUILDER_CACHE]/Linux_Trusty/src/webrtc/audio/test/low_bandwidth_audio_test.py",
+      "[BUILDER_CACHE]/Linux_Trusty/src/out/Release",
       "--remove"
     ],
-    "cwd": "[BUILDER_CACHE]/Mac_10_11",
+    "cwd": "[BUILDER_CACHE]/Linux_Trusty",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
@@ -596,11 +654,11 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[TMP_BASE]/low_bandwidth_audio_test_test_output_tmp_2"
+      "[TMP_BASE]/low_bandwidth_audio_test_test_output_tmp_3"
     ],
-    "cwd": "[BUILDER_CACHE]/Mac_10_11",
+    "cwd": "[BUILDER_CACHE]/Linux_Trusty",
     "infra_step": true,
-    "name": "rmtree [TMP_BASE]/low_bandwidth_audio_test_test_output_tmp_2"
+    "name": "rmtree [TMP_BASE]/low_bandwidth_audio_test_test_output_tmp_3"
   },
   {
     "name": "$result",
