@@ -223,7 +223,7 @@ def GenTests(api):
         mastername='tryserver.infra',
         buildername='infra_presubmit',
         repo_name='recipes_py',
-        patch_project='recipes-py',
+        patch_project='infra/luci/recipes-py',
         runhooks=True) +
     api.step_data('presubmit', api.json.output([['infra_presubmit',
                                                  ['compile']]]))
