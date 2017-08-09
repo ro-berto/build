@@ -445,7 +445,7 @@ _CONFIG_MAP = {
 
     'target': {
       'angler-armv7-ndebug': {
-        'serial': '84B7N16728001148',
+        'serial': '84B7N16728001219',
         'device': 'angler-armv7',
         'debug': False,
       },
