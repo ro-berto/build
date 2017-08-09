@@ -651,9 +651,7 @@
           },
           "Fuchsia": {
             "tree_notify": [
-              "kmarshall+fuchsia-bot@chromium.org",
-              "sergeyu+fuchsia-bot@chromium.org",
-              "wez+fuchsia-bot@chromium.org"
+              "cr-fuchsia+bot@chromium.org"
             ],
             "forgiving_optional": ["*"]
           },
