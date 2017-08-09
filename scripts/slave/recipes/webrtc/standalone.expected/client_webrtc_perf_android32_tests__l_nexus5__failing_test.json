@@ -391,22 +391,6 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[TMP_BASE]/webrtc_perf_tests_test_output_tmp_1/test_output"
-    ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_",
-    "infra_step": true,
-    "name": "ensure test_output"
-  },
-  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -439,9 +423,7 @@
       "--run-python-script",
       "--revision=170242",
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/Release/bin/run_webrtc_perf_tests",
-      "--verbose",
-      "--test_output_dir",
-      "[TMP_BASE]/webrtc_perf_tests_test_output_tmp_1/test_output"
+      "--verbose"
     ],
     "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_",
     "env": {
@@ -453,36 +435,6 @@
       "step returned non-zero exit code: 1",
       "@@@STEP_FAILURE@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "rmtree",
-      "[TMP_BASE]/webrtc_perf_tests_test_output_tmp_1"
-    ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_",
-    "infra_step": true,
-    "name": "rmtree [TMP_BASE]/webrtc_perf_tests_test_output_tmp_1"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[TMP_BASE]/low_bandwidth_audio_test_test_output_tmp_2/test_output"
-    ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_",
-    "infra_step": true,
-    "name": "ensure test_output (2)"
   },
   {
     "allow_subannotations": true,
@@ -521,9 +473,7 @@
       "--remove",
       "--android",
       "--adb-path",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/third_party/android_tools/sdk/platform-tools/adb",
-      "--test_output_dir",
-      "[TMP_BASE]/low_bandwidth_audio_test_test_output_tmp_2/test_output"
+      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_",
     "env": {
@@ -531,36 +481,6 @@
       "CHROME_HEADLESS": "1"
     },
     "name": "low_bandwidth_audio_test"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "rmtree",
-      "[TMP_BASE]/low_bandwidth_audio_test_test_output_tmp_2"
-    ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_",
-    "infra_step": true,
-    "name": "rmtree [TMP_BASE]/low_bandwidth_audio_test_test_output_tmp_2"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[TMP_BASE]/video_quality_loopback_test_test_output_tmp_3/test_output"
-    ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_",
-    "infra_step": true,
-    "name": "ensure test_output (3)"
   },
   {
     "allow_subannotations": true,
@@ -597,9 +517,7 @@
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/webrtc/examples/androidtests/video_quality_loopback_test.py",
       "--adb-path",
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/third_party/android_tools/sdk/platform-tools/adb",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/Release",
-      "--test_output_dir",
-      "[TMP_BASE]/video_quality_loopback_test_test_output_tmp_3/test_output"
+      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_",
     "env": {
@@ -607,20 +525,6 @@
       "CHROME_HEADLESS": "1"
     },
     "name": "video_quality_loopback_test"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "rmtree",
-      "[TMP_BASE]/video_quality_loopback_test_test_output_tmp_3"
-    ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_",
-    "infra_step": true,
-    "name": "rmtree [TMP_BASE]/video_quality_loopback_test_test_output_tmp_3"
   },
   {
     "cmd": [
@@ -729,7 +633,7 @@
   },
   {
     "name": "$result",
-    "reason": "1 out of 11 aggregated steps failed. Failures: Step('webrtc_perf_tests') failed with return_code 1",
+    "reason": "1 out of 5 aggregated steps failed. Failures: Step('webrtc_perf_tests') failed with return_code 1",
     "recipe_result": null,
     "status_code": 1
   }
