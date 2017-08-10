@@ -264,11 +264,8 @@ class PerfTest(Test):
     test_output_name = self._name + '_test_output'
     upload_url = '%s/%s/%s_%s.zip' % (
         api.mastername, api.buildername, test_output_name, api.revision_number)
-    with api.m.tempfile.temp_dir(test_output_name) as temp_dir:
+    with api.m.tempfile.temp_dir(test_output_name) as test_output_path:
       if self._upload_test_output:
-        test_output_path = temp_dir.join('test_output')
-        api.m.file.ensure_directory('ensure test_output', test_output_path)
-        api.m.file.listdir('dbg listdir ' + test_output_name, test_output_path)
         self._args.extend(['--test_output_dir', test_output_path])
       api.m.chromium.runtest(
           test=self._test, name=self._name, args=self._args,
@@ -276,10 +273,9 @@ class PerfTest(Test):
           perf_dashboard_id=perf_dashboard_id, test_type=perf_dashboard_id,
           revision=api.revision_number, perf_id=api.c.PERF_ID,
           perf_config=perf_config, **self._runtest_kwargs)
-      api.m.file.listdir('listdir temp_dir', temp_dir)
       if (self._upload_test_output and
           api.m.file.listdir('listdir ' + test_output_name, test_output_path)):
-        zip_path = temp_dir.join(test_output_name + '.zip')
+        zip_path = api.m.path['tmp_base'].join(test_output_name + '.zip')
         api.m.zip.directory('zip ' + test_output_name, test_output_path,
                             zip_path)
         api.m.gsutil.upload(zip_path, 'chromium-webrtc', upload_url,
