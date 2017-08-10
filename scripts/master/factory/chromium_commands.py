@@ -21,7 +21,6 @@ from master.factory import commands
 
 from master.log_parser import archive_command
 from master.log_parser import retcode_command
-from master.log_parser import webkit_test_command
 
 
 class ChromiumCommands(commands.FactoryCommands):
