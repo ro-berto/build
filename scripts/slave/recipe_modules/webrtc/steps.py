@@ -268,6 +268,7 @@ class PerfTest(Test):
       if self._upload_test_output:
         test_output_path = temp_dir.join('test_output')
         api.m.file.ensure_directory('ensure test_output', test_output_path)
+        api.m.file.listdir('dbg listdir ' + test_output_name, test_output_path)
         self._args.extend(['--test_output_dir', test_output_path])
       api.m.chromium.runtest(
           test=self._test, name=self._name, args=self._args,
@@ -275,6 +276,7 @@ class PerfTest(Test):
           perf_dashboard_id=perf_dashboard_id, test_type=perf_dashboard_id,
           revision=api.revision_number, perf_id=api.c.PERF_ID,
           perf_config=perf_config, **self._runtest_kwargs)
+      api.m.file.listdir('listdir temp_dir', temp_dir)
       if (self._upload_test_output and
           api.m.file.listdir('listdir ' + test_output_name, test_output_path)):
         zip_path = temp_dir.join(test_output_name + '.zip')

@@ -503,6 +503,24 @@
       "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
+      "listdir",
+      "[TMP_BASE]/low_bandwidth_audio_test_test_output_tmp_2"
+    ],
+    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_",
+    "infra_step": true,
+    "name": "listdir temp_dir",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@listdir@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "rmtree",
       "[TMP_BASE]/low_bandwidth_audio_test_test_output_tmp_2"
     ],
@@ -553,6 +571,24 @@
       "CHROME_HEADLESS": "1"
     },
     "name": "video_quality_loopback_test"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "listdir",
+      "[TMP_BASE]/video_quality_loopback_test_test_output_tmp_3"
+    ],
+    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_",
+    "infra_step": true,
+    "name": "listdir temp_dir (2)",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@listdir@@@"
+    ]
   },
   {
     "cmd": [

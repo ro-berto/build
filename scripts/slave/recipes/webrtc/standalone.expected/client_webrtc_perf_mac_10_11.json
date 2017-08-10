@@ -478,6 +478,24 @@
     "name": "ensure test_output"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "listdir",
+      "[TMP_BASE]/webrtc_perf_tests_test_output_tmp_1/test_output"
+    ],
+    "cwd": "[BUILDER_CACHE]/Mac_10_11",
+    "infra_step": true,
+    "name": "dbg listdir webrtc_perf_tests_test_output",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@listdir@@@"
+    ]
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -515,6 +533,24 @@
       "CHROME_HEADLESS": "1"
     },
     "name": "webrtc_perf_tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "listdir",
+      "[TMP_BASE]/webrtc_perf_tests_test_output_tmp_1"
+    ],
+    "cwd": "[BUILDER_CACHE]/Mac_10_11",
+    "infra_step": true,
+    "name": "listdir temp_dir",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@listdir@@@"
+    ]
   },
   {
     "cmd": [
@@ -587,6 +623,24 @@
       "CHROME_HEADLESS": "1"
     },
     "name": "low_bandwidth_audio_test"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "listdir",
+      "[TMP_BASE]/low_bandwidth_audio_test_test_output_tmp_2"
+    ],
+    "cwd": "[BUILDER_CACHE]/Mac_10_11",
+    "infra_step": true,
+    "name": "listdir temp_dir (2)",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@listdir@@@"
+    ]
   },
   {
     "cmd": [
