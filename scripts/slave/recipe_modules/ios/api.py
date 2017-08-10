@@ -79,12 +79,6 @@ class iOSApi(recipe_api.RecipeApi):
       self.m.file.rmcontents('rmcontents checkout', checkout_dir)
 
     with self.m.context(cwd=kwargs.get('cwd', checkout_dir)):
-      try:
-        self.m.gclient(
-            'refresh git indices',
-            ['recurse', '-v', 'git', 'update-index', '--refresh'])
-      except self.m.step.StepFailure as f:
-        f.result.presentation.status = self.m.step.WARNING
       return self.m.bot_update.ensure_checkout(**kwargs)
 
   def parse_tests(self, tests, include_dir, start_index=0):
