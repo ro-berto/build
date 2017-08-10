@@ -802,6 +802,10 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
       "[START_DIR]/swarming.client",
@@ -842,6 +846,10 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
       "[START_DIR]/swarming.client",
@@ -882,6 +890,10 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
       "[START_DIR]/swarming.client",
@@ -922,6 +934,10 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
       "[START_DIR]/swarming.client",
