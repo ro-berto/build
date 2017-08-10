@@ -548,13 +548,16 @@ def RemoveTempDirContents():
 
   print '  Inspecting args for files to skip'
   whitelist = set()
+  whitelist_parents = set()
   for i in sys.argv:
     try:
       if '=' in i:
         i = i.split('=')[1]
       low = os.path.abspath(i.lower())
-      if low.startswith(temp_dir.lower()):
-        whitelist.add(low)
+      whitelist.add(low)
+      while low.startswith(temp_dir.lower()):
+        whitelist_parents.add(low)
+        low = os.path.dirname(low)
     except TypeError:
       # If the argument is too long, windows will freak out and pop a TypeError.
       pass
@@ -576,7 +579,13 @@ def RemoveTempDirContents():
         print '  Keeping file %r (whitelisted)' % p
     for d in dirs[:]:
       p = os.path.join(root, d)
-      if p.lower() not in whitelist:
+      if p.lower() in whitelist:
+        print '  Keeping dir %r (whitelisted)' % p
+        # This dir was whitelisted, so we shouldn't recurse into it.
+        dirs.remove(d)
+      elif p.lower() in whitelist_parents:
+        print '  Keeping dir %r (parent of a whitelisted dir/file)' % p
+      else:
         try:
           # TODO(iannucci): Make this deal with whitelisted items which are
           # inside of |d|
@@ -589,8 +598,6 @@ def RemoveTempDirContents():
           dirs.remove(d)
         except OSError:
           pass
-      else:
-        print '  Keeping dir %r (whitelisted)' % p
   print '   Removing temp contents took %.1f s' % (time.time() - start_time)
 
 

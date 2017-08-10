@@ -215,5 +215,57 @@ class TelemetryRevisionTest(unittest.TestCase):
         versions)
 
 
+class RemoveTempDirContentsTest(unittest.TestCase):
+  """Tests related to removing contents of the temporary directory."""
+  def setUp(self):
+    self._mock_listdir = None
+    self._removed = []
+    self._whitelist = []
+
+    mock.patch('sys.argv', self._whitelist).start()
+    mock.patch('tempfile.gettempdir', lambda: '/tmp/').start()
+    mock.patch('os.listdir', lambda p: self._mock_listdir[p]).start()
+    mock.patch('os.path.isdir', lambda p: p.endswith('dir')).start()
+    mock.patch('os.path.islink', lambda _: False).start()
+    mock.patch('os.remove', self._removed.append).start()
+    mock.patch('shutil.rmtree',
+               lambda p, *args, **kwargs: self._removed.append(p)).start()
+
+  def tearDown(self):
+    mock.patch.stopall()
+
+  def test_DoesntRemoveWhitelisted(self):
+    self._mock_listdir = {
+        '/tmp': ['1_file', '2_file', '1_dir', '2_dir', '3_dir'],
+        '/tmp/1_dir': [],
+        '/tmp/2_dir': [],
+        '/tmp/3_dir': ['3.1_file', '3.2_file', '3.1_dir', '3.2_dir', '3.3_dir'],
+        '/tmp/3_dir/3.1_dir': ['3.1.1_file', '3.1.2_file', '3.1.1_dir'],
+        '/tmp/3_dir/3.2_dir': ['3.2.1_file', '3.2.1_dir'],
+        '/tmp/3_dir/3.3_dir': [],
+    }
+    self._whitelist = [
+        '/tmp/1_dir',
+        '/tmp/1_file',
+        '/tmp/3_dir/3.1_dir/3.1.1_file',
+        '/tmp/3_dir/3.2_dir',
+        '/tmp/3_dir/3.2_file',
+    ]
+
+    with mock.patch('sys.argv', self._whitelist):
+      slave_utils.RemoveTempDirContents()
+
+    self.assertEqual(
+        sorted([
+            '/tmp/2_file',
+            '/tmp/2_dir',
+            '/tmp/3_dir/3.1_dir/3.1.2_file',
+            '/tmp/3_dir/3.1_dir/3.1.1_dir',
+            '/tmp/3_dir/3.1_file',
+            '/tmp/3_dir/3.3_dir'
+        ]),
+        sorted(self._removed))
+
+
 if __name__ == '__main__':
   unittest.main()
