@@ -322,8 +322,8 @@
     "env": {
       "PATH": "[START_DIR]\\src\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
-    "name": "Zip dart_sdk",
-    "stdin": "{\"entries\": [{\"path\": \"[START_DIR]\\\\src/out/host_debug_unopt\\\\dart_sdk\", \"type\": \"dir\"}], \"output\": \"[TMP_BASE]\\\\tmp_tmp_4\\\\dart-sdk-windows-x64.zip\", \"root\": \"[START_DIR]\\\\src/out/host_debug_unopt\"}"
+    "name": "Zip dart-sdk",
+    "stdin": "{\"entries\": [{\"path\": \"[START_DIR]\\\\src/out/host_debug_unopt\\\\dart-sdk\", \"type\": \"dir\"}], \"output\": \"[TMP_BASE]\\\\tmp_tmp_4\\\\dart-sdk-windows-x64.zip\", \"root\": \"[START_DIR]\\\\src/out/host_debug_unopt\"}"
   },
   {
     "cmd": [

@@ -114,7 +114,7 @@ def UploadDartSdk(api, archive_name):
   UploadFolder(api,
     'Upload Dart SDK', # dir_label
     'src/out/host_debug_unopt', # parent_dir
-    'dart_sdk', # folder_name
+    'dart-sdk', # folder_name
     archive_name)
 
 # TODO(eseidel): Would be nice to have this on api.path or api.file.
