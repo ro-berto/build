@@ -532,6 +532,10 @@ BUILDERS = {
         'bot_type': 'builder',
         'build_gs_archive': 'win32_rel_archive',
         'enable_swarming': True,
+        'binary_size_tracking': {
+          'path_pieces_list': [['d8.exe']],
+          'category': 'win32'
+        },
         'testing': {'platform': 'win'},
         'triggers': [
           'V8 Win32',
@@ -632,6 +636,10 @@ BUILDERS = {
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
         },
+        'binary_size_tracking': {
+          'path_pieces_list': [['d8.exe']],
+          'category': 'win64'
+        },
         'tests': [
           V8Testing,
           Test262,
@@ -686,6 +694,10 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
+        'binary_size_tracking': {
+          'path_pieces_list': [['d8']],
+          'category': 'mac32'
+        },
         'tests': [
           V8Testing,
           Test262,
@@ -726,6 +738,10 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
+        'binary_size_tracking': {
+          'path_pieces_list': [['d8']],
+          'category': 'mac64'
+        },
         'tests': [
           V8Testing,
           Test262,
@@ -1279,6 +1295,10 @@ BUILDERS = {
         'bot_type': 'builder',
         'build_gs_archive': 'arm_rel_archive',
         'enable_swarming': True,
+        'binary_size_tracking': {
+          'path_pieces_list': [['d8']],
+          'category': 'linux_arm32'
+        },
         'testing': {'platform': 'linux'},
         'triggers': [
           'V8 Arm',
@@ -1315,6 +1335,10 @@ BUILDERS = {
         'bot_type': 'builder',
         'build_gs_archive': 'android_arm_rel_archive',
         'enable_swarming': True,
+        'binary_size_tracking': {
+          'path_pieces_list': [['d8']],
+          'category': 'android_arm32'
+        },
         'testing': {'platform': 'linux'},
         'triggers_proxy': True,
       },
@@ -1456,6 +1480,10 @@ BUILDERS = {
         'bot_type': 'builder',
         'build_gs_archive': 'android_arm64_rel_archive',
         'enable_swarming': True,
+        'binary_size_tracking': {
+          'path_pieces_list': [['d8']],
+          'category': 'android_arm64'
+        },
         'testing': {'platform': 'linux'},
         'triggers_proxy': True,
       },

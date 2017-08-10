@@ -532,6 +532,44 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "filesizes",
+      "[START_DIR]/v8/out/Release/d8"
+    ],
+    "infra_step": true,
+    "name": "Check binary size",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@filesizes@[START_DIR]/v8/out/Release/d8: \t111@@@",
+      "@@@STEP_LOG_END@filesizes@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py",
+      "https://chromeperf.appspot.com/add_point",
+      "-i",
+      "{\"data\": \"[{\\\"buildnumber\\\": 571, \\\"masterid\\\": \\\"client.v8\\\", \\\"units\\\": \\\"bytes\\\", \\\"master\\\": \\\"client.v8\\\", \\\"supplemental_columns\\\": {\\\"r_v8_git\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"a_default_rev\\\": \\\"r_v8_git\\\"}, \\\"buildername\\\": \\\"V8 Mac64\\\", \\\"test\\\": \\\"v8.infra/binary_size/d8\\\", \\\"bot\\\": \\\"mac64\\\", \\\"value\\\": \\\"111\\\", \\\"revision\\\": \\\"50110\\\"}]\"}",
+      "-o",
+      "/path/to/tmp/json"
+    ],
+    "name": "perf dashboard post",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Failed to post to Perf Dashboard. Error response: None@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@",
+      "@@@STEP_WARNINGS@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
       "[START_DIR]/v8/tools/swarming_client",
       "batcharchive",
