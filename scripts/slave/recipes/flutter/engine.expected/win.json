@@ -124,12 +124,13 @@
       "-C",
       "[START_DIR]\\src\\out/host_debug_unopt",
       "flutter/lib/snapshot:generate_snapshot_bin",
-      "lib/ftl:ftl_unittests"
+      "lib/ftl:ftl_unittests",
+      "dart:create_sdk"
     ],
     "env": {
       "PATH": "[START_DIR]\\src\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
-    "name": "build host_debug_unopt flutter/lib/snapshot:generate_snapshot_bin lib/ftl:ftl_unittests"
+    "name": "build host_debug_unopt flutter/lib/snapshot:generate_snapshot_bin lib/ftl:ftl_unittests dart:create_sdk"
   },
   {
     "cmd": [
@@ -311,6 +312,55 @@
     },
     "infra_step": true,
     "name": "temp dir for android-arm-release UploadArtifacts windows-x64.zip"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::zip]\\resources\\zip.py"
+    ],
+    "env": {
+      "PATH": "[START_DIR]\\src\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
+    },
+    "name": "Zip dart_sdk",
+    "stdin": "{\"entries\": [{\"path\": \"[START_DIR]\\\\src/out/host_debug_unopt\\\\dart_sdk\", \"type\": \"dir\"}], \"output\": \"[TMP_BASE]\\\\tmp_tmp_4\\\\dart-sdk-windows-x64.zip\", \"root\": \"[START_DIR]\\\\src/out/host_debug_unopt\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "----",
+      "cp",
+      "[TMP_BASE]\\tmp_tmp_4\\dart-sdk-windows-x64.zip",
+      "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/dart-sdk-windows-x64.zip"
+    ],
+    "env": {
+      "PATH": "[START_DIR]\\src\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
+    },
+    "infra_step": true,
+    "name": "gsutil upload dart-sdk-windows-x64.zip",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/dart-sdk-windows-x64.zip@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[TMP_BASE]\\tmp_tmp_4"
+    ],
+    "env": {
+      "PATH": "[START_DIR]\\src\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
+    },
+    "infra_step": true,
+    "name": "temp dir for Upload Dart SDK"
   },
   {
     "name": "$result",

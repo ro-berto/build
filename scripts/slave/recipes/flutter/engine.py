@@ -110,6 +110,13 @@ def UploadFlutterPatchedSdk(api):
     'flutter_patched_sdk', # folder_name
     'flutter_patched_sdk.zip') # zip_name
 
+def UploadDartSdk(api, archive_name):
+  UploadFolder(api,
+    'Upload Dart SDK', # dir_label
+    'src/out/host_debug_unopt', # parent_dir
+    'dart_sdk', # folder_name
+    archive_name)
+
 # TODO(eseidel): Would be nice to have this on api.path or api.file.
 @contextlib.contextmanager
 def MakeTempDir(api, label):
@@ -198,6 +205,7 @@ def BuildLinux(api):
     'out/host_debug_unopt/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
   ])
   UploadFlutterPatchedSdk(api)
+  UploadDartSdk(api, archive_name='dart-sdk-linux-x64.zip')
 
 
 def TestObservatory(api):
@@ -267,6 +275,8 @@ def BuildMac(api):
     'out/android_release/clang_i386/gen_snapshot',
   ], archive_name='darwin-x64.zip')
 
+  UploadDartSdk(api, archive_name='dart-sdk-darwin-x64.zip')
+
 
 def PackageIOSVariant(api, label, device_out, sim_out, bucket_name):
   checkout = api.path['start_dir'].join('src')
@@ -329,7 +339,8 @@ def BuildWindows(api):
   RunGN(api, '--runtime-mode', 'release', '--android')
 
   Build(api, 'host_debug_unopt',
-    'flutter/lib/snapshot:generate_snapshot_bin', 'lib/ftl:ftl_unittests')
+    'flutter/lib/snapshot:generate_snapshot_bin', 'lib/ftl:ftl_unittests',
+    'dart:create_sdk')
   Build(api, 'android_profile', 'gen_snapshot')
   Build(api, 'android_release', 'gen_snapshot')
 
@@ -347,6 +358,8 @@ def BuildWindows(api):
   UploadArtifacts(api, "android-arm-release" , [
     'out/android_release/gen_snapshot.exe',
   ], archive_name='windows-x64.zip')
+
+  UploadDartSdk(api, archive_name='dart-sdk-windows-x64.zip')
 
 
 def BuildJavadoc(api):
