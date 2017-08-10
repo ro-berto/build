@@ -91,7 +91,6 @@ b.o: #deps 3, deps mtime 1 (VALID)
 
 c.o: #deps 1, deps mtime 1 (STALE)
     ../../base/b.cc
-
 """
 
 
@@ -110,7 +109,9 @@ _DEPS_ERROR_RETURN = """ninja: error: unknown target 'obj/e.o'"""
 class NinjaWrapperTestCase(unittest.TestCase):
 
   def testParseNinjaStdoutCXX(self):
-    ninja_parser = ninja_wrapper.NinjaBuildOutputStreamingParser()
+    warning_collector = ninja_wrapper.WarningCollector()
+    ninja_parser = ninja_wrapper.NinjaBuildOutputStreamingParser(
+        warning_collector)
     for line in _NINJA_STDOUT_CXX_RULE.splitlines():
       ninja_parser.parse(line)
     expected_list = [{
@@ -132,9 +133,28 @@ class NinjaWrapperTestCase(unittest.TestCase):
         'dependencies': []
     }]
     self.assertListEqual(ninja_parser.failed_target_list, expected_list)
+    self.assertListEqual(warning_collector.get(), [])
+
+  def testParseMalformattedNinjaStdout(self):
+    warning_collector = ninja_wrapper.WarningCollector()
+    ninja_parser = ninja_wrapper.NinjaBuildOutputStreamingParser(
+        warning_collector)
+    malformatted_stdout = textwrap.dedent("""\
+                                          [] CXX node1
+                                          FAILED: node1
+                                          output line
+                                          [1/1] CXX node2""")
+    for line in malformatted_stdout.splitlines():
+      ninja_parser.parse(line)
+    self.assertListEqual(ninja_parser.failed_target_list, [])
+    expected_warning = ["Unknown line when parsing "
+                        "ninja stdout: '[] CXX node1'"]
+    self.assertListEqual(warning_collector.get(), expected_warning)
 
   def testParseDeps(self):
-    target_dict = ninja_wrapper.parse_ninja_deps(_DEPS_RETURN)
+    warning_collector = ninja_wrapper.WarningCollector()
+    target_dict = ninja_wrapper.parse_ninja_deps(_DEPS_RETURN,
+                                                 warning_collector)
     source_deps_a = ['../../base/a.cc', '../../base/a.h',
                      '../../build/bd.h']
     auto_generated_deps_a = ['gen/b.cc']
@@ -147,9 +167,47 @@ class NinjaWrapperTestCase(unittest.TestCase):
     self.assertListEqual(target_dict['b.o'].source_deps, source_deps_b)
     self.assertListEqual(target_dict['b.o'].auto_generated_deps,
                          auto_generated_deps_b)
+    self.assertListEqual(warning_collector.get(), [])
+
+  def testParseEmptyDeps(self):
+    warning_collector = ninja_wrapper.WarningCollector()
+    malformatted_deps = textwrap.dedent("""\
+            a.o: #deps 2, deps mtime 1 (VALID)
+            ../../a.cc
+
+    """)
+    target_dict = ninja_wrapper.parse_ninja_deps(malformatted_deps,
+                                                 warning_collector)
+    self.assertListEqual(target_dict['a.o'].source_deps, ['../../a.cc'])
+    expected_warning = ['Unexpected empty deps line']
+    self.assertListEqual(warning_collector.get(), expected_warning)
+
+  def testParseExceedLimitDeps(self):
+    warning_collector = ninja_wrapper.WarningCollector()
+    malformatted_deps = textwrap.dedent("""\
+            a.o: #deps 2, deps mtime 1 (VALID)
+            ../../a.cc
+    """)
+    target_dict = ninja_wrapper.parse_ninja_deps(malformatted_deps,
+                                                 warning_collector)
+    self.assertListEqual(target_dict['a.o'].source_deps, ['../../a.cc'])
+    expected_warning = ['Expect 2 deps, but 1 line(s) left.']
+    self.assertListEqual(warning_collector.get(), expected_warning)
+
+  def testParseUnknownDeps(self):
+    warning_collector = ninja_wrapper.WarningCollector()
+    malformatted_deps = 'malformatted deps'
+    target_dict = ninja_wrapper.parse_ninja_deps(malformatted_deps,
+                                                 warning_collector)
+    self.assertDictEqual(target_dict, {})
+    expected_warning = ['Unknown line when parsing deps output: %r' %
+                        malformatted_deps]
+    self.assertListEqual(warning_collector.get(), expected_warning)
 
   def testParseNinjaDepsNotFound(self):
-    target_dict = ninja_wrapper.parse_ninja_deps(_DEPS_NOT_FOUND_RETURN)
+    warning_collector = ninja_wrapper.WarningCollector()
+    target_dict = ninja_wrapper.parse_ninja_deps(_DEPS_NOT_FOUND_RETURN,
+                                                 warning_collector)
     source_deps_b = ['../../base/b.cc', '../../base/b.h']
     auto_generated_deps_b = ['gen/b.cc']
 
@@ -158,12 +216,24 @@ class NinjaWrapperTestCase(unittest.TestCase):
     self.assertListEqual(target_dict['b.o'].source_deps, source_deps_b)
     self.assertListEqual(target_dict['b.o'].auto_generated_deps,
                          auto_generated_deps_b)
+    self.assertListEqual(warning_collector.get(), [])
+
+  def testParseMalformattedGraph(self):
+    warning_collector = ninja_wrapper.WarningCollector()
+    malformatted_graph = 'malformatted'
+    ninja_wrapper.Graph.build_graph(malformatted_graph,
+                                    warning_collector)
+    self.assertListEqual(warning_collector.get(),
+                         ['Unknown line when parsing graph output: %r'
+                          % malformatted_graph])
 
   def testParseNinjaGraph(self):
-    graph = ninja_wrapper.Graph.build_graph(_GRAPH_RETURN)
+    warning_collector = ninja_wrapper.WarningCollector()
+    graph = ninja_wrapper.Graph.build_graph(_GRAPH_RETURN, warning_collector)
     graph_dict = graph.get_root_deps(['gen/b.cc'])
     expected_dict = {'gen/b.cc': ['../../b.cc']}
     self.assertDictEqual(graph_dict, expected_dict)
+    self.assertListEqual(warning_collector.get(), [])
 
   def testCheckAutoGeneratedTrue(self):
     file_name = 'gen/123123'
@@ -207,13 +277,16 @@ class NinjaWrapperTestCase(unittest.TestCase):
                           '../../base/b.h', '../../b.cc'])
     expected_deps2 = set(['../../base/b.cc'])
     expected_deps3 = set([])
-    target_dict = ninja_wrapper.get_detailed_info('', '', failed_target_list)
+    warning_collector = ninja_wrapper.WarningCollector()
+    target_dict = ninja_wrapper.get_detailed_info('', '', failed_target_list,
+                                                  warning_collector)
     self.assertSetEqual(set(target_dict['failures'][0]['dependencies']),
                         expected_deps1)
     self.assertSetEqual(set(target_dict['failures'][1]['dependencies']),
                         expected_deps2)
     self.assertSetEqual(set(target_dict['failures'][2]['dependencies']),
                         expected_deps3)
+    self.assertListEqual(warning_collector.get(), [])
 
   @mock.patch('ninja_wrapper.run_ninja_tool',
               side_effect=['', _GRAPH_RETURN])
@@ -238,18 +311,24 @@ class NinjaWrapperTestCase(unittest.TestCase):
     }]
     expected_deps1 = set([])
     expected_deps2 = set([])
-    target_dict = ninja_wrapper.get_detailed_info('', '', failed_target_list)
+    warning_collector = ninja_wrapper.WarningCollector()
+    target_dict = ninja_wrapper.get_detailed_info('', '', failed_target_list,
+                                                  warning_collector)
     self.assertSetEqual(set(target_dict['failures'][0]['dependencies']),
                         expected_deps1)
     self.assertSetEqual(set(target_dict['failures'][1]['dependencies']),
                         expected_deps2)
+    self.assertListEqual(warning_collector.get(), [])
 
   def testGetDetailedInfoNonCXXRules(self):
-    ninja_parser = ninja_wrapper.NinjaBuildOutputStreamingParser()
+    warning_collector = ninja_wrapper.WarningCollector()
+    ninja_parser = ninja_wrapper.NinjaBuildOutputStreamingParser(
+        warning_collector)
     for line in _NINJA_STDOUT_NON_CXX_RULE.splitlines():
       ninja_parser.parse(line)
     failed_target_list = ninja_parser.failed_target_list
-    target_dict = ninja_wrapper.get_detailed_info('', '', failed_target_list)
+    target_dict = ninja_wrapper.get_detailed_info('', '', failed_target_list,
+                                                  warning_collector)
 
     expected_deps1 = set([])
     expected_deps2 = set([])
@@ -263,15 +342,19 @@ class NinjaWrapperTestCase(unittest.TestCase):
                         expected_deps3)
     self.assertSetEqual(set(target_dict['failures'][3]['dependencies']),
                         expected_deps4)
+    self.assertListEqual(warning_collector.get(), [])
 
   @mock.patch('ninja_wrapper.run_ninja_tool',
               side_effect=[_DEPS_NOT_FOUND_RETURN, _GRAPH_RETURN])
   def testGetDetailedInfoMixedRules(self, _):
-    ninja_parser = ninja_wrapper.NinjaBuildOutputStreamingParser()
+    warning_collector = ninja_wrapper.WarningCollector()
+    ninja_parser = ninja_wrapper.NinjaBuildOutputStreamingParser(
+        warning_collector)
     for line in _NINJA_STDOUT_MIXED_RULE.splitlines():
       ninja_parser.parse(line)
     failed_target_list = ninja_parser.failed_target_list
-    target_dict = ninja_wrapper.get_detailed_info('', '', failed_target_list)
+    target_dict = ninja_wrapper.get_detailed_info('', '', failed_target_list,
+                                                  warning_collector)
 
     expected_deps1 = set([])
     expected_deps2 = set(['../../base/b.cc', '../../base/b.h', '../../b.cc'])
@@ -282,6 +365,7 @@ class NinjaWrapperTestCase(unittest.TestCase):
                         expected_deps2)
     self.assertSetEqual(set(target_dict['failures'][2]['dependencies']),
                         expected_deps3)
+    self.assertListEqual(warning_collector.get(), [])
 
   def testParseArgs(self):
     expected_file_name = 'file.json'

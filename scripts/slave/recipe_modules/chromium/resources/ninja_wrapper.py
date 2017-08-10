@@ -44,14 +44,21 @@ _COLLECT_DEPENDENCIES_RULES = ['CXX', 'CC']
 
 _AUTO_GENERATED_RE = re.compile(r'^gen/|obj/')
 
-_DEPS_RE = re.compile(r'^(.*): #deps (\d+), deps mtime \d+ \((\w+)\)$')
-_DEPS_NOT_FOUND_RE = re.compile(r'^(.*): deps not found$')
+_DEPS_RE = re.compile(r'^(.+): #deps (\d+), deps mtime \d+ \((\w+)\)$')
+_DEPS_NOT_FOUND_RE = re.compile(r'^(.+): deps not found$')
 
 _NODE_LABEL_RE = re.compile(r'^"([^"]+)" \[label="([^"]+)"\]$')
 _EDGE_LABEL_RE = re.compile(r'^"([^"]+)" \[label="([^"]+)", shape=ellipse\]$')
-_EDGE_NODE_RE = re.compile(r'^"([^"]+)" -> "([^"]+)"$')
+# The first capturing group matches input node id, while the second matches
+# output edge id. If non-capturing group matches, it means node is order-only.
 _NODE_EDGE_RE = re.compile((r'^"([^"]+)" -> "([^"]+)" '
                             r'\[arrowhead=none(?: style=(dotted))?\]$'))
+# The first capturing group matches input edge id, while the second matches
+# output node id. This match happens when node has multiple input nodes.
+_EDGE_NODE_RE = re.compile(r'^"([^"]+)" -> "([^"]+)"$')
+# The first capturing group matches input node id, the second matches output
+# node id, and the thrid matches edge's rule name. This match happens when
+# edge has only one input node and output node.
 _NODE_NODE_RE = re.compile(r'^"([^"]+)" -> "([^"]+)" \[label="([^"]+)"\]$')
 _GRAPH_IGNORED_LINES = ['digraph ninja {', 'rankdir="LR"',
                         'edge [fontsize=10]',
@@ -62,18 +69,30 @@ _FAILED_RE = re.compile(r'^FAILED: (.*)$')
 _FAILED_END_RE = re.compile(r'^ninja: build stopped:.*')
 
 
+class WarningCollector(object):
+
+  def __init__(self):
+    self._warnings = []
+
+  def add(self, warning_info):
+    self._warnings.append(warning_info)
+
+  def get(self):
+    return self._warnings
+
+
 # TODO(yichunli): Improve by checking whether a file is in the build dir.
 def is_auto_generated(file_name):
   return _AUTO_GENERATED_RE.match(file_name)
 
 
-def run_ninja_tool(ninja_cmd):
+def run_ninja_tool(ninja_cmd, warning_collector):
   data = ''
   try:
-    data = subprocess.check_output(ninja_cmd)
-  except Exception:
-    # TODO(yichunli): Show warning in output file.
-    pass
+    data = subprocess.check_output(ninja_cmd, stderr=subprocess.STDOUT)
+  except Exception as e:
+    warning_collector.add(
+        'Exception occurs when running ninja tool: %r' % e)
   return data
 
 
@@ -103,7 +122,7 @@ class Edge(object):
 class Graph(object):
   """Parses output of ninja graph tool and saves the build graph."""
 
-  def __init__(self):
+  def __init__(self, warning_collector):
     self.node_id_dict = collections.defaultdict(Node)
     self.node_name_dict = {}
     self.edge_dict = {}
@@ -114,27 +133,33 @@ class Graph(object):
         (_NODE_EDGE_RE, self._record_node_edge),
         (_NODE_NODE_RE, self._record_node_node),
     ]
+    self.warning_collector = warning_collector
 
   def _record_node_label(self, node_id, node_name):
+    """Records node id and its file name."""
     node = self.node_id_dict[node_id]
     node.node_name = node_name
     self.node_name_dict[node_name] = node
 
   def _record_edge_label(self, edge_id, edge_rule):
+    """Records edge id and its rule name."""
     edge = Edge(edge_rule)
     self.edge_dict[edge_id] = edge
 
   def _record_edge_node(self, edge_id, node_id):
+    """Records edge's output node and node's input edge."""
     edge = self.edge_dict.get(edge_id)
-    output_node = self.node_id_dict[node_id]
     if edge:
+      output_node = self.node_id_dict[node_id]
       edge.output_nodes.append(output_node)
       output_node.input_edge = edge
     else:
-      # TODO(yichunli): Show warning in output file.
-      pass
+      self.warning_collector.add(
+          'Edge id does not exist in graph when calling '
+          '_recording_edge_node func: %r' % edge_id)
 
   def _record_node_edge(self, node_id, edge_id, order_only):
+    """Records node's output edge and edge's input node."""
     edge = self.edge_dict.get(edge_id)
     if edge:
       input_node = self.node_id_dict[node_id]
@@ -144,10 +169,12 @@ class Graph(object):
       else:
         edge.normal_input_nodes.append(input_node)
     else:
-      # TODO(yichunli): Show warning in output file.
-      pass
+      self.warning_collector.add(
+          'Edge id does not exist in graph when calling '
+          '_recording_node_edge func: %r' % edge_id)
 
   def _record_node_node(self, node_input_id, node_output_id, edge_rule):
+    """Records edge's rule name and its single input and output node."""
     edge = Edge(edge_rule)
     input_node = self.node_id_dict[node_input_id]
     output_node = self.node_id_dict[node_output_id]
@@ -156,9 +183,9 @@ class Graph(object):
     output_node.input_edge = edge
 
   @classmethod
-  def build_graph(cls, ninja_graph_output):
+  def build_graph(cls, ninja_graph_output, warning_collector):
     """Builds graph given the output of ninja graph tool."""
-    graph = cls()
+    graph = cls(warning_collector)
     lines = ninja_graph_output.splitlines()
     index = 0
     total_length = len(lines)
@@ -175,8 +202,8 @@ class Graph(object):
           break
       if not match:
         if line not in _GRAPH_IGNORED_LINES:
-          # TODO(yichunli): Show warning in output file.
-          pass
+          warning_collector.add(
+              'Unknown line when parsing graph output: %r' % line)
     return graph
 
   def get_root_deps(self, node_names):
@@ -186,16 +213,17 @@ class Graph(object):
       visited_edges = set()
       node = self.node_name_dict.get(node_name)
       if not node:
-        # TODO(yichunli): Show warning in output file.
+        self.warning_collector.add(
+            'Node name does not exist in graph when calling '
+            'get_root_deps func: %r' % node_name)
         continue
-
+      if not node.input_edge:
+        # The node itself is root node.
+        continue
       edge_list = [node.input_edge]
       visited_edges.add(node.input_edge)
       while edge_list:
         edge = edge_list.pop()
-        if not edge:
-          # TODO(yichunli): Show warning in output file.
-          continue
         for input_node in edge.normal_input_nodes:
           if not input_node.input_edge:
             if not is_auto_generated(input_node.node_name):
@@ -223,11 +251,12 @@ class DepsInfo(object):
     self.auto_generated_deps = []
 
 
-def parse_ninja_deps(ninja_deps_output):
+def parse_ninja_deps(ninja_deps_output, warning_collector):
   """Parses the output of 'ninja -t deps failed_nodes'.
 
   Args:
     ninja_deps_output: A string of ninja deps tool output.
+    warning_collector: A object recording warning info.
 
   Returns:
     deps: a dictionary whose key is name of failed node and value
@@ -247,14 +276,15 @@ def parse_ninja_deps(ninja_deps_output):
     if match:
       failed_node, deps_num, _ = match.groups()
       deps_num = int(deps_num)
-      if not index + deps_num < total_length or not failed_node:
-        # TODO(yichunli): Show warning in output file.
-        continue
+      if not index + deps_num <= total_length:
+        warning_collector.add(
+            'Expect %d deps, but %d line(s) left.'
+            % (deps_num, (total_length-index)))
       deps_info = DepsInfo()
       for dep in lines[index:index + deps_num]:
         dep = dep.strip()
         if not dep:
-          # TODO(yichunli): Show warning in output file.
+          warning_collector.add('Unexpected empty deps line')
           continue
         if _AUTO_GENERATED_RE.match(dep):
           deps_info.auto_generated_deps.append(dep)
@@ -270,23 +300,24 @@ def parse_ninja_deps(ninja_deps_output):
         deps_info = DepsInfo()
         deps[failed_node] = deps_info
       else:
-        # TODO(yichunli): Show warning in output file.
-        pass
+        warning_collector.add(
+            'Unknown line when parsing deps output: %r' % line)
   return deps
 
 
 class NinjaBuildOutputStreamingParser(object):
   """Parses ninja's stdout of build command in streaming way."""
 
-  def __init__(self):
+  def __init__(self, warning_collector):
     self.failed_target_list = []
     self._last_line = None
     self._failure_begins = False
     self._last_target = None
+    self._warning_collector = warning_collector
 
   def parse(self, line):
     line = line.strip()
-    if self._failure_begins:
+    if self._failure_begins and self._last_target:
       if not _RULE_RE.match(line) and not _FAILED_END_RE.match(line):
         self._last_target['output'] += line +'\n'
       else:
@@ -295,6 +326,7 @@ class NinjaBuildOutputStreamingParser(object):
         self.failed_target_list.append(self._last_target)
     else:
       failed_nodes_match = _FAILED_RE.match(line)
+      self._failure_begins = False
       if failed_nodes_match:
         # Get new failed edge when line begins with 'FAILED: ...'.
         self._failure_begins = True
@@ -311,18 +343,21 @@ class NinjaBuildOutputStreamingParser(object):
           target['dependencies'] = []
           self._last_target = target
         else:
-          # TODO(yichunli): Show warning in output file.
-          pass
+          self._warning_collector.add(
+              'Unknown line when parsing ninja '
+              'stdout: %r' % self._last_line)
     self._last_line = line
 
 
-def get_detailed_info(ninja_path, build_path, failed_target_list):
+def get_detailed_info(ninja_path, build_path, failed_target_list,
+                      warning_collector):
   """Gets detailed compile failure information from ninja stdout.
 
   Args:
     ninja_path: a string representing ninja path.
     build_path: a string representing chromium build directory.
     failed_target_list: a list of dict representing detailed failure information
+    warning_collector: a object recording warning info.
 
   Returns:
     a json string representing detailed failure information:
@@ -350,8 +385,8 @@ def get_detailed_info(ninja_path, build_path, failed_target_list):
     failed_nodes = list(set(failed_nodes))
     deps_command = [ninja_path, '-C', build_path,
                     '-t', 'deps'] + failed_nodes
-    ninja_deps_output = run_ninja_tool(deps_command)
-    deps_dict = parse_ninja_deps(ninja_deps_output)
+    ninja_deps_output = run_ninja_tool(deps_command, warning_collector)
+    deps_dict = parse_ninja_deps(ninja_deps_output, warning_collector)
     auto_generated_deps = []
     for _, deps in deps_dict.iteritems():
       auto_generated_deps.extend(deps.auto_generated_deps)
@@ -359,8 +394,8 @@ def get_detailed_info(ninja_path, build_path, failed_target_list):
     if auto_generated_deps:
       graph_command = [ninja_path, '-C', build_path,
                        '-t', 'graph'] + auto_generated_deps
-      ninja_graph_output = run_ninja_tool(graph_command)
-      graph = Graph.build_graph(ninja_graph_output)
+      ninja_graph_output = run_ninja_tool(graph_command, warning_collector)
+      graph = Graph.build_graph(ninja_graph_output, warning_collector)
       graph_dict = graph.get_root_deps(auto_generated_deps)
     for target in failed_target_list:
       for output_node in target['output_nodes']:
@@ -403,11 +438,13 @@ def main():
       build_path = cmd
       break
     prev_cmd = cmd
+
+  warning_collector = WarningCollector()
   # Ninja outputs info of build process to stdout whenever it fails or
   # successes.
   popen = subprocess.Popen(ninja_cmd, stdout=subprocess.PIPE,
                            universal_newlines=True)
-  ninja_parser = NinjaBuildOutputStreamingParser()
+  ninja_parser = NinjaBuildOutputStreamingParser(warning_collector)
   for stdout_line in iter(popen.stdout.readline, ''):
     # Comma here makes print function not append '\n' to the end of line.
     print stdout_line,
@@ -417,7 +454,9 @@ def main():
   return_code = popen.wait()
   if return_code:
     data = get_detailed_info(ninja_path, build_path,
-                             ninja_parser.failed_target_list)
+                             ninja_parser.failed_target_list,
+                             warning_collector)
+    data['warnings'] = warning_collector.get()
     with open(options.ninja_info_output, 'w') as fw:
       json.dump(data, fw)
   return return_code
