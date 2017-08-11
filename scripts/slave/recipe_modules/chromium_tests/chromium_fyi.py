@@ -2246,6 +2246,59 @@ SPEC = {
       'enable_swarming': True,
     },
 
+    'Out of Process Profiling Android': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+        'TARGET_PLATFORM': 'android',
+      },
+      'bot_type': 'builder_tester',
+      'test_results_config': 'staging_server',
+      'testing': { 'platform': 'linux', },
+    },
+
+    'Out of Process Profiling Linux': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder_tester',
+      'test_results_config': 'staging_server',
+      'testing': { 'platform': 'linux', },
+    },
+
+    'Out of Process Profiling Mac': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder_tester',
+      'test_results_config': 'staging_server',
+      'testing': { 'platform': 'mac', },
+    },
+
+    'Out of Process Profiling Windows': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder_tester',
+      'test_results_config': 'staging_server',
+      'testing': { 'platform': 'win', },
+    },
+
     'Linux Clang Analyzer': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'analysis'],
