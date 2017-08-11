@@ -239,11 +239,6 @@ class ChromiumApi(recipe_api.RecipeApi):
           '--ninja_info_output',
           self.m.json.output(add_json_log='on_failure', name='ninja_info')
       ]
-
-      script_args.extend([
-          '--source_code_path',
-          self.m.path['checkout']
-      ])
       script_args.append('--')
       script_args.extend(ninja_command)
 

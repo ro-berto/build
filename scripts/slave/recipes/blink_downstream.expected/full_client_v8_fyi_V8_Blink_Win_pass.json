@@ -310,8 +310,6 @@
       "RECIPE_MODULE[build::chromium]\\resources\\ninja_wrapper.py",
       "--ninja_info_output",
       "/path/to/tmp/json",
-      "--source_code_path",
-      "[BUILDER_CACHE]\\V8_Blink_Win\\src",
       "--",
       "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
       "-w",
