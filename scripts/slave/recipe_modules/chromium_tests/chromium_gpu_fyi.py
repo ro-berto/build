@@ -173,23 +173,6 @@ SPEC = {
       # These new graphics cards are being tested at the moment.
       'enable_swarming': False,
     },
-    'Win10 Release (Intel HD 530)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'GPU Win Builder',
-      'testing': {
-        'platform': 'win',
-      },
-      # Swarming is deliberately NOT enabled on this one-off configuration.
-      # This new hardware is being tested for reliability.
-      'enable_swarming': False,
-    },
     'Win10 Release (Intel HD 630)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
@@ -200,23 +183,6 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'GPU Win Builder',
-      'testing': {
-        'platform': 'win',
-      },
-      # Swarming is deliberately NOT enabled on this one-off configuration.
-      # This new hardware is being tested for reliability.
-      'enable_swarming': False,
-    },
-    'Win10 Debug (Intel HD 530)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'GPU Win Builder (dbg)',
       'testing': {
         'platform': 'win',
       },
@@ -442,24 +408,6 @@ SPEC = {
       'enable_swarming': True,
       'serialize_tests': True,
     },
-    'Linux Release (Intel HD 530)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'GPU Linux Builder',
-      'testing': {
-        'platform': 'linux',
-      },
-      # Swarming is deliberately NOT enabled on this one-off configuration.
-      # Multiple copies of the machines have to be deployed into swarming
-      # in order to keep up with the faster cycle time of the tests.
-      'enable_swarming': False,
-    },
     'Linux Release (Intel HD 630)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
@@ -470,24 +418,6 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'GPU Linux Builder',
-      'testing': {
-        'platform': 'linux',
-      },
-      # Swarming is deliberately NOT enabled on this one-off configuration.
-      # Multiple copies of the machines have to be deployed into swarming
-      # in order to keep up with the faster cycle time of the tests.
-      'enable_swarming': False,
-    },
-    'Linux Debug (Intel HD 530)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'GPU Linux Builder (dbg)',
       'testing': {
         'platform': 'linux',
       },
