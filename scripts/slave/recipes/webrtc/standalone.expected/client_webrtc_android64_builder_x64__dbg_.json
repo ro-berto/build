@@ -294,6 +294,8 @@
       "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
       "--ninja_info_output",
       "/path/to/tmp/json",
+      "--source_code_path",
+      "[BUILDER_CACHE]/Android64_Builder_x64__dbg_/src",
       "--",
       "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "-w",
