@@ -60,6 +60,35 @@ SPEC = {
       'enable_swarming': True,
       'checkout_dir': 'win',
     },
+    'GPU Win dEQP Builder': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'build_angle_deqp_tests',
+        'chrome_with_codecs',
+        'mb',
+        'ninja_confirm_noop',
+      ],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'bot_type': 'builder',
+      'compile_targets': [
+      ],
+      'testing': {
+        'platform': 'win',
+      },
+      'enable_swarming': True,
+      # When trybots are set up which mirror this configuration,
+      # compiling might induce a clobber build if the pinned
+      # buildtools version is different from Chromium's default. This
+      # is a risk we're willing to take because checkouts take a lot
+      # of disk space, and this is expected to be a corner case rather
+      # than the common case.
+      'checkout_dir': 'win',
+    },
     'Win7 Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
@@ -86,6 +115,22 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'GPU Win Builder (dbg)',
+      'testing': {
+        'platform': 'win',
+      },
+      'enable_swarming': True,
+      'serialize_tests': True,
+    },
+    'Win7 dEQP Release (NVIDIA)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU Win dEQP Builder',
       'testing': {
         'platform': 'win',
       },
@@ -150,6 +195,22 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'GPU Win Builder (dbg)',
+      'testing': {
+        'platform': 'win',
+      },
+      'enable_swarming': True,
+      'serialize_tests': True,
+    },
+    'Win7 dEQP Release (AMD)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU Win dEQP Builder',
       'testing': {
         'platform': 'win',
       },
@@ -254,6 +315,36 @@ SPEC = {
       'enable_swarming': True,
       'checkout_dir': 'win',
     },
+    'GPU Win x64 dEQP Builder': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'build_angle_deqp_tests',
+        'chrome_with_codecs',
+        'internal_gles2_conform_tests',
+        'mb',
+        'ninja_confirm_noop',
+      ],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder',
+      'compile_targets': [
+      ],
+      'testing': {
+        'platform': 'win',
+      },
+      'enable_swarming': True,
+      # When trybots are set up which mirror this configuration,
+      # compiling might induce a clobber build if the pinned
+      # buildtools version is different from Chromium's default. This
+      # is a risk we're willing to take because checkouts take a lot
+      # of disk space, and this is expected to be a corner case rather
+      # than the common case.
+      'checkout_dir': 'win',
+    },
     'Win7 x64 Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
@@ -280,6 +371,22 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'GPU Win x64 Builder (dbg)',
+      'testing': {
+        'platform': 'win',
+      },
+      'enable_swarming': True,
+      'serialize_tests': True,
+    },
+    'Win7 x64 dEQP Release (NVIDIA)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU Win x64 dEQP Builder',
       'testing': {
         'platform': 'win',
       },
@@ -359,6 +466,34 @@ SPEC = {
       'enable_swarming': True,
       'checkout_dir': 'linux',
     },
+    'GPU Linux dEQP Builder': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop',
+                                'chrome_with_codecs',
+                                'internal_gles2_conform_tests',
+                                'build_angle_deqp_tests',
+                                'fetch_telemetry_dependencies'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder',
+      'compile_targets': [
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+      'enable_swarming': True,
+      # When trybots are set up which mirror this configuration,
+      # compiling might induce a clobber build if the pinned
+      # buildtools version is different from Chromium's default. This
+      # is a risk we're willing to take because checkouts take a lot
+      # of disk space, and this is expected to be a corner case rather
+      # than the common case.
+      'checkout_dir': 'linux',
+    },
     'Linux Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
@@ -402,6 +537,22 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'GPU Linux Builder (dbg)',
+      'testing': {
+        'platform': 'linux',
+      },
+      'enable_swarming': True,
+      'serialize_tests': True,
+    },
+    'Linux dEQP Release (NVIDIA)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU Linux dEQP Builder',
       'testing': {
         'platform': 'linux',
       },
@@ -507,6 +658,34 @@ SPEC = {
         'platform': 'mac',
       },
       'enable_swarming': True,
+      'checkout_dir': 'mac',
+    },
+    'GPU Mac dEQP Builder': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config':['chrome_with_codecs',
+                               'internal_gles2_conform_tests',
+                               'mb',
+                               'ninja_confirm_noop',
+                               'fetch_telemetry_dependencies'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder',
+      'compile_targets': [
+      ],
+      'testing': {
+        'platform': 'mac',
+      },
+      'enable_swarming': True,
+      # When trybots are set up which mirror this configuration,
+      # compiling might induce a clobber build if the pinned
+      # buildtools version is different from Chromium's default. This
+      # is a risk we're willing to take because checkouts take a lot
+      # of disk space, and this is expected to be a corner case rather
+      # than the common case.
       'checkout_dir': 'mac',
     },
     'Mac Release (Intel)': {
@@ -707,6 +886,25 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder_tester',
+      'testing': {
+        'platform': 'mac',
+      },
+      'enable_swarming': True,
+      'serialize_tests': True,
+    },
+    'Mac dEQP Release': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb',
+                                'ninja_confirm_noop',
+                                'fetch_telemetry_dependencies'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU Mac dEQP Builder',
       'testing': {
         'platform': 'mac',
       },
