@@ -51,14 +51,6 @@ AUX_BINARY_PACKAGES = {
       cipd.CipdPackage(
           name='infra/tools/git/${platform}',
           version='git_revision:5cf65fdf804a9b3f3023f79d5b3cab2a88ccd09e'),
-
-      # The Git package installs its binaries into "bin/".
-      #
-      # Currently, we only install Git on x86 and amd64 platforms because we
-      # don't have cross-compile support for Git packages yet.
-      cipd.CipdPackage(
-          name='infra/git/${os}-${arch=386,amd64}',
-          version='version:2.14.1.chromium10'),
     ),
 
     STAGING: (
