@@ -256,6 +256,9 @@ class PythonTest(Test):
 
 class PerfTest(Test):
   """A WebRTC test that needs consistent hardware performance."""
+  PERF_CONFIG = {'a_default_rev': 'r_webrtc_git'}
+  DASHBOARD_UPLOAD_URL = 'https://chromeperf.appspot.com'
+
   def __init__(self, test, name=None, args=None, revision=None,
                upload_test_output=False, **runtest_kwargs):
     super(PerfTest, self).__init__(test, name)
@@ -271,7 +274,7 @@ class PerfTest(Test):
     assert api.revision_number, (
         'A revision number must be specified for perf tests as they upload '
         'data to the perf dashboard.')
-    perf_config = api.PERF_CONFIG
+    perf_config = self.PERF_CONFIG
     perf_config['r_webrtc_git'] = api.revision
     test_output_name = self._name + '_test_output'
     upload_url = '%s/%s/%s_%s.zip' % (
@@ -281,7 +284,7 @@ class PerfTest(Test):
         self._args.extend(['--test_output_dir', test_output_path])
       api.m.chromium.runtest(
           test=self._test, name=self._name, args=self._args,
-          results_url=api.DASHBOARD_UPLOAD_URL, annotate='graphing', xvfb=True,
+          results_url=self.DASHBOARD_UPLOAD_URL, annotate='graphing', xvfb=True,
           perf_dashboard_id=perf_dashboard_id, test_type=perf_dashboard_id,
           revision=api.revision_number, perf_id=api.c.PERF_ID,
           perf_config=perf_config, **self._runtest_kwargs)
@@ -290,7 +293,7 @@ class PerfTest(Test):
         zip_path = api.m.path['tmp_base'].join(test_output_name + '.zip')
         api.m.zip.directory('zip ' + test_output_name, test_output_path,
                             zip_path)
-        api.m.gsutil.upload(zip_path, 'chromium-webrtc', upload_url,
+        api.m.gsutil.upload(zip_path, api.WEBRTC_GS_BUCKET, upload_url,
                             args=['-a', 'public-read'],
                             unauthenticated_url=True)
 

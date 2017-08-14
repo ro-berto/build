@@ -25,8 +25,7 @@ class WebRTCApi(recipe_api.RecipeApi):
   ANDROID_INSTRUMENTATION_TESTS = steps.ANDROID_INSTRUMENTATION_TESTS
   ANDROID_JUNIT_TESTS = steps.ANDROID_JUNIT_TESTS
 
-  PERF_CONFIG = {'a_default_rev': 'r_webrtc_git'}
-  DASHBOARD_UPLOAD_URL = 'https://chromeperf.appspot.com'
+  WEBRTC_GS_BUCKET = 'chromium-webrtc'
 
   @property
   def should_build(self):
@@ -240,7 +239,7 @@ class WebRTCApi(recipe_api.RecipeApi):
 
     apk_upload_url = 'client.webrtc/%s/AppRTCMobile_apk_%s.zip' % (
         self.buildername, self.revision_number)
-    self.m.gsutil.upload(zip_path, 'chromium-webrtc', apk_upload_url,
+    self.m.gsutil.upload(zip_path, self.WEBRTC_GS_BUCKET, apk_upload_url,
                          args=['-a', 'public-read'], unauthenticated_url=True)
 
   def extract_build(self):
