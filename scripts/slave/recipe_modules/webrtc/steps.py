@@ -37,32 +37,44 @@ NORMAL_TESTS = freeze({
   'webrtc_nonparallel_tests': {},
 })
 
-ANDROID_DEVICE_TESTS = (
-  'audio_decoder_unittests',
-  'common_audio_unittests',
-  'common_video_unittests',
-  'modules_tests',
-  'modules_unittests',
-  'ortc_unittests',
-  'peerconnection_unittests',
-  'rtc_stats_unittests',
-  'rtc_unittests',
-  'system_wrappers_unittests',
-  'test_support_unittests',
-  'tools_unittests',
-  'video_engine_tests',
-  'voice_engine_unittests',
-  'webrtc_nonparallel_tests',
-)
+ANDROID_DEVICE_TESTS = freeze({
+  'audio_decoder_unittests': {},
+  'common_audio_unittests': {},
+  'common_video_unittests': {},
+  'modules_tests': {
+    'swarming_shards': 2,
+  },
+  'modules_unittests': {
+    'swarming_shards': 6,
+  },
+  'ortc_unittests': {},
+  'peerconnection_unittests': {
+    'swarming_shards': 4,
+  },
+  'rtc_stats_unittests': {},
+  'rtc_unittests': {
+    'swarming_shards': 6,
+  },
+  'system_wrappers_unittests': {},
+  'test_support_unittests': {},
+  'tools_unittests': {},
+  'video_engine_tests': {
+    'swarming_shards': 4,
+  },
+  'voice_engine_unittests': {},
+  'webrtc_nonparallel_tests': {},
+})
 
-ANDROID_INSTRUMENTATION_TESTS = (
-  'AppRTCMobileTest',
-  'libjingle_peerconnection_android_unittest',
-)
+ANDROID_INSTRUMENTATION_TESTS = freeze({
+  'AppRTCMobileTest': {},
+  'libjingle_peerconnection_android_unittest': {},
+})
 
-ANDROID_JUNIT_TESTS = (
-  'android_junit_tests',
-)
+ANDROID_JUNIT_TESTS = freeze({
+  'android_junit_tests': {
+    'shards': 1,
+  },
+})
 
 ANDROID_CIPD_PACKAGES = [
     ("bin",
@@ -156,15 +168,15 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
           revision=revision))
 
   elif test_suite == 'android':
-    for test in (ANDROID_DEVICE_TESTS +
-                 ANDROID_INSTRUMENTATION_TESTS):
+    for test, extra_args in sorted(ANDROID_DEVICE_TESTS.items() +
+                                   ANDROID_INSTRUMENTATION_TESTS.items()):
       tests.append(GTestTest(test, enable_swarming=enable_swarming,
                              override_isolate_target=test,
-                             cipd_packages=ANDROID_CIPD_PACKAGES))
-    for test in ANDROID_JUNIT_TESTS:
+                             cipd_packages=ANDROID_CIPD_PACKAGES, **extra_args))
+    for test, extra_args in sorted(ANDROID_JUNIT_TESTS.items()):
       if api.mastername == 'client.webrtc.fyi':
         tests.append(GTestTest(test, enable_swarming=enable_swarming,
-                               override_isolate_target=test))
+                               override_isolate_target=test, **extra_args))
       else:
         tests.append(AndroidJunitTest(test))
 

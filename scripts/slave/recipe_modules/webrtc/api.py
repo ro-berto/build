@@ -104,9 +104,9 @@ class WebRTCApi(recipe_api.RecipeApi):
       if self.c.TEST_SUITE == 'webrtc':
         self._isolated_targets = (self.NORMAL_TESTS.keys())
       elif self.c.TEST_SUITE == 'android':
-        self._isolated_targets = (self.ANDROID_DEVICE_TESTS +
-                                  self.ANDROID_INSTRUMENTATION_TESTS +
-                                  self.ANDROID_JUNIT_TESTS)
+        self._isolated_targets = (self.ANDROID_DEVICE_TESTS.keys() +
+                                  self.ANDROID_INSTRUMENTATION_TESTS.keys() +
+                                  self.ANDROID_JUNIT_TESTS.keys())
         if self.m.tryserver.is_tryserver:
           self._isolated_targets += ('webrtc_perf_tests',)
       self._isolated_targets = sorted(self._isolated_targets)

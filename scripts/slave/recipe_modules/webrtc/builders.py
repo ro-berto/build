@@ -529,6 +529,7 @@ BUILDERS = freeze({
           'device_os': 'M',
           'device_type': 'bullhead', # Nexus 5X
           'os': 'Android',
+          'android_devices': '1',
         }
       },
       'Android32 (M Nexus5X)': {
@@ -549,6 +550,7 @@ BUILDERS = freeze({
           'device_os': 'M',
           'device_type': 'bullhead', # Nexus 5X
           'os': 'Android',
+          'android_devices': '1',
         }
       },
       'Android64 (M Nexus5X)(dbg)': {
@@ -568,6 +570,7 @@ BUILDERS = freeze({
           'device_type': 'bullhead', # Nexus 5X
           'device_os': 'M',
           'os': 'Android',
+          'android_devices': '1',
         }
       },
       'Android64 (M Nexus5X)': {
@@ -587,6 +590,7 @@ BUILDERS = freeze({
           'device_type': 'bullhead', # Nexus 5X
           'device_os': 'M',
           'os': 'Android',
+          'android_devices': '1',
         }
       },
     },
@@ -640,6 +644,7 @@ BUILDERS = freeze({
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Android',
+          'android_devices': '1',
           'device_type': 'bullhead', # Nexus 5X
         }
       },
@@ -1445,6 +1450,7 @@ BUILDERS = freeze({
           'device_type': 'bullhead', # Nexus 5X
           'device_os': 'M',
           'os': 'Android',
+          'android_devices': '1',
         }
       },
       'android_rel': {
@@ -1464,6 +1470,7 @@ BUILDERS = freeze({
           'device_type': 'bullhead', # Nexus 5X
           'device_os': 'M',
           'os': 'Android',
+          'android_devices': '1',
         }
       },
       'android_clang_dbg': {
@@ -1493,6 +1500,7 @@ BUILDERS = freeze({
           'device_type': 'bullhead', # Nexus 5X
           'device_os': 'M',
           'os': 'Android',
+          'android_devices': '1',
         }
       },
     },
