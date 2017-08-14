@@ -25,6 +25,9 @@
       "daisy-incremental": [
         "cros-beefy427-c2"
       ], 
+      "lakitu-full": [
+        "build174-m2"
+      ], 
       "oak-full": [
         "cros-beefy428-c2"
       ], 
@@ -51,7 +54,6 @@
     }
   }, 
   "unallocated": [
-    "build174-m2", 
     "build245-m2", 
     "build326-m2", 
     "build333-m2"
