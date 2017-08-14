@@ -1134,7 +1134,7 @@ SPEC = {
       'enable_swarming': True,
       'swarming_dimensions': {
         'cpu': 'x86-64',
-        'machine_type': 'n1-standard-16',
+        'machine_type': 'n1-standard-8',
         'os': 'Windows-10',
       },
       'checkout_dir': 'win',
@@ -1159,7 +1159,7 @@ SPEC = {
       'enable_swarming': True,
       'swarming_dimensions': {
         'cpu': 'x86-64',
-        'machine_type': 'n1-standard-16',
+        'machine_type': 'n1-standard-8',
         'os': 'Windows-10',
       },
       'checkout_dir': 'win',
