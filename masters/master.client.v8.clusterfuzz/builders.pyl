@@ -92,6 +92,22 @@
       "slave_pools": ["linux4"],
       "category": "0Linux",
     },
+    "V8 Linux64 UBSan - release builder": {
+      "recipe": "v8",
+      "use_remote_run": False,
+      "scheduler": "v8_commits",
+      "mergeRequests": False,
+      "slave_pools": ["linux5"],
+      "category": "0Linux",
+    },
+    "V8 Linux64 UBSanVptr - release builder": {
+      "recipe": "v8",
+      "use_remote_run": False,
+      "scheduler": "v8_commits",
+      "mergeRequests": False,
+      "slave_pools": ["linux5"],
+      "category": "0Linux",
+    },
   },
 
   "schedulers": {
@@ -134,6 +150,14 @@
         "version": "trusty",
       },
       "slaves": ["slave254-c3"],
+    },
+    "linux5": {
+      "slave_data": {
+        "bits": 64,
+        "os": "linux",
+        "version": "trusty",
+      },
+      "slaves": ["slave255-c3"],
     },
   },
 }
