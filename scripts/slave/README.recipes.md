@@ -208,6 +208,7 @@
   * [dart/dart](#recipes-dart_dart)
   * [dart/dart2js](#recipes-dart_dart2js)
   * [dart/dart2js_nobuild](#recipes-dart_dart2js_nobuild)
+  * [dart/dart2js_swarming](#recipes-dart_dart2js_swarming)
   * [dart/dart_cross_compiler](#recipes-dart_dart_cross_compiler)
   * [dart/dart_cross_tester](#recipes-dart_dart_cross_tester)
   * [dart/dart_vm](#recipes-dart_dart_vm)
@@ -4332,6 +4333,13 @@ Generates the sequence of steps that will be run by the slave.
 &mdash; **def [RunTests](/scripts/slave/recipes/dart/dart2js_nobuild.py#37)(api, test_args, test_specs, use_xvfb=False):**
 
 &mdash; **def [sdk\_url](/scripts/slave/recipes/dart/dart2js_nobuild.py#59)(channel, platform, arch, mode, revision):**
+### *recipes* / [dart/dart2js\_swarming](/scripts/slave/recipes/dart/dart2js_swarming.py)
+
+[DEPS](/scripts/slave/recipes/dart/dart2js_swarming.py#5): [swarming](#recipe_modules-swarming), [swarming\_client](#recipe_modules-swarming_client), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+
+&mdash; **def [RunSteps](/scripts/slave/recipes/dart/dart2js_swarming.py#60)(api):**
+
+&mdash; **def [RunTests](/scripts/slave/recipes/dart/dart2js_swarming.py#37)(api, test_args, test_specs, use_xvfb=False):**
 ### *recipes* / [dart/dart\_cross\_compiler](/scripts/slave/recipes/dart/dart_cross_compiler.py)
 
 [DEPS](/scripts/slave/recipes/dart/dart_cross_compiler.py#5): [test\_utils](#recipe_modules-test_utils), [trigger](#recipe_modules-trigger), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
