@@ -23,7 +23,7 @@ STAGING_CIPD_VERSION = 'git_revision:b482bfa19d3fa79b4b40dd5ac7a34479052e3df1'
 
 # Latest Git bundle versions for packages that don't have a "latest" ref.
 LATEST_PYTHON_BUNDLE_VERSION = 'version:2.7.13.chromium7'
-LATEST_GIT_BUNDLE_VERSION = 'version:2.14.1.chromium10'
+LATEST_GIT_BUNDLE_VERSION = 'version:2.14.1.chromium11'
 
 PROD = None
 STAGING = 'staging'
