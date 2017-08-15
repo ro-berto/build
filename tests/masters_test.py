@@ -282,7 +282,6 @@ def main(argv):
       'master.tryserver.chromium.perf': 'ChromiumPerfTryServer',
       'master.tryserver.client.catapult': 'CatapultTryserver',
       'master.tryserver.client.custom_tabs_client': 'CustomTabsClientTryserver',
-      'master.tryserver.client.dart': 'DartTryServer',
       'master.tryserver.client.mojo': 'MojoTryServer',
       'master.tryserver.client.pdfium': 'PDFiumTryserver',
       'master.tryserver.client.syzygy': 'SyzygyTryserver',
