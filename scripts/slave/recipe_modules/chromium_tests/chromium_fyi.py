@@ -1135,7 +1135,10 @@ SPEC = {
       'swarming_dimensions': {
         'cpu': 'x86-64',
         'machine_type': 'n1-standard-8',
-        'os': 'Windows-10',
+        # Try to find a set of dimensions that allows tasks to run on
+        # all Windows 10 GCE VMs, but no other Windows 10 bots.
+        # TODO(smut): Change this if the Win 10 GCE VMs are updated.
+        'os': 'Windows-10-14393',
       },
       'checkout_dir': 'win',
     },
@@ -1160,7 +1163,8 @@ SPEC = {
       'swarming_dimensions': {
         'cpu': 'x86-64',
         'machine_type': 'n1-standard-8',
-        'os': 'Windows-10',
+        # TODO(smut): Change this if the Win 10 GCE VMs are updated (see above).
+        'os': 'Windows-10-14393',
       },
       'checkout_dir': 'win',
     },
