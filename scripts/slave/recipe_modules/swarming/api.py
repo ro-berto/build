@@ -754,7 +754,9 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     if task.build_properties:
       properties = dict(task.build_properties)
-      properties.update(self.m.properties)
+      # exclude any recipe-engine-controlling properties (starting with $)
+      properties.update((k, v) for k, v in self.m.properties.iteritems() if not
+                        k.startswith('$'))
       task_args.extend([
           '--build-properties', self.m.json.dumps(properties),
       ])
