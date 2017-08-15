@@ -60,7 +60,6 @@ for platform in ['linux', 'mac', 'win']:
       'mode': 'product',
       'target_arch': arch,
       'env': default_envs[platform],
-      'test_args': ['--builder-tag=no_ipv6'],
       'archive_core_dumps': True,
     }
 
@@ -111,16 +110,14 @@ for mode in ['debug', 'release', 'product']:
     'mode': mode,
     'target_arch': 'x64',
     'env': default_envs['linux'],
-    'test_args': ['-capp_jit',
-                  '--builder-tag=no_ipv6'],
+    'test_args': ['-capp_jit'],
     'archive_core_dumps': True,
   }
   builders['precomp-linux-%s-x64' % mode] = {
     'mode': mode,
     'target_arch': 'x64',
     'env': default_envs['linux'],
-    'test_args': ['-cprecompiler', '-rdart_precompiled',
-                  '--builder-tag=no_ipv6'],
+    'test_args': ['-cprecompiler', '-rdart_precompiled'],
     'build_args': ['runtime_precompiled'],
     'archive_core_dumps': True,
   }
@@ -130,8 +127,7 @@ for mode in ['debug', 'release', 'product']:
       'target_arch': arch,
       'env': default_envs['linux'],
       'checked': True,
-      'test_args': ['--hot-reload',
-                    '--builder-tag=no_ipv6'],
+      'test_args': ['--hot-reload'],
       'archive_core_dumps': True,
     }
     builders['vm-linux-%s-%s-reload-rollback' % (mode, arch)] = {
@@ -139,8 +135,7 @@ for mode in ['debug', 'release', 'product']:
       'target_arch': arch,
       'env': default_envs['linux'],
       'checked': True,
-      'test_args': ['--hot-reload-rollback',
-                    '--builder-tag=no_ipv6'],
+      'test_args': ['--hot-reload-rollback'],
       'archive_core_dumps': True,
     }
 
@@ -227,6 +222,6 @@ def GenTests(api):
       api.properties.generic(mastername='client.dart',
                              buildername='precomp-linux-debug-x64-be'))
    yield (
-      api.test('vm-mac-debug-x64-try') + api.platform('mac', 64) +
+      api.test('vm-linux-debug-x64-try') + api.platform('linux', 64) +
       api.properties.generic(mastername='client.dart',
-                             buildername='vm-mac-debug-x64-try'))
+                             buildername='vm-linux-debug-x64-try'))

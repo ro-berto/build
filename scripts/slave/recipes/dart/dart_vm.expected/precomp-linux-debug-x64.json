@@ -98,8 +98,7 @@
       "--write-test-outcome-log",
       "--copy-coredumps",
       "-cprecompiler",
-      "-rdart_precompiled",
-      "--builder-tag=no_ipv6"
+      "-rdart_precompiled"
     ],
     "cwd": "[START_DIR]/sdk",
     "name": "vm tests"

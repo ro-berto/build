@@ -33,11 +33,9 @@ for platform in ['linux', 'mac']:
   for arch in ['x64']:
     for mode in ['debug', 'release']:
       for checked in ['-checked', '']:
-        extra_args = ['--builder-tag=no_ipv6']
-
+        extra_args = []
         if mode == 'debug':
           extra_args += ['--vm-options=--no-enable-malloc-hooks']
-
         if checked:
           extra_args += ['--checked']
 

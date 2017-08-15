@@ -136,7 +136,6 @@
       "--time",
       "--write-debug-log",
       "--write-test-outcome-log",
-      "--builder-tag=no_ipv6",
       "pkg"
     ],
     "cwd": "[START_DIR]/sdk",
@@ -162,7 +161,6 @@
       "--time",
       "--write-debug-log",
       "--write-test-outcome-log",
-      "--builder-tag=no_ipv6",
       "--append_logs",
       "pkg_tested"
     ],
@@ -189,7 +187,6 @@
       "--time",
       "--write-debug-log",
       "--write-test-outcome-log",
-      "--builder-tag=no_ipv6",
       "--append_logs",
       "pkgbuild"
     ],
