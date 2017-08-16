@@ -24,6 +24,7 @@ class WebRTCApi(recipe_api.RecipeApi):
   ANDROID_DEVICE_TESTS = steps.ANDROID_DEVICE_TESTS
   ANDROID_INSTRUMENTATION_TESTS = steps.ANDROID_INSTRUMENTATION_TESTS
   ANDROID_JUNIT_TESTS = steps.ANDROID_JUNIT_TESTS
+  PERF_TESTS = steps.PERF_TESTS
 
   WEBRTC_GS_BUCKET = 'chromium-webrtc'
 
@@ -108,6 +109,8 @@ class WebRTCApi(recipe_api.RecipeApi):
                                   self.ANDROID_JUNIT_TESTS.keys())
         if self.m.tryserver.is_tryserver:
           self._isolated_targets += ('webrtc_perf_tests',)
+      elif self.c.TEST_SUITE == 'desktop_perf_swarming':
+        self._isolated_targets = self.PERF_TESTS
       self._isolated_targets = sorted(self._isolated_targets)
       if not self._isolated_targets: # pragma: no cover
         raise self.m.step.StepFailure('Isolation and swarming are only '

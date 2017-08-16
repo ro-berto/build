@@ -23,6 +23,11 @@ RECIPE_CONFIGS = freeze({
     'gclient_config': 'webrtc',
     'test_suite': 'desktop_perf',
   },
+  'webrtc_desktop_perf_swarming': {
+    'chromium_config': 'webrtc_desktop_perf',
+    'gclient_config': 'webrtc',
+    'test_suite': 'desktop_perf_swarming',
+  },
   'webrtc_clang': {
     'chromium_config': 'webrtc_clang',
     'gclient_config': 'webrtc',
@@ -628,6 +633,24 @@ BUILDERS = freeze({
         'swarming_dimensions': {
           'os': 'Windows-10',
           'cpu': 'x86-64',
+        }
+      },
+      'WebRTC Perf Tests (Linux Trusty swarming)': {
+        'recipe_config': 'webrtc_desktop_perf_swarming',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'webrtc-linux-large-tests-swarming',
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'linux'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Ubuntu-14.04',
+          'id': 'build89-m1',
         }
       },
       'Android ASan (swarming)': {

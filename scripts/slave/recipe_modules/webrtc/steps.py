@@ -83,6 +83,12 @@ ANDROID_CIPD_PACKAGES = [
     )
 ]
 
+PERF_TESTS = (
+  # TODO(ehmaldonado): Add isac_fix_test and low_bandwidth_audio_test. See
+  # http://crbug.com/755660.
+  'webrtc_perf_tests',
+)
+
 
 def generate_tests(api, test_suite, revision, enable_swarming=False):
   tests = []
@@ -124,6 +130,10 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
       if not api.m.platform.is_mac:
         tests.append(BaremetalTest('webrtc_perf_tests', revision=revision,
             args=['--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/']))
+  elif test_suite == 'desktop_perf_swarming':
+    for test in sorted(PERF_TESTS):
+      tests.append(SwarmingTest(test))
+      # TODO(ehmaldonado): Collect and upload perf results
   elif test_suite == 'desktop_perf':
     assert api.c.PERF_ID
     if api.m.platform.is_linux:

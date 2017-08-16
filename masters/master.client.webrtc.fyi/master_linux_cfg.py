@@ -41,6 +41,11 @@ def Update(c):
       'recipe': 'webrtc/auto_roll_webrtc_deps',
       'slavebuilddir': 'linux_autoroll',
     },
+    {
+      'name': 'WebRTC Perf Tests (Linux Trusty swarming)',
+      'recipe': 'webrtc/standalone',
+      'slavebuilddir': 'linux_trusty',
+    }
   ]
 
   c['builders'].extend([
