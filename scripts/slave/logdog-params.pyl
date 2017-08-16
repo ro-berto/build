@@ -188,7 +188,6 @@
     'client.dart': {},
     'client.dart.fyi': {},
     'client.dart.packages': {},
-    'tryserver.client.dart': {},
 
     # V8
     'client.v8': {},
