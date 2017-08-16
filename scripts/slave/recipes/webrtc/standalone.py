@@ -65,7 +65,6 @@ def _sanitize_nonalpha(text):
 
 def GenTests(api):
   builders = api.webrtc.BUILDERS
-  NORMAL_TESTS = api.webrtc.NORMAL_TESTS
 
   def generate_builder(mastername, buildername, revision,
                        parent_got_revision=None, failing_test=None,
@@ -121,23 +120,6 @@ def GenTests(api):
                                rietveld='https://fake.rietveld.url')
     test += api.properties(buildnumber=1337)
 
-    if (chromium_kwargs.get('TARGET_PLATFORM') != 'android' and
-        bot_config.get('enable_swarming', False) and
-        # TODO(kjellander): Remove when https://bugs.webrtc.org/7413 is fixed.
-        buildername not in ('Linux32 Debug', 'Linux32 Release')):
-      os_suffix = ' on %s' % bot_config['swarming_dimensions']['os']
-      if os_suffix in (' on Ubuntu-14.04', ' on Windows-7-SP1'):
-        os_suffix = ''
-      for test_name, test_data in NORMAL_TESTS.iteritems():
-        test += api.override_step_data(
-            test_name + os_suffix,
-            api.swarming.canned_summary_output(test_data.get('shards', 1))
-            + api.test_utils.canned_isolated_script_output(
-                passing=True, is_win=False, swarming=True,
-                shards=test_data.get('shards', 1),
-                isolated_script_passing=True,
-                use_json_test_format=True, output_chartjson=False),
-            retcode=0)
     return test
 
   for mastername in builders.keys():

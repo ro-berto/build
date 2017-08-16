@@ -4269,6 +4269,7 @@
     ],
     "name": "rtc_unittests",
     "~followup_annotations": [
+      "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>swarming pending 71s<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
@@ -4568,7 +4569,8 @@
       "@@@STEP_LINK@shard #4 isolated out@blah@@@",
       "@@@STEP_LINK@shard #4@https://chromium-swarm.appspot.com/user/task/10400@@@",
       "@@@STEP_LINK@shard #5 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #5@https://chromium-swarm.appspot.com/user/task/10500@@@"
+      "@@@STEP_LINK@shard #5@https://chromium-swarm.appspot.com/user/task/10500@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -5664,7 +5666,8 @@
   },
   {
     "name": "$result",
+    "reason": "1 out of 54 aggregated steps failed. Failures: Step('rtc_unittests') failed with return_code 1",
     "recipe_result": null,
-    "status_code": 0
+    "status_code": 1
   }
 ]

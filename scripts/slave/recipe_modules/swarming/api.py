@@ -920,7 +920,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       isolated_script_results_test_data = (
           self.m.test_utils.test_api.canned_isolated_script_output(
               passing=True, is_win=self.m.platform.is_win, swarming=True,
-              use_json_test_format=True))
+              use_json_test_format=True, shards=task.shards))
 
     # The call to collect_isolated_script_task emits two JSON files:
     #  1) a task summary JSON emitted by swarming
