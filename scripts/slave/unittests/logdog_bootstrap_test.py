@@ -555,6 +555,7 @@ class TestPublicParams(unittest.TestCase):
   def setUp(self):
     logging.basicConfig(level=logging.DEBUG)
 
+  @unittest.skip("https://crbug.com/755926")
   def test_load(self):
     params = ldbs._load_params_dict('chromium')
     self.assertIsInstance(params, dict)
