@@ -986,6 +986,20 @@ BUILDERS = {
         },
         'testing': {'platform': 'mac'},
       },
+      'V8 Win64 ASAN': {
+        'chromium_apply_config': ['v8_ninja', 'default_compiler', 'goma', 'mb'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'enable_swarming': True,
+        'tests': [V8Testing(5)],
+        'swarming_dimensions': {
+          'os': 'Windows-7-SP1',
+        },
+        'testing': {'platform': 'win'},
+      },
 ####### Category: FYI
       'V8 Linux64 - gcov coverage': {
       'v8_apply_config': ['gcov_coverage'],
@@ -2577,6 +2591,43 @@ BUILDERS = {
           'cpu': 'x86-64',
         },
         'tests': [V8Testing, Test262],
+        'testing': {'platform': 'linux'},
+      },
+      'v8_win64_asan_rel_ng': {
+        'chromium_apply_config': [
+          'default_compiler',
+          'v8_ninja',
+          'goma',
+          'mb',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'enable_swarming': True,
+        'slim_swarming_builder': True,
+        'triggers': [
+          'v8_win64_asan_rel_ng_triggered',
+        ],
+        'testing': {'platform': 'win'},
+      },
+      'v8_win64_asan_rel_ng_triggered': {
+        'chromium_apply_config': [
+          'use_windows_swarming_slaves',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'v8_win64_asan_rel_ng',
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Windows-7-SP1',
+          'cpu': 'x86-64',
+        },
+        'tests': [V8Testing(5)],
         'testing': {'platform': 'linux'},
       },
       'v8_win64_dbg': {

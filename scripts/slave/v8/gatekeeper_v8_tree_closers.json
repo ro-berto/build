@@ -12,7 +12,8 @@
           "V8 Linux64 UBSanVptr",
           "V8 Linux - full debug",
           "V8 Linux - interpreted regexp",
-          "V8 Random Deopt Fuzzer - debug"
+          "V8 Random Deopt Fuzzer - debug",
+          "V8 Win64 ASAN"
         ],
         "builders": {
           "V8 Linux - predictable": {
