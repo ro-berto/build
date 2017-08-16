@@ -947,18 +947,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           'script': self.m.path['checkout'].join(
               'third_party', 'WebKit', 'Tools', 'Scripts',
               'merge-layout-test-results'),
-          'args': [
-              '--verbose',
-              '--results-json-override-with-build-property',
-              'build_number',
-              'buildnumber',
-              '--results-json-override-with-build-property',
-              'builder_name',
-              'buildername',
-              '--results-json-override-with-build-property',
-              'chromium_revision',
-              'got_revision_cp',
-            ],
+          'args': ['--verbose'],
       }
 
       if buildername == 'linux_chromium_rel_ng':

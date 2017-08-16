@@ -92,15 +92,6 @@ def GenTests(api):
               'merge': {
                   'args': [
                       '--verbose',
-                      '--results-json-override-with-build-property',
-                      'build_number',
-                      'buildnumber',
-                      '--results-json-override-with-build-property',
-                      'builder_name',
-                      'buildername',
-                      '--results-json-override-with-build-property',
-                      'chromium_revision',
-                      'got_revision_cp',
                   ],
                   'script':
                       ('//third_party/WebKit/Tools/Scripts/'
