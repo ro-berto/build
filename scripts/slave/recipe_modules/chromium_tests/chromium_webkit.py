@@ -210,9 +210,7 @@ SPEC['builders'] = {
     },
     'bot_type': 'tester',
     'parent_buildername': 'WebKit Mac Builder',
-    'tests': [
-      steps.BlinkTest(),
-    ],
+    'tests': [],
     'testing': {
       'platform': 'mac',
     },
@@ -232,9 +230,7 @@ SPEC['builders'] = {
     },
     'bot_type': 'tester',
     'parent_buildername': 'WebKit Mac Builder',
-    'tests': [
-      steps.BlinkTest(),
-    ],
+    'tests': [],
     'testing': {
       'platform': 'mac',
     },
@@ -254,9 +250,7 @@ SPEC['builders'] = {
     },
     'bot_type': 'tester',
     'parent_buildername': 'WebKit Mac Builder',
-    'tests': [
-      steps.BlinkTest(),
-    ],
+    'tests': [],
     'testing': {
       'platform': 'mac',
     },
