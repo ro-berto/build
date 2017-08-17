@@ -649,6 +649,7 @@ BUILDERS = freeze({
         'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
+          'pool': 'WebRTC',
           'os': 'Ubuntu-14.04',
           'id': 'build89-m1',
         }
