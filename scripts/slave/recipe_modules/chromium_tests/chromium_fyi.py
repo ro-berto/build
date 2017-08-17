@@ -326,23 +326,6 @@ SPEC = {
         'platform': 'linux',
       },
     },
-    'Fuchsia Compile': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['fuchsia'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-        'TARGET_PLATFORM': 'fuchsia',
-      },
-      'bot_type': 'builder',
-      'checkout_dir': 'linux',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
     'ThinLTO Linux ToT': {
       'chromium_config': 'clang_tot_linux_lld',
       'chromium_apply_config': ['mb'],
