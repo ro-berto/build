@@ -596,7 +596,7 @@ TRYBOTS = freeze({
       },
       'win10_gce_x64_rel': simple_bot({
         'mastername': 'chromium.fyi',
-        'buildername': 'Chromium Win 10 GCE Tests (Win 10 Build)'
+        'buildername': 'Chromium Win 10 GCE Tests'
       }),
       'win10_chromium_x64_rel_ng': simple_bot({
         'mastername': 'chromium.win',
