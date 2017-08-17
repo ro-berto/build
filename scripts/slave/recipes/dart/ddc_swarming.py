@@ -3,19 +3,15 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'depot_tools/bot_update',
+  'dart',
   'depot_tools/depot_tools',
-  'depot_tools/gclient',
-  'depot_tools/gsutil',
   'recipe_engine/context',
-  'recipe_engine/file',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/python',
   'recipe_engine/step',
   'test_utils',
-  'zip',
 ]
 
 def RunSteps(api):
@@ -30,39 +26,21 @@ def RunSteps(api):
   channel = builder_fragments[3]
   assert channel in ['be', 'dev', 'stable', 'integration', 'try']
 
-  api.gclient.set_config('dart')
-  api.path.c.dynamic_paths['tools'] = None
-  api.path['tools'] = api.path['checkout'].join('tools')
+  api.dart.checkout(channel)
 
-  if channel == 'try':
-    api.gclient.c.solutions[0].url = 'https://dart.googlesource.com/sdk.git'
-
-  with api.context(cwd=api.path['cache'].join('builder')):
-    api.bot_update.ensure_checkout()
-    api.gclient.runhooks()
+  build_args = ['-mrelease', 'dart2js_bot']
+  api.dart.build(build_args)
 
   with api.context(cwd=api.path['checkout'],
                    env_prefixes={'PATH':[api.depot_tools.root]},
                    env={'BUILDBOT_BUILDERNAME':builder_name}):
-    with api.step.defer_results():
-      api.python('taskkill before building',
-                 api.path['checkout'].join('tools', 'task_kill.py'),
-                 args=['--kill_browsers=True'],
-                 ok_ret='any')
-      build_args = ['-mrelease', 'dart2js_bot']
-      api.python('build dart',
-                 api.path['checkout'].join('tools', 'build.py'),
-                 args=build_args)
 
     with api.step.defer_results():
       api.python('ddc tests',
                  api.path['checkout'].join('tools', 'bots', 'ddc_tests.py'),
                  args=[])
 
-      api.python('taskkill after testing',
-                 api.path['checkout'].join('tools', 'task_kill.py'),
-                 args=['--kill_browsers=True'],
-                 ok_ret='any')
+      api.dart.kill_tasks()
 
 def GenTests(api):
    yield (
