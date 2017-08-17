@@ -31,12 +31,15 @@ def Update(c):
     'Android Builder (dbg)',
     'Android Builder ARM64 (dbg)',
     'Linux Builder',
+    'Linux Builder (dbg)',
     'Mac Builder',
+    'Mac Builder (dbg)',
     'ios-device',
     'ios-simulator',
   ]
   win_builders = [
     'Win Builder',
+    'Win Builder (dbg)',
   ]
   all_builders = hourly_builders + win_builders
 
@@ -56,10 +59,12 @@ def Update(c):
 
   specs = [
     {'name': 'Win Builder', 'category': 'win'},
+    {'name': 'Win Builder (dbg)', 'category': 'win'},
     {'name': 'Win7 Tester', 'category': 'win'},
     {'name': 'Win8 Tester', 'category': 'win'},
     {'name': 'Win10 Tester', 'category': 'win'},
     {'name': 'Mac Builder', 'category': 'mac', 'slavebuilddir': 'mac64'},
+    {'name': 'Mac Builder (dbg)', 'category': 'mac', 'slavebuilddir': 'mac64'},
     {'name': 'Mac Tester', 'category': 'mac'},
     {
       'name': 'ios-device',
@@ -74,6 +79,7 @@ def Update(c):
       'slavebuilddir': 'mac64',
     },
     {'name': 'Linux Builder', 'category': 'linux'},
+    {'name': 'Linux Builder (dbg)', 'category': 'linux'},
     {'name': 'Linux Tester', 'category': 'linux'},
     {'name': 'Android Builder', 'category': 'android'},
     {'name': 'Android Builder (dbg)', 'category': 'android'},

@@ -76,8 +76,11 @@ def _ConfigureSyncingWebRTCToT(spec):
 
 
 AddBuildSpec('Win Builder', 'win', target_bits=32)
+AddBuildSpec('Win Builder (dbg)', 'win', target_bits=32, build_config='Debug')
 AddBuildSpec('Mac Builder', 'mac')
+AddBuildSpec('Mac Builder (dbg)', 'mac', build_config='Debug')
 AddBuildSpec('Linux Builder', 'linux')
+AddBuildSpec('Linux Builder (dbg)', 'linux', build_config='Debug')
 
 # The Release bot is actually only a builder (not builder+tester). It's
 # configured as builder+tester only to skip the archiving of the full build
