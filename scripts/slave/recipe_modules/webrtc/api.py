@@ -119,12 +119,14 @@ class WebRTCApi(recipe_api.RecipeApi):
 
     self.c.enable_swarming = self.bot_config.get('enable_swarming')
     if self.c.enable_swarming:
-      self.m.swarming.set_default_dimension('cpu', None)
-      self.m.swarming.set_default_dimension('gpu', None)
       self.m.chromium_swarming.configure_swarming(
           'webrtc',
           precommit=self.m.tryserver.is_tryserver,
           mastername=self.mastername)
+      self.m.swarming.set_default_dimension(
+          'os',
+          self.m.swarming.prefered_os_dimension(
+              self.m.platform.name).split('-', 1)[0])
       for key, value in self.bot_config.get(
           'swarming_dimensions', {}).iteritems():
         self.m.swarming.set_default_dimension(key, value)
