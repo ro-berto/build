@@ -15,6 +15,25 @@ from slave import build_directory
 import config
 
 
+# Environment variables that could point to the location of Program Files.
+PROGRAM_FILES_ENV_VARS = [
+    'PROGRAMFILES',
+    'PROGRAMFILES(X86)',
+    'PROGRAMW6432',
+]
+
+
+# Places relative to Program Files that the debugger could be located.
+DEBUGGER_DIRS = [
+    'Debugging Tools For Windows',
+    'Debugging Tools For Windows (x86)',
+    'Debugging Tools For Windows (x64)',
+    'Windows Kits\\8.0\\Debuggers\\x86',
+    'Windows Kits\\8.1\\Debuggers\\x64',
+    'Windows Kits\\10\\Debuggers\\x64',
+]
+
+
 def GetCrashDumpDir():
   """Returns the default crash dump directory used by chromium. """
   local_app_data = os.environ.get('LOCALAPPDATA')
@@ -33,41 +52,13 @@ def CdbExistsAtLocation(candidate_dir):
 
 def ProbeDebuggerDir():
   """Probes the debugger installed path and returns the path."""
-  program_files = os.environ.get('ProgramFiles')
-  if not program_files:
-    return None
-  # Probing debugger installed path.
-  # Starting with 32 bit debugger on 32 bit platform.
-  debugger_dir = '%s\\Debugging Tools For Windows' % program_files
-  if CdbExistsAtLocation(debugger_dir):
-    return debugger_dir
-  # 32 bit debugger on 32 bit platform.
-  debugger_dir = '%s\\Debugging Tools For Windows (x86)' % program_files
-  if CdbExistsAtLocation(debugger_dir):
-    return debugger_dir
-  # 64 bit debugger.
-  debugger_dir = '%s\\Debugging Tools For Windows (x64)' % program_files
-  if CdbExistsAtLocation(debugger_dir):
-    return debugger_dir
-  # windows 8 32 bit
-  debugger_dir = '%s\\Windows Kits\\8.0\\Debuggers\\x86' % program_files
-  if CdbExistsAtLocation(debugger_dir):
-    return debugger_dir
-  # windows 8.1 64 bit
-  debugger_dir = '%s\\Windows Kits\\8.1\\Debuggers\\x64' % program_files
-  if CdbExistsAtLocation(debugger_dir):
-    return debugger_dir
-  # windows 10 64 bit
-  debugger_dir = '%s\\Windows Kits\\10\\Debuggers\\x64' % program_files
-  if CdbExistsAtLocation(debugger_dir):
-    return debugger_dir
-  program_files = os.environ.get('PROGRAMW6432')
-  if not program_files:
-    return None
-  # 64 bit debugger on 64 bit platform.
-  debugger_dir = '%s\\Debugging Tools For Windows (x64)' % program_files
-  if CdbExistsAtLocation(debugger_dir):
-    return debugger_dir
+  for env_var in PROGRAM_FILES_ENV_VARS:
+    program_files = os.environ.get(env_var)
+    if program_files:
+      for debugger_dir in DEBUGGER_DIRS:
+        debugger_dir = os.path.join(program_files, debugger_dir)
+        if CdbExistsAtLocation(debugger_dir):
+          return debugger_dir
   return None
 
 
