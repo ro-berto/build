@@ -78,6 +78,7 @@
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[CACHE]/goma/test_builder",
       "GOMA_DUMP_STATS_FILE": "build_data_dir/goma_stats_proto",
+      "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GOMA_TMP_DIR": "/tmp/goma_goma_module"
     },
@@ -138,6 +139,7 @@
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[CACHE]/goma/test_builder",
       "GOMA_DUMP_STATS_FILE": "build_data_dir/goma_stats_proto",
+      "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GOMA_TMP_DIR": "/tmp/goma_goma_module"
     },
@@ -169,6 +171,7 @@
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[CACHE]/goma/test_builder",
       "GOMA_DUMP_STATS_FILE": "build_data_dir/goma_stats_proto",
+      "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GOMA_TMP_DIR": "/tmp/goma_goma_module"
     },
@@ -189,6 +192,7 @@
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[CACHE]/goma/test_builder",
       "GOMA_DUMP_STATS_FILE": "build_data_dir/goma_stats_proto",
+      "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GOMA_TMP_DIR": "/tmp/goma_goma_module"
     },

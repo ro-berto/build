@@ -626,6 +626,7 @@
       "GOMA_CACHE_DIR": "[CACHE]/goma/linux_chromium_rel_ng",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache_131",
       "GOMA_FAIL_FAST": "true",
+      "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "infra_step": true,
@@ -721,6 +722,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
+      "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_jsonstatus",
@@ -749,6 +751,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
+      "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_stat",
@@ -766,6 +769,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
+      "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.stop_goma",
