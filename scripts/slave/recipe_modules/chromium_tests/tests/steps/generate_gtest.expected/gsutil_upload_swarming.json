@@ -478,12 +478,12 @@
       "----",
       "cp",
       "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}]}]}",
-      "gs://flake-predictor-data/test_mastername/test_buildername/123/browser_tests.json"
+      "gs://flake-predictor-data/log_data/test_mastername/test_buildername/123/browser_tests.json"
     ],
     "infra_step": true,
-    "name": "gsutil Uploading results to flake-predictor-data",
+    "name": "gsutil Uploading results to flake-predictor-data/log_data",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flake-predictor-data/test_mastername/test_buildername/123/browser_tests.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flake-predictor-data/log_data/test_mastername/test_buildername/123/browser_tests.json@@@"
     ]
   },
   {

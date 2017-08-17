@@ -143,7 +143,7 @@ def GenTests(api):
                   "shards": 5
               },
               "test": "browser_tests",
-              "upload_to_flake_predictor": "flake-predictor-data"
+              "upload_to_flake_predictor": "flake-predictor-data/log-data"
           },
           mastername='test_mastername',
           buildername='test_buildername',
@@ -162,7 +162,7 @@ def GenTests(api):
       api.properties(
           single_spec={
               "test": "browser_tests",
-              "upload_to_flake_predictor": "flake-predictor-data"
+              "upload_to_flake_predictor": "flake-predictor-data/log-data"
           },
           mastername='test_mastername',
           buildername='test_buildername',

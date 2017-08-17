@@ -447,7 +447,7 @@ class LocalGTestTest(Test):
                   self._commit_position_property, 'x@{#0}'))
           if (self._upload_to_flake_predictor and step_result.retcode != 0):
             GTestTest.upload_to_gs_bucket(
-                api, source, 'flake-predictor-data', self.name)
+                api, source, 'flake-predictor-data/log_data', self.name)
 
     return step_result
 
@@ -1393,7 +1393,7 @@ class SwarmingGTestTest(SwarmingTest):
               test_results_server='test-results.appspot.com')
           if (self._upload_to_flake_predictor and step_result.retcode != 0):
             GTestTest.upload_to_gs_bucket(
-                api, source, 'flake-predictor-data', self.name)
+                api, source, 'flake-predictor-data/log_data', self.name)
 
 class LocalIsolatedScriptTest(Test):
   def __init__(self, name, args=None, target_name=None,

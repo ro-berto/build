@@ -115,9 +115,9 @@
       "Release",
       "--xvfb",
       "--factory-properties",
-      "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"mastername\": \"test_mastername\", \"recipe\": \"chromium_tests:tests/steps/generate_gtest\", \"single_spec\": {\"test\": \"browser_tests\", \"upload_to_flake_predictor\": \"flake-predictor-data\"}, \"slavename\": \"test_bot_id\"}",
+      "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"mastername\": \"test_mastername\", \"recipe\": \"chromium_tests:tests/steps/generate_gtest\", \"single_spec\": {\"test\": \"browser_tests\", \"upload_to_flake_predictor\": \"flake-predictor-data/log-data\"}, \"slavename\": \"test_bot_id\"}",
       "--build-properties",
-      "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"mastername\": \"test_mastername\", \"recipe\": \"chromium_tests:tests/steps/generate_gtest\", \"single_spec\": {\"test\": \"browser_tests\", \"upload_to_flake_predictor\": \"flake-predictor-data\"}, \"slavename\": \"test_bot_id\"}",
+      "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"mastername\": \"test_mastername\", \"recipe\": \"chromium_tests:tests/steps/generate_gtest\", \"single_spec\": {\"test\": \"browser_tests\", \"upload_to_flake_predictor\": \"flake-predictor-data/log-data\"}, \"slavename\": \"test_bot_id\"}",
       "--annotate=gtest",
       "--test-type=browser_tests",
       "--step-name=browser_tests",
@@ -173,12 +173,12 @@
       "----",
       "cp",
       "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}]}]}",
-      "gs://flake-predictor-data/test_mastername/test_buildername/123/browser_tests.json"
+      "gs://flake-predictor-data/log_data/test_mastername/test_buildername/123/browser_tests.json"
     ],
     "infra_step": true,
-    "name": "gsutil Uploading results to flake-predictor-data",
+    "name": "gsutil Uploading results to flake-predictor-data/log_data",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flake-predictor-data/test_mastername/test_buildername/123/browser_tests.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flake-predictor-data/log_data/test_mastername/test_buildername/123/browser_tests.json@@@"
     ]
   },
   {
