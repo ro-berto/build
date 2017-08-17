@@ -23,6 +23,7 @@
   * [commit_position](#recipe_modules-commit_position)
   * [cronet](#recipe_modules-cronet) &mdash; Common steps for recipes that sync/build Cronet sources.
   * [crrev](#recipe_modules-crrev)
+  * [dart](#recipe_modules-dart)
   * [disk](#recipe_modules-disk)
   * [emulator](#recipe_modules-emulator)
   * [filter](#recipe_modules-filter)
@@ -223,6 +224,8 @@
   * [dart/packages](#recipes-dart_packages)
   * [dart/sdk_builder](#recipes-dart_sdk_builder)
   * [dart/sdk_gn](#recipes-dart_sdk_gn)
+  * [dart/vm_kernel_swarming](#recipes-dart_vm_kernel_swarming)
+  * [dart:examples/example](#recipes-dart_examples_example)
   * [devtools](#recipes-devtools)
   * [disk:examples/full](#recipes-disk_examples_full)
   * [emulator](#recipes-emulator)
@@ -1569,6 +1572,32 @@ Fetches the corresponding commit hash for a commit position.
 &mdash; **def [to\_commit\_position](/scripts/slave/recipe_modules/crrev/api.py#47)(self, commit_hash, attempts=3, step_name=None):**
 
 Fetches a commit position string given a commit hash.
+### *recipe_modules* / [dart](/scripts/slave/recipe_modules/dart)
+
+[DEPS](/scripts/slave/recipe_modules/dart/__init__.py#1): [swarming](#recipe_modules-swarming), [swarming\_client](#recipe_modules-swarming_client), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+
+#### **class [DartApi](/scripts/slave/recipe_modules/dart/api.py#3)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
+
+Recipe module for code commonly used in dart recipies. Shouldn't be used elsewhere.
+
+&mdash; **def [build](/scripts/slave/recipe_modules/dart/api.py#26)(self, build_args=[], isolate=None):**
+
+Builds dart using the specified build_args
+and optionally isolates the sdk for testing using the specified isolate.
+If an isolate is specified, it returns the hash of the isolated archive.
+
+&mdash; **def [checkout](/scripts/slave/recipe_modules/dart/api.py#6)(self, channel=None, clobber=False):**
+
+Checks out the dart code and prepares it for building.
+
+&mdash; **def [kill\_tasks](/scripts/slave/recipe_modules/dart/api.py#20)(self):**
+
+Kills leftover tasks from previous runs or steps.
+
+&mdash; **def [shard](/scripts/slave/recipe_modules/dart/api.py#56)(self, title, isolate_hash, test_args, os=None, cpu='x86-64', pool='Dart.LUCI'):**
+
+Runs test.py in the given isolate, sharded over several swarming tasks.
+Requires the 'shards' build property to be set to the number of tasks.
 ### *recipe_modules* / [disk](/scripts/slave/recipe_modules/disk)
 
 [DEPS](/scripts/slave/recipe_modules/disk/__init__.py#1): [depot\_tools/infra\_paths][depot_tools/recipe_modules/infra_paths], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -4439,6 +4468,16 @@ Generates the sequence of steps that will be run by the slave.
 [DEPS](/scripts/slave/recipes/dart/sdk_gn.py#5): [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/dart/sdk_gn.py#17)(api):**
+### *recipes* / [dart/vm\_kernel\_swarming](/scripts/slave/recipes/dart/vm_kernel_swarming.py)
+
+[DEPS](/scripts/slave/recipes/dart/vm_kernel_swarming.py#7): [dart](#recipe_modules-dart), [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+
+&mdash; **def [RunSteps](/scripts/slave/recipes/dart/vm_kernel_swarming.py#18)(api):**
+### *recipes* / [dart:examples/example](/scripts/slave/recipe_modules/dart/examples/example.py)
+
+[DEPS](/scripts/slave/recipe_modules/dart/examples/example.py#1): [dart](#recipe_modules-dart), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/dart/examples/example.py#6)(api):**
 ### *recipes* / [devtools](/scripts/slave/recipes/devtools.py)
 
 [DEPS](/scripts/slave/recipes/devtools.py#7): [chromium\_checkout](#recipe_modules-chromium_checkout), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]

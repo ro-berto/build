@@ -1,0 +1,87 @@
+from recipe_engine import recipe_api
+
+class DartApi(recipe_api.RecipeApi):
+  """Recipe module for code commonly used in dart recipies. Shouldn't be used elsewhere."""
+
+  def checkout(self, channel=None, clobber=False):
+    """Checks out the dart code and prepares it for building."""
+    self.m.gclient.set_config('dart')
+    if channel == 'try':
+      self.m.gclient.c.solutions[0].url = 'https://dart.googlesource.com/sdk.git'
+
+    with self.m.context(cwd=self.m.path['cache'].join('builder')):
+      self.m.bot_update.ensure_checkout()
+      with self.m.context(cwd=self.m.path['checkout']):
+        if clobber:
+          self.m.python('clobber',
+                        self.m.path['checkout'].join('tools', 'clean_output_directory.py'))
+      self.m.gclient.runhooks()
+
+  def kill_tasks(self):
+    """Kills leftover tasks from previous runs or steps."""
+    self.m.python('taskkill before building',
+               self.m.path['checkout'].join('tools', 'task_kill.py'),
+               args=['--kill_browsers=True'])
+
+  def build(self, build_args=[], isolate=None):
+    """Builds dart using the specified build_args
+       and optionally isolates the sdk for testing using the specified isolate.
+       If an isolate is specified, it returns the hash of the isolated archive.
+    """
+    with self.m.context(cwd=self.m.path['checkout'],
+                     env_prefixes={'PATH':[self.m.depot_tools.root]}):
+      self.kill_tasks()
+      self.m.python('build dart',
+                 self.m.path['checkout'].join('tools', 'build.py'),
+                 args=build_args)
+      if isolate is not None:
+        self.m.swarming_client.checkout(
+          revision='5c8043e54541c3cee7ea255e0416020f2e3a5904')
+        self.m.file.copy('copy .isolate file to sdk root',
+                self.m.path['checkout'].join('tools', 'bots', '%s.isolate' % isolate),
+                self.m.path['checkout'])
+        step_result = self.m.python(
+          'upload testing isolate',
+          self.m.swarming_client.path.join('isolate.py'),
+          args= ['archive',
+                 '--ignore_broken_items', # TODO(athom) find a way to avoid that
+                 '-Ihttps://isolateserver.appspot.com',
+                 '-i%s' % self.m.path['checkout'].join('%s.isolate' % isolate),
+                 '-s%s' % self.m.path['checkout'].join('%s.isolated' % isolate)],
+          stdout=self.m.raw_io.output('out'))
+        isolate_hash = step_result.stdout.strip()[:40]
+        step_result.presentation.step_text = 'isolate hash: %s' % isolate_hash
+        return isolate_hash
+
+  def shard(self, title, isolate_hash, test_args, os=None, cpu='x86-64', pool='Dart.LUCI'):
+    """Runs test.py in the given isolate, sharded over several swarming tasks.
+       Requires the 'shards' build property to be set to the number of tasks.
+    """
+    num_shards = int(self.m.properties['shards'])
+    tasks = []
+    for shard in range(num_shards):
+      # TODO(athom) collect all the triggers, and present as a single step
+      task = self.m.swarming.task("%s_shard_%s" % (title, (shard + 1)),
+                               isolate_hash,
+                               extra_args= test_args +
+                                 ['--shards=%s' % num_shards,
+                                  '--shard=%s' % (shard + 1)])
+      if os is None:
+        os = self.m.platform.name
+      os_names = {
+        'win': 'Windows',
+        'linux': 'Linux',
+        'mac': 'Mac'
+      }
+      if os in os_names:
+        os = os_names[os]
+      task.dimensions['os'] = os
+      task.dimensions['cpu'] = cpu
+      task.dimensions['pool'] = pool
+      self.m.swarming.trigger_task(task)
+      tasks.append(task)
+    # TODO(athom) do something while sharded tasks are running, maybe run last shard?
+    with self.m.step.defer_results():
+      for task in tasks:
+        # TODO(athom) collect all the output, and present as a single step
+        self.m.swarming.collect_task(task)
