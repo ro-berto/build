@@ -1904,7 +1904,7 @@ GomaApi contains helper functions for using goma.
 
 &emsp; **@property**<br>&mdash; **def [build\_data\_dir](/scripts/slave/recipe_modules/goma/api.py#147)(self):**
 
-&mdash; **def [build\_with\_goma](/scripts/slave/recipe_modules/goma/api.py#393)(self, ninja_command, name=None, ninja_log_outdir=None, ninja_log_compiler=None, goma_env=None, ninja_env=None, use_cloudtail=True, \*\*kwargs):**
+&mdash; **def [build\_with\_goma](/scripts/slave/recipe_modules/goma/api.py#392)(self, ninja_command, name=None, ninja_log_outdir=None, ninja_log_compiler=None, goma_env=None, ninja_env=None, use_cloudtail=True, \*\*kwargs):**
 
 Build with ninja_command using goma
 
@@ -1966,7 +1966,7 @@ Start goma compiler_proxy.
 A user MUST execute ensure_goma beforehand.
 It is user's responsibility to handle failure of starting compiler_proxy.
 
-&mdash; **def [stop](/scripts/slave/recipe_modules/goma/api.py#276)(self, ninja_log_outdir=None, ninja_log_compiler=None, ninja_log_command=None, ninja_log_exit_status=None, \*\*kwargs):**
+&mdash; **def [stop](/scripts/slave/recipe_modules/goma/api.py#275)(self, ninja_log_outdir=None, ninja_log_compiler=None, ninja_log_command=None, ninja_log_exit_status=None, \*\*kwargs):**
 
 Stop goma compiler_proxy.
 

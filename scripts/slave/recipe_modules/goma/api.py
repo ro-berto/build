@@ -243,8 +243,7 @@ class GomaApi(recipe_api.RecipeApi):
 
       goma_ctl_start_env = self._goma_ctl_env.copy()
 
-      if env is not None:
-        goma_ctl_start_env.update(env)
+      goma_ctl_start_env.update(env)
 
       try:
         self._make_goma_cache_dir(self.default_cache_path)
