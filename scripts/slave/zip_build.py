@@ -443,7 +443,7 @@ def Archive(options):
         versioned_file, revision_file, options.build_url, options.gs_acl,
         options.gsutil_py_path)
 
-    storage_url = ('https://storage.googleapis.com/%s/%s' %
+    storage_url = ('https://storage.cloud.google.com/%s/%s' %
         (options.build_url[len('gs://'):], os.path.basename(versioned_file)))
     urls['storage_url'] = storage_url
   else:
