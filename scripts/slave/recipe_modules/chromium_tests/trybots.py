@@ -594,6 +594,20 @@ TRYBOTS = freeze({
           },
         ],
       },
+      'win7_chromium_rel_ng': {
+        'bot_ids': [
+          {
+            'mastername': 'chromium.win',
+            'buildername': 'Win Builder',
+            'tester': 'Win7 Tests (1)',
+          },
+          {
+            'mastername': 'chromium.gpu',
+            'buildername': 'GPU Win Builder',
+            'tester': 'Win7 Release (NVIDIA)',
+          },
+        ],
+      },
       'win10_gce_x64_rel': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'Chromium Win 10 GCE Tests'
