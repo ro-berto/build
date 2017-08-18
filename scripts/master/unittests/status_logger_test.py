@@ -216,7 +216,7 @@ class StatusLoggerTest(unittest.TestCase):
 
   def testReportsFailType(self):
     with _make_logger() as logger:
-      mock_build = Build(properties={'fail_type': 'INVALID_TEST_RESULTS'})
+      mock_build = Build(properties={'failure_type': 'INVALID_TEST_RESULTS'})
       logger.buildFinished('coconuts', mock_build, 0)
       self.assertTrue(os.path.isdir(logger._event_logging_dir))
       self.assertTrue(os.path.exists(logger._event_logfile))

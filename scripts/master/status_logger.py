@@ -516,7 +516,7 @@ class StatusEventLogger(StatusReceiverMultiService):
         patch_url=self._get_patch_url(properties),
         bbucket_id=self._get_bbucket_id(properties),
         category=properties.getProperty('category'),
-        fail_type=properties.getProperty('fail_type'),
+        fail_type=properties.getProperty('failure_type'),
         head_revision_git_hash=self._get_head_revision_git_hash(properties))
 
     pre_test_time_s = None
