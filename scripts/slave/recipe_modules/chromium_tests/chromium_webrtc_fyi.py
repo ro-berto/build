@@ -45,12 +45,12 @@ def AddBuildSpec(name, platform, target_bits=64, build_config='Release',
   spec['bot_type'] = bot_type
 
   SPEC['builders'][name] = spec
-  _builders[platform][target_bits] = name
+  _builders['%s_%s' % (platform, build_config)][target_bits] = name
 
 
 def AddTestSpec(name, perf_id, platform, target_bits=64,
                 build_config='Release'):
-  parent_builder = _builders[platform][target_bits]
+  parent_builder = _builders['%s_%s' % (platform, build_config)][target_bits]
   spec = chromium_webrtc.TestSpec(
       parent_builder,
       perf_id,
