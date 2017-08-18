@@ -145,6 +145,7 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
                   'resources', 'speech_and_misc_wb.pcm'),
               'isac_speech_and_misc_wb.pcm']))
     tests.append(PerfTest('webrtc_perf_tests', revision=revision,
+                          args=['--save_worst_frame'],
                           upload_test_output=True))
 
     # TODO(kjellander): Re-enable when https://crbug.com/731717 is fixed.

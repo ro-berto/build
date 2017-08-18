@@ -477,6 +477,7 @@
       "--build-number=1337",
       "--revision=170242",
       "webrtc_perf_tests.exe",
+      "--save_worst_frame",
       "--test_output_dir",
       "[TMP_BASE]\\webrtc_perf_tests_test_output_tmp_1"
     ],
