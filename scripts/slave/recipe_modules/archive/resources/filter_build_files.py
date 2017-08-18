@@ -175,10 +175,6 @@ def main(argv):
   if not os.path.exists(build_dir) or not os.path.isdir(build_dir):
     raise Exception('%s is not an existing directory.' % build_dir)
 
-  # TODO(machenbach): Temporary debug output for https://crbug.com/741603
-  icudtl = os.path.join(build_dir, 'icudtl.dat')
-  print ('Found ' if os.path.exists(icudtl) else 'Didn\'t find ') + icudtl
-
   list_of_files = walk_and_filter(build_dir, args.platform)
 
   with open(args.output, 'w') as f:
