@@ -104,8 +104,8 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
       tests.append(BaremetalTest(
           'modules_tests',
           name='modules_tests (screen capture disabled tests)',
-          args=['--gtest_filter=ScreenCapturerIntegrationTest.*',
-                '--gtest_also_run_disabled_tests'],
+          gtest_args=['--gtest_filter=ScreenCapturerIntegrationTest.*',
+                      '--gtest_also_run_disabled_tests'],
           parallel=True))
   elif test_suite == 'webrtc_baremetal':
     api.virtual_webcam_check()  # Needed for video_capture_tests below.
@@ -225,35 +225,34 @@ class Test(object):
 
 class BaremetalTest(Test):
   """A WebRTC test that uses audio and/or video devices."""
-  def __init__(self, test, name=None, revision=None, parallel=False, args=None,
-               **runtest_kwargs):
+  def __init__(self, test, name=None, revision=None, parallel=False,
+               gtest_args=None, args=None, **runtest_kwargs):
     super(BaremetalTest, self).__init__(test, name)
     self._parallel = parallel
     self._args = args or []
+    self._gtest_args = gtest_args or []
     self._revision = revision
     self._runtest_kwargs = runtest_kwargs
 
   def run(self, api, suffix):
-    python_mode = False
-
-    annotate = 'gtest'
     test_type = self._test
-    flakiness_dash = not api.m.tryserver.is_tryserver
+    test = api.m.path['checkout'].join('tools_webrtc',
+                                       'gtest-parallel-wrapper.py')
+    test_ext = '.exe' if api.m.platform.is_win else ''
+    test_executable = api.m.chromium.c.build_dir.join(
+      api.m.chromium.c.build_config_fs, self._test + test_ext)
 
-    if self._parallel:
-      test_executable = api.m.chromium.c.build_dir.join(
-        api.m.chromium.c.build_config_fs, self._test)
-      self._args = [test_executable] + self._args
-      self._test = api.m.path['checkout'].join('third_party', 'gtest-parallel',
-                                               'gtest-parallel')
-      python_mode = True
-      annotate = None  # The parallel script doesn't output gtest format.
-      flakiness_dash = False
+    args = [test_executable]
+    if not self._parallel:
+      args.append('--workers=1')
+    args += self._gtest_args
+    if self._args:
+      args += ['--'] + self._args
 
     api.m.chromium.runtest(
-        test=self._test, args=self._args, name=self._name, annotate=annotate,
-        xvfb=True, flakiness_dash=flakiness_dash, python_mode=python_mode,
-        revision=self._revision, test_type=test_type, **self._runtest_kwargs)
+        test=test, args=args, name=self._name, annotate=None, xvfb=True,
+        flakiness_dash=False, python_mode=True, revision=self._revision,
+        test_type=test_type, **self._runtest_kwargs)
 
 class PythonTest(Test):
   def __init__(self, test, script, args):

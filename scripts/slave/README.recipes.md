@@ -3360,7 +3360,7 @@ Remove all test output in out/, since we have tests leaking files.
 
 &mdash; **def [package\_build](/scripts/slave/recipe_modules/webrtc/api.py#223)(self):**
 
-&mdash; **def [run\_baremetal\_test](/scripts/slave/recipe_modules/webrtc/api.py#205)(self, test, name=None, args=None, parallel=True):**
+&mdash; **def [run\_baremetal\_test](/scripts/slave/recipe_modules/webrtc/api.py#205)(self, test, name=None, gtest_args=None, args=None, parallel=True):**
 
 &mdash; **def [run\_mb](/scripts/slave/recipe_modules/webrtc/api.py#158)(self):**
 
