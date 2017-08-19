@@ -1007,14 +1007,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # thus need to be manually added on blink changes.
     # See https://crbug.com/703894
     nonanalyze_blink_tests = []
-    if add_blink_tests:
-      nonanalyze_blink_tests = [
-          self.steps.ScriptTest(
-              'webkit_lint', 'webkit_lint.py', collections.defaultdict(list)),
-          self.steps.ScriptTest(
-              'webkit_python_tests', 'webkit_python_tests.py',
-              collections.defaultdict(list)),
-      ]
     # TODO(tansell): Remove this once all builders are running layout tests
     # via analyze.
     if layout_tests_strategy == 'add_local':
@@ -1028,7 +1020,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       add_tests(nonanalyze_blink_tests)
       for test in nonanalyze_blink_tests:
-        compile_targets.extend(test.compile_targets(self._api_for_tests))
+        compile_targets.extend(test.compile_targets(self._api_for_tests))  # pragma: no cover
 
       compile_targets = sorted(set(compile_targets))
       self.compile_specific_targets(

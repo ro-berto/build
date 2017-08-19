@@ -244,7 +244,7 @@ class ScriptTest(Test):  # pylint: disable=W0232
   def run(self, api, suffix):
     name = self.name
     if suffix:
-      name += ' (%s)' % suffix
+      name += ' (%s)' % suffix  # pragma: no cover
 
     run_args = []
     if suffix == 'without patch':

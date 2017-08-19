@@ -874,64 +874,6 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/linux/src/testing/scripts/webkit_lint.py",
-      "--build-config-fs",
-      "Release",
-      "--use-src-side-runtest-py",
-      "--paths",
-      "{\"checkout\": \"[BUILDER_CACHE]/linux/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
-      "--properties",
-      "{\"bot_id\": \"test_bot\", \"buildername\": \"linux_chromium_rel_ng\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.linux\", \"slavename\": \"test_bot\", \"target_platform\": \"linux\"}",
-      "run",
-      "--output",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[BUILDER_CACHE]/linux",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "webkit_lint (with patch)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"failures\": [], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"valid\": true@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILDER_CACHE]/linux/src/testing/scripts/webkit_python_tests.py",
-      "--build-config-fs",
-      "Release",
-      "--use-src-side-runtest-py",
-      "--paths",
-      "{\"checkout\": \"[BUILDER_CACHE]/linux/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
-      "--properties",
-      "{\"bot_id\": \"test_bot\", \"buildername\": \"linux_chromium_rel_ng\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.linux\", \"slavename\": \"test_bot\", \"target_platform\": \"linux\"}",
-      "run",
-      "--output",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[BUILDER_CACHE]/linux",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "webkit_python_tests (with patch)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"failures\": [], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"valid\": true@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--",
