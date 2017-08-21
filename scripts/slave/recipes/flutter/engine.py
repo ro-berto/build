@@ -203,6 +203,7 @@ def BuildLinux(api):
     'out/host_debug_unopt/flutter_tester',
     'out/host_debug_unopt/gen/flutter/lib/snapshot/isolate_snapshot.bin',
     'out/host_debug_unopt/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
+    'out/host_debug_unopt/gen/frontend_server.dart.snapshot',
   ])
   UploadFlutterPatchedSdk(api)
   UploadDartSdk(api, archive_name='dart-sdk-linux-x64.zip')
@@ -265,6 +266,7 @@ def BuildMac(api):
     'out/host_debug_unopt/flutter_tester',
     'out/host_debug_unopt/gen/flutter/lib/snapshot/isolate_snapshot.bin',
     'out/host_debug_unopt/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
+    'out/host_debug_unopt/gen/frontend_server.dart.snapshot',
   ])
 
   UploadArtifacts(api, "android-arm-profile" , [
@@ -340,7 +342,7 @@ def BuildWindows(api):
 
   Build(api, 'host_debug_unopt',
     'flutter/lib/snapshot:generate_snapshot_bin', 'lib/ftl:ftl_unittests',
-    'dart:create_sdk')
+    'dart:create_sdk', 'flutter/frontend_server')
   Build(api, 'android_profile', 'gen_snapshot')
   Build(api, 'android_release', 'gen_snapshot')
 
@@ -349,6 +351,7 @@ def BuildWindows(api):
   UploadArtifacts(api, 'windows-x64', [
     'out/host_debug_unopt/gen/flutter/lib/snapshot/isolate_snapshot.bin',
     'out/host_debug_unopt/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
+    'out/host_debug_unopt/gen/frontend_server.dart.snapshot',
   ])
 
   UploadArtifacts(api, "android-arm-profile" , [

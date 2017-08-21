@@ -125,12 +125,13 @@
       "[START_DIR]\\src\\out/host_debug_unopt",
       "flutter/lib/snapshot:generate_snapshot_bin",
       "lib/ftl:ftl_unittests",
-      "dart:create_sdk"
+      "dart:create_sdk",
+      "flutter/frontend_server"
     ],
     "env": {
       "PATH": "[START_DIR]\\src\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
-    "name": "build host_debug_unopt flutter/lib/snapshot:generate_snapshot_bin lib/ftl:ftl_unittests dart:create_sdk"
+    "name": "build host_debug_unopt flutter/lib/snapshot:generate_snapshot_bin lib/ftl:ftl_unittests dart:create_sdk flutter/frontend_server"
   },
   {
     "cmd": [
@@ -176,7 +177,7 @@
       "PATH": "[START_DIR]\\src\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
     "name": "Zip windows-x64 artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"isolate_snapshot.bin\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug_unopt/gen/flutter/lib/snapshot/isolate_snapshot.bin\", \"type\": \"file\"}, {\"archive_name\": \"vm_isolate_snapshot.bin\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug_unopt/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]\\\\tmp_tmp_1\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"isolate_snapshot.bin\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug_unopt/gen/flutter/lib/snapshot/isolate_snapshot.bin\", \"type\": \"file\"}, {\"archive_name\": \"vm_isolate_snapshot.bin\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug_unopt/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin\", \"type\": \"file\"}, {\"archive_name\": \"frontend_server.dart.snapshot\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug_unopt/gen/frontend_server.dart.snapshot\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]\\\\tmp_tmp_1\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
   },
   {
     "cmd": [
