@@ -3,19 +3,16 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'depot_tools/bot_update',
+  'dart',
   'depot_tools/depot_tools',
   'depot_tools/gclient',
   'recipe_engine/context',
-  'recipe_engine/file',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/python',
   'recipe_engine/raw_io',
   'recipe_engine/step',
-  'swarming_client',
-  'swarming',
   'test_utils',
 ]
 
@@ -33,6 +30,9 @@ all_options = {'hostchecked': '--host-checked',
                'unittest': '',  # unittest is handled specially.
                'debug': ''} # debug is handled specially.
 
+xvfb_cmd = ['/usr/bin/xvfb-run', '-a', '--server-args=-screen 0 1024x768x24']
+xvfb_cmd.extend(['python', '-u', './tools/test.py'])
+
 IsFirstTestStep = True
 def RunTests(api, test_args, test_specs, use_xvfb=False):
   for test_spec in test_specs:
@@ -48,10 +48,8 @@ def RunTests(api, test_args, test_specs, use_xvfb=False):
     with api.context(cwd=api.path['checkout'],
                      env_prefixes={'PATH':[api.depot_tools.root]}):
       if use_xvfb:
-        xvfb_cmd = ['xvfb-run', '-a', '--server-args=-screen 0 1024x768x24']
-        xvfb_cmd.extend(['python', '-u', './tools/test.py'])
-        xvfb_cmd.extend(args)
-        api.step(test_spec['name'], xvfb_cmd)
+        cmd = xvfb_cmd + args
+        api.step(test_spec['name'], cmd)
       else:
         api.python(test_spec['name'],
                    api.path['checkout'].join('tools', 'test.py'),
@@ -68,101 +66,41 @@ def RunSteps(api):
   assert runtime in all_runtimes
   channel = builder_fragments[-1]
   assert channel in ['be', 'dev', 'stable', 'integration', 'try']
-  try:
-    num_shards = int(builder_fragments[-2])
-    shard = int(builder_fragments[-3])
-    sharded = True
-    options_end = - 3
-  except ValueError:
-    sharded = False
-    options_end = - 1
-  options = builder_fragments[3:options_end]
+  options = builder_fragments[3:-1]
   for option in options:
     assert all_options.has_key(option)
   mode = 'debug' if 'debug' in options else 'release'
-  api.gclient.set_config('dart')
-  if channel == 'try':
-    api.gclient.c.solutions[0].url = 'https://dart.googlesource.com/sdk.git'
 
-  with api.context(cwd=api.path['cache'].join('builder')):
-    api.bot_update.ensure_checkout()
-    api.gclient.runhooks()
+  api.dart.checkout(channel)
 
-  with api.context(cwd=api.path['checkout'],
-                   env_prefixes={'PATH':[api.depot_tools.root]}):
-    api.python('taskkill before building',
-               api.path['checkout'].join('tools', 'task_kill.py'),
-               args=['--kill_browsers=True'])
-
-    build_args = ['-m%s' % mode, '--arch=ia32', 'dart2js_bot']
-    if 'unittest' in options:
-      build_args.append('patched_dart2js_sdk')
-    api.python('build dart',
-               api.path['checkout'].join('tools', 'build.py'),
-               args=build_args)
-    api.swarming_client.checkout(
-      revision='5c8043e54541c3cee7ea255e0416020f2e3a5904')
-    api.file.copy('copy .isolate file to sdk root',
-            api.path['checkout'].join('tools', 'bots', 'dart2js_tests.isolate'),
-            api.path['checkout'])
-    step_result = api.python(
-      'upload testing isolate',
-      api.swarming_client.path.join('isolate.py'),
-      args= ['archive',
-             '-Ihttps://isolateserver.appspot.com',
-             '-i%s' % api.path['checkout'].join('dart2js_tests.isolate'),
-             '-s%s' % api.path['checkout'].join('dart2js_tests.isolated')],
-      stdout=api.raw_io.output('out'))
-    isolate_hash = step_result.stdout.strip()[:40]
-    step_result.presentation.step_text = 'isolate hash: %s' % isolate_hash
-
-    # Run different shards on isolates
-    api.swarming.set_default_dimension('os', 'Linux')
-    api.swarming.set_default_dimension('cpu', 'x86-64')
-    api.swarming.set_default_dimension('pool', 'Dart.LUCI')
-    test_args = ['-mrelease', '-aia32', '-cdart2js',
-                 '--dart2js-batch', '--reset-browser-configuration',
-                 '--report', '--time', '--use-sdk', '--progress=buildbot',
-                 '-v',
-                 '--exclude-suite=observatory_ui,service,co19',
-                 '-rd8']
-    num_shards = 6
-    tasks = []
-    for shard in range(num_shards):
-      task = api.swarming.task("dart2js_tests_shard_%s" % (shard + 1),
-                               isolate_hash,
-                               extra_args= test_args +
-                                 ['--shards=%s' % num_shards,
-                                  '--shard=%s' % (shard + 1)])
-      api.swarming.trigger_task(task)
-      tasks.append(task)
-    with api.step.defer_results():
-      for task in tasks:
-        api.swarming.collect_task(task)
-
-    test_args = ['-mrelease', '-aia32', '-cdart2js', '-rd8',
-                 '--dart2js-batch', '--reset-browser-configuration',
-                 '--report', '--time', '--use-sdk', '--progress=buildbot',
-                 '-v',
-                 'co19']
-    num_shards = 8
-    tasks = []
-    for shard in range(num_shards):
-      task = api.swarming.task("dart2js_co19_tests_shard_%s" % (shard + 1),
-                               isolate_hash,
-                               extra_args= test_args +
-                                 ['--shards=%s' % num_shards,
-                                  '--shard=%s' % (shard + 1)])
-      api.swarming.trigger_task(task)
-      tasks.append(task)
-    with api.step.defer_results():
-      for task in tasks:
-        api.swarming.collect_task(task)
+  build_args = ['-m%s' % mode, '--arch=ia32', 'dart2js_bot']
+  if 'unittest' in options:
+    build_args.append('patched_dart2js_sdk')
+  isolate_hash = api.dart.build(build_args, 'dart2js_tests_no_command')
 
   with api.step.defer_results():
     # Standard test steps, run on all runtimes.
     runtimes = multiple_runtimes.get(runtime, [runtime])
     for runtime in runtimes:
+      needs_xvfb = (runtime in ['drt', 'chrome', 'ff'] and
+                    system == 'linux')
+      command = xvfb_cmd if needs_xvfb else ['./tools/test.py']
+
+      test_args = command + ['-m%s' % mode, '-aia32', '-cdart2js',
+                   '--dart2js-batch', '--reset-browser-configuration',
+                   '--report', '--time', '--use-sdk', '--progress=buildbot',
+                   '-v',
+                   '--exclude-suite=observatory_ui,service,co19',
+                   '-r%s' % runtime]
+      api.dart.shard('dart2js_tests', isolate_hash, test_args)
+
+      test_args = command + ['-m%s' % mode, '-aia32', '-cdart2js', '-r%s' % runtime,
+                   '--dart2js-batch', '--reset-browser-configuration',
+                   '--report', '--time', '--use-sdk', '--progress=buildbot',
+                   '-v',
+                   'co19']
+      api.dart.shard('dart2js_co19_tests', isolate_hash, test_args)
+
       test_args = ['--mode=%s' % mode,
                    '--arch=ia32',
                    '--compiler=dart2js',
@@ -178,8 +116,6 @@ def RunSteps(api):
       for option in options:
         if all_options[option] != '':
           test_args.append(all_options[option])
-      if sharded:
-        test_args.extend(['--shards=%s' % num_shards, '--shard=%s' % shard])
 
       if system in ['win7', 'win8', 'win10']:
         test_args.append('--builder-tag=%s' % system)
@@ -199,8 +135,6 @@ def RunSteps(api):
            'tests': ['dart2js_extra', 'dart2js_native']},
         ]
 
-      needs_xvfb = (runtime in ['drt', 'dartium', 'chrome', 'ff'] and
-                    system == 'linux')
       RunTests(api, test_args, test_specs, use_xvfb=needs_xvfb)
       if runtime in ['d8', 'drt']:
         test_args.append('--checked')
@@ -217,14 +151,11 @@ def RunSteps(api):
                          "--write-debug-log", "--write-test-outcome-log",
                          "--progress=buildbot", "-v", "--append_logs",
                          "--reset-browser-configuration",
-                         "--shards=%s" % num_shards, "--shard=%s" % shard,
                          "--checked", "dart2js"])
 
     with api.context(cwd=api.path['checkout']):
       # TODO(whesse): Add archive coredumps step from dart_factory.py.
-      api.python('taskkill after testing',
-                 api.path['checkout'].join('tools', 'task_kill.py'),
-                 args=['--kill_browsers=True'])
+      api.dart.kill_tasks()
       if api.platform.name == 'win':
         api.step('debug log',
                  ['cmd.exe', '/c', 'type', '.debug.log'])
@@ -234,13 +165,14 @@ def RunSteps(api):
 
 def GenTests(api):
    yield (
-      api.test('dart2js-linux-d8-hostchecked-csp-unittest-3-5-try') +
+      api.test('dart2js-linux-d8-hostchecked-csp-unittest-try') +
       api.platform('linux', 64) +
       api.properties.generic(
         mastername='luci.dart.try',
-        buildername='dart2js-linux-d8-hostchecked-csp-unittest-3-5-try') +
+        buildername='dart2js-linux-d8-hostchecked-csp-unittest-try') +
       api.step_data('upload testing isolate',
-                    stdout=api.raw_io.output('test isolate hash'))
+                    stdout=api.raw_io.output('test isolate hash')) +
+      api.properties(shards='3')
    )
    yield (
       api.test('dart2js-win7-ie10-debug-try') + api.platform('win', 32) +
@@ -248,12 +180,14 @@ def GenTests(api):
         mastername='client.dart',
         buildername='dart2js-win7-ie10-debug-try') +
       api.step_data('upload testing isolate',
-                    stdout=api.raw_io.output('test isolate hash'))
+                    stdout=api.raw_io.output('test isolate hash')) +
+      api.properties(shards='6')
    )
    yield (
       api.test('dart2js-linux-drt-try') + api.platform('linux', 64) +
       api.properties.generic(mastername='client.dart',
-                             buildername='dart2js-linux-drt-93-105-try') +
+                             buildername='dart2js-linux-drt-try') +
       api.step_data('upload testing isolate',
-                    stdout=api.raw_io.output('test isolate hash'))
+                    stdout=api.raw_io.output('test isolate hash')) +
+      api.properties(shards='9')
    )

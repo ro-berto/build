@@ -4365,9 +4365,9 @@ Generates the sequence of steps that will be run by the slave.
 &mdash; **def [sdk\_url](/scripts/slave/recipes/dart/dart2js_nobuild.py#59)(channel, platform, arch, mode, revision):**
 ### *recipes* / [dart/dart2js\_swarming](/scripts/slave/recipes/dart/dart2js_swarming.py)
 
-[DEPS](/scripts/slave/recipes/dart/dart2js_swarming.py#5): [swarming](#recipe_modules-swarming), [swarming\_client](#recipe_modules-swarming_client), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/dart/dart2js_swarming.py#5): [dart](#recipe_modules-dart), [test\_utils](#recipe_modules-test_utils), [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/dart/dart2js_swarming.py#60)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/dart/dart2js_swarming.py#58)(api):**
 
 &mdash; **def [RunTests](/scripts/slave/recipes/dart/dart2js_swarming.py#37)(api, test_args, test_specs, use_xvfb=False):**
 ### *recipes* / [dart/dart\_cross\_compiler](/scripts/slave/recipes/dart/dart_cross_compiler.py)
