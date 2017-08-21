@@ -2,8 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import copy
-
 from recipe_engine.types import freeze
 from recipe_engine.recipe_api import composite_step
 
@@ -181,30 +179,15 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
           revision=revision))
 
   elif test_suite == 'android':
-    merge_template = {
-        'script': ('//build/android/pylib/results/presentation/'
-                   'test_results_presentation.py'),
-        'args': [
-            "--bucket",
-            "chromium-result-details",
-            "--test-name",
-        ]
-    }
     for test, extra_args in sorted(ANDROID_DEVICE_TESTS.items() +
                                    ANDROID_INSTRUMENTATION_TESTS.items()):
-      merge = copy.deepcopy(merge_template)
-      merge['args'].append(test)
       tests.append(GTestTest(test, enable_swarming=enable_swarming,
                              override_isolate_target=test,
-                             cipd_packages=ANDROID_CIPD_PACKAGES, merge=merge,
-                             **extra_args))
+                             cipd_packages=ANDROID_CIPD_PACKAGES, **extra_args))
     for test, extra_args in sorted(ANDROID_JUNIT_TESTS.items()):
       if api.mastername == 'client.webrtc.fyi':
-        merge = copy.deepcopy(merge_template)
-        merge['args'].append(test)
         tests.append(GTestTest(test, enable_swarming=enable_swarming,
-                               override_isolate_target=test,
-                               merge=merge, **extra_args))
+                               override_isolate_target=test, **extra_args))
       else:
         tests.append(AndroidJunitTest(test))
 
