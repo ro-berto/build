@@ -28,16 +28,7 @@ def RunSteps(api):
     """ % goma_dir)
     api.goma.set_goma_dir_for_local_test(goma_dir)
 
-    goma_config_file = '/home/goma/.goma_oauth2_config'
-    api.python.inline('check oauth2 file',"""
-    import os.path
-    if os.path.exists('%s'):
-      exit(0)
-    exit(1)
-    """ % goma_config_file)
-    env['GOMA_OAUTH2_CONFIG_FILE'] = goma_config_file
-  else:
-    api.goma.ensure_goma()
+  api.goma.ensure_goma()
 
   api.step('gn', ['gn', 'gen', 'out/Release',
                   '--args=use_goma=true goma_dir=%s' % api.goma.goma_dir])
@@ -51,8 +42,7 @@ def RunSteps(api):
       ninja_log_outdir=api.properties.get('ninja_log_outdir'),
       ninja_log_compiler=api.properties.get('ninja_log_compiler'),
       ninja_command=command,
-      goma_env=env,
-      use_cloudtail=not goma_local)
+      goma_env=env)
 
 
 def GenTests(api):

@@ -9,11 +9,21 @@ import socket
 from recipe_engine import recipe_api
 
 class GomaApi(recipe_api.RecipeApi):
-  """GomaApi contains helper functions for using goma."""
+  """
+  GomaApi contains helper functions for using goma.
+
+  For local running of goma recipe module,
+  set local goma dir like below at the beginning of recipe running.
+  `api.goma.set_goma_dir_for_local_test(goma_dir)`
+  """
 
   def __init__(self, **kwargs):
     super(GomaApi, self).__init__(**kwargs)
     self._goma_dir = None
+
+    # Flag to represent local goma module running.
+    self._is_local = False
+
     self._goma_started = False
 
     self._goma_ctl_env = {}
@@ -100,8 +110,13 @@ class GomaApi(recipe_api.RecipeApi):
     Do not use in recipes used by buildbots.
     """
     self._goma_dir = goma_dir
+    self._is_local = True
 
   def ensure_goma(self, canary=False):
+    if self._is_local:
+      # When using goma module on local debug, we need to skip cipd step.
+      return self._goma_dir
+
     with self.m.step.nest('ensure_goma'):
       with self.m.context(infra_steps=True):
         self.m.cipd.set_service_account_credentials(
@@ -205,7 +220,7 @@ class GomaApi(recipe_api.RecipeApi):
         args=['stop', '--killed-pid-file', self.cloudtail_pid_file],
         infra_step=True)
 
-  def start(self, env=None, use_cloudtail=True, **kwargs):
+  def start(self, env=None, **kwargs):
     """Start goma compiler_proxy.
 
     A user MUST execute ensure_goma beforehand.
@@ -224,8 +239,9 @@ class GomaApi(recipe_api.RecipeApi):
         self._goma_ctl_env['GOMACTL_CRASH_REPORT_ID_FILE'] = (
             self.m.path.join(self.build_data_dir, 'crash_report_id_file'))
 
-      self._goma_ctl_env['GOMA_SERVICE_ACCOUNT_JSON_FILE'] = (
-          self.service_account_json_path)
+      if not self._is_local:
+        self._goma_ctl_env['GOMA_SERVICE_ACCOUNT_JSON_FILE'] = (
+            self.service_account_json_path)
 
       # Do not continue to build when unsupported compiler is used.
       self._goma_ctl_env['GOMA_HERMETIC'] = 'error'
@@ -252,11 +268,11 @@ class GomaApi(recipe_api.RecipeApi):
               name='start_goma',
               script=self.goma_ctl,
               args=['restart'], infra_step=True, **kwargs)
-          if use_cloudtail:
+          if not self._is_local:
             result.presentation.links['cloudtail'] = 'https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%%2Finstance_id%%2F%s&timestamp=%s' % (self._hostname, self.m.time.utcnow().isoformat())
 
         self._goma_started = True
-        if use_cloudtail:
+        if not self._is_local:
           self._start_cloudtail()
 
       except self.m.step.InfraFailure as e:
@@ -391,7 +407,7 @@ class GomaApi(recipe_api.RecipeApi):
 
   def build_with_goma(self, ninja_command, name=None, ninja_log_outdir=None,
                       ninja_log_compiler=None, goma_env=None, ninja_env=None,
-                      use_cloudtail=True, **kwargs):
+                      **kwargs):
     """Build with ninja_command using goma
 
     Args:
@@ -403,7 +419,6 @@ class GomaApi(recipe_api.RecipeApi):
       ninja_log_compiler: Compiler used in ninja. (e.g. "clang")
       goma_env: Environment controlling goma behavior.
       ninja_env: Environment for ninja.
-      use_cloudtail(bool): Use coudtail if it is True.
 
     Returns:
       TODO(tikuta): return step_result
@@ -421,7 +436,7 @@ class GomaApi(recipe_api.RecipeApi):
 
     # TODO(tikuta): Remove -j flag from ninja_command and set appropriate value.
 
-    self.start(goma_env, use_cloudtail=use_cloudtail)
+    self.start(goma_env)
 
     try:
       with self.m.context(env=ninja_env):

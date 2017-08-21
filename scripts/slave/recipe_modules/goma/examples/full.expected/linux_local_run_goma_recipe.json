@@ -17,22 +17,6 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "\nimport os.path\nif os.path.exists('/home/goma/.goma_oauth2_config'):\n  exit(0)\nexit(1)\n"
-    ],
-    "name": "check oauth2 file",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os.path@@@",
-      "@@@STEP_LOG_LINE@python.inline@if os.path.exists('/home/goma/.goma_oauth2_config'):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  exit(0)@@@",
-      "@@@STEP_LOG_LINE@python.inline@exit(1)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
       "gn",
       "gen",
       "out/Release",
@@ -74,9 +58,7 @@
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[CACHE]/goma/test_builder",
       "GOMA_DUMP_STATS_FILE": "build_data_dir/goma_stats_proto",
-      "GOMA_HERMETIC": "error",
-      "GOMA_OAUTH2_CONFIG_FILE": "/home/goma/.goma_oauth2_config",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_HERMETIC": "error"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start_goma",
@@ -111,8 +93,7 @@
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[CACHE]/goma/test_builder",
       "GOMA_DUMP_STATS_FILE": "build_data_dir/goma_stats_proto",
-      "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_HERMETIC": "error"
     },
     "name": "postprocess_for_goma.goma_jsonstatus",
     "~followup_annotations": [
@@ -142,8 +123,7 @@
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[CACHE]/goma/test_builder",
       "GOMA_DUMP_STATS_FILE": "build_data_dir/goma_stats_proto",
-      "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_HERMETIC": "error"
     },
     "name": "postprocess_for_goma.goma_stat",
     "~followup_annotations": [
@@ -162,8 +142,7 @@
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[CACHE]/goma/test_builder",
       "GOMA_DUMP_STATS_FILE": "build_data_dir/goma_stats_proto",
-      "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_HERMETIC": "error"
     },
     "name": "postprocess_for_goma.stop_goma",
     "~followup_annotations": [
