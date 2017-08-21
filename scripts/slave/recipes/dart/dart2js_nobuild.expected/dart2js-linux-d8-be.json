@@ -272,7 +272,9 @@
       "--dart2js-with-kernel",
       "--append_logs",
       "language",
+      "language_2",
       "corelib",
+      "corelib_2",
       "dart2js_extra",
       "dart2js_native"
     ],
