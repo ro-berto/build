@@ -37,9 +37,7 @@ SPEC['builders'] = {
     },
     'bot_type': 'tester',
     'parent_buildername': 'WebKit Win Builder',
-    'tests': [
-      steps.BlinkTest(),
-    ],
+    'tests': [],
     'testing': {
       'platform': 'win',
     },
@@ -56,9 +54,7 @@ SPEC['builders'] = {
     },
     'bot_type': 'tester',
     'parent_buildername': 'WebKit Win Builder',
-    'tests': [
-      steps.BlinkTest(),
-    ],
+    'tests': [],
     'testing': {
       'platform': 'win',
     },
@@ -109,9 +105,7 @@ SPEC['builders'] = {
     },
     'bot_type': 'tester',
     'parent_buildername': 'WebKit Win Builder (dbg)',
-    'tests': [
-      steps.BlinkTest(),
-    ],
+    'tests': [],
     'testing': {
       'platform': 'win',
     },

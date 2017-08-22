@@ -957,17 +957,6 @@ def GenTests(api):
   )
 
   yield (
-    api.test('non_cq_blink_tryjob') +
-    props(mastername='tryserver.blink',
-          buildername='win7_blink_rel',
-          requester='someone@chromium.org') +
-    suppress_analyze() +
-    api.platform.name('win') +
-    api.override_step_data('webkit_tests (with patch)',
-                           api.test_utils.canned_test_output(passing=True))
-  )
-
-  yield (
     api.test('use_skia_patch_on_blink_trybot') +
     props(mastername='tryserver.blink',
           buildername='mac10.9_blink_rel',
