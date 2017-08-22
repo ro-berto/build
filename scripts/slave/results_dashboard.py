@@ -8,6 +8,7 @@
 import calendar
 import datetime
 import httplib
+import httplib2
 import json
 import os
 import urllib
@@ -17,6 +18,7 @@ from common import chromium_utils # pylint: disable=W0611
 
 # The paths in the results dashboard URLs for sending and viewing results.
 SEND_RESULTS_PATH = '/add_point'
+SEND_HISTOGRAMS_PATH = '/add_histograms'
 RESULTS_LINK_PATH = '/report?masters=%s&bots=%s&tests=%s&rev=%s'
 
 # CACHE_DIR/CACHE_FILENAME will be created in options.build_dir to cache
@@ -25,7 +27,8 @@ CACHE_DIR = 'results_dashboard'
 CACHE_FILENAME = 'results_to_retry'
 
 
-def SendResults(data, url, build_dir, json_url_file=None):
+def SendResults(data, url, build_dir, json_url_file=None,
+                send_as_histograms=False, oauth_token=None):
   """Sends results to the Chrome Performance Dashboard.
 
   This function tries to send the given data to the dashboard, in addition to
@@ -36,8 +39,14 @@ def SendResults(data, url, build_dir, json_url_file=None):
     data: The data to try to send. Must be JSON-serializable.
     url: Performance Dashboard URL (including schema).
     build_dir: Directory name, where the cache directory shall be.
+    json_url_file: Optional file to which to write the dashboard viewing URL.
+    send_as_histograms: True if result is to be sent to /add_histograms.
+    oauth_token: string; used for flushing oauth uploads from cache.
   """
-  results_json = json.dumps(data)
+  results_json = json.dumps({
+      'is_histogramset': send_as_histograms,
+      'data': data
+  })
 
   # Write the new request line to the cache file, which contains all lines
   # that we shall try to send now.
@@ -45,7 +54,7 @@ def SendResults(data, url, build_dir, json_url_file=None):
   _AddLineToCacheFile(results_json, cache_file_name)
 
   # Send all the results from this run and the previous cache to the dashboard.
-  fatal_error, errors = _SendResultsFromCache(cache_file_name, url)
+  fatal_error, errors = _SendResultsFromCache(cache_file_name, url, oauth_token)
 
   # Dump dashboard url to file.
   dashboard_url = _DashboardUrl(url, data)
@@ -85,13 +94,15 @@ def _AddLineToCacheFile(line, cache_file_name):
     cache.write('\n' + line)
 
 
-def _SendResultsFromCache(cache_file_name, url):
+def _SendResultsFromCache(cache_file_name, url, oauth_token):
   """Tries to send each line from the cache file in a separate request.
 
   This also writes data which failed to send back to the cache file.
 
   Args:
     cache_file_name: A file name.
+    url: The instance URL to which to post results.
+    oauth_token: An oauth token to use for histogram uploads. Might be None.
 
   Returns:
     A pair (fatal_error, errors), where fatal_error is a boolean indicating
@@ -111,13 +122,24 @@ def _SendResultsFromCache(cache_file_name, url):
     if not line:
       continue
     print 'Sending result %d of %d to dashboard.' % (index + 1, total_results)
-    # Check that the line that was read from the file is valid JSON. If not,
-    # don't try to send it, and don't re-try it later; just print an error.
-    if not _CanParseJSON(line):
+    # We need to check whether we're trying to upload histograms. If the JSON
+    # is invalid, we should not try to send this data or re-try it later.
+    # Instead, we'll print an error.
+    try:
+      is_histogramset, data = _GetData(line)
+    except ValueError:
       errors.append('Could not parse JSON: %s' % line)
       continue
 
-    error = _SendResultsJson(url, line)
+    if is_histogramset:
+      # TODO(eakuefner): Remove this discard logic once all bots use histograms.
+      if oauth_token is None:
+        print 'No oauth token provided, cannot upload HistogramSet. Discarding.'
+        fatal_error = True
+        break
+      error = _SendHistogramJson(url, json.dumps(data), oauth_token)
+    else:
+      error = _SendResultsJson(url, json.dumps(data))
 
     # If the dashboard returned an error, we will re-try next time.
     if error:
@@ -147,13 +169,9 @@ def _SendResultsFromCache(cache_file_name, url):
   return fatal_error, errors
 
 
-def _CanParseJSON(my_json):
-  """Returns True if the input can be parsed as JSON, False otherwise."""
-  try:
-    json.loads(my_json)
-  except ValueError:
-    return False
-  return True
+def _GetData(line):
+  line_dict = json.loads(line)
+  return bool(line_dict.get('is_histogramset')), line_dict['data']
 
 
 def MakeListOfPoints(charts, bot, test_name, buildername,
@@ -405,12 +423,40 @@ def _SendResultsJson(url, results_json):
   try:
     urllib2.urlopen(req)
   except urllib2.HTTPError as e:
-    return ('HTTPError: %d. Reponse: %s\n'
-            'JSON: %s\n' % (e.code, e.read(), results_json))
+    return 'HTTPError: %d. Reponse: %s\n' % (e.code, e.read())
   except urllib2.URLError as e:
-    return 'URLError: %s for JSON %s\n' % (str(e.reason), results_json)
+    return 'URLError: %s\n' % str(e.reason)
   except httplib.HTTPException as e:
-    return 'HTTPException for JSON %s\n' % results_json
+    return 'HTTPException %s\n' % e
+  return None
+
+
+def _SendHistogramJson(url, histogramset_json, oauth_token):
+  """POST a HistogramSet JSON to the Performance Dashboard.
+
+  Args:
+    url: URL of Performance Dashboard instance, e.g.
+        "https://chromeperf.appspot.com".
+    histogramset_json: JSON string that contains a serialized HistogramSet.
+    oauth_token: An oauth token to be used for this upload.
+
+  Returns:
+    None if successful, or an error string if there were errors.
+  """
+  data = urllib.urlencode({'data': histogramset_json})
+  headers = {
+      'Authorization': 'Bearer %s' % oauth_token,
+      'User-Agent': 'perf-uploader/1.0'
+  }
+  http = httplib2.Http()
+  try:
+    _, content = http.request(
+        url + SEND_HISTOGRAMS_PATH, method='POST', body=data, headers=headers)
+    error = content.get('error')
+    if error is not None:
+      return 'HTTP error: %s\n' % error
+  except httplib2.HttpLib2Error as e:
+    return 'HttpLib2Error: %s\n' % e
   return None
 
 def _DashboardUrl(url, data):
