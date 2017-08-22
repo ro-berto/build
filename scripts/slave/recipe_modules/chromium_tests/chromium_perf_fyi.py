@@ -121,3 +121,7 @@ _AddBuildSpec('Battor Agent Mac', 'mac', 'mac', run_sizes=False,
               compile_targets=['battor_agent'])
 _AddBuildSpec('Battor Agent Win', 'win', 'win', run_sizes=False,
               compile_targets=['battor_agent'])
+
+_AddIsolatedTestSpec('Histogram Pipeline Linux Perf',
+                     'histogram-pipeline-linux-perf',
+                     'linux')
