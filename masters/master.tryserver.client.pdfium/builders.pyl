@@ -268,7 +268,14 @@
         "os": "linux",
         "version": "trusty",
       },
-      "slaves": ["vm195-m4", "slave767-c4", "slave1386-c4", "slave1387-c4"],
+      "slaves": [
+        "vm195-m4",
+        "slave399-c4",
+        "slave417-c4",
+        "slave767-c4",
+        "slave1386-c4",
+        "slave1387-c4",
+      ],
     },
     "mac_slave_pool": {
       "slave_data": {
@@ -276,7 +283,11 @@
         "os": "mac",
         "version": "10.9",
       },
-      "slaves": ["vm200-m4", "vm154-m4"],
+      "slaves": [
+        "vm154-m4",
+        "vm200-m4",
+        "vm1511-m4",
+      ],
     },
     "win_slave_pool": {
       "slave_data": {
@@ -284,7 +295,14 @@
         "os": "win",
         "version": "win7",
       },
-      "slaves": ["vm345-m4", "vm155-m4", "vm1081-m4", "vm1082-m4"],
+      "slaves": [
+        "vm155-m4",
+        "vm345-m4",
+        "vm1081-m4",
+        "vm1082-m4",
+        "vm1509-m4",
+        "vm1510-m4",
+      ],
     },
   },
 }
