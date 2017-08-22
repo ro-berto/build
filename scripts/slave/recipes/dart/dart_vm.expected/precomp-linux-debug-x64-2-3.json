@@ -98,7 +98,9 @@
       "--write-test-outcome-log",
       "--copy-coredumps",
       "-cprecompiler",
-      "-rdart_precompiled"
+      "-rdart_precompiled",
+      "--shard=2",
+      "--shards=3"
     ],
     "cwd": "[START_DIR]/sdk",
     "name": "vm tests"
@@ -111,7 +113,7 @@
       "--kill_browsers=True"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "taskkill after testing"
+    "name": "taskkill before building (2)"
   },
   {
     "cmd": [

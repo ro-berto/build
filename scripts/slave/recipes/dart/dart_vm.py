@@ -2,7 +2,10 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import re
+
 DEPS = [
+  'dart',
   'depot_tools/bot_update',
   'depot_tools/depot_tools',
   'depot_tools/gclient',
@@ -144,6 +147,14 @@ def RunSteps(api):
   buildername = str(api.properties.get('buildername')) # Convert from unicode.
   (buildername, _, channel) = buildername.rpartition('-')
   assert channel in ['be', 'dev', 'stable', 'integration', 'try']
+  shard_match = re.match(r'^(.+?)-([0-9]+)-([0-9]+)$', buildername)
+  shard_args = []
+  if shard_match:
+    buildername = shard_match.group(1)
+    shard_index = int(shard_match.group(2))
+    shard_count = int(shard_match.group(3))
+    shard_args.append('--shard=%d' % shard_index)
+    shard_args.append('--shards=%d' % shard_count)
   b = builders[buildername]
 
   api.gclient.set_config('dart')
@@ -163,9 +174,7 @@ def RunSteps(api):
     api.gclient.runhooks()
 
   with api.context(cwd=api.path['checkout']):
-    api.python('taskkill before building',
-               api.path['checkout'].join('tools', 'task_kill.py'),
-               args=['--kill_browsers=True'])
+    api.dart.kill_tasks()
 
     build_args = ['-m%s' % b['mode'], '--arch=%s' % b['target_arch'], 'runtime']
     build_args.extend(b.get('build_args', []))
@@ -186,6 +195,7 @@ def RunSteps(api):
       if b.get('archive_core_dumps', False):
         test_args.append('--copy-coredumps')
       test_args.extend(b.get('test_args', []))
+      test_args.extend(shard_args)
       with api.context(env=b['env']):
         api.python('vm tests',
                    api.path['checkout'].join('tools', 'test.py'),
@@ -197,9 +207,7 @@ def RunSteps(api):
                      api.path['checkout'].join('tools', 'test.py'),
                      args=test_args)
 
-      api.python('taskkill after testing',
-                 api.path['checkout'].join('tools', 'task_kill.py'),
-                 args=['--kill_browsers=True'])
+      api.dart.kill_tasks()
       if api.platform.name == 'win':
         api.step('debug log',
                  ['cmd.exe', '/c', 'type', '.debug.log'])
@@ -218,9 +226,9 @@ def GenTests(api):
                              buildername='test-coverage-win-be',
                              clobber=''))
    yield (
-      api.test('precomp-linux-debug-x64') + api.platform('linux', 64) +
+      api.test('precomp-linux-debug-x64-2-3') + api.platform('linux', 64) +
       api.properties.generic(mastername='client.dart',
-                             buildername='precomp-linux-debug-x64-be'))
+                             buildername='precomp-linux-debug-x64-2-3-be'))
    yield (
       api.test('vm-linux-debug-x64-try') + api.platform('linux', 64) +
       api.properties.generic(mastername='client.dart',

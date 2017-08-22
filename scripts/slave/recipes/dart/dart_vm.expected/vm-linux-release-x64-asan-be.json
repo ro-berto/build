@@ -149,7 +149,7 @@
       "--kill_browsers=True"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "taskkill after testing"
+    "name": "taskkill before building (2)"
   },
   {
     "cmd": [
