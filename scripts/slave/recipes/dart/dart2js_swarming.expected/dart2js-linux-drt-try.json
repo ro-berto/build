@@ -217,8 +217,34 @@
       "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
+      "glob",
+      "[CACHE]/builder/sdk/tools/bots",
+      "*.isolate"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "find isolate files",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@glob@[CACHE]/builder/sdk/tools/bots/[CACHE]/builder/sdk/tools/bots/a.isolate@@@",
+      "@@@STEP_LOG_LINE@glob@[CACHE]/builder/sdk/tools/bots/[CACHE]/builder/sdk/tools/bots/b.isolate@@@",
+      "@@@STEP_LOG_END@glob@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "copy",
-      "[CACHE]/builder/sdk/tools/bots/dart2js_tests_no_command.isolate",
+      "[CACHE]/builder/sdk/tools/bots/[CACHE]/builder/sdk/tools/bots/a.isolate",
       "[CACHE]/builder/sdk"
     ],
     "cwd": "[CACHE]/builder/sdk",
@@ -228,7 +254,27 @@
       ]
     },
     "infra_step": true,
-    "name": "copy .isolate file to sdk root"
+    "name": "copy a.isolate to sdk root"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/sdk/tools/bots/[CACHE]/builder/sdk/tools/bots/b.isolate",
+      "[CACHE]/builder/sdk"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "copy b.isolate to sdk root"
   },
   {
     "cmd": [
@@ -238,8 +284,8 @@
       "archive",
       "--ignore_broken_items",
       "-Ihttps://isolateserver.appspot.com",
-      "-i[CACHE]/builder/sdk/dart2js_tests_no_command.isolate",
-      "-s[CACHE]/builder/sdk/dart2js_tests_no_command.isolated"
+      "-i[CACHE]/builder/sdk/dart_tests.isolate",
+      "-s[CACHE]/builder/sdk/dart_tests.isolated"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env_prefixes": {

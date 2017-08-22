@@ -1594,7 +1594,7 @@ Checks out the dart code and prepares it for building.
 
 Kills leftover tasks from previous runs or steps.
 
-&mdash; **def [shard](/scripts/slave/recipe_modules/dart/api.py#56)(self, title, isolate_hash, test_args, os=None, cpu='x86-64', pool='Dart.LUCI'):**
+&mdash; **def [shard](/scripts/slave/recipe_modules/dart/api.py#62)(self, title, isolate_hash, test_args, os=None, cpu='x86-64', pool='Dart.LUCI'):**
 
 Runs test.py in the given isolate, sharded over several swarming tasks.
 Requires the 'shards' build property to be set to the number of tasks.

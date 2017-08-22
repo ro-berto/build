@@ -46,7 +46,7 @@ def RunSteps(api):
 
   # TODO(athom) This used to be runtime instead of create_sdk, which is correct?
   build_args = ['-m%s' % mode, '--arch=%s' % arch, 'create_sdk', 'runtime_kernel']
-  isolate_hash = api.dart.build(build_args, 'dart_tests')
+  isolate_hash = api.dart.build(build_args, 'dart_tests_extended')
 
   with api.context(cwd=api.path['checkout'],
                    env_prefixes={'PATH':[api.depot_tools.root]}):
@@ -59,6 +59,7 @@ def RunSteps(api):
                  args=front_end_args)
 
       test_args.extend(['--append_logs', '-cdartk'])
+      test_args = ['./tools/test.py'] + test_args
       api.dart.shard('vm_tests', isolate_hash, test_args)
       api.dart.kill_tasks()
       api.step('debug log', ['cat', '.debug.log'])

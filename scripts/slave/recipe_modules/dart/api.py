@@ -37,9 +37,15 @@ class DartApi(recipe_api.RecipeApi):
       if isolate is not None:
         self.m.swarming_client.checkout(
           revision='5c8043e54541c3cee7ea255e0416020f2e3a5904')
-        self.m.file.copy('copy .isolate file to sdk root',
-                self.m.path['checkout'].join('tools', 'bots', '%s.isolate' % isolate),
-                self.m.path['checkout'])
+        bots_path = self.m.path['checkout'].join('tools', 'bots')
+        isolate_paths = self.m.file.glob_paths("find isolate files", bots_path, '*.isolate',
+                                          test_data=[bots_path.join('a.isolate'),
+                                                     bots_path.join('b.isolate')])
+        for path in isolate_paths:
+          self.m.file.copy('copy %s to sdk root' % path.pieces[-1],
+                           path,
+                           self.m.path['checkout'])
+
         step_result = self.m.python(
           'upload testing isolate',
           self.m.swarming_client.path.join('isolate.py'),

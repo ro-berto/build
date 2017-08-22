@@ -76,7 +76,7 @@ def RunSteps(api):
   build_args = ['-m%s' % mode, '--arch=ia32', 'dart2js_bot']
   if 'unittest' in options:
     build_args.append('patched_dart2js_sdk')
-  isolate_hash = api.dart.build(build_args, 'dart2js_tests_no_command')
+  isolate_hash = api.dart.build(build_args, 'dart_tests')
 
   with api.step.defer_results():
     # Standard test steps, run on all runtimes.
