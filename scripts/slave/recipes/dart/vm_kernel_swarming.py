@@ -2,8 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import re
-
 DEPS = [
   'dart',
   'depot_tools/depot_tools',
@@ -35,7 +33,6 @@ def RunSteps(api):
                '--progress=line',
                '--report',
                '--time',
-               '--use-sdk',
                '--write-debug-log',
                '--write-test-outcome-log',
                '--copy-coredumps']
@@ -44,22 +41,26 @@ def RunSteps(api):
 
   api.dart.checkout(channel)
 
-  # TODO(athom) This used to be runtime instead of create_sdk, which is correct?
   build_args = ['-m%s' % mode, '--arch=%s' % arch, 'create_sdk', 'runtime_kernel']
   isolate_hash = api.dart.build(build_args, 'dart_tests_extended')
 
   with api.context(cwd=api.path['checkout'],
                    env_prefixes={'PATH':[api.depot_tools.root]}):
-
     with api.step.defer_results():
-      front_end_args = ['pkg/front_end', '-cnone', '--checked']
+      front_end_args = ['pkg/front_end', '-cnone', '--checked', '--use-sdk']
       front_end_args.extend(test_args)
       api.python('front-end tests',
                  api.path['checkout'].join('tools', 'test.py'),
                  args=front_end_args)
 
       test_args.extend(['--append_logs', '-cdartk'])
-      test_args = ['./tools/test.py'] + test_args
+      api.python('samples, service, standalone, and vm tests',
+                 api.path['checkout'].join('tools', 'test.py'),
+                 args=test_args + ['samples', 'service', 'standalone', 'vm'])
+
+      test_args = ['./tools/test.py',
+                   '--use-sdk',
+                   '--exclude-suite=samples,service,standalone,vm'] + test_args
       api.dart.shard('vm_tests', isolate_hash, test_args)
       api.dart.kill_tasks()
       api.step('debug log', ['cat', '.debug.log'])

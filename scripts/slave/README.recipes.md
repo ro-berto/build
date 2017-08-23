@@ -4470,9 +4470,9 @@ Generates the sequence of steps that will be run by the slave.
 &mdash; **def [RunSteps](/scripts/slave/recipes/dart/sdk_gn.py#17)(api):**
 ### *recipes* / [dart/vm\_kernel\_swarming](/scripts/slave/recipes/dart/vm_kernel_swarming.py)
 
-[DEPS](/scripts/slave/recipes/dart/vm_kernel_swarming.py#7): [dart](#recipe_modules-dart), [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/dart/vm_kernel_swarming.py#5): [dart](#recipe_modules-dart), [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/dart/vm_kernel_swarming.py#18)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/dart/vm_kernel_swarming.py#16)(api):**
 ### *recipes* / [dart:examples/example](/scripts/slave/recipe_modules/dart/examples/example.py)
 
 [DEPS](/scripts/slave/recipe_modules/dart/examples/example.py#1): [dart](#recipe_modules-dart), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
