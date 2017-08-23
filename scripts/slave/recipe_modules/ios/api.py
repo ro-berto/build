@@ -394,17 +394,18 @@ class iOSApi(recipe_api.RecipeApi):
             ninja_log_command=cmd,
             ninja_log_exit_status=exit_status)
 
-  def symupload(self, artifact):
+  def symupload(self, artifact, url):
     """Uploads the given symbols file.
 
     Args:
       artifact: Name of the artifact to upload. Will be found relative to the
         out directory, so must have already been compiled.
+      url: URL of the symbol server to upload to.
     """
     cmd = [
         self.most_recent_app_path.join('symupload'),
         self.most_recent_app_path.join(artifact),
-        'https://client2.google.com/cr/symbol',
+        url,
     ]
     self.m.step('symupload %s' % artifact, cmd)
 
@@ -452,7 +453,7 @@ class iOSApi(recipe_api.RecipeApi):
     for artifact in self.__config['upload']:
       name = str(artifact['artifact'])
       if artifact.get('symupload'):
-        self.symupload(name)
+        self.symupload(name, artifact['symupload'])
       elif artifact.get('compress'):
         with self.m.step.nest('upload %s' % name):
           self.upload_tgz(

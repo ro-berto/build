@@ -44,7 +44,7 @@ def GenTests(api):
         },
         {
           'artifact': 'Chrome.app.arm.breakpad',
-          'symupload': True,
+          'symupload': 'https://clients2.google.com/cr/symbol',
         },
       ],
       'tests': [
