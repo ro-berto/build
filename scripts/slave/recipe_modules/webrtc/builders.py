@@ -47,12 +47,6 @@ RECIPE_CONFIGS = freeze({
     'gclient_apply_config': ['android', 'webrtc_test_resources'],
     'test_suite': 'android_perf',
   },
-  'webrtc_android_clang': {
-    'chromium_config': 'android_clang',
-    'chromium_android_config': 'webrtc',
-    'gclient_config': 'webrtc',
-    'gclient_apply_config': ['android'],
-  },
   'webrtc_android_asan': {
     'chromium_config': 'android_asan',
     'chromium_android_config': 'webrtc',
@@ -494,7 +488,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'Android32 Builder MIPS (dbg)': {
-        'recipe_config': 'webrtc_android_clang',
+        'recipe_config': 'webrtc_android',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'android',
@@ -511,17 +505,6 @@ BUILDERS = freeze({
           'TARGET_PLATFORM': 'android',
           'TARGET_ARCH': 'intel',
           'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'linux'},
-      },
-      'Android32 Clang (dbg)': {
-        'recipe_config': 'webrtc_android_clang',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
         },
         'bot_type': 'builder',
         'testing': {'platform': 'linux'},
@@ -1467,7 +1450,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'android_compile_mips_dbg': {
-        'recipe_config': 'webrtc_android_clang',
+        'recipe_config': 'webrtc_android',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'android',
@@ -1515,17 +1498,6 @@ BUILDERS = freeze({
           'os': 'Android',
           'android_devices': '1',
         }
-      },
-      'android_clang_dbg': {
-        'recipe_config': 'webrtc_android_clang',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'linux'},
       },
       'android_arm64_rel': {
         'recipe_config': 'webrtc_android',

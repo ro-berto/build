@@ -166,7 +166,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[CACHE]/goma_client' target_arch=mipsel use_goma=1",
+      "GYP_DEFINES": "OS=android component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[CACHE]/goma_client' target_arch=mipsel use_goma=1",
       "PATH": "[BUILDER_CACHE]/android_compile_mips_dbg/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_compile_mips_dbg/src/build/android:<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -193,33 +193,6 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "generate_build_files"
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
-      "--src-dir",
-      "[BUILDER_CACHE]/android_compile_mips_dbg/src",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "PATH": "[BUILDER_CACHE]/android_compile_mips_dbg/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_compile_mips_dbg/src/build/android:<PATH>"
-    },
-    "name": "clang_revision",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
   },
   {
     "cmd": [
@@ -444,7 +417,7 @@
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",
-      "goma-clang",
+      "goma",
       "--buildbot-buildername",
       "android_compile_mips_dbg",
       "--buildbot-mastername",
