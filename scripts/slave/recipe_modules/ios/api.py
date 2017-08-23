@@ -14,6 +14,7 @@ class iOSApi(recipe_api.RecipeApi):
   PRODUCT_TYPES = {
     'iPad 4 GSM CDMA': 'iPad3,6',
     'iPad Air':        'iPad4,1',
+    'iPad Air 2':      'iPad5,3',
     'iPhone 5':        'iPhone5,1',
     'iPhone 5s':       'iPhone6,1',
     'iPhone 6s':       'iPhone8,1',
