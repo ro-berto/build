@@ -381,7 +381,8 @@ class SwarmingApi(recipe_api.RecipeApi):
 
   def task(self, title, isolated_hash, ignore_task_failure=False, shards=1,
            task_output_dir=None, extra_args=None, idempotent=None,
-           cipd_packages=None, build_properties=None, merge=None):
+           cipd_packages=None, build_properties=None, merge=None,
+           trigger_script=None):
     """Returns a new SwarmingTask instance to run an isolated executable on
     Swarming.
 
@@ -431,6 +432,13 @@ class SwarmingApi(recipe_api.RecipeApi):
               links that will be included in the buildbot output.
           "args": an optional list of additional arguments to pass to the
               above script.
+      trigger_script: An optional dict containing:
+          "script": path to a script to call which will use custom logic to
+              trigger appropriate swarming jobs, using swarming.py.
+          "args": an optional list of additional arguments to pass to the
+              script.
+          See SwarmingTask.__init__ docstring for more details.
+
     """
     if idempotent is None:
       idempotent = self.default_idempotent
@@ -454,7 +462,8 @@ class SwarmingApi(recipe_api.RecipeApi):
         task_output_dir=task_output_dir,
         cipd_packages=cipd_packages,
         build_properties=build_properties,
-        merge=merge)
+        merge=merge,
+        trigger_script=trigger_script)
 
   def gtest_task(self, title, isolated_hash, test_launcher_summary_output=None,
                  extra_args=None, cipd_packages=None, merge=None, **kwargs):
@@ -637,12 +646,18 @@ class SwarmingApi(recipe_api.RecipeApi):
       args.append('--')
       args.extend(task.extra_args)
 
+    script = self.m.swarming_client.path.join('swarming.py')
+    if task.trigger_script:
+      args.extend(['--swarming-py-path', script])
+      script = task.trigger_script['script']
+      if task.trigger_script.get('args'):
+        args.extend(task.trigger_script['args'])
+
     # The step can fail only on infra failures, so mark it as 'infra_step'.
     try:
       return self.m.python(
           name=self.get_step_name('trigger', task),
-          script=self.m.swarming_client.path.join('swarming.py'),
-          args=args,
+          script=script, args=args,
           step_test_data=functools.partial(
               self._gen_trigger_step_test_data, task),
           infra_step=True,
@@ -1071,7 +1086,7 @@ class SwarmingTask(object):
                env, priority, shards, buildername, buildnumber, expiration,
                user, io_timeout, hard_timeout, idempotent, extra_args,
                collect_step, task_output_dir, cipd_packages=None,
-               build_properties=None, merge=None):
+               build_properties=None, merge=None, trigger_script=None):
     """Configuration of a swarming task.
 
     Args:
@@ -1126,6 +1141,17 @@ class SwarmingTask(object):
               collected outputs from the tasks.
           "args": an optional list of additional arguments to pass to the
               above script.
+      trigger_script: An optional dict containing:
+          "script": path to a script to call which will use custom logic to
+              trigger appropriate swarming jobs, using swarming.py. Required.
+          "args": an optional list of additional arguments to pass to the
+              script.
+          The script will receive the exact same arguments that are normally
+          passed to calls to `swarming.py trigger`, with two additions:
+            1. --swarming-py-path, which will contain the path to the
+              swarming.py file which should be used for any trigger RPCs to the
+              swarming server.
+            2. Any additional arguments provided in the "args" entry.
     """
     self._trigger_output = None
     self.build_properties = build_properties
@@ -1143,6 +1169,7 @@ class SwarmingTask(object):
     self.io_timeout = io_timeout
     self.isolated_hash = isolated_hash
     self.merge = merge or {}
+    self.trigger_script = trigger_script or {}
     self.priority = priority
     self.shards = shards
     self.tags = set()

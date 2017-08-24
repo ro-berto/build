@@ -19,6 +19,7 @@ DEPS = [
 ]
 
 from recipe_engine.recipe_api import Property
+from recipe_engine import post_process
 
 PROPERTIES = {
   'platforms': Property(default=('win',)),
@@ -27,11 +28,12 @@ PROPERTIES = {
   'gtest_task': Property(default=False),
   'isolated_script_task': Property(default=False),
   'merge': Property(default=None),
+  'trigger_script': Property(default=None),
 }
 
 def RunSteps(api, platforms, show_isolated_out_in_collect_step,
              show_shards_in_collect_step, gtest_task, isolated_script_task,
-             merge):
+             merge, trigger_script):
   # Checkout swarming client.
   api.swarming_client.checkout('master')
 
@@ -97,7 +99,7 @@ def RunSteps(api, platforms, show_isolated_out_in_collect_step,
       task = api.swarming.isolated_script_task(
           'hello_world', isolated_hash,
           task_output_dir=temp_dir.join('task_output_dir'),
-          merge=merge)
+          merge=merge, trigger_script=trigger_script)
     else:
       task = api.swarming.task('hello_world', isolated_hash,
                               task_output_dir=temp_dir.join('task_output_dir'))
@@ -353,6 +355,25 @@ def GenTests(api):
           merge={
             'script': '//fake_custom_merge_script.py',
           }))
+
+  yield (
+      api.test('isolated_script_with_custom_trigger_script') +
+      api.step_data(
+          'archive for win',
+          stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
+      api.step_data(
+          'hello_world on Windows-7-SP1',
+          api.raw_io.output_dir({'summary.json': json.dumps(summary_data)}),
+          api.json.output(json_results) + api.swarming.summary(summary_data)) +
+      api.properties(
+          isolated_script_task=True,
+          trigger_script={
+            'script': '//fake_custom_trigger_script.py',
+            'args': ['foo', 'bar'],
+          }) +
+      api.post_process(post_process.Filter(
+          '[trigger] hello_world on Windows-7-SP1'))
+  )
 
   summary_data = {
     'shards': [
