@@ -201,6 +201,11 @@ TRYBOTS = freeze({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'Linux ChromiumOS Builder',
       }),
+      'linux_angle_deqp_rel_ng': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU Linux dEQP Builder',
+        'tester': 'Linux dEQP Release (NVIDIA)',
+      }),
       'mac_angle_rel_ng': {
         'bot_ids': [
           {
@@ -253,6 +258,25 @@ TRYBOTS = freeze({
         # This bot is compile-only.
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU Win x64 Builder (dbg)',
+      }),
+      'win_angle_deqp_rel_ng': {
+        'bot_ids': [
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU Win dEQP Builder',
+            'tester': 'Win7 dEQP Release (NVIDIA)',
+          },
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU Win dEQP Builder',
+            'tester': 'Win7 dEQP Release (AMD)',
+          },
+        ],
+      },
+      'win_angle_x64_deqp_rel_ng': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU Win x64 dEQP Builder',
+        'tester': 'Win7 x64 dEQP Release (NVIDIA)',
       }),
     },
   },
