@@ -30,10 +30,7 @@ SPEC = {
       },
       'testing': {
         'platform': 'linux',
-      },
-      'tests': [
-        steps.SizesStep(RESULTS_URL, 'android_cronet_armv6_builder'),
-      ]
+      }
     },
     'Android Cronet Builder (dbg)': {
       'android_config': 'main_builder_mb',
@@ -73,10 +70,7 @@ SPEC = {
       },
       'testing': {
         'platform': 'linux',
-      },
-      'tests': [
-        steps.SizesStep(RESULTS_URL, 'android_cronet_builder'),
-      ]
+      }
     },
 
     'Android Tests (trial)(dbg)': {

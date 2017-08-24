@@ -31,7 +31,7 @@
       "category": "5Cronet",
       "mergeRequests": True,
     },
-    "Android Cronet KitKat Builder Builder": {
+    "Android Cronet KitKat Builder": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": "chromium_commits",
