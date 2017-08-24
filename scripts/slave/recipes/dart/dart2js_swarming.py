@@ -122,9 +122,7 @@ def RunSteps(api):
 
       if runtime in ['ie10', 'ie11']:
         test_specs = [{'name': 'dart2js-%s tests' % runtime,
-                       'tests': ['html', 'pkg', 'samples']},
-                      {'name': 'dart2js-%s-co19 tests' % runtime,
-                       'tests': ['co19']}]
+                       'tests': ['html', 'pkg', 'samples']}]
       else:
         test_specs = [
           {'name': 'dart2js-%s-package tests' % runtime,

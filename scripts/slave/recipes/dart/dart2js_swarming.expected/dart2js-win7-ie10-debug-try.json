@@ -2361,35 +2361,6 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\builder\\sdk\\tools\\test.py",
-      "--mode=debug",
-      "--arch=ia32",
-      "--compiler=dart2js",
-      "--dart2js-batch",
-      "--runtime=ie10",
-      "--progress=buildbot",
-      "-v",
-      "--reset-browser-configuration",
-      "--report",
-      "--time",
-      "--write-debug-log",
-      "--write-test-outcome-log",
-      "--builder-tag=win7",
-      "--append_logs",
-      "co19"
-    ],
-    "cwd": "[CACHE]\\builder\\sdk",
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
-      ]
-    },
-    "name": "dart2js-ie10-co19 tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[CACHE]\\builder\\sdk\\tools\\task_kill.py",
       "--kill_browsers=True"
     ],
