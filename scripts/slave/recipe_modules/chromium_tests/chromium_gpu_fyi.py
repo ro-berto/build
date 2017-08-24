@@ -1023,6 +1023,24 @@ SPEC = {
       },
       'enable_swarming': False,
     },
+    'Android dEQP Release (Nexus 5X)': {
+      'chromium_config': 'android',
+      'chromium_apply_config': ['chrome_with_codecs'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android', 'angle_top_of_tree'],
+      'chromium_config_kwargs': {
+        'TARGET_PLATFORM': 'android',
+      },
+      'android_config': 'arm64_builder_rel_mb',
+      'bot_type': 'builder_tester',
+      'compile_targets': [
+      ],
+      'testing': {
+        'platform': 'linux',
+      },
+      'enable_swarming': True,
+      'checkout_dir': 'android',
+    },
 
     'GPU Fake Linux Builder': {
       'chromium_config': 'chromium',
