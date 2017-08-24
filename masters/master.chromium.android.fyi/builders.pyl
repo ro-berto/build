@@ -18,7 +18,7 @@
     "Android Cronet ARMv6 Builder": {
       "recipe": "chromium",
       "use_remote_run": True,
-      "scheduler": None,
+      "scheduler": "chromium_commits",
       "slave_pools": ["cronet_armv6"],
       "category": "5Cronet",
       "mergeRequests": True,
@@ -26,7 +26,7 @@
     "Android Cronet Builder (dbg)": {
       "recipe": "chromium",
       "use_remote_run": True,
-      "scheduler": None,
+      "scheduler": "chromium_commits",
       "slave_pools": ["cronet_dbg"],
       "category": "5Cronet",
       "mergeRequests": True,
@@ -34,7 +34,7 @@
     "Android Cronet KitKat Builder Builder": {
       "recipe": "chromium",
       "use_remote_run": True,
-      "scheduler": None,
+      "scheduler": "chromium_commits",
       "slave_pools": ["cronet_kk"],
       "category": "5Cronet",
       "mergeRequests": True,
