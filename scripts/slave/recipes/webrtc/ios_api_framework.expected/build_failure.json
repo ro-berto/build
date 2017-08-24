@@ -345,37 +345,9 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::zip]/resources/zip.py"
-    ],
-    "name": "zip archive",
-    "stdin": "{\"entries\": [{\"path\": \"[BUILDER_CACHE]/iOS_API_Framework_Builder/src/out_ios_libs/WebRTC.framework\", \"type\": \"dir\"}], \"output\": \"[START_DIR]/webrtc_ios_api_framework.zip\", \"root\": \"[BUILDER_CACHE]/iOS_API_Framework_Builder/src/out_ios_libs\"}"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "cp",
-      "-a",
-      "public-read",
-      "[START_DIR]/webrtc_ios_api_framework.zip",
-      "gs://chromium-webrtc/ios_api_framework/webrtc_ios_api_framework_170242.zip"
-    ],
-    "infra_step": true,
-    "name": "gsutil upload",
-    "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.googleapis.com/chromium-webrtc/ios_api_framework/webrtc_ios_api_framework_170242.zip@@@"
-    ]
-  },
-  {
     "name": "$result",
+    "reason": "Step('build') failed with return_code 1",
     "recipe_result": null,
-    "status_code": 0
+    "status_code": 1
   }
 ]

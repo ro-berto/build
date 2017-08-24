@@ -48,6 +48,7 @@ def RunSteps(api):
     ninja_log_exit_status = step_result.retcode
   except api.step.StepFailure as e:
     ninja_log_exit_status = e.retcode
+    raise e
   finally:
     api.goma.stop(ninja_log_compiler='goma',
                   ninja_log_exit_status=ninja_log_exit_status)
