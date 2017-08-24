@@ -4,12 +4,81 @@
 
 from . import steps
 
+RESULTS_URL = 'https://chromeperf.appspot.com'
 
 SPEC = {
   'settings': {
     'build_gs_bucket': 'chromium-android-archive',
   },
   'builders': {
+    # TODO(jbudorick): Move the three cronet bots over to chromium.android.
+    'Android Cronet ARMv6 Builder': {
+      'android_config': 'main_builder_mb',
+      'bot_type': 'builder_tester',
+      'chromium_config': 'main_builder_mb',
+      'chromium_apply_config': [
+        'cronet_builder',
+        'cronet_official',
+      ],
+      'enable_swarming': True,
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+        'TARGET_PLATFORM': 'android',
+      },
+      'testing': {
+        'platform': 'linux',
+      },
+      'tests': [
+        steps.SizesStep(RESULTS_URL, 'android_cronet_armv6_builder'),
+      ]
+    },
+    'Android Cronet Builder (dbg)': {
+      'android_config': 'main_builder_mb',
+      'bot_type': 'builder_tester',
+      'chromium_config': 'main_builder_mb',
+      'chromium_apply_config': [
+        'cronet_builder',
+        'cronet_official',
+      ],
+      'enable_swarming': True,
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 32,
+        'TARGET_PLATFORM': 'android',
+      },
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+    'Android Cronet KitKat Builder': {
+      'android_config': 'main_builder_mb',
+      'bot_type': 'builder_tester',
+      'chromium_config': 'main_builder_mb',
+      'chromium_apply_config': [
+        'cronet_builder',
+        'cronet_official',
+      ],
+      'enable_swarming': True,
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+        'TARGET_PLATFORM': 'android',
+      },
+      'testing': {
+        'platform': 'linux',
+      },
+      'tests': [
+        steps.SizesStep(RESULTS_URL, 'android_cronet_builder'),
+      ]
+    },
+
     'Android Tests (trial)(dbg)': {
       'chromium_config': 'android',
       'gclient_config': 'chromium',
