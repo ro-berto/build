@@ -949,9 +949,9 @@ Used by the internal goma recipe.
 
 #### **class [ChromiumApi](/scripts/slave/recipe_modules/chromium/api.py#28)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [apply\_syzyasan](/scripts/slave/recipe_modules/chromium/api.py#956)(self):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [apply\_syzyasan](/scripts/slave/recipe_modules/chromium/api.py#953)(self):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [archive\_build](/scripts/slave/recipe_modules/chromium/api.py#968)(self, step_name, gs_bucket, gs_acl=None, mode=None, \*\*kwargs):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [archive\_build](/scripts/slave/recipe_modules/chromium/api.py#965)(self, step_name, gs_bucket, gs_acl=None, mode=None, \*\*kwargs):**
 
 Returns a step invoking archive_build.py to archive a Chromium build.
 
@@ -997,7 +997,7 @@ Returns (ChromiumApi.Layout): The configured Chromium build layout.
 
 &mdash; **def [ensure\_goma](/scripts/slave/recipe_modules/chromium/api.py#711)(self, canary=False):**
 
-&mdash; **def [get\_annotate\_by\_test\_name](/scripts/slave/recipe_modules/chromium/api.py#1050)(self, test_name):**
+&mdash; **def [get\_annotate\_by\_test\_name](/scripts/slave/recipe_modules/chromium/api.py#1047)(self, test_name):**
 
 &emsp; **@_with_chromium_layout**<br>&mdash; **def [get\_clang\_version](/scripts/slave/recipe_modules/chromium/api.py#667)(self, \*\*kwargs):**
 
@@ -1017,19 +1017,19 @@ Args:
 
 &mdash; **def [get\_version](/scripts/slave/recipe_modules/chromium/api.py#158)(self):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [list\_perf\_tests](/scripts/slave/recipe_modules/chromium/api.py#1009)(self, browser, num_shards, device=None):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [list\_perf\_tests](/scripts/slave/recipe_modules/chromium/api.py#1006)(self, browser, num_shards, device=None):**
 
 &emsp; **@property**<br>&mdash; **def [output\_dir](/scripts/slave/recipe_modules/chromium/api.py#140)(self):**
 
 Return the path to the built executable directory.
 
-&mdash; **def [process\_dumps](/scripts/slave/recipe_modules/chromium/api.py#944)(self, \*\*kwargs):**
+&mdash; **def [process\_dumps](/scripts/slave/recipe_modules/chromium/api.py#941)(self, \*\*kwargs):**
 
 &emsp; **@_with_chromium_layout**<br>&mdash; **def [run\_gn](/scripts/slave/recipe_modules/chromium/api.py#777)(self, use_goma=False, gn_path=None, build_dir=None, \*\*kwargs):**
 
 &emsp; **@_with_chromium_layout**<br>&mdash; **def [run\_gyp\_chromium](/scripts/slave/recipe_modules/chromium/api.py#769)(self):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [run\_mb](/scripts/slave/recipe_modules/chromium/api.py#834)(self, mastername, buildername, use_goma=True, mb_path=None, mb_config_path=None, isolated_targets=None, name=None, build_dir=None, android_version_code=None, android_version_name=None, gyp_script=None, phase=None, \*\*kwargs):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [run\_mb](/scripts/slave/recipe_modules/chromium/api.py#835)(self, mastername, buildername, use_goma=True, mb_path=None, mb_config_path=None, isolated_targets=None, name=None, build_dir=None, android_version_code=None, android_version_name=None, gyp_script=None, phase=None, \*\*kwargs):**
 
 &emsp; **@_with_chromium_layout**<br>&mdash; **def [runhooks](/scripts/slave/recipe_modules/chromium/api.py#739)(self, env=None, \*\*kwargs):**
 
@@ -1046,11 +1046,11 @@ Return a runtest.py invocation.
 Return a sizes.py invocation.
 This uses runtests.py to upload the results to the perf dashboard.
 
-&mdash; **def [taskkill](/scripts/slave/recipe_modules/chromium/api.py#938)(self):**
+&mdash; **def [taskkill](/scripts/slave/recipe_modules/chromium/api.py#935)(self):**
 
 &emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_launcher\_filter](/scripts/slave/recipe_modules/chromium/api.py#492)(self, tests):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [update\_clang](/scripts/slave/recipe_modules/chromium/api.py#928)(self):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [update\_clang](/scripts/slave/recipe_modules/chromium/api.py#925)(self):**
 
 &emsp; **@property**<br>&mdash; **def [version](/scripts/slave/recipe_modules/chromium/api.py#145)(self):**
 

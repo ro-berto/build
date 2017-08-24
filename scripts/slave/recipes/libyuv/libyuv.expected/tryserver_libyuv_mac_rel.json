@@ -124,7 +124,8 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "gn"
   },

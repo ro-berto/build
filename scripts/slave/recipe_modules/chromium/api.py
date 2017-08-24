@@ -825,7 +825,8 @@ class ChromiumApi(recipe_api.RecipeApi):
         build_dir,
         '--args=%s' % ' '.join(gn_args),
     ]
-    with self.m.context(cwd=kwargs.get('cwd', self.m.path['checkout'])):
+    with self.m.context(
+        cwd=kwargs.get('cwd', self.m.path['checkout']), env=self.get_env()):
       if str(gn_path).endswith('.py'):
         self.m.python(name='gn', script=gn_path, args=step_args, **kwargs)
       else:
@@ -885,31 +886,27 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     args += [build_dir]
 
-    # This runs with an almost-bare env being passed along, so we get a clean
-    # environment without any GYP_DEFINES being present to cause confusion.
-    env = {
-      'GOMA_SERVICE_ACCOUNT_JSON_FILE': self.m.goma.service_account_json_path,
-    }
-    env.update(self.m.context.env)
     step_kwargs = {
       'name': name or 'generate_build_files',
       'script': mb_path.join('mb.py'),
       'args': args,
     }
 
-    if self.c.env.FORCE_MAC_TOOLCHAIN:
-      env['FORCE_MAC_TOOLCHAIN'] = self.c.env.FORCE_MAC_TOOLCHAIN
-    if self.c.env.FORCE_MAC_SDK_MIN:
-      env['FORCE_MAC_SDK_MIN'] = self.c.env.FORCE_MAC_SDK_MIN
+    if self.c.TARGET_CROS_BOARD:
+      # Wrap 'runhooks' through 'cros chrome-sdk'
+      step_kwargs['wrapper'] = self.get_cros_chrome_sdk_wrapper(clean=True)
+
+    # This runs with an almost-bare env being passed along, so we get a clean
+    # environment without any GYP_DEFINES being present to cause confusion.
+    env = self.get_env()
+    env['GOMA_SERVICE_ACCOUNT_JSON_FILE'] = (
+        self.m.goma.service_account_json_path)
+    env.update(self.m.context.env)
 
     if self.c.gyp_env.GYP_MSVS_VERSION:
       # TODO(machenbach): Remove this as soon as it's not read anymore by
       # vs_toolchain.py (currently called by gn).
       env['GYP_MSVS_VERSION'] = self.c.gyp_env.GYP_MSVS_VERSION
-
-    if self.c.TARGET_CROS_BOARD:
-      # Wrap 'runhooks' through 'cros chrome-sdk'
-      step_kwargs['wrapper'] = self.get_cros_chrome_sdk_wrapper(clean=True)
 
     step_kwargs.update(kwargs)
     with self.m.context(
