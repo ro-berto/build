@@ -87,12 +87,6 @@
       "slave_pools": ["cronet_mips"],
       "category": "0Cronet",
     },
-    "Android Cronet Data Reduction Proxy Builder": {
-      "recipe": "cronet",
-      "scheduler": "android_commits",
-      "slave_pools": ["cronet_k_hammerhead"],
-      "category": "0Cronet",
-    },
     "Android Cronet Marshmallow 64bit Perf": {
       "recipe": "cronet",
       "scheduler": "android_commits",
