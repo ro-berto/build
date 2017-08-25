@@ -22,7 +22,7 @@ DEFAULT_CIPD_VERSION = 'git_revision:b482bfa19d3fa79b4b40dd5ac7a34479052e3df1'
 STAGING_CIPD_VERSION = 'git_revision:cf5b0de14e94b06274d15e84b19449f580576e80'
 
 # Latest Git bundle versions for packages that don't have a "latest" ref.
-LATEST_PYTHON_BUNDLE_VERSION = 'version:2.7.13.chromium7'
+LATEST_PYTHON_BUNDLE_VERSION = 'version:2.7.13.chromium8'
 LATEST_GIT_BUNDLE_VERSION = 'version:2.14.1.chromium11'
 
 PROD = None
@@ -52,10 +52,12 @@ AUX_BINARY_PACKAGES = {
           name='infra/tools/git/${platform}',
           version='git_revision:5cf65fdf804a9b3f3023f79d5b3cab2a88ccd09e'),
 
+      ## The Python package installs its binaries into "bin/".
+      #cipd.CipdPackage(
+          #name='infra/python/cpython/${os}-${arch=386,amd64}',
+          #version='version:2.7.13.chromium8'),
+
       # The Git package installs its binaries into "bin/".
-      #
-      # Currently, we only install Git on x86 and amd64 platforms because we
-      # don't have cross-compile support for Git packages yet.
       cipd.CipdPackage(
           name='infra/git/${os}-${arch=386,amd64}',
           version='version:2.14.1.chromium11'),
@@ -71,17 +73,11 @@ AUX_BINARY_PACKAGES = {
           version='git_revision:5cf65fdf804a9b3f3023f79d5b3cab2a88ccd09e'),
 
       # The Python package installs its binaries into "bin/".
-      #
-      # Currently, we only install Python on Windows, since we believe that
-      # other platforms make assumptions about package availability.
       cipd.CipdPackage(
-          name='infra/python/cpython/${os=windows}-${arch=386,amd64}',
+          name='infra/python/cpython/${os}-${arch=386,amd64}',
           version=LATEST_PYTHON_BUNDLE_VERSION),
 
       # The Git package installs its binaries into "bin/".
-      #
-      # Currently, we only install Git on x86 and amd64 platforms because we
-      # don't have cross-compile support for Git packages yet.
       cipd.CipdPackage(
           name='infra/git/${os}-${arch=386,amd64}',
           version=LATEST_GIT_BUNDLE_VERSION),
