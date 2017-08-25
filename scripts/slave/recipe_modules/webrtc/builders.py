@@ -1065,6 +1065,21 @@ BUILDERS = freeze({
           'cpu': 'x86-64',
         }
       },
+      'win_experimental': {
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'win'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Windows-7-SP1',
+          'cpu': 'x86',
+        }
+      },
       'mac_compile_dbg': {
         'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
@@ -1146,6 +1161,21 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder',
         'testing': {'platform': 'linux'},
+      },
+      'mac_experimental': {
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'mac'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Mac-10.11',
+          'cpu': 'x86-64',
+        }
       },
       'linux_compile_rel': {
         'recipe_config': 'webrtc',
@@ -1372,6 +1402,21 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
       },
+      'linux_experimental': {
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'linux'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Ubuntu-14.04',
+          'cpu': 'x86-64',
+        }
+      },
       'android_compile_dbg': {
         'recipe_config': 'webrtc_android',
         'chromium_config_kwargs': {
@@ -1509,6 +1554,26 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'device_type': 'bullhead', # Nexus 5X
+          'device_os': 'M',
+          'os': 'Android',
+          'android_devices': '1',
+        }
+      },
+      'android_experimental': {
+        'recipe_config': 'webrtc_android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'linux'},
+        'test_android_studio_project_generation': True,
         'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
