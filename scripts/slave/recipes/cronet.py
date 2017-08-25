@@ -156,23 +156,6 @@ BUILDERS = freeze({
     'kwargs': {
       'BUILD_CONFIG': 'Debug',
     },
-    'gyp_defs': {
-      'enable_data_reduction_proxy_support': 1,
-    }
-  },
-  'Android Cronet Data Reduction Proxy Builder': {
-    'recipe_config': 'main_builder_mb',
-    'run_tests': True,
-    'cronet_kwargs': {
-      'PERF_ID': 'android_cronet_data_reduction_proxy_builder',
-    },
-    'kwargs': {
-      'BUILD_CONFIG': 'Release',
-    },
-    'gyp_defs': {
-      'enable_data_reduction_proxy_support': 1,
-    },
-    'chromium_apply_config': ['cronet_official'],
   },
   'Android Cronet Marshmallow 64bit Perf': {
     'recipe_config': 'arm64_builder_mb',
