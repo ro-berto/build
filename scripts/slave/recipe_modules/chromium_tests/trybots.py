@@ -187,6 +187,10 @@ TRYBOTS = freeze({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'Android Release (Nexus 5X)',
       }),
+      'android_angle_deqp_rel_ng': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'Android dEQP Release (Nexus 5X)',
+      }),
       'linux_angle_rel_ng': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU Linux Builder',
