@@ -79,8 +79,6 @@ class WebRTCApi(recipe_api.RecipeApi):
 
     self.m.chromium.set_config(self.recipe_config['chromium_config'],
                                **chromium_kwargs)
-    if 'experimental' not in self.buildername:
-      self.m.chromium.apply_config('force_mac_toolchain_off_10_11')
     self.m.gclient.set_config(self.recipe_config['gclient_config'])
 
     # Support applying configs both at the bot and the recipe config level.

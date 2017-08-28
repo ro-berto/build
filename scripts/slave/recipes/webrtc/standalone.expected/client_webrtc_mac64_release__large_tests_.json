@@ -135,7 +135,7 @@
     "cwd": "[BUILDER_CACHE]/Mac64_Release__large_tests_/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_SDK_MIN": "10.11",
+      "FORCE_MAC_TOOLCHAIN": "1",
       "GYP_DEFINES": "clang=1 component=static_library gomadir='[CACHE]/goma_client' target_arch=x64 use_goma=1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -160,7 +160,7 @@
     "cwd": "[BUILDER_CACHE]/Mac64_Release__large_tests_/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_SDK_MIN": "10.11",
+      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "generate_build_files"
@@ -182,7 +182,7 @@
     ],
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_SDK_MIN": "10.11"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "clang_revision",
     "~followup_annotations": [
@@ -250,7 +250,7 @@
     "cwd": "[BUILDER_CACHE]/Mac64_Release__large_tests_/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_SDK_MIN": "10.11",
+      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[GOMA_CACHE]/Mac64_Release__large_tests_",
@@ -311,7 +311,7 @@
     "cwd": "[BUILDER_CACHE]/Mac64_Release__large_tests_/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_SDK_MIN": "10.11"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "compile"
   },
