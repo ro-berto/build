@@ -249,8 +249,6 @@ def main(argv):
       'master.client.dart': 'Dart',
       'master.client.dart.fyi': 'DartFYI',
       'master.client.dart.packages': 'DartPackages',
-      'master.client.drmemory': 'DrMemory',
-      'master.client.dynamorio': 'DynamoRIO',
       'master.client.flutter': 'ClientFlutter',
       'master.client.gyp': 'GYP',
       'master.client.libyuv': 'Libyuv',
