@@ -808,7 +808,7 @@ class iOSApi(recipe_api.RecipeApi):
 
       # Upload performance data result to the perf dashboard.
       perf_results = self.m.path.join(
-        task['task'].task_output_dir, '0', 'perf_result.json')
+        task['task'].task_output_dir, '0', 'Documents', 'perf_result.json')
       if self.m.path.exists(perf_results):
         data = self.get_perftest_data(perf_results)
         data_decode = data['Perf Data']
