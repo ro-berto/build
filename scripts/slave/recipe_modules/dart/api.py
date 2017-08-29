@@ -19,7 +19,7 @@ class DartApi(recipe_api.RecipeApi):
 
   def kill_tasks(self):
     """Kills leftover tasks from previous runs or steps."""
-    self.m.python('taskkill before building',
+    self.m.python('kill processes',
                self.m.path['checkout'].join('tools', 'task_kill.py'),
                args=['--kill_browsers=True'])
 
@@ -62,6 +62,7 @@ class DartApi(recipe_api.RecipeApi):
   def shard(self, title, isolate_hash, test_args, os=None, cpu='x86-64', pool='Dart.LUCI'):
     """Runs test.py in the given isolate, sharded over several swarming tasks.
        Requires the 'shards' build property to be set to the number of tasks.
+       Returns the created task(s), which are meant to be passed into collect().
     """
     num_shards = int(self.m.properties['shards'])
     tasks = []
@@ -86,7 +87,10 @@ class DartApi(recipe_api.RecipeApi):
       task.dimensions['pool'] = pool
       self.m.swarming.trigger_task(task)
       tasks.append(task)
-    # TODO(athom) do something while sharded tasks are running, maybe run last shard?
+    return tasks
+
+  def collect(self, tasks):
+    """Collects the results of a sharded test run."""
     with self.m.step.defer_results():
       for task in tasks:
         # TODO(athom) collect all the output, and present as a single step

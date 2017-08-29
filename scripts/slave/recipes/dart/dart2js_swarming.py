@@ -92,14 +92,14 @@ def RunSteps(api):
                    '-v',
                    '--exclude-suite=observatory_ui,service,co19',
                    '-r%s' % runtime]
-      api.dart.shard('dart2js_tests', isolate_hash, test_args)
+      dart2js_tasks = api.dart.shard('dart2js_tests', isolate_hash, test_args)
 
       test_args = command + ['-m%s' % mode, '-aia32', '-cdart2js', '-r%s' % runtime,
                    '--dart2js-batch', '--reset-browser-configuration',
                    '--report', '--time', '--use-sdk', '--progress=buildbot',
                    '-v',
                    'co19']
-      api.dart.shard('dart2js_co19_tests', isolate_hash, test_args)
+      co19_tasks = api.dart.shard('dart2js_co19_tests', isolate_hash, test_args)
 
       test_args = ['--mode=%s' % mode,
                    '--arch=ia32',
@@ -140,6 +140,9 @@ def RunSteps(api):
           spec['name'] = spec['name'].replace(' tests', '-checked tests')
         RunTests(api, test_args, test_specs, use_xvfb=needs_xvfb)
 
+      api.dart.collect(dart2js_tasks.get_result())
+      api.dart.collect(co19_tasks.get_result())
+
     if 'unittest' in options:
       with api.context(cwd=api.path['checkout']):
         api.python('dart2js-unit tests',
@@ -170,7 +173,7 @@ def GenTests(api):
         buildername='dart2js-linux-d8-hostchecked-csp-unittest-try') +
       api.step_data('upload testing isolate',
                     stdout=api.raw_io.output('test isolate hash')) +
-      api.properties(shards='3')
+      api.properties(shards='1')
    )
    yield (
       api.test('dart2js-win7-ie10-debug-try') + api.platform('win', 32) +
@@ -179,7 +182,7 @@ def GenTests(api):
         buildername='dart2js-win7-ie10-debug-try') +
       api.step_data('upload testing isolate',
                     stdout=api.raw_io.output('test isolate hash')) +
-      api.properties(shards='6')
+      api.properties(shards='2')
    )
    yield (
       api.test('dart2js-linux-drt-try') + api.platform('linux', 64) +
@@ -187,5 +190,5 @@ def GenTests(api):
                              buildername='dart2js-linux-drt-try') +
       api.step_data('upload testing isolate',
                     stdout=api.raw_io.output('test isolate hash')) +
-      api.properties(shards='9')
+      api.properties(shards='3')
    )

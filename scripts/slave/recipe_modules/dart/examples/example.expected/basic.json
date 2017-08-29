@@ -137,7 +137,7 @@
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
-    "name": "taskkill before building"
+    "name": "kill processes"
   },
   {
     "cmd": [
@@ -167,7 +167,7 @@
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
-    "name": "taskkill before building (2)"
+    "name": "kill processes (2)"
   },
   {
     "cmd": [
@@ -1295,7 +1295,7 @@
       "[CACHE]/builder/sdk/tools/task_kill.py",
       "--kill_browsers=True"
     ],
-    "name": "taskkill before building (3)"
+    "name": "kill processes (3)"
   },
   {
     "name": "$result",

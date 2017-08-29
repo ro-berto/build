@@ -70,7 +70,7 @@
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
-    "name": "taskkill before building"
+    "name": "kill processes"
   },
   {
     "cmd": [
@@ -121,7 +121,7 @@
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
-    "name": "taskkill before building (2)"
+    "name": "kill processes (2)"
   },
   {
     "name": "$result",

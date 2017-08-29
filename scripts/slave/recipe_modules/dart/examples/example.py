@@ -14,7 +14,8 @@ def RunSteps(api):
   isolate_hash = api.dart.build(build_args, 'dart_tests')
 
   test_args = ['--all']
-  api.dart.shard('vm_tests', isolate_hash, test_args)
+  tasks = api.dart.shard('vm_tests', isolate_hash, test_args)
+  api.dart.collect(tasks)
 
   api.dart.kill_tasks()
 

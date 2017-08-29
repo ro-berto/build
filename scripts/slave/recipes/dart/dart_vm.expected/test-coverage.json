@@ -74,7 +74,7 @@
       "--kill_browsers=True"
     ],
     "cwd": "[START_DIR]\\sdk",
-    "name": "taskkill before building"
+    "name": "kill processes"
   },
   {
     "cmd": [
@@ -144,7 +144,7 @@
       "--kill_browsers=True"
     ],
     "cwd": "[START_DIR]\\sdk",
-    "name": "taskkill before building (2)"
+    "name": "kill processes (2)"
   },
   {
     "cmd": [

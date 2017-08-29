@@ -49,19 +49,22 @@ def RunSteps(api):
     with api.step.defer_results():
       front_end_args = ['pkg/front_end', '-cnone', '--checked', '--use-sdk']
       front_end_args.extend(test_args)
+      test_args.extend(['--append_logs', '-cdartk'])
+
+      shard_test_args = ['./tools/test.py',
+                         '--use-sdk',
+                         '--exclude-suite=samples,service,standalone,vm'] + test_args
+      tasks = api.dart.shard('vm_tests', isolate_hash, shard_test_args)
+
       api.python('front-end tests',
                  api.path['checkout'].join('tools', 'test.py'),
                  args=front_end_args)
 
-      test_args.extend(['--append_logs', '-cdartk'])
       api.python('samples, service, standalone, and vm tests',
                  api.path['checkout'].join('tools', 'test.py'),
                  args=test_args + ['samples', 'service', 'standalone', 'vm'])
 
-      test_args = ['./tools/test.py',
-                   '--use-sdk',
-                   '--exclude-suite=samples,service,standalone,vm'] + test_args
-      api.dart.shard('vm_tests', isolate_hash, test_args)
+      api.dart.collect(tasks.get_result())
       api.dart.kill_tasks()
       api.step('debug log', ['cat', '.debug.log'])
 
@@ -71,11 +74,11 @@ def GenTests(api):
       api.platform('mac', 64) +
       api.properties.generic(mastername='client.dart.internal',
                              buildername='vm-kernel-mac-release-x64-be') +
-      api.properties(shards='3'))
+      api.properties(shards='1'))
    yield (
       api.test('vm-kernel-linux-debug-x64-try') +
       api.platform('linux', 64) +
       api.properties.generic(
           mastername='luci.dart.try',
           buildername='vm-kernel-linux-debug-x64-try') +
-      api.properties(shards='6'))
+      api.properties(shards='3'))

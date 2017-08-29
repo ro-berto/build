@@ -1590,6 +1590,10 @@ If an isolate is specified, it returns the hash of the isolated archive.
 
 Checks out the dart code and prepares it for building.
 
+&mdash; **def [collect](/scripts/slave/recipe_modules/dart/api.py#92)(self, tasks):**
+
+Collects the results of a sharded test run.
+
 &mdash; **def [kill\_tasks](/scripts/slave/recipe_modules/dart/api.py#20)(self):**
 
 Kills leftover tasks from previous runs or steps.
@@ -1598,6 +1602,7 @@ Kills leftover tasks from previous runs or steps.
 
 Runs test.py in the given isolate, sharded over several swarming tasks.
 Requires the 'shards' build property to be set to the number of tasks.
+Returns the created task(s), which are meant to be passed into collect().
 ### *recipe_modules* / [disk](/scripts/slave/recipe_modules/disk)
 
 [DEPS](/scripts/slave/recipe_modules/disk/__init__.py#1): [depot\_tools/infra\_paths][depot_tools/recipe_modules/infra_paths], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
