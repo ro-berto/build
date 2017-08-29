@@ -18,7 +18,7 @@ DEPS = [
 ]
 
 
-BUILDERS = freeze({
+BUILDERS = {
   'tryserver.chromium.linux': {
     'builders': {
       'linux_chromium_gn_upload': {
@@ -58,7 +58,24 @@ BUILDERS = freeze({
       },
     },
   },
-})
+}
+
+
+def b(master, builder):
+  return BUILDERS[master]['builders'][builder]
+
+
+# Equivalent LUCI-based builders (all in a single bucket).
+BUILDERS['luci.infra-internal.triggered'] = {
+  'builders': {
+    'gn-builder-linux':
+        b('tryserver.chromium.linux', 'linux_chromium_gn_upload'),
+    'gn-builder-mac': b('tryserver.chromium.mac', 'mac_chromium_gn_upload'),
+    'gn-builder-win': b('tryserver.chromium.win', 'win8_chromium_gn_upload'),
+  },
+}
+
+BUILDERS = freeze(BUILDERS)
 
 
 def RunSteps(api):
