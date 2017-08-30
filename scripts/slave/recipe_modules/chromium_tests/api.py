@@ -959,7 +959,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       elif buildername == 'mac_chromium_rel_ng':
         layout_test_extra_args = {
             'shards': 12,
-            'dimensions': {'os': 'Mac-10.12', 'gpu': '8086:0a2e'},
+            'dimensions': {
+                'os': 'Mac-10.12',
+                'gpu': '8086:0a2e',
+                'hidpi': '0',
+            },
         }
       else:
         layout_test_extra_args = {}  # pragma: no cover
