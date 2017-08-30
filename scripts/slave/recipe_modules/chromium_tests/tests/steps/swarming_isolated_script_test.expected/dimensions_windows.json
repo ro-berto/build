@@ -105,7 +105,7 @@
     ],
     "name": "base_unittests on Intel GPU on Windows on Windows",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Windows'<br>swarming pending 71s<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
+      "@@@STEP_TEXT@Run on OS: 'Windows'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",
@@ -145,7 +145,7 @@
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"abandoned_ts\": null, @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"bot_id\": \"vm30\", @@@",
-      "@@@STEP_LOG_LINE@swarming.summary@      \"completed_ts\": \"2014-09-25T01:42:00.123\", @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"durations\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@        5.7, @@@",

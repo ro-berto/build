@@ -4,7 +4,7 @@
 
 from recipe_engine import recipe_test_api
 
-import state
+from . import state
 
 class SwarmingTestApi(recipe_test_api.RecipeTestApi):
 
@@ -12,14 +12,14 @@ class SwarmingTestApi(recipe_test_api.RecipeTestApi):
   def summary(self, data):
     return self.m.json.output(data)
 
-  def canned_summary_output(
+  def canned_summary_output_raw(
       self, shards=1, failure=False, internal_failure=False):
-    return self.summary({
+    return {
       'shards': [
         {
           'abandoned_ts': None,
           'bot_id': 'vm30',
-          'completed_ts': '2014-09-25T01:42:00.123',
+          'completed_ts': '2014-09-25T01:43:11.123',
           'created_ts': '2014-09-25T01:41:00.123',
           'durations': [5.7, 31.5],
           'exit_codes': [0, 0],
@@ -47,4 +47,9 @@ class SwarmingTestApi(recipe_test_api.RecipeTestApi):
           'user': 'unknown',
         } for i in xrange(shards)
       ],
-    })
+    }
+
+  def canned_summary_output(
+      self, shards=1, failure=False, internal_failure=False):
+    return self.summary(
+      self.canned_summary_output_raw( shards, failure, internal_failure))

@@ -236,7 +236,7 @@
     ],
     "name": "hello_world on Windows-7-SP1",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br>swarming pending 71s@@@",
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
@@ -244,7 +244,7 @@
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"abandoned_ts\": null, @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"bot_id\": \"vm30\", @@@",
-      "@@@STEP_LOG_LINE@swarming.summary@      \"completed_ts\": \"2014-09-25T01:42:00.123\", @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"durations\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@        5.7, @@@",

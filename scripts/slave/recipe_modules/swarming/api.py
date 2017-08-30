@@ -12,7 +12,7 @@ from recipe_engine import config_types
 from recipe_engine import recipe_api
 from recipe_engine import util as recipe_util
 
-import state
+from . import state
 
 # Minimally supported version of swarming.py script (reported by --version).
 MINIMAL_SWARMING_VERSION = (0, 8, 6)
@@ -83,6 +83,15 @@ def parse_time(value):
     except ValueError:  # pragma: no cover
       pass
   raise ValueError('Failed to parse %s' % value)  # pragma: no cover
+
+
+def fmt_time(seconds):
+  """Formats some number of seconds into a string. If this is < 60, it will
+  render as `NNs`. If it's >= 60 seconds, it will render as 'hh:mm:ss'."""
+  return (
+    '%ds' % (seconds,) if seconds < 60
+    else str(datetime.timedelta(seconds=seconds))
+  )
 
 
 class ReadOnlyDict(dict):
@@ -727,19 +736,40 @@ class SwarmingApi(recipe_api.RecipeApi):
   collect_each = collect
 
   @staticmethod
-  def _display_pending(summary_json, step_presentation):
-    """Shows max pending time in seconds across all shards if it exceeds 10s."""
-    pending_times = [
-      (parse_time(shard['started_ts']) -
-        parse_time(shard['created_ts'])).total_seconds()
-      for shard in summary_json.get('shards', [])
-      if shard and shard.get('started_ts')
-    ]
-    max_pending = max(pending_times) if pending_times else 0
+  def _display_pending(shards, step_presentation):
+    """Shows max pending time in seconds across all shards if it exceeds 10s,
+    and also displays the max shard duration accross all shards."""
+    max_pending = (-1, None)
+    max_duration = (-1, None)
+    for i, shard in enumerate(shards):
+      if not shard.get('started_ts'):
+        continue
+
+      created = parse_time(shard['created_ts'])
+      started = parse_time(shard['started_ts'])
+
+      pending = (started - created).total_seconds()
+      if pending > max_pending[0]:
+        max_pending = (pending, i)
+
+      if shard.get('completed_ts'):
+        duration = (parse_time(shard['completed_ts']) - started).total_seconds()
+        if duration > max_duration[0]:
+          max_duration = (duration, i)
 
     # Only display annotation when pending more than 10 seconds to reduce noise.
-    if max_pending > 10:
-      step_presentation.step_text += '<br>swarming pending %ds' % max_pending
+    if max_pending[0] > 10:
+      prefix = 'P' if len(shards) <= 1 else 'Max p'
+      suffix = '' if len(shards) <= 1 else ' (shard #%d)' % max_pending[1]
+      step_presentation.step_text += (
+        '<br>%sending time: %s%s' % (prefix, fmt_time(max_pending[0]), suffix))
+
+    if max_duration[0] > 0:
+      prefix = 'S' if len(shards) <= 1 else 'Max s'
+      suffix = '' if len(shards) <= 1 else ' (shard #%d)' % max_duration[1]
+      step_presentation.step_text += (
+        '<br>%shard duration: %s%s' % (
+          prefix, fmt_time(max_duration[0]), suffix))
 
   def _default_collect_step(
       self, task, merged_test_output=None,
@@ -877,7 +907,8 @@ class SwarmingApi(recipe_api.RecipeApi):
           for failure in gtest_results.failures:
             p.logs[failure] = gtest_results.logs[failure]
         swarming_summary = step_result.swarming.summary
-        self._display_pending(swarming_summary, step_result.presentation)
+        self._display_pending(swarming_summary.get('shards', []),
+                              step_result.presentation)
 
         # Show any remaining isolated outputs (such as logcats).
         # Note that collect_task.py uses the default summary.json, which
@@ -914,7 +945,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       results_raw = step_result.raw_io.output_dir[path]
       try:
         chartjson_results_json = self.m.json.loads(results_raw)
-      except Exception as e:
+      except Exception:
         raise Exception('error decoding chart JSON results from shard #%d' % i)
       if not seen_first_shard:
         merged_results = chartjson_results_json
@@ -970,7 +1001,8 @@ class SwarmingApi(recipe_api.RecipeApi):
           self._merge_isolated_script_chartjson_output_shards(task, step_result)
 
       except Exception as e:
-        self.m.step.active_result.presentation.logs['no_isolated_results_exc'] = [str(e)]
+        self.m.step.active_result.presentation.logs[
+          'no_isolated_results_exc'] = [str(e)]
         self.m.step.active_result.isolated_script_results = None
 
   def get_step_name(self, prefix, task):
@@ -1031,7 +1063,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       if url and self.show_shards_in_collect_step:
         links[display_text] = url
 
-    self._display_pending(summary, step_result.presentation)
+    self._display_pending(summary.get('shards', []), step_result.presentation)
 
     if infra_failures:
       template = 'Shard #%s failed: %s'
