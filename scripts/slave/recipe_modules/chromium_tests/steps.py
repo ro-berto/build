@@ -858,6 +858,9 @@ class ResultsHandler(object):
 class JSONResultsHandler(ResultsHandler):
   MAX_FAILS = 30
 
+  def __init__(self, ignore_task_failure=False):
+    self._ignore_task_failure = ignore_task_failure
+
   @classmethod
   def _format_failures(cls, state, failures):
     failures.sort()
@@ -899,6 +902,8 @@ class JSONResultsHandler(ResultsHandler):
       test_type=step_name, test_results_server='test-results.appspot.com')
 
   def render_results(self, api, results, presentation):
+    failure_status = (
+        api.step.WARNING if self._ignore_task_failure else api.step.FAILURE)
     try:
       results = api.test_utils.create_results_from_json_if_needed(
           results)
@@ -911,7 +916,7 @@ class JSONResultsHandler(ResultsHandler):
 
     if not results.valid:
       # TODO(tansell): Change this to api.step.EXCEPTION after discussion.
-      presentation.status = api.step.FAILURE
+      presentation.status = failure_status
       presentation.step_text = api.test_utils.INVALID_RESULTS_MAGIC
       return
 
@@ -925,7 +930,7 @@ class JSONResultsHandler(ResultsHandler):
     # TODO(tansell): https://crbug.com/704066 - Kill simplified JSON format.
     elif results.version == 'simplified':
       if results.unexpected_failures:
-        presentation.status = api.step.FAILURE
+        presentation.status = failure_status
 
       step_text += [
           ('%s passed, %s failed (%s total)' % (
@@ -938,7 +943,8 @@ class JSONResultsHandler(ResultsHandler):
       if results.unexpected_flakes:
         presentation.status = api.step.WARNING
       if results.unexpected_failures:
-        presentation.status = api.step.FAILURE
+        presentation.status = (
+            api.step.WARNING if self._ignore_task_failure else api.step.FAILURE)
 
       step_text += [
           ('Total tests: %s' % len(results.tests), [
@@ -1516,7 +1522,8 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     self._isolated_script_results = {}
     self._merge = merge
     self._ignore_task_failure = ignore_task_failure
-    self.results_handler = results_handler or JSONResultsHandler()
+    self.results_handler = results_handler or JSONResultsHandler(
+        ignore_task_failure=ignore_task_failure)
 
   @property
   def target_name(self):
@@ -1553,9 +1560,6 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     valid, failures = self.results_handler.validate_results(api, results)
     presentation = step_result.presentation
     self.results_handler.render_results(api, results, presentation)
-    if (self._ignore_task_failure and valid and
-        presentation.status == api.step.FAILURE):
-      presentation.status = api.step.WARNING
 
     self._isolated_script_results = results
 
