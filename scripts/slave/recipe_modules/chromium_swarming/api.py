@@ -10,7 +10,6 @@ from recipe_engine import recipe_api
 PER_TARGET_SWARMING_DIMS = collections.defaultdict(dict)
 PER_TARGET_SWARMING_DIMS.update({
     'android': {
-      'android_devices': '6',
       'cpu': None,
       'gpu': None,
       'os': 'Android',
