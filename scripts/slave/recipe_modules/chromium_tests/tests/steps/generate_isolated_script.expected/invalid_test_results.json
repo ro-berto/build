@@ -117,12 +117,13 @@
     ],
     "name": "base_unittests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>Total tests: n/a<br/>@@@",
+      "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"failures\": [], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"valid\": true@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"valid\": false@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -136,7 +137,8 @@
   },
   {
     "name": "$result",
+    "reason": "TEST RESULTS WERE INVALID",
     "recipe_result": null,
-    "status_code": 0
+    "status_code": 1
   }
 ]

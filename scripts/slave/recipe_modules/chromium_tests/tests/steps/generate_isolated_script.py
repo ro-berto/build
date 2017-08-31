@@ -5,6 +5,7 @@
 DEPS = [
     'chromium',
     'chromium_tests',
+    'commit_position',
     'depot_tools/bot_update',
     'depot_tools/gclient',
     'isolate',
@@ -15,6 +16,7 @@ DEPS = [
     'recipe_engine/python',
     'recipe_engine/step',
     'swarming',
+    'test_results',
     'test_utils',
 ]
 
@@ -55,12 +57,33 @@ def RunSteps(api):
 
 
 def GenTests(api):
+  # FIXME: These tests should use the post_process.Filter methods to pick which
+  # specific steps are important to the particular test.
+
   yield (
       api.test('basic') +
       api.properties(single_spec={
           'name': 'base_unittests',
           'isolate_name': 'base_unittests_run',
+      },
+      swarm_hashes={
+        'base_unittests_run': 'ffffffffffffffffffffffffffffffffffffffff',
       })
+  )
+
+  yield (
+      api.test('invalid_test_results') +
+      api.properties(single_spec={
+          'name': 'base_unittests',
+          'isolate_name': 'base_unittests_run',
+      },
+      swarm_hashes={
+        'base_unittests_run': 'ffffffffffffffffffffffffffffffffffffffff',
+      }) +
+      api.override_step_data('base_unittests', api.json.output({
+          'valid': False,
+          'failures': [],
+      }))
   )
 
   yield (
@@ -92,7 +115,12 @@ def GenTests(api):
           'swarming': {
               'can_use_on_swarming_builders': True,
           },
-      })
+        }, swarm_hashes={
+            'base_unittests_run': 'deadbeef',
+        },
+        mastername='test_mastername',
+        buildername='test_buildername',
+        buildnumber=1)
   )
 
   yield (
@@ -106,7 +134,12 @@ def GenTests(api):
                   {'os': 'Linux'},
               ],
           },
-      })
+      }, swarm_hashes={
+            'base_unittests_run': 'ffffffffffffffffffffffffffffffffffffffff',
+      },
+      mastername='test_mastername',
+      buildername='test_buildername',
+      buildnumber=1)
   )
 
   yield (
@@ -143,5 +176,8 @@ def GenTests(api):
           'precommit_args': [
               '--should-also-be-in-output',
           ],
+      }, swarm_hashes={
+            'base_unittests_run': 'ffffffffffffffffffffffffffffffffffffffff',
       })
   )
+
