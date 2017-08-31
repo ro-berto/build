@@ -31,6 +31,8 @@ MASTERS = freeze({
 AFFECTED_PATHS = (
   'third_party/WebKit/Source/devtools',
   'third_party/WebKit/Source/core/inspector/browser_protocol.json',
+  'third_party/blink/renderer/core/inspector/browser_protocol.json',
+  'third_party/blink/renderer/devtools',
   'v8/src/inspector/js_protocol.json',
 )
 
@@ -50,13 +52,11 @@ def RunSteps(api):
     result.presentation.step_text = "No devtools files in patch."
     return
 
-  def get_devtools_path(*sub_paths):
-    devtools_sub_path = ('third_party', 'WebKit', 'Source', 'devtools')
-    joined_path = devtools_sub_path + sub_paths
-    return api.path['checkout'].join(*joined_path)
+  def get_script_path():
+    rel_path = ('third_party', 'blink', 'tools', 'compile_devtools_frontend.py')
+    return api.path['checkout'].join(*rel_path)
 
-  compile_frontend_path = get_devtools_path('scripts', 'compile_frontend.py')
-  api.python('compile frontend (closure compiler)', compile_frontend_path)
+  api.python('compile frontend (closure compiler)', get_script_path())
 
   # TODO(chenwilliam): re-enable npm step after open source approval
   # See crbug.com/655848
@@ -81,6 +81,18 @@ def GenTests(api):
             'git diff to analyze patch',
             api.raw_io.stream_output(
                 'third_party/WebKit/Source/devtools/fake.js\n'),
+        )
+      )
+      yield (
+        api.test(config['testname']  + '_with_devtools_in_blink') +
+        api.properties.tryserver(
+            buildername=config['buildername'],
+            mastername=mastername,
+        ) +
+        api.override_step_data(
+            'git diff to analyze patch',
+            api.raw_io.stream_output(
+                'third_party/blink/renderer/devtools/fake.js\n'),
         )
       )
     else:
