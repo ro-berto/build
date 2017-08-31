@@ -7,6 +7,7 @@ from recipe_engine.types import freeze
 DEPS = [
   'chromium',
   'depot_tools/bot_update',
+  'depot_tools/cipd',
   'depot_tools/depot_tools',
   'depot_tools/gsutil',
   'recipe_engine/file',
@@ -14,6 +15,7 @@ DEPS = [
   'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/python',
+  'recipe_engine/raw_io',
   'recipe_engine/step',
 ]
 
@@ -78,6 +80,43 @@ BUILDERS['luci.infra-internal.triggered'] = {
 BUILDERS = freeze(BUILDERS)
 
 
+CIPD_PKGS = freeze({
+  'gn-builder-linux': 'infra/tools/gn/linux-amd64',
+  'gn-builder-mac': 'infra/tools/gn/mac-amd64',
+  'gn-builder-win': 'infra/tools/gn/windows-386',
+})
+
+
+def upload_to_cipd(api, buildername, path_to_binary, version_tag):
+  api.cipd.set_service_account_credentials(None)
+
+  cipd_pkg_name = CIPD_PKGS[buildername]
+  step = api.cipd.search(cipd_pkg_name, '%s:%s' % version_tag)
+  if step.json.output['result']:
+    api.step('Package is up-to-date', cmd=None)
+    return
+
+  cipd_pkg_dir = api.path.mkdtemp('gn')
+  api.file.copy('copy gn', path_to_binary, cipd_pkg_dir)
+  cipd_pkg_path = api.path.mkdtemp('gn_package').join('gn.cipd')
+
+  api.cipd.build(
+      cipd_pkg_dir,
+      cipd_pkg_path,
+      cipd_pkg_name,
+  )
+  api.cipd.register(
+      cipd_pkg_name,
+      cipd_pkg_path,
+      refs=['latest'],
+      tags={
+        version_tag[0]: version_tag[1],
+        'git_repository': 'https://chromium.googlesource.com/chromium/src',
+        'git_revision': api.properties.get('got_revision'),
+      }
+  )
+
+
 def RunSteps(api):
   mastername = api.m.properties['mastername']
   buildername, bot_config = api.chromium.configure_bot(BUILDERS,
@@ -98,7 +137,9 @@ def RunSteps(api):
   if api.platform.is_win:
     path_to_binary += '.exe'
 
-  api.step('gn version', [path_to_binary, '--version'])
+  step = api.step('gn version', [path_to_binary, '--version'],
+                  stdout=api.raw_io.output())
+  version_tag = ('gn_version', step.stdout.strip())
 
   api.chromium.runtest('gn_unittests')
 
@@ -113,7 +154,25 @@ def RunSteps(api):
                             test_data='0123456789abcdeffedcba987654321012345678')
   api.step.active_result.presentation.step_text = sha1
 
+  if mastername == 'luci.infra-internal.triggered':
+    upload_to_cipd(api, buildername, path_to_binary, version_tag)
+
 
 def GenTests(api):
+  GN_VERSION = '12345'
+  def version():
+    return api.step_data('gn version', api.raw_io.stream_output(GN_VERSION))
+
+  def cipd_pkg(buildername, exists):
+    pkg_name = CIPD_PKGS[buildername]
+    cipd_step = 'cipd search %s gn_version:%s' % (pkg_name, GN_VERSION)
+    instances = (2) if exists else (0)
+    return api.step_data(cipd_step,
+        api.cipd.example_search(pkg_name, instances=instances))
+
   for test in api.chromium.gen_tests_for_builders(BUILDERS):
-    yield test
+    if test.properties['mastername'] == 'luci.infra-internal.triggered':
+      exists = 'mac' in test.properties['buildername']
+      yield test + version() + cipd_pkg(test.properties['buildername'], exists)
+    else:
+      yield test

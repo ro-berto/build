@@ -488,7 +488,8 @@
       "[START_DIR]\\src\\out\\Release\\gn.exe",
       "--version"
     ],
-    "name": "gn version"
+    "name": "gn version",
+    "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [
@@ -544,6 +545,89 @@
     "name": "gn sha1",
     "~followup_annotations": [
       "@@@STEP_TEXT@0123456789abcdeffedcba987654321012345678@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "cipd.bat",
+      "search",
+      "infra/tools/gn/windows-386",
+      "-tag",
+      "gn_version:12345",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "name": "cipd search infra/tools/gn/windows-386 gn_version:12345",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": []@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]\\src\\out\\Release\\gn.exe",
+      "[TMP_BASE]\\gn_tmp_1"
+    ],
+    "infra_step": true,
+    "name": "copy gn"
+  },
+  {
+    "cmd": [
+      "cipd.bat",
+      "pkg-build",
+      "-in",
+      "[TMP_BASE]\\gn_tmp_1",
+      "-name",
+      "infra/tools/gn/windows-386",
+      "-out",
+      "[TMP_BASE]\\gn_package_tmp_2\\gn.cipd",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "name": "build windows-386",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"instance_id\": \"40-chars-fake-of-the-package-instance_id\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"package\": \"infra/tools/gn/windows-386\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "cipd.bat",
+      "pkg-register",
+      "[TMP_BASE]\\gn_package_tmp_2\\gn.cipd",
+      "-json-output",
+      "/path/to/tmp/json",
+      "-ref",
+      "latest",
+      "-tag",
+      "git_repository:https://chromium.googlesource.com/chromium/src",
+      "-tag",
+      "git_revision:None",
+      "-tag",
+      "gn_version:12345"
+    ],
+    "name": "register infra/tools/gn/windows-386",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"instance_id\": \"40-chars-fake-of-the-package-instance_id\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"package\": \"infra/tools/gn/windows-386\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {

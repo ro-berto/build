@@ -504,7 +504,8 @@
       "[START_DIR]/src/out/Release/gn",
       "--version"
     ],
-    "name": "gn version"
+    "name": "gn version",
+    "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [
@@ -567,6 +568,37 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@0123456789abcdeffedcba987654321012345678@@@"
     ]
+  },
+  {
+    "cmd": [
+      "cipd",
+      "search",
+      "infra/tools/gn/mac-amd64",
+      "-tag",
+      "gn_version:12345",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "name": "cipd search infra/tools/gn/mac-amd64 gn_version:12345",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-instance_id_1---\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/gn/mac-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-instance_id_2---\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/gn/mac-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "Package is up-to-date"
   },
   {
     "name": "$result",

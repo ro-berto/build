@@ -479,7 +479,8 @@
       "[START_DIR]/src/out/Release/gn",
       "--version"
     ],
-    "name": "gn version"
+    "name": "gn version",
+    "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [
