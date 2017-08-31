@@ -817,8 +817,8 @@ class iOSApi(recipe_api.RecipeApi):
           for trace in data_decode[testcase]['value']:
             data_point = self.m.perf_dashboard.get_skeleton_point(
               'chrome_ios_perf/%s/%s' % (testcase, trace),
-              self.m.bot_update.last_returned_properties.get(
-                'got_revision_cp', 'x@{#0}'),
+              # TODO(huangml): Use revision.
+              int(self.m.time.time()),
               data_decode[testcase]['value'][trace]
             )
             data_point['units'] = data_decode[testcase]['unit']
