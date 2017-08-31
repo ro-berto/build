@@ -167,15 +167,38 @@ def _update_client(path, version):
   """
   client_path = os.path.join(path, CLIENT_NAME)
 
+
   # Happy path
   if os.path.exists(client_path):
-    if _selfupdate_client(client_path, version, fatal=False):
-      return
+    # Check to make sure current architecture matches what we expect.
+    if _arch_match(client_path):
+      if _selfupdate_client(client_path, version, fatal=False):
+        return
 
   # Sad/Fresh path
   _fresh_download(client_path, version)
   # Call selfupdate to write .versions and .cipd_client_cache files
   _selfupdate_client(client_path, version, fatal=True)
+
+
+def _arch_match(client_path):
+  """Checks the current cipd client has an architecture which matches the
+  architecture we'd get if we did a fresh download."""
+  try:
+    output = subprocess.check_output([client_path, 'version'])
+  except subprocess.CalledProcessError as ex:
+    LOGGER.error('existing client failed version check retcode=%d',
+                 ex.returncode)
+    return False
+
+  # plat will be e.g. 'linux-amd64'
+  plat = infra_platform.cipd_platform()
+  for line in output.splitlines():
+    if line.endswith(plat):
+      LOGGER.info('existing client matches platform: %s', plat)
+      return True
+
+  return False
 
 
 def _selfupdate_client(client_path, version, fatal):

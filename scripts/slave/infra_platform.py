@@ -92,11 +92,23 @@ def cipd_arch():
 
   Example: 'amd64', '386'
   """
-  _, machine, _ = get()
-  return _cipd_arch(machine)
+  os_name, machine, bits = get()
+  return _cipd_arch(os_name, machine, bits)
 
 
-def _cipd_arch(machine):
+def _cipd_arch(os_name, machine, bits):
+  # Linux can run a 64bit kernel with a 32bit userspace. `machine` comes from
+  # platform.machine(), which determines the kernel value, but `bits` comes from
+  # looking at the architecture of sys.executable. We assume that sys.executable
+  # is an adequate representation of 'userspace', and so downgrade a 64bit
+  # machine type to 32bit.
+  #
+  # The bitness of the CIPD client executable will determine the value of
+  # ${arch} and for our purposes here, we want the CIPD client bitness to match
+  # the bitness of userspace.
+  if _cipd_os(os_name) == 'linux' and machine == 'x86_64' and bits == 32:
+    return '386'
+
   return {
     'x86': '386',
     'x86_64': 'amd64',
@@ -105,8 +117,8 @@ def _cipd_arch(machine):
 
 def cipd_platform():
   """Return the equivalent of `cipd ensure`'s ${platform}."""
-  os_name, machine, _ = get()
-  return "%s-%s" % (_cipd_os(os_name), _cipd_arch(machine))
+  os_name, machine, bits = get()
+  return "%s-%s" % (_cipd_os(os_name), _cipd_arch(os_name, machine, bits))
 
 
 def cipd_all_targets():
