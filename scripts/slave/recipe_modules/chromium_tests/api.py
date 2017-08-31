@@ -52,6 +52,7 @@ CHROMIUM_BLINK_TESTS_PATHS = freeze([
   'device/usb/public/interfaces',
   'media',
   'third_party/WebKit',
+  'third_party/blink',
   'third_party/harfbuzz-ng',
   'third_party/iccjpeg',
   'third_party/libjpeg',
