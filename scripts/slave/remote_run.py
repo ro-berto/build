@@ -23,7 +23,6 @@ sys.path.insert(0, os.path.join(BUILD_ROOT, 'scripts'))
 
 from common import annotator
 from common import chromium_utils
-from common import env
 from slave import cipd
 from slave import infra_platform
 from slave import logdog_bootstrap
@@ -309,7 +308,7 @@ def _cleanup_old_layouts(buildbot_build_dir, cleanup_dir, cache_dir,
       _try_cleanup(path, cleanup_dir)
 
 
-def _remote_run_with_kitchen(args, stream, _is_canary, kitchen_version,
+def _remote_run_with_kitchen(args, stream, kitchen_version,
                              properties, tempdir, basedir, cache_dir):
   # Write our build properties to a JSON file.
   properties_file = os.path.join(tempdir, 'remote_run_properties.json')
@@ -515,8 +514,7 @@ def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir, cleanup_dir,
     kitchen_tempdir = _ensure_directory(tempdir, 'k')
     try:
       return _remote_run_with_kitchen(
-          args, stream, is_canary, pins.kitchen, properties, tempdir, basedir,
-          cache_dir)
+          args, stream, pins.kitchen, properties, tempdir, basedir, cache_dir)
     finally:
       _try_cleanup(kitchen_tempdir, cleanup_dir)
 
