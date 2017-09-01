@@ -119,7 +119,7 @@ _STABLE_CIPD_PINS = CipdPins(
 # Canary CIPD pin set.
 _CANARY_CIPD_PINS = CipdPins(
       recipes='git_revision:6eaacf24833ebd2565177157d368da33780fced9',
-      kitchen='git_revision:626f893e5822aa2fbea113c0c2e023f2a601c463')
+      kitchen='git_revision:fa75314ad412fbc989aec72993623316c8db9bc7')
 
 
 def _ensure_directory(*path):
@@ -308,7 +308,7 @@ def _cleanup_old_layouts(buildbot_build_dir, cleanup_dir, cache_dir,
       _try_cleanup(path, cleanup_dir)
 
 
-def _remote_run_with_kitchen(args, stream, kitchen_version,
+def _remote_run_with_kitchen(args, stream, is_canary, kitchen_version,
                              properties, tempdir, basedir, cache_dir):
   # Write our build properties to a JSON file.
   properties_file = os.path.join(tempdir, 'remote_run_properties.json')
@@ -376,6 +376,19 @@ def _remote_run_with_kitchen(args, stream, kitchen_version,
     kitchen_cmd += [
         '-logdog-annotation-url', annotation_url,
     ]
+
+    # TODO(nodir): do unconditionally, once rolled canary to prod
+    if is_canary:
+      # Note: as of 2017-09-01 this system service account is used for
+      # logdog and events (via bigquery).
+      # This flag is not passed if logdog is not configured (rare case).
+      # This will cause a failure to send events, but it is not fatal and
+      # won't affect overall build result or kitchen exit code.
+      #
+      # If we ever add something else to kitchen that may cause a fatal error
+      # b/c of the absence of the system account, this code may need to be
+      # changed. We hope to get off of buildbot by that time.
+      kitchen_cmd += ['-system-service-account', cfg.service_account_path]
 
     # Add LogDog tags.
     if cfg.tags:
@@ -514,7 +527,8 @@ def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir, cleanup_dir,
     kitchen_tempdir = _ensure_directory(tempdir, 'k')
     try:
       return _remote_run_with_kitchen(
-          args, stream, pins.kitchen, properties, tempdir, basedir, cache_dir)
+          args, stream, is_canary, pins.kitchen, properties, tempdir, basedir,
+          cache_dir)
     finally:
       _try_cleanup(kitchen_tempdir, cleanup_dir)
 
