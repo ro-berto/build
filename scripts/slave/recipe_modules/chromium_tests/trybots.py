@@ -404,11 +404,6 @@ TRYBOTS = freeze({
         'buildername': 'Linux ChromiumOS MSan Builder',
         'tester': 'Linux ChromiumOS MSan Tests',
       }),
-      'linux_chromium_chromeos_ozone_rel_ng': simple_bot({
-        'mastername': 'chromium.chromiumos',
-        'buildername': 'Linux ChromiumOS Ozone Builder',
-        'tester': 'Linux ChromiumOS Ozone Tests (1)',
-      }),
       'linux_chromium_compile_dbg_32_ng': simple_bot({
         'mastername': 'chromium.linux',
         'buildername': 'Linux Builder (dbg)(32)',
