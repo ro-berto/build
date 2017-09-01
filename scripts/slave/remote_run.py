@@ -388,7 +388,7 @@ def _remote_run_with_kitchen(args, stream, is_canary, kitchen_version,
       # If we ever add something else to kitchen that may cause a fatal error
       # b/c of the absence of the system account, this code may need to be
       # changed. We hope to get off of buildbot by that time.
-      kitchen_cmd += ['-system-service-account', cfg.service_account_path]
+      kitchen_cmd += ['-luci-system-account-json', cfg.service_account_path]
 
     # Add LogDog tags.
     if cfg.tags:
