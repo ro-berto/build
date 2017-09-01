@@ -374,6 +374,14 @@
       "builder_timeout_s": 3600,
       "category": "2Linux",
     },
+    "GPU Linux Ozone Builder": {
+      "recipe": "chromium",
+      "use_remote_run": True,
+      "scheduler": "chromium_commits",
+      "slave_pools": ["linux_ozone_builder"],
+      "builder_timeout_s": 7200,
+      "category": "2Linux",
+    },
     "GPU Linux Builder (dbg)": {
       "recipe": "chromium",
       "use_remote_run": True,
@@ -388,6 +396,16 @@
       "scheduler": "chromium_commits",
       "slave_pools": ["linux_deqp_rel_builders"],
       "builder_timeout_s": 3600,
+      "category": "2Linux",
+    },
+    "Linux Ozone (Intel)": {
+      "recipe": "chromium",
+      "use_remote_run": True,
+      "scheduler": None,
+      # It's crucial to merge build requests on the testers.
+      "mergeRequests": True,
+      "slave_pools": ["linux_ozone_intel"],
+      "builder_timeout_s": 21600,
       "category": "2Linux",
     },
     "Linux Release (NVIDIA)": {
@@ -514,33 +532,6 @@
       "slave_pools": ["android_deqp_rel_nexus_5x"],
       "builder_timeout_s": 21600,
       "category": "3Android",
-    },
-
-    "Linux ChromiumOS Builder": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": "chromium_commits",
-      "slave_pools": ["linux_chromiumos_builder"],
-      "builder_timeout_s": 10800,
-      "category": "4ChromiumOS",
-    },
-    "Linux ChromiumOS Ozone Builder": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": "chromium_commits",
-      "slave_pools": ["linux_chromiumos_ozone_builder"],
-      "builder_timeout_s": 7200,
-      "category": "4ChromiumOS",
-    },
-    "Linux ChromiumOS Ozone (Intel)": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": None,
-      # It's crucial to merge build requests on the testers.
-      "mergeRequests": True,
-      "slave_pools": ["linux_chromiumos_ozone_intel"],
-      "builder_timeout_s": 21600,
-      "category": "4ChromiumOS",
     },
   },
 
@@ -848,6 +839,14 @@
       },
       "slaves": ["build176-m1"],
     },
+    "linux_ozone_builder": {
+      "slave_data": {
+        "bits": 64,
+        "os": "linux",
+        "version": "wily",
+      },
+      "slaves": ["cros-wimpy8-c2"],
+    },
     "linux_rel_builders": {
       "slave_data": {
         "bits": 64,
@@ -928,7 +927,7 @@
       },
       "slaves": ["slave206-c1"],
     },
-    "linux_chromiumos_ozone_intel": {
+    "linux_ozone_intel": {
       "slave_data": {
         "bits": 64,
         "os": "linux",
@@ -992,23 +991,6 @@
         "version": "trusty",
       },
       "slaves": ["slave66-c1"],
-    },
-
-    "linux_chromiumos_builder": {
-      "slave_data": {
-        "bits": 64,
-        "os": "linux",
-        "version": "precise",
-      },
-      "slaves": ["slave907-c4"],
-    },
-    "linux_chromiumos_ozone_builder": {
-      "slave_data": {
-        "bits": 64,
-        "os": "linux",
-        "version": "wily",
-      },
-      "slaves": ["cros-wimpy8-c2"],
     },
   }
 }

@@ -445,6 +445,26 @@ SPEC = {
       'enable_swarming': True,
       'checkout_dir': 'linux',
     },
+    'GPU Linux Ozone Builder': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'internal_gles2_conform_tests',
+        'mb',
+        'ninja_confirm_noop',
+        'ozone',
+      ],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'linux',
+      },
+      'enable_swarming': False,
+    },
     'GPU Linux Builder (dbg)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop',
@@ -1075,7 +1095,7 @@ SPEC = {
       'enable_swarming': True,
     },
 
-    'Linux ChromiumOS Ozone (Intel)': {
+    'Linux Ozone (Intel)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -1084,7 +1104,7 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'Linux ChromiumOS Ozone Builder',
+      'parent_buildername': 'GPU Linux Ozone Builder',
       'testing': {
         'platform': 'linux',
       },
@@ -1207,49 +1227,6 @@ SPEC = {
       },
       'enable_swarming': True,
       'serialize_tests': True,
-    },
-
-    # The following machines do exist.
-    'Linux ChromiumOS Builder': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'chromeos',
-        'internal_gles2_conform_tests',
-        'mb',
-        'ninja_confirm_noop',
-      ],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'builder',
-      'testing': {
-        'platform': 'linux',
-      },
-      'enable_swarming': False,
-    },
-    'Linux ChromiumOS Ozone Builder': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'chromeos',
-        'internal_gles2_conform_tests',
-        'mb',
-        'ninja_confirm_noop',
-        'ozone',
-      ],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'builder',
-      'testing': {
-        'platform': 'linux',
-      },
-      'enable_swarming': False,
     },
   },
 }
