@@ -137,11 +137,7 @@ def _ComputeBuilders(builders, m_annotator, active_master_cls):
     if builder_data.get('use_remote_run'):
       factory = remote_run_factory.RemoteRunFactory(
           active_master=active_master_cls,
-          # TODO(dpranke): Remove 'repository' and
-          # 'default_remote_run_repository' once callers have been updated.
-          repository=builder_data.get('remote_run_repository',
-              builder_data.get('repository',
-                  builders.get('default_remote_run_repository'))),
+          repository=builder_data.get('repository'),
           recipe=builder_data['recipe'],
           revision=None,
           max_time=builder_data.get('builder_timeout_s'),
