@@ -566,7 +566,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "{'conditions': [['OS == \"ios\"', {'variables': {'files': ['<(app_path)/', 'src/ios/build/bots/scripts/'], 'command': ['src/ios/build/bots/scripts/run.py', '--app', '<(app_path)', '--args-json', '{\"test_args\": <(test_args), \"xctest\": <(xctest)}', '--out-dir', '${ISOLATED_OUTDIR}', '--retries', '3', '--xcode-version', '<(xcode_version)']}}]]}",
+      "{'conditions': [['OS == \"ios\"', {'variables': {'files': ['<(app_path)/', 'src/ios/build/bots/scripts/'], 'command': ['src/ios/build/bots/scripts/run.py', '--app', '<(app_path)', '--args-json', '{\"test_args\": <(test_args), \"xctest\": <(xctest), \"restart\": <(restart)}', '--out-dir', '${ISOLATED_OUTDIR}', '--retries', '3', '--xcode-version', '<(xcode_version)']}}]]}",
       "[BUILDER_CACHE]/ios/template.isolate"
     ],
     "cwd": "[BUILDER_CACHE]/ios/src",
@@ -585,7 +585,7 @@
       "@@@STEP_LOG_LINE@template.isolate@            \"--app\", @@@",
       "@@@STEP_LOG_LINE@template.isolate@            \"<(app_path)\", @@@",
       "@@@STEP_LOG_LINE@template.isolate@            \"--args-json\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@            \"{\\\"test_args\\\": <(test_args), \\\"xctest\\\": <(xctest)}\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@            \"{\\\"test_args\\\": <(test_args), \\\"xctest\\\": <(xctest), \\\"restart\\\": <(restart)}\", @@@",
       "@@@STEP_LOG_LINE@template.isolate@            \"--out-dir\", @@@",
       "@@@STEP_LOG_LINE@template.isolate@            \"${ISOLATED_OUTDIR}\", @@@",
       "@@@STEP_LOG_LINE@template.isolate@            \"--retries\", @@@",

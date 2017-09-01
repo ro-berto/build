@@ -503,6 +503,8 @@ class iOSApi(recipe_api.RecipeApi):
     args = [
       '--config-variable', 'OS', 'ios',
       '--config-variable', 'app_path', app_path,
+      '--config-variable', 'restart', (
+        'true' if test.get('restart') else 'false'),
       '--config-variable', 'test_args', self.m.json.dumps(
           test.get('test args') or []),
       '--config-variable', 'xcode_version', test.get(
@@ -548,7 +550,8 @@ class iOSApi(recipe_api.RecipeApi):
     cmd = [
       '%s/run.py' % scripts_dir,
       '--app', '<(app_path)',
-      '--args-json', '{"test_args": <(test_args), "xctest": <(xctest)}',
+      '--args-json',
+      '{"test_args": <(test_args), "xctest": <(xctest), "restart": <(restart)}',
       '--out-dir', '${ISOLATED_OUTDIR}',
       '--retries', '3',
       '--xcode-version', '<(xcode_version)',
