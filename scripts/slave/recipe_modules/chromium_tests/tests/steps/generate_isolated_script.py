@@ -124,6 +124,44 @@ def GenTests(api):
   )
 
   yield (
+      api.test('swarming_trigger_script') +
+      api.properties(enable_swarming=True, single_spec={
+          'name': 'base_unittests',
+          'isolate_name': 'base_unittests_run',
+          'trigger_script': {
+              'script': '//path/to/script.py',
+          },
+          'swarming': {
+              'can_use_on_swarming_builders': True,
+          },
+      }, swarm_hashes={
+          'base_unittests_run': 'deadbeef',
+      },
+         mastername='test_mastername',
+         buildername='test_buildername',
+         buildnumber=1)
+  )
+
+  yield (
+      api.test('swarming_trigger_script_invalid') +
+      api.properties(enable_swarming=True, single_spec={
+          'name': 'base_unittests',
+          'isolate_name': 'base_unittests_run',
+          'trigger_script': {
+              'script': 'bad',
+          },
+          'swarming': {
+              'can_use_on_swarming_builders': True,
+          },
+      }, swarm_hashes={
+          'base_unittests_run': 'deadbeef',
+      },
+         mastername='test_mastername',
+         buildername='test_buildername',
+         buildnumber=1)
+  )
+
+  yield (
       api.test('swarming_dimension_sets') +
       api.properties(enable_swarming=True, single_spec={
           'name': 'base_unittests',

@@ -589,6 +589,24 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
                   """ % (name, merge_script))),
               as_log='details')
 
+    trigger_script = dict(test.get('trigger_script', {}))
+    if trigger_script:
+      trigger_script_path = trigger_script.get('script')
+      if trigger_script_path:
+        if trigger_script_path.startswith('//'):
+          trigger_script['script'] = api.path['checkout'].join(
+              trigger_script_path[2:].replace('/', api.path.sep))
+        else:
+          api.python.failing_step(
+              'isolated_scripts spec format error',
+              textwrap.wrap(textwrap.dedent("""\
+                  The gtest target "%s" contains a custom trigger_script "%s"
+                  that doesn't match the expected format. Custom trigger_script entries
+                  should be a path relative to the top-level chromium src directory and
+                  should start with "//".
+                  """ % (name, trigger_script_path))),
+              as_log='details')
+
     if use_swarming and swarming_dimension_sets:
       for dimensions in swarming_dimension_sets:
         # Yield potentially multiple invocations of the same test, on
@@ -609,7 +627,7 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
                         use_xvfb=use_xvfb, cipd_packages=cipd_packages,
                         waterfall_mastername=mastername,
                         waterfall_buildername=buildername,
-                        merge=merge)
+                        merge=merge, trigger_script=trigger_script)
     else:
       yield GTestTest(name, args=args, target_name=target_name,
                       flakiness_dash=True,
@@ -625,7 +643,7 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
                       use_xvfb=use_xvfb, cipd_packages=cipd_packages,
                       waterfall_mastername=mastername,
                       waterfall_buildername=buildername,
-                      merge=merge)
+                      merge=merge, trigger_script=trigger_script)
 
 
 def generate_instrumentation_test(api, chromium_tests_api, mastername,
@@ -1300,7 +1318,7 @@ class SwarmingGTestTest(SwarmingTest):
                override_compile_targets=None, override_isolate_target=None,
                upload_to_flake_predictor=False, cipd_packages=None,
                waterfall_mastername=None, waterfall_buildername=None,
-               merge=None):
+               merge=None, trigger_script=None):
     super(SwarmingGTestTest, self).__init__(
         name, dimensions, tags, target_name, extra_suffix, priority, expiration,
         hard_timeout, waterfall_mastername=waterfall_mastername,
@@ -1314,6 +1332,7 @@ class SwarmingGTestTest(SwarmingTest):
     self._cipd_packages = cipd_packages
     self._gtest_results = {}
     self._merge = merge
+    self._trigger_script = trigger_script
 
   @Test.test_options.setter
   def test_options(self, value):
@@ -1354,7 +1373,8 @@ class SwarmingGTestTest(SwarmingTest):
         test_launcher_summary_output=api.test_utils.gtest_results(
             add_json_log=False),
         cipd_packages=self._cipd_packages, extra_args=args,
-        merge=self._merge, build_properties=api.chromium.build_properties)
+        merge=self._merge, trigger_script=self._trigger_script,
+        build_properties=api.chromium.build_properties)
 
   def validate_task_results(self, api, step_result):
     if not hasattr(step_result, 'test_utils'):
@@ -1507,7 +1527,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
                override_compile_targets=None, perf_id=None, results_url=None,
                perf_dashboard_id=None, io_timeout=None,
                waterfall_mastername=None, waterfall_buildername=None,
-               merge=None, results_handler=None):
+               merge=None, trigger_script=None, results_handler=None):
     super(SwarmingIsolatedScriptTest, self).__init__(
         name, dimensions, tags, target_name, extra_suffix, priority, expiration,
         hard_timeout, io_timeout, waterfall_mastername=waterfall_mastername,
@@ -1521,6 +1541,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     self._perf_dashboard_id = perf_dashboard_id
     self._isolated_script_results = {}
     self._merge = merge
+    self._trigger_script = trigger_script
     self._ignore_task_failure = ignore_task_failure
     self.results_handler = results_handler or JSONResultsHandler(
         ignore_task_failure=ignore_task_failure)
@@ -1551,8 +1572,8 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
         title=self._step_name(suffix),
         ignore_task_failure=self._ignore_task_failure,
         isolated_hash=isolated_hash, shards=self._shards, idempotent=False,
-        merge=self._merge, build_properties=api.chromium.build_properties,
-        extra_args=args)
+        merge=self._merge, trigger_script=self._trigger_script,
+        build_properties=api.chromium.build_properties, extra_args=args)
 
   def validate_task_results(self, api, step_result):
     results = getattr(step_result, 'isolated_script_results', None) or {}
@@ -1731,6 +1752,24 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
                   """ % (name, merge_script))),
               as_log='details')
 
+    trigger_script = dict(spec.get('trigger_script', {}))
+    if trigger_script:
+      trigger_script_path = trigger_script.get('script')
+      if trigger_script_path:
+        if trigger_script_path.startswith('//'):
+          trigger_script['script'] = api.path['checkout'].join(
+              trigger_script_path[2:].replace('/', api.path.sep))
+        else:
+          api.python.failing_step(
+              'isolated_scripts spec format error',
+              textwrap.wrap(textwrap.dedent("""\
+                  The isolated_scripts target "%s" contains a custom trigger_script "%s"
+                  that doesn't match the expected format. Custom trigger_script entries
+                  should be a path relative to the top-level chromium src directory and
+                  should start with "//".
+                  """ % (name, trigger_script_path))),
+              as_log='details')
+
     # TODO(tansell): Remove this once custom handling of results is no longer
     # needed.
     results_handler_name = spec.get('results_handler', 'default')
@@ -1769,7 +1808,8 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
               io_timeout=swarming_io_timeout,
               waterfall_mastername=mastername,
               waterfall_buildername=buildername,
-              merge=merge, results_handler=results_handler)
+              merge=merge, trigger_script=trigger_script,
+              results_handler=results_handler)
       else:
         yield SwarmingIsolatedScriptTest(
             name=name, args=args, target_name=target_name,
@@ -1782,7 +1822,8 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
             results_url=results_url, perf_dashboard_id=perf_dashboard_id,
             io_timeout=swarming_io_timeout,
             waterfall_mastername=mastername, waterfall_buildername=buildername,
-            merge=merge, results_handler=results_handler)
+            merge=merge, trigger_script=trigger_script,
+            results_handler=results_handler)
     else:
       yield LocalIsolatedScriptTest(
           name=name, args=args, target_name=target_name,
@@ -1796,7 +1837,7 @@ class GTestTest(Test):
                swarming_extra_suffix=None, swarming_priority=None,
                swarming_expiration=None, swarming_hard_timeout=None,
                cipd_packages=None, waterfall_mastername=None,
-               waterfall_buildername=None, merge=None,
+               waterfall_buildername=None, merge=None, trigger_script=None,
                **runtest_kwargs):
     super(GTestTest, self).__init__(
         waterfall_mastername=waterfall_mastername,
@@ -1815,7 +1856,7 @@ class GTestTest(Test):
               'upload_to_flake_predictor'),
           waterfall_mastername=waterfall_mastername,
           waterfall_buildername=waterfall_buildername,
-          merge=merge)
+          merge=merge, trigger_script=trigger_script)
     else:
       self._test = LocalGTestTest(
           name, args, target_name, waterfall_mastername=waterfall_mastername,

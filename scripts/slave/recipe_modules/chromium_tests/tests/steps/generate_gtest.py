@@ -135,6 +135,38 @@ def GenTests(api):
   )
 
   yield (
+      api.test('trigger_script') +
+      api.properties(
+          single_spec={
+              'test': 'base_unittests',
+              'trigger_script': {
+                  'script': '//trigger_script.py',
+              },
+          },
+          mastername='test_mastername',
+          buildername='test_buildername',
+          buildnumber=123,
+          bot_id='test_bot_id',
+      )
+  )
+
+  yield (
+      api.test('trigger_script_invalid') +
+      api.properties(
+          single_spec={
+              'test': 'base_unittests',
+              'trigger_script': {
+                  'script': 'trigger_script.py',
+              },
+          },
+          mastername='test_mastername',
+          buildername='test_buildername',
+          buildnumber=123,
+          bot_id='test_bot_id',
+      )
+  )
+
+  yield (
       api.test('gsutil_upload_swarming') +
       api.properties(
           single_spec={
