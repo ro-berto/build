@@ -591,9 +591,29 @@ TRYBOTS = freeze({
   },
   'tryserver.chromium.perf': {
     'builders': {
+      'Android Compile': simple_bot({
+        'mastername': 'chromium.perf',
+        'buildername': 'Android Compile',
+      }),
+      'Android arm64 Compile': simple_bot({
+        'mastername': 'chromium.perf',
+        'buildername': 'Android arm64 Compile',
+      }),
+      'Linux Builder': simple_bot({
+        'mastername': 'chromium.perf',
+        'buildername': 'Linux Builder',
+      }),
       'Mac Builder': simple_bot({
         'mastername': 'chromium.perf',
         'buildername': 'Mac Builder',
+      }),
+      'Win Builder': simple_bot({
+        'mastername': 'chromium.perf',
+        'buildername': 'Win Builder',
+      }),
+      'Win x64 Builder': simple_bot({
+        'mastername': 'chromium.perf',
+        'buildername': 'Win x64 Builder',
       }),
     },
   },
