@@ -119,7 +119,7 @@ _STABLE_CIPD_PINS = CipdPins(
 # Canary CIPD pin set.
 _CANARY_CIPD_PINS = CipdPins(
       recipes='git_revision:6eaacf24833ebd2565177157d368da33780fced9',
-      kitchen='git_revision:fa75314ad412fbc989aec72993623316c8db9bc7')
+      kitchen='git_revision:c9c1865b81113f02fd618259624170f59e2c832e')
 
 
 def _ensure_directory(*path):
