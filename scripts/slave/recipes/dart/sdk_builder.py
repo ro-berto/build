@@ -53,9 +53,7 @@ def RunSteps(api, revision, buildername):
     api.python('clobber',
                api.path['tools'].join('clean_output_directory.py'))
 
-    # Step 5) Run the old annotated steps.
-    # TODO(kustermann/whesse): We might consider pulling some of the steps
-    # of 'tools/bots/dart_sdk.py' out to here.
+    # Step 5) Build and upload the SDK
     api.python('generate sdks',
         api.path['checkout'].join('tools', 'bots', 'dart_sdk.py'),
         args=[])
@@ -66,40 +64,45 @@ def RunSteps(api, revision, buildername):
                args=[],
                ok_ret='any')
 
-  # Step 7) Trigger dependent builders.
-  buildernames = {
-    'linux' : (
-        BuildBuilderNames('analyze-linux', channel) +
-        BuildBuilderNames('analyzer-linux-release', channel) +
-        BuildBuilderNames('analyzer-linux-release-strong', channel) +
-        BuildBuilderNames('dart2js-linux-chromeff', channel, 4) +
-        BuildBuilderNames('dart2js-linux-d8-minified', channel, 5) +
-        BuildBuilderNames('dart2js-linux-drt', channel, 2) +
-        BuildBuilderNames('dart2js-linux-drt-csp-minified', channel) +
-        BuildBuilderNames('dart2js-linux-jsshell', channel, 4) +
-        BuildBuilderNames('pkg-linux-release', channel)
-    ),
-    'win' : (
-        BuildBuilderNames('analyzer-win7-release', channel) +
-        BuildBuilderNames('analyzer-win7-release-strong', channel) +
-        BuildBuilderNames('dart2js-win7-chrome', channel, 4) +
-        BuildBuilderNames('dart2js-win7-ie11ff', channel, 4) +
-        BuildBuilderNames('dart2js-win8-ie11', channel, 4) +
-        BuildBuilderNames('pkg-win7-release', channel)
-    ),
-    'mac' : (
-        BuildBuilderNames('analyzer-mac10.11-release', channel) +
-        BuildBuilderNames('analyzer-mac10.11-release-strong', channel) +
-        BuildBuilderNames('dart2js-mac10.11-chrome', channel) +
-        BuildBuilderNames('dart2js-mac10.11-safari', channel, 3) +
-        BuildBuilderNames('pkg-mac10.11-release', channel)
-    ),
-  }[api.platform.name]
+    # Step 7) Trigger dependent builders.
+    buildernames = {
+      'linux' : (
+          BuildBuilderNames('analyze-linux', channel) +
+          BuildBuilderNames('analyzer-linux-release', channel) +
+          BuildBuilderNames('analyzer-linux-release-strong', channel) +
+          BuildBuilderNames('dart2js-linux-chromeff', channel, 4) +
+          BuildBuilderNames('dart2js-linux-d8-minified', channel, 5) +
+          BuildBuilderNames('dart2js-linux-drt', channel, 2) +
+          BuildBuilderNames('dart2js-linux-drt-csp-minified', channel) +
+          BuildBuilderNames('dart2js-linux-jsshell', channel, 4) +
+          BuildBuilderNames('pkg-linux-release', channel)
+      ),
+      'win' : (
+          BuildBuilderNames('analyzer-win7-release', channel) +
+          BuildBuilderNames('analyzer-win7-release-strong', channel) +
+          BuildBuilderNames('dart2js-win7-chrome', channel, 4) +
+          BuildBuilderNames('dart2js-win7-ie11ff', channel, 4) +
+          BuildBuilderNames('dart2js-win8-ie11', channel, 4) +
+          BuildBuilderNames('pkg-win7-release', channel)
+      ),
+      'mac' : (
+          BuildBuilderNames('analyzer-mac10.11-release', channel) +
+          BuildBuilderNames('analyzer-mac10.11-release-strong', channel) +
+          BuildBuilderNames('dart2js-mac10.11-chrome', channel) +
+          BuildBuilderNames('dart2js-mac10.11-safari', channel, 3) +
+          BuildBuilderNames('pkg-mac10.11-release', channel)
+      ),
+    }[api.platform.name]
 
-  triggers = [{'builder_name': name,
-               'properties': { 'revision': revision },
-               } for name in buildernames]
-  api.trigger(*triggers)
+    triggers = [{'builder_name': name,
+                 'properties': { 'revision': revision },
+                 } for name in buildernames]
+    api.trigger(*triggers)
+
+    # Step 8) Create and upload the API docs
+    api.python('generate API docs',
+        api.path['checkout'].join('tools', 'bots', 'dart_sdk.py'),
+        args=['api_docs'])
 
 
 def GenTests(api):
