@@ -994,9 +994,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         self._all_compile_targets(tests + tests_including_triggered)))
     additional_compile_targets = sorted(
         set(compile_targets) - set(test_targets))
+    analyze_names = ['chromium'] + list(bot_config.get('analyze_names', []))
     test_targets, compile_targets = self.m.filter.analyze(
         affected_files, test_targets, additional_compile_targets,
-        'trybot_analyze_config.json')
+        'trybot_analyze_config.json',
+        additional_names=analyze_names)
 
     if bot_config.get('analyze_mode') == 'compile':
       tests = []

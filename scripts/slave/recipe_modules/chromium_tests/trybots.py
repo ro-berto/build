@@ -294,10 +294,15 @@ TRYBOTS = freeze({
         'mastername': 'chromium.linux',
         'buildername': 'Cast Audio Linux',
       }),
-      'fuchsia': simple_bot({
-        'mastername': 'chromium.fyi',
-        'buildername': 'Fuchsia',
-      }),
+      'fuchsia': {
+        'bot_ids': [
+          {
+            'mastername': 'chromium.fyi',
+            'buildername': 'Fuchsia',
+          }
+        ],
+        'analyze_names': ['fuchsia'],
+      },
       'fuchsia_compile': simple_bot({
         'mastername': 'chromium.linux',
         'buildername': 'Fuchsia Compile',
