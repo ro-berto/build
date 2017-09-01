@@ -86,39 +86,24 @@ def RunSteps(api):
                     system == 'linux')
       command = xvfb_cmd if needs_xvfb else ['./tools/test.py']
 
-      test_args = command + ['-m%s' % mode, '-aia32', '-cdart2js',
+      test_args = ['-m%s' % mode, '-aia32', '-cdart2js',
                    '--dart2js-batch', '--reset-browser-configuration',
                    '--report', '--time', '--use-sdk', '--progress=buildbot',
-                   '-v',
-                   '--exclude-suite=observatory_ui,service,co19',
-                   '-r%s' % runtime]
-      dart2js_tasks = api.dart.shard('dart2js_tests', isolate_hash, test_args)
+                   '-v', '-r%s' % runtime]
+      if system in ['win7', 'win8', 'win10']:
+        test_args.append('--builder-tag=%s' % system)
 
-      test_args = command + ['-m%s' % mode, '-aia32', '-cdart2js', '-r%s' % runtime,
-                   '--dart2js-batch', '--reset-browser-configuration',
-                   '--report', '--time', '--use-sdk', '--progress=buildbot',
-                   '-v',
-                   'co19']
-      co19_tasks = api.dart.shard('dart2js_co19_tests', isolate_hash, test_args)
+      tests = ['--exclude-suite=observatory_ui,service,co19']
+      dart2js_tasks = api.dart.shard('dart2js_tests', isolate_hash, command + test_args + tests)
 
-      test_args = ['--mode=%s' % mode,
-                   '--arch=ia32',
-                   '--compiler=dart2js',
-                   '--dart2js-batch',
-                   '--runtime=%s' % runtime,
-                   '--progress=buildbot',
-                   '-v',
-                   '--reset-browser-configuration',
-                   '--report',
-                   '--time',
-                   '--write-debug-log',
-                   '--write-test-outcome-log']
+      tests = ['co19']
+      co19_tasks = api.dart.shard('dart2js_co19_tests', isolate_hash, command + test_args + tests)
+
+      test_args.remove('--use-sdk')
+      test_args.extend(['--write-debug-log', '--write-test-outcome-log'])
       for option in options:
         if all_options[option] != '':
           test_args.append(all_options[option])
-
-      if system in ['win7', 'win8', 'win10']:
-        test_args.append('--builder-tag=%s' % system)
 
       if runtime in ['ie10', 'ie11']:
         test_specs = [{'name': 'dart2js-%s tests' % runtime,
