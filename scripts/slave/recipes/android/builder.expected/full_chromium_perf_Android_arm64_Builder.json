@@ -533,7 +533,7 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython",
       "-u",
       "[START_DIR]/src/build/android/test_runner.py",
       "perf",
@@ -602,7 +602,7 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython",
       "-u",
       "[START_DIR]/src/build/android/test_runner.py",
       "perf",
@@ -818,7 +818,7 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython",
       "-u",
       "[START_DIR]/src/build/android/test_runner.py",
       "perf",
@@ -887,7 +887,7 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython",
       "-u",
       "[START_DIR]/src/build/android/test_runner.py",
       "perf",
@@ -1103,7 +1103,7 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython",
       "-u",
       "[START_DIR]/src/build/android/test_runner.py",
       "perf",
@@ -1172,7 +1172,7 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython",
       "-u",
       "[START_DIR]/src/build/android/test_runner.py",
       "perf",

@@ -1,7 +1,7 @@
 [
   {
     "cmd": [
-      "python",
+      "vpython",
       "-u",
       "None/out/Release/bin/run_test_suite",
       "--verbose",

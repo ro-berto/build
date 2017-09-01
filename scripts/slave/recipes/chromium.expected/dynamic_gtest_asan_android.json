@@ -712,7 +712,7 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython",
       "-u",
       "[START_DIR]/src/out/Debug/bin/run_gfx_unittests",
       "--tool=asan",

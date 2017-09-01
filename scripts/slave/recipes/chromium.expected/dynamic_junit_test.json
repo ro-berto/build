@@ -388,7 +388,7 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython",
       "-u",
       "[START_DIR]/src/out/Release/bin/run_base_junit_tests",
       "--verbose",

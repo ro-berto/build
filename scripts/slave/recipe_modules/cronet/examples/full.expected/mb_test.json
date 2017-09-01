@@ -620,7 +620,7 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython",
       "-u",
       "[START_DIR]/src/build/android/test_runner.py",
       "perf",
@@ -689,7 +689,7 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython",
       "-u",
       "[START_DIR]/src/build/android/test_runner.py",
       "perf",
@@ -1118,7 +1118,7 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython",
       "-u",
       "[START_DIR]/src/out/Release/bin/run_cronet_unittests",
       "--blacklist-file",
@@ -1136,7 +1136,7 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython",
       "-u",
       "[START_DIR]/src/out/Release/bin/run_net_unittests",
       "--blacklist-file",
@@ -1154,7 +1154,7 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython",
       "-u",
       "[START_DIR]/src/out/Release/bin/run_cronet_sample_test_apk",
       "--blacklist-file",
@@ -1195,7 +1195,7 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython",
       "-u",
       "[START_DIR]/src/out/Release/bin/run_cronet_smoketests_missing_native_library_instrumentation_apk",
       "--blacklist-file",
@@ -1236,7 +1236,7 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython",
       "-u",
       "[START_DIR]/src/out/Release/bin/run_cronet_smoketests_platform_only_instrumentation_apk",
       "--blacklist-file",
@@ -1277,7 +1277,7 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython",
       "-u",
       "[START_DIR]/src/out/Release/bin/run_cronet_test_instrumentation_apk",
       "--blacklist-file",

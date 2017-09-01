@@ -2209,7 +2209,7 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython",
       "-u",
       "[BUILDER_CACHE]/Android32__M_Nexus5X_/src/out/Release/bin/run_android_junit_tests",
       "--verbose",
