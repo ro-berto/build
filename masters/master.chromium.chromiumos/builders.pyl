@@ -35,22 +35,6 @@
       "category": "1default",
     },
 
-    "Linux ChromiumOS Ozone Builder": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": "chromium",
-      "slave_pools": ["linux_ozone"],
-      "category": "3ozone",
-    },
-    "Linux ChromiumOS Ozone Tests (1)": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": None,
-      "mergeRequests": True,
-      "slave_pools": ["linux_ozone_tests_1"],
-      "category": "3ozone",
-    },
-
     "Linux ChromiumOS Builder (dbg)": {
       "recipe": "chromium",
       "use_remote_run": True,
@@ -114,22 +98,6 @@
         "bits": 64,
       },
       "slaves": ["vm911-m1"],
-    },
-    "linux_ozone": {
-      "slave_data": {
-        "os": "linux",
-        "version": "precise",
-        "bits": 64,
-      },
-      "slaves": ["build83-m1"],
-    },
-    "linux_ozone_tests_1": {
-      "slave_data": {
-        "os": "linux",
-        "version": "precise",
-        "bits": 64,
-      },
-      "slaves": ["vm316-m1"],
     },
 
     "linux_dbg": {

@@ -98,38 +98,6 @@ SPEC = {
       },
       'enable_swarming': True,
     },
-    'Linux ChromiumOS Ozone Builder': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['chromeos', 'mb', 'ninja_confirm_noop', 'ozone'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'builder',
-      'compile_targets': [
-      ],
-      'testing': {
-        'platform': 'linux',
-      },
-      'enable_swarming': True,
-      'checkout_dir': 'linux_chromeos',
-    },
-    'Linux ChromiumOS Ozone Tests (1)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['chromeos', 'ozone', 'ninja_confirm_noop'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'Linux ChromiumOS Ozone Builder',
-      'testing': {
-        'platform': 'linux',
-      },
-      'enable_swarming': True,
-    },
     'Linux ChromiumOS Builder (dbg)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['chromeos', 'mb', 'ninja_confirm_noop'],
