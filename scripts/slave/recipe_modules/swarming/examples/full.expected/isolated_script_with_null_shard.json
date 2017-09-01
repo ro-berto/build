@@ -254,10 +254,11 @@
       "@@@STEP_LOG_LINE@swarming.summary@  ]@@@",
       "@@@STEP_LOG_LINE@swarming.summary@}@@@",
       "@@@STEP_LOG_END@swarming.summary@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@'NoneType' object has no attribute 'get'@@@",
+      "@@@STEP_LOG_LINE@no_results_exc@Infra Failure in Shard #0 failed: Internal swarming failure@@@",
       "@@@STEP_LOG_END@no_results_exc@@@",
       "@@@STEP_LINK@shard #0 had an internal swarming failure@https://chromium-swarm-dev.appspot.com/user/task/10000@@@",
-      "@@@STEP_LINK@shard #1@https://chromium-swarm-dev.appspot.com/user/task/10100@@@"
+      "@@@STEP_LINK@shard #1@https://chromium-swarm-dev.appspot.com/user/task/10100@@@",
+      "@@@STEP_EXCEPTION@@@"
     ]
   },
   {

@@ -742,7 +742,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     max_pending = (-1, None)
     max_duration = (-1, None)
     for i, shard in enumerate(shards):
-      if not shard.get('started_ts'):
+      if not shard or not shard.get('started_ts'):
         continue
 
       created = parse_time(shard['created_ts'])
@@ -1247,4 +1247,3 @@ class SwarmingTask(object):
       for shard_dict in self._trigger_output['tasks'].itervalues():
         task_ids.append(shard_dict['task_id'])
     return task_ids
-
