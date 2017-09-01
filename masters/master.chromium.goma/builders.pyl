@@ -46,6 +46,20 @@
        "slave_pools": ["mac_10.11_gce"],
        "category": "gce",
      },
+     "CrWinGomaGCEStaging": {
+       "recipe": "chromium",
+       "use_remote_run": True,
+       "scheduler": "chromium_src_commits",
+       "slave_pools": ["win_win10_gce"],
+       "category": "gce",
+     },
+     "CrWinClangGomaGCEStaging": {
+       "recipe": "chromium",
+       "use_remote_run": True,
+       "scheduler": "chromium_src_commits",
+       "slave_pools": ["win_win10_gce"],
+       "category": "gce",
+     },
   },
 
   "schedulers": {
@@ -95,6 +109,14 @@
         "version": "win8",
       },
       "slaves": ["vm9-m1"],
+    },
+    "win_win10_gce": {
+      "slave_data": {
+        "bits": 64,
+        "os": "win",
+        "version": "win10"
+      },
+      "slaves": ["vm342-m1", "vm343-m1"],
     },
   },
 }
