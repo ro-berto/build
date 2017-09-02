@@ -87,32 +87,29 @@ CIPD_PKGS = freeze({
 })
 
 
-def upload_to_cipd(api, buildername, path_to_binary, version_tag):
+def upload_to_cipd(api, buildername, rel_dir, gn_exe, gn_version, git_revision):
+  # Switch to using default task account on LUCI for cipd auth.
   api.cipd.set_service_account_credentials(None)
 
   cipd_pkg_name = CIPD_PKGS[buildername]
-  step = api.cipd.search(cipd_pkg_name, '%s:%s' % version_tag)
+  step = api.cipd.search(cipd_pkg_name, 'gn_version:%s' % gn_version)
   if step.json.output['result']:
     api.step('Package is up-to-date', cmd=None)
     return
 
-  cipd_pkg_dir = api.path.mkdtemp('gn')
-  api.file.copy('copy gn', path_to_binary, cipd_pkg_dir)
-  cipd_pkg_path = api.path.mkdtemp('gn_package').join('gn.cipd')
+  pkg_def = api.cipd.PackageDefinition(
+      package_name=cipd_pkg_name,
+      package_root=rel_dir)
+  pkg_def.add_file(rel_dir.join(gn_exe))
+  pkg_def.add_version_file('.versions/%s.cipd_version' % gn_exe)
 
-  api.cipd.build(
-      cipd_pkg_dir,
-      cipd_pkg_path,
-      cipd_pkg_name,
-  )
-  api.cipd.register(
-      cipd_pkg_name,
-      cipd_pkg_path,
+  api.cipd.create_from_pkg(
+      pkg_def,
       refs=['latest'],
       tags={
-        version_tag[0]: version_tag[1],
+        'gn_version': gn_version,
         'git_repository': 'https://chromium.googlesource.com/chromium/src',
-        'git_revision': api.properties.get('got_revision'),
+        'git_revision': git_revision,
       }
   )
 
@@ -122,8 +119,9 @@ def RunSteps(api):
   buildername, bot_config = api.chromium.configure_bot(BUILDERS,
                                                        ['gn_for_uploads', 'mb'])
 
-  api.bot_update.ensure_checkout(
+  bot_update_step = api.bot_update.ensure_checkout(
       patch_root=bot_config.get('root_override'))
+  git_revision = bot_update_step.presentation.properties['got_revision']
 
   api.chromium.ensure_goma()
 
@@ -133,29 +131,32 @@ def RunSteps(api):
 
   api.chromium.compile(targets=['gn', 'gn_unittests'], use_goma_module=True)
 
-  path_to_binary = str(api.path['checkout'].join('out', 'Release', 'gn'))
-  if api.platform.is_win:
-    path_to_binary += '.exe'
+  gn_exe = 'gn' if not api.platform.is_win else 'gn.exe'
+  rel_dir = api.path['checkout'].join('out', 'Release')
+  path_to_binary = rel_dir.join(gn_exe)
+  path_to_sha1 = rel_dir.join(gn_exe + '.sha1')
 
   step = api.step('gn version', [path_to_binary, '--version'],
                   stdout=api.raw_io.output())
-  version_tag = ('gn_version', step.stdout.strip())
+  gn_version = step.stdout.strip()
 
   api.chromium.runtest('gn_unittests')
 
   if not api.platform.is_win:
     api.m.step('gn strip', cmd=['strip', path_to_binary])
 
-  api.python('upload',
-             api.depot_tools.upload_to_google_storage_path,
-             ['-b', 'chromium-gn', path_to_binary])
+  api.python(
+      'upload',
+      api.depot_tools.upload_to_google_storage_path,
+      ['-b', 'chromium-gn', path_to_binary])
 
-  sha1 = api.file.read_text('gn sha1', path_to_binary + '.sha1',
-                            test_data='0123456789abcdeffedcba987654321012345678')
+  sha1 = api.file.read_text(
+      'gn sha1', path_to_sha1,
+      test_data='0123456789abcdeffedcba987654321012345678')
   api.step.active_result.presentation.step_text = sha1
 
   if mastername == 'luci.infra-internal.triggered':
-    upload_to_cipd(api, buildername, path_to_binary, version_tag)
+    upload_to_cipd(api, buildername, rel_dir, gn_exe, gn_version, git_revision)
 
 
 def GenTests(api):

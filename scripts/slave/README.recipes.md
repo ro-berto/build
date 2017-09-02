@@ -3876,11 +3876,11 @@ Returns: the list of matched targets.
 
 [DEPS](/scripts/slave/recipes/chromium_gn_upload.py#7): [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/cipd][depot_tools/recipe_modules/cipd], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_gn_upload.py#120)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_gn_upload.py#117)(api):**
 
 &mdash; **def [b](/scripts/slave/recipes/chromium_gn_upload.py#66)(master, builder):**
 
-&mdash; **def [upload\_to\_cipd](/scripts/slave/recipes/chromium_gn_upload.py#90)(api, buildername, path_to_binary, version_tag):**
+&mdash; **def [upload\_to\_cipd](/scripts/slave/recipes/chromium_gn_upload.py#90)(api, buildername, rel_dir, gn_exe, gn_version, git_revision):**
 ### *recipes* / [chromium\_gsutil:examples/full](/scripts/slave/recipe_modules/chromium_gsutil/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_gsutil/examples/full.py#5): [chromium\_gsutil](#recipe_modules-chromium_gsutil), [recipe\_engine/path][recipe_engine/recipe_modules/path]

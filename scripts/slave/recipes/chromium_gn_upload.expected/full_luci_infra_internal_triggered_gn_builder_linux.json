@@ -559,47 +559,10 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[START_DIR]/src/out/Release/gn",
-      "[TMP_BASE]/gn_tmp_1"
-    ],
-    "infra_step": true,
-    "name": "copy gn"
-  },
-  {
-    "cmd": [
       "cipd",
-      "pkg-build",
-      "-in",
-      "[TMP_BASE]/gn_tmp_1",
-      "-name",
-      "infra/tools/gn/linux-amd64",
-      "-out",
-      "[TMP_BASE]/gn_package_tmp_2/gn.cipd",
-      "-json-output",
-      "/path/to/tmp/json"
-    ],
-    "name": "build linux-amd64",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"instance_id\": \"40-chars-fake-of-the-package-instance_id\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"package\": \"infra/tools/gn/linux-amd64\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "cipd",
-      "pkg-register",
-      "[TMP_BASE]/gn_package_tmp_2/gn.cipd",
+      "create",
+      "-pkg-def",
+      "{\"data\": [{\"file\": \"gn\"}, {\"version_file\": \".versions/gn.cipd_version\"}], \"install_mode\": \"\", \"package\": \"infra/tools/gn/linux-amd64\", \"root\": \"[START_DIR]/src/out/Release\"}",
       "-json-output",
       "/path/to/tmp/json",
       "-ref",
@@ -607,12 +570,13 @@
       "-tag",
       "git_repository:https://chromium.googlesource.com/chromium/src",
       "-tag",
-      "git_revision:None",
+      "git_revision:f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "-tag",
       "gn_version:12345"
     ],
-    "name": "register infra/tools/gn/linux-amd64",
+    "name": "create infra/tools/gn/linux-amd64",
     "~followup_annotations": [
+      "@@@STEP_TEXT@</br>pkg: infra/tools/gn/linux-amd64</br>id: 40-chars-fake-of-the-package-instance_id@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"instance_id\": \"40-chars-fake-of-the-package-instance_id\", @@@",
