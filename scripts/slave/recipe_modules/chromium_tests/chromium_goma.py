@@ -76,5 +76,33 @@ SPEC = {
        'platform': 'mac',
      },
    },
+   'CrWinGomaGCEStaging': {
+     'chromium_config': 'chromium',
+     'chromium_apply_config': ['goma_gce', 'clobber', 'mb'],
+     'gclient_config': 'chromium',
+     'chromium_config_kwargs': {
+       'BUILD_CONFIG': 'Release',
+       'TARGET_BITS': 64,
+     },
+     'tests': steps.GOMA_TESTS,
+     'goma_staging': True,
+     'testing': {
+       'platform': 'win',
+     },
+   },
+   'CrWinClangGomaGCEStaging': {
+     'chromium_config': 'chromium',
+     'chromium_apply_config': ['goma_gce', 'clobber', 'mb'],
+     'gclient_config': 'chromium',
+     'chromium_config_kwargs': {
+       'BUILD_CONFIG': 'Release',
+       'TARGET_BITS': 64,
+     },
+     'tests': steps.GOMA_TESTS,
+     'goma_staging': True,
+     'testing': {
+       'platform': 'win',
+     },
+   },
  },
 }
