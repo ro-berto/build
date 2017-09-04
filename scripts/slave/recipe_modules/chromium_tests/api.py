@@ -971,7 +971,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         layout_test_extra_args = {
             'shards': 5,
             'dimensions': {
-                'os': 'Windows-10-10586',
+                'os': 'Windows-7-SP1',
             },
         }
       else:
