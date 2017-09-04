@@ -26,15 +26,17 @@ RECIPE_CONFIG_PATHS = [
 # TODO(phajdan.jr): Remove special case for layout tests.
 # This could be done by moving layout tests to main waterfall.
 CHROMIUM_BLINK_TESTS_BUILDERS = freeze([
-  'mac_chromium_rel_ng',
-  'win_chromium_rel_ng',
   'linux_chromium_rel_ng',
+  'mac_chromium_rel_ng',
+  'old_chromium_rel_ng',
+  'win_chromium_rel_ng',
 ])
 
 # If we are running layout tests, we run on swarming if the buildername is in this list.
 LAYOUT_TESTS_SWARMING_BUILDERS = freeze([
   'linux_chromium_rel_ng',
   'mac_chromium_rel_ng',
+  'win_chromium_rel_ng',
 ])
 
 
@@ -963,6 +965,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                 'os': 'Mac-10.12',
                 'gpu': '8086:0a2e',
                 'hidpi': '0',
+            },
+        }
+      elif buildername == 'win_chromium_rel_ng':  # pragma: no cover
+        layout_test_extra_args = {
+            'shards': 5,
+            'dimensions': {
+                'os': 'Windows-10-10586',
             },
         }
       else:

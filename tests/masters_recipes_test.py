@@ -83,6 +83,14 @@ SUPPRESSIONS = {
 }
 
 
+# FIXME(tansell): Remove fake when BlinkTests are removed.
+FAKE_BUILDERS = {
+    'master.tryserver.chromium.win' : [
+        'old_chromium_rel_ng',
+    ],
+}
+
+
 def getBuilders(recipe_name):
   """Asks the given recipe to dump its BUILDERS dictionary.
 
@@ -176,7 +184,6 @@ def main(argv):
         print '(%s):' % master
         print '\n'.join('\t%s' % b for b in sorted(other_recipe_builders))
 
-
   for master in TRYSERVER_MASTERS:
     short_master = master.replace('master.', '')
     builders = getBuildersAndRecipes(master)
@@ -185,6 +192,12 @@ def main(argv):
 
     bogus_builders = set(recipe_side_builders.keys()).difference(
         set(builders.keys()))
+
+    # FIXME(tansell): Remove fake when BlinkTests are removed.
+    for fake in FAKE_BUILDERS.get(master, []):
+      if fake in bogus_builders:
+        bogus_builders.remove(fake)
+
     if bogus_builders:
       exit_code = 1
       print 'The following builders from chromium_trybot recipe'

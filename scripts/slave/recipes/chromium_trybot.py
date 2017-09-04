@@ -52,11 +52,13 @@ def GenTests(api):
   canned_test = api.test_utils.canned_gtest_output
 
   def props(config='Release', mastername='tryserver.chromium.linux',
-            buildername='linux_chromium_rel_ng', extra_swarmed_tests=None,
+            buildername='linux_chromium_rel_ng',
+            swarm_hashes=None, extra_swarmed_tests=None,
             **kwargs):
     kwargs.setdefault('path_config', 'kitchen')
     kwargs.setdefault('revision', None)
-    swarm_hashes = {}
+    if swarm_hashes is None:
+      swarm_hashes = {}
     if extra_swarmed_tests:
       for test in extra_swarmed_tests:
         swarm_hashes[test] = '[dummy hash for %s]' % test
@@ -649,7 +651,7 @@ def GenTests(api):
 
   yield (
     api.test('use_v8_patch_on_chromium_trybot_gerrit_feature_branch') +
-    props(buildername='win_chromium_rel_ng',
+    props(buildername='old_chromium_rel_ng',
           mastername='tryserver.chromium.win',
           gerrit_project='v8/v8') +
     api.platform.name('win') +
@@ -712,7 +714,7 @@ def GenTests(api):
     api.test('analyze_runs_nothing_with_no_source_file_changes') +
     api.properties.tryserver(
       mastername='tryserver.chromium.win',
-      buildername='win_chromium_rel_ng',
+      buildername='old_chromium_rel_ng',
       swarm_hashes={}
     ) +
     api.platform.name('win') +
@@ -728,7 +730,7 @@ def GenTests(api):
     api.test('add_layout_tests_via_manual_diff_inspection') +
     api.properties.tryserver(
       mastername='tryserver.chromium.win',
-      buildername='win_chromium_rel_ng',
+      buildername='old_chromium_rel_ng',
       swarm_hashes={}
     ) +
     api.platform.name('win') +
@@ -744,7 +746,7 @@ def GenTests(api):
     api.test('skip_layout_tests_via_manual_diff_doesnt_match') +
     api.properties.tryserver(
       mastername='tryserver.chromium.win',
-      buildername='win_chromium_rel_ng',
+      buildername='old_chromium_rel_ng',
       swarm_hashes={}
     ) +
     api.platform.name('win') +
@@ -757,13 +759,13 @@ def GenTests(api):
 
   # Test we run the swarming layout tests if we touch third_party/WebKit
   yield (
-    api.test('add_swarming_layout_tests_via_manual_diff_inspection') +
-    api.properties.tryserver(
+    api.test('add_swarming_layout_tests_via_manual_diff_inspection_linux') +
+    props(
       mastername='tryserver.chromium.linux',
       buildername='linux_chromium_rel_ng',
-      swarm_hashes={}
+      swarm_hashes={},
+      extra_swarmed_tests=['webkit_layout_tests_exparchive'],
     ) +
-    props(extra_swarmed_tests=['webkit_layout_tests_exparchive']) +
     api.platform.name('linux') +
     api.override_step_data(
       'analyze',
@@ -786,14 +788,43 @@ def GenTests(api):
   )
 
   yield (
+    api.test('add_swarming_layout_tests_via_manual_diff_inspection_win') +
+    props(
+      mastername='tryserver.chromium.win',
+      buildername='win_chromium_rel_ng',
+      swarm_hashes={},
+      extra_swarmed_tests=['webkit_layout_tests_exparchive'],
+    ) +
+    api.platform.name('win') +
+    api.override_step_data(
+      'analyze',
+      api.json.output({'status': 'Found dependency',
+                       'test_targets': ['webkit_layout_tests_exparchive'],
+                       'compile_targets': ['webkit_layout_tests_exparchive']})
+    ) +
+    api.override_step_data(
+        'git diff to analyze patch',
+        api.raw_io.stream_output(
+            'third_party/WebKit/Source/core/dom/ElementBAH.cpp\n')
+#    ) +
+#    api.override_step_data(
+#        'webkit_layout_tests (with patch)',
+#        api.test_utils.canned_isolated_script_output(
+#            passing=True, is_win=True, swarming=True
+#        ) +
+#        api.swarming.canned_summary_output()
+    )
+  )
+
+  yield (
     api.test(
         'add_swarming_layout_tests_via_manual_diff_inspection_that_fails') +
-    api.properties.tryserver(
+    props(
       mastername='tryserver.chromium.linux',
       buildername='linux_chromium_rel_ng',
-      swarm_hashes={}
+      swarm_hashes={},
+      extra_swarmed_tests=['webkit_layout_tests_exparchive'],
     ) +
-    props(extra_swarmed_tests=['webkit_layout_tests_exparchive']) +
     api.platform.name('linux') +
     api.override_step_data(
       'analyze',

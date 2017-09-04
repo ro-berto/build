@@ -220,7 +220,7 @@
       "--paths",
       "{\"checkout\": \"[START_DIR]\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"test_bot\", \"buildername\": \"win_chromium_rel_ng\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.win\", \"slavename\": \"test_bot\", \"target_platform\": \"win\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"old_chromium_rel_ng\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.win\", \"slavename\": \"test_bot\", \"target_platform\": \"win\"}"
     ],
     "env": {
       "CHROME_HEADLESS": "1",
@@ -329,7 +329,7 @@
       "-m",
       "tryserver.chromium.win",
       "-b",
-      "win_chromium_rel_ng",
+      "old_chromium_rel_ng",
       "-v",
       "//out/Release",
       "{\"additional_compile_targets\": [], \"files\": [\"third_party/WebKit/Source/core/dom/Element.cpp\"], \"test_targets\": [\"mini_installer\", \"next_version_mini_installer\"]}",
@@ -371,7 +371,7 @@
       "-m",
       "tryserver.chromium.win",
       "-b",
-      "win_chromium_rel_ng",
+      "old_chromium_rel_ng",
       "--config-file",
       "[START_DIR]\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
@@ -424,7 +424,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]\\goma\\win_chromium_rel_ng"
+      "[CACHE]\\goma\\old_chromium_rel_ng"
     ],
     "cwd": "[START_DIR]\\src",
     "env": {
@@ -449,7 +449,7 @@
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\win_chromium_rel_ng",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\old_chromium_rel_ng",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache_131",
       "GOMA_FAIL_FAST": "true",
       "GOMA_HERMETIC": "error",
@@ -648,7 +648,7 @@
       "--ninja-log-compiler",
       "goma",
       "--buildbot-buildername",
-      "win_chromium_rel_ng",
+      "old_chromium_rel_ng",
       "--buildbot-mastername",
       "tryserver.chromium.win",
       "--buildbot-slavename",
@@ -725,7 +725,7 @@
       "--build-number",
       "571",
       "--builder-name",
-      "win_chromium_rel_ng",
+      "old_chromium_rel_ng",
       "--step-name",
       "webkit_tests (with patch)",
       "--no-show-results",
@@ -755,7 +755,7 @@
       "--master-name",
       "tryserver.chromium.win",
       "--builder-name",
-      "win_chromium_rel_ng",
+      "old_chromium_rel_ng",
       "--build-number",
       "571",
       "--test-type",
@@ -787,7 +787,7 @@
       "--build-number",
       "571",
       "--builder-name",
-      "win_chromium_rel_ng",
+      "old_chromium_rel_ng",
       "--gs-bucket",
       "gs://chromium-layout-test-archives",
       "--staging-dir",
@@ -801,8 +801,8 @@
     },
     "name": "archive_webkit_tests_results",
     "~followup_annotations": [
-      "@@@STEP_LINK@layout_test_results@https://storage.googleapis.com/chromium-layout-test-archives/win_chromium_rel_ng/571/layout-test-results/results.html@@@",
-      "@@@STEP_LINK@(zip)@https://storage.googleapis.com/chromium-layout-test-archives/win_chromium_rel_ng/571/layout-test-results.zip@@@"
+      "@@@STEP_LINK@layout_test_results@https://storage.googleapis.com/chromium-layout-test-archives/old_chromium_rel_ng/571/layout-test-results/results.html@@@",
+      "@@@STEP_LINK@(zip)@https://storage.googleapis.com/chromium-layout-test-archives/old_chromium_rel_ng/571/layout-test-results.zip@@@"
     ]
   },
   {
