@@ -925,12 +925,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         f.startswith(path) for f in affected_files
         for path in CHROMIUM_BLINK_TESTS_PATHS)
 
-    if affects_blink_paths:
-      subproject_tag = 'blink'
-    else:
-      subproject_tag = 'chromium'
-
     if self.m.tryserver.is_tryserver:
+      if affects_blink_paths:
+        subproject_tag = 'blink'
+      else:
+        subproject_tag = 'chromium'
+
       self.m.tryserver.set_subproject_tag(subproject_tag)
 
     # TODO(phajdan.jr): Remove special case for layout tests.
@@ -1003,16 +1003,17 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         bot_config_object,
         bot_db,
         tests_including_triggered)
-
     test_targets = sorted(set(
         self._all_compile_targets(tests + tests_including_triggered)))
-    additional_compile_targets = sorted(
-        set(compile_targets) - set(test_targets))
-    analyze_names = ['chromium'] + list(bot_config.get('analyze_names', []))
-    test_targets, compile_targets = self.m.filter.analyze(
-        affected_files, test_targets, additional_compile_targets,
-        'trybot_analyze_config.json',
-        additional_names=analyze_names)
+
+    if self.m.tryserver.is_tryserver:
+      additional_compile_targets = sorted(
+          set(compile_targets) - set(test_targets))
+      analyze_names = ['chromium'] + list(bot_config.get('analyze_names', []))
+      test_targets, compile_targets = self.m.filter.analyze(
+          affected_files, test_targets, additional_compile_targets,
+          'trybot_analyze_config.json',
+          additional_names=analyze_names)
 
     if bot_config.get('analyze_mode') == 'compile':
       tests = []
