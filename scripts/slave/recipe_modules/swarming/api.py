@@ -660,7 +660,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       args.extend(['--swarming-py-path', script])
       script = task.trigger_script['script']
       if task.trigger_script.get('args'):
-        args.extend(task.trigger_script['args'])
+        args = task.trigger_script['args'] + args
 
     # The step can fail only on infra failures, so mark it as 'infra_step'.
     try:

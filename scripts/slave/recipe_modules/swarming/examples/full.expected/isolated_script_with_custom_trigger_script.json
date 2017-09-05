@@ -4,6 +4,8 @@
       "python",
       "-u",
       "//fake_custom_trigger_script.py",
+      "foo",
+      "bar",
       "trigger",
       "--swarming",
       "https://chromium-swarm-dev.appspot.com",
@@ -58,9 +60,7 @@
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json",
       "--swarming-py-path",
-      "[START_DIR]/swarming.client/swarming.py",
-      "foo",
-      "bar"
+      "[START_DIR]/swarming.client/swarming.py"
     ],
     "infra_step": true,
     "name": "[trigger] hello_world on Windows-7-SP1",
