@@ -567,12 +567,12 @@
       "-a",
       "public-read",
       "[TMP_BASE]/chrome_staging_tmp_1/d8-msan-no-origins-linux-release-v8-component-50110.zip",
-      "gs://v8-asan/linux-release/d8-msan-no-origins-linux-release-v8-component-50110.zip"
+      "gs://v8-msan/linux-release/d8-msan-no-origins-linux-release-v8-component-50110.zip"
     ],
     "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/v8-asan/linux-release/d8-msan-no-origins-linux-release-v8-component-50110.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/v8-msan/linux-release/d8-msan-no-origins-linux-release-v8-component-50110.zip@@@"
     ]
   },
   {
