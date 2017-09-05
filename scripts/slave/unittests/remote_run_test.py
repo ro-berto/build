@@ -485,6 +485,7 @@ class RemoteRunExecTest(unittest.TestCase):
           ('foo', 'bar'),
           ('baz', None),
         )),
+        service_account_path='/path/to/service_account.json',
     )
     get_config.return_value = cfg
 
@@ -500,6 +501,7 @@ class RemoteRunExecTest(unittest.TestCase):
 
     kitchen_args = self.kitchen_args + [
         '-logdog-annotation-url', logdog_bootstrap.get_annotation_url(cfg),
+        '-luci-system-account-json', '/path/to/service_account.json',
         '-logdog-tag', 'foo=bar',
         '-logdog-tag', 'baz',
     ]
