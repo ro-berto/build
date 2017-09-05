@@ -409,8 +409,10 @@ def main_win(options, args):
   """
   files = [
     'chrome.dll',
+    'chrome.dll.pdb',
     'chrome.exe',
     'chrome_child.dll',
+    'chrome_child.dll.pdb',
     'chrome_elf.dll',
     'chrome_watcher.dll',
     'libEGL.dll',
