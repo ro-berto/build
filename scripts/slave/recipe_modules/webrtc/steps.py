@@ -196,7 +196,7 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
           test='gradle_project_test',
           script=str(api.m.path['checkout'].join(
             'webrtc', 'examples',  'androidtests', 'gradle_project_test.py')),
-          args=[build_out_dir]))
+          args=[build_out_dir, '--disable_goma']))
     if api.m.tryserver.is_tryserver:
       tests.append(GTestTest(
           'webrtc_perf_tests',
