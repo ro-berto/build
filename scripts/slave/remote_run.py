@@ -375,20 +375,18 @@ def _remote_run_with_kitchen(args, stream, is_canary, kitchen_version,
 
     kitchen_cmd += [
         '-logdog-annotation-url', annotation_url,
-    ]
 
-    # TODO(nodir): do unconditionally, once rolled canary to prod
-    if is_canary:
-      # Note: as of 2017-09-01 this system service account is used for
-      # logdog and events (via bigquery).
-      # This flag is not passed if logdog is not configured (rare case).
-      # This will cause a failure to send events, but it is not fatal and
-      # won't affect overall build result or kitchen exit code.
-      #
-      # If we ever add something else to kitchen that may cause a fatal error
-      # b/c of the absence of the system account, this code may need to be
-      # changed. We hope to get off of buildbot by that time.
-      kitchen_cmd += ['-luci-system-account-json', cfg.service_account_path]
+        # Note: as of 2017-09-01 this system service account is used for
+        # logdog and events (via bigquery).
+        # This flag is not passed if logdog is not configured (rare case).
+        # This will cause a failure to send events, but it is not fatal and
+        # won't affect overall build result or kitchen exit code.
+        #
+        # If we ever add something else to kitchen that may cause a fatal error
+        # b/c of the absence of the system account, this code may need to be
+        # changed. We hope to get off of buildbot by that time.
+        '-luci-system-account-json', cfg.service_account_path,
+    ]
 
     # Add LogDog tags.
     if cfg.tags:
