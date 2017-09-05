@@ -649,7 +649,7 @@
           },
           "Mojo Linux": {
             "tree_notify": [
-              "network-service-dev+bot@chromium.org"
+              "network-service-sheriff@grotations.appspotmail.com"
             ],
             "forgive_all": "true",
             "forgiving_optional": ["*"]
