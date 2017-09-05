@@ -341,8 +341,10 @@ def BuildWindows(api):
   RunGN(api, '--runtime-mode', 'release', '--android')
 
   Build(api, 'host_debug_unopt',
-    'flutter/lib/snapshot:generate_snapshot_bin', 'lib/ftl:ftl_unittests',
-    'dart:create_sdk', 'flutter/frontend_server')
+    'flutter/lib/snapshot:generate_snapshot_bin',
+    'garnet/public/lib/ftl:ftl_unittests',
+    'dart:create_sdk',
+    'flutter/frontend_server')
   Build(api, 'android_profile', 'gen_snapshot')
   Build(api, 'android_release', 'gen_snapshot')
 

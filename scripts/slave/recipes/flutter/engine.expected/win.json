@@ -124,14 +124,14 @@
       "-C",
       "[START_DIR]\\src\\out/host_debug_unopt",
       "flutter/lib/snapshot:generate_snapshot_bin",
-      "lib/ftl:ftl_unittests",
+      "garnet/public/lib/ftl:ftl_unittests",
       "dart:create_sdk",
       "flutter/frontend_server"
     ],
     "env": {
       "PATH": "[START_DIR]\\src\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
-    "name": "build host_debug_unopt flutter/lib/snapshot:generate_snapshot_bin lib/ftl:ftl_unittests dart:create_sdk flutter/frontend_server"
+    "name": "build host_debug_unopt flutter/lib/snapshot:generate_snapshot_bin garnet/public/lib/ftl:ftl_unittests dart:create_sdk flutter/frontend_server"
   },
   {
     "cmd": [
