@@ -930,7 +930,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     else:
       subproject_tag = 'chromium'
 
-    self.m.tryserver.set_subproject_tag(subproject_tag)
+    if self.m.tryserver.is_tryserver:
+      self.m.tryserver.set_subproject_tag(subproject_tag)
 
     # TODO(phajdan.jr): Remove special case for layout tests.
     add_blink_tests = (
