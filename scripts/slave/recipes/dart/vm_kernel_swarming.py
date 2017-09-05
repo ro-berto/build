@@ -30,6 +30,7 @@ def RunSteps(api):
   test_args = ['-rvm',
                '-m%s' % mode,
                '--arch=%s' % arch,
+               '--builder-tag=swarming',
                '--progress=line',
                '--report',
                '--time',

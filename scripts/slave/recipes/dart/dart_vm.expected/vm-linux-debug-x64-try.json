@@ -95,7 +95,8 @@
       "--time",
       "--write-debug-log",
       "--write-test-outcome-log",
-      "--copy-coredumps"
+      "--copy-coredumps",
+      "--builder-tag=swarming"
     ],
     "cwd": "[START_DIR]/sdk",
     "name": "vm tests"
@@ -113,6 +114,7 @@
       "--write-debug-log",
       "--write-test-outcome-log",
       "--copy-coredumps",
+      "--builder-tag=swarming",
       "--checked",
       "--append_logs"
     ],

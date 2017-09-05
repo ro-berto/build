@@ -194,6 +194,8 @@ def RunSteps(api):
                    '--write-test-outcome-log']
       if b.get('archive_core_dumps', False):
         test_args.append('--copy-coredumps')
+      if channel == 'try':
+        test_args.append('--builder-tag=swarming')
       test_args.extend(b.get('test_args', []))
       test_args.extend(shard_args)
       with api.context(env=b['env']):
