@@ -2332,10 +2332,12 @@
       "python",
       "-u",
       "[BUILDER_CACHE]/android_experimental/src/webrtc/examples/androidtests/gradle_project_test.py",
-      "[BUILDER_CACHE]/android_experimental/src/out/Release",
-      "--disable_goma"
+      "[BUILDER_CACHE]/android_experimental/src/out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/android_experimental",
+    "env": {
+      "GOMA_DISABLED": "True"
+    },
     "name": "gradle_project_test"
   },
   {

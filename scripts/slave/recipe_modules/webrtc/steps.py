@@ -196,7 +196,8 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
           test='gradle_project_test',
           script=str(api.m.path['checkout'].join(
             'webrtc', 'examples',  'androidtests', 'gradle_project_test.py')),
-          args=[build_out_dir, '--disable_goma']))
+          args=[build_out_dir],
+          env={'GOMA_DISABLED': True}))
     if api.m.tryserver.is_tryserver:
       tests.append(GTestTest(
           'webrtc_perf_tests',
@@ -256,13 +257,15 @@ class BaremetalTest(Test):
         test_type=test_type, **self._runtest_kwargs)
 
 class PythonTest(Test):
-  def __init__(self, test, script, args):
+  def __init__(self, test, script, args, env):
     super(PythonTest, self).__init__(test)
     self._script = script
     self._args = args
+    self._env = env or {}
 
   def run(self, api, suffix):
-    api.m.python(self._test, self._script, self._args)
+    with api.m.context(env=self._env):
+      api.m.python(self._test, self._script, self._args)
 
 class PerfTest(Test):
   """A WebRTC test that needs consistent hardware performance."""
