@@ -467,7 +467,7 @@ _CONFIG_MAP = {
         'heap_poisoning': True,
       },
       'volantis-armv8-poison-debug': {
-        'serial': 'HT49CJT00070',
+        'serial': 'HT4CTJT04201',
         'device': 'volantis-armv8',
         'debug': True,
         'heap_poisoning': True
