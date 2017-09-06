@@ -696,7 +696,8 @@
     "cwd": "[BUILDER_CACHE]\\win\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "test r1.compile",
     "~followup_annotations": [
@@ -720,7 +721,8 @@
     "cwd": "[BUILDER_CACHE]\\win\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "test r1.compile confirm no-op",
     "stdout": "/path/to/tmp/",
@@ -1571,7 +1573,8 @@
     "cwd": "[BUILDER_CACHE]\\win\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "test r0.compile",
     "~followup_annotations": [
@@ -1595,7 +1598,8 @@
     "cwd": "[BUILDER_CACHE]\\win\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "test r0.compile confirm no-op",
     "stdout": "/path/to/tmp/",

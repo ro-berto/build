@@ -314,7 +314,8 @@
     ],
     "cwd": "[BUILDER_CACHE]/Android32_Builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "compile"
   },

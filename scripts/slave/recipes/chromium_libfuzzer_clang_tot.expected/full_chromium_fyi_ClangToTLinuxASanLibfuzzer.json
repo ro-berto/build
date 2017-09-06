@@ -329,6 +329,7 @@
     "cwd": "[START_DIR]/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false",
       "LLVM_FORCE_HEAD_REVISION": "YES"
     },
     "name": "compile"

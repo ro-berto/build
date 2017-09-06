@@ -368,6 +368,7 @@
     "cwd": "[BUILDER_CACHE]/android_rel/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false",
       "PATH": "[BUILDER_CACHE]/android_rel/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_rel/src/build/android:<PATH>"
     },
     "name": "compile"

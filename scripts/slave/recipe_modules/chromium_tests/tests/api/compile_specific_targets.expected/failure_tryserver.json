@@ -371,7 +371,8 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "compile (with patch)",
     "~followup_annotations": [
@@ -764,7 +765,8 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "compile (without patch)"
   },
@@ -784,7 +786,8 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "compile (without patch) confirm no-op",
     "stdout": "/path/to/tmp/"

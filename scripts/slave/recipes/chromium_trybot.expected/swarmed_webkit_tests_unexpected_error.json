@@ -552,7 +552,8 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "compile (with patch)"
   },
@@ -572,7 +573,8 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "compile (with patch) confirm no-op",
     "stdout": "/path/to/tmp/"
@@ -1281,7 +1283,8 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "compile (without patch)"
   },
@@ -1301,7 +1304,8 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "compile (without patch) confirm no-op",
     "stdout": "/path/to/tmp/"

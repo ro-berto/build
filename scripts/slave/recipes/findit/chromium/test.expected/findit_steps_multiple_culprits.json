@@ -704,7 +704,8 @@
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1"
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "test r5.compile",
     "~followup_annotations": [
@@ -729,7 +730,8 @@
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1"
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "test r5.compile confirm no-op",
     "stdout": "/path/to/tmp/",
@@ -1802,7 +1804,8 @@
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1"
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "test r6.compile",
     "~followup_annotations": [
@@ -1826,7 +1829,8 @@
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1"
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "test r6.compile confirm no-op",
     "stdout": "/path/to/tmp/",
@@ -2674,7 +2678,8 @@
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1"
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "test r2.compile",
     "~followup_annotations": [
@@ -2698,7 +2703,8 @@
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1"
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "test r2.compile confirm no-op",
     "stdout": "/path/to/tmp/",
@@ -3542,7 +3548,8 @@
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1"
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "test r3.compile",
     "~followup_annotations": [
@@ -3566,7 +3573,8 @@
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1"
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "test r3.compile confirm no-op",
     "stdout": "/path/to/tmp/",

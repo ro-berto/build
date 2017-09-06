@@ -355,7 +355,8 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "compile"
   },
@@ -1472,7 +1473,8 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "Bisect a0.compile",
     "~followup_annotations": [
@@ -2224,7 +2226,8 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "Bisect a2.compile",
     "~followup_annotations": [
@@ -3009,7 +3012,8 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "Bisect a1.compile",
     "~followup_annotations": [

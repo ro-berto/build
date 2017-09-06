@@ -354,7 +354,8 @@
     "cwd": "[BUILDER_CACHE]/V8_Blink_Mac",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1"
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "compile (with patch)"
   },
@@ -896,7 +897,8 @@
     "cwd": "[BUILDER_CACHE]/V8_Blink_Mac",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1"
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "compile (without patch)"
   },

@@ -475,7 +475,8 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "compile (with patch)"
   },
@@ -495,7 +496,8 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "compile (with patch) confirm no-op",
     "stdout": "/path/to/tmp/"

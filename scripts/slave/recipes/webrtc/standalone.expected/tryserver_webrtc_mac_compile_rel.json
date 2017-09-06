@@ -323,7 +323,8 @@
     "cwd": "[BUILDER_CACHE]/mac_compile_rel/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1"
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "compile"
   },

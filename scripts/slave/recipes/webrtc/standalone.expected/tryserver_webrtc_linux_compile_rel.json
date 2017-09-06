@@ -292,7 +292,8 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux_compile_rel/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "compile"
   },

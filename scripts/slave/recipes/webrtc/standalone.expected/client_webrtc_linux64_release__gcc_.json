@@ -286,7 +286,8 @@
     ],
     "cwd": "[BUILDER_CACHE]/Linux64_Release__GCC_/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "compile"
   },

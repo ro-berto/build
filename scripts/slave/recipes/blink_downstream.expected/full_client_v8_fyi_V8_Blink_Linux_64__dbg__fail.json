@@ -322,7 +322,8 @@
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64__dbg_",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "compile (with patch)"
   },
@@ -835,7 +836,8 @@
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64__dbg_",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "compile (without patch)"
   },

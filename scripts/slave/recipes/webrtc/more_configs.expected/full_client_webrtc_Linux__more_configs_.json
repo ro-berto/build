@@ -256,7 +256,8 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "compile"
   },
@@ -531,7 +532,8 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "compile (2)"
   },
@@ -806,7 +808,8 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "compile (3)"
   },
@@ -1081,7 +1084,8 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "compile (4)"
   },
@@ -1356,7 +1360,8 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "compile (5)"
   },
@@ -1663,7 +1668,8 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "compile (6)"
   },
@@ -1938,7 +1944,8 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "compile (7)"
   },
@@ -2213,7 +2220,8 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "compile (8)"
   },

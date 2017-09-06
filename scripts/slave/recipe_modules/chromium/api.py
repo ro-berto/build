@@ -291,9 +291,9 @@ class ChromiumApi(recipe_api.RecipeApi):
 
 
   def _run_ninja_with_goma(self, ninja_path, source_code_dir, build_output_dir,
-                           ninja_command, name=None,
+                           ninja_command, ninja_env, name=None,
                            ninja_log_outdir=None, ninja_log_compiler=None,
-                           goma_env=None, ninja_env=None,
+                           goma_env=None,
                            ninja_confirm_noop=False, **kwargs):
     """
     Run ninja with goma.
@@ -306,11 +306,11 @@ class ChromiumApi(recipe_api.RecipeApi):
       ninja_command: Command used for build.
                      This is sent as part of log.
                      (e.g. ['ninja', '-C', 'out/Release'])
+      ninja_env: Environment for ninja.
       name: Name of compile step.
       ninja_log_outdir: Directory of ninja log. (e.g. "out/Release")
       ninja_log_compiler: Compiler used in ninja. (e.g. "clang")
       goma_env: Environment controlling goma behavior.
-      ninja_env: Environment for ninja.
       ninja_confirm_noop (bool):
         If this is True, check that ninja does nothing in second build.
 
@@ -324,6 +324,10 @@ class ChromiumApi(recipe_api.RecipeApi):
     self.m.goma.start(goma_env)
 
     try:
+      if 'GOMA_USE_LOCAL' not in ninja_env:
+        # Do not allow goma to invoke local compiler.
+        ninja_env['GOMA_USE_LOCAL'] = 'false'
+
       self._run_ninja(ninja_path, source_code_dir, build_output_dir,
                       ninja_command, name, ninja_env,
                       ninja_confirm_noop, **kwargs)
@@ -474,8 +478,8 @@ class ChromiumApi(recipe_api.RecipeApi):
             source_code_dir=source_code_dir,
             build_output_dir=target_output_dir,
             ninja_command=command,
-            name=name or 'compile',
             ninja_env=ninja_env,
+            name=name or 'compile',
             goma_env=goma_env,
             ninja_log_outdir=target_output_dir,
             ninja_log_compiler=self.c.compile_py.compiler or 'goma',

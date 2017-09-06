@@ -190,7 +190,8 @@
     "env": {
       "CHROME_BUILD_TYPE": "_official",
       "CHROME_HEADLESS": "1",
-      "CHROMIUM_BUILD": "_google_chrome"
+      "CHROMIUM_BUILD": "_google_chrome",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "compile"
   },

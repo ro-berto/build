@@ -388,6 +388,7 @@
     "cwd": "[BUILDER_CACHE]/Android_ASan__swarming_/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false",
       "PATH": "[BUILDER_CACHE]/Android_ASan__swarming_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_ASan__swarming_/src/build/android:<PATH>"
     },
     "name": "compile"
