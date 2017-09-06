@@ -4,41 +4,32 @@
 
 """The wrapper runs ninja build command and provides detailed info of failure.
 
-This ninja wrapper first runs ninja build command to compile, and parses its
-output to extract failed output nodes. If the build succeeds, the wrapper just
-return. If the build fails, the wrapper runs ninja deps and graph tools to
-collect more detailed info of the failures and save the info as json to the give
---ninja_info_output file.
-
-Ninja environment should be set before calling this wrapper from recipe:
+The wrapper would just run ninja command if -o (--ninja_info_output) argument
+isn't provided. If the argument is given, wrapper runs ninja deps and graph
+tool to get detailed info when build fails, and finally writes info to file.
+The ninja build command should be the last argument after '--' flag.
+The first argument of ninja command should be set as ninja's absolute path.
+Ninja environment should be set before calling wrapper from recipe:
   with self.m.context(env=ninja_env):
-    self.m.python('name', '/path/to/ninja_wrapper.py')
+    self.m.python(name, ninja_wrapper.py)
 
-The entire ninja build command should be after a '--' flag. Example:
-python ninja_wrapper.py \
-  --ninja_info_output /absolute/path/to/file_name.json \
-  --ninja_path /absolute/path/to/ninja \
-  --source_code_dir /absolute/path/to/chromium/src \
-  --build_output_dir /absolute/path/to/chromium/src/out/Release \
-  -- /absolute/path/to/ninja -C /out -j 100 target1 target2 ...
+Example:
+python ninja_wrapper.py [--ninja_info_output file_name.json]
+  -- /absolute/path/to/ninja -C build/path build_target
 
 The wrapper writes detailed info in JSON format:
 {
-  "failures": [
-    {
-      "output_nodes": [...], // Output nodes of the failed build edge.
-      "rule": "CXX", // Rule of the failed build edge.
-      "output": "...", // Output of the failed build edge.
-      "dependencies": [...], // All dependencies for output nodes. Could be
-                             // empty if it is huge like for LINK build edge.
-    },
-    ...
-  ],
-  "warnings": [  // Warning message for failures in parsing ninja outputs.
-    "warning1 message",
-    "warning2 message"
+"failures":[
+  {
+    "output_nodes": [...], // failed nodes.
+    "rule": "CXX", // rule of failed edge.
+    "output": "...", // ninja output of failed edge.
+    "dependencies": [...], // dependencies of failed nodes.
+  },
+  ...
   ]
 }
+
 """
 
 
@@ -96,12 +87,13 @@ def is_auto_generated(file_name):
 
 
 def run_ninja_tool(ninja_cmd, warning_collector):
+  data = ''
   try:
-    return subprocess.check_output(ninja_cmd, stderr=subprocess.STDOUT)
+    data = subprocess.check_output(ninja_cmd, stderr=subprocess.STDOUT)
   except Exception as e:
     warning_collector.add(
         'Exception occurs when running ninja tool: %r' % e)
-    return ''
+  return data
 
 
 class Node(object):
@@ -419,47 +411,54 @@ def get_detailed_info(ninja_path, build_path, failed_target_list,
 def parse_args(args):
   """Parse arguments."""
   parser = argparse.ArgumentParser()
-  parser.add_argument('--ninja_info_output', required=True,
-                      help='Absolute path to the file to save ninja info.')
-  parser.add_argument('--ninja_path', required=True,
-                      help='Absolute path to the ninja binary.')
-  parser.add_argument('--source_code_dir', required=True,
-                      help='Absolute path to the source code directory.')
-  parser.add_argument('--build_output_dir', required=True,
-                      help='Absolute path to the build output directory.')
+  parser.add_argument('-o', '--ninja_info_output',
+                      help=('Optional. Save result in file.'))
   parser.add_argument('ninja_cmd', nargs='+',
-                      help=('The entire ninja build command, e.g.: '
-                            '/path/to/ninja -C /out -j 100 target1 target2'))
+                      help=('Ninja build command, e.g., '
+                            '/absolute/path/to/ninja -C build/path '
+                            'build_target'))
   options = parser.parse_args(args)
   return options
 
 
 def main():
   options = parse_args(sys.argv[1:])
+  ninja_cmd = options.ninja_cmd
 
-  p = subprocess.Popen(options.ninja_cmd,
-                       stdout=subprocess.PIPE,
-                       stderr=subprocess.STDOUT,
-                       universal_newlines=True)
+  # If first argument isn't file's name, calls ninja directly.
+  if not options.ninja_info_output:
+    popen = subprocess.Popen(ninja_cmd, universal_newlines=True)
+    return popen.wait()
+
+  ninja_path = ninja_cmd[0]
+  prev_cmd = None
+  build_path = None
+  for cmd in ninja_cmd:
+    if prev_cmd == '-C':
+      build_path = cmd
+      break
+    prev_cmd = cmd
 
   warning_collector = WarningCollector()
+  # Ninja outputs info of build process to stdout whenever it fails or
+  # successes.
+  popen = subprocess.Popen(ninja_cmd, stdout=subprocess.PIPE,
+                           universal_newlines=True)
   ninja_parser = NinjaBuildOutputStreamingParser(warning_collector)
-  for stdout_line in iter(p.stdout.readline, ''):
+  for stdout_line in iter(popen.stdout.readline, ''):
     # Comma here makes print function not append '\n' to the end of line.
     print stdout_line,
     ninja_parser.parse(stdout_line)
 
-  return_code = p.wait()
-
+  popen.stdout.close()
+  return_code = popen.wait()
   if return_code:
-    data = get_detailed_info(options.ninja_path,
-                             options.build_output_dir,
+    data = get_detailed_info(ninja_path, build_path,
                              ninja_parser.failed_target_list,
                              warning_collector)
     data['warnings'] = warning_collector.get()
     with open(options.ninja_info_output, 'w') as fw:
       json.dump(data, fw)
-
   return return_code
 
 

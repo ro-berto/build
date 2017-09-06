@@ -208,16 +208,12 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     return (buildername, bot_config)
 
-  def _run_ninja(self, ninja_path, source_code_dir, build_output_dir,
-                 ninja_command, name=None, ninja_env=None,
+  def _run_ninja(self, ninja_command, name=None, ninja_env=None,
                  ninja_confirm_noop=False, **kwargs):
     """
     Run ninja with given command and env.
 
     Args:
-      ninja_path: Absolute path to the ninja binary.
-      source_code_dir: Absolute path to the source code checkout directory.
-      build_output_dir: Absolute path to the build output directory.
       ninja_command: Command used for build.
                      This is sent as part of log.
                      (e.g. ['ninja', '-C', 'out/Release'])
@@ -230,36 +226,36 @@ class ChromiumApi(recipe_api.RecipeApi):
       StepFailure or InfraFailure if it fails to build or
       occurs something failure on goma steps.
     """
-    script = self.resource('ninja_wrapper.py')
 
-    script_args = [
-        '--ninja_info_output',
-        self.m.json.output(add_json_log='on_failure', name='ninja_info'),
-        '--ninja_path', ninja_path,
-        '--source_code_dir', source_code_dir,
-        '--build_output_dir', build_output_dir,
-    ]
-    script_args.append('--')
-    script_args.extend(ninja_command)
+    # TODO(https://crbug.com/752212) Remove this condition after fixing the bug.
+    # This bug makes ninja wrapper can't parse arguments correctly.
+    if kwargs.get('wrapper'):
+      with self.m.context(env=ninja_env):
+        self.m.step(name or 'compile', ninja_command, **kwargs)
+    else:
+      script = self.resource('ninja_wrapper.py')
 
-    example_json = {
-        'failures': [
-            {
-                'output_nodes': ['a.o'],
-                'rule': 'CXX',
-                'output': 'error info',
-                'dependencies': ['b/a.cc'],
-            }
-        ]
-    }
-    step_test_data = (lambda: self.m.json.test_api.output(
-                          example_json, name='ninja_info'))
+      script_args = [
+          '--ninja_info_output',
+          self.m.json.output(add_json_log='on_failure', name='ninja_info')
+      ]
+      script_args.append('--')
+      script_args.extend(ninja_command)
 
-    with self.m.context(env=ninja_env):
-      self.m.python(name or 'compile', script=script,
-                    args=script_args,
-                    step_test_data=step_test_data,
-                    **kwargs)
+      example_json = {'failures': [{
+          'output_nodes': ['a.o'],
+          'rule': 'CXX',
+          'output': 'error info',
+          'dependencies': ['b/a.cc']
+      }]}
+      step_test_data = (lambda: self.m.json.test_api.output(
+                            example_json, name='ninja_info'))
+
+      with self.m.context(env=ninja_env):
+        self.m.python(name or 'compile', script=script,
+                      args=script_args,
+                      step_test_data=step_test_data,
+                      **kwargs)
 
     if not ninja_confirm_noop:
       return
@@ -290,8 +286,7 @@ class ChromiumApi(recipe_api.RecipeApi):
           likely culprit.""")
 
 
-  def _run_ninja_with_goma(self, ninja_path, source_code_dir, build_output_dir,
-                           ninja_command, ninja_env, name=None,
+  def _run_ninja_with_goma(self, ninja_command, ninja_env, name=None,
                            ninja_log_outdir=None, ninja_log_compiler=None,
                            goma_env=None,
                            ninja_confirm_noop=False, **kwargs):
@@ -300,9 +295,6 @@ class ChromiumApi(recipe_api.RecipeApi):
     This function start goma, call _run_ninja and stop goma using goma module.
 
     Args:
-      ninja_path: Absolute path to the ninja binary.
-      source_code_dir: Absolute path to the source code checkout directory.
-      build_output_dir: Absolute path to the build output directory.
       ninja_command: Command used for build.
                      This is sent as part of log.
                      (e.g. ['ninja', '-C', 'out/Release'])
@@ -328,8 +320,7 @@ class ChromiumApi(recipe_api.RecipeApi):
         # Do not allow goma to invoke local compiler.
         ninja_env['GOMA_USE_LOCAL'] = 'false'
 
-      self._run_ninja(ninja_path, source_code_dir, build_output_dir,
-                      ninja_command, name, ninja_env,
+      self._run_ninja(ninja_command, name, ninja_env,
                       ninja_confirm_noop, **kwargs)
       ninja_log_exit_status = 0
     except self.m.step.StepFailure as e:
@@ -403,13 +394,12 @@ class ChromiumApi(recipe_api.RecipeApi):
     elif out_dir is None:
       out_dir = 'out'
 
-    source_code_dir = self.m.path.abspath(self.m.path['checkout'])
     target_output_dir = self.m.path.abspath(
-        self.m.path.join(source_code_dir, out_dir,
+        self.m.path.join(self.m.path['checkout'], out_dir,
                          target or self.c.build_config_fs))
 
-    ninja_path = str(self.m.depot_tools.ninja_path)
-    command = [ninja_path, '-w', 'dupbuild=err', '-C', target_output_dir]
+    command = [str(self.m.depot_tools.ninja_path), '-w', 'dupbuild=err',
+               '-C', target_output_dir]
 
     if self.c.compile_py.show_ninja_stats:
       command.extend(['-d', 'stats'])
@@ -442,10 +432,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       compile_exit_status = 1
       try:
         with self.m.context(cwd=self.m.context.cwd or self.m.path['checkout']):
-          self._run_ninja(ninja_path=ninja_path,
-                          source_code_dir=source_code_dir,
-                          build_output_dir=target_output_dir,
-                          ninja_command=command,
+          self._run_ninja(ninja_command=command,
                           name=name or 'compile',
                           ninja_env=ninja_env,
                           ninja_confirm_noop=self.c.compile_py.ninja_confirm_noop,
@@ -474,9 +461,6 @@ class ChromiumApi(recipe_api.RecipeApi):
     try:
       with self.m.context(cwd=self.m.context.cwd or self.m.path['checkout']):
         self._run_ninja_with_goma(
-            ninja_path=ninja_path,
-            source_code_dir=source_code_dir,
-            build_output_dir=target_output_dir,
             ninja_command=command,
             ninja_env=ninja_env,
             name=name or 'compile',

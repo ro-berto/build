@@ -367,29 +367,37 @@ class NinjaWrapperTestCase(unittest.TestCase):
                         expected_deps3)
     self.assertListEqual(warning_collector.get(), [])
 
-  def testParseOverlapArgsWithNinja(self):
+  def testParseArgs(self):
     expected_file_name = 'file.json'
-    expected_ninja_path = '/path/to/ninja'
-    expected_source_code_dir = '/path/to/chromium/src'
-    expected_build_output_dir = '/path/to/chromium/src/out/Release'
-    expected_ninja_cmd = [
-        'ninja', '-w', 'dupbuild=err', '--build_output_dir', 'build/path',
-        'target1', 'target2',]
-    args = [
-        '--ninja_info_output', expected_file_name,
-        '--ninja_path', expected_ninja_path,
-        '--source_code_dir', expected_source_code_dir,
-        '--build_output_dir', expected_build_output_dir,
-    ]
+    expected_ninja_cmd = ['ninja', '-w', 'dupbuild=err', '-C',
+                          'build/path', 'target1', 'target2', '-o', 'target3']
+    args = ['-o', expected_file_name]
     args.append('--')
     args.extend(expected_ninja_cmd)
     options = ninja_wrapper.parse_args(args)
     self.assertListEqual(expected_ninja_cmd, options.ninja_cmd)
     self.assertEqual(expected_file_name, options.ninja_info_output)
-    self.assertEqual(expected_ninja_path, options.ninja_path)
-    self.assertEqual(expected_source_code_dir, options.source_code_dir)
-    self.assertEqual(expected_build_output_dir, options.build_output_dir)
 
+  def testParseArgsFullName(self):
+    expected_file_name = 'file.json'
+    expected_ninja_cmd = ['ninja', '-w', 'dupbuild=err', '-C',
+                          'build/path', 'target1', 'target2', '-o', 'target3']
+    args = ['--ninja_info_output', expected_file_name]
+    args.append('--')
+    args.extend(expected_ninja_cmd)
+    options = ninja_wrapper.parse_args(args)
+    self.assertListEqual(expected_ninja_cmd, options.ninja_cmd)
+    self.assertEqual(expected_file_name, options.ninja_info_output)
+
+  def testParseArgsWithoutFile(self):
+    expected_ninja_cmd = ['ninja', '-w', 'dupbuild=err', '-C',
+                          'build/path', 'target1', 'target2']
+    args = []
+    args.append('--')
+    args.extend(expected_ninja_cmd)
+    options = ninja_wrapper.parse_args(args)
+    self.assertListEqual(expected_ninja_cmd, options.ninja_cmd)
+    self.assertIsNone(options.ninja_info_output)
 
 if __name__ == '__main__':
   unittest.main()
