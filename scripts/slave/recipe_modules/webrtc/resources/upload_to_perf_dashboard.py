@@ -9,16 +9,6 @@ from slave import performance_log_processor
 from slave import results_dashboard
 
 
-def _MergeTestLogs(logs_dir, shards):
-  all_logs = []
-  for i in range(shards):
-    log_path = os.path.join(logs_dir, str(i), 'test_logs', 'passed-tests.log')
-    if os.path.isfile(log_path):
-      with open(log_path) as f:
-        all_logs.extend(f.readlines())
-  return all_logs
-
-
 def _GetDataFromLogProcessor(log_processor):
   charts = {}
   for log_file_name, line_list in log_processor.PerformanceLogs().iteritems():
@@ -43,34 +33,23 @@ def main():
                       help='name of the builder running this script.')
   parser.add_argument('--buildnumber', type=str, required=True,
                       help='build number of the builder running this script.')
+  parser.add_argument('--logs_file', type=str, required=True,
+                      help='The path to the file with the test output log.')
   parser.add_argument('--perf_id', type=str, required=True,
                       help='perf builder ID.')
   parser.add_argument('--perf_config', type=str, required=True,
                       help='perf configuration dictionary (as a string).')
   parser.add_argument('--revision', type=str, required=True,
                       help='revision of this build.')
-  parser.add_argument('--shards', type=int, required=True,
-                      help='number of shards triggered by the test.')
   parser.add_argument('--test_name', type=str, required=True,
                       help='name of the test.')
   parser.add_argument('--url', type=str, required=True,
                       help='url where to upload perf results.')
 
-  logs_source = parser.add_mutually_exclusive_group(required=True)
-  logs_source.add_argument('--logs_dir', type=str,
-                           help=('The path to the directory where test logs '
-                                 'are stored.'))
-  logs_source.add_argument('--logs_file', type=str,
-                           help=('The path to the file with the test output '
-                                 'log.'))
-
   args = parser.parse_args()
 
-  if args.logs_dir:
-    test_logs = _MergeTestLogs(args.logs_dir, args.shards)
-  else:
-    with open(args.logs_file) as f:
-      test_logs = f.readlines()
+  with open(args.logs_file) as f:
+    test_logs = f.readlines()
 
   try:
     args.perf_config = ast.literal_eval(args.perf_config)

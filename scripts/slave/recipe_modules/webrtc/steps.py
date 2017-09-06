@@ -2,9 +2,20 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import os
+import sys
+
 from recipe_engine.types import freeze
 from recipe_engine.recipe_api import composite_step
 
+THIS_DIR = os.path.dirname(__file__)
+sys.path.append(os.path.join(os.path.dirname(THIS_DIR)))
+
+from chromium_tests.steps import SwarmingIsolatedScriptTest
+
+
+PERF_CONFIG = {'a_default_rev': 'r_webrtc_git'}
+DASHBOARD_UPLOAD_URL = 'https://chromeperf.appspot.com'
 
 NORMAL_TESTS = freeze({
   'audio_decoder_unittests': {},
@@ -132,7 +143,7 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
             args=['--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/']))
   elif test_suite == 'desktop_perf_swarming':
     for test in sorted(PERF_TESTS):
-      tests.append(SwarmingTest(test))
+      tests.append(SwarmingPerfTest(test, api))
       # TODO(ehmaldonado): Collect and upload perf results
   elif test_suite == 'desktop_perf':
     assert api.c.PERF_ID
@@ -225,6 +236,7 @@ class Test(object):
   def post_run(self, api, suffix):
     return []
 
+
 class BaremetalTest(Test):
   """A WebRTC test that uses audio and/or video devices."""
   def __init__(self, test, name=None, revision=None, parallel=False,
@@ -256,6 +268,7 @@ class BaremetalTest(Test):
         flakiness_dash=False, python_mode=True, revision=self._revision,
         test_type=test_type, **self._runtest_kwargs)
 
+
 class PythonTest(Test):
   def __init__(self, test, script, args, env):
     super(PythonTest, self).__init__(test)
@@ -267,11 +280,60 @@ class PythonTest(Test):
     with api.m.context(env=self._env):
       api.m.python(self._test, self._script, self._args)
 
+
+class SwarmingPerfTest(SwarmingIsolatedScriptTest):
+  def __init__(self, name, api, shards=1):
+    super(SwarmingPerfTest, self).__init__(name, shards=shards)
+    self._buildername = api.m.properties.get('buildername')
+    self._buildnumber = api.m.properties.get('buildnumber')
+    self._perf_config = PERF_CONFIG.copy()
+    self._perf_config['r_webrtc_git'] = api.revision
+    self._perf_config = api.m.json.dumps(self._perf_config)
+    self._perf_id = api.c.PERF_ID
+    self._revision = api.revision_number
+    self._name = name
+    self._upload_script = api.resource('upload_to_perf_dashboard.py')
+
+  def _merge_test_logs(self, task_output_files):
+    all_logs = ""
+    for file_name, contents in task_output_files.iteritems():
+      # TODO(ehmaldonado): Make it possible to add custom test data to the
+      # collected task dir.
+      if file_name.endswith('passed-tests.log'): # pragma: no cover
+        all_logs += contents
+    return all_logs
+
+  def post_run(self, api, suffix):
+    try:
+      # We have to call super of SwarmingIsolatedScriptTest since we need access
+      # to the swarming collect step's output_dir data.
+      super(SwarmingIsolatedScriptTest, self).post_run(api, suffix)
+    finally:
+      task_output_dir = api.step.active_result.raw_io.output_dir
+      logs_file = api.raw_io.input_text(self._merge_test_logs(task_output_dir))
+      api.python('Upload perf results',
+                 script=self._upload_script,
+                 args=[
+                     '--buildername', self._buildername,
+                     '--buildnumber', self._buildnumber,
+                     '--perf_id', self._perf_id,
+                     '--perf_config', self._perf_config,
+                     '--revision', self._revision,
+                     '--shards', self._shards,
+                     '--test_name', self._name,
+                     '--url', DASHBOARD_UPLOAD_URL,
+                     '--logs_file', logs_file,
+                 ])
+
+      # Copied from SwarmingIsolatedScriptTest.post_run
+      results = self._isolated_script_results
+      if results and self._upload_test_results:
+        self.results_handler.upload_results(
+            api, results, self._step_name(suffix), suffix)
+
+
 class PerfTest(Test):
   """A WebRTC test that needs consistent hardware performance."""
-  PERF_CONFIG = {'a_default_rev': 'r_webrtc_git'}
-  DASHBOARD_UPLOAD_URL = 'https://chromeperf.appspot.com'
-
   def __init__(self, test, name=None, args=None, revision=None,
                upload_test_output=False, **runtest_kwargs):
     super(PerfTest, self).__init__(test, name)
@@ -287,7 +349,7 @@ class PerfTest(Test):
     assert api.revision_number, (
         'A revision number must be specified for perf tests as they upload '
         'data to the perf dashboard.')
-    perf_config = self.PERF_CONFIG
+    perf_config = PERF_CONFIG
     perf_config['r_webrtc_git'] = api.revision
     test_output_name = self._name + '_test_output'
     upload_url = '%s/%s/%s_%s.zip' % (
@@ -297,7 +359,7 @@ class PerfTest(Test):
         self._args.extend(['--test_output_dir', test_output_path])
       api.m.chromium.runtest(
           test=self._test, name=self._name, args=self._args,
-          results_url=self.DASHBOARD_UPLOAD_URL, annotate='graphing', xvfb=True,
+          results_url=DASHBOARD_UPLOAD_URL, annotate='graphing', xvfb=True,
           perf_dashboard_id=perf_dashboard_id, test_type=perf_dashboard_id,
           revision=api.revision_number, perf_id=api.c.PERF_ID,
           perf_config=perf_config, **self._runtest_kwargs)
@@ -316,6 +378,7 @@ class AndroidJunitTest(Test):
 
   def run(self, api, suffix):
     api.m.chromium_android.run_java_unit_test_suite(self._name)
+
 
 class AndroidPerfTest(PerfTest):
   """A performance test to run on Android devices.

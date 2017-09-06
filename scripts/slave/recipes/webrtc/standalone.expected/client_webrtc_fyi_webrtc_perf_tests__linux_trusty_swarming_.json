@@ -720,6 +720,33 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::webrtc]/resources/upload_to_perf_dashboard.py",
+      "--buildername",
+      "WebRTC Perf Tests (Linux Trusty swarming)",
+      "--buildnumber",
+      "1337",
+      "--perf_id",
+      "webrtc-linux-large-tests-swarming",
+      "--perf_config",
+      "{\"a_default_rev\": \"r_webrtc_git\", \"r_webrtc_git\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"}",
+      "--revision",
+      "170242",
+      "--shards",
+      "1",
+      "--test_name",
+      "webrtc_perf_tests",
+      "--url",
+      "https://chromeperf.appspot.com",
+      "--logs_file",
+      ""
+    ],
+    "cwd": "[BUILDER_CACHE]/WebRTC_Perf_Tests__Linux_Trusty_swarming_",
+    "name": "Upload perf results"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
       "--input-json",
       "{\"interrupted\": false, \"num_failures_by_type\": {\"FAIL\": 0, \"PASS\": 2, \"SKIP\": 1}, \"path_delimiter\": \".\", \"seconds_since_epoch\": 14000000, \"tests\": {\"test1\": {\"Test1\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"Test2\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}, \"Test3\": {\"actual\": \"SKIP\", \"expected\": \"SKIP\"}}, \"test_common\": {\"Test1\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}}}, \"version\": 3}",
