@@ -145,12 +145,14 @@ def CommitChecks(input_api, output_api):
         path,
         whitelist))
 
+  test_env = os.environ.copy()
+  test_env['PYTHONPATH'] = os.pathsep.join(infra_path)
   tests.extend(input_api.canned_checks.GetUnitTestsInDirectory(
       input_api,
       output_api,
       input_api.os_path.join('slave', 'tests'),
       whitelist,
-      env={'PYTHONPATH': os.pathsep.join(infra_path)}))
+      env=test_env))
 
   with pythonpath(infra_path + sys.path):
     import common.master_cfg_utils  # pylint: disable=F0401
