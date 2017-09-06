@@ -101,39 +101,42 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
     ]
   else:
     spec['gclient_apply_config'].append('webrtc_test_resources')
-    spec['tests'] = [
-      steps.WebRTCPerfTest(
-          'content_browsertests',
-          args=['--gtest_filter=WebRtc*', '--run-manual',
-                '--test-launcher-print-test-stdio=always',
-                '--test-launcher-bot-mode'],
-          perf_id=perf_id,
-          perf_config_mappings=perf_config_mappings,
-          commit_position_property=commit_position_property),
-      steps.WebRTCPerfTest(
-          'browser_tests',
-          # These tests needs --test-launcher-jobs=1 since some of them are
-          # not able to run in parallel (due to the usage of the
-          # peerconnection server).
-          args=['--gtest_filter=%s' % ':'.join(BROWSER_TESTS_FILTER),
-                '--run-manual', '--ui-test-action-max-timeout=350000',
-                '--test-launcher-jobs=1',
-                '--test-launcher-bot-mode',
-                '--test-launcher-print-test-stdio=always'],
-          perf_id=perf_id,
-          perf_config_mappings=perf_config_mappings,
-          commit_position_property=commit_position_property),
+    if perf_id.endswith('-long'):
+      pass  # Not implemented yet (see crbug.com/723989).
+    else:
+      spec['tests'] = [
+        steps.WebRTCPerfTest(
+            'content_browsertests',
+            args=['--gtest_filter=WebRtc*', '--run-manual',
+                  '--test-launcher-print-test-stdio=always',
+                  '--test-launcher-bot-mode'],
+            perf_id=perf_id,
+            perf_config_mappings=perf_config_mappings,
+            commit_position_property=commit_position_property),
+        steps.WebRTCPerfTest(
+            'browser_tests',
+            # These tests needs --test-launcher-jobs=1 since some of them are
+            # not able to run in parallel (due to the usage of the
+            # peerconnection server).
+            args=['--gtest_filter=%s' % ':'.join(BROWSER_TESTS_FILTER),
+                  '--run-manual', '--ui-test-action-max-timeout=350000',
+                  '--test-launcher-jobs=1',
+                  '--test-launcher-bot-mode',
+                  '--test-launcher-print-test-stdio=always'],
+            perf_id=perf_id,
+            perf_config_mappings=perf_config_mappings,
+            commit_position_property=commit_position_property),
 
-      # Run capture unittests as well since our bots have real webcams.
-      steps.GTestTest('capture_unittests',
-                 args=['--enable-logging',
-                       '--v=1',
-                       '--test-launcher-jobs=1',
-                       '--test-launcher-print-test-stdio=always']),
-      steps.GTestTest('content_unittests'),
-      steps.GTestTest('jingle_unittests'),
-      steps.GTestTest('remoting_unittests', args=['--gtest_filter=Webrtc*']),
-    ]
+        # Run capture unittests as well since our bots have real webcams.
+        steps.GTestTest('capture_unittests',
+                   args=['--enable-logging',
+                         '--v=1',
+                         '--test-launcher-jobs=1',
+                         '--test-launcher-print-test-stdio=always']),
+        steps.GTestTest('content_unittests'),
+        steps.GTestTest('jingle_unittests'),
+        steps.GTestTest('remoting_unittests', args=['--gtest_filter=Webrtc*']),
+      ]
   return spec
 
 
@@ -154,7 +157,10 @@ AddBuildSpec('Mac Builder', 'mac')
 AddBuildSpec('Linux Builder', 'linux')
 
 AddTestSpec('Win7 Tester', 'chromium-webrtc-rel-7', 'win', target_bits=32)
+AddTestSpec('Win7 Tester (long-running)', 'chromium-webrtc-rel-7-long', 'win',
+            target_bits=32)
 AddTestSpec('Win8 Tester', 'chromium-webrtc-rel-win8', 'win', target_bits=32)
 AddTestSpec('Win10 Tester', 'chromium-webrtc-rel-win10', 'win', target_bits=32)
 AddTestSpec('Mac Tester', 'chromium-webrtc-rel-mac', 'mac')
+AddTestSpec('Mac Tester (long-running)', 'chromium-webrtc-rel-mac-long', 'mac')
 AddTestSpec('Linux Tester', 'chromium-webrtc-rel-linux', 'linux')
