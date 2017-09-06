@@ -247,8 +247,8 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
 
         chartjson_swarming_path = str(i)
         chartjson_swarming_path += \
-          '\\chartjson-output.json' \
-            if is_win else '/chartjson-output.json'
+          '\\perftest-output.json' \
+            if is_win else '/perftest-output.json'
 
         # Determine what output we are writing and if it is empty or not
         output_missing = i in missing_shards and not output_chartjson

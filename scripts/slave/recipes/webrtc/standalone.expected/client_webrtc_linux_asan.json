@@ -639,7 +639,7 @@
       "[dummy hash for audio_decoder_unittests]",
       "--",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
-      "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Asan",
     "infra_step": true,
@@ -726,7 +726,7 @@
       "[dummy hash for common_audio_unittests]",
       "--",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
-      "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Asan",
     "infra_step": true,
@@ -813,7 +813,7 @@
       "[dummy hash for common_video_unittests]",
       "--",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
-      "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Asan",
     "infra_step": true,
@@ -900,7 +900,7 @@
       "[dummy hash for low_bandwidth_audio_test]",
       "--",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
-      "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Asan",
     "infra_step": true,
@@ -987,7 +987,7 @@
       "[dummy hash for modules_tests]",
       "--",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
-      "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Asan",
     "infra_step": true,
@@ -1080,7 +1080,7 @@
       "[dummy hash for modules_unittests]",
       "--",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
-      "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Asan",
     "infra_step": true,
@@ -1197,7 +1197,7 @@
       "[dummy hash for ortc_unittests]",
       "--",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
-      "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Asan",
     "infra_step": true,
@@ -1284,7 +1284,7 @@
       "[dummy hash for peerconnection_unittests]",
       "--",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
-      "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Asan",
     "infra_step": true,
@@ -1389,7 +1389,7 @@
       "[dummy hash for rtc_media_unittests]",
       "--",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
-      "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Asan",
     "infra_step": true,
@@ -1476,7 +1476,7 @@
       "[dummy hash for rtc_pc_unittests]",
       "--",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
-      "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Asan",
     "infra_step": true,
@@ -1563,7 +1563,7 @@
       "[dummy hash for rtc_stats_unittests]",
       "--",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
-      "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Asan",
     "infra_step": true,
@@ -1650,7 +1650,7 @@
       "[dummy hash for rtc_unittests]",
       "--",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
-      "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Asan",
     "infra_step": true,
@@ -1767,7 +1767,7 @@
       "[dummy hash for system_wrappers_unittests]",
       "--",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
-      "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Asan",
     "infra_step": true,
@@ -1854,7 +1854,7 @@
       "[dummy hash for test_support_unittests]",
       "--",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
-      "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Asan",
     "infra_step": true,
@@ -1941,7 +1941,7 @@
       "[dummy hash for tools_unittests]",
       "--",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
-      "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Asan",
     "infra_step": true,
@@ -2028,7 +2028,7 @@
       "[dummy hash for video_engine_tests]",
       "--",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
-      "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Asan",
     "infra_step": true,
@@ -2133,7 +2133,7 @@
       "[dummy hash for voice_engine_unittests]",
       "--",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
-      "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Asan",
     "infra_step": true,
@@ -2220,7 +2220,7 @@
       "[dummy hash for webrtc_nonparallel_tests]",
       "--",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
-      "--isolated-script-test-chartjson-output=${ISOLATED_OUTDIR}/chartjson-output.json"
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Asan",
     "infra_step": true,

@@ -539,12 +539,12 @@ class SwarmingApi(recipe_api.RecipeApi):
     # output.json name is expected by collect_task.py.
     extra_args = self._check_and_set_output_flag(
       extra_args, 'isolated-script-test-output', 'output.json')
-    # chartjson-output.json name is expected by benchmarks generating chartjson
+    # perftest-output.json name is expected by benchmarks generating chartjson
     # output
     extra_args = self._check_and_set_output_flag(
       extra_args,
-      'isolated-script-test-chartjson-output',
-      'chartjson-output.json')
+      'isolated-script-test-perf-output',
+      'perftest-output.json')
 
     merge = merge or {
       'script': self.resource('standard_isolated_script_merge.py')
@@ -937,7 +937,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     merged_results = {}
     seen_first_shard = False
     for i in xrange(task.shards):
-      path = self.m.path.join(str(i), 'chartjson-output.json')
+      path = self.m.path.join(str(i), 'perftest-output.json')
       if path not in step_result.raw_io.output_dir:
         # chartjson results were not written for this shard, not an error,
         # just continue to the next shard
