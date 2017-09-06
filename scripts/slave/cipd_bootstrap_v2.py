@@ -21,6 +21,10 @@ CLIENT_NAME = 'cipd' + infra_platform.exe_suffix()
 DEFAULT_CIPD_VERSION = 'git_revision:b482bfa19d3fa79b4b40dd5ac7a34479052e3df1'
 STAGING_CIPD_VERSION = 'git_revision:cf5b0de14e94b06274d15e84b19449f580576e80'
 
+# Latest Git bundle versions for packages that don't have a "latest" ref.
+LATEST_PYTHON_BUNDLE_VERSION = 'version:2.7.13.chromium8'
+LATEST_GIT_BUNDLE_VERSION = 'version:2.14.1.chromium11'
+
 PROD = None
 STAGING = 'staging'
 CANARY = 'canary'
@@ -71,12 +75,12 @@ AUX_BINARY_PACKAGES = {
       # The Python package installs its binaries into "bin/".
       cipd.CipdPackage(
           name='infra/python/cpython/${os}-${arch=386,amd64}',
-          version='version:2.7.13.chromium9'),
+          version=LATEST_PYTHON_BUNDLE_VERSION),
 
       # The Git package installs its binaries into "bin/".
       cipd.CipdPackage(
           name='infra/git/${os}-${arch=386,amd64}',
-          version='version:2.14.1.chromium11'),
+          version=LATEST_GIT_BUNDLE_VERSION),
     ),
 
     CANARY: (
@@ -94,7 +98,7 @@ AUX_BINARY_PACKAGES = {
       # other platforms make assumptions about package availability.
       cipd.CipdPackage(
           name='infra/python/cpython/${os=windows}-${arch=386,amd64}',
-          version='latest'),
+          version=LATEST_PYTHON_BUNDLE_VERSION),
 
       # The Git package installs its binaries into "bin/".
       #
@@ -102,7 +106,7 @@ AUX_BINARY_PACKAGES = {
       # don't have cross-compile support for Git packages yet.
       cipd.CipdPackage(
           name='infra/git/${os}-${arch=386,amd64}',
-          version='latest'),
+          version=LATEST_GIT_BUNDLE_VERSION),
     ),
 }
 
