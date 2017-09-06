@@ -29,6 +29,34 @@ KITCHEN_TEST_SPEC = {
   'enable_swarming': True,
 }
 
+def stock_config(name, platform=None, config='Release'):
+  if platform is None:
+    if 'Mac' in name:
+      platform = 'mac'
+    elif 'Win' in name:
+      platform = 'win'
+    elif 'Linux' in name:
+      platform = 'linux'
+  assert(platform)
+
+  return name, {
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
+      'chromium_apply_config': [
+          'mb',
+          'ninja_confirm_noop',
+        ],
+      'chromium_config_kwargs': {
+          'BUILD_CONFIG': config,
+          'TARGET_BITS': 64,
+        },
+      'test_results_config': 'staging_server',
+      'testing': {
+          'platform': platform,
+        },
+  }
+
+
 
 SPEC = {
   'settings': {
@@ -2329,3 +2357,10 @@ SPEC = {
     },
   }
 }
+
+
+SPEC.update([
+    stock_config('Jumbo Linux x64'),
+    stock_config('Jumbo Mac'),
+    stock_config('Jumbo Win x64'),
+])
