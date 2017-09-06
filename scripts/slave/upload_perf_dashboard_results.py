@@ -47,6 +47,8 @@ def main(args):
   parser.add_option('--version')
   parser.add_option('--git-revision')
   parser.add_option('--output-json-dashboard-url')
+  parser.add_option('--send-as-histograms', action='store_true')
+  parser.add_option('--oauth-token-file')
   options, extra_args = parser.parse_args(args)
 
   # Validate options.
@@ -54,29 +56,39 @@ def main(args):
     parser.error('Unexpected command line arguments')
   if not options.perf_id or not options.results_url:
     parser.error('--perf-id and --results-url are required')
-
-  main_revision = _GetMainRevision(options.got_revision_cp, options.build_dir)
-  blink_revision = slave_utils.GetBlinkRevision(options.build_dir)
-  revisions = slave_utils.GetPerfDashboardRevisionsWithProperties(
-    options.got_webrtc_revision, options.got_v8_revision, options.version,
-    options.git_revision, main_revision, blink_revision)
-  reference_build = 'reference' in options.name
-  stripped_test_name = options.name.replace('.reference', '')
-  results = {}
-  with open(options.results_file) as f:
-    results = json.load(f)
-  dashboard_json = {}
-  if not 'charts' in results:
-    # These are legacy results.
-    dashboard_json = results_dashboard.MakeListOfPoints(
-      results, options.perf_id, stripped_test_name, options.buildername,
-      options.buildnumber, {}, revisions_dict=revisions)
+  if options.oauth_token_file:
+    with open(options.oauth_token_file) as f:
+      oauth_token = f.readline()
   else:
-    dashboard_json = results_dashboard.MakeDashboardJsonV1(
-      results,
-      revisions, stripped_test_name, options.perf_id,
-      options.buildername, options.buildnumber,
-      {}, reference_build)
+    oauth_token = None
+
+  if not options.send_as_histograms:
+    main_revision = _GetMainRevision(options.got_revision_cp, options.build_dir)
+    blink_revision = slave_utils.GetBlinkRevision(options.build_dir)
+    revisions = slave_utils.GetPerfDashboardRevisionsWithProperties(
+      options.got_webrtc_revision, options.got_v8_revision, options.version,
+      options.git_revision, main_revision, blink_revision)
+    reference_build = 'reference' in options.name
+    stripped_test_name = options.name.replace('.reference', '')
+    results = {}
+    with open(options.results_file) as f:
+      results = json.load(f)
+    dashboard_json = {}
+    if not 'charts' in results:
+      # These are legacy results.
+      dashboard_json = results_dashboard.MakeListOfPoints(
+        results, options.perf_id, stripped_test_name, options.buildername,
+        options.buildnumber, {}, revisions_dict=revisions)
+    else:
+      dashboard_json = results_dashboard.MakeDashboardJsonV1(
+        results,
+        revisions, stripped_test_name, options.perf_id,
+        options.buildername, options.buildnumber,
+        {}, reference_build)
+  else:
+    # TODO: Handle reference builds
+    with open(options.results_file) as f:
+      dashboard_json = json.load(f)
   if dashboard_json:
     if options.output_json_file:
       with open(options.output_json_file, 'w') as output_file:
@@ -85,7 +97,9 @@ def main(args):
         dashboard_json,
         options.results_url,
         options.build_dir,
-        options.output_json_dashboard_url):
+        options.output_json_dashboard_url,
+        send_as_histograms=options.send_as_histograms,
+        oauth_token=oauth_token):
       return 1
   else:
     print 'Error: No perf dashboard JSON was produced.'
