@@ -540,8 +540,7 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
         'archive_apprtc': True,
-        # Disabled until crbug.com/761927 is resolved.
-        'test_android_studio_project_generation': False,
+        'test_android_studio_project_generation': True,
         'enable_swarming': True,
         'use_isolate': True,
         'swarming_dimensions': {
@@ -1535,8 +1534,7 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        # Disabled until crbug.com/761927 is resolved.
-        'test_android_studio_project_generation': False,
+        'test_android_studio_project_generation': True,
         'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {

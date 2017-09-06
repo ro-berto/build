@@ -2223,6 +2223,19 @@
     "name": "android_junit_tests"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/Android32__M_Nexus5X_/src/webrtc/examples/androidtests/gradle_project_test.py",
+      "[BUILDER_CACHE]/Android32__M_Nexus5X_/src/out/Release"
+    ],
+    "cwd": "[BUILDER_CACHE]/Android32__M_Nexus5X_",
+    "env": {
+      "GOMA_DISABLED": "True"
+    },
+    "name": "gradle_project_test"
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",

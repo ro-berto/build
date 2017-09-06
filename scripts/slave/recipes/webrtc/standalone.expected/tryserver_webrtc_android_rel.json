@@ -2328,6 +2328,19 @@
     "name": "android_junit_tests"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/android_rel/src/webrtc/examples/androidtests/gradle_project_test.py",
+      "[BUILDER_CACHE]/android_rel/src/out/Release"
+    ],
+    "cwd": "[BUILDER_CACHE]/android_rel",
+    "env": {
+      "GOMA_DISABLED": "True"
+    },
+    "name": "gradle_project_test"
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",
