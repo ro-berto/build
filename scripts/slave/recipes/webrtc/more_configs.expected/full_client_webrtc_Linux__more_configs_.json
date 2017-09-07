@@ -126,7 +126,8 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "gn",
     "~followup_annotations": [
@@ -414,7 +415,8 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "gn (2)",
     "~followup_annotations": [
@@ -684,7 +686,8 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "gn (3)",
     "~followup_annotations": [
@@ -954,7 +957,8 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "gn (4)",
     "~followup_annotations": [
@@ -1224,7 +1228,8 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "gn (5)",
     "~followup_annotations": [
@@ -1526,7 +1531,8 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "gn (6)",
     "~followup_annotations": [
@@ -1796,7 +1802,8 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "gn (7)",
     "~followup_annotations": [
@@ -2066,7 +2073,8 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "gn (8)",
     "~followup_annotations": [

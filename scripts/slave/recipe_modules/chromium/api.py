@@ -811,6 +811,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     if gn_cpu:
       gn_args.append('target_cpu="%s"' % gn_cpu)
 
+    gn_env = self.get_env()
     # TODO: crbug.com/395784.
     # Consider getting the flags to use via the project_generator config
     # and/or modifying the goma config to modify the gn flags directly,
@@ -820,6 +821,10 @@ class ChromiumApi(recipe_api.RecipeApi):
     if use_goma:
       gn_args.append('use_goma=true')
       gn_args.append('goma_dir="%s"' % self.c.compile_py.goma_dir)
+
+      # Do not allow goma to invoke local compiler.
+      gn_env['GOMA_USE_LOCAL'] = 'false'
+
     gn_args.extend(self.c.project_generator.args)
 
     # TODO(jbudorick): Change this s.t. no clients use gn.py.
@@ -830,7 +835,7 @@ class ChromiumApi(recipe_api.RecipeApi):
         '--args=%s' % ' '.join(gn_args),
     ]
     with self.m.context(
-        cwd=kwargs.get('cwd', self.m.path['checkout']), env=self.get_env()):
+        cwd=kwargs.get('cwd', self.m.path['checkout']), env=gn_env):
       if str(gn_path).endswith('.py'):
         self.m.python(name='gn', script=gn_path, args=step_args, **kwargs)
       else:
