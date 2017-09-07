@@ -51,7 +51,6 @@ def Update(c):
     {'name': 'Mac64 Release', 'slavebuilddir': 'mac64'},
     {
       'name': 'Mac64 Release [large tests]',
-      'category': 'compile|baremetal',
       'slavebuilddir': 'mac_baremetal',
     },
     {'name': 'Mac Asan', 'slavebuilddir': 'mac_asan'},
@@ -105,7 +104,7 @@ def Update(c):
                    if 'recipe' in spec and spec['recipe'] == 'webrtc/ios'
                    else m_remote_run(spec.get('recipe', 'webrtc/standalone')),
         'notify_on_missing': True,
-        'category': spec.get('category', 'compile|testers'),
+        'category': 'ios' if 'ios' in spec['name'].lower() else 'mac',
         'slavebuilddir': spec['slavebuilddir'],
       } for spec in specs
   ])

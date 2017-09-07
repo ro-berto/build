@@ -48,7 +48,6 @@ def Update(c):
     {'name': 'Win64 Release'},
     {
       'name': 'Win32 Release [large tests]',
-      'category': 'compile|baremetal|windows',
       'slavebuilddir': 'win_baremetal',
     },
     {'name': 'Win32 Debug (Clang)', 'slavebuilddir': 'win_clang'},
@@ -66,7 +65,7 @@ def Update(c):
         # past Blink merge commit.
         'factory': m_remote_run('webrtc/standalone', timeout=3600),
         'notify_on_missing': True,
-        'category': spec.get('category', 'compile|testers|windows'),
+        'category': 'win',
         'slavebuilddir': spec.get('slavebuilddir', 'win'),
       } for spec in specs
   ])

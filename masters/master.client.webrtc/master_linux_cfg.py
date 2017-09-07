@@ -75,7 +75,6 @@ def Update(c):
     },
     {
       'name': 'Linux64 Release [large tests]',
-      'category': 'compile|baremetal',
       'slavebuilddir': 'linux_baremetal',
     },
     {
@@ -92,7 +91,7 @@ def Update(c):
                    if 'recipe' in spec
                    else m_remote_run('webrtc/standalone'),
         'notify_on_missing': True,
-        'category': spec.get('category', 'compile|testers'),
+        'category': 'linux',
         'slavebuilddir': spec['slavebuilddir'],
       } for spec in specs
   ])
