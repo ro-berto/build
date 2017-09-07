@@ -130,7 +130,8 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
       per_shard_results.append(jsonish_results)
     return per_shard_results
 
-  def generate_json_test_results(self, shards, isolated_script_passing):
+  def generate_json_test_results(self, shards, isolated_script_passing,
+                                 benchmark_enabled):
     per_shard_results = []
     for i in xrange(shards):
       jsonish_results = {
@@ -144,7 +145,7 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
         }
       }
       idx = 1 + (3 * i)
-      if isolated_script_passing:
+      if isolated_script_passing and benchmark_enabled:
         tests_run = {
           'test_common': {
             'Test%d' % idx: {
@@ -169,7 +170,7 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
         }
         jsonish_results['num_failures_by_type']['PASS'] = 2
         jsonish_results['num_failures_by_type']['SKIP'] = 1
-      else:
+      elif benchmark_enabled:
         tests_run = {
           'test%d' % idx: {
             'Test%d' % idx: {
@@ -185,6 +186,8 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
         }
 
         jsonish_results['num_failures_by_type']['FAIL'] = 2
+      else:
+        tests_run = {}
       jsonish_results['tests'] = tests_run
       per_shard_results.append(jsonish_results)
     return per_shard_results
@@ -217,7 +220,7 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
     if use_json_test_format:
       assert valid is None, "valid flag not used in full JSON format."
       per_shard_results = self.generate_json_test_results(
-          shards, isolated_script_passing)
+          shards, isolated_script_passing, benchmark_enabled)
     else:
       if valid is None:
         valid = True

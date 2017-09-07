@@ -103,13 +103,16 @@ def GenTests(api):
           api.swarming.canned_summary_output(2)
           + api.test_utils.canned_isolated_script_output(
               passing=True, swarming=True,
-              shards=2, isolated_script_passing=True, valid=True,
-              output_chartjson=True),
+              shards=2, isolated_script_passing=True,
+              output_chartjson=True,
+              use_json_test_format=True),
           retcode=0)
   )
 
+  # Uses simplified json
+  # https://crbug.com/704066
   yield (
-      api.test('chartjson_ignore_task_failure') +
+      api.test('chartjson_simplified_ignore_task_failure') +
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
@@ -132,6 +135,32 @@ def GenTests(api):
               output_chartjson=True))
   )
 
+  yield (
+      api.test('chartjson_ignore_task_failure') +
+      api.properties(
+          mastername='test_mastername',
+          buildername='test_buildername',
+          buildnumber=123,
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
+          git_revision='test_sha',
+          version='test-version',
+          got_revision_cp=123456,
+          perf_id='test-perf-id',
+          results_url='https://example/url',
+          ignore_task_failure=True) +
+      api.override_step_data(
+          'base_unittests on Intel GPU on Linux',
+          api.swarming.canned_summary_output(2)
+          + api.test_utils.canned_isolated_script_output(
+              passing=False, swarming=True,
+              shards=2, isolated_script_passing=False,
+              output_chartjson=True, use_json_test_format=True))
+  )
+
+  # Uses simplied json
+  # https://crbug.com/704066
   yield (
       api.test('chartjson_invalid') +
       api.properties(
@@ -175,8 +204,8 @@ def GenTests(api):
           api.swarming.canned_summary_output(2)
           + api.test_utils.canned_isolated_script_output(
               passing=True, swarming=True,
-              shards=2, isolated_script_passing=True, valid=False,
-              output_chartjson=True),
+              shards=2, isolated_script_passing=True,
+              output_chartjson=True, use_json_test_format=True),
           retcode=102)
   )
 
@@ -230,8 +259,8 @@ def GenTests(api):
           api.swarming.canned_summary_output(2)
           + api.test_utils.canned_isolated_script_output(
               passing=True, swarming=True,
-              shards=2, isolated_script_passing=True, valid=True,
-              output_chartjson=True),
+              shards=2, isolated_script_passing=True,
+              output_chartjson=True, use_json_test_format=True),
           retcode=0)
   )
 
@@ -254,8 +283,9 @@ def GenTests(api):
           api.swarming.canned_summary_output(2)
           + api.test_utils.canned_isolated_script_output(
               passing=True, swarming=True,
-              shards=2, isolated_script_passing=True, valid=True,
-              output_chartjson=True, benchmark_enabled=False),
+              shards=2, isolated_script_passing=True,
+              output_chartjson=True, benchmark_enabled=False,
+              use_json_test_format=True),
           retcode=0)
   )
 

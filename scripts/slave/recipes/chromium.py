@@ -649,8 +649,8 @@ def GenTests(api):
         api.swarming.canned_summary_output(2)
         + api.test_utils.canned_isolated_script_output(
             passing=True, is_win=True, swarming=True,
-            shards=2, isolated_script_passing=True, valid=True,
-            output_chartjson=True),
+            shards=2, isolated_script_passing=True,
+            output_chartjson=True, use_json_test_format=True),
         retcode=0) +
     # TODO(nednguyen): also assert the content of the benchmark dashboard upload
     # once post_process allows to do so.
@@ -754,8 +754,8 @@ def GenTests(api):
         api.swarming.canned_summary_output(2)
         + api.test_utils.canned_isolated_script_output(
             passing=True, is_win=True, swarming=True,
-            shards=2, isolated_script_passing=True, valid=True,
-            output_chartjson=False),
+            shards=2, isolated_script_passing=True,
+            output_chartjson=False, use_json_test_format=True),
         retcode=0)
   )
 
@@ -806,8 +806,9 @@ def GenTests(api):
         api.swarming.canned_summary_output(2)
         + api.test_utils.canned_isolated_script_output(
             passing=True, is_win=True, swarming=True,
-            shards=2, isolated_script_passing=True, valid=True,
-            output_chartjson=True, benchmark_enabled=False),
+            shards=2, isolated_script_passing=True,
+            output_chartjson=True, benchmark_enabled=False,
+            use_json_test_format=True),
         retcode=0) +
     api.post_process(post_process.Filter(
         'benchmark on Intel GPU on Windows on Windows-10-10586'))
@@ -860,8 +861,9 @@ def GenTests(api):
         api.swarming.canned_summary_output(2)
         + api.test_utils.canned_isolated_script_output(
             passing=True, is_win=True, swarming=True,
-            shards=1, isolated_script_passing=True, valid=True,
-            output_chartjson=True, benchmark_enabled=False, empty_shards=[1]),
+            shards=1, isolated_script_passing=True,
+            output_chartjson=True, benchmark_enabled=False, empty_shards=[1],
+            use_json_test_format=True),
         retcode=0)
   )
 
@@ -1071,8 +1073,9 @@ def GenTests(api):
       api.swarming.canned_summary_output(2)
       + api.test_utils.canned_isolated_script_output(
         passing=True, is_win=False, swarming=True,
-        shards=4, isolated_script_passing=True, valid=True,
-        empty_shards=[1], output_chartjson=True),
+        shards=4, isolated_script_passing=True,
+        empty_shards=[1], output_chartjson=True,
+        use_json_test_format=True),
       retcode=1)
   )
 
@@ -1108,8 +1111,9 @@ def GenTests(api):
         api.swarming.canned_summary_output(2)
         + api.test_utils.canned_isolated_script_output(
             passing=True, is_win=False, swarming=True,
-            shards=2, isolated_script_passing=True, valid=True,
-            output_chartjson=True, benchmark_enabled=False),
+            shards=2, isolated_script_passing=True,
+            output_chartjson=True, benchmark_enabled=False,
+            use_json_test_format=True),
         retcode=0)
   )
 
@@ -1147,8 +1151,8 @@ def GenTests(api):
       api.swarming.canned_summary_output(2)
       + api.test_utils.canned_isolated_script_output(
         passing=True, is_win=False, swarming=True,
-        shards=2, isolated_script_passing=True, valid=True,
-        missing_shards=[1], output_chartjson=True),
+        shards=2, isolated_script_passing=True,
+        missing_shards=[1], output_chartjson=True, use_json_test_format=True),
       retcode=1) +
     api.post_process(
         post_process.DoesNotRun, 'telemetry_gpu_unittests Dashboard Upload') +
@@ -1189,8 +1193,8 @@ def GenTests(api):
       api.swarming.canned_summary_output(2)
       + api.test_utils.canned_isolated_script_output(
         passing=True, is_win=False, swarming=True,
-        shards=2, isolated_script_passing=True, valid=True,
-        missing_shards=[1], output_chartjson=True),
+        shards=2, isolated_script_passing=True,
+        missing_shards=[1], output_chartjson=True, use_json_test_format=True),
       retcode=1)
   )
 
