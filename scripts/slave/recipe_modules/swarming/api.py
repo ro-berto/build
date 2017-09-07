@@ -540,7 +540,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     extra_args = self._check_and_set_output_flag(
       extra_args, 'isolated-script-test-output', 'output.json')
     # perftest-output.json name is expected by benchmarks generating chartjson
-    # output
+    # or histogram output
     extra_args = self._check_and_set_output_flag(
       extra_args,
       'isolated-script-test-perf-output',
@@ -919,7 +919,7 @@ class SwarmingApi(recipe_api.RecipeApi):
             link_name = 'shard #%d isolated out' % index
             p.links[link_name] = outputs_ref['view_url']
 
-  def _merge_isolated_script_chartjson_output_shards(self, task, step_result):
+  def _merge_isolated_script_perftest_output_shards(self, task, step_result):
     # Taken from third_party/catapult/telemetry/telemetry/internal/results/
     # chart_json_output_formatter.py, the json entries are as follows:
     # result_dict = {
@@ -934,29 +934,47 @@ class SwarmingApi(recipe_api.RecipeApi):
     #
     # Therefore, all entries should be the same and we should only need to merge
     # the chart from each shard.
-    merged_results = {}
-    seen_first_shard = False
+    collected_results = []
     for i in xrange(task.shards):
       path = self.m.path.join(str(i), 'perftest-output.json')
       if path not in step_result.raw_io.output_dir:
-        # chartjson results were not written for this shard, not an error,
+        # perf test results were not written for this shard, not an error,
         # just continue to the next shard
         continue
       results_raw = step_result.raw_io.output_dir[path]
       try:
-        chartjson_results_json = self.m.json.loads(results_raw)
-      except Exception:
-        raise Exception('error decoding chart JSON results from shard #%d' % i)
-      if not seen_first_shard:
-        merged_results = chartjson_results_json
-        seen_first_shard = True
-        continue
-      for key in chartjson_results_json:
+        perf_results_json = self.m.json.loads(results_raw)
+      except Exception as e:
+        raise Exception('error decoding perf test results from shard #%d' % i)
+      collected_results.append(perf_results_json)
+
+    if collected_results:
+      # If the first result is a dict, we assume that we're dealing with
+      # chart JSON. By contrast, HistogramSets are serialized as lists.
+      if isinstance(collected_results[0], dict):
+        return self._merge_chartjson_results(collected_results), False
+      elif isinstance(collected_results[0], list):
+        return self._merge_histogram_results(collected_results), True
+
+    return {}, False
+
+  def _merge_chartjson_results(self, chartjson_dicts):
+    merged_results = chartjson_dicts[0]
+    for chartjson_dict in chartjson_dicts[1:]:
+      for key in chartjson_dict:
         if key == 'charts':
-          # Append each additional chart to our merged results
-          for add_key in chartjson_results_json[key]:
-            merged_results[key][add_key] = chartjson_results_json[key][add_key]
+          for add_key in chartjson_dict[key]:
+            merged_results[key][add_key] = chartjson_dict[key][add_key]
+
     return merged_results
+
+  def _merge_histogram_results(self, histogram_lists):
+    merged_results = []
+    for histogram_list in histogram_lists:
+      merged_results += histogram_list
+
+    return merged_results
+
 
   def _isolated_script_collect_step(self, task, **kwargs):
     """Collects results for a step that is *not* a googletest, like telemetry.
@@ -996,9 +1014,13 @@ class SwarmingApi(recipe_api.RecipeApi):
 
         step_result.isolated_script_results = step_result.json.output
 
-        # Obtain chartjson results if present
-        step_result.isolated_script_chartjson_results = \
-          self._merge_isolated_script_chartjson_output_shards(task, step_result)
+        # Obtain perftest results if present
+        perftest_results, is_histogramset = \
+          self._merge_isolated_script_perftest_output_shards(task, step_result)
+        step_result.isolated_script_perf_results = {
+          'is_histogramset': is_histogramset,
+          'data': perftest_results
+        }
 
       except Exception as e:
         self.m.step.active_result.presentation.logs[

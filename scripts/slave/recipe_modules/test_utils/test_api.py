@@ -201,6 +201,7 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
                                     empty_shards=[],
                                     use_json_test_format=False,
                                     output_chartjson=False,
+                                    output_histograms=False,
                                     benchmark_enabled=True,
                                     corrupt=False,
                                     unknown=False,
@@ -210,13 +211,20 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
     per_shard_results = []
     per_shard_chartjson_results = []
     for i in xrange(shards):
-      chartjsonish_results = {}
-      idx = 1 + (2 * i)
-      chartjsonish_results['dummy'] =  'dummy%d' % i
-      chartjsonish_results['enabled'] = benchmark_enabled
-      chartjsonish_results['charts'] = {'entry%d' % idx: 'chart%d' % idx,
-        'entry%d' % (idx + 1): 'chart%d' % (idx + 1)}
-      per_shard_chartjson_results.append(chartjsonish_results)
+      if output_histograms:
+        histogramish_results = []
+        idx = 1 + (2 * i)
+        histogramish_results.append(
+            {'guid': '%s' % idx, 'name': 'foo%d' % idx, 'unit': 'count'})
+        per_shard_chartjson_results.append(histogramish_results)
+      else:
+        chartjsonish_results = {}
+        idx = 1 + (2 * i)
+        chartjsonish_results['dummy'] =  'dummy%d' % i
+        chartjsonish_results['enabled'] = benchmark_enabled
+        chartjsonish_results['charts'] = {'entry%d' % idx: 'chart%d' % idx,
+          'entry%d' % (idx + 1): 'chart%d' % (idx + 1)}
+        per_shard_chartjson_results.append(chartjsonish_results)
     if use_json_test_format:
       assert valid is None, "valid flag not used in full JSON format."
       per_shard_results = self.generate_json_test_results(

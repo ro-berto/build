@@ -1601,8 +1601,8 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
       # raise it as a step failure.
       raise api.step.StepFailure(api.test_utils.INVALID_RESULTS_MAGIC)
 
-    # Check for chartjson results and upload to results dashboard if present.
-    self._output_chartjson_results_if_present(api, step_result)
+    # Check for perf results and upload to results dashboard if present.
+    self._output_perf_results_if_present(api, step_result)
 
     return valid, failures
 
@@ -1615,9 +1615,12 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
         self.results_handler.upload_results(
             api, results, self._step_name(suffix), suffix)
 
-  def _output_chartjson_results_if_present(self, api, step_result):
-    results = \
-      getattr(step_result, 'isolated_script_chartjson_results', None) or {}
+  def _output_perf_results_if_present(self, api, step_result):
+    raw_results = \
+      getattr(step_result, 'isolated_script_perf_results', None) or {}
+
+    results = raw_results.get('data', {})
+    is_histogramset = raw_results.get('is_histogramset')
 
     if not self._perf_id or not self._results_url:
       # We aren't correctly configured to send data.
