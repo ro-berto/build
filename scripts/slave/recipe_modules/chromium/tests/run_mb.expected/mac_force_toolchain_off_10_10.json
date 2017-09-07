@@ -67,8 +67,7 @@
     "cwd": "None",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_SDK_MIN": "10.10",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_SDK_MIN": "10.10"
     },
     "name": "generate_build_files",
     "~followup_annotations": [

@@ -147,8 +147,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "generate_build_files",
     "stdout": "/path/to/tmp/",
@@ -202,8 +201,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "generate_build_files with gn (fyi)"
   },
@@ -1382,8 +1380,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisect a0.generate_build_files",
     "stdout": "/path/to/tmp/",
@@ -1444,8 +1441,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisect a0.generate_build_files with gn (fyi)",
     "~followup_annotations": [
@@ -2085,8 +2081,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisect a2.generate_build_files",
     "stdout": "/path/to/tmp/",
@@ -2147,8 +2142,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Bisect a2.generate_build_files with gn (fyi)",
     "~followup_annotations": [

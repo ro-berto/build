@@ -526,8 +526,7 @@
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "test r4.generate_build_files",
     "~followup_annotations": [
@@ -1409,8 +1408,7 @@
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "test r5.generate_build_files",
     "~followup_annotations": [
@@ -2271,8 +2269,7 @@
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "test r6.generate_build_files",
     "~followup_annotations": [
@@ -3133,8 +3130,7 @@
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "test r2.generate_build_files",
     "~followup_annotations": [
@@ -3991,8 +3987,7 @@
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "test r3.generate_build_files",
     "~followup_annotations": [

@@ -167,8 +167,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/v8_linux_rel_ng/v8",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "generate_build_files",
     "stdout": "/path/to/tmp/",
@@ -222,8 +221,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/v8_linux_rel_ng/v8",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "generate_build_files with gn (fyi)"
   },

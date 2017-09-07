@@ -242,8 +242,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "generate_build_files (with patch)"
   },
@@ -648,8 +647,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "CHROME_HEADLESS": "1"
     },
     "name": "generate_build_files (without patch)"
   },

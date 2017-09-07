@@ -908,8 +908,6 @@ class ChromiumApi(recipe_api.RecipeApi):
     # This runs with an almost-bare env being passed along, so we get a clean
     # environment without any GYP_DEFINES being present to cause confusion.
     env = self.get_env()
-    env['GOMA_SERVICE_ACCOUNT_JSON_FILE'] = (
-        self.m.goma.service_account_json_path)
     env.update(self.m.context.env)
 
     if self.c.gyp_env.GYP_MSVS_VERSION:

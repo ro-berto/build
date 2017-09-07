@@ -194,8 +194,7 @@
     "cwd": "[BUILDER_CACHE]/V8_Blink_Mac/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "generate_build_files (with patch)"
   },
@@ -750,8 +749,7 @@
     "cwd": "[BUILDER_CACHE]/V8_Blink_Mac/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "generate_build_files (without patch)"
   },
