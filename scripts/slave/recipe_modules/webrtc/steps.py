@@ -282,8 +282,8 @@ class PythonTest(Test):
 
 
 class SwarmingPerfTest(SwarmingIsolatedScriptTest):
-  def __init__(self, name, api, shards=1):
-    super(SwarmingPerfTest, self).__init__(name, shards=shards)
+  def __init__(self, name, api):
+    super(SwarmingPerfTest, self).__init__(name)
     self._buildername = api.m.properties.get('buildername')
     self._buildnumber = api.m.properties.get('buildnumber')
     self._perf_config = PERF_CONFIG.copy()
@@ -319,7 +319,6 @@ class SwarmingPerfTest(SwarmingIsolatedScriptTest):
                      '--perf_id', self._perf_id,
                      '--perf_config', self._perf_config,
                      '--revision', self._revision,
-                     '--shards', self._shards,
                      '--test_name', self._name,
                      '--url', DASHBOARD_UPLOAD_URL,
                      '--logs_file', logs_file,

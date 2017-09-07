@@ -731,8 +731,6 @@
       "{\"a_default_rev\": \"r_webrtc_git\", \"r_webrtc_git\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"}",
       "--revision",
       "170242",
-      "--shards",
-      "1",
       "--test_name",
       "webrtc_perf_tests",
       "--url",
