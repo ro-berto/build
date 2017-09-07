@@ -33,6 +33,12 @@ def Update(c):
           branch=None,
           builderNames=['Auto-roll - WebRTC DEPS'],
       ),
+      SingleBranchScheduler(name='webrtc_linux_scheduler',
+                            branch='master',
+                            treeStableTimer=30,
+                            builderNames=[
+          'WebRTC Perf Tests (Linux Trusty swarming)',
+      ]),
   ])
 
   specs = [
