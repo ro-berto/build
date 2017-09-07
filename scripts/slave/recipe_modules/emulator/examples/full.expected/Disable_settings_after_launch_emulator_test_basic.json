@@ -229,7 +229,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python",
       "-u",
       "[START_DIR]/src/out/Debug/bin/run_sample_test",
       "--blacklist-file",

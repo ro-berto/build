@@ -892,7 +892,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python",
       "-u",
       "[START_DIR]/src/build/android/test_runner.py",
       "monkey",
@@ -912,7 +912,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python",
       "-u",
       "[START_DIR]/src/build/android/test_runner.py",
       "instrumentation",
@@ -942,7 +942,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python",
       "-u",
       "[START_DIR]/src/out/Release/bin/run_unittests",
       "--blacklist-file",

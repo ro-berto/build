@@ -633,7 +633,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python",
       "-u",
       "[START_DIR]/src/build/android/test_runner.py",
       "perf",
@@ -707,7 +707,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python",
       "-u",
       "[START_DIR]/src/build/android/test_runner.py",
       "perf",

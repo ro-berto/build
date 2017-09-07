@@ -236,7 +236,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python",
       "-u",
       "None/build/android/test_runner.py",
       "perf",
@@ -309,7 +309,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python",
       "-u",
       "None/build/android/test_runner.py",
       "perf",

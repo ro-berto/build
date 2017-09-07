@@ -2308,7 +2308,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python",
       "-u",
       "[BUILDER_CACHE]/android_arm64_rel/src/out/Release/bin/run_android_junit_tests",
       "--verbose",

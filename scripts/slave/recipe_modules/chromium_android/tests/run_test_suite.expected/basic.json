@@ -1,7 +1,7 @@
 [
   {
     "cmd": [
-      "vpython",
+      "python",
       "-u",
       "None/out/Release/bin/run_test_suite",
       "--blacklist-file",

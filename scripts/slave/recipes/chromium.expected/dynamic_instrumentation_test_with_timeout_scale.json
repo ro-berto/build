@@ -582,7 +582,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python",
       "-u",
       "[START_DIR]/src/out/Debug/bin/run_chrome_public_test_apk",
       "--blacklist-file",

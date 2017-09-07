@@ -569,7 +569,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python",
       "-u",
       "[START_DIR]/src/out/Debug/bin/run_base_unittests",
       "--blacklist-file",

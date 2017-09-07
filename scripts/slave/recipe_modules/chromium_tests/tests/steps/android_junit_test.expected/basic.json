@@ -9,7 +9,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python",
       "-u",
       "None/out/Release/bin/run_test_name",
       "--verbose",

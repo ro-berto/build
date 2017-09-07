@@ -1,7 +1,7 @@
 [
   {
     "cmd": [
-      "vpython",
+      "python",
       "-u",
       "None/out/Release/bin/run_base_unittests",
       "--gtest_repeat=2",
@@ -53,7 +53,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python",
       "-u",
       "None/out/Release/bin/run_base_unittests",
       "--gtest_repeat=2",

@@ -576,7 +576,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python",
       "-u",
       "[START_DIR]/src/out/Debug/bin/run_android_webview_unittests",
       "--blacklist-file",
@@ -592,7 +592,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python",
       "-u",
       "[START_DIR]/src/out/Debug/bin/run_base_unittests",
       "--blacklist-file",
@@ -608,7 +608,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python",
       "-u",
       "[START_DIR]/src/out/Debug/bin/run_cc_unittests",
       "--blacklist-file",
@@ -624,7 +624,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python",
       "-u",
       "[START_DIR]/src/out/Debug/bin/run_components_unittests",
       "--blacklist-file",
@@ -640,7 +640,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python",
       "-u",
       "[START_DIR]/src/out/Debug/bin/run_events_unittests",
       "--blacklist-file",
@@ -656,7 +656,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python",
       "-u",
       "[START_DIR]/src/out/Debug/bin/run_gl_tests",
       "--blacklist-file",
@@ -672,7 +672,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python",
       "-u",
       "[START_DIR]/src/out/Debug/bin/run_ipc_tests",
       "--blacklist-file",
@@ -688,7 +688,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python",
       "-u",
       "[START_DIR]/src/out/Debug/bin/run_skia_unittests",
       "--blacklist-file",
@@ -704,7 +704,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python",
       "-u",
       "[START_DIR]/src/out/Debug/bin/run_sql_unittests",
       "--blacklist-file",
@@ -720,7 +720,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python",
       "-u",
       "[START_DIR]/src/out/Debug/bin/run_ui_android_unittests",
       "--blacklist-file",
@@ -736,7 +736,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python",
       "-u",
       "[START_DIR]/src/out/Debug/bin/run_ui_touch_selection_unittests",
       "--blacklist-file",
