@@ -1598,6 +1598,21 @@ Collects the results of a sharded test run.
 
 Kills leftover tasks from previous runs or steps.
 
+&mdash; **def [read\_debug\_log](/scripts/slave/recipe_modules/dart/api.py#116)(self):**
+
+Reads the debug.log file
+
+&mdash; **def [read\_result\_file](/scripts/slave/recipe_modules/dart/api.py#99)(self, name, result, test_data=''):**
+
+Reads the result.log file
+Args:
+  * name (str) - Name of step
+  * result (DeferredResult) - The deferred result from running the step
+  * test_data (str) - Some default data for this step to return when running
+    under simulation.
+Returns (str) - The content of the file.
+Raises file.Error
+
 &mdash; **def [shard](/scripts/slave/recipe_modules/dart/api.py#62)(self, title, isolate_hash, test_args, os=None, cpu='x86-64', pool='Dart.LUCI'):**
 
 Runs test.py in the given isolate, sharded over several swarming tasks.
@@ -4407,7 +4422,7 @@ Generates the sequence of steps that will be run by the slave.
 
 [DEPS](/scripts/slave/recipes/dart/dart_vm.py#7): [dart](#recipe_modules-dart), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/dart/dart_vm.py#146)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/dart/dart_vm.py#147)(api):**
 ### *recipes* / [dart/dart\_vm\_kernel](/scripts/slave/recipes/dart/dart_vm_kernel.py)
 
 [DEPS](/scripts/slave/recipes/dart/dart_vm_kernel.py#7): [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -4494,9 +4509,9 @@ Generates the sequence of steps that will be run by the slave.
 &mdash; **def [RunSteps](/scripts/slave/recipes/dart/vm_kernel_swarming.py#16)(api):**
 ### *recipes* / [dart:examples/example](/scripts/slave/recipe_modules/dart/examples/example.py)
 
-[DEPS](/scripts/slave/recipe_modules/dart/examples/example.py#1): [dart](#recipe_modules-dart), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+[DEPS](/scripts/slave/recipe_modules/dart/examples/example.py#1): [dart](#recipe_modules-dart), [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/dart/examples/example.py#6)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/dart/examples/example.py#8)(api):**
 ### *recipes* / [devtools](/scripts/slave/recipes/devtools.py)
 
 [DEPS](/scripts/slave/recipes/devtools.py#7): [chromium\_checkout](#recipe_modules-chromium_checkout), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]

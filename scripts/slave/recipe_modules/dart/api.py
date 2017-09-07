@@ -95,3 +95,29 @@ class DartApi(recipe_api.RecipeApi):
       for task in tasks:
         # TODO(athom) collect all the output, and present as a single step
         self.m.swarming.collect_task(task)
+
+  def read_result_file(self, name, result, test_data=''):
+    """Reads the result.log file
+    Args:
+      * name (str) - Name of step
+      * result (DeferredResult) - The deferred result from running the step
+      * test_data (str) - Some default data for this step to return when running
+        under simulation.
+    Returns (str) - The content of the file.
+    Raises file.Error
+    """
+    if result.is_ok:
+      read_data = self.m.file.read_text(name,
+                                        self.m.path['checkout'].join('logs',
+                                                                     'result.log'),
+                                        test_data)
+      self.m.step.active_result.presentation.logs['result.log'] = [read_data]
+
+  def read_debug_log(self):
+    """Reads the debug.log file"""
+    if self.m.platform.name == 'win':
+      self.m.step('debug log',
+                  ['cmd.exe', '/c', 'type', '.debug.log'])
+    else:
+      self.m.step('debug log',
+                  ['cat', '.debug.log'])

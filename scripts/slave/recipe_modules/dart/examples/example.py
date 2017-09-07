@@ -1,6 +1,8 @@
 DEPS = [
   'dart',
   'recipe_engine/properties',
+  'recipe_engine/step',
+  'recipe_engine/platform'
 ]
 
 def RunSteps(api):
@@ -17,9 +19,18 @@ def RunSteps(api):
   tasks = api.dart.shard('vm_tests', isolate_hash, test_args)
   api.dart.collect(tasks)
 
+  with api.step.defer_results():
+    result = api.step('Print Hello World', ['echo', 'hello', 'world'])
+    api.dart.read_result_file('print result', result)
+
   api.dart.kill_tasks()
+  api.dart.read_debug_log()
 
 def GenTests(api):
   yield (
     api.test('basic') +
-    api.properties(shards='6'))
+    api.properties(shards='2'))
+
+  yield (
+    api.test('basic-win') + api.platform('win', 64) +
+    api.properties(shards='1'))

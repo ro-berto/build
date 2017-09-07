@@ -5,7 +5,8 @@
 import re
 
 DEPS = [
-  'dart',
+
+    'dart',
   'depot_tools/bot_update',
   'depot_tools/depot_tools',
   'depot_tools/gclient',
@@ -191,6 +192,7 @@ def RunSteps(api):
                    '--report',
                    '--time',
                    '--write-debug-log',
+                   '--write-result-log',
                    '--write-test-outcome-log']
       if b.get('archive_core_dumps', False):
         test_args.append('--copy-coredumps')
@@ -199,23 +201,20 @@ def RunSteps(api):
       test_args.extend(b.get('test_args', []))
       test_args.extend(shard_args)
       with api.context(env=b['env']):
-        api.python('vm tests',
-                   api.path['checkout'].join('tools', 'test.py'),
-                   args=test_args)
+        result = api.python('vm tests',
+                            api.path['checkout'].join('tools', 'test.py'),
+                            args=test_args)
+        api.dart.read_result_file('read results', result);
       if b.get('checked', False):
         test_args.extend(['--checked', '--append_logs'])
         with api.context(env=b['env']):
-          api.python('checked vm tests',
-                     api.path['checkout'].join('tools', 'test.py'),
-                     args=test_args)
+          checked_result = api.python('checked vm tests',
+                                      api.path['checkout'].join('tools', 'test.py'),
+                                      args=test_args)
+          api.dart.read_result_file('read results', checked_result);
 
       api.dart.kill_tasks()
-      if api.platform.name == 'win':
-        api.step('debug log',
-                 ['cmd.exe', '/c', 'type', '.debug.log'])
-      else:
-        api.step('debug log',
-                 ['cat', '.debug.log'])
+      api.dart.read_debug_log()
 
 def GenTests(api):
    yield (

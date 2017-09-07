@@ -3,23 +3,23 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
+      "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'sdk', 'url': 'https://dart.googlesource.com/sdk.git'}]",
+      "cache_dir = '[CACHE]\\\\git'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'sdk', 'url': 'https://dart.googlesource.com/sdk.git'}]",
       "--patch_root",
       "sdk",
       "--revision_mapping_file",
       "{}",
       "--git-cache-dir",
-      "[CACHE]/git",
+      "[CACHE]\\git",
       "--cleanup-dir",
-      "[CLEANUP]/bot_update",
+      "[CLEANUP]\\bot_update",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
       "sdk@HEAD"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]\\builder",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -48,21 +48,21 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/sdk/tools/clean_output_directory.py"
+      "[CACHE]\\builder\\sdk\\tools\\clean_output_directory.py"
     ],
-    "cwd": "[CACHE]/builder/sdk",
+    "cwd": "[CACHE]\\builder\\sdk",
     "name": "clobber"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
   },
@@ -70,23 +70,23 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
+      "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'sdk', 'url': 'https://chromium.googlesource.com/external/github.com/dart-lang/sdk.git'}]",
+      "cache_dir = '[CACHE]\\\\git'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'sdk', 'url': 'https://chromium.googlesource.com/external/github.com/dart-lang/sdk.git'}]",
       "--patch_root",
       "sdk",
       "--revision_mapping_file",
       "{}",
       "--git-cache-dir",
-      "[CACHE]/git",
+      "[CACHE]\\git",
       "--cleanup-dir",
-      "[CLEANUP]/bot_update",
+      "[CLEANUP]\\bot_update",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
       "sdk@HEAD"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]\\builder",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -115,12 +115,12 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks (2)"
   },
@@ -128,10 +128,10 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/sdk/tools/task_kill.py",
+      "[CACHE]\\builder\\sdk\\tools\\task_kill.py",
       "--kill_browsers=True"
     ],
-    "cwd": "[CACHE]/builder/sdk",
+    "cwd": "[CACHE]\\builder\\sdk",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -143,10 +143,10 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/sdk/tools/build.py",
+      "[CACHE]\\builder\\sdk\\tools\\build.py",
       "--super-fast"
     ],
-    "cwd": "[CACHE]/builder/sdk",
+    "cwd": "[CACHE]\\builder\\sdk",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -158,10 +158,10 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/sdk/tools/task_kill.py",
+      "[CACHE]\\builder\\sdk\\tools\\task_kill.py",
       "--kill_browsers=True"
     ],
-    "cwd": "[CACHE]/builder/sdk",
+    "cwd": "[CACHE]\\builder\\sdk",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -173,10 +173,10 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/sdk/tools/build.py",
+      "[CACHE]\\builder\\sdk\\tools\\build.py",
       "--super-fast"
     ],
-    "cwd": "[CACHE]/builder/sdk",
+    "cwd": "[CACHE]\\builder\\sdk",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -188,13 +188,13 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[depot_tools::git]/resources/git_setup.py",
+      "RECIPE_MODULE[depot_tools::git]\\resources\\git_setup.py",
       "--path",
-      "[START_DIR]/swarming.client",
+      "[START_DIR]\\swarming.client",
       "--url",
       "https://chromium.googlesource.com/external/swarming.client.git"
     ],
-    "cwd": "[CACHE]/builder/sdk",
+    "cwd": "[CACHE]\\builder\\sdk",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -209,9 +209,9 @@
       "fetch",
       "origin"
     ],
-    "cwd": "[START_DIR]/swarming.client",
+    "cwd": "[START_DIR]\\swarming.client",
     "env": {
-      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:<PATH>"
+      "PATH": "RECIPE_PACKAGE_REPO[depot_tools];<PATH>"
     },
     "env_prefixes": {
       "PATH": [
@@ -228,7 +228,7 @@
       "-f",
       "5c8043e54541c3cee7ea255e0416020f2e3a5904"
     ],
-    "cwd": "[START_DIR]/swarming.client",
+    "cwd": "[START_DIR]\\swarming.client",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -243,7 +243,7 @@
       "rev-parse",
       "HEAD"
     ],
-    "cwd": "[START_DIR]/swarming.client",
+    "cwd": "[START_DIR]\\swarming.client",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -264,7 +264,7 @@
       "-d",
       "-x"
     ],
-    "cwd": "[START_DIR]/swarming.client",
+    "cwd": "[START_DIR]\\swarming.client",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -279,7 +279,7 @@
       "submodule",
       "sync"
     ],
-    "cwd": "[START_DIR]/swarming.client",
+    "cwd": "[START_DIR]\\swarming.client",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -296,7 +296,7 @@
       "--init",
       "--recursive"
     ],
-    "cwd": "[START_DIR]/swarming.client",
+    "cwd": "[START_DIR]\\swarming.client",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -309,14 +309,14 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "glob",
-      "[CACHE]/builder/sdk/tools/bots",
+      "[CACHE]\\builder\\sdk\\tools\\bots",
       "*.isolate"
     ],
-    "cwd": "[CACHE]/builder/sdk",
+    "cwd": "[CACHE]\\builder\\sdk",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -326,8 +326,8 @@
     "name": "find isolate files",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@glob@[CACHE]/builder/sdk/tools/bots/[CACHE]/builder/sdk/tools/bots/a.isolate@@@",
-      "@@@STEP_LOG_LINE@glob@[CACHE]/builder/sdk/tools/bots/[CACHE]/builder/sdk/tools/bots/b.isolate@@@",
+      "@@@STEP_LOG_LINE@glob@[CACHE]\\builder\\sdk\\tools\\bots\\[CACHE]\\builder\\sdk\\tools\\bots\\a.isolate@@@",
+      "@@@STEP_LOG_LINE@glob@[CACHE]\\builder\\sdk\\tools\\bots\\[CACHE]\\builder\\sdk\\tools\\bots\\b.isolate@@@",
       "@@@STEP_LOG_END@glob@@@"
     ]
   },
@@ -335,14 +335,14 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[CACHE]/builder/sdk/tools/bots/[CACHE]/builder/sdk/tools/bots/a.isolate",
-      "[CACHE]/builder/sdk"
+      "[CACHE]\\builder\\sdk\\tools\\bots\\[CACHE]\\builder\\sdk\\tools\\bots\\a.isolate",
+      "[CACHE]\\builder\\sdk"
     ],
-    "cwd": "[CACHE]/builder/sdk",
+    "cwd": "[CACHE]\\builder\\sdk",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -355,14 +355,14 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[CACHE]/builder/sdk/tools/bots/[CACHE]/builder/sdk/tools/bots/b.isolate",
-      "[CACHE]/builder/sdk"
+      "[CACHE]\\builder\\sdk\\tools\\bots\\[CACHE]\\builder\\sdk\\tools\\bots\\b.isolate",
+      "[CACHE]\\builder\\sdk"
     ],
-    "cwd": "[CACHE]/builder/sdk",
+    "cwd": "[CACHE]\\builder\\sdk",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -375,14 +375,14 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/swarming.client/isolate.py",
+      "[START_DIR]\\swarming.client\\isolate.py",
       "archive",
       "--ignore_broken_items",
       "-Ihttps://isolateserver.appspot.com",
-      "-i[CACHE]/builder/sdk/dart_tests.isolate",
-      "-s[CACHE]/builder/sdk/dart_tests.isolated"
+      "-i[CACHE]\\builder\\sdk\\dart_tests.isolate",
+      "-s[CACHE]\\builder\\sdk\\dart_tests.isolated"
     ],
-    "cwd": "[CACHE]/builder/sdk",
+    "cwd": "[CACHE]\\builder\\sdk",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -398,7 +398,7 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/swarming.client/swarming.py",
+      "[START_DIR]\\swarming.client\\swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -409,7 +409,7 @@
       "--shards",
       "1",
       "--task-name",
-      "vm_tests_shard_1/Linux/",
+      "vm_tests_shard_1/Windows/",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -426,7 +426,7 @@
       "none",
       "--dimension",
       "os",
-      "Linux",
+      "Windows",
       "--dimension",
       "pool",
       "Dart.LUCI",
@@ -435,24 +435,24 @@
       "--tag",
       "name:vm_tests_shard_1",
       "--tag",
-      "os:Linux",
+      "os:Windows",
       "--tag",
-      "stepname:vm_tests_shard_1",
+      "stepname:vm_tests_shard_1 on Windows",
       "--isolated",
       "",
       "--",
       "--all",
-      "--shards=2",
+      "--shards=1",
       "--shard=1"
     ],
     "infra_step": true,
-    "name": "[trigger] vm_tests_shard_1",
+    "name": "[trigger] vm_tests_shard_1 on Windows",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Linux'@@@",
+      "@@@STEP_TEXT@Run on OS: 'Windows'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"vm_tests_shard_1/Linux/\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"vm_tests_shard_1/Windows/\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"vm_tests_shard_1/Linux/\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"vm_tests_shard_1/Windows/\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -467,185 +467,36 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/swarming.client/swarming.py",
-      "trigger",
-      "--swarming",
-      "https://chromium-swarm.appspot.com",
-      "--isolate-server",
-      "https://isolateserver.appspot.com",
-      "--priority",
-      "200",
-      "--shards",
-      "1",
-      "--task-name",
-      "vm_tests_shard_2/Linux/",
-      "--dump-json",
-      "/path/to/tmp/json",
-      "--expiration",
-      "3600",
-      "--io-timeout",
-      "1200",
-      "--hard-timeout",
-      "3600",
-      "--dimension",
-      "cpu",
-      "x86-64",
-      "--dimension",
-      "gpu",
-      "none",
-      "--dimension",
-      "os",
-      "Linux",
-      "--dimension",
-      "pool",
-      "Dart.LUCI",
-      "--tag",
-      "data:",
-      "--tag",
-      "name:vm_tests_shard_2",
-      "--tag",
-      "os:Linux",
-      "--tag",
-      "stepname:vm_tests_shard_2",
-      "--isolated",
-      "",
-      "--",
-      "--all",
-      "--shards=2",
-      "--shard=2"
-    ],
-    "infra_step": true,
-    "name": "[trigger] vm_tests_shard_2",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Linux'@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"vm_tests_shard_2/Linux/\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"vm_tests_shard_2/Linux/\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--",
       "python",
-      "RECIPE_MODULE[build::swarming]/resources/collect_task.py",
+      "RECIPE_MODULE[build::swarming]\\resources\\collect_task.py",
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
       "/path/to/tmp/",
       "--merge-script",
-      "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
+      "RECIPE_MODULE[build::swarming]\\resources\\noop_merge.py",
       "--merge-additional-args",
       "[]",
       "--",
       "python",
       "-u",
-      "[START_DIR]/swarming.client/swarming.py",
+      "[START_DIR]\\swarming.client\\swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"vm_tests_shard_1/Linux/\", \"tasks\": {\"vm_tests_shard_1/Linux/\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"vm_tests_shard_1/Windows/\", \"tasks\": {\"vm_tests_shard_1/Windows/\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "name": "vm_tests_shard_1",
+    "name": "vm_tests_shard_1 on Windows",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Linux'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@swarming.summary@{@@@",
-      "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
-      "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
-      "@@@STEP_LOG_LINE@swarming.summary@      \"abandoned_ts\": null, @@@",
-      "@@@STEP_LOG_LINE@swarming.summary@      \"bot_id\": \"vm30\", @@@",
-      "@@@STEP_LOG_LINE@swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
-      "@@@STEP_LOG_LINE@swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
-      "@@@STEP_LOG_LINE@swarming.summary@      \"durations\": [@@@",
-      "@@@STEP_LOG_LINE@swarming.summary@        5.7, @@@",
-      "@@@STEP_LOG_LINE@swarming.summary@        31.5@@@",
-      "@@@STEP_LOG_LINE@swarming.summary@      ], @@@",
-      "@@@STEP_LOG_LINE@swarming.summary@      \"exit_codes\": [@@@",
-      "@@@STEP_LOG_LINE@swarming.summary@        0, @@@",
-      "@@@STEP_LOG_LINE@swarming.summary@        0@@@",
-      "@@@STEP_LOG_LINE@swarming.summary@      ], @@@",
-      "@@@STEP_LOG_LINE@swarming.summary@      \"failure\": false, @@@",
-      "@@@STEP_LOG_LINE@swarming.summary@      \"id\": \"148aa78d7aa0000\", @@@",
-      "@@@STEP_LOG_LINE@swarming.summary@      \"internal_failure\": false, @@@",
-      "@@@STEP_LOG_LINE@swarming.summary@      \"isolated_out\": {@@@",
-      "@@@STEP_LOG_LINE@swarming.summary@        \"isolated\": \"abc123\", @@@",
-      "@@@STEP_LOG_LINE@swarming.summary@        \"isolatedserver\": \"https://isolateserver.appspot.com\", @@@",
-      "@@@STEP_LOG_LINE@swarming.summary@        \"namespace\": \"default-gzip\", @@@",
-      "@@@STEP_LOG_LINE@swarming.summary@        \"view_url\": \"blah\"@@@",
-      "@@@STEP_LOG_LINE@swarming.summary@      }, @@@",
-      "@@@STEP_LOG_LINE@swarming.summary@      \"modified_ts\": \"2014-09-25 01:42:00\", @@@",
-      "@@@STEP_LOG_LINE@swarming.summary@      \"name\": \"heartbeat-canary-2014-09-25_01:41:55-os=Windows\", @@@",
-      "@@@STEP_LOG_LINE@swarming.summary@      \"outputs\": [@@@",
-      "@@@STEP_LOG_LINE@swarming.summary@        \"Heart beat succeeded on win32.\\n\", @@@",
-      "@@@STEP_LOG_LINE@swarming.summary@        \"Foo\"@@@",
-      "@@@STEP_LOG_LINE@swarming.summary@      ], @@@",
-      "@@@STEP_LOG_LINE@swarming.summary@      \"outputs_ref\": {@@@",
-      "@@@STEP_LOG_LINE@swarming.summary@        \"view_url\": \"blah\"@@@",
-      "@@@STEP_LOG_LINE@swarming.summary@      }, @@@",
-      "@@@STEP_LOG_LINE@swarming.summary@      \"started_ts\": \"2014-09-25T01:42:11.123\", @@@",
-      "@@@STEP_LOG_LINE@swarming.summary@      \"state\": 112, @@@",
-      "@@@STEP_LOG_LINE@swarming.summary@      \"try_number\": 1, @@@",
-      "@@@STEP_LOG_LINE@swarming.summary@      \"user\": \"unknown\"@@@",
-      "@@@STEP_LOG_LINE@swarming.summary@    }@@@",
-      "@@@STEP_LOG_LINE@swarming.summary@  ]@@@",
-      "@@@STEP_LOG_LINE@swarming.summary@}@@@",
-      "@@@STEP_LOG_END@swarming.summary@@@",
-      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::swarming]/resources/collect_task.py",
-      "-o",
-      "/path/to/tmp/json",
-      "--task-output-dir",
-      "/path/to/tmp/",
-      "--merge-script",
-      "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
-      "--merge-additional-args",
-      "[]",
-      "--",
-      "python",
-      "-u",
-      "[START_DIR]/swarming.client/swarming.py",
-      "collect",
-      "--swarming",
-      "https://chromium-swarm.appspot.com",
-      "--decorate",
-      "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"vm_tests_shard_2/Linux/\", \"tasks\": {\"vm_tests_shard_2/Linux/\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
-      "--task-summary-json",
-      "/path/to/tmp/json"
-    ],
-    "name": "vm_tests_shard_2",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Linux'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Windows'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
@@ -704,11 +555,11 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[CACHE]/builder/sdk/logs/result.log",
+      "[CACHE]\\builder\\sdk\\logs\\result.log",
       "/path/to/tmp/"
     ],
     "infra_step": true,
@@ -722,14 +573,16 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/sdk/tools/task_kill.py",
+      "[CACHE]\\builder\\sdk\\tools\\task_kill.py",
       "--kill_browsers=True"
     ],
     "name": "kill processes (3)"
   },
   {
     "cmd": [
-      "cat",
+      "cmd.exe",
+      "/c",
+      "type",
       ".debug.log"
     ],
     "name": "debug log"
