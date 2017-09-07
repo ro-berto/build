@@ -25,11 +25,6 @@ RECIPE_CONFIGS = freeze({
     'chromium_android_config': 'libyuv',
     'gclient_config': 'libyuv_android',
   },
-  'libyuv_android_clang': {
-    'chromium_config': 'libyuv_android_clang',
-    'chromium_android_config': 'libyuv',
-    'gclient_config': 'libyuv_android',
-  },
   'libyuv_ios': {
     'chromium_config': 'libyuv_ios',
     'gclient_config': 'libyuv_ios',
@@ -335,17 +330,6 @@ BUILDERS = freeze({
           'Android Tester ARM64 Debug (Nexus 5X)',
         ],
       },
-      'Android Clang Debug': {
-        'recipe_config': 'libyuv_android_clang',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'linux'},
-      },
       'Android32 x86 Debug': {
         'recipe_config': 'libyuv_android',
         'chromium_config_kwargs': {
@@ -358,7 +342,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'Android32 MIPS Debug': {
-        'recipe_config': 'libyuv_android_clang',
+        'recipe_config': 'libyuv_android',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'android',
@@ -659,17 +643,6 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
       },
-      'android_clang': {
-        'recipe_config': 'libyuv_android_clang',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'linux'},
-      },
       'android_arm64': {
         'recipe_config': 'libyuv_android',
         'chromium_config_kwargs': {
@@ -704,7 +677,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'android_mips': {
-        'recipe_config': 'libyuv_android_clang',
+        'recipe_config': 'libyuv_android',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'android',

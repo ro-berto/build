@@ -101,7 +101,7 @@
       "CHROME_HEADLESS": "1",
       "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android clang=1 component=static_library fastbuild=1 gomadir='[CACHE]/goma_client' target_arch=mipsel use_goma=1",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[CACHE]/goma_client' target_arch=mipsel use_goma=1",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -114,7 +114,7 @@
       "--root=[START_DIR]/src",
       "gen",
       "//out/Debug",
-      "--args=is_clang=true is_component_build=false is_debug=true target_os=\"android\" target_cpu=\"mipsel\" use_goma=true goma_dir=\"[CACHE]/goma_client\""
+      "--args=is_component_build=false is_debug=true target_os=\"android\" target_cpu=\"mipsel\" use_goma=true goma_dir=\"[CACHE]/goma_client\""
     ],
     "cwd": "[START_DIR]/src",
     "env": {
@@ -123,33 +123,6 @@
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "name": "gn"
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
-      "--src-dir",
-      "[START_DIR]/src",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
-    },
-    "name": "clang_revision",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
   },
   {
     "cmd": [
@@ -375,7 +348,7 @@
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",
-      "goma-clang",
+      "goma",
       "--buildbot-buildername",
       "Android32 MIPS Debug",
       "--buildbot-mastername",

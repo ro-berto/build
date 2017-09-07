@@ -37,10 +37,6 @@ def libyuv_android(c):
 
   _libyuv_static_build(c)
 
-@CONFIG_CTX(includes=['android_clang'])
-def libyuv_android_clang(c):
-  _libyuv_static_build(c)
-
 @CONFIG_CTX(includes=['chromium', 'static_library'])
 def libyuv_ios(c):
   if c.HOST_PLATFORM != 'mac':
