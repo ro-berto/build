@@ -6,6 +6,6 @@ from master import gitiles_poller
 
 
 def Update(config, c):
-  webrtc_repo_url = config.Master.git_server_url + '/external/webrtc'
+  webrtc_repo_url = 'https://webrtc.googlesource.com/src'
   poller = gitiles_poller.GitilesPoller(webrtc_repo_url)
   c['change_source'].append(poller)
