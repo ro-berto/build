@@ -94,12 +94,11 @@ for arch in ['simdbc64']:
     }
 
 for arch in ['x64', 'ia32']:
-  arch1 = 'x64'  # TODO(dartbug.com/30649): Remove this when issue is fixed
-  asan = builders['vm-linux-release-%s' % arch1].copy()
+  asan = builders['vm-linux-release-%s' % arch].copy()
   asan_args = ['--builder-tag=asan', '--timeout=240']
   asan_args.extend(asan.get('test_args', []))
   asan['test_args'] = asan_args
-  asan['env'] = linux_asan_env[arch1]
+  asan['env'] = linux_asan_env[arch]
   builders['vm-linux-release-%s-asan' % arch] = asan
 
   opt = builders['vm-linux-release-%s' % arch].copy()
