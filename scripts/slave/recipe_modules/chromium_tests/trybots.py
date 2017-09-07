@@ -201,9 +201,9 @@ TRYBOTS = freeze({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU Linux Builder (dbg)',
       }),
-      'linux_angle_chromeos_rel_ng': simple_bot({
+      'linux_angle_ozone_rel_ng': simple_bot({
         'mastername': 'chromium.gpu.fyi',
-        'buildername': 'Linux ChromiumOS Builder',
+        'buildername': 'GPU Linux Ozone Builder',
       }),
       'linux_angle_deqp_rel_ng': simple_bot({
         'mastername': 'chromium.gpu.fyi',
