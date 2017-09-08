@@ -2361,6 +2361,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
+      "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
       "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
@@ -2481,6 +2482,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
+      "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
       "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
@@ -2601,6 +2603,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
+      "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
       "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
@@ -2721,6 +2724,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
+      "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
       "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
@@ -2841,6 +2845,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
+      "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
       "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
@@ -2998,6 +3003,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
+      "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
       "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
       "@@@STEP_LINK@shard #1 isolated out@blah@@@",
@@ -3305,6 +3311,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
+      "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
       "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
       "@@@STEP_LINK@shard #1 isolated out@blah@@@",
@@ -3435,6 +3442,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
+      "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
       "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
@@ -3666,6 +3674,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
+      "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
       "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
       "@@@STEP_LINK@shard #1 isolated out@blah@@@",
@@ -3792,6 +3801,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
+      "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
       "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
@@ -4097,6 +4107,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
+      "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
       "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
       "@@@STEP_LINK@shard #1 isolated out@blah@@@",
@@ -4227,6 +4238,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
+      "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
       "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
@@ -4347,6 +4359,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
+      "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
       "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
@@ -4467,6 +4480,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
+      "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
       "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
@@ -4698,6 +4712,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
+      "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
       "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
       "@@@STEP_LINK@shard #1 isolated out@blah@@@",
@@ -4824,6 +4839,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
+      "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
       "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
@@ -4944,6 +4960,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
+      "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
       "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]

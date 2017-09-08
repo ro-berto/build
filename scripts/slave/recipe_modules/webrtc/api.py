@@ -176,8 +176,7 @@ class WebRTCApi(recipe_api.RecipeApi):
       test_suite=The name of the test suite.
     """
     with self.m.context(cwd=self._working_dir):
-      tests = steps.generate_tests(self, self.c.TEST_SUITE, self.revision,
-                                   self.c.enable_swarming)
+      tests = steps.generate_tests(self, self.c.TEST_SUITE, self.revision)
       with self.m.step.defer_results():
         if tests:
           run_android_device_steps = (not self.c.enable_swarming and

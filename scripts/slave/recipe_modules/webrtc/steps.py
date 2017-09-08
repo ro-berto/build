@@ -11,6 +11,7 @@ from recipe_engine.recipe_api import composite_step
 THIS_DIR = os.path.dirname(__file__)
 sys.path.append(os.path.join(os.path.dirname(THIS_DIR)))
 
+from chromium_tests.steps import SwarmingGTestTest
 from chromium_tests.steps import SwarmingIsolatedScriptTest
 
 
@@ -53,24 +54,24 @@ ANDROID_DEVICE_TESTS = freeze({
   'common_audio_unittests': {},
   'common_video_unittests': {},
   'modules_tests': {
-    'swarming_shards': 2,
+    'shards': 2,
   },
   'modules_unittests': {
-    'swarming_shards': 6,
+    'shards': 6,
   },
   'ortc_unittests': {},
   'peerconnection_unittests': {
-    'swarming_shards': 4,
+    'shards': 4,
   },
   'rtc_stats_unittests': {},
   'rtc_unittests': {
-    'swarming_shards': 6,
+    'shards': 6,
   },
   'system_wrappers_unittests': {},
   'test_support_unittests': {},
   'tools_unittests': {},
   'video_engine_tests': {
-    'swarming_shards': 4,
+    'shards': 4,
   },
   'voice_engine_unittests': {},
   'webrtc_nonparallel_tests': {},
@@ -102,16 +103,14 @@ PERF_TESTS = (
 )
 
 
-def generate_tests(api, test_suite, revision, enable_swarming=False):
+def generate_tests(api, test_suite, revision):
   tests = []
   build_out_dir = api.m.path['checkout'].join(
       'out', api.m.chromium.c.build_config_fs)
-  GTestTest = api.m.chromium_tests.steps.GTestTest
 
-  SwarmingTest = api.m.chromium_tests.steps.SwarmingIsolatedScriptTest
   if test_suite == 'webrtc':
     for test, extra_args in sorted(NORMAL_TESTS.items()):
-      tests.append(SwarmingTest(test, **extra_args))
+      tests.append(SwarmingIsolatedScriptTest(test, **extra_args))
     if api.mastername == 'client.webrtc.fyi' and api.m.platform.is_win:
       tests.append(BaremetalTest(
           'modules_tests',
@@ -190,15 +189,17 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
           revision=revision))
 
   elif test_suite == 'android':
+    display_logcat_link = api.mastername == 'client.webrtc.fyi'
     for test, extra_args in sorted(ANDROID_DEVICE_TESTS.items() +
                                    ANDROID_INSTRUMENTATION_TESTS.items()):
-      tests.append(GTestTest(test, enable_swarming=enable_swarming,
-                             override_isolate_target=test,
-                             cipd_packages=ANDROID_CIPD_PACKAGES, **extra_args))
+      tests.append(AndroidTest(test, override_isolate_target=test,
+                               cipd_packages=ANDROID_CIPD_PACKAGES,
+                               display_logcat_link=display_logcat_link,
+                               **extra_args))
     for test, extra_args in sorted(ANDROID_JUNIT_TESTS.items()):
       if api.mastername == 'client.webrtc.fyi':
-        tests.append(GTestTest(test, enable_swarming=enable_swarming,
-                               override_isolate_target=test, **extra_args))
+        tests.append(AndroidTest(test, override_isolate_target=test,
+                                 **extra_args))
       else:
         tests.append(AndroidJunitTest(test))
 
@@ -210,14 +211,21 @@ def generate_tests(api, test_suite, revision, enable_swarming=False):
           args=[build_out_dir],
           env={'GOMA_DISABLED': True}))
     if api.m.tryserver.is_tryserver:
-      tests.append(GTestTest(
+      tests.append(AndroidTest(
           'webrtc_perf_tests',
-          enable_swarming=enable_swarming,
           override_isolate_target='webrtc_perf_tests',
           cipd_packages=ANDROID_CIPD_PACKAGES,
           args=['--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/']))
 
   return tests
+
+
+def _MergeFiles(output_dir, suffix):
+  result = ""
+  for file_name, contents in output_dir.iteritems():
+    if file_name.endswith(suffix): # pragma: no cover
+      result += contents
+  return result
 
 
 # TODO(kjellander): Continue refactoring an integrate the classes in the
@@ -281,6 +289,40 @@ class PythonTest(Test):
       api.m.python(self._test, self._script, self._args)
 
 
+class AndroidTest(SwarmingGTestTest):
+  def __init__(self, name, display_logcat_link=False, **kwargs):
+    super(AndroidTest, self).__init__(name, **kwargs)
+    self._display_logcat_link = display_logcat_link
+
+  def post_run(self, api, suffix):
+    try:
+      super(SwarmingGTestTest, self).post_run(api, suffix)
+    finally:
+      step_result = api.step.active_result
+      if self._display_logcat_link:
+        task_output_dir = api.step.active_result.raw_io.output_dir
+        logcats = _MergeFiles(task_output_dir, 'logcats')
+        step_result.presentation.logs['logcats'] = logcats.splitlines()
+
+      if (hasattr(step_result, 'test_utils') and
+          hasattr(step_result.test_utils, 'gtest_results')):
+        gtest_results = getattr(step_result.test_utils, 'gtest_results', None)
+        self._gtest_results[suffix] = gtest_results
+        # Only upload test results if we have gtest results.
+        if self._upload_test_results and gtest_results and gtest_results.raw:
+          parsed_gtest_data = gtest_results.raw
+          chrome_revision_cp = api.bot_update.last_returned_properties.get(
+              'got_revision_cp', 'x@{#0}')
+          chrome_revision = str(api.commit_position.parse_revision(
+              chrome_revision_cp))
+          source = api.json.input(parsed_gtest_data)
+          api.test_results.upload(
+              source,
+              chrome_revision=chrome_revision,
+              test_type=step_result.step['name'],
+              test_results_server='test-results.appspot.com')
+
+
 class SwarmingPerfTest(SwarmingIsolatedScriptTest):
   def __init__(self, name, api):
     super(SwarmingPerfTest, self).__init__(name)
@@ -294,15 +336,6 @@ class SwarmingPerfTest(SwarmingIsolatedScriptTest):
     self._name = name
     self._upload_script = api.resource('upload_to_perf_dashboard.py')
 
-  def _merge_test_logs(self, task_output_files):
-    all_logs = ""
-    for file_name, contents in task_output_files.iteritems():
-      # TODO(ehmaldonado): Make it possible to add custom test data to the
-      # collected task dir.
-      if file_name.endswith('passed-tests.log'): # pragma: no cover
-        all_logs += contents
-    return all_logs
-
   def post_run(self, api, suffix):
     try:
       # We have to call super of SwarmingIsolatedScriptTest since we need access
@@ -310,7 +343,8 @@ class SwarmingPerfTest(SwarmingIsolatedScriptTest):
       super(SwarmingIsolatedScriptTest, self).post_run(api, suffix)
     finally:
       task_output_dir = api.step.active_result.raw_io.output_dir
-      logs_file = api.raw_io.input_text(self._merge_test_logs(task_output_dir))
+      logs_file = api.raw_io.input_text(
+          _MergeFiles(task_output_dir, 'passed-tests.log'))
       api.python('Upload perf results',
                  script=self._upload_script,
                  args=[
