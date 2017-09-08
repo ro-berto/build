@@ -92,7 +92,7 @@ _OPT_IN_USERS = set([
           'dnj', 'iannucci', 'hinoka', 'nodir', 'vadimsh', 'estaab', 'smut',
 
           # WebRTC Infrastructure Team Members
-          'kjellander', 'ehmaldonado', 'oprypin', 'mbonadei', 'phoglund',
+          'kjellander', 'ehmaldonado', 'oprypin', 'phoglund',
         ),
         ('chromium.org', 'google.com', 'webrtc.org')
       )
