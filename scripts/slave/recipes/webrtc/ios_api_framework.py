@@ -11,6 +11,7 @@ DEPS = [
   'depot_tools/tryserver',
   'goma',
   'depot_tools/gsutil',
+  'recipe_engine/context',
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/python',
@@ -24,7 +25,11 @@ def RunSteps(api):
   api.gclient.set_config('webrtc_ios')
 
   api.webrtc.checkout()
-  api.gclient.runhooks()
+
+  # Enforce use of the hermetic Xcode toolchain.
+  env = {'FORCE_MAC_TOOLCHAIN': '1'}
+  with api.context(cwd=api.path['checkout'], env=env):
+    api.gclient.runhooks()
 
   goma_dir = api.goma.ensure_goma()
   api.goma.start()
@@ -36,15 +41,16 @@ def RunSteps(api):
     if not api.tryserver.is_tryserver:
       api.step('cleanup', [build_script, '-c'])
 
-    step_result = api.python(
-        'build',
-        build_script,
-        args=['-r', api.webrtc.revision_number,
-              '-e',
-              '--use-goma',
-              '--extra-gn-args=goma_dir=\"%s\"' % goma_dir,
-              '--verbose'],
-    )
+    with api.context(cwd=api.path['checkout'], env=env):
+      step_result = api.python(
+          'build',
+          build_script,
+          args=['-r', api.webrtc.revision_number,
+                '-e',
+                '--use-goma',
+                '--extra-gn-args=goma_dir=\"%s\"' % goma_dir,
+                '--verbose'],
+      )
     ninja_log_exit_status = step_result.retcode
   except api.step.StepFailure as e:
     ninja_log_exit_status = e.retcode

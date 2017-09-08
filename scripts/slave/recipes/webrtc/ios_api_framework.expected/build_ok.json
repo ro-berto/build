@@ -88,6 +88,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/iOS_API_Framework_Builder/src",
     "env": {
+      "FORCE_MAC_TOOLCHAIN": "1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -212,6 +213,10 @@
       "--extra-gn-args=goma_dir=\"[CACHE]/goma_client\"",
       "--verbose"
     ],
+    "cwd": "[BUILDER_CACHE]/iOS_API_Framework_Builder/src",
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1"
+    },
     "name": "build"
   },
   {
