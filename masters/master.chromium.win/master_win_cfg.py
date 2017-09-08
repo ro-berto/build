@@ -44,7 +44,6 @@ def Update(config, active_master, c):
     {'name': 'Win7 Tests (dbg)(1)'},
     {'name': 'WinClang64 (dbg)'},
     {'name': 'Win10 Tests x64'},
-    {'name': 'Win10 Tests x64 (GCE)'},
   ]
 
   c['builders'].extend([

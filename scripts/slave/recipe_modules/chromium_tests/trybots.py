@@ -674,11 +674,6 @@ TRYBOTS = freeze({
           },
         ],
       },
-      'win10_gce_x64_rel': simple_bot({
-        'mastername': 'chromium.win',
-        'buildername': 'Win x64 Builder',
-        'tester': 'Win10 Tests x64 (GCE)',
-      }),
       'win10_chromium_x64_rel_ng': simple_bot({
         'mastername': 'chromium.win',
         'buildername': 'Win x64 Builder',
