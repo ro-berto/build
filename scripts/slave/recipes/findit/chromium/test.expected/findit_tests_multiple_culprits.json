@@ -526,7 +526,8 @@
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1"
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "test r4.generate_build_files",
     "~followup_annotations": [
@@ -1408,7 +1409,8 @@
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1"
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "test r5.generate_build_files",
     "~followup_annotations": [
@@ -2269,7 +2271,8 @@
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1"
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "test r6.generate_build_files",
     "~followup_annotations": [
@@ -3130,7 +3133,8 @@
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1"
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "test r2.generate_build_files",
     "~followup_annotations": [
@@ -3987,7 +3991,8 @@
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1"
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "test r3.generate_build_files",
     "~followup_annotations": [

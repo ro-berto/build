@@ -132,7 +132,8 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "generate_build_files",
     "stdout": "/path/to/tmp/",
@@ -186,7 +187,8 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "generate_build_files with gn (fyi)"
   },

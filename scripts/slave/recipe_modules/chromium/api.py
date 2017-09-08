@@ -908,6 +908,15 @@ class ChromiumApi(recipe_api.RecipeApi):
     # This runs with an almost-bare env being passed along, so we get a clean
     # environment without any GYP_DEFINES being present to cause confusion.
     env = self.get_env()
+
+    if use_goma:
+      # Do not allow goma to invoke local compiler.
+      # GOMA_USE_LOCAL is passed to gomacc from ninja.
+      # And in windows, env var for ninja is specified in `gn gen` step.
+      # We don't need to disallow local compile,
+      # but we want to utilize remote cpu resource more.
+      env['GOMA_USE_LOCAL'] = 'false'
+
     env.update(self.m.context.env)
 
     if self.c.gyp_env.GYP_MSVS_VERSION:

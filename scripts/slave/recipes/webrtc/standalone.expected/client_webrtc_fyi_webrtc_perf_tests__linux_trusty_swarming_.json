@@ -184,7 +184,8 @@
     ],
     "cwd": "[BUILDER_CACHE]/WebRTC_Perf_Tests__Linux_Trusty_swarming_/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "generate_build_files",
     "~followup_annotations": [

@@ -67,7 +67,8 @@
     "cwd": "None",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_SDK_MIN": "10.10"
+      "FORCE_MAC_SDK_MIN": "10.10",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "generate_build_files",
     "~followup_annotations": [

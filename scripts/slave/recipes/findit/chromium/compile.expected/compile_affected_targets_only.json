@@ -844,7 +844,8 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "test r2.generate_build_files",
     "~followup_annotations": [

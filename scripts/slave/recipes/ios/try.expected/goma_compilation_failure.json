@@ -226,6 +226,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_USE_LOCAL": "false",
       "LANDMINES_VERBOSE": "1"
     },
     "name": "generate build files (mb) (with patch)"
@@ -673,6 +674,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_USE_LOCAL": "false",
       "LANDMINES_VERBOSE": "1"
     },
     "name": "generate build files (mb) (without patch)"

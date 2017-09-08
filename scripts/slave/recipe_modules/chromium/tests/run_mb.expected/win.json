@@ -23,6 +23,7 @@
     "cwd": "None",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false",
       "GYP_MSVS_VERSION": "2015"
     },
     "name": "generate_build_files",

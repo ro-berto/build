@@ -158,7 +158,8 @@
     ],
     "cwd": "[BUILDER_CACHE]/Linux64_Release__large_tests_/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "generate_build_files"
   },

@@ -499,7 +499,8 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "test r6.generate_build_files",
     "~followup_annotations": [
@@ -550,7 +551,8 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "test r6.generate_build_files (2)",
     "~followup_annotations": [
@@ -1105,7 +1107,8 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "test r7.generate_build_files",
     "~followup_annotations": [
@@ -1156,7 +1159,8 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "test r7.generate_build_files (2)",
     "~followup_annotations": [
@@ -1690,7 +1694,8 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "test r9.generate_build_files",
     "~followup_annotations": [
@@ -1741,7 +1746,8 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "test r9.generate_build_files (2)",
     "~followup_annotations": [
@@ -2275,7 +2281,8 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "test r10.generate_build_files",
     "~followup_annotations": [
@@ -2326,7 +2333,8 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "test r10.generate_build_files (2)",
     "~followup_annotations": [

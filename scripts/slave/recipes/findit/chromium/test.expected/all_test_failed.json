@@ -550,7 +550,8 @@
     "cwd": "[BUILDER_CACHE]\\win\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "test r1.generate_build_files",
     "~followup_annotations": [

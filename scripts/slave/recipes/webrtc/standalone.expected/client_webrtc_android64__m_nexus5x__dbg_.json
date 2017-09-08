@@ -210,6 +210,7 @@
     "cwd": "[BUILDER_CACHE]/Android64__M_Nexus5X__dbg_/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false",
       "PATH": "[BUILDER_CACHE]/Android64__M_Nexus5X__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android64__M_Nexus5X__dbg_/src/build/android:<PATH>"
     },
     "name": "generate_build_files",
