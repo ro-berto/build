@@ -189,12 +189,10 @@ def generate_tests(api, test_suite, revision):
           revision=revision))
 
   elif test_suite == 'android':
-    display_logcat_link = api.mastername == 'client.webrtc.fyi'
     for test, extra_args in sorted(ANDROID_DEVICE_TESTS.items() +
                                    ANDROID_INSTRUMENTATION_TESTS.items()):
       tests.append(AndroidTest(test, override_isolate_target=test,
                                cipd_packages=ANDROID_CIPD_PACKAGES,
-                               display_logcat_link=display_logcat_link,
                                **extra_args))
     for test, extra_args in sorted(ANDROID_JUNIT_TESTS.items()):
       if api.mastername == 'client.webrtc.fyi':
@@ -290,19 +288,14 @@ class PythonTest(Test):
 
 
 class AndroidTest(SwarmingGTestTest):
-  def __init__(self, name, display_logcat_link=False, **kwargs):
-    super(AndroidTest, self).__init__(name, **kwargs)
-    self._display_logcat_link = display_logcat_link
-
   def post_run(self, api, suffix):
     try:
       super(SwarmingGTestTest, self).post_run(api, suffix)
     finally:
       step_result = api.step.active_result
-      if self._display_logcat_link:
-        task_output_dir = api.step.active_result.raw_io.output_dir
-        logcats = _MergeFiles(task_output_dir, 'logcats')
-        step_result.presentation.logs['logcats'] = logcats.splitlines()
+      task_output_dir = api.step.active_result.raw_io.output_dir
+      logcats = _MergeFiles(task_output_dir, 'logcats')
+      step_result.presentation.logs['logcats'] = logcats.splitlines()
 
       if (hasattr(step_result, 'test_utils') and
           hasattr(step_result.test_utils, 'gtest_results')):
