@@ -92,9 +92,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     """Adds builders to our builder map"""
     self._builders.update(builders)
 
-  def create_bot_config_object(self, mastername, buildername):
+  def create_bot_config_object(self, mastername, buildername, builders=None):
     bot_id = {'mastername': mastername, 'buildername': buildername}
-    return bdb_module.BotConfig(self.builders, [bot_id])
+    return bdb_module.BotConfig(builders or self.builders, [bot_id])
 
   def create_generalized_bot_config_object(self, bot_ids):
     return bdb_module.BotConfig(self.builders, bot_ids)
