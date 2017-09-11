@@ -97,7 +97,7 @@
       "--path",
       "[START_DIR]/swarming.client",
       "--url",
-      "https://chromium.googlesource.com/external/swarming.client.git"
+      "https://chromium.googlesource.com/infra/luci/client-py.git"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env_prefixes": {

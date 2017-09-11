@@ -41,7 +41,7 @@ class SwarmingClientApi(recipe_api.RecipeApi):
     self._client_path = self.m.path['start_dir'].join('swarming.client')
     try:
       self.m.git.checkout(
-          url='https://chromium.googlesource.com/external/swarming.client.git',
+          url='https://chromium.googlesource.com/infra/luci/client-py.git',
           ref=revision,
           dir_path=self._client_path,
           step_suffix='swarming_client',
