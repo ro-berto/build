@@ -182,13 +182,13 @@
   },
   {
     "cmd": [
-      "[START_DIR]/src/out/host_debug_unopt/ftl_unittests"
+      "[START_DIR]/src/out/host_debug_unopt/fxl_unittests"
     ],
     "cwd": "[START_DIR]/src/out/host_debug_unopt",
     "env": {
       "PATH": "[START_DIR]/src/dart/tools/sdks/linux/dart-sdk/bin:<PATH>"
     },
-    "name": "Test FTL"
+    "name": "Test FXL"
   },
   {
     "cmd": [

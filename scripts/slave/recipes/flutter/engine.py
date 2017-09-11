@@ -42,8 +42,8 @@ def RunHostTests(api, out_dir, exe_extension=''):
     if api.platform.is_mac:
       api.step('Test Flutter Channels',
         [directory.join('flutter_channels_unittests' + exe_extension)])
-    api.step('Test FTL',
-      [directory.join('ftl_unittests' + exe_extension)])
+    api.step('Test FXL',
+      [directory.join('fxl_unittests' + exe_extension)])
     # TODO(goderbauer): enable these tests on Windows when they pass.
     if not api.platform.is_win:
       api.step('Test FML', [
@@ -342,7 +342,7 @@ def BuildWindows(api):
 
   Build(api, 'host_debug_unopt',
     'flutter/lib/snapshot:generate_snapshot_bin',
-    'garnet/public/lib/ftl:ftl_unittests',
+    'garnet/public/lib/fxl:fxl_unittests',
     'dart:create_sdk',
     'flutter/frontend_server')
   Build(api, 'android_profile', 'gen_snapshot')
