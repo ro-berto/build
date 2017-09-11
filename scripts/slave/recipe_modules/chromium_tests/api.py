@@ -853,11 +853,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         step_test_data=lambda: self.m.json.test_api.output({}))
     return result.json.output
 
-  def main_waterfall_steps(self, mb_config_path=None):
+  def main_waterfall_steps(self, mb_config_path=None, bot_config=None):
     mastername = self.m.properties.get('mastername')
     buildername = self.m.properties.get('buildername')
-
-    bot_config = self.create_bot_config_object(mastername, buildername)
+    bot_config = (bot_config or
+                  self.create_bot_config_object(mastername, buildername))
     self.configure_build(bot_config)
     update_step, bot_db = self.prepare_checkout(bot_config)
     tests, tests_including_triggered = self.get_tests(bot_config, bot_db)
