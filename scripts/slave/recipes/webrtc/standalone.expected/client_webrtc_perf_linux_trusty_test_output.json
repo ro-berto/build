@@ -576,9 +576,9 @@
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Trusty",
     "infra_step": true,
-    "name": "gsutil upload",
+    "name": "gsutil upload webrtc_perf_tests_test_output",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.googleapis.com/chromium-webrtc/client.webrtc.perf/Linux Trusty/webrtc_perf_tests_test_output_170242.zip@@@"
+      "@@@STEP_LINK@webrtc_perf_tests output_dir@https://storage.googleapis.com/chromium-webrtc/client.webrtc.perf/Linux Trusty/webrtc_perf_tests_test_output_170242.zip@@@"
     ]
   },
   {

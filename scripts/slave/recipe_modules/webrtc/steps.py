@@ -396,7 +396,9 @@ class PerfTest(Test):
                             zip_path)
         api.m.gsutil.upload(zip_path, api.WEBRTC_GS_BUCKET, upload_url,
                             args=['-a', 'public-read'],
-                            unauthenticated_url=True)
+                            unauthenticated_url=True,
+                            name='upload ' + test_output_name,
+                            link_name=self._name + ' output_dir')
 
 
 class AndroidJunitTest(Test):
