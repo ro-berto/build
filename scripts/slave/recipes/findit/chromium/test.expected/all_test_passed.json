@@ -1043,7 +1043,7 @@
     "name": "test r1.gl_tests (r1)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",

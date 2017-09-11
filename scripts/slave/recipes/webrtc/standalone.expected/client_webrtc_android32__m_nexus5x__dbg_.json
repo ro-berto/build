@@ -2249,7 +2249,7 @@
     ],
     "name": "AppRTCMobileTest on Android",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
@@ -2371,7 +2371,7 @@
     ],
     "name": "audio_decoder_unittests on Android",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
@@ -2493,7 +2493,7 @@
     ],
     "name": "common_audio_unittests on Android",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
@@ -2615,7 +2615,7 @@
     ],
     "name": "common_video_unittests on Android",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
@@ -2737,7 +2737,7 @@
     ],
     "name": "libjingle_peerconnection_android_unittest on Android",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
@@ -2859,7 +2859,7 @@
     ],
     "name": "modules_tests on Android",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Android'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)@@@",
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)@@@",
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
@@ -3020,7 +3020,7 @@
     ],
     "name": "modules_unittests on Android",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Android'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)@@@",
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)@@@",
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
@@ -3337,7 +3337,7 @@
     ],
     "name": "ortc_unittests on Android",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
@@ -3459,7 +3459,7 @@
     ],
     "name": "peerconnection_unittests on Android",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Android'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)@@@",
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)@@@",
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
@@ -3698,7 +3698,7 @@
     ],
     "name": "rtc_stats_unittests on Android",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
@@ -3820,7 +3820,7 @@
     ],
     "name": "rtc_unittests on Android",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Android'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)@@@",
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)@@@",
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
@@ -4137,7 +4137,7 @@
     ],
     "name": "system_wrappers_unittests on Android",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
@@ -4259,7 +4259,7 @@
     ],
     "name": "test_support_unittests on Android",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
@@ -4381,7 +4381,7 @@
     ],
     "name": "tools_unittests on Android",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
@@ -4503,7 +4503,7 @@
     ],
     "name": "video_engine_tests on Android",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Android'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)@@@",
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)@@@",
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
@@ -4742,7 +4742,7 @@
     ],
     "name": "voice_engine_unittests on Android",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
@@ -4864,7 +4864,7 @@
     ],
     "name": "webrtc_nonparallel_tests on Android",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",

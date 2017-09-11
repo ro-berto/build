@@ -907,13 +907,14 @@ class SwarmingApi(recipe_api.RecipeApi):
           for failure in gtest_results.failures:
             p.logs[failure] = gtest_results.logs[failure]
         swarming_summary = step_result.swarming.summary
-        self._display_pending(swarming_summary.get('shards', []),
-                              step_result.presentation)
 
         # Show any remaining isolated outputs (such as logcats).
         # Note that collect_task.py uses the default summary.json, which
         # only has 'outputs_ref' instead of the deprecated 'isolated_out'.
         for index, shard in enumerate(swarming_summary.get('shards', [])):
+          if not shard:
+            continue
+
           outputs_ref = shard.get('outputs_ref')
           if outputs_ref:
             link_name = 'shard #%d isolated out' % index

@@ -1146,7 +1146,7 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@Run on OS: 'Mac-10.9'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br/>failures:<br/>Test.gl_One<br/><br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.9'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br/>failures:<br/>Test.gl_One<br/>@@@",
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
@@ -1281,7 +1281,7 @@
     "name": "test r5.browser_tests (r5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@Run on OS: 'Mac-10.9'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.9'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
@@ -2146,7 +2146,7 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@Run on OS: 'Mac-10.9'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br/>failures:<br/>Test.browser_One<br/><br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.9'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br/>failures:<br/>Test.browser_One<br/>@@@",
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
@@ -3013,7 +3013,7 @@
     "name": "test r2.gl_tests (r2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@Run on OS: 'Mac-10.9'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.9'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
@@ -3878,7 +3878,7 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@Run on OS: 'Mac-10.9'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br/>failures:<br/>Test.gl_One<br/><br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.9'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br/>failures:<br/>Test.gl_One<br/>@@@",
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",

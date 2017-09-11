@@ -1441,7 +1441,7 @@ Returns a Boolean indicating whether this module is running in
 precommit mode; i.e., whether tests are running before the changes
 are committed.
 
-&mdash; **def [main\_waterfall\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#856)(self, mb_config_path=None):**
+&mdash; **def [main\_waterfall\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#856)(self, mb_config_path=None, bot_config=None):**
 
 &mdash; **def [prepare\_checkout](/scripts/slave/recipe_modules/chromium_tests/api.py#223)(self, bot_config, root_solution_revision=None, disable_syntax_validation=False):**
 
@@ -2659,11 +2659,11 @@ This value can be changed per individual task.
 
 &emsp; **@default_user.setter**<br>&mdash; **def [default\_user](/scripts/slave/recipe_modules/swarming/api.py#284)(self, value):**
 
-&mdash; **def [get\_collect\_cmd\_args](/scripts/slave/recipe_modules/swarming/api.py#1100)(self, task):**
+&mdash; **def [get\_collect\_cmd\_args](/scripts/slave/recipe_modules/swarming/api.py#1101)(self, task):**
 
 SwarmingTask -> argument list for 'swarming.py' command.
 
-&mdash; **def [get\_step\_name](/scripts/slave/recipe_modules/swarming/api.py#1030)(self, prefix, task):**
+&mdash; **def [get\_step\_name](/scripts/slave/recipe_modules/swarming/api.py#1031)(self, prefix, task):**
 
 SwarmingTask -> name of a step of a waterfall.
 

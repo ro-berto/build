@@ -544,7 +544,7 @@
     },
     "name": "gl_tests on Intel GPU on Mac on Mac-10.10",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Mac-10.10'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.10'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
@@ -674,7 +674,7 @@
     },
     "name": "gl_tests on NVIDIA GPU on Mac Retina",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Mac-10.9'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.9'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",

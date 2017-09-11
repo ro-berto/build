@@ -95,7 +95,14 @@ def RunSteps(api, platforms, show_isolated_out_in_collect_step,
     # Create a task to run the isolated file on swarming, set OS dimension.
     # Also generate code coverage for multi-shard case by triggering multiple
     # shards on Linux.
-    if isolated_script_task:
+    if gtest_task:
+      task = api.swarming.gtest_task(
+          'hello_world', isolated_hash,
+          task_output_dir=temp_dir.join('task_output_dir'),
+          test_launcher_summary_output=api.test_utils.gtest_results(
+              add_json_log=False),
+          merge=merge)
+    elif isolated_script_task:
       task = api.swarming.isolated_script_task(
           'hello_world', isolated_hash,
           task_output_dir=temp_dir.join('task_output_dir'),
@@ -400,6 +407,20 @@ def GenTests(api):
     ]
   }
   yield (
+      api.test('gtest_with_null_shard') +
+      api.step_data(
+          'archive for linux',
+          stdout=api.raw_io.output('hash_for_linux hello_world.isolated')) +
+      api.step_data(
+          'hello_world',
+          api.raw_io.output_dir({'summary.json': json.dumps(summary_data)}),
+          api.swarming.summary(summary_data) +
+          api.test_utils.canned_gtest_output(False)) +
+      api.properties(
+          platforms=('linux',),
+          show_shards_in_collect_step=True,
+          gtest_task=True))
+  yield (
       api.test('isolated_script_with_null_shard') +
       api.step_data(
           'archive for linux',
@@ -410,4 +431,5 @@ def GenTests(api):
           api.swarming.summary(summary_data)) +
       api.properties(
           platforms=('linux',),
-          show_shards_in_collect_step=True))
+          show_shards_in_collect_step=True,
+          isolated_script_task=True))

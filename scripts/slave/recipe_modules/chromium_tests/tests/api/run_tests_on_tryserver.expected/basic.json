@@ -335,7 +335,7 @@
     "name": "base_unittests (with patch)",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br/>failures:<br/>Test.Two<br/><br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br/>failures:<br/>Test.Two<br/>@@@",
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
@@ -1005,7 +1005,7 @@
     ],
     "name": "base_unittests (without patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
