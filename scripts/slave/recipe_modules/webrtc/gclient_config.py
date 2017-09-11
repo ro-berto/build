@@ -7,9 +7,18 @@ CONFIG_CTX = DEPS['gclient'].CONFIG_CTX
 ChromeInternalGitURL = DEPS['gclient'].config.ChromeInternalGitURL
 ChromiumGitURL = DEPS['gclient'].config.ChromiumGitURL
 
+def WebRTCGitURL(_c, *pieces):
+  return '/'.join(('https://webrtc.googlesource.com',) + pieces)
+
 
 @CONFIG_CTX(includes=['_webrtc', '_webrtc_limited'])
 def webrtc(c):
+  pass
+
+# The new soure-of-truth repo being migrated to (see crbug.com/738330).
+# TODO(kjellander): Rename this and remove the old once above is completed.
+@CONFIG_CTX(includes=['_webrtc_new', '_webrtc_limited'])
+def webrtc_new(c):
   pass
 
 @CONFIG_CTX(includes=['webrtc'])
@@ -39,6 +48,21 @@ def _webrtc(c):
   s.deps_file = 'DEPS'
   c.got_revision_mapping['src'] = 'got_revision'
 
+# The new soure-of-truth repo being migrated to (see crbug.com/738330).
+# TODO(kjellander): Rename this and remove the old once above is completed.
+@CONFIG_CTX()
+def _webrtc_new(c):
+  """Add the main solution for WebRTC standalone builds.
+
+  This needs to be in it's own configuration that is added first in the
+  dependency chain. Otherwise the webrtc-limited solution will end up as the
+  first solution in the gclient spec, which doesn't work.
+  """
+  s = c.solutions.add()
+  s.name = 'src'
+  s.url = WebRTCGitURL(c, 'src')
+  s.deps_file = 'DEPS'
+  c.got_revision_mapping['src'] = 'got_revision'
 
 @CONFIG_CTX()
 def _webrtc_limited(c):

@@ -79,7 +79,12 @@ class WebRTCApi(recipe_api.RecipeApi):
 
     self.m.chromium.set_config(self.recipe_config['chromium_config'],
                                **chromium_kwargs)
-    self.m.gclient.set_config(self.recipe_config['gclient_config'])
+    gclient_config = self.recipe_config['gclient_config']
+    if self.mastername == 'client.webrtc.fyi':
+      # The new soure-of-truth repo being migrated to (see crbug.com/738330).
+      # TODO(kjellander): Rename this once above is completed.
+      gclient_config += "_new"
+    self.m.gclient.set_config(gclient_config)
 
     # Support applying configs both at the bot and the recipe config level.
     for c in self.bot_config.get('chromium_apply_config', []):
