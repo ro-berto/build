@@ -15,12 +15,6 @@ def WebRTCGitURL(_c, *pieces):
 def webrtc(c):
   pass
 
-# The new soure-of-truth repo being migrated to (see crbug.com/738330).
-# TODO(kjellander): Rename this and remove the old once above is completed.
-@CONFIG_CTX(includes=['_webrtc_new', '_webrtc_limited'])
-def webrtc_new(c):
-  pass
-
 @CONFIG_CTX(includes=['webrtc'])
 def webrtc_ios(c):
   # WebRTC for iOS depends on the src/third_party/openmax_dl in Chromium, which
@@ -36,22 +30,6 @@ def webrtc_valgrind(c):
 
 @CONFIG_CTX()
 def _webrtc(c):
-  """Add the main solution for WebRTC standalone builds.
-
-  This needs to be in it's own configuration that is added first in the
-  dependency chain. Otherwise the webrtc-limited solution will end up as the
-  first solution in the gclient spec, which doesn't work.
-  """
-  s = c.solutions.add()
-  s.name = 'src'
-  s.url = ChromiumGitURL(c, 'external', 'webrtc')
-  s.deps_file = 'DEPS'
-  c.got_revision_mapping['src'] = 'got_revision'
-
-# The new soure-of-truth repo being migrated to (see crbug.com/738330).
-# TODO(kjellander): Rename this and remove the old once above is completed.
-@CONFIG_CTX()
-def _webrtc_new(c):
   """Add the main solution for WebRTC standalone builds.
 
   This needs to be in it's own configuration that is added first in the
