@@ -122,7 +122,6 @@ def generate_tests(api, test_suite, revision):
     api.virtual_webcam_check()  # Needed for video_capture_tests below.
 
     tests.extend([
-        BaremetalTest('voe_auto_test', revision=revision, args=['--automated']),
         BaremetalTest('video_capture_tests', revision=revision),
     ])
 
