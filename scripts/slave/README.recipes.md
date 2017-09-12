@@ -1375,7 +1375,7 @@ a given continuous builder.
 
 &mdash; **def [configure\_build](/scripts/slave/recipe_modules/chromium_tests/api.py#120)(self, bot_config, override_bot_type=None):**
 
-&mdash; **def [create\_bot\_config\_object](/scripts/slave/recipe_modules/chromium_tests/api.py#95)(self, mastername, buildername):**
+&mdash; **def [create\_bot\_config\_object](/scripts/slave/recipe_modules/chromium_tests/api.py#95)(self, mastername, buildername, builders=None):**
 
 &mdash; **def [create\_bot\_db\_from\_master\_dict](/scripts/slave/recipe_modules/chromium_tests/api.py#218)(self, mastername, master_dict):**
 

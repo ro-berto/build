@@ -1636,7 +1636,16 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
       return
 
     json_results = getattr(step_result, 'isolated_script_results', {})
-    if not json_results.get('tests'):
+
+    is_benchmark_enabled = True
+    # If new json-test-results format exist, use that
+    if json_results.get('version') == 3:
+      is_benchmark_enabled = bool(json_results.get('tests'))
+    # If not, check the perf results
+    else:
+      is_benchmark_enabled = results.get('enabled', True)
+
+    if not is_benchmark_enabled:
       step_result.presentation.logs['DISABLED_BENCHMARK'] = \
          ['Info: Benchmark disabled, not sending results to dashboard']
       return

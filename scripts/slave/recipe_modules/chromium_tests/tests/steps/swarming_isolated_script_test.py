@@ -289,6 +289,33 @@ def GenTests(api):
           retcode=0)
   )
 
+  # Uses simplied json
+  # https://crbug.com/704066
+
+  yield (
+      api.test('chartjson_simplified_disabled') +
+      api.properties(
+          mastername='test_mastername',
+          buildername='test_buildername',
+          buildnumber=123,
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
+          git_revision='test_sha',
+          version='test-version',
+          got_revision_cp=123456,
+          perf_id='test-perf-id',
+          results_url='https://example/url') +
+      api.override_step_data(
+          'base_unittests on Intel GPU on Linux',
+          api.swarming.canned_summary_output(2)
+          + api.test_utils.canned_isolated_script_output(
+              passing=True, swarming=True,
+              shards=2, isolated_script_passing=True, valid=True,
+              output_chartjson=True, benchmark_enabled=False),
+          retcode=0)
+  )
+
   yield (
       api.test('dimensions_windows') +
       api.properties(
