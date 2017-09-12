@@ -61,7 +61,8 @@
       "python",
       "-u",
       "[START_DIR]/sdk/tools/task_kill.py",
-      "--kill_browsers=True"
+      "--kill_browsers=True",
+      "--kill_vsbuild=True"
     ],
     "cwd": "[START_DIR]/sdk",
     "name": "kill processes"
@@ -130,7 +131,8 @@
       "python",
       "-u",
       "[START_DIR]/sdk/tools/task_kill.py",
-      "--kill_browsers=True"
+      "--kill_browsers=True",
+      "--kill_vsbuild=True"
     ],
     "cwd": "[START_DIR]/sdk",
     "name": "kill processes (2)"

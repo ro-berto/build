@@ -21,7 +21,8 @@ class DartApi(recipe_api.RecipeApi):
     """Kills leftover tasks from previous runs or steps."""
     self.m.python('kill processes',
                self.m.path['checkout'].join('tools', 'task_kill.py'),
-               args=['--kill_browsers=True'])
+               args=['--kill_browsers=True', '--kill_vsbuild=True'],
+               ok_ret='any')
 
   def build(self, build_args=[], isolate=None):
     """Builds dart using the specified build_args

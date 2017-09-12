@@ -1581,7 +1581,7 @@ Fetches a commit position string given a commit hash.
 
 Recipe module for code commonly used in dart recipies. Shouldn't be used elsewhere.
 
-&mdash; **def [build](/scripts/slave/recipe_modules/dart/api.py#26)(self, build_args=[], isolate=None):**
+&mdash; **def [build](/scripts/slave/recipe_modules/dart/api.py#27)(self, build_args=[], isolate=None):**
 
 Builds dart using the specified build_args
 and optionally isolates the sdk for testing using the specified isolate.
@@ -1591,7 +1591,7 @@ If an isolate is specified, it returns the hash of the isolated archive.
 
 Checks out the dart code and prepares it for building.
 
-&mdash; **def [collect](/scripts/slave/recipe_modules/dart/api.py#92)(self, tasks):**
+&mdash; **def [collect](/scripts/slave/recipe_modules/dart/api.py#93)(self, tasks):**
 
 Collects the results of a sharded test run.
 
@@ -1599,11 +1599,11 @@ Collects the results of a sharded test run.
 
 Kills leftover tasks from previous runs or steps.
 
-&mdash; **def [read\_debug\_log](/scripts/slave/recipe_modules/dart/api.py#116)(self):**
+&mdash; **def [read\_debug\_log](/scripts/slave/recipe_modules/dart/api.py#117)(self):**
 
 Reads the debug.log file
 
-&mdash; **def [read\_result\_file](/scripts/slave/recipe_modules/dart/api.py#99)(self, name, result, test_data=''):**
+&mdash; **def [read\_result\_file](/scripts/slave/recipe_modules/dart/api.py#100)(self, name, result, test_data=''):**
 
 Reads the result.log file
 Args:
@@ -1614,7 +1614,7 @@ Args:
 Returns (str) - The content of the file.
 Raises file.Error
 
-&mdash; **def [shard](/scripts/slave/recipe_modules/dart/api.py#62)(self, title, isolate_hash, test_args, os=None, cpu='x86-64', pool='Dart.LUCI'):**
+&mdash; **def [shard](/scripts/slave/recipe_modules/dart/api.py#63)(self, title, isolate_hash, test_args, os=None, cpu='x86-64', pool='Dart.LUCI'):**
 
 Runs test.py in the given isolate, sharded over several swarming tasks.
 Requires the 'shards' build property to be set to the number of tasks.

@@ -62,7 +62,8 @@
       "python",
       "-u",
       "[CACHE]/builder/sdk/tools/task_kill.py",
-      "--kill_browsers=True"
+      "--kill_browsers=True",
+      "--kill_vsbuild=True"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env_prefixes": {
@@ -851,7 +852,8 @@
       "python",
       "-u",
       "[CACHE]/builder/sdk/tools/task_kill.py",
-      "--kill_browsers=True"
+      "--kill_browsers=True",
+      "--kill_vsbuild=True"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "name": "kill processes (2)"
