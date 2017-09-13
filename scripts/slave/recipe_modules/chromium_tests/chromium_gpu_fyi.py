@@ -912,7 +912,26 @@ SPEC = {
       'enable_swarming': True,
       'serialize_tests': True,
     },
-    'Mac dEQP Release': {
+    'Mac dEQP Release AMD': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb',
+                                'ninja_confirm_noop',
+                                'fetch_telemetry_dependencies'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU Mac dEQP Builder',
+      'testing': {
+        'platform': 'mac',
+      },
+      'enable_swarming': True,
+      'serialize_tests': True,
+    },
+    'Mac dEQP Release Intel': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb',
                                 'ninja_confirm_noop',
