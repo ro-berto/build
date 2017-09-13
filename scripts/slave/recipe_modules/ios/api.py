@@ -13,11 +13,13 @@ class iOSApi(recipe_api.RecipeApi):
   # exposed by the Swarming server.
   PRODUCT_TYPES = {
     'iPad 4 GSM CDMA': 'iPad3,6',
+    'iPad 5th Gen':    'iPad6,11',
     'iPad Air':        'iPad4,1',
     'iPad Air 2':      'iPad5,3',
     'iPhone 5':        'iPhone5,1',
     'iPhone 5s':       'iPhone6,1',
     'iPhone 6s':       'iPhone8,1',
+    'iPhone 7':        'iPhone9,1',
   }
 
   def __init__(self, *args, **kwargs):

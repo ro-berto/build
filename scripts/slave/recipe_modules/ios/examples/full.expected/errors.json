@@ -698,11 +698,13 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Requested unsupported device type.@@@",
       "@@@STEP_LOG_LINE@supported devices@iPad 4 GSM CDMA@@@",
+      "@@@STEP_LOG_LINE@supported devices@iPad 5th Gen@@@",
       "@@@STEP_LOG_LINE@supported devices@iPad Air@@@",
       "@@@STEP_LOG_LINE@supported devices@iPad Air 2@@@",
       "@@@STEP_LOG_LINE@supported devices@iPhone 5@@@",
       "@@@STEP_LOG_LINE@supported devices@iPhone 5s@@@",
       "@@@STEP_LOG_LINE@supported devices@iPhone 6s@@@",
+      "@@@STEP_LOG_LINE@supported devices@iPhone 7@@@",
       "@@@STEP_LOG_END@supported devices@@@",
       "@@@STEP_EXCEPTION@@@"
     ]
