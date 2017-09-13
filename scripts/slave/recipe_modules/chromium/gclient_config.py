@@ -182,7 +182,7 @@ def webrtc_test_resources(c):
   """
   s = c.solutions.add()
   s.name = 'webrtc.DEPS'
-  s.url = ChromiumGitURL(c, 'chromium', 'deps', 'webrtc', 'webrtc.DEPS')
+  s.url = 'https://webrtc.googlesource.com/webrtc.DEPS'
   s.deps_file = 'DEPS'
 
 @CONFIG_CTX(includes=['chromium'])
