@@ -367,13 +367,15 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-result-log",
       "--write-test-outcome-log",
       "--copy-coredumps",
       "--vm-options=--no-enable-malloc-hooks",
       "--append_logs",
       "-cdartk",
       "--shards=3",
-      "--shard=1"
+      "--shard=1",
+      "--output_directory=${ISOLATED_OUTDIR}"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env_prefixes": {
@@ -465,13 +467,15 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-result-log",
       "--write-test-outcome-log",
       "--copy-coredumps",
       "--vm-options=--no-enable-malloc-hooks",
       "--append_logs",
       "-cdartk",
       "--shards=3",
-      "--shard=2"
+      "--shard=2",
+      "--output_directory=${ISOLATED_OUTDIR}"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env_prefixes": {
@@ -563,13 +567,15 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-result-log",
       "--write-test-outcome-log",
       "--copy-coredumps",
       "--vm-options=--no-enable-malloc-hooks",
       "--append_logs",
       "-cdartk",
       "--shards=3",
-      "--shard=3"
+      "--shard=3",
+      "--output_directory=${ISOLATED_OUTDIR}"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env_prefixes": {
@@ -612,6 +618,7 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-result-log",
       "--write-test-outcome-log",
       "--copy-coredumps",
       "--vm-options=--no-enable-malloc-hooks"
@@ -637,6 +644,7 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-result-log",
       "--write-test-outcome-log",
       "--copy-coredumps",
       "--vm-options=--no-enable-malloc-hooks",
@@ -667,7 +675,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "/path/to/tmp/",
+      "[CLEANUP]/0",
       "--merge-script",
       "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
       "--merge-additional-args",
@@ -752,7 +760,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "/path/to/tmp/",
+      "[CLEANUP]/1",
       "--merge-script",
       "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
       "--merge-additional-args",
@@ -837,7 +845,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "/path/to/tmp/",
+      "[CLEANUP]/2",
       "--merge-script",
       "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
       "--merge-additional-args",

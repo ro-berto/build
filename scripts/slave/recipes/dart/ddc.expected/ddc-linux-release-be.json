@@ -90,6 +90,25 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "infra_step": true,
+    "name": "read results of ddc tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[START_DIR]/sdk/tools/task_kill.py",
       "--kill_browsers=True"
     ],

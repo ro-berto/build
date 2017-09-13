@@ -3,16 +3,17 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'depot_tools/bot_update',
-  'depot_tools/depot_tools',
-  'depot_tools/gclient',
-  'recipe_engine/context',
-  'recipe_engine/path',
-  'recipe_engine/platform',
-  'recipe_engine/properties',
-  'recipe_engine/python',
-  'recipe_engine/step',
-  'test_utils',
+    'dart',
+    'depot_tools/bot_update',
+    'depot_tools/depot_tools',
+    'depot_tools/gclient',
+    'recipe_engine/context',
+    'recipe_engine/path',
+    'recipe_engine/platform',
+    'recipe_engine/properties',
+    'recipe_engine/python',
+    'recipe_engine/step',
+    'test_utils',
 ]
 
 
@@ -48,11 +49,19 @@ def RunTests(api, test_args, test_specs, use_xvfb=False):
         xvfb_cmd = ['xvfb-run', '-a', '--server-args=-screen 0 1024x768x24']
         xvfb_cmd.extend(['python', '-u', './tools/test.py'])
         xvfb_cmd.extend(args)
-        api.step(test_spec['name'], xvfb_cmd)
+        result = api.step(test_spec['name'], xvfb_cmd)
+        api.dart.read_result_file('read results of %s' % test_spec['name'],
+                                  'result.log',
+                                  result);
+
       else:
-        api.python(test_spec['name'],
-                   api.path['checkout'].join('tools', 'test.py'),
-                   args=args)
+        result = api.python(test_spec['name'],
+                            api.path['checkout'].join('tools', 'test.py'),
+                            args=args)
+        api.dart.read_result_file('read results of %s' % test_spec['name'],
+                                  'result.log',
+                                  result);
+
 
 def RunSteps(api):
   builder_name = str(api.properties.get('buildername')) # Convert from unicode.
@@ -111,6 +120,7 @@ def RunSteps(api):
                    '--report',
                    '--time',
                    '--write-debug-log',
+                   '--write-result-log',
                    '--write-test-outcome-log']
       for option in options:
         if all_options[option] != '':
@@ -151,27 +161,28 @@ def RunSteps(api):
 
     if 'unittest' in options:
       with api.context(cwd=api.path['checkout']):
-        api.python('dart2js-unit tests',
-                   api.path['checkout'].join('tools', 'test.py'),
-                   args=["--mode=%s" % mode, "--compiler=none", "--runtime=vm",
-                         "--arch=ia32", "--time", "--use-sdk", "--report",
-                         "--write-debug-log", "--write-test-outcome-log",
-                         "--progress=buildbot", "-v", "--append_logs",
-                         "--reset-browser-configuration",
-                         "--shards=%s" % num_shards, "--shard=%s" % shard,
-                         "--checked", "dart2js"])
+        result = api.python('dart2js-unit tests',
+                            api.path['checkout'].join('tools', 'test.py'),
+                            args=["--mode=%s" % mode, "--compiler=none", "--runtime=vm",
+                                  "--arch=ia32", "--time", "--use-sdk", "--report",
+                                  "--write-debug-log",
+                                  "--write-result-log",
+                                  "--write-test-outcome-log",
+                                  "--progress=buildbot", "-v", "--append_logs",
+                                  "--reset-browser-configuration",
+                                  "--shards=%s" % num_shards, "--shard=%s" % shard,
+                                  "--checked", "dart2js"])
+        api.dart.read_result_file('read results of dart2js-unit tests',
+                                  'result.log',
+                                  result);
+
 
     with api.context(cwd=api.path['checkout']):
       # TODO(whesse): Add archive coredumps step from dart_factory.py.
       api.python('taskkill after testing',
                  api.path['checkout'].join('tools', 'task_kill.py'),
                  args=['--kill_browsers=True'])
-      if api.platform.name == 'win':
-        api.step('debug log',
-                 ['cmd.exe', '/c', 'type', '.debug.log'])
-      else:
-        api.step('debug log',
-                 ['cat', '.debug.log'])
+      api.dart.read_debug_log()
 
 def GenTests(api):
    yield (

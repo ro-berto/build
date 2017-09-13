@@ -21,7 +21,7 @@ def RunSteps(api):
 
   with api.step.defer_results():
     result = api.step('Print Hello World', ['echo', 'hello', 'world'])
-    api.dart.read_result_file('print result', result)
+    api.dart.read_result_file('print result', 'result.log', result)
 
   api.dart.kill_tasks()
   api.dart.read_debug_log()
@@ -29,8 +29,10 @@ def RunSteps(api):
 def GenTests(api):
   yield (
     api.test('basic') +
-    api.properties(shards='2'))
+    api.properties(shards='2')
+  )
 
   yield (
     api.test('basic-win') + api.platform('win', 64) +
-    api.properties(shards='1'))
+    api.properties(shards='1')
+  )

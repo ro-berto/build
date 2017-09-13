@@ -445,7 +445,8 @@
       "--",
       "--all",
       "--shards=1",
-      "--shard=1"
+      "--shard=1",
+      "--output_directory=${ISOLATED_OUTDIR}"
     ],
     "infra_step": true,
     "name": "[trigger] vm_tests_shard_1 on Windows",
@@ -477,7 +478,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "/path/to/tmp/",
+      "[CLEANUP]\\0",
       "--merge-script",
       "RECIPE_MODULE[build::swarming]\\resources\\noop_merge.py",
       "--merge-additional-args",

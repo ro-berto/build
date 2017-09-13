@@ -3,16 +3,17 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'depot_tools/bot_update',
-  'depot_tools/gclient',
-  'depot_tools/gsutil',
-  'recipe_engine/context',
-  'recipe_engine/path',
-  'recipe_engine/platform',
-  'recipe_engine/properties',
-  'recipe_engine/python',
-  'recipe_engine/step',
-  'test_utils',
+    'dart',
+    'depot_tools/bot_update',
+    'depot_tools/gclient',
+    'depot_tools/gsutil',
+    'recipe_engine/context',
+    'recipe_engine/path',
+    'recipe_engine/platform',
+    'recipe_engine/properties',
+    'recipe_engine/python',
+    'recipe_engine/step',
+    'test_utils',
 ]
 
 GCS_BUCKET = 'gs://dart-cross-compiled-binaries'
@@ -62,15 +63,22 @@ def RunSteps(api):
                    '--report',
                    '--time',
                    '--write-debug-log',
+                   '--write-result-log',
                    '--write-test-outcome-log']
       test_args.extend(b.get('test_args', []))
-      api.python('vm tests',
-                 api.path['tools'].join('test.py'),
-                 args=test_args)
+      result = api.python('vm tests',
+                          api.path['tools'].join('test.py'),
+                          args=test_args)
+      api.dart.read_result_file('read results of vm tests',
+                                'result.log',
+                                result);
       test_args.extend(['--checked', '--append_logs'])
-      api.python('checked vm tests',
-                 api.path['tools'].join('test.py'),
-                 args=test_args)
+      result = api.python('checked vm tests',
+                          api.path['tools'].join('test.py'),
+                          args=test_args)
+      api.dart.read_result_file('read results of checked vm tests',
+                                'result.log',
+                                result);
       api.step('debug log', ['cat', '.debug.log'])
       api.step('delete tarball', ['rm', tarball])
       api.python('clobber',

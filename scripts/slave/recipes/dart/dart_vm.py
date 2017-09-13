@@ -5,18 +5,17 @@
 import re
 
 DEPS = [
-
     'dart',
-  'depot_tools/bot_update',
-  'depot_tools/depot_tools',
-  'depot_tools/gclient',
-  'recipe_engine/context',
-  'recipe_engine/path',
-  'recipe_engine/platform',
-  'recipe_engine/properties',
-  'recipe_engine/python',
-  'recipe_engine/step',
-  'test_utils',
+    'depot_tools/bot_update',
+    'depot_tools/depot_tools',
+    'depot_tools/gclient',
+    'recipe_engine/context',
+    'recipe_engine/path',
+    'recipe_engine/platform',
+    'recipe_engine/properties',
+    'recipe_engine/python',
+    'recipe_engine/step',
+    'test_utils',
 ]
 
 asan64 = {
@@ -204,14 +203,19 @@ def RunSteps(api):
         result = api.python('vm tests',
                             api.path['checkout'].join('tools', 'test.py'),
                             args=test_args)
-        api.dart.read_result_file('read results', result);
+        api.dart.read_result_file('read results of vm tests',
+                                  'result.log',
+                                  result);
       if b.get('checked', False):
         test_args.extend(['--checked', '--append_logs'])
         with api.context(env=b['env']):
-          checked_result = api.python('checked vm tests',
-                                      api.path['checkout'].join('tools', 'test.py'),
+          result = api.python('checked vm tests',
+                                      api.path['checkout'].join('tools',
+                                                                'test.py'),
                                       args=test_args)
-          api.dart.read_result_file('read results', checked_result);
+          api.dart.read_result_file('read results of checked vm tests',
+                                    'result.log',
+                                    result);
 
       api.dart.kill_tasks()
       api.dart.read_debug_log()

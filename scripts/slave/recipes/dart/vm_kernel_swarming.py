@@ -35,6 +35,7 @@ def RunSteps(api):
                '--report',
                '--time',
                '--write-debug-log',
+               '--write-result-log',
                '--write-test-outcome-log',
                '--copy-coredumps']
   if mode == 'debug':
@@ -66,6 +67,7 @@ def RunSteps(api):
                  args=test_args + ['samples', 'service', 'standalone', 'vm'])
 
       api.dart.collect(tasks.get_result())
+
       api.dart.kill_tasks()
       api.step('debug log', ['cat', '.debug.log'])
 

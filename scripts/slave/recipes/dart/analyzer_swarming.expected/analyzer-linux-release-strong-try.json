@@ -103,6 +103,7 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-result-log",
       "--write-test-outcome-log",
       "--copy-coredumps",
       "--strong",
@@ -123,6 +124,33 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "PUB_ENVIRONMENT": "dart_bots"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "read results of analyze tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[CACHE]/builder/sdk/tools/test.py",
       "--mode=release",
       "--arch=x64",
@@ -133,6 +161,7 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-result-log",
       "--write-test-outcome-log",
       "--copy-coredumps",
       "--strong",
@@ -155,6 +184,33 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "PUB_ENVIRONMENT": "dart_bots"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "read results of analyze pkg tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[CACHE]/builder/sdk/tools/test.py",
       "--mode=release",
       "--arch=x64",
@@ -165,6 +221,7 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-result-log",
       "--write-test-outcome-log",
       "--copy-coredumps",
       "--strong",
@@ -187,6 +244,33 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "PUB_ENVIRONMENT": "dart_bots"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "read results of analyze tests checked",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[CACHE]/builder/sdk/tools/test.py",
       "--mode=release",
       "--arch=x64",
@@ -197,6 +281,7 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-result-log",
       "--write-test-outcome-log",
       "--copy-coredumps",
       "--strong",
@@ -220,6 +305,33 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "PUB_ENVIRONMENT": "dart_bots"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "read results of analyze pkg tests checked",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[CACHE]/builder/sdk/tools/test.py",
       "--mode=release",
       "--arch=x64",
@@ -230,6 +342,7 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-result-log",
       "--write-test-outcome-log",
       "--copy-coredumps",
       "--strong",
@@ -254,6 +367,33 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "PUB_ENVIRONMENT": "dart_bots"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "read results of analyze strong tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[CACHE]/builder/sdk/tools/test.py",
       "--mode=release",
       "--arch=x64",
@@ -264,6 +404,7 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-result-log",
       "--write-test-outcome-log",
       "--copy-coredumps",
       "--strong",
@@ -289,6 +430,33 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "PUB_ENVIRONMENT": "dart_bots"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "read results of analyze strong tests checked",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[CACHE]/builder/sdk/tools/test.py",
       "--mode=release",
       "--arch=x64",
@@ -301,6 +469,7 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-result-log",
       "--write-test-outcome-log",
       "--append_logs",
       "pkg/analyzer"
@@ -320,6 +489,33 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "PUB_ENVIRONMENT": "dart_bots"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "read results of analyzer unit tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[CACHE]/builder/sdk/tools/test.py",
       "--mode=release",
       "--arch=x64",
@@ -332,6 +528,7 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-result-log",
       "--write-test-outcome-log",
       "--append_logs",
       "pkg/analysis_server"
@@ -351,6 +548,33 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "PUB_ENVIRONMENT": "dart_bots"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "read results of analysis server unit tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[CACHE]/builder/sdk/tools/test.py",
       "--mode=release",
       "--arch=x64",
@@ -363,6 +587,7 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-result-log",
       "--write-test-outcome-log",
       "--append_logs",
       "pkg/analyzer_cli"
@@ -382,6 +607,33 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "PUB_ENVIRONMENT": "dart_bots"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "read results of analyzer_cli unit tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[CACHE]/builder/sdk/tools/test.py",
       "--mode=release",
       "--arch=x64",
@@ -394,6 +646,7 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-result-log",
       "--write-test-outcome-log",
       "--append_logs",
       "pkg/front_end"
@@ -408,6 +661,33 @@
       ]
     },
     "name": "front end unit tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "PUB_ENVIRONMENT": "dart_bots"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "read results of front end unit tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
   },
   {
     "cmd": [

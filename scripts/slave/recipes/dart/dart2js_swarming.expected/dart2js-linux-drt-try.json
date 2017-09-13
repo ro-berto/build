@@ -370,11 +370,13 @@
       "--time",
       "--use-sdk",
       "--progress=buildbot",
+      "--write-result-log",
       "-v",
       "-rdrt",
       "--exclude-suite=observatory_ui,service,co19",
       "--shards=3",
-      "--shard=1"
+      "--shard=1",
+      "--output_directory=${ISOLATED_OUTDIR}"
     ],
     "infra_step": true,
     "name": "[trigger] dart2js_tests_shard_1",
@@ -464,11 +466,13 @@
       "--time",
       "--use-sdk",
       "--progress=buildbot",
+      "--write-result-log",
       "-v",
       "-rdrt",
       "--exclude-suite=observatory_ui,service,co19",
       "--shards=3",
-      "--shard=2"
+      "--shard=2",
+      "--output_directory=${ISOLATED_OUTDIR}"
     ],
     "infra_step": true,
     "name": "[trigger] dart2js_tests_shard_2",
@@ -558,11 +562,13 @@
       "--time",
       "--use-sdk",
       "--progress=buildbot",
+      "--write-result-log",
       "-v",
       "-rdrt",
       "--exclude-suite=observatory_ui,service,co19",
       "--shards=3",
-      "--shard=3"
+      "--shard=3",
+      "--output_directory=${ISOLATED_OUTDIR}"
     ],
     "infra_step": true,
     "name": "[trigger] dart2js_tests_shard_3",
@@ -652,11 +658,13 @@
       "--time",
       "--use-sdk",
       "--progress=buildbot",
+      "--write-result-log",
       "-v",
       "-rdrt",
       "co19",
       "--shards=3",
-      "--shard=1"
+      "--shard=1",
+      "--output_directory=${ISOLATED_OUTDIR}"
     ],
     "infra_step": true,
     "name": "[trigger] dart2js_co19_tests_shard_1",
@@ -746,11 +754,13 @@
       "--time",
       "--use-sdk",
       "--progress=buildbot",
+      "--write-result-log",
       "-v",
       "-rdrt",
       "co19",
       "--shards=3",
-      "--shard=2"
+      "--shard=2",
+      "--output_directory=${ISOLATED_OUTDIR}"
     ],
     "infra_step": true,
     "name": "[trigger] dart2js_co19_tests_shard_2",
@@ -840,11 +850,13 @@
       "--time",
       "--use-sdk",
       "--progress=buildbot",
+      "--write-result-log",
       "-v",
       "-rdrt",
       "co19",
       "--shards=3",
-      "--shard=3"
+      "--shard=3",
+      "--output_directory=${ISOLATED_OUTDIR}"
     ],
     "infra_step": true,
     "name": "[trigger] dart2js_co19_tests_shard_3",
@@ -880,6 +892,7 @@
       "--report",
       "--time",
       "--progress=buildbot",
+      "--write-result-log",
       "-v",
       "-rdrt",
       "--write-debug-log",
@@ -893,6 +906,30 @@
       ]
     },
     "name": "dart2js-drt-package tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "read results of dart2js-drt-package tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
   },
   {
     "cmd": [
@@ -910,6 +947,7 @@
       "--report",
       "--time",
       "--progress=buildbot",
+      "--write-result-log",
       "-v",
       "-rdrt",
       "--write-debug-log",
@@ -927,6 +965,30 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "read results of dart2js-drt-observatory-ui tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
+  },
+  {
+    "cmd": [
       "/usr/bin/xvfb-run",
       "-a",
       "--server-args=-screen 0 1024x768x24",
@@ -941,6 +1003,7 @@
       "--report",
       "--time",
       "--progress=buildbot",
+      "--write-result-log",
       "-v",
       "-rdrt",
       "--write-debug-log",
@@ -959,6 +1022,30 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "read results of dart2js-drt-extra tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
+  },
+  {
+    "cmd": [
       "/usr/bin/xvfb-run",
       "-a",
       "--server-args=-screen 0 1024x768x24",
@@ -973,6 +1060,7 @@
       "--report",
       "--time",
       "--progress=buildbot",
+      "--write-result-log",
       "-v",
       "-rdrt",
       "--write-debug-log",
@@ -991,6 +1079,30 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "read results of dart2js-drt-package-checked tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
+  },
+  {
+    "cmd": [
       "/usr/bin/xvfb-run",
       "-a",
       "--server-args=-screen 0 1024x768x24",
@@ -1005,6 +1117,7 @@
       "--report",
       "--time",
       "--progress=buildbot",
+      "--write-result-log",
       "-v",
       "-rdrt",
       "--write-debug-log",
@@ -1023,6 +1136,30 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "read results of dart2js-drt-observatory-ui-checked tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
+  },
+  {
+    "cmd": [
       "/usr/bin/xvfb-run",
       "-a",
       "--server-args=-screen 0 1024x768x24",
@@ -1037,6 +1174,7 @@
       "--report",
       "--time",
       "--progress=buildbot",
+      "--write-result-log",
       "-v",
       "-rdrt",
       "--write-debug-log",
@@ -1058,6 +1196,30 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "read results of dart2js-drt-extra-checked tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--",
@@ -1066,7 +1228,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "/path/to/tmp/",
+      "[CLEANUP]/0",
       "--merge-script",
       "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
       "--merge-additional-args",
@@ -1146,7 +1308,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "/path/to/tmp/",
+      "[CLEANUP]/1",
       "--merge-script",
       "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
       "--merge-additional-args",
@@ -1226,7 +1388,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "/path/to/tmp/",
+      "[CLEANUP]/2",
       "--merge-script",
       "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
       "--merge-additional-args",
@@ -1306,7 +1468,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "/path/to/tmp/",
+      "[CLEANUP]/0",
       "--merge-script",
       "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
       "--merge-additional-args",
@@ -1386,7 +1548,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "/path/to/tmp/",
+      "[CLEANUP]/1",
       "--merge-script",
       "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
       "--merge-additional-args",
@@ -1466,7 +1628,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "/path/to/tmp/",
+      "[CLEANUP]/2",
       "--merge-script",
       "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
       "--merge-additional-args",

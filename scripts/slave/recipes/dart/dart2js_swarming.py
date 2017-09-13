@@ -49,11 +49,18 @@ def RunTests(api, test_args, test_specs, use_xvfb=False):
                      env_prefixes={'PATH':[api.depot_tools.root]}):
       if use_xvfb:
         cmd = xvfb_cmd + args
-        api.step(test_spec['name'], cmd)
+        result = api.step(test_spec['name'], cmd)
+        api.dart.read_result_file('read results of %s' % test_spec['name'],
+                                  'result.log',
+                                  result);
+
       else:
-        api.python(test_spec['name'],
-                   api.path['checkout'].join('tools', 'test.py'),
-                   args=args)
+        result = api.python(test_spec['name'],
+                            api.path['checkout'].join('tools', 'test.py'),
+                            args=args)
+        api.dart.read_result_file('read results of %s' % test_spec['name'],
+                                  'result.log',
+                                  result);
 
 def RunSteps(api):
   builder_name = str(api.properties.get('buildername')) # Convert from unicode.
@@ -89,7 +96,7 @@ def RunSteps(api):
       test_args = ['-m%s' % mode, '-aia32', '-cdart2js',
                    '--dart2js-batch', '--reset-browser-configuration',
                    '--report', '--time', '--use-sdk', '--progress=buildbot',
-                   '-v', '-r%s' % runtime]
+                   '--write-result-log', '-v', '-r%s' % runtime]
       if system in ['win7', 'win8', 'win10']:
         test_args.append('--builder-tag=%s' % system)
 
@@ -134,7 +141,9 @@ def RunSteps(api):
                    api.path['checkout'].join('tools', 'test.py'),
                    args=["--mode=%s" % mode, "--compiler=none", "--runtime=vm",
                          "--arch=ia32", "--time", "--use-sdk", "--report",
-                         "--write-debug-log", "--write-test-outcome-log",
+                         "--write-debug-log",
+                         "--write-result-log",
+                         "--write-test-outcome-log",
                          "--progress=buildbot", "-v", "--append_logs",
                          "--reset-browser-configuration",
                          "--checked", "dart2js"])

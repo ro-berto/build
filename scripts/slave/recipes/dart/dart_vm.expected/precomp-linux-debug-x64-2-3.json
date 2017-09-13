@@ -120,7 +120,7 @@
     ],
     "cwd": "[START_DIR]/sdk",
     "infra_step": true,
-    "name": "read results",
+    "name": "read results of vm tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@result.log@@@@",
       "@@@STEP_LOG_END@result.log@@@"

@@ -3,18 +3,19 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'depot_tools/bot_update',
-  'depot_tools/gclient',
-  'depot_tools/gsutil',
-  'recipe_engine/context',
-  'recipe_engine/file',
-  'recipe_engine/path',
-  'recipe_engine/platform',
-  'recipe_engine/properties',
-  'recipe_engine/python',
-  'recipe_engine/step',
-  'test_utils',
-  'zip',
+    'dart',
+    'depot_tools/bot_update',
+    'depot_tools/gclient',
+    'depot_tools/gsutil',
+    'recipe_engine/context',
+    'recipe_engine/file',
+    'recipe_engine/path',
+    'recipe_engine/platform',
+    'recipe_engine/properties',
+    'recipe_engine/python',
+    'recipe_engine/step',
+    'test_utils',
+    'zip',
 ]
 
 def RunSteps(api):
@@ -48,10 +49,12 @@ def RunSteps(api):
                  args=build_args)
 
     with api.step.defer_results():
-      api.python('ddc tests',
-                 api.path['checkout'].join('tools', 'bots', 'ddc_tests.py'),
-                 args=[])
-
+      result = api.python('ddc tests',
+                          api.path['checkout'].join('tools', 'bots', 'ddc_tests.py'),
+                          args=[])
+      api.dart.read_result_file('read results of ddc tests',
+                                'result.log',
+                                result);
       api.python('taskkill after testing',
                  api.path['checkout'].join('tools', 'task_kill.py'),
                  args=['--kill_browsers=True'],

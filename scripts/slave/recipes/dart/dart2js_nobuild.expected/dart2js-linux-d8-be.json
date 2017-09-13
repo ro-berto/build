@@ -136,6 +136,7 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-result-log",
       "--write-test-outcome-log",
       "--shards=4",
       "--shard=1",
@@ -143,6 +144,25 @@
     ],
     "cwd": "[START_DIR]/sdk",
     "name": "dart2js-d8 tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "infra_step": true,
+    "name": "read results of dart2js-d8 tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
   },
   {
     "cmd": [
@@ -161,6 +181,7 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-result-log",
       "--write-test-outcome-log",
       "--shards=4",
       "--shard=1",
@@ -174,27 +195,20 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/sdk/tools/test.py",
-      "--mode=release",
-      "--arch=x64",
-      "--use-sdk",
-      "--compiler=dart2js",
-      "--dart2js-batch",
-      "--runtime=d8",
-      "--progress=buildbot",
-      "-v",
-      "--reset-browser-configuration",
-      "--report",
-      "--time",
-      "--write-debug-log",
-      "--write-test-outcome-log",
-      "--shards=4",
-      "--shard=1",
-      "--append_logs",
-      "observatory_ui"
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/sdk/logs/result.log",
+      "/path/to/tmp/"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js-d8-observatory_ui tests"
+    "infra_step": true,
+    "name": "read results of dart2js-d8-package tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
   },
   {
     "cmd": [
@@ -213,6 +227,53 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-result-log",
+      "--write-test-outcome-log",
+      "--shards=4",
+      "--shard=1",
+      "--append_logs",
+      "observatory_ui"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "name": "dart2js-d8-observatory_ui tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "infra_step": true,
+    "name": "read results of dart2js-d8-observatory_ui tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/sdk/tools/test.py",
+      "--mode=release",
+      "--arch=x64",
+      "--use-sdk",
+      "--compiler=dart2js",
+      "--dart2js-batch",
+      "--runtime=d8",
+      "--progress=buildbot",
+      "-v",
+      "--reset-browser-configuration",
+      "--report",
+      "--time",
+      "--write-debug-log",
+      "--write-result-log",
       "--write-test-outcome-log",
       "--shards=4",
       "--shard=1",
@@ -227,27 +288,20 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/sdk/tools/test.py",
-      "--mode=release",
-      "--arch=x64",
-      "--use-sdk",
-      "--compiler=dart2js",
-      "--dart2js-batch",
-      "--runtime=d8",
-      "--progress=buildbot",
-      "-v",
-      "--reset-browser-configuration",
-      "--report",
-      "--time",
-      "--write-debug-log",
-      "--write-test-outcome-log",
-      "--shards=4",
-      "--shard=1",
-      "--append_logs",
-      "co19"
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/sdk/logs/result.log",
+      "/path/to/tmp/"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js-d8-co19 tests"
+    "infra_step": true,
+    "name": "read results of dart2js-d8-extra tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
   },
   {
     "cmd": [
@@ -266,6 +320,53 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-result-log",
+      "--write-test-outcome-log",
+      "--shards=4",
+      "--shard=1",
+      "--append_logs",
+      "co19"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "name": "dart2js-d8-co19 tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "infra_step": true,
+    "name": "read results of dart2js-d8-co19 tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/sdk/tools/test.py",
+      "--mode=release",
+      "--arch=x64",
+      "--use-sdk",
+      "--compiler=dart2js",
+      "--dart2js-batch",
+      "--runtime=d8",
+      "--progress=buildbot",
+      "-v",
+      "--reset-browser-configuration",
+      "--report",
+      "--time",
+      "--write-debug-log",
+      "--write-result-log",
       "--write-test-outcome-log",
       "--shards=4",
       "--shard=1",
@@ -285,6 +386,25 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "infra_step": true,
+    "name": "read results of dart2js-with-kernel-d8 tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[START_DIR]/sdk/tools/test.py",
       "--mode=release",
       "--arch=x64",
@@ -298,6 +418,7 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-result-log",
       "--write-test-outcome-log",
       "--shards=4",
       "--shard=1",
@@ -312,6 +433,25 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "infra_step": true,
+    "name": "read results of dart2js-d8-fast-startup tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[START_DIR]/sdk/tools/test.py",
       "--mode=release",
       "--arch=x64",
@@ -325,6 +465,7 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-result-log",
       "--write-test-outcome-log",
       "--shards=4",
       "--shard=1",
@@ -339,28 +480,20 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/sdk/tools/test.py",
-      "--mode=release",
-      "--arch=x64",
-      "--use-sdk",
-      "--compiler=dart2js",
-      "--dart2js-batch",
-      "--runtime=d8",
-      "--progress=buildbot",
-      "-v",
-      "--reset-browser-configuration",
-      "--report",
-      "--time",
-      "--write-debug-log",
-      "--write-test-outcome-log",
-      "--shards=4",
-      "--shard=1",
-      "--fast-startup",
-      "--append_logs",
-      "observatory_ui"
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/sdk/logs/result.log",
+      "/path/to/tmp/"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js-d8-observatory_ui-fast-startup tests"
+    "infra_step": true,
+    "name": "read results of dart2js-d8-package-fast-startup tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
   },
   {
     "cmd": [
@@ -379,6 +512,54 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-result-log",
+      "--write-test-outcome-log",
+      "--shards=4",
+      "--shard=1",
+      "--fast-startup",
+      "--append_logs",
+      "observatory_ui"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "name": "dart2js-d8-observatory_ui-fast-startup tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "infra_step": true,
+    "name": "read results of dart2js-d8-observatory_ui-fast-startup tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/sdk/tools/test.py",
+      "--mode=release",
+      "--arch=x64",
+      "--use-sdk",
+      "--compiler=dart2js",
+      "--dart2js-batch",
+      "--runtime=d8",
+      "--progress=buildbot",
+      "-v",
+      "--reset-browser-configuration",
+      "--report",
+      "--time",
+      "--write-debug-log",
+      "--write-result-log",
       "--write-test-outcome-log",
       "--shards=4",
       "--shard=1",
@@ -394,28 +575,20 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/sdk/tools/test.py",
-      "--mode=release",
-      "--arch=x64",
-      "--use-sdk",
-      "--compiler=dart2js",
-      "--dart2js-batch",
-      "--runtime=d8",
-      "--progress=buildbot",
-      "-v",
-      "--reset-browser-configuration",
-      "--report",
-      "--time",
-      "--write-debug-log",
-      "--write-test-outcome-log",
-      "--shards=4",
-      "--shard=1",
-      "--fast-startup",
-      "--append_logs",
-      "co19"
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/sdk/logs/result.log",
+      "/path/to/tmp/"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js-d8-co19-fast-startup tests"
+    "infra_step": true,
+    "name": "read results of dart2js-d8-extra-fast-startup tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
   },
   {
     "cmd": [
@@ -434,6 +607,54 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-result-log",
+      "--write-test-outcome-log",
+      "--shards=4",
+      "--shard=1",
+      "--fast-startup",
+      "--append_logs",
+      "co19"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "name": "dart2js-d8-co19-fast-startup tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "infra_step": true,
+    "name": "read results of dart2js-d8-co19-fast-startup tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/sdk/tools/test.py",
+      "--mode=release",
+      "--arch=x64",
+      "--use-sdk",
+      "--compiler=dart2js",
+      "--dart2js-batch",
+      "--runtime=d8",
+      "--progress=buildbot",
+      "-v",
+      "--reset-browser-configuration",
+      "--report",
+      "--time",
+      "--write-debug-log",
+      "--write-result-log",
       "--write-test-outcome-log",
       "--shards=4",
       "--shard=1",
@@ -449,6 +670,25 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "infra_step": true,
+    "name": "read results of dart2js-d8-fast-startup-checked tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[START_DIR]/sdk/tools/test.py",
       "--mode=release",
       "--arch=x64",
@@ -462,6 +702,7 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-result-log",
       "--write-test-outcome-log",
       "--shards=4",
       "--shard=1",
@@ -477,29 +718,20 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/sdk/tools/test.py",
-      "--mode=release",
-      "--arch=x64",
-      "--use-sdk",
-      "--compiler=dart2js",
-      "--dart2js-batch",
-      "--runtime=d8",
-      "--progress=buildbot",
-      "-v",
-      "--reset-browser-configuration",
-      "--report",
-      "--time",
-      "--write-debug-log",
-      "--write-test-outcome-log",
-      "--shards=4",
-      "--shard=1",
-      "--fast-startup",
-      "--checked",
-      "--append_logs",
-      "observatory_ui"
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/sdk/logs/result.log",
+      "/path/to/tmp/"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js-d8-observatory_ui-fast-startup-checked tests"
+    "infra_step": true,
+    "name": "read results of dart2js-d8-package-fast-startup-checked tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
   },
   {
     "cmd": [
@@ -518,6 +750,55 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-result-log",
+      "--write-test-outcome-log",
+      "--shards=4",
+      "--shard=1",
+      "--fast-startup",
+      "--checked",
+      "--append_logs",
+      "observatory_ui"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "name": "dart2js-d8-observatory_ui-fast-startup-checked tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "infra_step": true,
+    "name": "read results of dart2js-d8-observatory_ui-fast-startup-checked tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/sdk/tools/test.py",
+      "--mode=release",
+      "--arch=x64",
+      "--use-sdk",
+      "--compiler=dart2js",
+      "--dart2js-batch",
+      "--runtime=d8",
+      "--progress=buildbot",
+      "-v",
+      "--reset-browser-configuration",
+      "--report",
+      "--time",
+      "--write-debug-log",
+      "--write-result-log",
       "--write-test-outcome-log",
       "--shards=4",
       "--shard=1",
@@ -534,6 +815,25 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "infra_step": true,
+    "name": "read results of dart2js-d8-extra-fast-startup-checked tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[START_DIR]/sdk/tools/test.py",
       "--mode=release",
       "--arch=x64",
@@ -547,6 +847,7 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-result-log",
       "--write-test-outcome-log",
       "--shards=4",
       "--shard=1",
@@ -557,6 +858,25 @@
     ],
     "cwd": "[START_DIR]/sdk",
     "name": "dart2js-d8-co19-fast-startup-checked tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "infra_step": true,
+    "name": "read results of dart2js-d8-co19-fast-startup-checked tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
   },
   {
     "cmd": [

@@ -105,6 +105,7 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-result-log",
       "--write-test-outcome-log",
       "--host-checked",
       "--csp",
@@ -124,6 +125,30 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "read results of dart2js-d8 tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[START_DIR]/sdk/tools/test.py",
       "--mode=release",
       "--arch=ia32",
@@ -136,6 +161,7 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-result-log",
       "--write-test-outcome-log",
       "--host-checked",
       "--csp",
@@ -156,6 +182,30 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "read results of dart2js-d8-package tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[START_DIR]/sdk/tools/test.py",
       "--mode=release",
       "--arch=ia32",
@@ -168,6 +218,7 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-result-log",
       "--write-test-outcome-log",
       "--host-checked",
       "--csp",
@@ -188,6 +239,30 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "read results of dart2js-d8-observatory-ui tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[START_DIR]/sdk/tools/test.py",
       "--mode=release",
       "--arch=ia32",
@@ -200,6 +275,7 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-result-log",
       "--write-test-outcome-log",
       "--host-checked",
       "--csp",
@@ -221,6 +297,30 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "read results of dart2js-d8-extra tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[START_DIR]/sdk/tools/test.py",
       "--mode=release",
       "--arch=ia32",
@@ -233,6 +333,7 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-result-log",
       "--write-test-outcome-log",
       "--host-checked",
       "--csp",
@@ -253,6 +354,30 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "read results of dart2js-d8-co19 tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[START_DIR]/sdk/tools/test.py",
       "--mode=release",
       "--arch=ia32",
@@ -265,6 +390,7 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-result-log",
       "--write-test-outcome-log",
       "--host-checked",
       "--csp",
@@ -286,6 +412,30 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "read results of dart2js-d8-checked tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[START_DIR]/sdk/tools/test.py",
       "--mode=release",
       "--arch=ia32",
@@ -298,6 +448,7 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-result-log",
       "--write-test-outcome-log",
       "--host-checked",
       "--csp",
@@ -319,6 +470,30 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "read results of dart2js-d8-package-checked tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[START_DIR]/sdk/tools/test.py",
       "--mode=release",
       "--arch=ia32",
@@ -331,6 +506,7 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-result-log",
       "--write-test-outcome-log",
       "--host-checked",
       "--csp",
@@ -352,6 +528,30 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "read results of dart2js-d8-observatory-ui-checked tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[START_DIR]/sdk/tools/test.py",
       "--mode=release",
       "--arch=ia32",
@@ -364,6 +564,7 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-result-log",
       "--write-test-outcome-log",
       "--host-checked",
       "--csp",
@@ -386,6 +587,30 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "read results of dart2js-d8-extra-checked tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[START_DIR]/sdk/tools/test.py",
       "--mode=release",
       "--arch=ia32",
@@ -398,6 +623,7 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-result-log",
       "--write-test-outcome-log",
       "--host-checked",
       "--csp",
@@ -419,6 +645,30 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "read results of dart2js-d8-co19-checked tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[START_DIR]/sdk/tools/test.py",
       "--mode=release",
       "--compiler=none",
@@ -428,6 +678,7 @@
       "--use-sdk",
       "--report",
       "--write-debug-log",
+      "--write-result-log",
       "--write-test-outcome-log",
       "--progress=buildbot",
       "-v",
@@ -440,6 +691,25 @@
     ],
     "cwd": "[START_DIR]/sdk",
     "name": "dart2js-unit tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "infra_step": true,
+    "name": "read results of dart2js-unit tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
   },
   {
     "cmd": [

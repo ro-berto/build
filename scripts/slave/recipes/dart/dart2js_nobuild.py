@@ -3,18 +3,19 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'depot_tools/bot_update',
-  'depot_tools/gclient',
-  'depot_tools/gsutil',
-  'recipe_engine/context',
-  'recipe_engine/file',
-  'recipe_engine/path',
-  'recipe_engine/platform',
-  'recipe_engine/properties',
-  'recipe_engine/python',
-  'recipe_engine/step',
-  'test_utils',
-  'zip',
+    'dart',
+    'depot_tools/bot_update',
+    'depot_tools/gclient',
+    'depot_tools/gsutil',
+    'recipe_engine/context',
+    'recipe_engine/file',
+    'recipe_engine/path',
+    'recipe_engine/platform',
+    'recipe_engine/properties',
+    'recipe_engine/python',
+    'recipe_engine/step',
+    'test_utils',
+    'zip',
 ]
 
 
@@ -50,11 +51,18 @@ def RunTests(api, test_args, test_specs, use_xvfb=False):
         xvfb_cmd = ['xvfb-run', '-a', '--server-args=-screen 0 1024x768x24']
         xvfb_cmd.extend(['python', '-u', './tools/test.py'])
         xvfb_cmd.extend(args)
-        api.step(test_spec['name'], xvfb_cmd)
+        result = api.step(test_spec['name'], xvfb_cmd)
+        api.dart.read_result_file('read results of %s' % test_spec['name'],
+                                  'result.log',
+                                  result);
+
       else:
-        api.python(test_spec['name'],
-                   api.path['checkout'].join('tools', 'test.py'),
-                   args=args)
+        result = api.python(test_spec['name'],
+                            api.path['checkout'].join('tools', 'test.py'),
+                            args=args)
+        api.dart.read_result_file('read results of %s' % test_spec['name'],
+                                  'result.log',
+                                  result);
 
 def sdk_url(channel, platform, arch, mode, revision):
   platforms = {
@@ -129,6 +137,7 @@ def RunSteps(api):
                    '--report',
                    '--time',
                    '--write-debug-log',
+                   '--write-result-log',
                    '--write-test-outcome-log']
       for option in options:
         test_args.append(all_options[option])

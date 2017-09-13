@@ -3,18 +3,19 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'depot_tools/bot_update',
-  'depot_tools/depot_tools',
-  'depot_tools/gclient',
-  'depot_tools/gsutil',
-  'recipe_engine/context',
-  'recipe_engine/file',
-  'recipe_engine/path',
-  'recipe_engine/platform',
-  'recipe_engine/properties',
-  'recipe_engine/python',
-  'recipe_engine/step',
-  'test_utils',
+    'dart',
+    'depot_tools/bot_update',
+    'depot_tools/depot_tools',
+    'depot_tools/gclient',
+    'depot_tools/gsutil',
+    'recipe_engine/context',
+    'recipe_engine/file',
+    'recipe_engine/path',
+    'recipe_engine/platform',
+    'recipe_engine/properties',
+    'recipe_engine/python',
+    'recipe_engine/step',
+    'test_utils',
 ]
 
 is_first_test_step = True
@@ -31,9 +32,12 @@ def RunTests(api, test_args, test_specs):
     with api.context(cwd=api.path['checkout'],
                      env={'PUB_ENVIRONMENT': 'dart_bots'},
                      env_prefixes={'PATH':[api.depot_tools.root]}):
-      api.python(test_spec['name'],
-                 api.path['checkout'].join('tools', 'test.py'),
-                 args=args)
+      result = api.python(test_spec['name'],
+                          api.path['checkout'].join('tools', 'test.py'),
+                          args=args)
+      api.dart.read_result_file('read results of %s' % test_spec['name'],
+                                'result.log',
+                                result);
 
 
 def RunSteps(api):
@@ -81,6 +85,7 @@ def RunSteps(api):
                    '--report',
                    '--time',
                    '--write-debug-log',
+                   '--write-result-log',
                    '--write-test-outcome-log',
                    '--copy-coredumps']
       test_specs = [
@@ -116,6 +121,7 @@ def RunSteps(api):
                  '--report',
                  '--time',
                  '--write-debug-log',
+                 '--write-result-log',
                  '--write-test-outcome-log']
     if system in ['win7', 'win8', 'win10']:
       test_args.append('--builder-tag=%s' % system)

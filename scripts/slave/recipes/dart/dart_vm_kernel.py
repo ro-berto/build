@@ -5,14 +5,15 @@
 import re
 
 DEPS = [
-  'depot_tools/bot_update',
-  'depot_tools/gclient',
-  'recipe_engine/context',
-  'recipe_engine/path',
-  'recipe_engine/platform',
-  'recipe_engine/properties',
-  'recipe_engine/python',
-  'recipe_engine/step',
+    'dart',
+    'depot_tools/bot_update',
+    'depot_tools/gclient',
+    'recipe_engine/context',
+    'recipe_engine/path',
+    'recipe_engine/platform',
+    'recipe_engine/properties',
+    'recipe_engine/python',
+    'recipe_engine/step',
 ]
 
 builders = {
@@ -108,6 +109,7 @@ def RunSteps(api):
                    '--report',
                    '--time',
                    '--write-debug-log',
+                   '--write-result-log',
                    '--write-test-outcome-log']
       if b.get('archive_core_dumps', False):
         test_args.append('--copy-coredumps')
@@ -116,13 +118,21 @@ def RunSteps(api):
         front_end_args = ['pkg/front_end', '-rvm', '-cnone', '--checked']
         front_end_args.extend(test_args)
         test_args.append('--append_logs')
-        api.python('front-end tests',
-                   api.path['checkout'].join('tools', 'test.py'),
-                   args=front_end_args)
+        result = api.python('front-end tests',
+                            api.path['checkout'].join('tools', 'test.py'),
+                            args=front_end_args)
+        api.dart.read_result_file('read results of front-end tests',
+                                  'result.log',
+                                  result);
+
       test_args.extend(b.get('test_args', []))
-      api.python('vm tests',
-                 api.path['checkout'].join('tools', 'test.py'),
-                 args=test_args)
+      result = api.python('vm tests',
+                          api.path['checkout'].join('tools', 'test.py'),
+                          args=test_args)
+
+      api.dart.read_result_file('read results of vm tests',
+                                'result.log',
+                                result);
       api.python('taskkill after testing',
                  api.path['checkout'].join('tools', 'task_kill.py'),
                  args=['--kill_browsers=True'])

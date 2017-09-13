@@ -46,6 +46,8 @@ def RunSteps(api):
              'versionchecker': 'version_checker'}
   assert builder in scripts
   script = scripts[builder]
+  # TODO(mkroghj) iterate over all scripts, to get result.log from
+  # each step
   api.python('%s script' % script,
       api.path['checkout'].join('tools', 'bots','%s.py' % script),
       allow_subannotations=True)

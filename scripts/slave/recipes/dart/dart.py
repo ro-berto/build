@@ -5,15 +5,16 @@
 from recipe_engine.recipe_api import Property
 
 DEPS = [
-  'depot_tools/bot_update',
-  'depot_tools/gclient',
-  'recipe_engine/context',
-  'recipe_engine/path',
-  'recipe_engine/platform',
-  'recipe_engine/properties',
-  'recipe_engine/python',
-  'recipe_engine/step',
-  'test_utils',
+    'dart',
+    'depot_tools/bot_update',
+    'depot_tools/gclient',
+    'recipe_engine/context',
+    'recipe_engine/path',
+    'recipe_engine/platform',
+    'recipe_engine/properties',
+    'recipe_engine/python',
+    'recipe_engine/step',
+    'test_utils',
 ]
 
 def RunSteps(api):
@@ -47,11 +48,16 @@ def RunSteps(api):
                    '--report',
                    '--time',
                    '--write-debug-log',
+                   '--write-result-log',
                    '--write-test-outcome-log']
       test_args.extend(extra_test_args)
-      api.python('test vm',
-                 api.path['checkout'].join('tools', 'test.py'),
-                 args=test_args)
+      result = api.python('test vm',
+                          api.path['checkout'].join('tools', 'test.py'),
+                          args=test_args)
+      api.dart.read_result_file('read results of test vm',
+                                'result.log',
+                                result);
+
 
 def GenTests(api):
    yield (
