@@ -1179,34 +1179,6 @@ SPEC = {
       'goma_canary': True,
       'tests': steps.GOMA_TESTS,
     },
-    'Chromium Win 10 GCE Tests': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'chrome_with_codecs',
-        'goma_high_parallel',
-        'mb',
-        'ninja_confirm_noop',
-      ],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'builder',
-      'testing': {
-        'platform': 'win',
-      },
-      'enable_swarming': True,
-      'swarming_dimensions': {
-        'cpu': 'x86-64',
-        'machine_type': 'n1-standard-8',
-        # Try to find a set of dimensions that allows tasks to run on
-        # all Windows 10 GCE VMs, but no other Windows 10 bots.
-        # TODO(smut): Change this if the Win 10 GCE VMs are updated.
-        'os': 'Windows-10-14393',
-      },
-      'checkout_dir': 'win',
-    },
     # followed amd64-generic config in chromium_tests/chromium_chromiumos.py
     'ChromeOS amd64 Chromium Goma Canary': {
       'chromium_config': 'chromium',
