@@ -20,8 +20,8 @@ def RunSteps(api):
   api.dart.collect(tasks)
 
   with api.step.defer_results():
-    result = api.step('Print Hello World', ['echo', 'hello', 'world'])
-    api.dart.read_result_file('print result', 'result.log', result)
+    api.step('Print Hello World', ['echo', 'hello', 'world'])
+    api.dart.read_result_file('print result', 'result.log')
 
   api.dart.kill_tasks()
   api.dart.read_debug_log()

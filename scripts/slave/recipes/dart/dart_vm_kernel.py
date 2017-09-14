@@ -118,21 +118,17 @@ def RunSteps(api):
         front_end_args = ['pkg/front_end', '-rvm', '-cnone', '--checked']
         front_end_args.extend(test_args)
         test_args.append('--append_logs')
-        result = api.python('front-end tests',
-                            api.path['checkout'].join('tools', 'test.py'),
-                            args=front_end_args)
+        api.python('front-end tests',
+                   api.path['checkout'].join('tools', 'test.py'),
+                   args=front_end_args)
         api.dart.read_result_file('read results of front-end tests',
-                                  'result.log',
-                                  result);
+                                  'result.log');
 
       test_args.extend(b.get('test_args', []))
-      result = api.python('vm tests',
-                          api.path['checkout'].join('tools', 'test.py'),
-                          args=test_args)
-
-      api.dart.read_result_file('read results of vm tests',
-                                'result.log',
-                                result);
+      api.python('vm tests',
+                 api.path['checkout'].join('tools', 'test.py'),
+                 args=test_args)
+      api.dart.read_result_file('read results of vm tests', 'result.log');
       api.python('taskkill after testing',
                  api.path['checkout'].join('tools', 'task_kill.py'),
                  args=['--kill_browsers=True'])

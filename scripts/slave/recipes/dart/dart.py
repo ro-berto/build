@@ -51,12 +51,10 @@ def RunSteps(api):
                    '--write-result-log',
                    '--write-test-outcome-log']
       test_args.extend(extra_test_args)
-      result = api.python('test vm',
-                          api.path['checkout'].join('tools', 'test.py'),
-                          args=test_args)
-      api.dart.read_result_file('read results of test vm',
-                                'result.log',
-                                result);
+      api.python('test vm',
+                 api.path['checkout'].join('tools', 'test.py'),
+                 args=test_args)
+      api.dart.read_result_file('read results of test vm', 'result.log');
 
 
 def GenTests(api):

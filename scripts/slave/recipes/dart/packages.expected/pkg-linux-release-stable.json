@@ -135,6 +135,7 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-result-log",
       "--write-test-outcome-log",
       "pkg"
     ],
@@ -143,6 +144,28 @@
       "PUB_ENVIRONMENT": "dart_bots"
     },
     "name": "package unit tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "env": {
+      "PUB_ENVIRONMENT": "dart_bots"
+    },
+    "infra_step": true,
+    "name": "read results of package unit tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
   },
   {
     "cmd": [
@@ -160,6 +183,7 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-result-log",
       "--write-test-outcome-log",
       "--append_logs",
       "pkg_tested"
@@ -174,6 +198,28 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "env": {
+      "PUB_ENVIRONMENT": "dart_bots"
+    },
+    "infra_step": true,
+    "name": "read results of third_party/pkg_tested unit tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[START_DIR]/sdk/tools/test.py",
       "--mode=release",
       "--arch=x64",
@@ -186,6 +232,7 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-result-log",
       "--write-test-outcome-log",
       "--append_logs",
       "pkgbuild"
@@ -195,6 +242,28 @@
       "PUB_ENVIRONMENT": "dart_bots"
     },
     "name": "pub get dependencies"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "env": {
+      "PUB_ENVIRONMENT": "dart_bots"
+    },
+    "infra_step": true,
+    "name": "read results of pub get dependencies",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
   },
   {
     "cmd": [

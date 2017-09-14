@@ -66,19 +66,16 @@ def RunSteps(api):
                    '--write-result-log',
                    '--write-test-outcome-log']
       test_args.extend(b.get('test_args', []))
-      result = api.python('vm tests',
-                          api.path['tools'].join('test.py'),
-                          args=test_args)
-      api.dart.read_result_file('read results of vm tests',
-                                'result.log',
-                                result);
+      api.python('vm tests',
+                 api.path['tools'].join('test.py'),
+                 args=test_args)
+      api.dart.read_result_file('read results of vm tests', 'result.log');
       test_args.extend(['--checked', '--append_logs'])
-      result = api.python('checked vm tests',
-                          api.path['tools'].join('test.py'),
-                          args=test_args)
+      api.python('checked vm tests',
+                 api.path['tools'].join('test.py'),
+                 args=test_args)
       api.dart.read_result_file('read results of checked vm tests',
-                                'result.log',
-                                result);
+                                'result.log');
       api.step('debug log', ['cat', '.debug.log'])
       api.step('delete tarball', ['rm', tarball])
       api.python('clobber',

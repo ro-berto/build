@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
+  'dart',
   'depot_tools/bot_update',
   'depot_tools/gclient',
   'depot_tools/gsutil',
@@ -37,6 +38,9 @@ def RunTests(api, test_args, test_specs):
       api.python(test_spec['name'],
                  api.path['checkout'].join('tools', 'test.py'),
                  args=args)
+      api.dart.read_result_file('read results of %s' % test_spec['name'],
+                                'result.log');
+
 
 def sdk_url(channel, platform, arch, mode, revision):
   platforms = {
@@ -100,6 +104,7 @@ def RunSteps(api):
                    '--report',
                    '--time',
                    '--write-debug-log',
+                   '--write-result-log',
                    '--write-test-outcome-log',
                    '--copy-coredumps']
       test_specs = [
@@ -135,6 +140,7 @@ def RunSteps(api):
                  '--report',
                  '--time',
                  '--write-debug-log',
+                 '--write-result-log',
                  '--write-test-outcome-log']
     if system in ['win7', 'win8', 'win10']:
       test_args.append('--builder-tag=%s' % system)

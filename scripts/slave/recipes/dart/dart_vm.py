@@ -200,22 +200,18 @@ def RunSteps(api):
       test_args.extend(b.get('test_args', []))
       test_args.extend(shard_args)
       with api.context(env=b['env']):
-        result = api.python('vm tests',
-                            api.path['checkout'].join('tools', 'test.py'),
-                            args=test_args)
-        api.dart.read_result_file('read results of vm tests',
-                                  'result.log',
-                                  result);
+        api.python('vm tests',
+                   api.path['checkout'].join('tools', 'test.py'),
+                   args=test_args)
+        api.dart.read_result_file('read results of vm tests', 'result.log');
       if b.get('checked', False):
         test_args.extend(['--checked', '--append_logs'])
         with api.context(env=b['env']):
-          result = api.python('checked vm tests',
-                                      api.path['checkout'].join('tools',
-                                                                'test.py'),
-                                      args=test_args)
+          api.python('checked vm tests',
+                     api.path['checkout'].join('tools','test.py'),
+                     args=test_args)
           api.dart.read_result_file('read results of checked vm tests',
-                                    'result.log',
-                                    result);
+                                    'result.log');
 
       api.dart.kill_tasks()
       api.dart.read_debug_log()

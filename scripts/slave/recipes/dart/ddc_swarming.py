@@ -36,13 +36,10 @@ def RunSteps(api):
                    env={'BUILDBOT_BUILDERNAME':builder_name}):
 
     with api.step.defer_results():
-      result = api.python('ddc tests',
+      api.python('ddc tests',
                  api.path['checkout'].join('tools', 'bots', 'ddc_tests.py'),
                  args=[])
-      api.dart.read_result_file('read results of ddc tests',
-                                'result.log',
-                                result);
-
+      api.dart.read_result_file('read results of ddc tests', 'result.log');
       api.dart.kill_tasks()
 
 def GenTests(api):

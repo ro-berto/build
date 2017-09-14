@@ -49,18 +49,15 @@ def RunTests(api, test_args, test_specs, use_xvfb=False):
         xvfb_cmd = ['xvfb-run', '-a', '--server-args=-screen 0 1024x768x24']
         xvfb_cmd.extend(['python', '-u', './tools/test.py'])
         xvfb_cmd.extend(args)
-        result = api.step(test_spec['name'], xvfb_cmd)
+        api.step(test_spec['name'], xvfb_cmd)
         api.dart.read_result_file('read results of %s' % test_spec['name'],
-                                  'result.log',
-                                  result);
-
+                                  'result.log');
       else:
-        result = api.python(test_spec['name'],
-                            api.path['checkout'].join('tools', 'test.py'),
-                            args=args)
+        api.python(test_spec['name'],
+                   api.path['checkout'].join('tools', 'test.py'),
+                   args=args)
         api.dart.read_result_file('read results of %s' % test_spec['name'],
-                                  'result.log',
-                                  result);
+                                  'result.log');
 
 
 def RunSteps(api):
@@ -161,20 +158,19 @@ def RunSteps(api):
 
     if 'unittest' in options:
       with api.context(cwd=api.path['checkout']):
-        result = api.python('dart2js-unit tests',
-                            api.path['checkout'].join('tools', 'test.py'),
-                            args=["--mode=%s" % mode, "--compiler=none", "--runtime=vm",
-                                  "--arch=ia32", "--time", "--use-sdk", "--report",
-                                  "--write-debug-log",
-                                  "--write-result-log",
-                                  "--write-test-outcome-log",
-                                  "--progress=buildbot", "-v", "--append_logs",
-                                  "--reset-browser-configuration",
-                                  "--shards=%s" % num_shards, "--shard=%s" % shard,
-                                  "--checked", "dart2js"])
+        api.python('dart2js-unit tests',
+                   api.path['checkout'].join('tools', 'test.py'),
+                   args=["--mode=%s" % mode, "--compiler=none", "--runtime=vm",
+                         "--arch=ia32", "--time", "--use-sdk", "--report",
+                         "--write-debug-log",
+                         "--write-result-log",
+                         "--write-test-outcome-log",
+                         "--progress=buildbot", "-v", "--append_logs",
+                         "--reset-browser-configuration",
+                         "--shards=%s" % num_shards, "--shard=%s" % shard,
+                         "--checked", "dart2js"])
         api.dart.read_result_file('read results of dart2js-unit tests',
-                                  'result.log',
-                                  result);
+                                  'result.log');
 
 
     with api.context(cwd=api.path['checkout']):

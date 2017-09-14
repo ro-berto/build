@@ -49,18 +49,16 @@ def RunTests(api, test_args, test_specs, use_xvfb=False):
                      env_prefixes={'PATH':[api.depot_tools.root]}):
       if use_xvfb:
         cmd = xvfb_cmd + args
-        result = api.step(test_spec['name'], cmd)
+        api.step(test_spec['name'], cmd)
         api.dart.read_result_file('read results of %s' % test_spec['name'],
-                                  'result.log',
-                                  result);
+                                  'result.log');
 
       else:
-        result = api.python(test_spec['name'],
-                            api.path['checkout'].join('tools', 'test.py'),
-                            args=args)
+        api.python(test_spec['name'],
+                   api.path['checkout'].join('tools', 'test.py'),
+                   args=args)
         api.dart.read_result_file('read results of %s' % test_spec['name'],
-                                  'result.log',
-                                  result);
+                                  'result.log');
 
 def RunSteps(api):
   builder_name = str(api.properties.get('buildername')) # Convert from unicode.

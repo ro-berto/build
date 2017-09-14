@@ -32,12 +32,11 @@ def RunTests(api, test_args, test_specs):
     with api.context(cwd=api.path['checkout'],
                      env={'PUB_ENVIRONMENT': 'dart_bots'},
                      env_prefixes={'PATH':[api.depot_tools.root]}):
-      result = api.python(test_spec['name'],
-                          api.path['checkout'].join('tools', 'test.py'),
-                          args=args)
+      api.python(test_spec['name'],
+                 api.path['checkout'].join('tools', 'test.py'),
+                 args=args)
       api.dart.read_result_file('read results of %s' % test_spec['name'],
-                                'result.log',
-                                result);
+                                'result.log');
 
 
 def RunSteps(api):

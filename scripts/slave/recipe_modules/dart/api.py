@@ -102,31 +102,28 @@ class DartApi(recipe_api.RecipeApi):
         path = self.m.path['cleanup'].join(str(shard))
         task.task_output_dir = self.m.raw_io.output_dir(leak_to=path, name="results")
         collect = self.m.swarming.collect_task(task)
-        if collect.is_ok:
-          collect_result = collect.get_result()
-          output_dir = collect_result.raw_io.output_dir
-          for filename in output_dir:
-            if "result.log" in filename: # pragma: no cover
-              contents = output_dir[filename]
-              collect_result.presentation.logs['shard_%s_result.log' % (shard + 1)] = [contents]
+        collect_result = collect.get_result()
+        output_dir = collect_result.raw_io.output_dir
+        for filename in output_dir:
+          if "result.log" in filename: # pragma: no cover
+            contents = output_dir[filename]
+            collect_result.presentation.logs['shard_%s_result.log' % (shard + 1)] = [contents]
 
-  def read_result_file(self,  name, log_name, result, test_data=''):
+  def read_result_file(self,  name, log_name, test_data=''):
     """Reads the result.log file
     Args:
       * name (str) - Name of step
       * log_name (str) - Name of log
-      * result (DeferredResult) - The deferred result from running the step
       * test_data (str) - Some default data for this step to return when running
         under simulation.
     Returns (str) - The content of the file.
     Raises file.Error
     """
-    if result.is_ok:
-      read_data = self.m.file.read_text(name,
-                                        self.m.path['checkout'].join('logs',
-                                                                     'result.log'),
-                                        test_data)
-      self.m.step.active_result.presentation.logs[log_name] = [read_data]
+    read_data = self.m.file.read_text(name,
+                                      self.m.path['checkout'].join('logs',
+                                                                  'result.log'),
+                                      test_data)
+    self.m.step.active_result.presentation.logs[log_name] = [read_data]
 
   def read_debug_log(self):
     """Reads the debug.log file"""
