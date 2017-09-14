@@ -32,6 +32,8 @@ class GomaApi(recipe_api.RecipeApi):
     self._goma_jsonstatus_called = False
     self._cloudtail_running = False
 
+    self._is_canary = False
+
     if self._test_data.enabled:
       self._hostname = 'fakevm999-m9'
     else:  #pragma: no cover
@@ -116,6 +118,8 @@ class GomaApi(recipe_api.RecipeApi):
     if self._is_local:
       # When using goma module on local debug, we need to skip cipd step.
       return self._goma_dir
+
+    self._is_canary = canary
 
     with self.m.step.nest('ensure_goma'):
       with self.m.context(infra_steps=True):
@@ -247,6 +251,11 @@ class GomaApi(recipe_api.RecipeApi):
       self._goma_ctl_env['GOMA_HERMETIC'] = 'error'
 
       self._goma_ctl_env['GOMA_BACKEND_SOFT_STICKINESS'] = 'false'
+
+      if self._is_canary:
+        # Set larger entry limit to store result of included file analysis.
+        # TODO(tikuta): make this default
+        self._goma_ctl_env['GOMA_DEPS_CACHE_TABLE_THRESHOLD'] = '70000'
 
       # GLOG_log_dir should not be set.
       assert 'GLOG_log_dir' not in env
