@@ -37,8 +37,6 @@ FAKE_BUILDERS_PYL = """\
   "templates": ["templates"],
   "builders": {
     "fake builder": {
-      "recipe": "fake_recipe",
-      "scheduler": None,
       "os": "linux",
       "version": "trusty",
       "bot": "vm1",
