@@ -2220,7 +2220,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Android32__M_Nexus5X_/src/webrtc/examples/androidtests/gradle_project_test.py",
+      "[BUILDER_CACHE]/Android32__M_Nexus5X_/src/examples/androidtests/gradle_project_test.py",
       "[BUILDER_CACHE]/Android32__M_Nexus5X_/src/out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/Android32__M_Nexus5X_",

@@ -478,7 +478,7 @@
       "--build-number=1337",
       "--run-python-script",
       "--revision=170242",
-      "[BUILDER_CACHE]/Android32_Tests__K_Nexus5_/src/webrtc/audio/test/low_bandwidth_audio_test.py",
+      "[BUILDER_CACHE]/Android32_Tests__K_Nexus5_/src/audio/test/low_bandwidth_audio_test.py",
       "[BUILDER_CACHE]/Android32_Tests__K_Nexus5_/src/out/Release",
       "--remove",
       "--android",

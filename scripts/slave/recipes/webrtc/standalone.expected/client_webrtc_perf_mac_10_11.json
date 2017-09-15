@@ -567,7 +567,7 @@
       "--build-number=1337",
       "--run-python-script",
       "--revision=170242",
-      "[BUILDER_CACHE]/Mac_10_11/src/webrtc/audio/test/low_bandwidth_audio_test.py",
+      "[BUILDER_CACHE]/Mac_10_11/src/audio/test/low_bandwidth_audio_test.py",
       "[BUILDER_CACHE]/Mac_10_11/src/out/Release",
       "--remove"
     ],

@@ -160,7 +160,7 @@ def generate_tests(api, test_suite, revision):
     # TODO(kjellander): Re-enable when https://crbug.com/731717 is fixed.
     if not api.m.platform.is_win:
       tests.append(PerfTest(
-          str(api.m.path['checkout'].join('webrtc', 'audio', 'test',
+          str(api.m.path['checkout'].join('audio', 'test',
                                           'low_bandwidth_audio_test.py')),
           name='low_bandwidth_audio_test',
           args=[api.m.chromium.output_dir, '--remove'],
@@ -170,7 +170,7 @@ def generate_tests(api, test_suite, revision):
     tests.append(AndroidPerfTest('webrtc_perf_tests', revision=revision))
 
     tests.append(PerfTest(
-        str(api.m.path['checkout'].join('webrtc', 'audio', 'test',
+        str(api.m.path['checkout'].join('audio', 'test',
                                         'low_bandwidth_audio_test.py')),
         name='low_bandwidth_audio_test',
         args=[api.m.chromium.output_dir, '--remove',
@@ -181,7 +181,7 @@ def generate_tests(api, test_suite, revision):
     # TODO(oprypin): Re-enable on Nexus 4 once webrtc:7724 is fixed.
     if 'kitkat' not in api.c.PERF_ID and 'nexus4' not in api.c.PERF_ID:
       tests.append(PerfTest(
-          str(api.m.path['checkout'].join('webrtc', 'examples', 'androidtests',
+          str(api.m.path['checkout'].join('examples', 'androidtests',
                                           'video_quality_loopback_test.py')),
           name='video_quality_loopback_test',
           args=['--adb-path', api.m.adb.adb_path(), build_out_dir],
@@ -203,8 +203,8 @@ def generate_tests(api, test_suite, revision):
     if api.should_test_android_studio_project_generation:
        tests.append(PythonTest(
           test='gradle_project_test',
-          script=str(api.m.path['checkout'].join(
-            'webrtc', 'examples',  'androidtests', 'gradle_project_test.py')),
+          script=str(api.m.path['checkout'].join('examples',  'androidtests',
+                                                 'gradle_project_test.py')),
           args=[build_out_dir],
           env={'GOMA_DISABLED': True}))
     if api.m.tryserver.is_tryserver:

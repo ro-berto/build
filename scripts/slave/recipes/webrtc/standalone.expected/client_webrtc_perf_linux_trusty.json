@@ -593,7 +593,7 @@
       "--build-number=1337",
       "--run-python-script",
       "--revision=170242",
-      "[BUILDER_CACHE]/Linux_Trusty/src/webrtc/audio/test/low_bandwidth_audio_test.py",
+      "[BUILDER_CACHE]/Linux_Trusty/src/audio/test/low_bandwidth_audio_test.py",
       "[BUILDER_CACHE]/Linux_Trusty/src/out/Release",
       "--remove"
     ],
