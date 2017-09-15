@@ -70,7 +70,7 @@ def RunSteps(api):
                               '--all',
                               '--type=executable',
                               '--as=output',
-                              '//webrtc/test/fuzzers:webrtc_fuzzer_main',
+                              '//test/fuzzers:webrtc_fuzzer_main',
                               ],
                              stdout=api.raw_io.output_text())
 
