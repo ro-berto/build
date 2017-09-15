@@ -464,11 +464,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
         if bot_config.get('perf_isolate_lookup'):
           change = {
-              'base_commit': {
+              'commits': [{
                   'repository': 'chromium',
                   'git_hash':
                       update_step.presentation.properties['got_revision'],
-              }
+              }]
           }
 
           # FIXME: Move this property into a recipe module.
