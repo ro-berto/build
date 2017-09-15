@@ -1599,11 +1599,11 @@ Collects the results of a sharded test run.
 
 Kills leftover tasks from previous runs or steps.
 
-&mdash; **def [read\_debug\_log](/scripts/slave/recipe_modules/dart/api.py#128)(self):**
+&mdash; **def [read\_debug\_log](/scripts/slave/recipe_modules/dart/api.py#127)(self):**
 
 Reads the debug.log file
 
-&mdash; **def [read\_result\_file](/scripts/slave/recipe_modules/dart/api.py#112)(self, name, log_name, test_data=''):**
+&mdash; **def [read\_result\_file](/scripts/slave/recipe_modules/dart/api.py#111)(self, name, log_name, test_data=''):**
 
 Reads the result.log file
 Args:

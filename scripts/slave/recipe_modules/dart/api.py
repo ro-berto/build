@@ -102,12 +102,11 @@ class DartApi(recipe_api.RecipeApi):
         path = self.m.path['cleanup'].join(str(shard))
         task.task_output_dir = self.m.raw_io.output_dir(leak_to=path, name="results")
         collect = self.m.swarming.collect_task(task)
-        collect_result = collect.get_result()
-        output_dir = collect_result.raw_io.output_dir
+        output_dir = self.m.step.active_result.raw_io.output_dir
         for filename in output_dir:
           if "result.log" in filename: # pragma: no cover
             contents = output_dir[filename]
-            collect_result.presentation.logs['shard_%s_result.log' % (shard + 1)] = [contents]
+            self.m.step.active_result.presentation.logs['shard_%s_result.log' % (shard + 1)] = [contents]
 
   def read_result_file(self,  name, log_name, test_data=''):
     """Reads the result.log file
