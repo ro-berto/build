@@ -475,9 +475,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           deps_revision_overrides = self.m.properties.get(
               'deps_revision_overrides')
           if deps_revision_overrides:
-            change['deps'] = [{'repository': repository, 'git_hash': git_hash}
-                              for repository, git_hash
-                              in sorted(deps_revision_overrides.iteritems())]
+            change['commits'] += (
+                {'repository': repository, 'git_hash': git_hash}
+                for repository, git_hash in deps_revision_overrides.iteritems())
 
           # FIXME: Support Gerrit patches.
           if self.m.tryserver.can_apply_issue:
