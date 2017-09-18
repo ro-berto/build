@@ -821,6 +821,50 @@
     "cmd": [
       "python",
       "-u",
+      "[CACHE]/builder/sdk/tools/test.py",
+      "--mode=release",
+      "--compiler=none",
+      "--runtime=vm",
+      "--arch=ia32",
+      "--time",
+      "--use-sdk",
+      "--report",
+      "--write-debug-log",
+      "--write-result-log",
+      "--write-test-outcome-log",
+      "--progress=buildbot",
+      "-v",
+      "--append_logs",
+      "--reset-browser-configuration",
+      "--checked",
+      "dart2js"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "name": "dart2js-unit tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "infra_step": true,
+    "name": "read results of dart2js-unit tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--",
@@ -976,31 +1020,6 @@
       "@@@STEP_LOG_END@swarming.summary@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/builder/sdk/tools/test.py",
-      "--mode=release",
-      "--compiler=none",
-      "--runtime=vm",
-      "--arch=ia32",
-      "--time",
-      "--use-sdk",
-      "--report",
-      "--write-debug-log",
-      "--write-result-log",
-      "--write-test-outcome-log",
-      "--progress=buildbot",
-      "-v",
-      "--append_logs",
-      "--reset-browser-configuration",
-      "--checked",
-      "dart2js"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "name": "dart2js-unit tests"
   },
   {
     "cmd": [

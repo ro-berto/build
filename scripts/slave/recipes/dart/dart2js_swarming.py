@@ -27,6 +27,7 @@ all_options = {'hostchecked': '--host-checked',
                'minified': '--minified',
                'cps': '--cps-ir',
                'csp': '--csp',
+               'only': '', # prevents other tests to be run, use in combination with unittest
                'unittest': '',  # unittest is handled specially.
                'debug': ''} # debug is handled specially.
 
@@ -51,14 +52,14 @@ def RunTests(api, test_args, test_specs, use_xvfb=False):
         cmd = xvfb_cmd + args
         api.step(test_spec['name'], cmd)
         api.dart.read_result_file('read results of %s' % test_spec['name'],
-                                  'result.log');
+                                  'result.log')
 
       else:
         api.python(test_spec['name'],
                    api.path['checkout'].join('tools', 'test.py'),
                    args=args)
         api.dart.read_result_file('read results of %s' % test_spec['name'],
-                                  'result.log');
+                                  'result.log')
 
 def RunSteps(api):
   builder_name = str(api.properties.get('buildername')) # Convert from unicode.
@@ -81,57 +82,14 @@ def RunSteps(api):
   build_args = ['-m%s' % mode, '--arch=ia32', 'dart2js_bot']
   if 'unittest' in options:
     build_args.append('patched_dart2js_sdk')
-  isolate_hash = api.dart.build(build_args, 'dart_tests')
+  isolate_hash = api.dart.build(build_args, 'dart_tests' if 'only' not in options else None)
 
   with api.step.defer_results():
-    # Standard test steps, run on all runtimes.
+    tasks = []
     runtimes = multiple_runtimes.get(runtime, [runtime])
-    for runtime in runtimes:
-      needs_xvfb = (runtime in ['drt', 'chrome', 'ff'] and
-                    system == 'linux')
-      command = xvfb_cmd if needs_xvfb else ['./tools/test.py']
-
-      test_args = ['-m%s' % mode, '-aia32', '-cdart2js',
-                   '--dart2js-batch', '--reset-browser-configuration',
-                   '--report', '--time', '--use-sdk', '--progress=buildbot',
-                   '--write-result-log', '-v', '-r%s' % runtime]
-      if system in ['win7', 'win8', 'win10']:
-        test_args.append('--builder-tag=%s' % system)
-
-      tests = ['--exclude-suite=observatory_ui,service,co19']
-      dart2js_tasks = api.dart.shard('dart2js_tests', isolate_hash, command + test_args + tests)
-
-      tests = ['co19']
-      co19_tasks = api.dart.shard('dart2js_co19_tests', isolate_hash, command + test_args + tests)
-
-      test_args.remove('--use-sdk')
-      test_args.extend(['--write-debug-log', '--write-test-outcome-log'])
-      for option in options:
-        if all_options[option] != '':
-          test_args.append(all_options[option])
-
-      if runtime in ['ie10', 'ie11']:
-        test_specs = [{'name': 'dart2js-%s tests' % runtime,
-                       'tests': ['html', 'pkg', 'samples']}]
-      else:
-        test_specs = [
-          {'name': 'dart2js-%s-package tests' % runtime,
-           'tests': ['pkg']},
-          {'name': 'dart2js-%s-observatory-ui tests' % runtime,
-           'tests': ['observatory_ui']},
-          {'name': 'dart2js-%s-extra tests' % runtime,
-           'tests': ['dart2js_extra', 'dart2js_native']},
-        ]
-
-      RunTests(api, test_args, test_specs, use_xvfb=needs_xvfb)
-      if runtime in ['d8', 'drt']:
-        test_args.append('--checked')
-        for spec in test_specs:
-          spec['name'] = spec['name'].replace(' tests', '-checked tests')
-        RunTests(api, test_args, test_specs, use_xvfb=needs_xvfb)
-
-      api.dart.collect(dart2js_tasks.get_result())
-      api.dart.collect(co19_tasks.get_result())
+    if 'only' not in options:
+      for runtime in runtimes:
+        test_runtime(api, system, runtime, options, mode, tasks, isolate_hash)
 
     if 'unittest' in options:
       with api.context(cwd=api.path['checkout']):
@@ -145,16 +103,62 @@ def RunSteps(api):
                          "--progress=buildbot", "-v", "--append_logs",
                          "--reset-browser-configuration",
                          "--checked", "dart2js"])
+        api.dart.read_result_file('read results of dart2js-unit tests', 'result.log')
+
+    for task in tasks:
+      # only collect tasks that were triggered successfully
+      if task.is_ok:
+        api.dart.collect(task.get_result())
 
     with api.context(cwd=api.path['checkout']):
       # TODO(whesse): Add archive coredumps step from dart_factory.py.
       api.dart.kill_tasks()
-      if api.platform.name == 'win':
-        api.step('debug log',
-                 ['cmd.exe', '/c', 'type', '.debug.log'])
-      else:
-        api.step('debug log',
-                 ['cat', '.debug.log'])
+      api.dart.read_debug_log()
+
+def test_runtime(api, system, runtime, options, mode, tasks, isolate_hash):
+  needs_xvfb = (runtime in ['drt', 'chrome', 'ff'] and
+                system == 'linux')
+  command = xvfb_cmd if needs_xvfb else ['./tools/test.py']
+
+  test_args = ['-m%s' % mode, '-aia32', '-cdart2js',
+               '--dart2js-batch', '--reset-browser-configuration',
+               '--report', '--time', '--use-sdk', '--progress=buildbot',
+               '--write-result-log', '-v', '-r%s' % runtime]
+  if system in ['win7', 'win8', 'win10']:
+    test_args.append('--builder-tag=%s' % system)
+
+  tests = ['--exclude-suite=observatory_ui,service,co19']
+  tasks.append(api.dart.shard('dart2js_tests', isolate_hash, command + test_args + tests))
+
+  tests = ['co19']
+  tasks.append(api.dart.shard('dart2js_co19_tests', isolate_hash, command + test_args + tests))
+
+  test_args.remove('--use-sdk')
+  test_args.extend(['--write-debug-log', '--write-test-outcome-log'])
+  for option in options:
+    if all_options[option] != '':
+      test_args.append(all_options[option])
+
+  if runtime in ['ie10', 'ie11']:
+    test_specs = [{'name': 'dart2js-%s tests' % runtime,
+                   'tests': ['html', 'pkg', 'samples']}]
+  else:
+    test_specs = [
+      {'name': 'dart2js-%s-package tests' % runtime,
+       'tests': ['pkg']},
+      {'name': 'dart2js-%s-observatory-ui tests' % runtime,
+       'tests': ['observatory_ui']},
+      {'name': 'dart2js-%s-extra tests' % runtime,
+       'tests': ['dart2js_extra', 'dart2js_native']},
+    ]
+
+  RunTests(api, test_args, test_specs, use_xvfb=needs_xvfb)
+  if runtime in ['d8', 'drt']:
+    test_args.append('--checked')
+    for spec in test_specs:
+      spec['name'] = spec['name'].replace(' tests', '-checked tests')
+    RunTests(api, test_args, test_specs, use_xvfb=needs_xvfb)
+
 
 def GenTests(api):
    yield (
@@ -166,6 +170,13 @@ def GenTests(api):
       api.step_data('upload testing isolate',
                     stdout=api.raw_io.output('test isolate hash')) +
       api.properties(shards='1')
+   )
+   yield (
+      api.test('dart2js-linux-none-only-unittest-try') +
+      api.platform('linux', 64) +
+      api.properties.generic(
+        mastername='luci.dart.try',
+        buildername='dart2js-linux-none-only-unittest-try')
    )
    yield (
       api.test('dart2js-win7-ie10-debug-try') + api.platform('win', 32) +
