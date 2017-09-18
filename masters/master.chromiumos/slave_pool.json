@@ -33,12 +33,6 @@
       ], 
       "tatl-paladin": [
         "cros-beefy439-c2"
-      ], 
-      "x86-generic-full": [
-        "build182-m2"
-      ], 
-      "x86-generic-incremental": [
-        "build323-m2"
       ]
     }, 
     "builder_shared": {
@@ -54,8 +48,10 @@
     }
   }, 
   "unallocated": [
+    "build182-m2", 
     "build203-m2", 
     "build245-m2", 
+    "build323-m2", 
     "build326-m2", 
     "build333-m2"
   ]
