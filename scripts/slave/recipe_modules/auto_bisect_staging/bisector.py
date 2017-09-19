@@ -736,8 +736,8 @@ class Bisector(object):
     # target_bit from the bot config. crbug.com/640287
     if 'android' in bot_name: #pragma: no cover
       if any(b in bot_name for b in ['arm64', 'nexus9']):
-        return 'gs://chrome-perf/Android arm64 Compile/full-build-linux_'
-      return 'gs://chrome-perf/Android Compile/full-build-linux_'
+        return 'gs://chrome-perf/Android arm64 Builder/full-build-linux_'
+      return 'gs://chrome-perf/Android Builder/full-build-linux_'
 
     if 'mac' in bot_name:
       return 'gs://chrome-perf/Mac Builder/full-build-mac_'
