@@ -133,12 +133,12 @@ def run_perf_test(api, test_config, **kwargs):
       else:
         command = _set_output_dir(command, str(temp_dir))
 
-      if '{ADB_PATH}' in command:
-        command = command.replace('{ADB_PATH}', str(api.m.adb.adb_path()))
+    if '{ADB_PATH}' in command: # pragma: no cover
+      command = command.replace('{ADB_PATH}', str(api.m.adb.adb_path()))
 
-      if '{CHROMIUM_OUTPUT_DIR}' in command:
-        command = command.replace(
-            '{CHROMIUM_OUTPUT_DIR}', str(api.m.chromium.output_dir))
+    if '{CHROMIUM_OUTPUT_DIR}' in command: # pragma: no cover
+      command = command.replace(
+          '{CHROMIUM_OUTPUT_DIR}', str(api.m.chromium.output_dir))
 
     step_name = "Performance Test%s %d of %d" % (
         ' (%s)' % kwargs['name'] if 'name' in kwargs else '', i + 1, repeat_count)
