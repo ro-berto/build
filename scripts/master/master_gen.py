@@ -143,7 +143,9 @@ def _ComputeBuilders(builders, m_annotator, active_master_cls):
               builder_data.get('repository',
                   builders.get('default_remote_run_repository'))),
           recipe=builder_data['recipe'],
-          revision=None,
+          revision=(
+              _revision_getter if builder_data.get('remote_run_sync_revision')
+                               else None),
           max_time=builder_data.get('builder_timeout_s'),
           factory_properties=props,
           use_gitiles=False,
