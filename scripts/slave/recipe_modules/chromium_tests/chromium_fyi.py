@@ -1485,6 +1485,28 @@ SPEC = {
       'testing': { 'platform': 'linux', },
       'enable_swarming': True,
     },
+    'ClangToTLinuxMSan': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'compile_targets': [
+        'all',
+      ],
+      'bot_type': 'builder_tester',
+      'test_results_config': 'staging_server',
+      'testing': { 'platform': 'linux', },
+      'tests': {
+        steps.SizesStep(RESULTS_URL, 'ClangToTLinuxMSan')
+      },
+      'enable_swarming': True,
+      # Workaround so that recipes doesn't add random build targets to our
+      # compile line. We want to build everything.
+      'add_tests_as_compile_targets': False,
+    },
     'ClangToTLinuxLLD': {
       'chromium_config': 'clang_tot_linux_lld',
       'chromium_apply_config': ['mb'],
