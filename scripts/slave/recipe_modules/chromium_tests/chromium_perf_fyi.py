@@ -114,6 +114,8 @@ _AddTestSpec('Win Clang Perf Ref', 'chromium-win-clang-ref', 'win',
              parent_buildername='Win Builder FYI', target_bits=32)
 
 _AddIsolatedTestSpec('Mojo Linux Perf', 'mojo-linux-perf', 'linux')
+_AddIsolatedTestSpec(
+    'One Buildbot Step Test Builder', 'buildbot-test', 'linux')
 
 _AddBuildSpec('Battor Agent Linux', 'linux', 'linux', run_sizes=False,
               compile_targets=['battor_agent'])
