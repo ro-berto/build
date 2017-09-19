@@ -1710,10 +1710,11 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
   # Get the perf id and results url if present.
   bot_config = (chromium_tests_api.builders.get(mastername, {})
       .get('builders', {}).get(buildername, {}))
-  perf_id = bot_config.get('perf-id')
+  default_perf_id = bot_config.get('perf-id')
   results_url = bot_config.get('results-url')
   for spec in test_spec.get(buildername, {}).get('isolated_scripts', []):
     perf_dashboard_id = spec.get('name', '')
+    perf_id = spec.get('override_perf_id', default_perf_id)
     use_swarming = False
     swarming_ignore_task_failure = False
     swarming_shards = 1
