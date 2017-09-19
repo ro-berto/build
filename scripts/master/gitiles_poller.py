@@ -307,17 +307,12 @@ class GitilesPoller(PollingChangeSource):
               (ref.startswith('refs/heads/') and branch.match(ref[11:]))))):
           result[ref] = ref_head['value']
           break
-    deleted_branches = []
     for branch in self.branch_heads:
       if branch not in result:
         # for now we don't delete any branches, just warn
         # TODO(tandrii) http://crbug.com/443561
-        # deleted_branches.append(branch)
         log.msg("GitilesPoller: branch %s to be deleted; result: %s" % (
                 branch, result))
-    for branch in deleted_branches:
-      log.msg('GitilesPoller: Deleting branch head for %s' % (branch,))
-      del self.branch_heads[branch]
     defer.returnValue(result)
 
   def _create_change(self, commit_json, branch):
@@ -427,6 +422,10 @@ class GitilesPoller(PollingChangeSource):
       log.err(msg)
       return
 
+    # Fetch a list of commits that happened since the last poll (across all
+    # branches). Don't touch self.branch_heads yet. We'll update it once all
+    # commits are successfully converted into Buildbot changes.
+    updated_branch_heads = {}
     for branch, branch_head in branches.iteritems():
       try:
         branch_commits = None
@@ -439,30 +438,58 @@ class GitilesPoller(PollingChangeSource):
           branch_commits = yield self._fetch_new_commits(
               branch, self.branch_heads[branch])
         if branch_commits:
-          self.branch_heads[branch] = branch_commits[-1]['commit']
+          updated_branch_heads[branch] = branch_commits[-1]['commit']
           branch_commits = [(c, branch) for c in branch_commits]
           all_commits = self._collate_commits(all_commits, branch_commits)
       except Exception:
         msg = ('GitilesPoller: Error while fetching logs for branch %s:\n%s' %
                    (branch, traceback.format_exc()))
         log.err(msg)
-    for commit in all_commits:
-      commit, branch = commit
+        # Clear updated_branch_heads as a safeguard in case exception happened
+        # after we've updated it.
+        updated_branch_heads.pop(branch, None)
+
+    # Fetch details about all new commits. Give up on errors (to retry the whole
+    # thing from scratch on the next poll). In principle we can try to proceed
+    # with commits we've got, but it will require more careful handling of
+    # self.branch_heads. It will also result in somewhat odd order of commits
+    # (when historically older commits appear as newer changes because the
+    # poller failed to poll them on a first attempt).
+    detailed_commits = []
+    for commit, branch in all_commits:
+      path = REVISION_DETAIL_TEMPLATE % (self.repo_path, commit['commit'])
+      detail = None
+      if not self.dry_run:
+        try:
+          detail = yield self._request('GET', path)
+        except Exception:
+          msg = ('GitilesPoller: Error while processing revision %s '
+                 'on branch %s, aborting the poll attempt:\n%s' % (
+                     commit['commit'], branch, traceback.format_exc()))
+          log.err(msg)
+          return  # abort everything without checkpointing the progress
+      detailed_commits.append((commit, branch, detail))
+
+    # Now that we have successfully fetched all the commits, convert them into
+    # Buildbot changes.
+    for commit, branch, detail in detailed_commits:
       if not self.svn_mode:
         self.comparator.addRevision(commit['commit'])
       try:
-        path = REVISION_DETAIL_TEMPLATE % (self.repo_path, commit['commit'])
         if not self.dry_run:
-          detail = yield self._request('GET', path)
           yield self._create_change(detail, branch)
       except Exception:
-        msg = ('GitilesPoller: Error while processing revision %s '
+        msg = ('GitilesPoller: Error while creating a change for revision %s '
                'on branch %s:\n%s' % (
                    commit['commit'], branch, traceback.format_exc()))
         log.err(msg)
-    if not all_commits:
+
+    # Checkpoint the progress.
+    if updated_branch_heads:
+      self.branch_heads.update(updated_branch_heads)
+      self._save_cursor_file()
+    else:
       log.msg('GitilesPoller: No new commits.')
-    self._save_cursor_file()
 
   def describe(self):
     status = self.__class__.__name__
