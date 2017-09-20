@@ -597,6 +597,7 @@ class AndroidApi(recipe_api.RecipeApi):
         '--blacklist-file', self.blacklist_file,
         '--output-device-blacklist', self.m.json.output(add_json_log=False),
         '-t', self.m.chromium.c.BUILD_CONFIG,
+        '-v',
     ]
     if skip_wipe:
       args.append('--skip-wipe')

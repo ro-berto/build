@@ -270,7 +270,8 @@
       "--output-device-blacklist",
       "/path/to/tmp/json",
       "-t",
-      "Release"
+      "Release",
+      "-v"
     ],
     "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_",
     "infra_step": true,

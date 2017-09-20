@@ -938,6 +938,7 @@
       "/path/to/tmp/json",
       "-t",
       "Release",
+      "-v",
       "--reboot-timeout",
       "1800"
     ],
@@ -1051,6 +1052,7 @@
       "/path/to/tmp/json",
       "-t",
       "Release",
+      "-v",
       "--skip-wipe"
     ],
     "env": {

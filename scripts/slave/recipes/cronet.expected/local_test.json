@@ -402,7 +402,8 @@
       "--output-device-blacklist",
       "/path/to/tmp/json",
       "-t",
-      "Debug"
+      "Debug",
+      "-v"
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"

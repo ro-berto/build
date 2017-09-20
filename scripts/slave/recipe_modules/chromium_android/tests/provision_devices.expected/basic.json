@@ -12,6 +12,7 @@
       "/path/to/tmp/json",
       "-t",
       "Release",
+      "-v",
       "--chrome-specific-wipe",
       "--emulators"
     ],

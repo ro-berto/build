@@ -214,6 +214,7 @@
       "/path/to/tmp/json",
       "-t",
       "Debug",
+      "-v",
       "--remove-system-packages",
       "com.android.chrome",
       "com.google.android.webview",

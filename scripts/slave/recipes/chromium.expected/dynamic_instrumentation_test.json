@@ -486,7 +486,8 @@
       "--output-device-blacklist",
       "/path/to/tmp/json",
       "-t",
-      "Release"
+      "Release",
+      "-v"
     ],
     "env": {
       "CHROME_HEADLESS": "1",

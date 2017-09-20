@@ -332,6 +332,7 @@
       "/path/to/tmp/json",
       "-t",
       "Release",
+      "-v",
       "--min-battery-level",
       "95",
       "--disable-network",

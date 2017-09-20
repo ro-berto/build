@@ -504,7 +504,8 @@
       "--output-device-blacklist",
       "/path/to/tmp/json",
       "-t",
-      "Release"
+      "Release",
+      "-v"
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"

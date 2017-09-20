@@ -567,6 +567,7 @@
       "/path/to/tmp/json",
       "-t",
       "Debug",
+      "-v",
       "--emulators"
     ],
     "env": {

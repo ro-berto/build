@@ -320,6 +320,7 @@
       "/path/to/tmp/json",
       "-t",
       "Debug",
+      "-v",
       "--skip-wipe"
     ],
     "env": {
