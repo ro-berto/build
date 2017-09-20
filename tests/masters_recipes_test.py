@@ -30,6 +30,7 @@ MAIN_WATERFALL_MASTERS = [
 TRYSERVER_MASTERS = [
     'master.tryserver.blink',
     'master.tryserver.chromium.android',
+    'master.tryserver.chromium.angle',
     'master.tryserver.chromium.linux',
     'master.tryserver.chromium.mac',
     'master.tryserver.chromium.win',
