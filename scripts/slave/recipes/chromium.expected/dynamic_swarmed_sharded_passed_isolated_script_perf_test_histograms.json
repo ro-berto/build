@@ -613,6 +613,47 @@
   },
   {
     "cmd": [
+      "C:\\infra-tools\\authutil.exe",
+      "token",
+      "-service-account-json=C:\\creds\\service_accounts\\service-account-chromium-perf-histograms.json"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
+    "name": "get access token",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]\\src\\third_party\\catapult\\tracing\\bin\\add_reserved_diagnostics",
+      "--benchmarks",
+      "benchmark",
+      "--bots",
+      "Win 10 Low-End Perf Tests",
+      "--builds",
+      "1234",
+      "--chromium_commit_positions",
+      "291141",
+      "--chromium_revisions",
+      "asdfawe2342"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
+    "name": "Add shared diagnostics",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@"
+    ]
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
@@ -622,32 +663,18 @@
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\upload_perf_dashboard_results.py",
       "--results-file",
       "[{\"guid\": \"1\", \"name\": \"foo1\", \"unit\": \"count\"}, {\"guid\": \"3\", \"name\": \"foo3\", \"unit\": \"count\"}]",
-      "--output-json-file",
-      "/path/to/tmp/json",
+      "--oauth-token-file",
+      "\"abc124\"",
       "--perf-id",
       "win-10-low-end",
       "--results-url",
       "https://chromeperf.appspot.com",
-      "--name",
-      "benchmark",
-      "--buildername",
-      "Win 10 Low-End Perf Tests",
-      "--buildnumber",
-      "1234",
       "--output-json-dashboard-url",
       "/path/to/tmp/json",
-      "--build-dir",
-      "[START_DIR]\\src\\out",
-      "--got-revision-cp",
-      "refs/heads/master@{#291141}",
-      "--version",
-      "v23523",
-      "--git-revision",
-      "asdfawe2342",
-      "--got-webrtc-revision",
-      "0f90628433546e61d9268596da93418c623137f4",
-      "--got-v8-revision",
-      "801ada225ddc271c132c3a35f03975671d43e399"
+      "--is-histogramset",
+      "--is-histogramset",
+      "--output-json-file",
+      "null"
     ],
     "env": {
       "CHROME_HEADLESS": "1",
@@ -655,8 +682,6 @@
     },
     "name": "benchmark Dashboard Upload",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@step_metadata@{@@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"benchmark\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",

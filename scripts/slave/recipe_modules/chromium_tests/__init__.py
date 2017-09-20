@@ -27,6 +27,7 @@ DEPS = [
   'recipe_engine/raw_io',
   'recipe_engine/step',
   'recipe_engine/tempfile',
+  'service_account',
   'swarming',
   'test_results',
   'test_utils',

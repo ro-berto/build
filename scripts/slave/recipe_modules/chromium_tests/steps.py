@@ -15,6 +15,14 @@ from recipe_engine.types import freeze
 RESULTS_URL = 'https://chromeperf.appspot.com'
 
 
+REVISION_DIAGNOSTIC_FLAG_NAMES = {
+    'got_revision_cp': '--chromium_commit_positions',
+    'git_revision': '--chromium_revisions',
+    'got_webrtc_revision': '--webrtc_revisions',
+    'got_v8_revision': '--v8_revisions'
+}
+
+
 class TestOptions(object):
   """Abstracts command line flags to be passed to the test."""
   def __init__(self, repeat_count=None, test_filter=None, run_disabled=False,
@@ -1656,36 +1664,72 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
         ['Info: Setting up arguments for perf dashboard']
 
     results_file = api.raw_io.input_text(data=json.dumps(results))
+
+    oauth_token = api.service_account.get_token('chromium-perf-histograms')
+
     # Produces a step that uploads results to dashboard
     args = [
         '--results-file', results_file,
         # We are passing this in solely to have the output show up as a link
         # in the step log, it will not be used after the upload is complete.
-        '--output-json-file', api.json.output(),
+        '--oauth-token-file', api.json.input(oauth_token),
         '--perf-id', self._perf_id,
         '--results-url', self._results_url,
-        '--name', self._perf_dashboard_id,
-        '--buildername', api.properties['buildername'],
-        '--buildnumber', api.properties['buildnumber'],
         '--output-json-dashboard-url', api.json.output(
-            add_json_log=False, name='dashboard_url')
+            add_json_log=False, name='dashboard_url'),
     ]
-    if api.chromium.c.build_dir:
-      args.extend(['--build-dir', api.chromium.c.build_dir])
-    if 'got_revision_cp' in api.properties:
-      args.extend(['--got-revision-cp', api.properties['got_revision_cp']])
-    if 'version' in api.properties:
-      args.extend(['--version', api.properties['version']])
-    if 'git_revision' in api.properties:
-      args.extend(['--git-revision', api.properties['git_revision']])
+    revisions = {}
+    for revision_name in REVISION_DIAGNOSTIC_FLAG_NAMES.iterkeys():
+      if revision_name in api.properties:
+        # add_reserved_diagnostics expects commit positions to be parsed; the
+        # legacy logic does not.
+        if revision_name == 'got_revision_cp':
+          if is_histogramset:
+            revisions[revision_name] = api.commit_position.parse_revision(
+                api.properties['got_revision_cp'])
+          else:
+            revisions[revision_name] = api.properties['got_revision_cp']
+          continue
+        revisions[revision_name] = api.properties[revision_name]
+    # TODO(eakuefner): Confirm that 'version' is unused by legacy pipeline
+    # and remove it.
+    if not is_histogramset and 'version' in api.properties:
+      revisions['version'] = api.properties['version']
 
-    # Chromium build properties
-    if 'got_webrtc_revision' in api.chromium.build_properties:
-      args.extend(['--got-webrtc-revision',
-          api.chromium.build_properties['got_webrtc_revision']])
-    if 'got_v8_revision' in api.chromium.build_properties:
-      args.extend(['--got-v8-revision',
-          api.chromium.build_properties['got_v8_revision']])
+    if is_histogramset:
+      args.append('--is-histogramset')
+      add_diagnostics_args = []
+      add_diagnostics_args.extend([
+          '--benchmarks', self._perf_dashboard_id,
+          '--bots', api.properties['buildername'],
+          '--builds', api.properties['buildnumber'],
+      ])
+      for revision_name, revision in revisions.iteritems():
+        add_diagnostics_args.extend([
+            REVISION_DIAGNOSTIC_FLAG_NAMES[revision_name], revision])
+      script = api.chromium_checkout.working_dir.join(
+          'src', 'third_party', 'catapult', 'tracing', 'bin',
+          'add_reserved_diagnostics')
+      result = api.python(
+          'Add shared diagnostics',
+          script=script,
+          args=add_diagnostics_args,
+          stdout=api.json.output()).stdout
+      args.extend([
+          '--is-histogramset',
+          '--output-json-file', api.json.input(result)
+      ])
+    else:
+      args.extend([
+          '--output-json-file', api.json.output(),
+          '--name', self._perf_dashboard_id,
+          '--buildername', api.properties['buildername'],
+          '--buildnumber', api.properties['buildnumber'],
+      ])
+      if api.chromium.c.build_dir:
+        args.extend(['--build-dir', api.chromium.c.build_dir])
+      for revision_name, revision in revisions.iteritems():
+        flag_name = '--%s' % revision_name.replace('_', '-')
 
     step_name = '%s Dashboard Upload' % self._perf_dashboard_id
     step_result = api.build.python(

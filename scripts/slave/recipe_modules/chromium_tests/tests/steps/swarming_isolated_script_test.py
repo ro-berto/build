@@ -5,17 +5,20 @@
 DEPS = [
     'build',
     'chromium',
+    'chromium_checkout',
     'chromium_tests',
     'commit_position',
     'depot_tools/bot_update',
     'isolate',
     'perf_dashboard',
     'recipe_engine/json',
+    'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/python',
     'recipe_engine/raw_io',
     'recipe_engine/step',
+    'service_account',
     'swarming',
     'test_results',
     'test_utils',
@@ -28,6 +31,11 @@ def RunSteps(api):
       'got_v8_revision': 'v8_sha',
   })
   api.chromium.set_config('chromium')
+
+  bot_config_object = api.chromium_tests.create_bot_config_object(
+      api.properties['mastername'], api.properties['buildername'])
+  api.chromium_tests.configure_build(bot_config_object)
+  api.chromium_tests.prepare_checkout(bot_config_object)
 
   test = api.chromium_tests.steps.SwarmingIsolatedScriptTest(
       'base_unittests',
@@ -57,9 +65,10 @@ def RunSteps(api):
 def GenTests(api):
   yield (
       api.test('basic') +
+      api.properties.generic(
+          mastername='chromium.linux',
+          buildername='Linux Tests') +
       api.properties(
-          mastername='test_mastername',
-          buildername='test_buildername',
           buildnumber=123,
           swarm_hashes={
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -71,9 +80,10 @@ def GenTests(api):
 
   yield (
       api.test('override_compile_targets') +
+      api.properties.generic(
+          mastername='chromium.linux',
+          buildername='Linux Tests') +
       api.properties(
-          mastername='test_mastername',
-          buildername='test_buildername',
           buildnumber=123,
           swarm_hashes={
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -86,9 +96,10 @@ def GenTests(api):
 
   yield (
       api.test('chartjson') +
+      api.properties.generic(
+          mastername='chromium.linux',
+          buildername='Linux Tests') +
       api.properties(
-          mastername='test_mastername',
-          buildername='test_buildername',
           buildnumber=123,
           swarm_hashes={
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -113,9 +124,10 @@ def GenTests(api):
   # https://crbug.com/704066
   yield (
       api.test('chartjson_simplified_ignore_task_failure') +
+      api.properties.generic(
+          mastername='chromium.linux',
+          buildername='Linux Tests') +
       api.properties(
-          mastername='test_mastername',
-          buildername='test_buildername',
           buildnumber=123,
           swarm_hashes={
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -137,9 +149,10 @@ def GenTests(api):
 
   yield (
       api.test('chartjson_ignore_task_failure') +
+      api.properties.generic(
+          mastername='chromium.linux',
+          buildername='Linux Tests') +
       api.properties(
-          mastername='test_mastername',
-          buildername='test_buildername',
           buildnumber=123,
           swarm_hashes={
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -163,9 +176,10 @@ def GenTests(api):
   # https://crbug.com/704066
   yield (
       api.test('chartjson_invalid') +
+      api.properties.generic(
+          mastername='chromium.linux',
+          buildername='Linux Tests') +
       api.properties(
-          mastername='test_mastername',
-          buildername='test_buildername',
           buildnumber=123,
           swarm_hashes={
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -187,9 +201,10 @@ def GenTests(api):
 
   yield (
       api.test('chartjson_max_failures') +
+      api.properties.generic(
+          mastername='chromium.linux',
+          buildername='Linux Tests') +
       api.properties(
-          mastername='test_mastername',
-          buildername='test_buildername',
           buildnumber=123,
           swarm_hashes={
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -211,9 +226,10 @@ def GenTests(api):
 
   yield (
       api.test('chartjson_no_results') +
+      api.properties.generic(
+          mastername='chromium.linux',
+          buildername='Linux Tests') +
       api.properties(
-          mastername='test_mastername',
-          buildername='test_buildername',
           buildnumber=123,
           swarm_hashes={
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -227,9 +243,10 @@ def GenTests(api):
 
   yield (
       api.test('chartjson_no_results_failure') +
+      api.properties.generic(
+          mastername='chromium.linux',
+          buildername='Linux Tests') +
       api.properties(
-          mastername='test_mastername',
-          buildername='test_buildername',
           buildnumber=123,
           swarm_hashes={
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -244,9 +261,10 @@ def GenTests(api):
 
   yield (
       api.test('chartjson_not_uploading') +
+      api.properties.generic(
+          mastername='chromium.linux',
+          buildername='Linux Tests') +
       api.properties(
-          mastername='test_mastername',
-          buildername='test_buildername',
           buildnumber=123,
           swarm_hashes={
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -266,9 +284,10 @@ def GenTests(api):
 
   yield (
       api.test('chartjson_disabled') +
+      api.properties.generic(
+          mastername='chromium.linux',
+          buildername='Linux Tests') +
       api.properties(
-          mastername='test_mastername',
-          buildername='test_buildername',
           buildnumber=123,
           swarm_hashes={
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -294,9 +313,10 @@ def GenTests(api):
 
   yield (
       api.test('chartjson_simplified_disabled') +
+      api.properties.generic(
+          mastername='chromium.linux',
+          buildername='Linux Tests') +
       api.properties(
-          mastername='test_mastername',
-          buildername='test_buildername',
           buildnumber=123,
           swarm_hashes={
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -317,10 +337,39 @@ def GenTests(api):
   )
 
   yield (
-      api.test('dimensions_windows') +
+      api.test('histograms') +
+      api.properties.generic(
+          mastername='chromium.linux',
+          buildername='Linux Tests') +
       api.properties(
-          mastername='test_mastername',
-          buildername='test_buildername',
+          buildnumber=123,
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
+          git_revision='test_sha',
+          version='test-version',
+          got_revision_cp='refs/heads/master@{#123456}',
+          got_webrtc_revision='ffffffffffffffffffffffffffffffffffffffff',
+          got_v8_revision='ffffffffffffffffffffffffffffffffffffffff',
+          perf_id='test-perf-id',
+          results_url='https://example/url') +
+      api.override_step_data(
+          'base_unittests on Intel GPU on Linux',
+          api.swarming.canned_summary_output(2)
+          + api.test_utils.canned_isolated_script_output(
+              passing=True, swarming=True,
+              shards=2, isolated_script_passing=True,
+              output_chartjson=True, benchmark_enabled=True,
+              use_json_test_format=True, output_histograms=True),
+          retcode=0)
+  )
+
+  yield (
+      api.test('dimensions_windows') +
+      api.properties.generic(
+          mastername='chromium.linux',
+          buildername='Linux Tests') +
+      api.properties(
           buildnumber=123,
           swarm_hashes={
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -333,9 +382,10 @@ def GenTests(api):
 
   yield (
       api.test('dimensions_mac') +
+      api.properties.generic(
+          mastername='chromium.linux',
+          buildername='Linux Tests') +
       api.properties(
-          mastername='test_mastername',
-          buildername='test_buildername',
           buildnumber=123,
           swarm_hashes={
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -348,9 +398,10 @@ def GenTests(api):
 
   yield (
       api.test('dimensions_mac_hidpi') +
+      api.properties.generic(
+          mastername='chromium.linux',
+          buildername='Linux Tests') +
       api.properties(
-          mastername='test_mastername',
-          buildername='test_buildername',
           buildnumber=123,
           swarm_hashes={
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
