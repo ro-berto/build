@@ -408,7 +408,7 @@
       "pkg/front_end",
       "-cnone",
       "--checked",
-      "--use-sdk",
+      "--timeout=120",
       "-rvm",
       "-mrelease",
       "--arch=x64",

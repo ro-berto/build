@@ -49,7 +49,7 @@ def RunSteps(api):
   with api.context(cwd=api.path['checkout'],
                    env_prefixes={'PATH':[api.depot_tools.root]}):
     with api.step.defer_results():
-      front_end_args = ['pkg/front_end', '-cnone', '--checked', '--use-sdk']
+      front_end_args = ['pkg/front_end', '-cnone', '--checked', '--timeout=120']
       front_end_args.extend(test_args)
       test_args.extend(['--append_logs', '-cdartk'])
 
