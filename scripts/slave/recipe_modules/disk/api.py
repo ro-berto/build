@@ -67,7 +67,8 @@ class DiskApi(recipe_api.RecipeApi):
     except Exception as ex:
       # Do not fail entire build because of a disk space step failure.
       if step:
-        step.presentation.logs['exception'] = ['%r' % ex]
+        step.presentation.logs['exception'] = [
+            str(ex), '\n', self.m.traceback.format_exc()]
         step.presentation.status = self.m.step.WARNING
       if can_fail_build:
         raise recipe_api.StepFailure('Could not get disk info: %s' % ex)

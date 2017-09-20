@@ -29,6 +29,7 @@ DEPS = [
   'recipe_engine/tempfile',
   'service_account',
   'swarming',
+  'traceback',
   'test_results',
   'test_utils',
   'trigger',

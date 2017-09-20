@@ -331,6 +331,17 @@
       "@@@STEP_TEXT@<br/>Exception while processing test results: Invalid data given<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@null@@@",
       "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@no_results_exc@Invalid data given@@@",
+      "@@@STEP_LOG_LINE@no_results_exc@@@@",
+      "@@@STEP_LOG_LINE@no_results_exc@Traceback (most recent call last):@@@",
+      "@@@STEP_LOG_LINE@no_results_exc@  File \"<...>/recipe_modules/chromium_tests/steps.py\", line 938, in render_results@@@",
+      "@@@STEP_LOG_LINE@no_results_exc@    results)@@@",
+      "@@@STEP_LOG_LINE@no_results_exc@  File \"<...>/recipe_engine/recipe_api.py\", line 745, in _inner@@@",
+      "@@@STEP_LOG_LINE@no_results_exc@    return func(*a, **kw)@@@",
+      "@@@STEP_LOG_LINE@no_results_exc@  File \"<...>/recipe_modules/test_utils/api.py\", line 223, in create_results_from_json_if_needed@@@",
+      "@@@STEP_LOG_LINE@no_results_exc@    raise TypeError('Invalid data given')@@@",
+      "@@@STEP_LOG_LINE@no_results_exc@TypeError: Invalid data given@@@",
+      "@@@STEP_LOG_END@no_results_exc@@@",
       "@@@STEP_EXCEPTION@@@"
     ]
   },

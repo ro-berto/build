@@ -15,6 +15,7 @@ DEPS = [
   'recipe_engine/step',
   'swarming_client',
   'test_utils',
+  'traceback',
 ]
 
 from recipe_engine.recipe_api import Property

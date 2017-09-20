@@ -1,0 +1,14 @@
+[
+  {
+    "cmd": [
+      "echo",
+      "Traceback (most recent call last):\n  File \"<...>\\recipe_modules\\traceback\\examples\\full.py\", line 15, in RunSteps\n    raise Exception('error!')\nException: error!\n"
+    ],
+    "name": "echo"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]

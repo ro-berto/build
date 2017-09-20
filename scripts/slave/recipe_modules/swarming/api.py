@@ -859,7 +859,8 @@ class SwarmingApi(recipe_api.RecipeApi):
           step_result.presentation.links[k] = v
       except Exception as e:
         if step_result:
-          step_result.presentation.logs['no_results_exc'] = [str(e)]
+          step_result.presentation.logs['no_results_exc'] = [
+            str(e), '\n', self.m.traceback.format_exc()]
 
   def _gtest_collect_step(self, merged_test_output, task, **kwargs):
     """Produces a step that collects and processes a result of google-test task.
@@ -946,7 +947,11 @@ class SwarmingApi(recipe_api.RecipeApi):
       try:
         perf_results_json = self.m.json.loads(results_raw)
       except Exception as e:
-        raise Exception('error decoding perf test results from shard #%d' % i)
+        raise Exception(
+            'error decoding chart JSON results from shard #%d\n%s\n%s' % (
+                i,
+                str(e),
+                self.m.traceback.format_exc()))
       collected_results.append(perf_results_json)
 
     if collected_results:
@@ -1025,7 +1030,8 @@ class SwarmingApi(recipe_api.RecipeApi):
 
       except Exception as e:
         self.m.step.active_result.presentation.logs[
-          'no_isolated_results_exc'] = [str(e)]
+          'no_isolated_results_exc'] = [
+            str(e), '\n', self.m.traceback.format_exc()]
         self.m.step.active_result.isolated_script_results = None
 
   def get_step_name(self, prefix, task):

@@ -292,7 +292,10 @@ class ScriptTest(Test):  # pylint: disable=W0232
       self.failures(api, suffix)
 
       return self._test_runs[suffix].json.output['valid']
-    except Exception:  # pragma: no cover
+    except Exception as e:  # pragma: no cover
+      if suffix in self._test_runs:
+        self._test_runs[suffix].presentation.logs['no_results_exc'] = [
+          str(e), '\n', api.traceback.format_exc()]
       return False
 
   def failures(self, api, suffix):
@@ -938,6 +941,8 @@ class JSONResultsHandler(ResultsHandler):
       presentation.step_text += api.test_utils.format_step_text([
           ("Exception while processing test results: %s" % str(e),),
       ])
+      presentation.logs['no_results_exc'] = [
+          str(e), '\n', api.traceback.format_exc()]
       return
 
     if not results.valid:
@@ -1022,7 +1027,7 @@ class JSONResultsHandler(ResultsHandler):
       results = api.test_utils.create_results_from_json_if_needed(
           results)
     except Exception as e:
-      return False, [str(e)]
+      return False, [str(e), '\n', api.traceback.format_exc()]
 
     # If results were interrupted, we can't trust they have all the tests in
     # them. For this reason we mark them as invalid.

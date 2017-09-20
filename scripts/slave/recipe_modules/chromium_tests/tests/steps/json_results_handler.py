@@ -8,6 +8,7 @@ DEPS = [
     'recipe_engine/properties',
     'recipe_engine/step',
     'test_utils',
+    'traceback',
 ]
 
 
