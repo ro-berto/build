@@ -113,7 +113,7 @@ def GenTests(api):
         test += api.properties.tryserver(
             mastername=mastername,
             buildername=buildername,
-            gerrit_project='external/webrtc',
+            gerrit_project='src',
         )
       else:
         test += api.properties(issue=666666, patchset=1,
