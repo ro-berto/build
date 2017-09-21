@@ -88,6 +88,7 @@ class DartApi(recipe_api.RecipeApi):
       task.dimensions['os'] = os
       task.dimensions['cpu'] = cpu
       task.dimensions['pool'] = pool
+      task.dimensions.pop('gpu', None)
       self.m.swarming.trigger_task(task)
       tasks.append(task)
     return tasks
