@@ -479,12 +479,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                 {'repository': repository, 'git_hash': git_hash}
                 for repository, git_hash in deps_revision_overrides.iteritems())
 
-          # FIXME: Support Gerrit patches.
-          if self.m.tryserver.can_apply_issue:
+          if self.m.tryserver.is_tryserver:
             change['patch'] = {
-                'server': self.m.properties['rietveld'],
-                'issue': self.m.properties['issue'],
-                'patchset': self.m.properties['patchset'],
+                'server': self.m.properties['patch_gerrit_url'],
+                'change': self.m.properties['patch_issue'],
+                'revision': self.m.properties['patch_set'],
             }
 
           self.m.perf_dashboard.upload_isolate(

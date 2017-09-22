@@ -78,10 +78,13 @@ def GenTests(api):
           mastername='tryserver.chromium.perf',
           buildername='Mac Builder',
           deps_revision_overrides={'src': '1234567890abcdef'},
-          patch_storage='rietveld',
-          rietveld='https://codereview.chromium.org',
-          issue=123456000,
-          patchset=1,
+          patch_gerrit_url='https://chromium-review.googlesource.com',
+          patch_issue=671632,
+          patch_project='chromium/src',
+          patch_ref='refs/changes/32/671632/1',
+          patch_repository_url='https://chromium.googlesource.com/chromium/src',
+          patch_set=1,
+          patch_storage='gerrit',
           swarming_gtest=True) +
           api.post_process(Filter('pinpoint isolate upload'))
   )
