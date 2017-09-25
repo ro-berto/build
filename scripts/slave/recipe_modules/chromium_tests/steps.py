@@ -2644,7 +2644,7 @@ class WebRTCPerfTest(LocalGTestTest):
 
   def run(self, api, suffix):
     props = api.bot_update.last_returned_properties
-    perf_config = { 'a_default_rev': 'r_webrtc_subtree_git' }
+    perf_config = { 'a_default_rev': 'r_webrtc_git' }
 
     for revision_key, revision_prop in self._perf_config_mappings.iteritems():
       perf_config[revision_key] = props[revision_prop]
@@ -2654,8 +2654,7 @@ class WebRTCPerfTest(LocalGTestTest):
     # latter don't get properly simulated. Fallback to got_revision then.
     webrtc_rev = props.get('got_webrtc_revision', props['got_revision'])
 
-    # TODO(kjellander: Change to 'r_webrtc_git' after crbug.com/611808.
-    perf_config['r_webrtc_subtree_git'] = webrtc_rev
+    perf_config['r_webrtc_git'] = webrtc_rev
 
     self._runtest_kwargs['perf_config'] = perf_config
     LocalGTestTest.run(self, api, suffix)

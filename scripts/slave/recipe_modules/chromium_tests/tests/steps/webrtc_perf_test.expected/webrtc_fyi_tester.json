@@ -134,7 +134,7 @@
       "--perf-dashboard-id=test_name",
       "--perf-id=test-perf-id",
       "--perf-config",
-      "{\"a_default_rev\": \"r_webrtc_subtree_git\", \"r_chromium\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"r_chromium_commit_pos\": \"refs/heads/master@{#170242}\", \"r_webrtc_subtree_git\": \"0f90628433546e61d9268596da93418c623137f4\"}",
+      "{\"a_default_rev\": \"r_webrtc_git\", \"r_chromium\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"r_chromium_commit_pos\": \"refs/heads/master@{#170242}\", \"r_webrtc_git\": \"0f90628433546e61d9268596da93418c623137f4\"}",
       "--test-type=test_name",
       "--step-name=test_name",
       "--test-launcher-summary-output",
