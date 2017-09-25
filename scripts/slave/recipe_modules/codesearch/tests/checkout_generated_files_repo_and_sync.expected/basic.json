@@ -119,7 +119,8 @@
       "retry",
       "fetch",
       "origin",
-      "master"
+      "master",
+      "--progress"
     ],
     "cwd": "[START_DIR]/generated",
     "env": {

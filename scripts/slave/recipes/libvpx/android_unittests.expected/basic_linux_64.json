@@ -43,7 +43,8 @@
       "fetch",
       "origin",
       "master",
-      "--recurse-submodules"
+      "--recurse-submodules",
+      "--progress"
     ],
     "cwd": "[START_DIR]/android_tools",
     "env": {
@@ -130,7 +131,8 @@
       "fetch",
       "origin",
       "master",
-      "--recurse-submodules"
+      "--recurse-submodules",
+      "--progress"
     ],
     "cwd": "[START_DIR]/libvpx",
     "env": {

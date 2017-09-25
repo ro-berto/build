@@ -233,7 +233,8 @@
       "retry",
       "fetch",
       "origin",
-      "stable"
+      "stable",
+      "--progress"
     ],
     "cwd": "[START_DIR]/swarming.client",
     "env": {

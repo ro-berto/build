@@ -1134,7 +1134,8 @@
       "retry",
       "fetch",
       "origin",
-      "chromiumos"
+      "chromiumos",
+      "--progress"
     ],
     "cwd": "[START_DIR]/generated",
     "env": {

@@ -786,7 +786,8 @@
       "retry",
       "fetch",
       "origin",
-      "android"
+      "android",
+      "--progress"
     ],
     "cwd": "[START_DIR]/generated",
     "env": {

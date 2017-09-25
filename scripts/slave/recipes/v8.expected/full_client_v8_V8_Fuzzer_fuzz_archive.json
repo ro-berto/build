@@ -17,7 +17,8 @@
       "retry",
       "fetch",
       "origin",
-      "[dummy swarming client hash]"
+      "[dummy swarming client hash]",
+      "--progress"
     ],
     "cwd": "[START_DIR]/swarming.client",
     "env": {

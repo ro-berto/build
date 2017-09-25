@@ -113,7 +113,8 @@
       "git",
       "retry",
       "fetch",
-      "origin"
+      "origin",
+      "--progress"
     ],
     "cwd": "[START_DIR]\\swarming.client",
     "env": {

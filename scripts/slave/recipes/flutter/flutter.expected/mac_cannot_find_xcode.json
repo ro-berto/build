@@ -31,7 +31,8 @@
       "fetch",
       "origin",
       "1234abcd",
-      "--recurse-submodules"
+      "--recurse-submodules",
+      "--progress"
     ],
     "cwd": "[START_DIR]/flutter",
     "env": {
@@ -164,7 +165,8 @@
       "retry",
       "fetch",
       "origin",
-      "--recurse-submodules"
+      "--recurse-submodules",
+      "--progress"
     ],
     "cwd": "[START_DIR]/ios",
     "env": {
