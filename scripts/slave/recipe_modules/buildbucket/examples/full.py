@@ -54,12 +54,10 @@ def RunSteps(api):
   put_build_result = api.buildbucket.put(
       [{'bucket': example_bucket,
         'parameters': build_parameters,
-        'tags': build_tags,
-        'client_operation_id': 'random_client_op_id'},
+        'tags': build_tags},
        {'bucket': example_bucket,
         'parameters': build_parameters_mac,
-        'tags': build_tags2,
-        'client_operation_id': 'random_client_op_id2'}],
+        'tags': build_tags2}],
       service_account)
 
   new_job_id = put_build_result.stdout['builds'][0]['id']

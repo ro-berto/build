@@ -40,8 +40,7 @@ def RunSteps(api):
   api.buildbucket.put(
       [{'bucket': example_bucket,
         'parameters': build_parameters,
-        'tags': build_tags,
-        'client_operation_id': 'random_client_op_id'}],
+        'tags': build_tags}],
       service_account)
 
 

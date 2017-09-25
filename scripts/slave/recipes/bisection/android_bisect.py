@@ -158,7 +158,6 @@ def GenTests(api):
       'command': ('./tools/perf/run_benchmark -v --browser=android-chrome '
                   '--output-format=chartjson sunspider'),
       'max_time_minutes': '25',
-      'client_operation_id': '12345726327327',
       'repeat_count': '1',
       'truncate_percent': '25',
       'target_arch': 'ia32',

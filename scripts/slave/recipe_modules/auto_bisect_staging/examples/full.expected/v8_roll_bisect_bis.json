@@ -8520,7 +8520,7 @@
       "cr-buildbucket.appspot.com",
       "--service-account-json",
       "/creds/service_accounts/service-account-chromium-bisect.json",
-      "{\"bucket\": \"master.tryserver.chromium.perf\", \"client_operation_id\": \"dummy\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988_09d4f9ed90106f3025e64d9c4062bf927f2f5b86.zip\\\", \\\"clobber\\\": true, \\\"deps_revision_overrides\\\": {\\\"src/v8\\\": \\\"002\\\"}, \\\"parent_got_revision\\\": \\\"dcdcdc0ff1122212323134879ddceeb1240b0988\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"parent_buildername:linux_perf_bisect\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
+      "{\"bucket\": \"master.tryserver.chromium.perf\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988_09d4f9ed90106f3025e64d9c4062bf927f2f5b86.zip\\\", \\\"clobber\\\": true, \\\"deps_revision_overrides\\\": {\\\"src/v8\\\": \\\"002\\\"}, \\\"parent_got_revision\\\": \\\"dcdcdc0ff1122212323134879ddceeb1240b0988\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"parent_buildername:linux_perf_bisect\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
     ],
     "name": "Bisecting revision.buildbucket.put",
     "stdout": "/path/to/tmp/json",

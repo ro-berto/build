@@ -17,7 +17,6 @@ import math
 import os
 import tempfile
 import re
-import uuid
 
 from recipe_engine.recipe_api import StepFailure
 
@@ -370,7 +369,6 @@ class RevisionState(object):
     """Posts a request to buildbot to build this revision and archive it."""
     api = self.bisector.api
     bot_name = self.bisector.get_builder_bot_for_this_platform()
-    operation_id = 'dummy' if self.bisector.dummy_tests else uuid.uuid4().hex
     build_details = {
         'bucket': 'master.' + api.m.properties['mastername'],
         'parameters': {
@@ -381,7 +379,6 @@ class RevisionState(object):
                 'build_archive_url': self.build_url,
             },
         },
-        'client_operation_id': operation_id
     }
     if self.revision_overrides:
       build_details['parameters']['properties']['deps_revision_overrides'] = \

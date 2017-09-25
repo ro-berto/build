@@ -2,7 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import json
 import uuid
 
 # This is a wrapper class of revision that stores its build path and
@@ -112,17 +111,12 @@ class BuildState(object):
       for p in properties_to_update:
         properties.update({p: self.api.m.properties[p]})
     bot_name = self.get_builder_bot_for_this_platform()
-    if self.api.m.properties.get('is_test'):
-      client_operation_id = '123456'
-    else:
-      client_operation_id = uuid.uuid4().hex # pragma: no cover
     build_details = {
       'bucket': 'master.' + self.api.m.properties['mastername'],
       'parameters': {
         'builder_name': bot_name,
         'properties': properties
       },
-      'client_operation_id': client_operation_id,
       'tags':{}
     }
     result = self.api.m.buildbucket.put(
