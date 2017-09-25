@@ -71,12 +71,12 @@ AUX_BINARY_PACKAGES = {
       # The Python package installs its binaries into "bin/".
       cipd.CipdPackage(
           name='infra/python/cpython/${os}-${arch=386,amd64}',
-          version='version:2.7.13.chromium10'),
+          version='version:2.7.14.chromium12'),
 
       # The Git package installs its binaries into "bin/".
       cipd.CipdPackage(
           name='infra/git/${os}-${arch=386,amd64}',
-          version='version:2.14.1.chromium11'),
+          version='version:2.14.1.chromium12'),
     ),
 
     CANARY: (
