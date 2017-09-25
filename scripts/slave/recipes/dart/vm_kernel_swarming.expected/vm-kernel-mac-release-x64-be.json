@@ -89,7 +89,8 @@
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
-    "name": "build dart"
+    "name": "build dart",
+    "timeout": 900
   },
   {
     "cmd": [

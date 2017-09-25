@@ -35,7 +35,8 @@ class DartApi(recipe_api.RecipeApi):
       self.kill_tasks()
       self.m.python('build dart',
                  self.m.path['checkout'].join('tools', 'build.py'),
-                 args=build_args)
+                 args=build_args,
+                 timeout=15 * 60)
       if isolate is not None:
         self.m.swarming_client.checkout(
           revision='5c8043e54541c3cee7ea255e0416020f2e3a5904')
