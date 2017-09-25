@@ -684,98 +684,40 @@
     "name": "package build"
   },
   {
-    "cmd": [],
-    "name": "trigger",
-    "trigger_specs": [
-      {
-        "builder_name": "V8 Linux64",
-        "properties": {
-          "parent_build_environment": {
-            "gn_args": "target_cpu = \"x64\" use_goma = true"
-          },
-          "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
-          "parent_got_revision_cp": "refs/heads/master@{#50110}",
-          "parent_got_swarming_client_revision": "e4fee0b18f8163be6097c9c571640038896debc4",
-          "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
-          "swarm_hashes": {
-            "benchmarks": "[dummy hash for benchmarks]",
-            "bot_default": "[dummy hash for bot_default]",
-            "check-static-initializers": "[dummy hash for check-static-initializers]",
-            "mjsunit": "[dummy hash for mjsunit]",
-            "mozilla": "[dummy hash for mozilla]",
-            "optimize_for_size": "[dummy hash for optimize_for_size]",
-            "perf": "[dummy hash for perf]",
-            "run-valgrind": "[dummy hash for run-valgrind]",
-            "test262": "[dummy hash for test262]"
-          }
-        }
-      },
-      {
-        "builder_name": "V8 Linux64 - avx2",
-        "properties": {
-          "parent_build_environment": {
-            "gn_args": "target_cpu = \"x64\" use_goma = true"
-          },
-          "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
-          "parent_got_revision_cp": "refs/heads/master@{#50110}",
-          "parent_got_swarming_client_revision": "e4fee0b18f8163be6097c9c571640038896debc4",
-          "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
-          "swarm_hashes": {
-            "benchmarks": "[dummy hash for benchmarks]",
-            "bot_default": "[dummy hash for bot_default]",
-            "check-static-initializers": "[dummy hash for check-static-initializers]",
-            "mjsunit": "[dummy hash for mjsunit]",
-            "mozilla": "[dummy hash for mozilla]",
-            "optimize_for_size": "[dummy hash for optimize_for_size]",
-            "perf": "[dummy hash for perf]",
-            "run-valgrind": "[dummy hash for run-valgrind]",
-            "test262": "[dummy hash for test262]"
-          }
-        }
-      }
+    "cmd": [
+      "/opt/infra-tools/buildbucket",
+      "put",
+      "--host",
+      "cr-buildbucket.appspot.com",
+      "--service-account-json",
+      "/creds/service_accounts/service-account-v8-bot.json",
+      "{\"bucket\": \"master.client.v8\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"V8 Linux64\\\", \\\"properties\\\": {\\\"parent_build_environment\\\": {\\\"gn_args\\\": \\\"target_cpu = \\\\\\\"x64\\\\\\\" use_goma = true\\\"}, \\\"parent_got_revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"parent_got_revision_cp\\\": \\\"refs/heads/master@{#50110}\\\", \\\"parent_got_swarming_client_revision\\\": \\\"e4fee0b18f8163be6097c9c571640038896debc4\\\", \\\"revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"swarm_hashes\\\": {\\\"benchmarks\\\": \\\"[dummy hash for benchmarks]\\\", \\\"bot_default\\\": \\\"[dummy hash for bot_default]\\\", \\\"check-static-initializers\\\": \\\"[dummy hash for check-static-initializers]\\\", \\\"mjsunit\\\": \\\"[dummy hash for mjsunit]\\\", \\\"mozilla\\\": \\\"[dummy hash for mozilla]\\\", \\\"optimize_for_size\\\": \\\"[dummy hash for optimize_for_size]\\\", \\\"perf\\\": \\\"[dummy hash for perf]\\\", \\\"run-valgrind\\\": \\\"[dummy hash for run-valgrind]\\\", \\\"test262\\\": \\\"[dummy hash for test262]\\\"}}}\", \"tags\": [\"builder:V8 Linux64\", \"master:client.v8\", \"parent_buildername:V8 Linux64 - builder\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}",
+      "{\"bucket\": \"master.client.v8\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"V8 Linux64 - avx2\\\", \\\"properties\\\": {\\\"parent_build_environment\\\": {\\\"gn_args\\\": \\\"target_cpu = \\\\\\\"x64\\\\\\\" use_goma = true\\\"}, \\\"parent_got_revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"parent_got_revision_cp\\\": \\\"refs/heads/master@{#50110}\\\", \\\"parent_got_swarming_client_revision\\\": \\\"e4fee0b18f8163be6097c9c571640038896debc4\\\", \\\"revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"swarm_hashes\\\": {\\\"benchmarks\\\": \\\"[dummy hash for benchmarks]\\\", \\\"bot_default\\\": \\\"[dummy hash for bot_default]\\\", \\\"check-static-initializers\\\": \\\"[dummy hash for check-static-initializers]\\\", \\\"mjsunit\\\": \\\"[dummy hash for mjsunit]\\\", \\\"mozilla\\\": \\\"[dummy hash for mozilla]\\\", \\\"optimize_for_size\\\": \\\"[dummy hash for optimize_for_size]\\\", \\\"perf\\\": \\\"[dummy hash for perf]\\\", \\\"run-valgrind\\\": \\\"[dummy hash for run-valgrind]\\\", \\\"test262\\\": \\\"[dummy hash for test262]\\\"}}}\", \"tags\": [\"builder:V8 Linux64 - avx2\", \"master:client.v8\", \"parent_buildername:V8 Linux64 - builder\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
     ],
+    "name": "trigger",
+    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
-      "@@@STEP_TEXT@V8 Linux64<br />V8 Linux64 - avx2@@@"
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@"
     ]
   },
   {
-    "cmd": [],
-    "name": "trigger (2)",
-    "trigger_specs": [
-      {
-        "bucket": "master.internal.client.v8",
-        "buildbot_changes": [
-          {
-            "author": "trigger_proxy",
-            "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c"
-          }
-        ],
-        "builder_name": "v8_trigger_proxy",
-        "properties": {
-          "archive": "gs://chromium-v8/v8-linux64-rel",
-          "parent_build_environment": {
-            "gn_args": "target_cpu = \"x64\" use_goma = true"
-          },
-          "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
-          "parent_got_revision_cp": "refs/heads/master@{#50110}",
-          "parent_got_swarming_client_revision": "e4fee0b18f8163be6097c9c571640038896debc4",
-          "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
-          "swarm_hashes": {
-            "benchmarks": "[dummy hash for benchmarks]",
-            "bot_default": "[dummy hash for bot_default]",
-            "check-static-initializers": "[dummy hash for check-static-initializers]",
-            "mjsunit": "[dummy hash for mjsunit]",
-            "mozilla": "[dummy hash for mozilla]",
-            "optimize_for_size": "[dummy hash for optimize_for_size]",
-            "perf": "[dummy hash for perf]",
-            "run-valgrind": "[dummy hash for run-valgrind]",
-            "test262": "[dummy hash for test262]"
-          }
-        }
-      }
+    "cmd": [
+      "/opt/infra-tools/buildbucket",
+      "put",
+      "--host",
+      "cr-buildbucket.appspot.com",
+      "--service-account-json",
+      "/creds/service_accounts/service-account-v8-bot.json",
+      "{\"bucket\": \"master.internal.client.v8\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"v8_trigger_proxy\\\", \\\"changes\\\": [{\\\"author\\\": {\\\"email\\\": \\\"trigger_proxy\\\"}, \\\"revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\"}], \\\"properties\\\": {\\\"archive\\\": \\\"gs://chromium-v8/v8-linux64-rel\\\", \\\"parent_build_environment\\\": {\\\"gn_args\\\": \\\"target_cpu = \\\\\\\"x64\\\\\\\" use_goma = true\\\"}, \\\"parent_got_revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"parent_got_revision_cp\\\": \\\"refs/heads/master@{#50110}\\\", \\\"parent_got_swarming_client_revision\\\": \\\"e4fee0b18f8163be6097c9c571640038896debc4\\\", \\\"revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"swarm_hashes\\\": {\\\"benchmarks\\\": \\\"[dummy hash for benchmarks]\\\", \\\"bot_default\\\": \\\"[dummy hash for bot_default]\\\", \\\"check-static-initializers\\\": \\\"[dummy hash for check-static-initializers]\\\", \\\"mjsunit\\\": \\\"[dummy hash for mjsunit]\\\", \\\"mozilla\\\": \\\"[dummy hash for mozilla]\\\", \\\"optimize_for_size\\\": \\\"[dummy hash for optimize_for_size]\\\", \\\"perf\\\": \\\"[dummy hash for perf]\\\", \\\"run-valgrind\\\": \\\"[dummy hash for run-valgrind]\\\", \\\"test262\\\": \\\"[dummy hash for test262]\\\"}}}\", \"tags\": [\"builder:v8_trigger_proxy\", \"master:internal.client.v8\", \"parent_buildername:V8 Linux64 - builder\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
     ],
+    "name": "trigger proxy",
+    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
-      "@@@STEP_TEXT@v8_trigger_proxy@@@"
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@"
     ]
   },
   {
