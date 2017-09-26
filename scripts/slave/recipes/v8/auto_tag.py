@@ -163,7 +163,7 @@ def RunSteps(api):
   lkgr_ref = 'refs/heads/%s-lkgr' % branch
 
   api.gclient.set_config('v8')
-  api.gclient.checkout(with_branch_heads=True)
+  api.gclient.checkout()
 
   # Enforce a clean state.
   InitClean(api)
