@@ -12,12 +12,20 @@ import master_site_config
 ActiveMaster = master_site_config.WebRTCFYI
 
 
+INFRA_REPO_URL = 'https://chromium.googlesource.com/infra/infra'
+
+
 def m_remote_run(recipe, **kwargs):
+  properties = {'path_config': 'kitchen'}
+  properties.update(kwargs.pop('properties', {}))
   return remote_run_factory.RemoteRunFactory(
       active_master=ActiveMaster,
-      repository='https://chromium.googlesource.com/chromium/tools/build.git',
+      repository=kwargs.pop(
+          'repository',
+          'https://chromium.googlesource.com/chromium/tools/build.git'
+      ),
       recipe=recipe,
-      factory_properties={'path_config': 'kitchen'},
+      factory_properties=properties,
       **kwargs)
 
 
@@ -31,7 +39,10 @@ def Update(c):
           name='webrtc_deps',
           periodicBuildTimer=3*60*60,
           branch=None,
-          builderNames=['Auto-roll - WebRTC DEPS'],
+          builderNames=[
+              'Auto-roll - WebRTC DEPS',
+              'WebRTC lkgr finder',
+          ],
       ),
       SingleBranchScheduler(name='webrtc_linux_scheduler',
                             branch='master',
@@ -51,15 +62,25 @@ def Update(c):
       'name': 'WebRTC Perf Tests (Linux Trusty swarming)',
       'recipe': 'webrtc/standalone',
       'slavebuilddir': 'linux_trusty',
-    }
+    },
+    {
+      'name': 'WebRTC lkgr finder',
+      'factory': m_remote_run(
+          'lkgr_finder',
+          repository=INFRA_REPO_URL,
+          properties={'lkgr_project': 'webrtc', 'allowed_lag': 4},
+      ),
+      'slavebuilddir': 'webrtc_lkgr',
+    },
   ]
 
   c['builders'].extend([
       {
         'name': spec['name'],
-        'factory': m_annotator.BaseFactory(spec['recipe'])
-                   if 'recipe' in spec
-                   else m_remote_run('webrtc/standalone'),
+        # TODO(ehmaldonado): Flip all bots to remote run.
+        'factory': spec['factory']
+                   if 'factory' in spec
+                   else m_annotator.BaseFactory(spec['recipe']),
         'notify_on_missing': True,
         'category': 'linux',
         'slavebuilddir': spec['slavebuilddir'],
