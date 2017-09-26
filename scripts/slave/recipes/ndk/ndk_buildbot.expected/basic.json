@@ -93,8 +93,6 @@
       "master",
       "--buildnumber",
       "571",
-      "--config_repo",
-      "https://android.googlesource.com/toolchain/ndk_chromite_config",
       "--git-cache-dir",
       "[CACHE]/git",
       "--goma_dir",

@@ -95,8 +95,6 @@
       "0",
       "--debug",
       "--clobber",
-      "--config_repo",
-      "https://example.com/repo.git",
       "--git-cache-dir",
       "[CACHE]/git",
       "--goma_dir",

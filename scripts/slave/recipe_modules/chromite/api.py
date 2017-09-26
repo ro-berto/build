@@ -12,6 +12,8 @@ class ChromiteApi(recipe_api.RecipeApi):
   chromite_url = 'https://chromium.googlesource.com/chromiumos/chromite.git'
   depot_tools_url = (
       'https://chromium.googlesource.com/chromium/tools/depot_tools.git')
+  # Keep this pin in sync with manifest pin in:
+  #   https://cs.corp.google.com/chromeos_public/manifest/full.xml
   depot_tools_pin = '897602abc7548572c66579246e55f3d598ee4769'
 
   # Only used by the internal goma recipe.
@@ -297,12 +299,9 @@ class ChromiteApi(recipe_api.RecipeApi):
       cbb_args.extend(['--clobber'])
     if self.c.cbb.chrome_version:
       cbb_args.extend(['--chrome_version', self.c.cbb.chrome_version])
-    if self.c.cbb.config_repo:
-      cbb_args.extend(['--config_repo', self.c.cbb.config_repo])
     if self.c.cbb.buildbucket_id:
       cbb_args.extend(['--buildbucket-id', self.c.cbb.buildbucket_id])
-
-    # Set the build ID, if specified.
+    # Set the CIDB master build ID, if specified.
     if self.c.cbb.build_id:
       cbb_args.extend(['--master-build-id', self.c.cbb.build_id])
 
