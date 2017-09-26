@@ -24,11 +24,14 @@
    */
   function DisplayLKGR() {
     var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() { 
+    xmlHttp.onreadystatechange = function() {
       if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-        lkgr_entry = JSON.parse(xmlHttp.responseText)[0];
-        git_hash = lkgr_entry['git_hash'].substring(0, 8);
-        lkgr_date = lkgr_entry['date']
+        let response = xmlHttp.responseText;
+        if (response.startsWith(")]}'\n"))
+          response = response.substring(5);
+        lkgr_entry = JSON.parse(response);
+        git_hash = lkgr_entry['commit'].substring(0, 8);
+        lkgr_date = lkgr_entry['committer']['time']
         if (!/ UTC$/.test(lkgr_date) && ! / GMT$/.test(lkgr_date))
           // The lkgr date is in UTC, but it's unfortunately not part of the
           // string. Add it as otherwise the parser assumes local time.
@@ -41,7 +44,7 @@
       }
     };
 
-    var lkgrPath = "https://v8-status.appspot.com/commits?format=json";
+    var lkgrPath = "https://chromium.googlesource.com/v8/v8/+/lkgr?format=json";
     xmlHttp.open('GET', lkgrPath, true);
     xmlHttp.send(null);
   }
