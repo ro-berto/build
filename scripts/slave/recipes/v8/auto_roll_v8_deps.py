@@ -80,6 +80,11 @@ def GetDEPS(api, name, repo):
 
 
 def RunSteps(api):
+  # TODO(machenbach): This temporarily disables the v8 deps roller until
+  # https://crbug.com/v8/6857 is resolved.
+  if not api._test_data.enabled:  # pragma: no cover
+    return
+
   api.gclient.set_config('v8')
   api.gclient.apply_config('chromium')
 
