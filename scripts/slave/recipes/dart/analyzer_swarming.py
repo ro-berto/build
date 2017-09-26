@@ -50,7 +50,8 @@ def RunSteps(api):
   assert system in ['linux', 'mac10.11', 'win7', 'win8', 'win10']
   mode = builder_fragments[2]
   assert mode in ['debug', 'release']
-  strong = builder_fragments[3] == 'strong'
+  strong = 'strong' in builder_fragments
+  hostchecked = 'hostchecked' in builder_fragments
   channel = builder_fragments[-1]
   assert channel in ['be', 'dev', 'stable', 'integration', 'try']
 
@@ -77,7 +78,7 @@ def RunSteps(api):
     if builder_type == 'analyzer':
       test_args = ['--mode=%s' % mode,
                    '--arch=x64',
-                   '--use-sdk',
+                   '--use-sdk' if not hostchecked else '--host-checked',
                    '--compiler=dart2analyzer',
                    '--runtime=none',
                    '--progress=buildbot',
@@ -165,11 +166,11 @@ def RunSteps(api):
 
 def GenTests(api):
    yield (
-      api.test('analyzer-linux-release-strong-try') +
+      api.test('analyzer-linux-release-strong-hostchecked-try') +
       api.platform('linux', 64) +
       api.properties.generic(
         mastername='luci.dart.try',
-        buildername='analyzer-linux-release-strong-try',
+        buildername='analyzer-linux-release-strong-hostchecked-try',
         revision='hash_of_revision'))
    yield (
       api.test('analyzer-win7-debug-dev') + api.platform('win', 32) +
