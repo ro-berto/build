@@ -108,9 +108,14 @@ def _RunStepsInternal(api):
     # the scripts from presubmit_build checkout).
     env['PYTHONPATH'] = ''
 
+  # Repos that have '.vpython' spec.
+  venv = None
+  if repo_name == 'luci_py':
+    venv = abs_root.join('.vpython')
+
   try:
     with api.context(env=env):
-      api.presubmit(*presubmit_args)
+      api.presubmit(*presubmit_args, venv=venv)
   except api.step.StepFailure as step_failure:
     if step_failure.result and step_failure.result.retcode == 1:
       api.tryserver.set_test_failure_tryjob_result()
@@ -227,6 +232,16 @@ def GenTests(api):
         runhooks=True) +
     api.step_data('presubmit', api.json.output([['infra_presubmit',
                                                  ['compile']]]))
+  )
+
+  yield (
+    api.test('luci-py') +
+    api.properties.tryserver(
+        mastername='luci.infra.try',
+        buildername='Luci-py Presubmit',
+        repo_name='luci_py',
+        patch_project='infra/luci/luci-py') +
+    api.step_data('presubmit', api.json.output({}))
   )
 
   yield (
