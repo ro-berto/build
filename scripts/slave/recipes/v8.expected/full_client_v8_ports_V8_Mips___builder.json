@@ -246,22 +246,30 @@
     "name": "package build"
   },
   {
-    "cmd": [
-      "/opt/infra-tools/buildbucket",
-      "put",
-      "--host",
-      "cr-buildbucket.appspot.com",
-      "--service-account-json",
-      "/creds/service_accounts/service-account-v8-bot.json",
-      "{\"bucket\": \"master.client.v8.ports\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"V8 Mips - big endian - nosnap - 1\\\", \\\"properties\\\": {\\\"parent_build_environment\\\": {}, \\\"parent_got_revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"parent_got_revision_cp\\\": \\\"refs/heads/master@{#50110}\\\", \\\"revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\"}}\", \"tags\": [\"builder:V8 Mips - big endian - nosnap - 1\", \"master:client.v8.ports\", \"parent_buildername:V8 Mips - builder\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}",
-      "{\"bucket\": \"master.client.v8.ports\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"V8 Mips - big endian - nosnap - 2\\\", \\\"properties\\\": {\\\"parent_build_environment\\\": {}, \\\"parent_got_revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"parent_got_revision_cp\\\": \\\"refs/heads/master@{#50110}\\\", \\\"revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\"}}\", \"tags\": [\"builder:V8 Mips - big endian - nosnap - 2\", \"master:client.v8.ports\", \"parent_buildername:V8 Mips - builder\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
-    ],
+    "cmd": [],
     "name": "trigger",
-    "stdout": "/path/to/tmp/json",
+    "trigger_specs": [
+      {
+        "builder_name": "V8 Mips - big endian - nosnap - 1",
+        "properties": {
+          "parent_build_environment": {},
+          "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
+          "parent_got_revision_cp": "refs/heads/master@{#50110}",
+          "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c"
+        }
+      },
+      {
+        "builder_name": "V8 Mips - big endian - nosnap - 2",
+        "properties": {
+          "parent_build_environment": {},
+          "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
+          "parent_got_revision_cp": "refs/heads/master@{#50110}",
+          "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c"
+        }
+      }
+    ],
     "~followup_annotations": [
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@"
+      "@@@STEP_TEXT@V8 Mips - big endian - nosnap - 1<br />V8 Mips - big endian - nosnap - 2@@@"
     ]
   },
   {

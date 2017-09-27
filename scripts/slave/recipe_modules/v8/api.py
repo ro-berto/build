@@ -50,8 +50,6 @@ V8_MINOR = 'V8_MINOR_VERSION'
 V8_BUILD = 'V8_BUILD_NUMBER'
 V8_PATCH = 'V8_PATCH_LEVEL'
 
-BBUCKET_SERVICE_ACCOUNT = 'v8-bot'
-
 
 class V8Version(object):
   """A v8 version as used for tagging (with patch level), e.g. '3.4.5.1'."""
@@ -1248,15 +1246,16 @@ class V8Api(recipe_api.RecipeApi):
       if self.m.tryserver.is_tryserver:
         properties.update(
           category=self.m.properties.get('category', 'manual_ts'),
+          master=str(self.m.properties['master']),
           reason=str(self.m.properties.get('reason', 'ManualTS')),
+          requester=str(self.m.properties['requester']),
           # On tryservers, set revision to the same as on the current bot,
           # as CQ expects builders and testers to match the revision field.
           revision=str(self.m.properties.get('revision', 'HEAD')),
         )
-        for p in ['issue', 'master', 'patch_gerrit_url', 'patch_git_url',
-                  'patch_issue', 'patch_project', 'patch_ref',
-                  'patch_repository_url', 'patch_set', 'patch_storage',
-                  'patchset', 'requester', 'rietveld']:
+        for p in ['issue', 'patch_gerrit_url', 'patch_git_url', 'patch_issue',
+                  'patch_project', 'patch_ref', 'patch_repository_url',
+                  'patch_set', 'patch_storage', 'patchset', 'rietveld']:
           try:
             properties[p] = str(self.m.properties[p])
           except KeyError:
@@ -1284,47 +1283,25 @@ class V8Api(recipe_api.RecipeApi):
       if swarm_hashes:
         properties['swarm_hashes'] = swarm_hashes
       properties.update(**additional_properties)
-      builds_to_trigger = [
-        {
-          # TODO(sergiyb): Maybe parse bucket name from the 'buildbucket' build
-          # property when it's available.
-          'bucket': 'master.%s' % self.m.properties['mastername'],
-          'parameters': {
-            'builder_name': builder_name,
-            'properties': properties,
-          },
-        }
-        for builder_name in triggers
-      ]
-
-      if builds_to_trigger:
-        self.m.buildbucket.put(
-            builds_to_trigger,
-            self.m.service_account.get_json_path(BBUCKET_SERVICE_ACCOUNT),
-            name='trigger')
+      self.m.trigger(*[{
+        'builder_name': builder_name,
+        'properties': properties,
+      } for builder_name in triggers])
 
       if triggers_proxy:
         proxy_properties = {
           'archive': self.GS_ARCHIVES[self.bot_config['build_gs_archive']],
         }
         proxy_properties.update(properties)
-        self.m.buildbucket.put(
-            [{
-              'bucket': 'master.internal.client.v8',
-              'parameters': {
-                'builder_name': 'v8_trigger_proxy',
-                'properties': proxy_properties,
-                'changes': [{
-                  'revision': self.revision,
-                  'author': {
-                    'email': 'trigger_proxy',
-                  },
-                }],
-               },
-            }],
-            self.m.service_account.get_json_path(BBUCKET_SERVICE_ACCOUNT),
-            name='trigger proxy',
-        )
+        self.m.trigger(*[{
+          'builder_name': 'v8_trigger_proxy',
+          'bucket': 'master.internal.client.v8',
+          'properties': proxy_properties,
+          'buildbot_changes': [{
+            'author': 'trigger_proxy',
+            'revision': self.revision,
+          }]
+        }])
 
   def get_change_range(self):
     if self.m.properties.get('override_changes'):
