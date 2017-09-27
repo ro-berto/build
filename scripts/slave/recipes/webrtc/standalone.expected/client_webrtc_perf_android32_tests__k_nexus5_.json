@@ -441,11 +441,11 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[TMP_BASE]/webrtc_perf_tests_test_output_tmp_1"
+      "[TMP_BASE]/webrtc_perf_tests_test_artifacts_tmp_1"
     ],
     "cwd": "[BUILDER_CACHE]/Android32_Tests__K_Nexus5_",
     "infra_step": true,
-    "name": "rmtree [TMP_BASE]/webrtc_perf_tests_test_output_tmp_1"
+    "name": "rmtree [TMP_BASE]/webrtc_perf_tests_test_artifacts_tmp_1"
   },
   {
     "allow_subannotations": true,
@@ -501,11 +501,11 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[TMP_BASE]/low_bandwidth_audio_test_test_output_tmp_2"
+      "[TMP_BASE]/low_bandwidth_audio_test_test_artifacts_tmp_2"
     ],
     "cwd": "[BUILDER_CACHE]/Android32_Tests__K_Nexus5_",
     "infra_step": true,
-    "name": "rmtree [TMP_BASE]/low_bandwidth_audio_test_test_output_tmp_2"
+    "name": "rmtree [TMP_BASE]/low_bandwidth_audio_test_test_artifacts_tmp_2"
   },
   {
     "cmd": [

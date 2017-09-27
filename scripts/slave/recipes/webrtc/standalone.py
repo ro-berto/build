@@ -68,7 +68,7 @@ def GenTests(api):
 
   def generate_builder(mastername, buildername, revision,
                        parent_got_revision=None, failing_test=None,
-                       suffix=None, gerrit=False, test_output=None):
+                       suffix=None, gerrit=False, test_artifacts=None):
     suffix = suffix or ''
     bot_config = builders[mastername]['builders'][buildername]
     bot_type = bot_config.get('bot_type', 'builder_tester')
@@ -101,9 +101,9 @@ def GenTests(api):
       parent_rev = parent_got_revision or revision
       test += api.properties(parent_got_revision=parent_rev)
 
-    if test_output:
-      test += api.step_data('listdir webrtc_perf_tests_test_output',
-                            api.file.listdir(test_output))
+    if test_artifacts:
+      test += api.step_data('listdir webrtc_perf_tests_test_artifacts',
+                            api.file.listdir(test_artifacts))
 
     if failing_test:
       test += api.step_data(failing_test, retcode=1)
@@ -144,7 +144,7 @@ def GenTests(api):
 
   mastername = 'client.webrtc.perf'
   yield generate_builder(mastername, 'Linux Trusty', revision='12345',
-                         suffix='_test_output', test_output=['some file'])
+                         suffix='_test_artifacts', test_artifacts=['some file'])
   yield generate_builder(mastername, 'Android32 Builder', revision=None,
                          suffix='_forced')
 

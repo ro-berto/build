@@ -155,7 +155,7 @@ def generate_tests(api, test_suite, revision):
               'isac_speech_and_misc_wb.pcm']))
     tests.append(PerfTest('webrtc_perf_tests', revision=revision,
                           args=['--save_worst_frame'],
-                          upload_test_output=True))
+                          upload_test_artifacts=True))
 
     # TODO(kjellander): Re-enable when https://crbug.com/731717 is fixed.
     if not api.m.platform.is_win:
@@ -360,13 +360,13 @@ class SwarmingPerfTest(SwarmingIsolatedScriptTest):
 class PerfTest(Test):
   """A WebRTC test that needs consistent hardware performance."""
   def __init__(self, test, name=None, args=None, revision=None,
-               upload_test_output=False, **runtest_kwargs):
+               upload_test_artifacts=False, **runtest_kwargs):
     super(PerfTest, self).__init__(test, name)
     assert revision, 'Revision is mandatory for perf tests'
     self._revision = revision
     self._args = args or []
     self._runtest_kwargs = runtest_kwargs
-    self._upload_test_output = upload_test_output
+    self._upload_test_artifacts = upload_test_artifacts
 
   @composite_step
   def run(self, api, suffix):
@@ -376,27 +376,29 @@ class PerfTest(Test):
         'data to the perf dashboard.')
     perf_config = PERF_CONFIG
     perf_config['r_webrtc_git'] = api.revision
-    test_output_name = self._name + '_test_output'
+    test_artifacts_name = self._name + '_test_artifacts'
     upload_url = '%s/%s/%s_%s.zip' % (
-        api.mastername, api.buildername, test_output_name, api.revision_number)
-    with api.m.tempfile.temp_dir(test_output_name) as test_output_path:
-      if self._upload_test_output:
-        self._args.extend(['--test_output_dir', test_output_path])
+        api.mastername, api.buildername, test_artifacts_name,
+        api.revision_number)
+    with api.m.tempfile.temp_dir(test_artifacts_name) as test_artifacts_path:
+      if self._upload_test_artifacts:
+        self._args.extend(['--test_artifacts_dir', test_artifacts_path])
       api.m.chromium.runtest(
           test=self._test, name=self._name, args=self._args,
           results_url=DASHBOARD_UPLOAD_URL, annotate='graphing', xvfb=True,
           perf_dashboard_id=perf_dashboard_id, test_type=perf_dashboard_id,
           revision=api.revision_number, perf_id=api.c.PERF_ID,
           perf_config=perf_config, **self._runtest_kwargs)
-      if (self._upload_test_output and
-          api.m.file.listdir('listdir ' + test_output_name, test_output_path)):
-        zip_path = api.m.path['tmp_base'].join(test_output_name + '.zip')
-        api.m.zip.directory('zip ' + test_output_name, test_output_path,
+      if (self._upload_test_artifacts and
+          api.m.file.listdir('listdir ' + test_artifacts_name,
+                             test_artifacts_path)):
+        zip_path = api.m.path['tmp_base'].join(test_artifacts_name + '.zip')
+        api.m.zip.directory('zip ' + test_artifacts_name, test_artifacts_path,
                             zip_path)
         api.m.gsutil.upload(zip_path, api.WEBRTC_GS_BUCKET, upload_url,
                             args=['-a', 'public-read'],
                             unauthenticated_url=True,
-                            name='upload ' + test_output_name,
+                            name='upload ' + test_artifacts_name,
                             link_name=self._name + ' output_dir')
 
 

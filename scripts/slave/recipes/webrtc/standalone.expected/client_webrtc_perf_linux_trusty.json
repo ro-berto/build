@@ -484,11 +484,11 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[TMP_BASE]/isac_fix_test_test_output_tmp_1"
+      "[TMP_BASE]/isac_fix_test_test_artifacts_tmp_1"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Trusty",
     "infra_step": true,
-    "name": "rmtree [TMP_BASE]/isac_fix_test_test_output_tmp_1"
+    "name": "rmtree [TMP_BASE]/isac_fix_test_test_artifacts_tmp_1"
   },
   {
     "allow_subannotations": true,
@@ -521,8 +521,8 @@
       "--revision=170242",
       "webrtc_perf_tests",
       "--save_worst_frame",
-      "--test_output_dir",
-      "[TMP_BASE]/webrtc_perf_tests_test_output_tmp_2"
+      "--test_artifacts_dir",
+      "[TMP_BASE]/webrtc_perf_tests_test_artifacts_tmp_2"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Trusty",
     "env": {
@@ -539,11 +539,11 @@
       "--json-output",
       "/path/to/tmp/json",
       "listdir",
-      "[TMP_BASE]/webrtc_perf_tests_test_output_tmp_2"
+      "[TMP_BASE]/webrtc_perf_tests_test_artifacts_tmp_2"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Trusty",
     "infra_step": true,
-    "name": "listdir webrtc_perf_tests_test_output",
+    "name": "listdir webrtc_perf_tests_test_artifacts",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_END@listdir@@@"
@@ -557,11 +557,11 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[TMP_BASE]/webrtc_perf_tests_test_output_tmp_2"
+      "[TMP_BASE]/webrtc_perf_tests_test_artifacts_tmp_2"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Trusty",
     "infra_step": true,
-    "name": "rmtree [TMP_BASE]/webrtc_perf_tests_test_output_tmp_2"
+    "name": "rmtree [TMP_BASE]/webrtc_perf_tests_test_artifacts_tmp_2"
   },
   {
     "allow_subannotations": true,
@@ -612,11 +612,11 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[TMP_BASE]/low_bandwidth_audio_test_test_output_tmp_3"
+      "[TMP_BASE]/low_bandwidth_audio_test_test_artifacts_tmp_3"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Trusty",
     "infra_step": true,
-    "name": "rmtree [TMP_BASE]/low_bandwidth_audio_test_test_output_tmp_3"
+    "name": "rmtree [TMP_BASE]/low_bandwidth_audio_test_test_artifacts_tmp_3"
   },
   {
     "name": "$result",
