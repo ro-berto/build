@@ -16,6 +16,7 @@ class V8FYI(Master.Master3):
   project_url = 'http://v8.googlecode.com'
   buildbot_url = 'http://build.chromium.org/p/client.v8.fyi/'
   service_account_file = 'service-account-v8.json'
+  buildbucket_bucket = 'master.client.v8.fyi'
   pubsub_service_account_file = 'service-account-luci-milo.json'
   pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
   name = 'client.v8.fyi'

@@ -18,8 +18,8 @@ class ClientV8Official(Master.Master3a):
   slave_port = 31304
   master_port_alt = 26304
   buildbot_url = 'https://build.chromium.org/p/client.v8.official/'
-  buildbucket_bucket = None
-  service_account_file = None
+  buildbucket_bucket = 'master.client.v8.official'
+  service_account_file = 'service-account-v8.json'
   # To enable outbound pubsub event streaming.
   pubsub_service_account_file = 'service-account-luci-milo.json'
   pubsub_topic = 'projects/luci-milo/topics/public-buildbot'

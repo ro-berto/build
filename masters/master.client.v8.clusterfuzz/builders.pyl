@@ -3,7 +3,9 @@
   "master_port": 21303,
   "master_port_alt": 26303,
   "slave_port": 31303,
+  "service_account_file": "service-account-v8.json",
   "pubsub_service_account_file": "service-account-luci-milo.json",
+  "buildbucket_bucket": "master.client.v8.clusterfuzz",
   "templates": ['../master.client.v8/templates',
                 '../master.chromium/templates'],
 

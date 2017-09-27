@@ -18,8 +18,8 @@ class ClientV8Clusterfuzz(Master.Master3a):
   slave_port = 31303
   master_port_alt = 26303
   buildbot_url = 'https://build.chromium.org/p/client.v8.clusterfuzz/'
-  buildbucket_bucket = None
-  service_account_file = None
+  buildbucket_bucket = 'master.client.v8.clusterfuzz'
+  service_account_file = 'service-account-v8.json'
   # To enable outbound pubsub event streaming.
   pubsub_service_account_file = 'service-account-luci-milo.json'
   pubsub_topic = 'projects/luci-milo/topics/public-buildbot'
