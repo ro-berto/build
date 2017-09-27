@@ -130,6 +130,9 @@ class WebRTCApi(recipe_api.RecipeApi):
       for key, value in self.bot_config.get(
           'swarming_dimensions', {}).iteritems():
         self.m.swarming.set_default_dimension(key, value)
+      if self.bot_config.get('swarming_timeout'):
+        self.m.swarming.default_hard_timeout = self.bot_config['swarming_timeout']
+        self.m.swarming.default_io_timeout = self.bot_config['swarming_timeout']
 
   def checkout(self, **kwargs):
     self._working_dir = self.m.chromium_checkout.get_checkout_dir({})

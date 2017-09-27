@@ -645,7 +645,8 @@ BUILDERS = freeze({
           'gpu': None,
           'os': 'Ubuntu-14.04',
           'id': 'build89-m1',
-        }
+        },
+        'swarming_timeout': 3600,  # 1h
       },
       'Android ASan (swarming)': {
         'recipe_config': 'webrtc_android_asan',
