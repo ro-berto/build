@@ -510,18 +510,31 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "listdir",
-      "[TMP_BASE]/webrtc_perf_tests_test_artifacts_tmp_1"
+      "RECIPE_MODULE[build::zip]/resources/zip.py"
+    ],
+    "cwd": "[BUILDER_CACHE]/Mac_10_11",
+    "name": "zip webrtc_perf_tests_test_artifacts",
+    "stdin": "{\"entries\": [{\"path\": \"[TMP_BASE]/webrtc_perf_tests_test_artifacts_tmp_1\", \"type\": \"dir\"}], \"output\": \"[TMP_BASE]/webrtc_perf_tests_test_artifacts.zip\", \"root\": \"[TMP_BASE]/webrtc_perf_tests_test_artifacts_tmp_1\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "-a",
+      "public-read",
+      "[TMP_BASE]/webrtc_perf_tests_test_artifacts.zip",
+      "gs://chromium-webrtc/client.webrtc.perf/Mac 10.11/webrtc_perf_tests_test_artifacts_170242.zip"
     ],
     "cwd": "[BUILDER_CACHE]/Mac_10_11",
     "infra_step": true,
-    "name": "listdir webrtc_perf_tests_test_artifacts",
-    "stdout": "/path/to/tmp/",
+    "name": "gsutil upload webrtc_perf_tests_test_artifacts",
     "~followup_annotations": [
-      "@@@STEP_LOG_END@listdir@@@"
+      "@@@STEP_LINK@webrtc_perf_tests test artifacts@https://storage.googleapis.com/chromium-webrtc/client.webrtc.perf/Mac 10.11/webrtc_perf_tests_test_artifacts_170242.zip@@@"
     ]
   },
   {
@@ -536,7 +549,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/Mac_10_11",
     "infra_step": true,
-    "name": "rmtree [TMP_BASE]/webrtc_perf_tests_test_artifacts_tmp_1"
+    "name": "rmtree webrtc_perf_tests_test_artifacts"
   },
   {
     "allow_subannotations": true,
@@ -577,20 +590,6 @@
       "CHROME_HEADLESS": "1"
     },
     "name": "low_bandwidth_audio_test"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "rmtree",
-      "[TMP_BASE]/low_bandwidth_audio_test_test_artifacts_tmp_2"
-    ],
-    "cwd": "[BUILDER_CACHE]/Mac_10_11",
-    "infra_step": true,
-    "name": "rmtree [TMP_BASE]/low_bandwidth_audio_test_test_artifacts_tmp_2"
   },
   {
     "name": "$result",

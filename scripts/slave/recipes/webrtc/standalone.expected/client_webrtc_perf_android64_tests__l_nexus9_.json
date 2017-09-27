@@ -434,20 +434,6 @@
     "name": "webrtc_perf_tests"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "rmtree",
-      "[TMP_BASE]/webrtc_perf_tests_test_artifacts_tmp_1"
-    ],
-    "cwd": "[BUILDER_CACHE]/Android64_Tests__L_Nexus9_",
-    "infra_step": true,
-    "name": "rmtree [TMP_BASE]/webrtc_perf_tests_test_artifacts_tmp_1"
-  },
-  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -494,20 +480,6 @@
     "name": "low_bandwidth_audio_test"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "rmtree",
-      "[TMP_BASE]/low_bandwidth_audio_test_test_artifacts_tmp_2"
-    ],
-    "cwd": "[BUILDER_CACHE]/Android64_Tests__L_Nexus9_",
-    "infra_step": true,
-    "name": "rmtree [TMP_BASE]/low_bandwidth_audio_test_test_artifacts_tmp_2"
-  },
-  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -550,20 +522,6 @@
       "CHROME_HEADLESS": "1"
     },
     "name": "video_quality_loopback_test"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "rmtree",
-      "[TMP_BASE]/video_quality_loopback_test_test_artifacts_tmp_3"
-    ],
-    "cwd": "[BUILDER_CACHE]/Android64_Tests__L_Nexus9_",
-    "infra_step": true,
-    "name": "rmtree [TMP_BASE]/video_quality_loopback_test_test_artifacts_tmp_3"
   },
   {
     "cmd": [

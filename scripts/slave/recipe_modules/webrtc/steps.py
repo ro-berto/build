@@ -144,16 +144,19 @@ def generate_tests(api, test_suite, revision):
     for test in sorted(PERF_TESTS):
       tests.append(SwarmingPerfTest(test, api))
   elif test_suite == 'desktop_perf':
-    assert api.c.PERF_ID
     if api.m.platform.is_linux:
       tests.append(PerfTest(
           'isac_fix_test',
           revision=revision,
+          revision_number=api.revision_number,
+          perf_id=api.c.PERF_ID,
           args=[
               '32000', api.m.path['checkout'].join(
                   'resources', 'speech_and_misc_wb.pcm'),
               'isac_speech_and_misc_wb.pcm']))
     tests.append(PerfTest('webrtc_perf_tests', revision=revision,
+                          revision_number=api.revision_number,
+                          perf_id=api.c.PERF_ID,
                           args=['--save_worst_frame'],
                           upload_test_artifacts=True))
 
@@ -164,10 +167,16 @@ def generate_tests(api, test_suite, revision):
                                           'low_bandwidth_audio_test.py')),
           name='low_bandwidth_audio_test',
           args=[api.m.chromium.output_dir, '--remove'],
-          revision=revision))
+          revision=revision,
+          revision_number=api.revision_number,
+          perf_id=api.c.PERF_ID))
   elif test_suite == 'android_perf' and api.c.PERF_ID:
     # TODO(kjellander): Fix the Android ASan bot so we can have an assert here.
-    tests.append(AndroidPerfTest('webrtc_perf_tests', revision=revision))
+    tests.append(AndroidPerfTest(
+        'webrtc_perf_tests',
+        revision=revision,
+        revision_number=api.revision_number,
+        perf_id=api.c.PERF_ID))
 
     tests.append(PerfTest(
         str(api.m.path['checkout'].join('audio', 'test',
@@ -175,7 +184,9 @@ def generate_tests(api, test_suite, revision):
         name='low_bandwidth_audio_test',
         args=[api.m.chromium.output_dir, '--remove',
               '--android', '--adb-path', api.m.adb.adb_path()],
-        revision=revision))
+        revision=revision,
+        revision_number=api.revision_number,
+        perf_id=api.c.PERF_ID))
 
     # Skip video_quality_loopback_test on Android K bot (not supported).
     # TODO(oprypin): Re-enable on Nexus 4 once webrtc:7724 is fixed.
@@ -185,7 +196,9 @@ def generate_tests(api, test_suite, revision):
                                           'video_quality_loopback_test.py')),
           name='video_quality_loopback_test',
           args=['--adb-path', api.m.adb.adb_path(), build_out_dir],
-          revision=revision))
+          revision=revision,
+          revision_number=api.revision_number,
+          perf_id=api.c.PERF_ID))
 
   elif test_suite == 'android':
     for test, extra_args in sorted(ANDROID_DEVICE_TESTS.items() +
@@ -360,46 +373,62 @@ class SwarmingPerfTest(SwarmingIsolatedScriptTest):
 class PerfTest(Test):
   """A WebRTC test that needs consistent hardware performance."""
   def __init__(self, test, name=None, args=None, revision=None,
-               upload_test_artifacts=False, **runtest_kwargs):
+               revision_number=None, perf_id=None, upload_test_artifacts=False,
+               python_mode=False):
     super(PerfTest, self).__init__(test, name)
     assert revision, 'Revision is mandatory for perf tests'
-    self._revision = revision
+    assert revision_number, (
+        'A revision number must be specified for perf tests as they upload '
+        'data to the perf dashboard.')
+    assert perf_id
+
+    self._revision_number = revision_number
+    self._perf_id = perf_id
     self._args = args or []
-    self._runtest_kwargs = runtest_kwargs
-    self._upload_test_artifacts = upload_test_artifacts
+    self._python_mode = python_mode
+
+    self._should_upload_test_artifacts = upload_test_artifacts
+    self._test_artifacts_path = None
+    self._test_artifacts_name = self._name + '_test_artifacts'
+
+    self._perf_config= PERF_CONFIG
+    self._perf_config['r_webrtc_git'] = revision
+
+  def _prepare_test_artifacts_upload(self, api):
+    self._test_artifacts_path = api.m.path.mkdtemp(self._test_artifacts_name)
+    self._args.extend(['--test_artifacts_dir', self._test_artifacts_path])
+
+  def _upload_test_artifacts(self, api):
+    zip_path = api.m.path['tmp_base'].join(self._test_artifacts_name + '.zip')
+    api.m.zip.directory('zip ' + self._test_artifacts_name,
+                        self._test_artifacts_path, zip_path)
+
+    upload_url = '%s/%s/%s_%s.zip' % (
+        api.mastername, api.buildername, self._test_artifacts_name,
+        self._revision_number)
+    api.m.gsutil.upload(zip_path, api.WEBRTC_GS_BUCKET, upload_url,
+                        args=['-a', 'public-read'],
+                        unauthenticated_url=True,
+                        name='upload ' + self._test_artifacts_name,
+                        link_name=self._name + ' test artifacts')
+
+    api.m.file.rmtree('rmtree ' + self._test_artifacts_name,
+                      self._test_artifacts_path)
 
   @composite_step
   def run(self, api, suffix):
-    perf_dashboard_id = self._name
-    assert api.revision_number, (
-        'A revision number must be specified for perf tests as they upload '
-        'data to the perf dashboard.')
-    perf_config = PERF_CONFIG
-    perf_config['r_webrtc_git'] = api.revision
-    test_artifacts_name = self._name + '_test_artifacts'
-    upload_url = '%s/%s/%s_%s.zip' % (
-        api.mastername, api.buildername, test_artifacts_name,
-        api.revision_number)
-    with api.m.tempfile.temp_dir(test_artifacts_name) as test_artifacts_path:
-      if self._upload_test_artifacts:
-        self._args.extend(['--test_artifacts_dir', test_artifacts_path])
+    if self._should_upload_test_artifacts:
+      self._prepare_test_artifacts_upload(api)
+    try:
       api.m.chromium.runtest(
           test=self._test, name=self._name, args=self._args,
           results_url=DASHBOARD_UPLOAD_URL, annotate='graphing', xvfb=True,
-          perf_dashboard_id=perf_dashboard_id, test_type=perf_dashboard_id,
-          revision=api.revision_number, perf_id=api.c.PERF_ID,
-          perf_config=perf_config, **self._runtest_kwargs)
-      if (self._upload_test_artifacts and
-          api.m.file.listdir('listdir ' + test_artifacts_name,
-                             test_artifacts_path)):
-        zip_path = api.m.path['tmp_base'].join(test_artifacts_name + '.zip')
-        api.m.zip.directory('zip ' + test_artifacts_name, test_artifacts_path,
-                            zip_path)
-        api.m.gsutil.upload(zip_path, api.WEBRTC_GS_BUCKET, upload_url,
-                            args=['-a', 'public-read'],
-                            unauthenticated_url=True,
-                            name='upload ' + test_artifacts_name,
-                            link_name=self._name + ' output_dir')
+          perf_dashboard_id=self._name, test_type=self._name,
+          revision=self._revision_number, perf_id=self._perf_id,
+          perf_config=self._perf_config, python_mode=self._python_mode)
+    finally:
+      if self._should_upload_test_artifacts:
+        self._upload_test_artifacts(api)
 
 
 class AndroidJunitTest(Test):
@@ -418,9 +447,12 @@ class AndroidPerfTest(PerfTest):
     is entirely different.
   """
 
-  def __init__(self, test, name=None, revision=None):
-    super(AndroidPerfTest, self).__init__(test, name, args=['--verbose'],
-                                          revision=revision, python_mode=True)
+  def __init__(self, test, name=None, revision=None, revision_number=None,
+               perf_id=None):
+    super(AndroidPerfTest, self).__init__(
+        test, name, args=['--verbose'], revision=revision,
+        revision_number=revision_number, perf_id=perf_id,
+        python_mode=True)
 
   def run(self, api, suffix):
     wrapper_script = api.m.chromium.output_dir.join('bin',

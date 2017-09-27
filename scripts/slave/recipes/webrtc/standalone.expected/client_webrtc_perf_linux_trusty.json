@@ -477,20 +477,6 @@
     "name": "isac_fix_test"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "rmtree",
-      "[TMP_BASE]/isac_fix_test_test_artifacts_tmp_1"
-    ],
-    "cwd": "[BUILDER_CACHE]/Linux_Trusty",
-    "infra_step": true,
-    "name": "rmtree [TMP_BASE]/isac_fix_test_test_artifacts_tmp_1"
-  },
-  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -522,7 +508,7 @@
       "webrtc_perf_tests",
       "--save_worst_frame",
       "--test_artifacts_dir",
-      "[TMP_BASE]/webrtc_perf_tests_test_artifacts_tmp_2"
+      "[TMP_BASE]/webrtc_perf_tests_test_artifacts_tmp_1"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Trusty",
     "env": {
@@ -535,18 +521,31 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "listdir",
-      "[TMP_BASE]/webrtc_perf_tests_test_artifacts_tmp_2"
+      "RECIPE_MODULE[build::zip]/resources/zip.py"
+    ],
+    "cwd": "[BUILDER_CACHE]/Linux_Trusty",
+    "name": "zip webrtc_perf_tests_test_artifacts",
+    "stdin": "{\"entries\": [{\"path\": \"[TMP_BASE]/webrtc_perf_tests_test_artifacts_tmp_1\", \"type\": \"dir\"}], \"output\": \"[TMP_BASE]/webrtc_perf_tests_test_artifacts.zip\", \"root\": \"[TMP_BASE]/webrtc_perf_tests_test_artifacts_tmp_1\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "-a",
+      "public-read",
+      "[TMP_BASE]/webrtc_perf_tests_test_artifacts.zip",
+      "gs://chromium-webrtc/client.webrtc.perf/Linux Trusty/webrtc_perf_tests_test_artifacts_170242.zip"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Trusty",
     "infra_step": true,
-    "name": "listdir webrtc_perf_tests_test_artifacts",
-    "stdout": "/path/to/tmp/",
+    "name": "gsutil upload webrtc_perf_tests_test_artifacts",
     "~followup_annotations": [
-      "@@@STEP_LOG_END@listdir@@@"
+      "@@@STEP_LINK@webrtc_perf_tests test artifacts@https://storage.googleapis.com/chromium-webrtc/client.webrtc.perf/Linux Trusty/webrtc_perf_tests_test_artifacts_170242.zip@@@"
     ]
   },
   {
@@ -557,11 +556,11 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[TMP_BASE]/webrtc_perf_tests_test_artifacts_tmp_2"
+      "[TMP_BASE]/webrtc_perf_tests_test_artifacts_tmp_1"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Trusty",
     "infra_step": true,
-    "name": "rmtree [TMP_BASE]/webrtc_perf_tests_test_artifacts_tmp_2"
+    "name": "rmtree webrtc_perf_tests_test_artifacts"
   },
   {
     "allow_subannotations": true,
@@ -603,20 +602,6 @@
       "CHROME_HEADLESS": "1"
     },
     "name": "low_bandwidth_audio_test"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "rmtree",
-      "[TMP_BASE]/low_bandwidth_audio_test_test_artifacts_tmp_3"
-    ],
-    "cwd": "[BUILDER_CACHE]/Linux_Trusty",
-    "infra_step": true,
-    "name": "rmtree [TMP_BASE]/low_bandwidth_audio_test_test_artifacts_tmp_3"
   },
   {
     "name": "$result",
