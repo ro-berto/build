@@ -1,7 +1,6 @@
 DEPS = [
   'archive',
   'build',
-  'buildbucket',
   'depot_tools/bot_update',
   'chromium',
   'commit_position',
@@ -26,7 +25,7 @@ DEPS = [
   'recipe_engine/tempfile',
   'recipe_engine/time',
   'recipe_engine/url',
-  'service_account',
+  'trigger',
   'depot_tools/tryserver',
 ]
 

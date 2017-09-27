@@ -578,21 +578,44 @@
     ]
   },
   {
-    "cmd": [
-      "/opt/infra-tools/buildbucket",
-      "put",
-      "--host",
-      "cr-buildbucket.appspot.com",
-      "--service-account-json",
-      "/creds/service_accounts/service-account-v8-bot.json",
-      "{\"bucket\": \"master.tryserver.v8\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"v8_linux_rel_ng_triggered\\\", \\\"properties\\\": {\\\"category\\\": \\\"cq\\\", \\\"master\\\": \\\"tryserver.v8\\\", \\\"parent_build_environment\\\": {\\\"GYP_DEFINES\\\": \\\"target_arch=x64 cool_flag=a=1\\\"}, \\\"parent_got_revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"parent_got_revision_cp\\\": \\\"refs/heads/master@{#50110}\\\", \\\"parent_got_swarming_client_revision\\\": \\\"e4fee0b18f8163be6097c9c571640038896debc4\\\", \\\"patch_gerrit_url\\\": \\\"https://chromium-review.googlesource.com\\\", \\\"patch_issue\\\": \\\"456789\\\", \\\"patch_project\\\": \\\"v8\\\", \\\"patch_ref\\\": \\\"refs/changes/89/456789/12\\\", \\\"patch_repository_url\\\": \\\"https://chromium.googlesource.com/v8/v8\\\", \\\"patch_set\\\": \\\"12\\\", \\\"patch_storage\\\": \\\"gerrit\\\", \\\"reason\\\": \\\"CQ\\\", \\\"requester\\\": \\\"commit-bot@chromium.org\\\", \\\"revision\\\": \\\"12345\\\", \\\"swarm_hashes\\\": {\\\"benchmarks\\\": \\\"[dummy hash for benchmarks]\\\", \\\"bot_default\\\": \\\"[dummy hash for bot_default]\\\", \\\"mjsunit\\\": \\\"[dummy hash for mjsunit]\\\", \\\"mozilla\\\": \\\"[dummy hash for mozilla]\\\", \\\"optimize_for_size\\\": \\\"[dummy hash for optimize_for_size]\\\", \\\"run-gcmole\\\": \\\"[dummy hash for run-gcmole]\\\", \\\"test262\\\": \\\"[dummy hash for test262]\\\"}}}\", \"tags\": [\"builder:v8_linux_rel_ng_triggered\", \"master:tryserver.v8\", \"parent_buildername:v8_linux_rel_ng\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
-    ],
+    "cmd": [],
     "name": "trigger",
-    "stdout": "/path/to/tmp/json",
+    "trigger_specs": [
+      {
+        "builder_name": "v8_linux_rel_ng_triggered",
+        "properties": {
+          "category": "cq",
+          "master": "tryserver.v8",
+          "parent_build_environment": {
+            "GYP_DEFINES": "target_arch=x64 cool_flag=a=1"
+          },
+          "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
+          "parent_got_revision_cp": "refs/heads/master@{#50110}",
+          "parent_got_swarming_client_revision": "e4fee0b18f8163be6097c9c571640038896debc4",
+          "patch_gerrit_url": "https://chromium-review.googlesource.com",
+          "patch_issue": "456789",
+          "patch_project": "v8",
+          "patch_ref": "refs/changes/89/456789/12",
+          "patch_repository_url": "https://chromium.googlesource.com/v8/v8",
+          "patch_set": "12",
+          "patch_storage": "gerrit",
+          "reason": "CQ",
+          "requester": "commit-bot@chromium.org",
+          "revision": "12345",
+          "swarm_hashes": {
+            "benchmarks": "[dummy hash for benchmarks]",
+            "bot_default": "[dummy hash for bot_default]",
+            "mjsunit": "[dummy hash for mjsunit]",
+            "mozilla": "[dummy hash for mozilla]",
+            "optimize_for_size": "[dummy hash for optimize_for_size]",
+            "run-gcmole": "[dummy hash for run-gcmole]",
+            "test262": "[dummy hash for test262]"
+          }
+        }
+      }
+    ],
     "~followup_annotations": [
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@"
+      "@@@STEP_TEXT@v8_linux_rel_ng_triggered@@@"
     ]
   },
   {

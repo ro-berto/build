@@ -511,38 +511,35 @@
     "name": "package build"
   },
   {
-    "cmd": [
-      "/opt/infra-tools/buildbucket",
-      "put",
-      "--host",
-      "cr-buildbucket.appspot.com",
-      "--service-account-json",
-      "/creds/service_accounts/service-account-v8-bot.json"
-    ],
-    "name": "trigger",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@"
-    ]
+    "cmd": [],
+    "name": "trigger"
   },
   {
-    "cmd": [
-      "/opt/infra-tools/buildbucket",
-      "put",
-      "--host",
-      "cr-buildbucket.appspot.com",
-      "--service-account-json",
-      "/creds/service_accounts/service-account-v8-bot.json",
-      "{\"bucket\": \"master.internal.client.v8\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"v8_trigger_proxy\\\", \\\"changes\\\": [{\\\"author\\\": {\\\"email\\\": \\\"trigger_proxy\\\"}, \\\"revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\"}], \\\"properties\\\": {\\\"archive\\\": \\\"gs://chromium-v8/v8-linux64-rel-cm\\\", \\\"parent_build_environment\\\": {\\\"GYP_DEFINES\\\": \\\"target_arch=x64 cool_flag=a=1\\\"}, \\\"parent_got_revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"parent_got_revision_cp\\\": \\\"refs/heads/master@{#50110}\\\", \\\"revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\"}}\", \"tags\": [\"builder:v8_trigger_proxy\", \"master:internal.client.v8\", \"parent_buildername:V8 Linux64 - concurrent marking - builder\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
+    "cmd": [],
+    "name": "trigger (2)",
+    "trigger_specs": [
+      {
+        "bucket": "master.internal.client.v8",
+        "buildbot_changes": [
+          {
+            "author": "trigger_proxy",
+            "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c"
+          }
+        ],
+        "builder_name": "v8_trigger_proxy",
+        "properties": {
+          "archive": "gs://chromium-v8/v8-linux64-rel-cm",
+          "parent_build_environment": {
+            "GYP_DEFINES": "target_arch=x64 cool_flag=a=1"
+          },
+          "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
+          "parent_got_revision_cp": "refs/heads/master@{#50110}",
+          "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c"
+        }
+      }
     ],
-    "name": "trigger proxy",
-    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@"
+      "@@@STEP_TEXT@v8_trigger_proxy@@@"
     ]
   },
   {
