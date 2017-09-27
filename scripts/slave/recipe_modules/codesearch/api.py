@@ -15,6 +15,16 @@ class CodesearchApi(recipe_api.RecipeApi):
       'CHECKOUT_PATH': self.m.path['checkout'],
     }
 
+  def cleanup_old_generated(self, age_days=7):
+    """Clean up old generated files.
+
+    Args:
+      age_days: Ages in days on the form +days, e.g., '+30'.
+    """
+    self.m.step('delete old generated files',
+                ['find', self.m.path['checkout'].join('out'),
+                 '-mtime', ('+%d' % age_days), '-delete'])
+
   def generate_compilation_database(self, targets, platform, mb_config_path=None):
     mastername = self.m.properties['mastername']
     buildername = self.m.properties['buildername']

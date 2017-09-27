@@ -86,6 +86,8 @@ def RunSteps(api, buildername):
 
   result = api.codesearch.generate_compilation_database(targets, platform)
 
+  api.codesearch.cleanup_old_generated()
+
   try:
     api.chromium.compile(targets, use_goma_module=True)
   except api.step.StepFailure as _: # pragma: no cover

@@ -451,6 +451,16 @@
     ]
   },
   {
+    "cmd": [
+      "find",
+      "[START_DIR]/src/out",
+      "-mtime",
+      "+7",
+      "-delete"
+    ],
+    "name": "delete old generated files"
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",

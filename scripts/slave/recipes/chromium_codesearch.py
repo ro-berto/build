@@ -166,6 +166,10 @@ def RunSteps(api):
   result = api.codesearch.generate_compilation_database(
       targets, platform, mb_config_path=mb_config_path)
 
+  # Cleans up generated files. This is to prevent old generated files from
+  # being left in the out directory.
+  api.codesearch.cleanup_old_generated()
+
   try:
     api.chromium.compile(targets, use_goma_module=True)
   except api.step.StepFailure: # pragma: no cover
