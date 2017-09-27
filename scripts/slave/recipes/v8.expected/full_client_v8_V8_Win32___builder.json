@@ -646,21 +646,29 @@
     "name": "package build"
   },
   {
-    "cmd": [
-      "C:\\infra-tools\\buildbucket.exe",
-      "put",
-      "--host",
-      "cr-buildbucket.appspot.com",
-      "--service-account-json",
-      "C:\\creds\\service_accounts\\service-account-v8-bot.json",
-      "{\"bucket\": \"master.client.v8\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"V8 Win32\\\", \\\"properties\\\": {\\\"parent_build_environment\\\": {\\\"GYP_DEFINES\\\": \\\"target_arch=x64 cool_flag=a=1\\\"}, \\\"parent_got_revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"parent_got_revision_cp\\\": \\\"refs/heads/master@{#50110}\\\", \\\"parent_got_swarming_client_revision\\\": \\\"e4fee0b18f8163be6097c9c571640038896debc4\\\", \\\"revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"swarm_hashes\\\": {\\\"bot_default\\\": \\\"[dummy hash for bot_default]\\\", \\\"mozilla\\\": \\\"[dummy hash for mozilla]\\\", \\\"test262\\\": \\\"[dummy hash for test262]\\\"}}}\", \"tags\": [\"builder:V8 Win32\", \"master:client.v8\", \"parent_buildername:V8 Win32 - builder\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
-    ],
+    "cmd": [],
     "name": "trigger",
-    "stdout": "/path/to/tmp/json",
+    "trigger_specs": [
+      {
+        "builder_name": "V8 Win32",
+        "properties": {
+          "parent_build_environment": {
+            "GYP_DEFINES": "target_arch=x64 cool_flag=a=1"
+          },
+          "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
+          "parent_got_revision_cp": "refs/heads/master@{#50110}",
+          "parent_got_swarming_client_revision": "e4fee0b18f8163be6097c9c571640038896debc4",
+          "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
+          "swarm_hashes": {
+            "bot_default": "[dummy hash for bot_default]",
+            "mozilla": "[dummy hash for mozilla]",
+            "test262": "[dummy hash for test262]"
+          }
+        }
+      }
+    ],
     "~followup_annotations": [
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@"
+      "@@@STEP_TEXT@V8 Win32@@@"
     ]
   },
   {
