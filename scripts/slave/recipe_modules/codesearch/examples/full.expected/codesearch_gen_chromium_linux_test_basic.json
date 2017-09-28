@@ -426,6 +426,8 @@
       "[START_DIR]/src/out",
       "-mtime",
       "+7",
+      "-type",
+      "f",
       "-delete"
     ],
     "name": "delete old generated files"

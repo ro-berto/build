@@ -23,7 +23,7 @@ class CodesearchApi(recipe_api.RecipeApi):
     """
     self.m.step('delete old generated files',
                 ['find', self.m.path['checkout'].join('out'),
-                 '-mtime', ('+%d' % age_days), '-delete'])
+                 '-mtime', ('+%d' % age_days), '-type', 'f', '-delete'])
 
   def generate_compilation_database(self, targets, platform, mb_config_path=None):
     mastername = self.m.properties['mastername']
