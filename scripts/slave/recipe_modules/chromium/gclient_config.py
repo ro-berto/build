@@ -48,6 +48,9 @@ def chromium_bare(c):
   p['v8/v8'] = ('src/v8', 'HEAD')
   p['webrtc'] = ('src/third_party/webrtc', 'HEAD')
 
+  p = c.repo_path_map
+  p['https://webrtc.googlesource.com/src'] = ('src/third_party/webrtc', 'HEAD')
+
 @CONFIG_CTX(includes=['chromium_bare'])
 def chromium_empty(c):
   c.solutions[0].deps_file = ''  # pragma: no cover
