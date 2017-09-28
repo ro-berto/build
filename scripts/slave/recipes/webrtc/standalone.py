@@ -35,6 +35,8 @@ def RunSteps(api):
     return
 
   webrtc.configure_swarming()
+  if api.platform.is_win:
+    api.chromium.taskkill()
 
   webrtc.checkout()
   webrtc.cleanup()
