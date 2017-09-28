@@ -82,7 +82,12 @@ def RunSteps(api):
   build_args = ['-m%s' % mode, '--arch=ia32', 'dart2js_bot']
   if 'unittest' in options:
     build_args.append('patched_dart2js_sdk')
-  isolate_hash = api.dart.build(build_args, 'dart_tests' if 'only' not in options else None)
+  isolate = 'dart_tests'
+  if 'only' in options:
+    isolate = None
+  elif 'hostchecked' in options:
+    isolate = 'dart2js_d8_hostchecked_tests'
+  isolate_hash = api.dart.build(build_args, isolate)
 
   with api.step.defer_results():
     tasks = []
@@ -122,22 +127,23 @@ def test_runtime(api, system, runtime, options, mode, tasks, isolate_hash):
 
   test_args = ['-m%s' % mode, '-aia32', '-cdart2js',
                '--dart2js-batch', '--reset-browser-configuration',
-               '--report', '--time', '--use-sdk', '--progress=buildbot',
+               '--report', '--time', '--progress=buildbot',
                '--write-result-log', '-v', '-r%s' % runtime]
-  if system in ['win7', 'win8', 'win10']:
-    test_args.append('--builder-tag=%s' % system)
-
-  tests = ['--exclude-suite=observatory_ui,service,co19']
-  tasks.append(api.dart.shard('dart2js_tests', isolate_hash, command + test_args + tests))
-
-  tests = ['co19']
-  tasks.append(api.dart.shard('dart2js_co19_tests', isolate_hash, command + test_args + tests))
-
-  test_args.remove('--use-sdk')
-  test_args.extend(['--write-debug-log', '--write-test-outcome-log'])
   for option in options:
     if all_options[option] != '':
       test_args.append(all_options[option])
+  use_sdk = [] if 'hostchecked' in options else ['--use-sdk']
+  if system in ['win7', 'win8', 'win10']:
+    test_args.append('--builder-tag=%s' % system)
+  shard_args = command + test_args + use_sdk
+
+  tests = ['--exclude-suite=observatory_ui,service,co19']
+  tasks.append(api.dart.shard('dart2js_tests', isolate_hash, shard_args + tests))
+
+  tests = ['co19']
+  tasks.append(api.dart.shard('dart2js_co19_tests', isolate_hash, shard_args + tests))
+
+  test_args.extend(['--write-debug-log', '--write-test-outcome-log'])
 
   if runtime in ['ie10', 'ie11']:
     test_specs = [{'name': 'dart2js-%s tests' % runtime,
