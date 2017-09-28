@@ -160,6 +160,8 @@ processes = [
     'iexplore.exe',
     #'ieuser.exe',
     'acrord32.exe',
+    'pesq.exe',
+    'PolqaOem64.exe',
 
     # The JIT debugger may start when devenv.exe crashes.
     'vsjitdebugger.exe',
