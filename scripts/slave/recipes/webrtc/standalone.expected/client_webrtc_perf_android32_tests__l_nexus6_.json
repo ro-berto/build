@@ -424,7 +424,12 @@
       "--run-python-script",
       "--revision=170242",
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/out/Release/bin/run_webrtc_perf_tests",
-      "--verbose"
+      "--save_worst_frame",
+      "--verbose",
+      "--gs-test-artifacts-bucket",
+      "chromium-webrtc",
+      "--json-test-output",
+      "/path/to/tmp/json"
     ],
     "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_",
     "env": {
@@ -432,6 +437,31 @@
       "CHROME_HEADLESS": "1"
     },
     "name": "webrtc_perf_tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/build/android/pylib/results/presentation/test_results_presentation.py",
+      "--json-file",
+      "{}",
+      "--test-name",
+      "webrtc_perf_tests",
+      "--builder-name",
+      "Android32 Tests (L Nexus6)",
+      "--build-number",
+      "1337",
+      "--cs-base-url",
+      "http://cs.chromium.org",
+      "--bucket",
+      "chromium-result-details"
+    ],
+    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_",
+    "name": "webrtc_perf_tests: generate result details",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LINK@result_details@https://storage.cloud.google.com/chromium-result-details@@@"
+    ]
   },
   {
     "allow_subannotations": true,

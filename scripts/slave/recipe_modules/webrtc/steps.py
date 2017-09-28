@@ -174,9 +174,11 @@ def generate_tests(api, test_suite, revision):
     # TODO(kjellander): Fix the Android ASan bot so we can have an assert here.
     tests.append(AndroidPerfTest(
         'webrtc_perf_tests',
+        args=['--save_worst_frame'],
         revision=revision,
         revision_number=api.revision_number,
-        perf_id=api.c.PERF_ID))
+        perf_id=api.c.PERF_ID,
+        upload_test_artifacts=True))
 
     tests.append(PerfTest(
         str(api.m.path['checkout'].join('audio', 'test',
@@ -447,12 +449,28 @@ class AndroidPerfTest(PerfTest):
     is entirely different.
   """
 
-  def __init__(self, test, name=None, revision=None, revision_number=None,
-               perf_id=None):
+  def __init__(self, test, name=None, args=None, revision=None,
+               revision_number=None, perf_id=None, upload_test_artifacts=False):
+    args = (args or []) + ['--verbose']
     super(AndroidPerfTest, self).__init__(
-        test, name, args=['--verbose'], revision=revision,
+        test, name, args=args, revision=revision,
         revision_number=revision_number, perf_id=perf_id,
-        python_mode=True)
+        upload_test_artifacts=upload_test_artifacts, python_mode=True)
+
+  def _prepare_test_artifacts_upload(self, api):
+    gtest_results_file = api.m.test_utils.gtest_results(add_json_log=False)
+    self._args.extend(['--gs-test-artifacts-bucket', api.WEBRTC_GS_BUCKET,
+                       '--json-test-output', gtest_results_file])
+
+  def _upload_test_artifacts(self, api):
+    step_result = api.m.step.active_result
+    if (hasattr(step_result, 'test_utils') and
+        hasattr(step_result.test_utils, 'gtest_results')):
+      json_results = api.m.json.input(step_result.test_utils.gtest_results.raw)
+      details_link = api.m.chromium_android.create_result_details(
+          self._name, json_results)
+      api.m.step.active_result.presentation.links['result_details'] = (
+          details_link)
 
   def run(self, api, suffix):
     wrapper_script = api.m.chromium.output_dir.join('bin',
