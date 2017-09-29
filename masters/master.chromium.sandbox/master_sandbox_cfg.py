@@ -28,13 +28,13 @@ def Update(_config, active_master, c):
                             branch='master',
                             treeStableTimer=60,
                             builderNames=[
-          'Linux Builder',
-          #'Linux Builder (dbg)(32)',
-          #'Linux Builder (dbg)',
-          #'Cast Linux',
-          #'Cast Audio Linux',
-          'Deterministic Linux',
-          'Fuchsia Compile',
+          'Linux Builder SANDBOX',
+          #'Linux Builder (dbg)(32) SANDBOX',
+          #'Linux Builder (dbg) SANDBOX',
+          #'Cast Linux SANDBOX',
+          #'Cast Audio Linux SANDBOX',
+          'Deterministic Linux SANDBOX',
+          'Fuchsia Compile SANDBOX',
       ]),
   ])
 
@@ -42,17 +42,17 @@ def Update(_config, active_master, c):
   # recipe (str): optional (default: 'chromium'), the recipe to use for
   #   this builder.
   specs = [
-    {'name': 'Linux Builder'},
-    {'name': 'Linux Tests'},   # Triggered by above builder.
-    # {'name': 'Linux Builder (dbg)(32)'},
-    # {'name': 'Linux Tests (dbg)(1)(32)'},
-    # {'name': 'Linux Builder (dbg)'},
-    # {'name': 'Linux Tests (dbg)(1)'},
-    # {'name': 'Cast Linux'},
-    # {'name': 'Cast Audio Linux'},
-    {'name': 'Deterministic Linux',
+    {'name': 'Linux Builder SANDBOX'},
+    {'name': 'Linux Tests SANDBOX'},   # Triggered by above builder.
+    # {'name': 'Linux Builder (dbg)(32) SANDBOX'},
+    # {'name': 'Linux Tests (dbg)(1)(32) SANDBOX'},
+    # {'name': 'Linux Builder (dbg) SANDBOX'},
+    # {'name': 'Linux Tests (dbg)(1) SANDBOX'},
+    # {'name': 'Cast Linux SANDBOX'},
+    # {'name': 'Cast Audio Linux SANDBOX'},
+    {'name': 'Deterministic Linux SANDBOX',
      'recipe': 'swarming/deterministic_build'},
-    {'name': 'Fuchsia Compile'},
+    {'name': 'Fuchsia Compile SANDBOX'},
   ]
 
   c['builders'].extend([
