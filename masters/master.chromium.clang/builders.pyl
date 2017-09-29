@@ -1,0 +1,90 @@
+# Copyright 2017 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+#
+# This is the configuration file for the chromium.clang buildbot master.
+#
+# It is written using what we call the "builders.pyl" file format. For more
+# information on the format, see
+# https://chromium.googlesource.com/infra/infra/+/master/doc/users/services/buildbot/builders.pyl.md
+#
+
+{
+  "master_base_class": "Master1a",
+  "master_port": 21100,
+  "master_port_alt": 26000,
+  "bot_port": 31100,
+
+  "pubsub_service_account_file": "service-account-luci-milo.json",
+  "templates": ["../master.chromium/templates"],
+
+  "builder_defaults": {
+    "recipe": "chromium",
+    "remote_run_repository": "https://chromium.googlesource.com/chromium/tools/build.git",
+    "scheduler": "chromium_src_commits",
+    "use_remote_run": True,
+  },
+
+  "mixins": {
+    "trusty": {
+      "os": "linux",
+      "version": "trusty",
+    },
+  },
+
+  "builders": {
+    "ToTAndroid": {
+      "mixins": ["trusty"],
+      "bot": "slave144-c1",
+    },
+
+    # TODO(crbug.com/765420): need a new bot for this; slave149-c1 is in use by
+    # chromium.infra.codesearch.
+    #"ToTAndroid64": {
+    #  "mixins": ["trusty"],
+    #  "bot": "slave149-c1",
+    #},
+
+    "ToTLinux": {
+      "mixins": ["trusty"],
+      "bot": "slave162-c1",
+    },
+
+    "ToTLinux (dbg)": {
+      "mixins": ["trusty"],
+      "bot": "slave164-c1",
+    },
+
+    "ToTLinuxAsan": {
+      "mixins": ["trusty"],
+      "bot": "slave163-c1",
+    },
+
+    "ToTLinuxLLD": {
+      "mixins": ["trusty"],
+      "bot": "slave165-c1",
+    },
+
+    "ToTLinuxMsan": {
+      "mixins": ["trusty"],
+      "bot": "slave166-c1",
+    },
+
+    "ToTLinuxThinLTO": {
+      "mixins": ["trusty"],
+      "bot": "slave167-c1",
+    },
+
+    "ToTLinuxUBSanVptr": {
+      "mixins": ["trusty"],
+      "bot": "slave168-c1",
+    },
+  },
+
+  "schedulers": {
+    "chromium_src_commits": {
+      "type": "git_poller",
+      "git_repo_url": "https://chromium.googlesource.com/chromium/src.git",
+    },
+  },
+}

@@ -9,6 +9,7 @@ from . import chromium_android
 from . import chromium_android_fyi
 from . import chromium_chrome
 from . import chromium_chromiumos
+from . import chromium_clang
 from . import chromium_fyi
 from . import chromium_goma
 from . import chromium_gpu
@@ -35,6 +36,7 @@ BUILDERS = freeze({
   'chromium.android.fyi': chromium_android_fyi.SPEC,
   'chromium.chrome': chromium_chrome.SPEC,
   'chromium.chromiumos': chromium_chromiumos.SPEC,
+  'chromium.clang': chromium_clang.SPEC,
   'chromium.fyi': chromium_fyi.SPEC,
   'chromium.goma': chromium_goma.SPEC,
   'chromium.gpu': chromium_gpu.SPEC,
