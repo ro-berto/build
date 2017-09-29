@@ -53,6 +53,8 @@
     "build245-m2", 
     "build323-m2", 
     "build326-m2", 
-    "build333-m2"
+    "build333-m2", 
+    "cros-beefy466-c2", 
+    "cros-beefy467-c2"
   ]
 }
