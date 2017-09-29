@@ -41,14 +41,6 @@ class WebRTCApi(recipe_api.RecipeApi):
     return self.bot_config.get('triggers')
 
   @property
-  def should_build_android_archive(self):
-    return self.bot_config.get('build_android_archive')
-
-  @property
-  def should_upload_apprtcmobile(self):
-    return self.bot_config.get('archive_apprtc')
-
-  @property
   def should_test_android_studio_project_generation(self):
     return self.bot_config.get('test_android_studio_project_generation')
 
@@ -198,6 +190,12 @@ class WebRTCApi(recipe_api.RecipeApi):
 
           for test in tests:
             test.run(self, suffix='')
+
+          # Build + upload archives while waiting for swarming tasks to finish.
+          if self.bot_config.get('build_android_archive'):
+            self.build_android_archive()
+          if self.bot_config.get('archive_apprtc'):
+            self.package_apprtcmobile()
 
           for test in tests:
             test.post_run(self.m, suffix='')

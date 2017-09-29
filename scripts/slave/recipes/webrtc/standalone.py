@@ -50,10 +50,6 @@ def RunSteps(api):
 
   if webrtc.should_upload_build:
     webrtc.package_build()
-  if webrtc.should_upload_apprtcmobile:
-    webrtc.package_apprtcmobile()
-  if webrtc.should_build_android_archive:
-    webrtc.build_android_archive()
   if webrtc.should_download_build:
     webrtc.extract_build()
 

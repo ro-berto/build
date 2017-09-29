@@ -579,35 +579,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::zip]/resources/zip.py"
-    ],
-    "name": "AppRTCMobile zip archive",
-    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/Android32__M_Nexus5X__dbg_/src/out/Debug/apks/AppRTCMobile.apk\", \"type\": \"file\"}], \"output\": \"[START_DIR]/AppRTCMobile_apk.zip\", \"root\": \"[BUILDER_CACHE]/Android32__M_Nexus5X__dbg_/src/out/Debug/apks\"}"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "cp",
-      "-a",
-      "public-read",
-      "[START_DIR]/AppRTCMobile_apk.zip",
-      "gs://chromium-webrtc/client.webrtc/Android32 (M Nexus5X)(dbg)/AppRTCMobile_apk_170242.zip"
-    ],
-    "infra_step": true,
-    "name": "gsutil upload",
-    "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.googleapis.com/chromium-webrtc/client.webrtc/Android32 (M Nexus5X)(dbg)/AppRTCMobile_apk_170242.zip@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[BUILDER_CACHE]/Android32__M_Nexus5X__dbg_/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
@@ -2214,6 +2185,37 @@
       "PATH": "[BUILDER_CACHE]/Android32__M_Nexus5X__dbg_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32__M_Nexus5X__dbg_/src/build/android:<PATH>"
     },
     "name": "android_junit_tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::zip]/resources/zip.py"
+    ],
+    "cwd": "[BUILDER_CACHE]/Android32__M_Nexus5X__dbg_",
+    "name": "AppRTCMobile zip archive",
+    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/Android32__M_Nexus5X__dbg_/src/out/Debug/apks/AppRTCMobile.apk\", \"type\": \"file\"}], \"output\": \"[START_DIR]/AppRTCMobile_apk.zip\", \"root\": \"[BUILDER_CACHE]/Android32__M_Nexus5X__dbg_/src/out/Debug/apks\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "-a",
+      "public-read",
+      "[START_DIR]/AppRTCMobile_apk.zip",
+      "gs://chromium-webrtc/client.webrtc/Android32 (M Nexus5X)(dbg)/AppRTCMobile_apk_170242.zip"
+    ],
+    "cwd": "[BUILDER_CACHE]/Android32__M_Nexus5X__dbg_",
+    "infra_step": true,
+    "name": "gsutil upload",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.googleapis.com/chromium-webrtc/client.webrtc/Android32 (M Nexus5X)(dbg)/AppRTCMobile_apk_170242.zip@@@"
+    ]
   },
   {
     "allow_subannotations": true,
