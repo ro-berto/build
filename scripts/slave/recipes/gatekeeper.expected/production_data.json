@@ -86,6 +86,18 @@
       "@@@STEP_LOG_LINE@json.output@    \"status-url\": \"https://chromium-status.appspot.com\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"track-revisions\": true@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"chromium-sandbox\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"build-db\": \"chromium-sandbox.json\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"masters\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/chromium.sandbox\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"*\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      ]@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"open-tree\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"revision-properties\": \"got_revision_cp\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"set-status\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"track-revisions\": true@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"chromium.perf\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"masters\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/chromium.perf\": [@@@",
@@ -280,27 +292,19 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/gatekeeper_ng.py",
       "--json",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/v8/gatekeeper_v8_tree_closers.json",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/gatekeeper.json",
       "--email-app-secret-file",
       "/creds/gatekeeper/mailer_password",
       "--milo-creds",
       "/creds/service_accounts/service-account-gatekeeper.json",
-      "--status-url",
-      "https://v8-status.appspot.com",
-      "--set-status",
-      "--open-tree",
       "--track-revisions",
       "--revision-properties",
       "got_revision_cp",
       "--build-db",
-      "v8_tree_closers_build_db.json",
-      "--password-file",
-      "/creds/gatekeeper/v8_status_password",
-      "https://build.chromium.org/p/client.v8.fyi",
-      "https://build.chromium.org/p/client.v8",
-      "https://build.chromium.org/p/client.v8.ports"
+      "chromium-sandbox.json",
+      "https://build.chromium.org/p/chromium.sandbox"
     ],
-    "name": "gatekeeper: v8-tree-closers"
+    "name": "gatekeeper: chromium-sandbox"
   },
   {
     "cmd": [
@@ -346,13 +350,9 @@
       "/creds/gatekeeper/mailer_password",
       "--milo-creds",
       "/creds/service_accounts/service-account-gatekeeper.json",
-      "https://build.chromium.org/p/client.boringssl",
-      "https://build.chromium.org/p/chromium.fyi",
-      "https://build.chromium.org/p/client.crashpad",
-      "https://build.chromium.org/p/client.catapult",
-      "https://build.chromium.org/p/chromium.lkgr"
+      "https://build.chromium.org/p/chromium.perf"
     ],
-    "name": "gatekeeper: non-closers"
+    "name": "gatekeeper: chromium.perf"
   },
   {
     "cmd": [
@@ -364,14 +364,27 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/gatekeeper_ng.py",
       "--json",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/gatekeeper.json",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/v8/gatekeeper_v8_tree_closers.json",
       "--email-app-secret-file",
       "/creds/gatekeeper/mailer_password",
       "--milo-creds",
       "/creds/service_accounts/service-account-gatekeeper.json",
-      "https://build.chromium.org/p/chromium.perf"
+      "--status-url",
+      "https://v8-status.appspot.com",
+      "--set-status",
+      "--open-tree",
+      "--track-revisions",
+      "--revision-properties",
+      "got_revision_cp",
+      "--build-db",
+      "v8_tree_closers_build_db.json",
+      "--password-file",
+      "/creds/gatekeeper/v8_status_password",
+      "https://build.chromium.org/p/client.v8.fyi",
+      "https://build.chromium.org/p/client.v8",
+      "https://build.chromium.org/p/client.v8.ports"
     ],
-    "name": "gatekeeper: chromium.perf"
+    "name": "gatekeeper: v8-tree-closers"
   },
   {
     "cmd": [
@@ -545,6 +558,29 @@
       "https://build.chromium.org/p/chromium.tools.build"
     ],
     "name": "gatekeeper: build"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/gatekeeper_ng.py",
+      "--json",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/gatekeeper.json",
+      "--email-app-secret-file",
+      "/creds/gatekeeper/mailer_password",
+      "--milo-creds",
+      "/creds/service_accounts/service-account-gatekeeper.json",
+      "https://build.chromium.org/p/client.boringssl",
+      "https://build.chromium.org/p/chromium.fyi",
+      "https://build.chromium.org/p/client.crashpad",
+      "https://build.chromium.org/p/client.catapult",
+      "https://build.chromium.org/p/chromium.lkgr"
+    ],
+    "name": "gatekeeper: non-closers"
   },
   {
     "cmd": [
