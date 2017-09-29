@@ -16,6 +16,9 @@
       "arm-generic-paladin": [
         "cros-beefy425-c2"
       ], 
+      "chromeos-infra-go": [
+        "cros-beefy466-c2"
+      ], 
       "chromiumos-sdk": [
         "build112-m2"
       ], 
@@ -54,7 +57,6 @@
     "build323-m2", 
     "build326-m2", 
     "build333-m2", 
-    "cros-beefy466-c2", 
     "cros-beefy467-c2"
   ]
 }
