@@ -12,6 +12,7 @@ DEPS = [
   'depot_tools/git',
   'depot_tools/gsutil',
   'depot_tools/tryserver',
+  'goma',
   'isolate',
   'recipe_engine/context',
   'recipe_engine/file',

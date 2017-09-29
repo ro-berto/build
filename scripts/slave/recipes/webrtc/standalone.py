@@ -52,6 +52,8 @@ def RunSteps(api):
     webrtc.package_build()
   if webrtc.should_upload_apprtcmobile:
     webrtc.package_apprtcmobile()
+  if webrtc.should_build_android_archive:
+    webrtc.build_android_archive()
   if webrtc.should_download_build:
     webrtc.extract_build()
 
@@ -70,7 +72,7 @@ def GenTests(api):
 
   def generate_builder(mastername, buildername, revision,
                        parent_got_revision=None, failing_test=None,
-                       suffix=None, gerrit=False):
+                       suffix=None, gerrit=False, fail_android_archive=False):
     suffix = suffix or ''
     bot_config = builders[mastername]['builders'][buildername]
     bot_type = bot_config.get('bot_type', 'builder_tester')
@@ -106,6 +108,9 @@ def GenTests(api):
     if failing_test:
       test += api.step_data(failing_test, retcode=1)
 
+    if fail_android_archive:
+      test += api.step_data('build android archive', retcode=1)
+
     if mastername.startswith('tryserver'):
       if gerrit:
         test += api.properties.tryserver(
@@ -139,6 +144,8 @@ def GenTests(api):
   yield generate_builder(mastername, buildername, revision='12345',
                          failing_test='rtc_unittests',
                          suffix='_failing_test')
+  yield generate_builder(mastername, 'Android32 (M Nexus5X)', revision='12345',
+                         fail_android_archive=True, suffix='_failing_archive')
 
   mastername = 'client.webrtc.perf'
   yield generate_builder(mastername, 'Android32 Builder', revision=None,

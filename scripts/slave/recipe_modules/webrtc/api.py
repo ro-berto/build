@@ -41,6 +41,10 @@ class WebRTCApi(recipe_api.RecipeApi):
     return self.bot_config.get('triggers')
 
   @property
+  def should_build_android_archive(self):
+    return self.bot_config.get('build_android_archive')
+
+  @property
   def should_upload_apprtcmobile(self):
     return self.bot_config.get('archive_apprtc')
 
@@ -231,6 +235,46 @@ class WebRTCApi(recipe_api.RecipeApi):
         self.m.chromium.c.build_config_fs,
         upload_url,
         build_revision=self.revision)
+
+  def build_android_archive(self):
+    # Build the Android .aar archive and upload it to Google storage (except for
+    # trybots). This should only be run on a single bot or the archive will be
+    # overwritten (and it's a multi-arch build so one is enough).
+    goma_dir = self.m.goma.ensure_goma()
+    self.m.goma.start()
+    ninja_log_exit_status = 1
+    try:
+      build_script = self.m.path['checkout'].join('tools_webrtc', 'android',
+                                                   'build_aar.py')
+      args = ['--use-goma',
+              '--verbose',
+              '--extra-gn-args', 'goma_dir=\"%s\"' % goma_dir]
+      if self.m.tryserver.is_tryserver:
+        # To benefit from incremental builds for speed.
+        args.append('--build-dir=out/android-archive')
+
+      with self.m.context(cwd=self.m.path['checkout']):
+        step_result = self.m.python(
+            'build android archive',
+            build_script,
+            args=args,
+        )
+      ninja_log_exit_status = step_result.retcode
+    except self.m.step.StepFailure as e:
+      ninja_log_exit_status = e.retcode
+      raise e
+    finally:
+      self.m.goma.stop(ninja_log_compiler='goma',
+                       ninja_log_exit_status=ninja_log_exit_status)
+
+    if not self.m.tryserver.is_tryserver:
+      self.m.gsutil.upload(
+          self.m.path['checkout'].join('libwebrtc.aar'),
+          'chromium-webrtc',
+          'android_archive/webrtc_android_%s.aar' % self.revision_number,
+          args=['-a', 'public-read'],
+          unauthenticated_url=True)
+
 
   def package_apprtcmobile(self):
     # Zip and upload out/{Debug,Release}/apks/AppRTCMobile.apk
