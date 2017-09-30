@@ -240,7 +240,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]\\\\win\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"test_bot\", \"buildername\": \"win_chromium_rel_ng\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.win\", \"slavename\": \"test_bot\", \"target_platform\": \"win\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"win7_chromium_rel_ng\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.win\", \"slavename\": \"test_bot\", \"target_platform\": \"win\"}"
     ],
     "env": {
       "CHROME_HEADLESS": "1",
@@ -348,7 +348,7 @@
       "-m",
       "tryserver.chromium.win",
       "-b",
-      "win_chromium_rel_ng",
+      "win7_chromium_rel_ng",
       "-v",
       "//out/Release",
       "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": [\"mini_installer\", \"next_version_mini_installer\"]}",
@@ -415,7 +415,7 @@
       "-m",
       "tryserver.chromium.win",
       "-b",
-      "win_chromium_rel_ng",
+      "win7_chromium_rel_ng",
       "--config-file",
       "[BUILDER_CACHE]\\win\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
@@ -468,7 +468,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[GOMA_CACHE]\\win_chromium_rel_ng"
+      "[GOMA_CACHE]\\win7_chromium_rel_ng"
     ],
     "cwd": "[BUILDER_CACHE]\\win\\src",
     "env": {
@@ -493,7 +493,7 @@
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]\\win_chromium_rel_ng",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]\\win7_chromium_rel_ng",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache_131",
       "GOMA_FAIL_FAST": "true",
       "GOMA_HERMETIC": "error",
@@ -690,7 +690,7 @@
       "--ninja-log-compiler",
       "goma",
       "--buildbot-buildername",
-      "win_chromium_rel_ng",
+      "win7_chromium_rel_ng",
       "--buildbot-mastername",
       "tryserver.chromium.win",
       "--buildbot-slavename",

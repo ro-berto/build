@@ -243,7 +243,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]\\\\win\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"test_bot\", \"buildername\": \"win_chromium_rel_ng\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.win\", \"slavename\": \"test_bot\", \"target_platform\": \"win\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"win7_chromium_rel_ng\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.win\", \"slavename\": \"test_bot\", \"target_platform\": \"win\"}"
     ],
     "env": {
       "CHROME_HEADLESS": "1",
@@ -352,10 +352,10 @@
       "-m",
       "tryserver.chromium.win",
       "-b",
-      "win_chromium_rel_ng",
+      "win7_chromium_rel_ng",
       "-v",
       "//out/Release",
-      "{\"additional_compile_targets\": [], \"files\": [\"v8/foo.cc\"], \"test_targets\": [\"mini_installer\", \"next_version_mini_installer\", \"webkit_layout_tests_exparchive\"]}",
+      "{\"additional_compile_targets\": [], \"files\": [\"v8/foo.cc\"], \"test_targets\": [\"mini_installer\", \"next_version_mini_installer\"]}",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -379,8 +379,7 @@
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.test_targets\": [], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"test_targets\": [@@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"mini_installer\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"next_version_mini_installer\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"webkit_layout_tests_exparchive\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"next_version_mini_installer\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ]@@@",
       "@@@STEP_LOG_LINE@analyze_details@}@@@",
       "@@@STEP_LOG_END@analyze_details@@@"

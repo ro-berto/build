@@ -120,7 +120,7 @@ def GenTests(api):
   yield (
     api.test('process_dumps_failure') +
     props(mastername='tryserver.chromium.win',
-          buildername='win_chromium_rel_ng') +
+          buildername='win7_chromium_rel_ng') +
     api.platform.name('win') +
     suppress_analyze() +
     api.override_step_data('process_dumps', retcode=1)
@@ -414,7 +414,7 @@ def GenTests(api):
 
   yield (
     api.test('runhooks_failure') +
-    props(buildername='win_chromium_rel_ng',
+    props(buildername='win7_chromium_rel_ng',
           mastername='tryserver.chromium.win') +
     api.platform.name('win') +
     api.step_data('gclient runhooks (with patch)', retcode=1) +
@@ -643,7 +643,7 @@ def GenTests(api):
 
   yield (
     api.test('use_v8_patch_on_chromium_trybot') +
-    props(buildername='win_chromium_rel_ng',
+    props(buildername='win7_chromium_rel_ng',
           mastername='tryserver.chromium.win',
           patch_project='v8') +
     api.platform.name('win')
@@ -702,7 +702,7 @@ def GenTests(api):
 
   yield (
     api.test('use_skia_patch_on_chromium_trybot') +
-    props(buildername='win_chromium_rel_ng',
+    props(buildername='win7_chromium_rel_ng',
           mastername='tryserver.chromium.win',
           patch_project='skia') +
     api.platform.name('win')
@@ -791,7 +791,7 @@ def GenTests(api):
     api.test('add_swarming_layout_tests_via_manual_diff_inspection_win') +
     props(
       mastername='tryserver.chromium.win',
-      buildername='win_chromium_rel_ng',
+      buildername='win7_chromium_rel_ng',
       swarm_hashes={},
       extra_swarmed_tests=['webkit_layout_tests_exparchive'],
     ) +

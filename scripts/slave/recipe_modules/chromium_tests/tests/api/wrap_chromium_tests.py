@@ -51,7 +51,7 @@ def GenTests(api):
       api.platform.name('win') +
       api.properties.tryserver(
           mastername='tryserver.chromium.win',
-          buildername='win_chromium_rel_ng')
+          buildername='win7_chromium_rel_ng')
   )
 
   yield (
