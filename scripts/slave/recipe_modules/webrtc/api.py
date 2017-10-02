@@ -159,7 +159,8 @@ class WebRTCApi(recipe_api.RecipeApi):
     self.m.python('download audio quality tools',
                   self.m.path['checkout'].join('tools_webrtc',
                                                'download_tools.py'),
-                  args=[self.m.path['checkout'].join('audio_quality')])
+                  args=[self.m.path['checkout'].join('tools_webrtc',
+                                                     'audio_quality')])
 
   def check_swarming_version(self):
     if self.c.enable_swarming:

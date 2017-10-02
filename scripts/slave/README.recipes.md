@@ -3386,37 +3386,37 @@ Capture coverage data and upload a report.
 
 &mdash; **def [apply\_bot\_config](/scripts/slave/recipe_modules/webrtc/api.py#56)(self, builders, recipe_configs):**
 
-&mdash; **def [build\_android\_archive](/scripts/slave/recipe_modules/webrtc/api.py#248)(self):**
+&mdash; **def [build\_android\_archive](/scripts/slave/recipe_modules/webrtc/api.py#249)(self):**
 
-&mdash; **def [check\_swarming\_version](/scripts/slave/recipe_modules/webrtc/api.py#164)(self):**
+&mdash; **def [check\_swarming\_version](/scripts/slave/recipe_modules/webrtc/api.py#165)(self):**
 
 &mdash; **def [checkout](/scripts/slave/recipe_modules/webrtc/api.py#138)(self, \*\*kwargs):**
 
-&mdash; **def [clean\_test\_output](/scripts/slave/recipe_modules/webrtc/api.py#331)(self):**
+&mdash; **def [clean\_test\_output](/scripts/slave/recipe_modules/webrtc/api.py#332)(self):**
 
 Remove all test output in out/, since we have tests leaking files.
 
-&mdash; **def [cleanup](/scripts/slave/recipe_modules/webrtc/api.py#324)(self):**
+&mdash; **def [cleanup](/scripts/slave/recipe_modules/webrtc/api.py#325)(self):**
 
-&mdash; **def [compile](/scripts/slave/recipe_modules/webrtc/api.py#174)(self):**
+&mdash; **def [compile](/scripts/slave/recipe_modules/webrtc/api.py#175)(self):**
 
 &mdash; **def [configure\_swarming](/scripts/slave/recipe_modules/webrtc/api.py#102)(self):**
 
 &mdash; **def [download\_audio\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#158)(self):**
 
-&mdash; **def [extract\_build](/scripts/slave/recipe_modules/webrtc/api.py#303)(self):**
+&mdash; **def [extract\_build](/scripts/slave/recipe_modules/webrtc/api.py#304)(self):**
 
-&mdash; **def [maybe\_trigger](/scripts/slave/recipe_modules/webrtc/api.py#225)(self):**
+&mdash; **def [maybe\_trigger](/scripts/slave/recipe_modules/webrtc/api.py#226)(self):**
 
-&mdash; **def [package\_apprtcmobile](/scripts/slave/recipe_modules/webrtc/api.py#288)(self):**
+&mdash; **def [package\_apprtcmobile](/scripts/slave/recipe_modules/webrtc/api.py#289)(self):**
 
-&mdash; **def [package\_build](/scripts/slave/recipe_modules/webrtc/api.py#238)(self):**
+&mdash; **def [package\_build](/scripts/slave/recipe_modules/webrtc/api.py#239)(self):**
 
-&mdash; **def [run\_baremetal\_test](/scripts/slave/recipe_modules/webrtc/api.py#220)(self, test, name=None, gtest_args=None, args=None, parallel=True):**
+&mdash; **def [run\_baremetal\_test](/scripts/slave/recipe_modules/webrtc/api.py#221)(self, test, name=None, gtest_args=None, args=None, parallel=True):**
 
-&mdash; **def [run\_mb](/scripts/slave/recipe_modules/webrtc/api.py#168)(self):**
+&mdash; **def [run\_mb](/scripts/slave/recipe_modules/webrtc/api.py#169)(self):**
 
-&mdash; **def [runtests](/scripts/slave/recipe_modules/webrtc/api.py#183)(self):**
+&mdash; **def [runtests](/scripts/slave/recipe_modules/webrtc/api.py#184)(self):**
 
 Add a suite of test steps.
 
@@ -3435,7 +3435,7 @@ Args:
 
 &emsp; **@property**<br>&mdash; **def [should\_upload\_build](/scripts/slave/recipe_modules/webrtc/api.py#39)(self):**
 
-&mdash; **def [virtual\_webcam\_check](/scripts/slave/recipe_modules/webrtc/api.py#339)(self):**
+&mdash; **def [virtual\_webcam\_check](/scripts/slave/recipe_modules/webrtc/api.py#340)(self):**
 ### *recipe_modules* / [zip](/scripts/slave/recipe_modules/zip)
 
 [DEPS](/scripts/slave/recipe_modules/zip/__init__.py#5): [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/python][recipe_engine/recipe_modules/python]
