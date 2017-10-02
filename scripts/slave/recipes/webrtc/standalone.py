@@ -39,7 +39,10 @@ def RunSteps(api):
     api.chromium.taskkill()
 
   webrtc.checkout()
+  if webrtc.should_download_audio_quality_tools:
+    webrtc.download_audio_quality_tools()
   webrtc.cleanup()
+
   if webrtc.should_build:
     api.chromium.ensure_goma()
   api.chromium.runhooks()

@@ -102,6 +102,15 @@
     "cmd": [
       "python",
       "-u",
+      "[BUILDER_CACHE]\\win_experimental\\src\\tools_webrtc\\download_tools.py",
+      "[BUILDER_CACHE]\\win_experimental\\src\\audio_quality"
+    ],
+    "name": "download audio quality tools"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[build::webrtc]\\resources\\cleanup_files.py",
       "[BUILDER_CACHE]\\win_experimental\\src\\out"
     ],

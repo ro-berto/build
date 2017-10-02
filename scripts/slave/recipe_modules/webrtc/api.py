@@ -48,6 +48,11 @@ class WebRTCApi(recipe_api.RecipeApi):
   def should_download_build(self):
     return self.bot_config.get('parent_buildername')
 
+  @property
+  def should_download_audio_quality_tools(self):
+    return hasattr(self.c, 'TEST_SUITE') and self.c.TEST_SUITE in (
+        'android_perf', 'desktop_perf', 'desktop_perf_swarming', 'webrtc')
+
   def apply_bot_config(self, builders, recipe_configs):
     self.mastername = self.m.properties.get('mastername')
     self.buildername = self.m.properties.get('buildername')
@@ -149,6 +154,12 @@ class WebRTCApi(recipe_api.RecipeApi):
     self.revision_cp = revs['got_revision_cp']
     self.revision_number = str(self.m.commit_position.parse_revision(
         self.revision_cp))
+
+  def download_audio_quality_tools(self):
+    self.m.python('download audio quality tools',
+                  self.m.path['checkout'].join('tools_webrtc',
+                                               'download_tools.py'),
+                  args=[self.m.path['checkout'].join('audio_quality')])
 
   def check_swarming_version(self):
     if self.c.enable_swarming:
