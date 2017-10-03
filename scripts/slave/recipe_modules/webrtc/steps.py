@@ -100,6 +100,7 @@ PERF_TESTS = (
   # See http://crbug.com/755660.
   'isac_fix_test',
   'webrtc_perf_tests',
+  'low_bandwidth_audio_perf_test',
 )
 
 
