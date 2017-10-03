@@ -203,28 +203,24 @@ class AndroidApi(recipe_api.RecipeApi):
           infra_step=True,
           **kwargs)
 
-  def resource_sizes(self, apk_path, chartjson_file=False,
-                     upload_archives_to_bucket=None, perf_id=None):
-    cmd = ['build/android/resource_sizes.py', str(apk_path)]
+  def resource_sizes(self, apk_path, chartjson_file=False, perf_id=None):
+    test_name = 'resource_sizes (%s)' % self.m.path.basename(apk_path)
+    resource_sizes_args = [str(apk_path)]
     if chartjson_file:
-      cmd.append('--chartjson')
+      resource_sizes_args.append('--chartjson')
 
-    config = {
-        'steps': {
-            'resource_sizes (%s)' % self.m.path.basename(apk_path): {
-                'cmd': ' '.join(pipes.quote(x) for x in cmd),
-                'device_affinity': None,
-                'archive_output_dir': True
-            }
-        },
-        'version': 1
-    }
-    self.run_sharded_perf_tests(
-        config=self.m.json.input(config),
-        flaky_config=None,
+    with self.handle_exit_codes():
+      self.m.chromium.runtest(
+        self.c.resource_sizes,
+        resource_sizes_args,
+        name=test_name,
+        perf_dashboard_id=test_name,
+        point_id=None,
+        test_type=test_name,
+        annotate=self.m.chromium.get_annotate_by_test_name(test_name),
+        results_url='https://chromeperf.appspot.com',
         perf_id=perf_id or self.m.properties['buildername'],
-        chartjson_file=chartjson_file,
-        upload_archives_to_bucket=upload_archives_to_bucket)
+        chartjson_file=chartjson_file)
 
   def create_supersize_archive(self, apk_path, size_path):
     """Creates a .size file for the given .apk."""

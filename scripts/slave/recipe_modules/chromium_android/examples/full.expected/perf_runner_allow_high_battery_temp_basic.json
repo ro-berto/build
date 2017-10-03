@@ -913,6 +913,7 @@
       "0",
       "--flaky-steps",
       "flake_fakes.json",
+      "--collect-chartjson-data",
       "--trace-output",
       "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.json",
       "--adb-path",
@@ -1031,6 +1032,8 @@
       "--perf-dashboard-id=page_cycler.foo",
       "--test-type=page_cycler.foo",
       "--step-name=page_cycler.foo",
+      "--chartjson-file",
+      "/path/to/tmp/json",
       "--builder-name=perf_runner_allow_high_battery_temp",
       "--slave-name=tehslave",
       "--build-number=571",
@@ -1053,7 +1056,9 @@
     },
     "name": "page_cycler.foo",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>Device Affinity: 0<br/>@@@"
+      "@@@STEP_TEXT@<br/>Device Affinity: 0<br/>@@@",
+      "@@@STEP_LOG_LINE@json.output@[]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
@@ -1080,6 +1085,8 @@
       "--perf-dashboard-id=perf_test.foo",
       "--test-type=perf_test.foo",
       "--step-name=perf_test.foo",
+      "--chartjson-file",
+      "/path/to/tmp/json",
       "--builder-name=perf_runner_allow_high_battery_temp",
       "--slave-name=tehslave",
       "--build-number=571",
@@ -1104,7 +1111,9 @@
     },
     "name": "perf_test.foo",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>Device Affinity: 0<br/>@@@"
+      "@@@STEP_TEXT@<br/>Device Affinity: 0<br/>@@@",
+      "@@@STEP_LOG_LINE@json.output@[]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
@@ -1149,6 +1158,8 @@
       "--perf-dashboard-id=perf_test.foo.reference",
       "--test-type=perf_test.foo.reference",
       "--step-name=perf_test.foo.reference",
+      "--chartjson-file",
+      "/path/to/tmp/json",
       "--builder-name=perf_runner_allow_high_battery_temp",
       "--slave-name=tehslave",
       "--build-number=571",
@@ -1171,7 +1182,9 @@
     },
     "name": "perf_test.foo.reference",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>Device Affinity: 0<br/>@@@"
+      "@@@STEP_TEXT@<br/>Device Affinity: 0<br/>@@@",
+      "@@@STEP_LOG_LINE@json.output@[]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
