@@ -48,15 +48,10 @@ AUX_BINARY_PACKAGES = {
           name='infra/tools/git/${platform}',
           version='git_revision:5cf65fdf804a9b3f3023f79d5b3cab2a88ccd09e'),
 
-      ## The Python package installs its binaries into "bin/".
-      #cipd.CipdPackage(
-          #name='infra/python/cpython/${os}-${arch=386,amd64}',
-          #version='version:2.7.13.chromium8'),
-
       # The Git package installs its binaries into "bin/".
       cipd.CipdPackage(
           name='infra/git/${os}-${arch=386,amd64}',
-          version='version:2.14.1.chromium11'),
+          version='version:2.14.1.chromium12'),
     ),
 
     STAGING: (
@@ -71,7 +66,7 @@ AUX_BINARY_PACKAGES = {
       # The Python package installs its binaries into "bin/".
       cipd.CipdPackage(
           name='infra/python/cpython/${os}-${arch=386,amd64}',
-          version='version:2.7.14.chromium12'),
+          version='version:2.7.14.chromium13'),
 
       # The Git package installs its binaries into "bin/".
       cipd.CipdPackage(
