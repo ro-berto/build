@@ -83,6 +83,7 @@ _AddBuildSpec('Android arm64 Builder FYI', 'android', 'android',
                                      'push_apps_to_background_apk',
                                      'system_webview_apk',
                                      'system_webview_shell_apk',])
+_AddBuildSpec('Linux Compile FYI', 'linux-fyi', 'linux')
 
 _AddTestSpec('Android Power Nexus 5X Perf', 'fyi-android-power-nexus-5x',
              'android', target_bits=32, num_device_shards=7,
@@ -115,7 +116,8 @@ _AddTestSpec('Win Clang Perf Ref', 'chromium-win-clang-ref', 'win',
 
 _AddIsolatedTestSpec('Mojo Linux Perf', 'mojo-linux-perf', 'linux')
 _AddIsolatedTestSpec(
-    'One Buildbot Step Test Builder', 'buildbot-test', 'linux')
+    'One Buildbot Step Test Builder', 'buildbot-test', 'linux',
+    parent_buildername='Linux Compile FYI')
 
 _AddBuildSpec('Battor Agent Linux', 'linux', 'linux', run_sizes=False,
               compile_targets=['battor_agent'])
