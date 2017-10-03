@@ -58,10 +58,9 @@ AUX_BINARY_PACKAGES = {
           name='infra/git/${os}-${arch=386,amd64}',
           version='version:2.14.1.chromium11'),
 
-      # TODO(vadimsh): Enable after confirming staging works.
-      #cipd.CipdPackage(
-      #    name='infra/tools/authutil/${platform}',
-      #    version='git_revision:9c63809842a277ce10a86afd51b61c639a665d11')
+      cipd.CipdPackage(
+          name='infra/tools/authutil/${platform}',
+          version='git_revision:9c63809842a277ce10a86afd51b61c639a665d11'),
     ),
 
     STAGING: (
