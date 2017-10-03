@@ -57,6 +57,11 @@ AUX_BINARY_PACKAGES = {
       cipd.CipdPackage(
           name='infra/git/${os}-${arch=386,amd64}',
           version='version:2.14.1.chromium11'),
+
+      # TODO(vadimsh): Enable after confirming staging works.
+      #cipd.CipdPackage(
+      #    name='infra/tools/authutil/${platform}',
+      #    version='git_revision:9c63809842a277ce10a86afd51b61c639a665d11')
     ),
 
     STAGING: (
@@ -77,6 +82,10 @@ AUX_BINARY_PACKAGES = {
       cipd.CipdPackage(
           name='infra/git/${os}-${arch=386,amd64}',
           version='version:2.14.1.chromium12'),
+
+      cipd.CipdPackage(
+          name='infra/tools/authutil/${platform}',
+          version='git_revision:9c63809842a277ce10a86afd51b61c639a665d11'),
     ),
 
     CANARY: (
@@ -102,6 +111,10 @@ AUX_BINARY_PACKAGES = {
       # don't have cross-compile support for Git packages yet.
       cipd.CipdPackage(
           name='infra/git/${os}-${arch=386,amd64}',
+          version='latest'),
+
+      cipd.CipdPackage(
+          name='infra/tools/authutil/${platform}',
           version='latest'),
     ),
 }
