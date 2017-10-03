@@ -70,8 +70,6 @@ SPEC['builders'].update([
            target_arch='arm',
            target_bits=32),
 
-    # TODO(crbug.com/765420): need a bot for this; slave149-c1 is in use by
-    # chromium.infra.codesearch.
     config('ToTAndroid64',
            android_config='clang_tot_release_builder',
            chromium_config='clang_tot_android',

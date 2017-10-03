@@ -38,12 +38,10 @@
       "bot": "slave144-c1",
     },
 
-    # TODO(crbug.com/765420): need a new bot for this; slave149-c1 is in use by
-    # chromium.infra.codesearch.
-    #"ToTAndroid64": {
-    #  "mixins": ["trusty"],
-    #  "bot": "slave149-c1",
-    #},
+    "ToTAndroid64": {
+      "mixins": ["trusty"],
+      "bot": "slave172-c1",
+    },
 
     "ToTLinux": {
       "mixins": ["trusty"],
