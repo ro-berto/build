@@ -1486,7 +1486,7 @@ SPEC = {
       'enable_swarming': True,
     },
     'ClangToTLinuxMSan': {
-      'chromium_config': 'chromium',
+      'chromium_config': 'clang_tot_linux',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
