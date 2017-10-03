@@ -1048,7 +1048,7 @@ BUILDERS = freeze({
         'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
-          'os': 'Windows-8-SP0',
+          'os': 'Windows-8.1-SP0',
           'cpu': 'x86-64',
         }
       },
