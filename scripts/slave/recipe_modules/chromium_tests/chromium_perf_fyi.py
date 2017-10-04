@@ -37,23 +37,6 @@ def _AddBuildSpec(name, perf_id, platform, config_name='chromium_perf',
       force_exparchive=force_exparchive, run_sizes=run_sizes)
 
 
-def _AddTestSpec(name, perf_id, platform, num_device_shards=1,
-                 parent_buildername=None, target_bits=64):
-  tests = [steps.DynamicPerfTests(
-      perf_id, platform, target_bits,
-      num_device_shards=num_device_shards, num_host_shards=1, shard_index=0)]
-
-  spec = chromium_perf.TestSpec(
-      'chromium_perf', perf_id, platform, target_bits,
-      parent_buildername=parent_buildername, tests=tests)
-  if not parent_buildername:
-    spec['parent_mastername'] = 'chromium.perf'
-  else:
-    spec['parent_mastername'] = 'chromium.perf.fyi'
-
-  SPEC['builders'][name] = spec
-
-
 def _AddIsolatedTestSpec(name, perf_id, platform,
                          parent_buildername=None, target_bits=64):
   spec = chromium_perf.TestSpec('chromium_perf', perf_id, platform, target_bits,
@@ -85,10 +68,6 @@ _AddBuildSpec('Android arm64 Builder FYI', 'android', 'android',
                                      'system_webview_shell_apk',])
 _AddBuildSpec('Linux Compile FYI', 'linux-fyi', 'linux')
 
-_AddTestSpec('Android Power Nexus 5X Perf', 'fyi-android-power-nexus-5x',
-             'android', target_bits=32, num_device_shards=7,
-             parent_buildername='Android Builder FYI')
-
 
 _AddBuildSpec('Win Builder FYI', 'win', 'win', enable_swarming=True,
               force_exparchive=True)
@@ -97,22 +76,10 @@ _AddIsolatedTestSpec('Win 10 Low-End Perf Tests', 'win-10-low-end', 'win',
 _AddIsolatedTestSpec('Win 10 4 Core Low-End Perf Tests',
                      'win-10-4-core-low-end', 'win',
                      parent_buildername='Win Builder FYI')
-_AddTestSpec('Win 7 Intel GPU Perf (Xeon)', 'chromium-rel-win7-gpu-intel',
-             'win')
-_AddTestSpec('Win Power High-DPI Perf', 'win-power-high-dpi', 'win')
-
-
-_AddTestSpec('Mac Power Dual-GPU Perf', 'mac-power-dual-gpu', 'mac')
-_AddTestSpec('Mac Power Low-End Perf', 'mac-power-low-end', 'mac')
-_AddTestSpec('Mac Test Retina Perf', 'mac-test-retina', 'mac')
 
 
 _AddBuildSpec('Win Clang Builder', 'win-clang-builder', 'win',
               config_name='chromium_perf_clang', target_bits=32)
-_AddTestSpec('Win Clang Perf', 'chromium-win-clang', 'win',
-             parent_buildername='Win Clang Builder', target_bits=32)
-_AddTestSpec('Win Clang Perf Ref', 'chromium-win-clang-ref', 'win',
-             parent_buildername='Win Builder FYI', target_bits=32)
 
 _AddIsolatedTestSpec('Mojo Linux Perf', 'mojo-linux-perf', 'linux')
 _AddIsolatedTestSpec(
