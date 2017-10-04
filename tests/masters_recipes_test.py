@@ -70,11 +70,6 @@ SUPPRESSIONS = {
         'Linux ASan Tests (sandboxed)',
     ],
     'master.chromium.webkit': [
-        # TODO(crbug.com/736257) Spin up 10.12 (dbg) trybots once we've
-        # finished shutting down the 10.9 bots.
-        'WebKit Mac Builder (dbg)',
-        'WebKit Mac10.11 (dbg)',
-
         'WebKit Linux Trusty ASAN',
         'WebKit Linux Trusty Leak',
         'WebKit Linux Trusty MSAN',

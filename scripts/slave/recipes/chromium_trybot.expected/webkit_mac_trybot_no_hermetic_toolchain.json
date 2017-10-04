@@ -217,7 +217,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/mac_layout/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"test_bot\", \"buildername\": \"mac10.10_blink_rel\", \"buildnumber\": 571, \"mastername\": \"tryserver.blink\", \"slavename\": \"test_bot\", \"target_platform\": \"mac\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"mac10.9_blink_rel\", \"buildnumber\": 571, \"mastername\": \"tryserver.blink\", \"slavename\": \"test_bot\", \"target_platform\": \"mac\"}"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -303,7 +303,7 @@
       "-m",
       "tryserver.blink",
       "-b",
-      "mac10.10_blink_rel",
+      "mac10.9_blink_rel",
       "-v",
       "//out/Release",
       "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": [\"blink_tests\"]}",

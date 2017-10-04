@@ -990,7 +990,7 @@ def GenTests(api):
   yield (
     api.test('use_skia_patch_on_blink_trybot') +
     props(mastername='tryserver.blink',
-          buildername='mac10.12_blink_rel',
+          buildername='mac10.9_blink_rel',
           patch_project='skia') +
     api.platform.name('mac')
   )
@@ -998,7 +998,7 @@ def GenTests(api):
   yield (
     api.test('use_v8_patch_on_blink_trybot') +
     props(mastername='tryserver.blink',
-          buildername='mac10.12_blink_rel',
+          buildername='mac10.9_blink_rel',
           patch_project='v8') +
     api.platform.name('mac')
   )
@@ -1022,6 +1022,6 @@ def GenTests(api):
   yield (
     api.test('webkit_mac_trybot_no_hermetic_toolchain') +
     props(mastername='tryserver.blink',
-          buildername='mac10.10_blink_rel') +
+          buildername='mac10.9_blink_rel') +
     api.platform.name('mac')
   )
