@@ -244,6 +244,7 @@ class GetBotsFromBuilders(unittest.TestCase):
         'special_builder': {
           # This is a dumb example (you shouldn't override values), but it
           # is legal to do so.
+          'recipe': 'special',
           'mixins': ['main_pool', 'special_pool'],
         }
       },
@@ -274,6 +275,7 @@ class GetBotsFromBuilders(unittest.TestCase):
         },
         'linux': {
           'os': 'linux',
+          'recipe': 'recipe',
         },
       },
       'builders': {
@@ -296,6 +298,7 @@ class GetBotsFromBuilders(unittest.TestCase):
       'builders': {
         'trusty': {
           'os': 'linux',
+          'recipe': 'trusty',
           'version': 'precise',
           'bots': ['vm1', 'vm{10..12}'],
         },
@@ -316,6 +319,85 @@ class GetBotsFromBuilders(unittest.TestCase):
       'bot_pools': {},
     })
 
+  def test_default_remote_run_repository(self):
+    builders = {
+      'default_remote_run_repository': 'some_git_url',
+      'builders': {
+        'trusty': {
+          'os': 'linux',
+          'recipe': 'trusty',
+          'use_remote_run': True,
+          'version': 'precise',
+          'bots': ['vm1'],
+        },
+      },
+      'bot_pools': {},
+    }
+    errors = []
+    chromium_utils.NormalizeBuilders(builders, errors)
+    self.assertEqual(errors, [])
+    self.assertEqual(builders['builders']['trusty']['remote_run_repository'],
+                     'some_git_url')
+
+  def test_remote_run_and_repository(self):
+    builders = {
+      'builders': {
+        'trusty': {
+          'os': 'linux',
+          'recipe': 'trusty',
+          'repository': 'some_other_git_url',
+          'use_remote_run': True,
+          'version': 'precise',
+          'bots': ['vm1'],
+        },
+      },
+      'bot_pools': {},
+    }
+    errors = []
+    chromium_utils.NormalizeBuilders(builders, errors)
+    self.assertEqual(errors, [])
+    self.assertEqual('some_other_git_url',
+        builders['builders']['trusty']['remote_run_repository'])
+
+  def test_remote_run_repository_is_not_empty(self):
+    builders = {
+      'builders': {
+        'trusty': {
+          'os': 'linux',
+          'recipe': 'trusty',
+          'use_remote_run': True,
+          'version': 'precise',
+          'bots': ['vm1'],
+        },
+      },
+      'bot_pools': {},
+    }
+    errors = []
+    chromium_utils.NormalizeBuilders(builders, errors)
+    self.assertEqual(
+        ['Builder "trusty" has no remote_run_repository configured'],
+        errors)
+
+  def test_remote_run_repository_and_repository_are_not_both_present(self):
+    builders = {
+      'default_remote_run_repository': 'some_git_url',
+      'builders': {
+        'trusty': {
+          'os': 'linux',
+          'recipe': 'trusty',
+          'use_remote_run': True,
+          'repository': 'some_old_git_url',
+          'version': 'precise',
+          'bots': ['vm1'],
+        },
+      },
+      'bot_pools': {},
+    }
+    errors = []
+    chromium_utils.NormalizeBuilders(builders, errors)
+    self.assertEqual(
+        ['Builder "trusty" has both a repository and a remote_run_repository'],
+        errors)
   def test_too_many_bot_fields(self):
     self.assertBadBuilders({
       'builders': {

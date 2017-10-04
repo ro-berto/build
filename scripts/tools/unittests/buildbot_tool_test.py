@@ -38,6 +38,7 @@ FAKE_BUILDERS_PYL = """\
   "builders": {
     "fake builder": {
       "os": "linux",
+      "recipe": "some_recipe",
       "version": "trusty",
       "bot": "vm1",
     },

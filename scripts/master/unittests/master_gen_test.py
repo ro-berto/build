@@ -45,6 +45,7 @@ SAMPLE_WATERFALL_PYL = """\
     },
     "Test Linux Remote Run": {
       "use_remote_run": True,
+      "remote_run_repository": "some_git_url",
     },
     "Test Linux Nightly": {
       "recipe": "test_nightly_recipe",

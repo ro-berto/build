@@ -2031,6 +2031,20 @@ def NormalizeBuilders(builders, errors):
       if k not in BOT_KEYS or not builder_has_bot_keys_already:
         builder_data.setdefault(k, v)
 
+    builder_data.setdefault('use_remote_run', False)
+    builder_data.setdefault('remote_run_sync_revision', False)
+    if 'default_remote_run_repository' in builders:
+      builder_data.setdefault(
+          'remote_run_repository',
+          builders.get('default_remote_run_repository'))
+    if 'repository' in builder_data:
+      if 'remote_run_repository' in builder_data:
+        builder_errors.append('Builder "%s" has both a repository and a '
+            'remote_run_repository' % builder_name)
+      else:
+        builder_data.setdefault('remote_run_repository',
+                                builder_data['repository'])
+
     _ValidateBuilder(builder_name, builder_data, bot_pools, builder_errors)
 
     if (('bots' in builder_data or 'bot' in builder_data)
@@ -2103,6 +2117,13 @@ def _ValidateBuilder(builder_name, builder_data, bot_pools, errors):
     if 'bot' in builder_data and '..' in builder_data['bot']:
       errors.append('The "bot" key for "%s" must contain only a single '
                     'hostname' % builder_name)
+
+  if not builder_data.get('recipe'):
+    errors.append('Builder "%s" has no recipe specified.' % builder_name)
+  if builder_data.get('use_remote_run'):
+    if not builder_data.get('remote_run_repository'):
+      errors.append('Builder "%s" has no remote_run_repository configured' %
+                    builder_name)
 
 
 def _AddBotPoolForBuilder(builder_name, builder_data, bot_pools):
