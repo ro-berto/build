@@ -647,7 +647,13 @@
       "--buildnumber",
       "1234",
       "--build-dir",
-      "[START_DIR]\\src\\out"
+      "[START_DIR]\\src\\out",
+      "--got-revision-cp",
+      "refs/heads/master@{#291141}",
+      "--git-revision",
+      "asdfawe2342",
+      "--version",
+      "v23523"
     ],
     "env": {
       "CHROME_HEADLESS": "1",

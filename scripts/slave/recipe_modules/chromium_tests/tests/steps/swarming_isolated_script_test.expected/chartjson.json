@@ -477,7 +477,13 @@
       "--buildnumber",
       "123",
       "--build-dir",
-      "[START_DIR]/src/out"
+      "[START_DIR]/src/out",
+      "--got-revision-cp",
+      "123456",
+      "--git-revision",
+      "test_sha",
+      "--version",
+      "test-version"
     ],
     "name": "test-perf-dashboard-id Dashboard Upload",
     "~followup_annotations": [

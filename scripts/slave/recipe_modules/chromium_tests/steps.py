@@ -1738,6 +1738,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
         args.extend(['--build-dir', api.chromium.c.build_dir])
       for revision_name, revision in revisions.iteritems():
         flag_name = '--%s' % revision_name.replace('_', '-')
+        args.extend([flag_name, revision])
 
     step_name = '%s Dashboard Upload' % self._perf_dashboard_id
     step_result = api.build.python(
