@@ -4,12 +4,12 @@
 
 DEPS = [
     'buildbucket',
-    'service_account',
+    'puppet_service_account',
 ]
 
 
 def RunSteps(api):
-  service_account = api.service_account.get_json_path('username')
+  service_account = api.puppet_service_account.get_key_path('username')
 
   api.buildbucket.get_build('9016911228971028736', service_account)
 

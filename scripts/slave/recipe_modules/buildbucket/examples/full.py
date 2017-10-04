@@ -5,12 +5,9 @@
 """This file is a recipe demonstrating the buildbucket recipe module."""
 
 
-import json
-
-
 DEPS = [
     'buildbucket',
-    'service_account',
+    'puppet_service_account',
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
@@ -49,7 +46,7 @@ def RunSteps(api):
   example_bucket = 'master.user.username'
 
   # By default api.buildbucket is configured to use production buildbucket.
-  service_account = api.service_account.get_json_path('username')
+  service_account = api.puppet_service_account.get_key_path('username')
 
   put_build_result = api.buildbucket.put(
       [{'bucket': example_bucket,

@@ -44,8 +44,8 @@
   * [perf_try](#recipe_modules-perf_try) &mdash; API for the perf try job recipe module.
   * [perf_try_staging](#recipe_modules-perf_try_staging) &mdash; API for the perf try job recipe module.
   * [pgo](#recipe_modules-pgo)
+  * [puppet_service_account](#recipe_modules-puppet_service_account) &mdash; **[DEPRECATED]** API for generating OAuth2 access tokens from service account keys predeployed to Chrome Ops bots via Puppet.
   * [repo](#recipe_modules-repo) &mdash; Common steps for recipes that use repo for source control.
-  * [service_account](#recipe_modules-service_account) &mdash; API for generating oauth2 tokens from locally stored secrets.
   * [swarming](#recipe_modules-swarming)
   * [swarming_client](#recipe_modules-swarming_client)
   * [swarming_heartbeat](#recipe_modules-swarming_heartbeat)
@@ -287,11 +287,10 @@
   * [perf_dashboard:examples/full](#recipes-perf_dashboard_examples_full)
   * [pgo:examples/full](#recipes-pgo_examples_full) &mdash; Example of using the PGO recipe module.
   * [pgo:tests/archive_profile_database](#recipes-pgo_tests_archive_profile_database)
+  * [puppet_service_account:examples/full](#recipes-puppet_service_account_examples_full) &mdash; Small example of using the puppet_service_account api.
   * [remote_run_test](#recipes-remote_run_test) &mdash; Checks that properties get to recipes from remote_run properly.
   * [repo:examples/full](#recipes-repo_examples_full)
   * [run_presubmit](#recipes-run_presubmit)
-  * [service_account:examples/full](#recipes-service_account_examples_full) &mdash; Small example of using the service_account api.
-  * [service_account:tests/get_json_path](#recipes-service_account_tests_get_json_path)
   * [simple_ci](#recipes-simple_ci)
   * [swarming/deterministic_build](#recipes-swarming_deterministic_build) &mdash; Recipe to test the deterministic build.
   * [swarming/heartbeat](#recipes-swarming_heartbeat) &mdash; Swarming heart beat recipe: runs a dummy job on the prod Swarming instance to ensure it is working properly.
@@ -434,7 +433,7 @@ Returns a step invoking zip_build.py to zip up a Chromium build.
 If build_url is specified, also uploads the build.
 ### *recipe_modules* / [auto\_bisect](/scripts/slave/recipe_modules/auto_bisect)
 
-[DEPS](/scripts/slave/recipe_modules/auto_bisect/__init__.py#1): [adb](#recipe_modules-adb), [bisect\_tester](#recipe_modules-bisect_tester), [buildbucket](#recipe_modules-buildbucket), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [commit\_position](#recipe_modules-commit_position), [crrev](#recipe_modules-crrev), [goma](#recipe_modules-goma), [halt](#recipe_modules-halt), [math\_utils](#recipe_modules-math_utils), [perf\_dashboard](#recipe_modules-perf_dashboard), [perf\_try](#recipe_modules-perf_try), [service\_account](#recipe_modules-service_account), [test\_utils](#recipe_modules-test_utils), [trigger](#recipe_modules-trigger), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/auto_bisect/__init__.py#1): [adb](#recipe_modules-adb), [bisect\_tester](#recipe_modules-bisect_tester), [buildbucket](#recipe_modules-buildbucket), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [commit\_position](#recipe_modules-commit_position), [crrev](#recipe_modules-crrev), [goma](#recipe_modules-goma), [halt](#recipe_modules-halt), [math\_utils](#recipe_modules-math_utils), [perf\_dashboard](#recipe_modules-perf_dashboard), [perf\_try](#recipe_modules-perf_try), [puppet\_service\_account](#recipe_modules-puppet_service_account), [test\_utils](#recipe_modules-test_utils), [trigger](#recipe_modules-trigger), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 API for the bisect recipe module.
 
@@ -554,7 +553,7 @@ Returns:
 &emsp; **@property**<br>&mdash; **def [working\_dir](/scripts/slave/recipe_modules/auto_bisect/api.py#70)(self):**
 ### *recipe_modules* / [auto\_bisect\_staging](/scripts/slave/recipe_modules/auto_bisect_staging)
 
-[DEPS](/scripts/slave/recipe_modules/auto_bisect_staging/__init__.py#1): [adb](#recipe_modules-adb), [bisect\_tester\_staging](#recipe_modules-bisect_tester_staging), [buildbucket](#recipe_modules-buildbucket), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [commit\_position](#recipe_modules-commit_position), [crrev](#recipe_modules-crrev), [goma](#recipe_modules-goma), [halt](#recipe_modules-halt), [math\_utils](#recipe_modules-math_utils), [perf\_dashboard](#recipe_modules-perf_dashboard), [perf\_try\_staging](#recipe_modules-perf_try_staging), [service\_account](#recipe_modules-service_account), [test\_utils](#recipe_modules-test_utils), [trigger](#recipe_modules-trigger), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/auto_bisect_staging/__init__.py#1): [adb](#recipe_modules-adb), [bisect\_tester\_staging](#recipe_modules-bisect_tester_staging), [buildbucket](#recipe_modules-buildbucket), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [commit\_position](#recipe_modules-commit_position), [crrev](#recipe_modules-crrev), [goma](#recipe_modules-goma), [halt](#recipe_modules-halt), [math\_utils](#recipe_modules-math_utils), [perf\_dashboard](#recipe_modules-perf_dashboard), [perf\_try\_staging](#recipe_modules-perf_try_staging), [puppet\_service\_account](#recipe_modules-puppet_service_account), [test\_utils](#recipe_modules-test_utils), [trigger](#recipe_modules-trigger), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 API for the bisect recipe module.
 
@@ -1342,7 +1341,7 @@ Args:
       the changes are commited.
 ### *recipe_modules* / [chromium\_tests](/scripts/slave/recipe_modules/chromium_tests)
 
-[DEPS](/scripts/slave/recipe_modules/chromium_tests/__init__.py#1): [adb](#recipe_modules-adb), [archive](#recipe_modules-archive), [bisect\_tester](#recipe_modules-bisect_tester), [bisect\_tester\_staging](#recipe_modules-bisect_tester_staging), [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_swarming](#recipe_modules-chromium_swarming), [commit\_position](#recipe_modules-commit_position), [filter](#recipe_modules-filter), [goma](#recipe_modules-goma), [isolate](#recipe_modules-isolate), [perf\_dashboard](#recipe_modules-perf_dashboard), [service\_account](#recipe_modules-service_account), [swarming](#recipe_modules-swarming), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [traceback](#recipe_modules-traceback), [trigger](#recipe_modules-trigger), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tempfile][recipe_engine/recipe_modules/tempfile]
+[DEPS](/scripts/slave/recipe_modules/chromium_tests/__init__.py#1): [adb](#recipe_modules-adb), [archive](#recipe_modules-archive), [bisect\_tester](#recipe_modules-bisect_tester), [bisect\_tester\_staging](#recipe_modules-bisect_tester_staging), [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_swarming](#recipe_modules-chromium_swarming), [commit\_position](#recipe_modules-commit_position), [filter](#recipe_modules-filter), [goma](#recipe_modules-goma), [isolate](#recipe_modules-isolate), [perf\_dashboard](#recipe_modules-perf_dashboard), [puppet\_service\_account](#recipe_modules-puppet_service_account), [swarming](#recipe_modules-swarming), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [traceback](#recipe_modules-traceback), [trigger](#recipe_modules-trigger), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tempfile][recipe_engine/recipe_modules/tempfile]
 
 #### **class [ChromiumTestsApi](/scripts/slave/recipe_modules/chromium_tests/api.py#72)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
@@ -1870,7 +1869,7 @@ Args:
 &emsp; **@property**<br>&mdash; **def [platforms](/scripts/slave/recipe_modules/gae_sdk/api.py#60)(self):**
 ### *recipe_modules* / [gatekeeper](/scripts/slave/recipe_modules/gatekeeper)
 
-[DEPS](/scripts/slave/recipe_modules/gatekeeper/__init__.py#1): [build](#recipe_modules-build), [service\_account](#recipe_modules-service_account), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/gatekeeper/__init__.py#1): [build](#recipe_modules-build), [puppet\_service\_account](#recipe_modules-puppet_service_account), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 #### **class [Gatekeeper](/scripts/slave/recipe_modules/gatekeeper/api.py#8)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
@@ -1923,7 +1922,7 @@ Returns: (dict) If 'remote_name' is supplied, a dictionary mapping the
     that repository's bundle was uploaded.
 ### *recipe_modules* / [goma](/scripts/slave/recipe_modules/goma)
 
-[DEPS](/scripts/slave/recipe_modules/goma/__init__.py#1): [build](#recipe_modules-build), [service\_account](#recipe_modules-service_account), [depot\_tools/cipd][depot_tools/recipe_modules/cipd], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/time][recipe_engine/recipe_modules/time]
+[DEPS](/scripts/slave/recipe_modules/goma/__init__.py#1): [build](#recipe_modules-build), [puppet\_service\_account](#recipe_modules-puppet_service_account), [depot\_tools/cipd][depot_tools/recipe_modules/cipd], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/time][recipe_engine/recipe_modules/time]
 
 #### **class [GomaApi](/scripts/slave/recipe_modules/goma/api.py#11)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
@@ -2445,7 +2444,7 @@ Posts bisect results to Perf Dashboard.
 &mdash; **def [warning](/scripts/slave/recipe_modules/perf_dashboard/api.py#119)(self, step_result, reason):**
 ### *recipe_modules* / [perf\_try](/scripts/slave/recipe_modules/perf_try)
 
-[DEPS](/scripts/slave/recipe_modules/perf_try/__init__.py#1): [bisect\_tester](#recipe_modules-bisect_tester), [buildbucket](#recipe_modules-buildbucket), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_tests](#recipe_modules-chromium_tests), [commit\_position](#recipe_modules-commit_position), [halt](#recipe_modules-halt), [math\_utils](#recipe_modules-math_utils), [perf\_dashboard](#recipe_modules-perf_dashboard), [service\_account](#recipe_modules-service_account), [test\_utils](#recipe_modules-test_utils), [trigger](#recipe_modules-trigger), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/perf_try/__init__.py#1): [bisect\_tester](#recipe_modules-bisect_tester), [buildbucket](#recipe_modules-buildbucket), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_tests](#recipe_modules-chromium_tests), [commit\_position](#recipe_modules-commit_position), [halt](#recipe_modules-halt), [math\_utils](#recipe_modules-math_utils), [perf\_dashboard](#recipe_modules-perf_dashboard), [puppet\_service\_account](#recipe_modules-puppet_service_account), [test\_utils](#recipe_modules-test_utils), [trigger](#recipe_modules-trigger), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 API for the perf try job recipe module.
 
@@ -2473,7 +2472,7 @@ This is meant to be used by tryjobs with a metric.
 Entry point pert tryjob or CQ tryjob.
 ### *recipe_modules* / [perf\_try\_staging](/scripts/slave/recipe_modules/perf_try_staging)
 
-[DEPS](/scripts/slave/recipe_modules/perf_try_staging/__init__.py#1): [bisect\_tester\_staging](#recipe_modules-bisect_tester_staging), [buildbucket](#recipe_modules-buildbucket), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_tests](#recipe_modules-chromium_tests), [commit\_position](#recipe_modules-commit_position), [halt](#recipe_modules-halt), [math\_utils](#recipe_modules-math_utils), [perf\_dashboard](#recipe_modules-perf_dashboard), [service\_account](#recipe_modules-service_account), [test\_utils](#recipe_modules-test_utils), [trigger](#recipe_modules-trigger), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/perf_try_staging/__init__.py#1): [bisect\_tester\_staging](#recipe_modules-bisect_tester_staging), [buildbucket](#recipe_modules-buildbucket), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_tests](#recipe_modules-chromium_tests), [commit\_position](#recipe_modules-commit_position), [halt](#recipe_modules-halt), [math\_utils](#recipe_modules-math_utils), [perf\_dashboard](#recipe_modules-perf_dashboard), [puppet\_service\_account](#recipe_modules-puppet_service_account), [test\_utils](#recipe_modules-test_utils), [trigger](#recipe_modules-trigger), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 API for the perf try job recipe module.
 
@@ -2516,6 +2515,37 @@ annotate the current commit with the URL to this file.
 
 Do a PGO build. This takes care of building an instrumented image, profiling
 it and then compiling the optimized version of it.
+### *recipe_modules* / [puppet\_service\_account](/scripts/slave/recipe_modules/puppet_service_account)
+
+[DEPS](/scripts/slave/recipe_modules/puppet_service_account/__init__.py#1): [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/service\_account][recipe_engine/recipe_modules/service_account]
+
+**[DEPRECATED]** API for generating OAuth2 access tokens from service account
+keys predeployed to Chrome Ops bots via Puppet.
+
+Depends on 'authutil' being in PATH.
+
+This module exists only to support Buildbot code. On LUCI use default account
+exposed through 'recipe_engine/service_account' module.
+
+#### **class [PuppetServiceAccountApi](/scripts/slave/recipe_modules/puppet_service_account/api.py#17)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
+
+&mdash; **def [get\_access\_token](/scripts/slave/recipe_modules/puppet_service_account/api.py#29)(self, account, scopes=None, lifetime_sec=None):**
+
+Returns an access token for a service account.
+
+Args:
+  account: a name of the service account, as defined in Puppet config.
+  scopes: list of OAuth scopes for new token, default is [userinfo.email].
+  lifetime_sec: minimum allowed lifetime of the returned token (the token
+      may live longer). Should be under 45m. Default is 10m.
+
+&mdash; **def [get\_key\_path](/scripts/slave/recipe_modules/puppet_service_account/api.py#25)(self, account):**
+
+Path to a particular JSON key (as str).
+
+&emsp; **@property**<br>&mdash; **def [keys\_path](/scripts/slave/recipe_modules/puppet_service_account/api.py#18)(self):**
+
+Path to a directory where ChromeOps Puppet drops service account keys.
 ### *recipe_modules* / [repo](/scripts/slave/recipe_modules/repo)
 
 [DEPS](/scripts/slave/recipe_modules/repo/__init__.py#1): [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/infra\_paths][depot_tools/recipe_modules/infra_paths], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -2560,20 +2590,6 @@ Reset to HEAD an already-init'd repo.
 &mdash; **def [sync](/scripts/slave/recipe_modules/repo/api.py#49)(self, \*args, \*\*kwargs):**
 
 Sync an already-init'd repo.
-### *recipe_modules* / [service\_account](/scripts/slave/recipe_modules/service_account)
-
-[DEPS](/scripts/slave/recipe_modules/service_account/__init__.py#1): [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-API for generating oauth2 tokens from locally stored secrets.
-
-This is a thin wrapper over the authutil go executable, which itself calls
-https://github.com/luci/luci-go/blob/master/client/authcli/authcli.go
-
-#### **class [ServiceAccountApi](/scripts/slave/recipe_modules/service_account/api.py#14)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
-
-&mdash; **def [get\_json\_path](/scripts/slave/recipe_modules/service_account/api.py#22)(self, account):**
-
-&mdash; **def [get\_token](/scripts/slave/recipe_modules/service_account/api.py#28)(self, account, scopes=None, lifetime_sec=None):**
 ### *recipe_modules* / [swarming](/scripts/slave/recipe_modules/swarming)
 
 [DEPS](/scripts/slave/recipe_modules/swarming/__init__.py#5): [build](#recipe_modules-build), [isolate](#recipe_modules-isolate), [swarming\_client](#recipe_modules-swarming_client), [test\_utils](#recipe_modules-test_utils), [traceback](#recipe_modules-traceback), [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -3632,14 +3648,14 @@ Generates BoringSSL documentation and uploads it to Cloud Storage.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/build/examples/full.py#9)(api):**
 ### *recipes* / [buildbucket:examples/full](/scripts/slave/recipe_modules/buildbucket/examples/full.py)
 
-[DEPS](/scripts/slave/recipe_modules/buildbucket/examples/full.py#11): [buildbucket](#recipe_modules-buildbucket), [service\_account](#recipe_modules-service_account), [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/buildbucket/examples/full.py#8): [buildbucket](#recipe_modules-buildbucket), [puppet\_service\_account](#recipe_modules-puppet_service_account), [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 This file is a recipe demonstrating the buildbucket recipe module.
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/buildbucket/examples/full.py#21)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/buildbucket/examples/full.py#18)(api):**
 ### *recipes* / [buildbucket:tests/get](/scripts/slave/recipe_modules/buildbucket/tests/get.py)
 
-[DEPS](/scripts/slave/recipe_modules/buildbucket/tests/get.py#5): [buildbucket](#recipe_modules-buildbucket), [service\_account](#recipe_modules-service_account)
+[DEPS](/scripts/slave/recipe_modules/buildbucket/tests/get.py#5): [buildbucket](#recipe_modules-buildbucket), [puppet\_service\_account](#recipe_modules-puppet_service_account)
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/buildbucket/tests/get.py#11)(api):**
 ### *recipes* / [buildbucket:tests/properties](/scripts/slave/recipe_modules/buildbucket/tests/properties.py)
@@ -3649,7 +3665,7 @@ This file is a recipe demonstrating the buildbucket recipe module.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/buildbucket/tests/properties.py#12)(api):**
 ### *recipes* / [buildbucket:tests/put](/scripts/slave/recipe_modules/buildbucket/tests/put.py)
 
-[DEPS](/scripts/slave/recipe_modules/buildbucket/tests/put.py#5): [buildbucket](#recipe_modules-buildbucket), [service\_account](#recipe_modules-service_account), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+[DEPS](/scripts/slave/recipe_modules/buildbucket/tests/put.py#5): [buildbucket](#recipe_modules-buildbucket), [puppet\_service\_account](#recipe_modules-puppet_service_account), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/buildbucket/tests/put.py#12)(api):**
 ### *recipes* / [catapult](/scripts/slave/recipes/catapult.py)
@@ -4155,7 +4171,7 @@ Returns: the list of matched targets.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/swarming_gtest_test.py#22)(api):**
 ### *recipes* / [chromium\_tests:tests/steps/swarming\_isolated\_script\_test](/scripts/slave/recipe_modules/chromium_tests/tests/steps/swarming_isolated_script_test.py)
 
-[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/swarming_isolated_script_test.py#5): [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_tests](#recipe_modules-chromium_tests), [commit\_position](#recipe_modules-commit_position), [isolate](#recipe_modules-isolate), [perf\_dashboard](#recipe_modules-perf_dashboard), [service\_account](#recipe_modules-service_account), [swarming](#recipe_modules-swarming), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/swarming_isolated_script_test.py#5): [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_tests](#recipe_modules-chromium_tests), [commit\_position](#recipe_modules-commit_position), [isolate](#recipe_modules-isolate), [perf\_dashboard](#recipe_modules-perf_dashboard), [puppet\_service\_account](#recipe_modules-puppet_service_account), [swarming](#recipe_modules-swarming), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/swarming_isolated_script_test.py#28)(api):**
 ### *recipes* / [chromium\_tests:tests/steps/web\_view\_cts\_test](/scripts/slave/recipe_modules/chromium_tests/tests/steps/web_view_cts_test.py)
@@ -4977,6 +4993,13 @@ Example of using the PGO recipe module.
 [DEPS](/scripts/slave/recipe_modules/pgo/tests/archive_profile_database.py#5): [chromium](#recipe_modules-chromium), [pgo](#recipe_modules-pgo), [recipe\_engine/platform][recipe_engine/recipe_modules/platform]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/pgo/tests/archive_profile_database.py#12)(api):**
+### *recipes* / [puppet\_service\_account:examples/full](/scripts/slave/recipe_modules/puppet_service_account/examples/full.py)
+
+[DEPS](/scripts/slave/recipe_modules/puppet_service_account/examples/full.py#7): [puppet\_service\_account](#recipe_modules-puppet_service_account), [recipe\_engine/platform][recipe_engine/recipe_modules/platform]
+
+Small example of using the puppet_service_account api.
+
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/puppet_service_account/examples/full.py#13)(api):**
 ### *recipes* / [remote\_run\_test](/scripts/slave/recipes/remote_run_test.py)
 
 [DEPS](/scripts/slave/recipes/remote_run_test.py#9): [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -4994,18 +5017,6 @@ Checks that properties get to recipes from remote_run properly
 [DEPS](/scripts/slave/recipes/run_presubmit.py#5): [v8](#recipe_modules-v8), [webrtc](#recipe_modules-webrtc), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/infra\_paths][depot_tools/recipe_modules/infra_paths], [depot\_tools/presubmit][depot_tools/recipe_modules/presubmit], [depot\_tools/rietveld][depot_tools/recipe_modules/rietveld], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/run_presubmit.py#129)(api):**
-### *recipes* / [service\_account:examples/full](/scripts/slave/recipe_modules/service_account/examples/full.py)
-
-[DEPS](/scripts/slave/recipe_modules/service_account/examples/full.py#10): [service\_account](#recipe_modules-service_account), [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io]
-
-Small example of using the service_account api.
-
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/service_account/examples/full.py#32)(api, scopes, lifetime_sec):**
-### *recipes* / [service\_account:tests/get\_json\_path](/scripts/slave/recipe_modules/service_account/tests/get_json_path.py)
-
-[DEPS](/scripts/slave/recipe_modules/service_account/tests/get_json_path.py#5): [service\_account](#recipe_modules-service_account), [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/service_account/tests/get_json_path.py#11)(api):**
 ### *recipes* / [simple\_ci](/scripts/slave/recipes/simple_ci.py)
 
 [DEPS](/scripts/slave/recipes/simple_ci.py#8): [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -5384,6 +5395,7 @@ The changes are:
 [recipe_engine/recipe_modules/properties]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/4d872b88fb06006ec917c6d2a3324e26c0124319/README.recipes.md#recipe_modules-properties
 [recipe_engine/recipe_modules/python]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/4d872b88fb06006ec917c6d2a3324e26c0124319/README.recipes.md#recipe_modules-python
 [recipe_engine/recipe_modules/raw_io]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/4d872b88fb06006ec917c6d2a3324e26c0124319/README.recipes.md#recipe_modules-raw_io
+[recipe_engine/recipe_modules/service_account]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/4d872b88fb06006ec917c6d2a3324e26c0124319/README.recipes.md#recipe_modules-service_account
 [recipe_engine/recipe_modules/step]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/4d872b88fb06006ec917c6d2a3324e26c0124319/README.recipes.md#recipe_modules-step
 [recipe_engine/recipe_modules/tempfile]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/4d872b88fb06006ec917c6d2a3324e26c0124319/README.recipes.md#recipe_modules-tempfile
 [recipe_engine/recipe_modules/time]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/4d872b88fb06006ec917c6d2a3324e26c0124319/README.recipes.md#recipe_modules-time

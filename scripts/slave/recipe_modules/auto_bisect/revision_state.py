@@ -325,7 +325,7 @@ class RevisionState(object):
     try:
       result = api.m.buildbucket.get_build(
           self.build_id,
-          api.m.service_account.get_json_path(api.SERVICE_ACCOUNT),
+          api.m.puppet_service_account.get_key_path(api.SERVICE_ACCOUNT),
           step_test_data=lambda: api.test_api.buildbot_job_status_mock(
               api._test_data.get('build_status', {}).get(self.commit_hash, [])))
     except StepFailure:
@@ -387,7 +387,7 @@ class RevisionState(object):
     try:
       result = api.m.buildbucket.put(
           [build_details],
-          api.m.service_account.get_json_path(api.SERVICE_ACCOUNT),
+          api.m.puppet_service_account.get_key_path(api.SERVICE_ACCOUNT),
           step_test_data=lambda: api.m.json.test_api.output_stream(
               {'results':[{'build':{'id':'1201331270'}}]}))
     except StepFailure:  # pragma: no cover

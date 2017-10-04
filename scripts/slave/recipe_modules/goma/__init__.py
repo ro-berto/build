@@ -3,6 +3,7 @@ DEPS = [
   'depot_tools/cipd',
   'depot_tools/depot_tools',
   'depot_tools/gclient',
+  'puppet_service_account',
   'recipe_engine/context',
   'recipe_engine/file',
   'recipe_engine/json',
@@ -13,5 +14,4 @@ DEPS = [
   'recipe_engine/raw_io',
   'recipe_engine/step',
   'recipe_engine/time',
-  'service_account',
 ]

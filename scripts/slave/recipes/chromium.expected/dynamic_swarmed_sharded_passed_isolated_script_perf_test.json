@@ -613,15 +613,18 @@
   },
   {
     "cmd": [
-      "C:\\infra-tools\\authutil.exe",
+      "authutil.exe",
       "token",
-      "-service-account-json=C:\\creds\\service_accounts\\service-account-chromium-perf-histograms.json"
+      "-service-account-json",
+      "C:\\creds\\service_accounts\\service-account-chromium-perf-histograms.json",
+      "-lifetime",
+      "600s"
     ],
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
-    "name": "get access token",
+    "name": "get access token for service-account-chromium-perf-histograms.json",
     "stdout": "/path/to/tmp/"
   },
   {
@@ -636,7 +639,7 @@
       "--results-file",
       "{\"dummy\": \"dummy0\", \"enabled\": true, \"charts\": {\"entry2\": \"chart2\", \"entry3\": \"chart3\", \"entry1\": \"chart1\", \"entry4\": \"chart4\"}}",
       "--oauth-token-file",
-      "\"abc124\"",
+      "\"extra.secret.token.should.not.be.logged\"",
       "--perf-id",
       "win-10-low-end",
       "--results-url",

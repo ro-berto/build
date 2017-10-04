@@ -1669,7 +1669,8 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     results_file = api.raw_io.input_text(data=json.dumps(results))
 
     try:
-      oauth_token = api.service_account.get_token('chromium-perf-histograms')
+      oauth_token = api.puppet_service_account.get_access_token(
+          'chromium-perf-histograms')
     # Only bots uploading histograms have/need these creds.
     except api.step.StepFailure:  # pragma: no cover
       oauth_token = None

@@ -4,7 +4,7 @@
 
 DEPS = [
     'buildbucket',
-    'service_account',
+    'puppet_service_account',
     'recipe_engine/properties',
 ]
 
@@ -35,7 +35,7 @@ def RunSteps(api):
   build_tags = {'master': 'overriden.master.url',
                 'builder': 'overriden_builder'}
 
-  service_account = api.service_account.get_json_path('username')
+  service_account = api.puppet_service_account.get_key_path('username')
 
   api.buildbucket.put(
       [{'bucket': example_bucket,

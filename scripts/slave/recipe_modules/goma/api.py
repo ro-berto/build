@@ -42,11 +42,11 @@ class GomaApi(recipe_api.RecipeApi):
 
   @property
   def service_account_json_path(self):
-    return self.m.service_account.get_json_path('goma-client')
+    return self.m.puppet_service_account.get_key_path('goma-client')
 
   @property
   def cloudtail_service_account_json_path(self):
-    return self.m.service_account.get_json_path('goma-cloudtail')
+    return self.m.puppet_service_account.get_key_path('goma-cloudtail')
 
   @property
   def cloudtail_path(self):
