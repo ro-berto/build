@@ -16,7 +16,7 @@ class ChromiumClang(Master.Master1a):
   project_name = 'ChromiumClang'
   master_port = 21100
   slave_port = 31100
-  master_port_alt = 26000
+  master_port_alt = 26100
   buildbot_url = 'https://build.chromium.org/p/chromium.clang/'
   buildbucket_bucket = None
   service_account_file = None

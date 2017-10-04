@@ -12,7 +12,7 @@
 {
   "master_base_class": "Master1a",
   "master_port": 21100,
-  "master_port_alt": 26000,
+  "master_port_alt": 26100,
   "bot_port": 31100,
 
   "pubsub_service_account_file": "service-account-luci-milo.json",
