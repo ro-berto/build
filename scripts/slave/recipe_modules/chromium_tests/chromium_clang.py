@@ -11,8 +11,8 @@ def config(name,
            android_config=None,
            build_config='Release',
            chromium_config='clang_tot_linux',
-           target_arch=None,
-           target_bits=None):
+           target_arch='intel',
+           target_bits=64):
   cfg = {
     'chromium_config': chromium_config,
     'chromium_apply_config': [
@@ -22,6 +22,7 @@ def config(name,
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': build_config,
+      'TARGET_ARCH': target_arch,
       'TARGET_BITS': target_bits,
     },
     'bot_type': 'builder_tester',
@@ -47,10 +48,6 @@ def config(name,
       cfg['android_config'] = android_config
       cfg['chromium_config_kwargs']['TARGET_PLATFORM'] = 'android'
       cfg['gclient_apply_config'] = ['android']
-  if target_arch:
-      cfg['chromium_config_kwargs']['TARGET_ARCH'] = target_arch
-  if target_bits:
-      cfg['chromium_config_kwargs']['TARGET_BITS'] = target_bits
   return name, cfg
 
 
