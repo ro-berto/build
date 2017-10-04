@@ -61,6 +61,15 @@ AUX_BINARY_PACKAGES = {
       cipd.CipdPackage(
           name='infra/tools/authutil/${platform}',
           version='git_revision:9c63809842a277ce10a86afd51b61c639a665d11'),
+
+      # TODO(vadimsh): Deploy once it passes staging.
+      #cipd.CipdPackage(
+      #    name='infra/tools/buildbucket/${platform}',
+      #    version='git_revision:43acdc268b04a3eae197db17d81accbdfe928d94'),
+
+      #cipd.CipdPackage(
+      #    name='infra/tools/cloudtail/${platform}',
+      #    version='git_revision:43acdc268b04a3eae197db17d81accbdfe928d94'),
     ),
 
     STAGING: (
@@ -85,6 +94,14 @@ AUX_BINARY_PACKAGES = {
       cipd.CipdPackage(
           name='infra/tools/authutil/${platform}',
           version='git_revision:9c63809842a277ce10a86afd51b61c639a665d11'),
+
+      cipd.CipdPackage(
+          name='infra/tools/buildbucket/${platform}',
+          version='git_revision:43acdc268b04a3eae197db17d81accbdfe928d94'),
+
+      cipd.CipdPackage(
+          name='infra/tools/cloudtail/${platform}',
+          version='git_revision:43acdc268b04a3eae197db17d81accbdfe928d94'),
     ),
 
     CANARY: (
@@ -114,6 +131,14 @@ AUX_BINARY_PACKAGES = {
 
       cipd.CipdPackage(
           name='infra/tools/authutil/${platform}',
+          version='latest'),
+
+      cipd.CipdPackage(
+          name='infra/tools/buildbucket/${platform}',
+          version='latest'),
+
+      cipd.CipdPackage(
+          name='infra/tools/cloudtail/${platform}',
           version='latest'),
     ),
 }
