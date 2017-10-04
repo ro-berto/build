@@ -1283,7 +1283,7 @@ Uploads android apks for functional bisects.
 
 #### **class [ChromiumCheckoutApi](/scripts/slave/recipe_modules/chromium_checkout/api.py#8)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [ensure\_checkout](/scripts/slave/recipe_modules/chromium_checkout/api.py#62)(self, bot_config, root_solution_revision=None, disable_syntax_validation=False):**
+&mdash; **def [ensure\_checkout](/scripts/slave/recipe_modules/chromium_checkout/api.py#63)(self, bot_config, root_solution_revision=None, disable_syntax_validation=False):**
 
 Wrapper for bot_update.ensure_checkout with chromium-specific additions.
     

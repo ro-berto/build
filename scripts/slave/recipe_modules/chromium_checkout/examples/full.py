@@ -36,3 +36,11 @@ def GenTests(api):
             buildername='example_buildername',
             path_config=path_config)
     )
+
+  yield (
+      api.test('webrtc') +
+      api.platform('win', 64) +
+      api.properties(
+          buildername='example_buildername',
+          patch_repository_url='https://webrtc.googlesource.com/src')
+  )

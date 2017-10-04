@@ -48,7 +48,8 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
     Paths are relative to `relative_to` which for analyze should be 'src/'.
     """
     patch_root = self.m.gclient.calculate_patch_root(
-        self.m.properties.get('patch_project'))
+        patch_project=self.m.properties.get('patch_project'),
+        patch_repo=self.m.properties.get('patch_repository_url'))
     if not cwd and self.working_dir:
       cwd = self.working_dir.join(patch_root)
     with self.m.context(cwd=cwd):

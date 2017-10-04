@@ -917,8 +917,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       tests.extend(additional_tests)
       tests_including_triggered.extend(additional_tests)
 
-    affected_files = self.m.chromium_checkout.get_files_affected_by_patch(
-        'src/')
+    affected_files = self.m.chromium_checkout.get_files_affected_by_patch()
 
     affects_blink_paths = any(
         f.startswith(path) for f in affected_files
