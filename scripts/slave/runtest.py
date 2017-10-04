@@ -1394,13 +1394,13 @@ def _MainAndroid(options, args, extra_env):
 
 
 def _UpdateRunBenchmarkArgs(args, options):
-  """Updates the arguments for telemetry run_benchmark commands.
+  """Updates the arguments for commands producing chartjson.
 
-  Ensures that --output=chartjson is set and adds a --output argument.
+  Creates a temporary file/directory, and ensures that the required extra
+  arguments are given.
 
   Arguments:
-    args: list of command line arguments, starts with 'run_benchmark' for
-          telemetry tests.
+    args: list of command line arguments, starts with name of script runner.
 
   Returns:
     None if not a telemetry test, otherwise a
@@ -1409,14 +1409,15 @@ def _UpdateRunBenchmarkArgs(args, options):
   if not options.chartjson_file:
     return {}
 
-  if args[0].endswith('run_benchmark'):
+  script = args[0]
+  if script.endswith('run_benchmark') or script.endswith('resource_sizes.py'):
     output_dir = tempfile.mkdtemp()
     args.extend(['--output-dir=%s' % output_dir])
     temp_filename = os.path.join(output_dir, 'results-chart.json')
     return {'filename': temp_filename,
             'is_ref': '--browser=reference' in args,
             'cleanup_dir': True}
-  elif args[0].endswith('test_runner.py'):
+  elif script.endswith('test_runner.py'):
     _, temp_json_filename = tempfile.mkstemp()
     args.extend(['--output-chartjson-data=%s' % temp_json_filename])
     return {'filename': temp_json_filename,

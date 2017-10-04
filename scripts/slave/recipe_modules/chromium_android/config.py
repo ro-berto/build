@@ -33,6 +33,7 @@ def BaseConfig(CHECKOUT_PATH, INTERNAL=False, REPO_NAME=None, REPO_URL=None,
     tests = List(inner_type=basestring),
     cr_build_android = Static(CHECKOUT_PATH.join('build', 'android')),
     test_runner = Single(Path),
+    resource_sizes = Single(Path),
     gclient_custom_deps = Dict(value_type=(basestring, types.NoneType)),
     channel = Single(basestring, empty_val='chrome'),
     gclient_custom_vars = Dict(value_type=(basestring, types.NoneType)),
@@ -57,6 +58,8 @@ config_ctx = config_item_context(BaseConfig)
 def base_config(c):
   c.internal_dir_name = 'clank'
   c.test_runner = c.CHECKOUT_PATH.join('build', 'android', 'test_runner.py')
+  c.resource_sizes = c.CHECKOUT_PATH.join(
+      'build', 'android', 'resource_sizes.py')
 
 @config_ctx()
 def main_builder(c):
@@ -280,4 +283,3 @@ def remove_all_system_webviews(c):
 @config_ctx()
 def asan_symbolize(c):  # pragma: no cover
   c.asan_symbolize = True
-

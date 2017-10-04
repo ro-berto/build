@@ -212,6 +212,7 @@ def RunSteps(api, buildername):
     if config.get('perf_config'):
       api.chromium_android.run_sharded_perf_tests(
           config='fake_config.json',
+          chartjson_file=True,
           flaky_config='flake_fakes.json',
           upload_archives_to_bucket='archives-bucket',
           known_devices_file=config.get('last_known_devices', None),
@@ -249,8 +250,7 @@ def RunSteps(api, buildername):
   if config.get('resource_size'):
     api.chromium_android.resource_sizes(
         apk_path=api.chromium_android.apk_path('Example.apk'),
-        chartjson_file=True,
-        upload_archives_to_bucket='Bucket')
+        chartjson_file=True)
     api.chromium_android.create_supersize_archive(
         apk_path=api.chromium_android.apk_path('Example.apk'),
         size_path=api.chromium_android.apk_path('Example.apk.size'))
