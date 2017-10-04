@@ -106,6 +106,14 @@
     ]
   },
   {
+    "cmd": [
+      "cat",
+      ".debug.log"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "name": "debug log"
+  },
+  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0
