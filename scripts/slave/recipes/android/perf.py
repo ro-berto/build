@@ -104,6 +104,7 @@ def RunSteps(api):
   if builder.get('uses_webview', False):
     api.chromium_android.apply_config('remove_all_system_webviews')
   api.chromium.set_config(builder_config, **kwargs)
+  api.chromium_tests.set_config('chromium')
   api.gclient.set_config('perf')
   api.gclient.apply_config('android')
 

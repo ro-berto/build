@@ -223,6 +223,7 @@ def _RunStepsInternal(api, mastername, buildername, revision):
   default_kwargs.update(bot_config.get('kwargs', {}))
   droid.configure_from_properties(bot_config['recipe_config'], **default_kwargs)
   api.chromium.set_config(bot_config['recipe_config'], **default_kwargs)
+  api.chromium_tests.set_config('chromium')
   droid.c.set_val({'deps_file': 'DEPS'})
 
   api.gclient.set_config('chromium')

@@ -117,6 +117,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     """
     return self._precommit_mode
 
+  def get_config_defaults(self):
+    return {'CHECKOUT_PATH': self.m.path['checkout']}
+
   def configure_build(self, bot_config, override_bot_type=None):
     # Get the buildspec version. It can be supplied as a build property or as
     # a recipe config value.
@@ -126,6 +129,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     self.m.chromium.set_config(
         bot_config.get('chromium_config'),
         **bot_config.get('chromium_config_kwargs', {}))
+    self.set_config(bot_config.get('chromium_tests_config', 'chromium'))
+
 
     # Set GYP_DEFINES explicitly because chromium config constructor does
     # not support that.
@@ -264,8 +269,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     return tests
 
   def read_test_spec(self, test_spec_file):
-    test_spec_path = self.m.path['checkout'].join(
-        'testing', 'buildbot', test_spec_file)
+    test_spec_path = self.c.test_spec_dir.join(test_spec_file)
     test_spec_result = self.m.json.read(
         'read test spec (%s)' % self.m.path.basename(test_spec_path),
         test_spec_path,
