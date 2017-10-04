@@ -42,9 +42,6 @@ F('f_webkit_mac_rel', m_remote_run('chromium'))
 # Mac Rel WebKit testers
 #
 
-B('WebKit Mac10.9', 'f_webkit_rel_tests_109')
-F('f_webkit_rel_tests_109', m_remote_run('chromium'))
-
 B('WebKit Mac10.10', 'f_webkit_rel_tests_1010')
 F('f_webkit_rel_tests_1010', m_remote_run('chromium'))
 

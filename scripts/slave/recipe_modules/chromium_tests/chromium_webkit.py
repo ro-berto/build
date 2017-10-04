@@ -172,28 +172,6 @@ SPEC['builders'] = {
     },
     'checkout_dir': 'mac_layout',
   },
-  'WebKit Mac10.9': {
-    'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb', 'force_mac_toolchain_off_10_10'],
-    'gclient_config': 'chromium',
-    'chromium_config_kwargs': {
-      'BUILD_CONFIG': 'Release',
-      'TARGET_BITS': 64,
-    },
-    'bot_type': 'tester',
-    'parent_buildername': 'WebKit Mac Builder',
-    'tests': [
-      steps.BlinkTest(),
-    ],
-    'testing': {
-      'platform': 'mac',
-    },
-    'enable_swarming': True,
-    'swarming_dimensions': {
-      'os': 'Mac-10.9',
-    },
-    'checkout_dir': 'mac_layout',
-  },
   'WebKit Mac10.10': {
     'chromium_config': 'chromium',
     'chromium_apply_config': ['mb', 'force_mac_toolchain_off_10_10'],
