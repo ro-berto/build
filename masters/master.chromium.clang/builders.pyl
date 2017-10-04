@@ -53,7 +53,7 @@
       "bot": "slave164-c1",
     },
 
-    "ToTLinuxAsan": {
+    "ToTLinuxASan": {
       "mixins": ["trusty"],
       "bot": "slave163-c1",
     },
@@ -63,7 +63,7 @@
       "bot": "slave165-c1",
     },
 
-    "ToTLinuxMsan": {
+    "ToTLinuxMSan": {
       "mixins": ["trusty"],
       "bot": "slave166-c1",
     },

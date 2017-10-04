@@ -86,6 +86,9 @@ SPEC['builders'].update([
 
     config('ToTLinuxMSAN'),
 
+    config('ToTLinuxThinLTO',
+           chromium_config='clang_tot_linux_lld'),
+
     config('ToTLinuxUBSanVptr',
-           chromium_config='clang_tot_ubsan_vptr'),
+           chromium_config='clang_tot_linux_ubsan_vptr'),
 ])
