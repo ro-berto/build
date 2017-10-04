@@ -2,7 +2,7 @@
   {
     "cmd": [
       "echo",
-      "Traceback (most recent call last):\n  File \"<...>\\recipe_modules\\traceback\\examples\\full.py\", line 15, in RunSteps\n    raise Exception('error!')\nException: error!\n"
+      "Traceback (most recent call last):\n  File \"<...>\\recipe_modules\\traceback\\examples\\full.py\", line 18, in RunSteps\n    json.load(\"not a JSON\")\n  <skipping stdlib frames that depend on python version>\nAttributeError: 'str' object has no attribute 'read'\n"
     ],
     "name": "echo"
   },

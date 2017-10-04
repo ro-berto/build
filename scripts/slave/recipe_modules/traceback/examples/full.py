@@ -2,6 +2,9 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import json
+
+
 DEPS = [
   'recipe_engine/path',
   'recipe_engine/platform',
@@ -12,7 +15,7 @@ DEPS = [
 
 def RunSteps(api):
   try:
-    raise Exception('error!')
+    json.load("not a JSON")
   except Exception:
     api.step('echo', ['echo', api.traceback.format_exc()])
 

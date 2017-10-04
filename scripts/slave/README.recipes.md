@@ -3144,9 +3144,9 @@ The test_results will be an instance of the TestResults class.
 
 [DEPS](/scripts/slave/recipe_modules/traceback/__init__.py#5): [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-#### **class [TracebackApi](/scripts/slave/recipe_modules/traceback/api.py#12)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
+#### **class [TracebackApi](/scripts/slave/recipe_modules/traceback/api.py#26)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [format\_exc](/scripts/slave/recipe_modules/traceback/api.py#21)(self):**
+&mdash; **def [format\_exc](/scripts/slave/recipe_modules/traceback/api.py#76)(self):**
 
 Returns a string containing an exception traceback.
 
@@ -5182,9 +5182,9 @@ Example of using the Syzygy recipe module.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/test_results/examples/full.py#22)(api, warning, server_config):**
 ### *recipes* / [traceback:examples/full](/scripts/slave/recipe_modules/traceback/examples/full.py)
 
-[DEPS](/scripts/slave/recipe_modules/traceback/examples/full.py#5): [traceback](#recipe_modules-traceback), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/traceback/examples/full.py#8): [traceback](#recipe_modules-traceback), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/traceback/examples/full.py#13)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/traceback/examples/full.py#16)(api):**
 ### *recipes* / [trigger:examples/full](/scripts/slave/recipe_modules/trigger/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/trigger/examples/full.py#5): [trigger](#recipe_modules-trigger), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
