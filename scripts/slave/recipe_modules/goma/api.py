@@ -2,7 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import json
 import re
 import socket
 
@@ -49,8 +48,12 @@ class GomaApi(recipe_api.RecipeApi):
     return self.m.puppet_service_account.get_key_path('goma-cloudtail')
 
   @property
-  def cloudtail_path(self):
+  def cloudtail_exe(self):
     assert self._goma_dir
+    if self._is_canary:
+      if self.m.platform.is_win:  # pragma: no cover
+        return 'cloudtail.exe'
+      return 'cloudtail'
     return self.m.path.join(self._goma_dir, 'cloudtail')
 
   @property
@@ -136,22 +139,13 @@ class GomaApi(recipe_api.RecipeApi):
           ref='candidate'
         self._goma_dir = self.m.path['cache'].join('goma_client')
 
-        # To update:
-        # ./cipd set-ref infra/tools/cloudtail/ \
-        #     -ref goma_recipe_module \
-        #     -version git_revision:c6b17d5aa4fa6396c5f971248120e0e624c21fb3
-        #
-        # To see tags (e.g. git_revision:*):
-        # ./cipd describe infra/tools/cloudtail/linux-amd64 \
-        #     -version goma_recipe_module
-        cloudtail_package = (
-            'infra/tools/cloudtail/%s' % self.m.cipd.platform_suffix())
-        cloudtail_version = 'goma_recipe_module'
+        packages = {goma_package: ref}
+        if not self._is_canary:
+          cloudtail_package = (
+              'infra/tools/cloudtail/%s' % self.m.cipd.platform_suffix())
+          packages[cloudtail_package] = 'goma_recipe_module'
 
-        self.m.cipd.ensure(self._goma_dir,
-                           {goma_package: ref,
-                            cloudtail_package: cloudtail_version})
-
+        self.m.cipd.ensure(self._goma_dir, packages)
         return self._goma_dir
 
   @property
@@ -173,7 +167,9 @@ class GomaApi(recipe_api.RecipeApi):
     self.m.file.ensure_directory('goma cache directory', goma_cache_dir)
 
   def _start_cloudtail(self):
-    """Start cloudtail to upload compiler_proxy.INFO
+    """Start cloudtail to upload compiler_proxy.INFO.
+
+    'cloudtail' binary should be in PATH already.
 
     Raises:
       InfraFailure if it fails to start cloudtail
@@ -182,7 +178,7 @@ class GomaApi(recipe_api.RecipeApi):
     self.m.build.python(
       name='start cloudtail',
       script=self.resource('cloudtail_utils.py'),
-      args=['start', '--cloudtail-path', self.cloudtail_path,
+      args=['start', '--cloudtail-path', self.cloudtail_exe,
             '--cloudtail-service-account-json',
             self.cloudtail_service_account_json_path,
             '--pid-file', self.m.raw_io.output_text(
@@ -278,7 +274,11 @@ class GomaApi(recipe_api.RecipeApi):
               script=self.goma_ctl,
               args=['restart'], infra_step=True, **kwargs)
           if not self._is_local:
-            result.presentation.links['cloudtail'] = 'https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%%2Finstance_id%%2F%s&timestamp=%s' % (self._hostname, self.m.time.utcnow().isoformat())
+            result.presentation.links['cloudtail'] = (
+                'https://console.cloud.google.com/logs/viewer?'
+                'project=goma-logs&resource=gce_instance%%2F'
+                'instance_id%%2F%s&timestamp=%s' %
+                (self._hostname, self.m.time.utcnow().isoformat()))
 
         self._goma_started = True
         if not self._is_local:

@@ -1924,7 +1924,7 @@ Returns: (dict) If 'remote_name' is supplied, a dictionary mapping the
 
 [DEPS](/scripts/slave/recipe_modules/goma/__init__.py#1): [build](#recipe_modules-build), [puppet\_service\_account](#recipe_modules-puppet_service_account), [depot\_tools/cipd][depot_tools/recipe_modules/cipd], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/time][recipe_engine/recipe_modules/time]
 
-#### **class [GomaApi](/scripts/slave/recipe_modules/goma/api.py#11)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
+#### **class [GomaApi](/scripts/slave/recipe_modules/goma/api.py#10)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
 GomaApi contains helper functions for using goma.
 
@@ -1932,7 +1932,7 @@ For local running of goma recipe module,
 set local goma dir like below at the beginning of recipe running.
 `api.goma.set_goma_dir_for_local_test(goma_dir)`
 
-&emsp; **@property**<br>&mdash; **def [build\_data\_dir](/scripts/slave/recipe_modules/goma/api.py#166)(self):**
+&emsp; **@property**<br>&mdash; **def [build\_data\_dir](/scripts/slave/recipe_modules/goma/api.py#160)(self):**
 
 &mdash; **def [build\_with\_goma](/scripts/slave/recipe_modules/goma/api.py#417)(self, ninja_command, name=None, ninja_log_outdir=None, ninja_log_compiler=None, goma_env=None, ninja_env=None, \*\*kwargs):**
 
@@ -1955,40 +1955,40 @@ Raises:
   StepFailure or InfraFailure if it fails to build or
   occurs something failure on goma steps.
 
-&emsp; **@property**<br>&mdash; **def [cloudtail\_path](/scripts/slave/recipe_modules/goma/api.py#51)(self):**
+&emsp; **@property**<br>&mdash; **def [cloudtail\_exe](/scripts/slave/recipe_modules/goma/api.py#50)(self):**
 
-&emsp; **@property**<br>&mdash; **def [cloudtail\_pid\_file](/scripts/slave/recipe_modules/goma/api.py#56)(self):**
+&emsp; **@property**<br>&mdash; **def [cloudtail\_pid\_file](/scripts/slave/recipe_modules/goma/api.py#59)(self):**
 
-&emsp; **@property**<br>&mdash; **def [cloudtail\_service\_account\_json\_path](/scripts/slave/recipe_modules/goma/api.py#47)(self):**
+&emsp; **@property**<br>&mdash; **def [cloudtail\_service\_account\_json\_path](/scripts/slave/recipe_modules/goma/api.py#46)(self):**
 
-&emsp; **@property**<br>&mdash; **def [default\_cache\_path](/scripts/slave/recipe_modules/goma/api.py#79)(self):**
+&emsp; **@property**<br>&mdash; **def [default\_cache\_path](/scripts/slave/recipe_modules/goma/api.py#82)(self):**
 
-&emsp; **@property**<br>&mdash; **def [default\_cache\_path\_per\_slave](/scripts/slave/recipe_modules/goma/api.py#70)(self):**
+&emsp; **@property**<br>&mdash; **def [default\_cache\_path\_per\_slave](/scripts/slave/recipe_modules/goma/api.py#73)(self):**
 
-&mdash; **def [ensure\_goma](/scripts/slave/recipe_modules/goma/api.py#117)(self, canary=False):**
+&mdash; **def [ensure\_goma](/scripts/slave/recipe_modules/goma/api.py#120)(self, canary=False):**
 
-&emsp; **@property**<br>&mdash; **def [goma\_ctl](/scripts/slave/recipe_modules/goma/api.py#157)(self):**
+&emsp; **@property**<br>&mdash; **def [goma\_ctl](/scripts/slave/recipe_modules/goma/api.py#151)(self):**
 
-&emsp; **@property**<br>&mdash; **def [goma\_dir](/scripts/slave/recipe_modules/goma/api.py#161)(self):**
+&emsp; **@property**<br>&mdash; **def [goma\_dir](/scripts/slave/recipe_modules/goma/api.py#155)(self):**
 
-&emsp; **@property**<br>&mdash; **def [json\_path](/scripts/slave/recipe_modules/goma/api.py#60)(self):**
+&emsp; **@property**<br>&mdash; **def [json\_path](/scripts/slave/recipe_modules/goma/api.py#63)(self):**
 
-&emsp; **@property**<br>&mdash; **def [jsonstatus](/scripts/slave/recipe_modules/goma/api.py#65)(self):**
+&emsp; **@property**<br>&mdash; **def [jsonstatus](/scripts/slave/recipe_modules/goma/api.py#68)(self):**
 
-&emsp; **@property**<br>&mdash; **def [recommended\_goma\_jobs](/scripts/slave/recipe_modules/goma/api.py#85)(self):**
+&emsp; **@property**<br>&mdash; **def [recommended\_goma\_jobs](/scripts/slave/recipe_modules/goma/api.py#88)(self):**
 
 Return the recommended number of jobs for parallel build using Goma.
 
 This function caches the _goma_jobs.
 
-&emsp; **@property**<br>&mdash; **def [service\_account\_json\_path](/scripts/slave/recipe_modules/goma/api.py#43)(self):**
+&emsp; **@property**<br>&mdash; **def [service\_account\_json\_path](/scripts/slave/recipe_modules/goma/api.py#42)(self):**
 
-&mdash; **def [set\_goma\_dir\_for\_local\_test](/scripts/slave/recipe_modules/goma/api.py#109)(self, goma_dir):**
+&mdash; **def [set\_goma\_dir\_for\_local\_test](/scripts/slave/recipe_modules/goma/api.py#112)(self, goma_dir):**
 
 This function is made for local recipe test only.
 Do not use in recipes used by buildbots.
 
-&mdash; **def [start](/scripts/slave/recipe_modules/goma/api.py#227)(self, env=None, \*\*kwargs):**
+&mdash; **def [start](/scripts/slave/recipe_modules/goma/api.py#223)(self, env=None, \*\*kwargs):**
 
 Start goma compiler_proxy.
 
