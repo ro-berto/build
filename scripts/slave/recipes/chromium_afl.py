@@ -24,7 +24,7 @@ BUILDERS = freeze({
     'builders': {
       'Afl Upload Linux ASan': {
         'chromium_config': 'chromium_clang',
-        'chromium_apply_config': [ 'proprietary_codecs' ],
+        'chromium_apply_config': [ 'clobber', 'proprietary_codecs' ],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'linux',
