@@ -150,20 +150,6 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/sdk/tools/task_kill.py",
-      "--kill_browsers=True",
-      "--kill_vsbuild=True"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "BUILDBOT_BUILDERNAME": "dart-sdk-linux-be"
-    },
-    "name": "kill processes (3)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[CACHE]/builder/sdk/tools/bots/dart_sdk.py",
       "api_docs"
     ],
@@ -172,6 +158,16 @@
       "BUILDBOT_BUILDERNAME": "dart-sdk-linux-be"
     },
     "name": "generate API docs"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/builder/sdk/tools/task_kill.py",
+      "--kill_browsers=True",
+      "--kill_vsbuild=True"
+    ],
+    "name": "kill processes (3)"
   },
   {
     "name": "$result",

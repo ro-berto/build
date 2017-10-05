@@ -154,10 +154,6 @@
       "--kill_browsers=True",
       "--kill_vsbuild=True"
     ],
-    "cwd": "[CACHE]\\builder\\sdk",
-    "env": {
-      "BUILDBOT_BUILDERNAME": "dart-sdk-windows-dev"
-    },
     "name": "kill processes (3)"
   },
   {

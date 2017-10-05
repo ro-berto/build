@@ -22,19 +22,20 @@ def RunSteps(api, buildername):
   assert system in ['mac', 'linux', 'windows']
   assert channel in ['be', 'dev', 'stable', 'try']
 
-  api.dart.checkout(channel=channel, clobber=True)
+  try:
+    api.dart.checkout(channel=channel, clobber=True)
 
-  with api.context(cwd=api.path['checkout'],
+    with api.context(cwd=api.path['checkout'],
                    env={'BUILDBOT_BUILDERNAME':buildername}):
-    api.dart.build(['--mode=release', '--arch=ia32', 'create_sdk'])
-    api.dart.build(['--mode=release', '--arch=x64', 'create_sdk'])
+      api.dart.build(['--mode=release', '--arch=ia32', 'create_sdk'])
+      api.dart.build(['--mode=release', '--arch=x64', 'create_sdk'])
 
+      if system == 'linux':
+        api.python('generate API docs',
+            api.path['checkout'].join('tools', 'bots', 'dart_sdk.py'),
+            args=['api_docs'])
+  finally:
     api.dart.kill_tasks()
-
-    if system == 'linux':
-      api.python('generate API docs',
-          api.path['checkout'].join('tools', 'bots', 'dart_sdk.py'),
-          args=['api_docs'])
 
 def GenTests(api):
   yield (
