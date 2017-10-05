@@ -50,11 +50,9 @@ class GomaApi(recipe_api.RecipeApi):
   @property
   def cloudtail_exe(self):
     assert self._goma_dir
-    if self._is_canary:
-      if self.m.platform.is_win:  # pragma: no cover
-        return 'cloudtail.exe'
-      return 'cloudtail'
-    return self.m.path.join(self._goma_dir, 'cloudtail')
+    if self.m.platform.is_win:
+      return 'cloudtail.exe'
+    return 'cloudtail'
 
   @property
   def cloudtail_pid_file(self):
@@ -139,13 +137,7 @@ class GomaApi(recipe_api.RecipeApi):
           ref='candidate'
         self._goma_dir = self.m.path['cache'].join('goma_client')
 
-        packages = {goma_package: ref}
-        if not self._is_canary:
-          cloudtail_package = (
-              'infra/tools/cloudtail/%s' % self.m.cipd.platform_suffix())
-          packages[cloudtail_package] = 'goma_recipe_module'
-
-        self.m.cipd.ensure(self._goma_dir, packages)
+        self.m.cipd.ensure(self._goma_dir, {goma_package: ref})
         return self._goma_dir
 
   @property
