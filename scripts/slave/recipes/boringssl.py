@@ -37,15 +37,18 @@ def _GetHostExeSuffix(platform):
   return ''
 
 
+def _WindowsCMakeWorkaround(path):
+  # CMake does not allow backslashes in several path variables. It writes the
+  # string out to a cmake file with configure_file() and fails to escape it
+  # correctly. See https://gitlab.kitware.com/cmake/cmake/issues/16254.
+  return str(path).replace('\\', '/')
+
+
 def _GetHostCMakeArgs(platform, bot_utils):
   args = {}
   if platform.is_win:
-    # CMake does not allow backslashes in this variable. It writes the string
-    # out to a cmake file with configure_file() and fails to escape it
-    # correctly.
-    # TODO(davidben): Fix the bug in CMake upstream and remove this workaround.
-    args['CMAKE_ASM_NASM_COMPILER'] = \
-        str(bot_utils.join('yasm-win32.exe')).replace('\\', '/')
+    args['CMAKE_ASM_NASM_COMPILER'] = _WindowsCMakeWorkaround(
+        bot_utils.join('yasm-win32.exe'))
     args['PERL_EXECUTABLE'] = bot_utils.join('perl-win32', 'perl', 'bin',
                                              'perl.exe')
   return args
@@ -63,7 +66,14 @@ def _AppendFlags(args, key, flags):
     args[key] = flags
 
 
-def _GetTargetCMakeArgs(buildername, checkout, ninja_path):
+def _GetBuilderEnv(buildername):
+  env = {}
+  if _HasToken(buildername, 'vs2017'):
+    env['GYP_MSVS_VERSION'] = '2017'
+  return env
+
+
+def _GetTargetCMakeArgs(buildername, checkout, ninja_path, platform):
   bot_utils = checkout.join('util', 'bot')
   args = {'CMAKE_MAKE_PROGRAM': ninja_path}
   if _HasToken(buildername, 'shared'):
@@ -81,8 +91,15 @@ def _GetTargetCMakeArgs(buildername, checkout, ninja_path):
     args['OPENSSL_NO_ASM'] = '1'
   if _HasToken(buildername, 'asan') or _HasToken(buildername, 'clang') or \
      _HasToken(buildername, 'fuzz'):
-    args['CMAKE_C_COMPILER'] = bot_utils.join('llvm-build', 'bin', 'clang')
-    args['CMAKE_CXX_COMPILER'] = bot_utils.join('llvm-build', 'bin', 'clang++')
+    if platform.is_win:
+      args['CMAKE_C_COMPILER'] = _WindowsCMakeWorkaround(
+          bot_utils.join('llvm-build', 'bin', 'clang-cl.exe'))
+      args['CMAKE_CXX_COMPILER'] = _WindowsCMakeWorkaround(
+          bot_utils.join('llvm-build', 'bin', 'clang-cl.exe'))
+    else:
+      args['CMAKE_C_COMPILER'] = bot_utils.join('llvm-build', 'bin', 'clang')
+      args['CMAKE_CXX_COMPILER'] = bot_utils.join('llvm-build', 'bin',
+                                                  'clang++')
   if _HasToken(buildername, 'asan'):
     args['ASAN'] = '1'
   if _HasToken(buildername, 'small'):
@@ -153,120 +170,122 @@ PROPERTIES = {
 
 
 def RunSteps(api, buildername):
-  # Sync and pull in everything.
-  api.gclient.set_config('boringssl')
-  if _HasToken(buildername, 'android'):
-    api.gclient.c.target_os.add('android')
-  api.bot_update.ensure_checkout()
-  api.gclient.runhooks()
+  with api.context(env=_GetBuilderEnv(buildername)):
+    # Sync and pull in everything.
+    api.gclient.set_config('boringssl')
+    if _HasToken(buildername, 'android'):
+      api.gclient.c.target_os.add('android')
+    api.bot_update.ensure_checkout()
+    api.gclient.runhooks()
 
-  # Set up paths.
-  bot_utils = api.path['checkout'].join('util', 'bot')
-  go_env = bot_utils.join('go', 'env.py')
-  adb_path = bot_utils.join('android_tools', 'sdk', 'platform-tools', 'adb')
-  build_dir = api.path['checkout'].join('build')
-  runner_dir = api.path['checkout'].join('ssl', 'test', 'runner')
+    # Set up paths.
+    bot_utils = api.path['checkout'].join('util', 'bot')
+    go_env = bot_utils.join('go', 'env.py')
+    adb_path = bot_utils.join('android_tools', 'sdk', 'platform-tools', 'adb')
+    build_dir = api.path['checkout'].join('build')
+    runner_dir = api.path['checkout'].join('ssl', 'test', 'runner')
 
-  # Extract the Intel SDE.
-  if _HasToken(buildername, 'sde'):
-    sde_path = bot_utils.join('sde-' + _GetHostToolSuffix(api.platform))
-    sde_archive = bot_utils.join('sde-' + _GetHostToolSuffix(api.platform) +
-                                 '.tar.bz2')
-    sde_hash = bot_utils.join('sde-' + _GetHostToolSuffix(api.platform) +
-                              '.tar.bz2.sha1')
-    api.python(
-        'download_sde', api.depot_tools.download_from_google_storage_path,
-        ['--no_resume', '--bucket', 'chrome-boringssl-sde', '-s', sde_hash])
-    api.python('extract_sde',
-               bot_utils.join('extract.py'), [sde_archive, sde_path])
+    # Extract the Intel SDE.
+    if _HasToken(buildername, 'sde'):
+      sde_path = bot_utils.join('sde-' + _GetHostToolSuffix(api.platform))
+      sde_archive = bot_utils.join('sde-' + _GetHostToolSuffix(api.platform) +
+                                   '.tar.bz2')
+      sde_hash = bot_utils.join('sde-' + _GetHostToolSuffix(api.platform) +
+                                '.tar.bz2.sha1')
+      api.python(
+          'download_sde', api.depot_tools.download_from_google_storage_path,
+          ['--no_resume', '--bucket', 'chrome-boringssl-sde', '-s', sde_hash])
+      api.python('extract_sde',
+                 bot_utils.join('extract.py'), [sde_archive, sde_path])
 
-  # CMake is stateful, so do a clean build. BoringSSL builds quickly enough that
-  # this isn't a concern.
-  api.file.rmtree('clean', build_dir)
-  api.file.ensure_directory('mkdir', build_dir)
+    # CMake is stateful, so do a clean build. BoringSSL builds quickly enough
+    # that this isn't a concern.
+    api.file.rmtree('clean', build_dir)
+    api.file.ensure_directory('mkdir', build_dir)
 
-  # If building with MSVC, all commands must run with an environment wrapper.
-  # This is necessary both to find the toolchain and the runtime dlls. Rather
-  # than copy the runtime to every directory where a binary is installed, just
-  # run the tests with the toolchain prefix as well.
-  msvc_prefix = _GetTargetMSVCPrefix(buildername, bot_utils)
+    # If building with MSVC, all commands must run with an environment wrapper.
+    # This is necessary both to find the toolchain and the runtime dlls. Rather
+    # than copy the runtime to every directory where a binary is installed, just
+    # run the tests with the toolchain prefix as well.
+    msvc_prefix = _GetTargetMSVCPrefix(buildername, bot_utils)
 
-  # Build BoringSSL itself.
-  cmake = bot_utils.join('cmake-' + _GetHostToolSuffix(api.platform), 'bin',
-                         'cmake' + _GetHostExeSuffix(api.platform))
-  cmake_args = _GetHostCMakeArgs(api.platform, bot_utils)
-  cmake_args.update(_GetTargetCMakeArgs(buildername, api.path['checkout'],
-                                        api.depot_tools.ninja_path))
-  with api.context(cwd=build_dir):
-    api.python('cmake', go_env,
-               msvc_prefix + [cmake, '-GNinja'] +
-               ['-D%s=%s' % (k, v) for (k, v) in sorted(cmake_args.items())] +
-               [api.path['checkout']])
-  api.python('ninja', go_env,
-             msvc_prefix + [api.depot_tools.ninja_path, '-C', build_dir])
+    # Build BoringSSL itself.
+    cmake = bot_utils.join('cmake-' + _GetHostToolSuffix(api.platform), 'bin',
+                           'cmake' + _GetHostExeSuffix(api.platform))
+    cmake_args = _GetHostCMakeArgs(api.platform, bot_utils)
+    cmake_args.update(
+        _GetTargetCMakeArgs(buildername, api.path['checkout'],
+                            api.depot_tools.ninja_path, api.platform))
+    with api.context(cwd=build_dir):
+      api.python(
+          'cmake', go_env, msvc_prefix + [cmake, '-GNinja'] +
+          ['-D%s=%s' % (k, v)
+           for (k, v) in sorted(cmake_args.items())] + [api.path['checkout']])
+    api.python('ninja', go_env,
+               msvc_prefix + [api.depot_tools.ninja_path, '-C', build_dir])
 
-  if _HasToken(buildername, 'compile'):
-    return
+    if _HasToken(buildername, 'compile'):
+      return
 
-  with api.step.defer_results():
-    # The default Linux build may not depend on the C++ runtime. This is easy
-    # to check when building shared libraries.
-    if buildername == 'linux_shared':
-      api.python('check imported libraries', go_env, [
-          'go', 'run', api.path['checkout'].join('util',
-                                                 'check_imported_libraries.go'),
-          build_dir.join('crypto', 'libcrypto.so'),
-          build_dir.join('ssl', 'libssl.so')
-      ])
-
-    env = _GetTargetEnv(buildername, bot_utils)
-
-    # Run the unit tests.
-    with api.context(cwd=api.path['checkout'], env=env):
-      all_tests_args = []
-      if _HasToken(buildername, 'sde'):
-        all_tests_args += ['-sde', '-sde-path', sde_path.join('sde')]
-      if _HasToken(buildername, 'android'):
-        deferred = api.python('unit tests', go_env, [
+    with api.step.defer_results():
+      # The default Linux build may not depend on the C++ runtime. This is easy
+      # to check when building shared libraries.
+      if buildername == 'linux_shared':
+        api.python('check imported libraries', go_env, [
             'go', 'run',
-            api.path.join('util', 'run_android_tests.go'), '-build-dir',
-            build_dir, '-adb', adb_path, '-suite', 'unit', '-all-tests-args',
-            ' '.join(all_tests_args), '-json-output',
-            api.test_utils.test_results()
+            api.path['checkout'].join('util', 'check_imported_libraries.go'),
+            build_dir.join('crypto', 'libcrypto.so'),
+            build_dir.join('ssl', 'libssl.so')
         ])
-      else:
-        deferred = api.python('unit tests', go_env, msvc_prefix + [
-            'go', 'run',
-            api.path.join('util', 'all_tests.go'), '-json-output',
-            api.test_utils.test_results()
-        ] + all_tests_args)
-    _LogFailingTests(api, deferred)
 
-    # Run the SSL tests.
-    if not _HasToken(buildername, 'sde'):
-      runner_args = ['-pipe']
-      if _HasToken(buildername, 'fuzz'):
-        runner_args += ['-fuzzer', '-shim-config', 'fuzzer_mode.json']
-      # Limit the number of workers on Mac, to avoid flakiness.
-      # https://crbug.com/boringssl/199
-      if api.platform.is_mac:
-        runner_args += ['-num-workers', '1']
-      if _HasToken(buildername, 'android'):
-        with api.context(cwd=api.path['checkout'], env=env):
-          deferred = api.python('ssl tests', go_env, [
+      env = _GetTargetEnv(buildername, bot_utils)
+
+      # Run the unit tests.
+      with api.context(cwd=api.path['checkout'], env=env):
+        all_tests_args = []
+        if _HasToken(buildername, 'sde'):
+          all_tests_args += ['-sde', '-sde-path', sde_path.join('sde')]
+        if _HasToken(buildername, 'android'):
+          deferred = api.python('unit tests', go_env, [
               'go', 'run',
               api.path.join('util', 'run_android_tests.go'), '-build-dir',
-              build_dir, '-adb', adb_path, '-suite', 'ssl', '-runner-args',
-              ' '.join(runner_args), '-json-output',
+              build_dir, '-adb', adb_path, '-suite', 'unit', '-all-tests-args',
+              ' '.join(all_tests_args), '-json-output',
               api.test_utils.test_results()
           ])
-      else:
-        with api.context(cwd=runner_dir, env=env):
-          deferred = api.python(
-              'ssl tests', go_env, msvc_prefix +
-              ['go', 'test', '-json-output',
-               api.test_utils.test_results()] + runner_args)
-    _LogFailingTests(api, deferred)
+        else:
+          deferred = api.python('unit tests', go_env, msvc_prefix + [
+              'go', 'run',
+              api.path.join('util', 'all_tests.go'), '-json-output',
+              api.test_utils.test_results()
+          ] + all_tests_args)
+      _LogFailingTests(api, deferred)
+
+      # Run the SSL tests.
+      if not _HasToken(buildername, 'sde'):
+        runner_args = ['-pipe']
+        if _HasToken(buildername, 'fuzz'):
+          runner_args += ['-fuzzer', '-shim-config', 'fuzzer_mode.json']
+        # Limit the number of workers on Mac, to avoid flakiness.
+        # https://crbug.com/boringssl/199
+        if api.platform.is_mac:
+          runner_args += ['-num-workers', '1']
+        if _HasToken(buildername, 'android'):
+          with api.context(cwd=api.path['checkout'], env=env):
+            deferred = api.python('ssl tests', go_env, [
+                'go', 'run',
+                api.path.join('util', 'run_android_tests.go'), '-build-dir',
+                build_dir, '-adb', adb_path, '-suite', 'ssl', '-runner-args',
+                ' '.join(runner_args), '-json-output',
+                api.test_utils.test_results()
+            ])
+        else:
+          with api.context(cwd=runner_dir, env=env):
+            deferred = api.python(
+                'ssl tests', go_env, msvc_prefix +
+                ['go', 'test', '-json-output',
+                 api.test_utils.test_results()] + runner_args)
+      _LogFailingTests(api, deferred)
 
 
 def GenTests(api):
@@ -293,9 +312,13 @@ def GenTests(api):
     ('win32', api.platform('win', 64)),
     ('win32_small', api.platform('win', 64)),
     ('win32_rel', api.platform('win', 64)),
+    ('win32_vs2017', api.platform('win', 64)),
+    ('win32_vs2017_clang', api.platform('win', 64)),
     ('win64', api.platform('win', 64)),
     ('win64_small', api.platform('win', 64)),
     ('win64_rel', api.platform('win', 64)),
+    ('win64_vs2017', api.platform('win', 64)),
+    ('win64_vs2017_clang', api.platform('win', 64)),
     ('android_arm', api.platform('linux', 64)),
     ('android_arm_rel', api.platform('linux', 64)),
     ('android_aarch64', api.platform('linux', 64)),

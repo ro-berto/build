@@ -118,6 +118,18 @@
       "slave_pools": ["windows"],
       "category": "2win",
     },
+    "win64_vs2017": {
+      "recipe": "boringssl",
+      "scheduler": "boringssl_commits",
+      "slave_pools": ["windows"],
+      "category": "2win",
+    },
+    "win64_vs2017_clang": {
+      "recipe": "boringssl",
+      "scheduler": "boringssl_commits",
+      "slave_pools": ["windows"],
+      "category": "2win",
+    },
     "win32": {
       "recipe": "boringssl",
       "scheduler": "boringssl_commits",
@@ -131,6 +143,18 @@
       "category": "2win",
     },
     "win32_rel": {
+      "recipe": "boringssl",
+      "scheduler": "boringssl_commits",
+      "slave_pools": ["windows"],
+      "category": "2win",
+    },
+    "win32_vs2017": {
+      "recipe": "boringssl",
+      "scheduler": "boringssl_commits",
+      "slave_pools": ["windows"],
+      "category": "2win",
+    },
+    "win32_vs2017_clang": {
       "recipe": "boringssl",
       "scheduler": "boringssl_commits",
       "slave_pools": ["windows"],
