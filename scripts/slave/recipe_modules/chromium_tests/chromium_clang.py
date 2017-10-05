@@ -78,13 +78,13 @@ SPEC['builders'].update([
     config('ToTLinux (dbg)',
            build_config='Debug'),
 
-    config('ToTLinuxAsan',
+    config('ToTLinuxASan',
            chromium_config='clang_tot_linux_asan'),
 
     config('ToTLinuxLLD',
            chromium_config='clang_tot_linux_lld'),
 
-    config('ToTLinuxMSAN'),
+    config('ToTLinuxMSan'),
 
     config('ToTLinuxThinLTO',
            chromium_config='clang_tot_linux_lld'),
