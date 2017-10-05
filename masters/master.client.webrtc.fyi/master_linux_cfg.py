@@ -41,6 +41,14 @@ def Update(c):
           branch=None,
           builderNames=[
               'Auto-roll - WebRTC DEPS',
+          ],
+      ),
+      # Update LKGR revision every 15 minutes.
+      Periodic(
+          name='webrtc_lkgr',
+          periodicBuildTimer=15*60,
+          branch=None,
+          builderNames=[
               'WebRTC lkgr finder',
           ],
       ),
