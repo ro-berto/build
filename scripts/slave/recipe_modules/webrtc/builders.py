@@ -649,6 +649,48 @@ BUILDERS = freeze({
         },
         'swarming_timeout': 3600,  # 1h
       },
+      'WebRTC Perf Tests (Mac swarming)': {
+        'recipe_config': 'webrtc_desktop_perf_swarming',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'webrtc-mac-large-tests-swarming',
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'linux'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'pool': 'WebRTC',
+          'gpu': None,
+          'os': 'Mac-10.12',
+          'id': 'build9-m3',
+        },
+        'swarming_timeout': 3600,  # 1h
+      },
+      'WebRTC Perf Tests (Win swarming)': {
+        'recipe_config': 'webrtc_desktop_perf_swarming',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'webrtc-win-large-tests-swarming',
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'linux'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'pool': 'WebRTC',
+          'gpu': None,
+          'os': 'Windows',
+          'id': 'build1-m3',
+        },
+        'swarming_timeout': 3600,  # 1h
+      },
       'Android ASan (swarming)': {
         'recipe_config': 'webrtc_android_asan',
         'chromium_config_kwargs': {

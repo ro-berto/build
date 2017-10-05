@@ -1,4 +1,4 @@
-# Copyright 2015 The Chromium Authors. All rights reserved.
+# Copyright 2017 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -21,27 +21,17 @@ def m_remote_run(recipe, **kwargs):
 
 def Update(c):
   c['schedulers'].extend([
-      SingleBranchScheduler(name='webrtc_windows_scheduler',
+      SingleBranchScheduler(name='webrtc_mac_scheduler',
                             branch='master',
                             treeStableTimer=0,
                             builderNames=[
-                                'Win64 Debug (Win8)',
-                                'Win64 Debug (Win10)',
-                                'WebRTC Perf Tests (Win swarming)',
+                                'WebRTC Perf Tests (Mac swarming)',
                             ]),
   ])
 
   specs = [
     {
-      'name': 'Win64 Debug (Win8)',
-      'slavebuilddir': 'win',
-    },
-    {
-      'name': 'Win64 Debug (Win10)',
-      'slavebuilddir': 'win',
-    },
-    {
-      'name': 'WebRTC Perf Tests (Win swarming)',
+      'name': 'WebRTC Perf Tests (Mac swarming)',
       'recipe': 'webrtc/standalone',
       'slavebuilddir': 'win',
     },
@@ -52,7 +42,7 @@ def Update(c):
         'name': spec['name'],
         'factory': m_remote_run('webrtc/standalone'),
         'notify_on_missing': True,
-        'category': 'win',
+        'category': 'mac',
         'slavebuilddir': spec['slavebuilddir'],
       } for spec in specs
   ])
