@@ -9,4 +9,3 @@ MASTERPATH := master.chromium.gpu.fyi
 include ../master-common.mk
 
 # -*- makefile -*-
-

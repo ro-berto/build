@@ -9,4 +9,3 @@ MASTERPATH := master.chromium.clang
 include ../master-common.mk
 
 # -*- makefile -*-
-

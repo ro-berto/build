@@ -9,4 +9,3 @@ MASTERPATH := master.client.gyp
 include ../master-common.mk
 
 # -*- makefile -*-
-

@@ -9,4 +9,3 @@ MASTERPATH := master.tryserver.chromium.chromiumos
 include ../master-common.mk
 
 # -*- makefile -*-
-

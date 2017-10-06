@@ -9,4 +9,3 @@ MASTERPATH := master.tryserver.client.catapult
 include ../master-common.mk
 
 # -*- makefile -*-
-

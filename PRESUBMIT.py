@@ -214,16 +214,15 @@ def BuildInternalCheck(output, input_api, output_api):
   return []
 
 def CheckExternalBuildersPylMastersAreInSync(input_api, output_api):
-  script_path = input_api.os.path.join('scripts', 'tools', 'buildbot_tool.py')
+  script_path = input_api.os.path.join('scripts', 'tools', 'buildbot-tool')
   proc = input_api.subprocess.Popen([
-      input_api.python_interpreter,
       script_path,
       'check',
       '--external-only'
       ], stdout=input_api.subprocess.PIPE, stderr=input_api.subprocess.STDOUT)
   out, _ = proc.communicate()
   if proc.retcode or out:
-    return [output_api.PresubmitError('`scripts/slave/buildbot_tool.py '
+    return [output_api.PresubmitError('`scripts/tools/buildbot-tool '
                                       'check --external-only` returned '
                                       '%d:\n%s\n' % (proc.retcode, out))]
 

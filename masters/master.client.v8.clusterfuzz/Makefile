@@ -9,4 +9,3 @@ MASTERPATH := master.client.v8.clusterfuzz
 include ../master-common.mk
 
 # -*- makefile -*-
-

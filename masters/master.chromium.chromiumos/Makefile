@@ -9,4 +9,3 @@ MASTERPATH := master.chromium.chromiumos
 include ../master-common.mk
 
 # -*- makefile -*-
-

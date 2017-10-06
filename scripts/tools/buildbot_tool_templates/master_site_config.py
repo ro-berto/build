@@ -20,3 +20,4 @@ class %(master_classname)s(Master.%(master_base_class)s):
   pubsub_service_account_file = %(pubsub_service_account_file_str)s
   pubsub_topic = %(pubsub_topic_str)s
   name = '%(name)s'
+%(master_host_line)s

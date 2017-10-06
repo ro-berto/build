@@ -9,4 +9,3 @@ MASTERPATH := master.tryserver.client.custom_tabs_client
 include ../master-common.mk
 
 # -*- makefile -*-
-

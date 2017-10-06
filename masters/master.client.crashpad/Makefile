@@ -9,4 +9,3 @@ MASTERPATH := master.client.crashpad
 include ../master-common.mk
 
 # -*- makefile -*-
-

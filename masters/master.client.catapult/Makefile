@@ -9,4 +9,3 @@ MASTERPATH := master.client.catapult
 include ../master-common.mk
 
 # -*- makefile -*-
-

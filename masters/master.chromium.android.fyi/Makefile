@@ -9,4 +9,3 @@ MASTERPATH := master.chromium.android.fyi
 include ../master-common.mk
 
 # -*- makefile -*-
-

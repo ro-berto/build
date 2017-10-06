@@ -75,9 +75,12 @@ class Tool(object):
     """Generates and updates master configs."""
     files_to_write, ret = self._generate(args)
     for path in sorted(files_to_write):
-      self.fs.write_text_file(self.fs.join(self.build_dir, path),
-                              files_to_write[path])
-      self.print_('Wrote %s.' % self.fs.relpath(path, self.build_dir))
+      if self.fs.exists(self.fs.join(self.build_dir, self.fs.dirname(path))):
+        d = self.build_dir
+      else:
+        d = self.build_internal_dir
+      self.fs.write_text_file(self.fs.join(d, path), files_to_write[path])
+      self.print_('Wrote %s.' % self.fs.relpath(path, d))
     return ret
 
   def run_help(self, args):
@@ -161,7 +164,8 @@ class Tool(object):
     except:
       self.print_("Error populating template %s" % path, file=self.stderr)
       raise
-    return self._update_generated_file_disclaimer(contents, path)
+    contents = self._update_generated_file_disclaimer(contents, path)
+    return contents.strip() + '\n'
 
   def _update_generated_file_disclaimer(self, contents, path):
     pattern = '# This file is used by scripts/tools/buildbot-tool.*'

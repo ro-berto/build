@@ -1978,6 +1978,14 @@ def ParseBuildersFileContents(path, contents):
   builders['pubsub_topic_str'] = repr(builders['pubsub_topic'])
   builders.setdefault('bot_pools', {})
 
+  if 'master_host' in builders:
+    master_host_line = "  master_host = '%s'" % builders['master_host']
+  else:
+    master_host_line = ""
+  builders['master_host_line'] = master_host_line
+
+  builders['extra_master_cfg_code'] = builders.get('extra_master_cfg_code', '')
+
   # Handle backwards-compatibility of old 'slaves' nomenclature.
   # TODO: Remove this once all builders.pyl files have been upgraded.
   if 'slave_port' in builders:

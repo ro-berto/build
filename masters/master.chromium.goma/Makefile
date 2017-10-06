@@ -9,4 +9,3 @@ MASTERPATH := master.chromium.goma
 include ../master-common.mk
 
 # -*- makefile -*-
-

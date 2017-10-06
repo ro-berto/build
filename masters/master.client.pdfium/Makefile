@@ -9,4 +9,3 @@ MASTERPATH := master.client.pdfium
 include ../master-common.mk
 
 # -*- makefile -*-
-
