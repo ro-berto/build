@@ -487,11 +487,14 @@ def _SendHistogramJson(url, histogramset_json, oauth_token):
   try:
     _, content = http.request(
         url + SEND_HISTOGRAMS_PATH, method='POST', body=data, headers=headers)
-    error = content.get('error')
+    result = json.loads(content) or {}
+    error = result.get('error')
     if error is not None:
       return 'HTTP error: %s\n' % error
   except httplib2.HttpLib2Error as e:
     return 'HttpLib2Error: %s\n' % e
+  except ValueError as e:
+    return 'ValueError: %s\n' % e
   return None
 
 def _DashboardUrl(url, data):
