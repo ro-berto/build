@@ -79,7 +79,11 @@ def get_root_json(master_url, milo_creds):
   name = master_url.rstrip('/').split('/')[-1]
 
   endpoint = 'milo.Buildbot/GetCompressedMasterJSON'
-  resp = _get_from_milo(endpoint, json.dumps({'name': name}), milo_creds)
+  req = {
+    'name': name,
+    'exclude_deprecated': True,
+  }
+  resp = _get_from_milo(endpoint, json.dumps(req), milo_creds)
   data = zlib.decompress(base64.b64decode(resp['data']), zlib.MAX_WBITS | 16)
   return json.loads(data)
 
@@ -169,7 +173,8 @@ def get_build_json(url_tuple):
   data = {
     'master': master_name,
     'builder': builder,
-    'build_num': int(buildnum)
+    'build_num': int(buildnum),
+    'exclude_deprecated': True,
   }
   resp = _get_from_milo(endpoint, json.dumps(data), milo_creds)
   return (json.loads(base64.b64decode(resp['data'])),
