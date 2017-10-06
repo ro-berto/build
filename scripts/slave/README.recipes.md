@@ -1396,17 +1396,17 @@ Args:
 Returns:
   A function that can be passed to setup_chromium_tests or run directly.
 
-&mdash; **def [deapply\_patch](/scripts/slave/recipe_modules/chromium_tests/api.py#698)(self, bot_update_step):**
+&mdash; **def [deapply\_patch](/scripts/slave/recipe_modules/chromium_tests/api.py#711)(self, bot_update_step):**
 
 &mdash; **def [download\_and\_unzip\_build](/scripts/slave/recipe_modules/chromium_tests/api.py#595)(self, mastername, buildername, update_step, bot_db, build_archive_url=None, build_revision=None, override_bot_type=None):**
 
 &mdash; **def [generate\_tests\_from\_test\_spec](/scripts/slave/recipe_modules/chromium_tests/api.py#256)(self, test_spec, builder_dict, buildername, mastername, enable_swarming, swarming_dimensions, scripts_compile_targets, generators, bot_update_step):**
 
-&mdash; **def [get\_common\_args\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#788)(self):**
+&mdash; **def [get\_common\_args\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#801)(self):**
 
 &mdash; **def [get\_compile\_targets](/scripts/slave/recipe_modules/chromium_tests/api.py#380)(self, bot_config, bot_db, tests):**
 
-&mdash; **def [get\_compile\_targets\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#827)(self):**
+&mdash; **def [get\_compile\_targets\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#840)(self):**
 
 This gets the combined compile_targets information from the
 //testing/scripts/get_compile_targets.py script.
@@ -1441,7 +1441,7 @@ Returns a Boolean indicating whether this module is running in
 precommit mode; i.e., whether tests are running before the changes
 are committed.
 
-&mdash; **def [main\_waterfall\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#859)(self, mb_config_path=None, bot_config=None):**
+&mdash; **def [main\_waterfall\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#872)(self, mb_config_path=None, bot_config=None):**
 
 &mdash; **def [prepare\_checkout](/scripts/slave/recipe_modules/chromium_tests/api.py#228)(self, bot_config, root_solution_revision=None, disable_syntax_validation=False):**
 
@@ -1449,7 +1449,7 @@ are committed.
 
 &mdash; **def [run\_mb\_and\_compile](/scripts/slave/recipe_modules/chromium_tests/api.py#575)(self, compile_targets, isolated_targets, name_suffix, mb_mastername=None, mb_buildername=None, mb_config_path=None):**
 
-&mdash; **def [run\_tests\_on\_tryserver](/scripts/slave/recipe_modules/chromium_tests/api.py#710)(self, bot_config, tests, bot_update_step, affected_files, mb_mastername=None, mb_buildername=None, disable_deapply_patch=False):**
+&mdash; **def [run\_tests\_on\_tryserver](/scripts/slave/recipe_modules/chromium_tests/api.py#723)(self, bot_config, tests, bot_update_step, affected_files, mb_mastername=None, mb_buildername=None, disable_deapply_patch=False):**
 
 &mdash; **def [runhooks](/scripts/slave/recipe_modules/chromium_tests/api.py#209)(self, update_step):**
 
@@ -1473,7 +1473,7 @@ Runs command, checking for transience if this is a try job.
   patch") and runs the command.
 * update_step is the bot_update step used for deapplying the patch.
 
-&mdash; **def [trybot\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#887)(self):**
+&mdash; **def [trybot\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#900)(self):**
 
 &emsp; **@property**<br>&mdash; **def [trybots](/scripts/slave/recipe_modules/chromium_tests/api.py#87)(self):**
 

@@ -19,9 +19,6 @@
       "--revision",
       "src@HEAD"
     ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -105,144 +102,7 @@
     ]
   },
   {
-    "cmd": [],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "ensure_goma"
-  },
-  {
-    "cmd": [
-      "cipd",
-      "ensure",
-      "-root",
-      "[CACHE]/goma_client",
-      "-ensure-file",
-      "infra_internal/goma/client/linux-amd64 release",
-      "-json-output",
-      "/path/to/tmp/json",
-      "-service-account-json",
-      "/creds/service_accounts/service-account-goma-client.json"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "ensure_goma.ensure_installed",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/linux-amd64\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/src/tools/swarming_client/swarming.py",
-      "--version"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "swarming.py --version",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@0.8.6@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
-      "runhooks"
-    ],
-    "cwd": "[START_DIR]/src",
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "component=static_library gomadir='[CACHE]/goma_client' target_arch=x64 use_goma=1",
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
-    },
-    "name": "gclient runhooks"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/src/testing/scripts/get_compile_targets.py",
-      "--output",
-      "/path/to/tmp/json",
-      "--",
-      "--build-config-fs",
-      "Release",
-      "--use-src-side-runtest-py",
-      "--paths",
-      "{\"checkout\": \"[START_DIR]/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
-      "--properties",
-      "{\"bot_id\": \"test_bot\", \"buildername\": \"Linux Tests\", \"buildnumber\": 571, \"mastername\": \"chromium.linux\", \"slavename\": \"test_bot\", \"target_platform\": \"linux\"}"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "get compile targets for scripts",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[START_DIR]/src/testing/buildbot/chromium.linux.json",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "read test spec (chromium.linux.json)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@path: [START_DIR]/src/testing/buildbot/chromium.linux.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Linux Tests\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"isolated_scripts\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"isolate_name\": \"telemetry_gpu_unittests\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"name\": \"telemetry_gpu_unittests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "rmtree",
-      "[START_DIR]/src/out/Release"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "build directory"
-  },
-  {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -250,101 +110,67 @@
       "--show-path",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/extract_build.py",
-      "--gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
-      "--src-dir",
-      "[START_DIR]/src",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "--build-url",
-      "gs://chromium-linux-archive/chromium.linux/Linux Builder/full-build-linux.zip",
-      "--build_revision",
-      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "--master-name",
-      "chromium.linux",
-      "--build-number",
-      "571"
+      "--xvfb",
+      "--factory-properties",
+      "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"mastername\": \"test_mastername\", \"recipe\": \"chromium_tests:tests/steps/generate_gtest\", \"single_spec\": {\"setup\": [{\"script\": \"//set_up_script1.py\"}, {\"script\": \"//set_up_script2.py\"}], \"teardown\": [{\"script\": \"//tear_down_script1.py\"}, {\"script\": \"//tear_down_script2.py\"}], \"test\": \"base_unittests\"}, \"slavename\": \"test_bot_id\"}",
+      "--build-properties",
+      "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"mastername\": \"test_mastername\", \"recipe\": \"chromium_tests:tests/steps/generate_gtest\", \"single_spec\": {\"setup\": [{\"script\": \"//set_up_script1.py\"}, {\"script\": \"//set_up_script2.py\"}], \"teardown\": [{\"script\": \"//tear_down_script1.py\"}, {\"script\": \"//tear_down_script2.py\"}], \"test\": \"base_unittests\"}, \"slavename\": \"test_bot_id\"}",
+      "--annotate=gtest",
+      "--test-type=base_unittests",
+      "--step-name=base_unittests",
+      "--test-launcher-summary-output",
+      "/path/to/tmp/json",
+      "--generate-json-file",
+      "-o",
+      "gtest-results/base_unittests",
+      "--builder-name=test_buildername",
+      "--slave-name=test_bot_id",
+      "--build-number=123",
+      "base_unittests"
     ],
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "infra_step": true,
-    "name": "extract build"
+    "name": "base_unittests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
-      "--build-dir",
-      "[START_DIR]/src/out/Release",
-      "--output-json",
-      "/path/to/tmp/json"
+      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
+      "--input-json",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}]}]}",
+      "--master-name",
+      "test_mastername",
+      "--builder-name",
+      "test_buildername",
+      "--build-number",
+      "123",
+      "--test-type",
+      "base_unittests",
+      "--test-results-server",
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "refs/heads/master@{#170242}"
     ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "find isolated tests",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"dummy_target_1\": \"[dummy hash for dummy_target_1]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"dummy_target_2\": \"[dummy hash for dummy_target_2]\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"dummy_target_1\": \"[dummy hash for dummy_target_1]\", \"dummy_target_2\": \"[dummy hash for dummy_target_2]\"}@@@"
-    ]
+    "name": "Upload to test-results [base_unittests]"
   },
   {
     "cmd": [],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "test_pre_run"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/src/tools/swarming_client/run_isolated.py",
-      "--isolated",
-      "eeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
-      "-I",
-      "https://isolateserver.appspot.com",
-      "--verbose",
-      "--",
-      "--isolated-script-test-output",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "telemetry_gpu_unittests",
+    "name": "details",
     "~followup_annotations": [
-      "step returned non-zero exit code: -11",
-      "@@@STEP_TEXT@<br/>Exception while processing test results: Invalid data given<br/>@@@",
-      "@@@STEP_LOG_LINE@json.output@null@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@Invalid data given@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@Traceback (most recent call last):@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@  File \"<...>/recipe_modules/chromium_tests/steps.py\", line 1001, in render_results@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@    results)@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@  File \"<...>/recipe_engine/recipe_api.py\", line 745, in _inner@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@    return func(*a, **kw)@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@  File \"<...>/recipe_modules/test_utils/api.py\", line 223, in create_results_from_json_if_needed@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@    raise TypeError('Invalid data given')@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@TypeError: Invalid data given@@@",
-      "@@@STEP_LOG_END@no_results_exc@@@",
-      "@@@STEP_EXCEPTION@@@"
+      "@@@STEP_LOG_LINE@details@compile_targets: ['base_unittests']@@@",
+      "@@@STEP_LOG_LINE@details@uses_local_devices: True@@@",
+      "@@@STEP_LOG_END@details@@@"
     ]
   },
   {
     "name": "$result",
-    "reason": "1 tests failed: ['telemetry_gpu_unittests']",
     "recipe_result": null,
-    "status_code": 1
+    "status_code": 0
   }
 ]

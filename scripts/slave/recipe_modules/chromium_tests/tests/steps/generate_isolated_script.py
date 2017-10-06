@@ -112,6 +112,60 @@ def GenTests(api):
           'merge': {
               'script': '//path/to/script.py',
           },
+          'setup': [
+            {'script': '//path/to/setup1.py'},
+            {'script': '//path/to/setup2.py'}
+          ],
+          'teardown': [
+            {'script': '//path/to/teardown1.py'},
+            {'script': '//path/to/teardown2.py'}
+          ],
+          'swarming': {
+              'can_use_on_swarming_builders': True,
+          },
+        }, swarm_hashes={
+            'base_unittests_run': 'deadbeef',
+        },
+        mastername='test_mastername',
+        buildername='test_buildername',
+        buildnumber=1)
+  )
+
+  yield (
+      api.test('bad set up') +
+      api.properties(enable_swarming=True, single_spec={
+          'name': 'base_unittests',
+          'isolate_name': 'base_unittests_run',
+          'merge': {
+              'script': '//path/to/script.py',
+          },
+          'teardown': [
+            {'script': '//path/to/teardown1.py'},
+            {'script': 'path/to/teardown2.py'}
+          ],
+          'swarming': {
+              'can_use_on_swarming_builders': True,
+          },
+        }, swarm_hashes={
+            'base_unittests_run': 'deadbeef',
+        },
+        mastername='test_mastername',
+        buildername='test_buildername',
+        buildnumber=1)
+  )
+
+  yield (
+      api.test('bad tear down') +
+      api.properties(enable_swarming=True, single_spec={
+          'name': 'base_unittests',
+          'isolate_name': 'base_unittests_run',
+          'merge': {
+              'script': '//path/to/script.py',
+          },
+          'setup': [
+            {'script': '//path/to/setup1.py'},
+            {'script': 'path/to/setup2.py'}
+          ],
           'swarming': {
               'can_use_on_swarming_builders': True,
           },

@@ -135,6 +135,93 @@ def GenTests(api):
   )
 
   yield (
+      api.test('set_up and tear down') +
+      api.properties(
+          single_spec={
+              'test': 'base_unittests',
+              'setup': [
+                {
+                  'script': '//set_up_script1.py',
+                },
+                {
+                  'script': '//set_up_script2.py',
+                }
+              ],
+              'teardown': [
+                {
+                  'script': '//tear_down_script1.py',
+                },
+                {
+                  'script': '//tear_down_script2.py',
+                }
+              ],
+          },
+          mastername='test_mastername',
+          buildername='test_buildername',
+          buildnumber=123,
+          bot_id='test_bot_id',
+      )
+  )
+
+  yield (
+      api.test('invalid set_up') +
+      api.properties(
+          single_spec={
+              'test': 'base_unittests',
+              'setup': [
+                {
+                  'script': '//set_up_script1.py',
+                },
+                {
+                  'script': 'set_up_script2.py',
+                }
+              ],
+              'teardown': [
+                {
+                  'script': '//tear_down_script1.py',
+                },
+                {
+                  'script': '//tear_down_script2.py',
+                }
+              ],
+          },
+          mastername='test_mastername',
+          buildername='test_buildername',
+          buildnumber=123,
+          bot_id='test_bot_id',
+      )
+  )
+
+  yield (
+      api.test('invalid tear down') +
+      api.properties(
+          single_spec={
+              'test': 'base_unittests',
+              'setup': [
+                {
+                  'script': '//set_up_script1.py',
+                },
+                {
+                  'script': '//set_up_script2.py',
+                }
+              ],
+              'teardown': [
+                {
+                  'script': '//tear_down_script1.py',
+                },
+                {
+                  'script': 'tear_down_script2.py',
+                }
+              ],
+          },
+          mastername='test_mastername',
+          buildername='test_buildername',
+          buildnumber=123,
+          bot_id='test_bot_id',
+      )
+  )
+
+  yield (
       api.test('trigger_script') +
       api.properties(
           single_spec={

@@ -678,9 +678,22 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             bot_id['mastername'].startswith('tryserver.chromium.perf'))
         self.m.chromium_android.common_tests_setup_steps(perf_setup=perf_setup)
 
+      for test in (tests or []):
+        for set_up_step in (test.set_up or []):
+          self.m.python(
+              set_up_step['name'],
+              set_up_step['script'],
+              args=set_up_step['args'])
       try:
         yield
       finally:
+        for test in (tests or []):
+          for tear_down_step in (test.tear_down or []):
+            self.m.python(
+                tear_down_step['name'],
+                tear_down_step['script'],
+                args=tear_down_step['args'])
+
         if self.m.platform.is_win:
           self.m.chromium.process_dumps()
 

@@ -79,6 +79,14 @@ class Test(object):
     self._test_options = None
 
   @property
+  def set_up(self):
+    return None
+
+  @property
+  def tear_down(self):
+    return None
+
+  @property
   def test_options(self):
     return self._test_options or TestOptions()
 
@@ -309,7 +317,7 @@ class LocalGTestTest(Test):
                upload_to_flake_predictor=False,
                commit_position_property='got_revision_cp', use_xvfb=True,
                waterfall_mastername=None, waterfall_buildername=None,
-               **runtest_kwargs):
+               set_up=None, tear_down=None, **runtest_kwargs):
     """Constructs an instance of LocalGTestTest.
 
     Args:
@@ -329,6 +337,8 @@ class LocalGTestTest(Test):
       use_xvfb: whether to use the X virtual frame buffer. Only has an
           effect on Linux. Defaults to True. Mostly harmless to
           specify this, except on GPU bots.
+      set_up: Optional setup scripts.
+      tear_down: Optional teardown script.
       runtest_kwargs: Additional keyword args forwarded to the runtest.
 
     """
@@ -350,10 +360,20 @@ class LocalGTestTest(Test):
     self._use_xvfb = use_xvfb
     self._runtest_kwargs = runtest_kwargs
     self._gtest_results = {}
+    self._set_up = set_up
+    self._tear_down = tear_down
 
   @Test.test_options.setter
   def test_options(self, value):
     self._test_options = value
+
+  @property
+  def set_up(self):
+    return self._set_up
+
+  @property
+  def tear_down(self):
+    return self._tear_down
 
   @property
   def name(self):
@@ -599,6 +619,50 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
                   """ % (name, merge_script))),
               as_log='details')
 
+    set_up = list(test.get('setup', []))
+    processed_set_up = []
+    for set_up_step in set_up:
+      set_up_step_script = set_up_step.get('script')
+      if set_up_step_script:
+        if set_up_step_script.startswith('//'):
+          set_up_step_new = dict(set_up_step)
+          set_up_step_new['script'] = api.path['checkout'].join(
+              set_up_step_script[2:].replace('/', api.path.sep))
+          processed_set_up.append(set_up_step_new)
+        else:
+          api.python.failing_step(
+            'gtest spec format error',
+            textwrap.wrap(textwrap.dedent("""\
+                The gtest target "%s" contains a custom set up script "%s"
+                that doesn't match the expected format. Custom set up script entries
+                should be a path relative to the top-level chromium src directory and
+                should start with "//".
+                """ % (name, set_up_step_script))),
+            as_log='details')
+    set_up = processed_set_up
+
+    tear_down = list(test.get('teardown', []))
+    processed_tear_down = []
+    for tear_down_step in tear_down:
+      tear_down_step_script = tear_down_step.get('script')
+      if tear_down_step_script:
+        if tear_down_step_script.startswith('//'):
+          tear_down_step_new = dict(tear_down_step)
+          tear_down_step_new['script'] = api.path['checkout'].join(
+              tear_down_step_script[2:].replace('/', api.path.sep))
+          processed_tear_down.append(tear_down_step_new)
+        else:
+          api.python.failing_step(
+            'gtest spec format error',
+            textwrap.wrap(textwrap.dedent("""\
+                The gtest target "%s" contains a custom tear down script "%s"
+                that doesn't match the expected format. Custom tear down script entries
+                should be a path relative to the top-level chromium src directory and
+                should start with "//".
+                """ % (name, tear_down_step_script))),
+            as_log='details')
+    tear_down = processed_tear_down
+
     trigger_script = dict(test.get('trigger_script', {}))
     if trigger_script:
       trigger_script_path = trigger_script.get('script')
@@ -637,7 +701,8 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
                         use_xvfb=use_xvfb, cipd_packages=cipd_packages,
                         waterfall_mastername=mastername,
                         waterfall_buildername=buildername,
-                        merge=merge, trigger_script=trigger_script)
+                        merge=merge, trigger_script=trigger_script,
+                        set_up=set_up, tear_down=tear_down)
     else:
       yield GTestTest(name, args=args, target_name=target_name,
                       flakiness_dash=True,
@@ -653,7 +718,8 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
                       use_xvfb=use_xvfb, cipd_packages=cipd_packages,
                       waterfall_mastername=mastername,
                       waterfall_buildername=buildername,
-                      merge=merge, trigger_script=trigger_script)
+                      merge=merge, trigger_script=trigger_script,
+                      set_up=set_up, tear_down=tear_down)
 
 
 def generate_instrumentation_test(api, chromium_tests_api, mastername,
@@ -1115,7 +1181,8 @@ class SwarmingTest(Test):
   def __init__(self, name, dimensions=None, tags=None, target_name=None,
                extra_suffix=None, priority=None, expiration=None,
                hard_timeout=None, io_timeout=None,
-               waterfall_mastername=None, waterfall_buildername=None):
+               waterfall_mastername=None, waterfall_buildername=None,
+               set_up=None, tear_down=None):
     super(SwarmingTest, self).__init__(
         waterfall_mastername=waterfall_mastername,
         waterfall_buildername=waterfall_buildername)
@@ -1130,6 +1197,8 @@ class SwarmingTest(Test):
     self._expiration = expiration
     self._hard_timeout = hard_timeout
     self._io_timeout = io_timeout
+    self._set_up = set_up
+    self._tear_down = tear_down
     if dimensions and not extra_suffix:
       self._extra_suffix = self._get_gpu_suffix(dimensions)
 
@@ -1157,6 +1226,14 @@ class SwarmingTest(Test):
       os_name = 'Linux'
 
     return 'on %s GPU on %s' % (gpu_vendor, os_name)
+
+  @property
+  def set_up(self):
+    return self._set_up
+
+  @property
+  def tear_down(self):
+    return self._tear_down
 
   @property
   def name(self):
@@ -1328,11 +1405,12 @@ class SwarmingGTestTest(SwarmingTest):
                override_compile_targets=None, override_isolate_target=None,
                upload_to_flake_predictor=False, cipd_packages=None,
                waterfall_mastername=None, waterfall_buildername=None,
-               merge=None, trigger_script=None):
+               merge=None, trigger_script=None, set_up=None, tear_down=None):
     super(SwarmingGTestTest, self).__init__(
         name, dimensions, tags, target_name, extra_suffix, priority, expiration,
         hard_timeout, waterfall_mastername=waterfall_mastername,
-        waterfall_buildername=waterfall_buildername)
+        waterfall_buildername=waterfall_buildername,
+        set_up=set_up, tear_down=tear_down)
     self._args = args or []
     self._shards = shards
     self._upload_test_results = upload_test_results
@@ -1434,6 +1512,7 @@ class SwarmingGTestTest(SwarmingTest):
 class LocalIsolatedScriptTest(Test):
   def __init__(self, name, args=None, target_name=None,
                override_compile_targets=None, results_handler=None,
+               set_up=None, tear_down=None,
                **runtest_kwargs):
     """Constructs an instance of LocalIsolatedScriptTest.
 
@@ -1457,6 +1536,8 @@ class LocalIsolatedScriptTest(Test):
       runtest_kwargs: Additional keyword args forwarded to the runtest.
       override_compile_targets: The list of compile targets to use. If not
         specified this is the same as target_name.
+      set_up: Optional set up scripts.
+      tear_down: Optional tear_down scripts.
     """
     super(LocalIsolatedScriptTest, self).__init__()
     self._name = name
@@ -1464,7 +1545,17 @@ class LocalIsolatedScriptTest(Test):
     self._target_name = target_name
     self._runtest_kwargs = runtest_kwargs
     self._override_compile_targets = override_compile_targets
+    self._set_up = set_up
+    self._tear_down = tear_down
     self.results_handler = results_handler or JSONResultsHandler()
+
+  @property
+  def set_up(self):
+    return self._set_up
+
+  @property
+  def tear_down(self):
+    return self._tear_down
 
   @property
   def name(self):
@@ -1537,11 +1628,13 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
                override_compile_targets=None, perf_id=None, results_url=None,
                perf_dashboard_id=None, io_timeout=None,
                waterfall_mastername=None, waterfall_buildername=None,
-               merge=None, trigger_script=None, results_handler=None):
+               merge=None, trigger_script=None, results_handler=None,
+               set_up=None, tear_down=None):
     super(SwarmingIsolatedScriptTest, self).__init__(
         name, dimensions, tags, target_name, extra_suffix, priority, expiration,
         hard_timeout, io_timeout, waterfall_mastername=waterfall_mastername,
-        waterfall_buildername=waterfall_buildername)
+        waterfall_buildername=waterfall_buildername,
+        set_up=set_up, tear_down=tear_down)
     self._args = args or []
     self._shards = shards
     self._upload_test_results = upload_test_results
@@ -1788,6 +1881,50 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
                   """ % (name, merge_script))),
               as_log='details')
 
+    set_up = list(spec.get('setup', []))
+    processed_set_up = []
+    for set_up_step in set_up:
+      set_up_step_script = set_up_step.get('script')
+      if set_up_step_script:
+        if set_up_step_script.startswith('//'):
+          set_up_step_new = dict(set_up_step)
+          set_up_step_new['script'] = api.path['checkout'].join(
+              set_up_step_script[2:].replace('/', api.path.sep))
+          processed_set_up.append(set_up_step_new)
+        else:
+          api.python.failing_step(
+            'isolated_scripts spec format error',
+            textwrap.wrap(textwrap.dedent("""\
+                The isolated_scripts target "%s" contains a custom set up script "%s"
+                that doesn't match the expected format. Custom set up script entries
+                should be a path relative to the top-level chromium src directory and
+                should start with "//".
+                """ % (name, set_up_step_script))),
+            as_log='details')
+    set_up = processed_set_up
+
+    tear_down = list(spec.get('teardown', []))
+    processed_tear_down = []
+    for tear_down_step in tear_down:
+      tear_down_step_script = tear_down_step.get('script')
+      if tear_down_step_script:
+        if tear_down_step_script.startswith('//'):
+          tear_down_step_new = dict(tear_down_step)
+          tear_down_step_new['script'] = api.path['checkout'].join(
+              tear_down_step_script[2:].replace('/', api.path.sep))
+          processed_tear_down.append(tear_down_step_new)
+        else:
+          api.python.failing_step(
+            'isolated_scripts spec format error',
+            textwrap.wrap(textwrap.dedent("""\
+                The isolated_scripts target "%s" contains a custom tear down script "%s"
+                that doesn't match the expected format. Custom tear down script entries
+                should be a path relative to the top-level chromium src directory and
+                should start with "//".
+                """ % (name, tear_down_step_script))),
+            as_log='details')
+    tear_down = processed_tear_down
+
     trigger_script = dict(spec.get('trigger_script', {}))
     if trigger_script:
       trigger_script_path = trigger_script.get('script')
@@ -1845,6 +1982,7 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
               waterfall_mastername=mastername,
               waterfall_buildername=buildername,
               merge=merge, trigger_script=trigger_script,
+              set_up=set_up, tear_down=tear_down,
               results_handler=results_handler)
       else:
         yield SwarmingIsolatedScriptTest(
@@ -1859,6 +1997,7 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
             io_timeout=swarming_io_timeout,
             waterfall_mastername=mastername, waterfall_buildername=buildername,
             merge=merge, trigger_script=trigger_script,
+            set_up=set_up, tear_down=tear_down,
             results_handler=results_handler)
     else:
       yield LocalIsolatedScriptTest(
@@ -1874,7 +2013,7 @@ class GTestTest(Test):
                swarming_expiration=None, swarming_hard_timeout=None,
                cipd_packages=None, waterfall_mastername=None,
                waterfall_buildername=None, merge=None, trigger_script=None,
-               **runtest_kwargs):
+               set_up=None, tear_down=None, **runtest_kwargs):
     super(GTestTest, self).__init__(
         waterfall_mastername=waterfall_mastername,
         waterfall_buildername=waterfall_buildername)
@@ -1892,18 +2031,27 @@ class GTestTest(Test):
               'upload_to_flake_predictor'),
           waterfall_mastername=waterfall_mastername,
           waterfall_buildername=waterfall_buildername,
-          merge=merge, trigger_script=trigger_script)
+          merge=merge, trigger_script=trigger_script,
+          set_up=set_up, tear_down=tear_down)
     else:
       self._test = LocalGTestTest(
           name, args, target_name, waterfall_mastername=waterfall_mastername,
           waterfall_buildername=waterfall_buildername,
-          **runtest_kwargs)
+          set_up=set_up, tear_down=tear_down, **runtest_kwargs)
 
     self.enable_swarming = enable_swarming
 
   @Test.test_options.setter
   def test_options(self, value):
     self._test.test_options = value
+
+  @property
+  def set_up(self):
+    return self._test.set_up
+
+  @property
+  def tear_down(self):
+    return self._test.tear_down
 
   @property
   def name(self):
