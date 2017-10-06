@@ -129,7 +129,7 @@ class IsolateApi(recipe_api.RecipeApi):
     assert use_exparchive_mod > 0
 
     buildnumber = self.m.properties.get('buildnumber', 1)
-    assert buildnumber > 0, 'buildnumber %s should be > 0' % buildnumber
+    assert buildnumber >= 0, 'buildnumber %s should be >= 0' % buildnumber
     use_exparchive_for_all_targets = (buildnumber % use_exparchive_mod) == 0
 
     # TODO(vadimsh): Always require |targets| to be passed explicitly. Currently
