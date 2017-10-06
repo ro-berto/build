@@ -30,6 +30,49 @@ def _GetMainRevision(commit_pos, build_dir, revision=None):
   return slave_utils.GetRevision(os.path.dirname(os.path.abspath(build_dir)))
 
 
+def _GetDashboardJson(options):
+  main_revision = _GetMainRevision(options.got_revision_cp, options.build_dir)
+  blink_revision = slave_utils.GetBlinkRevision(options.build_dir)
+  revisions = slave_utils.GetPerfDashboardRevisionsWithProperties(
+    options.got_webrtc_revision, options.got_v8_revision, options.version,
+    options.git_revision, main_revision, blink_revision)
+  reference_build = 'reference' in options.name
+  stripped_test_name = options.name.replace('.reference', '')
+  results = {}
+  with open(options.results_file) as f:
+    results = json.load(f)
+  dashboard_json = {}
+  if not 'charts' in results:
+    # These are legacy results.
+    dashboard_json = results_dashboard.MakeListOfPoints(
+      results, options.perf_id, stripped_test_name, options.buildername,
+      options.buildnumber, {}, revisions_dict=revisions)
+  else:
+    dashboard_json = results_dashboard.MakeDashboardJsonV1(
+      results,
+      revisions, stripped_test_name, options.perf_id,
+      options.buildername, options.buildnumber,
+      {}, reference_build)
+  return dashboard_json
+
+
+def _GetDashboardHistogramData(options):
+  revisions = {
+      '--chromium_commit_positions': _GetMainRevision(
+          options.got_revision_cp, options.build_dir),
+      '--chromium_revisions': options.git_revision
+  }
+
+  if options.got_webrtc_revision:
+    revisions['--webrtc_revisions'] = options.got_webrtc_revision
+  if options.got_v8_revision:
+    revisions['--v8_revisions'] = options.got_v8_revision
+
+  return results_dashboard.MakeHistogramSetWithDiagnostics(
+      options.results_file, options.chromium_checkout_dir, options.name,
+      options.buildername, options.buildnumber, revisions)
+
+
 def main(args):
   # Parse options
   parser = optparse.OptionParser()
@@ -49,6 +92,7 @@ def main(args):
   parser.add_option('--output-json-dashboard-url')
   parser.add_option('--send-as-histograms', action='store_true')
   parser.add_option('--oauth-token-file')
+  parser.add_option('--chromium-checkout-dir')
   options, extra_args = parser.parse_args(args)
 
   # Validate options.
@@ -63,32 +107,10 @@ def main(args):
     oauth_token = None
 
   if not options.send_as_histograms:
-    main_revision = _GetMainRevision(options.got_revision_cp, options.build_dir)
-    blink_revision = slave_utils.GetBlinkRevision(options.build_dir)
-    revisions = slave_utils.GetPerfDashboardRevisionsWithProperties(
-      options.got_webrtc_revision, options.got_v8_revision, options.version,
-      options.git_revision, main_revision, blink_revision)
-    reference_build = 'reference' in options.name
-    stripped_test_name = options.name.replace('.reference', '')
-    results = {}
-    with open(options.results_file) as f:
-      results = json.load(f)
-    dashboard_json = {}
-    if not 'charts' in results:
-      # These are legacy results.
-      dashboard_json = results_dashboard.MakeListOfPoints(
-        results, options.perf_id, stripped_test_name, options.buildername,
-        options.buildnumber, {}, revisions_dict=revisions)
-    else:
-      dashboard_json = results_dashboard.MakeDashboardJsonV1(
-        results,
-        revisions, stripped_test_name, options.perf_id,
-        options.buildername, options.buildnumber,
-        {}, reference_build)
+    dashboard_json = _GetDashboardJson(options)
   else:
-    # TODO: Handle reference builds
-    with open(options.results_file) as f:
-      dashboard_json = json.load(f)
+    dashboard_json = _GetDashboardHistogramData(options)
+
   if dashboard_json:
     if options.output_json_file:
       with open(options.output_json_file, 'w') as output_file:

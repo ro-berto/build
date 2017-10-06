@@ -9,6 +9,8 @@ import datetime
 import json
 import os
 import shutil
+import subprocess
+import sys
 import tempfile
 import time
 import unittest
@@ -91,6 +93,26 @@ class ResultsDashboardFormatTest(unittest.TestCase):
               }
         },
         v1json)
+
+  def test_MakeHistogramSetWithDiagnostics_CallsAddReservedDiagnostics(self):
+    with tempfile.NamedTemporaryFile(
+        suffix='.json', prefix='test') as f:
+      f.write(json.dumps({'histogram': 'data'}))
+      f.flush()
+
+      self.mox.StubOutWithMock(chromium_utils, 'GetActiveMaster')
+      chromium_utils.GetActiveMaster().AndReturn('ChromiumPerf')
+      self.mox.StubOutWithMock(subprocess, 'call')
+      expected_cmd = [sys.executable,
+          '/path/to/chromium/src/third_party/catapult/tracing/bin/'
+          'add_reserved_diagnostics', '--benchmarks', 'foo.test', '--bots',
+          'builder', '--builds', '1', '--masters', 'ChromiumPerf',
+          f.name]
+      subprocess.call(expected_cmd)
+      self.mox.ReplayAll()
+
+      results_dashboard.MakeHistogramSetWithDiagnostics(
+          f.name, '/path/to/chromium', 'foo.test', 'builder', 1, {})
 
   def test_MakeListOfPoints_MinimalCase(self):
     """A very simple test of a call to MakeListOfPoints."""

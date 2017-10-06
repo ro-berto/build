@@ -11,6 +11,8 @@ import httplib
 import httplib2
 import json
 import os
+import subprocess
+import sys
 import urllib
 import urllib2
 
@@ -172,6 +174,39 @@ def _SendResultsFromCache(cache_file_name, url, oauth_token):
 def _GetData(line):
   line_dict = json.loads(line)
   return bool(line_dict.get('is_histogramset')), line_dict['data']
+
+
+def MakeHistogramSetWithDiagnostics(histograms_file, chromium_checkout_path,
+                                    test_name, buildername, buildnumber,
+                                    revisions_dict):
+  add_diagnostics_args = []
+  add_diagnostics_args.extend([
+      '--benchmarks', test_name,
+      '--bots', buildername,
+      '--builds', buildnumber,
+      '--masters', chromium_utils.GetActiveMaster(),
+  ])
+
+  for k, v in revisions_dict.iteritems():
+    add_diagnostics_args.extend((k, v))
+
+  add_diagnostics_args.append(histograms_file)
+
+  # Subprocess only accepts string args
+  add_diagnostics_args = [str(v) for v in add_diagnostics_args]
+
+  add_reserved_diagnostics_path = os.path.join(
+      chromium_checkout_path, 'src', 'third_party', 'catapult', 'tracing',
+      'bin', 'add_reserved_diagnostics')
+  cmd = [sys.executable, add_reserved_diagnostics_path] + add_diagnostics_args
+
+  subprocess.call(cmd)
+
+  # TODO: Handle reference builds
+  with open(histograms_file) as f:
+    hs = json.load(f)
+
+  return hs
 
 
 def MakeListOfPoints(charts, bot, test_name, buildername,

@@ -18,7 +18,7 @@
       "@@@STEP_LOG_LINE@no_results_exc@Invalid data given@@@",
       "@@@STEP_LOG_LINE@no_results_exc@@@@",
       "@@@STEP_LOG_LINE@no_results_exc@Traceback (most recent call last):@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@  File \"<...>/recipe_modules/chromium_tests/steps.py\", line 936, in render_results@@@",
+      "@@@STEP_LOG_LINE@no_results_exc@  File \"<...>/recipe_modules/chromium_tests/steps.py\", line 935, in render_results@@@",
       "@@@STEP_LOG_LINE@no_results_exc@    results)@@@",
       "@@@STEP_LOG_LINE@no_results_exc@  File \"<...>/recipe_engine/recipe_api.py\", line 745, in _inner@@@",
       "@@@STEP_LOG_LINE@no_results_exc@    return func(*a, **kw)@@@",
@@ -34,7 +34,7 @@
     "name": "details",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@details@valid: False@@@",
-      "@@@STEP_LOG_LINE@details@unexpected_failures: ['Invalid data given', '\\n', 'Traceback (most recent call last):\\n  File \"<...>/recipe_modules/chromium_tests/steps.py\", line 1026, in validate_results\\n    results)\\n  File \"<...>/recipe_engine/recipe_api.py\", line 745, in _inner\\n    return func(*a, **kw)\\n  File \"<...>/recipe_modules/test_utils/api.py\", line 223, in create_results_from_json_if_needed\\n    raise TypeError(\\'Invalid data given\\')\\nTypeError: Invalid data given\\n']@@@",
+      "@@@STEP_LOG_LINE@details@unexpected_failures: ['Invalid data given', '\\n', 'Traceback (most recent call last):\\n  File \"<...>/recipe_modules/chromium_tests/steps.py\", line 1025, in validate_results\\n    results)\\n  File \"<...>/recipe_engine/recipe_api.py\", line 745, in _inner\\n    return func(*a, **kw)\\n  File \"<...>/recipe_modules/test_utils/api.py\", line 223, in create_results_from_json_if_needed\\n    raise TypeError(\\'Invalid data given\\')\\nTypeError: Invalid data given\\n']@@@",
       "@@@STEP_LOG_END@details@@@"
     ]
   },

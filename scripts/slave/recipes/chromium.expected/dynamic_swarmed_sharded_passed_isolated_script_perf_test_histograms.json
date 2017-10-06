@@ -627,34 +627,6 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]\\src\\third_party\\catapult\\tracing\\bin\\add_reserved_diagnostics",
-      "--benchmarks",
-      "benchmark",
-      "--bots",
-      "Win 10 Low-End Perf Tests",
-      "--builds",
-      "1234",
-      "--chromium_commit_positions",
-      "291141",
-      "--chromium_revisions",
-      "asdfawe2342"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
-    "name": "Add shared diagnostics",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--",
@@ -670,10 +642,23 @@
       "https://chromeperf.appspot.com",
       "--output-json-dashboard-url",
       "/path/to/tmp/json",
-      "--is-histogramset",
-      "--is-histogramset",
       "--output-json-file",
-      "null"
+      "/path/to/tmp/json",
+      "--name",
+      "benchmark",
+      "--buildername",
+      "Win 10 Low-End Perf Tests",
+      "--buildnumber",
+      "1234",
+      "--build-dir",
+      "[START_DIR]\\src\\out",
+      "--got-revision-cp",
+      "refs/heads/master@{#291141}",
+      "--git-revision",
+      "asdfawe2342",
+      "--send-as-histograms",
+      "--chromium-checkout-dir",
+      "[START_DIR]"
     ],
     "env": {
       "CHROME_HEADLESS": "1",
@@ -681,6 +666,8 @@
     },
     "name": "benchmark Dashboard Upload",
     "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@step_metadata@{@@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"benchmark\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",

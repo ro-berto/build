@@ -14,13 +14,12 @@ from recipe_engine.types import freeze
 
 RESULTS_URL = 'https://chromeperf.appspot.com'
 
-
-REVISION_DIAGNOSTIC_FLAG_NAMES = {
-    'got_revision_cp': '--chromium_commit_positions',
-    'git_revision': '--chromium_revisions',
-    'got_webrtc_revision': '--webrtc_revisions',
-    'got_v8_revision': '--v8_revisions'
-}
+UPLOAD_DASHBOARD_REVISION_PROPERTIES = [
+    'got_revision_cp',
+    'git_revision',
+    'got_webrtc_revision',
+    'got_v8_revision'
+]
 
 
 class TestOptions(object):
@@ -1666,8 +1665,6 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     step_result.presentation.logs['chartjson_info'] = \
         ['Info: Setting up arguments for perf dashboard']
 
-    results_file = api.raw_io.input_text(data=json.dumps(results))
-
     try:
       oauth_token = api.puppet_service_account.get_access_token(
           'chromium-perf-histograms')
@@ -1676,8 +1673,18 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
       oauth_token = None
 
     # Produces a step that uploads results to dashboard
+    revisions = {}
+    for revision_name in UPLOAD_DASHBOARD_REVISION_PROPERTIES:
+      if revision_name in api.properties:
+        revisions[revision_name] = api.properties[revision_name]
+
+    # TODO(eakuefner): Confirm that 'version' is unused by legacy pipeline
+    # and remove it.
+    if not is_histogramset and 'version' in api.properties:
+      revisions['version'] = api.properties['version']
+
     args = [
-        '--results-file', results_file,
+        '--results-file', api.raw_io.input_text(data=json.dumps(results)),
         # We are passing this in solely to have the output show up as a link
         # in the step log, it will not be used after the upload is complete.
         '--oauth-token-file', api.json.input(oauth_token),
@@ -1685,60 +1692,22 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
         '--results-url', self._results_url,
         '--output-json-dashboard-url', api.json.output(
             add_json_log=False, name='dashboard_url'),
+        '--output-json-file', api.json.output(),
+        '--name', self._perf_dashboard_id,
+        '--buildername', api.properties['buildername'],
+        '--buildnumber', api.properties['buildnumber'],
     ]
-    revisions = {}
-    for revision_name in REVISION_DIAGNOSTIC_FLAG_NAMES.iterkeys():
-      if revision_name in api.properties:
-        # add_reserved_diagnostics expects commit positions to be parsed; the
-        # legacy logic does not.
-        if revision_name == 'got_revision_cp':
-          if is_histogramset:
-            revisions[revision_name] = api.commit_position.parse_revision(
-                api.properties['got_revision_cp'])
-          else:
-            revisions[revision_name] = api.properties['got_revision_cp']
-          continue
-        revisions[revision_name] = api.properties[revision_name]
-    # TODO(eakuefner): Confirm that 'version' is unused by legacy pipeline
-    # and remove it.
-    if not is_histogramset and 'version' in api.properties:
-      revisions['version'] = api.properties['version']
+
+    if api.chromium.c.build_dir:
+      args.extend(['--build-dir', api.chromium.c.build_dir])
+    for revision_name, revision in revisions.iteritems():
+      flag_name = '--%s' % revision_name.replace('_', '-')
+      args.extend([flag_name, revision])
 
     if is_histogramset:
-      args.append('--is-histogramset')
-      add_diagnostics_args = []
-      add_diagnostics_args.extend([
-          '--benchmarks', self._perf_dashboard_id,
-          '--bots', api.properties['buildername'],
-          '--builds', api.properties['buildnumber'],
-      ])
-      for revision_name, revision in revisions.iteritems():
-        add_diagnostics_args.extend([
-            REVISION_DIAGNOSTIC_FLAG_NAMES[revision_name], revision])
-      script = api.chromium_checkout.working_dir.join(
-          'src', 'third_party', 'catapult', 'tracing', 'bin',
-          'add_reserved_diagnostics')
-      result = api.python(
-          'Add shared diagnostics',
-          script=script,
-          args=add_diagnostics_args,
-          stdout=api.json.output()).stdout
-      args.extend([
-          '--is-histogramset',
-          '--output-json-file', api.json.input(result)
-      ])
-    else:
-      args.extend([
-          '--output-json-file', api.json.output(),
-          '--name', self._perf_dashboard_id,
-          '--buildername', api.properties['buildername'],
-          '--buildnumber', api.properties['buildnumber'],
-      ])
-      if api.chromium.c.build_dir:
-        args.extend(['--build-dir', api.chromium.c.build_dir])
-      for revision_name, revision in revisions.iteritems():
-        flag_name = '--%s' % revision_name.replace('_', '-')
-        args.extend([flag_name, revision])
+      args.append('--send-as-histograms')
+      args.extend(
+          ['--chromium-checkout-dir', api.chromium_checkout.working_dir])
 
     step_name = '%s Dashboard Upload' % self._perf_dashboard_id
     step_result = api.build.python(
