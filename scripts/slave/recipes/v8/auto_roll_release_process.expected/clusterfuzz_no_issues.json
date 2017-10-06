@@ -65,17 +65,11 @@
     ],
     "name": "check clusterfuzz",
     "stderr": "/path/to/tmp/err",
-    "stdout": "/path/to/tmp/out",
-    "~followup_annotations": [
-      "@@@STEP_LINK@1@https://cluster-fuzz.appspot.com/testcase?key=1@@@",
-      "@@@STEP_LINK@2@https://cluster-fuzz.appspot.com/testcase?key=2@@@",
-      "@@@STEP_FAILURE@@@"
-    ]
+    "stdout": "/path/to/tmp/out"
   },
   {
     "name": "$result",
-    "reason": "Clusterfuzz had issues.",
     "recipe_result": null,
-    "status_code": 1
+    "status_code": 0
   }
 ]

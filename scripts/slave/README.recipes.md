@@ -5231,25 +5231,11 @@ Recipe for archiving officially tagged v8 builds.
 &mdash; **def [RunSteps](/scripts/slave/recipes/v8/auto_roll_push.py#19)(api):**
 ### *recipes* / [v8/auto\_roll\_release\_process](/scripts/slave/recipes/v8/auto_roll_release_process.py)
 
-[DEPS](/scripts/slave/recipes/v8/auto_roll_release_process.py#5): [v8](#recipe_modules-v8), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/time][recipe_engine/recipe_modules/time], [recipe\_engine/url][recipe_engine/recipe_modules/url]
+[DEPS](/scripts/slave/recipes/v8/auto_roll_release_process.py#5): [v8](#recipe_modules-v8), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [AgeLimitBailout](/scripts/slave/recipes/v8/auto_roll_release_process.py#91)(api, new_date, old_date):**
+&mdash; **def [ClusterfuzzHasIssues](/scripts/slave/recipes/v8/auto_roll_release_process.py#21)(api):**
 
-&mdash; **def [ClusterfuzzHasIssues](/scripts/slave/recipes/v8/auto_roll_release_process.py#110)(api):**
-
-&mdash; **def [GetLKGR](/scripts/slave/recipes/v8/auto_roll_release_process.py#98)(api):**
-
-&mdash; **def [GetRef](/scripts/slave/recipes/v8/auto_roll_release_process.py#35)(api, repo, ref):**
-
-&mdash; **def [LogStep](/scripts/slave/recipes/v8/auto_roll_release_process.py#87)(api, text):**
-
-&mdash; **def [PushRef](/scripts/slave/recipes/v8/auto_roll_release_process.py#50)(api, repo, ref, hsh):**
-
-&mdash; **def [ReadTimeStamp](/scripts/slave/recipes/v8/auto_roll_release_process.py#71)(api, name):**
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/v8/auto_roll_release_process.py#133)(api):**
-
-&mdash; **def [WriteTimeStamp](/scripts/slave/recipes/v8/auto_roll_release_process.py#79)(api, name, timestamp):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/v8/auto_roll_release_process.py#44)(api):**
 ### *recipes* / [v8/auto\_roll\_v8\_deps](/scripts/slave/recipes/v8/auto_roll_v8_deps.py)
 
 [DEPS](/scripts/slave/recipes/v8/auto_roll_v8_deps.py#8): [v8](#recipe_modules-v8), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
