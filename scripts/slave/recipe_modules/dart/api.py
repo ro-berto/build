@@ -87,6 +87,8 @@ class DartApi(recipe_api.RecipeApi):
       if os in os_names:
         os = os_names[os]
       task.dimensions['os'] = os
+      if os == 'Linux':
+        task.dimensions['kvm'] = '0'
       task.dimensions['cpu'] = cpu
       task.dimensions['pool'] = pool
       task.dimensions.pop('gpu', None)
