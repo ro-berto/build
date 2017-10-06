@@ -80,8 +80,13 @@ def _GetTargetCMakeArgs(buildername, checkout, ninja_path, platform):
     args['BUILD_SHARED_LIBS'] = '1'
   if _HasToken(buildername, 'rel'):
     args['CMAKE_BUILD_TYPE'] = 'Release'
+  # 32-bit builds are cross-compiled on the 64-bit bots.
+  if _HasToken(buildername, 'win32') and _HasToken(buildername, 'clang'):
+    args['CMAKE_SYSTEM_NAME'] = 'Windows'
+    args['CMAKE_SYSTEM_PROCESSOR'] = 'x86'
+    _AppendFlags(args, 'CMAKE_CXX_FLAGS', '-m32 -msse2')
+    _AppendFlags(args, 'CMAKE_C_FLAGS', '-m32 -msse2')
   if _HasToken(buildername, 'linux32'):
-    # 32-bit Linux is cross-compiled on the 64-bit Linux bot.
     args['CMAKE_SYSTEM_NAME'] = 'Linux'
     args['CMAKE_SYSTEM_PROCESSOR'] = 'x86'
     _AppendFlags(args, 'CMAKE_CXX_FLAGS', '-m32 -msse2')
