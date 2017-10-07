@@ -137,6 +137,22 @@ SPEC = {
       'enable_swarming': True,
       'serialize_tests': True,
     },
+    'Win7 Experimental Release (NVIDIA)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU Win Builder',
+      'testing': {
+        'platform': 'win',
+      },
+      'enable_swarming': True,
+      'serialize_tests': True,
+    },
     'Win10 Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
