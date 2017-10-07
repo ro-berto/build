@@ -436,6 +436,7 @@
         "builders": {
           "*": {}
         },
+        "forgive_all": "true",
         "tree_notify": [
           "tandrii+master-sandbox@google.com"
         ]

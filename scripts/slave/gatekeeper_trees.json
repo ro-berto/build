@@ -39,9 +39,10 @@
         "masters": {
             "https://build.chromium.org/p/chromium.sandbox": ["*"]
         },
-        "open-tree": false,
+        "open-tree": true,
         "revision-properties": "got_revision_cp",
-        "set-status": false,
+        "set-status": true,
+        "status-url": "https://luci-sandbox-tree-status.appspot.com",
         "track-revisions": true
     },
     "android": {
