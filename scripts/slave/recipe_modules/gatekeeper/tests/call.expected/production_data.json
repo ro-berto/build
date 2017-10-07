@@ -101,6 +101,7 @@
       "@@@STEP_LOG_LINE@json.output@      ]@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"open-tree\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"password-file\": \"/creds/gatekeeper/luci_sandbox_status_password\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"revision-properties\": \"got_revision_cp\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"set-status\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"status-url\": \"https://luci-sandbox-tree-status.appspot.com\", @@@",
@@ -461,6 +462,8 @@
       "got_revision_cp",
       "--build-db",
       "chromium.sandbox.json",
+      "--password-file",
+      "/creds/gatekeeper/luci_sandbox_status_password",
       "https://build.chromium.org/p/chromium.sandbox"
     ],
     "name": "gatekeeper: chromium.sandbox"

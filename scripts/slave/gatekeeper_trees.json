@@ -40,6 +40,7 @@
             "https://build.chromium.org/p/chromium.sandbox": ["*"]
         },
         "open-tree": true,
+        "password-file": "/creds/gatekeeper/luci_sandbox_status_password",
         "revision-properties": "got_revision_cp",
         "set-status": true,
         "status-url": "https://luci-sandbox-tree-status.appspot.com",
