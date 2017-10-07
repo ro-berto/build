@@ -97,12 +97,6 @@ def CommitChecks(input_api, output_api):
   infra_path = input_api.subprocess.check_output(
       ['python', 'scripts/common/env.py', 'print']).split()
 
-  # Run our 'test_env.py' script to generate any required binaries before
-  # executing the tests in parallel. Otherwise, individual tests may attempt to
-  # generate the binaries at the same time, causing race conflicts.
-  input_api.subprocess.check_output(
-      ['python', 'scripts/slave/unittests/test_env.py'])
-
   whitelist = [r'.+_test\.py$']
   blacklist = [r'bot_update_test.py$', r'masters_test.py$']
   tests.extend(input_api.canned_checks.GetUnitTestsInDirectory(

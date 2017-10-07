@@ -54,4 +54,13 @@ hooks = [
       "build/scripts/common/cros_chromite.py", "-v",
     ],
   },
+  {
+    "name": "vpython_sync_unittests",
+    "pattern": ".",
+    "action": [
+      "vpython",
+      "-vpython-spec", "build/scripts/slave/unittests/.vpython",
+      "-vpython-tool", "install",
+    ],
+  },
 ]

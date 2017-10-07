@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env vpython
 """Tests for update_scripts.
 
 Note that this is very incomplete test coverage."""
