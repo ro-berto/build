@@ -13,7 +13,6 @@ DEPS = [
   'recipe_engine/properties',
   'recipe_engine/python',
   'recipe_engine/raw_io',
-  'depot_tools/rietveld',
   'recipe_engine/step',
   'depot_tools/tryserver',
 ]
