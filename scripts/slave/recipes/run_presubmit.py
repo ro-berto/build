@@ -16,7 +16,6 @@ DEPS = [
   'recipe_engine/python',
   'recipe_engine/step',
   'depot_tools/tryserver',
-  'depot_tools/rietveld',
   'v8',
   'webrtc',
 ]
@@ -25,7 +24,6 @@ DEPS = [
 def _RunStepsInternal(api):
   repo_name = api.properties.get('repo_name')
   codereview_auth = api.properties.get('codereview_auth', False)
-  patch_storage = api.properties.get('patch_storage', 'rietveld')
 
   gclient_config = None
   if repo_name:
@@ -62,31 +60,12 @@ def _RunStepsInternal(api):
     with api.context(cwd=api.path['checkout']):
       api.gclient.runhooks()
 
-  if patch_storage == 'rietveld':
-    presubmit_args = [
-      '--issue', api.properties['issue'],
-      '--patchset', api.properties['patchset'],
-      '--rietveld_url', api.properties['rietveld'],
-      '--rietveld_fetch',
-    ]
-    if codereview_auth:
-      presubmit_args.extend([
-          '--rietveld_email_file',
-          api.package_repo_resource('site_config', '.rietveld_client_email')])
-      presubmit_args.extend([
-          '--rietveld_private_key_file',
-          api.package_repo_resource('site_config', '.rietveld_secret_key')])
-    else:
-      presubmit_args.extend(['--rietveld_email', ''])  # activate anonymous mode
-  elif patch_storage == 'gerrit':
-    presubmit_args = [
-      '--issue', api.properties['patch_issue'],
-      '--patchset', api.properties['patch_set'],
-      '--gerrit_url', api.properties['patch_gerrit_url'],
-      '--gerrit_fetch',
-    ]
-  else:  # pragma: no cover
-    assert False, 'patch_storage %s is not supported' % patch_storage
+  presubmit_args = [
+    '--issue', api.properties['patch_issue'],
+    '--patchset', api.properties['patch_set'],
+    '--gerrit_url', api.properties['patch_gerrit_url'],
+    '--gerrit_fetch',
+  ]
   if api.properties.get('dry_run'):
     presubmit_args.append('--dry_run')
 
@@ -156,7 +135,7 @@ def GenTests(api):
           mastername='tryserver.chromium.linux',
           buildername='%s_presubmit' % repo_name,
           repo_name=repo_name,
-          patch_project=repo_name) +
+          gerrit_project=repo_name) +
       api.step_data('presubmit', api.json.output([['%s_presubmit' % repo_name,
                                                    ['compile']]]))
     )
@@ -167,7 +146,7 @@ def GenTests(api):
         mastername='tryserver.chromium.linux',
         buildername='chromium_presubmit',
         repo_name='chromium',
-        patch_project='chromium',
+        gerrit_project='chromium/src',
         dry_run=True) +
     api.step_data('presubmit', api.json.output([['chromium_presubmit',
                                                  ['compile']]]))
@@ -181,7 +160,7 @@ def GenTests(api):
         repo_name='chromium',
         codereview_auth=True,
         path_config='buildbot', # codereview_auth works only on Buildbot
-        patch_project='chromium') +
+        gerrit_project='chromium/src') +
     api.step_data('presubmit', api.json.output([['chromium_presubmit',
                                                  ['compile']]]))
   )
@@ -192,34 +171,10 @@ def GenTests(api):
         mastername='tryserver.chromium.linux',
         buildername='infra_presubmit',
         repo_name='infra',
-        patch_project='infra',
-        runhooks=True) +
-    api.step_data('presubmit', api.json.output([['infra_presubmit',
-                                                 ['compile']]]))
-  )
-
-  yield (
-    api.test('infra_with_runhooks_and_gerrit') +
-    api.properties.tryserver(
         gerrit_project='infra/infra',
-        repo_name='infra',
-        mastername='tryserver.infra',
-        buildername='infra_presubmit',
         runhooks=True) +
     api.step_data('presubmit', api.json.output([['infra_presubmit',
                                                  ['compile']]]))
-  )
-
-  yield (
-    api.test('depot_tools_and_gerrit') +
-    api.properties.tryserver(
-        gerrit_project='chromium/tools/depot_tools',
-        repo_name='depot_tools',
-        mastername='tryserver.infra',
-        buildername='presubmit_depot_tools',
-        runhooks=True) +
-    api.step_data('presubmit', api.json.output([['depot_tools_presubmit',
-                                                 ['test']]]))
   )
 
   yield (
@@ -228,7 +183,7 @@ def GenTests(api):
         mastername='tryserver.infra',
         buildername='infra_presubmit',
         repo_name='recipes_py',
-        patch_project='infra/luci/recipes-py',
+        gerrit_project='infra/luci/recipes-py',
         runhooks=True) +
     api.step_data('presubmit', api.json.output([['infra_presubmit',
                                                  ['compile']]]))
@@ -240,7 +195,7 @@ def GenTests(api):
         mastername='luci.infra.try',
         buildername='Luci-py Presubmit',
         repo_name='luci_py',
-        patch_project='infra/luci/luci-py') +
+        gerrit_project='infra/luci/luci-py') +
     api.step_data('presubmit', api.json.output({}))
   )
 
@@ -250,7 +205,7 @@ def GenTests(api):
         mastername='tryserver.chromium.linux',
         buildername='chromium_presubmit',
         repo_name='chromium',
-        patch_project='chromium') +
+        gerrit_project='chromium/src') +
     api.step_data('presubmit', api.json.output({}, retcode=1))
   )
 
@@ -260,7 +215,7 @@ def GenTests(api):
         mastername='tryserver.chromium.linux',
         buildername='chromium_presubmit',
         repo_name='chromium',
-        patch_project='chromium') +
+        gerrit_project='chromium/src') +
     api.step_data('presubmit', api.json.output({}, retcode=2))
   )
 
@@ -270,6 +225,7 @@ def GenTests(api):
         mastername='tryserver.chromium.linux',
         buildername='chromium_presubmit',
         repository_url='https://skia.googlesource.com/skia.git',
+        gerrit_project='skia',
         solution_name='skia') +
     api.step_data('presubmit',
                   api.json.output([['chromium_presubmit', ['compile']]]))
@@ -281,7 +237,7 @@ def GenTests(api):
         mastername='tryserver.v8',
         buildername='v8_presubmit',
         repo_name='v8',
-        patch_project='v8',
+        gerrit_project='v8/v8',
         runhooks=True,
         path_config='generic')
   )
