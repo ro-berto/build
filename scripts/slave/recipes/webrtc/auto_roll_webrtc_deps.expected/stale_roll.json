@@ -163,6 +163,9 @@
       "123"
     ],
     "cwd": "[START_DIR]/src",
+    "env": {
+      "SKIP_GCE_AUTH_FOR_GIT": "1"
+    },
     "infra_step": true,
     "name": "git cl",
     "~followup_annotations": [

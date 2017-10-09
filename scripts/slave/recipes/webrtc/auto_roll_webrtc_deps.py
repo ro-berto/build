@@ -71,9 +71,10 @@ def RunSteps(api):
         api.step.active_result.presentation.step_text = 'Active rolls found.'
         return
       else:
-        api.git('cl', 'set-close', '--gerrit', '-i', commits[0]['_number'])
-        api.step.active_result.presentation.step_text = (
-            'Stale roll found. Abandoned.')
+        with api.context(env={'SKIP_GCE_AUTH_FOR_GIT': '1'}):
+          api.git('cl', 'set-close', '--gerrit', '-i', commits[0]['_number'])
+          api.step.active_result.presentation.step_text = (
+              'Stale roll found. Abandoned.')
 
     # Enforce a clean state, and discard any local commits from previous runs.
     api.git('checkout', '-f', 'master')
