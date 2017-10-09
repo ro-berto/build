@@ -6,8 +6,10 @@
 DEPS = [
   'depot_tools/bot_update',
   'depot_tools/gclient',
+  'depot_tools/gerrit',
   'depot_tools/git',
   'recipe_engine/context',
+  'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/python',
@@ -15,6 +17,9 @@ DEPS = [
   'recipe_engine/step',
   'webrtc',
 ]
+
+
+GERRIT_URL = 'https://webrtc-review.googlesource.com'
 
 
 def RunSteps(api):
@@ -43,6 +48,33 @@ def RunSteps(api):
   api.gclient.runhooks()
 
   with api.context(cwd=api.path['checkout']):
+    commits = api.gerrit.get_changes(
+        GERRIT_URL,
+        query_params=[
+            ('project', 'src'),
+            ('owner', 'buildbot@webrtc.org'),
+            ('status', 'open'),
+        ],
+        limit=1,
+    )
+    if commits:
+      cq_commits = api.gerrit.get_changes(
+          GERRIT_URL,
+          query_params=[
+              ('change', commits[0]['_number']),
+              ('label', 'Commit-Queue=2'),
+          ],
+          limit=1,
+      )
+      if cq_commits:
+        assert cq_commits[0]['_number'] == commits[0]['_number']
+        api.step.active_result.presentation.step_text = 'Active rolls found.'
+        return
+      else:
+        api.git('cl', 'set-close', '--gerrit', '-i', commits[0]['_number'])
+        api.step.active_result.presentation.step_text = (
+            'Stale roll found. Abandoned.')
+
     # Enforce a clean state, and discard any local commits from previous runs.
     api.git('checkout', '-f', 'master')
     api.git('pull', 'origin', 'master')
@@ -61,11 +93,31 @@ def GenTests(api):
   yield (
       api.test('rolling_activated') +
       api.properties.generic(mastername='client.webrtc.fyi',
-                             buildername='Auto-roll - WebRTC DEPS')
+                             buildername='Auto-roll - WebRTC DEPS') +
+      api.override_step_data('gerrit changes', api.json.output([]))
   )
-  yield (api.test('rolling_deactivated') +
+  yield (
+      api.test('rolling_deactivated') +
       api.properties.generic(mastername='client.webrtc.fyi',
                              buildername='Auto-roll - WebRTC DEPS') +
       api.override_step_data('check roll status',
                              api.raw_io.stream_output('0', stream='stdout'))
   )
+  yield (
+      api.test('stale_roll') +
+      api.properties.generic(mastername='client.webrtc.fyi',
+                             buildername='Auto-roll - WebRTC DEPS') +
+      api.override_step_data(
+          'gerrit changes', api.json.output([{'_number': '123'}])) +
+      api.override_step_data('gerrit changes (2)', api.json.output([]))
+  )
+  yield (
+      api.test('previous_roll_in_cq') +
+      api.properties.generic(mastername='client.webrtc.fyi',
+                             buildername='Auto-roll - WebRTC DEPS') +
+      api.override_step_data(
+          'gerrit changes', api.json.output([{'_number': '123'}])) +
+      api.override_step_data(
+          'gerrit changes (2)', api.json.output([{'_number': '123'}]))
+  )
+

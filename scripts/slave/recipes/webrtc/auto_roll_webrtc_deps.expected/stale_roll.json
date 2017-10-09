@@ -117,8 +117,56 @@
     "infra_step": true,
     "name": "gerrit changes",
     "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"_number\": \"123\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gerrit_client.py",
+      "changes",
+      "--host",
+      "https://webrtc-review.googlesource.com",
+      "--json_file",
+      "/path/to/tmp/json",
+      "--limit",
+      "1",
+      "-p",
+      "change=123",
+      "-p",
+      "label=Commit-Queue=2"
+    ],
+    "cwd": "[START_DIR]/src",
+    "env": {
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+    },
+    "infra_step": true,
+    "name": "gerrit changes (2)",
+    "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[]@@@",
       "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "cl",
+      "set-close",
+      "--gerrit",
+      "-i",
+      "123"
+    ],
+    "cwd": "[START_DIR]/src",
+    "infra_step": true,
+    "name": "git cl",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Stale roll found. Abandoned.@@@"
     ]
   },
   {
