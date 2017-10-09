@@ -31,26 +31,6 @@ TRYBOTS = freeze({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Linux Trusty',
       }, analyze_mode='compile'),
-      'mac10.9_blink_dbg': simple_bot({
-        'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Mac Builder (dbg)',
-        'tester': 'WebKit Mac10.11 (dbg)',
-      }),
-      'mac10.9_blink_rel': simple_bot({
-        'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Mac Builder',
-        'tester': 'WebKit Mac10.9',
-      }),
-      'mac10.9_blink_compile_dbg': simple_bot({
-        'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Mac Builder (dbg)',
-        'tester': 'WebKit Mac10.11 (dbg)',
-      }, analyze_mode='compile'),
-      'mac10.9_blink_compile_rel': simple_bot({
-        'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Mac Builder',
-        'tester': 'WebKit Mac10.9',
-      }, analyze_mode='compile'),
       'mac10.10_blink_rel': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Mac Builder',
