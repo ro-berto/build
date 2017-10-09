@@ -12,6 +12,7 @@ def config(name,
            build_config='Release',
            chromium_config='clang_tot_linux',
            ninja_confirm_noop=True,
+           is_msan=False,
            target_arch='intel',
            target_bits=64):
   cfg = {
@@ -52,6 +53,9 @@ def config(name,
   if ninja_confirm_noop:
       cfg['chromium_apply_config'].append('ninja_confirm_noop')
 
+  if is_msan:
+      cfg['chromium_apply_config'].append('prebuilt_instrumented_libraries')
+
   return name, cfg
 
 
@@ -90,7 +94,8 @@ SPEC['builders'].update([
     config('ToTLinuxLLD',
            chromium_config='clang_tot_linux_lld'),
 
-    config('ToTLinuxMSan'),
+    config('ToTLinuxMSan',
+           is_msan=True),
 
     config('ToTLinuxThinLTO',
            chromium_config='clang_tot_linux_lld'),

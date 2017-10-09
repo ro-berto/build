@@ -1487,7 +1487,7 @@ SPEC = {
     },
     'ClangToTLinuxMSan': {
       'chromium_config': 'clang_tot_linux',
-      'chromium_apply_config': ['mb'],
+      'chromium_apply_config': ['mb', 'prebuilt_instrumented_libraries'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
