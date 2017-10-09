@@ -161,7 +161,7 @@ def RunSteps(api):
         api.python('dart2js-unit tests',
                    api.path['checkout'].join('tools', 'test.py'),
                    args=["--mode=%s" % mode, "--compiler=none", "--runtime=vm",
-                         "--arch=ia32", "--time", "--use-sdk", "--report",
+                         "--arch=ia32", "--time", "--report",
                          "--write-debug-log",
                          "--write-result-log",
                          "--write-test-outcome-log",

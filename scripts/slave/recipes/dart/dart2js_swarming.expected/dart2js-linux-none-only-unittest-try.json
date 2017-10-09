@@ -102,7 +102,6 @@
       "--runtime=vm",
       "--arch=ia32",
       "--time",
-      "--use-sdk",
       "--report",
       "--write-debug-log",
       "--write-result-log",
