@@ -120,6 +120,11 @@
         'logdog_only': True,
       },
     },
+    'chromium.clang': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
     'chromium.goma': {
       '*': {
         'logdog_only': True,
