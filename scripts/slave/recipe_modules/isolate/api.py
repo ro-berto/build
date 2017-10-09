@@ -117,7 +117,7 @@ class IsolateApi(recipe_api.RecipeApi):
     if use_exparchive is False:
       use_exparchive_mod = sys.maxint
     elif use_exparchive is True:
-      use_exparchive_mod = 1
+      use_exparchive_mod = 1  # pragma: no cover
     else:
       assert use_exparchive >= 0 and use_exparchive <= 100, (
             'use_exparchive should be between 0 and 100, not %s' %
@@ -155,7 +155,7 @@ class IsolateApi(recipe_api.RecipeApi):
     batch_targets = []
     exparchive_targets = []
     for t in targets:
-      if t.endswith('_exparchive') or use_exparchive_for_all_targets:
+      if t.endswith('_exparchive'):
         exparchive_targets.append(t)
       else:
         batch_targets.append(t)
@@ -191,6 +191,7 @@ class IsolateApi(recipe_api.RecipeApi):
             '--dump-json', self.m.json.output(),
             '--isolate-server', self._isolate_server,
             '--eventlog-endpoint', 'prod',
+        ] + (['--exparchive'] if use_exparchive_for_all_targets else []) +  [
         ] + (['--verbose'] if verbose else []) +  [
             build_dir.join('%s.isolated.gen.json' % t) for t in batch_targets
         ]

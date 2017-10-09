@@ -136,23 +136,15 @@ def GenTests(api):
   # Use force-exparchive
   yield make_test(
       'always-use-exparchive',
-      [],
-      ['test_exparchive', 'test1', 'test2'],
+      ['test1', 'test2'],
+      ['test_exparchive'],
       ['test_exparchive', 'test1', 'test2']) + api.properties(
           use_exparchive=True)
   # Use force-exparchive
   for i in range(1, 11):
-    if i in (5, 10):
-        yield make_test(
-            'use-exparchive-20percent-build%i' % i,
-            [],
-            ['test_exparchive', 'test1', 'test2'],
-            ['test_exparchive', 'test1', 'test2']) + api.properties(
-                  use_exparchive=20, buildnumber=i)
-    else:
-        yield make_test(
-            'use-exparchive-20percent-build%i' % i,
-            ['test1', 'test2'],
-            ['test_exparchive'],
-            ['test_exparchive', 'test1', 'test2']) + api.properties(
-                  use_exparchive=20, buildnumber=i)
+    yield make_test(
+        'use-exparchive-20percent-build%i' % i,
+        ['test1', 'test2'],
+        ['test_exparchive'],
+        ['test_exparchive', 'test1', 'test2']) + api.properties(
+              use_exparchive=20, buildnumber=i)
