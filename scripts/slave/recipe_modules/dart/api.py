@@ -111,7 +111,7 @@ class DartApi(recipe_api.RecipeApi):
         for filename in output_dir:
           if "result.log" in filename: # pragma: no cover
             contents = output_dir[filename]
-            self.m.step.active_result.presentation.logs['shard_%s_result.log' % (shard + 1)] = [contents]
+            self.m.step.active_result.presentation.logs['result.log'] = [contents]
 
   def read_result_file(self,  name, log_name, test_data=''):
     """Reads the result.log file
