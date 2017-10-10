@@ -8,8 +8,6 @@ deps = {
     'https://chromium.googlesource.com/chromium/tools/gsd_generate_index.git',
   'build/scripts/private/data/reliability':
     'https://chromium.googlesource.com/chromium/src/chrome/test/data/reliability.git',
-  'build/scripts/tools/deps2git':
-    'https://chromium.googlesource.com/chromium/tools/deps2git.git',
   'build/third_party/gsutil':
     'https://chromium.googlesource.com/external/gsutil/src.git'
     '@5cba434b828da428a906c8197a23c9ae120d2636',
