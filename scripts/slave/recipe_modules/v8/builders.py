@@ -81,7 +81,6 @@ BUILDERS = {
           'category': 'linux32'
         },
         'triggers': [
-          'V8 Deopt Fuzzer',
           'V8 Linux',
           'V8 Linux - presubmit',
         ],
@@ -336,6 +335,7 @@ BUILDERS = {
           'category': 'linux64'
         },
         'triggers': [
+          'V8 Deopt Fuzzer',
           'V8 Linux64',
           'V8 Linux64 - avx2',
         ],
@@ -791,12 +791,12 @@ BUILDERS = {
         'v8_apply_config': ['deopt_fuzz_normal'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
+          'TARGET_BITS': 64,
         },
         'bot_type': 'tester',
         'enable_swarming': True,
-        'parent_buildername': 'V8 Linux - builder',
-        'build_gs_archive': 'linux_rel_archive',
+        'parent_buildername': 'V8 Linux64 - builder',
+        'build_gs_archive': 'linux64_rel_archive',
         'tests': [Deopt],
         'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
@@ -1055,7 +1055,7 @@ BUILDERS = {
         'v8_apply_config': ['deopt_fuzz_random'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
+          'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,

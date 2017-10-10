@@ -168,7 +168,7 @@
       "--mode",
       "Release",
       "--arch",
-      "ia32",
+      "x64",
       "--progress",
       "verbose",
       "--buildbot",
