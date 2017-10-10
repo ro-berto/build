@@ -156,11 +156,12 @@ class WebRTCApi(recipe_api.RecipeApi):
         self.revision_cp))
 
   def download_audio_quality_tools(self):
-    self.m.python('download audio quality tools',
-                  self.m.path['checkout'].join('tools_webrtc',
-                                               'download_tools.py'),
-                  args=[self.m.path['checkout'].join('tools_webrtc',
-                                                     'audio_quality')])
+    with self.m.context(env_prefixes={'PATH':[self.m.depot_tools.root]}):
+      self.m.python('download audio quality tools',
+                    self.m.path['checkout'].join('tools_webrtc',
+                                                 'download_tools.py'),
+                    args=[self.m.path['checkout'].join('tools_webrtc',
+                                                       'audio_quality')])
 
   def check_swarming_version(self):
     if self.c.enable_swarming:
@@ -255,7 +256,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     ninja_log_exit_status = 1
     try:
       build_script = self.m.path['checkout'].join('tools_webrtc', 'android',
-                                                   'build_aar.py')
+                                                  'build_aar.py')
       args = ['--use-goma',
               '--verbose',
               '--extra-gn-args', 'goma_dir=\"%s\"' % goma_dir]

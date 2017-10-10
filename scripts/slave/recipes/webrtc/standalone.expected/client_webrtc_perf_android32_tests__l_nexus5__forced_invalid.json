@@ -86,6 +86,11 @@
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/tools_webrtc/download_tools.py",
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/tools_webrtc/audio_quality"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "name": "download audio quality tools"
   },
   {

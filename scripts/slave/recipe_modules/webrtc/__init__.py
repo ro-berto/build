@@ -8,6 +8,7 @@ DEPS = [
   'chromium_tests',
   'commit_position',
   'depot_tools/bot_update',
+  'depot_tools/depot_tools',
   'depot_tools/gclient',
   'depot_tools/git',
   'depot_tools/gsutil',

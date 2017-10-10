@@ -86,6 +86,11 @@
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/tools_webrtc/download_tools.py",
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus7_2_/src/tools_webrtc/audio_quality"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "name": "download audio quality tools"
   },
   {
@@ -445,6 +450,11 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "name": "webrtc_perf_tests"
   },
   {
@@ -516,6 +526,11 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "name": "low_bandwidth_audio_test"
   },
   {
@@ -559,6 +574,11 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "name": "video_quality_loopback_test"
   },

@@ -424,12 +424,15 @@ class PerfTest(Test):
     if self._should_upload_test_artifacts:
       self._prepare_test_artifacts_upload(api)
     try:
-      api.m.chromium.runtest(
-          test=self._test, name=self._name, args=self._args,
-          results_url=DASHBOARD_UPLOAD_URL, annotate='graphing', xvfb=True,
-          perf_dashboard_id=self._name, test_type=self._name,
-          revision=self._revision_number, perf_id=self._perf_id,
-          perf_config=self._perf_config, python_mode=self._python_mode)
+      # Some of the perf tests depend on depot_tools for
+      # download_from_google_storage and gsutil usage.
+      with api.m.context(env_prefixes={'PATH':[api.m.depot_tools.root]}):
+        api.m.chromium.runtest(
+            test=self._test, name=self._name, args=self._args,
+            results_url=DASHBOARD_UPLOAD_URL, annotate='graphing', xvfb=True,
+            perf_dashboard_id=self._name, test_type=self._name,
+            revision=self._revision_number, perf_id=self._perf_id,
+            perf_config=self._perf_config, python_mode=self._python_mode)
     finally:
       if self._should_upload_test_artifacts:
         self._upload_test_artifacts(api)
