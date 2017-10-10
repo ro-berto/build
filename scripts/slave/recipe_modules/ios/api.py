@@ -449,7 +449,7 @@ class iOSApi(recipe_api.RecipeApi):
     if not base_path:
       base_path = '%s/%s' % (
           self.m.properties['buildername'],
-          str(self.m.properties['buildnumber'] or 0),
+          str(self.m.time.utcnow().strftime('%Y%m%d%H%M%S')),
       )
 
     for artifact in self.__config['upload']:

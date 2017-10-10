@@ -17,7 +17,7 @@ def RunSteps(api):
   api.ios.read_build_config()
   api.ios.build(
     default_gn_args_path='src/example/args.gn', setup_gn=True, use_mb=False)
-  api.ios.upload(base_path='fixed-path')
+  api.ios.upload()
   api.ios.test_swarming()
 
 def GenTests(api):

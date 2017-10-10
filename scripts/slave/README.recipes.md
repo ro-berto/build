@@ -1669,7 +1669,7 @@ Returns:
 &mdash; **def [wait\_for\_emulator](/scripts/slave/recipe_modules/emulator/api.py#23)(self, num, \*\*kwargs):**
 ### *recipe_modules* / [filter](/scripts/slave/recipe_modules/filter)
 
-[DEPS](/scripts/slave/recipe_modules/filter/__init__.py#5): [chromium](#recipe_modules-chromium), [goma](#recipe_modules-goma), [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/rietveld][depot_tools/recipe_modules/rietveld], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/filter/__init__.py#5): [chromium](#recipe_modules-chromium), [goma](#recipe_modules-goma), [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 #### **class [FilterApi](/scripts/slave/recipe_modules/filter/api.py#13)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
@@ -5372,7 +5372,6 @@ The changes are:
 [depot_tools/recipe_modules/gsutil]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/a5b7d73e7b2537e3eb3ccb3a2f3b18aa1f2b25af/recipes/README.recipes.md#recipe_modules-gsutil
 [depot_tools/recipe_modules/infra_paths]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/a5b7d73e7b2537e3eb3ccb3a2f3b18aa1f2b25af/recipes/README.recipes.md#recipe_modules-infra_paths
 [depot_tools/recipe_modules/presubmit]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/a5b7d73e7b2537e3eb3ccb3a2f3b18aa1f2b25af/recipes/README.recipes.md#recipe_modules-presubmit
-[depot_tools/recipe_modules/rietveld]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/a5b7d73e7b2537e3eb3ccb3a2f3b18aa1f2b25af/recipes/README.recipes.md#recipe_modules-rietveld
 [depot_tools/recipe_modules/tryserver]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/a5b7d73e7b2537e3eb3ccb3a2f3b18aa1f2b25af/recipes/README.recipes.md#recipe_modules-tryserver
 [recipe_engine/recipe_modules/context]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/3e09a61a1ad7c8f21e2ce2afd7240855c318d7ce/README.recipes.md#recipe_modules-context
 [recipe_engine/recipe_modules/file]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/3e09a61a1ad7c8f21e2ce2afd7240855c318d7ce/README.recipes.md#recipe_modules-file
