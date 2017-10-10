@@ -1056,7 +1056,11 @@ BUILDERS = {
         'tests': [Deopt],
         'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
-        'swarming_properties': SWARMING_FYI_PROPS,
+        'swarming_properties': {
+          'default_expiration': 2 * 60 * 60,
+          'default_hard_timeout': 2 * 60 * 60,
+          'default_priority': 35,
+        },
       },
     },
   },
