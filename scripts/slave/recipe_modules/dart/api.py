@@ -87,7 +87,8 @@ class DartApi(recipe_api.RecipeApi):
       if os in os_names:
         os = os_names[os]
       task.dimensions['os'] = os
-      if os == 'Linux':
+      # TODO(athom) remove this once all linux machines have chrome
+      if os == 'Linux' and not '-rd8' in test_args:
         task.dimensions['kvm'] = '0'
       task.dimensions['cpu'] = cpu
       task.dimensions['pool'] = pool
