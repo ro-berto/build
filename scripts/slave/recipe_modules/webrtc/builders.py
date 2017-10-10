@@ -717,7 +717,7 @@ BUILDERS = freeze({
     },
     'builders': {
        'Win7': {
-        'recipe_config': 'webrtc_desktop_perf',
+        'recipe_config': 'webrtc_desktop_perf_swarming',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -727,9 +727,18 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'pool': 'WebRTC',
+          'gpu': None,
+          'os': 'Windows',
+          'id': 'build18-m3',
+        },
+        'swarming_timeout': 3600,  # 1h
       },
       'Mac 10.11': {
-        'recipe_config': 'webrtc_desktop_perf',
+        'recipe_config': 'webrtc_desktop_perf_swarming',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -739,9 +748,18 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'pool': 'WebRTC',
+          'gpu': None,
+          'os': 'Mac-10.12',
+          'id': 'build16-m3',
+        },
+        'swarming_timeout': 3600,  # 1h
       },
       'Linux Trusty': {
-        'recipe_config': 'webrtc_desktop_perf',
+        'recipe_config': 'webrtc_desktop_perf_swarming',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -751,6 +769,15 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'pool': 'WebRTC',
+          'gpu': None,
+          'os': 'Ubuntu-14.04',
+          'id': 'build17-m3',
+        },
+        'swarming_timeout': 3600,  # 1h
       },
       'Android32 Builder': {
         'recipe_config': 'webrtc_android_perf',

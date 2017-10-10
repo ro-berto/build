@@ -147,31 +147,6 @@ def generate_tests(api, test_suite, revision):
   elif test_suite == 'desktop_perf_swarming':
     for test, extra_args in sorted(PERF_TESTS.items()):
       tests.append(SwarmingPerfTest(test, api, **extra_args))
-  elif test_suite == 'desktop_perf':
-    if api.m.platform.is_linux:
-      tests.append(PerfTest(
-          'isac_fix_test',
-          revision=revision,
-          revision_number=api.revision_number,
-          perf_id=api.c.PERF_ID,
-          args=[
-              '32000', api.m.path['checkout'].join(
-                  'resources', 'speech_and_misc_wb.pcm'),
-              'isac_speech_and_misc_wb.pcm']))
-    tests.append(PerfTest('webrtc_perf_tests', revision=revision,
-                          revision_number=api.revision_number,
-                          perf_id=api.c.PERF_ID,
-                          args=['--save_worst_frame'],
-                          upload_test_artifacts=True))
-
-    tests.append(PerfTest(
-        str(api.m.path['checkout'].join('audio', 'test',
-                                        'low_bandwidth_audio_test.py')),
-        name='low_bandwidth_audio_test',
-        args=[api.m.chromium.output_dir, '--remove'],
-        revision=revision,
-        revision_number=api.revision_number,
-        perf_id=api.c.PERF_ID))
   elif test_suite == 'android_perf' and api.c.PERF_ID:
     # TODO(kjellander): Fix the Android ASan bot so we can have an assert here.
     tests.append(AndroidPerfTest(
@@ -398,44 +373,16 @@ class PerfTest(Test):
     self._perf_config= PERF_CONFIG
     self._perf_config['r_webrtc_git'] = revision
 
-  def _prepare_test_artifacts_upload(self, api):
-    self._test_artifacts_path = api.m.path.mkdtemp(self._test_artifacts_name)
-    self._args.extend(['--test_artifacts_dir', self._test_artifacts_path])
-
-  def _upload_test_artifacts(self, api):
-    zip_path = api.m.path['tmp_base'].join(self._test_artifacts_name + '.zip')
-    api.m.zip.directory('zip ' + self._test_artifacts_name,
-                        self._test_artifacts_path, zip_path)
-
-    upload_url = '%s/%s/%s_%s.zip' % (
-        api.mastername, api.buildername, self._test_artifacts_name,
-        self._revision_number)
-    api.m.gsutil.upload(zip_path, api.WEBRTC_GS_BUCKET, upload_url,
-                        args=['-a', 'public-read'],
-                        unauthenticated_url=True,
-                        name='upload ' + self._test_artifacts_name,
-                        link_name=self._name + ' test artifacts')
-
-    api.m.file.rmtree('rmtree ' + self._test_artifacts_name,
-                      self._test_artifacts_path)
-
-  @composite_step
   def run(self, api, suffix):
-    if self._should_upload_test_artifacts:
-      self._prepare_test_artifacts_upload(api)
-    try:
-      # Some of the perf tests depend on depot_tools for
-      # download_from_google_storage and gsutil usage.
-      with api.m.context(env_prefixes={'PATH':[api.m.depot_tools.root]}):
-        api.m.chromium.runtest(
-            test=self._test, name=self._name, args=self._args,
-            results_url=DASHBOARD_UPLOAD_URL, annotate='graphing', xvfb=True,
-            perf_dashboard_id=self._name, test_type=self._name,
-            revision=self._revision_number, perf_id=self._perf_id,
-            perf_config=self._perf_config, python_mode=self._python_mode)
-    finally:
-      if self._should_upload_test_artifacts:
-        self._upload_test_artifacts(api)
+    # Some of the perf tests depend on depot_tools for
+    # download_from_google_storage and gsutil usage.
+    with api.m.context(env_prefixes={'PATH':[api.m.depot_tools.root]}):
+      api.m.chromium.runtest(
+          test=self._test, name=self._name, args=self._args,
+          results_url=DASHBOARD_UPLOAD_URL, annotate='graphing', xvfb=True,
+          perf_dashboard_id=self._name, test_type=self._name,
+          revision=self._revision_number, perf_id=self._perf_id,
+          perf_config=self._perf_config, python_mode=self._python_mode)
 
 
 class AndroidJunitTest(Test):
@@ -477,8 +424,15 @@ class AndroidPerfTest(PerfTest):
       api.m.step.active_result.presentation.links['result_details'] = (
           details_link)
 
+  @composite_step
   def run(self, api, suffix):
     wrapper_script = api.m.chromium.output_dir.join('bin',
                                                     'run_%s' % self._name)
     self._test = wrapper_script
-    super(AndroidPerfTest, self).run(api, suffix)
+    if self._should_upload_test_artifacts:
+      self._prepare_test_artifacts_upload(api)
+    try:
+      super(AndroidPerfTest, self).run(api, suffix)
+    finally:
+      if self._should_upload_test_artifacts:
+        self._upload_test_artifacts(api)
