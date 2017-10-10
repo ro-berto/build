@@ -5,7 +5,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_deps': {'v8/third_party/valgrind': 'https://chromium.googlesource.com/chromium/deps/valgrind/binaries'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
       "--patch_root",
       "v8",
       "--revision_mapping_file",
@@ -118,7 +118,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "gomadir='[CACHE]/goma_client' has_valgrind=1 jsfunfuzz=1 target_arch=x64 use_goma=1 v8_enable_slow_dchecks=1 v8_optimized_debug=1 v8_target_arch=x64",
+      "GYP_DEFINES": "gomadir='[CACHE]/goma_client' jsfunfuzz=1 target_arch=x64 use_goma=1 v8_enable_slow_dchecks=1 v8_optimized_debug=1 v8_target_arch=x64",
       "GYP_GENERATORS": "ninja",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -517,7 +517,6 @@
       "[START_DIR]/v8/out/Debug/mjsunit.isolated.gen.json",
       "[START_DIR]/v8/out/Debug/mozilla.isolated.gen.json",
       "[START_DIR]/v8/out/Debug/optimize_for_size.isolated.gen.json",
-      "[START_DIR]/v8/out/Debug/run-valgrind.isolated.gen.json",
       "[START_DIR]/v8/out/Debug/test262.isolated.gen.json"
     ],
     "name": "isolate tests",
@@ -529,7 +528,6 @@
       "@@@STEP_LOG_LINE@json.output@  \"mjsunit\": \"[dummy hash for mjsunit]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"mozilla\": \"[dummy hash for mozilla]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"optimize_for_size\": \"[dummy hash for optimize_for_size]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"run-valgrind\": \"[dummy hash for run-valgrind]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"test262\": \"[dummy hash for test262]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -546,7 +544,7 @@
       "cp",
       "-a",
       "public-read",
-      "{\"benchmarks\": \"[dummy hash for benchmarks]\", \"bot_default\": \"[dummy hash for bot_default]\", \"jsfunfuzz\": \"[dummy hash for jsfunfuzz]\", \"mjsunit\": \"[dummy hash for mjsunit]\", \"mozilla\": \"[dummy hash for mozilla]\", \"optimize_for_size\": \"[dummy hash for optimize_for_size]\", \"run-valgrind\": \"[dummy hash for run-valgrind]\", \"test262\": \"[dummy hash for test262]\"}",
+      "{\"benchmarks\": \"[dummy hash for benchmarks]\", \"bot_default\": \"[dummy hash for bot_default]\", \"jsfunfuzz\": \"[dummy hash for jsfunfuzz]\", \"mjsunit\": \"[dummy hash for mjsunit]\", \"mozilla\": \"[dummy hash for mozilla]\", \"optimize_for_size\": \"[dummy hash for optimize_for_size]\", \"test262\": \"[dummy hash for test262]\"}",
       "gs://chromium-v8/isolated/client.v8/V8 Linux64 - debug builder/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json"
     ],
     "infra_step": true,
@@ -606,7 +604,6 @@
             "mjsunit": "[dummy hash for mjsunit]",
             "mozilla": "[dummy hash for mozilla]",
             "optimize_for_size": "[dummy hash for optimize_for_size]",
-            "run-valgrind": "[dummy hash for run-valgrind]",
             "test262": "[dummy hash for test262]"
           }
         }
@@ -628,7 +625,6 @@
             "mjsunit": "[dummy hash for mjsunit]",
             "mozilla": "[dummy hash for mozilla]",
             "optimize_for_size": "[dummy hash for optimize_for_size]",
-            "run-valgrind": "[dummy hash for run-valgrind]",
             "test262": "[dummy hash for test262]"
           }
         }
@@ -650,7 +646,6 @@
             "mjsunit": "[dummy hash for mjsunit]",
             "mozilla": "[dummy hash for mozilla]",
             "optimize_for_size": "[dummy hash for optimize_for_size]",
-            "run-valgrind": "[dummy hash for run-valgrind]",
             "test262": "[dummy hash for test262]"
           }
         }

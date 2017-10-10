@@ -80,11 +80,6 @@ def gcmole(c):
 
 
 @CONFIG_CTX(includes=['v8'])
-def has_valgrind(c):
-  c.gyp_env.GYP_DEFINES['has_valgrind'] = 1
-
-
-@CONFIG_CTX(includes=['v8'])
 def coverage(c):
   c.gyp_env.GYP_DEFINES['coverage'] = 1
 

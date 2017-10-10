@@ -35,7 +35,6 @@ MjsunitSPFrameAccess = TestStepConfig('mjsunit_sp_frame_access')
 Mozilla = TestStepConfig('mozilla')
 OptimizeForSize = TestStepConfig('optimize_for_size')
 Presubmit = TestStepConfig('presubmit')
-SimpleLeak = TestStepConfig('simpleleak')
 Test262 = TestStepConfig('test262')
 Test262Variants = TestStepConfig('test262_variants')
 Unittests = TestStepConfig('unittests')
@@ -318,9 +317,8 @@ BUILDERS = {
       },
 ####### Category: Linux64
       'V8 Linux64 - builder': {
-        'gclient_apply_config': ['v8_valgrind'],
         'chromium_apply_config': [
-          'default_compiler', 'v8_ninja', 'goma', 'has_valgrind', 'mb'],
+          'default_compiler', 'v8_ninja', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -354,10 +352,8 @@ BUILDERS = {
         'triggers_proxy': True,
       },
       'V8 Linux64 - debug builder': {
-        'gclient_apply_config': ['v8_valgrind'],
         'chromium_apply_config': [
-          'default_compiler', 'v8_ninja', 'goma', 'jsfunfuzz', 'has_valgrind',
-          'mb'],
+          'default_compiler', 'v8_ninja', 'goma', 'jsfunfuzz', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -405,7 +401,6 @@ BUILDERS = {
           Test262Variants(2),
           Mozilla,
           MjsunitSPFrameAccess,
-          SimpleLeak,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -443,7 +438,6 @@ BUILDERS = {
           Test262Variants(5),
           Mozilla,
           MjsunitSPFrameAccess,
-          SimpleLeak,
         ],
         'testing': {'platform': 'linux'},
       },
@@ -2091,9 +2085,8 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_rel_ng': {
-        'gclient_apply_config': ['v8_valgrind'],
         'chromium_apply_config': [
-          'default_compiler', 'v8_ninja', 'goma', 'has_valgrind', 'mb'],
+          'default_compiler', 'v8_ninja', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -2120,7 +2113,6 @@ BUILDERS = {
           OptimizeForSize,
           Test262Variants(4),
           MjsunitSPFrameAccess,
-          SimpleLeak,
         ],
         'testing': {'platform': 'linux'},
       },

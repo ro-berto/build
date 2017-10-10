@@ -115,10 +115,6 @@ TEST_CONFIGS = freeze({
     'test_args': ['--extra-flags=--optimize-for-size'],
     'variants': V8Variant('default'),
   },
-  'simpleleak': {
-    'tool': 'run-valgrind',
-    'isolated_target': 'run-valgrind',
-  },
   'test262': {
     'name': 'Test262 - no variants',
     'tests': ['test262'],
@@ -674,16 +670,6 @@ class V8GCMole(V8CompositeSwarmingTest):
     ]
 
 
-class V8SimpleLeakCheck(V8GenericSwarmingTest):
-  @property
-  def title(self):
-    return 'Simple Leak Check'
-
-  @property
-  def extra_args(self):
-    return [self.v8.relative_path_to_d8, '-e', 'print(1+2)']
-
-
 V8_NON_STANDARD_TESTS = freeze({
   'presubmit': V8Presubmit,
 })
@@ -699,7 +685,6 @@ TOOL_TO_TEST_SWARMING = freeze({
   'jsfunfuzz': V8Fuzzer,
   'run-deopt-fuzzer': V8DeoptFuzzer,
   'run-gcmole': V8GCMole,
-  'run-valgrind': V8SimpleLeakCheck,
   'run-tests': V8SwarmingTest,
 })
 
