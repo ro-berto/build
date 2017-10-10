@@ -26,13 +26,223 @@
   },
 
   "mixins": {
+    "tester": {
+      "scheduler": None,
+
+      # If this is False and the testers are slower than the builders,
+      # they'll fall behind, and we don't normally want that.
+      "mergeRequests": True,
+    },
     "trusty": {
       "os": "linux",
       "version": "trusty",
     },
+    "win7": {
+      "os": "win",
+      "version": "win7",
+    },
   },
 
   "builders": {
+    "CrWinClang": {
+      "mixins": ["win7"],
+      "bot": "build29-m1",
+    },
+    "CrWinClang (tester)": {
+      "mixins": ["tester", "win7"],
+      "bot": "vm961-m1",
+    },
+    "CrWinClang(dbg)": {
+      "bot_pool": "build60-m1",
+    },
+    "CrWinClang(shared)": {
+      "bot_pool": "build60-m1",
+    },
+    "CrWinClang(dbg) tester": {
+      "mixins": ["tester"],
+      "bot_pool": "vm962-m1",
+    },
+    "CrWinClang(shared) tester": {
+      "mixins": ["tester"],
+      "bot_pool": "vm962-m1",
+    },
+    "CrWinClang64(dbg)": {
+      "bot_pool": "build70-m1",
+    },
+    "CrWinClang64": {
+      "bot_pool": "build70-m1",
+    },
+    "CrWinClang64(dll)": {
+      "bot_pool": "build70-m1",
+    },
+    "CrWinClang64(dbg) tester": {
+      "mixins": ["tester"],
+      "bot_pool": "vm970-m1",
+    },
+    "CrWinClang64 tester": {
+      "mixins": ["tester"],
+      "bot_pool": "vm970-m1",
+    },
+    "CrWinClang64(dll) tester": {
+      "mixins": ["tester"],
+      "bot_pool": "vm970-m1",
+    },
+    "CrWinAsan": {
+      "bot_pool": "build4-m1",
+    },
+    "CrWinClangLLD": {
+      "bot_pool": "build4-m1",
+    },
+    "CrWinAsanCov": {
+      "bot_pool": "build4-m1",
+    },
+    "CrWinAsan tester": {
+      "mixins": ["tester"],
+      "bot_pool": "vm978-m1",
+    },
+    "CrWinClangLLD tester": {
+      "mixins": ["tester"],
+      "bot_pool": "vm978-m1",
+    },
+    "CrWinAsan(dll)": {
+      "bot_pool": "build27-m1",
+    },
+    "CrWinClangLLD64": {
+      "bot_pool": "build27-m1",
+    },
+    "ToTWinCFI64": {
+      "bot_pool": "build27-m1",
+    },
+    "ToTWinThinLTO64": {
+      "bot_pool": "build27-m1",
+    },
+    "CrWinAsan(dll) tester": {
+      "mixins": ["tester"],
+      "bot_pool": "vm190-m1",
+    },
+    "CrWinClangLLD64 tester": {
+      "mixins": ["tester"],
+      "bot_pool": "vm190-m1",
+    },
+    "CrWinAsanCov tester": {
+      "mixins": ["tester"],
+      "bot_pool": "vm190-m1",
+    },
+    "CrWinClngLLDdbg": {
+      "mixins": ["tester"],
+      "bot_pool": "build154-m1",
+    },
+    "CrWinClngLLD64dbg": {
+      "bot_pool": "build154-m1",
+    },
+    "ToTWinCFI": {
+      "bot_pool": "build154-m1",
+    },
+    "CrWinClngLLDdbg tester": {
+      "mixins": ["tester"],
+      "bot_pool": "vm12-m1",
+    },
+    "CrWinClngLLD64dbg tester": {
+      "mixins": ["tester"],
+      "bot_pool": "vm12-m1",
+    },
+    "ToTAndroidASan": {
+      "mixins": ["trusty"],
+      "bot": "build3-b1",
+    },
+    "ToTAndroid (dbg)": {
+      "mixins": ["trusty"],
+      "bot": "slave135-c1",
+    },
+    "ToTAndroid x64": {
+      "mixins": ["trusty"],
+      "bot": "slave176-c1",
+    },
+    "ToTMac": {
+      "bot_pool": "build98-m1",
+    },
+    "ToTiOS": {
+      "bot_pool": "build98-m1",
+    },
+    "ToTMac (dbg)": {
+      "bot_pool": "build99-m1",
+    },
+    "ToTMacASan": {
+      "bot_pool": "build99-m1",
+    },
+    "ToTMac tester": {
+      "mixins": ["tester"],
+      "bot_pool": "vm30-m1",
+    },
+    "ToTMacASan tester": {
+      "mixins": ["tester"],
+      "bot_pool": "vm30-m1",
+    },
+    "ToTWin": {
+      "mixins": ["win7"],
+      "bot": "build127-m1",
+    },
+    "ToTWin tester": {
+      "mixins": ["tester", "win7"],
+      "bot": "vm310-m1",
+    },
+    "ToTWin(dbg)": {
+      "bot_pool": "build128-m1",
+    },
+    "ToTWin(dll)": {
+      "bot_pool": "build128-m1",
+    },
+    "ToTWin(dbg) tester": {
+      "mixins": ["tester"],
+      "bot_pool": "vm311-m1",
+    },
+    "ToTWin(dll) tester": {
+      "mixins": ["tester"],
+      "bot_pool": "vm311-m1",
+    },
+    "ToTWin64": {
+      "mixins": ["win7"],
+      "bot": "build129-m1",
+    },
+    "ToTWin64 tester": {
+      "mixins": ["tester", "win7"],
+      "bot": "vm312-m1",
+    },
+    "ToTWin64(dbg)": {
+      "bot_pool": "build130-m1",
+    },
+    "ToTWin64(dll)": {
+      "bot_pool": "build130-m1",
+    },
+    "ToTWin64(dbg) tester": {
+      "mixins": ["tester"],
+      "bot_pool": "vm313-m1",
+    },
+    "ToTWin64(dll) tester": {
+      "mixins": ["tester"],
+      "bot_pool": "vm313-m1",
+    },
+    "UBSanVptr Linux": {
+      "mixins": ["trusty"],
+      "bot": "slave20-c1",
+    },
+    "CFI Linux ToT": {
+      "mixins": ["trusty"],
+      "bot": "slave59-c1",
+    },
+    "CFI Linux CF": {
+      "mixins": ["trusty"],
+      "bot": "slave33-c1",
+    },
+    "CFI Linux (icall)": {
+      "mixins": ["trusty"],
+      "bot": "slave30-c1",
+    },
+    "ToTLinuxASanLibfuzzer": {
+      "mixins": ["trusty"],
+      "bot": "slave116-c1",
+    },
+
     "ToTAndroid": {
       "mixins": ["trusty"],
       "bot": "slave144-c1",
@@ -76,6 +286,94 @@
     "ToTLinuxUBSanVptr": {
       "mixins": ["trusty"],
       "bot": "slave168-c1",
+    },
+  },
+
+  "bot_pools": {
+    "build4-m1": {
+      "os": "win",
+      "version": "win7",
+      "bots": "build4-m1",
+    },
+    "build27-m1": {
+      "os": "win",
+      "version": "win7",
+      "bots": "build27-m1",
+    },
+    "build60-m1": {
+      "os": "win",
+      "version": "win7",
+      "bots": "build60-m1",
+    },
+    "build70-m1": {
+      "os": "win",
+      "version": "win7",
+      "bots": "build70-m1",
+    },
+    "build98-m1": {
+      "os": "mac",
+      "version": "10.9",
+      "bots": "build98-m1",
+    },
+    "build99-m1": {
+      "os": "mac",
+      "version": "10.9",
+      "bots": "build99-m1",
+    },
+    "build128-m1": {
+      "os": "win",
+      "version": "win7",
+      "bots": "build128-m1",
+    },
+    "build130-m1": {
+      "os": "win",
+      "version": "win7",
+      "bots": "build130-m1",
+    },
+    "build154-m1": {
+      "os": "win",
+      "version": "win7",
+      "bots": "build154-m1",
+    },
+    "vm12-m1": {
+      "os": "win",
+      "version": "win7",
+      "bots": "vm12-m1",
+    },
+    "vm30-m1": {
+      "os": "mac",
+      "version": "10.9",
+      "bots": "vm30-m1",
+    },
+    "vm190-m1": {
+      "os": "win",
+      "version": "win7",
+      "bots": "vm190-m1",
+    },
+    "vm311-m1": {
+      "os": "win",
+      "version": "win7",
+      "bots": "vm311-m1",
+    },
+    "vm313-m1": {
+      "os": "win",
+      "version": "win7",
+      "bots": "vm313-m1",
+    },
+    "vm962-m1": {
+      "os": "win",
+      "version": "win7",
+      "bots": "vm962-m1",
+    },
+    "vm970-m1": {
+      "os": "win",
+      "version": "win7",
+      "bots": "vm970-m1",
+    },
+    "vm978-m1": {
+      "os": "win",
+      "version": "win7",
+      "bots": "vm978-m1",
     },
   },
 

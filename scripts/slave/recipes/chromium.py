@@ -1776,24 +1776,6 @@ def GenTests(api):
         }))
   )
 
-  yield (
-    api.test('dynamic_gtest_asan_android') +
-    api.properties.generic(mastername='chromium.fyi',
-                           buildername='ClangToTAndroidASan') +
-    api.override_step_data(
-        'read test spec (chromium.fyi.json)',
-        api.json.output({
-            'ClangToTAndroidASan': {
-                'gtest_tests': [
-                    {
-                        'args': ['--tool=asan'],
-                        'test': 'gfx_unittests',
-                    },
-                ]
-            }
-        }))
-  )
-
   # Tests switching on asan and swiching off lsan for sandbox tester.
   yield (
     api.test('dynamic_gtest_memory_asan_no_lsan') +
