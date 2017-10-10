@@ -19,7 +19,7 @@ CLIENT_NAME = 'cipd' + infra_platform.exe_suffix()
 
 
 DEFAULT_CIPD_VERSION = 'git_revision:b482bfa19d3fa79b4b40dd5ac7a34479052e3df1'
-STAGING_CIPD_VERSION = 'git_revision:cf5b0de14e94b06274d15e84b19449f580576e80'
+STAGING_CIPD_VERSION = 'git_revision:c8044eb23015ef176913df6f4493c13f67e4d44b'
 
 PROD = None
 STAGING = 'staging'

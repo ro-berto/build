@@ -3,16 +3,10 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import argparse
-import collections
 import logging
 import os
-import re
-import string
 import subprocess
 import sys
-
-from multiprocessing.pool import ThreadPool
 
 import test_env  # pylint: disable=W0403,W0611
 
@@ -20,34 +14,9 @@ import slave.infra_platform
 import slave.robust_tempdir
 
 
-# Instance-wide logger.
-LOGGER = logging.getLogger('cipd_presubmit')
-
-
-# Regular expression for a CIPD package name template.
-RE_TEMPLATE = re.compile(r'\${(?P<name>\w+)(=(?P<constraints>[^}]+))?}')
-
-
 CIPD_CLIENT = 'cipd'
 if sys.platform == 'win32':
   CIPD_CLIENT += '.bat'
-
-
-def resolve_package(pkg):
-  LOGGER.info('Resolving CIPD package: %s %s', pkg.name, pkg.version)
-
-  cmd = [CIPD_CLIENT, 'resolve', pkg.name, '-version', pkg.version]
-  LOGGER.debug('Running command: %s', cmd)
-  proc = subprocess.Popen(cmd,
-      stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-  stdout, _ = proc.communicate()
-  LOGGER.debug('STDOUT:\n%s', stdout)
-
-  if proc.returncode != 0:
-    LOGGER.error('Failed to resolve CIPD package: %s %s',
-        pkg.name, pkg.version)
-    return False
-  return True
 
 
 def run_presubmit(basedir):
@@ -64,103 +33,44 @@ def run_presubmit(basedir):
   # We want to run this here so we can use the CIPD version that the slave
   # system uses. However, if this fails, we will fall back to the local system's
   # CIPD binary (in PATH) for the remainder of the tests.
-  cipd_bootstrap_succeeded = False
-  try:
-    from slave import cipd_bootstrap_v2
-    cipd_bootstrap_v2.high_level_ensure_cipd_client(basedir, None)
-    cipd_bootstrap_succeeded = True
-  except Exception:
-    LOGGER.exception('Failed to ensure CIPD bootstrap.')
+  from slave import cipd_bootstrap_v2
+  cipd_bootstrap_v2.high_level_ensure_cipd_client(
+      basedir, None, track=cipd_bootstrap_v2.STAGING)
 
-  # Collect our expected packages.
+  # Build our aggregate manifest.
   from slave import logdog_bootstrap, remote_run
-  packages = set()
+
+  manifest = []
+  for os_name, arch in slave.infra_platform.cipd_all_targets():
+    manifest += ['$VerifiedPlatform %s-%s' % (os_name, arch)]
+
   def _add_packages(src_fn):
     src_packages = set(src_fn())
     assert src_packages, (
         'Source %s yielded no CIPD packages.' % (src_fn.__module__,))
-    packages.update(src_packages)
+    for pkg in src_packages:
+      manifest.append('%s %s' % (pkg.name, pkg.version))
 
   _add_packages(cipd_bootstrap_v2.all_cipd_packages)
   _add_packages(logdog_bootstrap.all_cipd_packages)
   _add_packages(remote_run.all_cipd_packages)
 
-  # Validate the set of packages.
-  #
-  # Since packages may have constraints (e.g., ${os=windows,mac}), we will
-  # manually parse the constraint parameters and decide if a given OS/Arch
-  # matches the package's constraints.
-  all_packages = set()
-  for base_pkg in packages:
-    constraint_map = collections.defaultdict(set)
-    for t in RE_TEMPLATE.finditer(base_pkg.name):
-      constraints = t.group('constraints')
-      if not constraints:
-        continue
-      constraint_map[t.group('name')].update(constraints.split(','))
+  manifest = '\n'.join(manifest)
+  logging.debug('Ensuring manifest:\n%s', manifest)
 
-    # Replace constrained templated parameters with non-constrained
-    # versions (e.g., "${os=mac,windows}" => "${os}").
-    unconstrained_name = RE_TEMPLATE.sub(r'${\g<name>}', base_pkg.name)
-    name_template = string.Template(unconstrained_name)
-
-    for os_name, arch in slave.infra_platform.cipd_all_targets():
-      subst = {
-          'os': os_name,
-          'arch': arch,
-          'platform': '%s-%s' % (os_name, arch),
-      }
-      for k, v in subst.iteritems():
-        constraints = constraint_map.get(k, ())
-        if constraints and v not in constraints:
-          break
-      else:
-        pkg = base_pkg._replace(name=name_template.substitute(**subst))
-        all_packages.add(pkg)
-
-  # Fire up a thread pool to execute our resolutions in parallel.
-  tp = ThreadPool(processes=10)
-  try:
-    result = tp.map(resolve_package, sorted(all_packages))
-  finally:
-    tp.close()
-    tp.join()
-
-  resolved = sum(result)
-  LOGGER.info('Resolved %d package(s).', resolved)
-
-  missing = len(result) - resolved
-  if missing:
-    LOGGER.error('%d CIPD package(s) could not be resolved.', missing)
-    return 1
-
-  if not cipd_bootstrap_succeeded:
-    LOGGER.error('CIPD bootstrap did not successfully install.')
-    return 1
-
-  return 0
+  proc = subprocess.Popen(
+      [CIPD_CLIENT, 'ensure-file-verify', '-ensure-file=-'],
+      stdin=subprocess.PIPE)
+  proc.communicate(input=manifest)
+  return proc.returncode
 
 
-def main(argv):
-  parser = argparse.ArgumentParser()
-  parser.add_argument('-v', '--verbose', action='count', default=0,
-                      help='Increase logging. Can be specified multiple times.')
-  opts = parser.parse_args(argv[1:])
-
-  # Verbosity.
-  if opts.verbose == 0:
-    level = logging.WARNING
-  elif opts.verbose == 1:
-    level = logging.INFO
-  else:
-    level = logging.DEBUG
-  logging.getLogger().setLevel(level)
-
+def main(_argv):
   basedir = os.path.join(test_env.BASE_DIR, 'cipd_presubmit')
   with slave.robust_tempdir.RobustTempdir(basedir) as rt:
     return run_presubmit(rt.tempdir())
 
 
 if __name__ == '__main__':
-  logging.basicConfig(level=logging.WARNING)
+  logging.basicConfig(level=logging.DEBUG)
   sys.exit(main(sys.argv))
