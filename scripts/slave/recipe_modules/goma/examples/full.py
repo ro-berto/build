@@ -28,7 +28,7 @@ def RunSteps(api):
     """ % goma_dir)
     api.goma.set_goma_dir_for_local_test(goma_dir)
 
-  api.goma.ensure_goma()
+  api.goma.ensure_goma(api.properties.get('canary', False))
 
   api.step('gn', ['gn', 'gen', 'out/Release',
                   '--args=use_goma=true goma_dir=%s' % api.goma.goma_dir])
@@ -84,4 +84,8 @@ def GenTests(api):
 
   yield (api.test('linux_local_run_goma_recipe') + api.platform.name('linux') +
          api.properties(local_run_goma_recipe=True) +
+         api.properties.generic(**properties))
+
+  yield (api.test('win_goma_canary') + api.platform.name('win') +
+         api.properties(canary=True) +
          api.properties.generic(**properties))
