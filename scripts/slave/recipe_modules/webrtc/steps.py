@@ -95,13 +95,16 @@ ANDROID_CIPD_PACKAGES = [
     )
 ]
 
-PERF_TESTS = (
-  # TODO(ehmaldonado): Add low_bandwidth_audio_test.
-  # See http://crbug.com/755660.
-  'isac_fix_test',
-  'webrtc_perf_tests',
-  'low_bandwidth_audio_perf_test',
-)
+PERF_TESTS = freeze({
+    'isac_fix_test': {},
+    'low_bandwidth_audio_perf_test': {},
+    'webrtc_perf_tests': {
+        'args': [
+            '--store-test-artifacts',
+            '--save_worst_frame',
+        ],
+    },
+})
 
 
 def generate_tests(api, test_suite, revision):
@@ -142,8 +145,8 @@ def generate_tests(api, test_suite, revision):
         tests.append(BaremetalTest('webrtc_perf_tests', revision=revision,
             args=['--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/']))
   elif test_suite == 'desktop_perf_swarming':
-    for test in sorted(PERF_TESTS):
-      tests.append(SwarmingPerfTest(test, api))
+    for test, extra_args in sorted(PERF_TESTS.items()):
+      tests.append(SwarmingPerfTest(test, api, **extra_args))
   elif test_suite == 'desktop_perf':
     if api.m.platform.is_linux:
       tests.append(PerfTest(
@@ -330,8 +333,8 @@ class AndroidTest(SwarmingGTestTest):
 
 
 class SwarmingPerfTest(SwarmingIsolatedScriptTest):
-  def __init__(self, name, api):
-    super(SwarmingPerfTest, self).__init__(name)
+  def __init__(self, name, api, **kwargs):
+    super(SwarmingPerfTest, self).__init__(name, **kwargs)
     self._buildername = api.m.properties.get('buildername')
     self._buildnumber = api.m.properties.get('buildnumber')
     self._perf_config = PERF_CONFIG.copy()

@@ -737,6 +737,8 @@
       "--isolated",
       "[dummy hash for webrtc_perf_tests]",
       "--",
+      "--store-test-artifacts",
+      "--save_worst_frame",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
