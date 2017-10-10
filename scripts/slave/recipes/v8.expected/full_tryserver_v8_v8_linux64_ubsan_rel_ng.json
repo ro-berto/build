@@ -574,36 +574,20 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "trigger",
-    "trigger_specs": [
-      {
-        "builder_name": "v8_linux64_ubsan_rel_ng_triggered",
-        "properties": {
-          "category": "cq",
-          "issue": "12853011",
-          "master": "tryserver.v8",
-          "parent_build_environment": {
-            "GYP_DEFINES": "target_arch=x64 cool_flag=a=1"
-          },
-          "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
-          "parent_got_revision_cp": "refs/heads/master@{#50110}",
-          "parent_got_swarming_client_revision": "e4fee0b18f8163be6097c9c571640038896debc4",
-          "patch_project": "v8",
-          "patch_storage": "rietveld",
-          "patchset": "1",
-          "reason": "CQ",
-          "requester": "commit-bot@chromium.org",
-          "revision": "12345",
-          "rietveld": "https://codereview.chromium.org",
-          "swarm_hashes": {
-            "bot_default": "[dummy hash for bot_default]"
-          }
-        }
-      }
+    "cmd": [
+      "/opt/infra-tools/buildbucket",
+      "put",
+      "--host",
+      "cr-buildbucket.appspot.com",
+      "--service-account-json",
+      "/creds/service_accounts/service-account-v8-bot.json",
+      "{\"bucket\": \"master.tryserver.v8\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"v8_linux64_ubsan_rel_ng_triggered\\\", \\\"changes\\\": [{\\\"author\\\": {\\\"email\\\": \\\"cool_dev1337@chromium.org\\\"}}, {\\\"author\\\": {\\\"email\\\": \\\"hax@chromium.org\\\"}}], \\\"properties\\\": {\\\"branch\\\": \\\"master\\\", \\\"category\\\": \\\"cq\\\", \\\"issue\\\": \\\"12853011\\\", \\\"master\\\": \\\"tryserver.v8\\\", \\\"parent_build_environment\\\": {\\\"GYP_DEFINES\\\": \\\"target_arch=x64 cool_flag=a=1\\\"}, \\\"parent_buildername\\\": \\\"v8_linux64_ubsan_rel_ng\\\", \\\"parent_buildnumber\\\": 571, \\\"parent_got_revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"parent_got_revision_cp\\\": \\\"refs/heads/master@{#50110}\\\", \\\"parent_got_swarming_client_revision\\\": \\\"e4fee0b18f8163be6097c9c571640038896debc4\\\", \\\"patch_project\\\": \\\"v8\\\", \\\"patch_storage\\\": \\\"rietveld\\\", \\\"patchset\\\": \\\"1\\\", \\\"project\\\": \\\"chrome\\\", \\\"reason\\\": \\\"CQ\\\", \\\"requester\\\": \\\"commit-bot@chromium.org\\\", \\\"revision\\\": \\\"12345\\\", \\\"rietveld\\\": \\\"https://codereview.chromium.org\\\", \\\"swarm_hashes\\\": {\\\"bot_default\\\": \\\"[dummy hash for bot_default]\\\"}}}\", \"tags\": [\"builder:v8_linux64_ubsan_rel_ng_triggered\", \"master:tryserver.v8\", \"parent_buildername:v8_linux64_ubsan_rel_ng\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
     ],
+    "name": "trigger",
+    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
-      "@@@STEP_TEXT@v8_linux64_ubsan_rel_ng_triggered@@@"
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
