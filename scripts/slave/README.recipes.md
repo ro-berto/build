@@ -2453,23 +2453,23 @@ API for the perf try job recipe module.
 This API is meant to enable the perf try job recipe on any chromium-supported
 platform for any test that can be run via buildbot, perf or otherwise.
 
-#### **class [PerfTryJobApi](/scripts/slave/recipe_modules/perf_try/api.py#40)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
+#### **class [PerfTryJobApi](/scripts/slave/recipe_modules/perf_try/api.py#36)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [get\_result](/scripts/slave/recipe_modules/perf_try/api.py#328)(self, config, results_without_patch, results_with_patch, labels):**
+&mdash; **def [get\_result](/scripts/slave/recipe_modules/perf_try/api.py#324)(self, config, results_without_patch, results_with_patch, labels):**
 
 Returns the results as a dict.
 
-&mdash; **def [parse\_cloud\_links](/scripts/slave/recipe_modules/perf_try/api.py#317)(self, output):**
+&mdash; **def [parse\_cloud\_links](/scripts/slave/recipe_modules/perf_try/api.py#313)(self, output):**
 
-&mdash; **def [parse\_values](/scripts/slave/recipe_modules/perf_try/api.py#416)(self, results_a, results_b, metric, output_format, \*\*kwargs):**
+&mdash; **def [parse\_values](/scripts/slave/recipe_modules/perf_try/api.py#412)(self, results_a, results_b, metric, output_format, \*\*kwargs):**
 
 Parse the values for a given metric for the given results.
 
 This is meant to be used by tryjobs with a metric.
 
-&mdash; **def [set\_internal](/scripts/slave/recipe_modules/perf_try/api.py#46)(self):**
+&mdash; **def [set\_internal](/scripts/slave/recipe_modules/perf_try/api.py#42)(self):**
 
-&mdash; **def [start\_perf\_try\_job](/scripts/slave/recipe_modules/perf_try/api.py#49)(self, api, affected_files, bot_update_step, bot_db):**
+&mdash; **def [start\_perf\_try\_job](/scripts/slave/recipe_modules/perf_try/api.py#45)(self, api, affected_files, bot_update_step, bot_db):**
 
 Entry point pert tryjob or CQ tryjob.
 ### *recipe_modules* / [perf\_try\_staging](/scripts/slave/recipe_modules/perf_try_staging)
@@ -2481,23 +2481,23 @@ API for the perf try job recipe module.
 This API is meant to enable the perf try job recipe on any chromium-supported
 platform for any test that can be run via buildbot, perf or otherwise.
 
-#### **class [PerfTryJobApi](/scripts/slave/recipe_modules/perf_try_staging/api.py#40)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
+#### **class [PerfTryJobApi](/scripts/slave/recipe_modules/perf_try_staging/api.py#36)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [get\_result](/scripts/slave/recipe_modules/perf_try_staging/api.py#328)(self, config, results_without_patch, results_with_patch, labels):**
+&mdash; **def [get\_result](/scripts/slave/recipe_modules/perf_try_staging/api.py#324)(self, config, results_without_patch, results_with_patch, labels):**
 
 Returns the results as a dict.
 
-&mdash; **def [parse\_cloud\_links](/scripts/slave/recipe_modules/perf_try_staging/api.py#317)(self, output):**
+&mdash; **def [parse\_cloud\_links](/scripts/slave/recipe_modules/perf_try_staging/api.py#313)(self, output):**
 
-&mdash; **def [parse\_values](/scripts/slave/recipe_modules/perf_try_staging/api.py#416)(self, results_a, results_b, metric, output_format, \*\*kwargs):**
+&mdash; **def [parse\_values](/scripts/slave/recipe_modules/perf_try_staging/api.py#412)(self, results_a, results_b, metric, output_format, \*\*kwargs):**
 
 Parse the values for a given metric for the given results.
 
 This is meant to be used by tryjobs with a metric.
 
-&mdash; **def [set\_internal](/scripts/slave/recipe_modules/perf_try_staging/api.py#46)(self):**
+&mdash; **def [set\_internal](/scripts/slave/recipe_modules/perf_try_staging/api.py#42)(self):**
 
-&mdash; **def [start\_perf\_try\_job](/scripts/slave/recipe_modules/perf_try_staging/api.py#49)(self, api, affected_files, bot_update_step, bot_db):**
+&mdash; **def [start\_perf\_try\_job](/scripts/slave/recipe_modules/perf_try_staging/api.py#45)(self, api, affected_files, bot_update_step, bot_db):**
 
 Entry point pert tryjob or CQ tryjob.
 ### *recipe_modules* / [pgo](/scripts/slave/recipe_modules/pgo)

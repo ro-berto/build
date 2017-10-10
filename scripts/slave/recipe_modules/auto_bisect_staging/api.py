@@ -366,7 +366,7 @@ class AutoBisectStagingApi(recipe_api.RecipeApi):
 
     with self.m.context(cwd=self.working_dir):
       with self.m.context(cwd=self.m.path['checkout']):
-        affected_files = self.m.tryserver.get_files_affected_by_patch()
+        affected_files = self.m.chromium_checkout.get_files_affected_by_patch()
       with self.build_context_mgr(self.m):
         if BISECT_CONFIG_FILE in affected_files:
           api.step('***LEGACY BISECT HAS BEEN DEPRECATED***', [])

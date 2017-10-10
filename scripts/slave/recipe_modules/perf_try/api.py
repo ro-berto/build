@@ -17,10 +17,6 @@ from . import build_state
 
 PERF_CONFIG_FILE = 'tools/run-perf-test.cfg'
 WEBKIT_PERF_CONFIG_FILE = 'third_party/WebKit/Tools/run-perf-test.cfg'
-PERF_BENCHMARKS_PATH = 'tools/perf/benchmarks'
-PERF_MEASUREMENTS_PATH = 'tools/perf/measurements'
-BUILDBOT_BUILDERNAME = 'BUILDBOT_BUILDERNAME'
-BENCHMARKS_JSON_FILE = 'benchmarks.json'
 
 CLOUD_RESULTS_LINK = (r'\s(?P<VALUES>https://console.developers.google.com/'
     'm/cloudstorage/b/chromium-telemetry/o/html-results/results-[a-z0-9-_]+)\s')
