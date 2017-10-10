@@ -694,7 +694,7 @@ def gclient_sync(with_branch_heads, shallow):
   os.close(fd)
   gclient_bin = 'gclient.bat' if sys.platform.startswith('win') else 'gclient'
   cmd = [gclient_bin, 'sync', '--verbose', '--reset', '--force',
-         '--ignore_locks', '--output-json', gclient_output_file,
+         '--output-json', gclient_output_file,
          '--nohooks', '--noprehooks', '--delete_unversioned_trees']
   if with_branch_heads:
     cmd += ['--with_branch_heads']
@@ -863,13 +863,6 @@ def force_revision(folder_name, revision):
 
 def git_checkout(solutions, revisions, shallow, refs):
   build_dir = os.getcwd()
-  # Before we do anything, break all git_cache locks.
-  if path.isdir(CACHE_DIR):
-    git('cache', 'unlock', '-vv', '--force', '--all', '--cache-dir', CACHE_DIR)
-    for item in os.listdir(CACHE_DIR):
-      filename = os.path.join(CACHE_DIR, item)
-      if item.endswith('.lock'):
-        raise Exception('%s exists after cache unlock' % filename)
   first_solution = True
   for sln in solutions:
     # This is so we can loop back and try again if we need to wait for the
@@ -885,7 +878,7 @@ def git_checkout(solutions, revisions, shallow, refs):
         shallow = False
       sln_dir = path.join(build_dir, name)
       s = ['--shallow'] if shallow else []
-      populate_cmd = (['cache', 'populate', '--ignore_locks', '-v',
+      populate_cmd = (['cache', 'populate', '-v',
                        '--cache-dir', CACHE_DIR] + s + [url])
       for ref in refs:
         populate_cmd.extend(['--ref', ref])

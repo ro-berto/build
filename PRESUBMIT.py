@@ -96,7 +96,7 @@ def CommitChecks(input_api, output_api):
       ['python', 'scripts/common/env.py', 'print']).split()
 
   whitelist = [r'.+_test\.py$']
-  blacklist = [r'bot_update_test.py$', r'masters_test.py$']
+  blacklist = [r'masters_test.py$']
   tests.extend(input_api.canned_checks.GetUnitTestsInDirectory(
       input_api, output_api, 'tests', whitelist=whitelist,
       blacklist=blacklist))
@@ -179,9 +179,6 @@ def ConditionalChecks(input_api, output_api):
           r'^scripts/master/.*',
           r'^third_party/buildbot_8_4p1/.*',
           r'^third_party/twisted_10_2/.*',
-      ],
-      'tests/bot_update_test.py': [
-          r'^scripts/slave/bot_update.py$',
       ],
   }
   affected_files = set([
