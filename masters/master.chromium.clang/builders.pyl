@@ -162,6 +162,7 @@
       "bot_pool": "build98-m1",
     },
     "ToTiOS": {
+      "recipe": "ios/unified_builder_tester",
       "bot_pool": "build98-m1",
     },
     "ToTMac (dbg)": {
