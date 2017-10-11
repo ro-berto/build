@@ -188,7 +188,7 @@ BUILDERS = {
         'tests': [
           V8Testing(2),
           Benchmarks,
-          Test262Variants(3),
+          Test262Variants(4),
           Mozilla,
           MjsunitSPFrameAccess,
         ] + with_test_args(
