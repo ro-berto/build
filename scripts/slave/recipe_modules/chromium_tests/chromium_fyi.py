@@ -452,7 +452,7 @@ SPEC = {
     },
     'CrWinGoma': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['goma_canary', 'mb'],
+      'chromium_apply_config': ['goma_canary', 'mb', 'goma_high_parallel'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -468,7 +468,8 @@ SPEC = {
     },
     'CrWinGoma(dll)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['goma_canary','mb', 'shared_library'],
+      'chromium_apply_config': ['goma_canary','mb', 'shared_library',
+                                'goma_high_parallel'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -485,7 +486,8 @@ SPEC = {
     'CrWinGoma(loc)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['clobber', 'goma_canary', 'shared_library',
-                                'goma_localoutputcache', 'mb'],
+                                'goma_localoutputcache', 'mb',
+                                'goma_high_parallel'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -501,7 +503,7 @@ SPEC = {
     },
     'CrWin7Goma': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['goma_canary', 'mb'],
+      'chromium_apply_config': ['goma_canary', 'mb', 'goma_high_parallel'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -517,7 +519,8 @@ SPEC = {
     },
     'CrWin7Goma(dll)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['goma_canary', 'mb', 'shared_library'],
+      'chromium_apply_config': ['goma_canary', 'mb', 'goma_high_parallel',
+                                'shared_library'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -533,7 +536,7 @@ SPEC = {
     },
     'CrWin7Goma(dbg)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['goma_canary', 'mb'],
+      'chromium_apply_config': ['goma_canary', 'mb', 'goma_high_parallel'],
       'gclient_config': 'chromium',
       'GYP_DEFINES': {
         'win_z7': '1'
@@ -553,7 +556,7 @@ SPEC = {
     'CrWin7Goma(clbr)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['clobber', 'goma_canary', 'mb',
-                                'shared_library'],
+                                'shared_library', 'goma_high_parallel'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
