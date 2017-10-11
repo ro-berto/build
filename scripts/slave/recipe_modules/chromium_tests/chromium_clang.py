@@ -107,20 +107,6 @@ SPEC = {
       'testing': {'platform': 'linux'},
       'enable_swarming': True,
     },
-    'ThinLTO Linux ToT': {
-      'chromium_config': 'clang_tot_linux_lld',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'builder_tester',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
     'UBSanVptr Linux': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb'],
