@@ -610,7 +610,7 @@
       "--progress",
       "verbose",
       "--buildbot",
-      "--coverage=0.4",
+      "--coverage=0.3",
       "--coverage-lift=50",
       "--distribution-mode=random"
     ],
