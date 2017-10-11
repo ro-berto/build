@@ -1064,6 +1064,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'tests': [V8Testing],
+        'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
       },
       'V8 Random Deopt Fuzzer - debug': {
