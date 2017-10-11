@@ -713,7 +713,7 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [
-          V8Testing(2),
+          V8Testing(3),
           Test262,
           Mozilla,
         ],
@@ -757,7 +757,7 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [
-          V8Testing(2),
+          V8Testing(3),
           Test262,
           Mozilla,
         ],
@@ -2725,7 +2725,7 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [
-          V8Testing(2),
+          V8Testing(3),
           Test262,
           Mozilla,
         ],
@@ -2765,7 +2765,7 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [
-          V8Testing(2),
+          V8Testing(3),
           Test262,
           Mozilla,
         ],
