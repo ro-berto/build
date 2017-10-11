@@ -79,7 +79,7 @@ Platform = collections.namedtuple('Platform', (
 _PLATFORM_CONFIG = {
   # All systems.
   (): {
-    'host': 'luci-logdog.appspot.com',
+    'host': 'logs.chromium.org',
     'max_buffer_age': '30s',
     'butler': 'infra/tools/luci/logdog/butler/${platform}',
     'annotee': 'infra/tools/luci/logdog/annotee/${platform}',
