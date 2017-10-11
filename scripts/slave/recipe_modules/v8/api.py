@@ -50,8 +50,6 @@ V8_MINOR = 'V8_MINOR_VERSION'
 V8_BUILD = 'V8_BUILD_NUMBER'
 V8_PATCH = 'V8_PATCH_LEVEL'
 
-BBUCKET_SERVICE_ACCOUNT = 'v8-bot'
-
 
 class V8Version(object):
   """A v8 version as used for tagging (with patch level), e.g. '3.4.5.1'."""
@@ -1233,11 +1231,6 @@ class V8Api(recipe_api.RecipeApi):
     ]
     return full_args, env
 
-  @staticmethod
-  def _copy_property(src, dest, key):
-    if key in src:
-      dest[key] = src[key]
-
   def maybe_trigger(self, **additional_properties):
     triggers = self.bot_config.get('triggers', [])
     triggers_proxy = self.bot_config.get('triggers_proxy', False)
@@ -1253,15 +1246,16 @@ class V8Api(recipe_api.RecipeApi):
       if self.m.tryserver.is_tryserver:
         properties.update(
           category=self.m.properties.get('category', 'manual_ts'),
+          master=str(self.m.properties['master']),
           reason=str(self.m.properties.get('reason', 'ManualTS')),
+          requester=str(self.m.properties['requester']),
           # On tryservers, set revision to the same as on the current bot,
           # as CQ expects builders and testers to match the revision field.
           revision=str(self.m.properties.get('revision', 'HEAD')),
         )
-        for p in ['issue', 'master', 'patch_gerrit_url', 'patch_git_url',
-                  'patch_issue', 'patch_project', 'patch_ref',
-                  'patch_repository_url', 'patch_set', 'patch_storage',
-                  'patchset', 'requester', 'rietveld']:
+        for p in ['issue', 'patch_gerrit_url', 'patch_git_url', 'patch_issue',
+                  'patch_project', 'patch_ref', 'patch_repository_url',
+                  'patch_set', 'patch_storage', 'patchset', 'rietveld']:
           try:
             properties[p] = str(self.m.properties[p])
           except KeyError:
@@ -1273,7 +1267,8 @@ class V8Api(recipe_api.RecipeApi):
 
       if self.m.properties.get('testfilter'):
         properties.update(testfilter=list(self.m.properties['testfilter']))
-      self._copy_property(self.m.properties, properties, 'extra_flags')
+      if self.m.properties.get('extra_flags'):
+        properties.update(extra_flags=self.m.properties['extra_flags'])
 
       # TODO(machenbach): Also set meaningful buildbucket tags of triggering
       # parent.
@@ -1288,54 +1283,10 @@ class V8Api(recipe_api.RecipeApi):
       if swarm_hashes:
         properties['swarm_hashes'] = swarm_hashes
       properties.update(**additional_properties)
-
-      if self.m.tryserver.is_tryserver:
-        if triggers:
-          trigger_props = {}
-          self._copy_property(self.m.properties, trigger_props, 'branch')
-          self._copy_property(self.m.properties, trigger_props, 'git_revision')
-          self._copy_property(self.m.properties, trigger_props, 'project')
-          self._copy_property(self.m.properties, trigger_props, 'revision')
-          trigger_props['parent_buildername'] = self.m.properties['buildername']
-          trigger_props['parent_buildnumber'] = self.m.properties['buildnumber']
-          trigger_props.update(properties)
-          self.m.buildbucket.put(
-              [
-                {
-                  # TODO(sergiyb): Maybe parse bucket name from the
-                  # 'buildbucket' build property when it's available.
-                  'bucket': 'master.%s' % self.m.properties['mastername'],
-                  'parameters': {
-                    'builder_name': builder_name,
-                    'properties': trigger_props,
-                    # Generate a list of fake changes from the blamelist
-                    # property to have correct blamelist displayed on the child
-                    # build. Unfortunately, this only copies author names, but
-                    # additional details about the list of changes associated
-                    # with the build are currently not accessible from the
-                    # recipe code.
-                    'changes': [
-                      {
-                        'author': {
-                          'email': author,
-                        },
-                      }
-                      for author in self.m.properties.get('blamelist', [])
-                    ],
-                  },
-                }
-                for builder_name in triggers
-              ],
-              self.m.puppet_service_account.get_key_path(
-                BBUCKET_SERVICE_ACCOUNT),
-              name='trigger',
-              step_test_data=lambda: self.m.json.test_api.output_stream({}),
-          )
-      else:
-        self.m.trigger(*[{
-          'builder_name': builder_name,
-          'properties': properties,
-        } for builder_name in triggers])
+      self.m.trigger(*[{
+        'builder_name': builder_name,
+        'properties': properties,
+      } for builder_name in triggers])
 
       if triggers_proxy:
         proxy_properties = {

@@ -1,22 +1,15 @@
 DEPS = [
   'archive',
   'build',
-  'buildbucket',
+  'depot_tools/bot_update',
   'chromium',
   'commit_position',
-  'depot_tools/bot_update',
   'depot_tools/gclient',
   'depot_tools/git',
   'depot_tools/gitiles',
   'depot_tools/gsutil',
-  'depot_tools/tryserver',
   'isolate',
   'perf_dashboard',
-  # TODO(sergiyb): Module puppet_service_account is not LUCI-ready because it
-  # requires puppet configuration to be used. We need to migrate to
-  # recipe_engine/service_account once buildbucket module supports passing
-  # access_token instead of path to JSON file containing credentials.
-  'puppet_service_account',
   'recipe_engine/context',
   'recipe_engine/file',
   'recipe_engine/json',
@@ -26,13 +19,14 @@ DEPS = [
   'recipe_engine/python',
   'recipe_engine/raw_io',
   'recipe_engine/step',
-  'recipe_engine/tempfile',
-  'recipe_engine/time',
-  'recipe_engine/url',
   'swarming',
   'swarming_client',
   'test_utils',
+  'recipe_engine/tempfile',
+  'recipe_engine/time',
+  'recipe_engine/url',
   'trigger',
+  'depot_tools/tryserver',
 ]
 
 
