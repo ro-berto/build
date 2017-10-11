@@ -1076,7 +1076,7 @@ SPEC['builders'].update([
     config('ToTLinuxASan',
            chromium_config='clang_tot_linux_asan'),
 
-    config('ToTLinuxLibfuzzer',
+    config('ToTLinuxASanLibfuzzer',
            chromium_config='clang_tot_linux_asan'),
 
     config('ToTLinuxLLD',
