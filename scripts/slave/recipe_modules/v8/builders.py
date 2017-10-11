@@ -910,6 +910,7 @@ BUILDERS = {
         'swarming_properties': SWARMING_FYI_PROPS,
       },
       'V8 Linux - arm64 - sim - MSAN': {
+        'gclient_apply_config': ['checkout_instrumented_libraries'],
         # 'simulate_arm' is actually implied by 'msan'. We still set it
         # explicitly for the sake of consistency.
         'chromium_apply_config': [
@@ -1263,6 +1264,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux MSAN no origins': {
+        'gclient_apply_config': ['checkout_instrumented_libraries'],
         'chromium_apply_config': [
           'v8_ninja',
           'clang',
@@ -1288,6 +1290,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux MSAN chained origins': {
+        'gclient_apply_config': ['checkout_instrumented_libraries'],
         'chromium_apply_config': [
           'v8_ninja',
           'clang',
@@ -2312,6 +2315,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_msan_rel': {
+        'gclient_apply_config': ['checkout_instrumented_libraries'],
         # 'simulate_arm' is actually implied by 'msan'. We still set it
         # explicitly for the sake of consistency.
         'chromium_apply_config': [

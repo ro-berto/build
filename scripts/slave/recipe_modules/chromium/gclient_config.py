@@ -246,3 +246,7 @@ def chrome_internal(c):
     "src/webkit/data/test_shell/plugins":None,
     "src/webkit/data/xbm_decoder":None,
   }
+
+@CONFIG_CTX()
+def checkout_instrumented_libraries(c):
+  c.solutions[0].custom_vars['checkout_instrumented_libraries'] = 'True'

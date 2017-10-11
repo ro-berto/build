@@ -36,6 +36,9 @@ def RunSteps(api):
   for config_name in TEST_CONFIGS:
     api.gclient.make_config(config_name)
 
+  api.gclient.set_config('chromium')
+  api.gclient.apply_config('checkout_instrumented_libraries')
+
 
 def GenTests(api):
   yield api.test('basic') + api.post_process(DropExpectation)
