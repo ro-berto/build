@@ -145,6 +145,11 @@
         'logdog_only': True,
       },
     },
+    'chromium.sandbox': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
     'chromium.win': {
       '*': {
         'logdog_only': True,
