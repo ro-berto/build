@@ -285,7 +285,6 @@
       "--timeout=200",
       "--random-seed=-799690107",
       "benchmarks",
-      "--download-data",
       "--exhaustive-variants",
       "--rerun-failures-count=2",
       "--swarming",

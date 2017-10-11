@@ -479,7 +479,6 @@
       "--timeout=200",
       "--random-seed=1879570862",
       "test262",
-      "--download-data",
       "--exhaustive-variants",
       "--dcheck-always-on",
       "--rerun-failures-count=2",

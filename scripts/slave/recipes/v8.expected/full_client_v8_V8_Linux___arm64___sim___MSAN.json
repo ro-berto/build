@@ -758,7 +758,6 @@
       "--timeout=200",
       "--random-seed=831298184",
       "test262",
-      "--download-data",
       "--variants=default",
       "--msan",
       "--rerun-failures-count=2",

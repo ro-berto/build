@@ -80,7 +80,6 @@ TEST_CONFIGS = freeze({
   'benchmarks': {
     'name': 'Benchmarks',
     'tests': ['benchmarks'],
-    'test_args': ['--download-data'],
   },
   'deopt': {
     'tool': 'run-deopt-fuzzer',
@@ -118,13 +117,11 @@ TEST_CONFIGS = freeze({
   'test262': {
     'name': 'Test262 - no variants',
     'tests': ['test262'],
-    'test_args': ['--download-data'],
     'variants': V8Variant('default'),
   },
   'test262_variants': {
     'name': 'Test262',
     'tests': ['test262'],
-    'test_args': ['--download-data'],
   },
   'unittests': {
     'name': 'Unittests',

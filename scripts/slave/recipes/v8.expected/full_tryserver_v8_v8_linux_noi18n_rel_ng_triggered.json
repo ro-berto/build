@@ -292,7 +292,6 @@
       "--timeout=200",
       "--random-seed=-275937916",
       "test262",
-      "--download-data",
       "--noi18n",
       "--variants=default",
       "--dcheck-always-on",

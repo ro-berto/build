@@ -755,7 +755,6 @@
       "--timeout=200",
       "--random-seed=-275937916",
       "test262",
-      "--download-data",
       "--variants=default",
       "--extra-flags",
       "--enable-armv8 --trace_gc --turbo_stats",

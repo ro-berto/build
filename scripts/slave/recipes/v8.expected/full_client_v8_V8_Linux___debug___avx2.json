@@ -273,7 +273,6 @@
       "--timeout=200",
       "--random-seed=1524778624",
       "benchmarks",
-      "--download-data",
       "--exhaustive-variants",
       "--rerun-failures-count=2",
       "--swarming",

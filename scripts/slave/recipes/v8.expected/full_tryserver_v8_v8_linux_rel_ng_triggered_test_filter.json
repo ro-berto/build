@@ -410,7 +410,6 @@
       "--random-seed=-1743232531",
       "test262/foo",
       "test262/bar",
-      "--download-data",
       "--exhaustive-variants",
       "--extra-flags",
       "--trace_gc --turbo_stats",

@@ -453,7 +453,6 @@
       "--timeout=200",
       "--random-seed=929021456",
       "test262",
-      "--download-data",
       "--exhaustive-variants",
       "--rerun-failures-count=2",
       "--swarming",

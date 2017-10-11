@@ -377,7 +377,6 @@
       "--timeout=200",
       "--random-seed=-11105671",
       "test262",
-      "--download-data",
       "--exhaustive-variants",
       "--rerun-failures-count=2",
       "--swarming",

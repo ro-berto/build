@@ -285,7 +285,6 @@
       "--timeout=200",
       "--random-seed=-275937916",
       "test262",
-      "--download-data",
       "--no-snap",
       "--variants=default",
       "--rerun-failures-count=2",

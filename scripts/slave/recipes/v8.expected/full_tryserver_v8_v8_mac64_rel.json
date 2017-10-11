@@ -766,7 +766,6 @@
       "--timeout=200",
       "--random-seed=-275937916",
       "test262",
-      "--download-data",
       "--variants=default",
       "--dcheck-always-on",
       "--rerun-failures-count=2",

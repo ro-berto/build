@@ -812,7 +812,6 @@
       "--timeout=200",
       "--random-seed=-275937916",
       "test262",
-      "--download-data",
       "--noi18n",
       "--variants=default",
       "--rerun-failures-count=2",
