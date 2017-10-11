@@ -44,249 +44,310 @@
   },
 
   "builders": {
-    "CrWinClang": {
-      "mixins": ["win7"],
-      "bot": "build29-m1",
-    },
-    "CrWinClang (tester)": {
-      "mixins": ["tester", "win7"],
-      "bot": "vm961-m1",
-    },
-    "CrWinClang(dbg)": {
-      "bot_pool": "build60-m1",
-    },
-    "CrWinClang(shared)": {
-      "bot_pool": "build60-m1",
-    },
-    "CrWinClang(dbg) tester": {
-      "mixins": ["tester"],
-      "bot_pool": "vm962-m1",
-    },
-    "CrWinClang(shared) tester": {
-      "mixins": ["tester"],
-      "bot_pool": "vm962-m1",
-    },
-    "CrWinClang64(dbg)": {
-      "bot_pool": "build70-m1",
-    },
-    "CrWinClang64": {
-      "bot_pool": "build70-m1",
-    },
-    "CrWinClang64(dll)": {
-      "bot_pool": "build70-m1",
-    },
-    "CrWinClang64(dbg) tester": {
-      "mixins": ["tester"],
-      "bot_pool": "vm970-m1",
-    },
-    "CrWinClang64 tester": {
-      "mixins": ["tester"],
-      "bot_pool": "vm970-m1",
-    },
-    "CrWinClang64(dll) tester": {
-      "mixins": ["tester"],
-      "bot_pool": "vm970-m1",
-    },
-    "CrWinAsan": {
-      "bot_pool": "build4-m1",
-    },
-    "CrWinClangLLD": {
-      "bot_pool": "build4-m1",
-    },
-    "CrWinAsanCov": {
-      "bot_pool": "build4-m1",
-    },
-    "CrWinAsan tester": {
-      "mixins": ["tester"],
-      "bot_pool": "vm978-m1",
-    },
-    "CrWinClangLLD tester": {
-      "mixins": ["tester"],
-      "bot_pool": "vm978-m1",
-    },
-    "CrWinAsan(dll)": {
-      "bot_pool": "build27-m1",
-    },
-    "CrWinClangLLD64": {
-      "bot_pool": "build27-m1",
-    },
-    "ToTWinCFI64": {
-      "bot_pool": "build27-m1",
-    },
-    "ToTWinThinLTO64": {
-      "bot_pool": "build27-m1",
-    },
-    "CrWinAsan(dll) tester": {
-      "mixins": ["tester"],
-      "bot_pool": "vm190-m1",
-    },
-    "CrWinClangLLD64 tester": {
-      "mixins": ["tester"],
-      "bot_pool": "vm190-m1",
-    },
-    "CrWinAsanCov tester": {
-      "mixins": ["tester"],
-      "bot_pool": "vm190-m1",
-    },
-    "CrWinClngLLDdbg": {
-      "mixins": ["tester"],
-      "bot_pool": "build154-m1",
-    },
-    "CrWinClngLLD64dbg": {
-      "bot_pool": "build154-m1",
-    },
-    "ToTWinCFI": {
-      "bot_pool": "build154-m1",
-    },
-    "CrWinClngLLDdbg tester": {
-      "mixins": ["tester"],
-      "bot_pool": "vm12-m1",
-    },
-    "CrWinClngLLD64dbg tester": {
-      "mixins": ["tester"],
-      "bot_pool": "vm12-m1",
-    },
-    "ToTAndroidASan": {
+    "ToTLinux": {
       "mixins": ["trusty"],
-      "bot": "build3-b1",
+      "bot": "slave162-c1",
+      "category": "0ToTLinux",
     },
-    "ToTAndroid (dbg)": {
+    "ToTLinux (dbg)": {
       "mixins": ["trusty"],
-      "bot": "slave135-c1",
+      "bot": "slave164-c1",
+      "category": "0ToTLinux",
     },
-    "ToTAndroid x64": {
+    "ToTLinuxASan": {
       "mixins": ["trusty"],
-      "bot": "slave176-c1",
+      "bot": "slave163-c1",
+      "category": "0ToTLinux",
     },
-    "ToTMac": {
-      "bot_pool": "build98-m1",
-    },
-    "ToTiOS": {
-      "recipe": "ios/unified_builder_tester",
-      "bot_pool": "build98-m1",
-    },
-    "ToTMac (dbg)": {
-      "bot_pool": "build99-m1",
-    },
-    "ToTMacASan": {
-      "bot_pool": "build99-m1",
-    },
-    "ToTMac tester": {
-      "mixins": ["tester"],
-      "bot_pool": "vm30-m1",
-    },
-    "ToTMacASan tester": {
-      "mixins": ["tester"],
-      "bot_pool": "vm30-m1",
-    },
-    "ToTWin": {
-      "mixins": ["win7"],
-      "bot": "build127-m1",
-    },
-    "ToTWin tester": {
-      "mixins": ["tester", "win7"],
-      "bot": "vm310-m1",
-    },
-    "ToTWin(dbg)": {
-      "bot_pool": "build128-m1",
-    },
-    "ToTWin(dll)": {
-      "bot_pool": "build128-m1",
-    },
-    "ToTWin(dbg) tester": {
-      "mixins": ["tester"],
-      "bot_pool": "vm311-m1",
-    },
-    "ToTWin(dll) tester": {
-      "mixins": ["tester"],
-      "bot_pool": "vm311-m1",
-    },
-    "ToTWin64": {
-      "mixins": ["win7"],
-      "bot": "build129-m1",
-    },
-    "ToTWin64 tester": {
-      "mixins": ["tester", "win7"],
-      "bot": "vm312-m1",
-    },
-    "ToTWin64(dbg)": {
-      "bot_pool": "build130-m1",
-    },
-    "ToTWin64(dll)": {
-      "bot_pool": "build130-m1",
-    },
-    "ToTWin64(dbg) tester": {
-      "mixins": ["tester"],
-      "bot_pool": "vm313-m1",
-    },
-    "ToTWin64(dll) tester": {
-      "mixins": ["tester"],
-      "bot_pool": "vm313-m1",
-    },
-    "UBSanVptr Linux": {
+    "ToTLinuxLLD": {
       "mixins": ["trusty"],
-      "bot": "slave20-c1",
+      "bot": "slave165-c1",
+      "category": "0ToTLinux",
     },
-    "CFI Linux ToT": {
+    "ToTLinuxMSan": {
       "mixins": ["trusty"],
-      "bot": "slave59-c1",
+      "bot": "slave166-c1",
+      "category": "0ToTLinux",
     },
-    "CFI Linux CF": {
+    "ToTLinuxThinLTO": {
       "mixins": ["trusty"],
-      "bot": "slave33-c1",
+      "bot": "slave167-c1",
+      "category": "0ToTLinux",
     },
-    "CFI Linux (icall)": {
+    "ToTLinuxUBSanVptr": {
       "mixins": ["trusty"],
-      "bot": "slave30-c1",
+      "bot": "slave168-c1",
+      "category": "0ToTLinux",
     },
     "ToTLinuxASanLibfuzzer": {
       "mixins": ["trusty"],
       "bot": "slave116-c1",
+      "category": "0ToTLinux",
     },
 
+    "ToTAndroidASan": {
+      "mixins": ["trusty"],
+      "bot": "build3-b1",
+      "category": "1ToTAndroid",
+    },
+    "ToTAndroid (dbg)": {
+      "mixins": ["trusty"],
+      "bot": "slave135-c1",
+      "category": "1ToTAndroid",
+    },
+    "ToTAndroid x64": {
+      "mixins": ["trusty"],
+      "bot": "slave176-c1",
+      "category": "1ToTAndroid",
+    },
     "ToTAndroid": {
       "mixins": ["trusty"],
       "bot": "slave144-c1",
+      "category": "1ToTAndroid",
     },
-
     "ToTAndroid64": {
       "mixins": ["trusty"],
       "bot": "slave172-c1",
+      "category": "1ToTAndroid",
     },
 
-    "ToTLinux": {
-      "mixins": ["trusty"],
-      "bot": "slave162-c1",
+    "ToTMac": {
+      "bot_pool": "build98-m1",
+      "category": "2ToTMac",
+    },
+    "ToTMac tester": {
+      "mixins": ["tester"],
+      "bot_pool": "vm30-m1",
+      "category": "2ToTMac",
+    },
+    "ToTMac (dbg)": {
+      "bot_pool": "build99-m1",
+      "category": "2ToTMac",
+    },
+    "ToTMacASan": {
+      "bot_pool": "build99-m1",
+      "category": "2ToTMac",
+    },
+    "ToTMacASan tester": {
+      "mixins": ["tester"],
+      "bot_pool": "vm30-m1",
+      "category": "2ToTMac",
+    },
+    "ToTiOS": {
+      "recipe": "ios/unified_builder_tester",
+      "bot_pool": "build98-m1",
+      "category": "2ToTMac",
     },
 
-    "ToTLinux (dbg)": {
-      "mixins": ["trusty"],
-      "bot": "slave164-c1",
+    "ToTWin": {
+      "mixins": ["win7"],
+      "bot": "build127-m1",
+      "category": "3ToTWindows",
+    },
+    "ToTWin tester": {
+      "mixins": ["tester", "win7"],
+      "bot": "vm310-m1",
+      "category": "3ToTWindows",
+    },
+    "ToTWin(dbg)": {
+      "bot_pool": "build128-m1",
+      "category": "3ToTWindows",
+    },
+    "ToTWin(dbg) tester": {
+      "mixins": ["tester"],
+      "bot_pool": "vm311-m1",
+      "category": "3ToTWindows",
+    },
+    "ToTWin(dll)": {
+      "bot_pool": "build128-m1",
+      "category": "3ToTWindows",
+    },
+    "ToTWin(dll) tester": {
+      "mixins": ["tester"],
+      "bot_pool": "vm311-m1",
+      "category": "3ToTWindows",
+    },
+    "ToTWin64": {
+      "mixins": ["win7"],
+      "bot": "build129-m1",
+      "category": "3ToTWindows",
+    },
+    "ToTWin64 tester": {
+      "mixins": ["tester", "win7"],
+      "bot": "vm312-m1",
+      "category": "3ToTWindows",
+    },
+    "ToTWin64(dbg)": {
+      "bot_pool": "build130-m1",
+      "category": "3ToTWindows",
+    },
+    "ToTWin64(dbg) tester": {
+      "mixins": ["tester"],
+      "bot_pool": "vm313-m1",
+      "category": "3ToTWindows",
+    },
+    "ToTWin64(dll)": {
+      "bot_pool": "build130-m1",
+      "category": "3ToTWindows",
+    },
+    "ToTWin64(dll) tester": {
+      "mixins": ["tester"],
+      "bot_pool": "vm313-m1",
+      "category": "3ToTWindows",
+    },
+    "ToTWinCFI64": {
+      "bot_pool": "build27-m1",
+      "category": "3ToTWindows",
+    },
+    "ToTWinThinLTO64": {
+      "bot_pool": "build27-m1",
+      "category": "3ToTWindows",
     },
 
-    "ToTLinuxASan": {
-      "mixins": ["trusty"],
-      "bot": "slave163-c1",
+    "CrWinClang": {
+      "mixins": ["win7"],
+      "bot": "build29-m1",
+      "category": "4Windows",
+    },
+    "CrWinClang (tester)": {
+      "mixins": ["tester", "win7"],
+      "bot": "vm961-m1",
+      "category": "4Windows",
+    },
+    "CrWinClang(dbg)": {
+      "bot_pool": "build60-m1",
+      "category": "4Windows",
+    },
+    "CrWinClang(dbg) tester": {
+      "mixins": ["tester"],
+      "bot_pool": "vm962-m1",
+      "category": "4Windows",
+    },
+    "CrWinClang(shared)": {
+      "bot_pool": "build60-m1",
+      "category": "4Windows",
+    },
+    "CrWinClang(shared) tester": {
+      "mixins": ["tester"],
+      "bot_pool": "vm962-m1",
+      "category": "4Windows",
+    },
+    "CrWinClang64(dbg)": {
+      "bot_pool": "build70-m1",
+      "category": "4Windows",
+    },
+    "CrWinClang64(dbg) tester": {
+      "mixins": ["tester"],
+      "bot_pool": "vm970-m1",
+      "category": "4Windows",
+    },
+    "CrWinClang64": {
+      "bot_pool": "build70-m1",
+      "category": "4Windows",
+    },
+    "CrWinClang64 tester": {
+      "mixins": ["tester"],
+      "bot_pool": "vm970-m1",
+      "category": "4Windows",
+    },
+    "CrWinClang64(dll)": {
+      "bot_pool": "build70-m1",
+      "category": "4Windows",
+    },
+    "CrWinClang64(dll) tester": {
+      "mixins": ["tester"],
+      "bot_pool": "vm970-m1",
+      "category": "4Windows",
+    },
+    "CrWinAsan": {
+      "bot_pool": "build4-m1",
+      "category": "4Windows",
+    },
+    "CrWinAsan tester": {
+      "mixins": ["tester"],
+      "bot_pool": "vm978-m1",
+      "category": "4Windows",
+    },
+    "CrWinAsanCov": {
+      "bot_pool": "build4-m1",
+      "category": "4Windows",
+    },
+    "CrWinAsanCov tester": {
+      "mixins": ["tester"],
+      "bot_pool": "vm190-m1",
+      "category": "4Windows",
+    },
+    "CrWinClangLLD": {
+      "bot_pool": "build4-m1",
+      "category": "4Windows",
+    },
+    "CrWinClangLLD tester": {
+      "mixins": ["tester"],
+      "bot_pool": "vm978-m1",
+      "category": "4Windows",
+    },
+    "CrWinAsan(dll)": {
+      "bot_pool": "build27-m1",
+      "category": "4Windows",
+    },
+    "CrWinAsan(dll) tester": {
+      "mixins": ["tester"],
+      "bot_pool": "vm190-m1",
+      "category": "4Windows",
+    },
+    "CrWinClangLLD64": {
+      "bot_pool": "build27-m1",
+      "category": "4Windows",
+    },
+    "CrWinClangLLD64 tester": {
+      "mixins": ["tester"],
+      "bot_pool": "vm190-m1",
+      "category": "4Windows",
+    },
+    "CrWinClngLLDdbg": {
+      "mixins": ["tester"],
+      "bot_pool": "build154-m1",
+      "category": "4Windows",
+    },
+    "CrWinClngLLDdbg tester": {
+      "mixins": ["tester"],
+      "bot_pool": "vm12-m1",
+      "category": "4Windows",
+    },
+    "CrWinClngLLD64dbg": {
+      "bot_pool": "build154-m1",
+      "category": "4Windows",
+    },
+    "CrWinClngLLD64dbg tester": {
+      "mixins": ["tester"],
+      "bot_pool": "vm12-m1",
+      "category": "4Windows",
     },
 
-    "ToTLinuxLLD": {
+    "CFI Linux ToT": {
       "mixins": ["trusty"],
-      "bot": "slave165-c1",
+      "bot": "slave59-c1",
+      "category": "5CFI",
+    },
+    "CFI Linux CF": {
+      "mixins": ["trusty"],
+      "bot": "slave33-c1",
+      "category": "5CFI",
+    },
+    "CFI Linux (icall)": {
+      "mixins": ["trusty"],
+      "bot": "slave30-c1",
+      "category": "5CFI",
+    },
+    "ToTWinCFI": {
+      "bot_pool": "build154-m1",
+      "category": "5CFI",
     },
 
-    "ToTLinuxMSan": {
+    "UBSanVptr Linux": {
       "mixins": ["trusty"],
-      "bot": "slave166-c1",
-    },
-
-    "ToTLinuxThinLTO": {
-      "mixins": ["trusty"],
-      "bot": "slave167-c1",
-    },
-
-    "ToTLinuxUBSanVptr": {
-      "mixins": ["trusty"],
-      "bot": "slave168-c1",
+      "bot": "slave20-c1",
+      "category": "6Other",
     },
   },
 
