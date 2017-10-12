@@ -5,7 +5,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': 'util/bot/DEPS', 'managed': True, 'name': 'boringssl', 'url': 'https://boringssl.googlesource.com/boringssl.git'}]",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'checkout_sde': 'True'}, 'deps_file': 'util/bot/DEPS', 'managed': True, 'name': 'boringssl', 'url': 'https://boringssl.googlesource.com/boringssl.git'}]",
       "--patch_root",
       "boringssl",
       "--revision_mapping_file",
@@ -55,29 +55,6 @@
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]/download_from_google_storage.py",
-      "--no_resume",
-      "--bucket",
-      "chrome-boringssl-sde",
-      "-s",
-      "[START_DIR]/boringssl/util/bot/sde-linux64.tar.bz2.sha1"
-    ],
-    "name": "download_sde"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/boringssl/util/bot/extract.py",
-      "[START_DIR]/boringssl/util/bot/sde-linux64.tar.bz2",
-      "[START_DIR]/boringssl/util/bot/sde-linux64"
-    ],
-    "name": "extract_sde"
   },
   {
     "cmd": [

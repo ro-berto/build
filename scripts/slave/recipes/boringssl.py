@@ -73,6 +73,17 @@ def _GetBuilderEnv(buildername):
   return env
 
 
+def _GetGclientVars(buildername):
+  ret = {}
+  if _HasToken(buildername, 'clang'):
+    ret['checkout_clang'] = 'True'
+  if _HasToken(buildername, 'sde'):
+    ret['checkout_sde'] = 'True'
+  if _HasToken(buildername, 'fuzz'):
+    ret['checkout_fuzzer'] = 'True'
+  return ret
+
+
 def _GetTargetCMakeArgs(buildername, checkout, ninja_path, platform):
   bot_utils = checkout.join('util', 'bot')
   args = {'CMAKE_MAKE_PROGRAM': ninja_path}
@@ -180,6 +191,7 @@ def RunSteps(api, buildername):
     api.gclient.set_config('boringssl')
     if _HasToken(buildername, 'android'):
       api.gclient.c.target_os.add('android')
+    api.gclient.c.solutions[0].custom_vars = _GetGclientVars(buildername)
     api.bot_update.ensure_checkout()
     api.gclient.runhooks()
 
@@ -187,21 +199,9 @@ def RunSteps(api, buildername):
     bot_utils = api.path['checkout'].join('util', 'bot')
     go_env = bot_utils.join('go', 'env.py')
     adb_path = bot_utils.join('android_tools', 'sdk', 'platform-tools', 'adb')
+    sde_path = bot_utils.join('sde-' + _GetHostToolSuffix(api.platform))
     build_dir = api.path['checkout'].join('build')
     runner_dir = api.path['checkout'].join('ssl', 'test', 'runner')
-
-    # Extract the Intel SDE.
-    if _HasToken(buildername, 'sde'):
-      sde_path = bot_utils.join('sde-' + _GetHostToolSuffix(api.platform))
-      sde_archive = bot_utils.join('sde-' + _GetHostToolSuffix(api.platform) +
-                                   '.tar.bz2')
-      sde_hash = bot_utils.join('sde-' + _GetHostToolSuffix(api.platform) +
-                                '.tar.bz2.sha1')
-      api.python(
-          'download_sde', api.depot_tools.download_from_google_storage_path,
-          ['--no_resume', '--bucket', 'chrome-boringssl-sde', '-s', sde_hash])
-      api.python('extract_sde',
-                 bot_utils.join('extract.py'), [sde_archive, sde_path])
 
     # CMake is stateful, so do a clean build. BoringSSL builds quickly enough
     # that this isn't a concern.
