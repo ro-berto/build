@@ -209,7 +209,7 @@
       "bot": "build29-m1",
       "category": "4Windows",
     },
-    "CrWinClang (tester)": {
+    "CrWinClang tester": {
       "mixins": ["tester", "win7"],
       "bot": "vm961-m1",
       "category": "4Windows",
