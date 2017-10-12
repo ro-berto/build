@@ -203,6 +203,70 @@
       "bot_pool": "build27-m1",
       "category": "3ToTWindows",
     },
+    "CrWinAsan": {
+      "bot_pool": "build4-m1",
+      "category": "3ToTWindows",
+    },
+    "CrWinAsan tester": {
+      "mixins": ["tester"],
+      "bot_pool": "vm978-m1",
+      "category": "3ToTWindows",
+    },
+    "CrWinAsanCov": {
+      "bot_pool": "build4-m1",
+      "category": "3ToTWindows",
+    },
+    "CrWinAsanCov tester": {
+      "mixins": ["tester"],
+      "bot_pool": "vm190-m1",
+      "category": "3ToTWindows",
+    },
+    "CrWinClangLLD": {
+      "bot_pool": "build4-m1",
+      "category": "3ToTWindows",
+    },
+    "CrWinClangLLD tester": {
+      "mixins": ["tester"],
+      "bot_pool": "vm978-m1",
+      "category": "3ToTWindows",
+    },
+    "CrWinAsan(dll)": {
+      "bot_pool": "build27-m1",
+      "category": "3ToTWindows",
+    },
+    "CrWinAsan(dll) tester": {
+      "mixins": ["tester"],
+      "bot_pool": "vm190-m1",
+      "category": "3ToTWindows",
+    },
+    "CrWinClangLLD64": {
+      "bot_pool": "build27-m1",
+      "category": "3ToTWindows",
+    },
+    "CrWinClangLLD64 tester": {
+      "mixins": ["tester"],
+      "bot_pool": "vm190-m1",
+      "category": "3ToTWindows",
+    },
+    "CrWinClngLLDdbg": {
+      "mixins": ["tester"],
+      "bot_pool": "build154-m1",
+      "category": "3ToTWindows",
+    },
+    "CrWinClngLLDdbg tester": {
+      "mixins": ["tester"],
+      "bot_pool": "vm12-m1",
+      "category": "3ToTWindows",
+    },
+    "CrWinClngLLD64dbg": {
+      "bot_pool": "build154-m1",
+      "category": "3ToTWindows",
+    },
+    "CrWinClngLLD64dbg tester": {
+      "mixins": ["tester"],
+      "bot_pool": "vm12-m1",
+      "category": "3ToTWindows",
+    },
 
     "CrWinClang": {
       "mixins": ["win7"],
@@ -257,70 +321,6 @@
     "CrWinClang64(dll) tester": {
       "mixins": ["tester"],
       "bot_pool": "vm970-m1",
-      "category": "4Windows",
-    },
-    "CrWinAsan": {
-      "bot_pool": "build4-m1",
-      "category": "4Windows",
-    },
-    "CrWinAsan tester": {
-      "mixins": ["tester"],
-      "bot_pool": "vm978-m1",
-      "category": "4Windows",
-    },
-    "CrWinAsanCov": {
-      "bot_pool": "build4-m1",
-      "category": "4Windows",
-    },
-    "CrWinAsanCov tester": {
-      "mixins": ["tester"],
-      "bot_pool": "vm190-m1",
-      "category": "4Windows",
-    },
-    "CrWinClangLLD": {
-      "bot_pool": "build4-m1",
-      "category": "4Windows",
-    },
-    "CrWinClangLLD tester": {
-      "mixins": ["tester"],
-      "bot_pool": "vm978-m1",
-      "category": "4Windows",
-    },
-    "CrWinAsan(dll)": {
-      "bot_pool": "build27-m1",
-      "category": "4Windows",
-    },
-    "CrWinAsan(dll) tester": {
-      "mixins": ["tester"],
-      "bot_pool": "vm190-m1",
-      "category": "4Windows",
-    },
-    "CrWinClangLLD64": {
-      "bot_pool": "build27-m1",
-      "category": "4Windows",
-    },
-    "CrWinClangLLD64 tester": {
-      "mixins": ["tester"],
-      "bot_pool": "vm190-m1",
-      "category": "4Windows",
-    },
-    "CrWinClngLLDdbg": {
-      "mixins": ["tester"],
-      "bot_pool": "build154-m1",
-      "category": "4Windows",
-    },
-    "CrWinClngLLDdbg tester": {
-      "mixins": ["tester"],
-      "bot_pool": "vm12-m1",
-      "category": "4Windows",
-    },
-    "CrWinClngLLD64dbg": {
-      "bot_pool": "build154-m1",
-      "category": "4Windows",
-    },
-    "CrWinClngLLD64dbg tester": {
-      "mixins": ["tester"],
-      "bot_pool": "vm12-m1",
       "category": "4Windows",
     },
 
