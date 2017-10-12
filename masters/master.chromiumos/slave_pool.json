@@ -39,7 +39,7 @@
       ]
     }, 
     "builder_shared": {
-      "amd64-generic-asan": [
+      "betty-asan": [
         "build263-m2"
       ]
     }, 
