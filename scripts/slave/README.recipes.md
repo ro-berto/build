@@ -62,7 +62,6 @@
 **[Recipes](#Recipes)**
   * [adb:examples/full](#recipes-adb_examples_full)
   * [android/builder](#recipes-android_builder)
-  * [android/perf](#recipes-android_perf)
   * [annotated_run_test](#recipes-annotated_run_test) &mdash; Checks that properties get to recipes from annotated_run properly.
   * [archive:examples/full](#recipes-archive_examples_full)
   * [archive:tests/download_and_unzip_build](#recipes-archive_tests_download_and_unzip_build)
@@ -3518,11 +3517,6 @@ Args:
 [DEPS](/scripts/slave/recipes/android/builder.py#9): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_tests](#recipe_modules-chromium_tests), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/android/builder.py#279)(api, mastername, buildername, revision):**
-### *recipes* / [android/perf](/scripts/slave/recipes/android/perf.py)
-
-[DEPS](/scripts/slave/recipes/android/perf.py#8): [adb](#recipe_modules-adb), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_tests](#recipe_modules-chromium_tests), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/android/perf.py#87)(api):**
 ### *recipes* / [annotated\_run\_test](/scripts/slave/recipes/annotated_run_test.py)
 
 [DEPS](/scripts/slave/recipes/annotated_run_test.py#9): [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
