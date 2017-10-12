@@ -205,10 +205,6 @@ class GClientFactory(object):
 
     use_mb = factory_properties.get('use_mb')
 
-    if use_mb:
-      # Don't run GYP as part of gclient runhooks.
-      env.update({'GYP_CHROMIUM_NO_ACTION': '1'})
-
     # svn timeout is 2 min; we allow 5
     timeout = factory_properties.get('gclient_timeout')
     if official_release or factory_properties.get('nuke_and_pave'):
@@ -363,10 +359,6 @@ class GClientFactory(object):
     gclient_transitive = factory_properties.get('gclient_transitive', False)
     primary_repo = factory_properties.get('primary_repo', '')
     gclient_jobs = factory_properties.get('gclient_jobs')
-
-    # Do not run gyp_chromium on testers.
-    if slave_type in ('Tester',):
-      env.update({'GYP_CHROMIUM_NO_ACTION': '1'})
 
     # Add the update step.
     factory_cmd_obj.AddUpdateStep(

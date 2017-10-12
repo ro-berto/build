@@ -143,7 +143,6 @@
     "cwd": "[START_DIR]/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "clang=1 clang_use_chrome_plugins=0 component=static_library gomadir='[CACHE]/goma_client' proprietary_codecs=1 target_arch=x64 use_goma=1",
       "LLVM_FORCE_HEAD_REVISION": "YES",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"

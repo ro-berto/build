@@ -363,8 +363,6 @@ class V8Api(recipe_api.RecipeApi):
       env['RANLIB'] = self.c.gyp_env.RANLIB
     if self.m.chromium.c.project_generator.tool != 'gyp':
       env['GYP_CHROMIUM_NO_ACTION'] = 1
-    else:
-      env['GYP_CHROMIUM_NO_ACTION'] = 0
     self.m.chromium.runhooks(env=env, **kwargs)
 
   @contextlib.contextmanager

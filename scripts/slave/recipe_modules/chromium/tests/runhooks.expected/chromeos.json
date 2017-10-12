@@ -16,7 +16,6 @@
     "cwd": "None",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_CHROMIUM_NO_ACTION": "1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"

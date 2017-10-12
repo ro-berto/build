@@ -767,8 +767,6 @@ class ChromiumApi(recipe_api.RecipeApi):
       # accordingly.
       runhooks_env.update(self.c.gyp_env.as_jsonish())
 
-    if self.c.project_generator.tool != 'gyp':
-      runhooks_env['GYP_CHROMIUM_NO_ACTION'] = 1
     if self.c.TARGET_CROS_BOARD:
       # Wrap 'runhooks' through 'cros chrome-sdk'
       kwargs['wrapper'] = self.get_cros_chrome_sdk_wrapper(clean=True)

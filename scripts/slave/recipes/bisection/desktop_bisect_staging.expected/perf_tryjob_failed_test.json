@@ -179,7 +179,6 @@
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library gomadir='[CACHE]/goma_client' target_arch=x64 use_goma=1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -622,7 +621,6 @@
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library gomadir='[CACHE]/goma_client' target_arch=x64 use_goma=1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },

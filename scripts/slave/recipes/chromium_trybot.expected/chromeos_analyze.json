@@ -203,7 +203,6 @@
     "cwd": "[BUILDER_CACHE]/chromeos_amd64_generic_chromium_compile_only_ng/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_CHROMIUM_NO_ACTION": "1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks (with patch)"
