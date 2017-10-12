@@ -75,7 +75,6 @@
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\test_builder",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_STATS_FILE": "build_data_dir\\goma_stats_proto",
-      "GOMA_ENABLE_GLOBAL_FILE_ID_CACHE": "true",
       "GOMA_ENABLE_MACRO_CACHE": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
@@ -138,7 +137,6 @@
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\test_builder",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_STATS_FILE": "build_data_dir\\goma_stats_proto",
-      "GOMA_ENABLE_GLOBAL_FILE_ID_CACHE": "true",
       "GOMA_ENABLE_MACRO_CACHE": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
@@ -172,7 +170,6 @@
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\test_builder",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_STATS_FILE": "build_data_dir\\goma_stats_proto",
-      "GOMA_ENABLE_GLOBAL_FILE_ID_CACHE": "true",
       "GOMA_ENABLE_MACRO_CACHE": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
@@ -195,7 +192,6 @@
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\test_builder",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_STATS_FILE": "build_data_dir\\goma_stats_proto",
-      "GOMA_ENABLE_GLOBAL_FILE_ID_CACHE": "true",
       "GOMA_ENABLE_MACRO_CACHE": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"

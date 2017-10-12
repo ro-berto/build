@@ -255,7 +255,6 @@ class GomaApi(recipe_api.RecipeApi):
         self._goma_ctl_env['GOMA_CACHE_DIR'] = self.default_cache_path
 
       if self._is_canary and self.m.platform.is_win:
-        self._goma_ctl_env['GOMA_ENABLE_GLOBAL_FILE_ID_CACHE'] = 'true'
         self._goma_ctl_env['GOMA_ENABLE_MACRO_CACHE'] = 'true'
 
       goma_ctl_start_env = self._goma_ctl_env.copy()

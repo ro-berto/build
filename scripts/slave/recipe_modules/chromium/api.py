@@ -376,6 +376,10 @@ class ChromiumApi(recipe_api.RecipeApi):
       goma_env['GOMA_LOCAL_OUTPUT_CACHE_DIR'] = (
           self.m.path.join(self.m.goma.default_cache_path_per_slave,
                            "localoutputcache"))
+
+    if self.c.compile_py.goma_enable_global_file_id_cache:
+      goma_env['GOMA_ENABLE_GLOBAL_FILE_ID_CACHE'] = 'true'
+
     if self.c.compile_py.goma_max_active_fail_fallback_tasks:
       goma_env['GOMA_MAX_ACTIVE_FAIL_FALLBACK_TASKS'] = (
           self.c.compile_py.goma_max_active_fail_fallback_tasks)
