@@ -77,6 +77,11 @@ def mips_cross_compile(c):
 
 
 @config_ctx()
+def msan(c):
+  c.testing.test_args.append('--msan')
+
+
+@config_ctx()
 def no_i18n(c):
   c.testing.test_args.append('--noi18n')
 

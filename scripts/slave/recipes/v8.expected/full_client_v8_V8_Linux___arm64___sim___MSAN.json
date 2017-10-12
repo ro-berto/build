@@ -118,7 +118,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "clang=1 gomadir='[CACHE]/goma_client' msan=1 msan_track_origins=2 target_arch=x64 use_goma=1 use_prebuilt_instrumented_libraries=1 v8_target_arch=arm64",
+      "GYP_DEFINES": "clang=1 gomadir='[CACHE]/goma_client' target_arch=x64 use_goma=1 v8_target_arch=arm64",
       "GYP_GENERATORS": "ninja",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -642,8 +642,8 @@
       "--timeout=200",
       "--random-seed=831298184",
       "bot_default",
-      "--exhaustive-variants",
       "--msan",
+      "--exhaustive-variants",
       "--rerun-failures-count=2",
       "--swarming",
       "--json-test-results",
@@ -758,8 +758,8 @@
       "--timeout=200",
       "--random-seed=831298184",
       "test262",
-      "--variants=default",
       "--msan",
+      "--variants=default",
       "--rerun-failures-count=2",
       "--swarming",
       "--json-test-results",

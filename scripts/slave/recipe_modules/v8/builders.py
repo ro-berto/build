@@ -916,13 +916,11 @@ BUILDERS = {
         'chromium_apply_config': [
           'v8_ninja',
           'clang',
-          'msan',
-          'msan_full_origin_tracking',
-          'prebuilt_instrumented_libraries',
           'simulate_arm',
           'goma',
           'mb',
         ],
+        'v8_apply_config': ['msan'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -1270,12 +1268,6 @@ BUILDERS = {
           'v8_ninja',
           'clang',
           'default_target_v8_clusterfuzz',
-          # TODO(machenbach): The following three are set by MB, but are
-          # required for hooks in gyp_defines until http://crbug.com/570091 is
-          # resolved.
-          'msan',
-          'msan_no_origin_tracking',
-          'prebuilt_instrumented_libraries',
           'goma',
           'mb',
         ],
@@ -1296,12 +1288,6 @@ BUILDERS = {
           'v8_ninja',
           'clang',
           'default_target_v8_clusterfuzz',
-          # TODO(machenbach): The following three are set by MB, but are
-          # required for hooks in gyp_defines until http://crbug.com/570091 is
-          # resolved.
-          'msan',
-          'msan_full_origin_tracking',
-          'prebuilt_instrumented_libraries',
           'goma',
           'mb',
         ],
@@ -2322,14 +2308,12 @@ BUILDERS = {
         'chromium_apply_config': [
           'v8_ninja',
           'clang',
-          'msan',
-          'msan_full_origin_tracking',
-          'prebuilt_instrumented_libraries',
           'simulate_arm',
           'goma',
           'mb',
           'no_dcheck',
         ],
+        'v8_apply_config': ['msan'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
