@@ -2101,6 +2101,17 @@ BUILDERS = {
         'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
+      'v8_linux_shared_compile_rel': {
+        'chromium_apply_config': [
+          'default_compiler', 'v8_ninja', 'goma', 'mb'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'enable_swarming': True,
+        'testing': {'platform': 'linux'},
+      },
       'v8_linux64_gcc_compile_dbg': {
         'chromium_apply_config': [
           'v8_ninja', 'gcc', 'goma', 'mb'],
@@ -2573,6 +2584,20 @@ BUILDERS = {
         'tests': [V8Testing(3)],
         'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
+      },
+      'v8_win64_clang_compile_rel': {
+        'chromium_apply_config': [
+          'clang',
+          'v8_ninja',
+          'goma',
+          'mb',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'win'},
       },
       'v8_win64_rel_ng': {
         'chromium_apply_config': [
