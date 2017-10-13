@@ -73,9 +73,14 @@ def _GetBuilderEnv(buildername):
   return env
 
 
+def _UsesClang(buildername):
+  return any(
+      _HasToken(buildername, token) for token in ('asan', 'clang', 'fuzz'))
+
+
 def _GetGclientVars(buildername):
   ret = {}
-  if _HasToken(buildername, 'clang'):
+  if _UsesClang(buildername):
     ret['checkout_clang'] = 'True'
   if _HasToken(buildername, 'sde'):
     ret['checkout_sde'] = 'True'
@@ -92,7 +97,7 @@ def _GetTargetCMakeArgs(buildername, checkout, ninja_path, platform):
   if _HasToken(buildername, 'rel'):
     args['CMAKE_BUILD_TYPE'] = 'Release'
   # 32-bit builds are cross-compiled on the 64-bit bots.
-  if _HasToken(buildername, 'win32') and _HasToken(buildername, 'clang'):
+  if _HasToken(buildername, 'win32') and _UsesClang(buildername):
     args['CMAKE_SYSTEM_NAME'] = 'Windows'
     args['CMAKE_SYSTEM_PROCESSOR'] = 'x86'
     _AppendFlags(args, 'CMAKE_CXX_FLAGS', '-m32 -msse2')
@@ -105,8 +110,7 @@ def _GetTargetCMakeArgs(buildername, checkout, ninja_path, platform):
     _AppendFlags(args, 'CMAKE_ASM_FLAGS', '-m32 -msse2')
   if _HasToken(buildername, 'noasm'):
     args['OPENSSL_NO_ASM'] = '1'
-  if _HasToken(buildername, 'asan') or _HasToken(buildername, 'clang') or \
-     _HasToken(buildername, 'fuzz'):
+  if _UsesClang(buildername):
     if platform.is_win:
       args['CMAKE_C_COMPILER'] = _WindowsCMakeWorkaround(
           bot_utils.join('llvm-build', 'bin', 'clang-cl.exe'))
