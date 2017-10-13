@@ -852,7 +852,10 @@ class ChromiumApi(recipe_api.RecipeApi):
              android_version_name=None, gyp_script=None, phase=None,
              **kwargs):
     mb_path = mb_path or self.m.path['checkout'].join('tools', 'mb')
-    mb_config_path = mb_config_path or mb_path.join('mb_config.pyl')
+    mb_config_path = (
+        mb_config_path or self.c.project_generator.config_path or
+        self.m.path.join(mb_path, 'mb_config.pyl'))
+
     isolated_targets = isolated_targets or []
 
     out_dir = 'out'

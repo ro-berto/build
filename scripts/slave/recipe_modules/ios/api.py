@@ -302,7 +302,6 @@ class iOSApi(recipe_api.RecipeApi):
         self.m.step('setup-gn.py', cmd)
 
     if use_mb:
-      self.m.chromium.c.project_generator.tool = 'mb'
       with self.m.context(env=env):
         self.m.chromium.run_mb(
             self.__config['mastername'],

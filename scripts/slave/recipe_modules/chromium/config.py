@@ -77,6 +77,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
     ),
     project_generator = ConfigGroup(
       tool = Single(basestring, empty_val='mb'),
+      config_path = Single(Path),
       args = Set(basestring),
     ),
     build_dir = Single(Path),

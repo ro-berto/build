@@ -145,7 +145,6 @@ def RunSteps(api):
 
     api.chromium.ensure_goma()
 
-    api.chromium.c.project_generator.tool = 'mb'
     with api.context(cwd=api.path['checkout']):
       api.chromium.runhooks()
 
