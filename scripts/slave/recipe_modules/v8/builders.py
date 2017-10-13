@@ -133,6 +133,7 @@ BUILDERS = {
         ],
       },
       'V8 Linux - presubmit': {
+        'chromium_apply_config': ['gn'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
