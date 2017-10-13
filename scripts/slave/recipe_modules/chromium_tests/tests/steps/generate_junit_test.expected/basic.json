@@ -111,7 +111,7 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython",
       "-u",
       "[START_DIR]/src/out/Release/bin/run_junit_test",
       "--verbose",

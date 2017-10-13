@@ -341,7 +341,7 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython",
       "-u",
       "[START_DIR]/src/out/Release/bin/run_libyuv_unittest",
       "--blacklist-file",
