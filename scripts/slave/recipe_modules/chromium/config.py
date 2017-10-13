@@ -76,7 +76,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       FORCE_MAC_SDK_MIN = Single(basestring, required=False),
     ),
     project_generator = ConfigGroup(
-      tool = Single(basestring, empty_val='gyp'),
+      tool = Single(basestring, empty_val='mb'),
       args = Set(basestring),
     ),
     build_dir = Single(Path),

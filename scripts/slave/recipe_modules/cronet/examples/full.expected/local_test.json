@@ -189,6 +189,27 @@
     "cmd": [
       "python",
       "-u",
+      "[START_DIR]/src/tools/mb/mb.py",
+      "gen",
+      "-m",
+      "chromium.testing.master",
+      "-b",
+      "local_test",
+      "--config-file",
+      "[START_DIR]/src/tools/mb/mb_config.pyl",
+      "//out/Debug"
+    ],
+    "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
+    },
+    "name": "generate_build_files"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
       "--ninja_info_output",
       "/path/to/tmp/json",
