@@ -58,15 +58,11 @@ def SendResults(data, url, build_dir, json_url_file=None,
   # Send all the results from this run and the previous cache to the dashboard.
   fatal_error, errors = _SendResultsFromCache(cache_file_name, url, oauth_token)
 
-  if not send_as_histograms:
+  if json_url_file:
     # Dump dashboard url to file.
     dashboard_url = _DashboardUrl(url, data)
-    if json_url_file:
-      with open(json_url_file, 'w') as f:
-        json.dump(dashboard_url if dashboard_url else '', f)
-    else:
-      if dashboard_url:
-        print '@@@STEP_LINK@%s@%s@@@' % ('Results Dashboard', dashboard_url)
+    with open(json_url_file, 'w') as f:
+      json.dump(dashboard_url if dashboard_url else '', f)
 
 
   # Print any errors; if there was a fatal error, it should be an exception.

@@ -1783,8 +1783,6 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
         '--oauth-token-file', api.json.input(oauth_token),
         '--perf-id', self._perf_id,
         '--results-url', self._results_url,
-        '--output-json-dashboard-url', api.json.output(
-            add_json_log=False, name='dashboard_url'),
         '--output-json-file', api.json.output(),
         '--name', self._perf_dashboard_id,
         '--buildername', api.properties['buildername'],
@@ -1801,6 +1799,9 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
       args.append('--send-as-histograms')
       args.extend(
           ['--chromium-checkout-dir', api.chromium_checkout.working_dir])
+    else:
+      args.append('--output-json-dashboard-url')
+      args.append(api.json.output(add_json_log=False, name='dashboard_url'))
 
     step_name = '%s Dashboard Upload' % self._perf_dashboard_id
     step_result = api.build.python(
@@ -1812,8 +1813,10 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
             lambda: api.json.test_api.output('chromeperf.appspot.com',
                                              name='dashboard_url') +
                     api.json.test_api.output({})))
-    step_result.presentation.links['Results Dashboard'] = (
-        step_result.json.outputs.get('dashboard_url', ''))
+
+    if not is_histogramset:
+      step_result.presentation.links['Results Dashboard'] = (
+          step_result.json.outputs.get('dashboard_url', ''))
 
     return step_result
 

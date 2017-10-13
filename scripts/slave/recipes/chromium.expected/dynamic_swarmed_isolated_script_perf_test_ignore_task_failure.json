@@ -631,8 +631,6 @@
       "win-10-low-end",
       "--results-url",
       "https://chromeperf.appspot.com",
-      "--output-json-dashboard-url",
-      "/path/to/tmp/json",
       "--output-json-file",
       "/path/to/tmp/json",
       "--name",
@@ -648,7 +646,9 @@
       "--git-revision",
       "asdfawe2342",
       "--version",
-      "v23523"
+      "v23523",
+      "--output-json-dashboard-url",
+      "/path/to/tmp/json"
     ],
     "env": {
       "CHROME_HEADLESS": "1",

@@ -639,8 +639,6 @@
       "win-10-low-end",
       "--results-url",
       "https://chromeperf.appspot.com",
-      "--output-json-dashboard-url",
-      "/path/to/tmp/json",
       "--output-json-file",
       "/path/to/tmp/json",
       "--name",
@@ -685,8 +683,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": \"Win 10 Low-End Perf Tests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": \"chromium.perf.fyi\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
-      "@@@STEP_LOG_END@step_metadata@@@",
-      "@@@STEP_LINK@Results Dashboard@chromeperf.appspot.com@@@"
+      "@@@STEP_LOG_END@step_metadata@@@"
     ]
   },
   {

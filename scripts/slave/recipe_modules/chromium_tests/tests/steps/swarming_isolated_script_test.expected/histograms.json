@@ -461,8 +461,6 @@
       "test-perf-id",
       "--results-url",
       "https://example/url",
-      "--output-json-dashboard-url",
-      "/path/to/tmp/json",
       "--output-json-file",
       "/path/to/tmp/json",
       "--name",
@@ -504,8 +502,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
-      "@@@STEP_LOG_END@step_metadata@@@",
-      "@@@STEP_LINK@Results Dashboard@chromeperf.appspot.com@@@"
+      "@@@STEP_LOG_END@step_metadata@@@"
     ]
   },
   {

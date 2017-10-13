@@ -275,7 +275,6 @@
   * [luci_config:examples/full](#recipes-luci_config_examples_full)
   * [math_utils:examples/full](#recipes-math_utils_examples_full)
   * [math_utils:tests/mean_error](#recipes-math_utils_tests_mean_error)
-  * [mojo](#recipes-mojo)
   * [nacl](#recipes-nacl)
   * [nacl/sdk](#recipes-nacl_sdk)
   * [nacl/sdk_build](#recipes-nacl_sdk_build)
@@ -4891,11 +4890,6 @@ Recipe for building and running tests for Libyuv stand-alone.
 [DEPS](/scripts/slave/recipe_modules/math_utils/tests/mean_error.py#5): [math\_utils](#recipe_modules-math_utils)
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/math_utils/tests/mean_error.py#10)(api):**
-### *recipes* / [mojo](/scripts/slave/recipes/mojo.py)
-
-[DEPS](/scripts/slave/recipes/mojo.py#5): [adb](#recipe_modules-adb), [goma](#recipe_modules-goma), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/url][recipe_engine/recipe_modules/url]
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/mojo.py#197)(api):**
 ### *recipes* / [nacl](/scripts/slave/recipes/nacl.py)
 
 [DEPS](/scripts/slave/recipes/nacl.py#5): [goma](#recipe_modules-goma), [trigger](#recipe_modules-trigger), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]

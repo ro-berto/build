@@ -452,8 +452,6 @@
       "test-perf-id",
       "--results-url",
       "https://example/url",
-      "--output-json-dashboard-url",
-      "/path/to/tmp/json",
       "--output-json-file",
       "/path/to/tmp/json",
       "--name",
@@ -469,7 +467,9 @@
       "--git-revision",
       "test_sha",
       "--version",
-      "test-version"
+      "test-version",
+      "--output-json-dashboard-url",
+      "/path/to/tmp/json"
     ],
     "name": "test-perf-dashboard-id Dashboard Upload",
     "~followup_annotations": [
