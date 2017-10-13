@@ -2305,7 +2305,7 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython",
       "-u",
       "[BUILDER_CACHE]/android_dbg/src/out/Debug/bin/run_android_junit_tests",
       "--verbose"

@@ -390,7 +390,7 @@ class AndroidJunitTest(Test):
   """Runs an Android Junit test."""
 
   def run(self, api, suffix):
-    api.m.chromium_android.run_java_unit_test_suite(self._name)
+    api.m.chromium_android.run_java_unit_test_suite(self._name, venv=True)
 
 
 class AndroidPerfTest(PerfTest):
