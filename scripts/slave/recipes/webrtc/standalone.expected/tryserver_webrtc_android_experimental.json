@@ -2328,6 +2328,11 @@
     "env": {
       "GOMA_DISABLED": "True"
     },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "name": "gradle_project_test"
   },
   {

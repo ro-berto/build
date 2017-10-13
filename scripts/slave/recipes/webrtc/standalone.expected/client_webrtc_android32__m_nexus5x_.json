@@ -2194,6 +2194,11 @@
     "env": {
       "GOMA_DISABLED": "True"
     },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "name": "gradle_project_test"
   },
   {
@@ -2310,6 +2315,11 @@
       "goma_dir=\"[CACHE]/goma_client\""
     ],
     "cwd": "[BUILDER_CACHE]/Android32__M_Nexus5X_/src",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "name": "build android archive"
   },
   {

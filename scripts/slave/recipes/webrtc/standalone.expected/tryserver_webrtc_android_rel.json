@@ -2328,6 +2328,11 @@
     "env": {
       "GOMA_DISABLED": "True"
     },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "name": "gradle_project_test"
   },
   {
@@ -2445,6 +2450,11 @@
       "--build-dir=out/android-archive"
     ],
     "cwd": "[BUILDER_CACHE]/android_rel/src",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "name": "build android archive"
   },
   {

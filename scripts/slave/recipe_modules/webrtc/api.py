@@ -264,7 +264,8 @@ class WebRTCApi(recipe_api.RecipeApi):
         # To benefit from incremental builds for speed.
         args.append('--build-dir=out/android-archive')
 
-      with self.m.context(cwd=self.m.path['checkout']):
+      with self.m.context(cwd=self.m.path['checkout'],
+                          env_prefixes={'PATH':[self.m.depot_tools.root]}):
         step_result = self.m.python(
             'build android archive',
             build_script,

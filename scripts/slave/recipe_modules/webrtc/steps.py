@@ -274,7 +274,8 @@ class PythonTest(Test):
     self._env = env or {}
 
   def run(self, api, suffix):
-    with api.m.context(env=self._env):
+    with api.m.context(env=self._env,
+                       env_prefixes={'PATH':[api.m.depot_tools.root]}):
       api.m.python(self._test, self._script, self._args)
 
 
