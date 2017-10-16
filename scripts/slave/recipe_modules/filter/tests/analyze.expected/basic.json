@@ -30,6 +30,7 @@
       "chrome-sdk",
       "--board=x86=generic",
       "--nocolor",
+      "--log-level=debug",
       "--use-external-config",
       "--",
       "python",

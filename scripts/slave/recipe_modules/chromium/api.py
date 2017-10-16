@@ -701,7 +701,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     wrapper = [
         self.m.depot_tools.cros_path, 'chrome-sdk',
         '--board=%s' % (self.c.TARGET_CROS_BOARD,),
-        '--nocolor',]
+        '--nocolor', '--log-level=debug',]
     wrapper += self.c.cros_sdk.args
     if self.c.cros_sdk.external:
       wrapper += ['--use-external-config']
