@@ -20,7 +20,7 @@
         "cros-beefy466-c2"
       ], 
       "chromiumos-sdk": [
-        "build112-m2"
+        "cros-beefy467-c2"
       ], 
       "daisy-full": [
         "cros-beefy426-c2"
@@ -39,6 +39,9 @@
       ]
     }, 
     "builder_shared": {
+      "amd64-generic-asan": [
+        "build326-m2"
+      ], 
       "betty-asan": [
         "build263-m2"
       ]
@@ -51,12 +54,11 @@
     }
   }, 
   "unallocated": [
+    "build112-m2", 
     "build182-m2", 
     "build203-m2", 
     "build245-m2", 
     "build323-m2", 
-    "build326-m2", 
-    "build333-m2", 
-    "cros-beefy467-c2"
+    "build333-m2"
   ]
 }
