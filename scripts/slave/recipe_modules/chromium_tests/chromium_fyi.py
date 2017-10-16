@@ -323,6 +323,23 @@ SPEC = {
         'platform': 'linux',
       },
     },
+    'Fuchsia ARM64': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['fuchsia'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+        'TARGET_PLATFORM': 'fuchsia',
+      },
+      'bot_type': 'builder_tester',
+      'checkout_dir': 'linux',
+      'test_results_config': 'staging_server',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
     'Mac OpenSSL': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
