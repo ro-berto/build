@@ -99,7 +99,6 @@
   * [chromium:tests/gclient](#recipes-chromium_tests_gclient)
   * [chromium:tests/get_env](#recipes-chromium_tests_get_env)
   * [chromium:tests/get_version](#recipes-chromium_tests_get_version)
-  * [chromium:tests/list_perf_tests](#recipes-chromium_tests_list_perf_tests)
   * [chromium:tests/process_dumps](#recipes-chromium_tests_process_dumps)
   * [chromium:tests/run_gn](#recipes-chromium_tests_run_gn)
   * [chromium:tests/run_mb](#recipes-chromium_tests_run_mb)
@@ -158,7 +157,6 @@
   * [chromium_tests:tests/steps/bisect_test](#recipes-chromium_tests_tests_steps_bisect_test)
   * [chromium_tests:tests/steps/bisect_test_staging](#recipes-chromium_tests_tests_steps_bisect_test_staging)
   * [chromium_tests:tests/steps/blink_test](#recipes-chromium_tests_tests_steps_blink_test)
-  * [chromium_tests:tests/steps/dynamic_perf_tests](#recipes-chromium_tests_tests_steps_dynamic_perf_tests)
   * [chromium_tests:tests/steps/find_annotated_test](#recipes-chromium_tests_tests_steps_find_annotated_test)
   * [chromium_tests:tests/steps/generate_cts_test](#recipes-chromium_tests_tests_steps_generate_cts_test)
   * [chromium_tests:tests/steps/generate_fuchsia_test](#recipes-chromium_tests_tests_steps_generate_fuchsia_test)
@@ -994,7 +992,7 @@ Returns (ChromiumApi.Layout): The configured Chromium build layout.
 
 &mdash; **def [ensure\_goma](/scripts/slave/recipe_modules/chromium/api.py#721)(self, canary=False):**
 
-&mdash; **def [get\_annotate\_by\_test\_name](/scripts/slave/recipe_modules/chromium/api.py#1070)(self, test_name):**
+&mdash; **def [get\_annotate\_by\_test\_name](/scripts/slave/recipe_modules/chromium/api.py#1029)(self, test_name):**
 
 &emsp; **@_with_chromium_layout**<br>&mdash; **def [get\_clang\_version](/scripts/slave/recipe_modules/chromium/api.py#677)(self, \*\*kwargs):**
 
@@ -1013,8 +1011,6 @@ Args:
 &mdash; **def [get\_env](/scripts/slave/recipe_modules/chromium/api.py#112)(self):**
 
 &mdash; **def [get\_version](/scripts/slave/recipe_modules/chromium/api.py#160)(self):**
-
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [list\_perf\_tests](/scripts/slave/recipe_modules/chromium/api.py#1029)(self, browser, num_shards, device=None):**
 
 &emsp; **@property**<br>&mdash; **def [output\_dir](/scripts/slave/recipe_modules/chromium/api.py#142)(self):**
 
@@ -3760,11 +3756,6 @@ This file is a recipe demonstrating the buildbucket recipe module.
 [DEPS](/scripts/slave/recipe_modules/chromium/tests/get_version.py#5): [chromium](#recipe_modules-chromium)
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium/tests/get_version.py#10)(api):**
-### *recipes* / [chromium:tests/list\_perf\_tests](/scripts/slave/recipe_modules/chromium/tests/list_perf_tests.py)
-
-[DEPS](/scripts/slave/recipe_modules/chromium/tests/list_perf_tests.py#5): [chromium](#recipe_modules-chromium)
-
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium/tests/list_perf_tests.py#10)(api):**
 ### *recipes* / [chromium:tests/process\_dumps](/scripts/slave/recipe_modules/chromium/tests/process_dumps.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium/tests/process_dumps.py#5): [chromium](#recipe_modules-chromium)
@@ -4069,11 +4060,6 @@ Returns: the list of matched targets.
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/blink_test.py#5): [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [commit\_position](#recipe_modules-commit_position), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/blink_test.py#23)(api):**
-### *recipes* / [chromium\_tests:tests/steps/dynamic\_perf\_tests](/scripts/slave/recipe_modules/chromium_tests/tests/steps/dynamic_perf_tests.py)
-
-[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/dynamic_perf_tests.py#5): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/dynamic_perf_tests.py#15)(api):**
 ### *recipes* / [chromium\_tests:tests/steps/find\_annotated\_test](/scripts/slave/recipe_modules/chromium_tests/tests/steps/find_annotated_test.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/find_annotated_test.py#5): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tempfile][recipe_engine/recipe_modules/tempfile]
