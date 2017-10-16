@@ -132,7 +132,7 @@
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GYP_CHROMIUM_NO_ACTION": "1",
-      "GYP_DEFINES": "fastbuild=1 gomadir='[CACHE]\\goma_client' target_arch=x64 use_goma=1 v8_target_arch=x64",
+      "GYP_DEFINES": "fastbuild=1 gomadir='[CACHE]\\goma_client' target_arch=ia32 use_goma=1 v8_target_arch=ia32",
       "GYP_GENERATORS": "ninja",
       "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -147,13 +147,13 @@
       "-m",
       "client.v8",
       "-b",
-      "V8 Win64 ASAN",
+      "V8 Win32 ASAN",
       "--config-file",
       "[START_DIR]\\v8\\infra\\mb\\mb_config.pyl",
       "--goma-dir",
       "[CACHE]\\goma_client",
       "--gyp-script=gypfiles\\gyp_v8",
-      "//out/Release_x64"
+      "//out/Release"
     ],
     "cwd": "[START_DIR]\\v8",
     "env": {
@@ -204,7 +204,7 @@
       "-m",
       "client.v8",
       "-b",
-      "V8 Win64 ASAN",
+      "V8 Win32 ASAN",
       "--config-file",
       "[mb config]",
       "--goma-dir",
@@ -225,7 +225,7 @@
       "-u",
       "[START_DIR]\\v8\\tools\\gyp_flag_compare.py",
       "[START_DIR]\\v8\\out\\gn",
-      "[START_DIR]\\v8\\out\\Release_x64",
+      "[START_DIR]\\v8\\out\\Release",
       "all",
       "all"
     ],
@@ -282,7 +282,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]\\goma\\V8_Win64_ASAN"
+      "[CACHE]\\goma\\V8_Win32_ASAN"
     ],
     "cwd": "[START_DIR]\\v8",
     "env": {
@@ -308,7 +308,7 @@
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\V8_Win64_ASAN",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\V8_Win32_ASAN",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache_131",
       "GOMA_ENABLE_MACRO_CACHE": "true",
       "GOMA_HERMETIC": "error",
@@ -361,7 +361,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]\\v8\\out\\Release_x64",
+      "[START_DIR]\\v8\\out\\Release",
       "-j",
       "50"
     ],
@@ -474,15 +474,15 @@
       "--json-status",
       "[TMP_BASE]\\goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[START_DIR]\\v8\\out\\Release_x64",
+      "[START_DIR]\\v8\\out\\Release",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe', '-w', 'dupbuild=err', '-C', '[START_DIR]\\\\v8\\\\out\\\\Release_x64', '-j', 50]",
+      "['RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe', '-w', 'dupbuild=err', '-C', '[START_DIR]\\\\v8\\\\out\\\\Release', '-j', 50]",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",
       "goma",
       "--buildbot-buildername",
-      "V8 Win64 ASAN",
+      "V8 Win32 ASAN",
       "--buildbot-mastername",
       "client.v8",
       "--buildbot-slavename",
@@ -543,7 +543,7 @@
       "--eventlog-endpoint",
       "prod",
       "--verbose",
-      "[START_DIR]\\v8\\out\\Release_x64\\bot_default.isolated.gen.json"
+      "[START_DIR]\\v8\\out\\Release\\bot_default.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [
@@ -565,12 +565,12 @@
       "-a",
       "public-read",
       "{\"bot_default\": \"[dummy hash for bot_default]\"}",
-      "gs://chromium-v8/isolated/client.v8/V8 Win64 ASAN/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json"
+      "gs://chromium-v8/isolated/client.v8/V8 Win32 ASAN/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json"
     ],
     "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/isolated/client.v8/V8 Win64 ASAN/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/isolated/client.v8/V8 Win32 ASAN/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json@@@"
     ]
   },
   {
@@ -588,7 +588,7 @@
       "--shards",
       "5",
       "--task-name",
-      "Check/Windows-7-SP1/[dummy has/V8 Win64 ASAN/571",
+      "Check/Windows-7-SP1/[dummy has/V8 Win32 ASAN/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -610,7 +610,7 @@
       "pool",
       "Chrome",
       "--tag",
-      "buildername:V8 Win64 ASAN",
+      "buildername:V8 Win32 ASAN",
       "--tag",
       "buildnumber:571",
       "--tag",
@@ -637,9 +637,9 @@
       "--",
       "--progress=verbose",
       "--mode",
-      "Release_x64",
+      "Release",
       "--arch",
-      "x64",
+      "ia32",
       "--outdir",
       "out",
       "--buildbot",
@@ -658,29 +658,29 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Check/Windows-7-SP1/[dummy has/V8 Win64 ASAN/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Check/Windows-7-SP1/[dummy has/V8 Win32 ASAN/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Check/Windows-7-SP1/[dummy has/V8 Win64 ASAN/571:5:0\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Check/Windows-7-SP1/[dummy has/V8 Win32 ASAN/571:5:0\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Check/Windows-7-SP1/[dummy has/V8 Win64 ASAN/571:5:1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Check/Windows-7-SP1/[dummy has/V8 Win32 ASAN/571:5:1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 1, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10100\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Check/Windows-7-SP1/[dummy has/V8 Win64 ASAN/571:5:2\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Check/Windows-7-SP1/[dummy has/V8 Win32 ASAN/571:5:2\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 2, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10200\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Check/Windows-7-SP1/[dummy has/V8 Win64 ASAN/571:5:3\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Check/Windows-7-SP1/[dummy has/V8 Win32 ASAN/571:5:3\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 3, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10300\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10300\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Check/Windows-7-SP1/[dummy has/V8 Win64 ASAN/571:5:4\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Check/Windows-7-SP1/[dummy has/V8 Win32 ASAN/571:5:4\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 4, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10400\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10400\"@@@",
@@ -718,7 +718,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Check/Windows-7-SP1/[dummy has/V8 Win64 ASAN/571\", \"tasks\": {\"Check/Windows-7-SP1/[dummy has/V8 Win64 ASAN/571:5:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"Check/Windows-7-SP1/[dummy has/V8 Win64 ASAN/571:5:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"Check/Windows-7-SP1/[dummy has/V8 Win64 ASAN/571:5:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}, \"Check/Windows-7-SP1/[dummy has/V8 Win64 ASAN/571:5:3\": {\"shard_index\": 3, \"task_id\": \"10300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10300\"}, \"Check/Windows-7-SP1/[dummy has/V8 Win64 ASAN/571:5:4\": {\"shard_index\": 4, \"task_id\": \"10400\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10400\"}}}"
+      "{\"base_task_name\": \"Check/Windows-7-SP1/[dummy has/V8 Win32 ASAN/571\", \"tasks\": {\"Check/Windows-7-SP1/[dummy has/V8 Win32 ASAN/571:5:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"Check/Windows-7-SP1/[dummy has/V8 Win32 ASAN/571:5:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"Check/Windows-7-SP1/[dummy has/V8 Win32 ASAN/571:5:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}, \"Check/Windows-7-SP1/[dummy has/V8 Win32 ASAN/571:5:3\": {\"shard_index\": 3, \"task_id\": \"10300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10300\"}, \"Check/Windows-7-SP1/[dummy has/V8 Win32 ASAN/571:5:4\": {\"shard_index\": 4, \"task_id\": \"10400\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10400\"}}}"
     ],
     "infra_step": true,
     "name": "Check",
