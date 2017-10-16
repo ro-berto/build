@@ -44,6 +44,16 @@ def v8(c):
 
 
 @config_ctx()
+def asan(c):
+  c.testing.test_args.append('--asan')
+
+
+@config_ctx()
+def cfi_vptr(c):
+  c.testing.test_args.append('--cfi-vptr')
+
+
+@config_ctx()
 def deopt_fuzz_normal(c):
   c.testing.test_args.append('--coverage=0.4')
   c.testing.test_args.append('--distribution-mode=smooth')
@@ -104,6 +114,11 @@ def predictable(c):
 @config_ctx()
 def stress_incremental_marking(c):
   c.testing.test_args.append('--extra-flags=--stress-incremental-marking')
+
+
+@config_ctx()
+def tsan(c):
+  c.testing.test_args.append('--tsan')
 
 
 @config_ctx()

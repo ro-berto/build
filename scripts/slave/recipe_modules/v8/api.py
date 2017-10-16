@@ -1222,12 +1222,6 @@ class V8Api(recipe_api.RecipeApi):
     if self.m.chromium.c.gyp_env.GYP_DEFINES.get('dcheck_always_on') == 1:
       full_args.append('--dcheck-always-on')
 
-    # TODO(machenbach): Replace this hack using auto-detection of the test
-    # mode with GN.
-    for gyp_flag in ['asan', 'cfi_vptr', 'tsan']:
-      if self.m.chromium.c.gyp_env.GYP_DEFINES.get(gyp_flag) == 1:
-        full_args.append('--%s' % gyp_flag.replace('_', '-'))
-
     full_args += [
       '--rerun-failures-count=%d' % self.rerun_failures_count,
     ]

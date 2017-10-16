@@ -41,17 +41,6 @@ def arm_hard_float(c):
 
 
 @CONFIG_CTX(includes=['v8'])
-def sanitizer_bb_coverage(c):
-  c.gyp_env.GYP_DEFINES['sanitizer_coverage'] = 'bb,trace-pc-guard'
-
-
-@CONFIG_CTX(includes=['v8'])
-def cfi(c):
-  c.gyp_env.GYP_DEFINES['cfi_vptr'] = 1
-  c.gyp_env.GYP_DEFINES['cfi_diag'] = 1
-
-
-@CONFIG_CTX(includes=['v8'])
 def default_target_v8_clusterfuzz(c):
   c.compile_py.default_targets = ['v8_clusterfuzz']
 
