@@ -34,7 +34,7 @@ def Update(_config, active_master, c):
           #'Cast Linux SANDBOX',
           #'Cast Audio Linux SANDBOX',
           'Deterministic Linux SANDBOX',
-          'Fuchsia Compile SANDBOX',
+          'Fuchsia x64 SANDBOX',
       ]),
   ])
 
@@ -52,7 +52,7 @@ def Update(_config, active_master, c):
     # {'name': 'Cast Audio Linux SANDBOX'},
     {'name': 'Deterministic Linux SANDBOX',
      'recipe': 'swarming/deterministic_build'},
-    {'name': 'Fuchsia Compile SANDBOX'},
+    {'name': 'Fuchsia x64 SANDBOX'},
   ]
 
   c['builders'].extend([

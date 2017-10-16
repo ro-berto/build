@@ -275,7 +275,7 @@ SPEC = {
       },
     },
 
-    'Fuchsia Compile': {
+    'Fuchsia x64': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',

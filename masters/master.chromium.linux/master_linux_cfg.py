@@ -34,7 +34,7 @@ def Update(_config, active_master, c):
           'Cast Linux',
           'Cast Audio Linux',
           'Deterministic Linux',
-          'Fuchsia Compile',
+          'Fuchsia x64',
       ]),
   ])
 
@@ -52,7 +52,7 @@ def Update(_config, active_master, c):
     {'name': 'Cast Audio Linux'},
     {'name': 'Deterministic Linux',
      'recipe': 'swarming/deterministic_build'},
-    {'name': 'Fuchsia Compile'},
+    {'name': 'Fuchsia x64'},
   ]
 
   c['builders'].extend([
