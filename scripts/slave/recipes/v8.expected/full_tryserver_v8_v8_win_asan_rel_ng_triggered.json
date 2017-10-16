@@ -184,7 +184,6 @@
       "bot_default",
       "--asan",
       "--exhaustive-variants",
-      "--dcheck-always-on",
       "--rerun-failures-count=2",
       "--swarming",
       "--json-test-results",

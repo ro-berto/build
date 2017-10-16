@@ -2461,6 +2461,7 @@ BUILDERS = {
       'v8_win_asan_rel_ng_triggered': {
         'chromium_apply_config': [
           'use_windows_swarming_slaves',
+          'no_dcheck',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
