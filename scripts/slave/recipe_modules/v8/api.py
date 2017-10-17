@@ -367,48 +367,6 @@ class V8Api(recipe_api.RecipeApi):
       env['GYP_CHROMIUM_NO_ACTION'] = 0
     self.m.chromium.runhooks(env=env, **kwargs)
 
-  @contextlib.contextmanager
-  def _temp_dir(self, path):
-    try:
-      self.m.file.ensure_directory('for peeking gn', path)
-      yield
-    finally:
-      self.m.file.rmtree('rmtree %s' % (path,), path)
-
-  def peek_gn(self):
-    """Runs gn and compares flags with gyp (fyi only)."""
-    gyp_build_dir = self.m.chromium.c.build_dir.join(
-        self.m.chromium.c.build_config_fs)
-    gn_build_dir = self.m.chromium.c.build_dir.join('gn')
-    with self._temp_dir(gn_build_dir):
-      step_result = self.m.python(
-          name='patch mb config (fyi)',
-          script=self.resource('patch_mb_config.py'),
-          args=[
-            self.m.path['checkout'].join('infra', 'mb', 'mb_config.pyl'),
-            self.m.raw_io.output_text(),
-          ],
-          step_test_data=lambda: self.m.raw_io.test_api.output_text('[mb config]'),
-          ok_ret='any',
-      )
-      use_goma = (self.m.chromium.c.compile_py.compiler and
-                  'goma' in self.m.chromium.c.compile_py.compiler)
-      self.m.chromium.run_mb(
-          self.m.properties['mastername'],
-          self.m.properties['buildername'],
-          name='generate_build_files with gn (fyi)',
-          use_goma=use_goma,
-          mb_config_path=self.m.raw_io.input_text(step_result.raw_io.output_text),
-          build_dir=gn_build_dir,
-          ok_ret='any',
-      )
-      self.m.python(
-          'compare build flags (fyi)',
-          self.m.path['checkout'].join('tools', 'gyp_flag_compare.py'),
-          [gn_build_dir, gyp_build_dir, 'all', 'all'],
-          ok_ret='any',
-      )
-
   def setup_mips_toolchain(self):
     # TODO(machenbach): Deprecate this before migrating to LUCI.
     mips_dir = self.m.path['start_dir'].join(MIPS_DIR, 'bin')
@@ -627,8 +585,6 @@ class V8Api(recipe_api.RecipeApi):
     elif self.m.chromium.c.project_generator.tool == 'gn':
       self.m.chromium.run_gn(use_goma=use_goma)
 
-    if self.m.chromium.c.project_generator.tool != 'gn':
-      self.peek_gn()
     if self.m.properties['buildername'] != 'V8 Mips - builder':
       kwargs['use_goma_module'] = True
     self.m.chromium.compile(**kwargs)
