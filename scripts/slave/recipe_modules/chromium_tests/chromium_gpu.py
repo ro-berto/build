@@ -18,6 +18,7 @@ SPEC = {
       'chromium_apply_config': [
         'chrome_with_codecs',
         'goma_high_parallel',
+        'goma_enable_global_file_id_cache',
         'mb',
         'ninja_confirm_noop',
       ],

@@ -490,6 +490,7 @@
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[GOMA_CACHE]\\win7_chromium_rel_ng",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache_131",
+      "GOMA_ENABLE_GLOBAL_FILE_ID_CACHE": "true",
       "GOMA_ENABLE_MACRO_CACHE": "true",
       "GOMA_FAIL_FAST": "true",
       "GOMA_HERMETIC": "error",
