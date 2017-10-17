@@ -906,13 +906,11 @@
       "--release",
       "--verbose",
       "--steps",
-      "fake_config.json",
+      "sharded_perf_tests.json",
       "--blacklist-file",
       "[START_DIR]/src/out/bad_devices.json",
       "--num-retries",
       "0",
-      "--flaky-steps",
-      "flake_fakes.json",
       "--collect-chartjson-data",
       "--trace-output",
       "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.json",
@@ -975,7 +973,7 @@
       "[START_DIR]/src/build/android/test_runner.py",
       "perf",
       "--steps",
-      "fake_config.json",
+      "sharded_perf_tests.json",
       "--output-json-list",
       "/path/to/tmp/json",
       "--blacklist-file",
@@ -1030,6 +1028,7 @@
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=page_cycler.foo",
+      "--perf-id=perf_runner_allow_low_battery",
       "--test-type=page_cycler.foo",
       "--step-name=page_cycler.foo",
       "--chartjson-file",
@@ -1083,6 +1082,7 @@
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=perf_test.foo",
+      "--perf-id=perf_runner_allow_low_battery",
       "--test-type=perf_test.foo",
       "--step-name=perf_test.foo",
       "--chartjson-file",
@@ -1099,9 +1099,7 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
       "--blacklist-file",
-      "[START_DIR]/src/out/bad_devices.json",
-      "--get-output-dir-archive",
-      "[TMP_BASE]/perf_archives_tmp_2/output_dir.zip"
+      "[START_DIR]/src/out/bad_devices.json"
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
@@ -1114,24 +1112,6 @@
       "@@@STEP_TEXT@<br/>Device Affinity: 0<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@[]@@@",
       "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "cp",
-      "[TMP_BASE]/perf_archives_tmp_2/output_dir.zip",
-      "gs://archives-bucket/perf_runner_allow_low_battery/perf_test.foo/20150928T110712_build_571.zip"
-    ],
-    "infra_step": true,
-    "name": "gsutil upload perf_test.foo output dir archive",
-    "~followup_annotations": [
-      "@@@STEP_LINK@output_dir.zip@https://storage.cloud.google.com/archives-bucket/perf_runner_allow_low_battery/perf_test.foo/20150928T110712_build_571.zip@@@"
     ]
   },
   {
@@ -1156,6 +1136,7 @@
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=perf_test.foo.reference",
+      "--perf-id=perf_runner_allow_low_battery",
       "--test-type=perf_test.foo.reference",
       "--step-name=perf_test.foo.reference",
       "--chartjson-file",

@@ -737,35 +737,17 @@ class AndroidApi(recipe_api.RecipeApi):
           **kwargs)
 
 
-  def _run_sharded_tests(self,
-                         config='sharded_perf_tests.json',
-                         flaky_config=None,
-                         chartjson_output=False,
-                         max_battery_temp=None,
-                         known_devices_file=None,
-                         enable_platform_mode=False,
-                         write_buildbot_json=False,
-                         num_retries=0,
-                         test_trace=None,
-                         **kwargs):
+  def _run_sharded_tests(self, config, test_trace=None,
+                         write_buildbot_json=False):
     args = [
         'perf',
         '--release',
         '--verbose',
         '--steps', config,
         '--blacklist-file', self.blacklist_file,
-        '--num-retries', num_retries
+        '--num-retries', '0',
+        '--collect-chartjson-data'
     ]
-    if flaky_config:
-      args.extend(['--flaky-steps', flaky_config])
-    if chartjson_output:
-      args.append('--collect-chartjson-data')
-    if max_battery_temp:
-      args.extend(['--max-battery-temp', max_battery_temp])
-    if known_devices_file:
-      args.extend(['--known-devices-file', known_devices_file])
-    if enable_platform_mode:
-      args.extend(['--enable-platform-mode'])
     if write_buildbot_json:
       args.extend(['--write-buildbot-json'])
     if test_trace:
@@ -773,10 +755,7 @@ class AndroidApi(recipe_api.RecipeApi):
 
     with self.m.context(cwd=self.m.path['checkout'],
                         env=self.m.chromium.get_env()):
-      self.test_runner(
-          'Sharded Perf Tests',
-          args,
-          **kwargs)
+      self.test_runner('Sharded Perf Tests', args)
 
   def _upload_trace_results(self, trace_json_path, test_name):
     dest = '{builder}/trace_{buildnumber}_{name}.html'.format(
@@ -805,52 +784,37 @@ class AndroidApi(recipe_api.RecipeApi):
         dest=dest,
         link_name='Test Trace')
 
-  def run_sharded_perf_tests(self, config, flaky_config=None, perf_id=None,
-                             test_type_transform=lambda x: x,
-                             chartjson_file=False, max_battery_temp=None,
+  def run_sharded_perf_tests(self, config, test_type_transform=None,
                              upload_archives_to_bucket=None,
-                             known_devices_file=None,
-                             enable_platform_mode=False,
                              timestamp_as_point_id=False,
-                             pass_adb_path=True,
-                             num_retries=0,
-                             # TODO(crbug.com/770700): Remove deprecated option
-                             # when no longer used by callers.
-                             json_output=False,
+                             # TODO(crbug.com/770700): Do not accept any extra
+                             # kwargs after updating all clients appropriately.
                              **kwargs):
     """Run the perf tests from the given config file.
 
     config: the path of the config file containing perf tests.
-    flaky_config: optional file of tests to avoid.
-    perf_id: the id of the builder running these tests
     test_type_transform: a lambda transforming the test name to the
       test_type to upload to.
-    known_devices_file: Path to file containing serial numbers of known devices.
-    enable_platform_mode: If set, will run using the android test runner's new
-      platform mode.
-    timestamp_as_point_id: If True, will use a unix timestamp as a point_id to
+    upload_archives_to_bucket: an optional string, if given will create an
+      archive of all output files per test and upload to the bucket specified.
+    timestamp_as_point_id: if True, will use a unix timestamp as a point_id to
       identify values in the perf dashboard; otherwise the default (commit
       position) is used.
-    pass_adb_path: If True, will pass the configured adb binary to the test
-      runner via --adb-path.
     """
-    assert not json_output
+    del kwargs
+
+    if test_type_transform is None:
+      test_type_transform = lambda x: x
 
     with self.m.tempfile.temp_dir('test_runner_trace') as trace_dir:
       test_trace_path = self.m.path.join(trace_dir, 'test_trace.json')
 
-      # TODO(jbudorick): Remove pass_adb_path once telemetry can use a
-      # configurable adb path.
-
       # test_runner.py actually runs the tests and records the results
-      self._run_sharded_tests(config=config, flaky_config=flaky_config,
-                              chartjson_output=chartjson_file,
-                              max_battery_temp=max_battery_temp,
-                              known_devices_file=known_devices_file,
-                              enable_platform_mode=enable_platform_mode,
-                              pass_adb_path=pass_adb_path,
-                              num_retries=num_retries,
-                              test_trace=test_trace_path, **kwargs)
+      self._run_sharded_tests(
+          config,
+          test_trace=test_trace_path,
+          # Need some extra buildbot data in archives when going to upload.
+          write_buildbot_json=bool(upload_archives_to_bucket))
 
       self._upload_trace_results(test_trace_path, 'perf')
 
@@ -894,8 +858,6 @@ class AndroidApi(recipe_api.RecipeApi):
                         '--blacklist-file', self.blacklist_file]
       if archive:
         print_step_cmd.extend(['--get-output-dir-archive', archive])
-      if enable_platform_mode:
-        print_step_cmd.extend(['--enable-platform-mode'])
 
       try:
         with self.handle_exit_codes():
@@ -911,8 +873,8 @@ class AndroidApi(recipe_api.RecipeApi):
               test_type=test_type,
               annotate=annotate,
               results_url='https://chromeperf.appspot.com',
-              perf_id=perf_id,
-              chartjson_file=chartjson_file)
+              perf_id=self.m.properties['buildername'],
+              chartjson_file=True)
       except self.m.step.StepFailure as f:
         # Only warn for failures on reference builds.
         if test_name.endswith('.reference'):
