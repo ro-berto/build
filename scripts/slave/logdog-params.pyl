@@ -182,8 +182,16 @@
       },
     },
 
-    'chromium.webrtc': {},
-    'chromium.webrtc.fyi': {},
+    'chromium.webrtc': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'chromium.webrtc.fyi': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
 
     'chromium.gatekeeper': {},
 
@@ -224,11 +232,31 @@
     'tryserver.client.syzygy': {},
 
     # WebRTC
-    'client.webrtc': {},
-    'client.webrtc.branches': {},
-    'client.webrtc.fyi': {},
-    'client.webrtc.perf': {},
-    'tryserver.webrtc': {},
+    'client.webrtc': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'client.webrtc.branches': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'client.webrtc.fyi': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'client.webrtc.perf': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'tryserver.webrtc': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
   },
 
   'chromiumos': {
