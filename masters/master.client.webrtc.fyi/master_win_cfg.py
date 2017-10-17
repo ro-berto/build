@@ -43,20 +43,19 @@ def Update(c):
     },
     {
       'name': 'WebRTC Perf Tests (Win swarming)',
-      'recipe': 'webrtc/standalone',
       'slavebuilddir': 'win',
     },
     {
-        'name': 'Win (more configs)',
-        'recipe': 'webrtc/more_configs',
-        'slavebuilddir': 'win_more_configs',
+      'name': 'Win (more configs)',
+      'recipe': 'webrtc/more_configs',
+      'slavebuilddir': 'win_more_configs',
     },
   ]
 
   c['builders'].extend([
       {
         'name': spec['name'],
-        'factory': m_remote_run('webrtc/standalone'),
+        'factory': m_remote_run(spec.get('recipe', 'webrtc/standalone')),
         'notify_on_missing': True,
         'category': 'win',
         'slavebuilddir': spec['slavebuilddir'],
