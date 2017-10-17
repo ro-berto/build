@@ -69,13 +69,13 @@ def RunSteps(api):
       api.python('vm tests',
                  api.path['tools'].join('test.py'),
                  args=test_args)
-      api.dart.read_result_file('read results of vm tests', 'result.log');
+      api.dart.read_result_file('read results of vm tests', 'result.log')
       test_args.extend(['--checked', '--append_logs'])
       api.python('checked vm tests',
                  api.path['tools'].join('test.py'),
                  args=test_args)
       api.dart.read_result_file('read results of checked vm tests',
-                                'result.log');
+                                'result.log')
       api.step('debug log', ['cat', '.debug.log'])
       api.step('delete tarball', ['rm', tarball])
       api.python('clobber',

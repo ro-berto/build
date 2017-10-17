@@ -36,7 +36,7 @@ def RunTests(api, test_args, test_specs):
                  api.path['checkout'].join('tools', 'test.py'),
                  args=args)
       api.dart.read_result_file('read results of %s' % test_spec['name'],
-                                'result.log');
+                                'result.log')
 
 
 def RunSteps(api):

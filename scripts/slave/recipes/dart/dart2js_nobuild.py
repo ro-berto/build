@@ -53,13 +53,13 @@ def RunTests(api, test_args, test_specs, use_xvfb=False):
         xvfb_cmd.extend(args)
         api.step(test_spec['name'], xvfb_cmd)
         api.dart.read_result_file('read results of %s' % test_spec['name'],
-                                  'result.log');
+                                  'result.log')
       else:
         api.python(test_spec['name'],
                    api.path['checkout'].join('tools', 'test.py'),
                    args=args)
         api.dart.read_result_file('read results of %s' % test_spec['name'],
-                                  'result.log');
+                                  'result.log')
 
 def sdk_url(channel, platform, arch, mode, revision):
   platforms = {

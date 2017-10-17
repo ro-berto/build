@@ -54,7 +54,7 @@ def RunSteps(api):
       api.python('test vm',
                  api.path['checkout'].join('tools', 'test.py'),
                  args=test_args)
-      api.dart.read_result_file('read results of test vm', 'result.log');
+      api.dart.read_result_file('read results of test vm', 'result.log')
       api.dart.read_debug_log()
 
 

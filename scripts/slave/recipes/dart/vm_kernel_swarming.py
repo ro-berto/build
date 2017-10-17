@@ -62,13 +62,13 @@ def RunSteps(api):
                  api.path['checkout'].join('tools', 'test.py'),
                  args=front_end_args)
       api.dart.read_result_file('read results of front-end tests',
-                                'result.log');
+                                'result.log')
 
       api.python('samples, service, standalone, and vm tests',
                  api.path['checkout'].join('tools', 'test.py'),
                  args=test_args + ['samples', 'service', 'standalone', 'vm'])
       api.dart.read_result_file('read results of samples, service, standalone, and vm tests',
-                                'result.log');
+                                'result.log')
 
       api.dart.collect(tasks.get_result())
 

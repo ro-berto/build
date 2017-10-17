@@ -51,13 +51,13 @@ def RunTests(api, test_args, test_specs, use_xvfb=False):
         xvfb_cmd.extend(args)
         api.step(test_spec['name'], xvfb_cmd)
         api.dart.read_result_file('read results of %s' % test_spec['name'],
-                                  'result.log');
+                                  'result.log')
       else:
         api.python(test_spec['name'],
                    api.path['checkout'].join('tools', 'test.py'),
                    args=args)
         api.dart.read_result_file('read results of %s' % test_spec['name'],
-                                  'result.log');
+                                  'result.log')
 
 
 def RunSteps(api):
@@ -170,7 +170,7 @@ def RunSteps(api):
                          "--shards=%s" % num_shards, "--shard=%s" % shard,
                          "--checked", "dart2js"])
         api.dart.read_result_file('read results of dart2js-unit tests',
-                                  'result.log');
+                                  'result.log')
 
 
     with api.context(cwd=api.path['checkout']):

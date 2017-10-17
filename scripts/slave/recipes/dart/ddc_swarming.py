@@ -39,7 +39,7 @@ def RunSteps(api):
       api.python('ddc tests',
                  api.path['checkout'].join('tools', 'bots', 'ddc_tests.py'),
                  args=[])
-      api.dart.read_result_file('read results of ddc tests', 'result.log');
+      api.dart.read_result_file('read results of ddc tests', 'result.log')
       api.dart.kill_tasks()
 
 def GenTests(api):
