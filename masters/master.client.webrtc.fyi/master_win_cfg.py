@@ -27,6 +27,7 @@ def Update(c):
                             builderNames=[
                                 'Win64 Debug (Win8)',
                                 'Win64 Debug (Win10)',
+                                'Win (more configs)',
                                 'WebRTC Perf Tests (Win swarming)',
                             ]),
   ])
@@ -44,6 +45,11 @@ def Update(c):
       'name': 'WebRTC Perf Tests (Win swarming)',
       'recipe': 'webrtc/standalone',
       'slavebuilddir': 'win',
+    },
+    {
+        'name': 'Win (more configs)',
+        'recipe': 'webrtc/more_configs',
+        'slavebuilddir': 'win_more_configs',
     },
   ]
 

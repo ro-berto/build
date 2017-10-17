@@ -49,6 +49,19 @@ BUILDERS = freeze({
       },
     },
   },
+  'client.webrtc.fyi': {
+    'builders': {
+      'Win (more configs)': {
+        'recipe_config': 'webrtc_default',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'win'},
+      },
+    },
+  },
   'tryserver.webrtc': {
     'builders': {
       'linux_more_configs': {
@@ -97,7 +110,7 @@ def RunSteps(api):
   BuildSteps(api, gn_arg='rtc_include_tests=false')
   BuildSteps(api, gn_arg='rtc_enable_protobuf=false')
   BuildSteps(api, gn_arg='rtc_enable_bwe_test_logging=true')
-  if (api.chromium.c.TARGET_PLATFORM == 'linux'):
+  if api.chromium.c.TARGET_PLATFORM != 'android':
     # Sanity check for the rtc_enable_bwe_test_logging=true build.
     api.webrtc.run_baremetal_test('bwe_simulations_tests',
         gtest_args=['--gtest_filter=VideoSendersTest/'
@@ -105,7 +118,7 @@ def RunSteps(api):
   BuildSteps(api, gn_arg='rtc_use_dummy_audio_file_devices=true')
   BuildSteps(api, gn_arg='use_rtti=true')
   BuildSteps(api, gn_arg='rtc_enable_sctp=false')
-  if (api.chromium.c.TARGET_PLATFORM == 'linux'):
+  if api.chromium.c.TARGET_PLATFORM != 'android':
     # Sanity check for the rtc_enable_sctp=false build.
     api.webrtc.run_baremetal_test('peerconnection_unittests')
 
