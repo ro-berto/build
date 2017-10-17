@@ -254,7 +254,6 @@
       "category": "3ToTWindows",
     },
     "CrWinClngLLDdbg": {
-      "mixins": ["tester"],
       "bot_pool": "build154-m1",
       "category": "3ToTWindows",
     },
