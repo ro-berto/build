@@ -593,6 +593,103 @@ BUILDERS = freeze({
       },
     },
   },
+  'client.webrtc.branches': {
+    'settings': {
+      'build_gs_bucket': 'chromium-webrtc',
+    },
+    'builders': {
+      'Win (stable)': {  # Win32 Release
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'win'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Windows-7-SP1',
+          'cpu': 'x86',
+        }
+      },
+      'Win (beta)': {  # Win32 Release
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'win'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Windows-7-SP1',
+          'cpu': 'x86',
+        }
+      },
+      'Mac (stable)': {  # Mac64 Release
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'mac'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Mac-10.12',
+          'cpu': 'x86-64',
+        }
+      },
+      'Mac (beta)': {  # Mac64 Release
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'mac'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Mac-10.12',
+          'cpu': 'x86-64',
+        }
+      },
+      'Linux (stable)': {  # Linux64 Release
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'linux'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Ubuntu-14.04',
+          'cpu': 'x86-64',
+        }
+      },
+      'Linux (beta)': {  # Linux64 Release
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'linux'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Ubuntu-14.04',
+          'cpu': 'x86-64',
+        }
+      },
+    },
+  },
   'client.webrtc.fyi': {
     'settings': {
       'build_gs_bucket': 'chromium-webrtc',
