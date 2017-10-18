@@ -18,11 +18,6 @@ RECIPE_CONFIGS = freeze({
     'gclient_config': 'webrtc',
     'test_suite': 'webrtc_baremetal',
   },
-  'webrtc_desktop_perf': {
-    'chromium_config': 'webrtc_desktop_perf',
-    'gclient_config': 'webrtc',
-    'test_suite': 'desktop_perf',
-  },
   'webrtc_desktop_perf_swarming': {
     'chromium_config': 'webrtc_desktop_perf',
     'gclient_config': 'webrtc',
@@ -46,6 +41,13 @@ RECIPE_CONFIGS = freeze({
     'gclient_config': 'webrtc',
     'gclient_apply_config': ['android', 'webrtc_test_resources'],
     'test_suite': 'android_perf',
+  },
+  'webrtc_android_perf_swarming': {
+    'chromium_config': 'webrtc_android_perf',
+    'chromium_android_config': 'webrtc',
+    'gclient_config': 'webrtc',
+    'gclient_apply_config': ['android', 'webrtc_test_resources'],
+    'test_suite': 'android_perf_swarming',
   },
   'webrtc_android_asan': {
     'chromium_config': 'android_asan',
@@ -741,6 +743,28 @@ BUILDERS = freeze({
           'os': 'Android',
           'android_devices': '1',
           'device_type': 'bullhead', # Nexus 5X
+        }
+      },
+      'Android Perf (swarming)': {
+        'recipe_config': 'webrtc_android_perf_swarming',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'webrtc-android-tests-swarming',
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'linux'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Android',
+          'android_devices': '1',
+          'device_type': 'bullhead', # Nexus 5X
+          'id': 'build39-b3', # From crbug.com/773027
         }
       },
     },

@@ -106,6 +106,12 @@ PERF_TESTS = freeze({
     },
 })
 
+ANDROID_PERF_TESTS = freeze({
+    # TODO(ehmaldonado): Add low_bandwidth_audio_perf_test and
+    # video_quality_loopback_test.
+    'webrtc_perf_tests': {},
+})
+
 
 def generate_tests(api, test_suite, revision):
   tests = []
@@ -146,6 +152,9 @@ def generate_tests(api, test_suite, revision):
             args=['--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/']))
   elif test_suite == 'desktop_perf_swarming':
     for test, extra_args in sorted(PERF_TESTS.items()):
+      tests.append(SwarmingPerfTest(test, api, **extra_args))
+  elif test_suite == 'android_perf_swarming' and api.c.PERF_ID:
+    for test, extra_args in sorted(ANDROID_PERF_TESTS.items()):
       tests.append(SwarmingPerfTest(test, api, **extra_args))
   elif test_suite == 'android_perf' and api.c.PERF_ID:
     # TODO(kjellander): Fix the Android ASan bot so we can have an assert here.

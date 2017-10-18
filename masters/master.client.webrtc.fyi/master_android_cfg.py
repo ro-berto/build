@@ -26,11 +26,13 @@ def Update(c):
                             treeStableTimer=0,
                             builderNames=[
           'Android ASan (swarming)',
+          'Android Perf (swarming)',
       ]),
   ])
 
   specs = [
     {'name': 'Android ASan (swarming)'},
+    {'name': 'Android Perf (swarming)'},
   ]
 
   c['builders'].extend([
