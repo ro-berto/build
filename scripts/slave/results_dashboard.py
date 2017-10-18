@@ -175,13 +175,14 @@ def _GetData(line):
 
 def MakeHistogramSetWithDiagnostics(histograms_file, chromium_checkout_path,
                                     test_name, buildername, buildnumber,
-                                    revisions_dict):
+                                    revisions_dict, is_reference_build):
   add_diagnostics_args = []
   add_diagnostics_args.extend([
       '--benchmarks', test_name,
       '--bots', buildername,
       '--builds', buildnumber,
       '--masters', chromium_utils.GetActiveMaster(),
+      '--is-reference-build', 'true' if is_reference_build else '',
   ])
 
   for k, v in revisions_dict.iteritems():

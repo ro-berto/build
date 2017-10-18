@@ -68,9 +68,11 @@ def _GetDashboardHistogramData(options):
   if options.got_v8_revision:
     revisions['--v8_revisions'] = options.got_v8_revision
 
+  is_reference_build = 'reference' in options.name
+  stripped_test_name = options.name.replace('.reference', '')
   return results_dashboard.MakeHistogramSetWithDiagnostics(
-      options.results_file, options.chromium_checkout_dir, options.name,
-      options.buildername, options.buildnumber, revisions)
+      options.results_file, options.chromium_checkout_dir, stripped_test_name,
+      options.buildername, options.buildnumber, revisions, is_reference_build)
 
 
 def main(args):
