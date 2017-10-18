@@ -52,12 +52,6 @@ def Update(c):
               'WebRTC lkgr finder',
           ],
       ),
-      SingleBranchScheduler(name='webrtc_linux_scheduler',
-                            branch='master',
-                            treeStableTimer=30,
-                            builderNames=[
-          'WebRTC Perf Tests (Linux Trusty swarming)',
-      ]),
   ])
 
   specs = [
@@ -65,11 +59,6 @@ def Update(c):
       'name': 'Auto-roll - WebRTC DEPS',
       'recipe': 'webrtc/auto_roll_webrtc_deps',
       'slavebuilddir': 'linux_autoroll',
-    },
-    {
-      'name': 'WebRTC Perf Tests (Linux Trusty swarming)',
-      'recipe': 'webrtc/standalone',
-      'slavebuilddir': 'linux_trusty',
     },
     {
       'name': 'WebRTC lkgr finder',

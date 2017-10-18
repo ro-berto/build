@@ -28,7 +28,6 @@ def Update(c):
                                 'Win64 Debug (Win8)',
                                 'Win64 Debug (Win10)',
                                 'Win (more configs)',
-                                'WebRTC Perf Tests (Win swarming)',
                             ]),
   ])
 
@@ -39,10 +38,6 @@ def Update(c):
     },
     {
       'name': 'Win64 Debug (Win10)',
-      'slavebuilddir': 'win',
-    },
-    {
-      'name': 'WebRTC Perf Tests (Win swarming)',
       'slavebuilddir': 'win',
     },
     {
