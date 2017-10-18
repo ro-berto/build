@@ -23,6 +23,7 @@ def Update(config, active_master, c):
   specs = [
     {'name': 'ios-device'},
     {'name': 'ios-simulator'},
+    {'name': 'ios-simulator-full-configs'},
     {'name': 'ios-device-xcode-clang'},
     {'name': 'ios-simulator-xcode-clang'},
   ]
