@@ -50,7 +50,7 @@ BUILDERS = {
   },
   'tryserver.chromium.win': {
     'builders': {
-      'win8_chromium_gn_upload': {
+      'win_chromium_gn_upload': {
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'win',
@@ -73,7 +73,7 @@ BUILDERS['luci.infra-internal.triggered'] = {
     'gn-builder-linux':
         b('tryserver.chromium.linux', 'linux_chromium_gn_upload'),
     'gn-builder-mac': b('tryserver.chromium.mac', 'mac_chromium_gn_upload'),
-    'gn-builder-win': b('tryserver.chromium.win', 'win8_chromium_gn_upload'),
+    'gn-builder-win': b('tryserver.chromium.win', 'win_chromium_gn_upload'),
   },
 }
 
