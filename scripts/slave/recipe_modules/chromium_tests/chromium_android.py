@@ -54,23 +54,6 @@ SPEC = {
       },
     },
 
-    'Android ASAN (dbg)': {
-      'chromium_config': 'android_clang',
-      'chromium_apply_config': ['chrome_with_codecs', 'errorprone'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
-        'TARGET_PLATFORM': 'android',
-      },
-      'android_config': 'clang_builder_mb',
-      'bot_type': 'builder_tester',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-
     'Android Cronet Builder': {
       'chromium_config': 'android',
       'chromium_apply_config': ['cronet_builder'],
@@ -240,60 +223,6 @@ SPEC = {
       },
     },
 
-
-    'Cast Android (dbg)' : {
-      'chromium_config': 'android',
-      'chromium_apply_config': ['chrome_with_codecs', 'mb'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
-        'TARGET_PLATFORM': 'android',
-      },
-      'android_config': 'cast_builder',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-
-    'KitKat Phone Tester (dbg)': {
-      'chromium_config': 'android',
-      'chromium_apply_config': ['chrome_with_codecs', 'mb'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
-        'TARGET_PLATFORM': 'android',
-      },
-      'android_config': 'main_builder',
-      'bot_type': 'tester',
-      'parent_buildername': 'Android arm Builder (dbg)',
-      'testing': {
-        'platform': 'linux',
-      },
-      'enable_swarming': True,
-    },
-
-    'KitKat Phone Tester (rel)': {
-      'chromium_config': 'android',
-      'chromium_apply_config': ['chrome_with_codecs', 'mb'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-        'TARGET_PLATFORM': 'android',
-      },
-      'android_config': 'main_builder',
-      'bot_type': 'builder_tester',
-      'testing': {
-        'platform': 'linux',
-      },
-      'enable_swarming': True,
-    },
-
     'KitKat Tablet Tester': {
       'enable_swarming': True,
       'chromium_config': 'android',
@@ -370,28 +299,6 @@ SPEC = {
       },
     },
 
-    'Marshmallow Phone Tester (rel)': {
-      'enable_swarming': True,
-      'chromium_config': 'android',
-      'chromium_apply_config': [
-        'chrome_with_codecs',
-        'download_vr_test_apks',
-      ],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-        'TARGET_PLATFORM': 'android',
-      },
-      'android_config': 'main_builder_mb',
-      'test_results_config': 'public_server',
-      'bot_type': 'builder_tester',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-
     'Marshmallow Tablet Tester': {
       'enable_swarming': True,
       'chromium_config': 'android',
@@ -425,6 +332,28 @@ SPEC = {
       'android_config': 'main_builder_mb',
       'android_apply_config': ['use_devil_provision'],
       'test_results_config': 'public_server',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+
+    'Android N5X Swarm Builder': {
+      'enable_swarming': True,
+      'chromium_config': 'android',
+      'chromium_apply_config': [
+        'chrome_with_codecs',
+        'download_vr_test_apks',
+      ],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+        'TARGET_PLATFORM': 'android',
+      },
+      'android_config': 'main_builder_mb',
+      'test_results_config': 'public_server',
+      'bot_type': 'builder_tester',
       'testing': {
         'platform': 'linux',
       },
