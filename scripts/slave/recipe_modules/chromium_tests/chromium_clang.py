@@ -14,7 +14,8 @@ def config(name,
            ninja_confirm_noop=True,
            is_msan=False,
            target_arch='intel',
-           target_bits=64):
+           target_bits=64,
+           add_tests_as_compile_targets=False):
   cfg = {
     'chromium_config': chromium_config,
     'chromium_apply_config': [
@@ -40,7 +41,7 @@ def config(name,
     # or `ninja all base_unittests net_unittests...`, but really the
     # compile() call in the recipe should be smart enough to do this
     # automatically. This shouldn't be configurable per bot.
-    'add_tests_as_compile_targets': False,
+    'add_tests_as_compile_targets': add_tests_as_compile_targets,
 
     'enable_swarming': True,
   }
@@ -1059,7 +1060,10 @@ SPEC['builders'].update([
            chromium_config='clang_tot_android',
            ninja_confirm_noop=False,
            target_arch='arm',
-           target_bits=32),
+           target_bits=32,
+           # TODO(pcc): Remove this once lld is capable of linking
+           # everything on Android.
+           add_tests_as_compile_targets=True),
 
     config('ToTLinux'),
 
