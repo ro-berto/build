@@ -50,14 +50,14 @@
        "recipe": "chromium",
        "use_remote_run": True,
        "scheduler": "chromium_src_commits",
-       "slave_pools": ["win_win10_gce"],
+       "slave_pools": ["win_win10_gce_clexe"],
        "category": "gce",
      },
      "CrWinClangGomaGCEStaging": {
        "recipe": "chromium",
        "use_remote_run": True,
        "scheduler": "chromium_src_commits",
-       "slave_pools": ["win_win10_gce"],
+       "slave_pools": ["win_win10_gce_clangcl"],
        "category": "gce",
      },
   },
@@ -110,13 +110,21 @@
       },
       "slaves": ["vm9-m1"],
     },
-    "win_win10_gce": {
+    "win_win10_gce_clexe": {
       "slave_data": {
         "bits": 64,
         "os": "win",
         "version": "win10"
       },
-      "slaves": ["vm342-m1", "vm343-m1"],
+      "slaves": ["vm342-m1"],
+    },
+    "win_win10_gce_clangcl": {
+      "slave_data": {
+        "bits": 64,
+        "os": "win",
+        "version": "win10"
+      },
+      "slaves": ["vm343-m1"],
     },
   },
 }
