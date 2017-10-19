@@ -177,7 +177,7 @@ def BuildLinuxAndroidArm(api):
     Build(api, build_output_dir)
 
     UploadArtifacts(api, upload_dir, [
-      'dart/runtime/bin/dart_io_entries.txt',
+      'third_party/dart/runtime/bin/dart_io_entries.txt',
       'flutter/runtime/dart_vm_entry_points.txt',
     ] + AddPathPrefix(api, 'out/%s' % build_output_dir, out_paths))
 
@@ -304,7 +304,7 @@ def PackageIOSVariant(api, label, device_out, sim_out, bucket_name):
     label_dir.join('Flutter.framework.zip'))
 
   UploadArtifacts(api, bucket_name, [
-    'dart/runtime/bin/dart_io_entries.txt',
+    'third_party/dart/runtime/bin/dart_io_entries.txt',
     'flutter/runtime/dart_vm_entry_points.txt',
     'flutter/lib/snapshot/snapshot.dart',
     'flutter/shell/platform/darwin/ios/framework/Flutter.podspec',
