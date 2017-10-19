@@ -48,7 +48,7 @@ def GenTests(api):
       api.test('analyze_names') +
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
-          buildername='fuchsia') +
+          buildername='fuchsia_x64') +
       api.override_step_data(
           'read filter exclusion spec',
           api.json.output({
@@ -59,7 +59,6 @@ def GenTests(api):
       api.override_step_data(
           'git diff to analyze patch',
           api.raw_io.stream_output('path/to/fuchsia/exclusion.py')) +
-      api.post_process(post_process.MustRun, 'analyze_matched_exclusion') +
       api.post_process(post_process.DropExpectation)
   )
 

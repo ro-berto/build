@@ -274,19 +274,14 @@ TRYBOTS = freeze({
         'mastername': 'chromium.linux',
         'buildername': 'Cast Audio Linux',
       }),
-      'fuchsia': {
-        'bot_ids': [
-          {
-            'mastername': 'chromium.fyi',
-            'buildername': 'Fuchsia',
-          }
-        ],
-        'analyze_names': ['fuchsia'],
-      },
-      'fuchsia_compile': simple_bot({
+      'fuchsia_arm64': simple_bot({
+        'mastername': 'chromium.linux',
+        'buildername': 'Fuchsia ARM64',
+      }),
+      'fuchsia_x64': simple_bot({
         'mastername': 'chromium.linux',
         'buildername': 'Fuchsia x64',
-      }, analyze_mode='compile'),
+      }),
       'linux_arm': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'Linux ARM',
