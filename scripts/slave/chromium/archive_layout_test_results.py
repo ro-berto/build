@@ -111,12 +111,18 @@ def archive_layout(args):
   gs_acl = args.gs_acl
   # These files never change, cache for a year.
   cache_control = "public, max-age=31556926"
+
   slave_utils.GSUtilCopyFile(zip_file, gs_base, gs_acl=gs_acl,
                              cache_control=cache_control,
                              add_quiet_flag=True)
-  slave_utils.GSUtilCopyDir(args.results_dir, gs_base, gs_acl=gs_acl,
-                            cache_control=cache_control,
-                            add_quiet_flag=True)
+
+
+  # TODO(crbug.com/776334) - Temporarily disable the "build results by
+  # " build number and directory"
+  #slave_utils.GSUtilCopyDir(args.results_dir, gs_base, gs_acl=gs_acl,
+  #                          cache_control=cache_control,
+  #                          add_quiet_flag=True)
+
   slave_utils.GSUtilCopyFile(last_change_file,
                              gs_base + '/' + results_dir_basename,
                              gs_acl=gs_acl,
@@ -128,12 +134,18 @@ def archive_layout(args):
   # caching w/ a max-age=3600).
   gs_base = '/'.join([args.gs_bucket, builder_name, 'results'])
   cache_control = 'no-cache'
+
+  # TODO(crbug.com/776334) - Temporarily disable the "latest zip file"
   slave_utils.GSUtilCopyFile(zip_file, gs_base, gs_acl=gs_acl,
                              cache_control=cache_control,
                              add_quiet_flag=True)
-  slave_utils.GSUtilCopyDir(args.results_dir, gs_base, gs_acl=gs_acl,
-                            cache_control=cache_control,
-                            add_quiet_flag=True)
+
+  # TODO(crbug.com/776334) - Temporarily disable the "latest directory
+  # tree" per-file uploads
+  #slave_utils.GSUtilCopyDir(args.results_dir, gs_base, gs_acl=gs_acl,
+  #                          cache_control=cache_control,
+  #                          add_quiet_flag=True)
+
   slave_utils.GSUtilCopyFile(last_change_file,
                              gs_base + '/' + results_dir_basename,
                              gs_acl=gs_acl,
