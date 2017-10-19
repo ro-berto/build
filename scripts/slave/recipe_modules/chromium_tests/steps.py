@@ -2662,9 +2662,3 @@ class WebRTCPerfTest(LocalGTestTest):
 
     self._runtest_kwargs['perf_config'] = perf_config
     LocalGTestTest.run(self, api, suffix)
-
-
-GOMA_TESTS = [
-  GTestTest('base_unittests'),
-  GTestTest('content_unittests'),
-]

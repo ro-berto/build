@@ -478,7 +478,6 @@ SPEC = {
       },
       'compile_targets': [ 'chrome' ],
       'goma_canary': True,
-      'tests': steps.GOMA_TESTS,
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win'
@@ -495,7 +494,6 @@ SPEC = {
       },
       'compile_targets': [ 'chrome' ],
       'goma_canary': True,
-      'tests': steps.GOMA_TESTS,
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win'
@@ -513,7 +511,6 @@ SPEC = {
       },
       'compile_targets': [ 'all' ],
       'goma_canary': True,
-      'tests': steps.GOMA_TESTS,
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win'
@@ -530,7 +527,6 @@ SPEC = {
       },
       'compile_targets': [ 'chrome' ],
       'goma_canary': True,
-      'tests': steps.GOMA_TESTS,
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win'
@@ -547,7 +543,6 @@ SPEC = {
       },
       'compile_targets': [ 'chrome' ],
       'goma_canary': True,
-      'tests': steps.GOMA_TESTS,
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win'
@@ -567,7 +562,6 @@ SPEC = {
       },
       'compile_targets': [ 'chrome' ],
       'goma_canary': True,
-      'tests': steps.GOMA_TESTS,
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win'
@@ -585,7 +579,6 @@ SPEC = {
       },
       'compile_targets': [ 'all' ],
       'goma_canary': True,
-      'tests': steps.GOMA_TESTS,
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win'
@@ -614,7 +607,6 @@ SPEC = {
       'add_tests_as_compile_targets': False,
 
       'goma_canary': True,
-      'tests': steps.GOMA_TESTS,
     },
     # followed amd64-generic config in chromium_tests/chromium_chromiumos.py
     'ChromeOS amd64 Chromium Goma Canary': {
@@ -644,7 +636,6 @@ SPEC = {
       },
       'compile_targets': [ 'chrome' ],
       'goma_canary': True,
-      'tests': steps.GOMA_TESTS,
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux'
@@ -660,7 +651,6 @@ SPEC = {
       },
       'compile_targets': [ 'all' ],
       'goma_canary': True,
-      'tests': steps.GOMA_TESTS,
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux'
@@ -677,7 +667,6 @@ SPEC = {
       },
       'compile_targets': [ 'all' ],
       'goma_canary': True,
-      'tests': steps.GOMA_TESTS,
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux'
@@ -693,7 +682,6 @@ SPEC = {
       },
       'compile_targets': [ 'chrome' ],
       'goma_canary': True,
-      'tests': steps.GOMA_TESTS,
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'mac'
@@ -709,7 +697,6 @@ SPEC = {
       },
       'compile_targets': [ 'chrome' ],
       'goma_canary': True,
-      'tests': steps.GOMA_TESTS,
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'mac'
@@ -729,7 +716,6 @@ SPEC = {
       },
       'compile_targets': [ 'all' ],
       'goma_canary': True,
-      'tests': steps.GOMA_TESTS,
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'mac'
@@ -749,7 +735,6 @@ SPEC = {
       },
       'compile_targets': [ 'all' ],
       'goma_canary': True,
-      'tests': steps.GOMA_TESTS,
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'mac'
@@ -770,7 +755,6 @@ SPEC = {
       },
       'compile_targets': [ 'all' ],
       'goma_canary': True,
-      'tests': steps.GOMA_TESTS,
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'mac'
