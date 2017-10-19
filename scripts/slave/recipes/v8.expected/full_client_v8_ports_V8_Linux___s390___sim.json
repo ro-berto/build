@@ -533,8 +533,6 @@
       "--progress=verbose",
       "--mode",
       "Release",
-      "--arch",
-      "s390",
       "--outdir",
       "out",
       "--buildbot",

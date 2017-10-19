@@ -119,8 +119,6 @@
       "--progress=verbose",
       "--mode",
       "Release",
-      "--arch",
-      "mips",
       "--outdir",
       "out",
       "--buildbot",

@@ -534,8 +534,6 @@
       "--progress=verbose",
       "--mode",
       "Release",
-      "--arch",
-      "mips64el",
       "--outdir",
       "out",
       "--buildbot",

@@ -534,8 +534,6 @@
       "--progress=verbose",
       "--mode",
       "Release",
-      "--arch",
-      "ppc",
       "--outdir",
       "out",
       "--buildbot",

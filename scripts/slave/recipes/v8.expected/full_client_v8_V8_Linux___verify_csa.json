@@ -533,8 +533,6 @@
       "--progress=verbose",
       "--mode",
       "Release",
-      "--arch",
-      "ia32",
       "--outdir",
       "out",
       "--buildbot",

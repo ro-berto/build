@@ -564,8 +564,6 @@
       "--progress=verbose",
       "--mode",
       "Release",
-      "--arch",
-      "x64",
       "--outdir",
       "out",
       "--buildbot",

@@ -1131,7 +1131,6 @@ class V8Api(recipe_api.RecipeApi):
     full_args = [
       '--progress=verbose',
       '--mode', self.m.chromium.c.build_config_fs,
-      '--arch', self.m.chromium.c.gyp_env.GYP_DEFINES['v8_target_arch'],
       '--outdir', self.m.path.split(self.m.chromium.c.build_dir)[-1],
       '--buildbot',
       '--timeout=200',
