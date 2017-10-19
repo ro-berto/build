@@ -343,7 +343,7 @@ def BuildWindows(api):
   Build(api, 'host_debug_unopt',
     'flutter/lib/snapshot:generate_snapshot_bin',
     'garnet/public/lib/fxl:fxl_unittests',
-    'dart:create_sdk',
+    'third_party/dart:create_sdk',
     'flutter/frontend_server')
   Build(api, 'android_profile', 'gen_snapshot')
   Build(api, 'android_release', 'gen_snapshot')
