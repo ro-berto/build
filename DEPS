@@ -41,6 +41,7 @@ deps_os = {
 
 hooks = [
   {
+    "name": "remove_orphaned_pycs",
     "pattern": ".",
     "action": [
       "python", "-u", "build/scripts/common/remove_orphaned_pycs.py",
