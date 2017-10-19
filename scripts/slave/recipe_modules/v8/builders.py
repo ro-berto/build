@@ -245,7 +245,6 @@ BUILDERS = {
         },
       },
       'V8 Linux - nosnap': {
-        'v8_apply_config': ['no_snapshot'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -264,7 +263,6 @@ BUILDERS = {
         'swarming_properties': SWARMING_FYI_PROPS,
       },
       'V8 Linux - nosnap - debug': {
-        'v8_apply_config': ['no_snapshot'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -291,7 +289,6 @@ BUILDERS = {
         'swarming_properties': SWARMING_FYI_PROPS,
       },
       'V8 Linux - noi18n - debug': {
-        'v8_apply_config': ['no_i18n'],
         'chromium_apply_config': [
           'default_compiler', 'v8_ninja', 'goma', 'no_i18n', 'mb'],
         'v8_config_kwargs': {
@@ -572,7 +569,6 @@ BUILDERS = {
         },
       },
       'V8 Win32 - nosnap - shared': {
-        'v8_apply_config': ['no_snapshot'],
         'chromium_apply_config': [
           'default_compiler',
           'v8_ninja',
@@ -861,7 +857,6 @@ BUILDERS = {
       },
       'V8 Linux64 ASAN': {
         'chromium_apply_config': ['v8_ninja', 'clang', 'goma', 'mb'],
-        'v8_apply_config': ['asan'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -876,7 +871,6 @@ BUILDERS = {
       },
       'V8 Linux64 TSAN': {
         'chromium_apply_config': ['v8_ninja', 'clang', 'goma', 'mb'],
-        'v8_apply_config': ['tsan'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -893,7 +887,7 @@ BUILDERS = {
       },
       'V8 Linux64 TSAN - concurrent marking': {
         'chromium_apply_config': ['v8_ninja', 'clang', 'goma', 'mb'],
-        'v8_apply_config': ['stress_incremental_marking', 'tsan'],
+        'v8_apply_config': ['stress_incremental_marking'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -920,7 +914,6 @@ BUILDERS = {
           'goma',
           'mb',
         ],
-        'v8_apply_config': ['msan'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -936,7 +929,6 @@ BUILDERS = {
       'V8 Linux64 - cfi': {
         'chromium_apply_config': [
           'v8_ninja', 'default_compiler', 'goma', 'mb'],
-        'v8_apply_config': ['cfi_vptr'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -966,7 +958,6 @@ BUILDERS = {
       },
       'V8 Mac64 ASAN': {
         'chromium_apply_config': ['v8_ninja', 'clang', 'goma', 'mb'],
-        'v8_apply_config': ['asan'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -982,7 +973,6 @@ BUILDERS = {
       },
       'V8 Win32 ASAN': {
         'chromium_apply_config': ['v8_ninja', 'default_compiler', 'goma', 'mb'],
-        'v8_apply_config': ['asan'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -1019,7 +1009,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64 - gcov coverage': {
-        'v8_apply_config': ['gcov_coverage'],
         'chromium_apply_config': [
           'clobber', 'v8_ninja', 'gcc', 'coverage', 'goma', 'mb',
         ],
@@ -1044,7 +1033,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - predictable': {
-        'v8_apply_config': ['predictable'],
         'chromium_apply_config': [
           'v8_ninja', 'default_compiler', 'goma', 'predictable', 'mb'],
         'v8_config_kwargs': {
@@ -1614,7 +1602,7 @@ BUILDERS = {
         'chromium_apply_config': [
           'default_compiler', 'v8_ninja', 'goma', 'simulate_arm',
           'no_snapshot', 'mb'],
-        'v8_apply_config': ['no_snapshot', 'verify_heap_skip_remembered_set'],
+        'v8_apply_config': ['verify_heap_skip_remembered_set'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -1652,7 +1640,7 @@ BUILDERS = {
       'V8 Mips - builder': {
         # TODO(machenbach): Switch this bot manually to gn.
         'chromium_apply_config': ['no_snapshot', 'no_i18n'],
-        'v8_apply_config': ['mips_cross_compile', 'no_snapshot', 'no_i18n'],
+        'v8_apply_config': ['mips_cross_compile'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_ARCH': 'mips',
@@ -1667,7 +1655,6 @@ BUILDERS = {
         ],
       },
       'V8 Mips - big endian - nosnap - 1': {
-        'v8_apply_config': ['no_snapshot', 'no_i18n'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_ARCH': 'mips',
@@ -1683,7 +1670,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Mips - big endian - nosnap - 2': {
-        'v8_apply_config': ['no_snapshot', 'no_i18n'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_ARCH': 'mips',
@@ -2023,7 +2009,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_noi18n_rel_ng_triggered': {
-        'v8_apply_config': ['no_i18n'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -2280,7 +2265,6 @@ BUILDERS = {
       },
       'v8_linux64_asan_rel_ng_triggered': {
         'chromium_apply_config': ['no_dcheck'],
-        'v8_apply_config': ['asan'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -2306,7 +2290,6 @@ BUILDERS = {
           'mb',
           'no_dcheck',
         ],
-        'v8_apply_config': ['msan'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -2327,7 +2310,6 @@ BUILDERS = {
           'mb',
           'no_dcheck',
         ],
-        'v8_apply_config': ['tsan'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -2363,7 +2345,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_tsan_concurrent_marking_rel_ng_triggered': {
-        'v8_apply_config': ['stress_incremental_marking', 'tsan'],
+        'v8_apply_config': ['stress_incremental_marking'],
         'chromium_apply_config': ['no_dcheck'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -2426,7 +2408,6 @@ BUILDERS = {
           'mb',
           'no_dcheck',
         ],
-        'v8_apply_config': ['asan'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -2467,7 +2448,6 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
-        'v8_apply_config': ['asan'],
         'bot_type': 'tester',
         'parent_buildername': 'v8_win_asan_rel_ng',
         'enable_swarming': True,
@@ -2553,7 +2533,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_win_nosnap_shared_rel_ng': {
-        'v8_apply_config': ['no_snapshot'],
         'chromium_apply_config': [
           'default_compiler',
           'v8_ninja',
@@ -2576,7 +2555,6 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'v8_win_nosnap_shared_rel_ng_triggered': {
-        'v8_apply_config': ['no_snapshot'],
         'chromium_apply_config': [
           'no_dcheck',
           'use_windows_swarming_slaves',
@@ -2789,7 +2767,6 @@ BUILDERS = {
           'no_dcheck',
           'mb',
         ],
-        'v8_apply_config': ['asan'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,

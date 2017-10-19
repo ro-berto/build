@@ -44,16 +44,6 @@ def v8(c):
 
 
 @config_ctx()
-def asan(c):
-  c.testing.test_args.append('--asan')
-
-
-@config_ctx()
-def cfi_vptr(c):
-  c.testing.test_args.append('--cfi-vptr')
-
-
-@config_ctx()
 def deopt_fuzz_normal(c):
   c.testing.test_args.append('--coverage=0.4')
   c.testing.test_args.append('--distribution-mode=smooth')
@@ -77,28 +67,8 @@ def gc_stress(c):
 
 
 @config_ctx()
-def gcov_coverage(c):
-  c.testing.test_args.extend(['--gcov-coverage'])
-
-
-@config_ctx()
 def mips_cross_compile(c):
   c.mips_cross_compile = True
-
-
-@config_ctx()
-def msan(c):
-  c.testing.test_args.append('--msan')
-
-
-@config_ctx()
-def no_i18n(c):
-  c.testing.test_args.append('--noi18n')
-
-
-@config_ctx()
-def no_snapshot(c):
-  c.testing.test_args.append('--no-snap')
 
 
 @config_ctx()
@@ -107,18 +77,8 @@ def no_harness(c):
 
 
 @config_ctx()
-def predictable(c):
-  c.testing.test_args.append('--predictable')
-
-
-@config_ctx()
 def stress_incremental_marking(c):
   c.testing.test_args.append('--extra-flags=--stress-incremental-marking')
-
-
-@config_ctx()
-def tsan(c):
-  c.testing.test_args.append('--tsan')
 
 
 @config_ctx()

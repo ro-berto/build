@@ -541,7 +541,6 @@
       "--timeout=200",
       "--random-seed=-976563914",
       "bot_default",
-      "--no-snap",
       "--extra-flags=--verify-heap-skip-remembered-set",
       "--variants=default",
       "--rerun-failures-count=2",

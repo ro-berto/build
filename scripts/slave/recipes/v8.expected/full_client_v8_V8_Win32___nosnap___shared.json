@@ -572,7 +572,6 @@
       "--timeout=200",
       "--random-seed=-976563914",
       "bot_default",
-      "--no-snap",
       "--rerun-failures-count=2",
       "--swarming",
       "--json-test-results",

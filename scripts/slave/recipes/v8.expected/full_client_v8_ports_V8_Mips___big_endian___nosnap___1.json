@@ -127,8 +127,6 @@
       "--timeout=200",
       "--random-seed=-358114921",
       "bot_default",
-      "--no-snap",
-      "--noi18n",
       "--rerun-failures-count=2",
       "--shard-count=2",
       "--shard-run=1",
