@@ -16,80 +16,80 @@
   "builders": {
     "Android Cronet Builder": {
       "recipe": "chromium",
-      "scheduler": "android_commits",
+      "scheduler": "chromium_commits",
       "slave_pools": ["builders"],
       "slavebuilddir": "cronet",
       "category": "0Cronet",
     },
     "Android Cronet KitKat Builder": {
       "recipe": "cronet",
-      "scheduler": "android_commits",
+      "scheduler": "chromium_commits",
       "slave_pools": ["cronet_k_hammerhead"],
       "category": "0Cronet",
     },
     "Android Cronet Lollipop Builder": {
       "recipe": "cronet",
-      "scheduler": "android_commits",
+      "scheduler": "chromium_commits",
       "slave_pools": ["cronet_l_hammerhead"],
       "category": "0Cronet",
     },
     "Android Cronet Marshmallow 64bit Builder": {
       "recipe": "cronet",
-      "scheduler": "android_commits",
+      "scheduler": "chromium_commits",
       "slave_pools": ["cronet_m_bullhead"],
       "category": "0Cronet",
     },
     "Android Cronet Builder (dbg)": {
       "recipe": "cronet",
-      "scheduler": "android_commits",
+      "scheduler": "chromium_commits",
       "slave_pools": ["cronet_k_hammerhead"],
       "category": "0Cronet",
     },
     "Android Cronet Builder Asan": {
       "recipe": "cronet",
-      "scheduler": "android_commits",
+      "scheduler": "chromium_commits",
       "slave_pools": ["cronet_k_hammerhead"],
       "category": "0Cronet",
     },
     "Android Cronet ARMv6 Builder": {
       "recipe": "cronet",
-      "scheduler": "android_commits",
+      "scheduler": "chromium_commits",
       "slave_pools": ["cronet_k_hammerhead"],
       "category": "0Cronet",
     },
     "Android Cronet ARM64 Builder": {
       "recipe": "cronet",
-      "scheduler": "android_commits",
+      "scheduler": "chromium_commits",
       "slave_pools": ["cronet_arm64"],
       "category": "0Cronet",
     },
     "Android Cronet ARM64 Builder (dbg)": {
       "recipe": "cronet",
-      "scheduler": "android_commits",
+      "scheduler": "chromium_commits",
       "slave_pools": ["cronet_arm64_dbg"],
       "category": "0Cronet",
     },
     "Android Cronet x86 Builder": {
       "recipe": "cronet",
-      "scheduler": "android_commits",
+      "scheduler": "chromium_commits",
       "slave_pools": ["cronet_x86"],
       "category": "0Cronet",
     },
     "Android Cronet x86 Builder (dbg)": {
       "recipe": "cronet",
-      "scheduler": "android_commits",
+      "scheduler": "chromium_commits",
       "slave_pools": ["cronet_x86_dbg"],
       "category": "0Cronet",
     },
     "Android Cronet MIPS Builder": {
       "recipe": "cronet",
-      "scheduler": "android_commits",
+      "scheduler": "chromium_commits",
       "slave_pools": ["cronet_mips"],
       "category": "0Cronet",
     },
     "Android Cronet Marshmallow 64bit Perf": {
       "recipe": "cronet",
-      "scheduler": "android_commits",
+      "scheduler": "chromium_commits",
       "slave_pools": ["cronet_m_bullhead_perf"],
       "category": "0Cronet",
     },
@@ -120,7 +120,7 @@
     "Android MIPS Builder (dbg)": {
       "recipe": "chromium",
       "use_remote_run": True,
-      "scheduler": "android_commits",
+      "scheduler": "chromium_commits",
       "slave_pools": ["mips_builder"],
       "category": "2Builders",
       "slavebuilddir": "android_build",
@@ -128,7 +128,7 @@
     "Android x64 Builder (dbg)": {
       "recipe": "chromium",
       "use_remote_run": True,
-      "scheduler": "android_commits",
+      "scheduler": "chromium_commits",
       "slave_pools": ["builders"],
       "category": "2Builders",
       "slavebuilddir": "android_build",
@@ -136,7 +136,7 @@
     "Android x86 Builder (dbg)": {
       "recipe": "chromium",
       "use_remote_run": True,
-      "scheduler": "android_commits",
+      "scheduler": "chromium_commits",
       "slave_pools": ["builders"],
       "category": "2Builders",
       "slavebuilddir": "android_build",
@@ -144,7 +144,7 @@
     "Android arm Builder (dbg)": {
       "recipe": "chromium",
       "use_remote_run": True,
-      "scheduler": "android_commits",
+      "scheduler": "chromium_commits",
       "slave_pools": ["arm_builder"],
       "category": "2Builders",
       "slavebuilddir": "android_build",
@@ -152,17 +152,17 @@
     "Android arm64 Builder (dbg)": {
       "recipe": "chromium",
       "use_remote_run": True,
-      "scheduler": "android_commits",
+      "scheduler": "chromium_commits",
       "slave_pools": ["builders"],
       "category": "2Builders",
       "slavebuilddir": "android_build",
     },
-    "Android N5X Swarm Builder": {
+    "KitKat Phone Tester (dbg)": {
       "recipe": "chromium",
       "use_remote_run": True,
-      "scheduler": "android_commits",
-      "slave_pools": ["main_n5x_builder"],
-      "category": "4Swarming",
+      "scheduler": "chromium_commits",
+      "slave_pools": ["kit_kat_phone_dbg"],
+      "category": "3Testers",
       "slavebuilddir": "android_build",
     },
     "KitKat Tablet Tester": {
@@ -213,10 +213,50 @@
       "category": "3Testers",
       "mergeRequests": True,
     },
+    "Android ASAN (dbg)": {
+      "recipe": "chromium",
+      "use_remote_run": True,
+      "scheduler": "chromium_commits",
+      "slave_pools": ["clang_builder"],
+      "category": "4OnCQ",
+      "slavebuilddir": "android_build",
+    },
+    "Android N5X Swarm Builder": {
+      "recipe": "chromium",
+      "use_remote_run": True,
+      "scheduler": "chromium_commits",
+      "slave_pools": ["main_n5x_builder"],
+      "category": "4OnCQ",
+      "slavebuilddir": "android_build",
+    },
+    "Cast Android (dbg)": {
+      "recipe": "chromium",
+      "use_remote_run": True,
+      "scheduler": "chromium_commits",
+      "slave_pools": ["cast_builder"],
+      "category": "4OnCQ",
+      "slavebuilddir": "android_build",
+    },
+    "KitKat Phone Tester (rel)": {
+      "recipe": "chromium",
+      "use_remote_run": True,
+      "scheduler": "chromium_commits",
+      "slave_pools": ["kit_kat_phone_rel"],
+      "category": "4OnCQ",
+      "slavebuilddir": "android_build",
+    },
+    "Marshmallow Phone Tester (rel)": {
+      "recipe": "chromium",
+      "use_remote_run": True,
+      "scheduler": "chromium_commits",
+      "slave_pools": ["marshmallow_phone"],
+      "category": "4OnCQ",
+      "mergeRequests": True,
+    },
   },
 
   "schedulers": {
-    "android_commits": {
+    "chromium_commits": {
       "type": "git_poller",
       "git_repo_url": "https://chromium.googlesource.com/chromium/src",
     },
@@ -249,6 +289,22 @@
           "slave126-c1",
           "slave127-c1",
         ],
+    },
+    "cast_builder": {
+      "slave_data": {
+        "os": "linux",
+        "version": "trusty",
+        "bits": 64,
+      },
+      "slaves": ["slave198-c1"],
+    },
+    "clang_builder": {
+      "slave_data": {
+        "os": "linux",
+        "version": "trusty",
+        "bits": 64,
+      },
+      "slaves": ["slave199-c1"],
     },
     "cronet_arm64": {
       "slave_data": {
@@ -322,6 +378,22 @@
       },
       "slaves": ["build88-b1"],
     },
+    "kit_kat_phone_dbg": {
+      "slave_data": {
+        "os": "linux",
+        "version": "trusty",
+        "bits": "64",
+      },
+      "slaves": ["slave154-c1"],
+    },
+    "kit_kat_phone_rel": {
+      "slave_data": {
+        "os": "linux",
+        "version": "trusty",
+        "bits": "64",
+      },
+      "slaves": ["slave155-c1"],
+    },
     "kit_kat_tablet": {
       "slave_data": {
         "os": "linux",
@@ -361,6 +433,14 @@
         "bits": "64",
       },
       "slaves": ["slave46-c1"],
+    },
+    "marshmallow_phone": {
+      "slave_data": {
+        "os": "linux",
+        "version": "trusty",
+        "bits": "64",
+      },
+      "slaves": ["slave200-c1"],
     },
     "marshmallow_tablet": {
       "slave_data": {
