@@ -2,62 +2,58 @@
   "master_base_class": "Master1",
   "master_port": 20104,
   "master_port_alt": 25104,
-  "slave_port": 30104,
+  "bot_port": 30104,
   "pubsub_service_account_file": "service-account-luci-milo.json",
   "templates": ["../master.chromium/templates"],
 
   "builder_defaults": {
+    "recipe": "chromium",
     "remote_run_repository": "https://chromium.googlesource.com/chromium/tools/build.git",
+    "scheduler": "chromium_src_commits",
+    "use_remote_run": True,
   },
 
   "builders": {
      "Chromium Linux Goma Staging": {
-       "recipe": "chromium",
-       "use_remote_run": True,
-       "scheduler": "chromium_src_commits",
-       "slave_pools": ["linux_trusty"],
+       "os": "linux",
+       "version": "trusty",
+       "bot": "slave11-c1",
        "category": "0builders",
      },
      "Chromium Mac Goma Staging": {
-       "recipe": "chromium",
-       "use_remote_run": True,
-       "scheduler": "chromium_src_commits",
-       "slave_pools": ["mac_10.11"],
+       "os": "mac",
+       "version": "10.11",
+       "bot": "build178-m1",
        "category": "0builders",
      },
      "CrWinGomaStaging": {
-       "recipe": "chromium",
-       "use_remote_run": True,
-       "scheduler": "chromium_src_commits",
-       "slave_pools": ["win_win8"],
+       "os": "win",
+       "version": "win8",
+       "bot": "vm9-m1",
        "category": "0builders",
      },
      "Chromium Linux Goma GCE Staging": {
-       "recipe": "chromium",
-       "use_remote_run": True,
-       "scheduler": "chromium_src_commits",
-       "slave_pools": ["linux_trusty_gce"],
+       "os": "linux",
+       "version": "trusty",
+       "bot": "slave156-c1",
        "category": "gce",
      },
      "Chromium Mac Goma GCE Staging": {
-       "recipe": "chromium",
-       "use_remote_run": True,
-       "scheduler": "chromium_src_commits",
-       "slave_pools": ["mac_10.11_gce"],
+       "os": "mac",
+       "version": "10.11",
+       "bot": "vm196-m1",
        "category": "gce",
      },
      "CrWinGomaGCEStaging": {
-       "recipe": "chromium",
-       "use_remote_run": True,
-       "scheduler": "chromium_src_commits",
-       "slave_pools": ["win_win10_gce_clexe"],
+       "os": "win",
+       "version": "win10",
+       "bot": "vm342-m1",
        "category": "gce",
      },
      "CrWinClangGomaGCEStaging": {
-       "recipe": "chromium",
-       "use_remote_run": True,
-       "scheduler": "chromium_src_commits",
-       "slave_pools": ["win_win10_gce_clangcl"],
+       "os": "win",
+       "version": "win10",
+       "bot": "vm343-m1",
        "category": "gce",
      },
   },
@@ -66,65 +62,6 @@
     "chromium_src_commits": {
       "type": "git_poller",
       "git_repo_url": "https://chromium.googlesource.com/chromium/src.git",
-    },
-  },
-
-  "slave_pools": {
-    "linux_trusty": {
-      "slave_data": {
-        "bits": 64,
-        "os": "linux",
-        "version": "trusty",
-      },
-      "slaves": ["slave11-c1"],
-    },
-    "linux_trusty_gce": {
-      "slave_data": {
-        "bits": 64,
-        "os": "linux",
-        "version": "trusty",
-      },
-      "slaves": ["slave156-c1"],
-    },
-    "mac_10.11": {
-      "slave_data": {
-        "bits": 64,
-        "os": "mac",
-        "version": "10.11",
-      },
-      "slaves": ["build178-m1"],
-    },
-    "mac_10.11_gce": {
-      "slave_data": {
-        "bits": 64,
-        "os": "mac",
-        "version": "10.11",
-      },
-      "slaves": ["vm196-m1"],
-    },
-    "win_win8": {
-      "slave_data": {
-        "bits": 64,
-        "os": "win",
-        "version": "win8",
-      },
-      "slaves": ["vm9-m1"],
-    },
-    "win_win10_gce_clexe": {
-      "slave_data": {
-        "bits": 64,
-        "os": "win",
-        "version": "win10"
-      },
-      "slaves": ["vm342-m1"],
-    },
-    "win_win10_gce_clangcl": {
-      "slave_data": {
-        "bits": 64,
-        "os": "win",
-        "version": "win10"
-      },
-      "slaves": ["vm343-m1"],
     },
   },
 }
