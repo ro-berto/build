@@ -243,7 +243,8 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "archive_build"
+    "name": "archive_build",
+    "timeout": 1200
   },
   {
     "name": "$result",

@@ -25,7 +25,8 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "archive build"
+    "name": "archive build",
+    "timeout": 1200
   },
   {
     "cmd": [],
