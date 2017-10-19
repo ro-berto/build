@@ -41,9 +41,6 @@
     "builder_shared": {
       "amd64-generic-asan": [
         "build326-m2"
-      ], 
-      "betty-asan": [
-        "build263-m2"
       ]
     }, 
     "floating": {
@@ -58,6 +55,7 @@
     "build182-m2", 
     "build203-m2", 
     "build245-m2", 
+    "build263-m2", 
     "build323-m2", 
     "build333-m2"
   ]
