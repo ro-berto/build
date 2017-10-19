@@ -1174,10 +1174,6 @@ class V8Api(recipe_api.RecipeApi):
         '%s -reset_every_nth_pending 0 --' % drrun,
       ]
 
-    # Indicate whether DCHECKs were enabled.
-    if self.m.chromium.c.gyp_env.GYP_DEFINES.get('dcheck_always_on') == 1:
-      full_args.append('--dcheck-always-on')
-
     full_args += [
       '--rerun-failures-count=%d' % self.rerun_failures_count,
     ]

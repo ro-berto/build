@@ -183,7 +183,6 @@
       "--random-seed=-976563914",
       "bot_default",
       "--exhaustive-variants",
-      "--dcheck-always-on",
       "--rerun-failures-count=2",
       "--swarming",
       "--json-test-results",

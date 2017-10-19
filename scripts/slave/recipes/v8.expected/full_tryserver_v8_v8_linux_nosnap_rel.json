@@ -553,7 +553,6 @@
       "--timeout=200",
       "--random-seed=-976563914",
       "bot_default",
-      "--dcheck-always-on",
       "--rerun-failures-count=2",
       "--swarming",
       "--json-test-results",
