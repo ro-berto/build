@@ -15,7 +15,8 @@ def config(name,
            is_msan=False,
            target_arch='intel',
            target_bits=64,
-           add_tests_as_compile_targets=False):
+           add_tests_as_compile_targets=False,
+           sizes=True):
   cfg = {
     'chromium_config': chromium_config,
     'chromium_apply_config': [
@@ -32,9 +33,7 @@ def config(name,
     'testing': {
       'platform': 'linux',
     },
-    'tests': {
-      steps.SizesStep(RESULTS_URL, name)
-    },
+    'tests': {},
 
     # TODO(dpranke): Get rid of this flag, it's a misfeature. This was
     # added to allow the bots to run `ninja` instead of `ninja all`
@@ -56,6 +55,11 @@ def config(name,
 
   if is_msan:
       cfg['chromium_apply_config'].append('prebuilt_instrumented_libraries')
+
+  if sizes:
+      cfg['tests'] = {
+        steps.SizesStep(RESULTS_URL, name)
+      }
 
   return name, cfg
 
@@ -1061,9 +1065,10 @@ SPEC['builders'].update([
            ninja_confirm_noop=False,
            target_arch='arm',
            target_bits=32,
-           # TODO(pcc): Remove this once lld is capable of linking
+           # TODO(pcc): Remove these once lld is capable of linking
            # everything on Android.
-           add_tests_as_compile_targets=True),
+           add_tests_as_compile_targets=True,
+           sizes=False),
 
     config('ToTLinux'),
 
