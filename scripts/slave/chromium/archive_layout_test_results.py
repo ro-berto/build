@@ -24,6 +24,7 @@ import os
 import re
 import socket
 import sys
+import time
 
 from common import archive_utils
 from common import chromium_utils
@@ -34,41 +35,11 @@ from slave import slave_utils
 def _CollectZipArchiveFiles(output_dir):
   """Returns a list of layout test result files to archive in a zip file."""
   file_list = []
-
   for path, _, files in os.walk(output_dir):
     rel_path = path[len(output_dir + '\\'):]
     for name in files:
-      if _IsIncludedInZipArchive(name):
-        file_list.append(os.path.join(rel_path, name))
-
-  if os.path.exists(os.path.join(output_dir, 'results.html')):
-    file_list.append('results.html')
-
-  if sys.platform == 'win32':
-    if os.path.exists(os.path.join(output_dir, 'access_log.txt')):
-      file_list.append('access_log.txt')
-    if os.path.exists(os.path.join(output_dir, 'error_log.txt')):
-      file_list.append('error_log.txt')
-
+      file_list.append(os.path.join(rel_path, name))
   return file_list
-
-
-def _IsIncludedInZipArchive(name):
-  """Returns True if a file should be included in the zip, False otherwise."""
-  if '-stack.' in name or '-crash-log.' in name:
-    return True
-  extension = os.path.splitext(name)[1]
-  if '-actual.' in name and extension in ('.txt', '.png', '.checksum', '.wav'):
-    return True
-  if '-expected.' in name:
-    return True
-  if '-wdiff.' in name:
-    return True
-  if name.endswith('-diff.txt') or name.endswith('-diff.png'):
-    return True
-  if name.endswith('.json'):
-    return True
-  return False
 
 
 def archive_layout(args):
@@ -82,6 +53,10 @@ def archive_layout(args):
     os.makedirs(staging_dir)
 
   file_list = _CollectZipArchiveFiles(args.results_dir)
+  print
+  print "Archiving %d files" % len(file_list)
+  print
+
   zip_file = chromium_utils.MakeZip(staging_dir,
                                     results_dir_basename,
                                     file_list,
@@ -106,46 +81,87 @@ def archive_layout(args):
   with open(last_change_file, 'w') as f:
     f.write(last_change)
 
-  # Copy the results to a directory archived by build number.
-  gs_base = '/'.join([args.gs_bucket, builder_name, build_number])
+  # In addition to the last_change file, above, we upload a zip file containing
+  # all of the results, and an unzipped directory of the results. And, we
+  # actually need two copies of each, one archived by build number and one
+  # representing the "latest" version.
+  # TODO: Get rid of the need for the "latest" version.
+
+  gs_build_base = '/'.join([args.gs_bucket, builder_name, build_number])
+  gs_build_zip_file_path = gs_build_base + '/' + os.path.basename(zip_file)
+  gs_build_dir_path = gs_build_base + '/' + results_dir_basename
+  gs_build_last_change_path = (gs_build_base + '/' + results_dir_basename +
+          os.path.basename(last_change_file))
+
+  gs_latest_base = '/'.join([args.gs_bucket, builder_name, 'results'])
+  gs_latest_zip_file_path = gs_latest_base + '/' + os.path.basename(zip_file)
+  gs_latest_last_change_path = (gs_latest_base + '/' + results_dir_basename +
+          os.path.basename(last_change_file))
+
   gs_acl = args.gs_acl
+
   # These files never change, cache for a year.
   cache_control = "public, max-age=31556926"
 
-  slave_utils.GSUtilCopyFile(zip_file, gs_base, gs_acl=gs_acl,
-                             cache_control=cache_control,
-                             add_quiet_flag=True)
-
-
-  slave_utils.GSUtilCopyDir(args.results_dir, gs_base, gs_acl=gs_acl,
-                            cache_control=cache_control,
-                            add_quiet_flag=True)
-
-  slave_utils.GSUtilCopyFile(last_change_file,
-                             gs_base + '/' + results_dir_basename,
+  start = time.time()
+  slave_utils.GSUtilCopyFile(zip_file,
+                             gs_build_zip_file_path,
                              gs_acl=gs_acl,
                              cache_control=cache_control,
                              add_quiet_flag=True)
+  print "took %.1d seconds" % (time.time() - start)
+  sys.stdout.flush()
 
-  # And also to the 'results' directory to provide the 'latest' results
-  # and make sure they are not cached at all (Cloud Storage defaults to
-  # caching w/ a max-age=3600).
-  gs_base = '/'.join([args.gs_bucket, builder_name, 'results'])
+  start = time.time()
+  slave_utils.GSUtilCopyDir(args.results_dir,
+                            gs_build_base,
+                            gs_acl=gs_acl,
+                            cache_control=cache_control,
+                            add_quiet_flag=True)
+  print "took %.1d seconds" % (time.time() - start)
+  sys.stdout.flush()
+
+  start = time.time()
+  slave_utils.GSUtilCopyFile(last_change_file,
+                             gs_build_last_change_path,
+                             gs_acl=gs_acl,
+                             cache_control=cache_control,
+                             add_quiet_flag=True)
+  print "took %.1d seconds" % (time.time() - start)
+  sys.stdout.flush()
+
+  # The 'latest' results need to be not cached at all (Cloud Storage defaults to
+  # caching w/ a max-age=3600), since they change with every build. We also
+  # do cloud->cloud copies for these, to save on network traffic.
   cache_control = 'no-cache'
 
-  slave_utils.GSUtilCopyFile(zip_file, gs_base, gs_acl=gs_acl,
-                             cache_control=cache_control,
-                             add_quiet_flag=True)
-
-  slave_utils.GSUtilCopyDir(args.results_dir, gs_base, gs_acl=gs_acl,
-                            cache_control=cache_control,
-                            add_quiet_flag=True)
-
-  slave_utils.GSUtilCopyFile(last_change_file,
-                             gs_base + '/' + results_dir_basename,
+  start = time.time()
+  slave_utils.GSUtilCopyFile(gs_build_zip_file_path,
+                             gs_latest_zip_file_path,
                              gs_acl=gs_acl,
                              cache_control=cache_control,
                              add_quiet_flag=True)
+  print "took %.1d seconds" % (time.time() - start)
+  sys.stdout.flush()
+
+  start = time.time()
+  slave_utils.GSUtilCopyDir(gs_build_dir_path,
+                            gs_latest_base,
+                            gs_acl=gs_acl,
+                            cache_control=cache_control,
+                            add_quiet_flag=True)
+  print "took %.1d seconds" % (time.time() - start)
+  sys.stdout.flush()
+
+  start = time.time()
+  slave_utils.GSUtilCopyFile(gs_build_last_change_path,
+                             gs_latest_last_change_path,
+                             gs_acl=gs_acl,
+                             cache_control=cache_control,
+                             add_quiet_flag=True)
+  print "took %.1d seconds" % (time.time() - start)
+  sys.stdout.flush()
+
   return 0
 
 
