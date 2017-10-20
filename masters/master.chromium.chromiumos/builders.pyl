@@ -2,68 +2,58 @@
   "master_base_class": "Master1",
   "master_port": 8052,
   "master_port_alt": 8252,
-  "slave_port": 8152,
+  "bot_port": 8152,
   "pubsub_service_account_file": "service-account-luci-milo.json",
   "templates": ["templates", "../master.chromium/templates"],
 
   "builder_defaults": {
+    "os": "linux",
+    "version": "precise",
+    "recipe": "chromium",
     "remote_run_repository": "https://chromium.googlesource.com/chromium/tools/build.git",
+    "use_remote_run": True,
+    "scheduler": "chromium",
+  },
+
+  "mixins": {
+    "tester": {
+      "scheduler": None,
+      "mergeRequests": True,
+    },
   },
 
   "builders": {
     "Linux ChromiumOS Full": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": "chromium",
-      "slave_pools": ["linux_full"],
       "category": "1default",
+      "bot": "build18-m1",
     },
-
     "Linux ChromiumOS Builder": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": "chromium",
-      "slave_pools": ["linux_builder"],
       "category": "1default",
+      "bot": "build16-m1",
     },
     "Linux ChromiumOS Tests (1)": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": None,
-      "mergeRequests": True,
-      "slave_pools": ["linux_tester_1"],
       "category": "1default",
+      "mixins": ["tester"],
+      "bot": "vm911-m1",
     },
 
     "Linux ChromiumOS Builder (dbg)": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": "chromium",
-      "slave_pools": ["linux_dbg"],
       "category": "4debug",
+      "bot": "build43-m1",
     },
     "Linux ChromiumOS Tests (dbg)(1)": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": None,
-      "mergeRequests": True,
-      "slave_pools": ["linux_dbg_tests_1"],
       "category": "4debug",
+      "mixins": ["tester"],
+      "bots": ["slave117-c1, slave118-c1"],
     },
 
     "ChromiumOS amd64-generic Compile": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": "chromium",
-      "slave_pools": ["linux_simplechrome_amd64_generic"],
       "category": "5simplechrome",
+      "bot": "slave24-c1",
     },
     "ChromiumOS daisy Compile": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": "chromium",
-      "slave_pools": ["linux_simplechrome_daisy"],
       "category": "5simplechrome",
+      "bot": "slave25-c1",
     },
   },
 
@@ -71,67 +61,6 @@
     "chromium": {
       "type": "git_poller",
       "git_repo_url": "https://chromium.googlesource.com/chromium/src",
-    },
-  },
-
-  "slave_pools": {
-    "linux_full": {
-      "slave_data": {
-        "os": "linux",
-        "version": "precise",
-        "bits": 64,
-      },
-      "slaves": ["build18-m1"],
-    },
-    "linux_builder": {
-      "slave_data": {
-        "os": "linux",
-        "version": "precise",
-        "bits": 64,
-      },
-      "slaves": ["build16-m1"],
-    },
-    "linux_tester_1": {
-      "slave_data": {
-        "os": "linux",
-        "version": "precise",
-        "bits": 64,
-      },
-      "slaves": ["vm911-m1"],
-    },
-
-    "linux_dbg": {
-      "slave_data": {
-        "os": "linux",
-        "version": "precise",
-        "bits": 64,
-      },
-      "slaves": ["build43-m1"],
-    },
-    "linux_dbg_tests_1": {
-      "slave_data": {
-        "os": "linux",
-        "version": "precise",
-        "bits": 64,
-      },
-      "slaves": ["slave117-c1", "slave118-c1"],
-    },
-
-    "linux_simplechrome_amd64_generic": {
-      "slave_data": {
-        "os": "linux",
-        "version": "precise",
-        "bits": 64,
-      },
-      "slaves": ["slave24-c1"],
-    },
-    "linux_simplechrome_daisy": {
-      "slave_data": {
-        "os": "linux",
-        "version": "precise",
-        "bits": 64,
-      },
-      "slaves": ["slave25-c1"],
     },
   },
 }
