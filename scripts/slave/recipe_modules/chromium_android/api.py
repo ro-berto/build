@@ -786,10 +786,7 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def run_sharded_perf_tests(self, config, test_type_transform=None,
                              upload_archives_to_bucket=None,
-                             timestamp_as_point_id=False,
-                             # TODO(crbug.com/770700): Do not accept any extra
-                             # kwargs after updating all clients appropriately.
-                             **kwargs):
+                             timestamp_as_point_id=False):
     """Run the perf tests from the given config file.
 
     config: the path of the config file containing perf tests.
@@ -801,8 +798,6 @@ class AndroidApi(recipe_api.RecipeApi):
       identify values in the perf dashboard; otherwise the default (commit
       position) is used.
     """
-    del kwargs
-
     if test_type_transform is None:
       test_type_transform = lambda x: x
 
