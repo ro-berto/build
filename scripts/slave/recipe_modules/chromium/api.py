@@ -1024,10 +1024,6 @@ class ChromiumApi(recipe_api.RecipeApi):
           'scripts', 'slave', 'chromium', 'archive_build.py'),
       args,
       infra_step=True,
-
-      # TODO(crbug.com/776334) - Temporarily enforce a hard timeout on the
-      # upload of the archive at 20min.
-      timeout=20*60,
       **kwargs)
 
   def get_annotate_by_test_name(self, test_name):
