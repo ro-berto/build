@@ -117,11 +117,9 @@ def archive_layout(args):
                              add_quiet_flag=True)
 
 
-  # TODO(crbug.com/776334) - Temporarily disable the "build results by
-  # " build number and directory"
-  #slave_utils.GSUtilCopyDir(args.results_dir, gs_base, gs_acl=gs_acl,
-  #                          cache_control=cache_control,
-  #                          add_quiet_flag=True)
+  slave_utils.GSUtilCopyDir(args.results_dir, gs_base, gs_acl=gs_acl,
+                            cache_control=cache_control,
+                            add_quiet_flag=True)
 
   slave_utils.GSUtilCopyFile(last_change_file,
                              gs_base + '/' + results_dir_basename,
