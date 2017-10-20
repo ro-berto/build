@@ -133,16 +133,13 @@ def archive_layout(args):
   gs_base = '/'.join([args.gs_bucket, builder_name, 'results'])
   cache_control = 'no-cache'
 
-  # TODO(crbug.com/776334) - Temporarily disable the "latest zip file"
   slave_utils.GSUtilCopyFile(zip_file, gs_base, gs_acl=gs_acl,
                              cache_control=cache_control,
                              add_quiet_flag=True)
 
-  # TODO(crbug.com/776334) - Temporarily disable the "latest directory
-  # tree" per-file uploads
-  #slave_utils.GSUtilCopyDir(args.results_dir, gs_base, gs_acl=gs_acl,
-  #                          cache_control=cache_control,
-  #                          add_quiet_flag=True)
+  slave_utils.GSUtilCopyDir(args.results_dir, gs_base, gs_acl=gs_acl,
+                            cache_control=cache_control,
+                            add_quiet_flag=True)
 
   slave_utils.GSUtilCopyFile(last_change_file,
                              gs_base + '/' + results_dir_basename,
