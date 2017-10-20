@@ -182,7 +182,7 @@ def MakeHistogramSetWithDiagnostics(histograms_file, chromium_checkout_path,
       '--bots', buildername,
       '--builds', buildnumber,
       '--masters', chromium_utils.GetActiveMaster(),
-      '--is-reference-build', 'true' if is_reference_build else '',
+      '--is_reference_build', 'true' if is_reference_build else '',
   ])
 
   for k, v in revisions_dict.iteritems():

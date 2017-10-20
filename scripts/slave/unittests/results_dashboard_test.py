@@ -107,7 +107,7 @@ class ResultsDashboardFormatTest(unittest.TestCase):
           '/path/to/chromium/src/third_party/catapult/tracing/bin/'
           'add_reserved_diagnostics', '--benchmarks', 'foo.test', '--bots',
           'builder', '--builds', '1', '--masters', 'ChromiumPerf',
-          '--is-reference-build', '',
+          '--is_reference_build', '',
           f.name]
       subprocess.call(expected_cmd)
       self.mox.ReplayAll()
