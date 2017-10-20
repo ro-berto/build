@@ -370,7 +370,8 @@ def GSUtilCopyFile(filename, gs_base, subdir=None, mimetype=None, gs_acl=None,
     The status code returned from running the generated gsutil command.
   """
 
-  source = 'file://' + filename
+  if not filename.startswith('gs://') and not filename.startswith('file://'):
+      source = 'file://' + filename
   dest = gs_base
   if subdir:
     # HACK(nsylvain): We can't use normpath here because it will break the

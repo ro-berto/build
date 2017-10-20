@@ -91,12 +91,12 @@ def archive_layout(args):
   gs_build_zip_file_path = gs_build_base + '/' + os.path.basename(zip_file)
   gs_build_dir_path = gs_build_base + '/' + results_dir_basename
   gs_build_last_change_path = (gs_build_base + '/' + results_dir_basename +
-          os.path.basename(last_change_file))
+          '/' + os.path.basename(last_change_file))
 
   gs_latest_base = '/'.join([args.gs_bucket, builder_name, 'results'])
   gs_latest_zip_file_path = gs_latest_base + '/' + os.path.basename(zip_file)
   gs_latest_last_change_path = (gs_latest_base + '/' + results_dir_basename +
-          os.path.basename(last_change_file))
+          '/' + os.path.basename(last_change_file))
 
   gs_acl = args.gs_acl
 
@@ -109,7 +109,7 @@ def archive_layout(args):
                              gs_acl=gs_acl,
                              cache_control=cache_control,
                              add_quiet_flag=True)
-  print "took %.1d seconds" % (time.time() - start)
+  print "took %.1f seconds" % (time.time() - start)
   sys.stdout.flush()
 
   start = time.time()
@@ -118,7 +118,7 @@ def archive_layout(args):
                             gs_acl=gs_acl,
                             cache_control=cache_control,
                             add_quiet_flag=True)
-  print "took %.1d seconds" % (time.time() - start)
+  print "took %.1f seconds" % (time.time() - start)
   sys.stdout.flush()
 
   start = time.time()
@@ -127,7 +127,7 @@ def archive_layout(args):
                              gs_acl=gs_acl,
                              cache_control=cache_control,
                              add_quiet_flag=True)
-  print "took %.1d seconds" % (time.time() - start)
+  print "took %.1f seconds" % (time.time() - start)
   sys.stdout.flush()
 
   # The 'latest' results need to be not cached at all (Cloud Storage defaults to
@@ -141,7 +141,7 @@ def archive_layout(args):
                              gs_acl=gs_acl,
                              cache_control=cache_control,
                              add_quiet_flag=True)
-  print "took %.1d seconds" % (time.time() - start)
+  print "took %.1f seconds" % (time.time() - start)
   sys.stdout.flush()
 
   start = time.time()
@@ -150,7 +150,7 @@ def archive_layout(args):
                             gs_acl=gs_acl,
                             cache_control=cache_control,
                             add_quiet_flag=True)
-  print "took %.1d seconds" % (time.time() - start)
+  print "took %.1f seconds" % (time.time() - start)
   sys.stdout.flush()
 
   start = time.time()
