@@ -365,7 +365,7 @@ class RemoteRunExecTest(unittest.TestCase):
             '@@@STEP_STARTED@@@',
             '@@@SET_BUILD_PROPERTY@logdog_project@"project"@@@',
             '@@@SET_BUILD_PROPERTY@logdog_prefix@"prefix"@@@',
-            ('@@@SET_BUILD_PROPERTY@logdog_annotation_url@'
+            ('@@@SET_BUILD_PROPERTY@log_location@'
              '"logdog://example.com/project/prefix/+/recipes/annotations"@@@'),
             '@@@STEP_CURSOR LogDog Bootstrap@@@',
             '@@@STEP_CLOSED@@@',
@@ -414,7 +414,7 @@ class RemoteRunExecTest(unittest.TestCase):
             '@@@STEP_STARTED@@@',
             '@@@SET_BUILD_PROPERTY@logdog_project@"project"@@@',
             '@@@SET_BUILD_PROPERTY@logdog_prefix@"prefix"@@@',
-            ('@@@SET_BUILD_PROPERTY@logdog_annotation_url@'
+            ('@@@SET_BUILD_PROPERTY@log_location@'
              '"logdog://example.com/project/prefix/+/recipes/annotations"@@@'),
             '@@@STEP_CURSOR LogDog Bootstrap@@@',
             '@@@STEP_CLOSED@@@',
@@ -425,8 +425,8 @@ class RemoteRunExecTest(unittest.TestCase):
   @mock.patch('slave.logdog_bootstrap.BootstrapState.get_result')
   @mock.patch('slave.cipd_bootstrap_v2.install_cipd_packages')
   @mock.patch('slave.robust_tempdir.RobustTempdir.tempdir')
-  def test_exec_with_logdog_only(self, rt_tempdir, _install_cipd_packages,
-                                 _logdog_bootstrap_result, bootstrap):
+  def test_exec(self, rt_tempdir, _install_cipd_packages,
+                _logdog_bootstrap_result, bootstrap):
 
     args = self.recipe_remote_args + ['--'] + self.recipe_args
     cfg = self._default_namedtuple(logdog_bootstrap.Config)._replace(
@@ -435,7 +435,6 @@ class RemoteRunExecTest(unittest.TestCase):
         ),
         prefix="prefix",
         host="example.com",
-        logdog_only=True,
     )
     bootstrap.return_value = logdog_bootstrap.BootstrapState(
         cfg, ['logdog_bootstrap'] + args, '/path/to/result.json')
@@ -500,6 +499,7 @@ class RemoteRunExecTest(unittest.TestCase):
     self.assertEqual(rv, 0)
 
     kitchen_args = self.kitchen_args + [
+        '-logdog-only',
         '-logdog-annotation-url', logdog_bootstrap.get_annotation_url(cfg),
         '-luci-system-account-json', '/path/to/service_account.json',
         '-logdog-tag', 'foo=bar',
@@ -517,7 +517,7 @@ class RemoteRunExecTest(unittest.TestCase):
             '@@@STEP_STARTED@@@',
             '@@@SET_BUILD_PROPERTY@logdog_project@"project"@@@',
             '@@@SET_BUILD_PROPERTY@logdog_prefix@"prefix"@@@',
-            ('@@@SET_BUILD_PROPERTY@logdog_annotation_url@'
+            ('@@@SET_BUILD_PROPERTY@log_location@'
              '"logdog://example.com/project/prefix/+/recipes/annotations"@@@'),
             '@@@STEP_CURSOR LogDog Bootstrap@@@',
             '@@@STEP_CLOSED@@@',
