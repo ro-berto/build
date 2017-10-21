@@ -173,9 +173,11 @@
           "*": {}
         },
         "excluded_builders" : [
-          "Linux ChromiumOS Ozone Builder",
-          "Linux ChromiumOS Ozone Tests (1)",
-          "Linux ChromiumOS Ozone Tests (2)",
+          "chromeos-betty-rel",
+          "chromeos-amd64-generic-rel",
+          "chromeos-daisy-rel",
+          "linux-chromeos-rel",
+          "linux-chromeos-dbg",
           "*Compile"
         ]
       }
