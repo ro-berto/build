@@ -188,7 +188,11 @@ SPEC['builders'].update([
     _config('linux-chromeos-rel'),
     _config('linux-chromeos-dbg'),
     _config('chromeos-amd64-generic-rel', cros_board='amd64-generic'),
-    _config('chromeos-betty-rel', cros_board='betty'),
+
+    # TODO(crbug.com/732531) - uncomment this once there's a betty-full SDK?
+    # _config('chromeos-betty-rel', cros_board='betty'),
+    _config('chromeos-betty-rel', cros_board='amd64-generic'),
+
     _config('chromeos-daisy-rel', cros_board='daisy',
             target_arch='arm', target_bits=32),
 ])

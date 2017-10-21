@@ -37,7 +37,7 @@
       "bot": "vm911-m1",
     },
     "linux-chromeos-rel": {
-      # This bot will replace "Linux ChromiumOS Builder / Tests (1)"
+      # This will replace Linux ChromiumOS Builder / Tests (1)
       "category": "1default",
       "bot": "slave230-c1",
     },
@@ -49,10 +49,10 @@
     "Linux ChromiumOS Tests (dbg)(1)": {
       "category": "4debug",
       "mixins": ["tester"],
-      "bots": ["slave117-c1, slave118-c1"],
+      "bots": ["slave117-c1", "slave118-c1"],
     },
     "linux-chromeos-dbg": {
-      # This bot will replace "Linux ChromiumOS Builder (dbg) / Tests (dbg)(1)"
+      # This will replace Linux ChromiumOS Builder (dbg) / Tests (dbg)(1)
       "category": "4debug",
       "bot": "slave231-c1",
     },
@@ -67,7 +67,7 @@
     },
 
     "chromeos-amd64-generic-rel": {
-      # This bot will replace "ChromiumOS amd64-generic Compile"
+      # This will replace ChromiumOS amd64-generic Compile
       "category": "5simplechrome",
       "bot": "slave232-c1",
     },
@@ -76,7 +76,7 @@
       "bot": "slave233-c1",
     },
     "chromeos-daisy-rel": {
-      # This bot will replace "ChromiumOS daisy Compile"
+      # This will replace ChromiumOS daisy Compile
       "category": "5simplechrome",
       "bot": "slave234-c1",
     },
