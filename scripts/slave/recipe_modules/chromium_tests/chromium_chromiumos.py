@@ -152,3 +152,43 @@ for board in ('amd64-generic', 'daisy'):
       'platform': 'linux',
     },
   }
+
+
+def _config(name,
+            cros_board=None,
+            target_arch='intel',
+            target_bits=64
+           ):
+  build_config = 'Release' if '-rel' in name else 'Debug'
+  cfg = {
+    'chromium_config': 'chromium',
+    'chromium_apply_config': [
+      'chromeos', 'mb', 'ninja_confirm_noop',
+    ],
+    'gclient_config': 'chromium',
+    'chromium_config_kwargs': {
+      'BUILD_CONFIG': build_config,
+      'TARGET_ARCH': target_arch,
+      'TARGET_BITS': target_bits,
+    },
+    'bot_type': 'builder_tester',
+    'testing': {
+      'platform': 'linux',
+    },
+    'tests': {},
+    'enable_swarming': True,
+  }
+  if cros_board:
+    cfg['chromium_config_kwargs']['TARGET_CROS_BOARD'] = cros_board
+    cfg['chromium_config_kwargs']['TARGET_PLATFORM'] = 'chromeos'
+  return name, cfg
+
+
+SPEC['builders'].update([
+    _config('linux-chromeos-rel'),
+    _config('linux-chromeos-dbg'),
+    _config('chromeos-amd64-generic-rel', cros_board='amd64-generic'),
+    _config('chromeos-betty-rel', cros_board='betty'),
+    _config('chromeos-daisy-rel', cros_board='daisy',
+            target_arch='arm', target_bits=32),
+])

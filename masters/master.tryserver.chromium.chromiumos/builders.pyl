@@ -19,25 +19,22 @@
   },
 
   "builders": {
-    "chromeos_amd64-generic": {
-      "bot_pool": "optional",
-    },
-    "chromeos_amd64-generic_chromium_compile_only": {
+    "chromeos-amd64-generic-rel": {
       "bot_pool": "cq",
     },
-    "chromeos_daisy": {
-      "bot_pool": "optional",
-    },
-    "chromeos_daisy_chromium_compile_only": {
+    "chromeos-betty-rel": {
       "bot_pool": "cq",
     },
-    "linux_chromium_chromeos_compile_dbg": {
+    "chromeos-daisy-rel": {
       "bot_pool": "cq",
     },
-    "linux_chromium_chromeos_dbg": {
+    "linux-chromeos-compile-dbg": {
+      "bot_pool": "cq",
+    },
+    "linux-chromeos-dbg": {
       "bot_pool": "optional",
     },
-    "linux_chromium_chromiumos_rel": {
+    "linux-chromeos-rel": {
       "bot_pool": "cq",
     },
   },
