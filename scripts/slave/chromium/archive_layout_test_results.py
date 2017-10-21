@@ -159,7 +159,7 @@ def archive_layout(args):
                              gs_acl=gs_acl,
                              cache_control=cache_control,
                              add_quiet_flag=True)
-  print "took %.1d seconds" % (time.time() - start)
+  print "took %.1f seconds" % (time.time() - start)
   sys.stdout.flush()
 
   return 0
