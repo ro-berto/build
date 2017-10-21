@@ -77,7 +77,8 @@ def archive_layout(args):
   # after all layout test results are uploaded so the client can check this
   # file to see if the upload for the revision is complete.
   # See crbug.com/574272 for more details.
-  last_change_file = os.path.join(staging_dir, 'LAST_CHANGE')
+  last_change_basename = 'LAST_CHANGE'
+  last_change_file = os.path.join(staging_dir, last_change_basename)
   with open(last_change_file, 'w') as f:
     f.write(last_change)
 
@@ -87,16 +88,13 @@ def archive_layout(args):
   # representing the "latest" version.
   # TODO: Get rid of the need for the "latest" version.
 
-  gs_build_base = '/'.join([args.gs_bucket, builder_name, build_number])
-  gs_build_zip_file_path = gs_build_base + '/' + os.path.basename(zip_file)
-  gs_build_dir_path = gs_build_base + '/' + results_dir_basename
-  gs_build_last_change_path = (gs_build_base + '/' + results_dir_basename +
-          '/' + os.path.basename(last_change_file))
+  gs_build_dir = '/'.join([args.gs_bucket, builder_name, build_number])
+  gs_build_zip_file_path = gs_build_dir + '/' + os.path.basename(zip_file)
+  gs_build_results_dir = gs_build_dir + '/' + results_dir_basename
+  gs_build_last_change_path = gs_build_results_dir + '/' + last_change_basename
 
-  gs_latest_base = '/'.join([args.gs_bucket, builder_name, 'results'])
-  gs_latest_zip_file_path = gs_latest_base + '/' + os.path.basename(zip_file)
-  gs_latest_last_change_path = (gs_latest_base + '/' + results_dir_basename +
-          '/' + os.path.basename(last_change_file))
+  gs_latest_dir = '/'.join([args.gs_bucket, builder_name, 'results'])
+  gs_latest_results_dir = gs_latest_dir + '/' + results_dir_basename
 
   gs_acl = args.gs_acl
 
@@ -104,31 +102,40 @@ def archive_layout(args):
   cache_control = "public, max-age=31556926"
 
   start = time.time()
-  slave_utils.GSUtilCopyFile(zip_file,
-                             gs_build_zip_file_path,
-                             gs_acl=gs_acl,
-                             cache_control=cache_control,
-                             add_quiet_flag=True)
+  rc = slave_utils.GSUtilCopyFile(zip_file,
+                                  gs_build_dir,
+                                  gs_acl=gs_acl,
+                                  cache_control=cache_control,
+                                  add_quiet_flag=True)
   print "took %.1f seconds" % (time.time() - start)
   sys.stdout.flush()
+  if rc:
+      print "cp failed: %d" % rc
+      return rc
 
   start = time.time()
-  slave_utils.GSUtilCopyDir(args.results_dir,
-                            gs_build_base,
-                            gs_acl=gs_acl,
-                            cache_control=cache_control,
-                            add_quiet_flag=True)
+  rc = slave_utils.GSUtilCopyDir(args.results_dir,
+                                 gs_build_dir,
+                                 gs_acl=gs_acl,
+                                 cache_control=cache_control,
+                                 add_quiet_flag=True)
   print "took %.1f seconds" % (time.time() - start)
   sys.stdout.flush()
+  if rc:
+      print "cp failed: %d" % rc
+      return rc
 
   start = time.time()
-  slave_utils.GSUtilCopyFile(last_change_file,
-                             gs_build_last_change_path,
-                             gs_acl=gs_acl,
-                             cache_control=cache_control,
-                             add_quiet_flag=True)
+  rc = slave_utils.GSUtilCopyFile(last_change_file,
+                                  gs_build_results_dir,
+                                  gs_acl=gs_acl,
+                                  cache_control=cache_control,
+                                  add_quiet_flag=True)
   print "took %.1f seconds" % (time.time() - start)
   sys.stdout.flush()
+  if rc:
+      print "cp failed: %d" % rc
+      return rc
 
   # The 'latest' results need to be not cached at all (Cloud Storage defaults to
   # caching w/ a max-age=3600), since they change with every build. We also
@@ -136,31 +143,39 @@ def archive_layout(args):
   cache_control = 'no-cache'
 
   start = time.time()
-  slave_utils.GSUtilCopyFile(gs_build_zip_file_path,
-                             gs_latest_zip_file_path,
-                             gs_acl=gs_acl,
-                             cache_control=cache_control,
-                             add_quiet_flag=True)
+  rc = slave_utils.GSUtilCopyFile(gs_build_zip_file_path,
+                                  gs_latest_dir,
+                                  gs_acl=gs_acl,
+                                  cache_control=cache_control,
+                                  add_quiet_flag=True)
   print "took %.1f seconds" % (time.time() - start)
   sys.stdout.flush()
+  if rc:
+      print "cp failed: %d" % rc
+      return rc
 
   start = time.time()
-  slave_utils.GSUtilCopyDir(gs_build_dir_path,
-                            gs_latest_base,
-                            gs_acl=gs_acl,
-                            cache_control=cache_control,
-                            add_quiet_flag=True)
+  rc = slave_utils.GSUtilCopyDir(gs_build_results_dir,
+                                 gs_latest_dir,
+                                 gs_acl=gs_acl,
+                                 cache_control=cache_control,
+                                 add_quiet_flag=True)
   print "took %.1f seconds" % (time.time() - start)
   sys.stdout.flush()
+  if rc:
+      print "cp failed: %d" % rc
+      return rc
 
   start = time.time()
-  slave_utils.GSUtilCopyFile(gs_build_last_change_path,
-                             gs_latest_last_change_path,
-                             gs_acl=gs_acl,
-                             cache_control=cache_control,
-                             add_quiet_flag=True)
+  rc = slave_utils.GSUtilCopyFile(gs_build_last_change_path,
+                                  gs_latest_results_dir,
+                                  gs_acl=gs_acl,
+                                  cache_control=cache_control,
+                                  add_quiet_flag=True)
   print "took %.1f seconds" % (time.time() - start)
   sys.stdout.flush()
+  if rc:
+      print "cp failed: %d" % rc
 
   return 0
 
