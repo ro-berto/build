@@ -91,7 +91,7 @@
       "--json-file",
       "/path/to/tmp/json",
       "--version",
-      "9.0"
+      "9.0.1"
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/linux/dart-sdk/bin:<PATH>"
@@ -100,7 +100,7 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"matches\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"/Applications/Xcode9.0.app\": \"9.0 (9A235)\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"/Applications/Xcode9.0.app\": \"9.0.1 (9A1004)\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"

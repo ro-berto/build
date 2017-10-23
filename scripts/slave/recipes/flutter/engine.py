@@ -242,7 +242,7 @@ def RunFindXcode(api, ios_tools_path, target_version):
 
 def SetupXcode(api):
   ios_tools_path = api.path['start_dir'].join('src', 'ios_tools')
-  target_version = '9.0'
+  target_version = '9.0.1'
   xcode_json = RunFindXcode(api, ios_tools_path, target_version)
   if not xcode_json['matches']:
     raise api.step.StepFailure('Xcode %s not found' % target_version)
@@ -458,7 +458,7 @@ def GenTests(api):
       test += (
         api.step_data('set_xcode_version', api.json.output({
           'matches': {
-            '/Applications/Xcode9.0.app': '9.0 (9A235)'
+            '/Applications/Xcode9.0.app': '9.0.1 (9A1004)'
           }
         }))
       )
