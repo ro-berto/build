@@ -273,7 +273,7 @@
       "--json-file",
       "/path/to/tmp/json",
       "--version",
-      "8.0"
+      "9.0.1"
     ],
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
@@ -284,7 +284,7 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"matches\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"/Applications/Xcode8.0.app\": \"8.0 (8A218a)\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"/Applications/Xcode9.0.app\": \"9.0.1 (9A1004)\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
