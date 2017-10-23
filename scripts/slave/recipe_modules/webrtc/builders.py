@@ -763,7 +763,7 @@ BUILDERS = freeze({
         'swarming_dimensions': {
           'os': 'Android',
           'android_devices': '1',
-          'device_type': 'bullhead', # Nexus 5X
+          'device_type': 'hammerhead', # Nexus 5
           'id': 'build39-b3', # From crbug.com/773027
         }
       },
