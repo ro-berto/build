@@ -89,9 +89,7 @@ def archive_layout(args):
   # TODO: Get rid of the need for the "latest" version.
 
   gs_build_dir = '/'.join([args.gs_bucket, builder_name, build_number])
-  gs_build_zip_file_path = gs_build_dir + '/' + os.path.basename(zip_file)
   gs_build_results_dir = gs_build_dir + '/' + results_dir_basename
-  gs_build_last_change_path = gs_build_results_dir + '/' + last_change_basename
 
   gs_latest_dir = '/'.join([args.gs_bucket, builder_name, 'results'])
   gs_latest_results_dir = gs_latest_dir + '/' + results_dir_basename
@@ -143,7 +141,7 @@ def archive_layout(args):
   cache_control = 'no-cache'
 
   start = time.time()
-  rc = slave_utils.GSUtilCopyFile(gs_build_zip_file_path,
+  rc = slave_utils.GSUtilCopyFile(zip_file,
                                   gs_latest_dir,
                                   gs_acl=gs_acl,
                                   cache_control=cache_control,
@@ -155,7 +153,7 @@ def archive_layout(args):
       return rc
 
   start = time.time()
-  rc = slave_utils.GSUtilCopyDir(gs_build_results_dir,
+  rc = slave_utils.GSUtilCopyDir(args.results_dir,
                                  gs_latest_dir,
                                  gs_acl=gs_acl,
                                  cache_control=cache_control,
@@ -167,7 +165,7 @@ def archive_layout(args):
       return rc
 
   start = time.time()
-  rc = slave_utils.GSUtilCopyFile(gs_build_last_change_path,
+  rc = slave_utils.GSUtilCopyFile(last_change_file,
                                   gs_latest_results_dir,
                                   gs_acl=gs_acl,
                                   cache_control=cache_control,
