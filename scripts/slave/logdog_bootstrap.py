@@ -113,13 +113,13 @@ _PLATFORM_CONFIG = {
 # Loaded by '_get_params'.
 Params = collections.namedtuple('Params', (
     'project', 'cipd_tag', 'api', 'mastername', 'buildername', 'buildnumber',
-    'logdog_only', 'generation',
+    'generation',
 ))
 
 
 # LogDog bootstrapping configuration.
 Config = collections.namedtuple('Config', (
-    'params', 'plat', 'host', 'prefix', 'tags', 'logdog_only',
+    'params', 'plat', 'host', 'prefix', 'tags',
     'service_account_path',
 ))
 
@@ -240,7 +240,6 @@ def _get_params(properties):
   builder_map = {
     'enabled': True,
     'cipd_tag': '$stable',
-    'logdog_only': False,
     'generation': None,
   }
   for bn in (buildername, '*'):
@@ -269,7 +268,6 @@ def _get_params(properties):
       mastername=mastername,
       buildername=buildername,
       buildnumber=buildnumber,
-      logdog_only=builder_map['logdog_only'],
       generation=builder_map['generation'],
   )
 
@@ -445,16 +443,12 @@ def get_config(opts, properties):
   # Generate our service account path.
   service_account_path = _get_service_account_json(opts, plat.credential_path)
 
-  logdog_only = ((opts.logdog_only) if opts.logdog_only is not None else
-                 (params.logdog_only))
-
   return Config(
       params=params,
       plat=plat,
       host=host,
       prefix=prefix,
       tags=tags,
-      logdog_only=logdog_only,
       service_account_path=service_account_path,
   )
 
@@ -569,8 +563,7 @@ def bootstrap(rt, opts, basedir, tempdir, properties, cmd):
     butler_args += ['-service-account-json', cfg.service_account_path]
   if cfg.plat.max_buffer_age:
     butler_args += ['-output-max-buffer-age', cfg.plat.max_buffer_age]
-  if cfg.logdog_only:
-    butler_args += ['-io-keepalive-stderr', '5m']
+  butler_args += ['-io-keepalive-stderr', '5m']
 
   # Butler: subcommand run.
   butler_run_args = [
@@ -585,7 +578,7 @@ def bootstrap(rt, opts, basedir, tempdir, properties, cmd):
       '-log-level', log_level,
       '-name-base', 'recipes',
       '-print-summary',
-      '-tee', ('annotations' if cfg.logdog_only else 'annotations,text'),
+      '-tee', 'annotations',
       '-json-args-path', cmd_json,
       '-result-path', bootstrap_result_path,
   ]
@@ -629,10 +622,7 @@ def annotate(cfg, stream):
   with stream.step('LogDog Bootstrap') as st:
     st.set_build_property('logdog_project', json.dumps(cfg.params.project))
     st.set_build_property('logdog_prefix', json.dumps(cfg.prefix))
-    if cfg.logdog_only:
-      st.set_build_property('log_location', json.dumps(annotation_url))
-    else:
-      st.set_build_property('logdog_annotation_url', json.dumps(annotation_url))
+    st.set_build_property('log_location', json.dumps(annotation_url))
 
 
 class BootstrapState(object):
@@ -707,8 +697,6 @@ def add_arguments(parser):
   parser.add_argument('--logdog-output-service',
       help='If specified, use <service>-dot-<host> for output service '
            'configuration.')
-  parser.add_argument('--logdog-only', type=_argparse_type_trinary,
-      help='Override output only to LogDog. Can be True/False to force.')
   parser.add_argument('--logdog-debug-out-file',
       help='(Debug) Write logs to this text protobuf file instead of a live '
            'service.')

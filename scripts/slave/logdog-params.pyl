@@ -48,159 +48,46 @@
       # Used for canarying.
       '*': {
         'cipd_tag': '$canary',
-        'logdog_only': True,
       },
     },
-    'chromium.infra.cron': {
-      '*': {
-        'logdog_only': True,
-      },
-    },
-    'chromium.swarm': {
-      '*': {
-        'logdog_only': True,
-      },
-    },
+    'chromium.infra.cron': {},
+    'chromium.swarm': {},
 
     # Chromium tryservers.
-    'tryserver.chromium.android': {
-      '*': {
-        'logdog_only': True,
-      },
-    },
-    'tryserver.chromium.angle': {
-      '*': {
-        'logdog_only': True,
-      },
-    },
-    'tryserver.chromium.mac': {
-      '*': {
-        'logdog_only': True,
-      },
-    },
-    'tryserver.chromium.linux': {
-      '*': {
-        'logdog_only': True,
-      },
-    },
-    'tryserver.chromium.win': {
-      '*': {
-        'logdog_only': True,
-      },
-    },
+    'tryserver.chromium.android': {},
+    'tryserver.chromium.angle': {},
+    'tryserver.chromium.mac': {},
+    'tryserver.chromium.linux': {},
+    'tryserver.chromium.win': {},
 
     # Chromium continuous waterfalls.
-    'chromium': {
-      '*': {
-        'logdog_only': True,
-      },
-    },
-    'chromium.android': {
-      '*': {
-        'logdog_only': True,
-      },
-    },
-    'chromium.android.fyi': {
-      '*': {
-        'logdog_only': True,
-      },
-    },
-    'chromium.chrome': {
-      '*': {
-        'logdog_only': True,
-      },
-    },
-    'chromium.chromedriver': {
-      '*': {
-        'logdog_only': True,
-      },
-    },
-    'chromium.chromiumos': {
-      '*': {
-        'logdog_only': True,
-      },
-    },
-    'chromium.clang': {
-      '*': {
-        'logdog_only': True,
-      },
-    },
-    'chromium.goma': {
-      '*': {
-        'logdog_only': True,
-      },
-    },
-    'chromium.mac': {
-      '*': {
-        'logdog_only': True,
-      },
-    },
-    'chromium.linux': {
-      '*': {
-        'logdog_only': True,
-      },
-    },
-    'chromium.lkgr': {
-      '*': {
-        'logdog_only': True,
-      },
-    },
-    'chromium.sandbox': {
-      '*': {
-        'logdog_only': True,
-      },
-    },
-    'chromium.win': {
-      '*': {
-        'logdog_only': True,
-      },
-    },
-    'chromium.fyi': {
-      '*': {
-        'logdog_only': True,
-      },
-    },
-    'chromium.gpu': {
-      '*': {
-        'logdog_only': True,
-      },
-    },
-    'chromium.gpu.fyi': {
-      '*': {
-        'logdog_only': True,
-      },
-    },
-    'chromium.webkit': {
-      '*': {
-        'logdog_only': True,
-      },
-    },
+    'chromium': {},
+    'chromium.android': {},
+    'chromium.android.fyi': {},
+    'chromium.chrome': {},
+    'chromium.chromedriver': {},
+    'chromium.chromiumos': {},
+    'chromium.clang': {},
+    'chromium.goma': {},
+    'chromium.mac': {},
+    'chromium.linux': {},
+    'chromium.lkgr': {},
+    'chromium.sandbox': {},
+    'chromium.win': {},
+    'chromium.fyi': {},
+    'chromium.gpu': {},
+    'chromium.gpu.fyi': {},
+    'chromium.webkit': {},
 
-    'chromium.memory': {
-      '*': {
-        'logdog_only': True,
-      },
-    },
+    'chromium.memory': {},
 
-    'chromium.webrtc': {
-      '*': {
-        'logdog_only': True,
-      },
-    },
-    'chromium.webrtc.fyi': {
-      '*': {
-        'logdog_only': True,
-      },
-    },
+    'chromium.webrtc': {},
+    'chromium.webrtc.fyi': {},
 
     'chromium.gatekeeper': {},
 
     # Blink
-    'tryserver.blink': {
-      '*': {
-        'logdog_only': True,
-      },
-    },
+    'tryserver.blink': {},
 
     # Dart
     'client.dart': {},
@@ -215,11 +102,7 @@
     'client.v8.fyi': {},
     'client.v8.official': {},
     'client.v8.ports': {},
-    'tryserver.v8': {
-      '*': {
-        'logdog_only': True,
-      },
-    },
+    'tryserver.v8': {},
 
     # NaCl / WASM
     'client.nacl': {},
@@ -232,31 +115,11 @@
     'tryserver.client.syzygy': {},
 
     # WebRTC
-    'client.webrtc': {
-      '*': {
-        'logdog_only': True,
-      },
-    },
-    'client.webrtc.branches': {
-      '*': {
-        'logdog_only': True,
-      },
-    },
-    'client.webrtc.fyi': {
-      '*': {
-        'logdog_only': True,
-      },
-    },
-    'client.webrtc.perf': {
-      '*': {
-        'logdog_only': True,
-      },
-    },
-    'tryserver.webrtc': {
-      '*': {
-        'logdog_only': True,
-      },
-    },
+    'client.webrtc': {},
+    'client.webrtc.branches': {},
+    'client.webrtc.fyi': {},
+    'client.webrtc.perf': {},
+    'tryserver.webrtc': {},
   },
 
   'chromiumos': {
@@ -267,21 +130,9 @@
   # chromium.perf logs are considered "internal" for viewing purposes, even
   # though they are described in Chromium's build repository.
   'chrome': {
-    'chromium.perf': {
-      '*': {
-        'logdog_only': True,
-      },
-    },
-    'chromium.perf.fyi': {
-      '*': {
-        'logdog_only': True,
-      },
-    },
-    'tryserver.chromium.perf': {
-      '*': {
-        'logdog_only': True,
-      },
-    },
+    'chromium.perf': {},
+    'chromium.perf.fyi': {},
+    'tryserver.chromium.perf': {},
   },
 
   # The CrOS tryserver is considered "internal" for viewing purposes, even
