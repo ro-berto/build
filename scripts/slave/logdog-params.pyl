@@ -48,7 +48,245 @@
       # Used for canarying.
       '*': {
         'cipd_tag': '$canary',
+        'logdog_only': True,
       },
     },
+    'chromium.infra.cron': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'chromium.swarm': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+
+    # Chromium tryservers.
+    'tryserver.chromium.android': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'tryserver.chromium.angle': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'tryserver.chromium.mac': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'tryserver.chromium.linux': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'tryserver.chromium.win': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+
+    # Chromium continuous waterfalls.
+    'chromium': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'chromium.android': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'chromium.android.fyi': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'chromium.chrome': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'chromium.chromedriver': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'chromium.chromiumos': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'chromium.clang': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'chromium.goma': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'chromium.mac': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'chromium.linux': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'chromium.lkgr': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'chromium.sandbox': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'chromium.win': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'chromium.fyi': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'chromium.gpu': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'chromium.gpu.fyi': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'chromium.webkit': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+
+    'chromium.memory': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+
+    'chromium.webrtc': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'chromium.webrtc.fyi': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+
+    'chromium.gatekeeper': {},
+
+    # Blink
+    'tryserver.blink': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+
+    # Dart
+    'client.dart': {},
+    'client.dart.fyi': {},
+    'client.dart.packages': {},
+
+    # V8
+    'client.v8': {},
+    'client.v8.branches': {},
+    'client.v8.clusterfuzz': {},
+    'client.v8.chromium': {},
+    'client.v8.fyi': {},
+    'client.v8.official': {},
+    'client.v8.ports': {},
+    'tryserver.v8': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+
+    # NaCl / WASM
+    'client.nacl': {},
+    'client.nacl.ports': {},
+    'client.wasm.llvm': {},
+    'tryserver.nacl': {},
+
+    # Syzygy
+    'client.syzygy': {},
+    'tryserver.client.syzygy': {},
+
+    # WebRTC
+    'client.webrtc': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'client.webrtc.branches': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'client.webrtc.fyi': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'client.webrtc.perf': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'tryserver.webrtc': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+  },
+
+  'chromiumos': {
+    'chromiumos': {},
+    'chromiumos.chromium': {},
+  },
+
+  # chromium.perf logs are considered "internal" for viewing purposes, even
+  # though they are described in Chromium's build repository.
+  'chrome': {
+    'chromium.perf': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'chromium.perf.fyi': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+    'tryserver.chromium.perf': {
+      '*': {
+        'logdog_only': True,
+      },
+    },
+  },
+
+  # The CrOS tryserver is considered "internal" for viewing purposes, even
+  # though it is described in Chromium's build repository.
+  'chromeos': {
+    'chromiumos.tryserver': {},
   },
 }

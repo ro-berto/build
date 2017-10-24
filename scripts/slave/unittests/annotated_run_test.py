@@ -235,7 +235,7 @@ class AnnotatedRunExecTest(unittest.TestCase):
             '@@@STEP_STARTED@@@',
             '@@@SET_BUILD_PROPERTY@logdog_project@"project"@@@',
             '@@@SET_BUILD_PROPERTY@logdog_prefix@"prefix"@@@',
-            ('@@@SET_BUILD_PROPERTY@log_location@'
+            ('@@@SET_BUILD_PROPERTY@logdog_annotation_url@'
              '"logdog://example.com/project/prefix/+/recipes/annotations"@@@'),
             '@@@STEP_CURSOR LogDog Bootstrap@@@',
             '@@@STEP_CLOSED@@@',
@@ -244,13 +244,14 @@ class AnnotatedRunExecTest(unittest.TestCase):
 
   @mock.patch('slave.logdog_bootstrap.bootstrap')
   @mock.patch('slave.logdog_bootstrap.BootstrapState.get_result')
-  def test_exec_with_logdog_bootstrap(self, bs_result, bootstrap):
+  def test_exec_with_logdog_bootstrap_logdog_only(self, bs_result, bootstrap):
     cfg = self._default_namedtuple(logdog_bootstrap.Config)._replace(
         params=self._default_namedtuple(logdog_bootstrap.Params)._replace(
           project="project",
         ),
         prefix="prefix",
         host="example.com",
+        logdog_only=True,
     )
     bootstrap.return_value = logdog_bootstrap.BootstrapState(
         cfg, ['logdog_bootstrap'] + self.recipe_args, '/path/to/result.json')

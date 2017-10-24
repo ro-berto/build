@@ -370,8 +370,11 @@ def _remote_run_with_kitchen(args, stream, is_canary, kitchen_version,
     cfg = logdog_bootstrap.get_config(args, properties)
     annotation_url = logdog_bootstrap.get_annotation_url(cfg)
 
+    if cfg.logdog_only:
+      kitchen_cmd += ['-logdog-only']
+
     kitchen_cmd += [
-      '-logdog-only', '-logdog-annotation-url', annotation_url,
+        '-logdog-annotation-url', annotation_url,
     ]
     if cfg.service_account_path:
       # Note: as of 2017-09-01 this system service account is used for

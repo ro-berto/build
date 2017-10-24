@@ -33,7 +33,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MockOptions = collections.namedtuple('MockOptions', (
     'logdog_verbose', 'logdog_disable', 'logdog_butler_path',
     'logdog_annotee_path', 'logdog_service_account_json', 'logdog_host',
-    'logdog_debug_out_file'))
+    'logdog_only', 'logdog_debug_out_file'))
 
 
 class LogDogBootstrapTest(unittest.TestCase):
@@ -61,6 +61,7 @@ class LogDogBootstrapTest(unittest.TestCase):
         logdog_annotee_path=None,
         logdog_service_account_json=None,
         logdog_host=None,
+        logdog_only=None,
         logdog_debug_out_file=None)
     self.properties = {
       'mastername': 'default',
@@ -76,7 +77,7 @@ class LogDogBootstrapTest(unittest.TestCase):
     self.base = ldbs.Params(
         project='alpha', cipd_tag=ldbs._STABLE_CIPD_TAG, api=self.stable_api,
         mastername='default', buildername='builder', buildnumber=24601,
-        generation=None)
+        logdog_only=False, generation=None)
 
     # Control whether we think we're a GCE instnace.
     gce.Authenticator.is_gce.return_value = False
@@ -179,7 +180,7 @@ class LogDogBootstrapTest(unittest.TestCase):
     get_params.return_value = ldbs.Params(
         project='myproject', cipd_tag='stable', api=self.stable_api,
         mastername='mastername', buildername='buildername', buildnumber=1337,
-        generation=None)
+        logdog_only=False, generation=None)
     isfile.return_value = True
 
     streamserver_uri = 'unix:%s' % (os.path.join('foo', 'butler.sock'),)
@@ -215,7 +216,6 @@ class LogDogBootstrapTest(unittest.TestCase):
                     'mastername/buildername/1337',
             '-service-account-json', ':gce',
             '-output-max-buffer-age', '30s',
-            '-io-keepalive-stderr', '5m',
             'run',
             '-stdout', 'tee=stdout',
             '-stderr', 'tee=stderr',
@@ -225,7 +225,7 @@ class LogDogBootstrapTest(unittest.TestCase):
                 '-log-level', 'warning',
                 '-name-base', 'recipes',
                 '-print-summary',
-                '-tee', 'annotations',
+                '-tee', 'annotations,text',
                 '-json-args-path', self._tp('logdog_annotee_cmd.json'),
                 '-result-path', self._tp('bootstrap_result.json'),
         ])
@@ -246,7 +246,8 @@ class LogDogBootstrapTest(unittest.TestCase):
     get_params.return_value = ldbs.Params(
         project='myproject', cipd_tag='stable',
         api=self.stable_api, mastername='mastername',
-        buildername='buildername', buildnumber=1337, generation='1')
+        buildername='buildername', buildnumber=1337, logdog_only=True,
+        generation='1')
     service_account.return_value = 'creds.json'
     isfile.return_value = True
 
@@ -316,7 +317,8 @@ class LogDogBootstrapTest(unittest.TestCase):
     get_params.return_value = ldbs.Params(
         project='myproject', cipd_tag='canary',
         api=self.latest_api, mastername='mastername',
-        buildername='buildername', buildnumber=1337, generation=None)
+        buildername='buildername', buildnumber=1337, logdog_only=False,
+        generation=None)
     service_account.return_value = 'creds.json'
     isfile.return_value = True
 
@@ -351,7 +353,6 @@ class LogDogBootstrapTest(unittest.TestCase):
                     'mastername/buildername/1337',
             '-service-account-json', 'creds.json',
             '-output-max-buffer-age', '30s',
-            '-io-keepalive-stderr', '5m',
             'run',
             '-stdout', 'tee=stdout',
             '-stderr', 'tee=stderr',
@@ -361,7 +362,7 @@ class LogDogBootstrapTest(unittest.TestCase):
                 '-log-level', 'warning',
                 '-name-base', 'recipes',
                 '-print-summary',
-                '-tee', 'annotations',
+                '-tee', 'annotations,text',
                 '-json-args-path', self._tp('logdog_annotee_cmd.json'),
                 '-result-path', self._tp('bootstrap_result.json'),
         ])
@@ -384,7 +385,8 @@ class LogDogBootstrapTest(unittest.TestCase):
     get_params.return_value = ldbs.Params(
         project='myproject', cipd_tag='canary',
         api=self.latest_api, mastername='mastername',
-        buildername='buildername', buildnumber=1337, generation=None)
+        buildername='buildername', buildnumber=1337, logdog_only=True,
+        generation=None)
     service_account.return_value = 'creds.json'
     isfile.return_value = True
 
@@ -483,6 +485,7 @@ class LogDogBootstrapTest(unittest.TestCase):
         host='example.com',
         prefix='foo/bar',
         tags=None,
+        logdog_only=False,
         service_account_path=None,
     )
     bs = ldbs.BootstrapState(cfg, [], '/foo/bar')
@@ -495,7 +498,7 @@ class LogDogBootstrapTest(unittest.TestCase):
         '@@@STEP_STARTED@@@',
         '@@@SET_BUILD_PROPERTY@logdog_project@"alpha"@@@',
         '@@@SET_BUILD_PROPERTY@logdog_prefix@"foo/bar"@@@',
-        ('@@@SET_BUILD_PROPERTY@log_location@'
+        ('@@@SET_BUILD_PROPERTY@logdog_annotation_url@'
          '"logdog://example.com/alpha/foo/bar/+/recipes/annotations"@@@'),
         '@@@STEP_CURSOR LogDog Bootstrap@@@',
         '@@@STEP_CLOSED@@@',
