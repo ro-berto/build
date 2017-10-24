@@ -129,6 +129,14 @@ def RunSteps(api):
                  api.path['checkout'].join('tools', 'test.py'),
                  args=test_args)
       api.dart.read_result_file('read results of vm tests', 'result.log')
+
+      test_args.extend(['--strong',
+          'language_2', 'corelib_2', 'lib_2', 'standalone_2'])
+      api.python('vm strong tests',
+                 api.path['checkout'].join('tools', 'test.py'),
+                 args=test_args)
+      api.dart.read_result_file('read results of vm strong tests', 'result.log')
+
       api.python('taskkill after testing',
                  api.path['checkout'].join('tools', 'task_kill.py'),
                  args=['--kill_browsers=True'])
