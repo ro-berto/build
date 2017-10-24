@@ -1985,7 +1985,7 @@ BUILDERS = {
         'parent_buildername': 'v8_linux_dbg_ng',
         'enable_swarming': True,
         'tests': [
-          V8Testing(2),
+          V8Testing(3),
           Test262,
           Mozilla,
           Benchmarks,
@@ -2274,7 +2274,7 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing(3),
-          Test262Variants(5),
+          Test262Variants(7),
         ],
         'testing': {'platform': 'linux'},
       },
@@ -2880,7 +2880,7 @@ BUILDERS = {
         'parent_buildername': 'v8_linux_arm64_rel_ng',
         'enable_swarming': True,
         'tests': [
-          V8Testing(5),
+          V8Testing(7),
           Test262,
           Mozilla,
           MjsunitSPFrameAccess,
