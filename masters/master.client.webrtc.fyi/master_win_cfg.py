@@ -27,7 +27,6 @@ def Update(c):
                             builderNames=[
                                 'Win64 Debug (Win8)',
                                 'Win64 Debug (Win10)',
-                                'Win (more configs)',
                             ]),
   ])
 
@@ -39,11 +38,6 @@ def Update(c):
     {
       'name': 'Win64 Debug (Win10)',
       'slavebuilddir': 'win',
-    },
-    {
-      'name': 'Win (more configs)',
-      'recipe': 'webrtc/more_configs',
-      'slavebuilddir': 'win_more_configs',
     },
   ]
 

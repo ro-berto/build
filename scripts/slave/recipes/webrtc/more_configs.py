@@ -47,10 +47,6 @@ BUILDERS = freeze({
         'bot_type': 'builder',
         'testing': {'platform': 'linux'},
       },
-    },
-  },
-  'client.webrtc.fyi': {
-    'builders': {
       'Win (more configs)': {
         'recipe_config': 'webrtc_default',
         'chromium_config_kwargs': {

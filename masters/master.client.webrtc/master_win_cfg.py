@@ -56,6 +56,11 @@ def Update(c):
     {'name': 'Win64 Release (Clang)', 'slavebuilddir': 'win_clang'},
     {'name': 'Win32 ASan', 'slavebuilddir': 'win_asan'},
     {'name': 'Win32 Release (MSVC)'},
+    {
+      'name': 'Win (more configs)',
+      'recipe': 'webrtc/more_configs',
+      'slavebuilddir': 'win_more_configs',
+    },
   ]
 
   c['builders'].extend([
@@ -63,7 +68,8 @@ def Update(c):
         'name': spec['name'],
         # TODO(sergiyb): Remove the timeout below after all bots have synched
         # past Blink merge commit.
-        'factory': m_remote_run('webrtc/standalone', timeout=3600),
+        'factory': m_remote_run(spec.get('recipe', 'webrtc/standalone'),
+                                timeout=3600),
         'notify_on_missing': True,
         'category': 'win',
         'slavebuilddir': spec.get('slavebuilddir', 'win'),
