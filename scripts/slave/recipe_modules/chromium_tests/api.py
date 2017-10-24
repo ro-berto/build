@@ -978,7 +978,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         layout_test_extra_args = {
             'shards': 12,
             'dimensions': {
-                'os': 'Mac-10.12',
+                'os': 'Mac-10.12.6',
                 'gpu': '8086:0a2e',
                 'hidpi': '0',
             },
