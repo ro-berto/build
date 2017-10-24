@@ -192,6 +192,16 @@
   },
   {
     "cmd": [
+      "[START_DIR]/src/out/host_debug_unopt/flow_unittests"
+    ],
+    "cwd": "[START_DIR]/src/out/host_debug_unopt",
+    "env": {
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/linux/dart-sdk/bin:<PATH>"
+    },
+    "name": "Test Flow"
+  },
+  {
+    "cmd": [
       "[START_DIR]/src/out/host_debug_unopt/fml_unittests",
       "--gtest_filter=\"-*TimeSensitiveTest*\""
     ],
