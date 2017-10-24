@@ -251,6 +251,7 @@ def SetupXcode(api):
 
 
 def BuildMac(api):
+  RunGN(api, '--runtime-mode', 'debug')
   RunGN(api, '--runtime-mode', 'debug', '--unoptimized')
   RunGN(api, '--runtime-mode', 'profile', '--android')
   RunGN(api, '--runtime-mode', 'release', '--android')
@@ -259,9 +260,16 @@ def BuildMac(api):
   Build(api, 'host_debug_unopt')
   RunHostTests(api, 'out/host_debug_unopt')
 
+  Build(api, 'host_debug')
   Build(api, 'android_profile', 'flutter/lib/snapshot')
   Build(api, 'android_release', 'flutter/lib/snapshot')
   Build(api, 'android_release_vulkan')
+
+  host_debug_path = api.path['start_dir'].join('src', 'out', 'host_debug')
+
+  api.zip.directory('Archive FlutterEmbedder.framework',
+    host_debug_path.join('FlutterEmbedder.framework'),
+    host_debug_path.join('FlutterEmbedder.framework.zip'))
 
   UploadArtifacts(api, 'darwin-x64', [
     'out/host_debug_unopt/icudtl.dat',
@@ -270,6 +278,10 @@ def BuildMac(api):
     'out/host_debug_unopt/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
     'out/host_debug_unopt/gen/frontend_server.dart.snapshot',
   ])
+
+  UploadArtifacts(api, 'darwin-x64', [
+    'out/host_debug/FlutterEmbedder.framework.zip'
+  ], archive_name='FlutterEmbedder.framework.zip')
 
   UploadArtifacts(api, "android-arm-profile" , [
     'out/android_profile/clang_i386/gen_snapshot',
