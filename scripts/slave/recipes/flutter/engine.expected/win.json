@@ -126,13 +126,12 @@
       "flutter/lib/snapshot:generate_snapshot_bin",
       "garnet/public/lib/fxl:fxl_unittests",
       "third_party/dart:create_sdk",
-      "flutter/frontend_server",
-      "flutter/flow:flow_unittests"
+      "flutter/frontend_server"
     ],
     "env": {
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
-    "name": "build host_debug_unopt flutter/lib/snapshot:generate_snapshot_bin garnet/public/lib/fxl:fxl_unittests third_party/dart:create_sdk flutter/frontend_server flutter/flow:flow_unittests"
+    "name": "build host_debug_unopt flutter/lib/snapshot:generate_snapshot_bin garnet/public/lib/fxl:fxl_unittests third_party/dart:create_sdk flutter/frontend_server"
   },
   {
     "cmd": [
@@ -167,16 +166,6 @@
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
     "name": "Test FXL"
-  },
-  {
-    "cmd": [
-      "[START_DIR]\\src\\out\\host_debug_unopt\\flow_unittests.exe"
-    ],
-    "cwd": "[START_DIR]\\src\\out\\host_debug_unopt",
-    "env": {
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
-    },
-    "name": "Test Flow"
   },
   {
     "cmd": [

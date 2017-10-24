@@ -44,10 +44,10 @@ def RunHostTests(api, out_dir, exe_extension=''):
         [directory.join('flutter_channels_unittests' + exe_extension)])
     api.step('Test FXL',
       [directory.join('fxl_unittests' + exe_extension)])
-    api.step('Test Flow',
-      [directory.join('flow_unittests' + exe_extension)])
     # TODO(goderbauer): enable these tests on Windows when they pass.
     if not api.platform.is_win:
+      api.step('Test Flow',
+        [directory.join('flow_unittests' + exe_extension)])
       api.step('Test FML', [
         directory.join('fml_unittests' + exe_extension),
         '--gtest_filter="-*TimeSensitiveTest*"'
@@ -346,8 +346,7 @@ def BuildWindows(api):
     'flutter/lib/snapshot:generate_snapshot_bin',
     'garnet/public/lib/fxl:fxl_unittests',
     'third_party/dart:create_sdk',
-    'flutter/frontend_server',
-    'flutter/flow:flow_unittests')
+    'flutter/frontend_server')
   Build(api, 'android_profile', 'gen_snapshot')
   Build(api, 'android_release', 'gen_snapshot')
 
