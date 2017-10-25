@@ -7,8 +7,9 @@ class DartApi(recipe_api.RecipeApi):
   def checkout(self, channel=None, clobber=False):
     """Checks out the dart code and prepares it for building."""
     self.m.gclient.set_config('dart')
-    if channel == 'try':
-      self.m.gclient.c.solutions[0].url = 'https://dart.googlesource.com/sdk.git'
+    # TODO(athom): Remove channel parameter from this function and fix URL
+    # in gclient 'dart' config, remove line below.
+    self.m.gclient.c.solutions[0].url = 'https://dart.googlesource.com/sdk.git'
 
     with self.m.context(cwd=self.m.path['cache'].join('builder')):
       self.m.bot_update.ensure_checkout()
@@ -164,19 +165,21 @@ class DartApi(recipe_api.RecipeApi):
     try:
       read_data = self.m.file.read_text(
         name, result_log_path, test_data)
+      self.m.step.active_result.presentation.logs[log_name] = [read_data]
+      self.m.file.remove("delete result.log", result_log_path)
     except self.m.file.Error: # pragma: no cover
       pass
-    self.m.step.active_result.presentation.logs[log_name] = [read_data]
-    self.m.file.remove("delete result.log", result_log_path)
 
   def read_debug_log(self):
     """Reads the debug.log file"""
     if self.m.platform.name == 'win':
       self.m.step('debug log',
-                  ['cmd.exe', '/c', 'type', '.debug.log'])
+                  ['cmd.exe', '/c', 'type', '.debug.log'],
+                  ok_ret='any')
     else:
       self.m.step('debug log',
-                  ['cat', '.debug.log'])
+                  ['cat', '.debug.log'],
+                  ok_ret='any')
 
   def test(self, test_data):
     """Reads the test-matrix.json file in checkout and performs each step listed
