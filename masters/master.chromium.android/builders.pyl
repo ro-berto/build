@@ -160,7 +160,7 @@
     "KitKat Phone Tester (dbg)": {
       "recipe": "chromium",
       "use_remote_run": True,
-      "scheduler": "chromium_commits",
+      "scheduler": None,
       "slave_pools": ["kit_kat_phone_dbg"],
       "category": "3Testers",
       "slavebuilddir": "android_build",
