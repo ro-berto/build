@@ -15,7 +15,7 @@ RECIPE_CONFIGS = freeze({
   },
   'webrtc_baremetal': {
     'chromium_config': 'webrtc_default',
-    'gclient_config': 'webrtc',
+    'gclient_config': 'webrtc_with_limited',
     'test_suite': 'webrtc_baremetal',
   },
   'webrtc_desktop_perf_swarming': {

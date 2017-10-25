@@ -10,9 +10,15 @@ ChromiumGitURL = DEPS['gclient'].config.ChromiumGitURL
 def WebRTCGitURL(_c, *pieces):
   return '/'.join(('https://webrtc.googlesource.com',) + pieces)
 
+@CONFIG_CTX(includes=['_webrtc'])
+def webrtc(c):
+  pass
 
 @CONFIG_CTX(includes=['_webrtc', '_webrtc_limited'])
-def webrtc(c):
+def webrtc_with_limited(c):
+  # This is only used by Win7 bots that are builder+tester and not just testers.
+  # It's used to get DirectX, which is built into the Win8 SDK but not Win7.
+  # Remove this when we no longer have Win7 builder+testers.
   pass
 
 @CONFIG_CTX(includes=['webrtc'])
