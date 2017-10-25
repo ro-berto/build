@@ -143,6 +143,23 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[START_DIR]\\sdk\\logs\\result.log"
+    ],
+    "cwd": "[START_DIR]\\sdk",
+    "env": {
+      "LOGONSERVER": "\\\\AD1"
+    },
+    "infra_step": true,
+    "name": "delete result.log"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[START_DIR]\\sdk\\tools\\test.py",
       "-mrelease",
       "--arch=x64",
@@ -182,6 +199,23 @@
       "@@@STEP_LOG_LINE@result.log@@@@",
       "@@@STEP_LOG_END@result.log@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[START_DIR]\\sdk\\logs\\result.log"
+    ],
+    "cwd": "[START_DIR]\\sdk",
+    "env": {
+      "LOGONSERVER": "\\\\AD1"
+    },
+    "infra_step": true,
+    "name": "delete result.log (2)"
   },
   {
     "cmd": [

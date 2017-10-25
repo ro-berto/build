@@ -169,6 +169,20 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[START_DIR]/sdk/logs/result.log"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "infra_step": true,
+    "name": "delete result.log"
+  },
+  {
+    "cmd": [
       "xvfb-run",
       "-a",
       "--server-args=-screen 0 1024x768x24",
@@ -218,6 +232,20 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[START_DIR]/sdk/logs/result.log"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "infra_step": true,
+    "name": "delete result.log (2)"
+  },
+  {
+    "cmd": [
       "xvfb-run",
       "-a",
       "--server-args=-screen 0 1024x768x24",
@@ -264,6 +292,20 @@
       "@@@STEP_LOG_LINE@result.log@@@@",
       "@@@STEP_LOG_END@result.log@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[START_DIR]/sdk/logs/result.log"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "infra_step": true,
+    "name": "delete result.log (3)"
   },
   {
     "cmd": [
@@ -317,6 +359,20 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[START_DIR]/sdk/logs/result.log"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "infra_step": true,
+    "name": "delete result.log (4)"
+  },
+  {
+    "cmd": [
       "xvfb-run",
       "-a",
       "--server-args=-screen 0 1024x768x24",
@@ -363,6 +419,20 @@
       "@@@STEP_LOG_LINE@result.log@@@@",
       "@@@STEP_LOG_END@result.log@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[START_DIR]/sdk/logs/result.log"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "infra_step": true,
+    "name": "delete result.log (5)"
   },
   {
     "cmd": [
@@ -416,6 +486,20 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[START_DIR]/sdk/logs/result.log"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "infra_step": true,
+    "name": "delete result.log (6)"
+  },
+  {
+    "cmd": [
       "xvfb-run",
       "-a",
       "--server-args=-screen 0 1024x768x24",
@@ -466,6 +550,20 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[START_DIR]/sdk/logs/result.log"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "infra_step": true,
+    "name": "delete result.log (7)"
+  },
+  {
+    "cmd": [
       "xvfb-run",
       "-a",
       "--server-args=-screen 0 1024x768x24",
@@ -513,6 +611,20 @@
       "@@@STEP_LOG_LINE@result.log@@@@",
       "@@@STEP_LOG_END@result.log@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[START_DIR]/sdk/logs/result.log"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "infra_step": true,
+    "name": "delete result.log (8)"
   },
   {
     "cmd": [
@@ -567,6 +679,20 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[START_DIR]/sdk/logs/result.log"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "infra_step": true,
+    "name": "delete result.log (9)"
+  },
+  {
+    "cmd": [
       "xvfb-run",
       "-a",
       "--server-args=-screen 0 1024x768x24",
@@ -614,6 +740,20 @@
       "@@@STEP_LOG_LINE@result.log@@@@",
       "@@@STEP_LOG_END@result.log@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[START_DIR]/sdk/logs/result.log"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "infra_step": true,
+    "name": "delete result.log (10)"
   },
   {
     "cmd": [
@@ -668,6 +808,20 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[START_DIR]/sdk/logs/result.log"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "infra_step": true,
+    "name": "delete result.log (11)"
+  },
+  {
+    "cmd": [
       "xvfb-run",
       "-a",
       "--server-args=-screen 0 1024x768x24",
@@ -719,6 +873,20 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[START_DIR]/sdk/logs/result.log"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "infra_step": true,
+    "name": "delete result.log (12)"
+  },
+  {
+    "cmd": [
       "xvfb-run",
       "-a",
       "--server-args=-screen 0 1024x768x24",
@@ -767,6 +935,20 @@
       "@@@STEP_LOG_LINE@result.log@@@@",
       "@@@STEP_LOG_END@result.log@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[START_DIR]/sdk/logs/result.log"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "infra_step": true,
+    "name": "delete result.log (13)"
   },
   {
     "cmd": [
@@ -822,6 +1004,20 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[START_DIR]/sdk/logs/result.log"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "infra_step": true,
+    "name": "delete result.log (14)"
+  },
+  {
+    "cmd": [
       "xvfb-run",
       "-a",
       "--server-args=-screen 0 1024x768x24",
@@ -870,6 +1066,20 @@
       "@@@STEP_LOG_LINE@result.log@@@@",
       "@@@STEP_LOG_END@result.log@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[START_DIR]/sdk/logs/result.log"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "infra_step": true,
+    "name": "delete result.log (15)"
   },
   {
     "cmd": [

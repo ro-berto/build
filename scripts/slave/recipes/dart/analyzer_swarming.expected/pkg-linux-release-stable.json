@@ -152,6 +152,28 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[CACHE]/builder/sdk/logs/result.log"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "PUB_ENVIRONMENT": "dart_bots"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "delete result.log"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[CACHE]/builder/sdk/tools/test.py",
       "--mode=release",
       "--arch=x64",
@@ -212,6 +234,28 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[CACHE]/builder/sdk/logs/result.log"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "PUB_ENVIRONMENT": "dart_bots"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "delete result.log (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[CACHE]/builder/sdk/tools/test.py",
       "--mode=release",
       "--arch=x64",
@@ -267,6 +311,28 @@
       "@@@STEP_LOG_LINE@result.log@@@@",
       "@@@STEP_LOG_END@result.log@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[CACHE]/builder/sdk/logs/result.log"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "PUB_ENVIRONMENT": "dart_bots"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "delete result.log (3)"
   },
   {
     "cmd": [

@@ -110,6 +110,20 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[START_DIR]/sdk/logs/result.log"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "infra_step": true,
+    "name": "delete result.log"
+  },
+  {
+    "cmd": [
       "cat",
       ".debug.log"
     ],

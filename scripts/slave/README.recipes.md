@@ -217,6 +217,7 @@
   * [dart/flutter_engine](#recipes-dart_flutter_engine)
   * [dart/misc](#recipes-dart_misc)
   * [dart/misc_nobuild](#recipes-dart_misc_nobuild)
+  * [dart/neo](#recipes-dart_neo)
   * [dart/packagebot](#recipes-dart_packagebot)
   * [dart/packages](#recipes-dart_packages)
   * [dart/sdk_builder](#recipes-dart_sdk_builder)
@@ -1570,11 +1571,11 @@ Fetches the corresponding commit hash for a commit position.
 Fetches a commit position string given a commit hash.
 ### *recipe_modules* / [dart](/scripts/slave/recipe_modules/dart)
 
-[DEPS](/scripts/slave/recipe_modules/dart/__init__.py#1): [swarming](#recipe_modules-swarming), [swarming\_client](#recipe_modules-swarming_client), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/dart/__init__.py#1): [swarming](#recipe_modules-swarming), [swarming\_client](#recipe_modules-swarming_client), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 #### **class [DartApi](/scripts/slave/recipe_modules/dart/api.py#4)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-Recipe module for code commonly used in dart recipies. Shouldn't be used elsewhere.
+Recipe module for code commonly used in dart recipes. Shouldn't be used elsewhere.
 
 &mdash; **def [build](/scripts/slave/recipe_modules/dart/api.py#28)(self, build_args=[], isolate=None):**
 
@@ -1586,7 +1587,11 @@ If an isolate is specified, it returns the hash of the isolated archive.
 
 Checks out the dart code and prepares it for building.
 
-&mdash; **def [collect](/scripts/slave/recipe_modules/dart/api.py#100)(self, tasks):**
+&mdash; **def [collect](/scripts/slave/recipe_modules/dart/api.py#120)(self, tasks):**
+
+Collects the results of a sharded test run.
+
+&mdash; **def [collect\_all](/scripts/slave/recipe_modules/dart/api.py#137)(self, deferred_tasks):**
 
 Collects the results of a sharded test run.
 
@@ -1594,11 +1599,11 @@ Collects the results of a sharded test run.
 
 Kills leftover tasks from previous runs or steps.
 
-&mdash; **def [read\_debug\_log](/scripts/slave/recipe_modules/dart/api.py#132)(self):**
+&mdash; **def [read\_debug\_log](/scripts/slave/recipe_modules/dart/api.py#168)(self):**
 
 Reads the debug.log file
 
-&mdash; **def [read\_result\_file](/scripts/slave/recipe_modules/dart/api.py#116)(self, name, log_name, test_data=''):**
+&mdash; **def [read\_result\_file](/scripts/slave/recipe_modules/dart/api.py#153)(self, name, log_name, test_data=''):**
 
 Reads the result.log file
 Args:
@@ -1609,11 +1614,46 @@ Args:
 Returns (str) - The content of the file.
 Raises file.Error
 
-&mdash; **def [shard](/scripts/slave/recipe_modules/dart/api.py#65)(self, title, isolate_hash, test_args, os=None, cpu='x86-64', pool='Dart.LUCI'):**
+&mdash; **def [run\_script](/scripts/slave/recipe_modules/dart/api.py#332)(self, step_name, script, args, isolate_hash, shards, environment, tasks):**
+
+Runs a specific script with current working directory to be checkout. If
+the runtime (passed in environment) is a browser, and the system is linux,
+xvfb is used. If an isolate_hash is passed in, it will swarm the command.
+Args:
+  * step_name (str) - Name of the step
+  * script (str) - The script to invoke
+  * args ([str]) - Additional arguments to test.py
+  * isolate_hash (str) - The isolate hash if the script should be swarmed
+  * environment (dict) - Environment with runtime, arch, system etc
+  * tasks ([task]) - placeholder to put all swarming tasks in
+
+&mdash; **def [run\_test\_py](/scripts/slave/recipe_modules/dart/api.py#298)(self, step_name, args, index, step, isolate_hash, shards, environment, tasks):**
+
+Runs test.py with default arguments, based on configuration from.
+Args:
+  * step_name (str) - Name of the step
+  * args ([str]) - Additional arguments to test.py
+  * index (int) - Index of test.py calls. Used to append logs
+  * step (dict) - Test-matrix step
+  * environment (dict) - Environment with runtime, arch, system etc
+  * tasks ([task]) - placeholder to put all swarming tasks in
+
+&mdash; **def [shard](/scripts/slave/recipe_modules/dart/api.py#82)(self, title, isolate_hash, test_args, os=None, cpu='x86-64', pool='Dart.LUCI', num_shards=0):**
 
 Runs test.py in the given isolate, sharded over several swarming tasks.
 Requires the 'shards' build property to be set to the number of tasks.
 Returns the created task(s), which are meant to be passed into collect().
+
+&mdash; **def [test](/scripts/slave/recipe_modules/dart/api.py#177)(self, test_data):**
+
+Reads the test-matrix.json file in checkout and performs each step listed
+in the file
+
+Raises StepFailure.
+
+&mdash; **def [upload\_isolate](/scripts/slave/recipe_modules/dart/api.py#65)(self, isolate_fileset):**
+
+Builds an isolate
 ### *recipe_modules* / [disk](/scripts/slave/recipe_modules/disk)
 
 [DEPS](/scripts/slave/recipe_modules/disk/__init__.py#1): [traceback](#recipe_modules-traceback), [depot\_tools/infra\_paths][depot_tools/recipe_modules/infra_paths], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -4482,6 +4522,11 @@ Generates the sequence of steps that will be run by the slave.
 &mdash; **def [RunSteps](/scripts/slave/recipes/dart/misc_nobuild.py#35)(api):**
 
 &mdash; **def [sdk\_url](/scripts/slave/recipes/dart/misc_nobuild.py#24)(channel, platform, arch, mode, revision):**
+### *recipes* / [dart/neo](/scripts/slave/recipes/dart/neo.py)
+
+[DEPS](/scripts/slave/recipes/dart/neo.py#5): [dart](#recipe_modules-dart), [test\_utils](#recipe_modules-test_utils), [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+
+&mdash; **def [RunSteps](/scripts/slave/recipes/dart/neo.py#64)(api):**
 ### *recipes* / [dart/packagebot](/scripts/slave/recipes/dart/packagebot.py)
 
 [DEPS](/scripts/slave/recipes/dart/packagebot.py#7): [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python]
@@ -4520,9 +4565,9 @@ Generates the sequence of steps that will be run by the slave.
 &mdash; **def [RunSteps](/scripts/slave/recipes/dart/vm_kernel_swarming.py#16)(api):**
 ### *recipes* / [dart:examples/example](/scripts/slave/recipe_modules/dart/examples/example.py)
 
-[DEPS](/scripts/slave/recipe_modules/dart/examples/example.py#1): [dart](#recipe_modules-dart), [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/dart/examples/example.py#1): [dart](#recipe_modules-dart), [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/dart/examples/example.py#8)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/dart/examples/example.py#66)(api):**
 ### *recipes* / [devtools](/scripts/slave/recipes/devtools.py)
 
 [DEPS](/scripts/slave/recipes/devtools.py#7): [chromium\_checkout](#recipe_modules-chromium_checkout), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]

@@ -2,7 +2,7 @@
 from recipe_engine import recipe_api
 
 class DartApi(recipe_api.RecipeApi):
-  """Recipe module for code commonly used in dart recipies. Shouldn't be used elsewhere."""
+  """Recipe module for code commonly used in dart recipes. Shouldn't be used elsewhere."""
 
   def checkout(self, channel=None, clobber=False):
     """Checks out the dart code and prepares it for building."""
@@ -62,12 +62,32 @@ class DartApi(recipe_api.RecipeApi):
         step_result.presentation.step_text = 'isolate hash: %s' % isolate_hash
         return isolate_hash
 
-  def shard(self, title, isolate_hash, test_args, os=None, cpu='x86-64', pool='Dart.LUCI'):
+  def upload_isolate(self, isolate_fileset):
+    """Builds an isolate"""
+    self.m.swarming_client.checkout(
+      revision='5c8043e54541c3cee7ea255e0416020f2e3a5904')
+    step_result = self.m.python(
+        'upload testing fileset %s' % isolate_fileset,
+        self.m.swarming_client.path.join('isolate.py'),
+        args= ['archive',
+                 '--ignore_broken_items', # TODO(athom) find a way to avoid that
+                 '-Ihttps://isolateserver.appspot.com',
+                 '-i%s' % self.m.path['checkout'].join('%s' % isolate_fileset),
+                 '-s%s' % self.m.path['checkout'].join('%s.isolated' % isolate_fileset)],
+        stdout=self.m.raw_io.output('out'))
+    isolate_hash = step_result.stdout.strip()[:40]
+    step_result.presentation.step_text = 'swarming fileset hash: %s' % isolate_hash
+    return isolate_hash
+
+  def shard(self, title, isolate_hash, test_args, os=None, cpu='x86-64', pool='Dart.LUCI',
+      num_shards=0):
     """Runs test.py in the given isolate, sharded over several swarming tasks.
        Requires the 'shards' build property to be set to the number of tasks.
        Returns the created task(s), which are meant to be passed into collect().
     """
-    num_shards = int(self.m.properties['shards'])
+    if 'shards' in self.m.properties:
+      num_shards = int(self.m.properties['shards'])
+    assert(num_shards > 0)
     tasks = []
     for shard in range(num_shards):
       # TODO(athom) collect all the triggers, and present as a single step
@@ -99,6 +119,7 @@ class DartApi(recipe_api.RecipeApi):
 
   def collect(self, tasks):
     """Collects the results of a sharded test run."""
+    # TODO(mkroghj) remove when all swarming recipes has been converted to neo.
     with self.m.step.defer_results():
       # TODO(athom) collect all the output, and present as a single step
       num_shards = int(self.m.properties['shards'])
@@ -113,6 +134,22 @@ class DartApi(recipe_api.RecipeApi):
             contents = output_dir[filename]
             self.m.step.active_result.presentation.logs['result.log'] = [contents]
 
+  def collect_all(self, deferred_tasks):
+    """Collects the results of a sharded test run."""
+    with self.m.step.defer_results():
+      # TODO(athom) collect all the output, and present as a single step
+      for index_step,deferred_task in enumerate(deferred_tasks):
+        if deferred_task.is_ok:
+          for index_task,task in enumerate(deferred_task.get_result()):
+            path = self.m.path['cleanup'].join(str(index_step) + '_' + str(index_task))
+            task.task_output_dir = self.m.raw_io.output_dir(leak_to=path, name="results")
+            collect = self.m.swarming.collect_task(task)
+            output_dir = self.m.step.active_result.raw_io.output_dir
+            for filename in output_dir:
+              if "result.log" in filename: # pragma: no cover
+                contents = output_dir[filename]
+                self.m.step.active_result.presentation.logs['result.log'] = [contents]
+
   def read_result_file(self,  name, log_name, test_data=''):
     """Reads the result.log file
     Args:
@@ -123,11 +160,10 @@ class DartApi(recipe_api.RecipeApi):
     Returns (str) - The content of the file.
     Raises file.Error
     """
-    read_data = self.m.file.read_text(name,
-                                      self.m.path['checkout'].join('logs',
-                                                                  'result.log'),
-                                      test_data)
+    result_log_path = self.m.path['checkout'].join('logs', 'result.log')
+    read_data = self.m.file.read_text(name, result_log_path, test_data)
     self.m.step.active_result.presentation.logs[log_name] = [read_data]
+    self.m.file.remove("delete result.log", result_log_path)
 
   def read_debug_log(self):
     """Reads the debug.log file"""
@@ -137,3 +173,190 @@ class DartApi(recipe_api.RecipeApi):
     else:
       self.m.step('debug log',
                   ['cat', '.debug.log'])
+
+  def test(self, test_data):
+    """Reads the test-matrix.json file in checkout and performs each step listed
+    in the file
+
+    Raises StepFailure.
+    """
+    test_matrix_path = self.m.path['checkout'].join('tools',
+                                                    'bots',
+                                                    'test_matrix.json')
+    read_json = self.m.json.read(
+      'read test-matrix.json',
+      test_matrix_path,
+      step_test_data=lambda: self.m.json.test_api.output(test_data))
+    test_matrix = read_json.json.output
+    builder = self.m.properties['buildername']
+    isolate_hashes = {}
+    for config in test_matrix['configurations']:
+      if builder in config['builders']:
+        self._write_file_sets(test_matrix['filesets'])
+        self._run_steps(config, isolate_hashes)
+        return
+    raise self.m.step.StepFailure(
+        'Error, could not find builder by name %s in test-matrix' % builder)
+
+  def _write_file_sets(self, filesets):
+    """Writes the fileset to the root of the sdk to allow for swarming to pick
+    up the files and isolate the files.
+    Args:
+      * filesets - Filesets from the test-matrix
+    """
+    for fileset,files in filesets.iteritems():
+      isolate_fileset = { 'variables': { 'files': files } }
+      destination_path = self.m.path['checkout'].join(fileset)
+      self.m.file.write_text('write fileset %s to sdk root' % fileset,
+                            destination_path,
+                            str(isolate_fileset))
+
+  def _build_isolates(self, config, isolate_hashes):
+    """Isolate filesets from all steps in config and returns a dictionary with a
+    mapping from fileset to isolate_hash.
+    Args:
+      * config (dict) - Configuration of the builder, including the steps
+
+    Returns (dict) - A mapping from fileset to isolate_hashes
+    """
+    for step in config['steps']:
+      if 'fileset' in step and step['fileset'] not in isolate_hashes:
+        isolate_hash = self.upload_isolate(step['fileset'])
+        isolate_hashes[step['fileset']] = isolate_hash
+
+  def _get_option(self, builder_fragments, options, default_value):
+    """Gets an option from builder_fragments in options, or returns the default
+    value."""
+    intersection = set(builder_fragments) & set(options)
+    if len(intersection) == 1:
+      return intersection.pop()
+    return default_value
+
+  def _run_steps(self, config, isolate_hashes):
+    """Executes all steps from a json test-matrix builder entry"""
+    # Find information from the builder name. It should be in the form
+    # <info>-<os>-<mode>-<arch>-<runtime> or <info>-<os>-<mode>-<arch>.
+    builder_name = self.m.properties['buildername']
+    builder_fragments = builder_name.split('-')
+    system = self._get_option(
+      builder_fragments,
+      ['linux', 'mac', 'win7', 'win8', 'win10'],
+      'linux')
+    mode = self._get_option(
+      builder_fragments,
+      ['debug', 'release', 'product'],
+      'release')
+    arch = self._get_option(
+      builder_fragments,
+      ['ia32', 'x64', 'arm', 'armv6', 'armv5te', 'arm64', 'simarm', 'simarmv6',
+      'simarmv5te', 'simarm64', 'simdbc', 'simdbc64'],
+      'x64')
+    runtime = self._get_option(
+      builder_fragments,
+      ['none', 'd8', 'jsshell', 'ie9', 'ie10', 'ie11', 'ff',
+            'safari', 'chrome', 'safarimobilesim', 'drt', 'ie10', 'ie11'],
+      None)
+    environment = {'system': system,
+                   'mode': mode,
+                   'arch': arch}
+    if runtime is not None:
+      environment['runtime'] = runtime
+    test_py_path = 'tools/test.py'
+    build_py_path = 'tools/build.py'
+    # Indexes the number of test.py steps.
+    test_py_index = 0;
+    tasks = []
+    for step in config['steps']:
+      step_name = step['name']
+      # If script is not defined, use test.py.
+      script = step.get('script', test_py_path)
+      args = step['arguments']
+      is_build_step = script.endswith(build_py_path)
+      is_test_py_step = script.endswith(test_py_path)
+      script = self.m.path['checkout'].join(*script.split('/'))
+      isolate_hash = None
+      shards = 0
+      if 'fileset' in step:
+        # We build isolates here, every time we see fileset, to wait for the
+        # building of Dart, which may be included in the fileset.
+        self._build_isolates(config, isolate_hashes)
+        isolate_hash = isolate_hashes[step['fileset']]
+        shards = step['shards']
+      if is_build_step:
+        build_args = ['-m%s' % mode, '--arch=%s' % arch] + args
+        self.build(build_args=build_args)
+      elif is_test_py_step:
+        self.run_test_py(step_name, args, test_py_index, step, isolate_hash, shards, environment, tasks)
+        if shards == 0:
+          # Only count indexes that are not sharded, to help with adding append-logs.
+          test_py_index += 1
+      else:
+        args = args + ['--buildername=%s' % builder_name]
+        self.run_script(step_name, script, args, isolate_hash, shards, environment, tasks)
+    self.collect_all(tasks)
+
+  def run_test_py(self, step_name, args, index, step, isolate_hash, shards, environment, tasks):
+    """Runs test.py with default arguments, based on configuration from.
+    Args:
+      * step_name (str) - Name of the step
+      * args ([str]) - Additional arguments to test.py
+      * index (int) - Index of test.py calls. Used to append logs
+      * step (dict) - Test-matrix step
+      * environment (dict) - Environment with runtime, arch, system etc
+      * tasks ([task]) - placeholder to put all swarming tasks in
+    """
+    default_test_args = ['-m%s' % environment['mode'],
+                         '--arch=%s' % environment['arch'],
+                         '--progress=buildbot',
+                         '-v',
+                         '--report',
+                         '--time',
+                         '--write-debug-log',
+                         '--write-result-log',
+                         '--write-test-outcome-log']
+    if 'runtime' in environment:
+      default_test_args = default_test_args + ['--runtime=%s' % environment['runtime']]
+    args = default_test_args + args
+    if index > 0:
+      args = args + ['--append_logs']
+    if environment['system'] in ['win7', 'win8', 'win10']:
+      args = args + ['--builder-tag=%s' % environment['system']]
+    if 'exclude_tests' in step:
+        args = args + ['--exclude_suite=' + ','.join(step['exclude_tests'])]
+    if 'tests' in step:
+      args = args + step['tests']
+    self.run_script(step_name, 'tools/test.py', args, isolate_hash, shards, environment, tasks)
+    if shards == 0:
+      self.read_result_file('read results of %s' % step_name, 'result.log')
+
+  def run_script(self, step_name, script, args, isolate_hash, shards, environment, tasks):
+    """Runs a specific script with current working directory to be checkout. If
+    the runtime (passed in environment) is a browser, and the system is linux,
+    xvfb is used. If an isolate_hash is passed in, it will swarm the command.
+    Args:
+      * step_name (str) - Name of the step
+      * script (str) - The script to invoke
+      * args ([str]) - Additional arguments to test.py
+      * isolate_hash (str) - The isolate hash if the script should be swarmed
+      * environment (dict) - Environment with runtime, arch, system etc
+      * tasks ([task]) - placeholder to put all swarming tasks in
+    """
+    runtime = environment.get('runtime', None)
+    use_xvfb = (runtime in ['drt', 'chrome', 'ff'] and
+                environment['system'] == 'linux')
+
+    with self.m.context(cwd=self.m.path['checkout'],
+                     env_prefixes={'PATH':[self.m.depot_tools.root]}):
+      with self.m.step.defer_results():
+        if use_xvfb:
+          xvfb_cmd = ['/usr/bin/xvfb-run', '-a', '--server-args=-screen 0 1024x768x24']
+          cmd = xvfb_cmd + ['python', '-u', script] + args
+          if isolate_hash:
+            tasks.append(self.shard(step_name, isolate_hash, cmd, num_shards=shards))
+          else:
+            self.m.step(step_name, cmd)
+        else:
+          if isolate_hash:
+            tasks.append(self.shard(step_name, isolate_hash, [script] + args, num_shards=shards))
+          else:
+            self.m.python(step_name, script, args=args)

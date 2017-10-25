@@ -130,6 +130,20 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[START_DIR]/sdk/logs/result.log"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "infra_step": true,
+    "name": "delete result.log"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[START_DIR]/sdk/tools/task_kill.py",
       "--kill_browsers=True",
       "--kill_vsbuild=True"
