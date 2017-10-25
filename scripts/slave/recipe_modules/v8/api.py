@@ -577,13 +577,27 @@ class V8Api(recipe_api.RecipeApi):
             step_test_data=step_test_data,
         )
       finally:
-        # Log captured output.
-        self.m.step.active_result.presentation.logs['stdout'] = (
+        # Log captured output. We call log below 'captured_stdout' instead of
+        # simply 'stdout' to differentiate it from the default 'stdout' log that
+        # is added to all steps. The latter log will actually contain no real
+        # output because it is captured by the raw_io module.
+        self.m.step.active_result.presentation.logs['captured_stdout'] = (
           self.m.step.active_result.stdout.splitlines())
 
       # Update the build environment dictionary, which is printed to the
       # user on test failures for easier build reproduction.
       self._update_build_environment(self.m.step.active_result.stdout)
+
+      # Create logs surfacing GN arguments and GYP environment. This information
+      # is critical to developers for reproducing failures locally.
+      if 'gn_args' in self.build_environment:
+        self.m.step.active_result.presentation.logs['gn_args'] = (
+            self.build_environment['gn_args'].splitlines())
+      if any(k.startswith('GYP_') for k in self.build_environment):
+        gyp_env = {k: v for k, v in self.build_environment.iteritems()
+                        if k.startswith('GYP_')}
+        gyp_env = self.m.json.dumps(gyp_env, indent=2).splitlines()
+        self.m.step.active_result.presentation.logs['gyp_env'] = gyp_env
     elif self.m.chromium.c.project_generator.tool == 'gn':
       self.m.chromium.run_gn(use_goma=use_goma)
 

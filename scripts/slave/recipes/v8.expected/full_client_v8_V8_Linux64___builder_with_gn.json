@@ -149,13 +149,15 @@
     "name": "generate_build_files",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@stdout@Writing \"\"\"\\@@@",
-      "@@@STEP_LOG_LINE@stdout@goma_dir = \"/b/build/slave/cache/cipd/goma\"@@@",
-      "@@@STEP_LOG_LINE@stdout@target_cpu = \"x64\"@@@",
-      "@@@STEP_LOG_LINE@stdout@use_goma = true@@@",
-      "@@@STEP_LOG_LINE@stdout@\"\"\" to /path/to/args.gn.@@@",
-      "@@@STEP_LOG_LINE@stdout@moar@@@",
-      "@@@STEP_LOG_END@stdout@@@"
+      "@@@STEP_LOG_LINE@captured_stdout@Writing \"\"\"\\@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@goma_dir = \"/b/build/slave/cache/cipd/goma\"@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@target_cpu = \"x64\"@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@use_goma = true@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@\"\"\" to /path/to/args.gn.@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@moar@@@",
+      "@@@STEP_LOG_END@captured_stdout@@@",
+      "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x64\" use_goma = true@@@",
+      "@@@STEP_LOG_END@gn_args@@@"
     ]
   },
   {

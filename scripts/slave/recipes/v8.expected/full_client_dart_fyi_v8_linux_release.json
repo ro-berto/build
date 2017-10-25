@@ -129,10 +129,14 @@
     "name": "generate_build_files",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@stdout@some line@@@",
-      "@@@STEP_LOG_LINE@stdout@GYP_DEFINES='target_arch=x64 cool_flag=a=1'@@@",
-      "@@@STEP_LOG_LINE@stdout@moar@@@",
-      "@@@STEP_LOG_END@stdout@@@"
+      "@@@STEP_LOG_LINE@captured_stdout@some line@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@GYP_DEFINES='target_arch=x64 cool_flag=a=1'@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@moar@@@",
+      "@@@STEP_LOG_END@captured_stdout@@@",
+      "@@@STEP_LOG_LINE@gyp_env@{@@@",
+      "@@@STEP_LOG_LINE@gyp_env@  \"GYP_DEFINES\": \"target_arch=x64 cool_flag=a=1\"@@@",
+      "@@@STEP_LOG_LINE@gyp_env@}@@@",
+      "@@@STEP_LOG_END@gyp_env@@@"
     ]
   },
   {
