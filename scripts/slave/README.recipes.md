@@ -1599,7 +1599,7 @@ Collects the results of a sharded test run.
 
 Kills leftover tasks from previous runs or steps.
 
-&mdash; **def [read\_debug\_log](/scripts/slave/recipe_modules/dart/api.py#168)(self):**
+&mdash; **def [read\_debug\_log](/scripts/slave/recipe_modules/dart/api.py#172)(self):**
 
 Reads the debug.log file
 
@@ -1614,7 +1614,7 @@ Args:
 Returns (str) - The content of the file.
 Raises file.Error
 
-&mdash; **def [run\_script](/scripts/slave/recipe_modules/dart/api.py#350)(self, step_name, script, args, isolate_hash, shards, environment, tasks):**
+&mdash; **def [run\_script](/scripts/slave/recipe_modules/dart/api.py#354)(self, step_name, script, args, isolate_hash, shards, environment, tasks):**
 
 Runs a specific script with current working directory to be checkout. If
 the runtime (passed in environment) is a browser, and the system is linux,
@@ -1627,7 +1627,7 @@ Args:
   * environment (dict) - Environment with runtime, arch, system etc
   * tasks ([task]) - placeholder to put all swarming tasks in
 
-&mdash; **def [run\_test\_py](/scripts/slave/recipe_modules/dart/api.py#311)(self, step_name, args, index, step, isolate_hash, shards, environment, tasks):**
+&mdash; **def [run\_test\_py](/scripts/slave/recipe_modules/dart/api.py#315)(self, step_name, args, index, step, isolate_hash, shards, environment, tasks):**
 
 Runs test.py with default arguments, based on configuration from.
 Args:
@@ -1644,7 +1644,7 @@ Runs test.py in the given isolate, sharded over several swarming tasks.
 Requires the 'shards' build property to be set to the number of tasks.
 Returns the created task(s), which are meant to be passed into collect().
 
-&mdash; **def [test](/scripts/slave/recipe_modules/dart/api.py#177)(self, test_data):**
+&mdash; **def [test](/scripts/slave/recipe_modules/dart/api.py#181)(self, test_data):**
 
 Reads the test-matrix.json file in checkout and performs each step listed
 in the file

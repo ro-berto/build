@@ -161,7 +161,11 @@ class DartApi(recipe_api.RecipeApi):
     Raises file.Error
     """
     result_log_path = self.m.path['checkout'].join('logs', 'result.log')
-    read_data = self.m.file.read_text(name, result_log_path, test_data)
+    try:
+      read_data = self.m.file.read_text(
+        name, result_log_path, test_data)
+    except self.m.file.Error: # pragma: no cover
+      pass
     self.m.step.active_result.presentation.logs[log_name] = [read_data]
     self.m.file.remove("delete result.log", result_log_path)
 
