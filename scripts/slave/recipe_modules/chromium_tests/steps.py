@@ -14,9 +14,12 @@ from recipe_engine.types import freeze
 
 RESULTS_URL = 'https://chromeperf.appspot.com'
 
-UPLOAD_DASHBOARD_REVISION_PROPERTIES = [
+UPLOAD_DASHBOARD_API_PROPERTIES = [
     'got_revision_cp',
     'git_revision',
+]
+
+UPLOAD_DASHBOARD_BUILD_PROPERTIES = [
     'got_webrtc_revision',
     'got_v8_revision'
 ]
@@ -1647,9 +1650,12 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
 
     # Produces a step that uploads results to dashboard
     revisions = {}
-    for revision_name in UPLOAD_DASHBOARD_REVISION_PROPERTIES:
+    for revision_name in UPLOAD_DASHBOARD_API_PROPERTIES:
       if revision_name in api.properties:
         revisions[revision_name] = api.properties[revision_name]
+    for revision_name in UPLOAD_DASHBOARD_BUILD_PROPERTIES:
+      if revision_name in api.chromium.build_properties:
+        revisions[revision_name] = api.chromium.build_properties[revision_name]
 
     # TODO(eakuefner): Confirm that 'version' is unused by legacy pipeline
     # and remove it.
