@@ -25,7 +25,7 @@ class DartApi(recipe_api.RecipeApi):
                args=['--kill_browsers=True', '--kill_vsbuild=True'],
                ok_ret='any')
 
-  def build(self, build_args=[], isolate=None):
+  def build(self, build_args=[], isolate=None, name='build dart'):
     """Builds dart using the specified build_args
        and optionally isolates the sdk for testing using the specified isolate.
        If an isolate is specified, it returns the hash of the isolated archive.
@@ -33,7 +33,7 @@ class DartApi(recipe_api.RecipeApi):
     with self.m.context(cwd=self.m.path['checkout'],
                      env_prefixes={'PATH':[self.m.depot_tools.root]}):
       self.kill_tasks()
-      self.m.python('build dart',
+      self.m.python(name,
                  self.m.path['checkout'].join('tools', 'build.py'),
                  args=build_args,
                  timeout=15 * 60)
@@ -232,6 +232,13 @@ class DartApi(recipe_api.RecipeApi):
       return intersection.pop()
     return default_value
 
+  def _has_specific_argument(self, arguments, options):
+    for arg in arguments:
+      for option in options:
+        if arg.startswith(option):
+          return True
+    return False
+
   def _run_steps(self, config, isolate_hashes):
     """Executes all steps from a json test-matrix builder entry"""
     # Find information from the builder name. It should be in the form
@@ -283,19 +290,26 @@ class DartApi(recipe_api.RecipeApi):
         isolate_hash = isolate_hashes[step['fileset']]
         shards = step['shards']
       if is_build_step:
-        build_args = ['-m%s' % mode, '--arch=%s' % arch] + args
-        self.build(build_args=build_args)
+        if not self._has_specific_argument(args, ['-m', '--mode']):
+          args = ['-m%s' % mode] + args
+        if not self._has_specific_argument(args, ['-a', '--arch']):
+          args = ['-a%s' % arch] + args
+        self.build(name=step_name, build_args=args)
       elif is_test_py_step:
-        self.run_test_py(step_name, args, test_py_index, step, isolate_hash, shards, environment, tasks)
+        self.run_test_py(step_name, args, test_py_index, step, isolate_hash,
+            shards, environment, tasks)
         if shards == 0:
           # Only count indexes that are not sharded, to help with adding append-logs.
           test_py_index += 1
       else:
-        args = args + ['--buildername=%s' % builder_name]
-        self.run_script(step_name, script, args, isolate_hash, shards, environment, tasks)
+        with self.m.context(cwd=self.m.path['checkout'],
+                            env={'BUILDBOT_BUILDERNAME':builder_name}):
+          self.run_script(step_name, script, args, isolate_hash, shards,
+              environment, tasks)
     self.collect_all(tasks)
 
-  def run_test_py(self, step_name, args, index, step, isolate_hash, shards, environment, tasks):
+  def run_test_py(self, step_name, args, index, step, isolate_hash, shards,
+      environment, tasks):
     """Runs test.py with default arguments, based on configuration from.
     Args:
       * step_name (str) - Name of the step
@@ -305,18 +319,22 @@ class DartApi(recipe_api.RecipeApi):
       * environment (dict) - Environment with runtime, arch, system etc
       * tasks ([task]) - placeholder to put all swarming tasks in
     """
-    default_test_args = ['-m%s' % environment['mode'],
-                         '--arch=%s' % environment['arch'],
-                         '--progress=buildbot',
-                         '-v',
-                         '--report',
-                         '--time',
-                         '--write-debug-log',
-                         '--write-result-log',
-                         '--write-test-outcome-log']
-    if 'runtime' in environment:
-      default_test_args = default_test_args + ['--runtime=%s' % environment['runtime']]
-    args = default_test_args + args
+
+    test_args = ['--progress=buildbot',
+                 '-v',
+                 '--report',
+                 '--time',
+                 '--write-debug-log',
+                 '--write-result-log',
+                 '--write-test-outcome-log']
+    if not self._has_specific_argument(args, ['-m', '--mode']):
+      test_args = ['-m%s' % environment['mode']] + test_args
+    if not self._has_specific_argument(args, ['-a', '--arch']):
+      test_args = ['-a%s' % environment['arch']] + test_args
+    if 'runtime' in environment and not self._has_specific_argument(
+        args, ['-r', '--runtime']):
+      test_args = test_args + ['-r%s' % environment['runtime']]
+    args = test_args + args
     if index > 0:
       args = args + ['--append_logs']
     if environment['system'] in ['win7', 'win8', 'win10']:

@@ -24,7 +24,7 @@ TEST_MATRIX = {
       }, {
         "name": "Test-step 1",
         "script": "tools/test.py",
-        "arguments": ["foo", "--bar"],
+        "arguments": ["foo", "--arch=x64"],
         "tests": ["language_2"],
         "exclude_tests": ["co19"],
         "shards": 1,
@@ -53,7 +53,7 @@ TEST_MATRIX = {
       }, {
         "name": "Test-step custom",
         "script": "tools/custom_thing.py",
-        "arguments": ["foo", "--bar"]
+        "arguments": ["foo", "--bar", "--buildername"]
       }, {
         "name": "Test-step 2",
         "arguments": ["foo", "--bar"],
