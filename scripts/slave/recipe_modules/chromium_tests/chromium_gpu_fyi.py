@@ -1033,14 +1033,15 @@ SPEC = {
         'TARGET_PLATFORM': 'android',
       },
       'android_config': 'arm64_builder_rel_mb',
-      'android_apply_config': ['restart_usb', 'use_devil_adb'],
       'bot_type': 'builder_tester',
       'compile_targets': [
       ],
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': False,
+      'enable_swarming': True,
+      'serialize_tests': True,
+      'checkout_dir': 'android',
     },
     'Android Release (Nexus 9)': {
       'chromium_config': 'android',

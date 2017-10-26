@@ -1001,7 +1001,7 @@
         "os": "linux",
         "version": "trusty",
       },
-      "slaves": ["build89-b1"],
+      "slaves": ["slave235-c1"],
     },
     "android_rel_nexus_9": {
       "slave_data": {
