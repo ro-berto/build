@@ -34,10 +34,14 @@ class DartApi(recipe_api.RecipeApi):
     with self.m.context(cwd=self.m.path['checkout'],
                      env_prefixes={'PATH':[self.m.depot_tools.root]}):
       self.kill_tasks()
-      self.m.python(name,
-                 self.m.path['checkout'].join('tools', 'build.py'),
-                 args=build_args,
-                 timeout=15 * 60)
+      try:
+        self.m.python(name,
+                   self.m.path['checkout'].join('tools', 'build.py'),
+                   args=build_args,
+                   timeout=20 * 60)
+      except self.m.step.StepTimeout as e:
+        raise self.m.step.StepFailure('Step "%s" timed out after 20 minutes' % name)
+
       if isolate is not None:
         self.m.swarming_client.checkout(
           revision='5c8043e54541c3cee7ea255e0416020f2e3a5904')

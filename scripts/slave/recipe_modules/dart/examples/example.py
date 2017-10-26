@@ -70,7 +70,7 @@ def RunSteps(api):
   api.dart.checkout(channel, False)
 
   build_args = ['--super-fast']
-  api.dart.build(build_args)
+  api.dart.build(build_args, name='can_time_out')
   isolate_hash = api.dart.build(build_args, 'dart_tests')
 
   test_args = ['--all']
@@ -96,6 +96,10 @@ def GenTests(api):
 
   yield (api.test('basic-missing-name') + api.properties(
       shards='1', buildername='this-name-does-not-exists-in-test-matrix'))
+
+  yield (api.test('basic-timeout') + api.properties(
+      shards='1', buildername='times-out') +
+      api.step_data('can_time_out', times_out_after=20 * 61 + 1))
 
   yield (api.test('basic-win') + api.platform('win', 64) + api.properties(
       shards='1', buildername='dart2js-win10-debug-x64-ff-try') +

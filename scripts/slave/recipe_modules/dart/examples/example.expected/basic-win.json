@@ -153,8 +153,8 @@
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
-    "name": "build dart",
-    "timeout": 900
+    "name": "can_time_out",
+    "timeout": 1200
   },
   {
     "cmd": [
@@ -185,8 +185,8 @@
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
-    "name": "build dart (2)",
-    "timeout": 900
+    "name": "build dart",
+    "timeout": 1200
   },
   {
     "cmd": [
@@ -761,7 +761,7 @@
       ]
     },
     "name": "Build",
-    "timeout": 900
+    "timeout": 1200
   },
   {
     "cmd": [
