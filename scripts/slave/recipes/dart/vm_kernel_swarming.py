@@ -53,10 +53,16 @@ def RunSteps(api):
       front_end_args.extend(test_args)
       test_args.extend(['--append_logs', '-cdartk'])
 
-      shard_test_args = ['./tools/test.py',
+      shard_test_args = (['./tools/test.py',
                          '--use-sdk',
-                         '--exclude-suite=samples,service,standalone,vm'] + test_args
+                         '--exclude-suite=samples,service,standalone,vm,language_2,corelib_2,lib_2,standalone_2']
+                         + test_args)
       tasks = api.dart.shard('vm_tests', isolate_hash, shard_test_args)
+
+      strong_test_args = (['./tools/test.py', '--strong', '--use-sdk',
+                         'language_2', 'corelib_2', 'lib_2', 'standalone_2']
+                         + test_args)
+      tasks = api.dart.shard('vm_strong_tests', isolate_hash, strong_test_args)
 
       api.python('front-end tests',
                  api.path['checkout'].join('tools', 'test.py'),

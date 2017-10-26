@@ -154,7 +154,8 @@
       "--write-debug-log",
       "--write-result-log",
       "--write-test-outcome-log",
-      "--append_logs"
+      "--append_logs",
+      "--exclude-suite=language_2,corelib_2,lib_2,standalone_2"
     ],
     "cwd": "[START_DIR]\\sdk",
     "name": "vm tests"
