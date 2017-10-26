@@ -309,8 +309,17 @@ class DartApi(recipe_api.RecipeApi):
           # Only count indexes that are not sharded, to help with adding append-logs.
           test_py_index += 1
       else:
-        with self.m.context(cwd=self.m.path['checkout'],
-                            env={'BUILDBOT_BUILDERNAME':builder_name}):
+        channel = 'try'
+        if 'branch' in self.m.properties:
+          channels = {
+            "refs/heads/master": "be",
+            "refs/heads/stable": "stable",
+            "refs/heads/dev": "dev"
+          }
+          channel = channels.get(self.m.properties['branch'], 'try');
+        with self.m.context(
+            cwd=self.m.path['checkout'],
+            env={'BUILDBOT_BUILDERNAME': builder_name + "-%s" % channel}):
           self.run_script(step_name, script, args, isolate_hash, shards,
               environment, tasks)
     self.collect_all(tasks)

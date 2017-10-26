@@ -89,7 +89,8 @@ def RunSteps(api):
 
 def GenTests(api):
   yield (api.test('basic') + api.properties(
-      shards='2', buildername='dart2js-linux-release-chrome-try') +
+      shards='2', branch="refs/head/master",
+      buildername='dart2js-linux-release-chrome-try') +
       api.step_data('upload testing fileset fileset1',
                     stdout=api.raw_io.output('test isolate hash')))
 
