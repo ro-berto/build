@@ -16,6 +16,7 @@ def Update(config, active_master, c):
                             builderNames=[
           'ios-device',
           'ios-simulator',
+          'ios-simulator-full-configs',
           'ios-device-xcode-clang',
           'ios-simulator-xcode-clang',
       ]),
