@@ -289,7 +289,7 @@
   },
   {
     "cmd": [
-      "ninja",
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "-C",
       "[BUILDER_CACHE]/ios/src/out/Release-iphoneos",
       "-j",
@@ -391,7 +391,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/ios/src/out/Release-iphoneos",
       "--ninja-log-command",
-      "['ninja', '-C', Path('checkout', 'out','Release-iphoneos'), '-j', '50']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-C', Path('checkout', 'out','Release-iphoneos'), '-j', '50']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",

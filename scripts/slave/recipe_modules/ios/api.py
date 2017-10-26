@@ -369,7 +369,7 @@ class iOSApi(recipe_api.RecipeApi):
 
       self.compilation_targets.sort()
 
-    cmd = ['ninja', '-C', cwd]
+    cmd = [str(self.m.depot_tools.ninja_path), '-C', cwd]
     cmd.extend(self.__config['compiler flags'])
 
     if self.use_goma:

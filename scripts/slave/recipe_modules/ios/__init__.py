@@ -13,6 +13,7 @@ DEPS = [
   'build/swarming_client',
   'build/test_results',
   'depot_tools/bot_update',
+  'depot_tools/depot_tools',
   'depot_tools/gclient',
   'depot_tools/gsutil',
   'depot_tools/tryserver',

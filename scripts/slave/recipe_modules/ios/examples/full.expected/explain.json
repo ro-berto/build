@@ -180,7 +180,7 @@
   },
   {
     "cmd": [
-      "ninja",
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "-C",
       "[START_DIR]/src/out/Debug-iphonesimulator",
       "-d",
@@ -196,7 +196,7 @@
   },
   {
     "cmd": [
-      "ninja",
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "-C",
       "[START_DIR]/src/out/Debug-iphonesimulator"
     ],

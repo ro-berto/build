@@ -284,7 +284,7 @@
   },
   {
     "cmd": [
-      "ninja",
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "-C",
       "[BUILDER_CACHE]/ios_simulator/src/out/Debug-iphonesimulator",
       "fake_target"

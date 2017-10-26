@@ -395,7 +395,7 @@
   },
   {
     "cmd": [
-      "ninja",
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "-C",
       "[BUILDER_CACHE]/ios_simulator_gn/src/out/Debug-iphonesimulator",
       "-j",
@@ -502,7 +502,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/ios_simulator_gn/src/out/Debug-iphonesimulator",
       "--ninja-log-command",
-      "['ninja', '-C', Path('checkout', 'out','Debug-iphonesimulator'), '-j', '50', 'fake tests']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-C', Path('checkout', 'out','Debug-iphonesimulator'), '-j', '50', 'fake tests']",
       "--ninja-log-exit-status",
       "1",
       "--ninja-log-compiler",
@@ -742,7 +742,7 @@
   },
   {
     "cmd": [
-      "ninja",
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "-C",
       "[BUILDER_CACHE]/ios_simulator_gn/src/out/Debug-iphonesimulator",
       "-j",
@@ -845,7 +845,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/ios_simulator_gn/src/out/Debug-iphonesimulator",
       "--ninja-log-command",
-      "['ninja', '-C', Path('checkout', 'out','Debug-iphonesimulator'), '-j', '50', 'fake tests']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-C', Path('checkout', 'out','Debug-iphonesimulator'), '-j', '50', 'fake tests']",
       "--ninja-log-exit-status",
       "0",
       "--ninja-log-compiler",
