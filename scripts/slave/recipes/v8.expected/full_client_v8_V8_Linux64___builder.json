@@ -539,7 +539,6 @@
       "[START_DIR]/v8/out/Release/mozilla.isolated.gen.json",
       "[START_DIR]/v8/out/Release/optimize_for_size.isolated.gen.json",
       "[START_DIR]/v8/out/Release/perf.isolated.gen.json",
-      "[START_DIR]/v8/out/Release/run-deopt-fuzzer.isolated.gen.json",
       "[START_DIR]/v8/out/Release/test262.isolated.gen.json"
     ],
     "name": "isolate tests",
@@ -552,7 +551,6 @@
       "@@@STEP_LOG_LINE@json.output@  \"mozilla\": \"[dummy hash for mozilla]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"optimize_for_size\": \"[dummy hash for optimize_for_size]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"perf\": \"[dummy hash for perf]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"run-deopt-fuzzer\": \"[dummy hash for run-deopt-fuzzer]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"test262\": \"[dummy hash for test262]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -569,7 +567,7 @@
       "cp",
       "-a",
       "public-read",
-      "{\"benchmarks\": \"[dummy hash for benchmarks]\", \"bot_default\": \"[dummy hash for bot_default]\", \"check-static-initializers\": \"[dummy hash for check-static-initializers]\", \"mjsunit\": \"[dummy hash for mjsunit]\", \"mozilla\": \"[dummy hash for mozilla]\", \"optimize_for_size\": \"[dummy hash for optimize_for_size]\", \"perf\": \"[dummy hash for perf]\", \"run-deopt-fuzzer\": \"[dummy hash for run-deopt-fuzzer]\", \"test262\": \"[dummy hash for test262]\"}",
+      "{\"benchmarks\": \"[dummy hash for benchmarks]\", \"bot_default\": \"[dummy hash for bot_default]\", \"check-static-initializers\": \"[dummy hash for check-static-initializers]\", \"mjsunit\": \"[dummy hash for mjsunit]\", \"mozilla\": \"[dummy hash for mozilla]\", \"optimize_for_size\": \"[dummy hash for optimize_for_size]\", \"perf\": \"[dummy hash for perf]\", \"test262\": \"[dummy hash for test262]\"}",
       "gs://chromium-v8/isolated/client.v8/V8 Linux64 - builder/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json"
     ],
     "infra_step": true,
@@ -613,29 +611,6 @@
     "name": "trigger",
     "trigger_specs": [
       {
-        "builder_name": "V8 Deopt Fuzzer",
-        "properties": {
-          "parent_build_environment": {
-            "gn_args": "target_cpu = \"x86\" use_goma = true"
-          },
-          "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
-          "parent_got_revision_cp": "refs/heads/master@{#50110}",
-          "parent_got_swarming_client_revision": "e4fee0b18f8163be6097c9c571640038896debc4",
-          "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
-          "swarm_hashes": {
-            "benchmarks": "[dummy hash for benchmarks]",
-            "bot_default": "[dummy hash for bot_default]",
-            "check-static-initializers": "[dummy hash for check-static-initializers]",
-            "mjsunit": "[dummy hash for mjsunit]",
-            "mozilla": "[dummy hash for mozilla]",
-            "optimize_for_size": "[dummy hash for optimize_for_size]",
-            "perf": "[dummy hash for perf]",
-            "run-deopt-fuzzer": "[dummy hash for run-deopt-fuzzer]",
-            "test262": "[dummy hash for test262]"
-          }
-        }
-      },
-      {
         "builder_name": "V8 Linux64",
         "properties": {
           "parent_build_environment": {
@@ -653,7 +628,6 @@
             "mozilla": "[dummy hash for mozilla]",
             "optimize_for_size": "[dummy hash for optimize_for_size]",
             "perf": "[dummy hash for perf]",
-            "run-deopt-fuzzer": "[dummy hash for run-deopt-fuzzer]",
             "test262": "[dummy hash for test262]"
           }
         }
@@ -676,14 +650,13 @@
             "mozilla": "[dummy hash for mozilla]",
             "optimize_for_size": "[dummy hash for optimize_for_size]",
             "perf": "[dummy hash for perf]",
-            "run-deopt-fuzzer": "[dummy hash for run-deopt-fuzzer]",
             "test262": "[dummy hash for test262]"
           }
         }
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@V8 Deopt Fuzzer<br />V8 Linux64<br />V8 Linux64 - avx2@@@"
+      "@@@STEP_TEXT@V8 Linux64<br />V8 Linux64 - avx2@@@"
     ]
   },
   {
@@ -716,7 +689,6 @@
             "mozilla": "[dummy hash for mozilla]",
             "optimize_for_size": "[dummy hash for optimize_for_size]",
             "perf": "[dummy hash for perf]",
-            "run-deopt-fuzzer": "[dummy hash for run-deopt-fuzzer]",
             "test262": "[dummy hash for test262]"
           }
         }
