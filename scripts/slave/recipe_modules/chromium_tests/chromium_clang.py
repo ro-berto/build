@@ -14,9 +14,7 @@ def config(name,
            ninja_confirm_noop=True,
            is_msan=False,
            target_arch='intel',
-           target_bits=64,
-           add_tests_as_compile_targets=False,
-           sizes=True):
+           target_bits=64):
   cfg = {
     'chromium_config': chromium_config,
     'chromium_apply_config': [
@@ -33,14 +31,16 @@ def config(name,
     'testing': {
       'platform': 'linux',
     },
-    'tests': {},
+    'tests': {
+      steps.SizesStep(RESULTS_URL, name)
+    },
 
     # TODO(dpranke): Get rid of this flag, it's a misfeature. This was
     # added to allow the bots to run `ninja` instead of `ninja all`
     # or `ninja all base_unittests net_unittests...`, but really the
     # compile() call in the recipe should be smart enough to do this
     # automatically. This shouldn't be configurable per bot.
-    'add_tests_as_compile_targets': add_tests_as_compile_targets,
+    'add_tests_as_compile_targets': False,
 
     'enable_swarming': True,
   }
@@ -55,11 +55,6 @@ def config(name,
 
   if is_msan:
       cfg['chromium_apply_config'].append('prebuilt_instrumented_libraries')
-
-  if sizes:
-      cfg['tests'] = {
-        steps.SizesStep(RESULTS_URL, name)
-      }
 
   return name, cfg
 
@@ -1064,11 +1059,7 @@ SPEC['builders'].update([
            chromium_config='clang_tot_android',
            ninja_confirm_noop=False,
            target_arch='arm',
-           target_bits=32,
-           # TODO(pcc): Remove these once lld is capable of linking
-           # everything on Android.
-           add_tests_as_compile_targets=True,
-           sizes=False),
+           target_bits=32),
 
     config('ToTLinux'),
 
