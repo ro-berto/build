@@ -22,6 +22,7 @@ DEPS = [
 AUTO_REVIEWERS = [
   'machenbach@chromium.org',
   'hablich@chromium.org',
+  'sergiyb@chromium.org',
 ]
 BASE_URL = 'https://chromium.googlesource.com'
 V8_REPO = BASE_URL + '/v8/v8'
