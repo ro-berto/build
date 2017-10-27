@@ -112,12 +112,12 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
                   '--test-launcher-bot-mode'],
             perf_id=perf_id,
             perf_config_mappings=perf_config_mappings,
-            commit_position_property=commit_position_property),
+            commit_position_property=commit_position_property,
+            upload_wav_files_from_test=False),
         steps.WebRTCPerfTest(
             'browser_tests',
             # These tests needs --test-launcher-jobs=1 since some of them are
-            # not able to run in parallel (due to the usage of the
-            # peerconnection server).
+            # not able to run in parallel (they record system audio, etc).
             args=['--gtest_filter=%s' % ':'.join(BROWSER_TESTS_FILTER),
                   '--run-manual', '--ui-test-action-max-timeout=350000',
                   '--test-launcher-jobs=1',
@@ -125,7 +125,8 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
                   '--test-launcher-print-test-stdio=always'],
             perf_id=perf_id,
             perf_config_mappings=perf_config_mappings,
-            commit_position_property=commit_position_property),
+            commit_position_property=commit_position_property,
+            upload_wav_files_from_test=True),
 
         # Run capture unittests as well since our bots have real webcams.
         steps.GTestTest('capture_unittests',

@@ -33,4 +33,5 @@ DEPS = [
   'test_utils',
   'traceback',
   'trigger',
+  'zip',
 ]
