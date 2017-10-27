@@ -275,7 +275,7 @@ TRYBOTS = freeze({
         'buildername': 'Cast Audio Linux',
       }),
       'fuchsia_arm64': simple_bot({
-        'mastername': 'chromium.linux',
+        'mastername': 'chromium.fyi',
         'buildername': 'Fuchsia ARM64',
       }),
       'fuchsia_x64': simple_bot({
