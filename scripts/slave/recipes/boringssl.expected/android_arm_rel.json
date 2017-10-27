@@ -193,7 +193,7 @@
       "-suite",
       "ssl",
       "-runner-args",
-      "-pipe",
+      "-pipe -num-workers 1",
       "-json-output",
       "/path/to/tmp/json"
     ],
