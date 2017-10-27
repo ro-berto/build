@@ -466,14 +466,14 @@ class V8Api(recipe_api.RecipeApi):
     # Windows:
     # set GYP_DEFINES=foo=1 path='a/b/c'
     # TODO(machenbach): Remove the gyp case after gyp is deprecated.
-    for match in re.finditer(
-        '^(?:set )?GYP_([^=]*)=(?:(?:\'(.*)\')|(?:(.*)))$', mb_output, re.M):
+    for match in re.finditer('^(?:set )?GYP_([^=]*)=(?:(?:\'(.*)\')|(?:(.*)))$',
+                             mb_output, re.M):  # pragma: no cover
       # Yield the property name (e.g. GYP_DEFINES) and the value. Either the
       # windows or the posix group matches.
       self.build_environment['GYP_' + match.group(1)] = (
           match.group(2) or match.group(3))
 
-    if 'GYP_DEFINES' in self.build_environment:
+    if 'GYP_DEFINES' in self.build_environment:  # pragma: no cover
       # Filter out gomadir.
       self.build_environment['GYP_DEFINES'] = ' '.join(
           d for d in self.build_environment['GYP_DEFINES'].split()
@@ -558,12 +558,14 @@ class V8Api(recipe_api.RecipeApi):
                 'goma' in self.m.chromium.c.compile_py.compiler)
     if self.m.chromium.c.project_generator.tool == 'mb':
       def step_test_data():
-        # Fake gyp flags.
-        # TODO(machenbach): Replace with gn args after the gn migration.
+        # Fake MB output with GN flags.
         return self.m.raw_io.test_api.stream_output(
-            'some line\n'
-            'GYP_DEFINES=\'target_arch=x64 cool_flag=a=1\'\n'
-            'moar\n'
+            'Writing """\\\n'
+            'goma_dir = "/b/build/slave/cache/goma_client"\n'
+            'target_cpu = "x86"\n'
+            'use_goma = true\n'
+            '""" to /b/build/slave/linux-builder/build/v8/out/Release/args.gn\n'
+            'moar text'
         )
       try:
         self.m.chromium.run_mb(
@@ -593,11 +595,6 @@ class V8Api(recipe_api.RecipeApi):
       if 'gn_args' in self.build_environment:
         self.m.step.active_result.presentation.logs['gn_args'] = (
             self.build_environment['gn_args'].splitlines())
-      if any(k.startswith('GYP_') for k in self.build_environment):
-        gyp_env = {k: v for k, v in self.build_environment.iteritems()
-                        if k.startswith('GYP_')}
-        gyp_env = self.m.json.dumps(gyp_env, indent=2).splitlines()
-        self.m.step.active_result.presentation.logs['gyp_env'] = gyp_env
     elif self.m.chromium.c.project_generator.tool == 'gn':
       self.m.chromium.run_gn(use_goma=use_goma)
 

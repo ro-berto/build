@@ -155,14 +155,15 @@
     "name": "generate_build_files",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@captured_stdout@some line@@@",
-      "@@@STEP_LOG_LINE@captured_stdout@GYP_DEFINES='target_arch=x64 cool_flag=a=1'@@@",
-      "@@@STEP_LOG_LINE@captured_stdout@moar@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@Writing \"\"\"\\@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@goma_dir = \"/b/build/slave/cache/goma_client\"@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@target_cpu = \"x86\"@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@use_goma = true@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@\"\"\" to /b/build/slave/linux-builder/build/v8/out/Release/args.gn@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@moar text@@@",
       "@@@STEP_LOG_END@captured_stdout@@@",
-      "@@@STEP_LOG_LINE@gyp_env@{@@@",
-      "@@@STEP_LOG_LINE@gyp_env@  \"GYP_DEFINES\": \"target_arch=x64 cool_flag=a=1\"@@@",
-      "@@@STEP_LOG_LINE@gyp_env@}@@@",
-      "@@@STEP_LOG_END@gyp_env@@@"
+      "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\" use_goma = true@@@",
+      "@@@STEP_LOG_END@gn_args@@@"
     ]
   },
   {
@@ -486,7 +487,7 @@
       "cr-buildbucket.appspot.com",
       "--service-account-json",
       "/creds/service_accounts/service-account-v8-bot.json",
-      "{\"bucket\": \"master.tryserver.v8\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"v8_linux64_avx2_rel_ng_triggered\\\", \\\"changes\\\": [{\\\"author\\\": {\\\"email\\\": \\\"cool_dev1337@chromium.org\\\"}}, {\\\"author\\\": {\\\"email\\\": \\\"hax@chromium.org\\\"}}], \\\"properties\\\": {\\\"category\\\": \\\"cq\\\", \\\"issue\\\": \\\"12853011\\\", \\\"master\\\": \\\"tryserver.v8\\\", \\\"parent_build_environment\\\": {\\\"GYP_DEFINES\\\": \\\"target_arch=x64 cool_flag=a=1\\\"}, \\\"parent_buildername\\\": \\\"v8_linux64_avx2_rel_ng\\\", \\\"parent_buildnumber\\\": 571, \\\"parent_got_revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"parent_got_revision_cp\\\": \\\"refs/heads/master@{#50110}\\\", \\\"parent_got_swarming_client_revision\\\": \\\"e4fee0b18f8163be6097c9c571640038896debc4\\\", \\\"patch_project\\\": \\\"v8\\\", \\\"patch_storage\\\": \\\"rietveld\\\", \\\"patchset\\\": \\\"1\\\", \\\"reason\\\": \\\"CQ\\\", \\\"requester\\\": \\\"commit-bot@chromium.org\\\", \\\"revision\\\": \\\"12345\\\", \\\"rietveld\\\": \\\"https://codereview.chromium.org\\\", \\\"swarm_hashes\\\": {\\\"bot_default\\\": \\\"[dummy hash for bot_default]\\\"}}}\", \"tags\": [\"builder:v8_linux64_avx2_rel_ng_triggered\", \"master:tryserver.v8\", \"parent_buildername:v8_linux64_avx2_rel_ng\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
+      "{\"bucket\": \"master.tryserver.v8\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"v8_linux64_avx2_rel_ng_triggered\\\", \\\"changes\\\": [{\\\"author\\\": {\\\"email\\\": \\\"cool_dev1337@chromium.org\\\"}}, {\\\"author\\\": {\\\"email\\\": \\\"hax@chromium.org\\\"}}], \\\"properties\\\": {\\\"category\\\": \\\"cq\\\", \\\"issue\\\": \\\"12853011\\\", \\\"master\\\": \\\"tryserver.v8\\\", \\\"parent_build_environment\\\": {\\\"gn_args\\\": \\\"target_cpu = \\\\\\\"x86\\\\\\\" use_goma = true\\\"}, \\\"parent_buildername\\\": \\\"v8_linux64_avx2_rel_ng\\\", \\\"parent_buildnumber\\\": 571, \\\"parent_got_revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"parent_got_revision_cp\\\": \\\"refs/heads/master@{#50110}\\\", \\\"parent_got_swarming_client_revision\\\": \\\"e4fee0b18f8163be6097c9c571640038896debc4\\\", \\\"patch_project\\\": \\\"v8\\\", \\\"patch_storage\\\": \\\"rietveld\\\", \\\"patchset\\\": \\\"1\\\", \\\"reason\\\": \\\"CQ\\\", \\\"requester\\\": \\\"commit-bot@chromium.org\\\", \\\"revision\\\": \\\"12345\\\", \\\"rietveld\\\": \\\"https://codereview.chromium.org\\\", \\\"swarm_hashes\\\": {\\\"bot_default\\\": \\\"[dummy hash for bot_default]\\\"}}}\", \"tags\": [\"builder:v8_linux64_avx2_rel_ng_triggered\", \"master:tryserver.v8\", \"parent_buildername:v8_linux64_avx2_rel_ng\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
     ],
     "name": "trigger",
     "stdout": "/path/to/tmp/json",

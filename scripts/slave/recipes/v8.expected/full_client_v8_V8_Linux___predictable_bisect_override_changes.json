@@ -128,14 +128,15 @@
     "name": "generate_build_files",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@captured_stdout@some line@@@",
-      "@@@STEP_LOG_LINE@captured_stdout@GYP_DEFINES='target_arch=x64 cool_flag=a=1'@@@",
-      "@@@STEP_LOG_LINE@captured_stdout@moar@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@Writing \"\"\"\\@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@goma_dir = \"/b/build/slave/cache/goma_client\"@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@target_cpu = \"x86\"@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@use_goma = true@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@\"\"\" to /b/build/slave/linux-builder/build/v8/out/Release/args.gn@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@moar text@@@",
       "@@@STEP_LOG_END@captured_stdout@@@",
-      "@@@STEP_LOG_LINE@gyp_env@{@@@",
-      "@@@STEP_LOG_LINE@gyp_env@  \"GYP_DEFINES\": \"target_arch=x64 cool_flag=a=1\"@@@",
-      "@@@STEP_LOG_LINE@gyp_env@}@@@",
-      "@@@STEP_LOG_END@gyp_env@@@"
+      "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\" use_goma = true@@@",
+      "@@@STEP_LOG_END@gn_args@@@"
     ]
   },
   {
@@ -449,7 +450,7 @@
       "@@@STEP_LOG_LINE@fast@Command: d8 test.js@@@",
       "@@@STEP_LOG_LINE@fast@@@@",
       "@@@STEP_LOG_LINE@fast@Build environment:@@@",
-      "@@@STEP_LOG_LINE@fast@ GYP_DEFINES: target_arch=x64 cool_flag=a=1@@@",
+      "@@@STEP_LOG_LINE@fast@ gn_args: target_cpu = \"x86\" use_goma = true@@@",
       "@@@STEP_LOG_LINE@fast@@@@",
       "@@@STEP_LOG_LINE@fast@Run #1@@@",
       "@@@STEP_LOG_LINE@fast@Exit code: 1@@@",
@@ -469,7 +470,7 @@
       "@@@STEP_LOG_LINE@slow@Command: d8 test.js@@@",
       "@@@STEP_LOG_LINE@slow@@@@",
       "@@@STEP_LOG_LINE@slow@Build environment:@@@",
-      "@@@STEP_LOG_LINE@slow@ GYP_DEFINES: target_arch=x64 cool_flag=a=1@@@",
+      "@@@STEP_LOG_LINE@slow@ gn_args: target_cpu = \"x86\" use_goma = true@@@",
       "@@@STEP_LOG_LINE@slow@@@@",
       "@@@STEP_LOG_LINE@slow@Run #1@@@",
       "@@@STEP_LOG_LINE@slow@Exit code: 1@@@",
@@ -804,14 +805,15 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@captured_stdout@some line@@@",
-      "@@@STEP_LOG_LINE@captured_stdout@GYP_DEFINES='target_arch=x64 cool_flag=a=1'@@@",
-      "@@@STEP_LOG_LINE@captured_stdout@moar@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@Writing \"\"\"\\@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@goma_dir = \"/b/build/slave/cache/goma_client\"@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@target_cpu = \"x86\"@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@use_goma = true@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@\"\"\" to /b/build/slave/linux-builder/build/v8/out/Release/args.gn@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@moar text@@@",
       "@@@STEP_LOG_END@captured_stdout@@@",
-      "@@@STEP_LOG_LINE@gyp_env@{@@@",
-      "@@@STEP_LOG_LINE@gyp_env@  \"GYP_DEFINES\": \"target_arch=x64 cool_flag=a=1\"@@@",
-      "@@@STEP_LOG_LINE@gyp_env@}@@@",
-      "@@@STEP_LOG_END@gyp_env@@@"
+      "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\" use_goma = true@@@",
+      "@@@STEP_LOG_END@gn_args@@@"
     ]
   },
   {
@@ -1263,14 +1265,15 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@captured_stdout@some line@@@",
-      "@@@STEP_LOG_LINE@captured_stdout@GYP_DEFINES='target_arch=x64 cool_flag=a=1'@@@",
-      "@@@STEP_LOG_LINE@captured_stdout@moar@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@Writing \"\"\"\\@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@goma_dir = \"/b/build/slave/cache/goma_client\"@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@target_cpu = \"x86\"@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@use_goma = true@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@\"\"\" to /b/build/slave/linux-builder/build/v8/out/Release/args.gn@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@moar text@@@",
       "@@@STEP_LOG_END@captured_stdout@@@",
-      "@@@STEP_LOG_LINE@gyp_env@{@@@",
-      "@@@STEP_LOG_LINE@gyp_env@  \"GYP_DEFINES\": \"target_arch=x64 cool_flag=a=1\"@@@",
-      "@@@STEP_LOG_LINE@gyp_env@}@@@",
-      "@@@STEP_LOG_END@gyp_env@@@"
+      "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\" use_goma = true@@@",
+      "@@@STEP_LOG_END@gn_args@@@"
     ]
   },
   {
@@ -1578,7 +1581,7 @@
       "@@@STEP_LOG_LINE@fast@Command: d8 test.js@@@",
       "@@@STEP_LOG_LINE@fast@@@@",
       "@@@STEP_LOG_LINE@fast@Build environment:@@@",
-      "@@@STEP_LOG_LINE@fast@ GYP_DEFINES: target_arch=x64 cool_flag=a=1@@@",
+      "@@@STEP_LOG_LINE@fast@ gn_args: target_cpu = \"x86\" use_goma = true@@@",
       "@@@STEP_LOG_LINE@fast@@@@",
       "@@@STEP_LOG_LINE@fast@Run #1@@@",
       "@@@STEP_LOG_LINE@fast@Exit code: 1@@@",
@@ -1598,7 +1601,7 @@
       "@@@STEP_LOG_LINE@slow@Command: d8 test.js@@@",
       "@@@STEP_LOG_LINE@slow@@@@",
       "@@@STEP_LOG_LINE@slow@Build environment:@@@",
-      "@@@STEP_LOG_LINE@slow@ GYP_DEFINES: target_arch=x64 cool_flag=a=1@@@",
+      "@@@STEP_LOG_LINE@slow@ gn_args: target_cpu = \"x86\" use_goma = true@@@",
       "@@@STEP_LOG_LINE@slow@@@@",
       "@@@STEP_LOG_LINE@slow@Run #1@@@",
       "@@@STEP_LOG_LINE@slow@Exit code: 1@@@",
@@ -1755,14 +1758,15 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@captured_stdout@some line@@@",
-      "@@@STEP_LOG_LINE@captured_stdout@GYP_DEFINES='target_arch=x64 cool_flag=a=1'@@@",
-      "@@@STEP_LOG_LINE@captured_stdout@moar@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@Writing \"\"\"\\@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@goma_dir = \"/b/build/slave/cache/goma_client\"@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@target_cpu = \"x86\"@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@use_goma = true@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@\"\"\" to /b/build/slave/linux-builder/build/v8/out/Release/args.gn@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@moar text@@@",
       "@@@STEP_LOG_END@captured_stdout@@@",
-      "@@@STEP_LOG_LINE@gyp_env@{@@@",
-      "@@@STEP_LOG_LINE@gyp_env@  \"GYP_DEFINES\": \"target_arch=x64 cool_flag=a=1\"@@@",
-      "@@@STEP_LOG_LINE@gyp_env@}@@@",
-      "@@@STEP_LOG_END@gyp_env@@@"
+      "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\" use_goma = true@@@",
+      "@@@STEP_LOG_END@gn_args@@@"
     ]
   },
   {

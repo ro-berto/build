@@ -149,14 +149,15 @@
     "name": "generate_build_files",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@captured_stdout@some line@@@",
-      "@@@STEP_LOG_LINE@captured_stdout@GYP_DEFINES='target_arch=x64 cool_flag=a=1'@@@",
-      "@@@STEP_LOG_LINE@captured_stdout@moar@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@Writing \"\"\"\\@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@goma_dir = \"/b/build/slave/cache/goma_client\"@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@target_cpu = \"x86\"@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@use_goma = true@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@\"\"\" to /b/build/slave/linux-builder/build/v8/out/Release/args.gn@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@moar text@@@",
       "@@@STEP_LOG_END@captured_stdout@@@",
-      "@@@STEP_LOG_LINE@gyp_env@{@@@",
-      "@@@STEP_LOG_LINE@gyp_env@  \"GYP_DEFINES\": \"target_arch=x64 cool_flag=a=1\"@@@",
-      "@@@STEP_LOG_LINE@gyp_env@}@@@",
-      "@@@STEP_LOG_END@gyp_env@@@"
+      "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\" use_goma = true@@@",
+      "@@@STEP_LOG_END@gn_args@@@"
     ]
   },
   {
@@ -510,7 +511,7 @@
         "builder_name": "V8 Linux64 - custom snapshot - debug",
         "properties": {
           "parent_build_environment": {
-            "GYP_DEFINES": "target_arch=x64 cool_flag=a=1"
+            "gn_args": "target_cpu = \"x86\" use_goma = true"
           },
           "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "parent_got_revision_cp": "refs/heads/master@{#50110}",
@@ -525,7 +526,7 @@
         "builder_name": "V8 Linux64 GC Stress - custom snapshot",
         "properties": {
           "parent_build_environment": {
-            "GYP_DEFINES": "target_arch=x64 cool_flag=a=1"
+            "gn_args": "target_cpu = \"x86\" use_goma = true"
           },
           "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "parent_got_revision_cp": "refs/heads/master@{#50110}",
