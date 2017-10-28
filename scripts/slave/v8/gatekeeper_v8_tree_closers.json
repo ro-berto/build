@@ -5,8 +5,6 @@
     "https://build.chromium.org/p/client.v8": [
       {
         "excluded_builders" : [
-          "V8 Fuchsia",
-          "V8 Fuchsia - debug",
           "V8 Fuzzer",
           "V8 Linux64 - cfi",
           "V8 Linux64 - gcov coverage",
