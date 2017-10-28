@@ -331,6 +331,7 @@ BUILDERS = {
           'category': 'linux64'
         },
         'triggers': [
+          'V8 Deopt Fuzzer',
           'V8 Linux64',
           'V8 Linux64 - avx2',
         ],
@@ -777,6 +778,21 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
         'swarming_properties': SWARMING_FYI_PROPS,
       },
+      'V8 Deopt Fuzzer': {
+        'v8_apply_config': ['deopt_fuzz_normal'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'enable_swarming': True,
+        'parent_buildername': 'V8 Linux64 - builder',
+        'build_gs_archive': 'linux64_rel_archive',
+        'tests': [Deopt],
+        'variants': V8NoExhaustiveVariants(),
+        'testing': {'platform': 'linux'},
+        'swarming_properties': SWARMING_FYI_PROPS,
+      },
       'V8 Linux - gc stress': {
         'v8_apply_config': ['gc_stress'],
         'v8_config_kwargs': {
@@ -1039,6 +1055,25 @@ BUILDERS = {
         'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
       },
+      'V8 Random Deopt Fuzzer - debug': {
+        'chromium_apply_config': [
+          'default_compiler', 'v8_ninja', 'goma', 'mb'],
+        'v8_apply_config': ['deopt_fuzz_random'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'enable_swarming': True,
+        'tests': [Deopt],
+        'variants': V8NoExhaustiveVariants(),
+        'testing': {'platform': 'linux'},
+        'swarming_properties': {
+          'default_expiration': 2 * 60 * 60,
+          'default_hard_timeout': 2 * 60 * 60,
+          'default_priority': 35,
+        },
+      },
     },
   },
 ####### Waterfall: client.v8.clusterfuzz
@@ -1056,16 +1091,11 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
-        'bot_type': 'builder',
-        'slim_swarming_builder': True,
-        'enable_swarming': True,
+        'bot_type': 'builder_tester',
         'cf_archive_build': True,
         'cf_gs_bucket': 'v8-asan',
         'cf_gs_acl': 'public-read',
         'cf_archive_name': 'd8',
-        'triggers': [
-          'V8 Deopt Fuzzer',
-        ],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64 - debug builder': {
@@ -1080,16 +1110,11 @@ BUILDERS = {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
         },
-        'bot_type': 'builder',
-        'slim_swarming_builder': True,
-        'enable_swarming': True,
+        'bot_type': 'builder_tester',
         'cf_archive_build': True,
         'cf_gs_bucket': 'v8-asan',
         'cf_gs_acl': 'public-read',
         'cf_archive_name': 'd8',
-        'triggers': [
-          'V8 Random Deopt Fuzzer - debug',
-        ],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64 ASAN no inline - release builder': {
@@ -1329,38 +1354,6 @@ BUILDERS = {
         'cf_gs_acl': 'public-read',
         'cf_archive_name': 'd8-asan',
         'testing': {'platform': 'mac'},
-      },
-      'V8 Deopt Fuzzer': {
-        'v8_apply_config': ['deopt_fuzz_normal'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'tester',
-        'enable_swarming': True,
-        'parent_buildername': 'V8 Linux64 - release builder',
-        'tests': [Deopt],
-        'variants': V8NoExhaustiveVariants(),
-        'testing': {'platform': 'linux'},
-        'swarming_properties': SWARMING_FYI_PROPS,
-      },
-      'V8 Random Deopt Fuzzer - debug': {
-        'v8_apply_config': ['deopt_fuzz_random'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'tester',
-        'enable_swarming': True,
-        'parent_buildername': 'V8 Linux64 - debug builder',
-        'tests': [Deopt],
-        'variants': V8NoExhaustiveVariants(),
-        'testing': {'platform': 'linux'},
-        'swarming_properties': {
-          'default_expiration': 2 * 60 * 60,
-          'default_hard_timeout': 2 * 60 * 60,
-          'default_priority': 35,
-        },
       },
     },
   },

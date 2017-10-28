@@ -2,7 +2,7 @@
   "master_base_class": "Master3a",
   "master_port": 21303,
   "master_port_alt": 26303,
-  "bot_port": 31303,
+  "slave_port": 31303,
   "service_account_file": "service-account-v8.json",
   "pubsub_service_account_file": "service-account-luci-milo.json",
   "buildbucket_bucket": "master.client.v8.clusterfuzz",
@@ -19,7 +19,7 @@
       "use_remote_run": False,
       "scheduler": "v8_commits",
       "mergeRequests": False,
-      "bot_pools": ["mac"],
+      "slave_pools": ["mac"],
       "category": "0Mac",
     },
     "V8 Mac64 ASAN - debug builder": {
@@ -27,7 +27,7 @@
       "use_remote_run": False,
       "scheduler": "v8_commits",
       "mergeRequests": False,
-      "bot_pools": ["mac"],
+      "slave_pools": ["mac"],
       "category": "0Mac",
     },
     "V8 Linux64 - release builder": {
@@ -35,7 +35,7 @@
       "use_remote_run": False,
       "scheduler": "v8_commits",
       "mergeRequests": False,
-      "bot_pools": ["linux1"],
+      "slave_pools": ["linux1"],
       "category": "1Linux",
     },
     "V8 Linux64 - debug builder": {
@@ -43,7 +43,7 @@
       "use_remote_run": False,
       "scheduler": "v8_commits",
       "mergeRequests": False,
-      "bot_pools": ["linux1"],
+      "slave_pools": ["linux1"],
       "category": "1Linux",
     },
     "V8 Linux64 ASAN no inline - release builder": {
@@ -51,7 +51,7 @@
       "use_remote_run": False,
       "scheduler": "v8_commits",
       "mergeRequests": False,
-      "bot_pools": ["linux2"],
+      "slave_pools": ["linux2"],
       "category": "1Linux",
     },
     "V8 Linux64 ASAN - debug builder": {
@@ -59,7 +59,7 @@
       "use_remote_run": False,
       "scheduler": "v8_commits",
       "mergeRequests": False,
-      "bot_pools": ["linux2"],
+      "slave_pools": ["linux2"],
       "category": "1Linux",
     },
     "V8 Linux64 ASAN arm64 - debug builder": {
@@ -67,7 +67,7 @@
       "use_remote_run": False,
       "scheduler": "v8_commits",
       "mergeRequests": False,
-      "bot_pools": ["linux2"],
+      "slave_pools": ["linux2"],
       "category": "1Linux",
     },
     "V8 Linux ASAN arm - debug builder": {
@@ -75,7 +75,7 @@
       "use_remote_run": False,
       "scheduler": "v8_commits",
       "mergeRequests": False,
-      "bot_pools": ["linux3"],
+      "slave_pools": ["linux3"],
       "category": "1Linux",
     },
     "V8 Linux ASAN mipsel - debug builder": {
@@ -83,7 +83,7 @@
       "use_remote_run": False,
       "scheduler": "v8_commits",
       "mergeRequests": False,
-      "bot_pools": ["linux3"],
+      "slave_pools": ["linux3"],
       "category": "1Linux",
     },
     "V8 Linux MSAN no origins": {
@@ -91,7 +91,7 @@
       "use_remote_run": False,
       "scheduler": "v8_commits",
       "mergeRequests": False,
-      "bot_pools": ["linux3"],
+      "slave_pools": ["linux3"],
       "category": "1Linux",
     },
     "V8 Linux MSAN chained origins": {
@@ -99,7 +99,7 @@
       "use_remote_run": False,
       "scheduler": "v8_commits",
       "mergeRequests": False,
-      "bot_pools": ["linux3"],
+      "slave_pools": ["linux3"],
       "category": "1Linux",
     },
     "V8 Linux64 CFI - release builder": {
@@ -107,7 +107,7 @@
       "use_remote_run": False,
       "scheduler": "v8_commits",
       "mergeRequests": False,
-      "bot_pools": ["linux4"],
+      "slave_pools": ["linux4"],
       "category": "1Linux",
     },
     "V8 Linux64 UBSan - release builder": {
@@ -115,7 +115,7 @@
       "use_remote_run": False,
       "scheduler": "v8_commits",
       "mergeRequests": False,
-      "bot_pools": ["linux5"],
+      "slave_pools": ["linux5"],
       "category": "1Linux",
     },
     "V8 Linux64 UBSanVptr - release builder": {
@@ -123,30 +123,8 @@
       "use_remote_run": False,
       "scheduler": "v8_commits",
       "mergeRequests": False,
-      "bot_pools": ["linux5"],
+      "slave_pools": ["linux5"],
       "category": "1Linux",
-    },
-    "V8 Deopt Fuzzer": {
-      "recipe": "v8",
-      "use_remote_run": False,
-      "scheduler": None,
-      "mergeRequests": True,
-      "bot": "slave210-c3#0",
-      "auto_reboot" : False,
-      "os": "linux",
-      "version": "trusty",
-      "category": "2Fuzzers",
-    },
-    "V8 Random Deopt Fuzzer - debug": {
-      "recipe": "v8",
-      "use_remote_run": False,
-      "scheduler": None,
-      "mergeRequests": True,
-      "bot": "slave210-c3#1",
-      "os": "linux",
-      "version": "trusty",
-      "auto_reboot" : False,
-      "category": "2Fuzzers",
     },
   },
 
@@ -158,42 +136,54 @@
     },
   },
 
-  "bot_pools": {
+  "slave_pools": {
     "mac": {
-      "bits": 64,
-      "os": "mac",
-      "version": "10.12.2",
-      "bots": ["vm82-m3", "vm85-m3"],
+      "slave_data": {
+        "bits": 64,
+        "os": "mac",
+        "version": "10.12.2",
+      },
+      "slaves": ["vm82-m3", "vm85-m3"],
     },
     "linux1": {
-      "bits": 64,
-      "os": "linux",
-      "version": "trusty",
-      "bots": ["slave4-c3"],
+      "slave_data": {
+        "bits": 64,
+        "os": "linux",
+        "version": "trusty",
+      },
+      "slaves": ["slave4-c3"],
     },
     "linux2": {
-      "bits": 64,
-      "os": "linux",
-      "version": "trusty",
-      "bots": ["slave252-c3"],
+      "slave_data": {
+        "bits": 64,
+        "os": "linux",
+        "version": "trusty",
+      },
+      "slaves": ["slave252-c3"],
     },
     "linux3": {
-      "bits": 64,
-      "os": "linux",
-      "version": "trusty",
-      "bots": ["slave253-c3"],
+      "slave_data": {
+        "bits": 64,
+        "os": "linux",
+        "version": "trusty",
+      },
+      "slaves": ["slave253-c3"],
     },
     "linux4": {
-      "bits": 64,
-      "os": "linux",
-      "version": "trusty",
-      "bots": ["slave254-c3"],
+      "slave_data": {
+        "bits": 64,
+        "os": "linux",
+        "version": "trusty",
+      },
+      "slaves": ["slave254-c3"],
     },
     "linux5": {
-      "bits": 64,
-      "os": "linux",
-      "version": "trusty",
-      "bots": ["slave255-c3"],
+      "slave_data": {
+        "bits": 64,
+        "os": "linux",
+        "version": "trusty",
+      },
+      "slaves": ["slave255-c3"],
     },
   },
 }
