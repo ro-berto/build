@@ -1,6 +1,7 @@
 {
   "comment": ["This is a configuration file for gatekeeper_ng.py",
-              "Look at that for documentation on this file's format."],
+              "Look in gatekeeper_ng_config.py for documentation on ",
+              "this files's format."],
 
   "masters": {
     "https://build.chromium.org/p/chromium": [
@@ -712,6 +713,30 @@
             "forgiving_optional": [
               "*"
             ]
+          },
+          "Jumbo Linux x64": {
+            "tree_notify": [
+              "bratell+jumbo-builds@opera.com",
+              "brucedawson@chromium.org",
+              "dpranke@chromium.org"
+            ],
+            "forgiving_optional": ["*"]
+          },
+          "Jumbo Mac": {
+            "tree_notify": [
+              "bratell+jumbo-builds@opera.com",
+              "brucedawson@chromium.org",
+              "dpranke@chromium.org"
+            ],
+            "forgiving_optional": ["*"]
+          },
+          "Jumbo Win x64": {
+            "tree_notify": [
+              "bratell+jumbo-builds@opera.com",
+              "brucedawson@chromium.org",
+              "dpranke@chromium.org"
+            ],
+            "forgiving_optional": ["*"]
           },
           "Windows LKGR (DrMemory)": {
             "tree_notify": [
