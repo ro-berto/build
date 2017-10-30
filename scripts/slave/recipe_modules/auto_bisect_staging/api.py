@@ -286,9 +286,7 @@ class AutoBisectStagingApi(recipe_api.RecipeApi):
         'chromium', precommit=False, mastername=mastername)
     test_runner = self.m.chromium_tests.create_test_runner(tests)
 
-    bot_config_object = self.m.chromium_tests.create_bot_config_object(
-        mastername, buildername)
-    with self.m.chromium_tests.wrap_chromium_tests(bot_config_object, tests):
+    with self.m.chromium_tests.wrap_chromium_tests(bot_config, tests):
       with self.test_context_mgr(self.m):
         if self.m.chromium.c.TARGET_PLATFORM == 'android' and not skip_download:
           deploy_apks = []

@@ -84,8 +84,8 @@ from recipe_engine.recipe_api import Property
 PROPERTIES = {'mastername': Property(), 'buildername': Property(),}
 
 def RunSteps(api, mastername, buildername):
-  master_dict = BUILDERS.get(mastername, {})
-  bot_config = master_dict.get('builders', {}).get(buildername)
+  bot_config = api.chromium_tests.create_bot_config_object(
+      mastername, buildername, builders=BUILDERS)
   # The following lines configures android bisect bot to to checkout codes,
   # executes runhooks, provisions devices and runs legacy bisect script.
   recipe_config = bot_config.get('recipe_config', 'perf')
@@ -101,6 +101,7 @@ def RunSteps(api, mastername, buildername):
   api.chromium_android.apply_config('use_devil_provision')
   api.chromium.set_config(recipe_config, **kwargs)
   api.chromium.ensure_goma()
+  api.chromium_tests.set_config('chromium')
   api.chromium_android.c.set_val({'deps_file': 'DEPS'})
   api.gclient.set_config('tryserver_chromium_perf')
   for c in bot_config.get('android_apply_config', []):
@@ -114,8 +115,8 @@ def RunSteps(api, mastername, buildername):
       'bisect_results')
   api.chromium_android.clean_local_files()
 
-  bot_db = api.chromium_tests.create_bot_db_from_master_dict(mastername,
-                                                             master_dict)
+  bot_db = api.chromium_tests.create_bot_db_object()
+  bot_config.initialize_bot_db(api.chromium_tests, bot_db, update_step)
 
   api.chromium_android.use_devil_adb()
 
