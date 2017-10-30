@@ -1057,6 +1057,9 @@
       "--output_directory=${ISOLATED_OUTDIR}"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-linux-release-chrome-try-try"
+    },
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -1153,6 +1156,9 @@
       "--output_directory=${ISOLATED_OUTDIR}"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-linux-release-chrome-try-try"
+    },
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -1222,6 +1228,9 @@
       "co19"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-linux-release-chrome-try-try"
+    },
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -1240,6 +1249,10 @@
       "[CACHE]/builder/sdk/logs/result.log",
       "/path/to/tmp/"
     ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-linux-release-chrome-try-try"
+    },
     "infra_step": true,
     "name": "read results of Test-step 2",
     "~followup_annotations": [
@@ -1257,6 +1270,10 @@
       "remove",
       "[CACHE]/builder/sdk/logs/result.log"
     ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-linux-release-chrome-try-try"
+    },
     "infra_step": true,
     "name": "delete result.log (2)"
   },

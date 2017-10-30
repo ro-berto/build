@@ -300,30 +300,31 @@ class DartApi(recipe_api.RecipeApi):
         self._build_isolates(config, isolate_hashes)
         isolate_hash = isolate_hashes[step['fileset']]
         shards = step['shards']
-      if is_build_step:
-        if not self._has_specific_argument(args, ['-m', '--mode']):
-          args = ['-m%s' % mode] + args
-        if not self._has_specific_argument(args, ['-a', '--arch']):
-          args = ['-a%s' % arch] + args
-        self.build(name=step_name, build_args=args)
-      elif is_test_py_step:
-        self.run_test_py(step_name, args, test_py_index, step, isolate_hash,
-            shards, environment, tasks)
-        if shards == 0:
-          # Only count indexes that are not sharded, to help with adding append-logs.
-          test_py_index += 1
-      else:
-        channel = 'try'
-        if 'branch' in self.m.properties:
-          channels = {
-            "refs/heads/master": "be",
-            "refs/heads/stable": "stable",
-            "refs/heads/dev": "dev"
-          }
-          channel = channels.get(self.m.properties['branch'], 'try');
-        with self.m.context(
-            cwd=self.m.path['checkout'],
-            env={'BUILDBOT_BUILDERNAME': builder_name + "-%s" % channel}):
+      channel = 'try'
+      if 'branch' in self.m.properties:
+        channels = {
+          "refs/heads/master": "be",
+          "refs/heads/stable": "stable",
+          "refs/heads/dev": "dev"
+        }
+        channel = channels.get(self.m.properties['branch'], 'try');
+      environment_variables = step.get('environment', {})
+      environment_variables['BUILDBOT_BUILDERNAME'] = builder_name + "-%s" % channel
+      with self.m.context(cwd=self.m.path['checkout'],
+                          env=environment_variables):
+        if is_build_step:
+          if not self._has_specific_argument(args, ['-m', '--mode']):
+            args = ['-m%s' % mode] + args
+          if not self._has_specific_argument(args, ['-a', '--arch']):
+            args = ['-a%s' % arch] + args
+          self.build(name=step_name, build_args=args)
+        elif is_test_py_step:
+          self.run_test_py(step_name, args, test_py_index, step, isolate_hash,
+              shards, environment, tasks)
+          if shards == 0:
+            # Only count indexes that are not sharded, to help with adding append-logs.
+            test_py_index += 1
+        else:
           self.run_script(step_name, script, args, isolate_hash, shards,
               environment, tasks)
     self.collect_all(tasks)

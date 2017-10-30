@@ -1614,7 +1614,7 @@ Args:
 Returns (str) - The content of the file.
 Raises file.Error
 
-&mdash; **def [run\_script](/scripts/slave/recipe_modules/dart/api.py#370)(self, step_name, script, args, isolate_hash, shards, environment, tasks):**
+&mdash; **def [run\_script](/scripts/slave/recipe_modules/dart/api.py#371)(self, step_name, script, args, isolate_hash, shards, environment, tasks):**
 
 Runs a specific script with current working directory to be checkout. If
 the runtime (passed in environment) is a browser, and the system is linux,
@@ -1627,7 +1627,7 @@ Args:
   * environment (dict) - Environment with runtime, arch, system etc
   * tasks ([task]) - placeholder to put all swarming tasks in
 
-&mdash; **def [run\_test\_py](/scripts/slave/recipe_modules/dart/api.py#331)(self, step_name, args, index, step, isolate_hash, shards, environment, tasks):**
+&mdash; **def [run\_test\_py](/scripts/slave/recipe_modules/dart/api.py#332)(self, step_name, args, index, step, isolate_hash, shards, environment, tasks):**
 
 Runs test.py with default arguments, based on configuration from.
 Args:

@@ -737,6 +737,9 @@
       "--kill_vsbuild=True"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-ff-try-try"
+    },
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -755,6 +758,9 @@
       "--bar"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-ff-try-try"
+    },
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -932,6 +938,9 @@
       "--output_directory=${ISOLATED_OUTDIR}"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-ff-try-try"
+    },
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -975,6 +984,9 @@
       "--builder-tag=win10"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-ff-try-try"
+    },
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -993,6 +1005,10 @@
       "[CACHE]\\builder\\sdk\\logs\\result.log",
       "/path/to/tmp/"
     ],
+    "cwd": "[CACHE]\\builder\\sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-ff-try-try"
+    },
     "infra_step": true,
     "name": "read results of Test-step 2",
     "~followup_annotations": [
@@ -1010,6 +1026,10 @@
       "remove",
       "[CACHE]\\builder\\sdk\\logs\\result.log"
     ],
+    "cwd": "[CACHE]\\builder\\sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-ff-try-try"
+    },
     "infra_step": true,
     "name": "delete result.log (2)"
   },
@@ -1034,6 +1054,9 @@
       "--builder-tag=win10"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-ff-try-try"
+    },
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -1052,6 +1075,10 @@
       "[CACHE]\\builder\\sdk\\logs\\result.log",
       "/path/to/tmp/"
     ],
+    "cwd": "[CACHE]\\builder\\sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-ff-try-try"
+    },
     "infra_step": true,
     "name": "read results of Test-step 3",
     "~followup_annotations": [
@@ -1069,6 +1096,10 @@
       "remove",
       "[CACHE]\\builder\\sdk\\logs\\result.log"
     ],
+    "cwd": "[CACHE]\\builder\\sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-ff-try-try"
+    },
     "infra_step": true,
     "name": "delete result.log (3)"
   },
