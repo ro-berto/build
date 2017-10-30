@@ -414,6 +414,7 @@ class V8Api(recipe_api.RecipeApi):
 
   def isolate_tests(self):
     if self.bot_config.get('enable_swarming'):
+      mastername = self.m.properties['mastername']
       buildername = self.m.properties['buildername']
       tests_to_isolate = []
       def add_tests_to_isolate(tests):
@@ -430,9 +431,11 @@ class V8Api(recipe_api.RecipeApi):
           elif config.get('tests'):
             tests_to_isolate.extend(config['tests'])
 
-      # Find tests to isolate on builders.
-      for _, _, _, bot_config in iter_builders():
-        if bot_config.get('parent_buildername') == buildername:
+      # Find tests to isolate on builders (requires builder and tester on same
+      # master).
+      for parent_mastername, _, _, bot_config in iter_builders():
+        if (parent_mastername == mastername and
+            bot_config.get('parent_buildername') == buildername):
           add_tests_to_isolate(bot_config.get('tests', []))
 
       # Find tests to isolate on builder_testers.
