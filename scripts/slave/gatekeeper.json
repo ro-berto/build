@@ -308,6 +308,26 @@
             "categories": [
               "infra_tree_closer"
             ]
+          },
+          "luci-go-trusty64": {
+            "categories": [
+              "infra_tree_closer"
+            ]
+          },
+          "luci-go-precise32": {
+            "categories": [
+              "infra_tree_closer"
+            ]
+          },
+          "luci-go-osx": {
+            "categories": [
+              "infra_tree_closer"
+            ]
+          },
+          "luci-go-win64": {
+            "categories": [
+              "infra_tree_closer"
+            ]
           }
         }
       }
