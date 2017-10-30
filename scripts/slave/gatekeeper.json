@@ -718,7 +718,8 @@
             "tree_notify": [
               "bratell+jumbo-builds@opera.com",
               "brucedawson@chromium.org",
-              "dpranke@chromium.org"
+              "dpranke@chromium.org",
+              "mostynb+jumbo@vewd.com"
             ],
             "forgiving_optional": ["*"]
           },
