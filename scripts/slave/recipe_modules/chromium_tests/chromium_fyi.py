@@ -536,7 +536,7 @@ SPEC = {
         'platform': 'win'
       }
     },
-    'CrWin7Goma(clbr)': {
+    'CrWinClexeGoma': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['clobber', 'goma_canary', 'mb',
                                 'shared_library', 'goma_high_parallel',
