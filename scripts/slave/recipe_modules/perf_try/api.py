@@ -83,6 +83,7 @@ class PerfTryJobApi(recipe_api.RecipeApi):
         self.m.chromium_tests.deapply_patch(bot_update_step)
 
     # Run without patch.
+    results_label_without_patch = 'TOT' if r[1] is None else r[1]
     with self.m.step.nest('Running WITHOUT patch'):
       results_name = 'Without Patch'
       results_without_patch = self._build_and_run_tests(
@@ -90,7 +91,7 @@ class PerfTryJobApi(recipe_api.RecipeApi):
           name=results_name,
           reset_on_first_run=False,
           upload_on_last_run=True,
-          results_label='TOT' if r[1] is None else r[1],
+          results_label=results_label_without_patch,
           allow_flakes=False)
 
     labels = {
@@ -104,7 +105,8 @@ class PerfTryJobApi(recipe_api.RecipeApi):
     # already outputs data in json format.
     with self.m.step.nest('Results'):
       self._compare_and_present_results(
-          test_cfg, results_without_patch, results_with_patch, labels)
+          test_cfg, results_without_patch, results_with_patch, labels,
+          results_label_without_patch)
 
     with self.m.step.nest('Notify dashboard'):
       bisect_results = self.get_result(
@@ -235,7 +237,8 @@ class PerfTryJobApi(recipe_api.RecipeApi):
             self._get_hash(config.get('good_revision')))
 
   def _compare_and_present_results(
-      self, cfg, results_without_patch, results_with_patch, labels):
+      self, cfg, results_without_patch, results_with_patch, labels,
+      results_label_without_patch):
     """Parses results and creates Results step."""
     step_result = self.m.step.active_result
 
@@ -254,6 +257,12 @@ class PerfTryJobApi(recipe_api.RecipeApi):
                     if cloud_links_without_patch['html'] else '')
 
     if results_link:
+      # Automatically compare the Patch column against the TOT column and set
+      # the summary statistic to percent delta average:
+      # Use URL fragment since cloudstorage loses query.
+      results_link += '#r=' + results_label_without_patch
+      results_link += '&s=%25' + unichr(916) + 'avg'
+
       step_result.presentation.links.update({'HTML Results': results_link})
 
     profiler_with_patch = cloud_links_with_patch['profiler']

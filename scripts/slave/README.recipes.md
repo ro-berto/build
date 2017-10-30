@@ -2483,13 +2483,13 @@ platform for any test that can be run via buildbot, perf or otherwise.
 
 #### **class [PerfTryJobApi](/scripts/slave/recipe_modules/perf_try/api.py#36)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [get\_result](/scripts/slave/recipe_modules/perf_try/api.py#324)(self, config, results_without_patch, results_with_patch, labels):**
+&mdash; **def [get\_result](/scripts/slave/recipe_modules/perf_try/api.py#333)(self, config, results_without_patch, results_with_patch, labels):**
 
 Returns the results as a dict.
 
-&mdash; **def [parse\_cloud\_links](/scripts/slave/recipe_modules/perf_try/api.py#313)(self, output):**
+&mdash; **def [parse\_cloud\_links](/scripts/slave/recipe_modules/perf_try/api.py#322)(self, output):**
 
-&mdash; **def [parse\_values](/scripts/slave/recipe_modules/perf_try/api.py#412)(self, results_a, results_b, metric, output_format, \*\*kwargs):**
+&mdash; **def [parse\_values](/scripts/slave/recipe_modules/perf_try/api.py#421)(self, results_a, results_b, metric, output_format, \*\*kwargs):**
 
 Parse the values for a given metric for the given results.
 
@@ -2511,13 +2511,13 @@ platform for any test that can be run via buildbot, perf or otherwise.
 
 #### **class [PerfTryJobApi](/scripts/slave/recipe_modules/perf_try_staging/api.py#36)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [get\_result](/scripts/slave/recipe_modules/perf_try_staging/api.py#324)(self, config, results_without_patch, results_with_patch, labels):**
+&mdash; **def [get\_result](/scripts/slave/recipe_modules/perf_try_staging/api.py#333)(self, config, results_without_patch, results_with_patch, labels):**
 
 Returns the results as a dict.
 
-&mdash; **def [parse\_cloud\_links](/scripts/slave/recipe_modules/perf_try_staging/api.py#313)(self, output):**
+&mdash; **def [parse\_cloud\_links](/scripts/slave/recipe_modules/perf_try_staging/api.py#322)(self, output):**
 
-&mdash; **def [parse\_values](/scripts/slave/recipe_modules/perf_try_staging/api.py#412)(self, results_a, results_b, metric, output_format, \*\*kwargs):**
+&mdash; **def [parse\_values](/scripts/slave/recipe_modules/perf_try_staging/api.py#421)(self, results_a, results_b, metric, output_format, \*\*kwargs):**
 
 Parse the values for a given metric for the given results.
 
