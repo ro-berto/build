@@ -36,6 +36,7 @@ def Update(c):
           'Win64 Release (Clang)',
           'Win32 ASan',
           'Win32 Release (MSVC)',
+          'Win (more configs)',
       ]),
   ])
 
