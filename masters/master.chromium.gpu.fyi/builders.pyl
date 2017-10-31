@@ -60,6 +60,16 @@
       "builder_timeout_s": 21600,
       "category": "0Windows",
     },
+    "Win7 Release (NVIDIA Quadro P400)": {
+      "recipe": "chromium",
+      "use_remote_run": True,
+      "scheduler": None,
+      # It's crucial to merge build requests on the testers.
+      "mergeRequests": True,
+      "slave_pools": ["win7_rel_nvidia_quadro_p400"],
+      "builder_timeout_s": 14400,
+      "category": "0Windows",
+    },
     "Win7 dEQP Release (NVIDIA)": {
       "recipe": "chromium",
       "use_remote_run": True,
@@ -447,6 +457,16 @@
       "builder_timeout_s": 10800,
       "category": "2Linux",
     },
+    "Linux Release (NVIDIA Quadro P400)": {
+      "recipe": "chromium",
+      "use_remote_run": True,
+      "scheduler": None,
+      # It's crucial to merge build requests on the testers.
+      "mergeRequests": True,
+      "slave_pools": ["linux_rel_nvidia_quadro_p400"],
+      "builder_timeout_s": 21600,
+      "category": "2Linux",
+    },
     "Linux dEQP Release (NVIDIA)": {
       "recipe": "chromium",
       "use_remote_run": True,
@@ -464,16 +484,6 @@
       # It's crucial to merge build requests on the testers.
       "mergeRequests": True,
       "slave_pools": ["linux_rel_amd_r7_240"],
-      "builder_timeout_s": 21600,
-      "category": "2Linux",
-    },
-    "Linux Release (NVIDIA Quadro P400)": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": None,
-      # It's crucial to merge build requests on the testers.
-      "mergeRequests": True,
-      "slave_pools": ["linux_rel_nvidia_quadro_p400"],
       "builder_timeout_s": 21600,
       "category": "2Linux",
     },
@@ -601,6 +611,14 @@
         "version": "win7",
       },
       "slaves": ["vm83-m1"],
+    },
+    "win7_rel_nvidia_quadro_p400": {
+      "slave_data": {
+        "bits": 64,
+        "os": "win",
+        "version": "win7",
+      },
+      "slaves": ["vm23-m1"],
     },
     "win7_deqp_rel_nvidia": {
       "slave_data": {
@@ -944,7 +962,7 @@
         "os": "linux",
         "version": "trusty",
       },
-      "slaves": ["build163-b1"],
+      "slaves": ["slave238-c1"],
     },
     "linux_rel_intel_hd_630": {
       "slave_data": {
