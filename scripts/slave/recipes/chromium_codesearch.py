@@ -41,7 +41,7 @@ SPEC = freeze({
       'platform': 'linux',
       'sync_generated_files': True,
       'gen_repo_branch': 'master',
-      'corpus': 'chromium-linux',
+      'corpus': 'chromium',
     },
     'codesearch-gen-webrtc-linux': {
       'gclient_config': 'webrtc',
@@ -96,7 +96,7 @@ SPEC = freeze({
       'platform': 'chromeos',
       'sync_generated_files': True,
       'gen_repo_branch': 'chromiumos',
-      'corpus': 'chromium-chromeos',
+      'corpus': 'chromium',
     },
     'codesearch-gen-chromium-android': {
       'gclient_config': 'chromium',
@@ -107,7 +107,7 @@ SPEC = freeze({
       'platform': 'android',
       'sync_generated_files': True,
       'gen_repo_branch': 'android',
-      'corpus': 'chromium-android',
+      'corpus': 'chromium',
     },
   },
 })
