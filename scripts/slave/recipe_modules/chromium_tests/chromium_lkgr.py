@@ -25,23 +25,6 @@ SPEC = {
       'compile_targets': [ 'chromium_builder_asan' ],
       'testing': { 'platform': 'win' },
     },
-    'Win ASan Release Coverage': {
-      'chromium_config': 'chromium_win_clang_asan',
-      'chromium_apply_config': ['mb', 'clobber', 'sanitizer_coverage'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'builder',
-      'disable_tests': True,
-      'cf_archive_build': True,
-      'cf_gs_bucket': 'chromium-browser-asan',
-      'cf_gs_acl': 'public-read',
-      'cf_archive_name': 'asan-coverage',
-      'compile_targets': [ 'chromium_builder_asan' ],
-      'testing': { 'platform': 'win' },
-    },
     'Win ASan Release Media': {
       'chromium_config': 'chromium_win_clang_asan',
       'chromium_apply_config': ['mb', 'clobber', 'chrome_with_codecs'],

@@ -41,10 +41,6 @@ S(name='chromium_lkcr', branch='lkcr')
 B('Win ASan Release', 'win_asan_rel', scheduler='chromium_lkcr')
 F('win_asan_rel', m_remote_run('chromium'))
 
-# ASan/Win coverage bot.
-B('Win ASan Release Coverage', 'win_asan_rel_cov', scheduler='chromium_lkcr')
-F('win_asan_rel_cov', m_remote_run('chromium'))
-
 # ASan/Win media bot.
 B('Win ASan Release Media', 'win_asan_rel_media', scheduler='chromium_lkcr')
 F('win_asan_rel_media', m_remote_run('chromium'))
