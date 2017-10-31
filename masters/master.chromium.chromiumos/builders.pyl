@@ -71,10 +71,6 @@
       "category": "5simplechrome",
       "bot": "slave232-c1",
     },
-    "chromeos-betty-rel": {
-      "category": "5simplechrome",
-      "bot": "slave233-c1",
-    },
     "chromeos-daisy-rel": {
       # This will replace ChromiumOS daisy Compile
       "category": "5simplechrome",

@@ -22,9 +22,6 @@
     "chromeos-amd64-generic-rel": {
       "bot_pool": "cq",
     },
-    "chromeos-betty-rel": {
-      "bot_pool": "cq",
-    },
     "chromeos-daisy-rel": {
       "bot_pool": "cq",
     },

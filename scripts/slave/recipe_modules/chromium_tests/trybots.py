@@ -455,10 +455,6 @@ TRYBOTS = freeze({
         'mastername': 'chromium.chromiumos',
         'buildername': 'chromeos-amd64-generic-rel',
       }),
-      'chromeos-betty-rel': simple_bot({
-        'mastername': 'chromium.chromiumos',
-        'buildername': 'chromeos-betty-rel',
-      }),
       'chromeos-daisy-rel': simple_bot({
         'mastername': 'chromium.chromiumos',
         'buildername': 'chromeos-daisy-rel',
