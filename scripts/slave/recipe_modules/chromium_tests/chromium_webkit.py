@@ -214,7 +214,7 @@ SPEC['builders'] = {
   },
   'WebKit Mac10.12': {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb', 'force_mac_toolchain_off_10_10'],
+    'chromium_apply_config': ['mb'],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
