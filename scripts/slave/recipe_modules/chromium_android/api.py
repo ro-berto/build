@@ -106,7 +106,7 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def init_and_sync(self, gclient_config='android_bare',
                     with_branch_heads=False, use_bot_update=True,
-                    use_git_cache=True):
+                    use_git_cache=True, manifest_name=None):
     # TODO(sivachandra): Move the setting of the gclient spec below to an
     # internal config extension when they are supported by the recipe system.
     if use_git_cache:
@@ -130,7 +130,8 @@ class AndroidApi(recipe_api.RecipeApi):
       refs = [refs]
     if use_bot_update:
       result = self.m.bot_update.ensure_checkout(
-          spec, refs=refs, with_branch_heads=with_branch_heads)
+          spec, refs=refs, with_branch_heads=with_branch_heads,
+          manifest_name=manifest_name)
     else:
       result = self.m.gclient.checkout(spec)
 
