@@ -178,6 +178,7 @@
         }
     },
     "non-closers": {
+        "filter-domain": "chromium.org,google.com,opera.com,vewd.com",
         "masters": {
             "https://build.chromium.org/p/chromium.fyi": ["*"],
             "https://build.chromium.org/p/chromium.lkgr": ["*"],
