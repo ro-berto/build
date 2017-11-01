@@ -72,7 +72,7 @@ def _GetDashboardHistogramData(options):
   stripped_test_name = options.name.replace('.reference', '')
   return results_dashboard.MakeHistogramSetWithDiagnostics(
       options.results_file, options.chromium_checkout_dir, stripped_test_name,
-      options.buildername, options.buildnumber, revisions, is_reference_build)
+      options.perf_id, options.buildnumber, revisions, is_reference_build)
 
 
 def main(args):
