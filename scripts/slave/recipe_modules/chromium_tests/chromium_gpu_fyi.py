@@ -135,7 +135,9 @@ SPEC = {
         'platform': 'win',
       },
       'enable_swarming': True,
-      'serialize_tests': True,
+      # Running tests in parallel on these machines while they're in
+      # the process of being deployed, to get faster test turnaround
+      # time.
     },
     'Win7 dEQP Release (NVIDIA)': {
       'chromium_config': 'chromium',
@@ -592,7 +594,9 @@ SPEC = {
         'platform': 'linux',
       },
       'enable_swarming': True,
-      'serialize_tests': True,
+      # Running tests in parallel on these machines while they're in
+      # the process of being deployed, to get faster test turnaround
+      # time.
     },
     'Linux dEQP Release (NVIDIA)': {
       'chromium_config': 'chromium',
