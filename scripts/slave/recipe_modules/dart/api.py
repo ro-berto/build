@@ -284,50 +284,52 @@ class DartApi(recipe_api.RecipeApi):
     # Indexes the number of test.py steps.
     test_py_index = 0;
     tasks = []
-    for step in config['steps']:
-      step_name = step['name']
-      # If script is not defined, use test.py.
-      script = step.get('script', test_py_path)
-      args = step['arguments']
-      is_build_step = script.endswith(build_py_path)
-      is_test_py_step = script.endswith(test_py_path)
-      script = self.m.path['checkout'].join(*script.split('/'))
-      isolate_hash = None
-      shards = 0
-      if 'fileset' in step:
-        # We build isolates here, every time we see fileset, to wait for the
-        # building of Dart, which may be included in the fileset.
-        self._build_isolates(config, isolate_hashes)
-        isolate_hash = isolate_hashes[step['fileset']]
-        shards = step['shards']
-      channel = 'try'
-      if 'branch' in self.m.properties:
-        channels = {
-          "refs/heads/master": "be",
-          "refs/heads/stable": "stable",
-          "refs/heads/dev": "dev"
-        }
-        channel = channels.get(self.m.properties['branch'], 'try');
-      environment_variables = step.get('environment', {})
-      environment_variables['BUILDBOT_BUILDERNAME'] = builder_name + "-%s" % channel
-      with self.m.context(cwd=self.m.path['checkout'],
-                          env=environment_variables):
-        if is_build_step:
-          if not self._has_specific_argument(args, ['-m', '--mode']):
-            args = ['-m%s' % mode] + args
-          if not self._has_specific_argument(args, ['-a', '--arch']):
-            args = ['-a%s' % arch] + args
-          self.build(name=step_name, build_args=args)
-        elif is_test_py_step:
-          self.run_test_py(step_name, args, test_py_index, step, isolate_hash,
-              shards, environment, tasks)
-          if shards == 0:
-            # Only count indexes that are not sharded, to help with adding append-logs.
-            test_py_index += 1
-        else:
-          self.run_script(step_name, script, args, isolate_hash, shards,
-              environment, tasks)
-    self.collect_all(tasks)
+    with self.m.step.defer_results():
+      for step in config['steps']:
+        step_name = step['name']
+        # If script is not defined, use test.py.
+        script = step.get('script', test_py_path)
+        args = step.get('arguments', [])
+        is_build_step = script.endswith(build_py_path)
+        is_test_py_step = script.endswith(test_py_path)
+        script = self.m.path['checkout'].join(*script.split('/'))
+        isolate_hash = None
+        shards = 0
+        if 'fileset' in step:
+          # We build isolates here, every time we see fileset, to wait for the
+          # building of Dart, which may be included in the fileset.
+          self._build_isolates(config, isolate_hashes)
+          isolate_hash = isolate_hashes[step['fileset']]
+          shards = step['shards']
+        channel = 'try'
+        if 'branch' in self.m.properties:
+          channels = {
+            "refs/heads/master": "be",
+            "refs/heads/stable": "stable",
+            "refs/heads/dev": "dev"
+          }
+          channel = channels.get(self.m.properties['branch'], 'try');
+        environment_variables = step.get('environment', {})
+        environment_variables['BUILDBOT_BUILDERNAME'] = builder_name + "-%s" % channel
+        with self.m.context(cwd=self.m.path['checkout'],
+                            env=environment_variables,
+                            env_prefixes={'PATH':[self.m.depot_tools.root]}):
+          if is_build_step:
+            if not self._has_specific_argument(args, ['-m', '--mode']):
+              args = ['-m%s' % mode] + args
+            if not self._has_specific_argument(args, ['-a', '--arch']):
+              args = ['-a%s' % arch] + args
+            self.build(name=step_name, build_args=args)
+          elif is_test_py_step:
+            self.run_test_py(step_name, args, test_py_index, step, isolate_hash,
+                shards, environment, tasks)
+            if shards == 0:
+              # Only count indexes that are not sharded, to help with adding append-logs.
+              test_py_index += 1
+          else:
+            self.run_script(step_name, script, args, isolate_hash, shards,
+                environment, tasks)
+      self.collect_all(tasks)
 
   def run_test_py(self, step_name, args, index, step, isolate_hash, shards,
       environment, tasks):
@@ -383,19 +385,18 @@ class DartApi(recipe_api.RecipeApi):
     runtime = environment.get('runtime', None)
     use_xvfb = (runtime in ['drt', 'chrome', 'ff'] and
                 environment['system'] == 'linux')
-
-    with self.m.context(cwd=self.m.path['checkout'],
-                     env_prefixes={'PATH':[self.m.depot_tools.root]}):
-      with self.m.step.defer_results():
-        if use_xvfb:
-          xvfb_cmd = ['/usr/bin/xvfb-run', '-a', '--server-args=-screen 0 1024x768x24']
-          cmd = xvfb_cmd + ['python', '-u', script] + args
-          if isolate_hash:
-            tasks.append(self.shard(step_name, isolate_hash, cmd, num_shards=shards))
-          else:
-            self.m.step(step_name, cmd)
+    with self.m.step.defer_results():
+      if use_xvfb:
+        xvfb_cmd = ['/usr/bin/xvfb-run', '-a', '--server-args=-screen 0 1024x768x24']
+        cmd = xvfb_cmd + ['python', '-u', script] + args
+        if isolate_hash:
+          tasks.append(self.shard(step_name, isolate_hash, cmd, num_shards=shards))
         else:
-          if isolate_hash:
-            tasks.append(self.shard(step_name, isolate_hash, [script] + args, num_shards=shards))
-          else:
-            self.m.python(step_name, script, args=args)
+          self.m.step(step_name, cmd)
+      else:
+        if isolate_hash:
+          tasks.append(self.shard(step_name, isolate_hash, [script] + args, num_shards=shards))
+        elif '.py' in str(script):
+          self.m.python(step_name, script, args=args)
+        else:
+          self.m.step(step_name, [script] + args)

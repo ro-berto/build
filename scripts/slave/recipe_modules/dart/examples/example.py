@@ -33,7 +33,11 @@ TEST_MATRIX = {
         "name": "Test-step 2",
         "arguments": ["foo", "--bar"],
         "tests": []
-      },{
+      }, {
+        "name": "Test-step custom",
+        "script": "tools/custom_thing",
+        "arguments": ["foo", "--bar", "--buildername"]
+      }, {
         "name": "Test-step 3",
         "arguments": ["foo", "--bar"]
       }]
@@ -94,8 +98,11 @@ def GenTests(api):
       api.step_data('upload testing fileset fileset1',
                     stdout=api.raw_io.output('test isolate hash')))
 
+  yield (api.test('analyzer-linux-release-be') + api.properties(
+      shards='1', buildername='analyzer-linux-release-be'))
+
   yield (api.test('basic-missing-name') + api.properties(
-      shards='1', buildername='this-name-does-not-exists-in-test-matrix'))
+      shards='1', buildername='this-name-does-not-exist-in-test-matrix'))
 
   yield (api.test('basic-timeout') + api.properties(
       shards='1', buildername='times-out') +

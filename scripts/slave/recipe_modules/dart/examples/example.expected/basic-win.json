@@ -668,6 +668,15 @@
       "@@@STEP_LOG_LINE@json.output@        {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"arguments\": [@@@",
       "@@@STEP_LOG_LINE@json.output@            \"foo\", @@@",
+      "@@@STEP_LOG_LINE@json.output@            \"--bar\", @@@",
+      "@@@STEP_LOG_LINE@json.output@            \"--buildername\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          ], @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"name\": \"Test-step custom\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"script\": \"tools/custom_thing\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }, @@@",
+      "@@@STEP_LOG_LINE@json.output@        {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"arguments\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@            \"foo\", @@@",
       "@@@STEP_LOG_LINE@json.output@            \"--bar\"@@@",
       "@@@STEP_LOG_LINE@json.output@          ], @@@",
       "@@@STEP_LOG_LINE@json.output@          \"name\": \"Test-step 3\"@@@",
@@ -750,6 +759,7 @@
     },
     "env_prefixes": {
       "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]",
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
@@ -771,6 +781,7 @@
     },
     "env_prefixes": {
       "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]",
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
@@ -1017,6 +1028,11 @@
     "env": {
       "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-ff-try-try"
     },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "read results of Test-step 2",
     "~followup_annotations": [
@@ -1038,8 +1054,31 @@
     "env": {
       "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-ff-try-try"
     },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "delete result.log (2)"
+  },
+  {
+    "cmd": [
+      "[CACHE]\\builder\\sdk\\tools\\custom_thing",
+      "foo",
+      "--bar",
+      "--buildername"
+    ],
+    "cwd": "[CACHE]\\builder\\sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-ff-try-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "Test-step custom"
   },
   {
     "cmd": [
@@ -1087,6 +1126,11 @@
     "env": {
       "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-ff-try-try"
     },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "read results of Test-step 3",
     "~followup_annotations": [
@@ -1107,6 +1151,11 @@
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
       "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-ff-try-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "infra_step": true,
     "name": "delete result.log (3)"
