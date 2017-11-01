@@ -243,24 +243,32 @@
     "https://build.chromium.org/p/chromium.infra.cron": [
       {
         "close_tree": false,
-        "tree_notify": [
-          "chrome-troopers+alerts-staging@google.com"
-        ],
-
-        "subject_template": "Codesearch build failure on %(builder_name)s",
-
         "builders": {
           "Chromium Linux Codesearch": {
             "excluded_steps": [
               "run translation_unit clang tool"
             ],
-            "forgiving_optional": ["*"]
+            "forgiving_optional": ["*"],
+            "subject_template": "Codesearch build failure on %(builder_name)s",
+            "tree_notify": [
+              "chrome-troopers+alerts-staging@google.com"
+            ]
           },
           "ChromiumOS Codesearch": {
             "excluded_steps": [
               "run translation_unit clang tool"
             ],
-            "forgiving_optional": ["*"]
+            "forgiving_optional": ["*"],
+            "subject_template": "Codesearch build failure on %(builder_name)s",
+            "tree_notify": [
+              "chrome-troopers+alerts-staging@google.com"
+            ]
+          },
+          "publish_tarball": {
+            "forgiving_optional": ["*"],
+            "tree_notify": [
+              "raphael.kubo.da.costa@intel.com"
+            ]
           }
         }
       }
