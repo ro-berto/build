@@ -1055,7 +1055,6 @@ SPEC = {
         'platform': 'linux',
       },
       'enable_swarming': True,
-      'serialize_tests': True,
       'checkout_dir': 'android',
     },
     'Android Release (Nexus 9)': {
