@@ -51,13 +51,16 @@ ESSENTIAL_FILES = (
 )
 
 TEST_DIRS = (
+    # This can be removed once we no longer need to build M62.
     'breakpad/src/processor/testdata',
+
     'chrome/test/data',
     'content/test/data',
     'courgette/testdata',
     'extensions/test/data',
     'media/test/data',
     'native_client/src/trusted/service_runtime/testdata',
+    'third_party/breakpad/breakpad/src/processor/testdata',
 )
 
 
@@ -171,7 +174,13 @@ def main(argv):
   try:
     if options.test_data:
       for directory in TEST_DIRS:
-        archive.add(os.path.join(options.src_dir, directory),
+        test_dir = os.path.join(options.src_dir, directory)
+        if not os.path.isdir(test_dir):
+          # A directory may not exist depending on the milestone we're building
+          # a tarball for.
+          print '"%s" not present; skipping.' % test_dir
+          continue
+        archive.add(test_dir,
                     arcname=os.path.join(output_basename, directory))
     else:
       archive.add(options.src_dir, arcname=output_basename)
