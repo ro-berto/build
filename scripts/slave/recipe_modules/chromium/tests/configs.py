@@ -43,22 +43,6 @@ def GenTests(api):
   )
 
   yield (
-      api.test('force_mac_toolchain_off_10_10') +
-      api.platform('mac', 64) +
-      api.properties(chromium_apply_config=['force_mac_toolchain_off_10_10'],
-                     target_platform='mac') +
-      api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
-      api.test('force_mac_toolchain_off_10_11') +
-      api.platform('mac', 64) +
-      api.properties(chromium_apply_config=['force_mac_toolchain_off_10_11'],
-                     target_platform='mac') +
-      api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
       api.test('goma_canary') +
       api.properties(chromium_apply_config=['goma_canary']) +
       api.post_process(post_process.DropExpectation)

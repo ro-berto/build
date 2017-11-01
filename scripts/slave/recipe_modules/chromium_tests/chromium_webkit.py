@@ -133,7 +133,7 @@ SPEC['builders'] = {
   },
   'WebKit Mac Builder': {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb', 'force_mac_toolchain_off_10_10'],
+    'chromium_apply_config': ['mb'],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
@@ -151,7 +151,7 @@ SPEC['builders'] = {
   },
   'WebKit Mac10.11 (retina)': {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb', 'force_mac_toolchain_off_10_10'],
+    'chromium_apply_config': ['mb'],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
@@ -159,9 +159,6 @@ SPEC['builders'] = {
     },
     'bot_type': 'tester',
     'parent_buildername': 'WebKit Mac Builder',
-    'tests': [
-      steps.BlinkTest(),
-    ],
     'testing': {
       'platform': 'mac',
     },
@@ -174,7 +171,7 @@ SPEC['builders'] = {
   },
   'WebKit Mac10.10': {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb', 'force_mac_toolchain_off_10_10'],
+    'chromium_apply_config': ['mb'],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
@@ -194,7 +191,7 @@ SPEC['builders'] = {
   },
   'WebKit Mac10.11': {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb', 'force_mac_toolchain_off_10_10'],
+    'chromium_apply_config': ['mb'],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
@@ -234,7 +231,7 @@ SPEC['builders'] = {
   },
   'WebKit Mac Builder (dbg)': {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb', 'force_mac_toolchain_off_10_10'],
+    'chromium_apply_config': ['mb'],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Debug',
@@ -252,7 +249,7 @@ SPEC['builders'] = {
   },
   'WebKit Mac10.11 (dbg)': {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb', 'force_mac_toolchain_off_10_10'],
+    'chromium_apply_config': ['mb'],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Debug',
@@ -260,9 +257,6 @@ SPEC['builders'] = {
     },
     'bot_type': 'tester',
     'parent_buildername': 'WebKit Mac Builder (dbg)',
-    'tests': [
-      steps.BlinkTest(),
-    ],
     'testing': {
       'platform': 'mac',
     },

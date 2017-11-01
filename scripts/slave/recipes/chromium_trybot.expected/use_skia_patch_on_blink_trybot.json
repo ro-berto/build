@@ -229,7 +229,7 @@
     "cwd": "[BUILDER_CACHE]/mac_layout/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_SDK_MIN": "10.10",
+      "FORCE_MAC_TOOLCHAIN": "1",
       "GYP_DEFINES": "clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[CACHE]/goma_client' target_arch=x64 use_goma=1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -337,12 +337,12 @@
       "mac10.12_blink_rel",
       "-v",
       "//out/Release",
-      "{\"additional_compile_targets\": [], \"files\": [\"third_party/skia/foo.cc\"], \"test_targets\": [\"blink_tests\"]}",
+      "{\"additional_compile_targets\": [], \"files\": [\"third_party/skia/foo.cc\"], \"test_targets\": []}",
       "/path/to/tmp/json"
     ],
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_SDK_MIN": "10.10",
+      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "analyze",
@@ -359,9 +359,7 @@
       "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.test_targets\": [], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"test_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"blink_tests\"@@@",
-      "@@@STEP_LOG_LINE@analyze_details@  ]@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"test_targets\": []@@@",
       "@@@STEP_LOG_LINE@analyze_details@}@@@",
       "@@@STEP_LOG_END@analyze_details@@@"
     ]

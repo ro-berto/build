@@ -128,11 +128,6 @@ class ChromiumApi(recipe_api.RecipeApi):
       ret['GOMA_COMPILER_PROXY_FORCE_CONNECT_ERRORNEOUS_ADDRESS'] = 'true'
     if self.c.env.FORCE_MAC_TOOLCHAIN:
       ret['FORCE_MAC_TOOLCHAIN'] = self.c.env.FORCE_MAC_TOOLCHAIN
-    if self.c.env.FORCE_MAC_TOOLCHAIN_REVISION_OVERRIDE:
-      ret['MAC_TOOLCHAIN_REVISION'] = \
-          self.c.env.FORCE_MAC_TOOLCHAIN_REVISION_OVERRIDE
-    if self.c.env.FORCE_MAC_SDK_MIN:
-      ret['FORCE_MAC_SDK_MIN'] = self.c.env.FORCE_MAC_SDK_MIN
     return ret
 
   @property

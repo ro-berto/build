@@ -72,8 +72,6 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       GOMA_STUBBY_PROXY_IP_ADDRESS = Single(basestring, required=False),
       GOMA_SETTINGS_SERVER = Single(basestring, required=False),
       FORCE_MAC_TOOLCHAIN = Single(int, required=False),
-      FORCE_MAC_TOOLCHAIN_REVISION_OVERRIDE = Single(basestring, required=False),
-      FORCE_MAC_SDK_MIN = Single(basestring, required=False),
     ),
     project_generator = ConfigGroup(
       tool = Single(basestring, empty_val='mb'),
@@ -237,22 +235,6 @@ def ninja(c):
   if c.TARGET_CROS_BOARD:
     out_path += '_%s' % (c.TARGET_CROS_BOARD,)
   c.build_dir = c.CHECKOUT_PATH.join(out_path)
-
-@config_ctx()
-def force_mac_toolchain_off_10_11(c):
-  c.env.FORCE_MAC_TOOLCHAIN = 0
-  if c.TARGET_PLATFORM == 'mac':
-    c.env.FORCE_MAC_SDK_MIN = '10.11'
-
-@config_ctx()
-def force_mac_toolchain_off_10_10(c):
-  c.env.FORCE_MAC_TOOLCHAIN = 0
-  if c.TARGET_PLATFORM == 'mac':
-    c.env.FORCE_MAC_SDK_MIN = '10.10'
-
-@config_ctx()
-def force_mac_toolchain_override(c):
-  c.env.FORCE_MAC_TOOLCHAIN_REVISION_OVERRIDE = '8C1002-2'
 
 @config_ctx()
 def msvs2015(c):

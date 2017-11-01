@@ -80,32 +80,6 @@ SPEC = {
         'platform': 'mac',
       },
     },
-    'Chromium Mac 10.11': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'mac',
-      },
-    },
-    'Chromium Mac 10.11 Force Mac Toolchain': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'force_mac_toolchain_override'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'mac',
-      },
-    },
     'Chromium Mac 10.13': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb'],

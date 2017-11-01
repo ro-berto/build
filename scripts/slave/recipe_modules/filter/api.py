@@ -171,9 +171,6 @@ class FilterApi(recipe_api.RecipeApi):
       if self.m.chromium.c.env.FORCE_MAC_TOOLCHAIN:
         env['FORCE_MAC_TOOLCHAIN'] = \
             self.m.chromium.c.env.FORCE_MAC_TOOLCHAIN
-      if self.m.chromium.c.env.FORCE_MAC_SDK_MIN:
-        env['FORCE_MAC_SDK_MIN'] = \
-            self.m.chromium.c.env.FORCE_MAC_SDK_MIN
 
     # If building for CrOS, execute through the "chrome_sdk" wrapper. This will
     # override GYP environment variables, so we'll refrain from defining them
