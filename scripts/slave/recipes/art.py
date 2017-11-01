@@ -187,7 +187,23 @@ def setup_host_x86(api, debug, bitness, concurrent_collector=True,
       # anything when we aren't 64 bit. Since the tester doesn't it when we have different
       # build-steps for bitness we will just tell it to run 'true' when we don't have a prebuilt
       # libjdwp.
-      libjdwp_run = art_tools.join('run-prebuilt-libjdwp-tests.sh') if bitness == 64 else 'true'
+      prebuilt_libjdwp_run = \
+          art_tools.join('run-prebuilt-libjdwp-tests.sh') if bitness == 64 else 'true'
+      prebuilt_libjdwp_common_command = [
+          prebuilt_libjdwp_run,
+          '--mode=host',
+          '--variant=X%d' % bitness]
+
+      if debug:
+        prebuilt_libjdwp_common_command.append('--debug')
+
+      if gcstress:
+        prebuilt_libjdwp_common_command += ['--vm-arg', '-Xgc:gcstress']
+
+      api.step('test prebuilt-libjdwp aot', prebuilt_libjdwp_common_command + ['--no-jit'])
+      api.step('test prebuilt-libjdwp jit', prebuilt_libjdwp_common_command)
+
+      libjdwp_run = art_tools.join('run-libjdwp-tests.sh')
       libjdwp_common_command = [
           libjdwp_run,
           '--mode=host',
@@ -371,6 +387,24 @@ def setup_target(api,
     with api.context(env=test_env):
       api.step('test jdwp aot', jdwp_command)
     test_logging(api, 'test jdwp aot')
+
+    libjdwp_command = [
+        art_tools.join('run-libjdwp-tests.sh'),
+        '--mode=device',
+        '--variant=X%d' % bitness]
+
+    if debug:
+      libjdwp_command.append('--debug')
+    if gcstress:
+      libjdwp_command += ['--vm-arg', '-Xgc:gcstress']
+
+    with api.context(env=test_env):
+      api.step('test libjdwp aot', libjdwp_command + ['--no-jit'])
+    test_logging(api, 'test libjdwp aot')
+
+    with api.context(env=test_env):
+      api.step('test libjdwp jit', libjdwp_command)
+    test_logging(api, 'test libjdwp jit')
 
 def setup_aosp_builder(api, read_barrier):
   full_checkout(api)
