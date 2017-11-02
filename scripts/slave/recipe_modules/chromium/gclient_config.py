@@ -17,7 +17,12 @@ def chromium_bare(c):
   s = c.solutions.add()
   s.name = 'src'
   s.url = ChromiumGitURL(c, 'chromium', 'src.git')
-  s.custom_vars = {}
+  s.custom_vars = {
+    # We always want the bots to fetch the dependencies needed to
+    # run the telemetry tests, regardless of whether they are needed or not
+    # (this makes things simpler and more consistent).
+    'checkout_telemetry_dependencies': 'True',
+  }
   m = c.got_revision_reverse_mapping
   m['got_revision'] = 'src'
   m['got_nacl_revision'] = 'src/native_client'
