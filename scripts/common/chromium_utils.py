@@ -2151,6 +2151,8 @@ def _AddBotPoolForBuilder(builder_name, builder_data, bot_pools):
     'version': builder_data['version'],
     'bots': bots,
   }
+  if builder_data.get('subdir'):
+    bot_pools[builder_name]['subdir'] = builder_data['subdir']
   builder_data['bot_pools'] = [builder_name]
 
 
@@ -2192,14 +2194,17 @@ def GetBotsFromBuilders(builders):
     builder_names = sorted(builders_in_pool[pool_name])
     for entry in pool_data['bots']:
       for name in ExpandBotsEntry(entry):
-        bots.append({
+        bot = {
             'hostname': name,
             'builder': builder_names,
             'master': builders['master_classname'],
             'os': pool_data['os'],
             'version': pool_data['version'],
             'bits': pool_data['bits'],
-        })
+        }
+        if pool_data.get('subdir'):
+          bot['subdir'] = pool_data['subdir']
+        bots.append(bot)
 
   return bots
 
@@ -2209,8 +2214,12 @@ def GetBotNamesForBuilder(builders, builder_name):
   hostnames = []
   pool_names = builders['builders'][builder_name]['bot_pools']
   for pool_name in pool_names:
+    subdir_extension = lambda x: x
+    if builders['bot_pools'][pool_name].get('subdir'):
+      subdir_tmpl = '%%s#%s' % builders['bot_pools'][pool_name]['subdir']
+      subdir_extension = lambda x: subdir_tmpl % x
     for entry in builders['bot_pools'][pool_name]['bots']:
-      hostnames.extend(ExpandBotsEntry(entry))
+      hostnames.extend(map(subdir_extension, ExpandBotsEntry(entry)))
   return hostnames
 
 

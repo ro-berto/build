@@ -196,6 +196,27 @@ class GetBotsFromBuilders(unittest.TestCase):
     finally:
       os.remove(fp.name)
 
+  def test_subdir(self):
+    # Test that subdir-slave layout is preserved.
+    try:
+      test_data = SAMPLE_BUILDERS_PY.splitlines()
+      test_data.insert(16, '      "subdir": "0",')
+      fp = tempfile.NamedTemporaryFile(delete=False)
+      fp.write('\n'.join(test_data))
+      fp.close()
+      bots = chromium_utils.GetBotsFromBuildersFile(fp.name)
+      self.assertEqual([{
+          'hostname': 'vm9999-m1',
+          'subdir': '0',
+          'builder': ['Test Linux'],
+          'master': '_FakeMaster',
+          'os': 'linux',
+          'version': 'precise',
+          'bits': 64,
+      }], bots)
+    finally:
+      os.remove(fp.name)
+
   def test_hostname_syntax_and_expansion(self):
     expand = chromium_utils.ExpandBotsEntry
     self.assertEqual(['vm1'], expand('vm1'))
@@ -309,6 +330,26 @@ class GetBotsFromBuilders(unittest.TestCase):
     chromium_utils.NormalizeBuilders(builders, errors)
     self.assertEqual(errors, [])
     self.assertEqual(['vm1', 'vm10', 'vm11', 'vm12'],
+                     chromium_utils.GetBotNamesForBuilder(builders, 'trusty'))
+
+  def test_bot_list_subdir(self):
+    errors = []
+    builders = {
+      'builders': {
+        'trusty': {
+          'os': 'linux',
+          'recipe': 'trusty',
+          'version': 'precise',
+          'bots': ['vm1'],
+          'subdir': '0',
+        },
+      },
+      'bot_pools': {
+      },
+    }
+    chromium_utils.NormalizeBuilders(builders, errors)
+    self.assertEqual(errors, [])
+    self.assertEqual(['vm1#0'],
                      chromium_utils.GetBotNamesForBuilder(builders, 'trusty'))
 
   def test_builder_must_have_bots(self):
