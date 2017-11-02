@@ -174,7 +174,7 @@ def _GetData(line):
 
 
 def MakeHistogramSetWithDiagnostics(histograms_file, chromium_checkout_path,
-                                    test_name, bot, buildnumber,
+                                    test_name, bot, buildername, buildnumber,
                                     revisions_dict, is_reference_build):
   add_diagnostics_args = []
   add_diagnostics_args.extend([
@@ -184,6 +184,10 @@ def MakeHistogramSetWithDiagnostics(histograms_file, chromium_checkout_path,
       '--masters', chromium_utils.GetActiveMaster(),
       '--is_reference_build', 'true' if is_reference_build else '',
   ])
+
+  url = _MakeStdioUrl(test_name, buildername, buildnumber)
+  if url:
+    add_diagnostics_args.extend(['--log_urls', url])
 
   for k, v in revisions_dict.iteritems():
     add_diagnostics_args.extend((k, v))
@@ -329,16 +333,24 @@ def MakeDashboardJsonV1(chart_json, revision_dict, test_name, bot, buildername,
   return fields
 
 
-def _GetStdioUriColumn(test_name, buildername, buildnumber):
-  """Gets a supplemental column containing buildbot stdio link."""
+def _MakeStdioUrl(test_name, buildername, buildnumber):
+  """Returns a string url pointing to buildbot stdio log."""
+  # TODO(780914): Link to logdog instead of buildbot.
   if not buildername or not buildnumber:
-    return {}
+    return ''
 
-  url = '%sbuilders/%s/builds/%s/steps/%s/logs/stdio' % (
+  return '%sbuilders/%s/builds/%s/steps/%s/logs/stdio' % (
       _GetBuildBotUrl(),
       urllib.quote(buildername),
       urllib.quote(str(buildnumber)),
       urllib.quote(test_name))
+
+
+def _GetStdioUriColumn(test_name, buildername, buildnumber):
+  """Gets a supplemental column containing buildbot stdio link."""
+  url = _MakeStdioUrl(test_name, buildername, buildnumber)
+  if not url:
+    return {}
   return _CreateLinkColumn('stdio_uri', 'Buildbot stdio', url)
 
 

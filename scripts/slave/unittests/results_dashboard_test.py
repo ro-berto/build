@@ -106,14 +106,15 @@ class ResultsDashboardFormatTest(unittest.TestCase):
       expected_cmd = [sys.executable,
           '/path/to/chromium/src/third_party/catapult/tracing/bin/'
           'add_reserved_diagnostics', '--benchmarks', 'foo.test', '--bots',
-          'builder', '--builds', '1', '--masters', 'ChromiumPerf',
-          '--is_reference_build', '',
+          'bot', '--builds', '1', '--masters', 'ChromiumPerf',
+          '--is_reference_build', '', '--log_urls',
+          'http://build.chromium.org/p/my.master/builders/builder/builds/1/steps/foo.test/logs/stdio',
           f.name]
       subprocess.call(expected_cmd)
       self.mox.ReplayAll()
 
       results_dashboard.MakeHistogramSetWithDiagnostics(
-          f.name, '/path/to/chromium', 'foo.test', 'builder', 1, {}, False)
+          f.name, '/path/to/chromium', 'foo.test', 'bot', 'builder', 1, {}, False)
 
   def test_MakeListOfPoints_MinimalCase(self):
     """A very simple test of a call to MakeListOfPoints."""
