@@ -287,7 +287,7 @@ class CrOSTryJobGit(TryBase):
 Your tryjob with name '%(name)s' failed the validation step.  This is most
 likely because <br>you are running an older version of cbuildbot.  Please run
 <br><code>repo sync chromiumos/chromite</code> and try again.  If you still
-see<br>this message please contact chromeos-build@google.com.<br>
+see<br>this message please contact chromeos-infra-discuss@google.com
 """
     html_content.append(body % {'name': name})
     html_content.append("Extra error information:")

@@ -14,7 +14,7 @@ class ChromiumOSTryServer(Master.ChromiumOSBase):
   repo_url_int = 'https://chrome-internal.googlesource.com/chromeos/tryjobs.git'
   from_address = 'cros.tryserver@chromium.org'
   # The reply-to address to set for emails sent from the server.
-  reply_to = 'chromeos-build@google.com'
+  reply_to = 'chromeos-infra-discuss@google.com'
   # Select tree status urls and codereview location.
   base_app_url = 'https://chromiumos-status.appspot.com'
   tree_status_url = base_app_url + '/status'
