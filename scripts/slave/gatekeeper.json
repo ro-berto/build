@@ -26,6 +26,11 @@
           "chromium_android"
         ],
         "builders": {
+          "Android ASAN (dbg)": {
+            "categories": [
+              "chromium_tree_closer"
+            ]
+          },
           "Android Cronet ARM64 Builder": {
             "tree_notify": [
               "cronet-sheriff+build@google.com"
@@ -122,7 +127,27 @@
               "*"
             ]
           },
-          "Android N5X Swarm Builder": {
+          "Android arm Builder (dbg)": {
+            "categories": [
+              "chromium_tree_closer"
+            ]
+          },
+          "Android arm64 Builder (dbg)": {
+            "categories": [
+              "chromium_tree_closer"
+            ]
+          },
+          "Cast Android (dbg)": {
+            "categories": [
+              "chromium_tree_closer"
+            ]
+          },
+          "KitKat Phone Tester (rel)": {
+            "categories": [
+              "chromium_tree_closer"
+            ]
+          },
+          "Marshmallow Phone Tester (rel)": {
             "categories": [
               "chromium_tree_closer"
             ]
@@ -325,41 +350,6 @@
           "chromium_tree_closer"
         ],
         "builders": {
-          "Android Builder (dbg)": {
-            "categories": [
-              "chromium_android"
-            ]
-          },
-          "Android Tests (dbg)": {
-            "categories": [
-              "chromium_android"
-            ]
-          },
-          "Android Builder": {
-            "categories": [
-              "chromium_android"
-            ]
-          },
-          "Android Tests": {
-            "categories": [
-              "chromium_android"
-            ]
-          },
-          "Android Clang Builder (dbg)": {
-            "categories": [
-              "chromium_android"
-            ]
-          },
-          "Android Webview AOSP Builder": {
-            "categories": [
-              "chromium_android"
-            ]
-          },
-          "Android GN": {
-            "categories": [
-              "chromium_android"
-            ]
-          },
           "*": {}
         }
       },

@@ -84,8 +84,8 @@ TRYBOTS = freeze({
         'buildername': 'Android',
       }),
       'android_arm64_dbg_recipe': simple_bot({
-        'mastername': 'chromium.linux',
-        'buildername': 'Android Arm64 Builder (dbg)',
+        'mastername': 'chromium.android',
+        'buildername': 'Android arm64 Builder (dbg)',
       }, analyze_mode='compile'),
       'android_blink_rel': simple_bot({
         'mastername': 'chromium.webkit',
@@ -93,12 +93,12 @@ TRYBOTS = freeze({
         'tester': 'WebKit Android (Nexus4)',
       }),
       'android_clang_dbg_recipe': simple_bot({
-        'mastername': 'chromium.linux',
-        'buildername': 'Android Clang Builder (dbg)',
+        'mastername': 'chromium.android',
+        'buildername': 'Android ASAN (dbg)',
       }, analyze_mode='compile'),
       'android_compile_dbg': simple_bot({
-        'mastername': 'chromium.linux',
-        'buildername': 'Android Builder (dbg)',
+        'mastername': 'chromium.android',
+        'buildername': 'Android arm Builder (dbg)',
       }, analyze_mode='compile'),
       'android_compile_mips_dbg': simple_bot({
         'mastername': 'chromium.android',
@@ -111,10 +111,6 @@ TRYBOTS = freeze({
       'android_compile_x86_dbg': simple_bot({
         'mastername': 'chromium.android',
         'buildername': 'Android x86 Builder (dbg)',
-      }, analyze_mode='compile'),
-      'android_compile_rel': simple_bot({
-        'mastername': 'chromium.linux',
-        'buildername': 'Android Builder',
       }, analyze_mode='compile'),
       'android_coverage': simple_bot({
         'mastername': 'chromium.fyi',
@@ -131,25 +127,23 @@ TRYBOTS = freeze({
        }),
       'android_n5x_swarming_rel': simple_bot({
         'mastername': 'chromium.android',
-        'buildername': 'Android N5X Swarm Builder',
+        'buildername': 'Marshmallow Phone Tester (rel)',
       }),
       'android_optional_gpu_tests_rel': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'Android Release (Nexus 5X)',
       }),
       'cast_shell_android': simple_bot({
-        'mastername': 'chromium.linux',
+        'mastername': 'chromium.android',
         'buildername': 'Cast Android (dbg)',
       }),
       'linux_android_dbg_ng': simple_bot({
-        'mastername': 'chromium.linux',
-        'buildername': 'Android Builder (dbg)',
-        'tester': 'Android Tests (dbg)',
+        'mastername': 'chromium.android',
+        'buildername': 'KitKat Phone Tester (dbg)',
       }),
       'linux_android_rel_ng': simple_bot({
-        'mastername': 'chromium.linux',
-        'buildername': 'Android Builder',
-        'tester': 'Android Tests',
+        'mastername': 'chromium.android',
+        'buildername': 'KitKat Phone Tester (rel)',
       }),
       'android_unswarmed_n5_rel': simple_bot({
         'mastername': 'chromium.android.fyi',

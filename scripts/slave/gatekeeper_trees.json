@@ -15,9 +15,6 @@
         "build-db": "waterfall_build_db.json",
         "masters": {
             "https://build.chromium.org/p/chromium": ["*"],
-            "https://build.chromium.org/p/chromium.android": [
-              "Android N5X Swarm Builder"
-            ],
             "https://build.chromium.org/p/chromium.chrome": ["*"],
             "https://build.chromium.org/p/chromium.chromiumos": ["*"],
             "https://build.chromium.org/p/chromium.gpu": ["*"],
@@ -54,17 +51,6 @@
             "https://build.chromium.org/p/chromium": ["Android"],
             "https://build.chromium.org/p/chromium.webkit": [
                 "Android Builder", "Webkit Android (Nexus4)"
-            ],
-            "https://build.chromium.org/p/chromium.linux": [
-                "Android Builder (dbg)",
-                "Android Tests (dbg)",
-                "Android Builder",
-                "Android Tests",
-                "Android Clang Builder (dbg)",
-                "Cast Android (dbg)"
-            ],
-            "https://build.chromium.org/p/chromium.fyi": [
-                "Android Builder (dbg)"
             ]
         }
     },
