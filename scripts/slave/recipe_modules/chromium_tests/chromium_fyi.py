@@ -420,7 +420,6 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'compile_targets': [ 'chrome' ],
-      'goma_canary': True,
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win'
@@ -436,7 +435,6 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'compile_targets': [ 'chrome' ],
-      'goma_canary': True,
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win'
@@ -453,7 +451,6 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'compile_targets': [ 'all' ],
-      'goma_canary': True,
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win'
@@ -469,7 +466,6 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'compile_targets': [ 'chrome' ],
-      'goma_canary': True,
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win'
@@ -485,7 +481,6 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'compile_targets': [ 'chrome' ],
-      'goma_canary': True,
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win'
@@ -504,7 +499,6 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'compile_targets': [ 'chrome' ],
-      'goma_canary': True,
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win'
@@ -521,7 +515,6 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'compile_targets': [ 'all' ],
-      'goma_canary': True,
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win'
@@ -548,8 +541,6 @@ SPEC = {
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
-
-      'goma_canary': True,
     },
     # followed amd64-generic config in chromium_tests/chromium_chromiumos.py
     'ChromeOS amd64 Chromium Goma Canary': {
@@ -563,7 +554,6 @@ SPEC = {
         'TARGET_CROS_BOARD': 'amd64-generic',
       },
       'compile_targets': [ 'chromiumos_preflight' ],
-      'goma_canary': True,
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux'
@@ -578,7 +568,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'compile_targets': [ 'chrome' ],
-      'goma_canary': True,
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux'
@@ -593,7 +582,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'compile_targets': [ 'all' ],
-      'goma_canary': True,
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux'
@@ -609,7 +597,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'compile_targets': [ 'all' ],
-      'goma_canary': True,
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux'
@@ -624,7 +611,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'compile_targets': [ 'chrome' ],
-      'goma_canary': True,
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'mac'
@@ -639,7 +625,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'compile_targets': [ 'chrome' ],
-      'goma_canary': True,
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'mac'
@@ -658,7 +643,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'compile_targets': [ 'all' ],
-      'goma_canary': True,
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'mac'
@@ -677,7 +661,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'compile_targets': [ 'all' ],
-      'goma_canary': True,
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'mac'
@@ -697,7 +680,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'compile_targets': [ 'all' ],
-      'goma_canary': True,
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'mac'
@@ -714,7 +696,6 @@ SPEC = {
         'TARGET_PLATFORM': 'android',
       },
       'android_config': 'main_builder',
-      'goma_canary': True,
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux',

@@ -233,7 +233,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     if (self.m.chromium.c.compile_py.compiler and
         'goma' in self.m.chromium.c.compile_py.compiler):
-      self.m.chromium.ensure_goma(canary=bot_config.get('goma_canary', False))
+      self.m.chromium.ensure_goma(
+          canary=self.m.chromium.c.compile_py.goma_canary)
 
     self.set_up_swarming(bot_config)
     self.runhooks(update_step)
