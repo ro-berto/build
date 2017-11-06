@@ -20,7 +20,6 @@ DEPS = [
   'recipe_engine/properties',
   'recipe_engine/raw_io',
   'recipe_engine/step',
-  'webrtc',
 ]
 
 SPEC = freeze({
@@ -42,17 +41,6 @@ SPEC = freeze({
       'sync_generated_files': True,
       'gen_repo_branch': 'master',
       'corpus': 'chromium',
-    },
-    'codesearch-gen-webrtc-linux': {
-      'gclient_config': 'webrtc',
-      'compile_targets': [
-        'all',
-      ],
-      'package_filename': 'webrtc-src',
-      'platform': 'linux',
-      'sync_generated_files': False,
-      'gen_repo_branch': 'master',
-      'corpus': 'webrtc-linux',
     },
     'codesearch-gen-chromium-chromiumos': {
       'gclient_config': 'chromium',
@@ -157,14 +145,7 @@ def RunSteps(api):
   with api.context(env={'CHROME_HEADLESS': '1'}):
     api.chromium.runhooks()
 
-  mb_config_path = None  # Defaults to Chromium's location.
-  # TODO(kjellander): Refactor WebRTC into its own recipe once more logic has
-  # moved into the codesearch recipe module. This is the only thing different
-  # between Chromium and WebRTC as of now.
-  if 'webrtc' in buildername:
-    mb_config_path = api.path['checkout'].join('tools_webrtc', 'mb')
-  result = api.codesearch.generate_compilation_database(
-      targets, platform, mb_config_path=mb_config_path)
+  result = api.codesearch.generate_compilation_database(targets, platform)
 
   # Cleans up generated files. This is to prevent old generated files from
   # being left in the out directory.
