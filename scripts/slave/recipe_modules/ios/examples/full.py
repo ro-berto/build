@@ -201,6 +201,37 @@ def GenTests(api):
   )
 
   yield (
+    api.test('perf_test')
+    + api.platform('mac', 64)
+    + api.properties(
+      buildername='ios',
+      buildnumber='0',
+      mastername='chromium.fake',
+      bot_id='fake-vm',
+    )
+    + api.ios.make_test_build_config({
+      'xcode version': '6.1.1',
+      'gn_args': [
+        'is_debug=true',
+        'target_cpu="x86"',
+      ],
+      'tests': [
+        {
+          'app': 'fake test',
+          'bot id': 'fake99-b1',
+          'device type': 'fake device',
+          'os': '8.1',
+          'pool': 'fake-pool',
+        },
+      ],
+    })
+    + api.step_data(
+        'bootstrap swarming.swarming.py --version',
+        stdout=api.raw_io.output_text('1.2.3'),
+    )
+ )
+
+  yield (
     api.test('infra_failure')
     + api.platform('mac', 64)
     + api.properties(

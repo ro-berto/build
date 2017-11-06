@@ -486,8 +486,10 @@ class iOSApi(recipe_api.RecipeApi):
   def isolate_test(self, test, tmp_dir, isolate_template):
     """Isolates a single test."""
     task = {
+        'bot id': test.get('bot id'),
         'isolate.gen': None,
         'isolated hash': None,
+        'pool': test.get('pool'),
         'skip': 'skip' in test,
         'step name': self.get_step_name(test),
         'task': None,
@@ -673,6 +675,10 @@ class iOSApi(recipe_api.RecipeApi):
           step_result.presentation.step_text = (
             'Requested unsupported device type.')
           continue
+      if task['bot id']:
+        swarming_task.dimensions['id'] = task['bot id']
+      if task['pool']:
+        swarming_task.dimensions['pool'] = task['pool']
 
       spec = [
         self.m.properties['mastername'],
