@@ -56,12 +56,10 @@ _AddBuildSpec('android_perf_bisect_builder', 'android', target_bits=32)
 _AddBuildSpec('android_arm64_perf_bisect_builder', 'android')
 _AddBuildSpec('win_perf_bisect_builder', 'win', target_bits=32)
 _AddBuildSpec('winx64_bisect_builder', 'win')
-_AddBuildSpec('mac_perf_bisect_builder', 'mac')
 _AddBuildSpec('linux_perf_bisect_builder', 'linux')
 
 
 _AddTestSpec('win_fyi_perf_bisect', 'win', target_bits=32)
-_AddTestSpec('mac_fyi_perf_bisect', 'mac')
 _AddTestSpec('linux_fyi_perf_bisect', 'linux')
 
 
@@ -75,13 +73,7 @@ _AddTestSpec('winx64ati_perf_bisect', 'win')
 _AddTestSpec('winx64intel_perf_bisect', 'win')
 _AddTestSpec('winx64nvidia_perf_bisect', 'win')
 
-_AddTestSpec('mac_10_11_perf_bisect', 'mac')
-_AddTestSpec('mac_10_12_perf_bisect', 'mac')
-_AddTestSpec('mac_retina_perf_bisect', 'mac')
-_AddTestSpec('mac_10_12_mini_8gb_perf_bisect', 'mac')
-
 _AddTestSpec('linux_perf_bisect', 'linux')
 
 _AddTestSpec('staging_linux_perf_bisect', 'linux')
-_AddTestSpec('staging_mac_10_12_perf_bisect', 'mac')
 _AddTestSpec('staging_win_perf_bisect', 'win', target_bits=32)

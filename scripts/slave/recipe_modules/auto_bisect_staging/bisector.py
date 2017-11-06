@@ -709,9 +709,6 @@ class Bisector(object):
         return 'android_arm64_perf_bisect_builder'
       return 'android_perf_bisect_builder'
 
-    if 'mac' in bot_name:
-      return 'mac_perf_bisect_builder'
-
     return 'linux_perf_bisect_builder'
 
   def get_platform_gs_prefix(self):
@@ -738,9 +735,6 @@ class Bisector(object):
       if any(b in bot_name for b in ['arm64', 'nexus9']):
         return 'gs://chrome-perf/Android arm64 Builder/full-build-linux_'
       return 'gs://chrome-perf/Android Builder/full-build-linux_'
-
-    if 'mac' in bot_name:
-      return 'gs://chrome-perf/Mac Builder/full-build-mac_'
 
     return 'gs://chrome-perf/Linux Builder/full-build-linux_'
 
