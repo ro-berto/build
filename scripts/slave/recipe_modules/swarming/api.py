@@ -391,7 +391,7 @@ class SwarmingApi(recipe_api.RecipeApi):
   def task(self, title, isolated_hash, ignore_task_failure=False, shards=1,
            task_output_dir=None, extra_args=None, idempotent=None,
            cipd_packages=None, build_properties=None, merge=None,
-           trigger_script=None):
+           trigger_script=None, named_caches=None):
     """Returns a new SwarmingTask instance to run an isolated executable on
     Swarming.
 
@@ -447,6 +447,8 @@ class SwarmingApi(recipe_api.RecipeApi):
           "args": an optional list of additional arguments to pass to the
               script.
           See SwarmingTask.__init__ docstring for more details.
+      named_caches: a dict {name: relpath} requesting a cache named `name`
+          to be installed in `relpath` relative to the task root directory.
 
     """
     if idempotent is None:
@@ -472,7 +474,9 @@ class SwarmingApi(recipe_api.RecipeApi):
         cipd_packages=cipd_packages,
         build_properties=build_properties,
         merge=merge,
-        trigger_script=trigger_script)
+        trigger_script=trigger_script,
+        named_caches=named_caches,
+      )
 
   def gtest_task(self, title, isolated_hash, test_launcher_summary_output=None,
                  extra_args=None, cipd_packages=None, merge=None, **kwargs):
@@ -599,6 +603,9 @@ class SwarmingApi(recipe_api.RecipeApi):
     for name, value in sorted(task.env.iteritems()):
       assert isinstance(value, basestring), value
       args.extend(['--env', name, value])
+
+    for name, relpath in sorted(task.named_caches.iteritems()):
+      args.extend(['--named-cache', name, relpath])
 
     # Default tags.
     tags = set(task.tags)
@@ -1147,7 +1154,8 @@ class SwarmingTask(object):
                env, priority, shards, buildername, buildnumber, expiration,
                user, io_timeout, hard_timeout, idempotent, extra_args,
                collect_step, task_output_dir, cipd_packages=None,
-               build_properties=None, merge=None, trigger_script=None):
+               build_properties=None, merge=None, trigger_script=None,
+               named_caches=None):
     """Configuration of a swarming task.
 
     Args:
@@ -1213,6 +1221,8 @@ class SwarmingTask(object):
               swarming.py file which should be used for any trigger RPCs to the
               swarming server.
             2. Any additional arguments provided in the "args" entry.
+      named_caches: a dict {name: relpath} requesting a cache named `name`
+          to be installed in `relpath` relative to the task root directory.
     """
     self._trigger_output = None
     self.build_properties = build_properties
@@ -1230,6 +1240,7 @@ class SwarmingTask(object):
     self.io_timeout = io_timeout
     self.isolated_hash = isolated_hash
     self.merge = merge or {}
+    self.named_caches = named_caches or {}
     self.trigger_script = trigger_script or {}
     self.priority = priority
     self.shards = shards
