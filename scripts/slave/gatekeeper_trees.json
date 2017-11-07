@@ -69,14 +69,11 @@
         "open-tree": false,
         "set-status": false,
         "masters": {
-          "https://build.chromium.org/p/chromium.fyi": [
-              "EarlGreyiOS",
-              "ios-simulator"
-          ],
           "https://build.chromium.org/p/chromium.mac": [
               "ios-device",
               "ios-device-xcode-clang",
               "ios-simulator",
+              "ios-simulator-full-configs",
               "ios-simulator-xcode-clang"
           ]
         }

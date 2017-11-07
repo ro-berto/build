@@ -118,14 +118,11 @@
       "@@@STEP_LOG_LINE@json.output@  \"ios\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"build-db\": \"ios_db.json\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"masters\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/chromium.fyi\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"EarlGreyiOS\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"ios-simulator\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      ], @@@",
       "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/chromium.mac\": [@@@",
       "@@@STEP_LOG_LINE@json.output@        \"ios-device\", @@@",
       "@@@STEP_LOG_LINE@json.output@        \"ios-device-xcode-clang\", @@@",
       "@@@STEP_LOG_LINE@json.output@        \"ios-simulator\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"ios-simulator-full-configs\", @@@",
       "@@@STEP_LOG_LINE@json.output@        \"ios-simulator-xcode-clang\"@@@",
       "@@@STEP_LOG_LINE@json.output@      ]@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
@@ -478,8 +475,7 @@
       "/creds/service_accounts/service-account-gatekeeper.json",
       "--build-db",
       "ios_db.json",
-      "https://build.chromium.org/p/chromium.fyi:EarlGreyiOS,ios-simulator",
-      "https://build.chromium.org/p/chromium.mac:ios-device,ios-device-xcode-clang,ios-simulator,ios-simulator-xcode-clang"
+      "https://build.chromium.org/p/chromium.mac:ios-device,ios-device-xcode-clang,ios-simulator,ios-simulator-full-configs,ios-simulator-xcode-clang"
     ],
     "name": "gatekeeper: ios"
   },
