@@ -2,8 +2,11 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from . import steps
+import copy
 import time
+
+from . import chromium_linux
+from . import steps
 
 RESULTS_URL = 'https://chromeperf.appspot.com'
 
@@ -56,6 +59,21 @@ def stock_config(name, platform=None, config='Release'):
         },
   }
 
+
+def chromium_apply_configs(base_config, config_names):
+  """chromium_apply_configs returns new config from base config with config.
+
+  It adds config names in chromium_apply_config.
+
+  Args:
+    base_config: config obj in SPEC['builders'][x].
+    config_names: a list of config names to be added into chromium_apply_config.
+  Returns:
+    new config obj.
+  """
+  config = copy.deepcopy(base_config)
+  config['chromium_apply_config'].extend(config_names)
+  return config
 
 
 SPEC = {
@@ -559,20 +577,8 @@ SPEC = {
         'platform': 'linux'
       }
     },
-    'Chromium Linux Goma Canary': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['goma_canary', 'mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'compile_targets': [ 'chrome' ],
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'linux'
-      }
-    },
+    'Chromium Linux Goma Canary': chromium_apply_configs(
+        chromium_linux.SPEC['builders']['Linux Builder'], ['goma_canary']),
     'Chromium Linux Goma Canary (clobber)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['clobber', 'goma_canary', 'mb'],
