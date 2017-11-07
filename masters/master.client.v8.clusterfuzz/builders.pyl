@@ -14,13 +14,29 @@
   },
 
   "builders": {
+    "V8 Win32 ASAN - release builder": {
+      "recipe": "v8",
+      "use_remote_run": False,
+      "scheduler": "v8_commits",
+      "mergeRequests": False,
+      "bot_pools": ["win"],
+      "category": "0Windows",
+    },
+    "V8 Win32 ASAN - debug builder": {
+      "recipe": "v8",
+      "use_remote_run": False,
+      "scheduler": "v8_commits",
+      "mergeRequests": False,
+      "bot_pools": ["win"],
+      "category": "0Windows",
+    },
     "V8 Mac64 ASAN - release builder": {
       "recipe": "v8",
       "use_remote_run": False,
       "scheduler": "v8_commits",
       "mergeRequests": False,
       "bot_pools": ["mac"],
-      "category": "0Mac",
+      "category": "1Mac",
     },
     "V8 Mac64 ASAN - debug builder": {
       "recipe": "v8",
@@ -28,7 +44,7 @@
       "scheduler": "v8_commits",
       "mergeRequests": False,
       "bot_pools": ["mac"],
-      "category": "0Mac",
+      "category": "1Mac",
     },
     "V8 Linux64 - release builder": {
       "recipe": "v8",
@@ -36,7 +52,7 @@
       "scheduler": "v8_commits",
       "mergeRequests": False,
       "bot_pools": ["linux1"],
-      "category": "1Linux",
+      "category": "2Linux",
     },
     "V8 Linux64 - debug builder": {
       "recipe": "v8",
@@ -44,7 +60,7 @@
       "scheduler": "v8_commits",
       "mergeRequests": False,
       "bot_pools": ["linux1"],
-      "category": "1Linux",
+      "category": "2Linux",
     },
     "V8 Linux64 ASAN no inline - release builder": {
       "recipe": "v8",
@@ -52,7 +68,7 @@
       "scheduler": "v8_commits",
       "mergeRequests": False,
       "bot_pools": ["linux2"],
-      "category": "1Linux",
+      "category": "2Linux",
     },
     "V8 Linux64 ASAN - debug builder": {
       "recipe": "v8",
@@ -60,7 +76,7 @@
       "scheduler": "v8_commits",
       "mergeRequests": False,
       "bot_pools": ["linux2"],
-      "category": "1Linux",
+      "category": "2Linux",
     },
     "V8 Linux64 ASAN arm64 - debug builder": {
       "recipe": "v8",
@@ -68,7 +84,7 @@
       "scheduler": "v8_commits",
       "mergeRequests": False,
       "bot_pools": ["linux2"],
-      "category": "1Linux",
+      "category": "2Linux",
     },
     "V8 Linux ASAN arm - debug builder": {
       "recipe": "v8",
@@ -76,7 +92,7 @@
       "scheduler": "v8_commits",
       "mergeRequests": False,
       "bot_pools": ["linux3"],
-      "category": "1Linux",
+      "category": "2Linux",
     },
     "V8 Linux ASAN mipsel - debug builder": {
       "recipe": "v8",
@@ -84,7 +100,7 @@
       "scheduler": "v8_commits",
       "mergeRequests": False,
       "bot_pools": ["linux3"],
-      "category": "1Linux",
+      "category": "2Linux",
     },
     "V8 Linux MSAN no origins": {
       "recipe": "v8",
@@ -92,7 +108,7 @@
       "scheduler": "v8_commits",
       "mergeRequests": False,
       "bot_pools": ["linux3"],
-      "category": "1Linux",
+      "category": "2Linux",
     },
     "V8 Linux MSAN chained origins": {
       "recipe": "v8",
@@ -100,7 +116,7 @@
       "scheduler": "v8_commits",
       "mergeRequests": False,
       "bot_pools": ["linux3"],
-      "category": "1Linux",
+      "category": "2Linux",
     },
     "V8 Linux64 CFI - release builder": {
       "recipe": "v8",
@@ -108,7 +124,7 @@
       "scheduler": "v8_commits",
       "mergeRequests": False,
       "bot_pools": ["linux4"],
-      "category": "1Linux",
+      "category": "2Linux",
     },
     "V8 Linux64 UBSanVptr - release builder": {
       "recipe": "v8",
@@ -116,7 +132,7 @@
       "scheduler": "v8_commits",
       "mergeRequests": False,
       "bot_pools": ["linux5"],
-      "category": "1Linux",
+      "category": "2Linux",
     },
     "V8 Deopt Fuzzer": {
       "recipe": "v8",
@@ -128,7 +144,7 @@
       "auto_reboot" : False,
       "os": "linux",
       "version": "trusty",
-      "category": "2Fuzzers",
+      "category": "3Fuzzers",
     },
     "V8 Random Deopt Fuzzer - debug": {
       "recipe": "v8",
@@ -140,7 +156,7 @@
       "os": "linux",
       "version": "trusty",
       "auto_reboot" : False,
-      "category": "2Fuzzers",
+      "category": "3Fuzzers",
     },
   },
 
@@ -153,6 +169,12 @@
   },
 
   "bot_pools": {
+    "win": {
+      "bits": 64,
+      "os": "win",
+      "version": "win7",
+      "bots": ["vm92-m3", "vm93-m3"],
+    },
     "mac": {
       "bits": 64,
       "os": "mac",
