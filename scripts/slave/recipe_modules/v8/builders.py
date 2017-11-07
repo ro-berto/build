@@ -672,6 +672,15 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Windows-7-SP1',
+        },
+        'tests': [
+          V8Testing,
+          Test262,
+          Mozilla,
+        ],
         'testing': {'platform': 'win'},
       },
 ####### Category: Mac
