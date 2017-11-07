@@ -227,7 +227,7 @@
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\win_clang",
-      "GOMA_DEPS_CACHE_FILE": "goma_deps_cache_131",
+      "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_ENABLE_MACRO_CACHE": "true",
       "GOMA_FAIL_FAST": "true",
       "GOMA_HERMETIC": "error",

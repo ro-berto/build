@@ -349,7 +349,7 @@
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[CACHE]/goma/Android_arm64_Builder",
-      "GOMA_DEPS_CACHE_FILE": "goma_deps_cache_131",
+      "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"

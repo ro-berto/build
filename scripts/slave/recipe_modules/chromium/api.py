@@ -350,8 +350,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     goma_env['GOMA_CACHE_DIR'] = self.m.goma.default_cache_path
 
     # Enable goma DepsCache
-    # TODO(tikuta): remove after crbug.com/737896
-    goma_env['GOMA_DEPS_CACHE_FILE'] = "goma_deps_cache_131"
+    goma_env['GOMA_DEPS_CACHE_FILE'] = "goma_deps_cache"
 
     if self.c.compile_py.mode:
       if (self.c.compile_py.mode == 'google_chrome' or
