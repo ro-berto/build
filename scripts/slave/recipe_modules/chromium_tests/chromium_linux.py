@@ -125,116 +125,6 @@ SPEC = {
       'enable_swarming': True,
     },
 
-    'Android Arm64 Builder (dbg)': {
-      'chromium_config': 'android',
-      'chromium_apply_config': ['chrome_with_codecs', 'mb'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 64,
-        'TARGET_PLATFORM': 'android',
-      },
-      'android_config': 'arm64_builder',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-    'Android Builder (dbg)': {
-      'chromium_config': 'android',
-      'chromium_apply_config': ['chrome_with_codecs', 'mb'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
-        'TARGET_PLATFORM': 'android',
-      },
-      'android_config': 'main_builder',
-      'bot_type': 'builder',
-      'testing': {
-        'platform': 'linux',
-      },
-      'enable_swarming': True,
-      'checkout_dir': 'android',
-    },
-    'Android Tests (dbg)': {
-      'chromium_config': 'android',
-      'chromium_apply_config': ['chrome_with_codecs', 'mb'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
-        'TARGET_PLATFORM': 'android',
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'Android Builder (dbg)',
-      'android_config': 'main_builder',
-      'root_devices': True,
-      'tests': [],
-      'testing': {
-        'platform': 'linux',
-      },
-      'enable_swarming': True,
-    },
-
-    'Android Builder': {
-      'chromium_config': 'android',
-      'chromium_apply_config': ['chrome_with_codecs', 'mb'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-        'TARGET_PLATFORM': 'android',
-      },
-      'android_config': 'main_builder',
-      'bot_type': 'builder',
-      'testing': {
-        'platform': 'linux',
-      },
-      'enable_swarming': True,
-      'checkout_dir': 'android',
-    },
-
-    'Android Tests': {
-      'chromium_config': 'android',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-        'TARGET_PLATFORM': 'android',
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'Android Builder',
-      'android_config': 'main_builder',
-      'root_devices': True,
-      'testing': {
-        'platform': 'linux',
-      },
-      'enable_swarming': True,
-    },
-
-    'Android Clang Builder (dbg)': {
-      'chromium_config': 'android_clang',
-      'chromium_apply_config': ['chrome_with_codecs', 'errorprone'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
-        'TARGET_PLATFORM': 'android',
-      },
-      'android_config': 'clang_builder_mb',
-      'bot_type': 'builder_tester',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-
     'Cast Audio Linux': {
       'chromium_config': 'cast_linux',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
@@ -255,21 +145,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-    'Cast Android (dbg)': {
-      'chromium_config': 'android',
-      'chromium_apply_config': ['chrome_with_codecs', 'mb'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
-        'TARGET_PLATFORM': 'android',
-      },
-      'android_config': 'cast_builder',
       'testing': {
         'platform': 'linux',
       },

@@ -58,15 +58,6 @@ SUPPRESSIONS = {
     ],
     'master.chromium.linux': [
         'Deterministic Linux',
-
-        # TODO(crbug.com/773872): These are being moved to chromium.android
-        'Android Arm64 Builder (dbg)',
-        'Android Builder',
-        'Android Builder (dbg)',
-        'Android Clang Builder (dbg)',
-        'Android Tests',
-        'Android Tests (dbg)',
-        'Cast Android (dbg)',
     ],
     'master.chromium.mac': [
         'ios-device', # these are covered, just by the iOS recipes instead.

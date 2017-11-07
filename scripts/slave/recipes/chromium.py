@@ -1529,13 +1529,12 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_instrumentation_test') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Android Tests',
-                           parent_buildername='Android Builder') +
+    api.properties.generic(mastername='chromium.android',
+                           buildername='KitKat Phone Tester (rel)') +
     api.override_step_data(
-        'read test spec (chromium.linux.json)',
+        'read test spec (chromium.android.json)',
         api.json.output({
-            'Android Tests': {
+            'KitKat Phone Tester (rel)': {
                 'instrumentation_tests': [
                     {
                         'test': 'ChromePublicTest',
@@ -1554,12 +1553,12 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_instrumentation_nodefault_build') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Android Builder') +
+    api.properties.generic(mastername='chromium.android',
+                           buildername='KitKat Phone Tester (rel)') +
     api.override_step_data(
-        'read test spec (chromium.linux.json)',
+        'read test spec (chromium.android.json)',
         api.json.output({
-            'Android Tests': {
+            'KitKat Phone Tester (rel)': {
                 'instrumentation_tests': [
                     {
                         'test': 'chrome_public_test_apk',
@@ -1572,13 +1571,12 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_instrumentation_nodefault_test') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Android Tests',
-                           parent_buildername='Android Builder') +
+    api.properties.generic(mastername='chromium.android',
+                           buildername='KitKat Phone Tester (rel)') +
     api.override_step_data(
-        'read test spec (chromium.linux.json)',
+        'read test spec (chromium.android.json)',
         api.json.output({
-            'Android Tests': {
+            'KitKat Phone Tester (rel)': {
                 'instrumentation_tests': [
                     {
                         'test': 'chrome_public_test_apk',
@@ -1591,13 +1589,12 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_swarmed_instrumentation_test') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Android Tests',
-                           parent_buildername='Android Builder') +
+    api.properties.generic(mastername='chromium.android',
+                           buildername='KitKat Phone Tester (rel)') +
     api.override_step_data(
-        'read test spec (chromium.linux.json)',
+        'read test spec (chromium.android.json)',
         api.json.output({
-            'Android Tests': {
+            'KitKat Phone Tester (rel)': {
                 'instrumentation_tests': [
                     {
                         'test': 'chrome_public_test',
@@ -1619,12 +1616,12 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_swarmed_gn_instrumentation_test') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Android Builder') +
+    api.properties.generic(mastername='chromium.android',
+                           buildername='KitKat Phone Tester (rel)') +
     api.override_step_data(
-        'read test spec (chromium.linux.json)',
+        'read test spec (chromium.android.json)',
         api.json.output({
-            'Android Tests': {
+            'KitKat Phone Tester (rel)': {
                 'gtest_tests': [
                     {
                         'test': 'chrome_public_test_apk',
@@ -1678,13 +1675,12 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_junit_test') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Android Tests',
-                           parent_buildername='Android Builder') +
+    api.properties.generic(mastername='chromium.android',
+                           buildername='KitKat Phone Tester (rel)') +
     api.override_step_data(
-        'read test spec (chromium.linux.json)',
+        'read test spec (chromium.android.json)',
         api.json.output({
-            'Android Tests': {
+            'KitKat Phone Tester (rel)': {
                 'junit_tests': [
                     {
                         'test': 'base_junit_tests',

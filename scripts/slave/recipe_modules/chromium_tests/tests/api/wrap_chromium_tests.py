@@ -57,8 +57,15 @@ def GenTests(api):
   yield (
       api.test('no_require_device_steps') +
       api.properties.generic(
-          mastername='chromium.linux',
-          buildername='Android Tests')
+          mastername='chromium.android',
+          buildername='KitKat Phone Tester (rel)')
+  )
+
+  yield (
+      api.test('no_require_device_steps_with_root') +
+      api.properties.generic(
+          mastername='chromium.fyi',
+          buildername='Android Remoting Tests')
   )
 
   yield (
