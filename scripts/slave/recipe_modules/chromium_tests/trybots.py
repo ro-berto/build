@@ -625,7 +625,6 @@ TRYBOTS = freeze({
       'win7_chromium_rel_loc_exp': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'CrWinGoma(loc)',
-        'tester': 'Win7 Tests (1)',
       }),
       'win10_chromium_x64_rel_ng': simple_bot({
         'mastername': 'chromium.win',
