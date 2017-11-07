@@ -660,9 +660,9 @@ BUILDERS = {
         ],
         'testing': {'platform': 'win'},
       },
-      'V8 Win64 - clang': {
+      'V8 Win64 - msvc': {
         'chromium_apply_config': [
-          'clang',
+          'default_compiler',
           'v8_ninja',
           'goma',
           'mb',
@@ -2581,9 +2581,9 @@ BUILDERS = {
         'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
       },
-      'v8_win64_clang_compile_rel': {
+      'v8_win64_msvc_compile_rel': {
         'chromium_apply_config': [
-          'clang',
+          'default_compiler',
           'v8_ninja',
           'goma',
           'mb',
