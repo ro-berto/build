@@ -221,7 +221,7 @@ BUILDERS = {
         'enable_swarming': True,
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
-        'tests': [V8Testing, Benchmarks, Mozilla],
+        'tests': [V8Testing(2), Benchmarks, Mozilla],
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
           'cpu': 'x86-64-avx2',
