@@ -351,20 +351,26 @@
         ],
         "builders": {
           "*": {}
-        }
+        },
+        "comment": [
+          "Fuchsia ARM64 should be un-excluded once its trybot is fully set up."
+        ],
+        "excluded_builders": [
+          "Fuchsia ARM64"
+        ]
       },
       {
-	"builders": {
-	  "Deterministic Linux": {
-	    "tree_notify": [
-	      "shinyak@chromium.org",
-	      "tikuta@chromium.org",
-	      "ukai@chromium.org",
-	      "yyanagisawa@chromium.org"
-	    ],
-	    "forgiving_optional": ["*"]
-	  }
-	}
+        "builders": {
+          "Deterministic Linux": {
+            "tree_notify": [
+              "shinyak@chromium.org",
+              "tikuta@chromium.org",
+              "ukai@chromium.org",
+              "yyanagisawa@chromium.org"
+            ],
+            "forgiving_optional": ["*"]
+          }
+        }
       }
     ],
     "https://build.chromium.org/p/chromium.lkgr": [
