@@ -1263,25 +1263,6 @@ BUILDERS = {
         'cf_archive_name': 'd8-msan-chained-origins',
         'testing': {'platform': 'linux'},
       },
-      'V8 Linux64 UBSan - release builder': {
-        'chromium_apply_config': [
-          'v8_ninja',
-          'default_compiler',
-          'goma',
-          'default_target_v8_clusterfuzz',
-          'mb',
-        ],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'cf_archive_build': True,
-        'cf_gs_bucket': 'v8-ubsan',
-        'cf_gs_acl': 'public-read',
-        'cf_archive_name': 'd8-ubsan',
-        'testing': {'platform': 'linux'},
-      },
       'V8 Linux64 UBSanVptr - release builder': {
         'chromium_apply_config': [
           'v8_ninja',
