@@ -793,7 +793,7 @@ class V8Api(recipe_api.RecipeApi):
 
   def create_coverage_context(self):
     if self.generate_sanitizer_coverage:
-      return testing.SanitizerCoverageContext(self.m, self)
+      return testing.SanitizerCoverageContext(self.m)
     else:
       return testing.NULL_COVERAGE
 
@@ -802,7 +802,7 @@ class V8Api(recipe_api.RecipeApi):
 
     Returns: A runnable test instance.
     """
-    return testing.create_test(test, self.m, self)
+    return testing.create_test(test, self.m)
 
   def create_tests(self):
     return [self.create_test(t) for t in self.bot_config.get('tests', [])]
