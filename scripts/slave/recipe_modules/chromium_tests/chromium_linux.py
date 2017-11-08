@@ -150,7 +150,39 @@ SPEC = {
       },
     },
 
+    'Fuchsia ARM64 Cast Audio': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['fuchsia'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+        'TARGET_PLATFORM': 'fuchsia',
+      },
+      'bot_type': 'builder',
+      'checkout_dir': 'linux',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
     'Fuchsia ARM64': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['fuchsia'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+        'TARGET_PLATFORM': 'fuchsia',
+      },
+      'bot_type': 'builder',
+      'checkout_dir': 'linux',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+    'Fuchsia x64 Cast Audio': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',

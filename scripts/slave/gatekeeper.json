@@ -353,10 +353,12 @@
           "*": {}
         },
         "comment": [
-          "Fuchsia ARM64 should be un-excluded once its trybot is fully set up."
+          "Fuchsia bots should be un-excluded once trybots are fully set up."
         ],
         "excluded_builders": [
-          "Fuchsia ARM64"
+          "Fuchsia ARM64 Cast Audio",
+          "Fuchsia ARM64",
+          "Fuchsia x64 Cast Audio"
         ]
       },
       {
