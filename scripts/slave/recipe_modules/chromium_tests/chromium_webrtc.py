@@ -105,17 +105,15 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
       pass  # Not implemented yet (see crbug.com/723989).
     else:
       spec['tests'] = [
-        steps.GTestTest(
+        steps.WebRTCPerfTest(
             'content_browsertests',
-            # Run all normal WebRTC content_browsertests. This is mostly so
-            # the FYI bots can detect breakages.
-            args=['--gtest_filter=WebRtc*']),
-        steps.GTestTest(
-            'content_browsertests (manual)',
-            # These run a few tests that require webcam access. They need to
-            # run sequentially, otherwise tests may interfere with each other.
-            args=['--gtest_filter=WebRtc*MANUAL*', '--run-manual',
-                  '--test-launcher-jobs=1', '--test-launcher-bot-mode']),
+            args=['--gtest_filter=WebRtc*', '--run-manual',
+                  '--test-launcher-print-test-stdio=always',
+                  '--test-launcher-bot-mode'],
+            perf_id=perf_id,
+            perf_config_mappings=perf_config_mappings,
+            commit_position_property=commit_position_property,
+            upload_wav_files_from_test=False),
         steps.WebRTCPerfTest(
             'browser_tests',
             # These tests needs --test-launcher-jobs=1 since some of them are
