@@ -32,7 +32,7 @@ def main_builder_mb(c):
 def main_builder_rel_mb(c):
   pass
 
-@CONFIG_CTX(includes=['base_config', 'clang', 'goma', 'android_findbugs'])
+@CONFIG_CTX(includes=['base_config', 'clang', 'goma'])
 def clang_builder(c):
   c.gyp_env.GYP_DEFINES['component'] = 'shared_library'
   c.gyp_env.GYP_DEFINES['asan'] = 1

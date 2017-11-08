@@ -283,12 +283,6 @@ def GenTests(api):
   )
 
   yield (
-      api.test('android_findbugs') +
-      api.properties(chromium_apply_config=['android_findbugs']) +
-      api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
       api.test('chromium_pgo_instrument') +
       api.properties(chromium_config='chromium_pgo_instrument') +
       api.post_process(post_process.DropExpectation)

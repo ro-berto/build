@@ -726,10 +726,6 @@ def android_common(c):
           'third_party', 'android_tools', 'sdk', 'platform-tools'),
       c.CHECKOUT_PATH.join('build', 'android')])
 
-@config_ctx()
-def android_findbugs(c):
-  c.gyp_env.GYP_DEFINES['run_findbugs'] = 1
-
 @config_ctx(includes=['ninja', 'shared_library', 'clang', 'goma'])
 def codesearch(c):
   # -k 0 prevents stopping on errors, so the compile step tries to do as much as
