@@ -42,6 +42,28 @@ BUILDERS = freeze({
           'platform': 'linux',
         },
       },
+      'V8 Win64 - node.js baseline': {
+        'baseline_only': True,
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'V8 Win64 - node.js integration': {
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'V8 Mac64 - node.js baseline': {
+        'baseline_only': True,
+        'testing': {
+          'platform': 'mac',
+        },
+      },
+      'V8 Mac64 - node.js integration': {
+        'testing': {
+          'platform': 'mac',
+        },
+      },
     },
   },
   'tryserver.v8': {
@@ -163,19 +185,20 @@ def RunSteps(api):
   _build_and_upload(api)
 
   # Trigger performance bots.
-  api.trigger(*[{
-    'builder_name': builder_name,
-    'bucket': 'master.internal.client.v8',
-    'properties': {
-      'revision': api.v8.revision,
-      'parent_got_revision': api.v8.revision,
-      'parent_got_revision_cp': api.v8.revision_cp,
-    },
-    'buildbot_changes': [{
-      'author': 'node.js',
-      'revision': api.v8.revision,
-    }]
-  } for builder_name in api.v8.bot_config['triggers']])
+  if api.v8.bot_config.get('triggers'):
+    api.trigger(*[{
+      'builder_name': builder_name,
+      'bucket': 'master.internal.client.v8',
+      'properties': {
+        'revision': api.v8.revision,
+        'parent_got_revision': api.v8.revision,
+        'parent_got_revision_cp': api.v8.revision_cp,
+      },
+      'buildbot_changes': [{
+        'author': 'node.js',
+        'revision': api.v8.revision,
+      }]
+    } for builder_name in api.v8.bot_config['triggers']])
 
 
 def _sanitize_nonalpha(*chunks):

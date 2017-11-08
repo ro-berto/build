@@ -64,6 +64,10 @@
     "https://build.chromium.org/p/client.v8.fyi": [
       {
         "excluded_builders" : [
+          "V8 Win64 - node.js baseline",
+          "V8 Win64 - node.js integration",
+          "V8 Mac64 - node.js baseline",
+          "V8 Mac64 - node.js integration",
           "Linux Snapshot Builder"
         ],
         "builders": {
