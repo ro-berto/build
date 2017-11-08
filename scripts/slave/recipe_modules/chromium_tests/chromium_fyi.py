@@ -5,7 +5,12 @@
 import copy
 import time
 
+from . import chromium
+from . import chromium_chromiumos
+from . import chromium_clang
 from . import chromium_linux
+from . import chromium_mac
+from . import chromium_win
 from . import steps
 
 RESULTS_URL = 'https://chromeperf.appspot.com'
@@ -73,6 +78,24 @@ def chromium_apply_configs(base_config, config_names):
   """
   config = copy.deepcopy(base_config)
   config['chromium_apply_config'].extend(config_names)
+  return config
+
+
+def no_archive(base_config):
+  """no_archive returns new config from base config without archive_build etc.
+
+  Args:
+    base_config: config obj in SPEC['builders'][x].
+  Returns:
+    new config obj.
+  """
+  config = copy.deepcopy(base_config)
+  if 'archive_build' in config:
+    del(config['archive_build'])
+  if 'gs_bucket' in config:
+    del(config['gs_bucket'])
+  if 'gs_acl' in config:
+    del(config['gs_acl'])
   return config
 
 
@@ -428,285 +451,61 @@ SPEC = {
       },
       'enable_swarming': True,
     },
-    'CrWinGoma': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['goma_canary', 'mb', 'goma_high_parallel',
-                                'goma_enable_global_file_id_cache'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'compile_targets': [ 'chrome' ],
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'win'
-      }
-    },
-    'CrWinGoma(dll)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['goma_canary','mb', 'shared_library',
-                                'goma_high_parallel', 'goma_enable_global_file_id_cache'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'compile_targets': [ 'chrome' ],
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'win'
-      }
-    },
-    'CrWinGoma(loc)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['clobber', 'goma_canary', 'shared_library',
-                                'goma_localoutputcache', 'mb',
-                                'goma_high_parallel', 'goma_enable_global_file_id_cache'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'compile_targets': [ 'all' ],
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'win'
-      }
-    },
-    'CrWin7Goma': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['goma_canary', 'mb', 'goma_high_parallel',
-                                'goma_enable_global_file_id_cache'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'compile_targets': [ 'chrome' ],
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'win'
-      }
-    },
-    'CrWin7Goma(dll)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['goma_canary', 'mb', 'goma_high_parallel',
-                                'shared_library', 'goma_enable_global_file_id_cache'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'compile_targets': [ 'chrome' ],
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'win'
-      }
-    },
-    'CrWin7Goma(dbg)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['goma_canary', 'mb', 'goma_high_parallel',
-                                'goma_enable_global_file_id_cache'],
-      'gclient_config': 'chromium',
-      'GYP_DEFINES': {
-        'win_z7': '1'
-      },
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
-      },
-      'compile_targets': [ 'chrome' ],
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'win'
-      }
-    },
-    'CrWinClexeGoma': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['clobber', 'goma_canary', 'mb',
-                                'shared_library', 'goma_high_parallel',
-                                'goma_enable_global_file_id_cache'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'compile_targets': [ 'all' ],
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'win'
-      }
-    },
-    'CrWinClangGoma': {
-      'chromium_config': 'chromium_win_clang_official',
-      'gclient_config': 'chromium',
-      'chromium_apply_config': ['goma_canary', 'mb', 'goma_high_parallel',
-                                'goma_enable_global_file_id_cache'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'compile_targets': [
-        'all',
-      ],
-      'bot_type': 'builder_tester',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'win',
-      },
-      'enable_swarming': True,
-      # Workaround so that recipes doesn't add random build targets to our
-      # compile line. We want to build everything.
-      'add_tests_as_compile_targets': False,
-    },
+    # win_chromium_compile_rel_ng. see trybots.py
+    'CrWinGoma': chromium_apply_configs(
+        chromium_win.SPEC['builders']['Win Builder'], ['goma_canary']),
+    'CrWinGoma(dll)': chromium_apply_configs(
+        chromium_win.SPEC['builders']['Win Builder'],
+        ['goma_canary', 'shared_library']),
+    'CrWinGoma(loc)': chromium_apply_configs(
+        no_archive(chromium.SPEC['builders']['Win']),
+        ['goma_canary', 'goma_localoutputcache']),
+    'CrWin7Goma': chromium_apply_configs(
+        chromium_win.SPEC['builders']['Win Builder'], ['goma_canary']),
+    'CrWin7Goma(dll)': chromium_apply_configs(
+        chromium_win.SPEC['builders']['Win Builder'],
+        ['goma_canary', 'shared_library']),
+    # win_chromium_compile_dbg_ng. see trybots.py
+    'CrWin7Goma(dbg)': chromium_apply_configs(
+        chromium_win.SPEC['builders']['Win Builder (dbg)'],
+        ['goma_canary']),
+    'CrWinClexeGoma': chromium_apply_configs(
+        chromium_win.SPEC['builders']['Win Builder'],
+        ['goma_canary', 'shared_library']),
+    'CrWinClangGoma': chromium_apply_configs(
+        chromium_clang.SPEC['builders']['CrWinClang'],
+        ['goma_canary', 'goma_high_parallel',
+         'goma_enable_global_file_id_cache']),
     # followed amd64-generic config in chromium_tests/chromium_chromiumos.py
-    'ChromeOS amd64 Chromium Goma Canary': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['chromeos', 'goma_canary', 'mb',
-                                'ninja_confirm_noop'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_PLATFORM': 'chromeos',
-        'TARGET_CROS_BOARD': 'amd64-generic',
-      },
-      'compile_targets': [ 'chromiumos_preflight' ],
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'linux'
-      }
-    },
+    'ChromeOS amd64 Chromium Goma Canary': chromium_apply_configs(
+        chromium_chromiumos.SPEC['builders'][
+            'ChromiumOS amd64-generic Compile'],
+        ['goma_canary']),
+
+    # linux_chromium_rel_ng. see trybots.py
     'Chromium Linux Goma Canary': chromium_apply_configs(
         chromium_linux.SPEC['builders']['Linux Builder'], ['goma_canary']),
-    'Chromium Linux Goma Canary (clobber)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['clobber', 'goma_canary', 'mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'compile_targets': [ 'all' ],
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'linux'
-      }
-    },
-    'Chromium Linux Goma Canary LocalOutputCache': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['clobber', 'goma_canary',
-                                'goma_localoutputcache', 'mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'compile_targets': [ 'all' ],
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'linux'
-      }
-    },
-    'Chromium Mac 10.9 Goma Canary': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['goma_canary', 'mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'compile_targets': [ 'chrome' ],
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'mac'
-      }
-    },
-    'Chromium Mac 10.9 Goma Canary (dbg)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['goma_canary', 'mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 64,
-      },
-      'compile_targets': [ 'chrome' ],
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'mac'
-      }
-    },
-    'Chromium Mac 10.9 Goma Canary (clobber)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'clobber',
-        'goma_canary',
-        'mb',
-      ],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'compile_targets': [ 'all' ],
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'mac'
-      }
-    },
-    'Chromium Mac 10.9 Goma Canary (dbg)(clobber)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'clobber',
-        'goma_canary',
-        'mb',
-      ],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 64,
-      },
-      'compile_targets': [ 'all' ],
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'mac'
-      }
-    },
-    'Chromium Mac Goma Canary LocalOutputCache': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'clobber',
-        'goma_canary',
-        'goma_localoutputcache',
-        'mb',
-      ],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 64,
-      },
-      'compile_targets': [ 'all' ],
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'mac'
-      }
-    },
-    'Android Builder Goma Canary (dbg)': {
-      'chromium_config': 'android',
-      'chromium_apply_config': ['goma_canary', 'chrome_with_codecs', 'mb'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
-        'TARGET_PLATFORM': 'android',
-      },
-      'android_config': 'main_builder',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
+    'Chromium Linux Goma Canary (clobber)': chromium_apply_configs(
+        no_archive(chromium.SPEC['builders']['Linux x64']), ['goma_canary']),
+    'Chromium Linux Goma Canary LocalOutputCache': chromium_apply_configs(
+        no_archive(chromium.SPEC['builders']['Linux x64']),
+        ['goma_canary', 'goma_localoutputcache']),
+
+    # mac_chromium_rel_ng. see trybots.py
+    'Chromium Mac 10.9 Goma Canary': chromium_apply_configs(
+        chromium_mac.SPEC['builders']['Mac Builder'], ['goma_canary']),
+    # mac_chromium_dbg_ng. see trybots.py
+    'Chromium Mac 10.9 Goma Canary (dbg)': chromium_apply_configs(
+        chromium_mac.SPEC['builders']['Mac Builder (dbg)'], ['goma_canary']),
+    'Chromium Mac 10.9 Goma Canary (clobber)': chromium_apply_configs(
+        no_archive(chromium.SPEC['builders']['Mac']), ['goma_canary']),
+    'Chromium Mac 10.9 Goma Canary (dbg)(clobber)': chromium_apply_configs(
+        chromium_mac.SPEC['builders']['Mac Builder (dbg)'],
+        ['goma_canary', 'clobber']),
+    'Chromium Mac Goma Canary LocalOutputCache': chromium_apply_configs(
+        no_archive(chromium.SPEC['builders']['Mac']),
+        ['goma_canary', 'goma_localoutputcache']),
+
     'Win Builder (ANGLE)': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
@@ -1104,6 +903,9 @@ SPEC = {
   },
 }
 
+SPEC['builders']['Android Builder Goma Canary (dbg)'] = chromium_apply_configs(
+    SPEC['builders']['Android Builder (dbg)'],
+    ['goma_canary'])
 
 SPEC['builders'].update([
     stock_config('Jumbo Linux x64'),
