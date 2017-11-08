@@ -55,10 +55,10 @@ def Update(_config, active_master, c):
     {'name': 'Cast Audio Linux'},
     {'name': 'Deterministic Linux',
      'recipe': 'swarming/deterministic_build'},
-    {'name': 'Fuchsia ARM64 Cast Audio'},
-    {'name': 'Fuchsia ARM64'},
-    {'name': 'Fuchsia x64 Cast Audio'},
-    {'name': 'Fuchsia x64'},
+    {'name': 'Fuchsia ARM64 Cast Audio', 'category': '5fuchsia'},
+    {'name': 'Fuchsia ARM64', 'category': '5fuchsia'},
+    {'name': 'Fuchsia x64 Cast Audio', 'category': '5fuchsia'},
+    {'name': 'Fuchsia x64', 'category': '5fuchsia'},
   ]
 
   c['builders'].extend([
@@ -66,6 +66,6 @@ def Update(_config, active_master, c):
         'name': spec['name'],
         'factory': m_remote_run(spec.get('recipe', 'chromium')),
         'notify_on_missing': True,
-        'category': '4linux',
+        'category': spec.get('category', '4linux'),
       } for spec in specs
   ])
