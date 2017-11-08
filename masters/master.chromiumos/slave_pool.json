@@ -31,6 +31,9 @@
       "lakitu-full": [
         "build174-m2"
       ], 
+      "moblab-generic-vm-paladin": [
+        "cros-beefy499-c2"
+      ], 
       "oak-full": [
         "cros-beefy428-c2"
       ], 
@@ -58,7 +61,6 @@
     "build263-m2", 
     "build323-m2", 
     "build333-m2", 
-    "cros-beefy499-c2", 
     "cros-beefy500-c2"
   ]
 }
