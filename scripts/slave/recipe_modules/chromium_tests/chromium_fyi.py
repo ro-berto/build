@@ -1109,4 +1109,5 @@ SPEC['builders'].update([
     stock_config('Jumbo Linux x64'),
     stock_config('Jumbo Mac'),
     stock_config('Jumbo Win x64'),
+    stock_config('VR Linux'),
 ])
