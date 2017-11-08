@@ -6,6 +6,21 @@
       "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CLEANUP]/chrome_staging"
+    ],
+    "infra_step": true,
+    "name": "create staging_dir"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "copy",
       "None/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer",
       "[START_DIR]/src/out/Release/llvm-symbolizer"
@@ -57,7 +72,7 @@
       "--",
       "python",
       "RECIPE_MODULE[build::archive]/resources/zip_archive.py",
-      "[TMP_BASE]/chrome_staging_tmp_1",
+      "[CLEANUP]/chrome_staging",
       "chrome-asan-linux-release-refs_heads_B1-123456",
       "[\"chrome\"]",
       "[START_DIR]/src/out/Release"
@@ -76,7 +91,7 @@
       "-h",
       "x-goog-meta-Cr-Commit-Position-Number:123456",
       "cp",
-      "[TMP_BASE]/chrome_staging_tmp_1/chrome-asan-linux-release-refs_heads_B1-123456.zip",
+      "[CLEANUP]/chrome_staging/chrome-asan-linux-release-refs_heads_B1-123456.zip",
       "gs://chromium/linux-release/chrome-asan-linux-release-refs_heads_B1-123456.zip"
     ],
     "infra_step": true,
@@ -93,7 +108,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "remove",
-      "[TMP_BASE]/chrome_staging_tmp_1/chrome-asan-linux-release-refs_heads_B1-123456.zip"
+      "[CLEANUP]/chrome_staging/chrome-asan-linux-release-refs_heads_B1-123456.zip"
     ],
     "infra_step": true,
     "name": "chrome-asan-linux-release-refs_heads_B1-123456.zip"

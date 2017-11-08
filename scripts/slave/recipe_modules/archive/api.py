@@ -183,7 +183,8 @@ class ArchiveApi(recipe_api.RecipeApi):
         update_properties, primary_project)
     cp_branch, cp_number = self.m.commit_position.parse(commit_position)
     build_git_commit = self._get_git_commit(update_properties, primary_project)
-    staging_dir = self.m.path.mkdtemp('chrome_staging')
+    staging_dir = self.m.path['cleanup'].join('chrome_staging')
+    self.m.file.ensure_directory('create staging_dir', staging_dir)
 
     llvm_tools_to_copy = ['llvm-symbolizer', 'sancov']
     llvm_bin_dir = self.m.path['checkout'].join('third_party', 'llvm-build',

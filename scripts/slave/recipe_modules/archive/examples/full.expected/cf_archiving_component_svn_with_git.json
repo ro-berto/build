@@ -6,6 +6,21 @@
       "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CLEANUP]/chrome_staging"
+    ],
+    "infra_step": true,
+    "name": "create staging_dir"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "copy",
       "None/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer",
       "[START_DIR]/src/out/Release/llvm-symbolizer"
@@ -57,7 +72,7 @@
       "--",
       "python",
       "RECIPE_MODULE[build::archive]/resources/zip_archive.py",
-      "[TMP_BASE]/chrome_staging_tmp_1",
+      "[CLEANUP]/chrome_staging",
       "chrome-asan-linux-release-x10-component-234",
       "[\"chrome\"]",
       "[START_DIR]/src/out/Release"
@@ -78,7 +93,7 @@
       "-h",
       "x-goog-meta-Cr-Git-Commit:deadbeefdda2b170692f8e762d43b7e8e7a96686",
       "cp",
-      "[TMP_BASE]/chrome_staging_tmp_1/chrome-asan-linux-release-x10-component-234.zip",
+      "[CLEANUP]/chrome_staging/chrome-asan-linux-release-x10-component-234.zip",
       "gs://chromium/linux-release/chrome-asan-linux-release-x10-component-234.zip"
     ],
     "infra_step": true,
@@ -95,7 +110,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "remove",
-      "[TMP_BASE]/chrome_staging_tmp_1/chrome-asan-linux-release-x10-component-234.zip"
+      "[CLEANUP]/chrome_staging/chrome-asan-linux-release-x10-component-234.zip"
     ],
     "infra_step": true,
     "name": "chrome-asan-linux-release-x10-component-234.zip"
