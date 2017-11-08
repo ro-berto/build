@@ -71,7 +71,7 @@ SPEC = {
        'platform': 'mac',
      },
    },
-   'CrWinGomaGCEStaging': {
+   'CrWinClangGomaGCEStaging': {
      'chromium_config': 'chromium',
      'chromium_apply_config': ['goma_gce', 'clobber', 'mb'],
      'gclient_config': 'chromium',
@@ -84,7 +84,7 @@ SPEC = {
        'platform': 'win',
      },
    },
-   'CrWinClangGomaGCEStaging': {
+   'CrWinClexeGomaGCEStaging': {
      'chromium_config': 'chromium',
      'chromium_apply_config': ['goma_gce', 'clobber', 'mb'],
      'gclient_config': 'chromium',
