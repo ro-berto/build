@@ -15,8 +15,8 @@ Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 from recipe_engine.recipe_api import Property
 
 DEPS = [
-  'depot_tools/bot_update',
   'chromium',
+  'chromium_checkout',
   'chromium_tests',
   'commit_position',
   'depot_tools/gclient',
@@ -69,7 +69,7 @@ def RunSteps(api, buildername, mastername):
   api.chromium_tests.configure_build(bot_config)
   api.gclient.c.solutions[0].custom_vars['swarming_revision'] = ''
   api.gclient.c.revisions['src/tools/swarming_client'] = 'HEAD'
-  update_step = api.bot_update.ensure_checkout()
+  update_step = api.chromium_checkout.ensure_checkout(bot_config)
 
   # Ensure swarming_client version is fresh enough.
   api.swarming.check_client_version()
@@ -103,7 +103,8 @@ def GenTests(api):
         buildername='Android N5 Swarm',
         mastername='chromium.swarm',
         bot_id='TestSlave',
-        buildnumber=123)
+        buildnumber=123,
+        path_config='kitchen')
   )
 
   # One 'collect' fails due to a missing shard and failing test, should not
@@ -114,7 +115,8 @@ def GenTests(api):
         buildername='Linux Swarm',
         mastername='chromium.swarm',
         bot_id='TestSlave',
-        buildnumber=123) +
+        buildnumber=123,
+        path_config='kitchen') +
     api.override_step_data(
         'read test spec (chromium.swarm.json)',
         api.json.output({
@@ -154,7 +156,8 @@ def GenTests(api):
         buildername='Windows Swarm',
         mastername='chromium.swarm',
         bot_id='TestSlave',
-        buildnumber=123) +
+        buildnumber=123,
+        path_config='kitchen') +
     api.platform('win', 64) +
     api.override_step_data(
         'read test spec (chromium.swarm.json)',
