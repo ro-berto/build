@@ -221,14 +221,6 @@
       "category": "4OnCQ",
       "slavebuilddir": "android_build",
     },
-    "Android N5X Swarm Builder": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": "chromium_commits",
-      "slave_pools": ["main_n5x_builder"],
-      "category": "4OnCQ",
-      "slavebuilddir": "android_build",
-    },
     "Cast Android (dbg)": {
       "recipe": "chromium",
       "use_remote_run": True,
@@ -417,14 +409,6 @@
         "bits": "64",
       },
       "slaves": ["slave217-c1"],
-    },
-    "main_n5x_builder": {
-      "slave_data": {
-        "os": "linux",
-        "version": "trusty",
-        "bits": "64",
-      },
-      "slaves": ["slave76-c1"],
     },
     "marshmallow_64": {
       "slave_data": {
