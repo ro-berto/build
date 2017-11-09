@@ -284,11 +284,11 @@ def BuildMac(api):
   ], archive_name='FlutterEmbedder.framework.zip')
 
   UploadArtifacts(api, "android-arm-profile" , [
-    'out/android_profile/clang_i386/gen_snapshot',
+    'out/android_profile/clang_x86/gen_snapshot',
   ], archive_name='darwin-x64.zip')
 
   UploadArtifacts(api, "android-arm-release" , [
-    'out/android_release/clang_i386/gen_snapshot',
+    'out/android_release/clang_x86/gen_snapshot',
   ], archive_name='darwin-x64.zip')
 
   UploadDartSdk(api, archive_name='dart-sdk-darwin-x64.zip')

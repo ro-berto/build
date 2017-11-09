@@ -420,7 +420,7 @@
       "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/linux/dart-sdk/bin:<PATH>"
     },
     "name": "Zip android-arm-profile darwin-x64.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot\", \"path\": \"[START_DIR]/src/out/android_profile/clang_i386/gen_snapshot\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_3/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot\", \"path\": \"[START_DIR]/src/out/android_profile/clang_x86/gen_snapshot\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_3/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -469,7 +469,7 @@
       "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/linux/dart-sdk/bin:<PATH>"
     },
     "name": "Zip android-arm-release darwin-x64.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot\", \"path\": \"[START_DIR]/src/out/android_release/clang_i386/gen_snapshot\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_4/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot\", \"path\": \"[START_DIR]/src/out/android_release/clang_x86/gen_snapshot\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_4/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
