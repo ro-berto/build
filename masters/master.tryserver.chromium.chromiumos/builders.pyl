@@ -43,8 +43,11 @@
       "os": "linux",
       "version": "trusty",
       "bots": [
-        "slave{1276..1285}-c4",
-        "slave{1290..1335}-c4",
+        "slave{556..567}-c4",
+        "slave1201-c4",
+        "slave{1276..1335}-c4",
+        "slave{1389..1395}-c4",
+        "slave{1528..1583}-c4",
       ],
     },
     "optional": {
