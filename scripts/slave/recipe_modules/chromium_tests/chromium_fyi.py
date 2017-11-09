@@ -318,6 +318,8 @@ SPEC = {
         'TARGET_PLATFORM': 'fuchsia',
       },
       'bot_type': 'builder_tester',
+      # Serialize the tests so as to not overwhelm the limited number of bots.
+      'serialize_tests': True,
       'checkout_dir': 'linux',
       'test_results_config': 'staging_server',
       'testing': {
