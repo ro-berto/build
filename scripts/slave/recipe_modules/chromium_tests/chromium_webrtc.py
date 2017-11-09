@@ -116,7 +116,7 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
             # These run a few tests that require webcam access. They need to
             # run sequentially, otherwise tests may interfere with each other.
             args=['--gtest_filter=WebRtc*MANUAL*', '--run-manual',
-                  '--test-launcher-jobs=1', '--test-launcher-bot-mode']),
+                  '--test-launcher-jobs=1']),
         steps.WebRTCPerfTest(
             'browser_tests',
             # These tests needs --test-launcher-jobs=1 since some of them are
