@@ -246,15 +246,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return update_step, bot_db
 
-  @property
-  def _api_for_tests(self):
-    """Methods of Test objects receive this as their api object to allow them
-    to access the 'chromium_tests' module as well as the other modules
-    in chromium_tests' module DEPS"""
-    api = copy.copy(self.m)
-    api.chromium_tests = self
-    return api
-
   # TODO(phajdan.jr): remove enable_swarming (http://crbug.com/684067).
   def generate_tests_from_test_spec(self, test_spec, builder_dict,
       buildername, mastername, enable_swarming, swarming_dimensions,
@@ -264,7 +255,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     for generator in generators:
       tests = (
           tuple(generator(
-              self._api_for_tests, self, mastername, buildername, test_spec,
+              self.m, self, mastername, buildername, test_spec,
               bot_update_step, enable_swarming=enable_swarming,
               swarming_dimensions=swarming_dimensions,
               scripts_compile_targets=scripts_compile_targets)) +
@@ -304,7 +295,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       with self.m.step.nest('test_pre_run'):
         for t in tests:
           try:
-            t.pre_run(self._api_for_tests, suffix)
+            t.pre_run(self.m, suffix)
           except self.m.step.InfraFailure:  # pragma: no cover
             raise
           except self.m.step.StepFailure:  # pragma: no cover
@@ -312,7 +303,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       for t in tests:
         try:
-          t.run(self._api_for_tests, suffix)
+          t.run(self.m, suffix)
         except self.m.step.InfraFailure:  # pragma: no cover
           raise
         except self.m.step.StepFailure:  # pragma: no cover
@@ -322,7 +313,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       for t in tests:
         try:
-          t.post_run(self._api_for_tests, suffix)
+          t.post_run(self.m, suffix)
         except self.m.step.InfraFailure:  # pragma: no cover
           raise
         except self.m.step.StepFailure:  # pragma: no cover
@@ -340,14 +331,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       for t in tests:
         try:
-          t.pre_run(self._api_for_tests, suffix)
+          t.pre_run(self.m, suffix)
         except self.m.step.InfraFailure:  # pragma: no cover
           raise
         except self.m.step.StepFailure:  # pragma: no cover
           failed_tests.append(t)
 
         try:
-          t.run(self._api_for_tests, suffix)
+          t.run(self.m, suffix)
         except self.m.step.InfraFailure:  # pragma: no cover
           raise
         except self.m.step.StepFailure:  # pragma: no cover
@@ -356,7 +347,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             raise
 
         try:
-          t.post_run(self._api_for_tests, suffix)
+          t.post_run(self.m, suffix)
         except self.m.step.InfraFailure:  # pragma: no cover
           raise
         except self.m.step.StepFailure:  # pragma: no cover
@@ -436,7 +427,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     if bot_type in ['builder', 'builder_tester']:
       isolated_targets = [
-          t.isolate_target(self._api_for_tests)
+          t.isolate_target(self.m)
           for t in tests_including_triggered if t.uses_swarming
       ]
 
@@ -656,7 +647,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       if bot_type in ('tester', 'builder_tester'):
         isolated_targets = [
-            t.isolate_target(self._api_for_tests)
+            t.isolate_target(self.m)
             for t in tests if t.uses_swarming]
         if isolated_targets:
           self.m.isolate.find_isolated_tests(self.m.chromium.output_dir)
@@ -729,12 +720,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     def deapply_patch_fn(failing_tests):
       self.deapply_patch(bot_update_step)
       compile_targets = list(itertools.chain(
-          *[t.compile_targets(self._api_for_tests) for t in failing_tests]))
+          *[t.compile_targets(self.m) for t in failing_tests]))
       if compile_targets:
         # Remove duplicate targets.
         compile_targets = sorted(set(compile_targets))
         failing_swarming_tests = [
-            t.isolate_target(self._api_for_tests)
+            t.isolate_target(self.m)
             for t in failing_tests if t.uses_swarming]
         if failing_swarming_tests:
           self.m.isolate.clean_isolated_files(self.m.chromium.output_dir)
@@ -763,10 +754,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     with self.wrap_chromium_tests(bot_config, tests):
       if deapply_patch:
         self.m.test_utils.determine_new_failures(
-            self._api_for_tests, tests, deapply_patch_fn)
+            self.m, tests, deapply_patch_fn)
       else:
         failing_tests = self.m.test_utils.run_tests_with_patch(
-            self._api_for_tests, tests)
+            self.m, tests)
         if failing_tests:
           self.m.python.failing_step(
               'test results',
@@ -1060,7 +1051,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       add_tests(nonanalyze_blink_tests)
       for test in nonanalyze_blink_tests:
-        compile_targets.extend(test.compile_targets(self._api_for_tests))  # pragma: no cover
+        compile_targets.extend(test.compile_targets(self.m))  # pragma: no cover
 
       compile_targets = sorted(set(compile_targets))
       self.compile_specific_targets(
@@ -1076,7 +1067,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       # compiled targets (that's obviously not covered by the
       # 'analyze' step) if any source files change.
       if any(self._is_source_file(f) for f in affected_files):
-        tests = [t for t in tests if not t.compile_targets(self._api_for_tests)]
+        tests = [t for t in tests if not t.compile_targets(self.m)]
       else:
         tests = []
 
@@ -1088,7 +1079,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     """Returns the compile_targets for all the Tests in |tests|."""
     return sorted(set(x
                       for test in tests
-                      for x in test.compile_targets(self._api_for_tests)))
+                      for x in test.compile_targets(self.m)))
 
   def _is_source_file(self, filepath):
     """Returns true iff the file is a source file."""
@@ -1100,7 +1091,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     targets in |compile_targets|."""
     result = []
     for test in tests:
-      test_compile_targets = test.compile_targets(self._api_for_tests)
+      test_compile_targets = test.compile_targets(self.m)
       # Always return tests that don't require compile. Otherwise we'd never
       # run them.
       if ((set(compile_targets) & set(test_compile_targets)) or

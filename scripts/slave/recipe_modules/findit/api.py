@@ -235,7 +235,8 @@ class FinditApi(recipe_api.RecipeApi):
       with api.m.chromium_tests.wrap_chromium_tests(
           bot_config, actual_tests_to_run):
         failed_tests = api.m.test_utils.run_tests(
-            api, actual_tests_to_run, suffix=abbreviated_revision)
+            api.chromium_tests.m, actual_tests_to_run,
+            suffix=abbreviated_revision)
 
       # Process failed tests.
       failed_tests_dict = defaultdict(list)

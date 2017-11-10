@@ -32,20 +32,13 @@ DEPS = [
   'build/chromium',
   'build/chromium_checkout',
   'build/chromium_tests',
-  # TODO(tandrii): remove this workaround for http://crbug.com/703074.
-  'build/commit_position',
-  'build/test_results',
   'build/test_utils',
   'depot_tools/bot_update',
   'depot_tools/gclient',
   'recipe_engine/context',
-  'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
-  'recipe_engine/python',
-  'recipe_engine/raw_io',
-  'recipe_engine/step',
 ]
 
 
@@ -184,9 +177,11 @@ def RunSteps(api):
     ]
 
     if 'future' in buildername:
-      determine_new_future_failures(api, extra_args)
+      determine_new_future_failures(
+          api.chromium_tests.m, extra_args)
     else:
-      api.test_utils.determine_new_failures(api, tests, component_pinned_fn)
+      api.test_utils.determine_new_failures(
+          api.chromium_tests.m, tests, component_pinned_fn)
 
 
 def _sanitize_nonalpha(text):
