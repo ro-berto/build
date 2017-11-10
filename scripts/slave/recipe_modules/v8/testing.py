@@ -83,7 +83,7 @@ TEST_CONFIGS = freeze({
   },
   'deopt': {
     'tool': 'run-deopt-fuzzer',
-    'isolated_target': 'run-deopt-fuzzer',
+    'isolated_target': 'run-num-fuzzer',
   },
   'jsfunfuzz': {
     'tool': 'jsfunfuzz',
@@ -547,6 +547,11 @@ class V8GenericSwarmingTest(BaseTest):
     return self._title  # pragma: no cover
 
   @property
+  def raw_command(self):
+    """Optioal raw command to pass to the swarming task."""
+    return None
+
+  @property
   def extra_args(self):
     return self._extra_args  # pragma: no cover
 
@@ -566,6 +571,7 @@ class V8GenericSwarmingTest(BaseTest):
         isolated_hash=self._get_isolated_hash(self.test),
         extra_args=self.extra_args,
         task_output_dir=self.task_output_dir,
+        raw_cmd=self.raw_command,
     )
 
     self.api.swarming.trigger_task(self.task)
@@ -646,8 +652,9 @@ class V8DeoptFuzzer(V8GenericSwarmingTest):
     return 'Deopt Fuzz'
 
   @property
-  def extra_args(self):
+  def raw_command(self):
     return [
+      'tools/run-deopt-fuzzer.py',
       '--mode', self.api.chromium.c.build_config_fs,
       '--arch', self.api.chromium.c.gyp_env.GYP_DEFINES['v8_target_arch'],
       '--progress', 'verbose',
