@@ -73,7 +73,8 @@ def RunSteps(api):
 
   # Get parameters specified in the tryjob description.
   tryjob_args = api.properties.get('cbb_extra_args', [])
-  if tryjob_args:
+  # If tryjob_args is a string, translate from json to list.
+  if hasattr(tryjob_args, 'startswith'):
     if tryjob_args.startswith('z:'):
       tryjob_args = zlib.decompress(base64.b64decode(tryjob_args[2:]))
     tryjob_args = api.json.loads(tryjob_args)
@@ -122,6 +123,17 @@ def GenTests(api):
           cbb_config='internal-paladin',
           cbb_extra_args='["--timeout", "14400", "--remote-trybot",'
                          '"--remote-version=4"]',
+          **common_properties
+      )
+  )
+
+  yield (
+      api.test('swarming')
+      + api.properties(
+          buildername='paladin',
+          cbb_config='internal-paladin',
+          cbb_extra_args=["--timeout", "14400", "--remote-trybot",
+                          "--remote-version=4"],
           **common_properties
       )
   )
