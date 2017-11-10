@@ -804,7 +804,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           master_config.get('build_gs_bucket'),
           extra_url_components=self.m.properties['mastername'])
 
-  def get_common_args_for_scripts(self):
+  def get_common_args_for_scripts(self, bot_config=None):
     args = []
 
     args.extend(['--build-config-fs', self.m.chromium.c.build_config_fs])
@@ -823,10 +823,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     properties = {}
     # TODO(phajdan.jr): Remove buildnumber when no longer used.
 
-    mastername = self.m.properties.get('mastername')
-    buildername = self.m.properties.get('buildername')
-    master_dict = self.builders.get(mastername, {})
-    bot_config = master_dict.get('builders', {}).get(buildername, {})
+    if not bot_config:
+      mastername = self.m.properties.get('mastername')
+      buildername = self.m.properties.get('buildername')
+      master_dict = self.builders.get(mastername, {})
+      bot_config = master_dict.get('builders', {}).get(buildername, {})
 
     for name in ('buildername', 'bot_id', 'buildnumber', 'mastername'):
       properties[name] = self.m.properties[name]
@@ -835,7 +836,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # Optional properties
     for name in ('perf-id', 'results-url'):
       if bot_config.get(name):
-        properties[name] = bot_config[name]
+        properties[name] = bot_config.get(name)
 
     properties['target_platform'] = self.m.chromium.c.TARGET_PLATFORM
 
@@ -843,7 +844,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return args
 
-  def get_compile_targets_for_scripts(self):
+  def get_compile_targets_for_scripts(self, bot_config=None):
     """This gets the combined compile_targets information from the
     //testing/scripts/get_compile_targets.py script.
 
@@ -871,7 +872,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         args=[
             '--output', self.m.json.output(),
             '--',
-        ] + self.get_common_args_for_scripts(),
+        ] + self.get_common_args_for_scripts(bot_config),
         step_test_data=lambda: self.m.json.test_api.output({}))
     return result.json.output
 

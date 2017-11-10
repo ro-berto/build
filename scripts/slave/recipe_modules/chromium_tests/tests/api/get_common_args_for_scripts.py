@@ -12,12 +12,13 @@ DEPS = [
 
 def RunSteps(api):
   bot_config = api.chromium_tests.create_bot_config_object(
-      api.properties['mastername'], api.properties['buildername'])
+      api.properties['mastername'], api.properties['buildername'],
+      api.properties['builders'])
   api.chromium_tests.configure_build(bot_config)
   api.python(
       'sample script',
       api.path['checkout'].join('testing', 'scripts', 'example.py'),
-      api.chromium_tests.get_common_args_for_scripts())
+      api.chromium_tests.get_common_args_for_scripts(bot_config))
 
 
 def GenTests(api):
@@ -25,5 +26,6 @@ def GenTests(api):
       api.test('basic') +
       api.properties.generic(
           mastername='chromium.perf',
-          buildername='Linux Perf')
+          buildername='Linux Perf',
+          builders=api.chromium_tests.builders)
   )
