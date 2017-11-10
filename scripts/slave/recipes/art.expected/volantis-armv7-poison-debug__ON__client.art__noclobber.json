@@ -264,7 +264,8 @@
       "--debuggable",
       "--ndebuggable",
       "--target",
-      "--verbose"
+      "--verbose",
+      "--debug"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -384,7 +385,8 @@
       "-j2",
       "--interpreter",
       "--target",
-      "--verbose"
+      "--verbose",
+      "--debug"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -504,7 +506,8 @@
       "-j2",
       "--jit",
       "--target",
-      "--verbose"
+      "--verbose",
+      "--debug"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -624,7 +627,8 @@
       "-j2",
       "--speed-profile",
       "--target",
-      "--verbose"
+      "--verbose",
+      "--debug"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",

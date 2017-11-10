@@ -100,10 +100,6 @@ def setup_host_x86(api, debug, bitness, concurrent_collector=True,
   if bitness == 32:
     env.update({ 'HOST_PREFER_32_BIT' : 'true' })
 
-  if not debug:
-    env.update({ 'ART_TEST_RUN_TEST_NDEBUG' : 'true' })
-    env.update({ 'ART_TEST_RUN_TEST_DEBUG' : 'false' })
-
   if concurrent_collector:
     env.update({ 'ART_USE_READ_BARRIER' : 'true' })
   else:
@@ -115,6 +111,11 @@ def setup_host_x86(api, debug, bitness, concurrent_collector=True,
     env.update({ 'ART_HEAP_POISONING' : 'false' })
 
   common_options = ['--verbose', '--host']
+  if debug:
+    common_options += ['--debug']
+  else:
+    common_options += ['--ndebug']
+
   if gcstress:
     common_options += ['--gcstress']
 
@@ -250,10 +251,6 @@ def setup_target(api,
          'ART_BUILD_HOST_DEBUG': 'false',
          'ART_TEST_KEEP_GOING': 'true'}
 
-  if not debug:
-    env.update({ 'ART_TEST_RUN_TEST_NDEBUG' : 'true' })
-    env.update({ 'ART_TEST_RUN_TEST_DEBUG' : 'false' })
-
   if concurrent_collector:
     env.update({ 'ART_USE_READ_BARRIER' : 'true' })
   else:
@@ -322,6 +319,11 @@ def setup_target(api,
       optimizing_make_jobs = 1
 
     common_options = ['--target', '--verbose']
+    if debug:
+      common_options += ['--debug']
+    else:
+      common_options += ['--ndebug']
+
     if gcstress:
       common_options += ['--gcstress']
 

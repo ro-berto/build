@@ -74,6 +74,7 @@
       "--optimizing",
       "--verbose",
       "--host",
+      "--debug",
       "--gcstress"
     ],
     "env": {
@@ -102,6 +103,7 @@
       "--debuggable",
       "--verbose",
       "--host",
+      "--debug",
       "--gcstress"
     ],
     "env": {
@@ -129,6 +131,7 @@
       "--interpreter",
       "--verbose",
       "--host",
+      "--debug",
       "--gcstress"
     ],
     "env": {
@@ -156,6 +159,7 @@
       "--jit",
       "--verbose",
       "--host",
+      "--debug",
       "--gcstress"
     ],
     "env": {
@@ -183,6 +187,7 @@
       "--speed-profile",
       "--verbose",
       "--host",
+      "--debug",
       "--gcstress"
     ],
     "env": {

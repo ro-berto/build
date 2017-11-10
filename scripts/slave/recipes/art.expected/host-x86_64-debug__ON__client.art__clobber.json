@@ -84,7 +84,8 @@
       "-j8",
       "--optimizing",
       "--verbose",
-      "--host"
+      "--host",
+      "--debug"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -110,7 +111,8 @@
       "--optimizing",
       "--debuggable",
       "--verbose",
-      "--host"
+      "--host",
+      "--debug"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -135,7 +137,8 @@
       "-j5",
       "--interpreter",
       "--verbose",
-      "--host"
+      "--host",
+      "--debug"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -160,7 +163,8 @@
       "-j8",
       "--jit",
       "--verbose",
-      "--host"
+      "--host",
+      "--debug"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -185,7 +189,8 @@
       "-j8",
       "--speed-profile",
       "--verbose",
-      "--host"
+      "--host",
+      "--debug"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",

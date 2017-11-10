@@ -278,6 +278,7 @@
       "--ndebuggable",
       "--target",
       "--verbose",
+      "--debug",
       "--gcstress"
     ],
     "env": {
@@ -399,6 +400,7 @@
       "--interpreter",
       "--target",
       "--verbose",
+      "--debug",
       "--gcstress"
     ],
     "env": {
@@ -520,6 +522,7 @@
       "--jit",
       "--target",
       "--verbose",
+      "--debug",
       "--gcstress"
     ],
     "env": {
@@ -641,6 +644,7 @@
       "--speed-profile",
       "--target",
       "--verbose",
+      "--debug",
       "--gcstress"
     ],
     "env": {
