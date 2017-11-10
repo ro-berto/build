@@ -1263,6 +1263,26 @@ BUILDERS = {
         'cf_archive_name': 'd8-msan-chained-origins',
         'testing': {'platform': 'linux'},
       },
+      'V8 Linux64 TSAN - release builder': {
+        'chromium_apply_config': [
+          'v8_ninja',
+          'default_compiler',
+          'goma',
+          'default_target_v8_clusterfuzz',
+          'mb',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'slim_swarming_builder': True,
+        'enable_swarming': True,
+        'triggers': [
+          # TODO(machenbach): Add gc fuzzer.
+        ],
+        'testing': {'platform': 'linux'},
+      },
       'V8 Linux64 UBSanVptr - release builder': {
         'chromium_apply_config': [
           'v8_ninja',
