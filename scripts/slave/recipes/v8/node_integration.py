@@ -28,13 +28,13 @@ DEPS = [
 BUILDERS = freeze({
   'client.v8.fyi': {
     'builders': {
-      'V8 - node.js baseline': {
+      'V8 Linux64 - node.js baseline': {
         'baseline_only': True,
         'testing': {
           'platform': 'linux',
         },
       },
-      'V8 - node.js integration': {
+      'V8 Linux64 - node.js integration': {
         'triggers': [
           'v8_node_linux64_haswell_perf',
         ],

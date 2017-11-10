@@ -71,7 +71,7 @@
           "Linux Snapshot Builder"
         ],
         "builders": {
-          "V8 - node.js integration": {
+          "V8 Linux64 - node.js integration": {
             "tree_notify": [
               "node-build-notifications@google.com"
             ],
