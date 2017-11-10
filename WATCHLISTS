@@ -7,12 +7,19 @@
 
 {
   'WATCHLIST_DEFINITIONS': {
+    'chromium_masters': {
+      'filepath': 'masters/master\.chromium.*(builders\.pyl|master\.cfg)$',
+    },
     'goma': {
       'filepath': 'scripts/slave/recipe_modules/goma/.+',
     },
   },
 
   'WATCHLISTS': {
+    'chromium_masters': [
+      'estaab+masters@chromium.org',
+      'hinoka+masters@chromium.org',
+    ],
     'goma': [
       'tikuta+cc@chromium.org',
     ],
