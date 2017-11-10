@@ -1767,7 +1767,7 @@ are affected by the set of files that have changed.
 
 #### **class [FinditApi](/scripts/slave/recipe_modules/findit/api.py#18)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [compile\_and\_test\_at\_revision](/scripts/slave/recipe_modules/findit/api.py#130)(self, api, target_mastername, target_buildername, target_testername, revision, requested_tests, use_analyze, test_repeat_count=None):**
+&mdash; **def [compile\_and\_test\_at\_revision](/scripts/slave/recipe_modules/findit/api.py#130)(self, api, target_mastername, target_buildername, target_testername, revision, requested_tests, use_analyze, test_repeat_count=None, skip_tests=False):**
 
 Compile the targets needed to execute the specified tests and run them.
 
@@ -1792,8 +1792,11 @@ Args:
       a parameter, and it's up to the test implementation to perform the
       repeats. Either 1 or None imply that no special flag for repeat will
       be passed.
+  skip_tests (bool):
+      If True, do not actually run the tests. Useful when we only want to
+      isolate the targets for running elsewhere.
 
-&mdash; **def [configure\_and\_sync](/scripts/slave/recipe_modules/findit/api.py#283)(self, api, tests, buildbucket, target_mastername, target_testername, revision):**
+&mdash; **def [configure\_and\_sync](/scripts/slave/recipe_modules/findit/api.py#295)(self, api, tests, buildbucket, target_mastername, target_testername, revision):**
 
 Loads tests from buildbucket, applies bot/swarming configs & syncs code.
 
@@ -1846,7 +1849,7 @@ Args:
   solution_name (str): the gclient solution name, eg:
       "src" for chromium, "src/third_party/pdfium" for pdfium.
 
-&mdash; **def [record\_previous\_revision](/scripts/slave/recipe_modules/findit/api.py#362)(self, api, bot_config):**
+&mdash; **def [record\_previous\_revision](/scripts/slave/recipe_modules/findit/api.py#374)(self, api, bot_config):**
 
 Records the latest checked out and cached revisions.
 
@@ -4631,7 +4634,7 @@ Generates the sequence of steps that will be run by the slave.
 
 [DEPS](/scripts/slave/recipes/findit/chromium/flake.py#14): [adb](#recipe_modules-adb), [buildbucket](#recipe_modules-buildbucket), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [commit\_position](#recipe_modules-commit_position), [filter](#recipe_modules-filter), [findit](#recipe_modules-findit), [isolate](#recipe_modules-isolate), [swarming](#recipe_modules-swarming), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/findit/chromium/flake.py#70)(api, target_mastername, target_testername, test_revision, tests, buildbucket, test_repeat_count):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/findit/chromium/flake.py#73)(api, target_mastername, target_testername, test_revision, tests, buildbucket, test_repeat_count, skip_tests):**
 ### *recipes* / [findit/chromium/preemptive\_bot\_update](/scripts/slave/recipes/findit/chromium/preemptive_bot_update.py)
 
 [DEPS](/scripts/slave/recipes/findit/chromium/preemptive_bot_update.py#13): [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_tests](#recipe_modules-chromium_tests), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/time][recipe_engine/recipe_modules/time]

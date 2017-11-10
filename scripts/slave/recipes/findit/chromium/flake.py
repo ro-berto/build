@@ -64,11 +64,14 @@ PROPERTIES = {
     'test_repeat_count': Property(
         kind=Single(int, required=False), default=100,
         help='How many times to repeat the tests.'),
+    'skip_tests': Property(
+        kind=Single(bool, required=False), default=False,
+        help='If True, skip the execution of the tests.'),
 }
 
 
 def RunSteps(api, target_mastername, target_testername,
-             test_revision, tests, buildbucket, test_repeat_count):
+             test_revision, tests, buildbucket, test_repeat_count, skip_tests):
 
   tests, target_buildername, checked_out_revision, cached_revision  = (
       api.findit.configure_and_sync(api, tests, buildbucket, target_mastername,
@@ -86,13 +89,14 @@ def RunSteps(api, target_mastername, target_testername,
     test_results[test_revision], _  = (
         api.findit.compile_and_test_at_revision(
           api, target_mastername, target_buildername, target_testername,
-          test_revision, tests, False, test_repeat_count))
+          test_revision, tests, False, test_repeat_count, skip_tests))
   except api.step.InfraFailure:
     test_results[test_revision] = api.findit.TestResult.INFRA_FAILED
     report['metadata']['infra_failure'] = True
     raise
   finally:
     report['last_checked_out_revision'] = api.properties.get('got_revision')
+    report['isolated_tests'] = api.isolate.isolated_tests
     # Give the full report including test results and metadata.
     api.python.succeeding_step(
         'report', [json.dumps(report, indent=2)], as_log='report')
@@ -103,7 +107,7 @@ def RunSteps(api, target_mastername, target_testername,
 def GenTests(api):
   def props(
       tests, platform_name, tester_name, use_analyze=False, revision=None,
-      buildbucket=None):
+      buildbucket=None, skip_tests=False):
     properties = {
         'path_config': 'kitchen',
         'mastername': 'tryserver.chromium.%s' % platform_name,
@@ -113,6 +117,7 @@ def GenTests(api):
         'target_mastername': 'chromium.%s' % platform_name,
         'target_testername': tester_name,
         'test_revision': revision or 'r0',
+        'skip_tests': skip_tests,
     }
     if tests:
       properties['tests'] = tests
@@ -120,6 +125,25 @@ def GenTests(api):
       properties['buildbucket'] = buildbucket
     return api.properties(**properties) + api.platform.name(platform_name)
 
+  yield (
+      api.test('flakiness_isolate_only') +
+      props({'browser_tests': ['Test.One']}, 'mac', 'Mac10.9 Tests', skip_tests=True) +
+      api.override_step_data(
+          'test r0.read test spec (chromium.mac.json)',
+          api.json.output({
+              'Mac10.9 Tests': {
+                  'gtest_tests': [
+                      {
+                          'test': 'browser_tests',
+                          'swarming': {
+                              'can_use_on_swarming_builders': True,
+                              'shards': 10},
+                      },
+                  ],
+              },
+          })
+      )
+  )
   yield (
       api.test('flakiness_swarming_tests') +
       props({'browser_tests': ['Test.One']}, 'mac', 'Mac10.9 Tests') +

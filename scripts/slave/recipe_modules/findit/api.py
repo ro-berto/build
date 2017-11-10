@@ -130,7 +130,7 @@ class FinditApi(recipe_api.RecipeApi):
   def compile_and_test_at_revision(self, api, target_mastername,
                                    target_buildername, target_testername,
                                    revision, requested_tests, use_analyze,
-                                   test_repeat_count=None):
+                                   test_repeat_count=None, skip_tests=False):
     """Compile the targets needed to execute the specified tests and run them.
 
     Args:
@@ -154,6 +154,9 @@ class FinditApi(recipe_api.RecipeApi):
           a parameter, and it's up to the test implementation to perform the
           repeats. Either 1 or None imply that no special flag for repeat will
           be passed.
+      skip_tests (bool):
+          If True, do not actually run the tests. Useful when we only want to
+          isolate the targets for running elsewhere.
     """
     results = {}
     abbreviated_revision = revision[:7]
@@ -234,6 +237,14 @@ class FinditApi(recipe_api.RecipeApi):
       # Run the tests.
       with api.m.chromium_tests.wrap_chromium_tests(
           bot_config, actual_tests_to_run):
+        if skip_tests:
+          # Not actually running any tests.
+          return {
+              x: {
+                  'status': self.TestResult.SKIPPED,
+                  'valid': True
+              } for x in requested_tests.keys()
+          }, defaultdict(list)
         failed_tests = api.m.test_utils.run_tests(
             api.chromium_tests.m, actual_tests_to_run,
             suffix=abbreviated_revision)
@@ -270,7 +281,8 @@ class FinditApi(recipe_api.RecipeApi):
 
       # Process skipped tests in two scenarios:
       # 1. Skipped by "analyze": tests are not affected by the given revision.
-      # 2. Skipped because the requested tests don't exist at the given revision.
+      # 2. Skipped because the requested tests don't exist at the given
+      #    revision.
       for test_name in requested_tests.keys():
         if test_name not in results:
           results[test_name] = {
