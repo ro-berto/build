@@ -16,6 +16,7 @@ CHROME_REQUIRED_FILES = {
     'chrome',
     'chrome_100_percent.pak',
     'chrome_200_percent.pak',
+    'chromedriver',
     'default_apps',
     'icudtl.dat',
     'libclearkeycdm.so',
@@ -45,6 +46,7 @@ CHROME_REQUIRED_FILES = {
     'chrome_child.dll',
     'chrome_elf.dll',
     'chrome_watcher.dll',
+    'chromedriver.exe',
     'default_apps',
     'd3dcompiler_47.dll',
     'icudtl.dat',
@@ -59,6 +61,7 @@ CHROME_REQUIRED_FILES = {
     'snapshot_blob.bin'
   ],
   'mac': [
+    'chromedriver',
     'Google Chrome.app'
   ]
 }
@@ -72,6 +75,7 @@ CHROME_WHITELIST_FILES = {
 CHROME_STRIP_LIST = {
   'linux': [
     'chrome',
+    'chromedriver',
     'nacl_helper'
   ],
   'win': [

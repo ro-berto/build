@@ -180,7 +180,7 @@
       "--gs-acl",
       "public",
       "--include-files",
-      "Google Chrome.app",
+      "chromedriver,Google Chrome.app",
       "--exclude-extra",
       "--build_revision",
       "170242",
