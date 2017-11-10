@@ -362,7 +362,7 @@
       },
       {
         "bucket": "master.chromium.perf.fyi",
-        "builder_name": "Linux ChromeOS Perf (mus/viz)",
+        "builder_name": "Linux ChromeOS Perf (mus-viz)",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
           "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
@@ -404,7 +404,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Histogram Pipeline Linux Perf<br />Linux ChromeOS Perf (mus/viz)<br />Linux Perf<br />Mojo Linux Perf@@@"
+      "@@@STEP_TEXT@Histogram Pipeline Linux Perf<br />Linux ChromeOS Perf (mus-viz)<br />Linux Perf<br />Mojo Linux Perf@@@"
     ]
   },
   {

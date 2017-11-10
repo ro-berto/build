@@ -97,5 +97,5 @@ _AddIsolatedTestSpec('Histogram Pipeline Linux Perf',
                      'histogram-pipeline-linux-perf',
                      'linux')
 
-_AddIsolatedTestSpec('Linux ChromeOS Perf (mus/viz)', 'chromeos-mus-viz-perf',
+_AddIsolatedTestSpec('Linux ChromeOS Perf (mus-viz)', 'chromeos-mus-viz-perf',
                      'linux')
