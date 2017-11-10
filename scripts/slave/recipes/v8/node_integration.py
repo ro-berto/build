@@ -153,6 +153,7 @@ def RunSteps(api):
   v8.apply_bot_config(BUILDERS)
   api.gclient.apply_config('node_js')
   v8.checkout()
+  v8.runhooks()
 
   if v8.bot_config.get('baseline_only', False):
     _build_and_test(api)
