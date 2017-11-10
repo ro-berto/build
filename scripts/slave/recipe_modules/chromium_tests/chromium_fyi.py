@@ -325,6 +325,12 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
+      'swarming_dimensions': {
+        'os': 'Ubuntu-16.04',
+        'gpu': None,
+        'cpu': 'arm64',
+        'kvm': '1',
+      },
     },
     'Mac OpenSSL': {
       'chromium_config': 'chromium',
