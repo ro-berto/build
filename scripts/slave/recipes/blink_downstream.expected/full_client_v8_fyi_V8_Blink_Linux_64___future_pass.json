@@ -540,6 +540,11 @@
     "name": "webkit_unit_tests"
   },
   {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
+    "name": "test_pre_run"
+  },
+  {
     "cmd": [
       "python",
       "-u",

@@ -847,6 +847,15 @@
     "name": "mark: before_tests"
   },
   {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]\\win",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
+    "name": "test_pre_run"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -922,8 +931,9 @@
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "infra_step": true,
-    "name": "[trigger] webkit_layout_tests (with patch)",
+    "name": "test_pre_run.[trigger] webkit_layout_tests (with patch)",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"webkit_layout_tests (with patch)/Windows-7-SP1/[dummy has/win7_chromium_rel_ng/571\", @@@",

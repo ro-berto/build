@@ -6,6 +6,7 @@ from recipe_engine import recipe_test_api
 
 from . import bot_config_and_test_db as bdb_module
 from . import builders
+from . import steps
 from . import trybots
 
 
@@ -13,6 +14,10 @@ class ChromiumTestsApi(recipe_test_api.RecipeTestApi):
   @property
   def builders(self):
     return builders.BUILDERS
+
+  @property
+  def steps(self):
+    return steps
 
   @property
   def trybots(self):

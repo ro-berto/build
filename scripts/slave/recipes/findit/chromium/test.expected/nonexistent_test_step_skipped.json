@@ -600,6 +600,14 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]\\win",
+    "name": "test r1.test_pre_run",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
     "cmd": [
       "python",
       "-u",

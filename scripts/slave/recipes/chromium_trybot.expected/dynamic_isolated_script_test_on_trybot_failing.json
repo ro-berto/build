@@ -813,6 +813,14 @@
     "name": "mark: before_tests"
   },
   {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/linux",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "test_pre_run"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -887,8 +895,9 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "[trigger] telemetry_gpu_unittests (with patch)",
+    "name": "test_pre_run.[trigger] telemetry_gpu_unittests (with patch)",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"telemetry_gpu_unittests (with patch)/Ubuntu-14.04/[dummy has/linux_chromium_rel_ng/571\", @@@",
@@ -1554,6 +1563,14 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/linux",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "test_pre_run (2)"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -1628,8 +1645,9 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "[trigger] telemetry_gpu_unittests (without patch)",
+    "name": "test_pre_run.[trigger] telemetry_gpu_unittests (without patch)",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"telemetry_gpu_unittests (without patch)/Ubuntu-14.04/[dummy has/linux_chromium_rel_ng/571\", @@@",

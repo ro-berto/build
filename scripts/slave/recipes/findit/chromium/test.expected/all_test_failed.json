@@ -1008,6 +1008,14 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]\\win",
+    "name": "test r1.test_pre_run",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -1077,9 +1085,9 @@
     ],
     "cwd": "[BUILDER_CACHE]\\win",
     "infra_step": true,
-    "name": "test r1.[trigger] gl_tests (r1)",
+    "name": "test r1.test_pre_run.[trigger] gl_tests (r1)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"gl_tests (r1)/Windows-7-SP1/[dummy has/win_chromium_variable/1\", @@@",

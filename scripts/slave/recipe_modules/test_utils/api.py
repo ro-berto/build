@@ -64,8 +64,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
             'Expected a one or two-element list, got %r instead.' % section)
     return ''.join(step_text)
 
-  # TODO(martinis) rewrite this. can be written better using 1.5 syntax.
-  # TODO(phajdan.jr): Deduplicate this and chromium_tests.create_test_runner.
   def run_tests(self, caller_api, tests, suffix):
     """
     Utility function for running a list of tests and returning the failed tests.
@@ -83,33 +81,34 @@ class TestUtilsApi(recipe_api.RecipeApi):
     """
     failed_tests = []
 
-    #TODO(martiniss) convert loops
-    for t in tests:
-      try:
-        t.pre_run(caller_api, suffix)
-      # TODO(iannucci): Write a test.
-      except caller_api.step.InfraFailure:  # pragma: no cover
-        raise
-      except caller_api.step.StepFailure:  # pragma: no cover
-        failed_tests.append(t)
+    with self.m.step.nest('test_pre_run'):
+      for t in tests:
+        try:
+          t.pre_run(caller_api, suffix)
+        except caller_api.step.InfraFailure:
+          raise
+        except caller_api.step.StepFailure:
+          failed_tests.append(t)
 
     for t in tests:
       try:
         t.run(caller_api, suffix)
-      except caller_api.step.InfraFailure:  # pragma: no cover
+      except caller_api.step.InfraFailure:
         raise
-      # TODO(iannucci): How should exceptions be accumulated/handled here?
       except caller_api.step.StepFailure:
         failed_tests.append(t)
+        if t.abort_on_failure:
+          raise
 
     for t in tests:
       try:
         t.post_run(caller_api, suffix)
-      # TODO(iannucci): Write a test.
-      except caller_api.step.InfraFailure:  # pragma: no cover
+      except caller_api.step.InfraFailure:
         raise
-      except caller_api.step.StepFailure:  # pragma: no cover
+      except caller_api.step.StepFailure:
         failed_tests.append(t)
+        if t.abort_on_failure:
+          raise
 
     return failed_tests
 

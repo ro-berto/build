@@ -812,6 +812,14 @@
     "name": "mark: before_tests"
   },
   {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/linux",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "test_pre_run"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -886,8 +894,9 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "[trigger] gl_tests (with patch)",
+    "name": "test_pre_run.[trigger] gl_tests (with patch)",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"gl_tests (with patch)/Ubuntu-14.04/[dummy has/linux_chromium_rel_ng/571\", @@@",
@@ -1565,6 +1574,14 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/linux",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "test_pre_run (2)"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -1640,8 +1657,9 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "[trigger] gl_tests (without patch)",
+    "name": "test_pre_run.[trigger] gl_tests (without patch)",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"gl_tests (without patch)/Ubuntu-14.04/[dummy has/linux_chromium_rel_ng/571\", @@@",

@@ -694,6 +694,10 @@
     "name": "mark: before_tests"
   },
   {
+    "cmd": [],
+    "name": "test_pre_run"
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",

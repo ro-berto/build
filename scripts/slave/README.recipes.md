@@ -170,6 +170,7 @@
   * [chromium_tests:tests/steps/local_gtest_test](#recipes-chromium_tests_tests_steps_local_gtest_test)
   * [chromium_tests:tests/steps/local_isolated_script_test](#recipes-chromium_tests_tests_steps_local_isolated_script_test)
   * [chromium_tests:tests/steps/mini_installer_test](#recipes-chromium_tests_tests_steps_mini_installer_test)
+  * [chromium_tests:tests/steps/mock_test](#recipes-chromium_tests_tests_steps_mock_test)
   * [chromium_tests:tests/steps/print_preview_tests](#recipes-chromium_tests_tests_steps_print_preview_tests)
   * [chromium_tests:tests/steps/script_test](#recipes-chromium_tests_tests_steps_script_test)
   * [chromium_tests:tests/steps/sizes_step](#recipes-chromium_tests_tests_steps_sizes_step)
@@ -303,6 +304,7 @@
   * [syzygy:tests/upload_kasko_symbols](#recipes-syzygy_tests_upload_kasko_symbols)
   * [tar:examples/full](#recipes-tar_examples_full)
   * [test_results:examples/full](#recipes-test_results_examples_full)
+  * [test_utils:tests/run_tests](#recipes-test_utils_tests_run_tests)
   * [traceback:examples/full](#recipes-traceback_examples_full)
   * [trigger:examples/full](#recipes-trigger_examples_full)
   * [v8](#recipes-v8)
@@ -3125,11 +3127,11 @@ Returns:
 
 #### **class [TestUtilsApi](/scripts/slave/recipe_modules/test_utils/api.py#27)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [create\_results\_from\_json](/scripts/slave/recipe_modules/test_utils/api.py#218)(self, data):**
+&mdash; **def [create\_results\_from\_json](/scripts/slave/recipe_modules/test_utils/api.py#217)(self, data):**
 
-&mdash; **def [create\_results\_from\_json\_if\_needed](/scripts/slave/recipe_modules/test_utils/api.py#221)(self, data):**
+&mdash; **def [create\_results\_from\_json\_if\_needed](/scripts/slave/recipe_modules/test_utils/api.py#220)(self, data):**
 
-&mdash; **def [determine\_new\_failures](/scripts/slave/recipe_modules/test_utils/api.py#130)(self, caller_api, tests, deapply_patch_fn):**
+&mdash; **def [determine\_new\_failures](/scripts/slave/recipe_modules/test_utils/api.py#129)(self, caller_api, tests, deapply_patch_fn):**
 
 Utility function for running steps with a patch applied, and retrying
 failing steps without the patch. Failures from the run without the patch are
@@ -3157,7 +3159,7 @@ Args:
        and the second one is an iterable of content lines; if there are
        no contents, the whole section is not displayed
 
-&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [gtest\_results](/scripts/slave/recipe_modules/test_utils/api.py#238)(self, add_json_log=True):**
+&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [gtest\_results](/scripts/slave/recipe_modules/test_utils/api.py#237)(self, add_json_log=True):**
 
 A placeholder which will expand to
 '--test-launcher-summary-output=/tmp/file'.
@@ -3167,7 +3169,7 @@ Provides the --test-launcher-summary-output flag since --flag=value
 
 The test_results will be an instance of the GTestResults class.
 
-&mdash; **def [run\_tests](/scripts/slave/recipe_modules/test_utils/api.py#69)(self, caller_api, tests, suffix):**
+&mdash; **def [run\_tests](/scripts/slave/recipe_modules/test_utils/api.py#67)(self, caller_api, tests, suffix):**
 
 Utility function for running a list of tests and returning the failed tests.
 
@@ -3182,9 +3184,9 @@ Args:
 Returns:
   The list of failed tests.
 
-&mdash; **def [run\_tests\_with\_patch](/scripts/slave/recipe_modules/test_utils/api.py#116)(self, caller_api, tests):**
+&mdash; **def [run\_tests\_with\_patch](/scripts/slave/recipe_modules/test_utils/api.py#115)(self, caller_api, tests):**
 
-&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_results](/scripts/slave/recipe_modules/test_utils/api.py#228)(self, add_json_log=True):**
+&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_results](/scripts/slave/recipe_modules/test_utils/api.py#227)(self, add_json_log=True):**
 
 A placeholder which will expand to '/tmp/file'.
 
@@ -4160,6 +4162,11 @@ Returns: the list of matched targets.
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/mini_installer_test.py#5): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [test\_utils](#recipe_modules-test_utils), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/mini_installer_test.py#16)(api):**
+### *recipes* / [chromium\_tests:tests/steps/mock\_test](/scripts/slave/recipe_modules/chromium_tests/tests/steps/mock_test.py)
+
+[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/mock_test.py#5): [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/mock_test.py#15)(api):**
 ### *recipes* / [chromium\_tests:tests/steps/print\_preview\_tests](/scripts/slave/recipe_modules/chromium_tests/tests/steps/print_preview_tests.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/print_preview_tests.py#5): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [test\_utils](#recipe_modules-test_utils), [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -5202,6 +5209,11 @@ Example of using the Syzygy recipe module.
 [DEPS](/scripts/slave/recipe_modules/test_results/examples/full.py#7): [test\_results](#recipe_modules-test_results), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/test_results/examples/full.py#22)(api, warning, server_config):**
+### *recipes* / [test\_utils:tests/run\_tests](/scripts/slave/recipe_modules/test_utils/tests/run_tests.py)
+
+[DEPS](/scripts/slave/recipe_modules/test_utils/tests/run_tests.py#5): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/test_utils/tests/run_tests.py#19)(api):**
 ### *recipes* / [traceback:examples/full](/scripts/slave/recipe_modules/traceback/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/traceback/examples/full.py#8): [traceback](#recipe_modules-traceback), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/step][recipe_engine/recipe_modules/step]

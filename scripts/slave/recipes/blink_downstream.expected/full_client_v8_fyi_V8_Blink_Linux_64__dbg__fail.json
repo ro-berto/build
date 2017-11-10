@@ -540,6 +540,11 @@
     "name": "webkit_unit_tests"
   },
   {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64__dbg_",
+    "name": "test_pre_run"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -1064,6 +1069,11 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64__dbg_",
+    "name": "test_pre_run (2)"
   },
   {
     "cmd": [

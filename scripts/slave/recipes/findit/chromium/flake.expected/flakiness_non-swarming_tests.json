@@ -920,6 +920,17 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/mac",
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1"
+    },
+    "name": "test r0.test_pre_run",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",

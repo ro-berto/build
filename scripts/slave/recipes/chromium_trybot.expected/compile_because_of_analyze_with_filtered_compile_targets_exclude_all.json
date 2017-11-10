@@ -742,6 +742,14 @@
     "name": "mark: before_tests"
   },
   {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/linux",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "test_pre_run"
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",

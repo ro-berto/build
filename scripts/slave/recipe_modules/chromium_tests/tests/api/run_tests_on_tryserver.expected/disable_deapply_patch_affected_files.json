@@ -267,6 +267,10 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "test_pre_run"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -323,8 +327,9 @@
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "infra_step": true,
-    "name": "[trigger] base_unittests (with patch)",
+    "name": "test_pre_run.[trigger] base_unittests (with patch)",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"base_unittests (with patch)/Ubuntu-14.04/ffffffffff/linux_chromium_rel_ng/571\", @@@",

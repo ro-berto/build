@@ -765,6 +765,15 @@
     "name": "mark: before_tests"
   },
   {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/mac",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "1"
+    },
+    "name": "test_pre_run"
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",

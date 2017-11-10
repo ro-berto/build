@@ -571,6 +571,11 @@
     "name": "webkit_unit_tests"
   },
   {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/V8_Blink_Mac",
+    "name": "test_pre_run"
+  },
+  {
     "cmd": [
       "python",
       "-u",

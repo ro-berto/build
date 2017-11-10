@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import contextlib
 import datetime
 import json
 import re
@@ -2711,3 +2712,48 @@ class WebRTCPerfTest(LocalGTestTest):
         dest=dest, args=['-a', 'public-read'], unauthenticated_url=True,
         link_name='Recordings from test')
 
+
+class MockTest(Test):
+  """A Test solely intended to be used in recipe tests."""
+
+  class ExitCodes(object):
+    FAILURE = 1
+    INFRA_FAILURE = 2
+
+  def __init__(self, name='MockTest',
+               waterfall_mastername=None, waterfall_buildername=None,
+               abort_on_failure=False):
+    super(MockTest, self).__init__(waterfall_mastername, waterfall_buildername)
+    self._abort_on_failure = abort_on_failure
+    self._name = name
+
+  @property
+  def name(self):
+    return self._name
+
+  @contextlib.contextmanager
+  def _mock_exit_codes(self, api):
+    try:
+      yield
+    except api.step.StepFailure as f:
+      if f.result.retcode == self.ExitCodes.INFRA_FAILURE:
+        i = api.step.InfraFailure(f.name, result=f.result)
+        i.result.presentation.status = api.step.EXCEPTION
+        raise i
+      raise
+
+  def pre_run(self, api, suffix):
+    with self._mock_exit_codes(api):
+      api.step('pre_run %s%s' % (self.name, suffix), None)
+
+  def run(self, api, suffix):
+    with self._mock_exit_codes(api):
+      api.step('%s%s' % (self.name, suffix), None)
+
+  def post_run(self, api, suffix):
+    with self._mock_exit_codes(api):
+      api.step('post_run %s%s' % (self.name, suffix), None)
+
+  @property
+  def abort_on_failure(self):
+    return self._abort_on_failure

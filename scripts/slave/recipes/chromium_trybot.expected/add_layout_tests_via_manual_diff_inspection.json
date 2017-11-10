@@ -751,6 +751,14 @@
     "name": "mark: before_tests"
   },
   {
+    "cmd": [],
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
+    "name": "test_pre_run"
+  },
+  {
     "cmd": [
       "python",
       "-u",
