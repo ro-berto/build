@@ -556,7 +556,8 @@ def get_args_for_test(api, chromium_tests_api, test_spec, bot_update_step):
 
 def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
                    bot_update_step, enable_swarming=False,
-                   swarming_dimensions=None, scripts_compile_targets=None):
+                   swarming_dimensions=None, scripts_compile_targets=None,
+                   bot_config=None):
   def canonicalize_test(test):
     if isinstance(test, basestring):
       canonical_test = {'test': test}
@@ -730,7 +731,8 @@ def generate_instrumentation_test(api, chromium_tests_api, mastername,
                                   buildername, test_spec, bot_update_step,
                                   enable_swarming=False,
                                   swarming_dimensions=None,
-                                  scripts_compile_targets=None):
+                                  scripts_compile_targets=None,
+                                  bot_config=None):
   for test in test_spec.get(buildername, {}).get('instrumentation_tests', []):
     test_name = str(test.get('test'))
     use_swarming = False
@@ -763,7 +765,8 @@ def generate_instrumentation_test(api, chromium_tests_api, mastername,
 def generate_junit_test(api, chromium_tests_api, mastername, buildername,
                         test_spec, bot_update_step, enable_swarming=False,
                         swarming_dimensions=None,
-                        scripts_compile_targets=None):
+                        scripts_compile_targets=None,
+                        bot_config=None):
   for test in test_spec.get(buildername, {}).get('junit_tests', []):
     yield AndroidJunitTest(
         str(test['test']),
@@ -773,7 +776,8 @@ def generate_junit_test(api, chromium_tests_api, mastername, buildername,
 def generate_cts_test(api, chromium_tests_api, mastername, buildername,
                       test_spec, bot_update_step, enable_swarming=False,
                       swarming_dimensions=None,
-                      scripts_compile_targets=None):
+                      scripts_compile_targets=None,
+                      bot_config=None):
   for test in test_spec.get(buildername, {}).get('cts_tests', []):
     yield WebViewCTSTest(
         platform=str(test['platform']),
@@ -784,7 +788,8 @@ def generate_cts_test(api, chromium_tests_api, mastername, buildername,
 
 def generate_script(api, chromium_tests_api, mastername, buildername, test_spec,
                     bot_update_step, enable_swarming=False,
-                    swarming_dimensions=None, scripts_compile_targets=None):
+                    swarming_dimensions=None, scripts_compile_targets=None,
+                    bot_config=None):
   for script_spec in test_spec.get(buildername, {}).get('scripts', []):
     yield ScriptTest(
         str(script_spec['name']),
@@ -1711,10 +1716,12 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
 def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
                              test_spec, bot_update_step, enable_swarming=False,
                              swarming_dimensions=None,
-                             scripts_compile_targets=None):
-  # Get the perf id and results url if present.
-  bot_config = (chromium_tests_api.builders.get(mastername, {})
-      .get('builders', {}).get(buildername, {}))
+                             scripts_compile_targets=None,
+                             bot_config=None):
+  if not bot_config:
+    # Get the perf id and results url if present.
+    bot_config = (chromium_tests_api.builders.get(mastername, {})
+        .get('builders', {}).get(buildername, {}))
   default_perf_id = bot_config.get('perf-id')
   results_url = bot_config.get('results-url')
   for spec in test_spec.get(buildername, {}).get('isolated_scripts', []):

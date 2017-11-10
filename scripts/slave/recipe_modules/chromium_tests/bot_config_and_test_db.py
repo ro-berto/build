@@ -104,7 +104,8 @@ class BotConfig(object):
                   builder_dict.get('swarming_dimensions', {}),
                   scripts_compile_targets,
                   test_generators,
-                  bot_update_step
+                  bot_update_step,
+                  self
               ))
       else:
         test_spec = None
