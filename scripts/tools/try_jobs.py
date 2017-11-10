@@ -81,7 +81,7 @@ def run(base, jobs, subdir, extra_args):
 
 def main():
   #emails1 = 'maruel@chromium.org'
-  emails2 = 'maruel@chromium.org,phajdan.jr@chromium.org'
+  emails2 = 'maruel@chromium.org'
   #emails3 = 'maruel@chromium.org,timurrrr@chromium.org'
 
   jobs = [
