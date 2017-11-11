@@ -2658,11 +2658,11 @@ tasks run for a day to calculate the cost of a type of type (CQ, ASAN, etc).
 
 Tags can be added per individual task.
 
-&mdash; **def [check\_client\_version](/scripts/slave/recipe_modules/swarming/api.py#565)(self, step_test_data=None):**
+&mdash; **def [check\_client\_version](/scripts/slave/recipe_modules/swarming/api.py#562)(self, step_test_data=None):**
 
 Yields steps to verify compatibility with swarming_client version.
 
-&mdash; **def [collect](/scripts/slave/recipe_modules/swarming/api.py#742)(self, tasks, \*\*kwargs):**
+&mdash; **def [collect](/scripts/slave/recipe_modules/swarming/api.py#733)(self, tasks, \*\*kwargs):**
 
 Batch version of 'collect_task'.
 
@@ -2670,7 +2670,7 @@ Deprecated, to be removed soon. Use 'collect_task' in a loop instead,
 properly handling exceptions. This method doesn't handle collect failures
 well (it aborts on a first failure).
 
-&mdash; **def [collect\_task](/scripts/slave/recipe_modules/swarming/api.py#705)(self, task, \*\*kwargs):**
+&mdash; **def [collect\_task](/scripts/slave/recipe_modules/swarming/api.py#696)(self, task, \*\*kwargs):**
 
 Waits for a single triggered task to finish.
 
@@ -2716,11 +2716,11 @@ This value can be changed per individual task.
 
 &emsp; **@default_user.setter**<br>&mdash; **def [default\_user](/scripts/slave/recipe_modules/swarming/api.py#284)(self, value):**
 
-&mdash; **def [get\_collect\_cmd\_args](/scripts/slave/recipe_modules/swarming/api.py#1123)(self, task):**
+&mdash; **def [get\_collect\_cmd\_args](/scripts/slave/recipe_modules/swarming/api.py#1114)(self, task):**
 
 SwarmingTask -> argument list for 'swarming.py' command.
 
-&mdash; **def [get\_step\_name](/scripts/slave/recipe_modules/swarming/api.py#1053)(self, prefix, task):**
+&mdash; **def [get\_step\_name](/scripts/slave/recipe_modules/swarming/api.py#1044)(self, prefix, task):**
 
 SwarmingTask -> name of a step of a waterfall.
 
@@ -2733,7 +2733,7 @@ Args:
 Returns:
   '[<prefix>] <task title> on <OS>'
 
-&mdash; **def [gtest\_task](/scripts/slave/recipe_modules/swarming/api.py#484)(self, title, isolated_hash, test_launcher_summary_output=None, extra_args=None, cipd_packages=None, merge=None, \*\*kwargs):**
+&mdash; **def [gtest\_task](/scripts/slave/recipe_modules/swarming/api.py#481)(self, title, isolated_hash, test_launcher_summary_output=None, extra_args=None, cipd_packages=None, merge=None, \*\*kwargs):**
 
 Returns a new SwarmingTask instance to run an isolated gtest on Swarming.
 
@@ -2744,7 +2744,7 @@ results from multiple shards and place it in path provided by
 
 For meaning of the rest of the arguments see 'task' method.
 
-&mdash; **def [isolated\_script\_task](/scripts/slave/recipe_modules/swarming/api.py#530)(self, title, isolated_hash, extra_args=None, idempotent=False, merge=None, \*\*kwargs):**
+&mdash; **def [isolated\_script\_task](/scripts/slave/recipe_modules/swarming/api.py#527)(self, title, isolated_hash, extra_args=None, idempotent=False, merge=None, \*\*kwargs):**
 
 Returns a new SwarmingTask to run an isolated script test on Swarming.
 
@@ -2783,7 +2783,7 @@ dimension.
 
 Changes URL of Swarming server to use.
 
-&mdash; **def [task](/scripts/slave/recipe_modules/swarming/api.py#391)(self, title, isolated_hash, ignore_task_failure=False, shards=1, task_output_dir=None, extra_args=None, idempotent=None, cipd_packages=None, build_properties=None, merge=None, trigger_script=None, named_caches=None, raw_cmd=None):**
+&mdash; **def [task](/scripts/slave/recipe_modules/swarming/api.py#391)(self, title, isolated_hash, ignore_task_failure=False, shards=1, task_output_dir=None, extra_args=None, idempotent=None, cipd_packages=None, build_properties=None, merge=None, trigger_script=None, named_caches=None):**
 
 Returns a new SwarmingTask instance to run an isolated executable on
 Swarming.
@@ -2842,10 +2842,8 @@ Args:
       See SwarmingTask.__init__ docstring for more details.
   named_caches: a dict {name: relpath} requesting a cache named `name`
       to be installed in `relpath` relative to the task root directory.
-  raw_cmd: Optional list of arguments to be used as raw command. Can be
-      used instead of extra args.
 
-&mdash; **def [trigger](/scripts/slave/recipe_modules/swarming/api.py#733)(self, tasks, \*\*kwargs):**
+&mdash; **def [trigger](/scripts/slave/recipe_modules/swarming/api.py#724)(self, tasks, \*\*kwargs):**
 
 Batch version of 'trigger_task'.
 
@@ -2853,7 +2851,7 @@ Deprecated, to be removed soon. Use 'trigger_task' in a loop instead,
 properly handling exceptions. This method doesn't handle trigger failures
 well (it aborts on a first failure).
 
-&mdash; **def [trigger\_task](/scripts/slave/recipe_modules/swarming/api.py#570)(self, task, \*\*kwargs):**
+&mdash; **def [trigger\_task](/scripts/slave/recipe_modules/swarming/api.py#567)(self, task, \*\*kwargs):**
 
 Triggers one task.
 

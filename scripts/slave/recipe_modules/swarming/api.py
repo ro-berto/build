@@ -391,7 +391,7 @@ class SwarmingApi(recipe_api.RecipeApi):
   def task(self, title, isolated_hash, ignore_task_failure=False, shards=1,
            task_output_dir=None, extra_args=None, idempotent=None,
            cipd_packages=None, build_properties=None, merge=None,
-           trigger_script=None, named_caches=None, raw_cmd=None):
+           trigger_script=None, named_caches=None):
     """Returns a new SwarmingTask instance to run an isolated executable on
     Swarming.
 
@@ -449,8 +449,6 @@ class SwarmingApi(recipe_api.RecipeApi):
           See SwarmingTask.__init__ docstring for more details.
       named_caches: a dict {name: relpath} requesting a cache named `name`
           to be installed in `relpath` relative to the task root directory.
-      raw_cmd: Optional list of arguments to be used as raw command. Can be
-          used instead of extra args.
 
     """
     if idempotent is None:
@@ -478,7 +476,6 @@ class SwarmingApi(recipe_api.RecipeApi):
         merge=merge,
         trigger_script=trigger_script,
         named_caches=named_caches,
-        raw_cmd=raw_cmd,
       )
 
   def gtest_task(self, title, isolated_hash, test_launcher_summary_output=None,
@@ -660,16 +657,10 @@ class SwarmingApi(recipe_api.RecipeApi):
     # What isolated command to trigger.
     args.extend(('--isolated', task.isolated_hash))
 
-    # Use a raw command as extra-args on tasks without command.
-    if task.raw_cmd:
-      # Allow using only one of raw_cmd or extra_args.
-      assert not task.extra_args
-      args.append('--raw-cmd')
-
     # Additional command line args for isolated command.
-    if task.extra_args or task.raw_cmd:
+    if task.extra_args:
       args.append('--')
-      args.extend(task.extra_args or task.raw_cmd)
+      args.extend(task.extra_args)
 
     script = self.m.swarming_client.path.join('swarming.py')
     if task.trigger_script:
@@ -1164,7 +1155,7 @@ class SwarmingTask(object):
                user, io_timeout, hard_timeout, idempotent, extra_args,
                collect_step, task_output_dir, cipd_packages=None,
                build_properties=None, merge=None, trigger_script=None,
-               named_caches=None, raw_cmd=None):
+               named_caches=None):
     """Configuration of a swarming task.
 
     Args:
@@ -1232,8 +1223,6 @@ class SwarmingTask(object):
             2. Any additional arguments provided in the "args" entry.
       named_caches: a dict {name: relpath} requesting a cache named `name`
           to be installed in `relpath` relative to the task root directory.
-      raw_cmd: Optional list of arguments to be used as raw command. Can be
-          used instead of extra args.
     """
     self._trigger_output = None
     self.build_properties = build_properties
@@ -1254,7 +1243,6 @@ class SwarmingTask(object):
     self.named_caches = named_caches or {}
     self.trigger_script = trigger_script or {}
     self.priority = priority
-    self.raw_cmd = tuple(raw_cmd or [])
     self.shards = shards
     self.tags = set()
     self.task_output_dir = task_output_dir
