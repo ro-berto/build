@@ -549,7 +549,6 @@
       "--eventlog-endpoint",
       "prod",
       "--verbose",
-      "[START_DIR]/v8/out/Release/benchmarks.isolated.gen.json",
       "[START_DIR]/v8/out/Release/bot_default.isolated.gen.json",
       "[START_DIR]/v8/out/Release/check-static-initializers.isolated.gen.json",
       "[START_DIR]/v8/out/Release/mjsunit.isolated.gen.json",
@@ -561,7 +560,6 @@
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"benchmarks\": \"[dummy hash for benchmarks]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"bot_default\": \"[dummy hash for bot_default]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"check-static-initializers\": \"[dummy hash for check-static-initializers]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"mjsunit\": \"[dummy hash for mjsunit]\", @@@",
@@ -584,7 +582,7 @@
       "cp",
       "-a",
       "public-read",
-      "{\"benchmarks\": \"[dummy hash for benchmarks]\", \"bot_default\": \"[dummy hash for bot_default]\", \"check-static-initializers\": \"[dummy hash for check-static-initializers]\", \"mjsunit\": \"[dummy hash for mjsunit]\", \"mozilla\": \"[dummy hash for mozilla]\", \"optimize_for_size\": \"[dummy hash for optimize_for_size]\", \"perf\": \"[dummy hash for perf]\", \"test262\": \"[dummy hash for test262]\"}",
+      "{\"bot_default\": \"[dummy hash for bot_default]\", \"check-static-initializers\": \"[dummy hash for check-static-initializers]\", \"mjsunit\": \"[dummy hash for mjsunit]\", \"mozilla\": \"[dummy hash for mozilla]\", \"optimize_for_size\": \"[dummy hash for optimize_for_size]\", \"perf\": \"[dummy hash for perf]\", \"test262\": \"[dummy hash for test262]\"}",
       "gs://chromium-v8/isolated/client.v8/V8 Linux64 - builder/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json"
     ],
     "infra_step": true,
@@ -638,29 +636,6 @@
           "parent_got_swarming_client_revision": "e4fee0b18f8163be6097c9c571640038896debc4",
           "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "swarm_hashes": {
-            "benchmarks": "[dummy hash for benchmarks]",
-            "bot_default": "[dummy hash for bot_default]",
-            "check-static-initializers": "[dummy hash for check-static-initializers]",
-            "mjsunit": "[dummy hash for mjsunit]",
-            "mozilla": "[dummy hash for mozilla]",
-            "optimize_for_size": "[dummy hash for optimize_for_size]",
-            "perf": "[dummy hash for perf]",
-            "test262": "[dummy hash for test262]"
-          }
-        }
-      },
-      {
-        "builder_name": "V8 Linux64 - avx2",
-        "properties": {
-          "parent_build_environment": {
-            "gn_args": "target_cpu = \"x86\" use_goma = true"
-          },
-          "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
-          "parent_got_revision_cp": "refs/heads/master@{#50110}",
-          "parent_got_swarming_client_revision": "e4fee0b18f8163be6097c9c571640038896debc4",
-          "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
-          "swarm_hashes": {
-            "benchmarks": "[dummy hash for benchmarks]",
             "bot_default": "[dummy hash for bot_default]",
             "check-static-initializers": "[dummy hash for check-static-initializers]",
             "mjsunit": "[dummy hash for mjsunit]",
@@ -673,7 +648,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@V8 Linux64<br />V8 Linux64 - avx2@@@"
+      "@@@STEP_TEXT@V8 Linux64@@@"
     ]
   },
   {
@@ -699,7 +674,6 @@
           "parent_got_swarming_client_revision": "e4fee0b18f8163be6097c9c571640038896debc4",
           "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "swarm_hashes": {
-            "benchmarks": "[dummy hash for benchmarks]",
             "bot_default": "[dummy hash for bot_default]",
             "check-static-initializers": "[dummy hash for check-static-initializers]",
             "mjsunit": "[dummy hash for mjsunit]",

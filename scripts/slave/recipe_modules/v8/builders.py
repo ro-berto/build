@@ -99,7 +99,6 @@ BUILDERS = {
         'triggers': [
           'V8 Linux - gc stress',
           'V8 Linux - debug',
-          'V8 Linux - debug - avx2',
         ],
       },
       'V8 Linux - nosnap builder': {
@@ -176,6 +175,9 @@ BUILDERS = {
         ),
         'testing': {'platform': 'linux'},
         'enable_swarming': True,
+        'swarming_dimensions': {
+          'cpu': 'x86-64-avx2',
+        },
       },
       'V8 Linux - debug': {
         'v8_config_kwargs': {
@@ -210,18 +212,6 @@ BUILDERS = {
             [Mjsunit, Mozilla, Test262, Benchmarks],
             V8Variant('default'),
         ),
-        'testing': {'platform': 'linux'},
-      },
-      'V8 Linux - debug - avx2': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'tester',
-        'enable_swarming': True,
-        'parent_buildername': 'V8 Linux - debug builder',
-        'build_gs_archive': 'linux_dbg_archive',
-        'tests': [V8Testing(2), Benchmarks, Mozilla],
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
           'cpu': 'x86-64-avx2',
@@ -332,7 +322,6 @@ BUILDERS = {
         },
         'triggers': [
           'V8 Linux64',
-          'V8 Linux64 - avx2',
         ],
         'triggers_proxy': True,
       },
@@ -362,7 +351,6 @@ BUILDERS = {
         'triggers': [
           'V8 Fuzzer',
           'V8 Linux64 - debug',
-          'V8 Linux64 - debug - avx2',
         ],
       },
       'V8 Linux64 - custom snapshot - debug builder': {
@@ -398,23 +386,10 @@ BUILDERS = {
           Test262Variants(2),
           Mozilla,
           MjsunitSPFrameAccess,
-        ],
-        'testing': {'platform': 'linux'},
-      },
-      'V8 Linux64 - avx2': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'tester',
-        'parent_buildername': 'V8 Linux64 - builder',
-        'build_gs_archive': 'linux64_rel_archive',
-        'enable_swarming': True,
-        'tests': [
-          V8Testing,
-          Benchmarks,
-          Mozilla,
-        ],
+        ] + with_test_args(
+            'noavx',
+            ['--extra-flags', '--noenable-avx'],
+            [V8Testing, Test262, Mozilla]),
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
           'cpu': 'x86-64-avx2',
@@ -435,23 +410,10 @@ BUILDERS = {
           Test262Variants(5),
           Mozilla,
           MjsunitSPFrameAccess,
-        ],
-        'testing': {'platform': 'linux'},
-      },
-      'V8 Linux64 - debug - avx2': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'tester',
-        'parent_buildername': 'V8 Linux64 - debug builder',
-        'build_gs_archive': 'linux64_dbg_archive',
-        'enable_swarming': True,
-        'tests': [
-          V8Testing(2),
-          Benchmarks,
-          Mozilla,
-        ],
+        ] + with_test_args(
+            'noavx',
+            ['--extra-flags', '--noenable-avx'],
+            [V8Testing(2), Test262, Mozilla]),
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
           'cpu': 'x86-64-avx2',
@@ -1940,6 +1902,9 @@ BUILDERS = {
           GCMole,
         ],
         'testing': {'platform': 'linux'},
+        'swarming_dimensions': {
+          'cpu': 'x86-64-avx2',
+        },
       },
       'v8_linux_verify_csa_rel_ng': {
         'chromium_apply_config': [
@@ -1966,23 +1931,6 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [V8Testing],
         'testing': {'platform': 'linux'},
-      },
-      'v8_linux_avx2_dbg': {
-        'chromium_apply_config': [
-          'default_compiler', 'v8_ninja', 'goma', 'mb'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'enable_swarming': True,
-        'tests': [
-          V8Testing(2),
-        ],
-        'testing': {'platform': 'linux'},
-        'swarming_dimensions': {
-          'cpu': 'x86-64-avx2',
-        },
       },
       'v8_linux_nodcheck_rel_ng': {
         'chromium_apply_config': [
@@ -2015,6 +1963,9 @@ BUILDERS = {
           Benchmarks,
         ],
         'testing': {'platform': 'linux'},
+        'swarming_dimensions': {
+          'cpu': 'x86-64-avx2',
+        },
       },
       'v8_linux_dbg_ng': {
         'chromium_apply_config': [
@@ -2047,6 +1998,9 @@ BUILDERS = {
           MjsunitSPFrameAccess,
         ],
         'testing': {'platform': 'linux'},
+        'swarming_dimensions': {
+          'cpu': 'x86-64-avx2',
+        },
       },
       'v8_linux_noi18n_rel_ng': {
         'chromium_apply_config': [
@@ -2181,6 +2135,9 @@ BUILDERS = {
           MjsunitSPFrameAccess,
         ],
         'testing': {'platform': 'linux'},
+        'swarming_dimensions': {
+          'cpu': 'x86-64-avx2',
+        },
       },
       'v8_linux64_verify_csa_rel_ng': {
         'chromium_apply_config': [
@@ -2234,54 +2191,6 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [V8Testing],
         'testing': {'platform': 'linux'},
-      },
-      'v8_linux64_avx2_rel_ng': {
-        'chromium_apply_config': [
-          'default_compiler', 'v8_ninja', 'goma', 'mb'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder',
-        'enable_swarming': True,
-        'slim_swarming_builder': True,
-        'triggers': [
-          'v8_linux64_avx2_rel_ng_triggered',
-        ],
-        'testing': {'platform': 'linux'},
-      },
-      'v8_linux64_avx2_rel_ng_triggered': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'tester',
-        'parent_buildername': 'v8_linux64_avx2_rel_ng',
-        'enable_swarming': True,
-        'tests': [
-          V8Testing,
-        ],
-        'testing': {'platform': 'linux'},
-        'swarming_dimensions': {
-          'cpu': 'x86-64-avx2',
-        },
-      },
-      'v8_linux64_avx2_dbg': {
-        'chromium_apply_config': [
-          'default_compiler', 'v8_ninja', 'goma', 'mb'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'enable_swarming': True,
-        'tests': [
-          V8Testing(2),
-        ],
-        'testing': {'platform': 'linux'},
-        'swarming_dimensions': {
-          'cpu': 'x86-64-avx2',
-        },
       },
       'v8_linux_gc_stress_dbg': {
         'chromium_apply_config': [
