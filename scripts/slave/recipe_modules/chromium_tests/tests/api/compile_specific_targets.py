@@ -93,8 +93,8 @@ def GenTests(api):
       api.test('update_clang') +
       api.platform.name('win') +
       api.properties.generic(
-          mastername='chromium.win',
-          buildername='WinClang64 (dbg)')
+          mastername='chromium.clang',
+          buildername='CrWinClang64(dbg)')
   )
 
   yield (

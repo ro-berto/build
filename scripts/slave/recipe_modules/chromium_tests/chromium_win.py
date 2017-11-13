@@ -171,8 +171,27 @@ SPEC = {
       },
       'enable_swarming': True,
     },
-    'WinClang64 (dbg)': {
-      'chromium_config': 'chromium_win_clang',
+    'WinMSVC64': {
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_PLATFORM': 'win',
+        'TARGET_BITS': 64,
+      },
+      'compile_targets': [
+        'all',
+      ],
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'win',
+      },
+      'enable_swarming': True,
+      # Workaround so that recipes doesn't add random build targets to our
+      # compile line. We want to build everything.
+      'add_tests_as_compile_targets': False,
+    },
+    'WinMSVC64 (dbg)': {
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -192,7 +211,6 @@ SPEC = {
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
-      'checkout_dir': 'win_clang',
     },
   },
 }

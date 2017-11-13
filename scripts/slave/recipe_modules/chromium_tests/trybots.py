@@ -652,9 +652,18 @@ TRYBOTS = freeze({
         'buildername': 'Win x64 Builder',
         'tester': 'Win 7 Tests x64 (1)',
       }),
+      # TODO(crbug.com/751220): Get rid of this after it is removed from the CQ.
       'win_clang': simple_bot({
         'mastername': 'chromium.win',
-        'buildername': 'WinClang64 (dbg)',
+        'buildername': 'WinMSVC64 (dbg)',
+      }),
+      'win-msvc-rel': simple_bot({
+        'mastername': 'chromium.win',
+        'buildername': 'WinMSVC64',
+      }),
+      'win-msvc-dbg': simple_bot({
+        'mastername': 'chromium.win',
+        'buildername': 'WinMSVC64 (dbg)',
       }),
       'win_chromium_syzyasan_rel': simple_bot({
         'mastername': 'chromium.fyi',

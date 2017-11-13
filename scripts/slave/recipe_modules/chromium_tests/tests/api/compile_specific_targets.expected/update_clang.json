@@ -232,11 +232,10 @@
       "--",
       "--build-config-fs",
       "Debug_x64",
-      "--use-src-side-runtest-py",
       "--paths",
       "{\"checkout\": \"[START_DIR]\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"test_bot\", \"buildername\": \"WinClang64 (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.win\", \"slavename\": \"test_bot\", \"target_platform\": \"win\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"CrWinClang64(dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.clang\", \"slavename\": \"test_bot\", \"target_platform\": \"win\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -249,12 +248,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[START_DIR]\\src\\testing\\buildbot\\chromium.win.json",
+      "[START_DIR]\\src\\testing\\buildbot\\chromium.clang.json",
       "/path/to/tmp/json"
     ],
-    "name": "read test spec (chromium.win.json)",
+    "name": "read test spec (chromium.clang.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [START_DIR]\\src\\testing\\buildbot\\chromium.win.json@@@",
+      "@@@STEP_TEXT@path: [START_DIR]\\src\\testing\\buildbot\\chromium.clang.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -278,9 +277,9 @@
       "[START_DIR]\\src\\tools\\mb\\mb.py",
       "gen",
       "-m",
-      "chromium.win",
+      "chromium.clang",
       "-b",
-      "WinClang64 (dbg)",
+      "CrWinClang64(dbg)",
       "--config-file",
       "[START_DIR]\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
@@ -360,7 +359,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]\\goma\\WinClang64__dbg_"
+      "[CACHE]\\goma\\CrWinClang64_dbg_"
     ],
     "cwd": "[START_DIR]\\src",
     "env": {
@@ -386,7 +385,7 @@
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\WinClang64__dbg_",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\CrWinClang64_dbg_",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_ENABLE_MACRO_CACHE": "true",
       "GOMA_HERMETIC": "error",
@@ -561,9 +560,9 @@
       "--ninja-log-compiler",
       "goma-clang",
       "--buildbot-buildername",
-      "WinClang64 (dbg)",
+      "CrWinClang64(dbg)",
       "--buildbot-mastername",
-      "chromium.win",
+      "chromium.clang",
       "--buildbot-slavename",
       "test_bot"
     ],
