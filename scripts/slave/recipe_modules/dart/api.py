@@ -85,7 +85,7 @@ class DartApi(recipe_api.RecipeApi):
     return isolate_hash
 
   def shard(self, title, isolate_hash, test_args, os=None, cpu='x86-64', pool='Dart.LUCI',
-      num_shards=0):
+      num_shards=0, last_shard_is_local=False):
     """Runs test.py in the given isolate, sharded over several swarming tasks.
        Requires the 'shards' build property to be set to the number of tasks.
        Returns the created task(s), which are meant to be passed into collect().
@@ -94,7 +94,7 @@ class DartApi(recipe_api.RecipeApi):
       num_shards = int(self.m.properties['shards'])
     assert(num_shards > 0)
     tasks = []
-    for shard in range(num_shards):
+    for shard in range(num_shards - 1) if last_shard_is_local else range(num_shards):
       # TODO(athom) collect all the triggers, and present as a single step
       task = self.m.swarming.task("%s_shard_%s" % (title, (shard + 1)),
                                isolate_hash,
@@ -200,11 +200,13 @@ class DartApi(recipe_api.RecipeApi):
       step_test_data=lambda: self.m.json.test_api.output(test_data))
     test_matrix = read_json.json.output
     builder = self.m.properties['buildername']
+    if builder.endswith(('-be', '-try', '-stable', 'dev')):
+      builder = builder[0:builder.rfind('-')]
     isolate_hashes = {}
     for config in test_matrix['configurations']:
       if builder in config['builders']:
         self._write_file_sets(test_matrix['filesets'])
-        self._run_steps(config, isolate_hashes)
+        self._run_steps(config, isolate_hashes, builder)
         return
     raise self.m.step.StepFailure(
         'Error, could not find builder by name %s in test-matrix' % builder)
@@ -250,11 +252,10 @@ class DartApi(recipe_api.RecipeApi):
           return True
     return False
 
-  def _run_steps(self, config, isolate_hashes):
+  def _run_steps(self, config, isolate_hashes, builder_name):
     """Executes all steps from a json test-matrix builder entry"""
     # Find information from the builder name. It should be in the form
     # <info>-<os>-<mode>-<arch>-<runtime> or <info>-<os>-<mode>-<arch>.
-    builder_name = self.m.properties['buildername']
     builder_fragments = builder_name.split('-')
     system = self._get_option(
       builder_fragments,
@@ -279,13 +280,21 @@ class DartApi(recipe_api.RecipeApi):
                    'arch': arch}
     if runtime is not None:
       environment['runtime'] = runtime
+    channel = 'try'
+    if 'branch' in self.m.properties:
+      channels = {
+        "refs/heads/master": "be",
+        "refs/heads/stable": "stable",
+        "refs/heads/dev": "dev"
+      }
+      channel = channels.get(self.m.properties['branch'], 'try');
     test_py_path = 'tools/test.py'
     build_py_path = 'tools/build.py'
     # Indexes the number of test.py steps.
     test_py_index = 0;
     tasks = []
     with self.m.step.defer_results():
-      for step in config['steps']:
+      for index,step in enumerate(config['steps']):
         step_name = step['name']
         # If script is not defined, use test.py.
         script = step.get('script', test_py_path)
@@ -294,21 +303,14 @@ class DartApi(recipe_api.RecipeApi):
         is_test_py_step = script.endswith(test_py_path)
         script = self.m.path['checkout'].join(*script.split('/'))
         isolate_hash = None
-        shards = 0
+        shards = step.get('shards', 0)
+        local_shard = shards > 0 and index == len(config['steps']) - 1
         if 'fileset' in step:
           # We build isolates here, every time we see fileset, to wait for the
           # building of Dart, which may be included in the fileset.
           self._build_isolates(config, isolate_hashes)
           isolate_hash = isolate_hashes[step['fileset']]
-          shards = step['shards']
-        channel = 'try'
-        if 'branch' in self.m.properties:
-          channels = {
-            "refs/heads/master": "be",
-            "refs/heads/stable": "stable",
-            "refs/heads/dev": "dev"
-          }
-          channel = channels.get(self.m.properties['branch'], 'try');
+
         environment_variables = step.get('environment', {})
         environment_variables['BUILDBOT_BUILDERNAME'] = builder_name + "-%s" % channel
         with self.m.context(cwd=self.m.path['checkout'],
@@ -321,28 +323,33 @@ class DartApi(recipe_api.RecipeApi):
               args = ['-a%s' % arch] + args
             self.build(name=step_name, build_args=args)
           elif is_test_py_step:
-            self.run_test_py(step_name, args, test_py_index, step, isolate_hash,
-                shards, environment, tasks)
-            if shards == 0:
-              # Only count indexes that are not sharded, to help with adding append-logs.
+            append_logs = test_py_index > 0
+            self.run_test_py(step_name, append_logs, step,
+                isolate_hash, shards, local_shard, environment, tasks)
+            if shards == 0 or local_shard:
+              # Only count indexes that are not sharded, to help with adding
+              # append-logs.
               test_py_index += 1
           else:
             self.run_script(step_name, script, args, isolate_hash, shards,
-                environment, tasks)
-      self.collect_all(tasks)
+                local_shard, environment, tasks)
+    self.collect_all(tasks)
 
-  def run_test_py(self, step_name, args, index, step, isolate_hash, shards,
-      environment, tasks):
+  def run_test_py(self, step_name, append_logs, step, isolate_hash, shards,
+      local_shard, environment, tasks):
     """Runs test.py with default arguments, based on configuration from.
     Args:
       * step_name (str) - Name of the step
-      * args ([str]) - Additional arguments to test.py
-      * index (int) - Index of test.py calls. Used to append logs
+      * append_logs (bool) - Add append_log to arguments
       * step (dict) - Test-matrix step
+      * isolate_hash (String) - Hash of uploadet fileset/isolate if the
+        process is to be sharded
+      * shards (int) - The number of shards
+      * local_shard (bool) - Should the current builder be one of the shards.
       * environment (dict) - Environment with runtime, arch, system etc
       * tasks ([task]) - placeholder to put all swarming tasks in
     """
-
+    args = step.get('arguments', [])
     test_args = ['--progress=buildbot',
                  '-v',
                  '--report',
@@ -358,7 +365,7 @@ class DartApi(recipe_api.RecipeApi):
         args, ['-r', '--runtime']):
       test_args = test_args + ['-r%s' % environment['runtime']]
     args = test_args + args
-    if index > 0:
+    if append_logs:
       args = args + ['--append_logs']
     if environment['system'] in ['win7', 'win8', 'win10']:
       args = args + ['--builder-tag=%s' % environment['system']]
@@ -366,11 +373,13 @@ class DartApi(recipe_api.RecipeApi):
         args = args + ['--exclude_suite=' + ','.join(step['exclude_tests'])]
     if 'tests' in step:
       args = args + step['tests']
-    self.run_script(step_name, 'tools/test.py', args, isolate_hash, shards, environment, tasks)
-    if shards == 0:
+    self.run_script(step_name, 'tools/test.py', args, isolate_hash, shards,
+        local_shard, environment, tasks)
+    if shards == 0 or local_shard:
       self.read_result_file('read results of %s' % step_name, 'result.log')
 
-  def run_script(self, step_name, script, args, isolate_hash, shards, environment, tasks):
+  def run_script(self, step_name, script, args, isolate_hash, shards,
+      local_shard, environment, tasks):
     """Runs a specific script with current working directory to be checkout. If
     the runtime (passed in environment) is a browser, and the system is linux,
     xvfb is used. If an isolate_hash is passed in, it will swarm the command.
@@ -379,6 +388,8 @@ class DartApi(recipe_api.RecipeApi):
       * script (str) - The script to invoke
       * args ([str]) - Additional arguments to test.py
       * isolate_hash (str) - The isolate hash if the script should be swarmed
+      * shards (int) - The number of shards to invoke
+      * local_shard (bool) - Should the current builder be used as a shard
       * environment (dict) - Environment with runtime, arch, system etc
       * tasks ([task]) - placeholder to put all swarming tasks in
     """
@@ -387,16 +398,30 @@ class DartApi(recipe_api.RecipeApi):
                 environment['system'] == 'linux')
     with self.m.step.defer_results():
       if use_xvfb:
-        xvfb_cmd = ['/usr/bin/xvfb-run', '-a', '--server-args=-screen 0 1024x768x24']
+        xvfb_cmd = [
+          '/usr/bin/xvfb-run',
+          '-a',
+          '--server-args=-screen 0 1024x768x24']
         cmd = xvfb_cmd + ['python', '-u', script] + args
         if isolate_hash:
-          tasks.append(self.shard(step_name, isolate_hash, cmd, num_shards=shards))
+          tasks.append(self.shard(step_name, isolate_hash, cmd,
+              num_shards=shards, last_shard_is_local=local_shard))
         else:
           self.m.step(step_name, cmd)
       else:
         if isolate_hash:
-          tasks.append(self.shard(step_name, isolate_hash, [script] + args, num_shards=shards))
+          tasks.append(self.shard(step_name, isolate_hash, [script] + args,
+              num_shards=shards, last_shard_is_local=local_shard))
         elif '.py' in str(script):
           self.m.python(step_name, script, args=args)
         else:
           self.m.step(step_name, [script] + args)
+
+    if local_shard:
+      this_shard = shards + 1
+      args = args + [
+        '--shards=%s' % this_shard,
+        '--shard=%s' % this_shard
+      ]
+      self.run_script("%s_shard_%s" % (step_name, this_shard), script,
+          args, None, 0, False, environment, tasks)

@@ -13,8 +13,8 @@ TEST_MATRIX = {
   "configurations": [
     {
       "builders": [
-        "dart2js-win10-debug-x64-ff-try",
-        "analyzer-linux-release-be"
+        "dart2js-win10-debug-x64-ff",
+        "analyzer-linux-release"
       ],
       "meta": {},
       "steps": [{
@@ -27,7 +27,7 @@ TEST_MATRIX = {
         "arguments": ["foo", "--arch=x64"],
         "tests": ["language_2"],
         "exclude_tests": ["co19"],
-        "shards": 1,
+        "shards": 2,
         "fileset": "fileset1"
       }, {
         "name": "Test-step 2",
@@ -39,12 +39,14 @@ TEST_MATRIX = {
         "arguments": ["foo", "--bar", "--buildername"]
       }, {
         "name": "Test-step 3",
-        "arguments": ["foo", "--bar"]
+        "arguments": ["foo", "--bar"],
+        "fileset": "fileset1",
+        "shards": 2
       }]
     },
     {
       "builders": [
-        "dart2js-linux-release-chrome-try"
+        "dart2js-linux-release-chrome"
       ],
       "meta": {},
       "steps": [{
@@ -78,8 +80,9 @@ def RunSteps(api):
   isolate_hash = api.dart.build(build_args, 'dart_tests')
 
   test_args = ['--all']
-  tasks = api.dart.shard('vm_tests', isolate_hash, test_args)
-  api.dart.collect(tasks)
+  if 'shards' in api.properties:
+    tasks = api.dart.shard('vm_tests', isolate_hash, test_args)
+    api.dart.collect(tasks)
 
   with api.step.defer_results():
     api.step('Print Hello World', ['echo', 'hello', 'world'])
@@ -108,7 +111,12 @@ def GenTests(api):
       shards='1', buildername='times-out') +
       api.step_data('can_time_out', times_out_after=20 * 61 + 1))
 
+  yield (api.test('basic-win-stable') + api.platform('win', 64) + api.properties(
+      buildername='dart2js-win10-debug-x64-ff-stable') +
+      api.step_data('upload testing fileset fileset1',
+                    stdout=api.raw_io.output('test isolate hash')))
+
   yield (api.test('basic-win') + api.platform('win', 64) + api.properties(
-      shards='1', buildername='dart2js-win10-debug-x64-ff-try') +
+      buildername='dart2js-win10-debug-x64-ff') +
       api.step_data('upload testing fileset fileset1',
                     stdout=api.raw_io.output('test isolate hash')))

@@ -781,8 +781,8 @@
       "@@@STEP_LOG_LINE@json.output@  \"configurations\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"builders\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"dart2js-win10-debug-x64-ff-try\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"analyzer-linux-release-be\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"dart2js-win10-debug-x64-ff\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"analyzer-linux-release\"@@@",
       "@@@STEP_LOG_LINE@json.output@      ], @@@",
       "@@@STEP_LOG_LINE@json.output@      \"meta\": {}, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"steps\": [@@@",
@@ -805,7 +805,7 @@
       "@@@STEP_LOG_LINE@json.output@          \"fileset\": \"fileset1\", @@@",
       "@@@STEP_LOG_LINE@json.output@          \"name\": \"Test-step 1\", @@@",
       "@@@STEP_LOG_LINE@json.output@          \"script\": \"tools/test.py\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"shards\": 1, @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"shards\": 2, @@@",
       "@@@STEP_LOG_LINE@json.output@          \"tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@            \"language_2\"@@@",
       "@@@STEP_LOG_LINE@json.output@          ]@@@",
@@ -832,13 +832,15 @@
       "@@@STEP_LOG_LINE@json.output@            \"foo\", @@@",
       "@@@STEP_LOG_LINE@json.output@            \"--bar\"@@@",
       "@@@STEP_LOG_LINE@json.output@          ], @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"name\": \"Test-step 3\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"fileset\": \"fileset1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"name\": \"Test-step 3\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"shards\": 2@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      ]@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"builders\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"dart2js-linux-release-chrome-try\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"dart2js-linux-release-chrome\"@@@",
       "@@@STEP_LOG_LINE@json.output@      ], @@@",
       "@@@STEP_LOG_LINE@json.output@      \"meta\": {}, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"steps\": [@@@",
@@ -1075,7 +1077,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-linux-release-chrome-try-try"
+      "BUILDBOT_BUILDERNAME": "dart2js-linux-release-chrome-try"
     },
     "env_prefixes": {
       "PATH": [
@@ -1174,7 +1176,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-linux-release-chrome-try-try"
+      "BUILDBOT_BUILDERNAME": "dart2js-linux-release-chrome-try"
     },
     "env_prefixes": {
       "PATH": [
@@ -1213,7 +1215,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-linux-release-chrome-try-try"
+      "BUILDBOT_BUILDERNAME": "dart2js-linux-release-chrome-try"
     },
     "env_prefixes": {
       "PATH": [
@@ -1246,7 +1248,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-linux-release-chrome-try-try"
+      "BUILDBOT_BUILDERNAME": "dart2js-linux-release-chrome-try"
     },
     "env_prefixes": {
       "PATH": [
@@ -1268,7 +1270,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-linux-release-chrome-try-try"
+      "BUILDBOT_BUILDERNAME": "dart2js-linux-release-chrome-try"
     },
     "env_prefixes": {
       "PATH": [
@@ -1294,7 +1296,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-linux-release-chrome-try-try"
+      "BUILDBOT_BUILDERNAME": "dart2js-linux-release-chrome-try"
     },
     "env_prefixes": {
       "PATH": [
