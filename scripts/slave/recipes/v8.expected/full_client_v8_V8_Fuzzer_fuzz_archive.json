@@ -164,7 +164,9 @@
       "--idempotent",
       "--isolated",
       "[dummy hash for jsfunfuzz]",
+      "--raw-cmd",
       "--",
+      "tools/jsfunfuzz/fuzz-harness.sh",
       "out/Debug/d8",
       "${ISOLATED_OUTDIR}/fuzz-results-54321.tar.bz2"
     ],

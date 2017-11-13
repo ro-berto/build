@@ -491,7 +491,7 @@ class V8SwarmingTest(V8Test):
         title=self.test['name'] + self.test_step_config.suffix,
         isolated_hash=self._get_isolated_hash(self.test),
         shards=shards,
-        extra_args=extra_args,
+        raw_cmd=['tools/run-tests.py'] + extra_args,
     )
     self.task.collect_step = lambda task, **kw: (
         self._v8_collect_step(task, coverage_context, **kw))
@@ -537,9 +537,9 @@ class V8Presubmit(BaseTest):
 
 class V8GenericSwarmingTest(BaseTest):
   def __init__(self, test_step_config, api, title='Generic test',
-               extra_args=None):
+               command=None):
     super(V8GenericSwarmingTest, self).__init__(test_step_config, api)
-    self._extra_args = extra_args or []
+    self._command = command or []
     self._title = title
 
   @property
@@ -547,13 +547,9 @@ class V8GenericSwarmingTest(BaseTest):
     return self._title  # pragma: no cover
 
   @property
-  def raw_command(self):
-    """Optioal raw command to pass to the swarming task."""
-    return None
-
-  @property
-  def extra_args(self):
-    return self._extra_args  # pragma: no cover
+  def command(self):
+    """Command to pass to the swarming task."""
+    return self._command
 
   @property
   def task_output_dir(self):
@@ -569,9 +565,8 @@ class V8GenericSwarmingTest(BaseTest):
     self.task = self.api.swarming.task(
         title=self.title,
         isolated_hash=self._get_isolated_hash(self.test),
-        extra_args=self.extra_args,
         task_output_dir=self.task_output_dir,
-        raw_cmd=self.raw_command,
+        raw_cmd=self.command,
     )
 
     self.api.swarming.trigger_task(self.task)
@@ -610,20 +605,24 @@ class V8CheckInitializers(V8GenericSwarmingTest):
     return 'Static-Initializers'
 
   @property
-  def extra_args(self):
-    return [self.api.v8.relative_path_to_d8]
+  def command(self):
+    return [
+      'tools/check-static-initializers.sh',
+      self.api.v8.relative_path_to_d8,
+    ]
 
 
 class V8Fuzzer(V8GenericSwarmingTest):
   def __init__(self, test_step_config, api, title='Generic test',
-               extra_args=None):
+               command=None):
     self.output_dir = api.path.mkdtemp('swarming_output')
     self.archive = 'fuzz-results-%s.tar.bz2' % (
         api.properties['parent_got_revision'])
     super(V8Fuzzer, self).__init__(
         test_step_config, api,
         title='Fuzz',
-        extra_args=[
+        command=[
+          'tools/jsfunfuzz/fuzz-harness.sh',
           api.v8.relative_path_to_d8,
           '${ISOLATED_OUTDIR}/%s' % self.archive,
         ],
@@ -652,7 +651,7 @@ class V8DeoptFuzzer(V8GenericSwarmingTest):
     return 'Deopt Fuzz'
 
   @property
-  def raw_command(self):
+  def command(self):
     return [
       'tools/run-deopt-fuzzer.py',
       '--mode', self.api.chromium.c.build_config_fs,
@@ -669,7 +668,7 @@ class V8GCMole(V8CompositeSwarmingTest):
       V8GenericSwarmingTest(
           self.test_step_config, self.api,
           title='GCMole %s' % arch,
-          extra_args=[arch],
+          command=['tools/gcmole/run-gcmole.py', arch],
       ) for arch in ['ia32', 'x64', 'arm', 'arm64']
     ]
 
