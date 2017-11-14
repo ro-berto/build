@@ -31,6 +31,8 @@
     "https://build.chromium.org/p/client.v8.clusterfuzz": [
       {
         "excluded_builders" : [
+          "V8 TSAN GC Fuzzer",
+          "V8 GC Fuzzer - debug",
           "V8 Deopt Fuzzer",
           "V8 Random Deopt Fuzzer - debug"
         ],

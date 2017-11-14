@@ -29,6 +29,7 @@ class TestStepConfig(object):
 Benchmarks = TestStepConfig('benchmarks')
 Deopt = TestStepConfig('deopt')
 Fuzz = TestStepConfig('jsfunfuzz')
+GCFuzz = TestStepConfig('gcfuzz')
 GCMole = TestStepConfig('gcmole')
 Mjsunit = TestStepConfig('mjsunit')
 MjsunitSPFrameAccess = TestStepConfig('mjsunit_sp_frame_access')
@@ -1059,6 +1060,7 @@ BUILDERS = {
         'cf_gs_acl': 'public-read',
         'cf_archive_name': 'd8',
         'triggers': [
+          'V8 GC Fuzzer - debug',
           'V8 Random Deopt Fuzzer - debug',
         ],
         'testing': {'platform': 'linux'},
@@ -1241,7 +1243,7 @@ BUILDERS = {
         'slim_swarming_builder': True,
         'enable_swarming': True,
         'triggers': [
-          # TODO(machenbach): Add gc fuzzer.
+          'V8 TSAN GC Fuzzer',
         ],
         'testing': {'platform': 'linux'},
       },
@@ -1364,6 +1366,70 @@ BUILDERS = {
         'enable_swarming': True,
         'parent_buildername': 'V8 Linux64 - debug builder',
         'tests': [Deopt],
+        'variants': V8NoExhaustiveVariants(),
+        'testing': {'platform': 'linux'},
+        'swarming_properties': {
+          'default_expiration': 2 * 60 * 60,
+          'default_hard_timeout': 2 * 60 * 60,
+          'default_priority': 35,
+        },
+      },
+      'V8 TSAN GC Fuzzer': {
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'enable_swarming': True,
+        'parent_buildername': 'V8 Linux64 TSAN - release builder',
+        'tests': with_test_args(
+            'compaction',
+            [
+              '--distribution-mode=random',
+              '--coverage=0.4',
+              '--stress-compaction',
+            ],
+            [GCFuzz],
+        ) + with_test_args(
+            'coverage',
+            [
+              '--distribution-mode=random',
+              '--coverage=0.8',
+            ],
+            [GCFuzz],
+        ),
+        'variants': V8NoExhaustiveVariants(),
+        'testing': {'platform': 'linux'},
+        'swarming_properties': {
+          'default_expiration': 2 * 60 * 60,
+          'default_hard_timeout': 2 * 60 * 60,
+          'default_priority': 35,
+        },
+      },
+      'V8 GC Fuzzer - debug': {
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'enable_swarming': True,
+        'parent_buildername': 'V8 Linux64 - debug builder',
+        'tests': with_test_args(
+            'compaction',
+            [
+              '--distribution-mode=random',
+              '--coverage=0.4',
+              '--stress-compaction',
+            ],
+            [GCFuzz],
+        ) + with_test_args(
+            'coverage',
+            [
+              '--distribution-mode=random',
+              '--coverage=0.8',
+            ],
+            [GCFuzz],
+        ),
         'variants': V8NoExhaustiveVariants(),
         'testing': {'platform': 'linux'},
         'swarming_properties': {

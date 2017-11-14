@@ -82,12 +82,18 @@ TEST_CONFIGS = freeze({
     'tests': ['benchmarks'],
   },
   'deopt': {
+    'name': 'Deopt Fuzz',
     'tool': 'run-deopt-fuzzer',
     'isolated_target': 'run-num-fuzzer',
   },
   'jsfunfuzz': {
     'tool': 'jsfunfuzz',
     'isolated_target': 'jsfunfuzz',
+  },
+  'gcfuzz': {
+    'name': 'GC Fuzz',
+    'tool': 'run-gc-fuzzer',
+    'isolated_target': 'run-num-fuzzer',
   },
   'gcmole': {
     'tool': 'run-gcmole',
@@ -536,15 +542,14 @@ class V8Presubmit(BaseTest):
 
 
 class V8GenericSwarmingTest(BaseTest):
-  def __init__(self, test_step_config, api, title='Generic test',
-               command=None):
+  def __init__(self, test_step_config, api, title=None, command=None):
     super(V8GenericSwarmingTest, self).__init__(test_step_config, api)
     self._command = command or []
-    self._title = title
+    self._title = title or TEST_CONFIGS[self.name].get('name', 'Generic test')
 
   @property
   def title(self):
-    return self._title  # pragma: no cover
+    return self._title + self.test_step_config.suffix
 
   @property
   def command(self):
@@ -647,10 +652,6 @@ class V8Fuzzer(V8GenericSwarmingTest):
 
 class V8DeoptFuzzer(V8GenericSwarmingTest):
   @property
-  def title(self):
-    return 'Deopt Fuzz'
-
-  @property
   def command(self):
     return [
       'tools/run-deopt-fuzzer.py',
@@ -658,7 +659,19 @@ class V8DeoptFuzzer(V8GenericSwarmingTest):
       '--arch', self.api.chromium.c.gyp_env.GYP_DEFINES['v8_target_arch'],
       '--progress', 'verbose',
       '--buildbot',
-    ] + self.api.v8.c.testing.test_args
+    ] + self.api.v8.c.testing.test_args + self.test_step_config.test_args
+
+
+class V8GCFuzzer(V8GenericSwarmingTest):
+  @property
+  def command(self):
+    return [
+      'tools/run-gc-fuzzer.py',
+      '--mode', self.api.chromium.c.build_config_fs,
+      '--arch', self.api.chromium.c.gyp_env.GYP_DEFINES['v8_target_arch'],
+      '--progress', 'verbose',
+      '--buildbot',
+    ] + self.api.v8.c.testing.test_args + self.test_step_config.test_args
 
 
 class V8GCMole(V8CompositeSwarmingTest):
@@ -687,6 +700,7 @@ TOOL_TO_TEST_SWARMING = freeze({
   'check-static-initializers': V8CheckInitializers,
   'jsfunfuzz': V8Fuzzer,
   'run-deopt-fuzzer': V8DeoptFuzzer,
+  'run-gc-fuzzer': V8GCFuzzer,
   'run-gcmole': V8GCMole,
   'run-tests': V8SwarmingTest,
 })
