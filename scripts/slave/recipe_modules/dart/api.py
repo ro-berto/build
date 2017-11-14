@@ -300,6 +300,7 @@ class DartApi(recipe_api.RecipeApi):
         script = step.get('script', test_py_path)
         args = step.get('arguments', [])
         is_build_step = script.endswith(build_py_path)
+        is_trigger = 'trigger' in step
         is_test_py_step = script.endswith(test_py_path)
         script = self.m.path['checkout'].join(*script.split('/'))
         isolate_hash = None
@@ -322,6 +323,8 @@ class DartApi(recipe_api.RecipeApi):
             if not self._has_specific_argument(args, ['-a', '--arch']):
               args = ['-a%s' % arch] + args
             self.build(name=step_name, build_args=args)
+          elif is_trigger:
+            self.run_trigger(step_name, step, isolate_hash)
           elif is_test_py_step:
             append_logs = test_py_index > 0
             self.run_test_py(step_name, append_logs, step,
@@ -334,6 +337,43 @@ class DartApi(recipe_api.RecipeApi):
             self.run_script(step_name, script, args, isolate_hash, shards,
                 local_shard, environment, tasks)
     self.collect_all(tasks)
+
+  def _copy_property(self, src, dest, key):
+    if key in src:
+      dest[key] = src[key]
+
+  def run_trigger(self, step_name, step, isolate_hash):
+    trigger_props = {}
+    self._copy_property(self.m.properties, trigger_props, 'git_revision')
+    self._copy_property(self.m.properties, trigger_props, 'revision')
+    trigger_props['parent_buildername'] = self.m.properties['buildername']
+    trigger_props['parent_build_id'] = self.m.properties.get('build_id', '')
+    if isolate_hash:
+      trigger_props['parent_fileset'] = isolate_hash
+    put_result = self.m.buildbucket.put(
+        [
+          {
+            'bucket': 'luci.dart.ci',
+            'parameters': {
+              'builder_name': builder_name,
+              'properties': trigger_props,
+              'changes': [
+                {
+                  'author': {
+                    'email': author,
+                  },
+                }
+                for author in self.m.properties.get('blamelist', [])
+              ],
+            },
+          }
+          for builder_name in step['trigger']
+        ])
+    self.m.step.active_result.presentation.step_text = step_name
+    for build in put_result.stdout['results']:
+      builder_tag = (x for x in build['build']['tags'] if x.startswith('builder:')).next()
+      builder_name = builder_tag[len('builder:'):]
+      self.m.step.active_result.presentation.links[builder_name] = build['build']['url']
 
   def run_test_py(self, step_name, append_logs, step, isolate_hash, shards,
       local_shard, environment, tasks):

@@ -517,6 +517,14 @@
       "@@@STEP_LOG_LINE@json.output@          \"tests\": []@@@",
       "@@@STEP_LOG_LINE@json.output@        }, @@@",
       "@@@STEP_LOG_LINE@json.output@        {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"fileset\": \"fileset1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"name\": \"Trigger step\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"trigger\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@            \"foo-builder\", @@@",
+      "@@@STEP_LOG_LINE@json.output@            \"bar-builder\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          ]@@@",
+      "@@@STEP_LOG_LINE@json.output@        }, @@@",
+      "@@@STEP_LOG_LINE@json.output@        {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"arguments\": [@@@",
       "@@@STEP_LOG_LINE@json.output@            \"foo\", @@@",
       "@@@STEP_LOG_LINE@json.output@            \"--bar\", @@@",
@@ -1006,6 +1014,68 @@
     },
     "infra_step": true,
     "name": "delete result.log (2)"
+  },
+  {
+    "cmd": [
+      "C:\\infra-tools\\buildbucket.exe",
+      "put",
+      "--host",
+      "cr-buildbucket.appspot.com",
+      "{\"bucket\": \"luci.dart.ci\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"foo-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"dart2js-win10-debug-x64-ff-stable\\\", \\\"parent_fileset\\\": \\\"test isolate hash\\\"}}\", \"tags\": [\"builder:foo-builder\", \"parent_buildername:dart2js-win10-debug-x64-ff-stable\", \"user_agent:recipe\"]}",
+      "{\"bucket\": \"luci.dart.ci\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"bar-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"dart2js-win10-debug-x64-ff-stable\\\", \\\"parent_fileset\\\": \\\"test isolate hash\\\"}}\", \"tags\": [\"builder:bar-builder\", \"parent_buildername:dart2js-win10-debug-x64-ff-stable\", \"user_agent:recipe\"]}"
+    ],
+    "cwd": "[CACHE]\\builder\\sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-ff-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "buildbucket.put",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Trigger step@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"results\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"build\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"id\": \"8963024236039183808\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"tags\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"builder:analyzer-linux-release\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"parent_buildername:dart-sdk-linux\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        ], @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"url\": \"https://ci.chromium.org/p/dart/builds/b8963024236039183808\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"build\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"id\": \"8963024236039836208\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"tags\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"builder:analyzer-strong-linux-release\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"parent_buildername:dart-sdk-linux\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        ], @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"url\": \"https://ci.chromium.org/p/dart/builds/b8963024236039836208\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"build\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"id\": \"8963024236039228096\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"tags\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"builder:analyzer-analysis-server-linux\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"parent_buildername:dart-sdk-linux\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        ], @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"url\": \"https://ci.chromium.org/p/dart/builds/b8963024236039228096\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@analyzer-linux-release@https://ci.chromium.org/p/dart/builds/b8963024236039183808@@@",
+      "@@@STEP_LINK@analyzer-strong-linux-release@https://ci.chromium.org/p/dart/builds/b8963024236039836208@@@",
+      "@@@STEP_LINK@analyzer-analysis-server-linux@https://ci.chromium.org/p/dart/builds/b8963024236039228096@@@"
+    ]
   },
   {
     "cmd": [

@@ -1,10 +1,46 @@
 DEPS = [
   'dart',
+  'recipe_engine/json',
   'recipe_engine/properties',
-  'recipe_engine/step',
   'recipe_engine/platform',
-  'recipe_engine/raw_io'
+  'recipe_engine/raw_io',
+  'recipe_engine/step'
 ]
+
+TRIGGER_RESULT = {
+  "results": [
+    {
+      "build": {
+        "id": "8963024236039183808",
+        "tags": [
+          "builder:analyzer-linux-release",
+          "parent_buildername:dart-sdk-linux"
+        ],
+        "url": "https://ci.chromium.org/p/dart/builds/b8963024236039183808",
+      }
+    },
+    {
+      "build": {
+        "id": "8963024236039836208",
+        "tags": [
+          "builder:analyzer-strong-linux-release",
+          "parent_buildername:dart-sdk-linux"
+        ],
+        "url": "https://ci.chromium.org/p/dart/builds/b8963024236039836208",
+      }
+    },
+    {
+      "build": {
+        "id": "8963024236039228096",
+        "tags": [
+          "builder:analyzer-analysis-server-linux",
+          "parent_buildername:dart-sdk-linux"
+        ],
+        "url": "https://ci.chromium.org/p/dart/builds/b8963024236039228096",
+      }
+    }
+  ]
+}
 
 TEST_MATRIX = {
   "filesets": {
@@ -33,6 +69,10 @@ TEST_MATRIX = {
         "name": "Test-step 2",
         "arguments": ["foo", "--bar"],
         "tests": []
+      }, {
+        "name": "Trigger step",
+        "fileset": "fileset1",
+        "trigger": ["foo-builder", "bar-builder"]
       }, {
         "name": "Test-step custom",
         "script": "tools/custom_thing",
@@ -102,7 +142,11 @@ def GenTests(api):
                     stdout=api.raw_io.output('test isolate hash')))
 
   yield (api.test('analyzer-linux-release-be') + api.properties(
-      shards='1', buildername='analyzer-linux-release-be'))
+      buildername='analyzer-linux-release-be') +
+      api.step_data('upload testing fileset fileset1',
+                    stdout=api.raw_io.output('test isolate hash')) +
+      api.step_data('buildbucket.put',
+                    stdout=api.json.output(TRIGGER_RESULT)))
 
   yield (api.test('basic-missing-name') + api.properties(
       shards='1', buildername='this-name-does-not-exist-in-test-matrix'))
@@ -114,9 +158,14 @@ def GenTests(api):
   yield (api.test('basic-win-stable') + api.platform('win', 64) + api.properties(
       buildername='dart2js-win10-debug-x64-ff-stable') +
       api.step_data('upload testing fileset fileset1',
-                    stdout=api.raw_io.output('test isolate hash')))
+                    stdout=api.raw_io.output('test isolate hash')) +
+      api.step_data('buildbucket.put',
+                    stdout=api.json.output(TRIGGER_RESULT)))
 
   yield (api.test('basic-win') + api.platform('win', 64) + api.properties(
-      buildername='dart2js-win10-debug-x64-ff') +
+      buildername='dart2js-win10-debug-x64-ff',
+      revision='revision-foo') +
       api.step_data('upload testing fileset fileset1',
-                    stdout=api.raw_io.output('test isolate hash')))
+                    stdout=api.raw_io.output('test isolate hash')) +
+      api.step_data('buildbucket.put',
+                    stdout=api.json.output(TRIGGER_RESULT)))
