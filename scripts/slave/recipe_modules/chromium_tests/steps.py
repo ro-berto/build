@@ -2630,6 +2630,7 @@ class WebRTCPerfTest(LocalGTestTest):
   """
   def __init__(self, name, args, perf_id, perf_config_mappings,
                commit_position_property, upload_wav_files_from_test,
+               target_name=None,
                **runtest_kwargs):
     """Construct a WebRTC Perf test.
 
@@ -2646,6 +2647,7 @@ class WebRTCPerfTest(LocalGTestTest):
       upload_wav_files_from_test: If true, will upload all .wav files output by
          the test. The test must obey the --webrtc_save_audio_recordings_in
          flag. This is used by webrtc_audio_quality_browsertest.
+      target_name: Name of the test binary. Defaults to name.
     """
     assert perf_id
     self._perf_config_mappings = perf_config_mappings or {}
@@ -2663,8 +2665,8 @@ class WebRTCPerfTest(LocalGTestTest):
     self.upload_wav_files_from_test = upload_wav_files_from_test
 
     super(WebRTCPerfTest, self).__init__(
-        name, args, commit_position_property=commit_position_property,
-        **runtest_kwargs)
+        name, args, target_name=target_name,
+        commit_position_property=commit_position_property, **runtest_kwargs)
 
   def run(self, api, suffix):
     self._wire_up_perf_config(api)

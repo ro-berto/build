@@ -16,7 +16,14 @@ SPEC = {
   'builders': {},
 }
 
-BROWSER_TESTS_FILTER = [
+PERF_BROWSER_TESTS_FILTER = [
+  'WebRtcAudioQualityBrowserTest.*',
+  'WebRtcInternalsPerfBrowserTest.*',
+  'WebRtcStatsPerfBrowserTest.*',
+  'WebRtcVideoQualityBrowserTests*',
+]
+
+FUNCTIONAL_BROWSER_TESTS_FILTER = [
   # Benefits from non-default device configurations (but could be implemented
   # on a VM using the fake device flags in different combinations)..
   'MediaStreamDevicesControllerTest.*',
@@ -25,15 +32,11 @@ BROWSER_TESTS_FILTER = [
   # Runs hardware-exercising test and/or video calling tests.
   'WebRtcApprtcBrowserTest.*',
   'WebrtcAudioPrivateTest.*',
-  'WebRtcAudioQualityBrowserTest.*',
   'WebRtcBrowserTest.*',
   'WebRtcDisableEncryptionFlagBrowserTest.*',
   'WebRtcGetMediaDevicesBrowserTests*',
-  'WebRtcInternalsPerfBrowserTest.*',
   'WebRtcMediaRecorderTest.*',
   'WebRtcSimulcastBrowserTest.*',
-  'WebRtcStatsPerfBrowserTest.*',
-  'WebRtcVideoQualityBrowserTests*',
   'WebRtcWebcamBrowserTests*',
 ]
 
@@ -117,11 +120,19 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
             # run sequentially, otherwise tests may interfere with each other.
             args=['--gtest_filter=WebRtc*MANUAL*', '--run-manual',
                   '--test-launcher-jobs=1']),
-        steps.WebRTCPerfTest(
+        steps.GTestTest(
             'browser_tests',
+            # TODO(phoglund): It's possible these survive running in parallel.
+            args=[
+              '--gtest_filter=%s' % ':'.join(FUNCTIONAL_BROWSER_TESTS_FILTER),
+               '--run-manual', '--test-launcher-jobs=1'
+            ]),
+        steps.WebRTCPerfTest(
+            name='browser_tests_perf',
+            target_name='browser_tests',
             # These tests needs --test-launcher-jobs=1 since some of them are
             # not able to run in parallel (they record system audio, etc).
-            args=['--gtest_filter=%s' % ':'.join(BROWSER_TESTS_FILTER),
+            args=['--gtest_filter=%s' % ':'.join(PERF_BROWSER_TESTS_FILTER),
                   '--run-manual', '--ui-test-action-max-timeout=350000',
                   '--test-launcher-jobs=1',
                   '--test-launcher-bot-mode',
