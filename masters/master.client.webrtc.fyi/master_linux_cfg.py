@@ -34,10 +34,10 @@ m_annotator = annotator_factory.AnnotatorFactory()
 
 def Update(c):
   c['schedulers'].extend([
-      # Run WebRTC DEPS roller every 35 minutes.
+      # Run WebRTC DEPS roller every hour.
       Periodic(
           name='webrtc_deps',
-          periodicBuildTimer=35*60,
+          periodicBuildTimer=60*60,
           branch=None,
           builderNames=[
               'Auto-roll - WebRTC DEPS',
