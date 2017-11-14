@@ -83,7 +83,7 @@ TEST_CONFIGS = freeze({
   },
   'deopt': {
     'tool': 'run-deopt-fuzzer',
-    'isolated_target': 'run-deopt-fuzzer',
+    'isolated_target': 'run-num-fuzzer',
   },
   'jsfunfuzz': {
     'tool': 'jsfunfuzz',
