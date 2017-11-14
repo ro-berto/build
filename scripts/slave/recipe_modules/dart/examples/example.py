@@ -133,6 +133,9 @@ def RunSteps(api):
 
   api.dart.test(test_data=TEST_MATRIX)
 
+  if 'parent_fileset' in api.properties:
+    api.dart.download_parent_isolate()
+
 
 def GenTests(api):
   yield (api.test('basic') + api.properties(
@@ -164,7 +167,9 @@ def GenTests(api):
 
   yield (api.test('basic-win') + api.platform('win', 64) + api.properties(
       buildername='dart2js-win10-debug-x64-ff',
-      revision='revision-foo') +
+      revision='revision-foo',
+      parent_fileset='isolate_hash_123',
+      parent_fileset_name='nameoffileset') +
       api.step_data('upload testing fileset fileset1',
                     stdout=api.raw_io.output('test isolate hash')) +
       api.step_data('buildbucket.put',

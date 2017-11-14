@@ -1019,8 +1019,8 @@
       "put",
       "--host",
       "cr-buildbucket.appspot.com",
-      "{\"bucket\": \"luci.dart.ci\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"foo-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"analyzer-linux-release-be\\\", \\\"parent_fileset\\\": \\\"test isolate hash\\\"}}\", \"tags\": [\"builder:foo-builder\", \"parent_buildername:analyzer-linux-release-be\", \"user_agent:recipe\"]}",
-      "{\"bucket\": \"luci.dart.ci\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"bar-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"analyzer-linux-release-be\\\", \\\"parent_fileset\\\": \\\"test isolate hash\\\"}}\", \"tags\": [\"builder:bar-builder\", \"parent_buildername:analyzer-linux-release-be\", \"user_agent:recipe\"]}"
+      "{\"bucket\": \"luci.dart.ci\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"foo-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"analyzer-linux-release-be\\\", \\\"parent_fileset\\\": \\\"test isolate hash\\\", \\\"parent_fileset_name\\\": \\\"fileset1\\\"}}\", \"tags\": [\"builder:foo-builder\", \"parent_buildername:analyzer-linux-release-be\", \"user_agent:recipe\"]}",
+      "{\"bucket\": \"luci.dart.ci\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"bar-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"analyzer-linux-release-be\\\", \\\"parent_fileset\\\": \\\"test isolate hash\\\", \\\"parent_fileset_name\\\": \\\"fileset1\\\"}}\", \"tags\": [\"builder:bar-builder\", \"parent_buildername:analyzer-linux-release-be\", \"user_agent:recipe\"]}"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {

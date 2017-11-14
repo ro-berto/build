@@ -62,12 +62,19 @@ TEST_MATRIX = {
 }
 
 def RunSteps(api):
-  builder_name = api.properties.get('buildername')
-  builder_fragments = builder_name.split('-')
-  channel = builder_fragments[-1]
-  if channel not in ['be', 'dev', 'stable', 'integration', 'try']:
-    channel = 'be'
-  api.dart.checkout(channel)
+  # If parent_fileset is set, the bot is triggered by
+  # another builder, and we should not download the sdk.
+  # We rely on all files being in the isolate
+  if 'parent_fileset' in api.properties:
+    api.dart.download_parent_isolate()
+  else:
+    builder_name = api.properties.get('buildername')
+    builder_fragments = builder_name.split('-')
+    channel = builder_fragments[-1]
+    if channel not in ['be', 'dev', 'stable', 'integration', 'try']:
+      channel = 'be'
+    api.dart.checkout(channel)
+
   api.dart.kill_tasks()
 
   with api.step.defer_results():
@@ -86,4 +93,11 @@ def GenTests(api):
       api.test('builders/vm-linux-release-x64-try') +
       api.properties.generic(
         buildername='builders/vm-linux-release-x64-try')
+   )
+   yield (
+      api.test('builders/analyzer-triggered') +
+      api.properties.generic(
+        buildername='builders/analyzer-triggered',
+        parent_fileset='isolate_123',
+        parent_fileset_name='test_name')
    )

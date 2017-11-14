@@ -84,6 +84,22 @@ class DartApi(recipe_api.RecipeApi):
     step_result.presentation.step_text = 'swarming fileset hash: %s' % isolate_hash
     return isolate_hash
 
+  def download_parent_isolate(self):
+    self.m.swarming_client.checkout(
+      revision='5c8043e54541c3cee7ea255e0416020f2e3a5904')
+    self.m.path['checkout'] = self.m.path['cleanup']
+    isolate_hash = self.m.properties['parent_fileset']
+    fileset_name = self.m.properties['parent_fileset_name']
+    with self.m.context(cwd=self.m.path['cleanup']):
+      step_result = self.m.python(
+        'downloading fileset %s' % fileset_name,
+        self.m.swarming_client.path.join('isolateserver.py'),
+        args= ['download',
+                 '-Ihttps://isolateserver.appspot.com',
+                 '-s%s' % isolate_hash,
+                 '--target=.'],
+        stdout=self.m.raw_io.output('out'))
+
   def shard(self, title, isolate_hash, test_args, os=None, cpu='x86-64', pool='Dart.LUCI',
       num_shards=0, last_shard_is_local=False):
     """Runs test.py in the given isolate, sharded over several swarming tasks.
@@ -350,6 +366,7 @@ class DartApi(recipe_api.RecipeApi):
     trigger_props['parent_build_id'] = self.m.properties.get('build_id', '')
     if isolate_hash:
       trigger_props['parent_fileset'] = isolate_hash
+      trigger_props['parent_fileset_name'] = step['fileset']
     put_result = self.m.buildbucket.put(
         [
           {

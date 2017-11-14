@@ -1021,8 +1021,8 @@
       "put",
       "--host",
       "cr-buildbucket.appspot.com",
-      "{\"bucket\": \"luci.dart.ci\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"foo-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"dart2js-win10-debug-x64-ff-stable\\\", \\\"parent_fileset\\\": \\\"test isolate hash\\\"}}\", \"tags\": [\"builder:foo-builder\", \"parent_buildername:dart2js-win10-debug-x64-ff-stable\", \"user_agent:recipe\"]}",
-      "{\"bucket\": \"luci.dart.ci\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"bar-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"dart2js-win10-debug-x64-ff-stable\\\", \\\"parent_fileset\\\": \\\"test isolate hash\\\"}}\", \"tags\": [\"builder:bar-builder\", \"parent_buildername:dart2js-win10-debug-x64-ff-stable\", \"user_agent:recipe\"]}"
+      "{\"bucket\": \"luci.dart.ci\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"foo-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"dart2js-win10-debug-x64-ff-stable\\\", \\\"parent_fileset\\\": \\\"test isolate hash\\\", \\\"parent_fileset_name\\\": \\\"fileset1\\\"}}\", \"tags\": [\"builder:foo-builder\", \"parent_buildername:dart2js-win10-debug-x64-ff-stable\", \"user_agent:recipe\"]}",
+      "{\"bucket\": \"luci.dart.ci\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"bar-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"dart2js-win10-debug-x64-ff-stable\\\", \\\"parent_fileset\\\": \\\"test isolate hash\\\", \\\"parent_fileset_name\\\": \\\"fileset1\\\"}}\", \"tags\": [\"builder:bar-builder\", \"parent_buildername:dart2js-win10-debug-x64-ff-stable\", \"user_agent:recipe\"]}"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
