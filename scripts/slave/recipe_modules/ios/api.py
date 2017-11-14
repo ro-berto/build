@@ -699,6 +699,10 @@ class iOSApi(recipe_api.RecipeApi):
       swarming_task.tags.add('platform:%s' % self.platform)
       swarming_task.tags.add('test:%s' % str(task['test']['app']))
 
+      expiration = task['test'].get('expiration_time') or self.__config.get('expiration_time')
+      if expiration:
+        swarming_task.expiration = expiration
+
       try:
         self.m.swarming.trigger_task(swarming_task)
         task['task'] = swarming_task
