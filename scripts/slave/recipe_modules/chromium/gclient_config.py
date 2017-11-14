@@ -255,3 +255,9 @@ def chrome_internal(c):
 @CONFIG_CTX()
 def checkout_instrumented_libraries(c):
   c.solutions[0].custom_vars['checkout_instrumented_libraries'] = 'True'
+
+# TODO(crbug.com/781413): remove this once the hook is working reliably.
+@CONFIG_CTX(includes=['chromium'])
+def chromium_no_telemetry_dependencies(c):  # pragma: no cover
+  c.solutions[0].custom_vars['checkout_telemetry_dependencies'] = 'False'
+
