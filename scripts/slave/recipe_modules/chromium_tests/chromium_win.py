@@ -172,7 +172,8 @@ SPEC = {
       'enable_swarming': True,
     },
     'WinMSVC64': {
-      'chromium_apply_config': ['mb'],
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -192,7 +193,8 @@ SPEC = {
       'add_tests_as_compile_targets': False,
     },
     'WinMSVC64 (dbg)': {
-      'chromium_apply_config': ['mb'],
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
