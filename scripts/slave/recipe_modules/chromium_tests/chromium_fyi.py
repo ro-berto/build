@@ -481,7 +481,7 @@ SPEC = {
     # followed amd64-generic config in chromium_tests/chromium_chromiumos.py
     'ChromeOS amd64 Chromium Goma Canary': chromium_apply_configs(
         chromium_chromiumos.SPEC['builders'][
-            'ChromiumOS amd64-generic Compile'],
+            'chromeos-amd64-generic-rel'],
         ['goma_canary']),
 
     # linux_chromium_rel_ng. see trybots.py

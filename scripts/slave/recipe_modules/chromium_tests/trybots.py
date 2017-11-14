@@ -337,45 +337,11 @@ TRYBOTS = freeze({
         'mastername': 'chromium',
         'buildername': 'Linux x64',
       }, analyze_mode='compile'),
-      'linux_chromium_chromeos_dbg_ng': simple_bot({
-        'mastername': 'chromium.chromiumos',
-        'buildername': 'Linux ChromiumOS Builder (dbg)',
-        'tester': 'Linux ChromiumOS Tests (dbg)(1)',
-      }),
-      'linux_chromium_chromeos_compile_dbg_ng': simple_bot({
-        'mastername': 'chromium.chromiumos',
-        'buildername': 'Linux ChromiumOS Builder (dbg)',
-      }, analyze_mode='compile'),
-      'linux_chromium_chromeos_rel_ng': simple_bot({
-        'mastername': 'chromium.chromiumos',
-        'buildername': 'Linux ChromiumOS Builder',
-        'tester': 'Linux ChromiumOS Tests (1)',
-      }),
       'linux_chromium_chromeos_asan_rel_ng': simple_bot({
         'mastername': 'chromium.memory',
         'buildername': 'Linux Chromium OS ASan LSan Builder',
         'tester': 'Linux Chromium OS ASan LSan Tests (1)',
       }),
-      'chromeos_amd64-generic': simple_bot({
-        'mastername': 'chromium.fyi',
-        'buildername': 'ChromiumOS amd64-generic Dummy Builder',
-      }),
-      'chromeos_amd64-generic_chromium_compile_only_ng': simple_bot({
-        'mastername': 'chromium.chromiumos',
-        'buildername': 'ChromiumOS amd64-generic Compile',
-      }, analyze_mode='compile'),
-      'chromeos_daisy': simple_bot({
-        'mastername': 'chromium.fyi',
-        'buildername': 'ChromiumOS daisy Dummy Builder',
-      }),
-      'chromeos_daisy_chromium_compile_only_ng': simple_bot({
-        'mastername': 'chromium.chromiumos',
-        'buildername': 'ChromiumOS daisy Compile',
-      }, analyze_mode='compile'),
-      'linux_chromium_chromeos_compile_rel_ng': simple_bot({
-        'mastername': 'chromium.chromiumos',
-        'buildername': 'Linux ChromiumOS Builder',
-      }, analyze_mode='compile'),
       'linux_chromium_chromeos_msan_rel_ng': simple_bot({
         'mastername': 'chromium.memory',
         'buildername': 'Linux ChromiumOS MSan Builder',
@@ -465,10 +431,6 @@ TRYBOTS = freeze({
         'mastername': 'chromium.chromiumos',
         'buildername': 'chromeos-daisy-rel',
       }),
-      'linux-chromeos-compile-dbg': simple_bot({
-        'mastername': 'chromium.chromiumos',
-        'buildername': 'linux-chromeos-dbg',
-      }, analyze_mode='compile'),
       'linux-chromeos-dbg': simple_bot({
         'mastername': 'chromium.chromiumos',
         'buildername': 'linux-chromeos-dbg',

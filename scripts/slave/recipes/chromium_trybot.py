@@ -94,13 +94,6 @@ def GenTests(api):
         })
     )
 
-  yield (
-    api.test('chromeos_analyze') +
-    api.platform.name('linux') +
-    props(mastername='tryserver.chromium.linux',
-          buildername='chromeos_amd64-generic_chromium_compile_only_ng')
-  )
-
   # Regression test for http://crbug.com/453471#c16
   yield (
     api.test('clobber_analyze') +
@@ -504,32 +497,6 @@ def GenTests(api):
           extra_swarmed_tests=['base_unittests']) +
     api.platform.name('linux') +
     suppress_analyze()
-  )
-
-  yield (
-    api.test('recipe_config_changes_not_retried_without_patch') +
-    api.properties.tryserver(
-      mastername='tryserver.chromium.linux',
-      buildername='linux_chromium_chromeos_rel_ng',
-      swarm_hashes={}
-    ) +
-    api.platform.name('linux') +
-    api.override_step_data(
-        'read test spec (chromium.chromiumos.json)',
-        api.json.output({
-            'Linux ChromiumOS Tests (1)': {
-                'gtest_tests': ['base_unittests'],
-            },
-        })
-    ) +
-    suppress_analyze() +
-    api.override_step_data(
-        'git diff to analyze patch',
-        api.raw_io.stream_output(
-            'testing/buildbot/chromium.chromiumos.json\nfoo/bar/baz.py')
-    ) +
-    api.override_step_data('base_unittests (with patch)',
-                           canned_test(passing=False))
   )
 
   yield (
