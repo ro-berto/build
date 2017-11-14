@@ -2,6 +2,10 @@
 
 Trigger recipe allows you to trigger new builds and pass arbitrary properties.
 
+**WARNING: Deprecated.
+You should use
+[`recipe_engine/buildbucket`](https://chromium.googlesource.com/infra/luci/recipes-py/+/6b01324b35c2a7046b67292f7be0cd827f7fd94c) instead.**
+
 ## Examples
 Basic:
 
