@@ -265,7 +265,8 @@
           "publish_tarball": {
             "forgiving_optional": ["*"],
             "tree_notify": [
-              "raphael.kubo.da.costa@intel.com"
+              "raphael.kubo.da.costa@intel.com",
+              "thomasanderson@chromium.org"
             ]
           }
         }
