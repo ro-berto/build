@@ -1,4 +1,10 @@
-<!-- Add header bar to announce "waterfall view" deprecation -->
+{% extends "announce.html" %}
+
+{% from "box_macros.html" import box %}
+
+{% block content %}
+
+<!-- Add header bar for waterfall view deprecation -->
 <div>
     <center width="100%">
         <div style="
@@ -31,12 +37,7 @@
         </div>
     </center>
 </div>
-<!-- End of "waterfall view" depreciate announcement -->
-
-{% extends "announce.html" %}
-{% from "box_macros.html" import box %}
-
-{% block content %}
+<!-- End of header bar for waterfall view depreciation -->
 
 <table border="0" cellspacing="0">
 
