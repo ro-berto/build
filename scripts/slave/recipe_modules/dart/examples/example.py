@@ -44,7 +44,8 @@ TRIGGER_RESULT = {
 
 TEST_MATRIX = {
   "filesets": {
-    "fileset1": "[]"
+    "fileset1": "[]",
+    "nameoffileset": "[]"
   },
   "configurations": [
     {
@@ -64,7 +65,7 @@ TEST_MATRIX = {
         "tests": ["language_2"],
         "exclude_tests": ["co19"],
         "shards": 2,
-        "fileset": "fileset1"
+        "fileset": "nameoffileset"
       }, {
         "name": "Test-step 2",
         "arguments": ["foo", "--bar"],

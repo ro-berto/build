@@ -69,6 +69,8 @@ class DartApi(recipe_api.RecipeApi):
 
   def upload_isolate(self, isolate_fileset):
     """Builds an isolate"""
+    if isolate_fileset == self.m.properties.get('parent_fileset_name', None):
+      return self.m.properties.get('parent_fileset')
     self.m.swarming_client.checkout(
       revision='5c8043e54541c3cee7ea255e0416020f2e3a5904')
     step_result = self.m.python(

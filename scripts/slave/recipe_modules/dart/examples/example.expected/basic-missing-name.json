@@ -650,7 +650,7 @@
       "@@@STEP_LOG_LINE@json.output@          \"exclude_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@            \"co19\"@@@",
       "@@@STEP_LOG_LINE@json.output@          ], @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"fileset\": \"fileset1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"fileset\": \"nameoffileset\", @@@",
       "@@@STEP_LOG_LINE@json.output@          \"name\": \"Test-step 1\", @@@",
       "@@@STEP_LOG_LINE@json.output@          \"script\": \"tools/test.py\", @@@",
       "@@@STEP_LOG_LINE@json.output@          \"shards\": 2, @@@",
@@ -736,7 +736,8 @@
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"filesets\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"fileset1\": \"[]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"fileset1\": \"[]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"nameoffileset\": \"[]\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
