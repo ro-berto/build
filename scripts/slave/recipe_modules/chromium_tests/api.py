@@ -7,7 +7,6 @@ import contextlib
 import copy
 import itertools
 import json
-import re
 
 from recipe_engine.types import freeze
 from recipe_engine import recipe_api
@@ -20,8 +19,7 @@ from . import steps
 # Paths which affect recipe config and behavior in a way that survives
 # deapplying user's patch.
 RECIPE_CONFIG_PATHS = [
-  'testing/buildbot/.*json$',
-  'testing/buildbot/.*pyl$',
+    'testing/buildbot',
 ]
 
 
@@ -740,14 +738,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     deapply_patch = True
     deapply_patch_reason = 'unknown reason'
-
-    exclusion_regexs = [re.compile(path) for path in RECIPE_CONFIG_PATHS]
-    for f in affected_files:
-      for regex in exclusion_regexs:
-        if regex.match(f):
-          deapply_patch = False
-          deapply_patch_reason = 'build config changes detected'
-
+    for path in RECIPE_CONFIG_PATHS:
+      if any([f.startswith(path) for f in affected_files]):
+        deapply_patch = False
+        deapply_patch_reason = 'build config changes detected'
+        break
     if disable_deapply_patch:
       deapply_patch = False
       deapply_patch_reason = 'disabled in recipes'
