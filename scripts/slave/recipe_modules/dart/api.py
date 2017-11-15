@@ -26,6 +26,16 @@ class DartApi(recipe_api.RecipeApi):
                args=['--kill_browsers=True', '--kill_vsbuild=True'],
                ok_ret='any')
 
+  def _swarming_checkout(self):
+    try:
+      if self.__swarming_checked_out:
+        return
+    except AttributeError:
+      pass
+    self.m.swarming_client.checkout(
+      revision='5c8043e54541c3cee7ea255e0416020f2e3a5904')
+    self.__swarming_checked_out = True
+
   def build(self, build_args=[], isolate=None, name='build dart'):
     """Builds dart using the specified build_args
        and optionally isolates the sdk for testing using the specified isolate.
@@ -43,8 +53,7 @@ class DartApi(recipe_api.RecipeApi):
         raise self.m.step.StepFailure('Step "%s" timed out after 20 minutes' % name)
 
       if isolate is not None:
-        self.m.swarming_client.checkout(
-          revision='5c8043e54541c3cee7ea255e0416020f2e3a5904')
+        self._swarming_checkout()
         bots_path = self.m.path['checkout'].join('tools', 'bots')
         isolate_paths = self.m.file.glob_paths("find isolate files", bots_path, '*.isolate',
                                           test_data=[bots_path.join('a.isolate'),
@@ -71,8 +80,7 @@ class DartApi(recipe_api.RecipeApi):
     """Builds an isolate"""
     if isolate_fileset == self.m.properties.get('parent_fileset_name', None):
       return self.m.properties.get('parent_fileset')
-    self.m.swarming_client.checkout(
-      revision='5c8043e54541c3cee7ea255e0416020f2e3a5904')
+    self._swarming_checkout()
     step_result = self.m.python(
         'upload testing fileset %s' % isolate_fileset,
         self.m.swarming_client.path.join('isolate.py'),
@@ -87,8 +95,7 @@ class DartApi(recipe_api.RecipeApi):
     return isolate_hash
 
   def download_parent_isolate(self):
-    self.m.swarming_client.checkout(
-      revision='5c8043e54541c3cee7ea255e0416020f2e3a5904')
+    self._swarming_checkout()
     self.m.path['checkout'] = self.m.path['cleanup']
     isolate_hash = self.m.properties['parent_fileset']
     fileset_name = self.m.properties['parent_fileset_name']
@@ -354,7 +361,7 @@ class DartApi(recipe_api.RecipeApi):
           else:
             self.run_script(step_name, script, args, isolate_hash, shards,
                 local_shard, environment, tasks)
-    self.collect_all(tasks)
+      self.collect_all(tasks)
 
   def _copy_property(self, src, dest, key):
     if key in src:
