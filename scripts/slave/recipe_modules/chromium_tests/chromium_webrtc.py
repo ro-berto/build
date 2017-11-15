@@ -121,15 +121,14 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
             args=['--gtest_filter=WebRtc*MANUAL*', '--run-manual',
                   '--test-launcher-jobs=1']),
         steps.GTestTest(
-            'browser_tests',
-            # TODO(phoglund): It's possible these survive running in parallel.
+            'browser_tests_functional',
+            target_name='browser_tests',
             args=[
               '--gtest_filter=%s' % ':'.join(FUNCTIONAL_BROWSER_TESTS_FILTER),
                '--run-manual', '--test-launcher-jobs=1'
             ]),
         steps.WebRTCPerfTest(
-            name='browser_tests_perf',
-            target_name='browser_tests',
+            name='browser_tests',
             # These tests needs --test-launcher-jobs=1 since some of them are
             # not able to run in parallel (they record system audio, etc).
             args=['--gtest_filter=%s' % ':'.join(PERF_BROWSER_TESTS_FILTER),
