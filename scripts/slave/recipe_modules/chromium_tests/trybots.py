@@ -547,6 +547,11 @@ TRYBOTS = freeze({
         'mastername': 'chromium.perf',
         'buildername': 'Win x64 Builder',
       }),
+      # Optional One Buildbot Step Tester.
+      'obbs_fyi': simple_bot({
+        'mastername': 'chromium.perf.fyi',
+        'buildername': 'One Buildbot Step Test Builder'
+      }),
     },
   },
   'tryserver.chromium.win': {
