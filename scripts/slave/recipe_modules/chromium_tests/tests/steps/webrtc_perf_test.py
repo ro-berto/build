@@ -77,11 +77,22 @@ def GenTests(api):
   )
 
   yield (
+      # The test will generally not write any files if it succeeds, but the
+      # recipe doesn't assume that here.
       api.test('upload_any_wav_files_from_audio_quality_test') +
       typical_properties +
       api.override_step_data('look for wav files',
           api.file.listdir(['rec_1.wav', 'rec_2.wav']), retcode=0)
   )
+
+  yield (
+      api.test('upload_any_wav_files_even_if_test_fails') +
+      typical_properties +
+      api.override_step_data('test_name', retcode=1) +
+      api.override_step_data('look for wav files',
+          api.file.listdir(['rec_1.wav', 'rec_2.wav']), retcode=0)
+  )
+
 
   yield (
       api.test('no_upload_if_no_wav_files') +

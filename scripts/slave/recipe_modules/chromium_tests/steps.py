@@ -2671,10 +2671,11 @@ class WebRTCPerfTest(LocalGTestTest):
     if self.upload_wav_files_from_test:
       recordings_dir = self._prepare_gathering_wav_files(api)
 
-    super(WebRTCPerfTest, self).run(api, suffix)
-
-    if self.upload_wav_files_from_test:
-      self._upload_wav_files(api, recordings_dir)
+    try:
+      super(WebRTCPerfTest, self).run(api, suffix)
+    finally:
+      if self.upload_wav_files_from_test:
+        self._upload_wav_files(api, recordings_dir)
 
   def _prepare_gathering_wav_files(self, api):
     # Pass an arg to the test so it knows where to write the .wav files.
