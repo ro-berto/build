@@ -560,7 +560,7 @@ _CONFIG_MAP = {
         'concurrent_collector': False,
       },
       'bullhead-armv8-gcstress-ndebug': {
-        'serial': '00d96a14bbc93e47',
+        'serial': '00c5a4683f54164f',
         'device': 'bullhead-armv8',
         'debug': False,
         'gcstress': True,
