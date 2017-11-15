@@ -169,11 +169,8 @@
       "tools/run-deopt-fuzzer.py",
       "--mode",
       "Release",
-      "--arch",
-      "x64",
       "--progress",
       "verbose",
-      "--buildbot",
       "--coverage=0.4",
       "--distribution-mode=smooth"
     ],

@@ -656,9 +656,7 @@ class V8DeoptFuzzer(V8GenericSwarmingTest):
     return [
       'tools/run-deopt-fuzzer.py',
       '--mode', self.api.chromium.c.build_config_fs,
-      '--arch', self.api.chromium.c.gyp_env.GYP_DEFINES['v8_target_arch'],
       '--progress', 'verbose',
-      '--buildbot',
     ] + self.api.v8.c.testing.test_args + self.test_step_config.test_args
 
 
@@ -668,9 +666,7 @@ class V8GCFuzzer(V8GenericSwarmingTest):
     return [
       'tools/run-gc-fuzzer.py',
       '--mode', self.api.chromium.c.build_config_fs,
-      '--arch', self.api.chromium.c.gyp_env.GYP_DEFINES['v8_target_arch'],
       '--progress', 'verbose',
-      '--buildbot',
     ] + self.api.v8.c.testing.test_args + self.test_step_config.test_args
 
 

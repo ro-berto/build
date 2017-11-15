@@ -1384,18 +1384,11 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux64 TSAN - release builder',
         'tests': with_test_args(
             'compaction',
-            [
-              '--distribution-mode=random',
-              '--coverage=0.4',
-              '--stress-compaction',
-            ],
+            ['--coverage=1.0', '--stress-compaction'],
             [GCFuzz],
         ) + with_test_args(
-            'coverage',
-            [
-              '--distribution-mode=random',
-              '--coverage=0.8',
-            ],
+            '',
+            ['--coverage=1.0'],
             [GCFuzz],
         ),
         'variants': V8NoExhaustiveVariants(),
@@ -1416,18 +1409,11 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux64 - debug builder',
         'tests': with_test_args(
             'compaction',
-            [
-              '--distribution-mode=random',
-              '--coverage=0.4',
-              '--stress-compaction',
-            ],
+            ['--coverage=0.9', '--stress-compaction'],
             [GCFuzz],
         ) + with_test_args(
-            'coverage',
-            [
-              '--distribution-mode=random',
-              '--coverage=0.8',
-            ],
+            '',
+            ['--coverage=0.9'],
             [GCFuzz],
         ),
         'variants': V8NoExhaustiveVariants(),
