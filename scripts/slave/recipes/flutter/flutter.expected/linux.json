@@ -171,7 +171,42 @@
   {
     "cmd": [
       "dart",
-      "dev/bots/test.dart"
+      "[START_DIR]/flutter/dev/bots/test.dart"
+    ],
+    "cwd": "[START_DIR]/flutter",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
+      "PUB_CACHE": "[START_DIR]/.pub-cache",
+      "SHARD": "tests"
+    },
+    "name": "run test.dart for tests shard"
+  },
+  {
+    "cmd": [
+      "dart",
+      "[START_DIR]/flutter/dev/bots/test.dart"
+    ],
+    "cwd": "[START_DIR]/flutter",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
+      "PUB_CACHE": "[START_DIR]/.pub-cache",
+      "SHARD": "coverage"
+    },
+    "name": "run test.dart for coverage shard"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[START_DIR]/flutter/packages/flutter/coverage/lcov.info",
+      "gs://flutter_infra/flutter/coverage/lcov.info"
     ],
     "cwd": "[START_DIR]/flutter",
     "env": {
@@ -179,7 +214,31 @@
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/.pub-cache"
     },
-    "name": "test.dart"
+    "infra_step": true,
+    "name": "gsutil upload coverage data",
+    "~followup_annotations": [
+      "@@@STEP_LINK@lcov.info@https://storage.cloud.google.com/flutter_infra/flutter/coverage/lcov.info@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
+      "RECIPE[build::flutter/flutter].resources/upload_to_coveralls.py",
+      "--token-file=/creds/generic/generic-flutter-coveralls-api-token",
+      "--coverage-path=[START_DIR]/flutter/packages/flutter/coverage/lcov.info"
+    ],
+    "cwd": "[START_DIR]/flutter/packages/flutter",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
+      "PUB_CACHE": "[START_DIR]/.pub-cache"
+    },
+    "name": "upload coverage data to Coveralls"
   },
   {
     "cmd": [

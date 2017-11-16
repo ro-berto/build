@@ -14,6 +14,7 @@ DEPS = [
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
+  'recipe_engine/raw_io',
   'recipe_engine/step',
   'recipe_engine/python',
   'recipe_engine/url',
@@ -23,31 +24,16 @@ DEPS = [
 BUCKET_NAME = 'flutter_infra'
 
 
+def GetPuppetApiTokenPath(api, token_name):
+  """Returns the path to a the token file
+
+  The file is located where ChromeOps Puppet drops generic secrets."""
+  return api.path.join(api.path.abspath(api.path.sep),
+                       'creds', 'generic', 'generic-%s' % token_name)
+
+
 def GetCloudPath(api, git_hash, path):
   return 'flutter/%s/%s' % (git_hash, path)
-
-
-# def TestCreateAndLaunch(api):
-#   with MakeTempDir(api) as temp_dir:
-#     api.step('shutdown simulator', ['killall', 'Simulator'], cwd=temp_dir)
-#     api.step('erase simulator', ['/usr/bin/xcrun', 'simctl', 'erase', 'all'],
-#         cwd=temp_dir)
-#     api.step('test create', ['flutter', 'create', '--with-driver-test',
-#         'sample_app'], cwd=temp_dir)
-#     app_path = temp_dir.join('sample_app')
-#     api.step('drive sample_app', ['flutter', 'drive', '--verbose'],
-#         cwd=app_path)
-#     api.step('dump logs', ['tail', '-n', '--verbose'],
-#         cwd=app_path)
-
-# TODO(eseidel): Would be nice to have this on api.path or api.file.
-# @contextlib.contextmanager
-# def MakeTempDir(api):
-#   try:
-#     temp_dir = api.path.mkdtemp('tmp')
-#     yield temp_dir
-#   finally:
-#     api.file.rmtree('temp dir', temp_dir)
 
 
 def BuildExamples(api, git_hash, flutter_executable):
@@ -129,6 +115,25 @@ def InstallGradle(api, checkout):
   api.step('update android tools', update_android_cmd)
 
 
+def UploadFlutterCoverage(api):
+  """Uploads the Flutter coverage output to cloud storage and Coveralls.
+  """
+  # Upload latest coverage to cloud storage.
+  checkout = api.path['checkout']
+  coverage_path = checkout.join('packages', 'flutter', 'coverage', 'lcov.info')
+  api.gsutil.upload(coverage_path, BUCKET_NAME,
+                    GetCloudPath(api, 'coverage', 'lcov.info'),
+                    link_name='lcov.info', name='upload coverage data')
+
+  # Upload latest coverage to Coveralls.
+  token_path = GetPuppetApiTokenPath(api, 'flutter-coveralls-api-token')
+  with api.context(cwd=checkout.join('packages', 'flutter')):
+    api.build.python('upload coverage data to Coveralls',
+                     api.resource('upload_to_coveralls.py'),
+                     ['--token-file=%s' % token_path,
+                      '--coverage-path=%s' % coverage_path])
+
+
 def RunSteps(api):
   # buildbot sets 'clobber' to the empty string which is falsey, check with 'in'
   if 'clobber' in api.properties:
@@ -160,7 +165,7 @@ def RunSteps(api):
     'ANDROID_HOME': checkout.join('dev', 'bots', 'android_tools'),
   }
 
-  # The context adds dart-sdk tools to PATH sets PUB_CACHE.
+  # The context adds dart-sdk tools to PATH and sets PUB_CACHE.
   with api.context(env=env):
     if api.platform.is_mac:
       SetupXcode(api)
@@ -171,15 +176,17 @@ def RunSteps(api):
     with api.context(cwd=checkout):
       api.step('download dependencies', [flutter_executable, 'update-packages'])
       api.step('flutter doctor', [flutter_executable, 'doctor'])
-      api.step('test.dart', [dart_executable, 'dev/bots/test.dart'])
+      shards = ['tests'] if not api.platform.is_linux else ['tests', 'coverage']
+      for shard in shards:
+        shard_env = env
+        shard_env['SHARD'] = shard
+        with api.context(env=shard_env):
+          api.step('run test.dart for %s shard' % shard,
+                   [dart_executable, checkout.join('dev', 'bots', 'test.dart')])
+        if shard == 'coverage':
+          UploadFlutterCoverage(api)
 
     BuildExamples(api, git_hash, flutter_executable)
-
-    # TODO(yjbanov): we do not yet have Android devices hooked up, nor do we
-    # support the Android emulator. For now, only run on iOS Simulator.
-    #
-    # if api.platform.is_mac:
-    #   TestCreateAndLaunch(api)
 
 
 def GenTests(api):
@@ -194,6 +201,9 @@ def GenTests(api):
           }
         }))
       )
+    if platform == 'linux':
+      test += (api.override_step_data('upload coverage data to Coveralls',
+                                      api.raw_io.output('')))
     yield test
 
   yield (
