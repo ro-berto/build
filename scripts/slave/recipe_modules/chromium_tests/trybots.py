@@ -172,13 +172,19 @@ TRYBOTS = freeze({
       }),
       'linux_angle_dbg_ng': simple_bot({
         # This bot is compile-only.
+        # TODO(jmadill): Remove or repurpose this config.
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU Linux Builder (dbg)',
-      }),
+      }, analyze_mode='compile'),
+      'linux_angle_compile_dbg_ng': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU Linux Builder (dbg)',
+      }, analyze_mode='compile'),
+      # TODO(fjhenigman): Add Ozone testers when possible.
       'linux_angle_ozone_rel_ng': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU Linux Ozone Builder',
-      }),
+      }, analyze_mode='compile'),
       'linux_angle_deqp_rel_ng': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU Linux dEQP Builder',
@@ -205,9 +211,14 @@ TRYBOTS = freeze({
       },
       'mac_angle_dbg_ng': simple_bot({
         # This bot is compile-only.
+        # TODO(jmadill): Remove or repurpose this config.
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU Mac Builder (dbg)',
-      }),
+      }, analyze_mode='compile'),
+      'mac_angle_compile_dbg_ng': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU Mac Builder (dbg)',
+      }, analyze_mode='compile'),
       'win_angle_rel_ng': {
         'bot_ids': [
           {
@@ -224,19 +235,33 @@ TRYBOTS = freeze({
       },
       'win_angle_dbg_ng': simple_bot({
         # This bot is compile-only.
+        # TODO(jmadill): Remove or repurpose this config.
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU Win Builder (dbg)',
-      }),
+      }, analyze_mode='compile'),
+      'win_angle_compile_dbg_ng': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU Win Builder (dbg)',
+      }, analyze_mode='compile'),
       'win_angle_x64_rel_ng': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU Win x64 Builder',
         'tester': 'Win7 x64 Release (NVIDIA)',
       }),
+      'win_angle_compile_x64_rel_ng': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU Win x64 Builder',
+      }, analyze_mode='compile'),
       'win_angle_x64_dbg_ng': simple_bot({
         # This bot is compile-only.
+        # TODO(jmadill): Remove or repurpose this config.
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU Win x64 Builder (dbg)',
-      }),
+      }, analyze_mode='compile'),
+      'win_angle_compile_x64_dbg_ng': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU Win x64 Builder (dbg)',
+      }, analyze_mode='compile'),
       'win_angle_deqp_rel_ng': {
         'bot_ids': [
           {
