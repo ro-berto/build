@@ -20,7 +20,6 @@ DEPS = [
   'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/python',
-  'recipe_engine/raw_io',
   'recipe_engine/step',
   'recipe_engine/tempfile',
   'swarming',

@@ -527,24 +527,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         )
 
       # TODO(phajdan.jr): Triggering should be separate from archiving.
-      trigger_specs = []
-      for loop_mastername, loop_buildername, builder_dict in sorted(
-          bot_db.bot_configs_matching_parent_buildername(
-              mastername, buildername)):
-        trigger_spec = {
-            'builder_name': loop_buildername,
-            'properties': {
-                'parent_mastername': mastername,
-            },
-        }
-        if mastername != loop_mastername:
-          trigger_spec['bucket'] = 'master.' + loop_mastername
-        for name, value in update_step.presentation.properties.iteritems():
-          if name.startswith('got_'):
-            trigger_spec['properties']['parent_' + name] = value
-        trigger_specs.append(trigger_spec)
-      if trigger_specs:
-        self.m.trigger(*trigger_specs)
+      self._trigger_child_builds(mastername, buildername, bot_db, update_step)
 
     if bot_config.get('archive_build') and not self.m.tryserver.is_tryserver:
       self.m.chromium.archive_build(
@@ -564,6 +547,65 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
          archive_subdir_suffix=bot_config.get('cf_archive_subdir_suffix', ''),
          revision_dir=bot_config.get('cf_revision_dir'),
        )
+
+  def _trigger_child_builds(self, mastername, buildername, bot_db, update_step):
+    # If you modify parameters or properties, make sure to modify it for both
+    # legacy and luci cases below.
+    if not self.m.runtime.is_luci:
+      # Legacy buildbot-only triggering.
+      trigger_specs = []
+      for loop_mastername, loop_buildername, builder_dict in sorted(
+          bot_db.bot_configs_matching_parent_buildername(
+              mastername, buildername)):
+        trigger_spec = {
+            'builder_name': loop_buildername,
+            'properties': {
+                'parent_mastername': mastername,
+            },
+        }
+        if mastername != loop_mastername:
+          trigger_spec['bucket'] = 'master.' + loop_mastername
+        for name, value in update_step.presentation.properties.iteritems():
+          if name.startswith('got_'):
+            trigger_spec['properties']['parent_' + name] = value
+        trigger_specs.append(trigger_spec)
+      if trigger_specs:
+        self.m.trigger(*trigger_specs)
+      return
+
+    properties = {
+      'parent_mastername': mastername,
+      'parent_buildername': buildername,
+    }
+    for name, value in update_step.presentation.properties.iteritems():
+      if name.startswith('got_'):
+        properties['parent_' + name] = value
+    # Work around https://crbug.com/785462 in LUCI UI that ignores
+    # buildset's revision and needs actual 'revision' property.
+    if 'parent_got_revision' in properties:
+      properties['revision'] = properties['parent_got_revision']
+
+    buildbucket_builds = []
+    for loop_mastername, loop_buildername, builder_dict in sorted(
+        bot_db.bot_configs_matching_parent_buildername(
+            mastername, buildername)):
+      # Luci mode will emulate triggering of builds inside master.chromium*
+      # masters which are all mapped into luci.chromium.ci bucket.
+      # If you use this recipe module with a different bucket (or migrating from
+      # a different master), refactor the
+      # `bot_configs_matching_parent_buildername` to return bucket instead of
+      # master.
+      assert loop_mastername.startswith('chromium'), loop_mastername
+      buildbucket_builds.append({
+        'bucket': 'luci.chromium.ci',
+        'parameters': {
+          'builder_name': loop_buildername,
+          'properties': properties,
+        },
+        # Default tags are fine.
+      })
+    if buildbucket_builds:
+      self.m.buildbucket.put(buildbucket_builds, name='trigger')
 
   def run_mb_and_compile(self, compile_targets, isolated_targets, name_suffix,
                          mb_mastername=None, mb_buildername=None,
