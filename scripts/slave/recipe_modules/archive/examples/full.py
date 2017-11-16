@@ -65,33 +65,6 @@ def GenTests(api):
       api.override_step_data('filter build_dir', api.json.output(build_files))
     )
 
-  # An svn project with a separate git property.
-  update_properties = {
-    'got_revision': '123456',
-    'got_revision_git': TEST_HASH_MAIN,
-    'got_revision_cp': TEST_COMMIT_POSITON_MAIN,
-  }
-  yield (
-    api.test('cf_archiving_svn_with_git') +
-    api.platform('linux', 64) +
-    api.properties(update_properties=update_properties) +
-    api.override_step_data(
-        'filter build_dir', api.json.output(['chrome']))
-  )
-
-  # An svn project without git hash.
-  update_properties = {
-    'got_revision': '123456',
-    'got_revision_cp': TEST_COMMIT_POSITON_MAIN,
-  }
-  yield (
-    api.test('cf_archiving_svn_no_git') +
-    api.platform('linux', 64) +
-    api.properties(update_properties=update_properties) +
-    api.override_step_data(
-        'filter build_dir', api.json.output(['chrome']))
-  )
-
   # A component build with git.
   update_properties = {
     'got_x10_revision': TEST_HASH_COMPONENT,
@@ -107,24 +80,6 @@ def GenTests(api):
     ) +
     api.override_step_data(
         'filter build_dir', api.json.output(['chrome', 'resources']))
-  )
-
-  # A component on svn with a separate git property.
-  update_properties = {
-    'got_x10_revision': '234',
-    'got_x10_revision_git': TEST_HASH_COMPONENT,
-    'got_x10_revision_cp': TEST_COMMIT_POSITON_COMPONENT,
-  }
-  yield (
-    api.test('cf_archiving_component_svn_with_git') +
-    api.platform('linux', 64) +
-    api.properties(
-        update_properties=update_properties,
-        revision_dir='x10',
-        primary_project='x10',
-    ) +
-    api.override_step_data(
-        'filter build_dir', api.json.output(['chrome']))
   )
 
   update_properties = {

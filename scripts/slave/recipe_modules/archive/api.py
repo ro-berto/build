@@ -118,20 +118,14 @@ class ArchiveApi(recipe_api.RecipeApi):
     returned.
     """
     if primary_project:
-      commit = update_properties.get('got_%s_revision_git' % primary_project)
-      if commit:
-        return commit
       commit = update_properties.get('got_%s_revision' % primary_project)
-      if commit and GIT_COMMIT_HASH_RE.match(commit):
+      if commit:
+        assert GIT_COMMIT_HASH_RE.match(commit), commit
         return commit
 
-    commit = update_properties.get('got_revision_git')
-    if commit:
-      return commit
     commit = update_properties.get('got_revision')
-    if commit and GIT_COMMIT_HASH_RE.match(commit):
-      return commit
-    return None
+    assert GIT_COMMIT_HASH_RE.match(commit), commit
+    return commit
 
   def _get_comparable_upload_path_for_sort_key(self, branch, number):
     """Returns a sortable string corresponding to the commit position."""
