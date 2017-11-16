@@ -28,11 +28,11 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'builder',
+      'checkout_dir': 'win',
       'testing': {
         'platform': 'win',
       },
       'enable_swarming': True,
-      'checkout_dir': 'win',
     },
     'Win10 Tests x64': {
       'chromium_config': 'chromium',
@@ -47,6 +47,7 @@ SPEC = {
         steps.MiniInstallerTest(),
       ],
       'parent_buildername': 'Win x64 Builder',
+      'checkout_dir': 'win',
       'testing': {
         'platform': 'win',
       },
@@ -66,6 +67,7 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'Win Builder',
+      'checkout_dir': 'win',
       'testing': {
         'platform': 'win',
       },
@@ -88,6 +90,7 @@ SPEC = {
         steps.MiniInstallerTest(),
       ],
       'parent_buildername': 'Win Builder',
+      'checkout_dir': 'win',
       'testing': {
         'platform': 'win',
       },
@@ -102,11 +105,11 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder',
+      'checkout_dir': 'win',
       'testing': {
         'platform': 'win',
       },
       'enable_swarming': True,
-      'checkout_dir': 'win',
     },
     'Win 7 Tests x64 (1)': {
       'chromium_config': 'chromium',
@@ -121,6 +124,7 @@ SPEC = {
         steps.MiniInstallerTest(),
       ],
       'parent_buildername': 'Win x64 Builder',
+      'checkout_dir': 'win',
       'testing': {
         'platform': 'win',
       },
@@ -135,6 +139,7 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder',
+      'checkout_dir': 'win',
       'testing': {
         'platform': 'win',
       },
@@ -150,11 +155,11 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'builder',
+      'checkout_dir': 'win',
       'testing': {
         'platform': 'win',
       },
       'enable_swarming': True,
-      'checkout_dir': 'win',
     },
     'Win7 Tests (dbg)(1)': {
       'chromium_config': 'chromium',
@@ -166,6 +171,7 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'Win Builder (dbg)',
+      'checkout_dir': 'win',
       'testing': {
         'platform': 'win',
       },
@@ -184,6 +190,7 @@ SPEC = {
         'all',
       ],
       'bot_type': 'builder',
+      'checkout_dir': 'win',
       'testing': {
         'platform': 'win',
       },
@@ -206,6 +213,7 @@ SPEC = {
       ],
       # Recipes builds Debug builds with component=shared_library by default.
       'bot_type': 'builder',
+      'checkout_dir': 'win',
       'testing': {
         'platform': 'win',
       },

@@ -142,7 +142,7 @@ SPEC = {
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
-      'checkout_dir': 'win_clang',
+      'checkout_dir': 'win',
     },
     'CrWinClang tester': {
       'chromium_config': 'chromium_no_goma',
@@ -180,7 +180,7 @@ SPEC = {
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
-      'checkout_dir': 'win_clang',
+      'checkout_dir': 'win',
     },
     'CrWinClang(dbg) tester': {
       'chromium_config': 'chromium_no_goma',
@@ -255,7 +255,7 @@ SPEC = {
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
-      'checkout_dir': 'win_clang',
+      'checkout_dir': 'win',
     },
     'CrWinClang64 tester': {
       'chromium_config': 'chromium_no_goma',
@@ -293,7 +293,7 @@ SPEC = {
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
-      'checkout_dir': 'win_clang',
+      'checkout_dir': 'win',
     },
     'CrWinClang64(dbg) tester': {
       'chromium_config': 'chromium_no_goma',
