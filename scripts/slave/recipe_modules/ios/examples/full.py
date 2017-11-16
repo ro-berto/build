@@ -58,6 +58,12 @@ def GenTests(api):
           ],
         },
         {
+          'app': 'fake test 2',
+          'device type': 'fake device 2',
+          'os': '8.1',
+          'host os': 'Mac-10.12',
+        },
+        {
           'include': 'fake include.json',
           'device type': 'fake device 1',
           'os': '8.1',

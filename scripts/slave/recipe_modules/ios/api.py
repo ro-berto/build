@@ -659,7 +659,7 @@ class iOSApi(recipe_api.RecipeApi):
         # 4 cores are better than 8! See https://crbug.com/711845.
         swarming_task.dimensions['cores'] = '4'
       if self.platform == 'simulator':
-        swarming_task.dimensions['os'] = 'Mac'
+        swarming_task.dimensions['os'] = task['test'].get('host os') or 'Mac'
       elif self.platform == 'device':
         swarming_task.dimensions['os'] = 'iOS-%s' % str(task['test']['os'])
         swarming_task.dimensions['device_status'] = 'available'
