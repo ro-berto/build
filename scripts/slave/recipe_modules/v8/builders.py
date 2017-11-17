@@ -821,7 +821,7 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing(2),
-          Test262Variants(3),
+          Test262Variants(4),
         ],
         'testing': {'platform': 'linux'},
       },
