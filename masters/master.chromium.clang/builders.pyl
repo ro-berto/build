@@ -41,6 +41,10 @@
       "os": "win",
       "version": "win7",
     },
+    "win10": {
+      "os": "win",
+      "version": "win10",
+    },
   },
 
   "builders": {
@@ -200,12 +204,9 @@
       "bot_pool": "vm313-m1",
       "category": "3ToTWindows",
     },
-    "ToTWinCFI64": {
-      "bot_pool": "build27-m1",
-      "category": "3ToTWindows",
-    },
     "ToTWinThinLTO64": {
-      "bot_pool": "build27-m1",
+      "mixins": ["win10"],
+      "bot": "win76-c1",
       "category": "3ToTWindows",
     },
     "CrWinAsan": {
@@ -344,7 +345,13 @@
       "category": "5CFI",
     },
     "ToTWinCFI": {
-      "bot_pool": "build154-m1",
+      "mixins": ["win10"],
+      "bot": "win109-c1",
+      "category": "5CFI",
+    },
+    "ToTWinCFI64": {
+      "mixins": ["win10"],
+      "bot": "win157-c1",
       "category": "5CFI",
     },
 
