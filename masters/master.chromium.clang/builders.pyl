@@ -118,6 +118,7 @@
       "mixins": ["trusty"],
       "bot": "slave153-c1",
       "category": "1ToTAndroid",
+      "no_output_timeout_s": 24000,
     },
 
     "ToTMac": {
@@ -208,6 +209,7 @@
       "mixins": ["win10"],
       "bot": "win76-c1",
       "category": "3ToTWindows",
+      "no_output_timeout_s": 24000,
     },
     "CrWinAsan": {
       "bot_pool": "build4-m1",
@@ -348,11 +350,13 @@
       "mixins": ["win10"],
       "bot": "win109-c1",
       "category": "5CFI",
+      "no_output_timeout_s": 24000,
     },
     "ToTWinCFI64": {
       "mixins": ["win10"],
       "bot": "win157-c1",
       "category": "5CFI",
+      "no_output_timeout_s": 24000,
     },
 
     "UBSanVptr Linux": {
