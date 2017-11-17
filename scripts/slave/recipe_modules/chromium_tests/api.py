@@ -553,6 +553,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # legacy and luci cases below.
     if not self.m.runtime.is_luci:
       # Legacy buildbot-only triggering.
+      # TODO(tandrii): get rid of legacy triggering.
       trigger_specs = []
       for loop_mastername, loop_buildername, builder_dict in sorted(
           bot_db.bot_configs_matching_parent_buildername(
@@ -573,6 +574,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         self.m.trigger(*trigger_specs)
       return
 
+    # Buildbucket-based triggering (required on luci stack).
     properties = {
       'parent_mastername': mastername,
       'parent_buildername': buildername,
@@ -595,7 +597,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       # a different master), refactor the
       # `bot_configs_matching_parent_buildername` to return bucket instead of
       # master.
-      assert loop_mastername.startswith('chromium'), loop_mastername
+      if not loop_mastername.startswith('chromium'):  # pragma: no cover
+        # If you hit this condition, then you have a test case for coverage,
+        # so please add your test and remove the pragma above.
+        self.m.python.failing_step('trigger', 'unknown destination bucket')
+
       buildbucket_builds.append({
         'bucket': 'luci.chromium.ci',
         'parameters': {
