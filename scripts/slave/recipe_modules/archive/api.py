@@ -137,7 +137,8 @@ class ArchiveApi(recipe_api.RecipeApi):
   def clusterfuzz_archive(
       self, build_dir, update_properties, gs_bucket,
       archive_prefix, archive_subdir_suffix='', gs_acl=None,
-      revision_dir=None, primary_project=None, **kwargs):
+      revision_dir=None, primary_project=None, bitness=None, use_legacy=True,
+      **kwargs):
     # TODO(machenbach): Merge revision_dir and primary_project. The
     # revision_dir is only used for building the archive name while the
     # primary_project is authoritative for the commit position.
@@ -171,7 +172,15 @@ class ArchiveApi(recipe_api.RecipeApi):
                     archive is a component revision
       primary_project: Optional project name for specifying the revision of the
                        checkout
+      bitness: The bitness of the build (32 or 64) to distinguish archive
+               names.
+      use_legacy: Specify if legacy paths and archive names should be used. Set
+                  to false for new builders.
     """
+    # We should distinguish build archives also by bitness on new bots, so that
+    # 32 and 64 bit bots can coexist. We don't change old bots to not confuse
+    # clusterfuzz bisect jobs.
+    assert use_legacy or bitness, 'Must specify bitness for new builders.'
     target = self.m.path.split(build_dir)[-1]
     commit_position = self._get_commit_position(
         update_properties, primary_project)
@@ -216,9 +225,16 @@ class ArchiveApi(recipe_api.RecipeApi):
 
     zip_file_list = filter_result.json.output
 
-    # Use the legacy platform name as Clusterfuzz has some expectations on
-    # this (it only affects Windows, where it replace 'win' by 'win32').
-    pieces = [self.legacy_platform_name(), target.lower()]
+    # Use the legacy platform name if specified as Clusterfuzz has some
+    # expectations on this (it only affects Windows, where it replace 'win'
+    # by 'win32').
+    if use_legacy:
+      platform_name = self.legacy_platform_name()
+    else:
+      # Always qualify platform with bitness on new bots. E.g. linux32 or win64.
+      platform_name = self.m.platform.name + str(bitness)
+
+    pieces = [platform_name, target.lower()]
     if archive_subdir_suffix:
       pieces.append(archive_subdir_suffix)
     subdir = '-'.join(pieces)
@@ -231,7 +247,7 @@ class ArchiveApi(recipe_api.RecipeApi):
     sortkey_path = self._get_comparable_upload_path_for_sort_key(
         cp_branch, cp_number)
     zip_file_base_name = '%s-%s-%s%s-%s' % (archive_prefix,
-                                            self.legacy_platform_name(),
+                                            platform_name,
                                             target.lower(),
                                             component,
                                             sortkey_path)
@@ -319,6 +335,8 @@ class ArchiveApi(recipe_api.RecipeApi):
       **kwargs
     )
 
+  # FIXME(machenbach): This is currently used by win64 builders as well, which
+  # have win32 in their archive names, which is confusing.
   def legacy_platform_name(self):
     """Replicates the behavior of PlatformName() in chromium_utils.py."""
     if self.m.platform.is_win:

@@ -41,6 +41,8 @@ def RunSteps(api):
       archive_subdir_suffix=api.properties.get('archive_subdir_suffix', ''),
       revision_dir=api.properties.get('revision_dir'),
       primary_project=api.properties.get('primary_project'),
+      bitness=api.properties.get('bitness'),
+      use_legacy=api.properties.get('use_legacy', True),
   )
 
 
@@ -64,6 +66,18 @@ def GenTests(api):
       ) +
       api.override_step_data('filter build_dir', api.json.output(build_files))
     )
+
+  yield (
+    api.test('cf_archiving_win64') +
+    api.platform('win', 64) +
+    api.properties(
+        bitness=64,
+        update_properties=update_properties,
+        use_legacy=False,
+    ) +
+    api.override_step_data(
+        'filter build_dir', api.json.output(['chrome']))
+  )
 
   # A component build with git.
   update_properties = {
