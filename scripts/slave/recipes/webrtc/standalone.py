@@ -34,13 +34,6 @@ def RunSteps(api):
     step_result.presentation.status = api.step.WARNING
     return
 
-  # TODO(ehmaldonado): Remove when http://crbug.com/774973 is fixed.
-  if api.properties['buildername'] == 'Linux UBSan':
-    step_result = api.step('Disabled: see http://crbug.com/774973',
-                           cmd=None)
-    step_result.presentation.status = api.step.WARNING
-    return
-
   webrtc.configure_swarming()
   if api.platform.is_win:
     api.chromium.taskkill()
