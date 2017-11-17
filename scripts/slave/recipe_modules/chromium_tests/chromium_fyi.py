@@ -460,7 +460,7 @@ SPEC = {
         chromium_win.SPEC['builders']['Win Builder'],
         ['goma_canary', 'shared_library']),
     'CrWinGoma(loc)': chromium_apply_configs(
-        no_archive(chromium_win.SPEC['builders']['Win Builder']),
+        no_archive(chromium.SPEC['builders']['Win']),
         ['goma_canary', 'goma_localoutputcache']),
     'CrWin7Goma': chromium_apply_configs(
         chromium_win.SPEC['builders']['Win Builder'], ['goma_canary']),
