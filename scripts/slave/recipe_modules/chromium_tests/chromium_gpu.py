@@ -265,5 +265,26 @@ SPEC = {
       },
       'enable_swarming': True,
     },
+    'Android Release (Nexus 5X)': {
+      'enable_swarming': True,
+      'chromium_config': 'android',
+      'chromium_apply_config': [
+        'chrome_with_codecs',
+        'download_vr_test_apks',
+      ],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+        'TARGET_PLATFORM': 'android',
+      },
+      'android_config': 'main_builder_mb',
+      'test_results_config': 'public_server',
+      'bot_type': 'builder_tester',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
   },
 }
