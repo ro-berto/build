@@ -197,14 +197,7 @@
         ],
         "builders": {
           "*": {}
-        },
-        "excluded_builders" : [
-          "chromeos-amd64-generic-rel",
-          "chromeos-daisy-rel",
-          "linux-chromeos-rel",
-          "linux-chromeos-dbg",
-          "*Compile"
-        ]
+        }
       }
     ],
     "https://build.chromium.org/p/chromium.gatekeeper": [
