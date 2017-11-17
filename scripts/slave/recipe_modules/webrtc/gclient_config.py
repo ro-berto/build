@@ -28,12 +28,6 @@ def webrtc_ios(c):
   c.target_os.add('mac')
   c.target_os.add('ios')
 
-@CONFIG_CTX(includes=['webrtc'])
-def webrtc_valgrind(c):
-  """Add Valgrind binaries to the gclient solution."""
-  c.solutions[0].custom_deps['src/third_party/valgrind'] = \
-      ChromiumGitURL(c, 'chromium', 'deps', 'valgrind', 'binaries')
-
 @CONFIG_CTX()
 def _webrtc(c):
   """Add the main solution for WebRTC standalone builds.
