@@ -385,7 +385,15 @@ class FinditApi(recipe_api.RecipeApi):
       A pair of revisions (checked_out_revision, cached_revision), or None, None
       if the checkout directory does not exist.
     """
-    src_root = api.gclient.c.src_root or api.gclient.c.solutions[0].name
+    src_root = api.gclient.c.src_root
+    first_solution = (api.gclient.c.solutions[0].name
+                      if api.gclient.c.solutions else None)
+
+    src_root = src_root or first_solution
+    if not src_root:  # pragma: no cover.
+      # We don't know where to look for the revisions
+      return None, None
+
     # api.path['checkout'] is not set yet, so we get it from chromium_checkout.
     checkout_dir = api.chromium_checkout.get_checkout_dir(bot_config)
     full_checkout_path = checkout_dir.join(src_root)
