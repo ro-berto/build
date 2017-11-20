@@ -229,7 +229,12 @@ class ChromiteApi(recipe_api.RecipeApi):
   def run_cbuildbot(self):
     """Performs a Chromite repository checkout, then runs cbuildbot.
     """
+    # Fetch chromite and depot_tools.
     self.checkout_chromite()
+
+    # Update or install goma client via cipd.
+    self.m.goma.ensure_goma()
+
     self.run()
 
   def checkout_chromite(self):
@@ -240,6 +245,28 @@ class ChromiteApi(recipe_api.RecipeApi):
         update_presentation=False)
 
     return self.chromite_path
+
+  def with_system_python(self):
+    """Prepare a directory with the system python binary available.
+
+    This is designed to make it possible to mask "bundled python" out of the
+    standard path without hiding any other binaries.
+
+    Returns: (context manager) A context manager that inserts system python
+        into the front of PATH.
+    """
+    with self.m.step.nest('system_python'):
+      # Create a directory to hold a symlink to the system python binary.
+      python_bin = self.m.path['start_dir'].join('python_bin')
+      self.m.file.ensure_directory('create_dir', python_bin)
+
+      # Create a symlink to the system python binary in that directory.
+      self.m.file.symlink('create_link',
+                          '/usr/bin/python',
+                          python_bin.join('python'))
+
+    # Return a context manager to insert that directory at the front of PATH.
+    return self.m.context(env_prefixes={'PATH': [python_bin]})
 
   def run(self, args=[]):
     """Runs the configured 'cbuildbot' build.
@@ -307,10 +334,8 @@ class ChromiteApi(recipe_api.RecipeApi):
 
     cbb_args.extend(['--git-cache-dir', self.m.path['cache'].join('git')])
 
-    # Update or install goma client via cipd.
-    goma_dir = self.m.goma.ensure_goma()
     cbb_args.extend([
-        '--goma_dir', goma_dir,
+        '--goma_dir', self.m.goma.goma_dir,
         '--goma_client_json', self.m.goma.service_account_json_path])
 
     # Add custom args, if there are any.

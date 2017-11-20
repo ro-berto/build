@@ -83,60 +83,75 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "system_python"
+  },
+  {
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[depot_tools::gitiles]/resources/gerrit_client.py",
-      "--json-file",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
       "/path/to/tmp/json",
-      "--url",
-      "https://chromium.googlesource.com/chromiumos/manifest-versions/+/a94a8fe5ccb19ba61c4c0873d391e987982fbbd3",
-      "--format",
-      "json",
-      "--attempts",
-      "10"
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[START_DIR]/python_bin"
     ],
-    "name": "Fetch manifest config",
+    "infra_step": true,
+    "name": "system_python.create_dir",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"author\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"email\": \"testauthor@fake.chromium.org\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"name\": \"Test Author\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"time\": \"Mon Jan 01 00:00:00 2015\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"commit\": \"a94a8fe5ccb19ba61c4c0873d391e987982fbbd3\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"committer\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"email\": \"testauthor@fake.chromium.org\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"name\": \"Test Author\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"time\": \"Mon Jan 01 00:00:00 2015\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"message\": null, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"parents\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"36786b4475350efa4e9e48de5ef516cc15e91a47\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tree\": \"d610084188c1248718d7541809f26d53384e9ade\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tree_diff\": []@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
     "cmd": [
       "python",
       "-u",
-      "import sys; sys.exit(1)"
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "symlink",
+      "/usr/bin/python",
+      "[START_DIR]/python_bin/python"
     ],
-    "name": "Fetch manifest config failure",
+    "infra_step": true,
+    "name": "system_python.create_link",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@Failed to fetch manifest config.@@@",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "[START_DIR]/chromite/scripts/cbuildbot_launch",
+      "--buildroot",
+      "[CACHE]/cbuild",
+      "--buildbot",
+      "--branch",
+      "master",
+      "--git-cache-dir",
+      "[CACHE]/git",
+      "--goma_dir",
+      "[CACHE]/goma_client",
+      "--goma_client_json",
+      "/creds/service_accounts/service-account-goma-client.json",
+      "swarming-build-config"
+    ],
+    "env": {
+      "DEPOT_TOOLS_UPDATE": "0"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/depot_tools",
+        "[START_DIR]/python_bin"
+      ]
+    },
+    "name": "cbuildbot [swarming-build-config]"
   },
   {
     "name": "$result",
-    "reason": "Step('Fetch manifest config failure') failed with return_code 1",
     "recipe_result": null,
-    "status_code": 1
+    "status_code": 0
   }
 ]

@@ -89,6 +89,9 @@ def RunSteps(api):
   # Load the Chromite configuration for our target.
   api.chromite.checkout_chromite()
 
+  # Update or install goma client via cipd.
+  api.chromite.m.goma.ensure_goma()
+
   # Run our 'cbuildbot'.
   api.chromite.run(args=tryjob_args)
 

@@ -202,6 +202,7 @@
   * [cronet:examples/full](#recipes-cronet_examples_full)
   * [cros/cbuildbot](#recipes-cros_cbuildbot)
   * [cros/cbuildbot_tryjob](#recipes-cros_cbuildbot_tryjob)
+  * [cros/swarming](#recipes-cros_swarming)
   * [crrev:examples/full](#recipes-crrev_examples_full)
   * [custom_tabs_client](#recipes-custom_tabs_client)
   * [dart/analyzer_swarming](#recipes-dart_analyzer_swarming)
@@ -835,7 +836,7 @@ Args:
 Uploads the given test results log to Google storage.
 ### *recipe_modules* / [chromite](/scripts/slave/recipe_modules/chromite)
 
-[DEPS](/scripts/slave/recipe_modules/chromite/__init__.py#1): [buildbucket](#recipe_modules-buildbucket), [goma](#recipe_modules-goma), [repo](#recipe_modules-repo), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [depot\_tools/infra\_paths][depot_tools/recipe_modules/infra_paths], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/chromite/__init__.py#1): [buildbucket](#recipe_modules-buildbucket), [goma](#recipe_modules-goma), [repo](#recipe_modules-repo), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [depot\_tools/infra\_paths][depot_tools/recipe_modules/infra_paths], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 #### **class [ChromiteApi](/scripts/slave/recipe_modules/chromite/api.py#11)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
@@ -867,7 +868,7 @@ Returns (bool): True if the value was found.
 
 &mdash; **def [checkout](/scripts/slave/recipe_modules/chromite/api.py#162)(self, manifest_url=None, repo_url=None, repo_sync_args=None):**
 
-&mdash; **def [checkout\_chromite](/scripts/slave/recipe_modules/chromite/api.py#235)(self):**
+&mdash; **def [checkout\_chromite](/scripts/slave/recipe_modules/chromite/api.py#240)(self):**
 
 Checks out the configured Chromite branch.
     
@@ -911,7 +912,7 @@ Args:
   repository (str): The URL of the repository hosting the change.
   revision (str): The revision hash to load the build ID from.
 
-&mdash; **def [run](/scripts/slave/recipe_modules/chromite/api.py#244)(self, args=[]):**
+&mdash; **def [run](/scripts/slave/recipe_modules/chromite/api.py#271)(self, args=[]):**
 
 Runs the configured 'cbuildbot' build.
 
@@ -945,6 +946,16 @@ Performs a Chromite repository checkout, then runs cbuildbot.
 Run the setup_board script inside the chroot.
 
 Used by the internal goma recipe.
+
+&mdash; **def [with\_system\_python](/scripts/slave/recipe_modules/chromite/api.py#249)(self):**
+
+Prepare a directory with the system python binary available.
+
+This is designed to make it possible to mask "bundled python" out of the
+standard path without hiding any other binaries.
+
+Returns: (context manager) A context manager that inserts system python
+    into the front of PATH.
 ### *recipe_modules* / [chromium](/scripts/slave/recipe_modules/chromium)
 
 [DEPS](/scripts/slave/recipe_modules/chromium/__init__.py#1): [adb](#recipe_modules-adb), [build](#recipe_modules-build), [commit\_position](#recipe_modules-commit_position), [goma](#recipe_modules-goma), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -4474,6 +4485,11 @@ Generates the sequence of steps that will be run by the slave.
 [DEPS](/scripts/slave/recipes/cros/cbuildbot_tryjob.py#10): [chromite](#recipe_modules-chromite), [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/cros/cbuildbot_tryjob.py#63)(api):**
+### *recipes* / [cros/swarming](/scripts/slave/recipes/cros/swarming.py)
+
+[DEPS](/scripts/slave/recipes/cros/swarming.py#5): [chromite](#recipe_modules-chromite), [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+
+&mdash; **def [RunSteps](/scripts/slave/recipes/cros/swarming.py#12)(api):**
 ### *recipes* / [crrev:examples/full](/scripts/slave/recipe_modules/crrev/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/crrev/examples/full.py#9): [crrev](#recipe_modules-crrev), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
