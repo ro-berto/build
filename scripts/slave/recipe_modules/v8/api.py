@@ -1256,7 +1256,6 @@ class V8Api(recipe_api.RecipeApi):
           self._copy_property(self.m.properties, trigger_props, 'git_revision')
           self._copy_property(self.m.properties, trigger_props, 'revision')
           trigger_props['parent_buildername'] = self.m.properties['buildername']
-          trigger_props['parent_buildnumber'] = self.m.properties['buildnumber']
           trigger_props.update(properties)
           self.m.buildbucket.put(
               [
