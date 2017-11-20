@@ -261,7 +261,6 @@ def goma_canary(c):
   c.compile_py.goma_hermetic = 'error'
   c.compile_py.goma_failfast = True
   c.compile_py.show_ninja_stats = True
-  c.compile_py.ninja_confirm_noop = True
 
 @config_ctx()
 def goma_staging(c):
