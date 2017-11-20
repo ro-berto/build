@@ -468,3 +468,13 @@ def GenTests(api):
         path_config='generic',
     )
   )
+
+  # Test using build_id (replaces buildnumber in LUCI world).
+  yield (
+    api.v8.test(
+        'tryserver.v8',
+        'v8_linux_rel_ng',
+        'with_build_id',
+        build_id='buildbucket/cr-buildbucket.appspot.com/1234567890',
+    )
+  )
