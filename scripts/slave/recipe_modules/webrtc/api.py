@@ -87,6 +87,8 @@ class WebRTCApi(recipe_api.RecipeApi):
     # Support applying configs both at the bot and the recipe config level.
     for c in self.bot_config.get('chromium_apply_config', []):
       self.m.chromium.apply_config(c)
+    for c in self.bot_config.get('gclient_apply_config', []):
+      self.m.gclient.apply_config(c)
     for c in self.recipe_config.get('gclient_apply_config', []):
       self.m.gclient.apply_config(c)
 
