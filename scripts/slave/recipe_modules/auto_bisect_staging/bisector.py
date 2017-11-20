@@ -697,10 +697,6 @@ class Bisector(object):
 
     # TODO(prasadv): Refactor this code to remove hard coded values.
     bot_name = self.get_perf_tester_name()
-    if 'win' in bot_name:
-      if any(b in bot_name for b in ['x64', 'gpu']):
-        return 'winx64_bisect_builder'
-      return 'win_perf_bisect_builder'
 
     # TODO(prasadv): Refactor this code to remove hard coded values and use
     # target_bit from the bot config. crbug.com/640287
@@ -724,10 +720,6 @@ class Bisector(object):
 
     # TODO(prasadv): Refactor this code to remove hard coded values.
     bot_name = self.get_perf_tester_name()
-    if 'win' in bot_name:
-      if any(b in bot_name for b in ['x64', 'gpu']):
-        return 'gs://chrome-perf/Win x64 Builder/full-build-win32_'
-      return 'gs://chrome-perf/Win Builder/full-build-win32_'
 
     # TODO(prasadv): Refactor this code to remove hard coded values and use
     # target_bit from the bot config. crbug.com/640287

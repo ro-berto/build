@@ -190,7 +190,7 @@ class AutoBisectStagingApi(recipe_api.RecipeApi):
 
     This is for the merged director/tester flow.
     """
-    if self.m.platform.is_win:
+    if self.m.platform.is_win:  # pragma: no cover
       self.m.chromium.taskkill()
 
     if skip_download:  # pragma: no cover

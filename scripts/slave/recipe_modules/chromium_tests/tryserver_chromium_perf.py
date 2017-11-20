@@ -54,26 +54,8 @@ def _AddTestSpec(name, platform, target_bits=64):
 
 _AddBuildSpec('android_perf_bisect_builder', 'android', target_bits=32)
 _AddBuildSpec('android_arm64_perf_bisect_builder', 'android')
-_AddBuildSpec('win_perf_bisect_builder', 'win', target_bits=32)
-_AddBuildSpec('winx64_bisect_builder', 'win')
 _AddBuildSpec('linux_perf_bisect_builder', 'linux')
 
-
-_AddTestSpec('win_fyi_perf_bisect', 'win', target_bits=32)
 _AddTestSpec('linux_fyi_perf_bisect', 'linux')
-
-
-_AddTestSpec('winx64_zen_perf_bisect', 'win')
-_AddTestSpec('winx64_high_dpi_perf_bisect', 'win')
-_AddTestSpec('winx64_10_perf_bisect', 'win')
-_AddTestSpec('win_8_perf_bisect', 'win', target_bits=32)
-_AddTestSpec('win_perf_bisect', 'win', target_bits=32)
-_AddTestSpec('win_x64_perf_bisect', 'win')
-_AddTestSpec('winx64ati_perf_bisect', 'win')
-_AddTestSpec('winx64intel_perf_bisect', 'win')
-_AddTestSpec('winx64nvidia_perf_bisect', 'win')
-
 _AddTestSpec('linux_perf_bisect', 'linux')
-
 _AddTestSpec('staging_linux_perf_bisect', 'linux')
-_AddTestSpec('staging_win_perf_bisect', 'win', target_bits=32)
