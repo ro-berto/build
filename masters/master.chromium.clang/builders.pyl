@@ -26,13 +26,6 @@
   },
 
   "mixins": {
-    "tester": {
-      "scheduler": None,
-
-      # If this is False and the testers are slower than the builders,
-      # they'll fall behind, and we don't normally want that.
-      "mergeRequests": True,
-    },
     "trusty": {
       "os": "linux",
       "version": "trusty",
@@ -125,22 +118,12 @@
       "bot_pool": "build98-m1",
       "category": "2ToTMac",
     },
-    "ToTMac tester": {
-      "mixins": ["tester"],
-      "bot_pool": "vm30-m1",
-      "category": "2ToTMac",
-    },
     "ToTMac (dbg)": {
       "bot_pool": "build99-m1",
       "category": "2ToTMac",
     },
     "ToTMacASan": {
       "bot_pool": "build99-m1",
-      "category": "2ToTMac",
-    },
-    "ToTMacASan tester": {
-      "mixins": ["tester"],
-      "bot_pool": "vm30-m1",
       "category": "2ToTMac",
     },
     "ToTiOS": {
@@ -154,27 +137,12 @@
       "bot": "build127-m1",
       "category": "3ToTWindows",
     },
-    "ToTWin tester": {
-      "mixins": ["tester", "win7"],
-      "bot": "vm310-m1",
-      "category": "3ToTWindows",
-    },
     "ToTWin(dbg)": {
       "bot_pool": "build128-m1",
       "category": "3ToTWindows",
     },
-    "ToTWin(dbg) tester": {
-      "mixins": ["tester"],
-      "bot_pool": "vm311-m1",
-      "category": "3ToTWindows",
-    },
     "ToTWin(dll)": {
       "bot_pool": "build128-m1",
-      "category": "3ToTWindows",
-    },
-    "ToTWin(dll) tester": {
-      "mixins": ["tester"],
-      "bot_pool": "vm311-m1",
       "category": "3ToTWindows",
     },
     "ToTWin64": {
@@ -182,27 +150,12 @@
       "bot": "build129-m1",
       "category": "3ToTWindows",
     },
-    "ToTWin64 tester": {
-      "mixins": ["tester", "win7"],
-      "bot": "vm312-m1",
-      "category": "3ToTWindows",
-    },
     "ToTWin64(dbg)": {
       "bot_pool": "build130-m1",
       "category": "3ToTWindows",
     },
-    "ToTWin64(dbg) tester": {
-      "mixins": ["tester"],
-      "bot_pool": "vm313-m1",
-      "category": "3ToTWindows",
-    },
     "ToTWin64(dll)": {
       "bot_pool": "build130-m1",
-      "category": "3ToTWindows",
-    },
-    "ToTWin64(dll) tester": {
-      "mixins": ["tester"],
-      "bot_pool": "vm313-m1",
       "category": "3ToTWindows",
     },
     "ToTWinThinLTO64": {
@@ -215,63 +168,28 @@
       "bot_pool": "build4-m1",
       "category": "3ToTWindows",
     },
-    "CrWinAsan tester": {
-      "mixins": ["tester"],
-      "bot_pool": "vm978-m1",
-      "category": "3ToTWindows",
-    },
     "CrWinAsanCov": {
       "bot_pool": "build4-m1",
-      "category": "3ToTWindows",
-    },
-    "CrWinAsanCov tester": {
-      "mixins": ["tester"],
-      "bot_pool": "vm190-m1",
       "category": "3ToTWindows",
     },
     "CrWinClangLLD": {
       "bot_pool": "build4-m1",
       "category": "3ToTWindows",
     },
-    "CrWinClangLLD tester": {
-      "mixins": ["tester"],
-      "bot_pool": "vm978-m1",
-      "category": "3ToTWindows",
-    },
     "CrWinAsan(dll)": {
       "bot_pool": "build27-m1",
-      "category": "3ToTWindows",
-    },
-    "CrWinAsan(dll) tester": {
-      "mixins": ["tester"],
-      "bot_pool": "vm190-m1",
       "category": "3ToTWindows",
     },
     "CrWinClangLLD64": {
       "bot_pool": "build27-m1",
       "category": "3ToTWindows",
     },
-    "CrWinClangLLD64 tester": {
-      "mixins": ["tester"],
-      "bot_pool": "vm190-m1",
-      "category": "3ToTWindows",
-    },
     "CrWinClngLLDdbg": {
       "bot_pool": "build154-m1",
       "category": "3ToTWindows",
     },
-    "CrWinClngLLDdbg tester": {
-      "mixins": ["tester"],
-      "bot_pool": "vm12-m1",
-      "category": "3ToTWindows",
-    },
     "CrWinClngLLD64dbg": {
       "bot_pool": "build154-m1",
-      "category": "3ToTWindows",
-    },
-    "CrWinClngLLD64dbg tester": {
-      "mixins": ["tester"],
-      "bot_pool": "vm12-m1",
       "category": "3ToTWindows",
     },
 
@@ -280,54 +198,24 @@
       "bot": "build29-m1",
       "category": "4Windows",
     },
-    "CrWinClang tester": {
-      "mixins": ["tester", "win7"],
-      "bot": "vm961-m1",
-      "category": "4Windows",
-    },
     "CrWinClang(dbg)": {
       "bot_pool": "build60-m1",
-      "category": "4Windows",
-    },
-    "CrWinClang(dbg) tester": {
-      "mixins": ["tester"],
-      "bot_pool": "vm962-m1",
       "category": "4Windows",
     },
     "CrWinClang(shared)": {
       "bot_pool": "build60-m1",
       "category": "4Windows",
     },
-    "CrWinClang(shared) tester": {
-      "mixins": ["tester"],
-      "bot_pool": "vm962-m1",
-      "category": "4Windows",
-    },
     "CrWinClang64(dbg)": {
       "bot_pool": "build70-m1",
-      "category": "4Windows",
-    },
-    "CrWinClang64(dbg) tester": {
-      "mixins": ["tester"],
-      "bot_pool": "vm970-m1",
       "category": "4Windows",
     },
     "CrWinClang64": {
       "bot_pool": "build70-m1",
       "category": "4Windows",
     },
-    "CrWinClang64 tester": {
-      "mixins": ["tester"],
-      "bot_pool": "vm970-m1",
-      "category": "4Windows",
-    },
     "CrWinClang64(dll)": {
       "bot_pool": "build70-m1",
-      "category": "4Windows",
-    },
-    "CrWinClang64(dll) tester": {
-      "mixins": ["tester"],
-      "bot_pool": "vm970-m1",
       "category": "4Windows",
     },
 
@@ -411,46 +299,6 @@
       "os": "win",
       "version": "win7",
       "bots": "build154-m1",
-    },
-    "vm12-m1": {
-      "os": "win",
-      "version": "win7",
-      "bots": "vm12-m1",
-    },
-    "vm30-m1": {
-      "os": "mac",
-      "version": "10.9",
-      "bots": "vm30-m1",
-    },
-    "vm190-m1": {
-      "os": "win",
-      "version": "win7",
-      "bots": "vm190-m1",
-    },
-    "vm311-m1": {
-      "os": "win",
-      "version": "win7",
-      "bots": "vm311-m1",
-    },
-    "vm313-m1": {
-      "os": "win",
-      "version": "win7",
-      "bots": "vm313-m1",
-    },
-    "vm962-m1": {
-      "os": "win",
-      "version": "win7",
-      "bots": "vm962-m1",
-    },
-    "vm970-m1": {
-      "os": "win",
-      "version": "win7",
-      "bots": "vm970-m1",
-    },
-    "vm978-m1": {
-      "os": "win",
-      "version": "win7",
-      "bots": "vm978-m1",
     },
   },
 

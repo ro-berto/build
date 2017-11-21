@@ -133,7 +133,7 @@ SPEC = {
       'compile_targets': [
         'all',
       ],
-      'bot_type': 'builder',
+      'bot_type': 'builder_tester',
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
@@ -143,21 +143,6 @@ SPEC = {
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
       'checkout_dir': 'win',
-    },
-    'CrWinClang tester': {
-      'chromium_config': 'chromium_no_goma',
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'CrWinClang',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'win',
-      },
-      'enable_swarming': True,
     },
     'CrWinClang(dbg)': {
       'chromium_config': 'chromium_win_clang',
@@ -171,7 +156,7 @@ SPEC = {
         'all',
       ],
       # Recipes builds Debug builds with component=shared_library by default.
-      'bot_type': 'builder',
+      'bot_type': 'builder_tester',
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
@@ -181,21 +166,6 @@ SPEC = {
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
       'checkout_dir': 'win',
-    },
-    'CrWinClang(dbg) tester': {
-      'chromium_config': 'chromium_no_goma',
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'CrWinClang(dbg)',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'win',
-      },
-      'enable_swarming': True,
     },
     'CrWinClang(shared)': {
       'chromium_config': 'chromium_win_clang',
@@ -209,7 +179,7 @@ SPEC = {
         'all',
       ],
       'GYP_DEFINES': { 'component': 'shared_library' },
-      'bot_type': 'builder',
+      'bot_type': 'builder_tester',
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
@@ -218,21 +188,6 @@ SPEC = {
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
-    },
-    'CrWinClang(shared) tester': {
-      'chromium_config': 'chromium_no_goma',
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'CrWinClang(shared)',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'win',
-      },
-      'enable_swarming': True,
     },
     'CrWinClang64': {
       'chromium_config': 'chromium_win_clang_official',
@@ -246,7 +201,7 @@ SPEC = {
       'compile_targets': [
         'all',
       ],
-      'bot_type': 'builder',
+      'bot_type': 'builder_tester',
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
@@ -256,21 +211,6 @@ SPEC = {
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
       'checkout_dir': 'win',
-    },
-    'CrWinClang64 tester': {
-      'chromium_config': 'chromium_no_goma',
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'CrWinClang64',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'win',
-      },
-      'enable_swarming': True,
     },
     'CrWinClang64(dbg)': {
       'chromium_config': 'chromium_win_clang',
@@ -284,7 +224,7 @@ SPEC = {
         'all',
       ],
       # Recipes builds Debug builds with component=shared_library by default.
-      'bot_type': 'builder',
+      'bot_type': 'builder_tester',
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
@@ -294,21 +234,6 @@ SPEC = {
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
       'checkout_dir': 'win',
-    },
-    'CrWinClang64(dbg) tester': {
-      'chromium_config': 'chromium_no_goma',
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'CrWinClang64(dbg)',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'win',
-      },
-      'enable_swarming': True,
     },
     'CrWinClang64(dll)': {
       'chromium_config': 'chromium_win_clang',
@@ -322,7 +247,7 @@ SPEC = {
         'all',
       ],
       'GYP_DEFINES': { 'component': 'shared_library' },
-      'bot_type': 'builder',
+      'bot_type': 'builder_tester',
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
@@ -331,21 +256,6 @@ SPEC = {
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
-    },
-    'CrWinClang64(dll) tester': {
-      'chromium_config': 'chromium_no_goma',
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'CrWinClang64(dll)',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'win',
-      },
-      'enable_swarming': True,
     },
     'CrWinClangLLD': {
       'chromium_config': 'chromium_win_clang_tot',
@@ -360,7 +270,7 @@ SPEC = {
         'all',
       ],
       'GYP_DEFINES': { 'component': 'shared_library', 'use_lld': 1 },
-      'bot_type': 'builder',
+      'bot_type': 'builder_tester',
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
@@ -369,21 +279,6 @@ SPEC = {
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
-    },
-    'CrWinClangLLD tester': {
-      'chromium_config': 'chromium_no_goma',
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'CrWinClangLLD',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'win',
-      },
-      'enable_swarming': True,
     },
     'CrWinClngLLDdbg': {
       'chromium_config': 'chromium_win_clang_tot',
@@ -397,7 +292,7 @@ SPEC = {
         'all',
       ],
       'GYP_DEFINES': { 'component': 'shared_library', 'use_lld': 1 },
-      'bot_type': 'builder',
+      'bot_type': 'builder_tester',
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
@@ -406,21 +301,6 @@ SPEC = {
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
-    },
-    'CrWinClngLLDdbg tester': {
-      'chromium_config': 'chromium_no_goma',
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'CrWinClngLLDdbg',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'win',
-      },
-      'enable_swarming': True,
     },
     'CrWinClangLLD64': {
       'chromium_config': 'chromium_win_clang_tot',
@@ -434,7 +314,7 @@ SPEC = {
         'all',
       ],
       'GYP_DEFINES': { 'component': 'shared_library', 'use_lld': 1 },
-      'bot_type': 'builder',
+      'bot_type': 'builder_tester',
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
@@ -443,21 +323,6 @@ SPEC = {
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
-    },
-    'CrWinClangLLD64 tester': {
-      'chromium_config': 'chromium_no_goma',
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'CrWinClangLLD64',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'win',
-      },
-      'enable_swarming': True,
     },
     'CrWinClngLLD64dbg': {
       'chromium_config': 'chromium_win_clang_tot',
@@ -471,7 +336,7 @@ SPEC = {
         'all',
       ],
       'GYP_DEFINES': { 'component': 'shared_library', 'use_lld': 1 },
-      'bot_type': 'builder',
+      'bot_type': 'builder_tester',
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
@@ -480,21 +345,6 @@ SPEC = {
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
-    },
-    'CrWinClngLLD64dbg tester': {
-      'chromium_config': 'chromium_no_goma',
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'CrWinClngLLD64dbg',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'win',
-      },
-      'enable_swarming': True,
     },
     'ToTWinCFI': {
       'chromium_config': 'chromium_win_clang_tot',
@@ -571,7 +421,7 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
       },
-      'bot_type': 'builder',
+      'bot_type': 'builder_tester',
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
@@ -580,21 +430,6 @@ SPEC = {
       'compile_targets': [ 'chromium_builder_asan' ],
       # add_tests_as_compile_targets not needed for the asan bot, it doesn't
       # build everything.
-    },
-    'CrWinAsan tester': {
-      'chromium_config': 'chromium_win_asan',
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'CrWinAsan',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'win',
-      },
-      'enable_swarming': True,
     },
     'CrWinAsan(dll)': {
       'chromium_config': 'chromium_win_clang_asan_tot',
@@ -605,7 +440,7 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'GYP_DEFINES': { 'component': 'shared_library' },
-      'bot_type': 'builder',
+      'bot_type': 'builder_tester',
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
@@ -614,21 +449,6 @@ SPEC = {
       'compile_targets': [ 'chromium_builder_asan' ],
       # add_tests_as_compile_targets not needed for the asan bot, it doesn't
       # build everything.
-    },
-    'CrWinAsan(dll) tester': {
-      'chromium_config': 'chromium_win_asan',
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'CrWinAsan(dll)',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'win',
-      },
-      'enable_swarming': True,
     },
     'CrWinAsanCov': {
       'chromium_config': 'chromium_win_clang_asan_tot_coverage',
@@ -638,7 +458,7 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
       },
-      'bot_type': 'builder',
+      'bot_type': 'builder_tester',
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
@@ -647,21 +467,6 @@ SPEC = {
       'compile_targets': [ 'chromium_builder_asan' ],
       # add_tests_as_compile_targets not needed for the asan bot, it doesn't
       # build everything.
-    },
-    'CrWinAsanCov tester': {
-      'chromium_config': 'chromium_win_asan',
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'CrWinAsanCov',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'win',
-      },
-      'enable_swarming': True,
     },
     'ToTAndroidASan': {
       'chromium_config': 'clang_tot_android_asan',
@@ -706,7 +511,7 @@ SPEC = {
       'compile_targets': [
         'all',
       ],
-      'bot_type': 'builder',
+      'bot_type': 'builder_tester',
       'android_config': 'clang_tot_debug_builder',
       'test_results_config': 'staging_server',
       'testing': { 'platform': 'linux', },
@@ -750,7 +555,7 @@ SPEC = {
       'compile_targets': [
         'all',
       ],
-      'bot_type': 'builder',
+      'bot_type': 'builder_tester',
       'test_results_config': 'staging_server',
       'testing': { 'platform': 'mac', },
       'tests': {
@@ -760,21 +565,6 @@ SPEC = {
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
-    },
-    'ToTMac tester': {
-      'chromium_config': 'chromium_no_goma',
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'ToTMac',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'mac',
-      },
-      'enable_swarming': True,
     },
     'ToTMac (dbg)': {
       'chromium_config': 'clang_tot_mac',
@@ -787,7 +577,7 @@ SPEC = {
       'compile_targets': [
         'all',
       ],
-      'bot_type': 'builder',
+      'bot_type': 'builder_tester',
       'test_results_config': 'staging_server',
       'testing': { 'platform': 'mac', },
       'tests': {
@@ -809,7 +599,7 @@ SPEC = {
       'compile_targets': [
         'all',
       ],
-      'bot_type': 'builder',
+      'bot_type': 'builder_tester',
       'test_results_config': 'staging_server',
       'testing': { 'platform': 'mac', },
       'tests': {
@@ -819,19 +609,6 @@ SPEC = {
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
-    },
-    'ToTMacASan tester': {
-      'chromium_config': 'chromium_mac_asan',
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'ToTMacASan',
-      'test_results_config': 'staging_server',
-      'testing': { 'platform': 'mac', },
-      'enable_swarming': True,
     },
     'ToTWin': {
       'chromium_config': 'chromium_win_clang_official_tot',
@@ -845,7 +622,7 @@ SPEC = {
       'compile_targets': [
         'all',
       ],
-      'bot_type': 'builder',
+      'bot_type': 'builder_tester',
       'test_results_config': 'staging_server',
       'testing': { 'platform': 'win', },
       'tests': { steps.SizesStep(RESULTS_URL, 'ToTWin') },
@@ -853,19 +630,6 @@ SPEC = {
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
-    },
-    'ToTWin tester': {
-      'chromium_config': 'chromium_no_goma',
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'ToTWin',
-      'test_results_config': 'staging_server',
-      'testing': { 'platform': 'win' },
-      'enable_swarming': True,
     },
     'ToTWin(dbg)': {
       'chromium_config': 'chromium_win_clang_tot',
@@ -878,7 +642,7 @@ SPEC = {
       'compile_targets': [
         'all',
       ],
-      'bot_type': 'builder',
+      'bot_type': 'builder_tester',
       'test_results_config': 'staging_server',
       'testing': { 'platform': 'win', },
       'tests': { steps.SizesStep(RESULTS_URL, 'ToTWin(dbg)') },
@@ -886,19 +650,6 @@ SPEC = {
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
-    },
-    'ToTWin(dbg) tester': {
-      'chromium_config': 'chromium_no_goma',
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'ToTWin(dbg)',
-      'test_results_config': 'staging_server',
-      'testing': { 'platform': 'win' },
-      'enable_swarming': True,
     },
     'ToTWin(dll)': {
       'chromium_config': 'chromium_win_clang_tot',
@@ -912,7 +663,7 @@ SPEC = {
         'all',
       ],
       'GYP_DEFINES': { 'component': 'shared_library' },
-      'bot_type': 'builder',
+      'bot_type': 'builder_tester',
       'test_results_config': 'staging_server',
       'testing': { 'platform': 'win', },
       'tests': { steps.SizesStep(RESULTS_URL, 'ToTWin(dll)') },
@@ -920,19 +671,6 @@ SPEC = {
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
-    },
-    'ToTWin(dll) tester': {
-      'chromium_config': 'chromium_no_goma',
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'ToTWin(dll)',
-      'test_results_config': 'staging_server',
-      'testing': { 'platform': 'win' },
-      'enable_swarming': True,
     },
     'ToTWin64': {
       'chromium_config': 'chromium_win_clang_official_tot',
@@ -946,7 +684,7 @@ SPEC = {
       'compile_targets': [
         'all',
       ],
-      'bot_type': 'builder',
+      'bot_type': 'builder_tester',
       'test_results_config': 'staging_server',
       'testing': { 'platform': 'win', },
       'tests': { steps.SizesStep(RESULTS_URL, 'ToTWin64') },
@@ -954,19 +692,6 @@ SPEC = {
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
-    },
-    'ToTWin64 tester': {
-      'chromium_config': 'chromium_no_goma',
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'ToTWin64',
-      'test_results_config': 'staging_server',
-      'testing': { 'platform': 'win' },
-      'enable_swarming': True,
     },
     'ToTWin64(dbg)': {
       'chromium_config': 'chromium_win_clang_tot',
@@ -979,7 +704,7 @@ SPEC = {
       'compile_targets': [
         'all',
       ],
-      'bot_type': 'builder',
+      'bot_type': 'builder_tester',
       'test_results_config': 'staging_server',
       'testing': { 'platform': 'win', },
       'tests': { steps.SizesStep(RESULTS_URL, 'ToTWin64(dbg)') },
@@ -987,19 +712,6 @@ SPEC = {
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
-    },
-    'ToTWin64(dbg) tester': {
-      'chromium_config': 'chromium_no_goma',
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'ToTWin64(dbg)',
-      'test_results_config': 'staging_server',
-      'testing': { 'platform': 'win' },
-      'enable_swarming': True,
     },
     'ToTWin64(dll)': {
       'chromium_config': 'chromium_win_clang_tot',
@@ -1013,7 +725,7 @@ SPEC = {
         'all',
       ],
       'GYP_DEFINES': { 'component': 'shared_library' },
-      'bot_type': 'builder',
+      'bot_type': 'builder_tester',
       'test_results_config': 'staging_server',
       'testing': { 'platform': 'win', },
       'tests': { steps.SizesStep(RESULTS_URL, 'ToTWin64(dll)') },
@@ -1021,19 +733,6 @@ SPEC = {
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
-    },
-    'ToTWin64(dll) tester': {
-      'chromium_config': 'chromium_no_goma',
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'ToTWin64(dll)',
-      'test_results_config': 'staging_server',
-      'testing': { 'platform': 'win' },
-      'enable_swarming': True,
     },
   },
 }
