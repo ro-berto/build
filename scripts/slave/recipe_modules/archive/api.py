@@ -367,9 +367,16 @@ class ArchiveApi(recipe_api.RecipeApi):
     trailing '/' which is inserted in the middle of the URL.
 
     The builder_name, or parent_buildername, is always automatically
-    inserted into the URL."""
+    inserted into the URL.
+
+    If build is running in experimental mode (see recipe_engine.runtime module),
+    then 'experimental/' is prepended to path inside bucket automatically. This
+    protects production builds from intererence from experimentation.
+    """
 
     result = ('gs://' + gs_bucket_name)
+    if self.m.runtime.is_experimental:
+      result += ('/experimental')
     if extra_url_components:
       result += ('/' + extra_url_components)
     if is_download:

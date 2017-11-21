@@ -2,12 +2,15 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from recipe_engine.post_process import Filter
+
 DEPS = [
   'archive',
   'depot_tools/bot_update',
   'depot_tools/gclient',
   'recipe_engine/path',
   'recipe_engine/properties',
+  'recipe_engine/runtime',
 ]
 
 
@@ -35,8 +38,18 @@ def GenTests(api):
   for platform in ('linux', 'mac', 'win'):
     yield (
         api.test(platform) +
+        api.runtime(is_luci=True, is_experimental=False) +
         api.properties(
             buildername='example_buildername',
             gs_acl='public',
             platform=platform)
     )
+  yield (
+      api.test('linux-experimental') +
+      api.runtime(is_luci=False, is_experimental=True) +
+      api.properties(
+          buildername='example_buildername',
+          gs_acl='public',
+          platform='linux') +
+      api.post_process(Filter('zip build'))
+  )
