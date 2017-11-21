@@ -174,6 +174,9 @@ class V8Api(recipe_api.RecipeApi):
     # correspond to the build of a bisect step.
     self._isolated_tests_override = None
 
+    # Cache to compute isolated targets only once.
+    self._isolate_targets_cached = []
+
     # This is inferred from the run_mb step or from the parent bot. If mb is
     # run multiple times, it is overwritten. It contains either gyp or gn
     # properties.
@@ -412,11 +415,14 @@ class V8Api(recipe_api.RecipeApi):
   def relative_path_to_d8(self):
     return self.m.path.join('out', self.m.chromium.c.build_config_fs, 'd8')
 
-  def isolate_tests(self):
+  @property
+  def isolate_targets(self):
+    if self._isolate_targets_cached:
+      return self._isolate_targets_cached
+
     if self.bot_config.get('enable_swarming'):
       mastername = self.m.properties['mastername']
       buildername = self.m.properties['buildername']
-      tests_to_isolate = []
       def add_tests_to_isolate(tests):
         for test in tests:
           if not test.swarming:  # pragma: no cover
@@ -427,9 +433,9 @@ class V8Api(recipe_api.RecipeApi):
           # Tests either define an explicit isolate target or use the test
           # names for convenience.
           if config.get('isolated_target'):
-            tests_to_isolate.append(config['isolated_target'])
+            self._isolate_targets_cached.append(config['isolated_target'])
           elif config.get('tests'):
-            tests_to_isolate.extend(config['tests'])
+            self._isolate_targets_cached.extend(config['tests'])
 
       # Find tests to isolate on builders (requires builder and tester on same
       # master).
@@ -444,16 +450,21 @@ class V8Api(recipe_api.RecipeApi):
       # Add the performance-tests isolate everywhere, where the perf-bot proxy
       # is triggered.
       if self.bot_config.get('triggers_proxy', False):
-        tests_to_isolate.append('perf')
+        self._isolate_targets_cached.append('perf')
 
-      if tests_to_isolate:
-        self.m.isolate.isolate_tests(
-            self.m.chromium.output_dir,
-            targets=sorted(list(set(tests_to_isolate))),
-            verbose=True,
-            set_swarm_hashes=False,
-        )
-        self.upload_isolated_json()
+    self._isolate_targets_cached = sorted(list(set(
+        self._isolate_targets_cached)))
+    return self._isolate_targets_cached
+
+  def isolate_tests(self):
+    if self.isolate_targets:
+      self.m.isolate.isolate_tests(
+          self.m.chromium.output_dir,
+          targets=self.isolate_targets,
+          verbose=True,
+          set_swarm_hashes=False,
+      )
+      self.upload_isolated_json()
 
   def _update_build_environment(self, mb_output):
     """Sets the build_environment property based on gyp or gn properties in mb
