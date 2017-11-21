@@ -121,22 +121,6 @@ SPEC = {
       'enable_swarming': True,
       'serialize_tests': True,
     },
-    'Win7 Release (NVIDIA Quadro P400)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'GPU Win Builder',
-      'testing': {
-        'platform': 'win',
-      },
-      'enable_swarming': True,
-      'serialize_tests': True,
-    },
     'Win7 dEQP Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
@@ -281,23 +265,6 @@ SPEC = {
       },
       # Swarming is deliberately NOT enabled on this one-off configuration.
       # This new hardware is being tested for reliability.
-      'enable_swarming': False,
-    },
-    'Win7 Release (AMD R7 240)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'GPU Win Builder',
-      'testing': {
-        'platform': 'win',
-      },
-      # Swarming is deliberately NOT enabled on this one-off configuration.
-      # These new graphics cards are being tested at the moment.
       'enable_swarming': False,
     },
     'GPU Win x64 Builder': {
@@ -572,22 +539,6 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'GPU Linux Builder (dbg)',
-      'testing': {
-        'platform': 'linux',
-      },
-      'enable_swarming': True,
-      'serialize_tests': True,
-    },
-    'Linux Release (NVIDIA Quadro P400)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'GPU Linux Builder',
       'testing': {
         'platform': 'linux',
       },
