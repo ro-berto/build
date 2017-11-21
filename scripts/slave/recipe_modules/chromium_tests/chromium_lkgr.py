@@ -123,12 +123,10 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder',
-      'disable_tests': True,
       'cf_archive_build': True,
       'cf_gs_bucket': 'chromium-browser-asan',
       'cf_gs_acl': 'public-read',
       'cf_archive_name': 'asan',
-      'compile_targets': [ 'chromium_builder_asan' ],
       'testing': { 'platform': 'linux' },
     },
     'ASAN Release Media': {

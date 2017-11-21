@@ -23,3 +23,10 @@ def GenTests(api):
           mastername='chromium.linux',
           buildername='Linux Builder')
   )
+
+  yield (
+      api.test('disable_tests') +
+      api.properties.generic(
+          mastername='chromium.lkgr',
+          buildername='Win ASan Release')
+  )
