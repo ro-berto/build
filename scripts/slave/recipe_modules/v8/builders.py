@@ -2061,7 +2061,7 @@ BUILDERS = {
           Benchmarks,
           MjsunitSPFrameAccess,
         ] + with_extra_variants(
-            [V8Testing, Test262Variants, Mozilla, Benchmarks]),
+            [V8Testing, Test262Variants(2), Mozilla, Benchmarks]),
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
           'cpu': 'x86-64-avx2',
