@@ -155,6 +155,8 @@
       "[START_DIR]/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma_client",
+      "--swarming-targets-file",
+      "benchmarks\nbot_default\nmjsunit\nmozilla\ntest262\nwebkit\n",
       "--gyp-script=gypfiles/gyp_v8",
       "//out/Debug"
     ],
@@ -166,6 +168,13 @@
     "name": "generate_build_files",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@benchmarks@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@bot_default@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@mjsunit@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@mozilla@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@test262@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@webkit@@@",
+      "@@@STEP_LOG_END@swarming-targets-file.txt@@@",
       "@@@STEP_LOG_LINE@captured_stdout@Writing \"\"\"\\@@@",
       "@@@STEP_LOG_LINE@captured_stdout@goma_dir = \"/b/build/slave/cache/goma_client\"@@@",
       "@@@STEP_LOG_LINE@captured_stdout@target_cpu = \"x86\"@@@",

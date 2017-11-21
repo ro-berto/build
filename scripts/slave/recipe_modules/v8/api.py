@@ -588,6 +588,7 @@ class V8Api(recipe_api.RecipeApi):
             use_goma=use_goma,
             mb_config_path=self.m.path['checkout'].join(
                 'infra', 'mb', 'mb_config.pyl'),
+            isolated_targets=self.isolate_targets,
             gyp_script=self.m.path.join('gypfiles', 'gyp_v8'),
             stdout=self.m.raw_io.output_text(),
             step_test_data=step_test_data,
