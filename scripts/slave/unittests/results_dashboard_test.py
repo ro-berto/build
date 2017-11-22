@@ -448,6 +448,56 @@ class ResultsDashboardSendDataTest(unittest.TestCase):
         [urllib2.URLError('some reason'), urllib2.URLError('some reason')],
         False)
 
+  def _TestSendHistogramResults(
+        self, new_data, expected_data, errors, expected_result,
+        send_as_histograms=False, oauth_token=''):
+    """Test one call of SendResults with the given set of arguments.
+
+    This method will fail a test case if the JSON that gets sent and the
+    errors that are raised when results_dashboard.SendResults is called
+    don't match the expected json and errors.
+
+    Args:
+      new_data: The new (not cached) data to send.
+      expected_data: A list of data expected to be sent.
+      errors: A list of corresponding errors expected to be received.
+      expected_result: Expected return value of SendResults
+    """
+    self.mox.UnsetStubs()
+
+    self.mox.StubOutWithMock(results_dashboard, '_Httplib2Request')
+    for data, error in zip(expected_data, errors):
+      if error:
+        results_dashboard._Httplib2Request(
+            'https://fake.dashboard', json.dumps(data), oauth_token).AndRaise(
+                error)
+      else:
+        results_dashboard._Httplib2Request(
+            'https://fake.dashboard', json.dumps(data), oauth_token).AndReturn(
+                ('', '{}'))
+    self.mox.ReplayAll()
+    result = results_dashboard.SendResults(
+        new_data, 'https://fake.dashboard', self.build_dir,
+        send_as_histograms=send_as_histograms, oauth_token=oauth_token)
+    self.assertEqual(expected_result, result)
+    self.mox.VerifyAll()
+
+  def test_Histogram_FailureRetried(self):
+    """After failing once, the same JSON is sent the next time."""
+    # First, some data is sent but it fails for some reason.
+    self._TestSendHistogramResults(
+        [{'histogram': 'data1'}],
+        [[{'histogram': 'data1'}]],
+        [ValueError('some reason')], True,
+        send_as_histograms=True, oauth_token='fake')
+
+    # The next time, the old data is sent with the new data.
+    self._TestSendHistogramResults(
+        [{'histogram': 'data2'}],
+        [[{'histogram': 'data1'}], [{'histogram': 'data2'}]],
+        [None, None], True,
+        send_as_histograms=True, oauth_token='fake')
+
 
 class ResultsDashboardTest(unittest.TestCase):
   """Tests for other functions in results_dashboard."""

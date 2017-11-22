@@ -13,6 +13,7 @@ import json
 import os
 import subprocess
 import sys
+import traceback
 import urllib
 import urllib2
 
@@ -467,14 +468,20 @@ def _SendResultsJson(url, results_json):
   req = urllib2.Request(url + SEND_RESULTS_PATH, data)
   try:
     urllib2.urlopen(req)
-  except urllib2.HTTPError as e:
-    return 'HTTPError: %d. Reponse: %s\n' % (e.code, e.read())
-  except urllib2.URLError as e:
-    return 'URLError: %s\n' % str(e.reason)
-  except httplib.HTTPException as e:
-    return 'HTTPException %s\n' % e
+  except (urllib2.HTTPError, urllib2.URLError, httplib.HTTPException):
+    return traceback.format_exc()
   return None
 
+def _Httplib2Request(url, data, oauth_token):
+  data = urllib.urlencode({'data': data})
+  headers = {
+      'Authorization': 'Bearer %s' % oauth_token,
+      'User-Agent': 'perf-uploader/1.0'
+  }
+
+  http = httplib2.Http()
+  return http.request(
+      url + SEND_HISTOGRAMS_PATH, method='POST', body=data, headers=headers)
 
 def _SendHistogramJson(url, histogramset_json, oauth_token):
   """POST a HistogramSet JSON to the Performance Dashboard.
@@ -488,23 +495,14 @@ def _SendHistogramJson(url, histogramset_json, oauth_token):
   Returns:
     None if successful, or an error string if there were errors.
   """
-  data = urllib.urlencode({'data': histogramset_json})
-  headers = {
-      'Authorization': 'Bearer %s' % oauth_token,
-      'User-Agent': 'perf-uploader/1.0'
-  }
-  http = httplib2.Http()
   try:
-    _, content = http.request(
-        url + SEND_HISTOGRAMS_PATH, method='POST', body=data, headers=headers)
+    _, content = _Httplib2Request(url, histogramset_json, oauth_token)
     result = json.loads(content) or {}
     error = result.get('error')
     if error is not None:
       return 'HTTP error: %s\n' % error
-  except httplib2.HttpLib2Error as e:
-    return 'HttpLib2Error: %s\n' % e
-  except ValueError as e:
-    return 'ValueError: %s\n' % e
+  except (httplib2.HttpLib2Error, ValueError):
+    return traceback.format_exc()
   return None
 
 def _DashboardUrl(url, data):
