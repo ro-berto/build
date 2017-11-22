@@ -391,7 +391,8 @@ class SwarmingApi(recipe_api.RecipeApi):
   def task(self, title, isolated_hash, ignore_task_failure=False, shards=1,
            task_output_dir=None, extra_args=None, idempotent=None,
            cipd_packages=None, build_properties=None, merge=None,
-           trigger_script=None, named_caches=None, raw_cmd=None):
+           trigger_script=None, named_caches=None, service_account=None,
+           raw_cmd=None):
     """Returns a new SwarmingTask instance to run an isolated executable on
     Swarming.
 
@@ -449,6 +450,7 @@ class SwarmingApi(recipe_api.RecipeApi):
           See SwarmingTask.__init__ docstring for more details.
       named_caches: a dict {name: relpath} requesting a cache named `name`
           to be installed in `relpath` relative to the task root directory.
+      service_account: (string) a service account email to run the task under.
       raw_cmd: Optional list of arguments to be used as raw command. Can be
           used instead of extra args.
 
@@ -478,6 +480,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         merge=merge,
         trigger_script=trigger_script,
         named_caches=named_caches,
+        service_account=service_account,
         raw_cmd=raw_cmd,
       )
 
@@ -609,6 +612,9 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     for name, relpath in sorted(task.named_caches.iteritems()):
       args.extend(['--named-cache', name, relpath])
+
+    if task.service_account:
+      args.extend(['--service-account', task.service_account])
 
     # Default tags.
     tags = set(task.tags)
@@ -1164,7 +1170,7 @@ class SwarmingTask(object):
                user, io_timeout, hard_timeout, idempotent, extra_args,
                collect_step, task_output_dir, cipd_packages=None,
                build_properties=None, merge=None, trigger_script=None,
-               named_caches=None, raw_cmd=None):
+               named_caches=None, service_account=None, raw_cmd=None):
     """Configuration of a swarming task.
 
     Args:
@@ -1232,6 +1238,7 @@ class SwarmingTask(object):
             2. Any additional arguments provided in the "args" entry.
       named_caches: a dict {name: relpath} requesting a cache named `name`
           to be installed in `relpath` relative to the task root directory.
+      service_account: (string) a service account email to run the task under.
       raw_cmd: Optional list of arguments to be used as raw command. Can be
           used instead of extra args.
     """
@@ -1252,6 +1259,7 @@ class SwarmingTask(object):
     self.isolated_hash = isolated_hash
     self.merge = merge or {}
     self.named_caches = named_caches or {}
+    self.service_account = service_account
     self.trigger_script = trigger_script or {}
     self.priority = priority
     self.raw_cmd = tuple(raw_cmd or [])

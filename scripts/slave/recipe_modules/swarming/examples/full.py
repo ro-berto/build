@@ -30,11 +30,12 @@ PROPERTIES = {
   'merge': Property(default=None),
   'trigger_script': Property(default=None),
   'named_caches': Property(default=None),
+  'service_account': Property(default=None),
 }
 
 def RunSteps(api, platforms, show_isolated_out_in_collect_step,
              show_shards_in_collect_step, gtest_task, isolated_script_task,
-             merge, trigger_script, named_caches):
+             merge, trigger_script, named_caches, service_account):
   # Checkout swarming client.
   api.swarming_client.checkout('master')
 
@@ -111,7 +112,8 @@ def RunSteps(api, platforms, show_isolated_out_in_collect_step,
     else:
       task = api.swarming.task('hello_world', isolated_hash,
                               task_output_dir=temp_dir.join('task_output_dir'),
-                              named_caches=named_caches)
+                              named_caches=named_caches,
+                              service_account=service_account)
     task.dimensions['os'] = api.swarming.prefered_os_dimension(platform)
     task.shards = 2 if platform == 'linux' else 1
     task.tags.add('os:' + platform)
@@ -169,6 +171,22 @@ def GenTests(api):
       api.properties(
           platforms=('mac',),
           named_caches={'foo': 'cache/foo', 'bar': 'cache/bar'}))
+
+  yield (
+      api.test('service_account') +
+      api.step_data(
+          'archive for win',
+          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
+      api.step_data(
+          'archive for linux',
+          stdout=api.raw_io.output_text(
+            'hash_for_linux hello_world.isolated')) +
+      api.step_data(
+          'archive for mac',
+          stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')) +
+      api.properties(
+          platforms=('win', 'linux', 'mac',),
+          service_account='test@example.com'))
 
   yield (
       api.test('rietveld_trybot') +
