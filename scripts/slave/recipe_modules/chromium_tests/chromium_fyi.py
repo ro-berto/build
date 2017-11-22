@@ -148,8 +148,7 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'archive_build': True,
-      'gs_bucket': 'chromium-fyi-archive',
+      'archive_build': False,
       'enable_swarming': True,
       'swarming_dimensions': {
         'cpu': 'armv7l-32',
