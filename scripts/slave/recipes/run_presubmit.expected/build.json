@@ -157,7 +157,8 @@
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]",
       "PYTHONPATH": ""
     },
-    "name": "presubmit"
+    "name": "presubmit",
+    "timeout": 480
   },
   {
     "name": "$result",

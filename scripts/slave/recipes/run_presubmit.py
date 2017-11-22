@@ -94,7 +94,12 @@ def _RunStepsInternal(api):
 
   try:
     with api.context(env=env):
-      api.presubmit(*presubmit_args, venv=venv)
+      # 8 minutes seems like a reasonable upper bound on presubmit timings.
+      # According to event mon data we have, it seems like anything longer than
+      # this is a bug, and should just instant fail.
+      api.presubmit(*presubmit_args, venv=venv, timeout=8 * 60)
+  except api.step.StepTimeout:
+    raise
   except api.step.StepFailure as step_failure:
     if step_failure.result and step_failure.result.retcode == 1:
       api.tryserver.set_test_failure_tryjob_result()
@@ -139,6 +144,17 @@ def GenTests(api):
       api.step_data('presubmit', api.json.output([['%s_presubmit' % repo_name,
                                                    ['compile']]]))
     )
+
+  yield (
+    api.test('chromium_timeout') +
+    api.properties.tryserver(
+        mastername='tryserver.chromium.linux',
+        buildername='chromium_presubmit',
+        repo_name='chromium',
+        gerrit_project='chromium/src') +
+    api.step_data('presubmit', api.json.output(
+        [['chromium_presubmit', ['compile']]]), times_out_after=60*20)
+  )
 
   yield (
     api.test('chromium_dry_run') +

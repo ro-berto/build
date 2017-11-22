@@ -169,7 +169,8 @@
     "env": {
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
-    "name": "presubmit"
+    "name": "presubmit",
+    "timeout": 480
   },
   {
     "name": "$result",
