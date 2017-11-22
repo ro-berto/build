@@ -835,8 +835,10 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      'enable_swarming': True,
-      'serialize_tests': True,
+      # Swarming is deliberately NOT enabled on this one-off configuration.
+      # Multiple copies of the machines have to be deployed into swarming
+      # in order to keep up with the faster cycle time of the tests.
+      'enable_swarming': False,
     },
     'Mac Experimental Retina Release (AMD)': {
       'chromium_config': 'chromium',
@@ -851,8 +853,10 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      'enable_swarming': True,
-      'serialize_tests': True,
+      # Swarming is deliberately NOT enabled on this one-off configuration.
+      # Multiple copies of the machines have to be deployed into swarming
+      # in order to keep up with the faster cycle time of the tests.
+      'enable_swarming': False,
     },
     'Mac Experimental Retina Release (NVIDIA)': {
       'chromium_config': 'chromium',

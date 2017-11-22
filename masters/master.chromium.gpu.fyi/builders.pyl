@@ -804,7 +804,7 @@
         "os": "mac",
         "version": "10.12",
       },
-      "slaves": ["build450-m1"],
+      "slaves": ["build71-m1"],
     },
     "mac_exp_retina_rel_amd": {
       "slave_data": {
@@ -812,7 +812,7 @@
         "os": "mac",
         "version": "10.12",
       },
-      "slaves": ["build451-m1"],
+      "slaves": ["build52-b1"],
     },
     "mac_exp_retina_rel_nvidia": {
       "slave_data": {
