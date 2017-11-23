@@ -3,6 +3,7 @@
 /bootstrap.py                 recipes
 /build_directory.py           recipes
 /goma_utils.py                recipes
+/kill_processes.py            recipes
 /slave_utils.py               recipes
 /upload_goma_logs.py          recipes
 /zip_build.py                 recipes
