@@ -3116,3 +3116,18 @@ def iter_builders(recipe='v8'):
       if bot_config.get('recipe', 'v8') != recipe:
         continue
       yield mastername, builders, buildername, bot_config
+
+def iter_builder_set(mastername, buildername, recipe='v8'):
+  """Iterates tuples of (buildername, bot_config).
+
+  Args:
+    mastername: Limits iteration to builders on the same master.
+    buildername: Limits iteration to this builder and all its children on the
+        same master (triggered testers).
+    recipe: Limits iteration to a specific recipe (default: v8).
+  """
+  for it_mastername, _, it_buildername, bot_config in iter_builders(recipe):
+    if (it_mastername == mastername and
+        (bot_config.get('parent_buildername') == buildername or
+         it_buildername == buildername)):
+      yield it_buildername, bot_config

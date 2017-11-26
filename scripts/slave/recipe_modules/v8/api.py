@@ -10,7 +10,7 @@ import random
 import re
 import urllib
 
-from builders import iter_builders
+from builders import iter_builder_set
 from recipe_engine.types import freeze
 from recipe_engine import recipe_api
 from . import bisection
@@ -90,6 +90,28 @@ class V8Version(object):
     blob = sub(V8_MINOR, self.minor, blob)
     blob = sub(V8_BUILD, self.build, blob)
     return sub(V8_PATCH, self.patch, blob)
+
+
+def isolate_targets_from_tests(tests):
+  """Returns the isolated targets associated with a list of tests.
+
+  Args:
+    tests: A list of builders.TestStepConfig objects.
+  """
+  targets = []
+  for test in tests:
+    if not test.swarming:  # pragma: no cover
+      # Skip tests that explicitly disable swarming.
+      continue
+    config = testing.TEST_CONFIGS.get(test.name) or {}
+
+    # Tests either define an explicit isolate target or use the test
+    # names for convenience.
+    if config.get('isolated_target'):
+      targets.append(config['isolated_target'])
+    elif config.get('tests'):
+      targets.extend(config['tests'])
+  return targets
 
 
 class V8Api(recipe_api.RecipeApi):
@@ -423,29 +445,12 @@ class V8Api(recipe_api.RecipeApi):
     if self.bot_config.get('enable_swarming'):
       mastername = self.m.properties['mastername']
       buildername = self.m.properties['buildername']
-      def add_tests_to_isolate(tests):
-        for test in tests:
-          if not test.swarming:  # pragma: no cover
-            # Skip tests that explicitly disable swarming.
-            continue
-          config = testing.TEST_CONFIGS.get(test.name) or {}
-
-          # Tests either define an explicit isolate target or use the test
-          # names for convenience.
-          if config.get('isolated_target'):
-            self._isolate_targets_cached.append(config['isolated_target'])
-          elif config.get('tests'):
-            self._isolate_targets_cached.extend(config['tests'])
 
       # Find tests to isolate on builders (requires builder and tester on same
       # master).
-      for parent_mastername, _, _, bot_config in iter_builders():
-        if (parent_mastername == mastername and
-            bot_config.get('parent_buildername') == buildername):
-          add_tests_to_isolate(bot_config.get('tests', []))
-
-      # Find tests to isolate on builder_testers.
-      add_tests_to_isolate(self.bot_config.get('tests', []))
+      for _, bot_config in iter_builder_set(mastername, buildername):
+        self._isolate_targets_cached.extend(
+            isolate_targets_from_tests(bot_config.get('tests', [])))
 
       # Add the performance-tests isolate everywhere, where the perf-bot proxy
       # is triggered.
