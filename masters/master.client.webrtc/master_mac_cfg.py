@@ -40,6 +40,7 @@ def Update(c):
           'iOS32 Sim Debug (iOS 9.0)',
           'iOS64 Sim Debug (iOS 9.0)',
           'iOS64 Sim Debug (iOS 10.0)',
+          'iOS64 Sim Debug (iOS 11.0)',
           'iOS API Framework Builder',
       ]),
   ])
@@ -86,6 +87,11 @@ def Update(c):
     },
     {
       'name': 'iOS64 Sim Debug (iOS 10.0)',
+      'slavebuilddir': 'mac64',
+      'recipe': 'webrtc/ios',
+    },
+    {
+      'name': 'iOS64 Sim Debug (iOS 11.0)',
       'slavebuilddir': 'mac64',
       'recipe': 'webrtc/ios',
     },
