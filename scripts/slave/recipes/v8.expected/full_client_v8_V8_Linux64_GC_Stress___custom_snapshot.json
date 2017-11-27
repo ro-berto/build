@@ -178,7 +178,7 @@
       "mjsunit",
       "--gc-stress",
       "--no-harness",
-      "--exhaustive-variants",
+      "--variants=more,dev",
       "--rerun-failures-count=2",
       "--swarming",
       "--json-test-results",

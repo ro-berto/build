@@ -568,7 +568,7 @@
       "--timeout=200",
       "--random-seed=1037194807",
       "unittests",
-      "--exhaustive-variants",
+      "--variants=more,dev",
       "--rerun-failures-count=2",
       "--swarming",
       "--json-test-results",

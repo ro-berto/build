@@ -433,7 +433,7 @@
       "--timeout=200",
       "--random-seed=-358114921",
       "mjsunit",
-      "--exhaustive-variants",
+      "--variants=more,dev",
       "--rerun-failures-count=2",
       "--json-test-results",
       "/path/to/tmp/json"
@@ -513,7 +513,7 @@
       "--timeout=200",
       "--random-seed=-358114921",
       "webkit",
-      "--exhaustive-variants",
+      "--variants=more,dev",
       "--rerun-failures-count=2",
       "--json-test-results",
       "/path/to/tmp/json"
@@ -551,7 +551,7 @@
       "--timeout=200",
       "--random-seed=-358114921",
       "benchmarks",
-      "--exhaustive-variants",
+      "--variants=more,dev",
       "--rerun-failures-count=2",
       "--json-test-results",
       "/path/to/tmp/json"
@@ -589,7 +589,7 @@
       "--timeout=200",
       "--random-seed=-358114921",
       "mozilla",
-      "--exhaustive-variants",
+      "--variants=more,dev",
       "--rerun-failures-count=2",
       "--json-test-results",
       "/path/to/tmp/json"

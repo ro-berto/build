@@ -40,7 +40,7 @@ class V8TestingVariants(object):
 
 class V8ExhaustiveVariants(V8TestingVariants):
   def __init__(self):
-    self.test_args = ['--exhaustive-variants']
+    self.test_args = ['--variants=more,dev']
 
   def _specify(self, previous):
     # Keep the previous as it's either exhaustive already or more specific.

@@ -465,7 +465,7 @@
       "--timeout=200",
       "--random-seed=-358114921",
       "bot_default",
-      "--exhaustive-variants",
+      "--variants=more,dev",
       "--command_prefix",
       "[START_DIR]/dynamorio/build/bin64/drrun -reset_every_nth_pending 0 --",
       "--rerun-failures-count=2",
