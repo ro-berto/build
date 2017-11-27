@@ -89,7 +89,7 @@
   {
     "cmd": [
       "vpython",
-      "-spec",
+      "-vpython-spec",
       "[START_DIR]/infra/luci/.vpython",
       "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]/presubmit_support.py",
