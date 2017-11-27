@@ -441,9 +441,9 @@ TRYBOTS = freeze({
         ],
       },
     },
-    'leak_detection_linux_perf': simple_bot({
-        'mastername': 'chromium.perf.fyi',
-        'buildername': 'Leak Detection Linux Perf',
+    'leak_detection_linux': simple_bot({
+        'mastername': 'chromium.fyi',
+        'buildername': 'Leak Detection Linux',
     }),
   },
   'tryserver.chromium.chromiumos': {
