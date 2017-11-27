@@ -63,8 +63,8 @@ class PerfDashboardApi(recipe_api.RecipeApi):
     # TODO: Remove.
     pass
 
-  def add_point(self, data, halt_on_failure=False):
-    return self.post('perf dashboard post',
+  def add_point(self, data, halt_on_failure=False, name=None):
+    return self.post(name or 'perf dashboard post',
                      '%s/add_point' % _BASE_URL,
                      {'data': json.dumps(data)}, halt_on_failure)
 
