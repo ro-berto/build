@@ -6,13 +6,13 @@
 # from multiple recipes.
 
 from recipe_engine.types import freeze
-from testing import V8NoExhaustiveVariants, V8Variant, V8VariantNeutral
+from testing import V8NoExhaustiveVariants, V8Variant
 
 
 class TestStepConfig(object):
   """Per-step test configuration."""
   def __init__(self, name, shards=1, swarming=True, suffix='', test_args=None,
-               variants=V8VariantNeutral):
+               variants=None):
     self.name = name
     self.shards = shards
     self.swarming = swarming
@@ -44,7 +44,7 @@ V8Testing = TestStepConfig('v8testing')
 Webkit = TestStepConfig('webkit')
 
 
-def with_test_args(suffix, test_args, tests, variants=V8VariantNeutral):
+def with_test_args(suffix, test_args, tests, variants=None):
   """Wrapper that runs a list of tests with additional arguments."""
   return [
     TestStepConfig(t.name, t.shards, t.swarming, suffix, test_args, variants)
@@ -257,7 +257,7 @@ BUILDERS = {
           Test262(2),
           Mozilla,
         ],
-        'variants': V8NoExhaustiveVariants(),
+        'variants': V8NoExhaustiveVariants,
         'testing': {'platform': 'linux'},
         'swarming_properties': SWARMING_FYI_PROPS,
       },
@@ -271,7 +271,7 @@ BUILDERS = {
         'build_gs_archive': 'linux_nosnap_dbg_archive',
         'enable_swarming': True,
         'tests': [V8Testing(7)],
-        'variants': V8NoExhaustiveVariants(),
+        'variants': V8NoExhaustiveVariants,
         'testing': {'platform': 'linux'},
         'swarming_properties': SWARMING_FYI_PROPS,
       },
@@ -297,7 +297,7 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [V8Testing, Mozilla, Test262],
-        'variants': V8NoExhaustiveVariants(),
+        'variants': V8NoExhaustiveVariants,
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - verify csa': {
@@ -556,7 +556,7 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [V8Testing(2)],
-        'variants': V8NoExhaustiveVariants(),
+        'variants': V8NoExhaustiveVariants,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
           'cpu': 'x86-64',
@@ -1018,7 +1018,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'tests': [V8Testing],
-        'variants': V8NoExhaustiveVariants(),
+        'variants': V8NoExhaustiveVariants,
         'testing': {'platform': 'linux'},
       },
     },
@@ -1362,7 +1362,7 @@ BUILDERS = {
         'enable_swarming': True,
         'parent_buildername': 'V8 Linux64 - release builder',
         'tests': [Deopt],
-        'variants': V8NoExhaustiveVariants(),
+        'variants': V8NoExhaustiveVariants,
         'testing': {'platform': 'linux'},
         'swarming_properties': SWARMING_FYI_PROPS,
       },
@@ -1376,7 +1376,7 @@ BUILDERS = {
         'enable_swarming': True,
         'parent_buildername': 'V8 Linux64 - debug builder',
         'tests': [Deopt],
-        'variants': V8NoExhaustiveVariants(),
+        'variants': V8NoExhaustiveVariants,
         'testing': {'platform': 'linux'},
         'swarming_properties': {
           'default_expiration': 2 * 60 * 60,
@@ -1401,7 +1401,7 @@ BUILDERS = {
             ['--coverage=1.0'],
             [GCFuzz],
         ),
-        'variants': V8NoExhaustiveVariants(),
+        'variants': V8NoExhaustiveVariants,
         'testing': {'platform': 'linux'},
         'swarming_properties': {
           'default_expiration': 2 * 60 * 60,
@@ -1426,7 +1426,7 @@ BUILDERS = {
             ['--coverage=0.9'],
             [GCFuzz],
         ),
-        'variants': V8NoExhaustiveVariants(),
+        'variants': V8NoExhaustiveVariants,
         'testing': {'platform': 'linux'},
         'swarming_properties': {
           'default_expiration': 2 * 60 * 60,
@@ -1537,7 +1537,7 @@ BUILDERS = {
           V8Testing(3),
           OptimizeForSize,
         ],
-        'variants': V8NoExhaustiveVariants(),
+        'variants': V8NoExhaustiveVariants,
         'enable_swarming': True,
         'swarming_properties': {
           'default_hard_timeout': 60 * 60,
@@ -1618,7 +1618,7 @@ BUILDERS = {
             'novfp3',
             ['--novfp3'],
             [V8Testing(4), Test262, Mozilla],
-            V8NoExhaustiveVariants(),
+            V8NoExhaustiveVariants,
         ) + with_extra_variants([V8Testing]),
         'testing': {'platform': 'linux'},
       },
@@ -1745,7 +1745,7 @@ BUILDERS = {
         'parent_buildername': 'V8 Mips - builder',
         'build_gs_archive': 'mips_rel_archive',
         'tests': [V8Testing],
-        'variants': V8NoExhaustiveVariants(),
+        'variants': V8NoExhaustiveVariants,
         'testing': {'platform': 'linux'},
       },
       'V8 Mips - big endian - nosnap - 2': {
@@ -1760,7 +1760,7 @@ BUILDERS = {
         'parent_buildername': 'V8 Mips - builder',
         'build_gs_archive': 'mips_rel_archive',
         'tests': [V8Testing],
-        'variants': V8NoExhaustiveVariants(),
+        'variants': V8NoExhaustiveVariants,
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - mipsel - sim - builder': {
@@ -2095,7 +2095,7 @@ BUILDERS = {
           Test262,
           Mozilla,
         ],
-        'variants': V8NoExhaustiveVariants(),
+        'variants': V8NoExhaustiveVariants,
         'testing': {'platform': 'linux'},
       },
       'v8_linux_nosnap_rel': {
@@ -2108,7 +2108,7 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [V8Testing(4)],
-        'variants': V8NoExhaustiveVariants(),
+        'variants': V8NoExhaustiveVariants,
         'testing': {'platform': 'linux'},
       },
       'v8_linux_nosnap_dbg': {
@@ -2121,7 +2121,7 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [V8Testing(5)],
-        'variants': V8NoExhaustiveVariants(),
+        'variants': V8NoExhaustiveVariants,
         'testing': {'platform': 'linux'},
         'swarming_properties': {
           'default_hard_timeout': 60 * 60,
@@ -2600,7 +2600,7 @@ BUILDERS = {
           'cpu': 'x86-64',
         },
         'tests': [V8Testing(3)],
-        'variants': V8NoExhaustiveVariants(),
+        'variants': V8NoExhaustiveVariants,
         'testing': {'platform': 'linux'},
       },
       'v8_win64_msvc_compile_rel': {

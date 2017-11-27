@@ -2,78 +2,39 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import itertools
 import re
 from recipe_engine.types import freeze
 
 
-class V8TestingVariants(object):
-  """Immutable class to manage the testing variant passed to v8.
+class V8Variant(object):
+  """Immutable class representing testing variants passed to v8."""
+  def __init__(self, *variants):
+    self.variants = variants
 
-  There are several test-runner flags that determine the v8-side testing
-  variants to be used. This class manages passing those flags to the runner
-  and makes sure that only one such flag is passed.
+# Spectial marker to indicate bots or tests that should only run with standard
+# or specific variants.
+V8NoExhaustiveVariants = object()
 
-  Infra test configurations might specify the variants on different levels,
-  e.g. per test, per step or per builder. This class makes sure that the
-  most specific variants are used.
+def test_args_from_variants(*variants):
+  """Merge variant specification from bot, test type and test step.
 
-  The variants have the following allowed transitions:
-  exhaustive variants -> no exhaustive variants -> one specific variant
+  Returns: Flags for the v8 test driver with either 1) all specific
+      variants if any, or 2) the exhaustive testing default if the
+      V8NoExhaustiveVariants marker wasn't used (e.g. on slow bots), or 3)
+      the default (no parameters).
   """
-  def __init__(self):
-    self.test_args = []
-
-  def __eq__(self, other):
-    assert isinstance(other, V8TestingVariants)
-    return self.test_args == other.test_args
-
-  def __add__(self, right):
-    """Use + to specify variants with the more specific one on the right-hand
-    side.
-    """
-    assert isinstance(right, V8TestingVariants)
-    return right._specify(self)
-
-  def _specify(self, previous):  # pragma: no cover
-    raise NotImplementedError()
-
-
-class V8ExhaustiveVariants(V8TestingVariants):
-  def __init__(self):
-    self.test_args = ['--variants=more,dev']
-
-  def _specify(self, previous):
-    # Keep the previous as it's either exhaustive already or more specific.
-    return previous
-
-
-class V8NoExhaustiveVariants(V8TestingVariants):
-  def _specify(self, previous):
-    # This is used to remove the default exhaustive variants on some bots.
-    if isinstance(previous, V8ExhaustiveVariants):
-      return self
-    else:
-      return previous
-
-
-class V8Variant(V8TestingVariants):
-  def __init__(self, name):
-    self.test_args = ['--variants=' + name]
-
-  def _specify(self, previous):
-    # A specific variant cannot be replaced by a different one. E.g. if a
-    # builder is specified to run with the default it can't have a test step
-    # that runs ignition only.
-    assert not isinstance(previous, V8Variant) or self == previous
-    return self
-
-
-class _V8VariantNeutral(V8TestingVariants):
-  """Convenience null object to specify effectless default values."""
-  def _specify(self, previous):
-    return previous
-
-V8VariantNeutral = _V8VariantNeutral()
+  specific_variants = [
+    v for v in variants if v and v != V8NoExhaustiveVariants]
+  _variants = []
+  if specific_variants:
+    _variants = sorted(list(set(itertools.chain(
+        *[v.variants for v in specific_variants]))))
+  elif V8NoExhaustiveVariants not in variants:
+    _variants = ['more', 'dev']
+  if _variants:
+    return ['--variants=' + ','.join(_variants)]
+  return []
 
 
 TEST_CONFIGS = freeze({

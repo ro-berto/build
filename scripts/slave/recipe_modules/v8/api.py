@@ -1187,10 +1187,11 @@ class V8Api(recipe_api.RecipeApi):
     full_args += self.c.testing.test_args
 
     # Add builder-, test- and step-specific variants.
-    variants = self.bot_config.get('variants', testing.V8ExhaustiveVariants())
-    variants += test.get('variants', variants)
-    variants += test_step_config.variants
-    full_args += variants.test_args
+    full_args += testing.test_args_from_variants(
+        self.bot_config.get('variants'),
+        test.get('variants'),
+        test_step_config.variants,
+    )
 
     # Add step-specific test arguments.
     full_args += test_step_config.test_args
