@@ -142,9 +142,6 @@ BUILDERS = freeze({
   'Android Cronet MIPS Builder': {
     'recipe_config': 'mipsel_builder_mb',
     'run_tests': False,
-    'cronet_kwargs': {
-      'PERF_ID': 'android_cronet_mips_builder',
-    },
     'kwargs': {
       'BUILD_CONFIG': 'Release',
     },
