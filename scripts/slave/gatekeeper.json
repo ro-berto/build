@@ -11,6 +11,11 @@
         ],
 
         "builders": {
+          "Linux x64": {
+            "tree_notify": [
+              "thomasanderson@chromium.org"
+            ]
+          },
           "Win": {
             "categories": [
               "chromium_windows"
@@ -174,6 +179,11 @@
           "chromium_tree_closer"
         ],
         "builders": {
+          "Google Chrome Linux x64": {
+            "tree_notify": [
+              "thomasanderson@chromium.org"
+            ]
+          },
           "*": {}
         }
       }
@@ -256,6 +266,19 @@
         "excluded_steps": [
           "webgl_conformance_tests"
         ]
+      }
+    ],
+    "https://build.chromium.org/p/chromium.clang": [
+      {
+        "close_tree": false,
+        "builders": {
+          "ToTLinux*": {
+            "forgiving_optional": [ "*" ],
+            "tree_notify": [
+              "thomasanderson@chromium.org"
+            ]
+          }
+        }
       }
     ],
     "https://build.chromium.org/p/chromium.infra.cron": [
@@ -353,6 +376,9 @@
           "Fuchsia ARM64 Cast Audio",
           "Fuchsia ARM64",
           "Fuchsia x64 Cast Audio"
+        ],
+        "tree_notify": [
+          "thomasanderson@chromium.org"
         ]
       },
       {
@@ -424,6 +450,11 @@
           "chromium_tree_closer"
         ],
         "builders": {
+          "Linux*": {
+            "tree_notify": [
+              "thomasanderson@chromium.org"
+            ]
+          },
           "*": {}
         }
       }
@@ -675,6 +706,18 @@
           "Fuchsia": {
             "tree_notify": [
               "cr-fuchsia+bot@chromium.org"
+            ],
+            "forgiving_optional": ["*"]
+          },
+          "Headless Linux (dbg)": {
+            "tree_notify": [
+              "thomasanderson@chromium.org"
+            ],
+            "forgiving_optional": ["*"]
+          },
+          "Linux ARM": {
+            "tree_notify": [
+              "thomasanderson@chromium.org"
             ],
             "forgiving_optional": ["*"]
           },
