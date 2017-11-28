@@ -19,10 +19,47 @@ class TestStepConfig(object):
     self.suffix = ' - ' + suffix if suffix else ''
     self.test_args = test_args or []
     self.variants = variants
+    if not suffix and variants:
+      # Disambiguate step names if a particular variant is specified and no
+      # default suffix is provided.
+      self.suffix = ' - %s' % variants
 
   def __call__(self, shards):
     return TestStepConfig(self.name, shards, self.swarming, self.suffix,
                           self.test_args, self.variants)
+
+  def __str__(self):
+    return '%s(%d) %s' % (self.name, self.shards, self.variants)
+
+  def pack(self):
+    """Returns a serializable version of this object.
+
+    This method is the counterpart to the method below.
+    """
+    # We don't support test_args. Make sure they're not used.
+    assert not self.test_args
+    return [self.name, self.shards, self.variants.pack()]
+
+  @staticmethod
+  def unpack(packed):
+    """Constructs a test-step config from a serialized version of this class.
+
+    This method is the counterpart to the method ablve.
+    """
+    return TestStepConfig(
+        name=packed[0],
+        shards=packed[1],
+        variants=V8Variant.unpack(packed[2]),
+    )
+
+  @staticmethod
+  def from_test_spec(spec):
+    """Constructs a test-step config from the V8-side pyl test spec."""
+    return TestStepConfig(
+        name=spec['name'],
+        shards=spec.get('shards', 1),
+        variants=V8Variant(spec['variant'])
+    )
 
 
 # Top-level test configs for convenience.

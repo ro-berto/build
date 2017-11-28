@@ -3,14 +3,16 @@
 # found in the LICENSE file.
 
 import argparse
+import ast
 import contextlib
 import datetime
 import difflib
+import itertools
 import random
 import re
 import urllib
 
-from builders import iter_builder_set
+from builders import TestStepConfig, iter_builder_set
 from recipe_engine.types import freeze
 from recipe_engine import recipe_api
 from . import bisection
@@ -437,6 +439,99 @@ class V8Api(recipe_api.RecipeApi):
   def relative_path_to_d8(self):
     return self.m.path.join('out', self.m.chromium.c.build_config_fs, 'd8')
 
+  def _test_spec_to_properties(self, buildername, test_spec):
+    """Packs a test spec and returns it as a properties dict to be passed to
+    another builder.
+
+    This method is the counterpart to the method below.
+    """
+    packed_spec = [t.pack() for t in (test_spec or {}).get(buildername, [])]
+    # TODO(machenbach): Remove this restriction post-buildbot.
+    assert len(self.m.json.dumps(packed_spec)) < 1024
+    if packed_spec:
+      return {'parent_test_spec': packed_spec}
+    return {}
+
+  def _test_spec_from_properties(self):
+    """Unpacks a test spec provided by another builder via properties.
+
+    This method is the counterpart to the method above.
+    """
+    return [
+      TestStepConfig.unpack(packed_spec)
+      for packed_spec in self.m.properties.get('parent_test_spec', [])
+    ]
+
+  def extra_tests_from_properties(self):
+    """Returns runnable testing.BaseTest objects for each extra test specified
+    by parent_test_spec property.
+
+    The parent_test_spec property is expected to contain a list of packed
+    builders.TestStepConfig objects.
+    """
+    return [
+      testing.create_test(test, self.m)
+      for test in self._test_spec_from_properties()
+    ]
+
+  def extra_tests_from_test_spec(self, test_spec):
+    """Returns runnable testing.BaseTest objects for each extra test specified
+    in the test spec of the current builder.
+    """
+    return [
+      testing.create_test(test, self.m)
+      for test in test_spec.get(self.m.properties['buildername'], [])
+    ]
+
+  def read_test_spec(self):
+    """Reads a test specification file under v8/infra/testing/<mastername>.pyl.
+
+    Returns: Test spec, filtered by interesting builders (current builder and
+        all its triggered testers). The format is a mapping of builder name
+        to list of builders.TestStepConfig objects. The test-step configs
+        can be used by the V8 api to create runnable test steps.
+    """
+    mastername = self.m.properties['mastername']
+    buildername = self.m.properties['buildername']
+    test_spec_file = self.m.path['checkout'].join(
+        'infra', 'testing', mastername + '.pyl')
+
+    # Source-side test spec is opt-in. Just ignore it if the file doesn't
+    # exist for the current master.
+    if not self.m.path.exists(test_spec_file):
+      return {}
+
+    try:
+      # Eval python literal file.
+      full_test_spec = ast.literal_eval(self.m.file.read_text(
+          'read test spec',
+          test_spec_file,
+          test_data='{}',
+      ))
+    except SyntaxError as e:  # pragma: no cover
+      raise self.m.step.InfraFailure(
+          'Failed to parse test specification "%s": %s' % (test_spec_file, e))
+
+    # Iterate over the current builder and all its triggered testers. Transform
+    # the pyl structure into a test-step configuration with TestStepConfig
+    # objects for all builders that apply.
+    test_spec = {}
+    for iter_buildername, _ in iter_builder_set(mastername, buildername):
+      if full_test_spec.get(iter_buildername):
+        test_spec[iter_buildername] = [
+          TestStepConfig.from_test_spec(t)
+          for t in full_test_spec[iter_buildername]
+        ]
+
+    # Log test spec for debuggability.
+    log = []
+    for builder, tests in sorted(test_spec.iteritems()):
+      log.append(builder)
+      for test in tests:
+        log.append('  ' + str(test))
+    self.m.step.active_result.presentation.logs['test_spec'] = log
+    return test_spec
+
   @property
   def isolate_targets(self):
     if self._isolate_targets_cached:
@@ -461,11 +556,18 @@ class V8Api(recipe_api.RecipeApi):
         self._isolate_targets_cached)))
     return self._isolate_targets_cached
 
-  def isolate_tests(self):
-    if self.isolate_targets:
+  def isolate_tests(self, extra_targets=None):
+    """Upload isolated tests to isolate server.
+
+    Args:
+      extra_targets: More targets to isolate.
+    """
+    isolate_targets = sorted(list(set(
+        self.isolate_targets + (extra_targets or []))))
+    if isolate_targets:
       self.m.isolate.isolate_tests(
           self.m.chromium.output_dir,
-          targets=self.isolate_targets,
+          targets=isolate_targets,
           verbose=True,
           set_swarm_hashes=False,
       )
@@ -572,7 +674,15 @@ class V8Api(recipe_api.RecipeApi):
       points.append(p)
     self.m.perf_dashboard.add_point(points)
 
-  def compile(self, **kwargs):
+  def compile(self, test_spec=None, **kwargs):
+    """Compile all desired targets and isolate tests.
+
+    Args:
+      test_spec: Optional test specification in the format returned by
+          read_test_spec(). Expected to contain only specifications for the
+          current builder and all triggered builders. All corrensponding extra
+          targets will also be isolated.
+    """
     use_goma = (self.m.chromium.c.compile_py.compiler and
                 'goma' in self.m.chromium.c.compile_py.compiler)
     if self.m.chromium.c.project_generator.tool == 'mb':
@@ -646,7 +756,12 @@ class V8Api(recipe_api.RecipeApi):
         tracking_config['category'],
       )
 
-    self.isolate_tests()
+    # Calculate extra targets to isolate from V8-side test specification. The
+    # test_spec contains extra TestStepConfig objects for the current builder
+    # and all its triggered builders.
+    extra_targets = isolate_targets_from_tests(
+        itertools.chain(*(test_spec or {}).values()))
+    self.isolate_tests(extra_targets)
 
   # TODO(machenbach): This should move to a dynamorio module as soon as one
   # exists.
@@ -1217,7 +1332,7 @@ class V8Api(recipe_api.RecipeApi):
     if key in src:
       dest[key] = src[key]
 
-  def maybe_trigger(self, **additional_properties):
+  def maybe_trigger(self, test_spec=None, **additional_properties):
     triggers = self.bot_config.get('triggers', [])
     triggers_proxy = self.bot_config.get('triggers_proxy', False)
     if triggers or triggers_proxy:
@@ -1288,7 +1403,11 @@ class V8Api(recipe_api.RecipeApi):
                   'bucket': 'master.%s' % self.m.properties['mastername'],
                   'parameters': {
                     'builder_name': builder_name,
-                    'properties': trigger_props,
+                    # Attach additional builder-specific test-spec properties.
+                    'properties': dict(
+                        trigger_props,
+                        **self._test_spec_to_properties(builder_name, test_spec)
+                    ),
                     # Generate a list of fake changes from the blamelist
                     # property to have correct blamelist displayed on the child
                     # build. Unfortunately, this only copies author names, but
@@ -1315,7 +1434,11 @@ class V8Api(recipe_api.RecipeApi):
       else:
         self.m.trigger(*[{
           'builder_name': builder_name,
-          'properties': properties,
+          # Attach additional builder-specific test-spec properties.
+          'properties': dict(
+              properties,
+              **self._test_spec_to_properties(builder_name, test_spec)
+          ),
         } for builder_name in triggers])
 
       if triggers_proxy:

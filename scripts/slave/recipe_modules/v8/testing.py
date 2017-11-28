@@ -12,6 +12,24 @@ class V8Variant(object):
   def __init__(self, *variants):
     self.variants = variants
 
+  def __str__(self):
+    return ' '.join(self.variants)
+
+  def pack(self):
+    """Returns a serializable version of this object.
+
+    This method is the counterpart to the method below.
+    """
+    return str(self)
+
+  @staticmethod
+  def unpack(packed):
+    """Constructs a variant object from a serialized version of this class.
+
+    This method is the counterpart to the method above.
+    """
+    return V8Variant(*(packed or '').split(' '))
+
 # Spectial marker to indicate bots or tests that should only run with standard
 # or specific variants.
 V8NoExhaustiveVariants = object()

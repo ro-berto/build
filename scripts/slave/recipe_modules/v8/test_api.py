@@ -343,6 +343,9 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       ],
     })
 
+  def example_test_spec(self, builder, spec):
+    return self.m.file.read_text('{"%s": %s}' % (builder, spec))
+
   def version_file(self, patch_level, desc, count=1):
     # Recipe step name disambiguation.
     suffix = ' (%d)' % count if count > 1 else ''
@@ -431,10 +434,14 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       )
       if bot_config.get('enable_swarming'):
         # Assume each tester is triggered with the required hashes for all
-        # tests.
+        # tests. Assume extra_isolate hashes for each extra test specified by
+        # parent_test_spec property.
+        swarm_hashes = self._make_dummy_swarm_hashes(bot_config)
+        for name, _, _ in kwargs.get('parent_test_spec', []):
+          swarm_hashes[name] = '[dummy hash for %s]' % name
         test += self.m.properties(
           parent_got_swarming_client_revision='[dummy swarming client hash]',
-          swarm_hashes=self._make_dummy_swarm_hashes(bot_config),
+          swarm_hashes=swarm_hashes,
         )
 
     if mastername.startswith('tryserver'):

@@ -29,7 +29,9 @@ def RunSteps(api):
   v8.apply_bot_config(v8.BUILDERS)
 
   additional_trigger_properties = {}
+  test_spec = {}
   tests = v8.create_tests()
+  tests += v8.extra_tests_from_properties()
 
   if v8.is_pure_swarming_tester(tests):
     api.swarming_client.checkout()
@@ -77,8 +79,11 @@ def RunSteps(api):
     if v8.generate_gcov_coverage:
       v8.init_gcov_coverage()
 
+    test_spec = v8.read_test_spec()
+    tests += v8.extra_tests_from_test_spec(test_spec)
+
     if v8.should_build:
-      v8.compile()
+      v8.compile(test_spec)
 
     if v8.run_dynamorio:
       v8.dr_compile()
@@ -106,7 +111,7 @@ def RunSteps(api):
   if v8.generate_gcov_coverage:
     v8.upload_gcov_coverage_report()
 
-  v8.maybe_trigger(**additional_trigger_properties)
+  v8.maybe_trigger(test_spec=test_spec, **additional_trigger_properties)
 
 
 def GenTests(api):
@@ -477,4 +482,67 @@ def GenTests(api):
         'with_build_id',
         build_id='buildbucket/cr-buildbucket.appspot.com/1234567890',
     )
+  )
+
+  # Test reading a pyl test-spec from the V8 repository. The additional test
+  # targets should be isolated and the tests should be executed.
+  f = Filter()
+  f = f.include('read test spec')
+  f = f.include('isolate tests')
+  f = f.include_re(r'.*Mjsunit.*')
+  yield (
+    api.v8.test(
+        'client.v8',
+        'V8 Mac64',
+        'with_test_spec',
+    ) +
+    api.path.exists(api.path['checkout'].join(
+        'infra', 'testing', 'client.v8.pyl')) +
+    api.override_step_data(
+        'read test spec',
+        api.v8.example_test_spec(
+            'V8 Mac64',
+            '[{"name": "mjsunit", "variant": "sweet", "shards": 2}]',
+        ),
+    ) +
+    api.post_process(f)
+  )
+
+  # As above but on a builder. The additional test targets should be isolated
+  # and the tests should be passed as properties to the triggered testers in
+  # the trigger step.
+  yield (
+    api.v8.test(
+        'client.v8',
+        'V8 Linux - nosnap builder',
+        'with_test_spec',
+    ) +
+    api.path.exists(api.path['checkout'].join(
+        'infra', 'testing', 'client.v8.pyl')) +
+    api.override_step_data(
+        'read test spec',
+        api.v8.example_test_spec(
+            'V8 Linux - nosnap',
+            '[{"name": "mjsunit", "variant": "sweet", "shards": 2}]',
+        ),
+    ) +
+    api.post_process(Filter(
+        'read test spec',
+        'isolate tests',
+        'trigger',
+    ))
+  )
+
+  # As above but on a tester. The additional tests passed as property from the
+  # builder should be executed.
+  f = Filter()
+  f = f.include_re(r'.*Mjsunit.*')
+  yield (
+    api.v8.test(
+        'client.v8',
+        'V8 Linux - nosnap',
+        'with_test_spec',
+        parent_test_spec=[["mjsunit", 2, "sweet"]],
+    ) +
+    api.post_process(f)
   )
