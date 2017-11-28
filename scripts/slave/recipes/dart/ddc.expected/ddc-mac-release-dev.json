@@ -95,12 +95,9 @@
   },
   {
     "cmd": [
-      "/usr/bin/xvfb-run",
-      "-a",
-      "--server-args=-screen 0 1024x768x24",
       "python",
       "-u",
-      "./tools/test.py",
+      "[START_DIR]/sdk/tools/test.py",
       "-mrelease",
       "--checked",
       "--progress=buildbot",
@@ -154,12 +151,9 @@
   },
   {
     "cmd": [
-      "/usr/bin/xvfb-run",
-      "-a",
-      "--server-args=-screen 0 1024x768x24",
       "python",
       "-u",
-      "./tools/test.py",
+      "[START_DIR]/sdk/tools/test.py",
       "-mrelease",
       "--checked",
       "--progress=buildbot",
@@ -210,12 +204,9 @@
   },
   {
     "cmd": [
-      "/usr/bin/xvfb-run",
-      "-a",
-      "--server-args=-screen 0 1024x768x24",
       "python",
       "-u",
-      "./tools/test.py",
+      "[START_DIR]/sdk/tools/test.py",
       "-mrelease",
       "--checked",
       "--progress=buildbot",

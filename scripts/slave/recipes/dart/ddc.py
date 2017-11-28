@@ -5,18 +5,33 @@
 DEPS = [
     'dart',
     'depot_tools/bot_update',
+    'depot_tools/depot_tools',
     'depot_tools/gclient',
-    'depot_tools/gsutil',
     'recipe_engine/context',
-    'recipe_engine/file',
     'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/python',
     'recipe_engine/step',
-    'test_utils',
-    'zip',
 ]
+
+TARGETS = [
+  'language_2',
+  'corelib_2',
+  'lib_2',
+  'lib_strong',
+]
+
+def test(api, system, name, args):
+  if system == 'linux':
+    xvfb_cmd = [
+      '/usr/bin/xvfb-run', '-a', '--server-args=-screen 0 1024x768x24',
+      'python', '-u', './tools/test.py'
+    ]
+    api.step(name, xvfb_cmd + args)
+  else:
+    api.python(name, api.path['checkout'].join('tools', 'test.py'), args)
+  api.dart.read_result_file('read results of %s' % name, 'result.log')
 
 def RunSteps(api):
   builder_name = api.properties.get('buildername')
@@ -31,32 +46,36 @@ def RunSteps(api):
   assert channel in ['be', 'dev', 'stable', 'integration']
 
   api.gclient.set_config('dart')
-  api.path.c.dynamic_paths['tools'] = None
   api.bot_update.ensure_checkout()
-  api.path['tools'] = api.path['checkout'].join('tools')
-
   api.gclient.runhooks()
 
   with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
-      api.python('taskkill before building',
-                 api.path['checkout'].join('tools', 'task_kill.py'),
-                 args=['--kill_browsers=True'],
-                 ok_ret='any')
-      build_args = ['-mrelease', 'dart2js_bot']
-      api.python('build dart',
-                 api.path['checkout'].join('tools', 'build.py'),
-                 args=build_args)
+      build_args = ['-mrelease', 'dart2js_bot', 'dartdevc_test']
+      with api.context(env_prefixes={'PATH':[api.depot_tools.root]}):
+        api.dart.kill_tasks()
+        api.python("build dart",
+                   api.path['checkout'].join('tools', 'build.py'),
+                   args=build_args)
 
     with api.step.defer_results():
-      api.python('ddc tests',
-                 api.path['checkout'].join('tools', 'bots', 'ddc_tests.py'),
-                 args=[])
-      api.dart.read_result_file('read results of ddc tests', 'result.log')
-      api.python('taskkill after testing',
-                 api.path['checkout'].join('tools', 'task_kill.py'),
-                 args=['--kill_browsers=True'],
-                 ok_ret='any')
+      test_args = [
+        '-m%s' % mode,
+        '--checked',
+        '--progress=buildbot',
+        '--report',
+        '--strong',
+        '--time',
+        '--use-sdk',
+        '--write-result-log',
+      ]
+      test(api, system, 'ddc tests',
+          test_args + ['-cdartdevc', '-rchrome'] + TARGETS)
+      test(api, system, 'ddc kernel tests',
+          test_args + ['-rchrome', '-cdartdevk', 'language_2'])
+      test(api, system, 'ddc kernel -rnone tests',
+          test_args + ['-rnone', '-cdartdevk', 'language_2'])
+      api.dart.kill_tasks()
 
 def GenTests(api):
    yield (
@@ -65,4 +84,12 @@ def GenTests(api):
       api.properties.generic(
         mastername='client.dart',
         buildername='ddc-linux-release-be',
+        revision='hash_of_revision'))
+
+   yield (
+      api.test('ddc-mac-release-dev') +
+      api.platform('mac', 64) +
+      api.properties.generic(
+        mastername='client.dart',
+        buildername='ddc-mac-release-dev',
         revision='hash_of_revision'))
