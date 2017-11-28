@@ -28,6 +28,7 @@ NONESSENTIAL_DIRS = (
     'third_party/findbugs',
     'third_party/hunspell_dictionaries',
     'third_party/hunspell/tests',
+    'third_party/liblouis/src/tests/harness',
     'third_party/sqlite/src/test',
     'third_party/xdg-utils/tests',
     'third_party/yasm/source/patched-yasm/modules/arch/x86/tests',
@@ -61,6 +62,7 @@ TEST_DIRS = (
     'media/test/data',
     'native_client/src/trusted/service_runtime/testdata',
     'third_party/breakpad/breakpad/src/processor/testdata',
+    'third_party/catapult/tracing/test_data',
 )
 
 
@@ -90,7 +92,7 @@ class MyTarFile(tarfile.TarFile):
   def add(self, name, arcname=None, recursive=True, exclude=None, filter=None):
     # pylint: disable=redefined-builtin
     _, file_name = os.path.split(name)
-    if file_name in ('.git', 'out'):
+    if file_name in ('.git', '.svn', 'out'):
       self.__report_skipped(name)
       return
 
