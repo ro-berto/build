@@ -1033,7 +1033,6 @@ class LayoutTestResultsHandler(JSONResultsHandler):
 
     archive_layout_test_args = [
       '--results-dir', results_dir,
-      '--build-dir', api.chromium.c.build_dir,
       '--build-number', buildnumber,
       '--builder-name', buildername,
       '--gs-bucket', 'gs://chromium-layout-test-archives',
