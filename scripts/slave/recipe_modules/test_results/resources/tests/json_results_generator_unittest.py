@@ -71,14 +71,12 @@ class JSONGeneratorTest(unittest.TestCase):
         self.builder_name, self.build_number,
         '',
         test_results_map,
-        svn_revisions=[('blink', '12345')],
         file_writer=mock_writer,
         test_locations=MOCK_LOCATION_DATA)
 
     results_json = generator.get_full_results_json()
     self._verify_full_json_results(results_json, tests_set, PASS_tests,
                                    failed_tests, test_timings)
-    self.assertEqual(results_json.get('blink_revision'), '12345')
 
   def test_get_full_results_json(self):
     self._generate_and_test_full_results_json(

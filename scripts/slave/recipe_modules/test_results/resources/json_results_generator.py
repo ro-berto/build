@@ -70,7 +70,6 @@ class JSONResultsGenerator(object):
   SKIP_LABEL = 'SKIP'
 
   ACTUAL = 'actual'
-  BLINK_REVISION = 'blink_revision'
   BUILD_NUMBER = 'build_number'
   BUILDER_NAME = 'builder_name'
   CHROMIUM_REVISION = 'chromium_revision'
@@ -90,7 +89,7 @@ class JSONResultsGenerator(object):
 
   def __init__(self, builder_name, build_number,
                results_file_base_path,
-               test_results_map, svn_revisions=None,
+               test_results_map,
                master_name='',
                path_delimiter='/',
                file_writer=None,
@@ -105,9 +104,6 @@ class JSONResultsGenerator(object):
           results json file.
       test_results_map: A dictionary that maps test_name to a list of
           TestResult, one for each time the test was retried.
-      svn_revisions: A (json_field_name, revision) pair for SVN
-          repositories that tests rely on.  The SVN revision will be
-          included in the JSON with the given json_field_name.
       master_name: The name of the buildbot master.
       path_delimiter: The string separating test path parts.
       file_writer: If given, the parameter is used to write JSON data to a file.
@@ -122,10 +118,6 @@ class JSONResultsGenerator(object):
     self._results_directory = results_file_base_path
     self._test_locations = test_locations
     self._test_results_map = test_results_map
-
-    self._svn_revisions = svn_revisions
-    if not self._svn_revisions:
-      self._svn_revisions = {}
 
     self._master_name = master_name
     self._file_writer = file_writer
@@ -150,8 +142,6 @@ class JSONResultsGenerator(object):
     results[self.BUILD_NUMBER] = self._build_number
     results[self.PATH_DELIMITER] = self._path_delimiter
     results[self.SECONDS_SINCE_EPOCH] = int(time.time())
-    for name, revision in self._svn_revisions:
-      results[name + '_revision'] = revision
 
     tests = results.setdefault(self.TESTS, {})
     for test_name in self._test_results_map.iterkeys():

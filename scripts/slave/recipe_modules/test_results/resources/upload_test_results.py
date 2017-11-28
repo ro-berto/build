@@ -106,7 +106,6 @@ def generate_json_results_file_for_gtest(
       builder_name, build_number,
       results_directory,
       test_results_map,
-      svn_revisions=[('chromium', chrome_revision)],
       master_name=master_name,
       test_locations=contents.get('test_locations'))
   generator.generate_json_output()
