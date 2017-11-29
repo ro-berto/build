@@ -9,6 +9,7 @@ import argparse
 import re
 
 from recipe_engine import recipe_test_api
+from recipe_engine.post_process import Filter
 from . import builders
 from . import testing
 
@@ -457,6 +458,15 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         not kwargs.get('gerrit_project')):
       test += self.m.properties(patch_storage='rietveld')
 
+    # Skip some goma-related steps in expectations.
+    skip_prefixes = [
+      'ensure_goma',
+      'calculate the number of recommended jobs',
+      'preprocess_for_goma',
+      'postprocess_for_goma',
+    ]
+    test += self.post_process(
+        Filter().include_re(r'^(?!%s).*$' % '|'.join(skip_prefixes)))
     return test
 
   def fail(self, step_name, variant='default'):
