@@ -78,7 +78,7 @@ BUILDERS = freeze({
 })
 
 ARCHIVE_LINK = ('https://storage.googleapis.com'
-                '/chromium-v8/node-linux-rel/%s')
+                '/chromium-v8/node-%s-rel/%s')
 
 
 def _build_and_test(api, suffix=''):
@@ -112,8 +112,8 @@ def _build_and_upload(api):
   # TODO(machenbach): Use a proper temp dir for putting archive-build and the
   # zip file to not depend on start_dir.
   archive_dir = api.path['start_dir'].join('archive-build')
-  archive_name = ('node-linux-rel-%s-%s.zip' %
-                  (api.v8.revision_number, api.v8.revision))
+  archive_name = ('node-%s-rel-%s-%s.zip' %
+                  (api.platform.name, api.v8.revision_number, api.v8.revision))
   zip_file = api.path['start_dir'].join(archive_name)
 
   # Make archive directory.
@@ -134,14 +134,14 @@ def _build_and_upload(api):
   # Upload to google storage bucket.
   api.gsutil.upload(
     zip_file,
-    'chromium-v8/node-linux-rel',
+    'chromium-v8/node-%s-rel' % api.platform.name,
     archive_name,
     args=['-a', 'public-read'],
   )
 
   api.step('Archive link', cmd=None)
   api.step.active_result.presentation.links['download'] = (
-      ARCHIVE_LINK % archive_name)
+      ARCHIVE_LINK % (api.platform.name, archive_name))
 
   # Clean up.
   api.file.remove('cleanup archive', zip_file)
@@ -211,7 +211,7 @@ def _sanitize_nonalpha(*chunks):
 
 def GenTests(api):
   for mastername, masterconf in BUILDERS.iteritems():
-    for buildername, _ in masterconf['builders'].iteritems():
+    for buildername, bot_config in masterconf['builders'].iteritems():
       if mastername.startswith('tryserver'):
         properties_fn = api.properties.tryserver
       else:
@@ -223,5 +223,6 @@ def GenTests(api):
               buildername=buildername,
               branch='refs/heads/master',
               revision='deadbeef',
-          )
+          ) +
+          api.platform(bot_config['testing']['platform'], 64)
       )

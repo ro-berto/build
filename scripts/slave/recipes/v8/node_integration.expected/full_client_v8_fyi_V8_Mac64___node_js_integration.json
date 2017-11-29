@@ -92,6 +92,7 @@
     "cwd": "[START_DIR]/v8",
     "env": {
       "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "1",
       "GYP_CHROMIUM_NO_ACTION": "0",
       "GYP_DEFINES": "target_arch=x64 v8_target_arch=x64",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -173,7 +174,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "name": "zipping",
-    "stdin": "{\"entries\": [{\"path\": \"[START_DIR]/archive-build\", \"type\": \"dir\"}], \"output\": \"[START_DIR]/node-linux-rel-50110-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.zip\", \"root\": \"[START_DIR]/archive-build\"}"
+    "stdin": "{\"entries\": [{\"path\": \"[START_DIR]/archive-build\", \"type\": \"dir\"}], \"output\": \"[START_DIR]/node-mac-rel-50110-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.zip\", \"root\": \"[START_DIR]/archive-build\"}"
   },
   {
     "cmd": [
@@ -186,20 +187,20 @@
       "cp",
       "-a",
       "public-read",
-      "[START_DIR]/node-linux-rel-50110-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.zip",
-      "gs://chromium-v8/node-linux-rel/node-linux-rel-50110-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.zip"
+      "[START_DIR]/node-mac-rel-50110-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.zip",
+      "gs://chromium-v8/node-mac-rel/node-mac-rel-50110-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.zip"
     ],
     "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/node-linux-rel/node-linux-rel-50110-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/node-mac-rel/node-mac-rel-50110-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.zip@@@"
     ]
   },
   {
     "cmd": [],
     "name": "Archive link",
     "~followup_annotations": [
-      "@@@STEP_LINK@download@https://storage.googleapis.com/chromium-v8/node-linux-rel/node-linux-rel-50110-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.zip@@@"
+      "@@@STEP_LINK@download@https://storage.googleapis.com/chromium-v8/node-mac-rel/node-mac-rel-50110-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.zip@@@"
     ]
   },
   {
@@ -210,7 +211,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "remove",
-      "[START_DIR]/node-linux-rel-50110-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.zip"
+      "[START_DIR]/node-mac-rel-50110-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.zip"
     ],
     "infra_step": true,
     "name": "cleanup archive"

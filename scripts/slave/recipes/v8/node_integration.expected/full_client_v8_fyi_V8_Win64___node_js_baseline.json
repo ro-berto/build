@@ -3,17 +3,17 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
+      "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}, {'deps_file': '.DEPS.git', 'managed': True, 'name': 'node.js', 'url': 'https://chromium.googlesource.com/external/github.com/v8/node'}]",
+      "cache_dir = '[CACHE]\\\\git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}, {'deps_file': '.DEPS.git', 'managed': True, 'name': 'node.js', 'url': 'https://chromium.googlesource.com/external/github.com/v8/node'}]",
       "--patch_root",
       "v8",
       "--revision_mapping_file",
       "{\"got_node_js_revision\": \"node.js\", \"got_revision\": \"v8\"}",
       "--git-cache-dir",
-      "[CACHE]/git",
+      "[CACHE]\\git",
       "--cleanup-dir",
-      "[CLEANUP]/bot_update",
+      "[CLEANUP]\\bot_update",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -86,23 +86,24 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[START_DIR]\\v8",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GYP_CHROMIUM_NO_ACTION": "0",
-      "GYP_DEFINES": "target_arch=x64 v8_target_arch=x64",
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+      "GYP_DEFINES": "target_arch=ia32 v8_target_arch=ia32",
+      "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
   },
   {
     "cmd": [
-      "[START_DIR]/node.js/configure"
+      "[START_DIR]\\node.js\\configure"
     ],
-    "cwd": "[START_DIR]/node.js",
+    "cwd": "[START_DIR]\\node.js",
     "name": "configure node.js"
   },
   {
@@ -110,7 +111,7 @@
       "make",
       "-j8"
     ],
-    "cwd": "[START_DIR]/node.js",
+    "cwd": "[START_DIR]\\node.js",
     "name": "build node.js"
   },
   {
@@ -119,7 +120,7 @@
       "-j8",
       "test-ci"
     ],
-    "cwd": "[START_DIR]/node.js",
+    "cwd": "[START_DIR]\\node.js",
     "name": "build addons and test node.js"
   },
   {

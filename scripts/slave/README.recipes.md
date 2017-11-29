@@ -463,13 +463,13 @@ Args:
 Returns:
   An instance of bisector.Bisector.
 
-&mdash; **def [deploy\_apk\_on\_device](/scripts/slave/recipe_modules/auto_bisect/api.py#314)(self, deploy_script, deploy_apks, deploy_args):**
+&mdash; **def [deploy\_apk\_on\_device](/scripts/slave/recipe_modules/auto_bisect/api.py#312)(self, deploy_script, deploy_apks, deploy_args):**
 
 Installs apk on the android device.
 
 &mdash; **def [ensure\_checkout](/scripts/slave/recipe_modules/auto_bisect/api.py#204)(self, \*args, \*\*kwargs):**
 
-&mdash; **def [full\_deploy\_on\_device](/scripts/slave/recipe_modules/auto_bisect/api.py#322)(self, deploy_script, args=None):**
+&mdash; **def [full\_deploy\_on\_device](/scripts/slave/recipe_modules/auto_bisect/api.py#320)(self, deploy_script, args=None):**
 
 Install android-chrome apk on device.
 
@@ -520,7 +520,7 @@ Sets SVN repo url for triggering build jobs.
 
 &mdash; **def [start\_test\_run\_for\_bisect](/scripts/slave/recipe_modules/auto_bisect/api.py#231)(self, update_step, bot_db, test_config_params, skip_download=False, \*\*kwargs):**
 
-&mdash; **def [start\_try\_job](/scripts/slave/recipe_modules/auto_bisect/api.py#340)(self, api, update_step=None, bot_db=None, \*\*kwargs):**
+&mdash; **def [start\_try\_job](/scripts/slave/recipe_modules/auto_bisect/api.py#338)(self, api, update_step=None, bot_db=None, \*\*kwargs):**
 
 Starts a recipe bisect job, perf test run, or legacy bisect run.
 
@@ -539,7 +539,7 @@ Args:
   bot_db: A BotConfigAndTestDB object, used for some job types.
   kwargs: Args to use only for legacy bisect.
 
-&mdash; **def [stat\_compare](/scripts/slave/recipe_modules/auto_bisect/api.py#397)(self, values_a, values_b, metric, output_format='chartjson', \*\*kwargs):**
+&mdash; **def [stat\_compare](/scripts/slave/recipe_modules/auto_bisect/api.py#395)(self, values_a, values_b, metric, output_format='chartjson', \*\*kwargs):**
 
 Compares samples using catapult's statistics implementation.
 
