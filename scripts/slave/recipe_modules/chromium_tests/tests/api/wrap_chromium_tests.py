@@ -95,7 +95,7 @@ def GenTests(api):
   yield (
       api.test('script_test') +
       api.properties.generic(
-          mastername='chromium.Linux',
+          mastername='chromium.linux',
           buildername='Linux Tests',
           script_test=True)
   )

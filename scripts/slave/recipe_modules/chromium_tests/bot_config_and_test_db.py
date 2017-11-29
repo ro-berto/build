@@ -20,6 +20,15 @@ class BotConfig(object):
     assert len(bot_ids) >= 1
     self._bot_ids = bot_ids
 
+    for bot_id in self._bot_ids:
+      m = bot_id['mastername']
+      b = bot_id['buildername']
+      if not m in self._bots_dict:
+        raise Exception('No configuration present for master %s' % m)
+      master_dict = self._bots_dict[m]
+      if not b in master_dict.get('builders', {}):
+        raise Exception('No configuration present for builder %s in master %s' % (b, m))
+
   def _consistent_get(self, getter, name, default=None):
     result = getter(self._bot_ids[0], name, default)
     for bot_id in self._bot_ids:

@@ -7,6 +7,7 @@ import contextlib
 import copy
 import itertools
 import json
+import traceback
 
 from recipe_engine.types import freeze
 from recipe_engine import recipe_api
@@ -93,11 +94,18 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     self._builders.update(builders)
 
   def create_bot_config_object(self, mastername, buildername, builders=None):
-    bot_id = {'mastername': mastername, 'buildername': buildername}
-    return bdb_module.BotConfig(builders or self.builders, [bot_id])
+    return self.create_generalized_bot_config_object(
+        [{'mastername': mastername, 'buildername': buildername}],
+        builders=builders)
 
-  def create_generalized_bot_config_object(self, bot_ids):
-    return bdb_module.BotConfig(self.builders, bot_ids)
+  def create_generalized_bot_config_object(self, bot_ids, builders=None):
+    try:
+      return bdb_module.BotConfig(builders or self.builders, bot_ids)
+    except Exception:
+      self.m.python.failing_step(
+          'Incorrect or missing bot configuration',
+          [traceback.format_exc()],
+          as_log='details')
 
   def create_bot_db_object(self):
     return bdb_module.BotConfigAndTestDB()
@@ -916,6 +924,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     buildername = self.m.properties.get('buildername')
     bot_config = (bot_config or
                   self.create_bot_config_object(mastername, buildername))
+
     self.configure_build(bot_config)
     update_step, bot_db = self.prepare_checkout(bot_config)
     tests, tests_including_triggered = self.get_tests(bot_config, bot_db)
