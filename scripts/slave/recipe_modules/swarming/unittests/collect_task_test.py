@@ -215,6 +215,58 @@ class CollectTaskTest(auto_stub.TestCase):
         ],
         self.subprocess_calls)
 
+  def test_empty_output_json(self):
+    collect_cmd = [
+      'swarming.py',
+      'positional0',
+      '--swarming-arg0', '0',
+      '--swarming-arg1', '1',
+      'positional1',
+    ]
+    build_props_json = os.path.join(self.temp_dir, 'build_properties.json')
+    task_output_dir = os.path.join(self.temp_dir, 'task_output_dir')
+    os.makedirs(task_output_dir)
+
+    shard0_dir = os.path.join(task_output_dir, '0')
+    os.makedirs(shard0_dir)
+    extant_shard_json = os.path.join(shard0_dir, 'output.json')
+    with open(extant_shard_json, 'w') as f:
+      f.write('{}')
+
+    shard1_dir = os.path.join(task_output_dir, '1')
+    os.makedirs(shard1_dir)
+    with open(os.path.join(shard1_dir, 'output.json'), 'w'):
+      # Intentionally leave 1/output.json empty.
+      pass
+
+    output_json = os.path.join(self.temp_dir, 'output.json')
+    exit_code = collect_task.collect_task(
+        collect_cmd, 'merge.py', build_props_json, None, task_output_dir,
+        output_json)
+    self.assertEqual(0, exit_code)
+
+    # Should append correct --task-output-dir to args after '--'.
+    self.assertEqual(
+        [
+            [
+                'swarming.py',
+                'positional0',
+                '--swarming-arg0', '0',
+                '--swarming-arg1', '1',
+                'positional1',
+                '--task-output-dir',
+                task_output_dir,
+            ],
+            [
+                sys.executable,
+                'merge.py',
+                '--build-properties', build_props_json,
+                '-o', output_json,
+                extant_shard_json
+            ]
+        ],
+        self.subprocess_calls)
+
 
 if __name__ == '__main__':
   unittest.main()

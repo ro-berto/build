@@ -21,7 +21,11 @@ def StandardIsolatedScriptMerge(output_json, jsons_to_merge):
   shard_results_list = []
   for j in jsons_to_merge:
     with open(j) as f:
-      shard_results_list.append(json.load(f))
+      try:
+        json_contents = json.load(f)
+      except ValueError:
+        raise ValueError('Failed to parse JSON from %s' % j)
+      shard_results_list.append(json_contents)
   merged_results = results_merger.merge_test_results(shard_results_list)
 
   with open(output_json, 'w') as f:
