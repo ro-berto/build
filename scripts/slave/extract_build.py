@@ -56,7 +56,7 @@ class WebHandler(ExtractHandler):
     return rc
 
 
-def GetBuildUrl(options, build_revision, webkit_revision=None):
+def GetBuildUrl(options, build_revision):
   """Compute the url to download the build from.  This will use as a base
      string, in order of preference:
      0) options.build_archive_url
@@ -68,7 +68,6 @@ def GetBuildUrl(options, build_revision, webkit_revision=None):
      Args:
        options: options object as specified by parser below.
        build_revision: Revision for the build.
-       webkit_revision: WebKit revision (optional)
   """
   if options.build_archive_url:
     return options.build_archive_url, None
@@ -77,7 +76,7 @@ def GetBuildUrl(options, build_revision, webkit_revision=None):
       options.master_name,
       options.build_number,
       options.parent_build_number,
-      build_revision, webkit_revision, extract=True)
+      build_revision, extract=True)
 
   replace_dict = {
     'base_filename': base_filename,
@@ -119,12 +118,11 @@ def real_main(options):
 
   src_dir = os.path.dirname(abs_build_dir)
   if not options.build_revision and not options.build_archive_url:
-    (build_revision, webkit_revision) = slave_utils.GetBuildRevisions(
-        src_dir, options.webkit_dir, options.revision_dir)
+    build_revision = slave_utils.GetBuildRevisions(
+        src_dir, revision_dir=options.revision_dir)
   else:
     build_revision = options.build_revision
-    webkit_revision = options.webkit_revision
-  url, archive_name = GetBuildUrl(options, build_revision, webkit_revision)
+  url, archive_name = GetBuildUrl(options, build_revision)
   if archive_name is None:
     archive_name = 'build.zip'
     base_url = None
@@ -234,12 +232,6 @@ def main():
                            help='Revision of the build that is being '
                                 'archived. Overrides the revision found on '
                                 'the local disk')
-  option_parser.add_option('--webkit_revision',
-                           help='Webkit revision of the build that is being '
-                                'archived. Overrides the revision found on '
-                                'the local disk')
-  option_parser.add_option('--webkit-dir', help='WebKit directory path, '
-                                                'relative to the src/ dir.')
   option_parser.add_option('--revision-dir',
                            help=('Directory path that shall be used to decide '
                                  'the revision number for the archive, '
@@ -277,8 +269,6 @@ def main():
         'halt_on_missing_build')
   if not options.target:
     options.target = options.factory_properties.get('target', 'Release')
-  if not options.webkit_dir:
-    options.webkit_dir = options.factory_properties.get('webkit_dir')
   if not options.revision_dir:
     options.revision_dir = options.factory_properties.get('revision_dir')
   options.src_dir = (options.factory_properties.get('extract_build_src_dir')

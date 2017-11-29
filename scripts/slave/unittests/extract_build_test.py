@@ -31,14 +31,12 @@ class MockOptions(object):
 class ExtractBuildTest(unittest.TestCase):
   def setUp(self):
     self._build_revision = 123
-    self._webkit_revision = None
 
   def testGetBuildUrl(self):
     options = MockOptions()
 
     base_filename, version_suffix = slave_utils.GetZipFileNames(
         '', None, None, build_revision=self._build_revision,
-        webkit_revision=self._webkit_revision,
         extract=True)
 
     gs_url_without_slash = 'gs://foo/Win'
@@ -70,8 +68,7 @@ class ExtractBuildTest(unittest.TestCase):
     # The versioned_url part of the tuple returned is not tested, since it would
     # just be to copy implementation from extract_build.py into this test.
     url, _archive_name = extract_build.GetBuildUrl(
-        options, build_revision=self._build_revision,
-        webkit_revision=self._webkit_revision)
+        options, build_revision=self._build_revision)
     self.assertEquals(url, expected_url)
 
 if __name__ == '__main__':

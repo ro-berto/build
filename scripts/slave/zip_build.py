@@ -351,17 +351,16 @@ def Archive(options):
     os.makedirs(staging_dir)
   chromium_utils.MakeParentDirectoriesWorldReadable(staging_dir)
   if not options.build_revision:
-    (build_revision, webkit_revision) = slave_utils.GetBuildRevisions(
-        options.src_dir, options.webkit_dir, options.revision_dir)
+    build_revision = slave_utils.GetBuildRevisions(
+        options.src_dir, options.revision_dir)
   else:
     build_revision = options.build_revision
-    webkit_revision = options.webkit_revision
 
   unversioned_base_name, version_suffix = slave_utils.GetZipFileNames(
       options.master_name,
       options.build_number,
       options.parent_build_number,
-      build_revision, webkit_revision,
+      build_revision,
       use_try_buildnumber=(not options.append_deps_patch_sha))
 
   # TODO(robertocn): Remove this if no one other than bisect uses it.
@@ -480,17 +479,12 @@ def AddOptions(option_parser):
                            help='Buildbot build number.')
   option_parser.add_option('--parent-build-number', type=int,
                            help='Buildbot parent build number.')
-  option_parser.add_option('--webkit-dir',
-                           help='webkit directory path, relative to --src-dir')
   option_parser.add_option('--revision-dir',
                            help='Directory path that shall be used to decide '
                                 'the revision number for the archive, '
                                 'relative to --src-dir')
   option_parser.add_option('--build_revision',
                            help='The revision the archive should be at. '
-                                'Overrides the revision found on disk.')
-  option_parser.add_option('--webkit_revision',
-                           help='The revision of webkit the build is at. '
                                 'Overrides the revision found on disk.')
   option_parser.add_option('--exclude-unmatched', action='store_true',
                            help='Exclude all files not matched by a whitelist')

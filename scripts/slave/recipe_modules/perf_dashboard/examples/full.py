@@ -20,12 +20,12 @@ DEPS = [
 def RunSteps(api):
   s1 = api.perf_dashboard.get_skeleton_point('sunspider/string-unpack-code/ref',
                                              33241, '18.5')
-  s1['supplemental_columns'] = {'r_webkit_rev': '167808'}
+  s1['supplemental_columns'] = {'d_supplemental': '167808'}
   s1['error'] = '0.5'
   s1['units'] = 'ms'
   s2 = api.perf_dashboard.get_skeleton_point('sunspider/string-unpack-code',
                                              33241, '18.4')
-  s2['supplemental_columns'] = {'r_webkit_rev': '167808'}
+  s2['supplemental_columns'] = {'d_supplemental': '167808'}
   s2['error'] = '0.4898'
   s2['units'] = 'ms'
 

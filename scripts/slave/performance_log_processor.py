@@ -46,7 +46,7 @@ class PerformanceLogProcessor(object):
   PERF_EXPECTATIONS_PATH = 'src/tools/perf_expectations/'
 
   def __init__(self, revision=None, factory_properties=None,
-               build_properties=None, webkit_revision='undefined'):
+      build_properties=None):
     """Initializes the log processor.
 
     Args:
@@ -54,7 +54,6 @@ class PerformanceLogProcessor(object):
           It is sent to the perf dashboard to be used as the x-value.
       factory_properties: Factory properties dict.
       build_properties: Build properties dict.
-      webkit_revision: Blink revision number.
     """
     if factory_properties is None:
       factory_properties = {}
@@ -95,8 +94,6 @@ class PerformanceLogProcessor(object):
       self._revision = revision
     else:
       raise ValueError('Must provide a revision to PerformanceLogProcessor.')
-
-    self._webkit_revision = webkit_revision
 
     if not build_properties:
       build_properties = {}
@@ -639,7 +636,6 @@ class GraphingLogProcessor(PerformanceLogProcessor):
         ('traces', graph.BuildTracesDict()),
         ('rev', str(self._revision)),
         ('git_revision', str(self._git_revision)),
-        ('webkit_rev', str(self._webkit_revision)),
         ('webrtc_rev', str(self._webrtc_revision)),
         ('v8_rev', str(self._v8_revision)),
         ('ver', str(self._version)),

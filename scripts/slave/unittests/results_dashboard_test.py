@@ -203,7 +203,6 @@ class ResultsDashboardFormatTest(unittest.TestCase):
                 },
                 'rev': '12345',
                 'git_revision': '46790669f8a2ecd7249ab92418260316b1c60dbf',
-                'webkit_rev': '6789',
                 'v8_rev': 'undefined',
                 'units': 'KB',
             },
@@ -233,7 +232,6 @@ class ResultsDashboardFormatTest(unittest.TestCase):
             'error': '5.0',
             'units': 'KB',
             'supplemental_columns': {
-                'r_webkit_rev': '6789',
                 'r_bar': '89abcdef',
                 'r_chromium': '46790669f8a2ecd7249ab92418260316b1c60dbf',
                 'a_stdio_uri': ('[Buildbot stdio](http://build.chromium.org/p'
@@ -251,7 +249,6 @@ class ResultsDashboardFormatTest(unittest.TestCase):
             'error': '5.0',
             'units': 'KB',
             'supplemental_columns': {
-                'r_webkit_rev': '6789',
                 'r_bar': '89abcdef',
                 'r_chromium': '46790669f8a2ecd7249ab92418260316b1c60dbf',
                 'a_stdio_uri': ('[Buildbot stdio](http://build.chromium.org/p'

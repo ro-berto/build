@@ -84,34 +84,23 @@ class TestGetZipFileNames(unittest.TestCase):
     self._verifyBaseName(base_name)
     self.assertEqual('_999', version_suffix)
 
-  def testWebKitName(self):
-    (base_name, version_suffix) = slave_utils.GetZipFileNames(
-        '', None, None, 123, 456)
-    self._verifyBaseName(base_name)
-    self.assertEqual('_wk456_123', version_suffix)
-
   def _verifyBaseName(self, base_name):
     self.assertEqual('full-build-%s' % sys.platform, base_name)
 
 
 class TestGetBuildRevisions(unittest.TestCase):
   def testNormal(self):
-    (build_revision, webkit_revision) = slave_utils.GetBuildRevisions(
-        _BUILD_DIR)
+    build_revision = slave_utils.GetBuildRevisions(_BUILD_DIR)
     self.assertTrue(build_revision > 0)
-    self.assertEquals(None, webkit_revision)
 
   def testWebKitDir(self):
-    (build_revision, webkit_revision) = slave_utils.GetBuildRevisions(
-        _BUILD_DIR, webkit_dir=_BUILD_DIR)
+    build_revision = slave_utils.GetBuildRevisions(_BUILD_DIR)
     self.assertTrue(build_revision > 0)
-    self.assertTrue(webkit_revision > 0)
 
   def testRevisionDir(self):
-    (build_revision, webkit_revision) = slave_utils.GetBuildRevisions(
+    build_revision = slave_utils.GetBuildRevisions(
         _BUILD_DIR, revision_dir=_BUILD_DIR)
     self.assertTrue(build_revision > 0)
-    self.assertEquals(None, webkit_revision)
 
 
 @mock.patch('__main__.slave_utils.GSUtilSetup',
@@ -201,16 +190,15 @@ class TelemetryRevisionTest(unittest.TestCase):
   def test_GetPerfDashboardRevisions(self):
     point_id = 1470050195
     revision = '294850'
-    webkit_revision = '34f9d01'
     build_properties = {
       'got_webrtc_revision': None,
       'got_v8_revision': 'undefined',
       'git_revision': '9a7b354',
     }
     versions = slave_utils.GetPerfDashboardRevisions(
-        build_properties, revision,  webkit_revision, point_id)
+        build_properties, revision, point_id)
     self.assertEqual(
-        {'rev': '294850', 'webkit_rev': '34f9d01', 'git_revision': '9a7b354',
+        {'rev': '294850', 'git_revision': '9a7b354',
          'point_id': 1470050195},
         versions)
 

@@ -227,7 +227,6 @@ class SendResultsToDashboardTest(unittest.TestCase):
     options = mock.MagicMock()
     options.point_id = 1470050195
     options.revision = '294850'
-    options.webkit_revision = '34f9d01'
     options.build_properties = {
         'got_webrtc_revision': None,
         'got_v8_revision': 'undefined',
@@ -235,7 +234,7 @@ class SendResultsToDashboardTest(unittest.TestCase):
     }
     versions = runtest._GetPerfDashboardRevisions(options)
     self.assertEqual(
-        {'rev': '294850', 'webkit_rev': '34f9d01', 'git_revision': '9a7b354',
+        {'rev': '294850', 'git_revision': '9a7b354',
          'point_id': 1470050195},
         versions)
 

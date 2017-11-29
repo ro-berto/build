@@ -18,7 +18,7 @@ from slave.gtest.test_result import TestResult
 
 GENERATE_JSON_RESULTS_OPTIONS = [
     'builder_name', 'build_name', 'build_number', 'results_directory',
-    'builder_base_url', 'webkit_revision', 'chrome_revision',
+    'builder_base_url', 'chrome_revision',
     'test_results_server', 'test_type', 'master_name']
 
 FULL_RESULTS_FILENAME = 'full_results.json'
@@ -174,21 +174,17 @@ def GenerateJSONResults(test_results_map, options):
 
   print('Generating json: '
         'builder_name:%s, build_name:%s, build_number:%s, '
-        'results_directory:%s, builder_base_url:%s, '
-        'webkit_revision:%s, chrome_revision:%s '
+        'results_directory:%s, builder_base_url:%s, chrome_revision:%s '
         'test_results_server:%s, test_type:%s, master_name:%s' %
         (options.builder_name, options.build_name, options.build_number,
          options.results_directory, options.builder_base_url,
-         options.webkit_revision, options.chrome_revision,
-         options.test_results_server, options.test_type,
-         options.master_name))
+         options.chrome_revision, options.test_results_server,
+         options.test_type, options.master_name))
 
   generator = JSONResultsGenerator(
       options.builder_name, options.build_name, options.build_number,
       options.results_directory, options.builder_base_url,
       test_results_map,
-      svn_revisions=(('blink', options.webkit_revision),
-                     ('chromium', options.chrome_revision)),
       test_results_server=options.test_results_server,
       test_type=options.test_type,
       master_name=options.master_name)
@@ -242,9 +238,6 @@ def main():
                                 'Both test-results-server and master-name '
                                 'need to be specified to upload the results '
                                 'to the server.')
-  option_parser.add_option('--webkit-revision', default='0',
-                           help='The WebKit revision being tested. If not '
-                                'given, defaults to 0.')
   option_parser.add_option('--chrome-revision', default='0',
                            help='The Chromium revision being tested. If not '
                                 'given, defaults to 0.')

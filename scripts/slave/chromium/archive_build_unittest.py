@@ -42,7 +42,7 @@ class MockOptions(object):
   """
   def __init__(self, src_dir, build_dir, target, archive_path,
                extra_archive_paths, build_number, default_chromium_revision,
-               default_webkit_revision, default_v8_revision,
+               default_v8_revision,
                build_name):
     self.src_dir = src_dir
     self.build_dir = build_dir
@@ -56,7 +56,6 @@ class MockOptions(object):
     self.build_number = build_number
     self.build_properties = {
         'got_revision': default_chromium_revision,
-        'got_revision_webkit': default_webkit_revision,
         'got_revision_v8': default_v8_revision,
     }
     self.factory_properties = {}
@@ -111,13 +110,11 @@ class ArchiveTest(unittest.TestCase):
     self.stager = None
 
   def initializeStager(self, build_number=None, default_chromium_revision=None,
-                       default_webkit_revision=None, default_v8_revision=None,
-                       build_name=None):
+                       default_v8_revision=None, build_name=None):
     self.options = MockOptions(self.src_dir, self.build_dir, self.target,
                                self.archive_dir, self.extra_files_dir,
                                build_number, default_chromium_revision,
-                               default_webkit_revision, default_v8_revision,
-                               build_name)
+                               default_v8_revision, build_name)
     if self.options.build_number:
       self.stager = archive_build.StagerByBuildNumber(self.options)
     else:
@@ -221,10 +218,8 @@ class ArchiveTest(unittest.TestCase):
   def testGenerateRevisionFile(self):
     build_number = None
     chromium_revision = '12345'
-    webkit_revision = '54321'
     v8_revision = '33333'
-    self.initializeStager(build_number, chromium_revision, webkit_revision,
-                          v8_revision)
+    self.initializeStager(build_number, chromium_revision, v8_revision)
     self.stager.GenerateRevisionFile()
     self.assertTrue(os.path.exists(self.stager.revisions_path))
     self.assertEquals(None, self.stager.GetLastBuildRevision())
@@ -232,8 +227,6 @@ class ArchiveTest(unittest.TestCase):
     revisions_dict = json.loads(fp.read())
     self.assertEquals(self.stager.last_chromium_revision,
                       revisions_dict['chromium_revision'])
-    self.assertEquals(self.stager.last_webkit_revision,
-                      revisions_dict['webkit_revision'])
     self.assertEquals(self.stager.last_v8_revision,
                       revisions_dict['v8_revision'])
     fp.close()
@@ -244,11 +237,9 @@ class ArchiveTest(unittest.TestCase):
     """
     build_number = None
     chromium_revision = '12345'
-    webkit_revision = '54321'
     v8_revision = '33333'
     expect_last_change_file_contents = '%s' % (chromium_revision)
-    self.initializeStager(build_number, chromium_revision, webkit_revision,
-                          v8_revision)
+    self.initializeStager(build_number, chromium_revision, v8_revision)
     last_change_file_path = self.stager.last_change_file
     # At first, there is no last change file.
     self.assertFalse(os.path.exists(last_change_file_path))
@@ -268,11 +259,9 @@ class ArchiveTest(unittest.TestCase):
     """
     build_number = '99999'
     chromium_revision = '12345'
-    webkit_revision = '54321'
     v8_revision = '33333'
     expect_last_change_file_contents = '%s' % (build_number)
-    self.initializeStager(build_number, chromium_revision, webkit_revision,
-                          v8_revision)
+    self.initializeStager(build_number, chromium_revision, v8_revision)
     last_change_file_path = self.stager.last_change_file
     # At first, there is no last change file.
     self.assertFalse(os.path.exists(last_change_file_path))
@@ -289,7 +278,6 @@ class ArchiveTest(unittest.TestCase):
   def testBuildName(self):
     build_number = '99999'
     chromium_revision = '12345'
-    webkit_revision = '54321'
     v8_revision = '33333'
     build_name = 'TestBuild'
 
@@ -299,11 +287,10 @@ class ArchiveTest(unittest.TestCase):
     # propagated through the public functions (it is only referenced inside
     # ArchiveBuild).
     # pylint: disable=W0212
-    self.initializeStager(build_number, chromium_revision, webkit_revision,
-                          v8_revision)
+    self.initializeStager(build_number, chromium_revision, v8_revision)
     self.assertNotEquals(self.stager._build_name, build_name)
 
-    self.initializeStager(build_number, chromium_revision, webkit_revision,
+    self.initializeStager(build_number, chromium_revision,
                           v8_revision, build_name)
     self.assertEquals(self.stager._build_name, build_name)
 

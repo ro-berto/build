@@ -406,7 +406,7 @@ def _RevisionNumberColumns(data, prefix):
     revision = int(data['point_id'])
 
   # For other revision data, add it if it's present and not undefined:
-  for key in ['webkit_rev', 'webrtc_rev', 'v8_rev']:
+  for key in ['webrtc_rev', 'v8_rev']:
     if key in data and data[key] != 'undefined':
       revision_supplemental_columns[prefix + key] = data[key]
 

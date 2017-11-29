@@ -68,12 +68,11 @@ def GetHashOrRevision(wc_dir):
   raise NotAnyWorkingCopy(wc_dir)
 
 
-def GetBuildRevisions(src_dir, webkit_dir=None, revision_dir=None):
+def GetBuildRevisions(src_dir, revision_dir=None):
   """Parses build revisions out of the provided directories.
 
   Args:
     src_dir: The source directory to be used to check the revision in.
-    webkit_dir: Optional WebKit directory, relative to src_dir.
     revision_dir: If provided, this dir will be used for the build revision
       instead of the mandatory src_dir.
 
@@ -82,22 +81,17 @@ def GetBuildRevisions(src_dir, webkit_dir=None, revision_dir=None):
   and Git hashes.
   """
   abs_src_dir = os.path.abspath(src_dir)
-  webkit_revision = None
-  if webkit_dir:
-    webkit_dir = os.path.join(abs_src_dir, webkit_dir)
-    webkit_revision = GetHashOrRevision(webkit_dir)
-
   if revision_dir:
     revision_dir = os.path.join(abs_src_dir, revision_dir)
     build_revision = GetHashOrRevision(revision_dir)
   else:
     build_revision = GetHashOrRevision(src_dir)
-  return (build_revision, webkit_revision)
+  return build_revision
 
 
 def GetZipFileNames(
     mastername, buildnumber, parent_buildnumber, build_revision,
-    webkit_revision=None, extract=False, use_try_buildnumber=True):
+    extract=False, use_try_buildnumber=True):
   base_name = 'full-build-%s' % chromium_utils.PlatformName()
 
   if 'try' in mastername and use_try_buildnumber:
@@ -107,8 +101,6 @@ def GetZipFileNames(
       version_suffix = '_%s' % parent_buildnumber
     else:
       version_suffix = '_%s' % buildnumber
-  elif webkit_revision:
-    version_suffix = '_wk%s_%s' % (webkit_revision, build_revision)
   else:
     version_suffix = '_%s' % build_revision
 
@@ -674,24 +666,23 @@ def ZipAndUpload(bucket, archive, *targets):
 
 
 def GetPerfDashboardRevisions(
-    build_properties, main_revision, blink_revision, point_id=None):
+    build_properties, main_revision, point_id=None):
   """Fills in the same revisions fields that process_log_utils does."""
   return GetPerfDashboardRevisionsWithProperties(
     build_properties.get('got_webrtc_revision'),
     build_properties.get('got_v8_revision'),
     build_properties.get('version'),
     build_properties.get('git_revision'),
-    main_revision, blink_revision, point_id)
+    main_revision, point_id)
 
 
 def GetPerfDashboardRevisionsWithProperties(
     got_webrtc_revision, got_v8_revision, version, git_revision, main_revision,
-    blink_revision, point_id=None):
+    point_id=None):
   """Fills in the same revisions fields that process_log_utils does."""
 
   versions = {}
   versions['rev'] = main_revision
-  versions['webkit_rev'] = blink_revision
   versions['webrtc_rev'] = got_webrtc_revision
   versions['v8_rev'] = got_v8_revision
   versions['ver'] = version
@@ -724,23 +715,6 @@ def GetMainRevision(build_properties, build_dir, revision=None):
   # a git commit, since this should be a numerical revision. Instead, abort
   # and fail.
   return GetRevision(os.path.dirname(os.path.abspath(build_dir)))
-
-
-def GetBlinkRevision(build_dir, webkit_revision=None):
-  """
-    TODO(eyaich): Blink's now folded into Chromium and doesn't have a separate
-    revision. Use main_revision and delete GetBlinkRevision and uses.
-  """
-  if webkit_revision:
-    webkit_revision = webkit_revision
-  else:
-    try:
-      webkit_dir = chromium_utils.FindUpward(
-          os.path.abspath(build_dir), 'third_party', 'WebKit', 'Source')
-      webkit_revision = GetRevision(webkit_dir)
-    except Exception:
-      webkit_revision = None
-  return webkit_revision
 
 
 def GetRevision(in_directory):

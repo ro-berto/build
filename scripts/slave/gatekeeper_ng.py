@@ -305,9 +305,8 @@ def convert_revisions_to_positions(property_dict):
 def reject_old_revisions(failed_builds, build_db):
   """Ignore builds which triggered on revisions older than the current.
 
-  triggered_revisions has the format: {'revision': 500,
-                                       'got_webkit_revision': 15,
-                                      }
+  triggered_revisions has the format: {'revision': 500}
+
   Each key is a buildproperty that was previously triggered on, and each value
   was the value of that key. Note that all keys present in triggered_revisions
   are used for the comparison. Only builds where at least one number is greater

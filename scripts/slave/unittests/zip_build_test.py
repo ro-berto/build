@@ -28,7 +28,6 @@ def _setup_testdir(testdir):
   options.master_name = 'lorem'
   options.slave_name = 'ipsum'
   options.build_revision = 'dolor'
-  options.webkit_revision = 'sit'
 
   build_dir = _build_dir(options)
   os.makedirs(build_dir)

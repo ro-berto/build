@@ -270,14 +270,6 @@ def _GenerateJSONForTestResults(options, log_processor):
       generate_json_options.chrome_revision = \
         slave_utils.GetRevision(chrome_dir)
 
-    if options.webkit_revision:
-      generate_json_options.webkit_revision = options.webkit_revision
-    else:
-      webkit_dir = chromium_utils.FindUpward(
-        build_dir, 'third_party', 'WebKit', 'Source')
-      generate_json_options.webkit_revision = \
-        slave_utils.GetRevision(webkit_dir)
-
     # Generate results JSON file and upload it to the appspot server.
     generator = gtest_slave_utils.GenerateJSONResults(
         results_map, generate_json_options)
@@ -391,16 +383,10 @@ def _GetMainRevision(options):
     options.build_properties, options.build_dir, options.revision)
 
 
-def _GetBlinkRevision(options):
-  return slave_utils.GetBlinkRevision(
-      options.build_dir, options.webkit_revision)
-
-
 def _GetPerfDashboardRevisions(options):
   return slave_utils.GetPerfDashboardRevisions(
     options.build_properties,
     _GetMainRevision(options),
-    _GetBlinkRevision(options),
     options.point_id)
 
 
@@ -429,14 +415,12 @@ def _CreateLogProcessor(log_processor_class, options, telemetry_info):
     tracker_obj = log_processor_class(
         options.build_properties.get('mastername'))
   else:
-    webkit_revision = _GetBlinkRevision(options) or 'undefined'
     revision = _GetMainRevision(options) or 'undefined'
 
     tracker_obj = log_processor_class(
         revision=revision,
         build_properties=options.build_properties,
-        factory_properties=options.factory_properties,
-        webkit_revision=webkit_revision)
+        factory_properties=options.factory_properties)
 
   if options.annotate and options.generate_json_file:
     tracker_obj.ProcessLine(_GetMasterString(_GetMaster()))
@@ -598,7 +582,7 @@ def _GetDataFromLogProcessor(log_processor):
       "traces": A dictionary mapping trace names to value, stddev pairs.
       "units": Units for the chart.
       "rev": A revision number or git hash.
-      Plus other revision keys, e.g. webkit_rev, ver, v8_rev.
+      Plus other revision keys, e.g. ver, v8_rev.
   """
   charts = {}
   for log_file_name, line_list in log_processor.PerformanceLogs().iteritems():

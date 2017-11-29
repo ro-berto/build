@@ -28,7 +28,6 @@ class LogProcessorTest(unittest.TestCase):
     """Set up for all test method of each test method below."""
     super(LogProcessorTest, self).setUp()
     self._revision = 12345
-    self._webkit_revision = 67890
 
   def _ConstructDefaultProcessor(
       self, log_processor_class, factory_properties=None,
@@ -49,8 +48,7 @@ class LogProcessorTest(unittest.TestCase):
     factory_properties['test_name'] = 'test-name'
     processor = log_processor_class(
         revision=self._revision, build_properties={},
-        factory_properties=factory_properties,
-        webkit_revision=self._webkit_revision)
+        factory_properties=factory_properties)
 
     # Set custom percentiles. This will be used by GraphingLogProcessor, which
     # has and uses a private member attribute called _percentiles.

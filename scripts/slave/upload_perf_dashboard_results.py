@@ -32,10 +32,9 @@ def _GetMainRevision(commit_pos, build_dir, revision=None):
 
 def _GetDashboardJson(options):
   main_revision = _GetMainRevision(options.got_revision_cp, options.build_dir)
-  blink_revision = slave_utils.GetBlinkRevision(options.build_dir)
   revisions = slave_utils.GetPerfDashboardRevisionsWithProperties(
     options.got_webrtc_revision, options.got_v8_revision, options.version,
-    options.git_revision, main_revision, blink_revision)
+    options.git_revision, main_revision)
   reference_build = 'reference' in options.name
   stripped_test_name = options.name.replace('.reference', '')
   results = {}
