@@ -30,6 +30,7 @@ DEPS = [
 ARCHIVE_LINK = 'https://storage.googleapis.com/chromium-v8/official/%s/%s'
 BRANCH_RE = re.compile(r'^\d+\.\d+(?:\.\d+)?$')
 RELEASE_BRANCH_RE = re.compile(r'^\d+\.\d+$')
+FIRST_BUILD_IN_MILESTONE_RE = re.compile(r'^\d+\.\d+\.\d+$')
 
 
 def make_archive(api, branch, version, archive_type, step_suffix='',
@@ -71,12 +72,27 @@ def make_archive(api, branch, version, archive_type, step_suffix='',
   )
   gs_path_suffix = branch if RELEASE_BRANCH_RE.match(branch) else 'canary'
   api.gsutil.upload(
-    zip_file,
-    'chromium-v8/official/%s' % gs_path_suffix,
-    archive_name,
-    args=['-a', 'public-read'],
-    name='upload' + step_suffix,
+      zip_file,
+      'chromium-v8/official/%s' % gs_path_suffix,
+      archive_name,
+      args=['-a', 'public-read'],
+      name='upload' + step_suffix,
   )
+
+  # Upload first build for the latest milestone to a known location. We use
+  # these binaries for running reference perf tests.
+  if (RELEASE_BRANCH_RE.match(branch) and
+      FIRST_BUILD_IN_MILESTONE_RE.match(version)):
+    api.gsutil.upload(
+        zip_file,
+        'chromium-v8/official/latest',
+        'v8-%s%s%s%s-rel.zip' % (api.chromium.c.TARGET_PLATFORM, arch_name,
+                                 api.chromium.c.TARGET_BITS, archive_suffix),
+        args=['-a', 'public-read'],
+        name='update latest beta binaries' + step_suffix,
+    )
+
+
 
   api.step('archive link' + step_suffix, cmd=None)
   api.step.active_result.presentation.links['download'] = (
@@ -177,4 +193,20 @@ def GenTests(api):
           DoesNotRun, 'gclient runhooks', 'gn', 'compile', 'zipping',
           'gsutil upload', 'archive link') +
       api.post_process(DropExpectation)
+  )
+
+  # Upload beta binaries to a known location.
+  mastername = 'client.v8.official'
+  buildername = 'V8 Linux64'
+  yield (
+      api.test(api.v8.test_name(mastername, buildername, 'update_beta')) +
+      api.properties.generic(mastername=mastername, buildername=buildername,
+                             branch='3.4', revision='deadbeef') +
+      api.v8.version_file(0, 'head') +
+      api.override_step_data(
+        'git describe', api.raw_io.stream_output('3.4.3')) +
+      api.post_process(Filter(
+        'gsutil update latest beta binaries',
+        'gsutil update latest beta binaries (libs)',
+      ))
   )
