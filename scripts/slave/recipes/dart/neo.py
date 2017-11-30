@@ -78,11 +78,30 @@ def RunSteps(api):
 
   api.dart.kill_tasks()
 
-  with api.step.defer_results():
-    api.dart.test(test_data=TEST_MATRIX)
-    api.dart.kill_tasks()
-    with api.context(cwd=api.path['checkout']):
-      api.dart.read_debug_log()
+  try_build_args = api.properties.get('try_build_args', None)
+  try_commands = [key for key in api.properties.keys() if
+      'try_cmd' in key and '_repeat' not in key]
+
+  if try_build_args or try_commands:
+    if try_build_args:
+      build_args = try_build_args.split(' ')
+      api.dart.build(build_args)
+    elif 'parent_fileset' not in api.properties:
+      api.dart.build()
+    try_commands.sort()
+    with api.step.defer_results():
+      with api.context(cwd=api.path['checkout']):
+        for cmd_key in try_commands:
+          try_test_cmd = api.properties[cmd_key].split(' ')
+          try_test_repeat = api.properties.get(cmd_key + '_repeat', '1')
+          for x in range(0, int(try_test_repeat)):
+            api.step("%s %s" % (api.properties[cmd_key],x), try_test_cmd)
+  else:
+    with api.step.defer_results():
+      api.dart.test(test_data=TEST_MATRIX)
+      api.dart.kill_tasks()
+      with api.context(cwd=api.path['checkout']):
+        api.dart.read_debug_log()
 
 def GenTests(api):
    yield (
@@ -95,6 +114,24 @@ def GenTests(api):
       api.properties.generic(
         buildername='builders/vm-linux-release-x64-try',
         clobber='true')
+   )
+   yield (
+      api.test('builders/try-cl-builder') +
+      api.properties.generic(
+          buildername='builders/vm-linux-release-x64-try',
+          try_build_args='runtime,sdk',
+          try_cmd_1='tools/test.py -rchrome',
+          try_cmd_2='tools/test.py -mdebug',
+          try_cmd_2_repeat='2')
+   )
+   yield (
+      api.test('builders/try-cl-builder-default-build') +
+      api.properties.generic(
+          buildername='builders/vm-linux-release-x64-try',
+          try_cmd_1='tools/test.py -mrelease',
+          try_cmd_1_repeat='1',
+          try_cmd_2='tools/test.py language_2/some_test',
+          try_cmd_2_repeat='3')
    )
    yield (
       api.test('builders/analyzer-triggered') +

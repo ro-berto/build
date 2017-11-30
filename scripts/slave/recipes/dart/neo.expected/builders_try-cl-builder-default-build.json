@@ -1,0 +1,142 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
+      "--spec-path",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'sdk', 'url': 'https://dart.googlesource.com/sdk.git'}]",
+      "--patch_root",
+      "sdk",
+      "--revision_mapping_file",
+      "{}",
+      "--git-cache-dir",
+      "[CACHE]/git",
+      "--cleanup-dir",
+      "[CLEANUP]/bot_update",
+      "--output_json",
+      "/path/to/tmp/json",
+      "--revision",
+      "sdk@HEAD"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "bot_update",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Some step text@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"sdk\": \"HEAD\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"manifest\": {}, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"sdk\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"properties\": {}, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"root\": \"sdk\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"source_manifest\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"directories\": {}, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"version\": 0@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"step_text\": \"Some step text\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
+      "runhooks"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+    },
+    "name": "gclient runhooks"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/builder/sdk/tools/task_kill.py",
+      "--kill_browsers=True",
+      "--kill_vsbuild=True"
+    ],
+    "name": "kill processes"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/builder/sdk/tools/task_kill.py",
+      "--kill_browsers=True",
+      "--kill_vsbuild=True"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "kill processes (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/builder/sdk/tools/build.py"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "build dart",
+    "timeout": 1200
+  },
+  {
+    "cmd": [
+      "tools/test.py",
+      "-mrelease"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "name": "tools/test.py -mrelease 0"
+  },
+  {
+    "cmd": [
+      "tools/test.py",
+      "language_2/some_test"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "name": "tools/test.py language_2/some_test 0"
+  },
+  {
+    "cmd": [
+      "tools/test.py",
+      "language_2/some_test"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "name": "tools/test.py language_2/some_test 1"
+  },
+  {
+    "cmd": [
+      "tools/test.py",
+      "language_2/some_test"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "name": "tools/test.py language_2/some_test 2"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]
