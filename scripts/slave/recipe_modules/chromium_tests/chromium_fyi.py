@@ -57,11 +57,12 @@ def stock_config(name, platform=None, config='Release'):
       'chromium_config_kwargs': {
           'BUILD_CONFIG': config,
           'TARGET_BITS': 64,
-        },
+      },
+      'chromium_tests_apply_config': [ 'staging' ],
       'test_results_config': 'staging_server',
       'testing': {
           'platform': platform,
-        },
+      },
   }
 
 

@@ -139,7 +139,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         **bot_config.get('chromium_config_kwargs', {}))
     self.set_config(bot_config.get('chromium_tests_config', 'chromium'))
 
-
     # Set GYP_DEFINES explicitly because chromium config constructor does
     # not support that.
     self.m.chromium.c.gyp_env.GYP_DEFINES.update(
@@ -167,6 +166,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     for c in bot_config.get('android_apply_config', []):
       self.m.chromium_android.apply_config(c)
+
+    for c in bot_config.get('chromium_tests_apply_config', []):
+      self.apply_config(c)
 
     # WARNING: src-side runtest.py is only tested with chromium CQ builders.
     # Usage not covered by chromium CQ is not supported and can break
@@ -295,6 +297,29 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       A function that can be passed to setup_chromium_tests or run directly.
 
     """
+
+    if self.c.staging:
+      def test_runner():
+        if serialize_tests:
+          tests_list = [[t] for t in tests]
+        else:
+          tests_list = [tests]
+
+        failed_tests = []
+        for tl in tests_list:
+          failed_ts = self.m.test_utils.run_tests(self.m, tl, suffix)
+          failed_tests.extend(failed_ts)
+
+        if failed_tests:
+          failed_tests_names = [t.name for t in failed_tests]
+          raise self.m.step.StepFailure(
+              '%d tests failed: %r' % (len(failed_tests), failed_tests_names))
+
+      return test_runner
+
+    # TODO(jbudorick): Promote the preceding part of this function to stable
+    # and remove the rest of it once staging looks ok. Remove the test in
+    # tests/api/create_test_runner.py as well.
 
     def test_runner():
       failed_tests = []
