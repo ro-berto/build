@@ -14,12 +14,20 @@ import os
 import subprocess
 import sys
 import tempfile
+import urllib
 
 
 # Install Infra build environment.
 BUILD_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(
                              os.path.abspath(__file__))))
 sys.path.insert(0, os.path.join(BUILD_ROOT, 'scripts'))
+
+import common.env
+common.env.Install()
+
+import httplib2
+from oauth2client import gce
+from oauth2client.client import GoogleCredentials
 
 from common import annotator
 from common import chromium_utils
@@ -229,6 +237,53 @@ def all_cipd_packages():
     # TODO(dnj): Remove me when everything runs on Kitchen.
     yield cipd.CipdPackage(name=_RECIPES_PY_CIPD_PACKAGE, version=pins.recipes)
     yield cipd.CipdPackage(name=_KITCHEN_CIPD_PACKAGE, version=pins.kitchen)
+
+
+def set_recipe_runtime_properties(args, properties):
+  """Looks at mastername/buildername in $properties and contacts
+  `luci-migration.appspot.com` to see if LUCI is prod for this builder yet.
+
+  Args:
+    * args - the optparse/argparse result object containing the logdog_bootstrap
+        arguments.
+    * properties (in/out dictionary) - the recipe properties.
+
+  Modifies `properties` to contain `$recipe_engine/runtime`.
+  """
+  ret = {
+    'is_experimental': False,
+    'is_luci': False,
+  }
+  try:
+    cred_path = logdog_bootstrap.get_config(
+      args, properties).service_account_path
+    master = properties['mastername']
+    builder = properties['buildername']
+
+    # piggyback on logdog's service account; this needs to run everywhere that
+    # logdog does, and since it's migration-buildbot-only code, this seems like
+    # a reasonable compromise to make this rollout as quick as possible.
+    scopes = ['https://www.googleapis.com/auth/userinfo.email']
+    if cred_path == logdog_bootstrap.GCE_CREDENTIALS:
+      cred = gce.AppAssertionCredentials(scopes)
+    else:
+      cred = GoogleCredentials.from_stream(cred_path).create_scoped(scopes)
+
+    http = httplib2.Http()
+    cred.authorize(http)
+    url = 'https://luci-migration.appspot.com/master/%s/builder/%s?format=json'
+    resp, body = http.request(
+      url % (urllib.quote(master), urllib.quote(builder)))
+    if resp.status == 200:
+      ret['is_experimental'] = not json.loads(body)['luci_is_prod']
+      properties['luci_migration'] = {'status': 'ok'}
+    else:
+      properties['luci_migration'] = {
+        'status': 'bad_status', 'code': resp.status}
+  except Exception as ex:
+    properties['luci_migration'] = {'status': 'error', 'error': str(ex)}
+
+  properties['$recipe_engine/runtime'] = ret
 
 
 def _call(cmd, **kwargs):
@@ -499,6 +554,7 @@ def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir, cleanup_dir,
       raise ValueError("Users of 'remote_run.py' MUST specify either 'kitchen' "
                        "or no 'path_config', not %r." % (path_config,))
 
+  set_recipe_runtime_properties(args, properties)
   LOGGER.info('Using properties: %r', properties)
 
   monitoring_utils.write_build_monitoring_event(build_data_dir, properties)
