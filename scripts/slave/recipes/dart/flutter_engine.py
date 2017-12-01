@@ -71,7 +71,7 @@ def GetCheckout(api):
   src_cfg.revisions = {
     'src/flutter': api.properties.get('rev_engine') or
                    api.properties.get('revision') or 'HEAD',
-    'src/dart': api.properties.get('rev_sdk') or 'HEAD',
+    'src/third_party/dart': api.properties.get('rev_sdk') or 'HEAD',
   }
 
   soln = src_cfg.solutions.add()
