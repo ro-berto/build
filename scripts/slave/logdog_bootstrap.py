@@ -24,10 +24,6 @@ from slave import infra_platform
 
 LOGGER = logging.getLogger('logdog_bootstrap')
 
-# Magic credential "path" to indicate that we're using GCE credentials instead
-# of a service account json file.
-GCE_CREDENTIALS = ':gce'
-
 
 class NotBootstrapped(Exception):
   pass
@@ -332,7 +328,7 @@ def _get_service_account_json(opts, credential_path):
 
   if gce.Authenticator.is_gce():
     LOGGER.info('Running on GCE. No credentials necessary.')
-    return GCE_CREDENTIALS
+    return ':gce' # Special value saying "use GCE metadata".
 
   if os.path.isfile(credential_path):
     return credential_path
