@@ -360,6 +360,15 @@ class RemoteRunExecTest(unittest.TestCase):
     self.assertEqual(
         [l for l in self.stream_output.getvalue().splitlines() if l],
         [
+            '@@@SEED_STEP LUCI Migration@@@',
+            '@@@STEP_CURSOR LUCI Migration@@@',
+            '@@@STEP_STARTED@@@',
+            '@@@SET_BUILD_PROPERTY@$recipe_engine/runtime@{"is_experimental":'
+              ' false, "is_luci": false}@@@',
+            '@@@SET_BUILD_PROPERTY@luci_migration@{"status": "error", "error":'
+              ' "Insufficient properties."}@@@',
+            '@@@STEP_CURSOR LUCI Migration@@@',
+            '@@@STEP_CLOSED@@@',
             '@@@SEED_STEP LogDog Bootstrap@@@',
             '@@@STEP_CURSOR LogDog Bootstrap@@@',
             '@@@STEP_STARTED@@@',
@@ -409,6 +418,15 @@ class RemoteRunExecTest(unittest.TestCase):
     self.assertEqual(
         [l for l in self.stream_output.getvalue().splitlines() if l],
         [
+            '@@@SEED_STEP LUCI Migration@@@',
+            '@@@STEP_CURSOR LUCI Migration@@@',
+            '@@@STEP_STARTED@@@',
+            '@@@SET_BUILD_PROPERTY@$recipe_engine/runtime@{"is_experimental":'
+              ' false, "is_luci": false}@@@',
+            '@@@SET_BUILD_PROPERTY@luci_migration@{"status": "error", "error":'
+              ' "Insufficient properties."}@@@',
+            '@@@STEP_CURSOR LUCI Migration@@@',
+            '@@@STEP_CLOSED@@@',
             '@@@SEED_STEP LogDog Bootstrap@@@',
             '@@@STEP_CURSOR LogDog Bootstrap@@@',
             '@@@STEP_STARTED@@@',
@@ -454,6 +472,15 @@ class RemoteRunExecTest(unittest.TestCase):
     self.assertEqual(
         [l for l in self.stream_output.getvalue().splitlines() if l],
         [
+            '@@@SEED_STEP LUCI Migration@@@',
+            '@@@STEP_CURSOR LUCI Migration@@@',
+            '@@@STEP_STARTED@@@',
+            '@@@SET_BUILD_PROPERTY@$recipe_engine/runtime@{"is_experimental":'
+              ' false, "is_luci": false}@@@',
+            '@@@SET_BUILD_PROPERTY@luci_migration@{"status": "error", "error":'
+              ' "Insufficient properties."}@@@',
+            '@@@STEP_CURSOR LUCI Migration@@@',
+            '@@@STEP_CLOSED@@@',
             '@@@SEED_STEP LogDog Bootstrap@@@',
             '@@@STEP_CURSOR LogDog Bootstrap@@@',
             '@@@STEP_STARTED@@@',
@@ -512,6 +539,16 @@ class RemoteRunExecTest(unittest.TestCase):
     self.assertEqual(
         [l for l in self.stream_output.getvalue().splitlines() if l],
         [
+            '@@@SEED_STEP LUCI Migration@@@',
+            '@@@STEP_CURSOR LUCI Migration@@@',
+            '@@@STEP_STARTED@@@',
+            '@@@SET_BUILD_PROPERTY@$recipe_engine/runtime@{"is_experimental":'
+              ' false, "is_luci": false}@@@',
+            '@@@SET_BUILD_PROPERTY@luci_migration@{"status": "error", "error":'
+              ' "The parameter passed to the from_stream() method should point'
+              ' to a file."}@@@',
+            '@@@STEP_CURSOR LUCI Migration@@@',
+            '@@@STEP_CLOSED@@@',
             '@@@SEED_STEP LogDog Bootstrap@@@',
             '@@@STEP_CURSOR LogDog Bootstrap@@@',
             '@@@STEP_STARTED@@@',

@@ -242,11 +242,14 @@ def all_cipd_packages():
     yield cipd.CipdPackage(name=_KITCHEN_CIPD_PACKAGE, version=pins.kitchen)
 
 
-def set_recipe_runtime_properties(args, properties):
+def set_recipe_runtime_properties(stream, args, properties):
   """Looks at mastername/buildername in $properties and contacts
   `luci-migration.appspot.com` to see if LUCI is prod for this builder yet.
 
   Args:
+    * stream - an StructuredAnnotationStream that this function will use to
+        present a 'LUCI Migration' step (and display generated migration
+        properties).
     * args - the optparse/argparse result object containing the logdog_bootstrap
         arguments.
     * properties (in/out dictionary) - the recipe properties.
@@ -257,6 +260,7 @@ def set_recipe_runtime_properties(args, properties):
     'is_experimental': False,
     'is_luci': False,
   }
+  migration = {'status': 'error'}
   try:
     cred_path = logdog_bootstrap.get_config(
       args, properties).service_account_path
@@ -279,14 +283,18 @@ def set_recipe_runtime_properties(args, properties):
       url % (urllib.quote(master), urllib.quote(builder)))
     if resp.status == 200:
       ret['is_experimental'] = json.loads(body)['luci_is_prod']
-      properties['luci_migration'] = {'status': 'ok'}
+      migration['status'] = 'ok'
     else:
-      properties['luci_migration'] = {
-        'status': 'bad_status', 'code': resp.status}
+      migration['status'] = 'bad_status'
+      migration['code'] = resp.status
   except Exception as ex:
-    properties['luci_migration'] = {'status': 'error', 'error': str(ex)}
+    migration['error'] = str(ex)
 
   properties['$recipe_engine/runtime'] = ret
+  properties['luci_migration'] = migration
+  with stream.step('LUCI Migration') as st:
+    st.set_build_property('$recipe_engine/runtime', json.dumps(ret))
+    st.set_build_property('luci_migration', json.dumps(migration))
 
 
 def _call(cmd, **kwargs):
@@ -557,7 +565,7 @@ def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir, cleanup_dir,
       raise ValueError("Users of 'remote_run.py' MUST specify either 'kitchen' "
                        "or no 'path_config', not %r." % (path_config,))
 
-  set_recipe_runtime_properties(args, properties)
+  set_recipe_runtime_properties(stream, args, properties)
   LOGGER.info('Using properties: %r', properties)
 
   monitoring_utils.write_build_monitoring_event(build_data_dir, properties)

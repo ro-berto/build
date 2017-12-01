@@ -430,7 +430,7 @@ def main(argv):
     properties['builder_id'] = 'master.%s:%s' % (
       properties['mastername'], properties['buildername'])
 
-    remote_run.set_recipe_runtime_properties(opts, properties)
+    remote_run.set_recipe_runtime_properties(stream, opts, properties)
     LOGGER.info('Using properties: %r', properties)
 
     # Write our annotated_run.py monitoring event.
