@@ -68,7 +68,7 @@ TEST_MATRIX = {
         "fileset": "nameoffileset"
       }, {
         "name": "Test-step 2",
-        "arguments": ["foo", "--bar"],
+        "arguments": ["foo", "--bar", "-rchrome"],
         "tests": []
       }, {
         "name": "Trigger step",

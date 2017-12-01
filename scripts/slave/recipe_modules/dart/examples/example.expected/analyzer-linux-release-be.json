@@ -509,7 +509,8 @@
       "@@@STEP_LOG_LINE@json.output@        {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"arguments\": [@@@",
       "@@@STEP_LOG_LINE@json.output@            \"foo\", @@@",
-      "@@@STEP_LOG_LINE@json.output@            \"--bar\"@@@",
+      "@@@STEP_LOG_LINE@json.output@            \"--bar\", @@@",
+      "@@@STEP_LOG_LINE@json.output@            \"-rchrome\"@@@",
       "@@@STEP_LOG_LINE@json.output@          ], @@@",
       "@@@STEP_LOG_LINE@json.output@          \"name\": \"Test-step 2\", @@@",
       "@@@STEP_LOG_LINE@json.output@          \"tests\": []@@@",
@@ -727,6 +728,9 @@
   },
   {
     "cmd": [
+      "/usr/bin/xvfb-run",
+      "-a",
+      "--server-args=-screen 0 1024x768x24",
       "python",
       "-u",
       "tools/test.py",
@@ -740,7 +744,8 @@
       "--write-result-log",
       "--write-test-outcome-log",
       "foo",
-      "--bar"
+      "--bar",
+      "-rchrome"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {

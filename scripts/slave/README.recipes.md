@@ -1623,7 +1623,7 @@ Args:
 Returns (str) - The content of the file.
 Raises file.Error
 
-&mdash; **def [run\_script](/scripts/slave/recipe_modules/dart/api.py#447)(self, step_name, script, args, isolate_hash, shards, local_shard, environment, tasks):**
+&mdash; **def [run\_script](/scripts/slave/recipe_modules/dart/api.py#450)(self, step_name, script, args, isolate_hash, shards, local_shard, environment, tasks):**
 
 Runs a specific script with current working directory to be checkout. If
 the runtime (passed in environment) is a browser, and the system is linux,
@@ -1638,7 +1638,7 @@ Args:
   * environment (dict) - Environment with runtime, arch, system etc
   * tasks ([task]) - placeholder to put all swarming tasks in
 
-&mdash; **def [run\_test\_py](/scripts/slave/recipe_modules/dart/api.py#404)(self, step_name, append_logs, step, isolate_hash, shards, local_shard, environment, tasks):**
+&mdash; **def [run\_test\_py](/scripts/slave/recipe_modules/dart/api.py#407)(self, step_name, append_logs, step, isolate_hash, shards, local_shard, environment, tasks):**
 
 Runs test.py with default arguments, based on configuration from.
 Args:
@@ -1652,7 +1652,7 @@ Args:
   * environment (dict) - Environment with runtime, arch, system etc
   * tasks ([task]) - placeholder to put all swarming tasks in
 
-&mdash; **def [run\_trigger](/scripts/slave/recipe_modules/dart/api.py#370)(self, step_name, step, isolate_hash):**
+&mdash; **def [run\_trigger](/scripts/slave/recipe_modules/dart/api.py#373)(self, step_name, step, isolate_hash):**
 
 &mdash; **def [shard](/scripts/slave/recipe_modules/dart/api.py#112)(self, title, isolate_hash, test_args, os=None, cpu='x86-64', pool='Dart.LUCI', num_shards=0, last_shard_is_local=False):**
 

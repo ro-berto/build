@@ -270,12 +270,15 @@ class DartApi(recipe_api.RecipeApi):
       return intersection.pop()
     return default_value
 
-  def _has_specific_argument(self, arguments, options):
+  def _get_specific_argument(self, arguments, options):
     for arg in arguments:
       for option in options:
         if arg.startswith(option):
-          return True
-    return False
+          return arg[len(option):]
+    return None
+
+  def _has_specific_argument(self, arguments, options):
+    return self._get_specific_argument(arguments, options) is not None
 
   def _run_steps(self, config, isolate_hashes, builder_name):
     """Executes all steps from a json test-matrix builder entry"""
@@ -459,7 +462,9 @@ class DartApi(recipe_api.RecipeApi):
       * environment (dict) - Environment with runtime, arch, system etc
       * tasks ([task]) - placeholder to put all swarming tasks in
     """
-    runtime = environment.get('runtime', None)
+    runtime = self._get_specific_argument(args, ['-r', '--runtime'])
+    if runtime is None:
+      runtime = environment.get('runtime', None)
     use_xvfb = (runtime in ['drt', 'chrome', 'ff'] and
                 environment['system'] == 'linux')
     with self.m.step.defer_results():
