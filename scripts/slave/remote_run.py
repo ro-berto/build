@@ -278,7 +278,8 @@ def set_recipe_runtime_properties(stream, args, properties):
 
     http = httplib2.Http()
     cred.authorize(http)
-    url = 'https://luci-migration.appspot.com/master/%s/builder/%s?format=json'
+    url = ('https://luci-migration.appspot.com/masters/%s/builders/%s/'
+           '?format=json')
     resp, body = http.request(
       url % (urllib.quote(master), urllib.quote(builder)))
     if resp.status == 200:
