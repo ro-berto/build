@@ -122,6 +122,8 @@ def _GetTargetCMakeArgs(buildername, checkout, ninja_path, platform):
                                                   'clang++')
   if _HasToken(buildername, 'asan'):
     args['ASAN'] = '1'
+  if _HasToken(buildername, 'cfi'):
+    args['CFI'] = '1'
   if _HasToken(buildername, 'small'):
     _AppendFlags(args, 'CMAKE_CXX_FLAGS', '-DOPENSSL_SMALL=1')
     _AppendFlags(args, 'CMAKE_C_FLAGS', '-DOPENSSL_SMALL=1')
@@ -310,6 +312,7 @@ def GenTests(api):
     ('linux_rel', api.platform('linux', 64)),
     ('linux32_rel', api.platform('linux', 64)),
     ('linux_clang_rel', api.platform('linux', 64)),
+    ('linux_clang_cfi', api.platform('linux', 64)),
     ('linux_fuzz', api.platform('linux', 64)),
     ('linux_fips', api.platform('linux', 64)),
     ('linux_fips_rel', api.platform('linux', 64)),
