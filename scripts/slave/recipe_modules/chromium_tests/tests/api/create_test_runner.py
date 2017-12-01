@@ -45,39 +45,3 @@ def GenTests(api):
           serialize_tests=True) +
       api.override_step_data('base_unittests', retcode=1)
   )
-
-  # TODO(jbudorick): Delete these when the create_test_runner deduplication
-  # moves to stable.
-
-  yield (
-      api.test('staging') +
-      api.properties(
-          mastername='test_mastername',
-          buildername='test_buildername',
-          bot_id='test_bot_id',
-          buildnumber=123,
-          chromium_tests_config='staging'))
-
-  yield (
-      api.test('staging_failure') +
-      api.properties(
-          mastername='test_mastername',
-          buildername='test_buildername',
-          bot_id='test_bot_id',
-          buildnumber=123,
-          chromium_tests_config='staging') +
-      api.override_step_data('base_unittests', retcode=1)
-  )
-
-  yield (
-      api.test('staging_serialize_tests') +
-      api.properties(
-          mastername='test_mastername',
-          buildername='test_buildername',
-          bot_id='test_bot_id',
-          buildnumber=123,
-          serialize_tests=True,
-          chromium_tests_config='staging') +
-      api.override_step_data('base_unittests', retcode=1)
-  )
-

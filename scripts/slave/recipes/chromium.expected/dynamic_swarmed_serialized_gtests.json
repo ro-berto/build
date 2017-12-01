@@ -364,6 +364,13 @@
     ]
   },
   {
+    "cmd": [],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "test_pre_run"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -431,8 +438,9 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "[trigger] base_unittests on NVIDIA GPU on Linux",
+    "name": "test_pre_run.[trigger] base_unittests on NVIDIA GPU on Linux",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Linux'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"base_unittests on NVIDIA GPU on Linux/Linux/eeeeeeeeee/Linux Release (NVIDIA)/571\", @@@",
@@ -580,6 +588,13 @@
     "name": "Upload to test-results [base_unittests on NVIDIA GPU on Linux]"
   },
   {
+    "cmd": [],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "test_pre_run (2)"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -647,8 +662,9 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "[trigger] browser_tests on NVIDIA GPU on Linux",
+    "name": "test_pre_run.[trigger] browser_tests on NVIDIA GPU on Linux",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Linux'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"browser_tests on NVIDIA GPU on Linux/Linux/ffffffffff/Linux Release (NVIDIA)/571\", @@@",

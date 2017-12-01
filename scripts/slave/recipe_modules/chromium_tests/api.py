@@ -298,101 +298,23 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     """
 
-    if self.c.staging:
-      def test_runner():
-        if serialize_tests:
-          tests_list = [[t] for t in tests]
-        else:
-          tests_list = [tests]
-
-        failed_tests = []
-        for tl in tests_list:
-          failed_ts = self.m.test_utils.run_tests(self.m, tl, suffix)
-          failed_tests.extend(failed_ts)
-
-        if failed_tests:
-          failed_tests_names = [t.name for t in failed_tests]
-          raise self.m.step.StepFailure(
-              '%d tests failed: %r' % (len(failed_tests), failed_tests_names))
-
-      return test_runner
-
-    # TODO(jbudorick): Promote the preceding part of this function to stable
-    # and remove the rest of it once staging looks ok. Remove the test in
-    # tests/api/create_test_runner.py as well.
-
     def test_runner():
+      if serialize_tests:
+        tests_list = [[t] for t in tests]
+      else:
+        tests_list = [tests]
+
       failed_tests = []
-
-      with self.m.step.nest('test_pre_run'):
-        for t in tests:
-          try:
-            t.pre_run(self.m, suffix)
-          except self.m.step.InfraFailure:  # pragma: no cover
-            raise
-          except self.m.step.StepFailure:  # pragma: no cover
-            failed_tests.append(t)
-
-      for t in tests:
-        try:
-          t.run(self.m, suffix)
-        except self.m.step.InfraFailure:  # pragma: no cover
-          raise
-        except self.m.step.StepFailure:  # pragma: no cover
-          failed_tests.append(t)
-          if t.abort_on_failure:
-            raise
-
-      for t in tests:
-        try:
-          t.post_run(self.m, suffix)
-        except self.m.step.InfraFailure:  # pragma: no cover
-          raise
-        except self.m.step.StepFailure:  # pragma: no cover
-          failed_tests.append(t)
-          if t.abort_on_failure:
-            raise
+      for tl in tests_list:
+        failed_ts = self.m.test_utils.run_tests(self.m, tl, suffix)
+        failed_tests.extend(failed_ts)
 
       if failed_tests:
         failed_tests_names = [t.name for t in failed_tests]
         raise self.m.step.StepFailure(
             '%d tests failed: %r' % (len(failed_tests), failed_tests_names))
 
-    def serialized_test_runner():
-      failed_tests = []
-
-      for t in tests:
-        try:
-          t.pre_run(self.m, suffix)
-        except self.m.step.InfraFailure:  # pragma: no cover
-          raise
-        except self.m.step.StepFailure:  # pragma: no cover
-          failed_tests.append(t)
-
-        try:
-          t.run(self.m, suffix)
-        except self.m.step.InfraFailure:  # pragma: no cover
-          raise
-        except self.m.step.StepFailure:  # pragma: no cover
-          failed_tests.append(t)
-          if t.abort_on_failure:
-            raise
-
-        try:
-          t.post_run(self.m, suffix)
-        except self.m.step.InfraFailure:  # pragma: no cover
-          raise
-        except self.m.step.StepFailure:  # pragma: no cover
-          failed_tests.append(t)
-          if t.abort_on_failure:
-            raise
-
-      if failed_tests:
-        failed_tests_names = [t.name for t in failed_tests]
-        raise self.m.step.StepFailure(
-            '%d tests failed: %r' % (len(failed_tests), failed_tests_names))
-
-    return serialized_test_runner if serialize_tests else test_runner
+    return test_runner
 
   def get_tests(self, bot_config, bot_db):
     """Returns a tuple: list of tests, and list of tests on the triggered
