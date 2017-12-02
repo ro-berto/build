@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
+  'build/build',
   'build/chromium',
   'build/chromium_checkout',
   'build/filter',
@@ -22,6 +23,7 @@ DEPS = [
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/properties',
+  'recipe_engine/raw_io',
   'recipe_engine/step',
   'recipe_engine/time',
 ]

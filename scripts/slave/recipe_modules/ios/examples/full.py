@@ -214,6 +214,7 @@ def GenTests(api):
       buildnumber='0',
       mastername='chromium.fake',
       bot_id='fake-vm',
+      got_revision_cp='123456',
     )
     + api.ios.make_test_build_config({
       'xcode version': '6.1.1',
@@ -235,7 +236,10 @@ def GenTests(api):
         'bootstrap swarming.swarming.py --version',
         stdout=api.raw_io.output_text('1.2.3'),
     )
- )
+    + api.path.exists(
+        api.path['tmp_base'].join('0_tmp_2', '0', 'Documents', 'perf_result.json'),
+    )
+  )
 
   yield (
     api.test('infra_failure')
