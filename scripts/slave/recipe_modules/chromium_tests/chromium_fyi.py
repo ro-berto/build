@@ -502,10 +502,7 @@ SPEC = {
         chromium_clang.SPEC['builders']['CrWinClang'],
         ['goma_canary', 'goma_high_parallel',
          'goma_enable_global_file_id_cache']),
-    'ToTWin Goma Canary': chromium_apply_configs(
-        chromium_clang.SPEC['builders']['CrWinClang'],
-        ['goma_canary', 'goma_high_parallel',
-         'goma_enable_global_file_id_cache']),
+
     # followed amd64-generic config in chromium_tests/chromium_chromiumos.py
     'ChromeOS amd64 Chromium Goma Canary': chromium_apply_configs(
         chromium_chromiumos.SPEC['builders'][
