@@ -8,6 +8,11 @@ import json
 from recipe_engine import recipe_api
 
 
+def cache_name(build_version):
+  """Returns a name for a named cache for the `build_version`."""
+  return 'xcode_ios_%s' % build_version
+
+
 class iOSApi(recipe_api.RecipeApi):
 
   # Mapping of common names of supported iOS devices to product types
@@ -22,6 +27,15 @@ class iOSApi(recipe_api.RecipeApi):
     'iPhone 6s':       'iPhone8,1',
     'iPhone 7':        'iPhone9,1',
   }
+  # Service account to use in swarming tasks.
+  SWARMING_SERVICE_ACCOUNT = \
+    'ios-isolated-tester@chops-service-accounts.iam.gserviceaccount.com'
+
+  # Pinned version of
+  # https://chromium.googlesource.com/infra/infra/+/master/go/src/infra/cmd/mac_toolchain
+  MAC_TOOLCHAIN_VERSION = 'git_revision:2b69be6203f56a970202d9b5984557c0453b4eb0'
+  MAC_TOOLCHAIN_ROOT    = '.'
+  XCODE_APP_PATH        = 'Xcode.app'
 
   DASHBOARD_UPLOAD_URL = 'https://chromeperf.appspot.com'
   UPLOAD_DASHBOARD_API_PROPERTIES = [
@@ -502,7 +516,14 @@ class iOSApi(recipe_api.RecipeApi):
         'task': None,
         'test': copy.deepcopy(test),
         'tmp dir': None,
+        'xcode version': test.get(
+            'xcode version', self.__config.get('xcode version')),
+        'xcode build version': test.get(
+            'xcode build version',
+            self.__config.get('xcode build version', '')).lower(),
     }
+    assert task['xcode build version'] or task['xcode version']
+
     if task['skip']:
       return task
 
@@ -517,14 +538,26 @@ class iOSApi(recipe_api.RecipeApi):
         'true' if test.get('restart') else 'false'),
       '--config-variable', 'test_args', self.m.json.dumps(
           test.get('test args') or []),
-      '--config-variable', 'xcode_version', test.get(
-        'xcode version', self.__config['xcode version']),
       '--config-variable', 'xctest', (
         'true' if test.get('xctest') else 'false'),
       '--isolate', isolate_template,
       '--isolated', tmp_dir.join('%s.isolated' % test['id']),
       '--path-variable', 'app_path', app_path,
     ]
+
+    # Prefer xcode build version. TODO(sergeyberezin): remove "xcode version"
+    # path when all builds are migrated to "xcode build version".
+    if task['xcode build version']:
+      args.extend([
+        '--config-variable', 'xcode_arg_name', 'xcode-build-version',
+        '--config-variable', 'xcode_version', task['xcode build version'],
+      ])
+    else:
+      args.extend([
+        '--config-variable', 'xcode_arg_name', 'xcode-version',
+        '--config-variable', 'xcode_version', task['xcode version'],
+      ])
+
     if self.platform == 'simulator':
       args.extend([
         '--config-variable', 'platform', test['device type'],
@@ -564,7 +597,9 @@ class iOSApi(recipe_api.RecipeApi):
       '{"test_args": <(test_args), "xctest": <(xctest), "restart": <(restart)}',
       '--out-dir', '${ISOLATED_OUTDIR}',
       '--retries', '3',
-      '--xcode-version', '<(xcode_version)',
+      '--<(xcode_arg_name)', '<(xcode_version)',
+      '--mac-toolchain-cmd', '%s/mac_toolchain' % self.MAC_TOOLCHAIN_ROOT,
+      '--xcode-path', self.XCODE_APP_PATH,
     ]
     files = [
       # .apps are directories. Need the trailing slash to isolate the
@@ -654,13 +689,24 @@ class iOSApi(recipe_api.RecipeApi):
         task['step name'],
         task['isolated hash'],
         task_output_dir=task['tmp_dir'],
+        service_account=self.SWARMING_SERVICE_ACCOUNT,
+        cipd_packages=[(
+            self.MAC_TOOLCHAIN_ROOT,
+            'infra/tools/mac_toolchain/${platform}',
+            self.MAC_TOOLCHAIN_VERSION,
+        )],
       )
 
       swarming_task.dimensions = {
         'pool': 'Chrome',
-        'xcode_version': task['test'].get(
-          'xcode version', self.__config['xcode version'])
       }
+      if task['xcode version']:
+        swarming_task.dimensions['xcode_version'] = task['xcode version']
+
+      if task['xcode build version']:
+        named_cache = cache_name(task['xcode build version'])
+        swarming_task.named_caches[named_cache] = self.XCODE_APP_PATH
+
       if ('internal' not in self.m.properties['mastername'] and
         'official' not in self.m.properties['mastername']):
         # 4 cores are better than 8! See https://crbug.com/711845.
@@ -694,8 +740,12 @@ class iOSApi(recipe_api.RecipeApi):
         self.platform,
         task['test']['device type'],
         task['test']['os'],
-        swarming_task.dimensions['xcode_version'],
       ]
+      if task['xcode build version']:
+        spec.append(task['xcode build version'])
+      else:
+        spec.append(task['xcode version'])
+
       # e.g.
       # chromium.mac:ios-simulator:base_unittests:simulator:iPad Air:10.0:8.0
       swarming_task.tags.add('spec_name:%s' % str(':'.join(spec)))
