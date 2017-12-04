@@ -252,9 +252,7 @@
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@failed to get bucket name@KeyError: buildbucket@@@",
-      "@@@STEP_LOG_END@failed to get bucket name@@@"
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {

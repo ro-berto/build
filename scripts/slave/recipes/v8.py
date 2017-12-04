@@ -199,7 +199,7 @@ def GenTests(api):
         'v8_win64_rel_ng',
         'test_triggered_build_luci',
     ) +
-    api.properties(buildbucket='{"build":{"bucket":"luci.v8.try"}}') +
+    api.properties(buildbucket={'build': {'bucket': 'luci.v8.try'}}) +
     api.post_process(Filter('trigger'))
   )
 
