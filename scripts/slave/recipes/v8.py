@@ -192,6 +192,17 @@ def GenTests(api):
     api.post_process(Filter('trigger'))
   )
 
+  # Test that triggered builds use parent builder when running on LUCI.
+  yield (
+    api.v8.test(
+        'tryserver.v8',
+        'v8_win64_rel_ng',
+        'test_triggered_build_luci',
+    ) +
+    api.properties(buildbucket='{"build":{"bucket":"luci.v8.try"}}') +
+    api.post_process(Filter('trigger'))
+  )
+
   # Test using extra flags with a bot that already uses some extra flags as
   # positional argument.
   yield (

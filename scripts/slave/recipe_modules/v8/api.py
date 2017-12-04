@@ -1395,12 +1395,15 @@ class V8Api(recipe_api.RecipeApi):
             trigger_props['parent_buildnumber'] = (
                 self.m.properties['buildnumber'])
           trigger_props.update(properties)
+          try:
+            bucket_name = self.m.json.loads(
+                self.m.properties['buildbucket'])['build']['bucket']
+          except (TypeError, ValueError, KeyError):
+            bucket_name = 'master.%s' % self.m.properties['mastername']
           self.m.buildbucket.put(
               [
                 {
-                  # TODO(sergiyb): Maybe parse bucket name from the
-                  # 'buildbucket' build property when it's available.
-                  'bucket': 'master.%s' % self.m.properties['mastername'],
+                  'bucket': bucket_name,
                   'parameters': {
                     'builder_name': builder_name,
                     # Attach additional builder-specific test-spec properties.
