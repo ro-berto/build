@@ -255,7 +255,7 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@bucket_err@KeyError: buildbucket@@@",
+      "@@@STEP_LOG_LINE@bucket_err@buildbucket KeyError buildbucket@@@",
       "@@@STEP_LOG_END@bucket_err@@@"
     ]
   },
