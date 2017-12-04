@@ -256,7 +256,7 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@bucket_err@buildbucket KeyError buildbucket@@@",
+      "@@@STEP_LOG_LINE@bucket_err@TypeError 'NoneType' object has no attribute '__getitem__'@@@",
       "@@@STEP_LOG_END@bucket_err@@@"
     ]
   },
