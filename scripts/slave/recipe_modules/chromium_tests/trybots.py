@@ -711,10 +711,6 @@ TRYBOTS = freeze({
         'mastername': 'client.v8.fyi',
         'buildername': 'V8 Linux GN',
       }),
-      'v8_android_chromium_gn_dbg': simple_bot({
-        'mastername': 'client.v8.fyi',
-        'buildername': 'V8 Android GN (dbg)',
-      }),
     },
   },
 })

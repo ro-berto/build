@@ -208,7 +208,7 @@ def GenTests(api):
   yield (
     api.v8.test(
         'tryserver.v8',
-        'v8_linux_arm_armv8a_rel',
+        'v8_linux_rel_ng_triggered',
         'positional_extra_flags',
     ) +
     api.properties(
