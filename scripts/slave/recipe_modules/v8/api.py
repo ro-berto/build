@@ -1396,11 +1396,13 @@ class V8Api(recipe_api.RecipeApi):
                 self.m.properties['buildnumber'])
           trigger_props.update(properties)
           try:
+            bucket_exc = None
             bucket_name = self.m.json.loads(
                 self.m.properties['buildbucket'])['build']['bucket']
-          except (TypeError, ValueError, KeyError):
+          except (TypeError, ValueError, KeyError) as e:
+            bucket_exc = '%s: %s' % (type(e).__name__, e.message)
             bucket_name = 'master.%s' % self.m.properties['mastername']
-          self.m.buildbucket.put(
+          step_result = self.m.buildbucket.put(
               [
                 {
                   'bucket': bucket_name,
@@ -1434,6 +1436,9 @@ class V8Api(recipe_api.RecipeApi):
               name='trigger',
               step_test_data=lambda: self.m.json.test_api.output_stream({}),
           )
+          if bucket_exc:
+            step_result.presentation.logs[
+                'failed to get bucket name'] = bucket_exc.splitlines()
       else:
         self.m.trigger(*[{
           'builder_name': builder_name,
