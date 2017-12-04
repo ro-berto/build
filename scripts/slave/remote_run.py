@@ -514,10 +514,6 @@ def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir, cleanup_dir,
   properties = copy.copy(args.factory_properties)
   properties.update(args.build_properties)
 
-  # Determine our pins.
-  mastername = properties.get('mastername')
-  buildername = properties.get('buildername')
-
   # Determine if this build is an opt-in build.
   is_opt_in = get_is_opt_in(properties)
 
@@ -525,6 +521,8 @@ def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir, cleanup_dir,
   #
   # If a property includes "remote_run_canary", we will explicitly use canary
   # pins. This can be done by manually submitting a build to the waterfall.
+  mastername = properties.get('mastername')
+  buildername = properties.get('buildername')
   is_canary = (_get_is_canary(mastername) or is_opt_in or
                'remote_run_canary' in properties or args.canary)
   pins = _STABLE_CIPD_PINS if not is_canary else _CANARY_CIPD_PINS
@@ -543,7 +541,12 @@ def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir, cleanup_dir,
 
   # Augment our input properties...
   properties['build_data_dir'] = build_data_dir
-  properties['builder_id'] = 'master.%s:%s' % (mastername, buildername)
+  properties['builder_id'] = (
+      'master.{mastername}:{buildername}'.format(**properties))
+  if 'buildnumber' in properties:
+    properties['build_id'] = (
+        'buildbot/{mastername}/{buildername}/{buildnumber}'.format(
+            **properties))
 
   if not is_kitchen:
     # path_config property defines what paths a build uses for checkout, git
