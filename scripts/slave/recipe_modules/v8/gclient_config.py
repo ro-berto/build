@@ -34,7 +34,6 @@ def llvm_compiler_rt(c):
   c.solutions[0].custom_deps['v8/third_party/llvm/projects/compiler-rt'] = (
     ChromiumGitURL(c, 'external', 'llvm.org', 'compiler-rt'))
 
-
 @CONFIG_CTX()
 def node_js(c):
   soln = c.solutions.add()
@@ -42,3 +41,7 @@ def node_js(c):
   soln.url = ChromiumGitURL(c, 'external', 'github.com', 'v8', 'node')
   soln.revision = 'vee-eight-lkgr:HEAD'
   c.got_revision_reverse_mapping['got_node_js_revision'] = soln.name
+
+  # Specify node-build for side-by-side V8 and node solutions.
+  c.solutions[0].custom_vars['build_for_node'] = 'True'
+  soln.custom_vars['build_for_node'] = 'True'
