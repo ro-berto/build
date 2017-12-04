@@ -73,7 +73,8 @@ def RunSteps(api):
     channel = builder_fragments[-1]
     if channel not in ['be', 'dev', 'stable', 'integration', 'try']:
       channel = 'be'
-    api.dart.checkout(channel)
+    clobber = 'clobber' in api.properties
+    api.dart.checkout(channel, clobber)
 
   api.dart.kill_tasks()
 
@@ -92,7 +93,8 @@ def GenTests(api):
    yield (
       api.test('builders/vm-linux-release-x64-try') +
       api.properties.generic(
-        buildername='builders/vm-linux-release-x64-try')
+        buildername='builders/vm-linux-release-x64-try',
+        clobber='true')
    )
    yield (
       api.test('builders/analyzer-triggered') +

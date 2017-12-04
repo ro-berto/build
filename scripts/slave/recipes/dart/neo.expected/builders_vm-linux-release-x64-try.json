@@ -52,6 +52,15 @@
     "cmd": [
       "python",
       "-u",
+      "[CACHE]/builder/sdk/tools/clean_output_directory.py"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "name": "clobber"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
