@@ -55,8 +55,12 @@ AUX_BINARY_PACKAGES = {
 
       # The Git package installs its binaries into "bin/".
       cipd.CipdPackage(
-          name='infra/git/${os}-${arch=386,amd64}',
-          version='version:2.15.0.chromium12'),
+          name='infra/git/${os=linux,mac}-${arch=386,amd64}',
+          version='version:2.15.1.chromium12'),
+
+      cipd.CipdPackage(
+          name='infra/git/windows-${arch=386,amd64}',
+          version='version:2.15.1.2.chromium12'),
 
       cipd.CipdPackage(
           name='infra/tools/authutil/${platform}',
