@@ -72,7 +72,7 @@ def RunSteps(api):
       test(api, system, 'ddc tests',
           test_args + ['-cdartdevc', '-rchrome'] + TARGETS)
       # todo(athom): Remove the check when DDK works on windows with --use-sdk
-      if system is not 'win':
+      if system != 'win':
         test(api, system, 'ddc kernel tests',
             test_args + ['-rchrome', '-cdartdevk', 'language_2'])
       api.dart.kill_tasks()
