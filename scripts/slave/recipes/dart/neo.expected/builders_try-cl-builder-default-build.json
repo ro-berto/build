@@ -104,11 +104,14 @@
   },
   {
     "cmd": [
+      "/usr/bin/xvfb-run",
+      "-a",
+      "--server-args=-screen 0 1024x768x24",
       "tools/test.py",
       "-mrelease"
     ],
     "cwd": "[CACHE]/builder/sdk",
-    "name": "tools/test.py -mrelease 0"
+    "name": "xvfb tools/test.py -mrelease 0"
   },
   {
     "cmd": [

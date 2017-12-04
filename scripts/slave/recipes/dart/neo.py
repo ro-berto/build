@@ -93,6 +93,9 @@ def RunSteps(api):
       with api.context(cwd=api.path['checkout']):
         for cmd_key in try_commands:
           try_test_cmd = api.properties[cmd_key].split(' ')
+          if try_test_cmd[0] == "xvfb":
+            try_test_cmd = ['/usr/bin/xvfb-run','-a',
+              '--server-args=-screen 0 1024x768x24'] + try_test_cmd[1:]
           try_test_repeat = api.properties.get(cmd_key + '_repeat', '1')
           for x in range(0, int(try_test_repeat)):
             api.step("%s %s" % (api.properties[cmd_key],x), try_test_cmd)
@@ -128,7 +131,7 @@ def GenTests(api):
       api.test('builders/try-cl-builder-default-build') +
       api.properties.generic(
           buildername='builders/vm-linux-release-x64-try',
-          try_cmd_1='tools/test.py -mrelease',
+          try_cmd_1='xvfb tools/test.py -mrelease',
           try_cmd_1_repeat='1',
           try_cmd_2='tools/test.py language_2/some_test',
           try_cmd_2_repeat='3')
