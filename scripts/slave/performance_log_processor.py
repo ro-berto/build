@@ -407,7 +407,7 @@ class GraphingLogProcessor(PerformanceLogProcessor):
 
   RESULTS_REGEX = re.compile(r'(?P<IMPORTANT>\*)?RESULT '
                              r'(?P<GRAPH>[^:]*): (?P<TRACE>[^=]*)= '
-                             r'(?P<VALUE>[\{\[]?[-\d\., ]+[\}\]]?)('
+                             r'(?P<VALUE>[\{\[]?[-e+\d\., ]+[\}\]]?)('
                              r' ?(?P<UNITS>.+))?')
   HISTOGRAM_REGEX = re.compile(r'(?P<IMPORTANT>\*)?HISTOGRAM '
                                r'(?P<GRAPH>[^:]*): (?P<TRACE>[^=]*)= '
