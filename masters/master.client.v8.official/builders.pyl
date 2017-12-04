@@ -46,6 +46,30 @@
       "slave_pools": ["linux"],
       "category": "0Linux",
     },
+    "V8 Win32": {
+      "recipe": "v8/archive",
+      "use_remote_run": False,
+      "scheduler": "v8_commits",
+      "mergeRequests": False,
+      "slave_pools": ["win"],
+      "category": "1Windows",
+    },
+    "V8 Win64": {
+      "recipe": "v8/archive",
+      "use_remote_run": False,
+      "scheduler": "v8_commits",
+      "mergeRequests": False,
+      "slave_pools": ["win"],
+      "category": "1Windows",
+    },
+    "V8 Mac64": {
+      "recipe": "v8/archive",
+      "use_remote_run": False,
+      "scheduler": "v8_commits",
+      "mergeRequests": False,
+      "slave_pools": ["mac"],
+      "category": "2Mac",
+    },
   },
 
   "schedulers": {
@@ -64,6 +88,22 @@
         "version": "trusty",
       },
       "slaves": ["slave47-c3", "slave86-c3"],
+    },
+    "win": {
+      "slave_data": {
+        "bits": 64,
+        "os": "win",
+        "version": "win7",
+      },
+      "slaves": ["vm58-m3"],
+    },
+    "mac": {
+      "slave_data": {
+        "bits": 64,
+        "os": "mac",
+        "version": "10.12",
+      },
+      "slaves": ["vm79-m3"],
     },
   },
 }

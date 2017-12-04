@@ -19,6 +19,7 @@ DEPS = [
   'recipe_engine/file',
   'recipe_engine/json',
   'recipe_engine/path',
+  'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/python',
   'recipe_engine/raw_io',
@@ -130,13 +131,15 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  for mastername, _, buildername, _ in api.v8.iter_builders('v8/archive'):
+  for mastername, _, buildername, bot_config in api.v8.iter_builders(
+      'v8/archive'):
     test = (
         api.test(api.v8.test_name(mastername, buildername)) +
         api.properties.generic(mastername=mastername,
                                buildername=buildername,
                                branch='3.4',
                                revision='deadbeef') +
+        api.platform(bot_config['testing']['platform'], 64) +
         api.v8.version_file(17, 'head') +
         api.override_step_data(
             'git describe', api.raw_io.stream_output('3.4.3.17')) +
