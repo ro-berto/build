@@ -11,7 +11,10 @@ class DartApi(recipe_api.RecipeApi):
     # in gclient 'dart' config, remove line below.
     self.m.gclient.c.solutions[0].url = 'https://dart.googlesource.com/sdk.git'
 
-    with self.m.context(cwd=self.m.path['cache'].join('builder')):
+    self.m.goma.ensure_goma()
+
+    with self.m.context(cwd=self.m.path['cache'].join('builder'),
+                        env={'GOMA_DIR':self.m.goma.goma_dir}):
       self.m.bot_update.ensure_checkout()
       with self.m.context(cwd=self.m.path['checkout']):
         if clobber:
@@ -41,16 +44,22 @@ class DartApi(recipe_api.RecipeApi):
        and optionally isolates the sdk for testing using the specified isolate.
        If an isolate is specified, it returns the hash of the isolated archive.
     """
+    build_args = build_args + ['--no-start-goma']
+    if self.m.platform.name == 'mac':
+      build_args.append('-j200')
     with self.m.context(cwd=self.m.path['checkout'],
                      env_prefixes={'PATH':[self.m.depot_tools.root]}):
       self.kill_tasks()
       try:
+        self.m.goma.start()
         self.m.python(name,
                    self.m.path['checkout'].join('tools', 'build.py'),
                    args=build_args,
                    timeout=20 * 60)
       except self.m.step.StepTimeout as e:
         raise self.m.step.StepFailure('Step "%s" timed out after 20 minutes' % name)
+      finally:
+        self.m.goma.stop()
 
       if isolate is not None:
         self._swarming_checkout()

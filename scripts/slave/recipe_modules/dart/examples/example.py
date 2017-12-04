@@ -106,6 +106,17 @@ TEST_MATRIX = {
         "arguments": ["foo", "--bar"],
         "tests": ["co19"]
       }]
+    },
+    {
+      "builders": [
+        "example-mac"
+      ],
+      "meta": {},
+      "steps": [{
+        "name": "Build",
+        "script": "tools/build.py",
+        "arguments": []
+      }]
     }
   ]
 }
@@ -175,3 +186,6 @@ def GenTests(api):
                     stdout=api.raw_io.output('test isolate hash')) +
       api.step_data('buildbucket.put',
                     stdout=api.json.output(TRIGGER_RESULT)))
+
+  yield (api.test('example-mac') + api.platform('mac', 64) + api.properties(
+      buildername='example-mac'))
