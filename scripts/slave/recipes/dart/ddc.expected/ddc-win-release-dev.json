@@ -3,17 +3,17 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
+      "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'sdk', 'url': 'https://dart.googlesource.com/sdk.git'}]",
+      "cache_dir = '[CACHE]\\\\git'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'sdk', 'url': 'https://dart.googlesource.com/sdk.git'}]",
       "--patch_root",
       "sdk",
       "--revision_mapping_file",
       "{}",
       "--git-cache-dir",
-      "[CACHE]/git",
+      "[CACHE]\\git",
       "--cleanup-dir",
-      "[CLEANUP]/bot_update",
+      "[CLEANUP]\\bot_update",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -51,12 +51,12 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[START_DIR]/sdk",
+    "cwd": "[START_DIR]\\sdk",
     "env": {
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
   },
@@ -64,11 +64,11 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/sdk/tools/task_kill.py",
+      "[START_DIR]\\sdk\\tools\\task_kill.py",
       "--kill_browsers=True",
       "--kill_vsbuild=True"
     ],
-    "cwd": "[START_DIR]/sdk",
+    "cwd": "[START_DIR]\\sdk",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -80,12 +80,12 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/sdk/tools/build.py",
+      "[START_DIR]\\sdk\\tools\\build.py",
       "-mrelease",
       "dart2js_bot",
       "dartdevc_test"
     ],
-    "cwd": "[START_DIR]/sdk",
+    "cwd": "[START_DIR]\\sdk",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -95,12 +95,9 @@
   },
   {
     "cmd": [
-      "/usr/bin/xvfb-run",
-      "-a",
-      "--server-args=-screen 0 1024x768x24",
       "python",
       "-u",
-      "./tools/test.py",
+      "[START_DIR]\\sdk\\tools\\test.py",
       "-mrelease",
       "--checked",
       "--progress=buildbot",
@@ -116,21 +113,21 @@
       "lib_2",
       "lib_strong"
     ],
-    "cwd": "[START_DIR]/sdk",
+    "cwd": "[START_DIR]\\sdk",
     "name": "ddc tests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[START_DIR]/sdk/logs/result.log",
+      "[START_DIR]\\sdk\\logs\\result.log",
       "/path/to/tmp/"
     ],
-    "cwd": "[START_DIR]/sdk",
+    "cwd": "[START_DIR]\\sdk",
     "infra_step": true,
     "name": "read results of ddc tests",
     "~followup_annotations": [
@@ -142,24 +139,21 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "remove",
-      "[START_DIR]/sdk/logs/result.log"
+      "[START_DIR]\\sdk\\logs\\result.log"
     ],
-    "cwd": "[START_DIR]/sdk",
+    "cwd": "[START_DIR]\\sdk",
     "infra_step": true,
     "name": "delete result.log"
   },
   {
     "cmd": [
-      "/usr/bin/xvfb-run",
-      "-a",
-      "--server-args=-screen 0 1024x768x24",
       "python",
       "-u",
-      "./tools/test.py",
+      "[START_DIR]\\sdk\\tools\\test.py",
       "-mrelease",
       "--checked",
       "--progress=buildbot",
@@ -172,21 +166,21 @@
       "-cdartdevk",
       "language_2"
     ],
-    "cwd": "[START_DIR]/sdk",
+    "cwd": "[START_DIR]\\sdk",
     "name": "ddc kernel tests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[START_DIR]/sdk/logs/result.log",
+      "[START_DIR]\\sdk\\logs\\result.log",
       "/path/to/tmp/"
     ],
-    "cwd": "[START_DIR]/sdk",
+    "cwd": "[START_DIR]\\sdk",
     "infra_step": true,
     "name": "read results of ddc kernel tests",
     "~followup_annotations": [
@@ -198,13 +192,13 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "remove",
-      "[START_DIR]/sdk/logs/result.log"
+      "[START_DIR]\\sdk\\logs\\result.log"
     ],
-    "cwd": "[START_DIR]/sdk",
+    "cwd": "[START_DIR]\\sdk",
     "infra_step": true,
     "name": "delete result.log (2)"
   },
@@ -212,11 +206,11 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/sdk/tools/task_kill.py",
+      "[START_DIR]\\sdk\\tools\\task_kill.py",
       "--kill_browsers=True",
       "--kill_vsbuild=True"
     ],
-    "cwd": "[START_DIR]/sdk",
+    "cwd": "[START_DIR]\\sdk",
     "name": "kill processes (2)"
   },
   {
