@@ -453,107 +453,45 @@ SPEC = {
       },
       'enable_swarming': True,
     },
-    'CrWinGoma': chromium_apply_configs(
-        chromium_win.SPEC['builders']['Win Builder'], ['goma_canary']),
     'Win Builder Goma Canary': chromium_apply_configs(
         chromium_win.SPEC['builders']['Win Builder'], ['goma_canary']),
-
-    'CrWinGoma(dll)': chromium_apply_configs(
-        chromium_win.SPEC['builders']['Win Builder'],
-        ['goma_canary', 'shared_library']),
     'Win Builder (dbg) Goma Canary': chromium_apply_configs(
         chromium_win.SPEC['builders']['Win Builder (dbg)'],
         ['goma_canary', 'shared_library']),
-
-    'CrWinGoma(loc)': chromium_apply_configs(
-        no_archive(chromium.SPEC['builders']['Win']),
-        ['goma_canary', 'goma_localoutputcache']),
     'Win Goma Canary LocalOutputCache': chromium_apply_configs(
         no_archive(chromium.SPEC['builders']['Win']),
         ['goma_canary', 'goma_localoutputcache']),
     'Win cl.exe Goma Canary LocalOutputCache': chromium_apply_configs(
         no_archive(chromium.SPEC['builders']['Win']),
         ['goma_canary', 'goma_localoutputcache']),
-
-    'CrWin7Goma': chromium_apply_configs(
-        chromium_win.SPEC['builders']['Win Builder'], ['goma_canary']),
     'Win7 Builder Goma Canary': chromium_apply_configs(
         chromium_win.SPEC['builders']['Win Builder'], ['goma_canary']),
-
-    'CrWin7Goma(dll)': chromium_apply_configs(
-        chromium_win.SPEC['builders']['Win Builder'],
-        ['goma_canary', 'shared_library']),
-
-    'CrWin7Goma(dbg)': chromium_apply_configs(
-        chromium_win.SPEC['builders']['Win Builder (dbg)'],
-        ['goma_canary']),
     'Win7 Builder (dbg) Goma Canary': chromium_apply_configs(
         chromium_win.SPEC['builders']['Win Builder (dbg)'],
         ['goma_canary']),
-
-    'CrWinClexeGoma': chromium_apply_configs(
-        chromium_win.SPEC['builders']['Win Builder'],
-        ['goma_canary', 'shared_library']),
     'WinMSVC64 Goma Canary': chromium_apply_configs(
         chromium_win.SPEC['builders']['WinMSVC64'],
-        ['goma_canary']),
-
-    'CrWinClangGoma': chromium_apply_configs(
-        chromium_clang.SPEC['builders']['CrWinClang'],
-        ['goma_canary', 'goma_high_parallel',
-         'goma_enable_global_file_id_cache']),
-
-    # followed amd64-generic config in chromium_tests/chromium_chromiumos.py
-    'ChromeOS amd64 Chromium Goma Canary': chromium_apply_configs(
-        chromium_chromiumos.SPEC['builders'][
-            'chromeos-amd64-generic-rel'],
         ['goma_canary']),
     'chromeos-amd64-generic-rel-goma-canary': chromium_apply_configs(
         chromium_chromiumos.SPEC['builders'][
             'chromeos-amd64-generic-rel'],
         ['goma_canary']),
-
-    'Chromium Linux Goma Canary': chromium_apply_configs(
-        chromium_linux.SPEC['builders']['Linux Builder'], ['goma_canary']),
     'Linux Builder Goma Canary': chromium_apply_configs(
         chromium_linux.SPEC['builders']['Linux Builder'], ['goma_canary']),
-
-    'Chromium Linux Goma Canary (clobber)': chromium_apply_configs(
-        no_archive(chromium.SPEC['builders']['Linux x64']), ['goma_canary']),
     'Linux x64 Goma Canary (clobber)': chromium_apply_configs(
         no_archive(chromium.SPEC['builders']['Linux x64']), ['goma_canary']),
-
-    'Chromium Linux Goma Canary LocalOutputCache': chromium_apply_configs(
-        no_archive(chromium.SPEC['builders']['Linux x64']),
-        ['goma_canary', 'goma_localoutputcache']),
     'Linux x64 Goma Canary LocalOutputCache': chromium_apply_configs(
         no_archive(chromium.SPEC['builders']['Linux x64']),
         ['goma_canary', 'goma_localoutputcache']),
-
-    'Chromium Mac 10.9 Goma Canary': chromium_apply_configs(
-        chromium_mac.SPEC['builders']['Mac Builder'], ['goma_canary']),
     'Mac Builder Goma Canary': chromium_apply_configs(
         chromium_mac.SPEC['builders']['Mac Builder'], ['goma_canary']),
-    'Chromium Mac 10.9 Goma Canary (dbg)': chromium_apply_configs(
-        chromium_mac.SPEC['builders']['Mac Builder (dbg)'], ['goma_canary']),
     'Mac Builder (dbg) Goma Canary': chromium_apply_configs(
         chromium_mac.SPEC['builders']['Mac Builder (dbg)'], ['goma_canary']),
-
-    'Chromium Mac 10.9 Goma Canary (clobber)': chromium_apply_configs(
-        no_archive(chromium.SPEC['builders']['Mac']), ['goma_canary']),
     'Mac Goma Canary (clobber)': chromium_apply_configs(
         no_archive(chromium.SPEC['builders']['Mac']), ['goma_canary']),
-
-    'Chromium Mac 10.9 Goma Canary (dbg)(clobber)': chromium_apply_configs(
-        chromium_mac.SPEC['builders']['Mac Builder (dbg)'],
-        ['goma_canary', 'clobber']),
     'Mac Builder (dbg) Goma Canary (clobber)': chromium_apply_configs(
         chromium_mac.SPEC['builders']['Mac Builder (dbg)'],
         ['goma_canary', 'clobber']),
-
-    'Chromium Mac Goma Canary LocalOutputCache': chromium_apply_configs(
-        no_archive(chromium.SPEC['builders']['Mac']),
-        ['goma_canary', 'goma_localoutputcache']),
     'Mac Goma Canary LocalOutputCache': chromium_apply_configs(
         no_archive(chromium.SPEC['builders']['Mac']),
         ['goma_canary', 'goma_localoutputcache']),
@@ -955,9 +893,6 @@ SPEC = {
   },
 }
 
-SPEC['builders']['Android Builder Goma Canary (dbg)'] = chromium_apply_configs(
-    SPEC['builders']['Android Builder (dbg)'],
-    ['goma_canary'])
 SPEC['builders']['Android Builder (dbg) Goma Canary'] = chromium_apply_configs(
     SPEC['builders']['Android Builder (dbg)'],
     ['goma_canary'])
