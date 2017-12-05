@@ -368,6 +368,7 @@ BUILDERS = {
         },
         'triggers': [
           'V8 Linux64',
+          'V8 Linux64 - fyi',
         ],
         'triggers_proxy': True,
       },
@@ -397,6 +398,7 @@ BUILDERS = {
         'triggers': [
           'V8 Fuzzer',
           'V8 Linux64 - debug',
+          'V8 Linux64 - debug - fyi',
         ],
       },
       'V8 Linux64 - custom snapshot - debug builder': {
@@ -1010,6 +1012,30 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'testing': {'platform': 'linux'},
+      },
+      'V8 Linux64 - fyi': {
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Linux64 - builder',
+        'build_gs_archive': 'linux64_rel_archive',
+        'enable_swarming': True,
+        'testing': {'platform': 'linux'},
+        'swarming_properties': SWARMING_FYI_PROPS,
+      },
+      'V8 Linux64 - debug - fyi': {
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Linux64 - debug builder',
+        'build_gs_archive': 'linux64_dbg_archive',
+        'enable_swarming': True,
+        'testing': {'platform': 'linux'},
+        'swarming_properties': SWARMING_FYI_PROPS,
       },
       'V8 Linux64 - gcov coverage': {
         'chromium_apply_config': [
@@ -2273,6 +2299,31 @@ BUILDERS = {
         'swarming_dimensions': {
           'cpu': 'x86-64-avx2',
         },
+      },
+      'v8_linux64_fyi_rel_ng': {
+        'chromium_apply_config': [
+          'default_compiler', 'v8_ninja', 'goma', 'mb'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'enable_swarming': True,
+        'slim_swarming_builder': True,
+        'triggers': [
+          'v8_linux64_fyi_rel_ng_triggered',
+        ],
+        'testing': {'platform': 'linux'},
+      },
+      'v8_linux64_fyi_rel_ng_triggered': {
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'v8_linux64_fyi_rel_ng',
+        'enable_swarming': True,
+        'testing': {'platform': 'linux'},
       },
       'v8_linux64_verify_csa_rel_ng': {
         'chromium_apply_config': [
