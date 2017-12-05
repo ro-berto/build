@@ -15,6 +15,7 @@ DEPS = [
   'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/raw_io',
+  'recipe_engine/runtime',
   'recipe_engine/step',
   'recipe_engine/url',
   'swarming_client',
@@ -192,7 +193,7 @@ def GenTests(api):
     api.post_process(Filter('trigger'))
   )
 
-  # Test that triggered builds use parent builder when running on LUCI.
+  # Test triggered builds when running on LUCI.
   yield (
     api.v8.test(
         'tryserver.v8',
@@ -200,6 +201,7 @@ def GenTests(api):
         'test_triggered_build_luci',
     ) +
     api.properties(buildbucket={'build': {'bucket': 'luci.v8.try'}}) +
+    api.runtime(is_luci=True, is_experimental=False) +
     api.post_process(Filter('trigger'))
   )
 
