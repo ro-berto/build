@@ -959,8 +959,8 @@
       "--slave-name=build1-a1",
       "--build-number=1",
       "gl_tests",
+      "--gtest_filter=Test.One",
       "--gtest_repeat=100",
-      "Test.One",
       "--test-launcher-retry-limit=0",
       "--gtest_also_run_disabled_tests"
     ],

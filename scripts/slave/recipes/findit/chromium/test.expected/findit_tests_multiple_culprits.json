@@ -1069,8 +1069,8 @@
       "--isolated",
       "[dummy hash for gl_tests]",
       "--",
-      "--gtest_repeat=20",
       "--gtest_filter=Test.One:Test.Two:Test.Three",
+      "--gtest_repeat=20",
       "--test-launcher-retry-limit=0",
       "--gtest_also_run_disabled_tests",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
@@ -1984,8 +1984,8 @@
       "--isolated",
       "[dummy hash for gl_tests]",
       "--",
-      "--gtest_repeat=20",
       "--gtest_filter=Test.Three:Test.One",
+      "--gtest_repeat=20",
       "--test-launcher-retry-limit=0",
       "--gtest_also_run_disabled_tests",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
@@ -2899,8 +2899,8 @@
       "--isolated",
       "[dummy hash for gl_tests]",
       "--",
-      "--gtest_repeat=20",
       "--gtest_filter=Test.One",
+      "--gtest_repeat=20",
       "--test-launcher-retry-limit=0",
       "--gtest_also_run_disabled_tests",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
@@ -3814,8 +3814,8 @@
       "--isolated",
       "[dummy hash for gl_tests]",
       "--",
-      "--gtest_repeat=20",
       "--gtest_filter=Test.Two",
+      "--gtest_repeat=20",
       "--test-launcher-retry-limit=0",
       "--gtest_also_run_disabled_tests",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
@@ -4725,8 +4725,8 @@
       "--isolated",
       "[dummy hash for gl_tests]",
       "--",
-      "--gtest_repeat=20",
       "--gtest_filter=Test.Two",
+      "--gtest_repeat=20",
       "--test-launcher-retry-limit=0",
       "--gtest_also_run_disabled_tests",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"

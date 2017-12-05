@@ -1300,7 +1300,7 @@ class AndroidApi(recipe_api.RecipeApi):
                                       'run-bisect-perf-regression.py'),
          '-w', self.m.path['start_dir']] + args, **kwargs)
 
-  def run_test_suite(self, suite, verbose=True, gtest_filter=None, tool=None,
+  def run_test_suite(self, suite, verbose=True, tool=None,
                      result_details=False, store_tombstones=False, name=None,
                      json_results_file=None, shard_timeout=None, args=None,
                      **kwargs):
@@ -1308,8 +1308,6 @@ class AndroidApi(recipe_api.RecipeApi):
     args.extend(['--blacklist-file', self.blacklist_file])
     if verbose:
       args.append('--verbose')
-    if gtest_filter:
-      args.append('--gtest_filter=%s' % gtest_filter)
     if tool:
       args.append('--tool=%s' % tool)
     if result_details and not json_results_file:

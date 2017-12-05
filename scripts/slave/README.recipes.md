@@ -1102,7 +1102,7 @@ Returns a version dictionary (after get_version()), e.g.
 
 &emsp; **@property**<br>&mdash; **def [coverage\_dir](/scripts/slave/recipe_modules/chromium_android/api.py#44)(self):**
 
-&mdash; **def [coverage\_report](/scripts/slave/recipe_modules/chromium_android/api.py#1423)(self, upload=True, \*\*kwargs):**
+&mdash; **def [coverage\_report](/scripts/slave/recipe_modules/chromium_android/api.py#1421)(self, upload=True, \*\*kwargs):**
 
 Creates an EMMA HTML report and optionally uploads it to storage bucket.
 
@@ -1152,7 +1152,7 @@ Args:
   binary_path: Path to binary to generate symbols for.
   root_chromium_dir: Root Chromium directory.
 
-&mdash; **def [get\_changed\_lines\_for\_revision](/scripts/slave/recipe_modules/chromium_android/api.py#1536)(self):**
+&mdash; **def [get\_changed\_lines\_for\_revision](/scripts/slave/recipe_modules/chromium_android/api.py#1534)(self):**
 
 Saves a JSON file containing the files/lines requiring coverage analysis.
 
@@ -1163,13 +1163,13 @@ coverage directory.
 
 &mdash; **def [git\_number](/scripts/slave/recipe_modules/chromium_android/api.py#194)(self, \*\*kwargs):**
 
-&emsp; **@contextlib.contextmanager**<br>&mdash; **def [handle\_exit\_codes](/scripts/slave/recipe_modules/chromium_android/api.py#1597)(self):**
+&emsp; **@contextlib.contextmanager**<br>&mdash; **def [handle\_exit\_codes](/scripts/slave/recipe_modules/chromium_android/api.py#1595)(self):**
 
 Handles exit codes emitted by the test runner and other scripts.
 
 &mdash; **def [host\_info](/scripts/slave/recipe_modules/chromium_android/api.py#407)(self, args=None, \*\*kwargs):**
 
-&mdash; **def [incremental\_coverage\_report](/scripts/slave/recipe_modules/chromium_android/api.py#1465)(self):**
+&mdash; **def [incremental\_coverage\_report](/scripts/slave/recipe_modules/chromium_android/api.py#1463)(self):**
 
 Creates an incremental code coverage report.
 
@@ -1209,7 +1209,7 @@ Args:
 
 &mdash; **def [run\_instrumentation\_suite](/scripts/slave/recipe_modules/chromium_android/api.py#924)(self, name, test_apk=None, apk_under_test=None, additional_apks=None, flakiness_dashboard=None, annotation=None, except_annotation=None, screenshot=False, verbose=False, tool=None, apk_package=None, json_results_file=None, timeout_scale=None, strict_mode=None, suffix=None, num_retries=None, device_flags=None, wrapper_script_suite_name=None, result_details=False, store_tombstones=False, trace_output=False, args=None, \*\*kwargs):**
 
-&mdash; **def [run\_java\_unit\_test\_suite](/scripts/slave/recipe_modules/chromium_android/api.py#1347)(self, suite, verbose=True, json_results_file=None, suffix=None, \*\*kwargs):**
+&mdash; **def [run\_java\_unit\_test\_suite](/scripts/slave/recipe_modules/chromium_android/api.py#1345)(self, suite, verbose=True, json_results_file=None, suffix=None, \*\*kwargs):**
 
 &mdash; **def [run\_sharded\_perf\_tests](/scripts/slave/recipe_modules/chromium_android/api.py#788)(self, config, test_type_transform=None, upload_archives_to_bucket=None, timestamp_as_point_id=False):**
 
@@ -1228,11 +1228,11 @@ timestamp_as_point_id: if True, will use a unix timestamp as a point_id to
 
 Run a telemetry browser test.
 
-&mdash; **def [run\_test\_suite](/scripts/slave/recipe_modules/chromium_android/api.py#1303)(self, suite, verbose=True, gtest_filter=None, tool=None, result_details=False, store_tombstones=False, name=None, json_results_file=None, shard_timeout=None, args=None, \*\*kwargs):**
+&mdash; **def [run\_test\_suite](/scripts/slave/recipe_modules/chromium_android/api.py#1303)(self, suite, verbose=True, tool=None, result_details=False, store_tombstones=False, name=None, json_results_file=None, shard_timeout=None, args=None, \*\*kwargs):**
 
 &mdash; **def [run\_tree\_truth](/scripts/slave/recipe_modules/chromium_android/api.py#179)(self, additional_repos=None):**
 
-&mdash; **def [run\_webview\_cts](/scripts/slave/recipe_modules/chromium_android/api.py#1382)(self, android_platform, arch, command_line_args=None, suffix=None, result_details=False):**
+&mdash; **def [run\_webview\_cts](/scripts/slave/recipe_modules/chromium_android/api.py#1380)(self, android_platform, arch, command_line_args=None, suffix=None, result_details=False):**
 
 &mdash; **def [shutdown\_device\_monitor](/scripts/slave/recipe_modules/chromium_android/api.py#364)(self):**
 
@@ -1253,7 +1253,7 @@ Args:
   binary_paths: Paths to binaries to generate breakpad symbols.
   root_chromium_dir: Root Chromium directory.
 
-&mdash; **def [staged\_files\_matching\_filter](/scripts/slave/recipe_modules/chromium_android/api.py#1577)(self, diff_filter):**
+&mdash; **def [staged\_files\_matching\_filter](/scripts/slave/recipe_modules/chromium_android/api.py#1575)(self, diff_filter):**
 
 Returns list of files changed matching the provided diff-filter.
 
@@ -1265,7 +1265,7 @@ Returns:
 
 &mdash; **def [test\_report](/scripts/slave/recipe_modules/chromium_android/api.py#1203)(self):**
 
-&mdash; **def [test\_runner](/scripts/slave/recipe_modules/chromium_android/api.py#1620)(self, step_name, args=None, wrapper_script_suite_name=None, pass_adb_path=True, \*\*kwargs):**
+&mdash; **def [test\_runner](/scripts/slave/recipe_modules/chromium_android/api.py#1618)(self, step_name, args=None, wrapper_script_suite_name=None, pass_adb_path=True, \*\*kwargs):**
 
 Wrapper for the python testrunner script.
 

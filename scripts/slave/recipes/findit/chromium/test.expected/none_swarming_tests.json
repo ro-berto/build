@@ -988,8 +988,8 @@
       "--slave-name=build1-a1",
       "--build-number=1",
       "gl_tests.exe",
+      "--gtest_filter=Test.One:Test.Two:Test.Three",
       "--gtest_repeat=20",
-      "Test.One\nTest.Two\nTest.Three",
       "--test-launcher-retry-limit=0",
       "--gtest_also_run_disabled_tests"
     ],

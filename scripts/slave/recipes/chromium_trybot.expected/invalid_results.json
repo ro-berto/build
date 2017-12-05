@@ -1288,7 +1288,7 @@
       "--slave-name=test_bot",
       "--build-number=571",
       "base_unittests",
-      "Test.Two"
+      "--gtest_filter=Test.Two"
     ],
     "cwd": "[BUILDER_CACHE]/linux",
     "env": {

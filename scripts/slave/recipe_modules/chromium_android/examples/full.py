@@ -229,7 +229,6 @@ def RunSteps(api, buildername):
       store_tombstones=config.get('store_tombstones'))
   api.chromium_android.run_test_suite(
       'unittests',
-      gtest_filter='WebRtc*',
       result_details=config.get('result_details'),
       store_tombstones=config.get('store_tombstones'),
       tool='asan')

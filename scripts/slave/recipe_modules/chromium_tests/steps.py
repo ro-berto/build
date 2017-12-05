@@ -62,6 +62,38 @@ class TestOptions(object):
     return self._test_filter
 
 
+def _merge_arg(args, flag, value):
+  args = [a for a in args if not a.startswith(flag)]
+  if value is not None:
+    return args + ['%s=%s' % (flag, str(value))]
+  else:
+    return args + [flag]
+
+
+def _merge_args_and_test_options(args, options):
+  if options.test_filter:
+    args = _merge_arg(args, '--gtest_filter', ':'.join(options.test_filter))
+  if options.repeat_count and options.repeat_count > 1:
+    args = _merge_arg(args, '--gtest_repeat', options.repeat_count)
+  if options.retry_limit is not None:
+    args = _merge_arg(args, '--test-launcher-retry-limit', options.retry_limit)
+  if options.run_disabled:
+    args = _merge_arg(args, '--gtest_also_run_disabled_tests', value=None)
+  return args
+
+
+def _merge_failures_for_retry(args, step, api, suffix):
+    if suffix == 'without patch':
+      # This will override any existing --gtest_filter specification; this
+      # is okay because the failures are a subset of the initial specified
+      # tests. When a patch is adding a new test (and it fails), the test
+      # runner is required to just ignore the unknown test.
+      failures = step.failures(api, 'with patch')
+      if failures:
+        return _merge_arg(args, '--gtest_filter', ':'.join(failures))
+    return args
+
+
 class Test(object):
   """
   Base class for tests that can be retried after deapplying a previously
@@ -403,34 +435,20 @@ class LocalGTestTest(Test):
     return [self.target_name]
 
   def run(self, api, suffix):
-    # Copy the list because run can be invoked multiple times and we modify
-    # the local copy.
-    args = self._args[:]
     is_android = api.chromium.c.TARGET_PLATFORM == 'android'
     is_fuchsia = api.chromium.c.TARGET_PLATFORM == 'fuchsia'
-    options = self.test_options
-    test_filter = options.test_filter
 
-    if suffix == 'without patch':
-      test_filter = self.failures(api, 'with patch')
-
-    kwargs = {}
-    if test_filter and is_android:  # pragma: no cover
-      kwargs['gtest_filter'] = ':'.join(test_filter)
-      test_filter = None
-
-    # We pass a local test_filter variable to override the immutable
-    # options.test_filter, in case test_filter was modified in the suffix ==
-    # without patch clause above.
-    args = GTestTest.args_from_options(api, args, self,
-                                       override_test_filter=test_filter)
+    args = _merge_args_and_test_options(self._args, self.test_options)
+    args = _merge_failures_for_retry(args, self, api, suffix)
 
     gtest_results_file = api.test_utils.gtest_results(add_json_log=False)
     step_test_data = lambda: api.test_utils.test_api.canned_gtest_output(True)
 
-    kwargs['name'] = self._step_name(suffix)
-    kwargs['args'] = args
-    kwargs['step_test_data'] = step_test_data
+    kwargs = {
+      'name': self._step_name(suffix),
+      'args': args,
+      'step_test_data': step_test_data,
+    }
 
     if is_android:
       kwargs['json_results_file'] = gtest_results_file
@@ -1328,18 +1346,10 @@ class SwarmingGTestTest(SwarmingTest):
 
   def create_task(self, api, suffix, isolated_hash):
     # For local tests test_args are added inside api.chromium.runtest.
-    args = self._args[:]
-    args.extend(api.chromium.c.runtests.test_args)
+    args = self._args + api.chromium.c.runtests.test_args
 
-    options = self.test_options
-    test_filter = options.test_filter
-
-    if suffix == 'without patch':
-      # If rerunning without a patch, run only tests that failed.
-      test_filter = sorted(self.failures(api, 'with patch'))
-
-    args = GTestTest.args_from_options(api, args, self,
-                                       override_test_filter=test_filter)
+    args = _merge_args_and_test_options(args, self.test_options)
+    args = _merge_failures_for_retry(args, self, api, suffix)
     args.extend(api.chromium.c.runtests.swarming_extra_args)
 
     return api.swarming.gtest_task(
@@ -1902,6 +1912,7 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
           results_handler=results_handler)
 
 
+# TODO(dpranke): Get rid of this whole class, it just causes confusion.
 class GTestTest(Test):
   def __init__(self, name, args=None, target_name=None, enable_swarming=False,
                swarming_shards=1, swarming_dimensions=None, swarming_tags=None,
@@ -1988,42 +1999,6 @@ class GTestTest(Test):
 
   def pass_fail_counts(self, suffix):
     return self._test.pass_fail_counts(suffix)
-
-  @staticmethod
-  def args_from_options(api, original_args, test, **kwargs):
-    """Returns a list of command line options for gtest from a test's
-    .test_options property
-
-    Args:
-      api - The caller api.
-      original_args - Any args previously defined.
-      test - The test object.
-      kwargs - A dictionary to override fields from options.
-    Returns:
-      a list of command line options for gtest.
-    """
-    args = []
-    options = test.test_options
-    test_filter = kwargs.get('override_test_filter', options.test_filter)
-    if options.repeat_count and options.repeat_count > 1:
-      args.append('--gtest_repeat=%d' % options.repeat_count)
-    if test_filter:
-      if test.uses_swarming:
-        args.append('--gtest_filter=%s' % ':'.join(test_filter))
-      else:
-        args.append(api.chromium.test_launcher_filter(test_filter))
-      # TODO(robertocn): Remove this code, because test launcher supports both
-      # flags now.
-      for a in original_args:  # pragma: no cover
-        if a.startswith('--test-launcher-filter-file'):
-          original_args.remove(a)
-
-    if options.retry_limit is not None:
-      args.append('--test-launcher-retry-limit=%d' % options.retry_limit)
-    if options.run_disabled:
-      args.append('--gtest_also_run_disabled_tests')
-
-    return original_args + args
 
   @staticmethod
   def upload_to_gs_bucket(api, source, bucket, file_name):
