@@ -21,12 +21,12 @@ DEPS = [
 asan64 = {
   'DART_USE_ASAN': '1',
   'ASAN_OPTIONS': 'handle_segv=0:detect_stack_use_after_return=1',
-  'ASAN_SYMBOLIZER_PATH': 'third_party/clang/linux/bin/llvm-symbolizer',
+  'ASAN_SYMBOLIZER_PATH': 'buildtools/toolchain/clang+llvm-x86_64-linux/bin/llvm-symbolizer',
 }
 asan32 = {
   'DART_USE_ASAN': '1',
   'ASAN_OPTIONS': 'handle_segv=0:detect_stack_use_after_return=0',
-  'ASAN_SYMBOLIZER_PATH': 'third_party/clang/linux/bin/llvm-symbolizer',
+  'ASAN_SYMBOLIZER_PATH': 'buildtools/toolchain/clang+llvm-x86_64-linux/bin/llvm-symbolizer',
 }
 linux_asan_env = {
   'x64': asan64,
