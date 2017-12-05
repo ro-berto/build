@@ -216,7 +216,6 @@
   * [dart/dart_vm_kernel](#recipes-dart_dart_vm_kernel)
   * [dart/dartium](#recipes-dart_dartium)
   * [dart/ddc](#recipes-dart_ddc)
-  * [dart/ddc_swarming](#recipes-dart_ddc_swarming)
   * [dart/flutter_engine](#recipes-dart_flutter_engine)
   * [dart/misc](#recipes-dart_misc)
   * [dart/misc_nobuild](#recipes-dart_misc_nobuild)
@@ -4577,11 +4576,6 @@ Generates the sequence of steps that will be run by the slave.
 &mdash; **def [RunSteps](/scripts/slave/recipes/dart/ddc.py#36)(api):**
 
 &mdash; **def [test](/scripts/slave/recipes/dart/ddc.py#25)(api, system, name, args):**
-### *recipes* / [dart/ddc\_swarming](/scripts/slave/recipes/dart/ddc_swarming.py)
-
-[DEPS](/scripts/slave/recipes/dart/ddc_swarming.py#5): [dart](#recipe_modules-dart), [test\_utils](#recipe_modules-test_utils), [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/dart/ddc_swarming.py#17)(api):**
 ### *recipes* / [dart/flutter\_engine](/scripts/slave/recipes/dart/flutter_engine.py)
 
 [DEPS](/scripts/slave/recipes/dart/flutter_engine.py#5): [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
