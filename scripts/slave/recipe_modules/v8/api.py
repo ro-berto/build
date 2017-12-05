@@ -1396,10 +1396,8 @@ class V8Api(recipe_api.RecipeApi):
                 self.m.properties['buildnumber'])
           trigger_props.update(properties)
           try:
-            bucket_err = None
             bucket_name = self.m.buildbucket.properties['build']['bucket']
           except (TypeError, KeyError) as e:
-            bucket_err = '%s %s' % (type(e).__name__, e.message)
             bucket_name = 'master.%s' % self.m.properties['mastername']
           if not self.m.runtime.is_luci:
             service_account = self.m.puppet_service_account.get_key_path(
@@ -1441,8 +1439,6 @@ class V8Api(recipe_api.RecipeApi):
               name='trigger',
               step_test_data=lambda: self.m.json.test_api.output_stream({}),
           )
-          if bucket_err:
-            step_result.presentation.logs['bucket_err'] = [bucket_err]
       else:
         self.m.trigger(*[{
           'builder_name': builder_name,
