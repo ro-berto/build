@@ -1391,7 +1391,7 @@ class V8Api(recipe_api.RecipeApi):
           trigger_props['parent_buildername'] = self.m.properties['buildername']
           if 'build_id' in self.m.properties:
             trigger_props['parent_build_id'] = self.m.properties['build_id']
-          else:
+          if 'buildnumber' in self.m.properties:
             trigger_props['parent_buildnumber'] = (
                 self.m.properties['buildnumber'])
           trigger_props.update(properties)
