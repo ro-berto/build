@@ -542,8 +542,13 @@ def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir, cleanup_dir,
     is_kitchen = True
 
   # Augment our input properties...
-  properties['build_data_dir'] = build_data_dir
-  properties['builder_id'] = 'master.%s:%s' % (mastername, buildername)
+
+  def set_property(key, value):
+    properties[key] = value
+    print '@@@SET_BUILD_PROPERTY@%s@%s@@@' % (key, json.dumps(value))
+
+  set_property('build_data_dir', build_data_dir)
+  set_property('builder_id', 'master.%s:%s' % (mastername, buildername))
 
   if not is_kitchen:
     # path_config property defines what paths a build uses for checkout, git
