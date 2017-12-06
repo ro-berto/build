@@ -32,7 +32,7 @@
         "build174-m2"
       ], 
       "moblab-generic-vm-paladin": [
-        "cros-beefy499-c2"
+        "build112-m2"
       ], 
       "oak-full": [
         "cros-beefy428-c2"
@@ -57,12 +57,12 @@
     }
   }, 
   "unallocated": [
-    "build112-m2", 
     "build182-m2", 
     "build203-m2", 
     "build245-m2", 
     "build263-m2", 
     "build323-m2", 
-    "build333-m2"
+    "build333-m2", 
+    "cros-beefy499-c2"
   ]
 }
