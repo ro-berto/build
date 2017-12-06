@@ -1312,6 +1312,8 @@
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\chromium\\archive_layout_test_results.py",
       "--results-dir",
       "[START_DIR]\\layout-test-results",
+      "--build-dir",
+      "[BUILDER_CACHE]\\win\\src\\out",
       "--build-number",
       "571",
       "--builder-name",
