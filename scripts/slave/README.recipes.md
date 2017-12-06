@@ -4824,6 +4824,10 @@ Locates and switches to a version of Xcode matching target_version.
 
 &mdash; **def [BuildExamples](/scripts/slave/recipes/flutter/flutter.py#39)(api, git_hash, flutter_executable):**
 
+&mdash; **def [BuildFlutterPackage](/scripts/slave/recipes/flutter/flutter.py#148)(api, git_hash):**
+
+Builds an all-inclusive package for users to download.
+
 &mdash; **def [GetCloudPath](/scripts/slave/recipes/flutter/flutter.py#35)(api, git_hash, path):**
 
 &mdash; **def [GetPuppetApiTokenPath](/scripts/slave/recipes/flutter/flutter.py#27)(api, token_name):**
@@ -4838,7 +4842,7 @@ The file is located where ChromeOps Puppet drops generic secrets.
 
 Locates and switches to a version of Xcode matching target_version.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/flutter/flutter.py#137)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/flutter/flutter.py#171)(api):**
 
 &mdash; **def [SetupXcode](/scripts/slave/recipes/flutter/flutter.py#87)(api):**
 
@@ -4846,6 +4850,10 @@ Locates and switches to a version of Xcode matching target_version.
 
 Uploads the Flutter coverage output to cloud storage and Coveralls.
   
+
+&mdash; **def [UploadFlutterPackage](/scripts/slave/recipes/flutter/flutter.py#137)(api, git_hash):**
+
+Uploads the all-inclusive package to cloud storage.
 ### *recipes* / [gae\_sdk:examples/full](/scripts/slave/recipe_modules/gae_sdk/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/gae_sdk/examples/full.py#5): [gae\_sdk](#recipe_modules-gae_sdk), [depot\_tools/cipd][depot_tools/recipe_modules/cipd], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
