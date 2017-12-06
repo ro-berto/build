@@ -45,7 +45,7 @@ class DartApi(recipe_api.RecipeApi):
        If an isolate is specified, it returns the hash of the isolated archive.
     """
     build_args = build_args + ['--no-start-goma']
-    if self.m.platform.name == 'mac':
+    if self.m.platform.name in ('mac', 'win'):
       build_args.append('-j200')
     with self.m.context(cwd=self.m.path['checkout'],
                      env_prefixes={'PATH':[self.m.depot_tools.root]}):

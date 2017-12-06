@@ -211,7 +211,8 @@
       "-mdebug",
       "--arch=ia32",
       "dart2js_bot",
-      "--no-start-goma"
+      "--no-start-goma",
+      "-j200"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env_prefixes": {
