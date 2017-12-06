@@ -912,7 +912,7 @@ Args:
   repository (str): The URL of the repository hosting the change.
   revision (str): The revision hash to load the build ID from.
 
-&mdash; **def [run](/scripts/slave/recipe_modules/chromite/api.py#271)(self, args=[]):**
+&mdash; **def [run](/scripts/slave/recipe_modules/chromite/api.py#274)(self, args=[]):**
 
 Runs the configured 'cbuildbot' build.
 

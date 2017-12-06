@@ -122,6 +122,23 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "symlink",
+      "/usr/bin/python2",
+      "[START_DIR]/python_bin/python2"
+    ],
+    "infra_step": true,
+    "name": "system_python.create_link (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "[START_DIR]/chromite/scripts/cbuildbot_launch",

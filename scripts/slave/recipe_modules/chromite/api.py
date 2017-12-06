@@ -264,8 +264,11 @@ class ChromiteApi(recipe_api.RecipeApi):
       self.m.file.symlink('create_link',
                           '/usr/bin/python',
                           python_bin.join('python'))
+      self.m.file.symlink('create_link',
+                          '/usr/bin/python2',
+                          python_bin.join('python2'))
 
-    # Return a context manager to insert that directory at the front of PATH.
+    # python2 a context manager to insert that directory at the front of PATH.
     return self.m.context(env_prefixes={'PATH': [python_bin]})
 
   def run(self, args=[]):
