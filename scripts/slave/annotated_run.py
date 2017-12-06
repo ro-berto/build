@@ -427,11 +427,8 @@ def main(argv):
     properties['path_config'] = properties.get('path_config', 'buildbot')
 
     properties['bot_id'] = properties['slavename']
-    properties['builder_id'] = (
-        'master.{mastername}:{buildername}'.format(**properties))
-    properties['build_id'] = (
-        'buildbot/{mastername}/{buildername}/{buildnumber}'.format(
-            **properties))
+    properties['builder_id'] = 'master.%s:%s' % (
+      properties['mastername'], properties['buildername'])
 
     remote_run.set_recipe_runtime_properties(stream, opts, properties)
     LOGGER.info('Using properties: %r', properties)

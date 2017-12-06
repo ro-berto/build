@@ -41,7 +41,6 @@ class AnnotatedRunTest(FakeBuildRootTestCase):
     build_properties = {
       'mastername': 'tryserver.chromium.linux',
       'buildername': 'builder',
-      'buildnumber': 1,
       'slavename': 'bot42-m1',
       'recipe': 'annotated_run_test',
       'true_prop': True,
@@ -63,7 +62,6 @@ class AnnotatedRunTest(FakeBuildRootTestCase):
     build_properties = {
       'mastername': 'tryserver.chromium.linux',
       'buildername': 'builder',
-      'buildnumber': 1,
       'slavename': 'bot42-m1',
       'recipe': 'annotated_run_test',
       'true_prop': True,
@@ -120,7 +118,6 @@ class AnnotatedRunExecTest(unittest.TestCase):
       'recipe': 'example/recipe',
       'mastername': 'tryserver.chromium.linux',
       'buildername': 'builder',
-      'buildnumber': 1,
     }
     self.rpy_path = os.path.join(env.Build, 'scripts', 'slave', 'recipes.py')
     self.recipe_args = [
