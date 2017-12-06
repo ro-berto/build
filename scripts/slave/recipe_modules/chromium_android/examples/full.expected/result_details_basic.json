@@ -949,7 +949,7 @@
     "name": "SmallTest: generate result details",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_LINK@result_details@https://storage.cloud.google.com/chromium-result-details@@@"
+      "@@@STEP_LINK@result_details (logcats, flakiness links)@https://storage.cloud.google.com/chromium-result-details@@@"
     ]
   },
   {
@@ -993,7 +993,7 @@
     "name": "unittests: generate result details",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_LINK@result_details@https://storage.cloud.google.com/chromium-result-details@@@"
+      "@@@STEP_LINK@result_details (logcats, flakiness links)@https://storage.cloud.google.com/chromium-result-details@@@"
     ]
   },
   {

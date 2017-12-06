@@ -698,7 +698,7 @@
     "name": "cronet_sample_test_apk: generate result details",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_LINK@result_details@https://storage.cloud.google.com/chromium-result-details@@@"
+      "@@@STEP_LINK@result_details (logcats, flakiness links)@https://storage.cloud.google.com/chromium-result-details@@@"
     ]
   },
   {
@@ -739,7 +739,7 @@
     "name": "cronet_smoketests_missing_native_library_instrumentation_apk: generate result details",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_LINK@result_details@https://storage.cloud.google.com/chromium-result-details@@@"
+      "@@@STEP_LINK@result_details (logcats, flakiness links)@https://storage.cloud.google.com/chromium-result-details@@@"
     ]
   },
   {
@@ -780,7 +780,7 @@
     "name": "cronet_smoketests_platform_only_instrumentation_apk: generate result details",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_LINK@result_details@https://storage.cloud.google.com/chromium-result-details@@@"
+      "@@@STEP_LINK@result_details (logcats, flakiness links)@https://storage.cloud.google.com/chromium-result-details@@@"
     ]
   },
   {
@@ -821,7 +821,7 @@
     "name": "cronet_test_instrumentation_apk: generate result details",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_LINK@result_details@https://storage.cloud.google.com/chromium-result-details@@@"
+      "@@@STEP_LINK@result_details (logcats, flakiness links)@https://storage.cloud.google.com/chromium-result-details@@@"
     ]
   },
   {

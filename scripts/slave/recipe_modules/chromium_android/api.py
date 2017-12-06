@@ -15,6 +15,10 @@ import urllib
 from recipe_engine.types import freeze
 from recipe_engine import recipe_api
 
+
+_RESULT_DETAILS_LINK = 'result_details (logcats, flakiness links)'
+
+
 def _TimestampToIsoFormat(timestamp):
   return datetime.datetime.utcfromtimestamp(timestamp).strftime('%Y%m%dT%H%M%S')
 
@@ -1008,7 +1012,7 @@ class AndroidApi(recipe_api.RecipeApi):
               result_step.test_utils.gtest_results.raw)
           details_link = self.create_result_details(step_name,
                                                     json_results)
-          self.m.step.active_result.presentation.links['result_details'] = (
+          self.m.step.active_result.presentation.links[_RESULT_DETAILS_LINK] = (
               details_link)
 
       if trace_output:
@@ -1337,7 +1341,7 @@ class AndroidApi(recipe_api.RecipeApi):
               result_step.test_utils.gtest_results.raw)
           details_link = self.create_result_details(step_name,
                                                     json_results)
-          self.m.step.active_result.presentation.links['result_details'] = (
+          self.m.step.active_result.presentation.links[_RESULT_DETAILS_LINK] = (
               details_link)
         self.copy_gtest_results(result_step,
                                 self.m.step.active_result)
@@ -1415,7 +1419,8 @@ class AndroidApi(recipe_api.RecipeApi):
                 step_result.test_utils.gtest_results.raw)
           details_link = self.create_result_details('CTS',
                                                     json_results)
-          self.m.step.active_result.presentation.links['result_details'] = details_link
+          self.m.step.active_result.presentation.links[_RESULT_DETAILS_LINK] = (
+              details_link)
 
 
   def coverage_report(self, upload=True, **kwargs):
