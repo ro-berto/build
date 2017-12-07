@@ -2103,34 +2103,34 @@ Args:
 
 Checks out Chromium.
 
-&mdash; **def [collect](/scripts/slave/recipe_modules/ios/api.py#771)(self, tasks, upload_test_results=True):**
+&mdash; **def [collect](/scripts/slave/recipe_modules/ios/api.py#782)(self, tasks, upload_test_results=True):**
 
 Collects the given Swarming task results.
 
 &emsp; **@property**<br>&mdash; **def [configuration](/scripts/slave/recipe_modules/ios/api.py#58)(self):**
 
-&mdash; **def [get\_perftest\_data](/scripts/slave/recipe_modules/ios/api.py#940)(self, path):**
+&mdash; **def [get\_perftest\_data](/scripts/slave/recipe_modules/ios/api.py#951)(self, path):**
 
 &emsp; **@staticmethod**<br>&mdash; **def [get\_step\_name](/scripts/slave/recipe_modules/ios/api.py#502)(test):**
 
-&mdash; **def [isolate](/scripts/slave/recipe_modules/ios/api.py#587)(self, scripts_dir='src/ios/build/bots/scripts'):**
+&mdash; **def [isolate](/scripts/slave/recipe_modules/ios/api.py#596)(self, scripts_dir='src/ios/build/bots/scripts'):**
 
 Isolates the tests specified in this bot's build config.
 
-&mdash; **def [isolate\_test](/scripts/slave/recipe_modules/ios/api.py#507)(self, test, tmp_dir, isolate_template):**
+&mdash; **def [isolate\_test](/scripts/slave/recipe_modules/ios/api.py#519)(self, test, tmp_dir, isolate_template):**
 
 Isolates a single test.
 
-&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_dir](/scripts/slave/recipe_modules/ios/api.py#1025)(self):**
+&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_dir](/scripts/slave/recipe_modules/ios/api.py#1036)(self):**
 
 Returns the path (relative to checkout working dir) of the most recently
 compiled apps.
 
-&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_path](/scripts/slave/recipe_modules/ios/api.py#1012)(self):**
+&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_path](/scripts/slave/recipe_modules/ios/api.py#1023)(self):**
 
 Returns the Path to the directory of the most recently compiled apps.
 
-&emsp; **@property**<br>&mdash; **def [most\_recent\_iossim](/scripts/slave/recipe_modules/ios/api.py#1040)(self):**
+&emsp; **@property**<br>&mdash; **def [most\_recent\_iossim](/scripts/slave/recipe_modules/ios/api.py#1051)(self):**
 
 Returns the path to the most recently compiled iossim.
 
@@ -2162,11 +2162,11 @@ Args:
     out directory, so must have already been compiled.
   url: URL of the symbol server to upload to.
 
-&mdash; **def [test\_swarming](/scripts/slave/recipe_modules/ios/api.py#989)(self, scripts_dir='src/ios/build/bots/scripts', upload_test_results=True):**
+&mdash; **def [test\_swarming](/scripts/slave/recipe_modules/ios/api.py#1000)(self, scripts_dir='src/ios/build/bots/scripts', upload_test_results=True):**
 
 Runs tests on Swarming as instructed by this bot's build config.
 
-&mdash; **def [trigger](/scripts/slave/recipe_modules/ios/api.py#679)(self, tasks):**
+&mdash; **def [trigger](/scripts/slave/recipe_modules/ios/api.py#688)(self, tasks):**
 
 Triggers the given Swarming tasks.
 
@@ -2687,7 +2687,7 @@ Tags can be added per individual task.
 
 Yields steps to verify compatibility with swarming_client version.
 
-&mdash; **def [collect](/scripts/slave/recipe_modules/swarming/api.py#748)(self, tasks, \*\*kwargs):**
+&mdash; **def [collect](/scripts/slave/recipe_modules/swarming/api.py#750)(self, tasks, \*\*kwargs):**
 
 Batch version of 'collect_task'.
 
@@ -2695,7 +2695,7 @@ Deprecated, to be removed soon. Use 'collect_task' in a loop instead,
 properly handling exceptions. This method doesn't handle collect failures
 well (it aborts on a first failure).
 
-&mdash; **def [collect\_task](/scripts/slave/recipe_modules/swarming/api.py#711)(self, task, \*\*kwargs):**
+&mdash; **def [collect\_task](/scripts/slave/recipe_modules/swarming/api.py#713)(self, task, \*\*kwargs):**
 
 Waits for a single triggered task to finish.
 
@@ -2741,11 +2741,11 @@ This value can be changed per individual task.
 
 &emsp; **@default_user.setter**<br>&mdash; **def [default\_user](/scripts/slave/recipe_modules/swarming/api.py#284)(self, value):**
 
-&mdash; **def [get\_collect\_cmd\_args](/scripts/slave/recipe_modules/swarming/api.py#1129)(self, task):**
+&mdash; **def [get\_collect\_cmd\_args](/scripts/slave/recipe_modules/swarming/api.py#1131)(self, task):**
 
 SwarmingTask -> argument list for 'swarming.py' command.
 
-&mdash; **def [get\_step\_name](/scripts/slave/recipe_modules/swarming/api.py#1059)(self, prefix, task):**
+&mdash; **def [get\_step\_name](/scripts/slave/recipe_modules/swarming/api.py#1061)(self, prefix, task):**
 
 SwarmingTask -> name of a step of a waterfall.
 
@@ -2871,7 +2871,7 @@ Args:
   raw_cmd: Optional list of arguments to be used as raw command. Can be
       used instead of extra args.
 
-&mdash; **def [trigger](/scripts/slave/recipe_modules/swarming/api.py#739)(self, tasks, \*\*kwargs):**
+&mdash; **def [trigger](/scripts/slave/recipe_modules/swarming/api.py#741)(self, tasks, \*\*kwargs):**
 
 Batch version of 'trigger_task'.
 

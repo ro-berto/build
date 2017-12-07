@@ -604,10 +604,12 @@ class SwarmingApi(recipe_api.RecipeApi):
       '--hard-timeout', str(task.hard_timeout),
     ]
     for name, value in sorted(task.dimensions.iteritems()):
-      assert isinstance(value, basestring), value
+      assert isinstance(value, basestring), \
+        'dimension %s is not a string: %s' % (name, value)
       args.extend(['--dimension', name, value])
     for name, value in sorted(task.env.iteritems()):
-      assert isinstance(value, basestring), value
+      assert isinstance(value, basestring), \
+        'env var %s is not a string: %s' % (name, value)
       args.extend(['--env', name, value])
 
     for name, relpath in sorted(task.named_caches.iteritems()):

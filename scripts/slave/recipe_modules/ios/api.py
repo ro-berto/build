@@ -504,6 +504,18 @@ class iOSApi(recipe_api.RecipeApi):
     return str('%s (%s iOS %s)' % (
         test['app'], test['device type'], test['os']))
 
+  def _ensure_xcode_version(self, task):
+    """Update task with xcode version if needed."""
+    if task.get('xcode build version'):
+      task['xcode build version'] = task['xcode build version'].lower()
+      return
+    if task.get('xcode version'):
+      return
+    task['xcode version'] = self.__config.get('xcode version')
+    task['xcode build version'] = self.__config.get(
+        'xcode build version', '').lower()
+    assert task['xcode build version'] or task['xcode version']
+
   def isolate_test(self, test, tmp_dir, isolate_template):
     """Isolates a single test."""
     task = {
@@ -516,13 +528,10 @@ class iOSApi(recipe_api.RecipeApi):
         'task': None,
         'test': copy.deepcopy(test),
         'tmp dir': None,
-        'xcode version': test.get(
-            'xcode version', self.__config.get('xcode version')),
-        'xcode build version': test.get(
-            'xcode build version',
-            self.__config.get('xcode build version', '')).lower(),
+        'xcode version': test.get('xcode version'),
+        'xcode build version': test.get('xcode build version', ''),
     }
-    assert task['xcode build version'] or task['xcode version']
+    self._ensure_xcode_version(task)
 
     if task['skip']:
       return task
@@ -684,6 +693,8 @@ class iOSApi(recipe_api.RecipeApi):
       if task['buildername'] != self.m.properties['buildername']:
         continue
 
+      self._ensure_xcode_version(task)
+
       task['tmp_dir'] = self.m.path.mkdtemp(task['test']['id'])
       swarming_task = self.m.swarming.task(
         task['step name'],
@@ -700,10 +711,10 @@ class iOSApi(recipe_api.RecipeApi):
       swarming_task.dimensions = {
         'pool': 'Chrome',
       }
-      if task['xcode version']:
+      if task.get('xcode version'):
         swarming_task.dimensions['xcode_version'] = task['xcode version']
 
-      if task['xcode build version']:
+      if task.get('xcode build version'):
         named_cache = cache_name(task['xcode build version'])
         swarming_task.named_caches[named_cache] = self.XCODE_APP_PATH
 
@@ -741,7 +752,7 @@ class iOSApi(recipe_api.RecipeApi):
         task['test']['device type'],
         task['test']['os'],
       ]
-      if task['xcode build version']:
+      if task.get('xcode build version'):
         spec.append(task['xcode build version'])
       else:
         spec.append(task['xcode version'])
