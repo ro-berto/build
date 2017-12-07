@@ -912,12 +912,13 @@ class iOSApi(recipe_api.RecipeApi):
         else:
           data['benchmark_name'] = task['test']['app']
           args = [
-              '--results-file', self.m.json.input(data),
-              '--perf-id', self.m.properties['buildername'],
-              '--results-url', self.DASHBOARD_UPLOAD_URL,
-              '--name', task['test']['app'],
+              '--build-dir', self.m.path['checkout'].join('out'),
               '--buildername', self.m.properties['buildername'],
               '--buildnumber', self.m.properties['buildnumber'],
+              '--name', task['test']['app'],
+              '--perf-id', self.m.properties['buildername'],
+              '--results-file', self.m.json.input(data),
+              '--results-url', self.DASHBOARD_UPLOAD_URL,
           ]
 
           for revision_name in self.UPLOAD_DASHBOARD_API_PROPERTIES:
