@@ -155,7 +155,9 @@ def generate_tests(api, test_suite, revision):
       tests.append(SwarmingPerfTest(test, api, **extra_args))
   elif test_suite == 'android_perf_swarming' and api.c.PERF_ID:
     for test, extra_args in sorted(ANDROID_PERF_TESTS.items()):
-      tests.append(SwarmingPerfTest(test, api, **extra_args))
+      tests.append(AndroidTest(test, override_isolate_target=test,
+                               cipd_packages=ANDROID_CIPD_PACKAGES,
+                               **extra_args))
   elif test_suite == 'android_perf' and api.c.PERF_ID:
     # TODO(kjellander): Fix the Android ASan bot so we can have an assert here.
     tests.append(AndroidPerfTest(
