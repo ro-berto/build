@@ -3,7 +3,6 @@
 # found in the LICENSE file.
 
 import copy
-import json
 
 from recipe_engine import recipe_api
 
