@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env vpython
 # Copyright (c) 2015 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -73,6 +73,9 @@ def main():
   parser.add_argument('--buildbot-clobber', default='',
                       help='buildbot clobber')
 
+  parser.add_argument('--build-id', default='',
+                      help='unique ID of the current build')
+
   args = parser.parse_args()
   tsmon_counters = []
 
@@ -108,6 +111,8 @@ def main():
   if args.log_url_json_file:
     with open(args.log_url_json_file, 'w') as f:
       f.write(json.dumps(viewer_urls))
+
+  # TODO(yyanagisawa): upload BuildEvent to BQ (crbug.com/776430).
 
   if args.goma_stats_file:
     # MakeGomaExitStatusCounter should be callbed before
