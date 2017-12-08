@@ -12,7 +12,6 @@ DEPS = [
   'recipe_engine/properties',
   'recipe_engine/python',
   'recipe_engine/raw_io',
-  'recipe_engine/runtime',
   'recipe_engine/step',
   'swarming',
   'swarming_client',
@@ -114,16 +113,13 @@ def RunSteps(api, platforms, show_isolated_out_in_collect_step,
       task = api.swarming.task('hello_world', isolated_hash,
                               task_output_dir=temp_dir.join('task_output_dir'),
                               named_caches=named_caches,
-                              service_account=service_account,
-                              cipd_packages=[
-                                ('', 'cool/package', 'vers'),
-                              ])
+                              service_account=service_account)
     task.dimensions['os'] = api.swarming.prefered_os_dimension(platform)
     task.shards = 2 if platform == 'linux' else 1
     task.tags.add('os:' + platform)
     if api.swarming_client.get_script_version('swarming.py') >= (0, 8, 6):
-      task.cipd_packages.append(
-        ('bin', 'super/awesome/pkg', 'git_revision:deadbeef'))
+      task.cipd_packages = [
+          ('bin', 'super/awesome/pkg', 'git_revision:deadbeef')]
     tasks.append(task)
 
   # Launch all tasks.
@@ -155,21 +151,6 @@ def RunSteps(api, platforms, show_isolated_out_in_collect_step,
 def GenTests(api):
   yield (
       api.test('basic') +
-      api.step_data(
-          'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
-      api.step_data(
-          'archive for linux',
-          stdout=api.raw_io.output_text(
-            'hash_for_linux hello_world.isolated')) +
-      api.step_data(
-          'archive for mac',
-          stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')) +
-      api.properties(platforms=('win', 'linux', 'mac')))
-
-  yield (
-      api.test('basic_luci') +
-      api.runtime(is_luci=True, is_experimental=False) +
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
