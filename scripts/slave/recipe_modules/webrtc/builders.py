@@ -747,8 +747,6 @@ BUILDERS = freeze({
           'pool': 'WebRTC',
           'os': 'Android',
           'android_devices': '1',
-          'device_type': 'hammerhead', # Nexus 5
-          'id': 'build39-b3', # From crbug.com/773027
         }
       },
     },
