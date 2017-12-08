@@ -539,7 +539,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python",
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
