@@ -744,7 +744,6 @@ BUILDERS = freeze({
         'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
-          'pool': 'WebRTC',
           'os': 'Android',
           'android_devices': '1',
         }
