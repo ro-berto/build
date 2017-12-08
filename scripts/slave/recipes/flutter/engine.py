@@ -44,18 +44,16 @@ def RunHostTests(api, out_dir, exe_extension=''):
         [directory.join('flutter_channels_unittests' + exe_extension)])
     api.step('Test FXL',
       [directory.join('fxl_unittests' + exe_extension)])
-    # TODO(goderbauer): enable these tests on Windows when they pass.
-    if not api.platform.is_win:
-      api.step('Test Flow',
-        [directory.join('flow_unittests' + exe_extension)])
-      api.step('Test FML', [
-        directory.join('fml_unittests' + exe_extension),
-        '--gtest_filter="-*TimeSensitiveTest*"'
-      ])
-      api.step('Test Synchronization',
-        [directory.join('synchronization_unittests' + exe_extension)])
-      api.step('Test WTF',
-        [directory.join('wtf_unittests' + exe_extension)])
+    api.step('Test Flow',
+      [directory.join('flow_unittests' + exe_extension)])
+    api.step('Test FML', [
+      directory.join('fml_unittests' + exe_extension),
+      '--gtest_filter="-*TimeSensitiveTest*"'
+    ])
+    api.step('Test Synchronization',
+      [directory.join('synchronization_unittests' + exe_extension)])
+    api.step('Test WTF',
+      [directory.join('wtf_unittests' + exe_extension)])
 
 
 def RunGN(api, *args):
@@ -354,17 +352,15 @@ def BuildWindows(api):
   RunGN(api, '--runtime-mode', 'profile', '--android')
   RunGN(api, '--runtime-mode', 'release', '--android')
 
-  Build(api, 'host_debug_unopt',
-    'flutter/lib/snapshot:generate_snapshot_bin',
-    'garnet/public/lib/fxl:fxl_unittests',
-    'third_party/dart:create_sdk',
-    'flutter/frontend_server')
+  Build(api, 'host_debug_unopt')
   Build(api, 'android_profile', 'gen_snapshot')
   Build(api, 'android_release', 'gen_snapshot')
 
   RunHostTests(api, 'out\\host_debug_unopt', '.exe')
 
   UploadArtifacts(api, 'windows-x64', [
+    'out/host_debug_unopt/icudtl.dat',
+    'out/host_debug_unopt/flutter_tester.exe',
     'out/host_debug_unopt/gen/flutter/lib/snapshot/isolate_snapshot.bin',
     'out/host_debug_unopt/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
     'out/host_debug_unopt/gen/frontend_server.dart.snapshot',

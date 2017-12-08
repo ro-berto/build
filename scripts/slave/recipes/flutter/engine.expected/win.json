@@ -133,16 +133,12 @@
     "cmd": [
       "ninja",
       "-C",
-      "[START_DIR]\\src\\out/host_debug_unopt",
-      "flutter/lib/snapshot:generate_snapshot_bin",
-      "garnet/public/lib/fxl:fxl_unittests",
-      "third_party/dart:create_sdk",
-      "flutter/frontend_server"
+      "[START_DIR]\\src\\out/host_debug_unopt"
     ],
     "env": {
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
-    "name": "build host_debug_unopt flutter/lib/snapshot:generate_snapshot_bin garnet/public/lib/fxl:fxl_unittests third_party/dart:create_sdk flutter/frontend_server"
+    "name": "build host_debug_unopt"
   },
   {
     "cmd": [
@@ -180,6 +176,47 @@
   },
   {
     "cmd": [
+      "[START_DIR]\\src\\out\\host_debug_unopt\\flow_unittests.exe"
+    ],
+    "cwd": "[START_DIR]\\src\\out\\host_debug_unopt",
+    "env": {
+      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
+    },
+    "name": "Test Flow"
+  },
+  {
+    "cmd": [
+      "[START_DIR]\\src\\out\\host_debug_unopt\\fml_unittests.exe",
+      "--gtest_filter=\"-*TimeSensitiveTest*\""
+    ],
+    "cwd": "[START_DIR]\\src\\out\\host_debug_unopt",
+    "env": {
+      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
+    },
+    "name": "Test FML"
+  },
+  {
+    "cmd": [
+      "[START_DIR]\\src\\out\\host_debug_unopt\\synchronization_unittests.exe"
+    ],
+    "cwd": "[START_DIR]\\src\\out\\host_debug_unopt",
+    "env": {
+      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
+    },
+    "name": "Test Synchronization"
+  },
+  {
+    "cmd": [
+      "[START_DIR]\\src\\out\\host_debug_unopt\\wtf_unittests.exe"
+    ],
+    "cwd": "[START_DIR]\\src\\out\\host_debug_unopt",
+    "env": {
+      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
+    },
+    "name": "Test WTF"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[build::zip]\\resources\\zip.py"
@@ -188,7 +225,7 @@
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
     "name": "Zip windows-x64 artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"isolate_snapshot.bin\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug_unopt/gen/flutter/lib/snapshot/isolate_snapshot.bin\", \"type\": \"file\"}, {\"archive_name\": \"vm_isolate_snapshot.bin\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug_unopt/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin\", \"type\": \"file\"}, {\"archive_name\": \"frontend_server.dart.snapshot\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug_unopt/gen/frontend_server.dart.snapshot\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]\\\\tmp_tmp_1\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"icudtl.dat\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug_unopt/icudtl.dat\", \"type\": \"file\"}, {\"archive_name\": \"flutter_tester.exe\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug_unopt/flutter_tester.exe\", \"type\": \"file\"}, {\"archive_name\": \"isolate_snapshot.bin\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug_unopt/gen/flutter/lib/snapshot/isolate_snapshot.bin\", \"type\": \"file\"}, {\"archive_name\": \"vm_isolate_snapshot.bin\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug_unopt/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin\", \"type\": \"file\"}, {\"archive_name\": \"frontend_server.dart.snapshot\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug_unopt/gen/frontend_server.dart.snapshot\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]\\\\tmp_tmp_1\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
   },
   {
     "cmd": [
