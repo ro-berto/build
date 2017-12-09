@@ -515,21 +515,15 @@ class iOSApi(recipe_api.RecipeApi):
         'xcode build version', '').lower()
     assert task['xcode build version'] or task['xcode version']
 
-  def isolate_test(self, test, tmp_dir, isolate_template,
-                   test_cases=None, shard_num=None):
+  def isolate_test(self, test, tmp_dir, isolate_template):
     """Isolates a single test."""
-    step_name = self.get_step_name(test)
-    test_id = test['id']
-    if test.get('sharding') and test_cases and shard_num is not None:
-      test_id = '%s_%s' % (test_id, shard_num)
-      step_name = '%s shard %s' % (step_name, shard_num)
     task = {
         'bot id': test.get('bot id'),
         'isolate.gen': None,
         'isolated hash': None,
         'pool': test.get('pool'),
         'skip': 'skip' in test,
-        'step name': step_name,
+        'step name': self.get_step_name(test),
         'task': None,
         'test': copy.deepcopy(test),
         'tmp dir': None,
@@ -543,7 +537,7 @@ class iOSApi(recipe_api.RecipeApi):
 
     app_path = self.m.path.join(self.most_recent_app_dir,
                                 '%s.app' % test['app'])
-    task['isolate.gen'] = tmp_dir.join('%s.isolate.gen.json' % test_id)
+    task['isolate.gen'] = tmp_dir.join('%s.isolate.gen.json' % test['id'])
 
     args = [
       '--config-variable', 'OS', 'ios',
@@ -552,11 +546,10 @@ class iOSApi(recipe_api.RecipeApi):
         'true' if test.get('restart') else 'false'),
       '--config-variable', 'test_args', self.m.json.dumps(
           test.get('test args') or []),
-      '--config-variable', 'test_cases', self.m.json.dumps(test_cases),
       '--config-variable', 'xctest', (
         'true' if test.get('xctest') else 'false'),
       '--isolate', isolate_template,
-      '--isolated', tmp_dir.join('%s.isolated' % test_id),
+      '--isolated', tmp_dir.join('%s.isolated' % test['id']),
       '--path-variable', 'app_path', app_path,
     ]
 
@@ -585,12 +578,12 @@ class iOSApi(recipe_api.RecipeApi):
     }, indent=2)
     try:
       self.m.file.write_text(
-        'generate %s.isolate.gen.json' % test_id,
+        'generate %s.isolate.gen.json' % test['id'],
         task['isolate.gen'],
         isolate_gen_file_contents,
       )
       pres = self.m.step.active_result.presentation
-      pres.logs['%s.isolate.gen.json' % test_id] = (
+      pres.logs['%s.isolate.gen.json' % test['id']] = (
         isolate_gen_file_contents.splitlines())
       pres.step_text = task['step name']
     except self.m.step.StepFailure as f:
@@ -598,42 +591,6 @@ class iOSApi(recipe_api.RecipeApi):
       task['isolate.gen'] = None
 
     return task
-
-  def isolate_earlgrey_test(self, test, shard_size, tmp_dir, isolate_template):
-    """Isolate earlgrey test into small shards"""
-    regex = '@interface\s\w*\s:\sChromeTestCase'
-    cmd = [
-      'grep',
-      '-roh',
-      '%s' % regex,
-      '%s' % self.m.path['checkout'].join(test['sharding']),
-    ]
-
-    step_result = self.m.step(
-      'shard EarlGrey test',
-      cmd,
-      stdout=self.m.raw_io.output(),
-      step_test_data=(
-        lambda: self.m.raw_io.test_api.stream_output([
-          '@interface CacheTestCase : ChromeTestCase',
-          '@interface KeyboardTestCase : ChromeTestCase',
-          '@interface PasswordsTestCase : ChromeTestCase',
-          '@interface TabUITestCase : ChromeTestCase',
-          '@interface ToolBarTestCase : ChromeTestCase',
-        ])
-      )
-    )
-    # Extract testcase names from stdout and split them into smaller sizes.
-    testcases = [i.split(' ')[1] for i in step_result.stdout]
-    sublists = [testcases[i : i + shard_size]
-                  for i in range(0, len(testcases), shard_size)]
-
-    tasks = []
-    for i, sublist in enumerate(sublists):
-      tasks.append(self.isolate_test(
-          test, tmp_dir, isolate_template, sublist, i))
-      tasks[-1]['buildername'] = self.m.properties['buildername']
-    return tasks
 
   def isolate(self, scripts_dir='src/ios/build/bots/scripts'):
     """Isolates the tests specified in this bot's build config."""
@@ -645,10 +602,7 @@ class iOSApi(recipe_api.RecipeApi):
       '%s/run.py' % scripts_dir,
       '--app', '<(app_path)',
       '--args-json',
-      '{"test_args": <(test_args), \
-        "xctest": <(xctest), \
-        "test_cases": <(test_cases), \
-        "restart": <(restart)}',
+      '{"test_args": <(test_args), "xctest": <(xctest), "restart": <(restart)}',
       '--out-dir', '${ISOLATED_OUTDIR}',
       '--retries', '3',
       '--<(xcode_arg_name)', '<(xcode_version)',
@@ -692,12 +646,8 @@ class iOSApi(recipe_api.RecipeApi):
     tmp_dir = self.m.path.mkdtemp('isolate')
 
     for test in self.__config['tests']:
-      if test.get('sharding') and test.get('shard size'):
-        tasks += self.isolate_earlgrey_test(test, test['shard size'],
-                                            tmp_dir, isolate_template)
-      else:
-        tasks.append(self.isolate_test(test, tmp_dir, isolate_template))
-        tasks[-1]['buildername'] = self.m.properties['buildername']
+      tasks.append(self.isolate_test(test, tmp_dir, isolate_template))
+      tasks[-1]['buildername'] = self.m.properties['buildername']
     for bot, tests in self.__config['triggered tests'].iteritems():
       for test in tests:
         tasks.append(self.isolate_test(test, tmp_dir, isolate_template))

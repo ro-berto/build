@@ -49,13 +49,6 @@ def GenTests(api):
       ],
       'tests': [
         {
-          'app': 'fake test 0',
-          'device type': 'fake device 0',
-          'os': '11.0',
-          'sharding': 'ios/chrome/browser',
-          'shard size': 2,
-        },
-        {
           'app': 'fake test 1',
           'device type': 'fake device 1',
           'os': '8.1',
