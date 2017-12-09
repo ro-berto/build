@@ -645,15 +645,12 @@
         "categories": [
           "pdfium_all"
         ],
-        "excluded_builders" : [
-          "drm_win_xfa"
-        ],
         "builders": {
           "*": {}
         },
         "tree_notify": [
-            "thestig@chromium.org",
-            "tsepez@chromium.org"
+            "dsinclair@chromium.org",
+            "thestig@chromium.org"
         ]
       }
     ],
