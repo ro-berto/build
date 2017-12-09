@@ -593,6 +593,7 @@
       "[dummy hash for webrtc_perf_tests]",
       "--",
       "--gtest_filter=AudioEncoderOpusComplexityAdaptationTest.AdaptationOn",
+      "--perf_results_json_path=${ISOLATED_OUTDIR}/perf_result.json",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Android_Perf__swarming_",

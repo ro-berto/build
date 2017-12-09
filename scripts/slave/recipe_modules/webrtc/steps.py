@@ -111,8 +111,8 @@ ANDROID_PERF_TESTS = freeze({
     # video_quality_loopback_test.
     'webrtc_perf_tests': {
         'args': [
-           ('--gtest_filter='
-            'AudioEncoderOpusComplexityAdaptationTest.AdaptationOn'),
+           '--gtest_filter='
+           'AudioEncoderOpusComplexityAdaptationTest.AdaptationOn',
         ],
     },
 })
@@ -160,9 +160,7 @@ def generate_tests(api, test_suite, revision):
       tests.append(SwarmingPerfTest(test, api, **extra_args))
   elif test_suite == 'android_perf_swarming' and api.c.PERF_ID:
     for test, extra_args in sorted(ANDROID_PERF_TESTS.items()):
-      tests.append(AndroidTest(test, override_isolate_target=test,
-                               cipd_packages=ANDROID_CIPD_PACKAGES,
-                               **extra_args))
+      tests.append(SwarmingAndroidPerfTest(test, **extra_args))
   elif test_suite == 'android_perf' and api.c.PERF_ID:
     # TODO(kjellander): Fix the Android ASan bot so we can have an assert here.
     tests.append(AndroidPerfTest(
@@ -198,13 +196,10 @@ def generate_tests(api, test_suite, revision):
   elif test_suite == 'android':
     for test, extra_args in sorted(ANDROID_DEVICE_TESTS.items() +
                                    ANDROID_INSTRUMENTATION_TESTS.items()):
-      tests.append(AndroidTest(test, override_isolate_target=test,
-                               cipd_packages=ANDROID_CIPD_PACKAGES,
-                               **extra_args))
+      tests.append(AndroidTest(test, **extra_args))
     for test, extra_args in sorted(ANDROID_JUNIT_TESTS.items()):
       if api.mastername == 'client.webrtc.fyi':
-        tests.append(AndroidTest(test, override_isolate_target=test,
-                                 **extra_args))
+        tests.append(AndroidTest(test, **extra_args))
       else:
         tests.append(AndroidJunitTest(test))
 
@@ -218,8 +213,6 @@ def generate_tests(api, test_suite, revision):
     if api.m.tryserver.is_tryserver:
       tests.append(AndroidTest(
           'webrtc_perf_tests',
-          override_isolate_target='webrtc_perf_tests',
-          cipd_packages=ANDROID_CIPD_PACKAGES,
           args=['--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/']))
 
   return tests
@@ -296,6 +289,45 @@ class PythonTest(Test):
 
 
 class AndroidTest(SwarmingGTestTest):
+  def __init__(self, test, **kwargs):
+    super(AndroidTest, self).__init__(test, override_isolate_target=test,
+                                      cipd_packages=ANDROID_CIPD_PACKAGES,
+                                      **kwargs)
+
+  def post_run(self, api, suffix):
+    try:
+      super(SwarmingGTestTest, self).post_run(api, suffix)
+    finally:
+      step_result = api.step.active_result
+      task_output_dir = api.step.active_result.raw_io.output_dir
+      logcats = _MergeFiles(task_output_dir, 'logcats')
+      step_result.presentation.logs['logcats'] = logcats.splitlines()
+
+      if (hasattr(step_result, 'test_utils') and
+          hasattr(step_result.test_utils, 'gtest_results')):
+        gtest_results = getattr(step_result.test_utils, 'gtest_results', None)
+        self._gtest_results[suffix] = gtest_results
+        # Only upload test results if we have gtest results.
+        if self._upload_test_results and gtest_results and gtest_results.raw:
+          parsed_gtest_data = gtest_results.raw
+          chrome_revision_cp = api.bot_update.last_returned_properties.get(
+              'got_revision_cp', 'x@{#0}')
+          chrome_revision = str(api.commit_position.parse_revision(
+              chrome_revision_cp))
+          source = api.json.input(parsed_gtest_data)
+          api.test_results.upload(
+              source,
+              chrome_revision=chrome_revision,
+              test_type=step_result.step['name'],
+              test_results_server='test-results.appspot.com')
+
+
+class SwarmingAndroidPerfTest(AndroidTest):
+  def __init__(self, test, args=None, **kwargs):
+    args = list(args or [])
+    args.append('--perf_results_json_path=${ISOLATED_OUTDIR}/perf_result.json')
+    super(SwarmingAndroidPerfTest, self).__init__(test, args=args)
+
   def post_run(self, api, suffix):
     try:
       super(SwarmingGTestTest, self).post_run(api, suffix)
