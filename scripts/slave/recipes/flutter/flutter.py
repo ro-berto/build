@@ -149,9 +149,21 @@ def BuildFlutterPackage(api, git_hash):
   """Builds an all-inclusive package for users to download."""
   flutter_executable = 'flutter' if not api.platform.is_win else 'flutter.bat'
   git_executable = 'git' if not api.platform.is_win else 'git.bat'
-  api.step('flutter ide-config', [flutter_executable, 'ide-config'])
-  # We want the user to start out in the master branch when they unpack.
+
+  # We want the user to start out in the master branch when they unpack,
+  # and to have them pull from github by default, not chromium's mirror.
   api.step('check out master branch', [git_executable, 'checkout', 'master'])
+  api.step('reset master branch to desired git hash', [git_executable, 'reset', '--hard', git_hash])
+  api.step('remove git remote origin', [git_executable, 'remote', 'remove', 'origin'])
+  api.step('set git remote origin to github',
+           [git_executable, 'remote', 'add', 'origin', 'https://github.com/flutter/flutter.git'])
+
+  # Warm the cache.
+  api.step('download dependencies', [flutter_executable, 'update-packages'])
+  api.step('flutter doctor', [flutter_executable, 'doctor'])
+  api.step('flutter precache', [flutter_executable, 'precache'])
+  api.step('flutter ide-config', [flutter_executable, 'ide-config'])
+
   # Yes, we could just skip all .packages files, but some are checked in, and we don't
   # want to skip those.
   api.step('remove .packages files', [git_executable, 'clean', '-f', '-X', '**/.packages'])
@@ -164,7 +176,6 @@ def BuildFlutterPackage(api, git_hash):
                                      api.path['start_dir'].join('flutter.zip'))
       package.add_directory(package.root.join('flutter'))
       package.zip('create zip archive')
-  api.step('detach head', [git_executable, 'checkout', git_hash])
   api.step('recreate .packages files', [flutter_executable, 'update-packages'])
 
 
@@ -200,8 +211,6 @@ def RunSteps(api):
 
   # The context adds dart-sdk tools to PATH and sets PUB_CACHE.
   with api.context(env=env, cwd=checkout):
-    api.step('download dependencies', [flutter_executable, 'update-packages'])
-    api.step('flutter doctor', [flutter_executable, 'doctor'])
     BuildFlutterPackage(api, git_hash)
     UploadFlutterPackage(api, git_hash)
 
