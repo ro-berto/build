@@ -1551,6 +1551,33 @@ def GenTests(api):
   )
 
   yield (
+    api.test('dynamic_instrumentation_test_custom_name') +
+    api.properties.generic(mastername='chromium.android',
+                           buildername='KitKat Phone Tester (rel)') +
+    api.override_step_data(
+        'read test spec (chromium.android.json)',
+        api.json.output({
+            'KitKat Phone Tester (rel)': {
+                'instrumentation_tests': [
+                    {
+                        'name': 'custom_test_name',
+                        'test': 'default_test_name',
+                        'test_apk': 'one_apk',
+                        'apk_under_test': 'second_apk',
+                        'additional_apks': [
+                            'another_apk',
+                            'omg_so_many_apks',
+                        ],
+                    }
+                ],
+            },
+        })
+    ) +
+    api.post_process(post_process.MustRun, 'custom_test_name') +
+    api.post_process(post_process.DoesNotRun, 'default_test_name')
+  )
+
+  yield (
     api.test('dynamic_instrumentation_nodefault_build') +
     api.properties.generic(mastername='chromium.android',
                            buildername='KitKat Phone Tester (rel)') +

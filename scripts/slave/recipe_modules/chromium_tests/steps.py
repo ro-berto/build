@@ -752,7 +752,8 @@ def generate_instrumentation_test(api, chromium_tests_api, mastername,
                                   scripts_compile_targets=None,
                                   bot_config=None):
   for test in test_spec.get(buildername, {}).get('instrumentation_tests', []):
-    test_name = str(test.get('test'))
+    target_name = str(test['test'])
+    test_name = str(test.get('name', target_name))
     use_swarming = False
     if enable_swarming:
       swarming_spec = test.get('swarming', {})
@@ -771,6 +772,7 @@ def generate_instrumentation_test(api, chromium_tests_api, mastername,
     else:
       yield AndroidInstrumentationTest(
           test_name,
+          target_name=target_name,
           compile_targets=test.get('override_compile_targets'),
           timeout_scale=test.get('timeout_scale'),
           result_details=True,
@@ -2312,13 +2314,14 @@ class AndroidInstrumentationTest(AndroidTest):
                except_annotation=None, screenshot=False, verbose=True,
                tool=None, additional_apks=None, store_tombstones=False,
                trace_output=False, result_details=False, args=None,
-               waterfall_mastername=None, waterfall_buildername=None):
+               waterfall_mastername=None, waterfall_buildername=None,
+               target_name=None):
     suite_defaults = (
         AndroidInstrumentationTest._DEFAULT_SUITES.get(name)
         or AndroidInstrumentationTest._DEFAULT_SUITES_BY_TARGET.get(name)
         or {})
     if not compile_targets:
-      compile_targets = [suite_defaults.get('compile_target', name)]
+      compile_targets = [suite_defaults.get('compile_target', target_name or name)]
       compile_targets.extend(
           suite_defaults.get('additional_compile_targets', []))
 
