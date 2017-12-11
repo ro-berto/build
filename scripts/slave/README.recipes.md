@@ -3227,7 +3227,7 @@ The test_results will be an instance of the TestResults class.
 
 #### **class [TracebackApi](/scripts/slave/recipe_modules/traceback/api.py#26)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [format\_exc](/scripts/slave/recipe_modules/traceback/api.py#76)(self):**
+&mdash; **def [format\_exc](/scripts/slave/recipe_modules/traceback/api.py#78)(self):**
 
 Returns a string containing an exception traceback.
 

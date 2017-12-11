@@ -51,6 +51,8 @@ class TracebackApi(recipe_api.RecipeApi):
     out += traceback.format_list(pending) if pending else []
     out += traceback.format_exception_only(etype, value)
 
+    out = [re.sub(r'line \d+,', 'line NA,', line) for line in out]
+
     return ''.join(out)
 
   def _filter_frame(self, frame):
