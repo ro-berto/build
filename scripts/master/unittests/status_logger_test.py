@@ -174,9 +174,13 @@ class StatusLoggerTest(unittest.TestCase):
   def testReportsPatchURL(self):
     with _make_logger() as logger:
       mock_build = Build(
-          properties={'rietveld': 'https://codereview.chromium.org',
-                      'issue': '123456',
-                      'patchset': '100001'})
+          properties={
+              'patch_storage': 'gerrit',
+              'patch_gerrit_url': 'https://chromium-review.googlesource.com',
+              'patch_project': 'chromium/src',
+              'patch_issue': '808725',
+              'patch_set': '1',
+          })
       logger.buildFinished('coconuts', mock_build, 0)
       self.assertTrue(os.path.isdir(logger._event_logging_dir))
       self.assertTrue(os.path.exists(logger._event_logfile))
@@ -185,8 +189,10 @@ class StatusLoggerTest(unittest.TestCase):
         content = f.read()
         self.assertTrue(content)
         parsed = json.loads(content)
-        self.assertEqual(parsed['build-event-patch-url'],
-                         'https://codereview.chromium.org/123456#ps100001')
+        self.assertEqual(
+            parsed['build-event-patch-url'],
+            'https://chromium-review.googlesource.com/c/chromium/src/'
+            '+/808725/1')
 
   def testReportsBBucketID(self):
     with _make_logger() as logger:

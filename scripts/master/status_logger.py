@@ -359,14 +359,13 @@ class StatusEventLogger(StatusReceiverMultiService):
     self.event_logger = logger
 
   def _get_patch_url(self, build_properties):
-    # TODO(sergiyb): Add support for Gerrit.
     patch_url = None
-    if ('issue' in build_properties and 'patchset' in build_properties and
-        'rietveld' in build_properties):
-      patch_url = '%s/%s#ps%s' % (
-          build_properties.getProperty('rietveld'),
-          build_properties.getProperty('issue'),
-          build_properties.getProperty('patchset'))
+    if build_properties.getProperty('patch_storage') == 'gerrit':
+      patch_url = '%s/c/%s/+/%s/%s' % (
+          build_properties.getProperty('patch_gerrit_url'),
+          build_properties.getProperty('patch_project'),
+          build_properties.getProperty('patch_issue'),
+          build_properties.getProperty('patch_set'))
     return patch_url
 
   def _get_bbucket_id(self, build_properties):
