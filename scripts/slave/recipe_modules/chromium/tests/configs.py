@@ -173,12 +173,6 @@ def GenTests(api):
   )
 
   yield (
-      api.test('clang_tot_linux_lld') +
-      api.properties(chromium_config='clang_tot_linux_lld') +
-      api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
       api.test('chromium_linux_ubsan') +
       api.properties(chromium_config='chromium_linux_ubsan') +
       api.post_process(post_process.DropExpectation)

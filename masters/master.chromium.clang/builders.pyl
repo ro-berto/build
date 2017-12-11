@@ -56,11 +56,6 @@
       "bot": "slave163-c1",
       "category": "0ToTLinux",
     },
-    "ToTLinuxLLD": {
-      "mixins": ["trusty"],
-      "bot": "slave165-c1",
-      "category": "0ToTLinux",
-    },
     "ToTLinuxMSan": {
       "mixins": ["trusty"],
       "bot": "slave166-c1",
