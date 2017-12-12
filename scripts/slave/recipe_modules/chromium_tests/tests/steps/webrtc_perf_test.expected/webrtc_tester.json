@@ -163,21 +163,6 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[CLEANUP]/recordings_dir"
-    ],
-    "infra_step": true,
-    "name": "create recordings_dir"
-  },
-  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -210,7 +195,7 @@
       "test_name",
       "some",
       "args",
-      "--webrtc_save_audio_recordings_in=[CLEANUP]/recordings_dir"
+      "--webrtc_save_audio_recordings_in=[TMP_BASE]/recordings_dir_tmp_1"
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
@@ -248,7 +233,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "listdir",
-      "[CLEANUP]/recordings_dir"
+      "[TMP_BASE]/recordings_dir_tmp_1"
     ],
     "infra_step": true,
     "name": "look for wav files",
@@ -256,6 +241,19 @@
     "~followup_annotations": [
       "@@@STEP_LOG_END@listdir@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[TMP_BASE]/recordings_dir_tmp_1"
+    ],
+    "infra_step": true,
+    "name": "Remove recordings_dir"
   },
   {
     "cmd": [],

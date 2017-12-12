@@ -2654,12 +2654,12 @@ class WebRTCPerfTest(LocalGTestTest):
     finally:
       if self.upload_wav_files_from_test:
         self._upload_wav_files(api, recordings_dir)
+        api.file.rmtree('Remove recordings_dir', recordings_dir)
 
   def _prepare_gathering_wav_files(self, api):
     # Pass an arg to the test so it knows where to write the .wav files.
     # This arg is implemented by the WebRTC audio quality browser test.
-    recordings_dir = api.path['cleanup'].join('recordings_dir')
-    api.file.ensure_directory('create recordings_dir', recordings_dir)
+    recordings_dir = api.path.mkdtemp(prefix='recordings_dir')
     self._args.append(
         '--webrtc_save_audio_recordings_in=%s' % recordings_dir)
     return recordings_dir

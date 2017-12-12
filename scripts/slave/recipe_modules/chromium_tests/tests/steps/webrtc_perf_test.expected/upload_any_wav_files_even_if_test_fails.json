@@ -163,21 +163,6 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[CLEANUP]/recordings_dir"
-    ],
-    "infra_step": true,
-    "name": "create recordings_dir"
-  },
-  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -210,7 +195,7 @@
       "test_name",
       "some",
       "args",
-      "--webrtc_save_audio_recordings_in=[CLEANUP]/recordings_dir"
+      "--webrtc_save_audio_recordings_in=[TMP_BASE]/recordings_dir_tmp_1"
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
@@ -252,14 +237,14 @@
       "--json-output",
       "/path/to/tmp/json",
       "listdir",
-      "[CLEANUP]/recordings_dir"
+      "[TMP_BASE]/recordings_dir_tmp_1"
     ],
     "infra_step": true,
     "name": "look for wav files",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@listdir@[CLEANUP]/recordings_dir/rec_1.wav@@@",
-      "@@@STEP_LOG_LINE@listdir@[CLEANUP]/recordings_dir/rec_2.wav@@@",
+      "@@@STEP_LOG_LINE@listdir@[TMP_BASE]/recordings_dir_tmp_1/rec_1.wav@@@",
+      "@@@STEP_LOG_LINE@listdir@[TMP_BASE]/recordings_dir_tmp_1/rec_2.wav@@@",
       "@@@STEP_LOG_END@listdir@@@"
     ]
   },
@@ -270,7 +255,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "name": "zip wav files from test",
-    "stdin": "{\"entries\": [{\"path\": \"[CLEANUP]/recordings_dir\", \"type\": \"dir\"}], \"output\": \"[CLEANUP]/webrtc_wav_files.zip\", \"root\": \"[CLEANUP]/recordings_dir\"}"
+    "stdin": "{\"entries\": [{\"path\": \"[TMP_BASE]/recordings_dir_tmp_1\", \"type\": \"dir\"}], \"output\": \"[CLEANUP]/webrtc_wav_files.zip\", \"root\": \"[TMP_BASE]/recordings_dir_tmp_1\"}"
   },
   {
     "cmd": [
@@ -291,6 +276,19 @@
     "~followup_annotations": [
       "@@@STEP_LINK@Recordings from test@https://storage.googleapis.com/chromium-webrtc/test_artifacts/chromium.webrtc/Linux Tester/123/wav_files.zip@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[TMP_BASE]/recordings_dir_tmp_1"
+    ],
+    "infra_step": true,
+    "name": "Remove recordings_dir"
   },
   {
     "cmd": [],
