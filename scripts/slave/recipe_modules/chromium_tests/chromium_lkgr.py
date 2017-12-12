@@ -14,7 +14,7 @@ SPEC = {
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
+        'TARGET_BITS': 64,
       },
       'bot_type': 'builder',
       'disable_tests': True,
