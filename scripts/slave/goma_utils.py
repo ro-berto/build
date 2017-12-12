@@ -533,15 +533,24 @@ def MakeGomaStatusCounter(json_file, exit_status,
     infra_status = json_status.get('infra_status')
 
     result = 'success'
+    reason = 'OK'
+
+    if infra_status is None:
+      reason = 'GOMA_SETUP_FAILURE'
+    elif infra_status.get('ping_status_code', 200) != 200:
+      reason = 'GOMA_PING_FAILURE'
+    elif infra_status.get('num_user_error', 0) > 0:
+      reason = 'GOMA_BUILD_ERROR'
+
     if exit_status is None:
-      result = 'exception'
+      if reason == 'OK':
+        # Maybe some failure on goma set up?
+        reason = 'EXIT_STATUS_IS_NONE'
     elif exit_status != 0:
       result = 'failure'
-      if (exit_status < 0 or
-          not infra_status or
-          infra_status['ping_status_code'] != 200 or
-          infra_status.get('num_user_error', 0) > 0):
-        result = 'exception'
+
+    if reason != 'OK':
+      result = 'exception'
 
     num_failure = 0
     ping_status_code = 0
@@ -558,7 +567,8 @@ def MakeGomaStatusCounter(json_file, exit_status,
         'clobber': 1 if clobber else 0,
         'os': chromium_utils.PlatformName(),
         'ping_status_code': ping_status_code,
-        'result': result}
+        'result': result,
+        'exception_reason': reason}
     start_time = GetCompilerProxyStartTime()
     if start_time:
       counter['start_time'] = int(time.mktime(start_time.timetuple()))
