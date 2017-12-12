@@ -270,8 +270,6 @@
   {
     "cmd": [
       "git",
-      "-c",
-      "core.quotePath=false",
       "diff",
       "--cached",
       "--name-only"
