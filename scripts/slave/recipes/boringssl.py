@@ -89,7 +89,8 @@ def _GetGclientVars(buildername):
   return ret
 
 
-def _GetTargetCMakeArgs(buildername, checkout, ninja_path, platform):
+def _GetTargetCMakeArgs(buildername, path, ninja_path, platform):
+  checkout = path['checkout']
   bot_utils = checkout.join('util', 'bot')
   args = {'CMAKE_MAKE_PROGRAM': ninja_path}
   if _HasToken(buildername, 'shared'):
@@ -131,9 +132,19 @@ def _GetTargetCMakeArgs(buildername, checkout, ninja_path, platform):
     _AppendFlags(args, 'CMAKE_CXX_FLAGS', '-DOPENSSL_NO_THREADS=1')
     _AppendFlags(args, 'CMAKE_C_FLAGS', '-DOPENSSL_NO_THREADS=1')
   if _HasToken(buildername, 'android'):
-    args['CMAKE_TOOLCHAIN_FILE'] = checkout.join('third_party', 'android-cmake',
-                                                 'android.toolchain.cmake')
-    args['ANDROID_NDK'] = bot_utils.join('android_tools', 'ndk')
+    # Use the NDK toolchain file on newer NDKs and the bundled
+    # third_party/android-cmake file on older ones.
+    #
+    # TODO(davidben): Remove the old NDK toolchain codepath when builders have
+    # switched to the new NDK. https://crbug.com/771171.
+    ndk = bot_utils.join('android_tools', 'ndk')
+    ndk_toolchain = ndk.join('build', 'cmake', 'android.toolchain.cmake')
+    if path.exists(ndk_toolchain):
+      args['CMAKE_TOOLCHAIN_FILE'] = ndk_toolchain
+    else:
+      args['CMAKE_TOOLCHAIN_FILE'] = checkout.join(
+          'third_party', 'android-cmake', 'android.toolchain.cmake')
+      args['ANDROID_NDK'] = ndk
     if _HasToken(buildername, 'arm'):
       args['ANDROID_ABI'] = 'armeabi-v7a'
       args['ANDROID_NATIVE_API_LEVEL'] = 16
@@ -225,8 +236,8 @@ def RunSteps(api, buildername):
                            'cmake' + _GetHostExeSuffix(api.platform))
     cmake_args = _GetHostCMakeArgs(api.platform, bot_utils)
     cmake_args.update(
-        _GetTargetCMakeArgs(buildername, api.path['checkout'],
-                            api.depot_tools.ninja_path, api.platform))
+        _GetTargetCMakeArgs(buildername, api.path, api.depot_tools.ninja_path,
+                            api.platform))
     with api.context(cwd=build_dir):
       api.python(
           'cmake', go_env, msvc_prefix + [cmake, '-GNinja'] +
@@ -351,6 +362,21 @@ def GenTests(api):
       api.override_step_data('ssl tests',
                              api.test_utils.canned_test_output(True))
     )
+
+  # Test the new NDK path.
+  yield (
+    api.test('android_arm_ndk') +
+    api.platform('linux', 64) +
+    api.properties.generic(mastername='client.boringssl',
+                           buildername='android_arm_ndk', bot_id='bot_id') +
+    api.path.exists(api.path['checkout'].join(
+        'util', 'bot', 'android_tools', 'ndk', 'build', 'cmake',
+        'android.toolchain.cmake')) +
+    api.override_step_data('unit tests',
+                           api.test_utils.canned_test_output(True)) +
+    api.override_step_data('ssl tests',
+                           api.test_utils.canned_test_output(True))
+  )
 
   compile_only_tests = [
     ('ios_compile', api.platform('mac', 64)),
