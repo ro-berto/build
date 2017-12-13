@@ -2484,13 +2484,13 @@ Args:
   revision: The build revision, e.g. got_revision from the update step.
   bot: The bot name used for the data on the perf dashboard.
 
-&mdash; **def [add\_point](/scripts/slave/recipe_modules/perf_dashboard/api.py#66)(self, data, halt_on_failure=False, name=None):**
+&mdash; **def [add\_point](/scripts/slave/recipe_modules/perf_dashboard/api.py#66)(self, data, halt_on_failure=False, name=None, \*\*kwargs):**
 
 &mdash; **def [get\_skeleton\_point](/scripts/slave/recipe_modules/perf_dashboard/api.py#20)(self, test, revision, value, bot=None):**
 
 &mdash; **def [halt](/scripts/slave/recipe_modules/perf_dashboard/api.py#114)(self, step_result, reason):**
 
-&mdash; **def [post](/scripts/slave/recipe_modules/perf_dashboard/api.py#88)(self, name, url, data, halt_on_failure):**
+&mdash; **def [post](/scripts/slave/recipe_modules/perf_dashboard/api.py#87)(self, name, url, data, halt_on_failure, \*\*kwargs):**
 
 Send a POST request to a URL with a payload.
 
@@ -2501,13 +2501,13 @@ Args:
   halt_on_failure: If True, the step turns purple on failure. Otherwise, it
       turns orange.
 
-&mdash; **def [post\_bisect\_results](/scripts/slave/recipe_modules/perf_dashboard/api.py#71)(self, data, halt_on_failure=False):**
+&mdash; **def [post\_bisect\_results](/scripts/slave/recipe_modules/perf_dashboard/api.py#70)(self, data, halt_on_failure=False, \*\*kwargs):**
 
 Posts bisect results to Perf Dashboard.
 
 &mdash; **def [set\_default\_config](/scripts/slave/recipe_modules/perf_dashboard/api.py#62)(self):**
 
-&mdash; **def [upload\_isolate](/scripts/slave/recipe_modules/perf_dashboard/api.py#77)(self, builder_name, change, isolate_map, halt_on_failure=False):**
+&mdash; **def [upload\_isolate](/scripts/slave/recipe_modules/perf_dashboard/api.py#76)(self, builder_name, change, isolate_map, halt_on_failure=False, \*\*kwargs):**
 
 &mdash; **def [warning](/scripts/slave/recipe_modules/perf_dashboard/api.py#119)(self, step_result, reason):**
 ### *recipe_modules* / [perf\_try](/scripts/slave/recipe_modules/perf_try)

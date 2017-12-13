@@ -63,19 +63,18 @@ class PerfDashboardApi(recipe_api.RecipeApi):
     # TODO: Remove.
     pass
 
-  def add_point(self, data, halt_on_failure=False, name=None):
-    return self.post(name or 'perf dashboard post',
-                     '%s/add_point' % _BASE_URL,
-                     {'data': json.dumps(data)}, halt_on_failure)
+  def add_point(self, data, halt_on_failure=False, name=None, **kwargs):
+    return self.post(name or 'perf dashboard post', '%s/add_point' % _BASE_URL,
+                     {'data': json.dumps(data)}, halt_on_failure, **kwargs)
 
-  def post_bisect_results(self, data, halt_on_failure=False):
+  def post_bisect_results(self, data, halt_on_failure=False, **kwargs):
     """Posts bisect results to Perf Dashboard."""
     return self.post('Post bisect results',
                      '%s/post_bisect_results' % _BASE_URL,
-                     {'data': json.dumps(data)}, halt_on_failure)
+                     {'data': json.dumps(data)}, halt_on_failure, **kwargs)
 
   def upload_isolate(self, builder_name, change, isolate_map,
-                     halt_on_failure=False):
+                     halt_on_failure=False, **kwargs):
     data = {
         'builder_name': builder_name,
         'change': json.dumps(change),
@@ -83,9 +82,9 @@ class PerfDashboardApi(recipe_api.RecipeApi):
     }
     return self.post('pinpoint isolate upload',
                      '%s/api/isolate' % _PINPOINT_BASE_URL,
-                     data, halt_on_failure)
+                     data, halt_on_failure, **kwargs)
 
-  def post(self, name, url, data, halt_on_failure):
+  def post(self, name, url, data, halt_on_failure, **kwargs):
     """Send a POST request to a URL with a payload.
 
     Args:
@@ -97,7 +96,8 @@ class PerfDashboardApi(recipe_api.RecipeApi):
     """
     step_result = self.m.python(
         name=name, script=self.resource('post_json.py'), args=[
-            url, '-i', self.m.json.input(data), '-o', self.m.json.output()])
+            url, '-i', self.m.json.input(data), '-o', self.m.json.output()],
+            **kwargs)
 
     response = step_result.json.output
     if not response or response['status_code'] != 200:  # pragma: no cover
