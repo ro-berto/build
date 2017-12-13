@@ -532,6 +532,7 @@ class iOSApi(recipe_api.RecipeApi):
         'skip': 'skip' in test,
         'step name': step_name,
         'task': None,
+        'task_id': test_id,
         'test': copy.deepcopy(test),
         'tmp dir': None,
         'xcode version': test.get('xcode version'),
@@ -725,14 +726,14 @@ class iOSApi(recipe_api.RecipeApi):
       cmd,
       infra_step=True,
       step_test_data=lambda: self.m.json.test_api.output({
-        task['test']['id']: 'fake-hash-%s' % task['test']['id']
+        task['task_id']: 'fake-hash-%s' % task['task_id']
         for task in tasks
         if task['isolate.gen'] and not task['skip']
       }),
     )
     for task in tasks:
-      if task['test']['id'] in step_result.json.output:
-        task['isolated hash'] = step_result.json.output[task['test']['id']]
+      if task['task_id'] in step_result.json.output:
+        task['isolated hash'] = step_result.json.output[task['task_id']]
 
     return tasks
 
@@ -746,7 +747,7 @@ class iOSApi(recipe_api.RecipeApi):
 
       self._ensure_xcode_version(task)
 
-      task['tmp_dir'] = self.m.path.mkdtemp(task['test']['id'])
+      task['tmp_dir'] = self.m.path.mkdtemp(task['task_id'])
       swarming_task = self.m.swarming.task(
         task['step name'],
         task['isolated hash'],
