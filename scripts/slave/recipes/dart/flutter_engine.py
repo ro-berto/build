@@ -72,6 +72,7 @@ def GetCheckout(api):
     'src/flutter': api.properties.get('rev_engine') or
                    api.properties.get('revision') or 'HEAD',
     'src/third_party/dart': api.properties.get('rev_sdk') or 'HEAD',
+    'flutter': api.properties.get('rev_flutter') or 'HEAD',
   }
 
   soln = src_cfg.solutions.add()
@@ -79,9 +80,36 @@ def GetCheckout(api):
   soln.url = \
       'https://chromium.googlesource.com/external/github.com/flutter/engine'
 
+  soln = src_cfg.solutions.add()
+  soln.name = 'flutter'
+  soln.url = \
+      'https://chromium.googlesource.com/external/github.com/flutter/flutter'
+
   api.gclient.c = src_cfg
   api.bot_update.ensure_checkout()
   api.gclient.runhooks()
+
+def TestFlutter(api):
+  engine_src = api.path['start_dir'].join('src')
+  flutter = api.path['start_dir'].join('flutter')
+  flutter_cmd = flutter.join('bin/flutter')
+  test_args = [
+      '--local-engine=host_debug_unopt',
+      '--local-engine-src-path=%s' % engine_src,
+  ]
+  test_cmd = [
+    'dart',
+    'dev/bots/test.dart',
+  ]
+  api.step('disable flutter analytics', [flutter_cmd, 'config', '--no-analytics'])
+  with api.context(cwd=flutter):
+    with api.context(cwd=flutter.join('dev/bots')):
+      api.step('pub get in dev/bots before flutter test', ['pub', 'get'])
+    api.step('flutter update-packages',
+             [flutter_cmd, 'update-packages'] + test_args)
+    # runs all flutter tests similar to travis as described on this page:
+    # https://github.com/flutter/flutter/blob/master/CONTRIBUTING.md
+    api.step('flutter test', test_cmd + test_args)
 
 def RunSteps(api):
   # buildbot sets 'clobber' to the empty string which is falsey, check with 'in'
@@ -102,6 +130,7 @@ def RunSteps(api):
     TestObservatory(api)
     BuildLinuxAndroidArm(api)
     BuildLinuxAndroidx86(api)
+    TestFlutter(api)
 
 def GenTests(api):
   yield (api.test('flutter-engine-linux') + api.platform('linux', 64)

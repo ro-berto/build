@@ -4600,7 +4600,9 @@ Generates the sequence of steps that will be run by the slave.
 
 &mdash; **def [RunGN](/scripts/slave/recipes/dart/flutter_engine.py#23)(api, \*args):**
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/dart/flutter_engine.py#86)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/dart/flutter_engine.py#114)(api):**
+
+&mdash; **def [TestFlutter](/scripts/slave/recipes/dart/flutter_engine.py#92)(api):**
 
 &mdash; **def [TestObservatory](/scripts/slave/recipes/dart/flutter_engine.py#58)(api):**
 ### *recipes* / [dart/misc](/scripts/slave/recipes/dart/misc.py)
