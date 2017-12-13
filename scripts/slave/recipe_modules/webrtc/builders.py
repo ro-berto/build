@@ -526,7 +526,8 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
         'archive_apprtc': True,
         'build_android_archive': True,
-        'test_android_studio_project_generation': True,
+        # TODO(bugs.webrtc.org/8642): Re-enable when it is fixed and stable.
+        # 'test_android_studio_project_generation': True,
         'enable_swarming': True,
         'use_isolate': True,
         'swarming_dimensions': {
@@ -1645,7 +1646,8 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
         'build_android_archive': True,
-        'test_android_studio_project_generation': True,
+        # TODO(bugs.webrtc.org/8642): Re-enable when it is fixed and stable.
+        # 'test_android_studio_project_generation': True,
         'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
@@ -1697,4 +1699,3 @@ BUILDERS = freeze({
     },
   },
 })
-
