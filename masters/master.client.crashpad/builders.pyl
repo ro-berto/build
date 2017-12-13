@@ -10,6 +10,28 @@
   "pubsub_service_account_file": "service-account-luci-milo.json",
 
   "builders": {
+    "crashpad_fuchsia_x64_dbg": {
+      "category": "continuous",
+      "recipe": "crashpad/build",
+      "scheduler": "crashpad_commits",
+      "slave_pools": ["linux"],
+
+      "auto_reboot": False,
+      "properties": {
+        "config": "Debug",
+      },
+    },
+    "crashpad_fuchsia_x64_rel": {
+      "category": "continuous",
+      "recipe": "crashpad/build",
+      "scheduler": "crashpad_commits",
+      "slave_pools": ["linux"],
+
+      "auto_reboot": False,
+      "properties": {
+        "config": "Release",
+      },
+    },
     "crashpad_mac_dbg": {
       "category": "continuous",
       "recipe": "crashpad/build",
@@ -78,6 +100,28 @@
     },
 
     # Trybots.
+    "crashpad_try_fuchsia_x64_dbg": {
+      "category": "trybots",
+      "recipe": "crashpad/build",
+      "scheduler": None,
+      "slave_pools": ["linux"],
+
+      "auto_reboot": False,
+      "properties": {
+        "config": "Debug",
+      },
+    },
+    "crashpad_try_fuchsia_x64_rel": {
+      "category": "trybots",
+      "recipe": "crashpad/build",
+      "scheduler": None,
+      "slave_pools": ["linux"],
+
+      "auto_reboot": False,
+      "properties": {
+        "config": "Release",
+      },
+    },
     "crashpad_try_mac_dbg": {
       "category": "trybots",
       "recipe": "crashpad/build",
@@ -154,6 +198,14 @@
   },
 
   "slave_pools": {
+    "linux": {
+      "slave_data": {
+        "bits": 64,
+        "os":  "linux",
+        "version": "trusty",
+      },
+      "slaves": ["slave36-c3"],
+    },
     "mac10.9": {
       "slave_data": {
         "bits": 64,
