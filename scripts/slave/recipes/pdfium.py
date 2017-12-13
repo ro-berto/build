@@ -91,8 +91,15 @@ def _GNGenBuilds(api, memory_tool, skia, xfa, v8, target_cpu, clang, rel,
   ]
   if api.platform.is_win and not memory_tool:
     args.append('symbol_level=1')
-  if clang:
-    args.append('is_clang=true')
+  if api.platform.is_win:
+    if clang:
+      args.append('is_clang=true')
+    else:
+      args.append('is_clang=false')
+  else:
+    # All other platforms already build with Clang, so no need to set it.
+    assert not clang
+
   if memory_tool == 'asan':
     args.append('is_asan=true is_lsan=true')
   if target_os:
