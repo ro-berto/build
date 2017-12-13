@@ -453,6 +453,11 @@ SPEC = {
       },
       'enable_swarming': True,
     },
+
+    'Win Builder Localoutputcache': chromium_apply_configs(
+        no_archive(chromium_win.SPEC['builders']['Win Builder']),
+        ['goma_localoutputcache']),
+
     'Win Builder Goma Canary': chromium_apply_configs(
         chromium_win.SPEC['builders']['Win Builder'], ['goma_canary']),
     'Win Builder (dbg) Goma Canary': chromium_apply_configs(
