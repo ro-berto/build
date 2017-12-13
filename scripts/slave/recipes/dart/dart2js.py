@@ -98,7 +98,7 @@ def RunSteps(api):
 
     build_args = ['-m%s' % mode, '--arch=ia32', 'dart2js_bot']
     if 'unittest' in options:
-      build_args.append('patched_dart2js_sdk')
+      build_args.append('compile_dart2js_platform')
     api.python('build dart',
                api.path['checkout'].join('tools', 'build.py'),
                args=build_args)

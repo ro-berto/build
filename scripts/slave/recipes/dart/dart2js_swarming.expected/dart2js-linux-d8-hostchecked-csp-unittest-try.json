@@ -210,7 +210,7 @@
       "-mrelease",
       "--arch=ia32",
       "dart2js_bot",
-      "patched_dart2js_sdk",
+      "compile_dart2js_platform",
       "--no-start-goma"
     ],
     "cwd": "[CACHE]/builder/sdk",

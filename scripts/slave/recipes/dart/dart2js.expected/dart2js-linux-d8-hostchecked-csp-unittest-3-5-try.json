@@ -83,7 +83,7 @@
       "-mrelease",
       "--arch=ia32",
       "dart2js_bot",
-      "patched_dart2js_sdk"
+      "compile_dart2js_platform"
     ],
     "cwd": "[START_DIR]/sdk",
     "env_prefixes": {
