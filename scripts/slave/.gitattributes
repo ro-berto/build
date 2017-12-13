@@ -2,6 +2,7 @@
 /annotation_utils.py          recipes
 /bootstrap.py                 recipes
 /build_directory.py           recipes
+/clang_revision.py            recipes
 /goma_utils.py                recipes
 /kill_processes.py            recipes
 /slave_utils.py               recipes
