@@ -1018,6 +1018,7 @@
       "stepname:vm_tests_shard_1",
       "--isolated",
       "",
+      "--raw-cmd",
       "--",
       "--all",
       "--shards=1",

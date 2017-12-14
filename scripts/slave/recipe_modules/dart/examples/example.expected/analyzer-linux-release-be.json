@@ -1787,6 +1787,7 @@
       "stepname:Test-step 3_shard_1",
       "--isolated",
       "test isolate hash",
+      "--raw-cmd",
       "--",
       "tools/test.py",
       "-ax64",

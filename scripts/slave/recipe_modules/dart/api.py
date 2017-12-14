@@ -132,7 +132,7 @@ class DartApi(recipe_api.RecipeApi):
       # TODO(athom) collect all the triggers, and present as a single step
       task = self.m.swarming.task("%s_shard_%s" % (title, (shard + 1)),
                                isolate_hash,
-                               extra_args= test_args +
+                               raw_cmd=test_args +
                                  ['--shards=%s' % num_shards,
                                   '--shard=%s' % (shard + 1),
                                   '--output_directory=${ISOLATED_OUTDIR}'])
