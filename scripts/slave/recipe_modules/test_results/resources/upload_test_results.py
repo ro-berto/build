@@ -91,15 +91,16 @@ def generate_json_results_file_for_gtest(
   if not os.path.exists(results_directory):
     os.makedirs(results_directory)
 
-  print('Generating json: '
-        'builder_name:%s, build_number:%s, '
-        'results_directory:%s, '
-        'chrome_revision:%s '
-        'master_name:%s' %
-        (builder_name, build_number,
-         results_directory,
-         chrome_revision,
-         master_name))
+  logging.info(
+      'Generating json: '
+      'builder_name:%s, build_number:%s, '
+      'results_directory:%s, '
+      'chrome_revision:%s '
+      'master_name:%s' %
+      (builder_name, build_number,
+       results_directory,
+       chrome_revision,
+       master_name))
 
   # TODO(estaab): This doesn't need to be an object. Make it a simple function.
   generator = JSONResultsGenerator(
@@ -143,7 +144,9 @@ def main(args):
                                 'given, defaults to 0.')
 
   options = option_parser.parse_args(args)[0]
-  logging.basicConfig(level=logging.INFO)
+  logging.basicConfig(
+      level=logging.INFO,
+      format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
   if not options.test_type:
     option_parser.error('--test-type needs to be specified.')
@@ -163,7 +166,7 @@ def main(args):
 
   content = json.loads(results_json)
   if content.get('version', 0) >= 3:
-    print 'Input JSON file probably has full json results format'
+    logging.info('Input JSON file probably has full json results format')
     files = generate_json_results_file_for_json(
       content, builder_name=options.builder_name,
       build_number=options.build_number,
@@ -171,8 +174,9 @@ def main(args):
       chrome_revision=options.chrome_revision,
       master_name=options.master_name)
   else:
-    print ('Input JSON file probably has gtest format. Converting to full json'
-           ' results format')
+    logging.info(
+        'Input JSON file probably has gtest format. Converting to full json'
+        ' results format')
     files = generate_json_results_file_for_gtest(
         results_json, builder_name=options.builder_name,
         build_number=options.build_number,
@@ -182,8 +186,8 @@ def main(args):
 
   # Upload to a test results server if specified.
   if options.test_results_server and options.master_name:
-    print 'Uploading JSON files for builder "%s" to server "%s"' % (
-        options.builder_name, options.test_results_server)
+    logging.info('Uploading JSON files for builder "%s" to server "%s"' % (
+        options.builder_name, options.test_results_server))
     attrs = [('builder', options.builder_name),
              ('testtype', options.test_type),
              ('master', options.master_name)]
