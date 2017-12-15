@@ -341,6 +341,7 @@ def _add_to_path(path):
   cur_path = [x for x in cur_path if os.path.realpath(x) != path]
   cur_path.insert(0, path)
   os.environ['PATH'] = os.path.pathsep.join(cur_path)
+  return path
 
 
 def ensure_cipd_client(path, version):
@@ -378,7 +379,7 @@ def ensure_cipd_client(path, version):
   except Exception:
     LOGGER.exception('caught exception in ensure_cipd_client')
     sys.exit('Failed to ensure cipd client')
-  _add_to_path(path)
+  return filter(bool, [_add_to_path(path)])
 
 
 def install_cipd_packages(dest, *packages):
@@ -416,6 +417,7 @@ def install_auxiliary_path_packages(dest, track):
     dest (str): The CIPD root directory to install into and add to PATH.
     track (str): The track to use, either STAGING, CANARY, or None (PROD).
   """
+  ret = []
   packages = AUX_BINARY_PACKAGES.get(track, AUX_BINARY_PACKAGES[None])
   if packages:
     if not os.path.isdir(dest):
@@ -426,8 +428,12 @@ def install_auxiliary_path_packages(dest, track):
     # Add the packages to PATH. Add "/bin" first, since it's where raw
     # Python/Git reside. Add "dest" second so that wrappers will be preferred
     # to underlying binaries.
-    _add_to_path(os.path.join(dest, 'bin'))
-    _add_to_path(dest)
+    ret.append(_add_to_path(os.path.join(dest, 'bin')))
+    ret.append(_add_to_path(dest))
+
+  # reverse ret so it goes [<dest>, <dest>/bin], preferring wrappers to
+  # underlying binaries (as above).
+  return reversed(filter(bool, ret))
 
 
 def high_level_ensure_cipd_client(b_dir, mastername, track=None):
@@ -445,6 +451,8 @@ def high_level_ensure_cipd_client(b_dir, mastername, track=None):
     mastername (str): The master name, used to determine automatic track.
     track (str): Explicitly specify which track to use, either STAGING, CANARY,
         or PROD (None) to automatically choose a track based on |mastername|.
+
+  Returns the list of paths added to $PATH.
   """
   LOGGER.info('bootstrapping CIPD')
 
@@ -461,8 +469,11 @@ def high_level_ensure_cipd_client(b_dir, mastername, track=None):
     cipd_version = 'latest'
 
   os.environ['CIPD_CACHE_DIR'] = os.path.join(b_dir, 'c', 'cipd')
-  ensure_cipd_client(cipd_dir, cipd_version)
+  ret = ensure_cipd_client(cipd_dir, cipd_version)
 
-  install_auxiliary_path_packages(os.path.join(b_dir, 'cipd_path_tools'),
-                                  track)
+  ret.extend(install_auxiliary_path_packages(
+    os.path.join(b_dir, 'cipd_path_tools'), track))
   os.environ['VPYTHON_VIRTUALENV_ROOT'] = os.path.join(b_dir, 'c', 'vpython')
+
+  # return a dedup'd list of everything in ret
+  return [x for i, x in enumerate(ret) if x not in ret[:i]]

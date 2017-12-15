@@ -118,13 +118,20 @@ class RemoteRunExecTest(unittest.TestCase):
         mock.patch('slave.remote_run._call'),
         mock.patch('slave.remote_run._get_is_canary'),
         mock.patch('slave.remote_run._get_is_kitchen'),
-        mock.patch('slave.cipd_bootstrap_v2.high_level_ensure_cipd_client'),
         mock.patch('slave.monitoring_utils.write_build_monitoring_event'),
         mock.patch('os.path.exists'),
         mock.patch('common.chromium_utils.RemoveDirectory'),
         mock.patch('common.chromium_utils.MoveFile'),
         mock.patch('common.chromium_utils.GetActiveSubdir'),
         ))
+
+    func = mock.patch(
+      'slave.cipd_bootstrap_v2.high_level_ensure_cipd_client').start()
+    func.return_value = [
+      'cipd_path_tools',
+      os.path.join('cipd_path_tools', 'bin'),
+    ]
+
     self.addCleanup(mock.patch.stopall)
 
     self.rt = robust_tempdir.RobustTempdir(prefix='remote_run_test')

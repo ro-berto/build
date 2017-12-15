@@ -574,7 +574,6 @@ def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir, cleanup_dir,
                        "or no 'path_config', not %r." % (path_config,))
 
   set_recipe_runtime_properties(stream, args, properties)
-  LOGGER.info('Using properties: %r', properties)
 
   monitoring_utils.write_build_monitoring_event(build_data_dir, properties)
 
@@ -582,8 +581,13 @@ def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir, cleanup_dir,
   # PATH.
   from slave import cipd_bootstrap_v2
   track = cipd_bootstrap_v2.STAGING if is_opt_in else cipd_bootstrap_v2.PROD
-  cipd_bootstrap_v2.high_level_ensure_cipd_client(
+  prefix_paths = cipd_bootstrap_v2.high_level_ensure_cipd_client(
       basedir, mastername, track=track)
+
+  if not is_kitchen:
+    # kitchen sets this property itself, so only set this for non-kitchen runs.
+    properties['$recipe_engine/step'] = {'prefix_path': prefix_paths}
+  LOGGER.info('Using properties: %r', properties)
 
   # Cleanup data from old builds.
   _cleanup_old_layouts(
