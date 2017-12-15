@@ -235,7 +235,8 @@
       "--mode=release",
       "--arch=ia32",
       "create_sdk",
-      "--no-start-goma"
+      "--no-start-goma",
+      "-j200"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
@@ -545,7 +546,8 @@
       "--mode=release",
       "--arch=x64",
       "create_sdk",
-      "--no-start-goma"
+      "--no-start-goma",
+      "-j200"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {

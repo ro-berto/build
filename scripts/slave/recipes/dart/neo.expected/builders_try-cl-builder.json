@@ -218,7 +218,8 @@
       "-u",
       "[CACHE]/builder/sdk/tools/build.py",
       "runtime,sdk",
-      "--no-start-goma"
+      "--no-start-goma",
+      "-j200"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env_prefixes": {

@@ -44,9 +44,7 @@ class DartApi(recipe_api.RecipeApi):
        and optionally isolates the sdk for testing using the specified isolate.
        If an isolate is specified, it returns the hash of the isolated archive.
     """
-    build_args = build_args + ['--no-start-goma']
-    if self.m.platform.name in ('mac', 'win'):
-      build_args.append('-j200')
+    build_args = build_args + ['--no-start-goma', '-j200']
     with self.m.context(cwd=self.m.path['checkout'],
                      env_prefixes={'PATH':[self.m.depot_tools.root]}):
       self.kill_tasks()

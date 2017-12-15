@@ -4,10 +4,7 @@
 
 DEPS = [
     'dart',
-    'depot_tools/bot_update',
     'depot_tools/depot_tools',
-    'depot_tools/gclient',
-    'depot_tools/gsutil',
     'recipe_engine/context',
     'recipe_engine/file',
     'recipe_engine/path',
@@ -55,12 +52,7 @@ def RunSteps(api):
   channel = builder_fragments[-1]
   assert channel in ['be', 'dev', 'stable', 'integration', 'try']
 
-  api.gclient.set_config('dart', GIT_MODE=True)
-  if channel == 'try':
-    api.gclient.c.solutions[0].url = 'https://dart.googlesource.com/sdk.git'
-  with api.context(cwd=api.path['cache'].join('builder')):
-    api.bot_update.ensure_checkout()
-    api.gclient.runhooks()
+  api.dart.checkout(channel=channel)
 
   with api.context(cwd=api.path['checkout'],
                    env_prefixes={'PATH':[api.depot_tools.root]}):
@@ -70,9 +62,7 @@ def RunSteps(api):
                ok_ret='any'
                )
     build_args = ['-m%s' % mode, '--arch=x64', 'dart2js_bot']
-    api.python('build dart',
-               api.path['checkout'].join('tools', 'build.py'),
-               args=build_args)
+    api.dart.build(build_args=build_args)
 
   with api.step.defer_results():
     if builder_type == 'analyzer':

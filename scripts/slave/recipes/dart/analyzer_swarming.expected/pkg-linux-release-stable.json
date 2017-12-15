@@ -1,5 +1,37 @@
 [
   {
+    "cmd": [],
+    "name": "ensure_goma"
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[CACHE]/goma_client",
+      "-ensure-file",
+      "infra_internal/goma/client/linux-amd64 release",
+      "-json-output",
+      "/path/to/tmp/json",
+      "-service-account-json",
+      "/creds/service_accounts/service-account-goma-client.json"
+    ],
+    "infra_step": true,
+    "name": "ensure_goma.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/linux-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -20,6 +52,9 @@
       "sdk@hash_of_revision"
     ],
     "cwd": "[CACHE]/builder",
+    "env": {
+      "GOMA_DIR": "[CACHE]/goma_client"
+    },
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -57,6 +92,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "env": {
+      "GOMA_DIR": "[CACHE]/goma_client",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -80,18 +116,296 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/sdk/tools/build.py",
-      "-mrelease",
-      "--arch=x64",
-      "dart2js_bot"
+      "[CACHE]/builder/sdk/tools/task_kill.py",
+      "--kill_browsers=True",
+      "--kill_vsbuild=True"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env_prefixes": {
       "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]",
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
-    "name": "build dart"
+    "name": "kill processes"
+  },
+  {
+    "cmd": [],
+    "cwd": "[CACHE]/builder/sdk",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]",
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "preprocess_for_goma"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]/goma/pkg_linux_release_stable"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]",
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "preprocess_for_goma.goma cache directory",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/goma_client/goma_ctl.py",
+      "restart"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "GOMA_BACKEND_SOFT_STICKINESS": "false",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/pkg_linux_release_stable",
+      "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]",
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "preprocess_for_goma.start_goma",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9&timestamp=2012-05-14T12:53:21.500000@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
+      "start",
+      "--cloudtail-path",
+      "cloudtail",
+      "--cloudtail-service-account-json",
+      "/creds/service_accounts/service-account-goma-cloudtail.json",
+      "--pid-file",
+      "[TMP_BASE]/cloudtail.pid"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]",
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "preprocess_for_goma.start cloudtail",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/builder/sdk/tools/build.py",
+      "-mrelease",
+      "--arch=x64",
+      "dart2js_bot",
+      "--no-start-goma",
+      "-j200"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]",
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "build dart",
+    "timeout": 1200
+  },
+  {
+    "cmd": [],
+    "cwd": "[CACHE]/builder/sdk",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]",
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "postprocess_for_goma"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/goma_client/goma_ctl.py",
+      "jsonstatus",
+      "[TMP_BASE]/goma_jsonstatus.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "GOMA_BACKEND_SOFT_STICKINESS": "false",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/pkg_linux_release_stable",
+      "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]",
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "postprocess_for_goma.goma_jsonstatus",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"notice\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"infra_status\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"num_user_error\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"ping_status_code\": 200@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/goma_client/goma_ctl.py",
+      "stat"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "GOMA_BACKEND_SOFT_STICKINESS": "false",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/pkg_linux_release_stable",
+      "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]",
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "postprocess_for_goma.goma_stat",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/goma_client/goma_ctl.py",
+      "stop"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "GOMA_BACKEND_SOFT_STICKINESS": "false",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/pkg_linux_release_stable",
+      "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]",
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "postprocess_for_goma.stop_goma",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/upload_goma_logs.py",
+      "--upload-compiler-proxy-info",
+      "--log-url-json-file",
+      "/path/to/tmp/json",
+      "--gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--json-status",
+      "[TMP_BASE]/goma_jsonstatus.json",
+      "--buildbot-buildername",
+      "pkg-linux-release-stable",
+      "--buildbot-mastername",
+      "client.dart",
+      "--buildbot-slavename",
+      "test_bot"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]",
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "postprocess_for_goma.upload_log",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"compiler_proxy_log\": \"http://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log.INFO.20170329-222936.4420.gz\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@compiler_proxy_log@http://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log.INFO.20170329-222936.4420.gz@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
+      "stop",
+      "--killed-pid-file",
+      "[TMP_BASE]/cloudtail.pid"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]",
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "postprocess_for_goma.stop cloudtail",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [

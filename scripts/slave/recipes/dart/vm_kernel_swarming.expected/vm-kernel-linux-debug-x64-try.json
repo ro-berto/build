@@ -211,7 +211,8 @@
       "--arch=x64",
       "create_sdk",
       "runtime_kernel",
-      "--no-start-goma"
+      "--no-start-goma",
+      "-j200"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env_prefixes": {

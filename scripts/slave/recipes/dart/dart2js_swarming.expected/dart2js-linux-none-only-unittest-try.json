@@ -211,7 +211,8 @@
       "--arch=ia32",
       "dart2js_bot",
       "compile_dart2js_platform",
-      "--no-start-goma"
+      "--no-start-goma",
+      "-j200"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env_prefixes": {

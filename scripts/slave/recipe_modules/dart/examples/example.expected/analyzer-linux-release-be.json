@@ -318,7 +318,8 @@
       "-u",
       "[CACHE]/builder/sdk/tools/build.py",
       "--super-fast",
-      "--no-start-goma"
+      "--no-start-goma",
+      "-j200"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env_prefixes": {
@@ -594,7 +595,8 @@
       "-u",
       "[CACHE]/builder/sdk/tools/build.py",
       "--super-fast",
-      "--no-start-goma"
+      "--no-start-goma",
+      "-j200"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env_prefixes": {
@@ -1328,7 +1330,8 @@
       "-mrelease",
       "foo",
       "--bar",
-      "--no-start-goma"
+      "--no-start-goma",
+      "-j200"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
