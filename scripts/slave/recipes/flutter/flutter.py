@@ -134,49 +134,36 @@ def UploadFlutterCoverage(api):
                       '--coverage-path=%s' % coverage_path])
 
 
+def GetArchiveName(api, git_hash):
+  suffix = '.tar.xz' if not api.platform.is_win else '.zip'
+  return 'flutter_%s_%s%s' % (api.platform.name, git_hash[:10], suffix)
+
+
+def CreateFlutterPackage(api, git_hash):
+  """Prepares and builds an all-inclusive archive package."""
+  dart_executable = 'dart' if not api.platform.is_win else 'dart.exe'
+  output_file = api.path['start_dir'].join(GetArchiveName(api, git_hash))
+  work_dir = api.path['start_dir'].join('archive');
+  prepare_script = api.path['checkout'].join('dev', 'bots', 'prepare_package.dart')
+  api.file.ensure_directory('Create archive work directory', work_dir)
+  with api.context(cwd=api.path['start_dir']):
+    api.step('prepare and create a flutter archive',
+             [dart_executable,
+              '--assert-initializer',
+              prepare_script,
+              '--temp_dir=%s' % work_dir,
+              '--output=%s' % output_file,
+              '--revision=%s' % git_hash])
+
+
 def UploadFlutterPackage(api, git_hash):
   """Uploads the all-inclusive package to cloud storage."""
-  suffix = '.zip' if api.platform.is_win else '.tar.bz2'
-  src_path = api.path['start_dir'].join('flutter%s' % suffix)
-  dest_file = 'flutter_%s_%s%s' % (api.platform.name, git_hash[:10], suffix)
+  src_path = api.path['start_dir'].join(GetArchiveName(api, git_hash))
+  dest_file = GetArchiveName(api, git_hash)
   api.gsutil.upload(src_path, BUCKET_NAME,
                     GetCloudPath(api, git_hash, dest_file),
                     link_name=dest_file,
                     name='upload package file %s/%s' % (git_hash, dest_file))
-
-
-def BuildFlutterPackage(api, git_hash):
-  """Builds an all-inclusive package for users to download."""
-  flutter_executable = 'flutter' if not api.platform.is_win else 'flutter.bat'
-  git_executable = 'git' if not api.platform.is_win else 'git.bat'
-
-  # We want the user to start out in the master branch when they unpack,
-  # and to have them pull from github by default, not chromium's mirror.
-  api.step('check out master branch', [git_executable, 'checkout', 'master'])
-  api.step('reset master branch to desired git hash', [git_executable, 'reset', '--hard', git_hash])
-  api.step('remove git remote origin', [git_executable, 'remote', 'remove', 'origin'])
-  api.step('set git remote origin to github',
-           [git_executable, 'remote', 'add', 'origin', 'https://github.com/flutter/flutter.git'])
-
-  # Warm the cache.
-  api.step('download dependencies', [flutter_executable, 'update-packages'])
-  api.step('flutter doctor', [flutter_executable, 'doctor'])
-  api.step('flutter precache', [flutter_executable, 'precache'])
-  api.step('flutter ide-config', [flutter_executable, 'ide-config'])
-
-  # Yes, we could just skip all .packages files, but some are checked in, and we don't
-  # want to skip those.
-  api.step('remove .packages files', [git_executable, 'clean', '-f', '-X', '**/.packages'])
-  with api.context(cwd=api.path['start_dir']):
-    if api.platform.is_linux or api.platform.is_mac:
-      api.step('create tar archive',
-               ['tar', 'cjf', api.path['start_dir'].join('flutter.tar.bz2'), 'flutter'])
-    elif api.platform.is_win:
-      package = api.zip.make_package(api.path['start_dir'],
-                                     api.path['start_dir'].join('flutter.zip'))
-      package.add_directory(package.root.join('flutter'))
-      package.zip('create zip archive')
-  api.step('recreate .packages files', [flutter_executable, 'update-packages'])
 
 
 def RunSteps(api):
@@ -211,7 +198,9 @@ def RunSteps(api):
 
   # The context adds dart-sdk tools to PATH and sets PUB_CACHE.
   with api.context(env=env, cwd=checkout):
-    BuildFlutterPackage(api, git_hash)
+    api.step('flutter doctor', [flutter_executable, 'doctor'])
+    api.step('download dependencies', [flutter_executable, 'update-packages'])
+    CreateFlutterPackage(api, git_hash)
     UploadFlutterPackage(api, git_hash)
 
   # Don't add any steps before here that are bot-specific.  BuildFlutterPackage

@@ -103,9 +103,8 @@
   },
   {
     "cmd": [
-      "git",
-      "checkout",
-      "master"
+      "flutter",
+      "doctor"
     ],
     "cwd": "[START_DIR]/flutter",
     "env": {
@@ -113,53 +112,7 @@
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
-    "name": "check out master branch"
-  },
-  {
-    "cmd": [
-      "git",
-      "reset",
-      "--hard",
-      "deadbeef"
-    ],
-    "cwd": "[START_DIR]/flutter",
-    "env": {
-      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
-      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
-    },
-    "name": "reset master branch to desired git hash"
-  },
-  {
-    "cmd": [
-      "git",
-      "remote",
-      "remove",
-      "origin"
-    ],
-    "cwd": "[START_DIR]/flutter",
-    "env": {
-      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
-      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
-    },
-    "name": "remove git remote origin"
-  },
-  {
-    "cmd": [
-      "git",
-      "remote",
-      "add",
-      "origin",
-      "https://github.com/flutter/flutter.git"
-    ],
-    "cwd": "[START_DIR]/flutter",
-    "env": {
-      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
-      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
-    },
-    "name": "set git remote origin to github"
+    "name": "flutter doctor"
   },
   {
     "cmd": [
@@ -176,8 +129,15 @@
   },
   {
     "cmd": [
-      "flutter",
-      "doctor"
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[START_DIR]/archive"
     ],
     "cwd": "[START_DIR]/flutter",
     "env": {
@@ -185,76 +145,24 @@
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
-    "name": "flutter doctor"
+    "infra_step": true,
+    "name": "Create archive work directory"
   },
   {
     "cmd": [
-      "flutter",
-      "precache"
-    ],
-    "cwd": "[START_DIR]/flutter",
-    "env": {
-      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
-      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
-    },
-    "name": "flutter precache"
-  },
-  {
-    "cmd": [
-      "flutter",
-      "ide-config"
-    ],
-    "cwd": "[START_DIR]/flutter",
-    "env": {
-      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
-      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
-    },
-    "name": "flutter ide-config"
-  },
-  {
-    "cmd": [
-      "git",
-      "clean",
-      "-f",
-      "-X",
-      "**/.packages"
-    ],
-    "cwd": "[START_DIR]/flutter",
-    "env": {
-      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
-      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
-    },
-    "name": "remove .packages files"
-  },
-  {
-    "cmd": [
-      "tar",
-      "cjf",
-      "[START_DIR]/flutter.tar.bz2",
-      "flutter"
+      "dart",
+      "--assert-initializer",
+      "[START_DIR]/flutter/dev/bots/prepare_package.dart",
+      "--temp_dir=[START_DIR]/archive",
+      "--output=[START_DIR]/flutter_mac_deadbeef.tar.xz",
+      "--revision=deadbeef"
     ],
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
-    "name": "create tar archive"
-  },
-  {
-    "cmd": [
-      "flutter",
-      "update-packages"
-    ],
-    "cwd": "[START_DIR]/flutter",
-    "env": {
-      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
-      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
-    },
-    "name": "recreate .packages files"
+    "name": "prepare and create a flutter archive"
   },
   {
     "cmd": [
@@ -265,8 +173,8 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[START_DIR]/flutter.tar.bz2",
-      "gs://flutter_infra/flutter/deadbeef/flutter_mac_deadbeef.tar.bz2"
+      "[START_DIR]/flutter_mac_deadbeef.tar.xz",
+      "gs://flutter_infra/flutter/deadbeef/flutter_mac_deadbeef.tar.xz"
     ],
     "cwd": "[START_DIR]/flutter",
     "env": {
@@ -275,9 +183,9 @@
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
     "infra_step": true,
-    "name": "gsutil upload package file deadbeef/flutter_mac_deadbeef.tar.bz2",
+    "name": "gsutil upload package file deadbeef/flutter_mac_deadbeef.tar.xz",
     "~followup_annotations": [
-      "@@@STEP_LINK@flutter_mac_deadbeef.tar.bz2@https://storage.cloud.google.com/flutter_infra/flutter/deadbeef/flutter_mac_deadbeef.tar.bz2@@@"
+      "@@@STEP_LINK@flutter_mac_deadbeef.tar.xz@https://storage.cloud.google.com/flutter_infra/flutter/deadbeef/flutter_mac_deadbeef.tar.xz@@@"
     ]
   },
   {
