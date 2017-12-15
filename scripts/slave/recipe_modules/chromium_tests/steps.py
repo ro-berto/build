@@ -566,8 +566,10 @@ def get_args_for_test(api, chromium_tests_api, test_spec, bot_update_step):
     args = args + extra_args
   # Perform substitution of known variables.
   substitutions = {
-    'buildername': api.properties.get('buildername'),
-    'got_revision': bot_update_step.presentation.properties['got_revision']
+      'buildername': api.properties.get('buildername'),
+      'got_revision': (
+          bot_update_step.presentation.properties.get('got_revision',
+          bot_update_step.presentation.properties.get('got_src_revision')))
   }
   return [string.Template(arg).safe_substitute(substitutions) for arg in args]
 
