@@ -135,6 +135,7 @@
       "https://isolateserver-dev.appspot.com",
       "--eventlog-endpoint",
       "prod",
+      "--max-concurrent-uploads=8",
       "--isolate",
       "RECIPE_PACKAGE_REPO[build]/test_exparchive.isolate",
       "--isolated",

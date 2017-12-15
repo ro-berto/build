@@ -168,6 +168,7 @@ class IsolateApi(recipe_api.RecipeApi):
           '--dump-json', self.m.json.output(),
           '--isolate-server', self._isolate_server,
           '--eventlog-endpoint', 'prod',
+          "--max-concurrent-uploads=8",
       ] + (['--verbose'] if verbose else [])
 
       for target in exparchive_targets:
@@ -185,13 +186,14 @@ class IsolateApi(recipe_api.RecipeApi):
       if batch_targets:
         # TODO(vadimsh): Differentiate between bad *.isolate and upload errors.
         # Raise InfraFailure on upload errors.
+        exparchive_flags = ['--exparchive', "--max-concurrent-uploads=8"]
         args = [
             self.m.swarming_client.path,
             'batcharchive',
             '--dump-json', self.m.json.output(),
             '--isolate-server', self._isolate_server,
             '--eventlog-endpoint', 'prod',
-        ] + (['--exparchive'] if use_exparchive_for_all_targets else []) +  [
+        ] + (exparchive_flags if use_exparchive_for_all_targets else []) +  [
         ] + (['--verbose'] if verbose else []) +  [
             build_dir.join('%s.isolated.gen.json' % t) for t in batch_targets
         ]

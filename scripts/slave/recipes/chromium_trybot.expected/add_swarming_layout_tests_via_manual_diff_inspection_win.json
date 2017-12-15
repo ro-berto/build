@@ -818,6 +818,7 @@
       "https://isolateserver.appspot.com",
       "--eventlog-endpoint",
       "prod",
+      "--max-concurrent-uploads=8",
       "--verbose",
       "--isolate",
       "[BUILDER_CACHE]\\win\\src\\out\\Release\\webkit_layout_tests_exparchive.isolate",
