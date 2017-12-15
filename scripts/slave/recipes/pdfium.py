@@ -101,7 +101,11 @@ def _GNGenBuilds(api, memory_tool, skia, xfa, v8, target_cpu, clang, rel,
     assert not clang
 
   if memory_tool == 'asan':
-    args.append('is_asan=true is_lsan=true')
+    if api.platform.is_win:
+      # No LSAN support.
+      args.append('is_asan=true')
+    else:
+      args.append('is_asan=true is_lsan=true')
   if target_os:
     args.append('target_os="%s"' % target_os)
   if target_cpu == 'x86':
@@ -130,11 +134,13 @@ def _BuildSteps(api, clang, out_dir):
 def _RunTests(api, memory_tool, v8, out_dir, build_config, revision):
   env = {}
   if memory_tool == 'asan':
-    options = ['detect_leaks=1',
-               'allocator_may_return_null=1',
-               'symbolize=1',
-               'external_symbolizer_path='
-               'third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer']
+    options = ['allocator_may_return_null=1']
+    if not api.platform.is_win:
+      options.extend([
+          'detect_leaks=1',
+          'symbolize=1',
+          'external_symbolizer_path='
+          'third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer'])
     env.update({'ASAN_OPTIONS': ' '.join(options)})
 
   unittests_path = str(api.path['checkout'].join('out', out_dir,
@@ -593,6 +599,33 @@ def GenTests(api):
                      memory_tool='asan',
                      mastername="client.pdfium",
                      buildername='linux_xfa_asan_lsan',
+                     buildnumber='1234',
+                     bot_id="test_slave")
+  )
+
+  yield (
+      api.test('win_asan') +
+      api.platform('win', 64) +
+      api.properties(clang=True,
+                     memory_tool='asan',
+                     rel=True,
+                     target_cpu='x86',
+                     mastername="client.pdfium",
+                     buildername='windows_asan',
+                     buildnumber='1234',
+                     bot_id="test_slave")
+  )
+
+  yield (
+      api.test('win_xfa_asan') +
+      api.platform('win', 64) +
+      api.properties(clang=True,
+                     memory_tool='asan',
+                     rel=True,
+                     target_cpu='x86',
+                     xfa=True,
+                     mastername="client.pdfium",
+                     buildername='windows_xfa_asan',
                      buildnumber='1234',
                      bot_id="test_slave")
   )

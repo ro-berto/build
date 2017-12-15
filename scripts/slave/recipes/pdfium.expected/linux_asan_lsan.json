@@ -351,7 +351,7 @@
     ],
     "cwd": "[START_DIR]/pdfium",
     "env": {
-      "ASAN_OPTIONS": "detect_leaks=1 allocator_may_return_null=1 symbolize=1 external_symbolizer_path=third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
+      "ASAN_OPTIONS": "allocator_may_return_null=1 detect_leaks=1 symbolize=1 external_symbolizer_path=third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
     },
     "name": "unittests"
   },
@@ -361,7 +361,7 @@
     ],
     "cwd": "[START_DIR]/pdfium",
     "env": {
-      "ASAN_OPTIONS": "detect_leaks=1 allocator_may_return_null=1 symbolize=1 external_symbolizer_path=third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
+      "ASAN_OPTIONS": "allocator_may_return_null=1 detect_leaks=1 symbolize=1 external_symbolizer_path=third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
     },
     "name": "embeddertests"
   },
@@ -375,7 +375,7 @@
     ],
     "cwd": "[START_DIR]/pdfium",
     "env": {
-      "ASAN_OPTIONS": "detect_leaks=1 allocator_may_return_null=1 symbolize=1 external_symbolizer_path=third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
+      "ASAN_OPTIONS": "allocator_may_return_null=1 detect_leaks=1 symbolize=1 external_symbolizer_path=third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
     },
     "name": "javascript tests"
   },
@@ -389,7 +389,7 @@
     ],
     "cwd": "[START_DIR]/pdfium",
     "env": {
-      "ASAN_OPTIONS": "detect_leaks=1 allocator_may_return_null=1 symbolize=1 external_symbolizer_path=third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
+      "ASAN_OPTIONS": "allocator_may_return_null=1 detect_leaks=1 symbolize=1 external_symbolizer_path=third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
     },
     "name": "pixel tests"
   },
@@ -453,7 +453,7 @@
     ],
     "cwd": "[START_DIR]/pdfium",
     "env": {
-      "ASAN_OPTIONS": "detect_leaks=1 allocator_may_return_null=1 symbolize=1 external_symbolizer_path=third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
+      "ASAN_OPTIONS": "allocator_may_return_null=1 detect_leaks=1 symbolize=1 external_symbolizer_path=third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
     },
     "name": "corpus tests"
   },
