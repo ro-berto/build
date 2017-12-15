@@ -835,17 +835,17 @@ Args:
 Uploads the given test results log to Google storage.
 ### *recipe_modules* / [chromite](/scripts/slave/recipe_modules/chromite)
 
-[DEPS](/scripts/slave/recipe_modules/chromite/__init__.py#1): [buildbucket](#recipe_modules-buildbucket), [goma](#recipe_modules-goma), [repo](#recipe_modules-repo), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [depot\_tools/infra\_paths][depot_tools/recipe_modules/infra_paths], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/chromite/__init__.py#1): [buildbucket](#recipe_modules-buildbucket), [goma](#recipe_modules-goma), [repo](#recipe_modules-repo), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [depot\_tools/infra\_paths][depot_tools/recipe_modules/infra_paths], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-#### **class [ChromiteApi](/scripts/slave/recipe_modules/chromite/api.py#11)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
+#### **class [ChromiteApi](/scripts/slave/recipe_modules/chromite/api.py#10)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [build\_packages](/scripts/slave/recipe_modules/chromite/api.py#199)(self, board, args=None, \*\*kwargs):**
+&mdash; **def [build\_packages](/scripts/slave/recipe_modules/chromite/api.py#198)(self, board, args=None, \*\*kwargs):**
 
 Run the build_packages script inside the chroot.
 
 Used by the internal goma recipe.
 
-&mdash; **def [cbuildbot](/scripts/slave/recipe_modules/chromite/api.py#145)(self, name, config, args=None, \*\*kwargs):**
+&mdash; **def [cbuildbot](/scripts/slave/recipe_modules/chromite/api.py#144)(self, name, config, args=None, \*\*kwargs):**
 
 Runs the cbuildbot command defined by the arguments.
 
@@ -856,7 +856,7 @@ Args:
 
 Returns: (Step) The step that was run.
 
-&mdash; **def [check\_repository](/scripts/slave/recipe_modules/chromite/api.py#54)(self, repo_type_key, value):**
+&mdash; **def [check\_repository](/scripts/slave/recipe_modules/chromite/api.py#53)(self, repo_type_key, value):**
 
 Scans through registered repositories for a specified value.
 
@@ -865,16 +865,16 @@ Args:
   value (str): The value to scan for.
 Returns (bool): True if the value was found.
 
-&mdash; **def [checkout](/scripts/slave/recipe_modules/chromite/api.py#162)(self, manifest_url=None, repo_url=None, repo_sync_args=None):**
+&mdash; **def [checkout](/scripts/slave/recipe_modules/chromite/api.py#161)(self, manifest_url=None, repo_url=None, repo_sync_args=None):**
 
-&mdash; **def [checkout\_chromite](/scripts/slave/recipe_modules/chromite/api.py#240)(self):**
+&mdash; **def [checkout\_chromite](/scripts/slave/recipe_modules/chromite/api.py#239)(self):**
 
 Checks out the configured Chromite branch.
     
 
-&emsp; **@property**<br>&mdash; **def [chromite\_path](/scripts/slave/recipe_modules/chromite/api.py#29)(self):**
+&emsp; **@property**<br>&mdash; **def [chromite\_path](/scripts/slave/recipe_modules/chromite/api.py#28)(self):**
 
-&mdash; **def [configure](/scripts/slave/recipe_modules/chromite/api.py#208)(self, properties, config_map, \*\*KWARGS):**
+&mdash; **def [configure](/scripts/slave/recipe_modules/chromite/api.py#207)(self, properties, config_map, \*\*KWARGS):**
 
 Loads configuration from build properties into this recipe config.
 
@@ -883,23 +883,23 @@ Args:
   config_map (dict): The configuration map to use.
   KWARGS: Additional keyword arguments to forward to the configuration.
 
-&mdash; **def [cros\_sdk](/scripts/slave/recipe_modules/chromite/api.py#173)(self, name, cmd, args=None, environ=None, \*\*kwargs):**
+&mdash; **def [cros\_sdk](/scripts/slave/recipe_modules/chromite/api.py#172)(self, name, cmd, args=None, environ=None, \*\*kwargs):**
 
 Return a step to run a command inside the cros_sdk.
 
 Used by the internal goma recipe.
 
-&emsp; **@property**<br>&mdash; **def [depot\_tools\_path](/scripts/slave/recipe_modules/chromite/api.py#33)(self):**
+&emsp; **@property**<br>&mdash; **def [depot\_tools\_path](/scripts/slave/recipe_modules/chromite/api.py#32)(self):**
 
-&mdash; **def [gclient\_config](/scripts/slave/recipe_modules/chromite/api.py#123)(self):**
+&mdash; **def [gclient\_config](/scripts/slave/recipe_modules/chromite/api.py#122)(self):**
 
 Generate a 'gclient' configuration to check out Chromite.
 
 Return: (config) A 'gclient' recipe module configuration.
 
-&mdash; **def [get\_config\_defaults](/scripts/slave/recipe_modules/chromite/api.py#37)(self):**
+&mdash; **def [get\_config\_defaults](/scripts/slave/recipe_modules/chromite/api.py#36)(self):**
 
-&mdash; **def [load\_manifest\_config](/scripts/slave/recipe_modules/chromite/api.py#72)(self, repository, revision):**
+&mdash; **def [load\_manifest\_config](/scripts/slave/recipe_modules/chromite/api.py#71)(self, repository, revision):**
 
 Loads manifest-specified parameters from the manifest commit.
 
@@ -911,7 +911,7 @@ Args:
   repository (str): The URL of the repository hosting the change.
   revision (str): The revision hash to load the build ID from.
 
-&mdash; **def [run](/scripts/slave/recipe_modules/chromite/api.py#274)(self, args=[]):**
+&mdash; **def [run](/scripts/slave/recipe_modules/chromite/api.py#273)(self, args=[]):**
 
 Runs the configured 'cbuildbot' build.
 
@@ -935,18 +935,18 @@ Args:
       default, which is '--buildbot'.
 Returns: (Step) the 'cbuildbot' execution step.
 
-&mdash; **def [run\_cbuildbot](/scripts/slave/recipe_modules/chromite/api.py#229)(self):**
+&mdash; **def [run\_cbuildbot](/scripts/slave/recipe_modules/chromite/api.py#228)(self):**
 
 Performs a Chromite repository checkout, then runs cbuildbot.
     
 
-&mdash; **def [setup\_board](/scripts/slave/recipe_modules/chromite/api.py#189)(self, board, args=None, \*\*kwargs):**
+&mdash; **def [setup\_board](/scripts/slave/recipe_modules/chromite/api.py#188)(self, board, args=None, \*\*kwargs):**
 
 Run the setup_board script inside the chroot.
 
 Used by the internal goma recipe.
 
-&mdash; **def [with\_system\_python](/scripts/slave/recipe_modules/chromite/api.py#249)(self):**
+&mdash; **def [with\_system\_python](/scripts/slave/recipe_modules/chromite/api.py#248)(self):**
 
 Prepare a directory with the system python binary available.
 
@@ -1633,7 +1633,7 @@ Args:
 Returns (str) - The content of the file.
 Raises file.Error
 
-&mdash; **def [run\_script](/scripts/slave/recipe_modules/dart/api.py#457)(self, step_name, script, args, isolate_hash, shards, local_shard, environment, tasks):**
+&mdash; **def [run\_script](/scripts/slave/recipe_modules/dart/api.py#456)(self, step_name, script, args, isolate_hash, shards, local_shard, environment, tasks):**
 
 Runs a specific script with current working directory to be checkout. If
 the runtime (passed in environment) is a browser, and the system is linux,
@@ -1648,7 +1648,7 @@ Args:
   * environment (dict) - Environment with runtime, arch, system etc
   * tasks ([task]) - placeholder to put all swarming tasks in
 
-&mdash; **def [run\_test\_py](/scripts/slave/recipe_modules/dart/api.py#414)(self, step_name, append_logs, step, isolate_hash, shards, local_shard, environment, tasks):**
+&mdash; **def [run\_test\_py](/scripts/slave/recipe_modules/dart/api.py#413)(self, step_name, append_logs, step, isolate_hash, shards, local_shard, environment, tasks):**
 
 Runs test.py with default arguments, based on configuration from.
 Args:
@@ -1662,7 +1662,7 @@ Args:
   * environment (dict) - Environment with runtime, arch, system etc
   * tasks ([task]) - placeholder to put all swarming tasks in
 
-&mdash; **def [run\_trigger](/scripts/slave/recipe_modules/dart/api.py#380)(self, step_name, step, isolate_hash):**
+&mdash; **def [run\_trigger](/scripts/slave/recipe_modules/dart/api.py#379)(self, step_name, step, isolate_hash):**
 
 &mdash; **def [shard](/scripts/slave/recipe_modules/dart/api.py#119)(self, title, isolate_hash, test_args, os=None, cpu='x86-64', pool='Dart.LUCI', num_shards=0, last_shard_is_local=False):**
 

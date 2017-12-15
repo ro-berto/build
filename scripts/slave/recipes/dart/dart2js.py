@@ -43,21 +43,21 @@ def RunTests(api, test_args, test_specs, use_xvfb=False):
       args.append('--append_logs')
     args.extend(test_spec['tests'])
 
-    with api.context(cwd=api.path['checkout'],
-                     env_prefixes={'PATH':[api.depot_tools.root]}):
-      if use_xvfb:
-        xvfb_cmd = ['xvfb-run', '-a', '--server-args=-screen 0 1024x768x24']
-        xvfb_cmd.extend(['python', '-u', './tools/test.py'])
-        xvfb_cmd.extend(args)
-        api.step(test_spec['name'], xvfb_cmd)
-        api.dart.read_result_file('read results of %s' % test_spec['name'],
-                                  'result.log')
-      else:
-        api.python(test_spec['name'],
-                   api.path['checkout'].join('tools', 'test.py'),
-                   args=args)
-        api.dart.read_result_file('read results of %s' % test_spec['name'],
-                                  'result.log')
+    with api.context(cwd=api.path['checkout']):
+      with api.depot_tools.on_path():
+        if use_xvfb:
+          xvfb_cmd = ['xvfb-run', '-a', '--server-args=-screen 0 1024x768x24']
+          xvfb_cmd.extend(['python', '-u', './tools/test.py'])
+          xvfb_cmd.extend(args)
+          api.step(test_spec['name'], xvfb_cmd)
+          api.dart.read_result_file('read results of %s' % test_spec['name'],
+                                    'result.log')
+        else:
+          api.python(test_spec['name'],
+                     api.path['checkout'].join('tools', 'test.py'),
+                     args=args)
+          api.dart.read_result_file('read results of %s' % test_spec['name'],
+                                    'result.log')
 
 
 def RunSteps(api):
@@ -90,18 +90,19 @@ def RunSteps(api):
   api.bot_update.ensure_checkout()
   api.gclient.runhooks()
 
-  with api.context(cwd=api.path['checkout'],
-                   env_prefixes={'PATH':[api.depot_tools.root]}):
-    api.python('taskkill before building',
-               api.path['checkout'].join('tools', 'task_kill.py'),
-               args=['--kill_browsers=True'])
+  with api.context(cwd=api.path['checkout']):
+    with api.depot_tools.on_path():
+      api.python('taskkill before building',
+                 api.path['checkout'].join('tools', 'task_kill.py'),
+                 args=['--kill_browsers=True'])
 
-    build_args = ['-m%s' % mode, '--arch=ia32', 'dart2js_bot']
-    if 'unittest' in options:
-      build_args.append('compile_dart2js_platform')
-    api.python('build dart',
-               api.path['checkout'].join('tools', 'build.py'),
-               args=build_args)
+      build_args = ['-m%s' % mode, '--arch=ia32', 'dart2js_bot']
+      if 'unittest' in options:
+        build_args.append('compile_dart2js_platform')
+      api.python('build dart',
+                 api.path['checkout'].join('tools', 'build.py'),
+                 args=build_args)
+
   with api.step.defer_results():
     # Standard test steps, run on all runtimes.
     runtimes = multiple_runtimes.get(runtime, [runtime])

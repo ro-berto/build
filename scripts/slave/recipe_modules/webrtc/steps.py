@@ -283,9 +283,9 @@ class PythonTest(Test):
     self._env = env or {}
 
   def run(self, api, suffix):
-    with api.m.context(env=self._env,
-                       env_prefixes={'PATH':[api.m.depot_tools.root]}):
-      api.m.python(self._test, self._script, self._args)
+    with api.m.depot_tools.on_path():
+      with api.m.context(env=self._env):
+        api.m.python(self._test, self._script, self._args)
 
 
 class AndroidTest(SwarmingGTestTest):
@@ -425,7 +425,7 @@ class PerfTest(Test):
   def run(self, api, suffix):
     # Some of the perf tests depend on depot_tools for
     # download_from_google_storage and gsutil usage.
-    with api.m.context(env_prefixes={'PATH':[api.m.depot_tools.root]}):
+    with api.m.depot_tools.on_path():
       api.m.chromium.runtest(
           test=self._test, name=self._name, args=self._args,
           results_url=DASHBOARD_UPLOAD_URL, annotate='graphing', xvfb=True,

@@ -27,13 +27,13 @@ def RunTests(api, test_args, test_specs):
       args.append('--append_logs')
     args.extend(test_spec['tests'])
     with api.context(cwd=api.path['checkout'],
-                     env={'PUB_ENVIRONMENT': 'dart_bots'},
-                     env_prefixes={'PATH':[api.depot_tools.root]}):
-      api.python(test_spec['name'],
-                 api.path['checkout'].join('tools', 'test.py'),
-                 args=args)
-      api.dart.read_result_file('read results of %s' % test_spec['name'],
-                                'result.log')
+                     env={'PUB_ENVIRONMENT': 'dart_bots'}):
+      with api.depot_tools.on_path():
+        api.python(test_spec['name'],
+                   api.path['checkout'].join('tools', 'test.py'),
+                   args=args)
+        api.dart.read_result_file('read results of %s' % test_spec['name'],
+                                  'result.log')
 
 
 def RunSteps(api):
@@ -54,15 +54,15 @@ def RunSteps(api):
 
   api.dart.checkout(channel=channel)
 
-  with api.context(cwd=api.path['checkout'],
-                   env_prefixes={'PATH':[api.depot_tools.root]}):
-    api.python('taskkill before building',
-               api.path['checkout'].join('tools', 'task_kill.py'),
-               args=['--kill_browsers=True'],
-               ok_ret='any'
-               )
-    build_args = ['-m%s' % mode, '--arch=x64', 'dart2js_bot']
-    api.dart.build(build_args=build_args)
+  with api.context(cwd=api.path['checkout']):
+    with api.depot_tools.on_path():
+      api.python('taskkill before building',
+                 api.path['checkout'].join('tools', 'task_kill.py'),
+                 args=['--kill_browsers=True'],
+                 ok_ret='any'
+                 )
+      build_args = ['-m%s' % mode, '--arch=x64', 'dart2js_bot']
+      api.dart.build(build_args=build_args)
 
   with api.step.defer_results():
     if builder_type == 'analyzer':

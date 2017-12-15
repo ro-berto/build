@@ -159,7 +159,7 @@ class WebRTCApi(recipe_api.RecipeApi):
         self.revision_cp))
 
   def download_audio_quality_tools(self):
-    with self.m.context(env_prefixes={'PATH':[self.m.depot_tools.root]}):
+    with self.m.depot_tools.on_path():
       self.m.python('download audio quality tools',
                     self.m.path['checkout'].join('tools_webrtc',
                                                  'download_tools.py'),
@@ -267,13 +267,13 @@ class WebRTCApi(recipe_api.RecipeApi):
         # To benefit from incremental builds for speed.
         args.append('--build-dir=out/android-archive')
 
-      with self.m.context(cwd=self.m.path['checkout'],
-                          env_prefixes={'PATH':[self.m.depot_tools.root]}):
-        step_result = self.m.python(
-            'build android archive',
-            build_script,
-            args=args,
-        )
+      with self.m.context(cwd=self.m.path['checkout']):
+        with self.m.depot_tools.on_path():
+          step_result = self.m.python(
+              'build android archive',
+              build_script,
+              args=args,
+          )
       ninja_log_exit_status = step_result.retcode
     except self.m.step.StepFailure as e:
       ninja_log_exit_status = e.retcode

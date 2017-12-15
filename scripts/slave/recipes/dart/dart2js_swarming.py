@@ -46,20 +46,20 @@ def RunTests(api, test_args, test_specs, use_xvfb=False):
       args.append('--append_logs')
     args.extend(test_spec['tests'])
 
-    with api.context(cwd=api.path['checkout'],
-                     env_prefixes={'PATH':[api.depot_tools.root]}):
-      if use_xvfb:
-        cmd = xvfb_cmd + args
-        api.step(test_spec['name'], cmd)
-        api.dart.read_result_file('read results of %s' % test_spec['name'],
-                                  'result.log')
+    with api.context(cwd=api.path['checkout']):
+      with api.depot_tools.on_path():
+        if use_xvfb:
+          cmd = xvfb_cmd + args
+          api.step(test_spec['name'], cmd)
+          api.dart.read_result_file('read results of %s' % test_spec['name'],
+                                    'result.log')
 
-      else:
-        api.python(test_spec['name'],
-                   api.path['checkout'].join('tools', 'test.py'),
-                   args=args)
-        api.dart.read_result_file('read results of %s' % test_spec['name'],
-                                  'result.log')
+        else:
+          api.python(test_spec['name'],
+                     api.path['checkout'].join('tools', 'test.py'),
+                     args=args)
+          api.dart.read_result_file('read results of %s' % test_spec['name'],
+                                    'result.log')
 
 def RunSteps(api):
   builder_name = str(api.properties.get('buildername')) # Convert from unicode.

@@ -46,40 +46,40 @@ def RunSteps(api):
   build_args = ['-m%s' % mode, '--arch=%s' % arch, 'create_sdk', 'runtime_kernel']
   isolate_hash = api.dart.build(build_args, 'dart_tests_extended')
 
-  with api.context(cwd=api.path['checkout'],
-                   env_prefixes={'PATH':[api.depot_tools.root]}):
-    with api.step.defer_results():
-      front_end_args = ['pkg/front_end', '-cnone', '--checked', '--timeout=120']
-      front_end_args.extend(test_args)
-      test_args.extend(['--append_logs', '-cdartk'])
+  with api.context(cwd=api.path['checkout']):
+    with api.depot_tools.on_path():
+      with api.step.defer_results():
+        front_end_args = ['pkg/front_end', '-cnone', '--checked', '--timeout=120']
+        front_end_args.extend(test_args)
+        test_args.extend(['--append_logs', '-cdartk'])
 
-      shard_test_args = (['./tools/test.py',
-                         '--use-sdk',
-                         '--exclude-suite=samples,service,standalone,vm,language_2,corelib_2,lib_2,standalone_2']
-                         + test_args)
-      tasks = api.dart.shard('vm_tests', isolate_hash, shard_test_args)
+        shard_test_args = (['./tools/test.py',
+                           '--use-sdk',
+                           '--exclude-suite=samples,service,standalone,vm,language_2,corelib_2,lib_2,standalone_2']
+                           + test_args)
+        tasks = api.dart.shard('vm_tests', isolate_hash, shard_test_args)
 
-      strong_test_args = (['./tools/test.py', '--strong', '--use-sdk',
-                         'language_2', 'corelib_2', 'lib_2', 'standalone_2']
-                         + test_args)
-      tasks = api.dart.shard('vm_strong_tests', isolate_hash, strong_test_args)
+        strong_test_args = (['./tools/test.py', '--strong', '--use-sdk',
+                           'language_2', 'corelib_2', 'lib_2', 'standalone_2']
+                           + test_args)
+        tasks = api.dart.shard('vm_strong_tests', isolate_hash, strong_test_args)
 
-      api.python('front-end tests',
-                 api.path['checkout'].join('tools', 'test.py'),
-                 args=front_end_args)
-      api.dart.read_result_file('read results of front-end tests',
-                                'result.log')
+        api.python('front-end tests',
+                   api.path['checkout'].join('tools', 'test.py'),
+                   args=front_end_args)
+        api.dart.read_result_file('read results of front-end tests',
+                                  'result.log')
 
-      api.python('samples, service, standalone, and vm tests',
-                 api.path['checkout'].join('tools', 'test.py'),
-                 args=test_args + ['samples', 'service', 'standalone', 'vm'])
-      api.dart.read_result_file('read results of samples, service, standalone, and vm tests',
-                                'result.log')
+        api.python('samples, service, standalone, and vm tests',
+                   api.path['checkout'].join('tools', 'test.py'),
+                   args=test_args + ['samples', 'service', 'standalone', 'vm'])
+        api.dart.read_result_file('read results of samples, service, standalone, and vm tests',
+                                  'result.log')
 
-      api.dart.collect(tasks.get_result())
+        api.dart.collect(tasks.get_result())
 
-      api.dart.kill_tasks()
-      api.step('debug log', ['cat', '.debug.log'])
+        api.dart.kill_tasks()
+        api.step('debug log', ['cat', '.debug.log'])
 
 def GenTests(api):
    yield (

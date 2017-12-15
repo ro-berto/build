@@ -52,7 +52,7 @@ def RunSteps(api):
   with api.context(cwd=api.path['checkout']):
     with api.step.defer_results():
       build_args = ['-mrelease', 'dart2js_bot', 'dartdevc_test']
-      with api.context(env_prefixes={'PATH':[api.depot_tools.root]}):
+      with api.depot_tools.on_path():
         api.dart.kill_tasks()
         api.python("build dart",
                    api.path['checkout'].join('tools', 'build.py'),

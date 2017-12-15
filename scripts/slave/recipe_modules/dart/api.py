@@ -45,43 +45,43 @@ class DartApi(recipe_api.RecipeApi):
        If an isolate is specified, it returns the hash of the isolated archive.
     """
     build_args = build_args + ['--no-start-goma', '-j200']
-    with self.m.context(cwd=self.m.path['checkout'],
-                     env_prefixes={'PATH':[self.m.depot_tools.root]}):
-      self.kill_tasks()
-      try:
-        self.m.goma.start()
-        self.m.python(name,
-                   self.m.path['checkout'].join('tools', 'build.py'),
-                   args=build_args,
-                   timeout=20 * 60)
-      except self.m.step.StepTimeout as e:
-        raise self.m.step.StepFailure('Step "%s" timed out after 20 minutes' % name)
-      finally:
-        self.m.goma.stop()
+    with self.m.context(cwd=self.m.path['checkout']):
+      with self.m.depot_tools.on_path():
+        self.kill_tasks()
+        try:
+          self.m.goma.start()
+          self.m.python(name,
+                     self.m.path['checkout'].join('tools', 'build.py'),
+                     args=build_args,
+                     timeout=20 * 60)
+        except self.m.step.StepTimeout as e:
+          raise self.m.step.StepFailure('Step "%s" timed out after 20 minutes' % name)
+        finally:
+          self.m.goma.stop()
 
-      if isolate is not None:
-        self._swarming_checkout()
-        bots_path = self.m.path['checkout'].join('tools', 'bots')
-        isolate_paths = self.m.file.glob_paths("find isolate files", bots_path, '*.isolate',
-                                          test_data=[bots_path.join('a.isolate'),
-                                                     bots_path.join('b.isolate')])
-        for path in isolate_paths:
-          self.m.file.copy('copy %s to sdk root' % path.pieces[-1],
-                           path,
-                           self.m.path['checkout'])
+        if isolate is not None:
+          self._swarming_checkout()
+          bots_path = self.m.path['checkout'].join('tools', 'bots')
+          isolate_paths = self.m.file.glob_paths("find isolate files", bots_path, '*.isolate',
+                                            test_data=[bots_path.join('a.isolate'),
+                                                       bots_path.join('b.isolate')])
+          for path in isolate_paths:
+            self.m.file.copy('copy %s to sdk root' % path.pieces[-1],
+                             path,
+                             self.m.path['checkout'])
 
-        step_result = self.m.python(
-          'upload testing isolate',
-          self.m.swarming_client.path.join('isolate.py'),
-          args= ['archive',
-                 '--ignore_broken_items', # TODO(athom) find a way to avoid that
-                 '-Ihttps://isolateserver.appspot.com',
-                 '-i%s' % self.m.path['checkout'].join('%s.isolate' % isolate),
-                 '-s%s' % self.m.path['checkout'].join('%s.isolated' % isolate)],
-          stdout=self.m.raw_io.output('out'))
-        isolate_hash = step_result.stdout.strip()[:40]
-        step_result.presentation.step_text = 'isolate hash: %s' % isolate_hash
-        return isolate_hash
+          step_result = self.m.python(
+            'upload testing isolate',
+            self.m.swarming_client.path.join('isolate.py'),
+            args= ['archive',
+                   '--ignore_broken_items', # TODO(athom) find a way to avoid that
+                   '-Ihttps://isolateserver.appspot.com',
+                   '-i%s' % self.m.path['checkout'].join('%s.isolate' % isolate),
+                   '-s%s' % self.m.path['checkout'].join('%s.isolated' % isolate)],
+            stdout=self.m.raw_io.output('out'))
+          isolate_hash = step_result.stdout.strip()[:40]
+          step_result.presentation.step_text = 'isolate hash: %s' % isolate_hash
+          return isolate_hash
 
   def upload_isolate(self, isolate_fileset):
     """Builds an isolate"""
@@ -349,28 +349,27 @@ class DartApi(recipe_api.RecipeApi):
 
         environment_variables = step.get('environment', {})
         environment_variables['BUILDBOT_BUILDERNAME'] = builder_name + "-%s" % channel
-        with self.m.context(cwd=self.m.path['checkout'],
-                            env=environment_variables,
-                            env_prefixes={'PATH':[self.m.depot_tools.root]}):
-          if is_build_step:
-            if not self._has_specific_argument(args, ['-m', '--mode']):
-              args = ['-m%s' % mode] + args
-            if not self._has_specific_argument(args, ['-a', '--arch']):
-              args = ['-a%s' % arch] + args
-            self.build(name=step_name, build_args=args)
-          elif is_trigger:
-            self.run_trigger(step_name, step, isolate_hash)
-          elif is_test_py_step:
-            append_logs = test_py_index > 0
-            self.run_test_py(step_name, append_logs, step,
-                isolate_hash, shards, local_shard, environment, tasks)
-            if shards == 0 or local_shard:
-              # Only count indexes that are not sharded, to help with adding
-              # append-logs.
-              test_py_index += 1
-          else:
-            self.run_script(step_name, script, args, isolate_hash, shards,
-                local_shard, environment, tasks)
+        with self.m.context(cwd=self.m.path['checkout'], env=environment_variables):
+          with self.m.depot_tools.on_path():
+            if is_build_step:
+              if not self._has_specific_argument(args, ['-m', '--mode']):
+                args = ['-m%s' % mode] + args
+              if not self._has_specific_argument(args, ['-a', '--arch']):
+                args = ['-a%s' % arch] + args
+              self.build(name=step_name, build_args=args)
+            elif is_trigger:
+              self.run_trigger(step_name, step, isolate_hash)
+            elif is_test_py_step:
+              append_logs = test_py_index > 0
+              self.run_test_py(step_name, append_logs, step,
+                  isolate_hash, shards, local_shard, environment, tasks)
+              if shards == 0 or local_shard:
+                # Only count indexes that are not sharded, to help with adding
+                # append-logs.
+                test_py_index += 1
+            else:
+              self.run_script(step_name, script, args, isolate_hash, shards,
+                  local_shard, environment, tasks)
       self.collect_all(tasks)
 
   def _copy_property(self, src, dest, key):

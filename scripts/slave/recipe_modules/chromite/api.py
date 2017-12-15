@@ -2,7 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import cgi
 import re
 
 from recipe_engine import recipe_api
@@ -351,10 +350,11 @@ class ChromiteApi(recipe_api.RecipeApi):
     # Set "DEPOT_TOOLS_UPDATE" to prevent any invocations of "depot_tools"
     # scripts that call "//update_depot_tools" (e.g., "gclient") from trying
     # to self-update from their pinned version (crbug.com/736890).
-    with self.m.context(
-        cwd=self.m.path['start_dir'],
-        env_prefixes={'PATH': [self.depot_tools_path]},
-        env={'DEPOT_TOOLS_UPDATE': '0'}):
+    context_key = 'env_suffixes' if self.m.runtime.is_luci else 'env_prefixes'
+    with self.m.context(**{
+        'cwd': self.m.path['start_dir'],
+        context_key: {'PATH': [self.depot_tools_path]},
+        'env': {'DEPOT_TOOLS_UPDATE': '0'}}):
       return self.cbuildbot(str('cbuildbot [%s]' % (self.c.cbb.config,)),
                             self.c.cbb.config,
                             args=cbb_args)
