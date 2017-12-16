@@ -120,7 +120,9 @@ def find_new_builds(master_url, builderlist, root_json, build_db):
     # cachedBuilds are the builds in the cache, while currentBuilds are the
     # currently running builds. Thus cachedBuilds can be unfinished or finished,
     # while currentBuilds are always unfinished.
-    candidate_builds = set(builder['cachedBuilds'] + builder['currentBuilds'])
+    cached_builds = builder.get('cachedBuilds') or []
+    current_builds = builder.get('currentBuilds') or []
+    candidate_builds = set(cached_builds + current_builds)
     if buildername in last_finished_build:
       new_builds[buildername] = [
           buildnum for buildnum in candidate_builds
@@ -140,12 +142,12 @@ def find_new_builds(master_url, builderlist, root_json, build_db):
         # builds yet.) In this state all the finished builds will be loaded in,
         # firing off an email storm any time the build_db changes or a new
         # builder is added. We set the last finished build here to prevent that.
-        finished = set(builder['cachedBuilds']) - set(builder['currentBuilds'])
+        finished = set(cached_builds) - set(current_builds)
         if finished:
           build_db.masters[master_url].setdefault(buildername, {})[
               max(finished)] = build_scan_db.gen_build(finished=True)
 
-        new_builds[buildername] = builder['currentBuilds']
+        new_builds[buildername] = current_builds
 
   return new_builds
 
