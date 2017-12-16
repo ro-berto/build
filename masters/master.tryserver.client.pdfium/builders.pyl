@@ -52,7 +52,7 @@
       "category": "2no_v8",
       "properties": {
         "v8": False,
-      }
+      },
     },
     "linux_skia": {
       "recipe": "pdfium",
@@ -65,7 +65,7 @@
         "skia": True,
         "xfa": True,
         "skip_test": True,
-      }
+      },
     },
     "linux_xfa": {
       "recipe": "pdfium",
@@ -76,7 +76,7 @@
       "category": "1xfa",
       "properties": {
         "xfa": True,
-      }
+      },
     },
     "linux_xfa_asan_lsan": {
       "recipe": "pdfium",
@@ -119,7 +119,7 @@
       "category": "2no_v8",
       "properties": {
         "v8": False,
-      }
+      },
     },
     "mac_skia": {
       "recipe": "pdfium",
@@ -132,7 +132,7 @@
         "skia": True,
         "xfa": True,
         "skip_test": True,
-      }
+      },
     },
     "mac_xfa": {
       "recipe": "pdfium",
@@ -143,7 +143,7 @@
       "category": "1xfa",
       "properties": {
         "xfa": True,
-      }
+      },
     },
     "mac_xfa_rel": {
       "recipe": "pdfium",
@@ -177,7 +177,7 @@
         "memory_tool": "asan",
         "rel": True,
         "target_cpu": "x86",
-      }
+      },
     },
     "win_no_v8": {
       "recipe": "pdfium",
@@ -188,7 +188,7 @@
       "category": "2no_v8",
       "properties": {
         "v8": False,
-      }
+      },
     },
     "win_skia": {
       "recipe": "pdfium",
@@ -201,7 +201,7 @@
         "skia": True,
         "xfa": True,
         "skip_test": True,
-      }
+      },
     },
     "win_xfa": {
       "recipe": "pdfium",
@@ -212,7 +212,7 @@
       "category": "1xfa",
       "properties": {
         "xfa": True,
-      }
+      },
     },
     "win_xfa_32": {
       "recipe": "pdfium",
@@ -239,7 +239,7 @@
         "rel": True,
         "target_cpu": "x86",
         "xfa": True,
-      }
+      },
     },
     "win_xfa_clang": {
       "recipe": "pdfium",
@@ -276,7 +276,7 @@
       "properties": {
         "xfa": True,
         "rel": True,
-      }
+      },
     },
   },
 
