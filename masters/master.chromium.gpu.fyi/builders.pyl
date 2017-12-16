@@ -150,16 +150,6 @@
       "builder_timeout_s": 14400,
       "category": "0Windows",
     },
-    "Win10 Release (NVIDIA Quadro P400)": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": None,
-      # It's crucial to merge build requests on the testers.
-      "mergeRequests": True,
-      "slave_pools": ["win10_rel_nvidia_quadro_p400"],
-      "builder_timeout_s": 21600,
-      "category": "0Windows",
-    },
     "GPU Win x64 Builder": {
       "recipe": "chromium",
       "use_remote_run": True,
@@ -673,14 +663,6 @@
         "version": "win7",
       },
       "slaves": ["vm339-m1"],
-    },
-    "win10_rel_nvidia_quadro_p400": {
-      "slave_data": {
-        "bits": 64,
-        "os": "win",
-        "version": "win10",
-      },
-      "slaves": ["build161-b1"],
     },
     "win10_rel_intel_hd_630": {
       "slave_data": {
