@@ -267,6 +267,22 @@ SPEC = {
       # This new hardware is being tested for reliability.
       'enable_swarming': False,
     },
+    'Win10 Release Swarmed (Intel HD 630)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU Win Builder',
+      'testing': {
+        'platform': 'win',
+      },
+      'enable_swarming': True,
+      'serialize_tests': True,
+    },
     'GPU Win x64 Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
@@ -578,6 +594,22 @@ SPEC = {
       # Multiple copies of the machines have to be deployed into swarming
       # in order to keep up with the faster cycle time of the tests.
       'enable_swarming': False,
+    },
+    'Linux Release Swarmed (Intel HD 630)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU Linux Builder',
+      'testing': {
+        'platform': 'linux',
+      },
+      'enable_swarming': True,
+      'serialize_tests': True,
     },
     'Linux GPU TSAN Release': {
       'chromium_config': 'chromium',
