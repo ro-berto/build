@@ -123,8 +123,9 @@ class AnnotatedRunExecTest(unittest.TestCase):
       'buildnumber': 1,
     }
     self.rpy_path = os.path.join(env.Build, 'scripts', 'slave', 'recipes.py')
+
     self.recipe_args = [
-        sys.executable, '-u', self.rpy_path, '--verbose', 'run',
+        mock.ANY, '-u', self.rpy_path, '--verbose', 'run',
         '--workdir=/home/user/builder/build',
         '--properties-file=%s' % (self._tp('recipe_properties.json'),),
         '--output-result-json', self._tp('recipe_result.json'),

@@ -64,7 +64,7 @@ class RemoteRunTest(FakeBuildRootTestCase):
     script_path = os.path.join(BASE_DIR, 'remote_run.py')
     prop_gz = base64.b64encode(zlib.compress(json.dumps(build_properties)))
     exit_code = subprocess.call([
-        sys.executable, script_path,
+        'python', script_path,
         '--build-properties-gz=%s' % (prop_gz,),
         '--recipe', 'remote_run_test',
         '--repository', self.REMOTE_REPO,
@@ -94,7 +94,7 @@ class RemoteRunTest(FakeBuildRootTestCase):
     script_path = os.path.join(BASE_DIR, 'remote_run.py')
     prop_gz = base64.b64encode(zlib.compress(json.dumps(build_properties)))
     exit_code = subprocess.call([
-        sys.executable, script_path,
+        'python', script_path,
         '--build-properties-gz=%s' % (prop_gz,),
         '--recipe', 'remote_run_test',
         '--repository', self.REMOTE_REPO,
