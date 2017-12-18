@@ -440,6 +440,10 @@ TRYBOTS = freeze({
           },
         ],
       },
+      'linux_vr': simple_bot({
+        'mastername': 'chromium.fyi',
+        'buildername': 'VR Linux',
+      }),
       'leak_detection_linux': simple_bot({
           'mastername': 'chromium.fyi',
           'buildername': 'Leak Detection Linux',
