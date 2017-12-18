@@ -37,6 +37,7 @@ PROPERTIES = {
   'v8': Property(default=True, kind=bool),
   'target_cpu': Property(default=None, kind=str),
   'clang': Property(default=False, kind=bool),
+  'msvc': Property(default=False, kind=bool),
   'rel': Property(default=False, kind=bool),
   'skip_test': Property(default=False, kind=bool),
   'target_os': Property(default=None, kind=str),
@@ -53,7 +54,7 @@ def _CheckoutSteps(api, target_os):
   api.gclient.runhooks()
   return update_step.presentation.properties['got_revision']
 
-def _OutPath(memory_tool, skia, xfa, v8, clang, rel):
+def _OutPath(memory_tool, skia, xfa, v8, clang, msvc, rel):
   out_dir = 'release' if rel else 'debug'
   if skia:
     out_dir += "_skia"
@@ -63,6 +64,8 @@ def _OutPath(memory_tool, skia, xfa, v8, clang, rel):
     out_dir += "_v8"
   if clang:
     out_dir += "_clang"
+  elif msvc:
+    out_dir += "_msvc"
   if memory_tool == 'asan':
     out_dir += "_asan"
   return out_dir
@@ -70,7 +73,7 @@ def _OutPath(memory_tool, skia, xfa, v8, clang, rel):
 
 # _GNGenBuilds calls 'gn gen' and returns a dictionary of
 # the used build configuration to be used by Gold.
-def _GNGenBuilds(api, memory_tool, skia, xfa, v8, target_cpu, clang, rel,
+def _GNGenBuilds(api, memory_tool, skia, xfa, v8, target_cpu, clang, msvc, rel,
                  target_os, out_dir):
   api.goma.ensure_goma()
   gn_bool = {True: 'true', False: 'false'}
@@ -92,9 +95,13 @@ def _GNGenBuilds(api, memory_tool, skia, xfa, v8, target_cpu, clang, rel,
   if api.platform.is_win and not memory_tool:
     args.append('symbol_level=1')
   if api.platform.is_win:
+    assert not clang or not msvc
     if clang:
       args.append('is_clang=true')
+    elif msvc:
+      args.append('is_clang=false')
     else:
+      # Default to MSVC.
       args.append('is_clang=false')
   else:
     # All other platforms already build with Clang, so no need to set it.
@@ -102,6 +109,9 @@ def _GNGenBuilds(api, memory_tool, skia, xfa, v8, target_cpu, clang, rel,
 
   if memory_tool == 'asan':
     if api.platform.is_win:
+      # ASAN requires Clang. Until Clang is default on Windows for certain,
+      # bots should set it explicitly.
+      assert clang
       # No LSAN support.
       args.append('is_asan=true')
     else:
@@ -191,14 +201,14 @@ def _RunTests(api, memory_tool, v8, out_dir, build_config, revision):
   upload_dm_results(api, gold_output_dir, revision)
 
 
-def RunSteps(api, memory_tool, skia, xfa, v8, target_cpu, clang, rel, skip_test,
-             target_os):
+def RunSteps(api, memory_tool, skia, xfa, v8, target_cpu, clang, msvc, rel,
+             skip_test, target_os):
   revision = _CheckoutSteps(api, target_os)
 
-  out_dir = _OutPath(memory_tool, skia, xfa, v8, clang, rel)
+  out_dir = _OutPath(memory_tool, skia, xfa, v8, clang, msvc, rel)
 
-  build_config = _GNGenBuilds(api, memory_tool, skia, xfa, v8,
-                              target_cpu, clang, rel, target_os, out_dir)
+  build_config = _GNGenBuilds(api, memory_tool, skia, xfa, v8, target_cpu,
+                              clang, msvc, rel, target_os, out_dir)
 
   _BuildSteps(api, clang, out_dir)
 
@@ -512,6 +522,29 @@ def GenTests(api):
                      clang=True,
                      mastername="client.pdfium",
                      buildername='windows_xfa_clang',
+                     buildnumber='1234',
+                     bot_id="test_slave")
+  )
+
+  yield (
+      api.test('win_xfa_msvc_32') +
+      api.platform('win', 64) +
+      api.properties(xfa=True,
+                     msvc=True,
+                     target_cpu='x86',
+                     mastername="client.pdfium",
+                     buildername='windows_xfa_msvc_32',
+                     buildnumber='1234',
+                     bot_id="test_slave")
+  )
+
+  yield (
+      api.test('win_xfa_msvc') +
+      api.platform('win', 64) +
+      api.properties(xfa=True,
+                     msvc=True,
+                     mastername="client.pdfium",
+                     buildername='windows_xfa_msvc',
                      buildnumber='1234',
                      bot_id="test_slave")
   )
