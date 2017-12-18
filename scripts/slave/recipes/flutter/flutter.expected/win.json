@@ -103,86 +103,13 @@
   },
   {
     "cmd": [
-      "git.bat",
-      "checkout",
-      "master"
-    ],
-    "cwd": "[START_DIR]\\flutter",
-    "env": {
-      "ANDROID_HOME": "[START_DIR]\\flutter\\dev\\bots\\android_tools",
-      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-2.14.1\\bin;<PATH>",
-      "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache"
-    },
-    "name": "check out master branch"
-  },
-  {
-    "cmd": [
-      "git.bat",
-      "reset",
-      "--hard",
-      "deadbeef"
-    ],
-    "cwd": "[START_DIR]\\flutter",
-    "env": {
-      "ANDROID_HOME": "[START_DIR]\\flutter\\dev\\bots\\android_tools",
-      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-2.14.1\\bin;<PATH>",
-      "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache"
-    },
-    "name": "reset master branch to desired git hash"
-  },
-  {
-    "cmd": [
-      "git.bat",
-      "remote",
-      "remove",
-      "origin"
-    ],
-    "cwd": "[START_DIR]\\flutter",
-    "env": {
-      "ANDROID_HOME": "[START_DIR]\\flutter\\dev\\bots\\android_tools",
-      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-2.14.1\\bin;<PATH>",
-      "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache"
-    },
-    "name": "remove git remote origin"
-  },
-  {
-    "cmd": [
-      "git.bat",
-      "remote",
-      "add",
-      "origin",
-      "https://github.com/flutter/flutter.git"
-    ],
-    "cwd": "[START_DIR]\\flutter",
-    "env": {
-      "ANDROID_HOME": "[START_DIR]\\flutter\\dev\\bots\\android_tools",
-      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-2.14.1\\bin;<PATH>",
-      "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache"
-    },
-    "name": "set git remote origin to github"
-  },
-  {
-    "cmd": [
-      "flutter.bat",
-      "update-packages"
-    ],
-    "cwd": "[START_DIR]\\flutter",
-    "env": {
-      "ANDROID_HOME": "[START_DIR]\\flutter\\dev\\bots\\android_tools",
-      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-2.14.1\\bin;<PATH>",
-      "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache"
-    },
-    "name": "download dependencies"
-  },
-  {
-    "cmd": [
       "flutter.bat",
       "doctor"
     ],
     "cwd": "[START_DIR]\\flutter",
     "env": {
       "ANDROID_HOME": "[START_DIR]\\flutter\\dev\\bots\\android_tools",
-      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-2.14.1\\bin;<PATH>",
+      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-2.14.1\\bin;<PROGRAMFILES>\\7-Zip-A\\x64;<PATH>",
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache"
     },
     "name": "flutter doctor"
@@ -190,71 +117,52 @@
   {
     "cmd": [
       "flutter.bat",
-      "precache"
-    ],
-    "cwd": "[START_DIR]\\flutter",
-    "env": {
-      "ANDROID_HOME": "[START_DIR]\\flutter\\dev\\bots\\android_tools",
-      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-2.14.1\\bin;<PATH>",
-      "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache"
-    },
-    "name": "flutter precache"
-  },
-  {
-    "cmd": [
-      "flutter.bat",
-      "ide-config"
-    ],
-    "cwd": "[START_DIR]\\flutter",
-    "env": {
-      "ANDROID_HOME": "[START_DIR]\\flutter\\dev\\bots\\android_tools",
-      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-2.14.1\\bin;<PATH>",
-      "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache"
-    },
-    "name": "flutter ide-config"
-  },
-  {
-    "cmd": [
-      "git.bat",
-      "clean",
-      "-f",
-      "-X",
-      "**/.packages"
-    ],
-    "cwd": "[START_DIR]\\flutter",
-    "env": {
-      "ANDROID_HOME": "[START_DIR]\\flutter\\dev\\bots\\android_tools",
-      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-2.14.1\\bin;<PATH>",
-      "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache"
-    },
-    "name": "remove .packages files"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::zip]\\resources\\zip.py"
-    ],
-    "env": {
-      "ANDROID_HOME": "[START_DIR]\\flutter\\dev\\bots\\android_tools",
-      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-2.14.1\\bin;<PATH>",
-      "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache"
-    },
-    "name": "create zip archive",
-    "stdin": "{\"entries\": [{\"path\": \"[START_DIR]\\\\flutter\", \"type\": \"dir\"}], \"output\": \"[START_DIR]\\\\flutter.zip\", \"root\": \"[START_DIR]\"}"
-  },
-  {
-    "cmd": [
-      "flutter.bat",
       "update-packages"
     ],
     "cwd": "[START_DIR]\\flutter",
     "env": {
       "ANDROID_HOME": "[START_DIR]\\flutter\\dev\\bots\\android_tools",
-      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-2.14.1\\bin;<PATH>",
+      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-2.14.1\\bin;<PROGRAMFILES>\\7-Zip-A\\x64;<PATH>",
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache"
     },
-    "name": "recreate .packages files"
+    "name": "download dependencies"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[START_DIR]\\archive"
+    ],
+    "cwd": "[START_DIR]\\flutter",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]\\flutter\\dev\\bots\\android_tools",
+      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-2.14.1\\bin;<PROGRAMFILES>\\7-Zip-A\\x64;<PATH>",
+      "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache"
+    },
+    "infra_step": true,
+    "name": "Create archive work directory"
+  },
+  {
+    "cmd": [
+      "dart.exe",
+      "--assert-initializer",
+      "[START_DIR]\\flutter\\dev\\bots\\prepare_package.dart",
+      "--temp_dir=[START_DIR]\\archive",
+      "--output=[START_DIR]\\flutter_win_deadbeef.zip",
+      "--revision=deadbeef"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]\\flutter\\dev\\bots\\android_tools",
+      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-2.14.1\\bin;<PROGRAMFILES>\\7-Zip-A\\x64;<PATH>",
+      "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache"
+    },
+    "name": "prepare and create a flutter archive"
   },
   {
     "cmd": [
@@ -265,13 +173,13 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
       "----",
       "cp",
-      "[START_DIR]\\flutter.zip",
+      "[START_DIR]\\flutter_win_deadbeef.zip",
       "gs://flutter_infra/flutter/deadbeef/flutter_win_deadbeef.zip"
     ],
     "cwd": "[START_DIR]\\flutter",
     "env": {
       "ANDROID_HOME": "[START_DIR]\\flutter\\dev\\bots\\android_tools",
-      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-2.14.1\\bin;<PATH>",
+      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-2.14.1\\bin;<PROGRAMFILES>\\7-Zip-A\\x64;<PATH>",
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache"
     },
     "infra_step": true,
@@ -329,7 +237,7 @@
     "cwd": "[START_DIR]\\flutter",
     "env": {
       "ANDROID_HOME": "[START_DIR]\\flutter\\dev\\bots\\android_tools",
-      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-2.14.1\\bin;<PATH>",
+      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-2.14.1\\bin;<PROGRAMFILES>\\7-Zip-A\\x64;<PATH>",
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache",
       "SHARD": "tests"
     },
@@ -345,7 +253,7 @@
     "cwd": "[START_DIR]\\flutter\\examples/stocks",
     "env": {
       "ANDROID_HOME": "[START_DIR]\\flutter\\dev\\bots\\android_tools",
-      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-2.14.1\\bin;<PATH>",
+      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-2.14.1\\bin;<PROGRAMFILES>\\7-Zip-A\\x64;<PATH>",
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache"
     },
     "name": "flutter build apk stocks"
@@ -360,7 +268,7 @@
     "cwd": "[START_DIR]\\flutter\\examples/flutter_gallery",
     "env": {
       "ANDROID_HOME": "[START_DIR]\\flutter\\dev\\bots\\android_tools",
-      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-2.14.1\\bin;<PATH>",
+      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-2.14.1\\bin;<PROGRAMFILES>\\7-Zip-A\\x64;<PATH>",
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache"
     },
     "name": "flutter build apk flutter_gallery"
