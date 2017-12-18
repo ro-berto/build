@@ -465,6 +465,57 @@
 
         "subject_template": "%(project_name)s %(builder_name)s %(result)s",
 
+        "builders": {
+          "Android Builder": {
+            "categories": [
+              "chromium_tree_closer"
+            ],
+            "forgiving_optional": []
+          },
+          "Android Compile": {
+            "categories": [
+              "chromium_tree_closer"
+            ],
+            "forgiving_optional": []
+          },
+          "Android arm64 Builder": {
+            "categories": [
+              "chromium_tree_closer"
+            ],
+            "forgiving_optional": []
+          },
+          "Android arm64 Compile": {
+            "categories": [
+              "chromium_tree_closer"
+            ],
+            "forgiving_optional": []
+          },
+          "Linux Builder": {
+            "categories": [
+              "chromium_tree_closer"
+            ],
+            "forgiving_optional": []
+          },
+          "Mac Builder": {
+            "categories": [
+              "chromium_tree_closer"
+            ],
+            "forgiving_optional": []
+          },
+          "Win Builder": {
+            "categories": [
+              "chromium_tree_closer"
+            ],
+            "forgiving_optional": []
+          },
+          "Win x64 Builder": {
+            "categories": [
+              "chromium_tree_closer"
+            ],
+            "forgiving_optional": []
+          }
+        },
+
         "categories": [
           "chromium_perf_steps"
         ],
