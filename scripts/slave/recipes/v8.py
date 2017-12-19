@@ -56,11 +56,7 @@ def RunSteps(api):
     if v8.generate_sanitizer_coverage:
       # When collecting code coverage, we need to sync to the revision that
       # fits to the patch for the line numbers to match.
-      if api.properties['patch_storage'] == 'gerrit':
-        revision = v8.calculate_patch_base_gerrit()
-      else:
-        v8.checkout(patch=False)
-        revision = v8.calculate_patch_base_rietveld()
+      revision = v8.calculate_patch_base_gerrit()
       update_step = v8.checkout(revision=revision, suffix='with patch base')
     else:
       update_step = v8.checkout()
@@ -450,30 +446,6 @@ def GenTests(api):
         'Check', api.v8.output_json(unmarked_slow_test=True))
   )
 
-  # Test gerrit tryjobs.
-  yield (
-    api.v8.test(
-        'tryserver.v8',
-        'v8_linux_rel_ng',
-        'gerrit',
-        requester='commit-bot@chromium.org',
-        gerrit_project='v8/v8',
-        blamelist=['dude@chromium.org'],
-    )
-  )
-
-  # Test gerrit tryjobs on coverage bot.
-  yield (
-    api.v8.test(
-        'tryserver.v8',
-        'v8_linux64_sanitizer_coverage_rel',
-        'gerrit',
-        requester='commit-bot@chromium.org',
-        gerrit_project='v8/v8',
-        blamelist=['dude@chromium.org'],
-    )
-  )
-
   # Test tryjob with named cache.
   yield (
     api.v8.test(
@@ -481,7 +453,6 @@ def GenTests(api):
         'v8_linux_rel_ng',
         'with_cache',
         requester='commit-bot@chromium.org',
-        gerrit_project='v8/v8',
         blamelist=['dude@chromium.org'],
         path_config='generic',
     )

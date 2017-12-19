@@ -418,6 +418,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
             branch=branch,
             parent_buildername=parent_buildername,
             revision='20123',
+            gerrit_project='v8/v8',
             **kwargs
         ) +
         self.m.platform(
@@ -454,9 +455,6 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
           revision='12345',
           try_job_key='1234',
       )
-    if (mastername.startswith('tryserver') and
-        not kwargs.get('gerrit_project')):
-      test += self.m.properties(patch_storage='rietveld')
 
     # Skip some goma-related steps in expectations.
     skip_prefixes = [

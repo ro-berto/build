@@ -165,9 +165,9 @@
       "--build-url",
       "gs://chromium-v8/v8-for-dart-rel",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"branch\": \"4.2\", \"buildername\": \"v8-linux-release\", \"buildnumber\": 571, \"mastername\": \"client.dart.fyi\", \"parent_buildername\": null, \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"branch\": \"4.2\", \"buildername\": \"v8-linux-release\", \"buildnumber\": 571, \"gerrit_project\": \"v8/v8\", \"mastername\": \"client.dart.fyi\", \"parent_buildername\": null, \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"branch\": \"4.2\", \"buildername\": \"v8-linux-release\", \"buildnumber\": 571, \"mastername\": \"client.dart.fyi\", \"parent_buildername\": null, \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"branch\": \"4.2\", \"buildername\": \"v8-linux-release\", \"buildnumber\": 571, \"gerrit_project\": \"v8/v8\", \"mastername\": \"client.dart.fyi\", \"parent_buildername\": null, \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "infra_step": true,
     "name": "package build"

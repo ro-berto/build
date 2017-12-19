@@ -291,26 +291,6 @@ class V8Api(recipe_api.RecipeApi):
 
     return update_step
 
-  def calculate_patch_base_rietveld(self):
-    """Calculates the latest commit hash that fits the patch."""
-    url = ('https://codereview.chromium.org/download/issue%s_%s.diff' %
-           (self.m.properties['issue'], self.m.properties['patchset']))
-    patch_content = self.m.url.get_text(
-        url,
-        step_name='Download patch',
-        default_test_data='some patch',
-    ).output
-    return self.m.python(
-        name='Calculate patch base',
-        script=self.resource('calculate_patch_base.py'),
-        args=[
-          self.m.raw_io.input_text(patch_content),
-          self.m.path['checkout'],
-          self.m.raw_io.output_text(),
-        ],
-        step_test_data=lambda: self.m.raw_io.test_api.output_text('[fitting hsh]'),
-    ).raw_io.output_text
-
   def calculate_patch_base_gerrit(self):
     """Calculates the commit hash a gerrit patch was branched off."""
     commits, _ = self.m.gitiles.log(
