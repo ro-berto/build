@@ -14,6 +14,14 @@
   },
 
   "builders": {
+    "V8 Arm32": {
+      "recipe": "v8/archive",
+      "use_remote_run": False,
+      "scheduler": "v8_commits",
+      "mergeRequests": False,
+      "slave_pools": ["linux"],
+      "category": "0Linux",
+    },
     "V8 Android Arm32": {
       "recipe": "v8/archive",
       "use_remote_run": False,
