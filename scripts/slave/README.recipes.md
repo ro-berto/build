@@ -2196,7 +2196,7 @@ Args:
 
 APIs for interacting with isolates.
 
-&mdash; **def [archive\_differences](/scripts/slave/recipe_modules/isolate/api.py#297)(self, first_dir, second_dir, values):**
+&mdash; **def [archive\_differences](/scripts/slave/recipe_modules/isolate/api.py#298)(self, first_dir, second_dir, values):**
 
 Archive different files of 2 builds.
 
@@ -2207,7 +2207,7 @@ preparation for the compile. Needed in order to ensure isolates
 are rebuilt properly because their dependencies are currently not
 completely described to gyp.
 
-&mdash; **def [compare\_build\_artifacts](/scripts/slave/recipe_modules/isolate/api.py#326)(self, first_dir, second_dir):**
+&mdash; **def [compare\_build\_artifacts](/scripts/slave/recipe_modules/isolate/api.py#327)(self, first_dir, second_dir):**
 
 Compare the artifacts from 2 builds.
 
@@ -2254,18 +2254,18 @@ Args:
         enable/disable exparchive, or provide a number (between 0 and 100)
         to have n% of builds run with exparchive.
 
-&emsp; **@property**<br>&mdash; **def [isolated\_tests](/scripts/slave/recipe_modules/isolate/api.py#244)(self):**
+&emsp; **@property**<br>&mdash; **def [isolated\_tests](/scripts/slave/recipe_modules/isolate/api.py#245)(self):**
 
 The dictionary of 'target name -> isolated hash' for this run.
 
 These come either from the incoming swarm_hashes build property,
 or from calling find_isolated_tests, above, at some point during the run.
 
-&mdash; **def [remove\_build\_metadata](/scripts/slave/recipe_modules/isolate/api.py#278)(self):**
+&mdash; **def [remove\_build\_metadata](/scripts/slave/recipe_modules/isolate/api.py#279)(self):**
 
 Removes the build metadata embedded in the build artifacts.
 
-&mdash; **def [run\_isolated](/scripts/slave/recipe_modules/isolate/api.py#266)(self, name, isolate_hash, args=None, \*\*kwargs):**
+&mdash; **def [run\_isolated](/scripts/slave/recipe_modules/isolate/api.py#267)(self, name, isolate_hash, args=None, \*\*kwargs):**
 
 Runs an isolated test.
 ### *recipe_modules* / [legion](/scripts/slave/recipe_modules/legion)

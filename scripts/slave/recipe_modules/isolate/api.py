@@ -164,7 +164,8 @@ class IsolateApi(recipe_api.RecipeApi):
     try:
       args = [
           self.m.swarming_client.path,
-          'exparchive',
+          'archive',
+          '--exparchive',
           '--dump-json', self.m.json.output(),
           '--isolate-server', self._isolate_server,
           '--eventlog-endpoint', 'prod',
