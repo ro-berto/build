@@ -103,8 +103,8 @@ def _GNGenBuilds(api, memory_tool, skia, xfa, v8, target_cpu, clang, msvc, rel,
     elif msvc:
       args.append('is_clang=false')
     else:
-      # Default to MSVC.
-      args.append('is_clang=false')
+      # Default to Clang.
+      args.append('is_clang=true')
   else:
     # All other platforms already build with Clang, so no need to set it.
     assert not clang
