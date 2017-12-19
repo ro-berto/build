@@ -134,6 +134,25 @@
       "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
+      "rmtree",
+      "[START_DIR]\\archive"
+    ],
+    "cwd": "[START_DIR]\\flutter",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]\\flutter\\dev\\bots\\android_tools",
+      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-2.14.1\\bin;<PROGRAMFILES>\\7-Zip-A\\x64;<PATH>",
+      "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache"
+    },
+    "infra_step": true,
+    "name": "clean archive output directory"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "ensure-directory",
       "--mode",
       "0777",
@@ -146,7 +165,7 @@
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache"
     },
     "infra_step": true,
-    "name": "Create archive work directory"
+    "name": "(re)create archive work directory"
   },
   {
     "cmd": [

@@ -143,9 +143,10 @@ def CreateFlutterPackage(api, git_hash):
   """Prepares and builds an all-inclusive archive package."""
   dart_executable = 'dart' if not api.platform.is_win else 'dart.exe'
   output_file = api.path['start_dir'].join(GetArchiveName(api, git_hash))
-  work_dir = api.path['start_dir'].join('archive');
+  work_dir = api.path['start_dir'].join('archive')
+  api.file.rmtree('clean archive output directory', work_dir)
+  api.file.ensure_directory('(re)create archive work directory', work_dir)
   prepare_script = api.path['checkout'].join('dev', 'bots', 'prepare_package.dart')
-  api.file.ensure_directory('Create archive work directory', work_dir)
   with api.context(cwd=api.path['start_dir']):
     api.step('prepare and create a flutter archive',
              [dart_executable,
