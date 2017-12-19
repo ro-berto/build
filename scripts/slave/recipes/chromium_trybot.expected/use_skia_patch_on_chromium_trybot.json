@@ -321,25 +321,6 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]\\win\\src\\testing\\buildbot\\chromium.webkit.json",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
-    "name": "read test spec (chromium.webkit.json)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@path: [BUILDER_CACHE]\\win\\src\\testing\\buildbot\\chromium.webkit.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "[BUILDER_CACHE]\\win\\src\\testing\\buildbot\\chromium.win.json",
       "/path/to/tmp/json"
     ],
@@ -374,7 +355,7 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@files@third_party/skia/foo.cc@@@",
       "@@@STEP_LOG_END@files@@@",
-      "@@@SET_BUILD_PROPERTY@subproject_tag@\"chromium\"@@@"
+      "@@@SET_BUILD_PROPERTY@subproject_tag@\"blink\"@@@"
     ]
   },
   {
@@ -418,7 +399,7 @@
       "win7_chromium_rel_ng",
       "-v",
       "//out/Release",
-      "{\"additional_compile_targets\": [], \"files\": [\"third_party/skia/foo.cc\"], \"test_targets\": [\"mini_installer\", \"next_version_mini_installer\"]}",
+      "{\"additional_compile_targets\": [], \"files\": [\"third_party/skia/foo.cc\"], \"test_targets\": [\"mini_installer\", \"next_version_mini_installer\", \"webkit_layout_tests_exparchive\"]}",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -442,7 +423,8 @@
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.test_targets\": [], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"test_targets\": [@@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"mini_installer\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"next_version_mini_installer\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"next_version_mini_installer\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"webkit_layout_tests_exparchive\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ]@@@",
       "@@@STEP_LOG_LINE@analyze_details@}@@@",
       "@@@STEP_LOG_END@analyze_details@@@"

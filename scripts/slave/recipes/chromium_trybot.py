@@ -617,6 +617,23 @@ def GenTests(api):
   )
 
   yield (
+    api.test('use_v8_patch_on_chromium_trybot_gerrit_feature_branch') +
+    props(buildername='old_chromium_rel_ng',
+          mastername='tryserver.chromium.win',
+          gerrit_project='v8/v8') +
+    api.platform.name('win') +
+    api.step_data(
+      'gerrit get_patch_destination_branch',
+      api.gerrit.get_one_change_response_data(branch='experimental/feature'),
+    ) +
+    api.step_data('compile (with patch)', retcode=1) +
+    api.post_process(
+        Filter('gerrit get_patch_destination_branch',
+               'bot_update',
+               'bot_update (without patch)'))
+  )
+
+  yield (
     api.test('chromium_trybot_gerrit_feature_branch') +
     api.platform('linux', 64) +
     props(mastername='tryserver.chromium.linux',
@@ -675,6 +692,152 @@ def GenTests(api):
     )
   )
 
+  # Test we *do* run the BlinkTest if we touch third_party/WebKit
+  yield (
+    api.test('add_layout_tests_via_manual_diff_inspection') +
+    api.properties.tryserver(
+      mastername='tryserver.chromium.win',
+      buildername='old_chromium_rel_ng',
+      swarm_hashes={}
+    ) +
+    api.platform.name('win') +
+    api.override_step_data(
+        'git diff to analyze patch',
+        api.raw_io.stream_output(
+            'third_party/WebKit/Source/core/dom/Element.cpp\n')
+    )
+  )
+
+  # Test we *don't* run the BlinkTest if we don't touch the right paths
+  yield (
+    api.test('skip_layout_tests_via_manual_diff_doesnt_match') +
+    api.properties.tryserver(
+      mastername='tryserver.chromium.win',
+      buildername='old_chromium_rel_ng',
+      swarm_hashes={}
+    ) +
+    api.platform.name('win') +
+    api.override_step_data(
+        'git diff to analyze patch',
+        api.raw_io.stream_output(
+            'base/time.h\n')
+    )
+  )
+
+  # Test we run the swarming layout tests if we touch third_party/WebKit
+  yield (
+    api.test('add_swarming_layout_tests_via_manual_diff_inspection_linux') +
+    props(
+      mastername='tryserver.chromium.linux',
+      buildername='linux_chromium_rel_ng',
+      swarm_hashes={},
+      extra_swarmed_tests=['webkit_layout_tests_exparchive'],
+    ) +
+    api.platform.name('linux') +
+    api.override_step_data(
+      'analyze',
+      api.json.output({'status': 'Found dependency',
+                       'test_targets': ['webkit_layout_tests_exparchive'],
+                       'compile_targets': ['webkit_layout_tests_exparchive']})
+    ) +
+    api.override_step_data(
+        'git diff to analyze patch',
+        api.raw_io.stream_output(
+            'third_party/WebKit/Source/core/dom/Element.cpp\n')
+    ) +
+    api.override_step_data(
+        'webkit_layout_tests (with patch)',
+        api.test_utils.canned_isolated_script_output(
+            passing=True, is_win=False, swarming=True
+        ) +
+        api.swarming.canned_summary_output()
+    )
+  )
+
+  yield (
+    api.test('add_swarming_layout_tests_via_manual_diff_inspection_win') +
+    props(
+      mastername='tryserver.chromium.win',
+      buildername='win7_chromium_rel_ng',
+      swarm_hashes={},
+      extra_swarmed_tests=['webkit_layout_tests_exparchive'],
+    ) +
+    api.platform.name('win') +
+    api.override_step_data(
+      'analyze',
+      api.json.output({'status': 'Found dependency',
+                       'test_targets': ['webkit_layout_tests_exparchive'],
+                       'compile_targets': ['webkit_layout_tests_exparchive']})
+    ) +
+    api.override_step_data(
+        'git diff to analyze patch',
+        api.raw_io.stream_output(
+            'third_party/WebKit/Source/core/dom/ElementBAH.cpp\n')
+#    ) +
+#    api.override_step_data(
+#        'webkit_layout_tests (with patch)',
+#        api.test_utils.canned_isolated_script_output(
+#            passing=True, is_win=True, swarming=True
+#        ) +
+#        api.swarming.canned_summary_output()
+    )
+  )
+
+  yield (
+    api.test(
+        'add_swarming_layout_tests_via_manual_diff_inspection_that_fails') +
+    props(
+      mastername='tryserver.chromium.linux',
+      buildername='linux_chromium_rel_ng',
+      swarm_hashes={},
+      extra_swarmed_tests=['webkit_layout_tests_exparchive'],
+    ) +
+    api.platform.name('linux') +
+    api.override_step_data(
+      'analyze',
+      api.json.output({
+          'status': 'Found dependency',
+          'test_targets': ['webkit_layout_tests_exparchive'],
+          'compile_targets': ['webkit_layout_tests_exparchive']})) +
+    api.override_step_data(
+        'git diff to analyze patch',
+        api.raw_io.stream_output(
+            'third_party/WebKit/Source/core/dom/Element.cpp\n')
+    ) +
+    api.override_step_data(
+        'webkit_layout_tests (with patch)',
+        api.test_utils.canned_isolated_script_output(
+            passing=True, is_win=False, swarming=True,
+            isolated_script_passing=False
+        ) +
+        api.swarming.canned_summary_output(failure=True)
+    ) +
+    api.override_step_data(
+        'webkit_layout_tests (without patch)',
+        api.test_utils.canned_isolated_script_output(
+            passing=True, is_win=False, swarming=True
+        ) +
+        api.swarming.canned_summary_output()
+    )
+  )
+
+  # Test we don't run the swarming layout tests if we don't touch the right
+  # paths
+  yield (
+    api.test('skip_swarming_layout_tests_via_manual_diff_doesnt_match') +
+    api.properties.tryserver(
+      mastername='tryserver.chromium.linux',
+      buildername='linux_chromium_rel_ng',
+      swarm_hashes={}
+    ) +
+    api.platform.name('linux') +
+    api.override_step_data(
+        'git diff to analyze patch',
+        api.raw_io.stream_output(
+            'base/time.h\n')
+    )
+  )
+
   swarmed_webkit_tests = (
     props(extra_swarmed_tests=['webkit_layout_tests']) +
     api.platform.name('linux') +
@@ -694,6 +857,34 @@ def GenTests(api):
         })
     ) +
     suppress_analyze()
+  )
+
+  # This tests that if the first fails, but the second pass succeeds
+  # that we fail the whole build.
+  yield (
+    api.test('swarmed_webkit_tests_minimal_pass_continues') +
+    swarmed_webkit_tests +
+    api.override_step_data('webkit_layout_tests (with patch)',
+        api.test_utils.canned_isolated_script_output(
+            passing=True, swarming=True,
+            isolated_script_passing=False)
+        + api.swarming.canned_summary_output()) +
+    api.override_step_data('webkit_layout_tests (without patch)',
+        api.test_utils.canned_isolated_script_output(
+            passing=True, swarming=True,
+            isolated_script_passing=True)
+        + api.swarming.canned_summary_output())
+  )
+
+  yield (
+    api.test('swarmed_webkit_tests_compile_without_patch_fails') +
+    swarmed_webkit_tests +
+    api.override_step_data('webkit_layout_tests (with patch)',
+        api.test_utils.canned_isolated_script_output(
+            passing=True, swarming=True,
+            isolated_script_passing=False) +
+        api.swarming.canned_summary_output(failure=True)) +
+    api.override_step_data('compile (without patch)', retcode=1)
   )
 
   # This tests what happens if something goes horribly wrong in
@@ -746,6 +937,21 @@ def GenTests(api):
             passing=True,
             isolated_script_passing=True) +
         api.swarming.canned_summary_output())
+  )
+
+  yield (
+    api.test('swarmed_layout_tests_with_and_without_patch_fail') +
+    swarmed_webkit_tests +
+    api.override_step_data('webkit_layout_tests (with patch)',
+        api.test_utils.canned_isolated_script_output(
+            passing=True, swarming=True,
+            isolated_script_passing=False) +
+        api.swarming.canned_summary_output(failure=True)) +
+    api.override_step_data('webkit_layout_tests (without patch)',
+        api.test_utils.canned_isolated_script_output(
+            passing=True, swarming=True,
+            isolated_script_passing=True) +
+        api.swarming.canned_summary_output(failure=True))
   )
 
   yield (
