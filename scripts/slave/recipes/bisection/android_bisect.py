@@ -227,11 +227,8 @@ m/cloudstorage/b/chromium-telemetry/o/html-results/results-without
               path_config='kitchen',
               mastername='tryserver.chromium.perf',
               buildername=buildername,
-              patch_storage='rietveld',
-              patchset='20001',
-              issue='12345',
-              is_test=True,
-              rietveld="https://codereview.chromium.org") +
+              gerrit_project='chromium',
+              is_test=True) +
           api.override_step_data(
               'git diff to analyze patch',
               api.raw_io.stream_output('tools/run-perf-test.cfg')) +
@@ -266,11 +263,8 @@ m/cloudstorage/b/chromium-telemetry/o/html-results/results-without
               path_config='kitchen',
               mastername='tryserver.chromium.perf',
               buildername=buildername,
-              patch_storage='rietveld',
-              patchset='20001',
-              issue='12345',
-              is_test=True,
-              rietveld="https://codereview.chromium.org") +
+              gerrit_project='chromium',
+              is_test=True) +
           api.override_step_data(
              'git diff to analyze patch',
           api.raw_io.stream_output('tools/run-perf-test.cfg')) +
@@ -307,11 +301,8 @@ m/cloudstorage/b/chromium-telemetry/o/html-results/results-without
               path_config='kitchen',
               mastername='tryserver.chromium.perf',
               buildername=buildername,
-              patch_storage='rietveld',
-              patchset='20001',
-              issue='12345',
-              is_test=True,
-              rietveld="https://codereview.chromium.org") +
+              gerrit_project='chromium',
+              is_test=True) +
           api.override_step_data(
               'git diff to analyze patch',
               api.raw_io.stream_output('tools/run-perf-test.cfg')) +
@@ -342,11 +333,8 @@ m/cloudstorage/b/chromium-telemetry/o/html-results/results-without
               path_config='kitchen',
               mastername='tryserver.chromium.perf',
               buildername=buildername,
-              patch_storage='rietveld',
-              patchset='20001',
-              issue='12345',
-              is_test=True,
-              rietveld="https://codereview.chromium.org") +
+              gerrit_project='chromium',
+              is_test=True) +
           api.override_step_data(
               'git diff to analyze patch',
               api.raw_io.stream_output('tools/run-perf-test.cfg')) +
