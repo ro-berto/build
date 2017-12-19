@@ -26,52 +26,6 @@ RECIPE_CONFIG_PATHS = [
 ]
 
 
-# TODO(phajdan.jr): Remove special case for layout tests.
-# This could be done by moving layout tests to main waterfall.
-CHROMIUM_BLINK_TESTS_BUILDERS = freeze([
-  'linux_chromium_rel_ng',
-  'mac_chromium_rel_ng',
-  'old_chromium_rel_ng',
-  'win7_chromium_rel_ng',
-])
-
-# If we are running layout tests, we run on swarming if the buildername is in this list.
-LAYOUT_TESTS_SWARMING_BUILDERS = freeze([
-  'linux_chromium_rel_ng',
-  'mac_chromium_rel_ng',
-  'win7_chromium_rel_ng',
-])
-
-
-CHROMIUM_BLINK_TESTS_PATHS = freeze([
-  'components/test_runner',
-  'content/browser/bluetooth',
-  'content/browser/service_worker',
-  'content/child/service_worker',
-  'content/common/bluetooth',
-  'content/renderer/bluetooth',
-  'content/renderer/service_worker',
-  'content/shell/browser/layout_test',
-  'content/shell/renderer/layout_test',
-  'device/bluetooth',
-  'device/usb/public/interfaces',
-  'media',
-  'third_party/WebKit',
-  'third_party/blink',
-  'third_party/harfbuzz-ng',
-  'third_party/iccjpeg',
-  'third_party/libjpeg',
-  'third_party/libjpeg_turbo',
-  'third_party/libpng',
-  'third_party/libwebp',
-  'third_party/qcms',
-  'third_party/skia',
-  'third_party/yasm',
-  'third_party/zlib',
-  'v8',
-])
-
-
 class ChromiumTestsApi(recipe_api.RecipeApi):
   def __init__(self, *args, **kwargs):
     super(ChromiumTestsApi, self).__init__(*args, **kwargs)
@@ -933,89 +887,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     bot_update_step, bot_db = self.prepare_checkout(bot_config_object)
     tests, tests_including_triggered = self.get_tests(bot_config_object, bot_db)
 
-    def add_tests(additional_tests):
-      tests.extend(additional_tests)
-      tests_including_triggered.extend(additional_tests)
-
     affected_files = self.m.chromium_checkout.get_files_affected_by_patch()
 
-    affects_blink_paths = any(
-        f.startswith(path) for f in affected_files
-        for path in CHROMIUM_BLINK_TESTS_PATHS)
-
     if self.m.tryserver.is_tryserver:
-      if affects_blink_paths:
-        subproject_tag = 'blink'
-      else:
-        subproject_tag = 'chromium'
-
-      self.m.tryserver.set_subproject_tag(subproject_tag)
-
-    # TODO(phajdan.jr): Remove special case for layout tests.
-    add_blink_tests = (
-        affects_blink_paths and
-        buildername in
-        CHROMIUM_BLINK_TESTS_BUILDERS)
-
-    # We decide at this point whether we will add layout tests to run on
-    # swarming, locally, or not at all.
-    layout_tests_strategy = _layout_tests_strategy(
-        tests, buildername, add_blink_tests)
-
-    # Before layout tests on swarming is rolled out to run on all CLs, blink layout tests needs
-    # to be manually added to the analyze list.
-    if layout_tests_strategy == 'add_swarmed':
-      merge = {
-          'script': self.m.path['checkout'].join(
-              'third_party', 'WebKit', 'Tools', 'Scripts',
-              'merge-layout-test-results'),
-          'args': ['--verbose'],
-      }
-
-      if buildername == 'linux_chromium_rel_ng':
-        layout_test_extra_args = {
-            'shards': 6,
-            'dimensions': {'os': 'Ubuntu-14.04'},
-        }
-      elif buildername == 'mac_chromium_rel_ng':
-        layout_test_extra_args = {
-            'shards': 12,
-            'dimensions': {
-                'os': 'Mac-10.12.6',
-                'gpu': '8086:0a2e',
-                'hidpi': '0',
-            },
-        }
-      elif buildername == 'win7_chromium_rel_ng':  # pragma: no cover
-        layout_test_extra_args = {
-            'shards': 5,
-            'dimensions': {
-                'os': 'Windows-7-SP1',
-            },
-        }
-      else:
-        layout_test_extra_args = {}  # pragma: no cover
-
-      add_tests([
-          self.steps.SwarmingIsolatedScriptTest(
-              name='webkit_layout_tests',
-              args=[],
-              target_name='webkit_layout_tests_exparchive',
-              override_compile_targets=None,
-              priority=None,
-              expiration=None,
-              hard_timeout=None,
-              perf_id=bot_config.get('perf-id'),
-              results_url=bot_config.get('results-url'),
-              perf_dashboard_id='webkt_layout_tests_exparchive',
-              io_timeout=None,
-              waterfall_mastername=mastername,
-              waterfall_buildername=buildername,
-              merge=merge,
-              results_handler=self.steps.LayoutTestResultsHandler(),
-              **layout_test_extra_args
-          ),
-      ])
+      self.m.tryserver.set_subproject_tag('chromium')
 
     compile_targets = self.get_compile_targets(
         bot_config_object,
@@ -1037,26 +912,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       tests = []
       tests_including_triggered = []
 
-    # TODO(tansell): Remove these special cases.
-    # At the moment there remains a few blink tests which are not using
-    # "analyze". These tests don't correctly specify their dependencies and
-    # thus need to be manually added on blink changes.
-    # See https://crbug.com/703894
-    nonanalyze_blink_tests = []
-    # TODO(tansell): Remove this once all builders are running layout tests
-    # via analyze.
-    if layout_tests_strategy == 'add_local':
-        nonanalyze_blink_tests.append(self.steps.BlinkTest())  # pragma: no cover
-
-    # Blink tests have to bypass "analyze", see below.
-    if compile_targets or nonanalyze_blink_tests:
+    if compile_targets:
       tests = self._tests_in_compile_targets(test_targets, tests)
       tests_including_triggered = self._tests_in_compile_targets(
           test_targets, tests_including_triggered)
-
-      add_tests(nonanalyze_blink_tests)
-      for test in nonanalyze_blink_tests:
-        compile_targets.extend(test.compile_targets(self.m))  # pragma: no cover
 
       compile_targets = sorted(set(compile_targets))
       self.compile_specific_targets(
@@ -1103,38 +962,3 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           not test_compile_targets):
         result.append(test)
     return result
-
-
-def _get_test_by_name(tests, name):
-  """ Returns the test with the specified name, or None if none match. """
-  for test in tests:
-    if test.name == name:
-      return test
-  return None
-
-
-def _layout_tests_strategy(tests, builder_name, add_blink_tests):
-  """Returns whether layout_tests should be run locally or on swarming.
-
-  Args:
-    tests: the list of tests according to the bot config.
-    builder_name: the name of the builder.
-    add_blink_tests: when false, inhibits running of layout tests.
-
-  Returns: one of the following:
-    None: do not add layout tests.
-    'add_local': add BlinkTest to run locally on the bot.
-    'add_swarmed': add webkit_layout_tests to run on swarming.
-
-    Note: If a webkit_layout_tests test has been configured src-side, this
-    function returns None, so that we don't manually add tests that
-    will conflict with the src-configured test.
-  """
-  if _get_test_by_name(tests, 'webkit_layout_tests') is not None:
-    return None
-
-  if not add_blink_tests:
-    return None
-
-  swarm = builder_name in LAYOUT_TESTS_SWARMING_BUILDERS
-  return 'add_swarmed' if swarm else 'add_local'

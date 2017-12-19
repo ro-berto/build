@@ -7,14 +7,20 @@ from . import steps
 SPEC = {
   'settings': {
     'build_gs_bucket': 'chromium-webkit-archive',
-    'src_side_runtest_py': False,
+    'src_side_runtest_py': True,
   },
 }
 
 SPEC['builders'] = {
   'WebKit Win Builder': {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb'],
+    'chromium_apply_config': [
+      'chrome_with_codecs',
+      'goma_high_parallel',
+      'goma_enable_global_file_id_cache',
+      'mb',
+      'ninja_confirm_noop',
+    ],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
@@ -25,7 +31,7 @@ SPEC['builders'] = {
       'platform': 'win',
     },
     'enable_swarming': True,
-    'checkout_dir': 'win_layout',
+    'checkout_dir': 'win',
   },
   'WebKit Win7': {
     'chromium_config': 'chromium',
@@ -42,7 +48,7 @@ SPEC['builders'] = {
       'platform': 'win',
     },
     'enable_swarming': True,
-    'checkout_dir': 'win_layout',
+    'checkout_dir': 'win',
   },
   'WebKit Win10': {
     'chromium_config': 'chromium',
@@ -59,7 +65,7 @@ SPEC['builders'] = {
       'platform': 'win',
     },
     'enable_swarming': True,
-    'checkout_dir': 'win_layout',
+    'checkout_dir': 'win',
   },
   'WebKit Win x64 Builder': {
     'chromium_config': 'chromium',
@@ -78,7 +84,7 @@ SPEC['builders'] = {
       'platform': 'win',
     },
     'enable_swarming': True,
-    'checkout_dir': 'win_layout',
+    'checkout_dir': 'win',
   },
   'WebKit Win Builder (dbg)': {
     'chromium_config': 'chromium',
@@ -93,7 +99,7 @@ SPEC['builders'] = {
       'platform': 'win',
     },
     'enable_swarming': True,
-    'checkout_dir': 'win_layout',
+    'checkout_dir': 'win',
   },
   'WebKit Win7 (dbg)': {
     'chromium_config': 'chromium',
@@ -110,7 +116,7 @@ SPEC['builders'] = {
       'platform': 'win',
     },
     'enable_swarming': True,
-    'checkout_dir': 'win_layout',
+    'checkout_dir': 'win',
   },
   'WebKit Win x64 Builder (dbg)': {
     'chromium_config': 'chromium',
@@ -129,11 +135,16 @@ SPEC['builders'] = {
       'platform': 'win',
     },
     'enable_swarming': True,
-    'checkout_dir': 'win_layout',
+    'checkout_dir': 'win',
   },
   'WebKit Mac Builder': {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb'],
+    'chromium_apply_config': [
+      'chrome_with_codecs',
+      'mb',
+      'ninja_confirm_noop',
+      'fetch_telemetry_dependencies',
+    ],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
@@ -147,7 +158,7 @@ SPEC['builders'] = {
     'swarming_dimensions': {
       'os': 'Mac-10.11',
     },
-    'checkout_dir': 'mac_layout',
+    'checkout_dir': 'mac',
   },
   'WebKit Mac10.11 (retina)': {
     'chromium_config': 'chromium',
@@ -167,7 +178,7 @@ SPEC['builders'] = {
       'os': 'Mac-10.11',
       'hidpi': '1',
     },
-    'checkout_dir': 'mac_layout',
+    'checkout_dir': 'mac',
   },
   'WebKit Mac10.10': {
     'chromium_config': 'chromium',
@@ -187,7 +198,7 @@ SPEC['builders'] = {
     'swarming_dimensions': {
       'os': 'Mac-10.10',
     },
-    'checkout_dir': 'mac_layout',
+    'checkout_dir': 'mac',
   },
   'WebKit Mac10.11': {
     'chromium_config': 'chromium',
@@ -207,7 +218,7 @@ SPEC['builders'] = {
     'swarming_dimensions': {
       'os': 'Mac-10.11',
     },
-    'checkout_dir': 'mac_layout',
+    'checkout_dir': 'mac',
   },
   'WebKit Mac10.12': {
     'chromium_config': 'chromium',
@@ -227,7 +238,7 @@ SPEC['builders'] = {
     'swarming_dimensions': {
       'os': 'Mac-10.12',
     },
-    'checkout_dir': 'mac_layout',
+    'checkout_dir': 'mac',
   },
   'WebKit Mac Builder (dbg)': {
     'chromium_config': 'chromium',
@@ -245,7 +256,7 @@ SPEC['builders'] = {
     'swarming_dimensions': {
       'os': 'Mac-10.11',
     },
-    'checkout_dir': 'mac_layout',
+    'checkout_dir': 'mac',
   },
   'WebKit Mac10.11 (dbg)': {
     'chromium_config': 'chromium',
@@ -264,7 +275,7 @@ SPEC['builders'] = {
     'swarming_dimensions': {
       'os': 'Mac-10.11',
     },
-    'checkout_dir': 'mac_layout',
+    'checkout_dir': 'mac',
   },
   'WebKit Linux Trusty': {
     'chromium_config': 'chromium',
