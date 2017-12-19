@@ -1061,12 +1061,24 @@ class LayoutTestResultsHandler(JSONResultsHandler):
       '--gs-bucket', 'gs://chromium-layout-test-archives',
       '--staging-dir', api.path['cache'].join('chrome_staging'),
     ]
+
+    # TODO: The naming of the archive step is clunky, but the step should
+    # really be triggered src-side as part of the post-collect merge and
+    # upload, and so this should go away when we make that change.
+    custom_step_name = step_name not in (
+        'webkit_tests', 'webkit_tests (with patch)',
+        'webkit_layout_tests', 'webkit_layout_tests (with patch)')
+    archive_step_name = 'archive_webkit_tests_results'
+    if custom_step_name:
+      archive_layout_test_args += ['--step-name', step_name]
+      archive_step_name = 'archive results for ' + step_name
+
     archive_layout_test_args += api.build.slave_utils_args
     # TODO(phajdan.jr): Pass gs_acl as a parameter, not build property.
     if api.properties.get('gs_acl'):
       archive_layout_test_args.extend(['--gs-acl', api.properties['gs_acl']])
     archive_result = api.build.python(
-      'archive_webkit_tests_results',
+      archive_step_name,
       archive_layout_test_results,
       archive_layout_test_args)
 
@@ -1075,6 +1087,8 @@ class LayoutTestResultsHandler(JSONResultsHandler):
     base = (
       "https://storage.googleapis.com/chromium-layout-test-archives/%s/%s"
       % (sanitized_buildername, buildnumber))
+    if custom_step_name:
+      base += '/' + step_name
 
     archive_result.presentation.links['layout_test_results'] = (
         base + '/layout-test-results/results.html')

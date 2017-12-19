@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
+    'build',
     'chromium',
     'chromium_tests',
     'commit_position',
@@ -271,5 +272,26 @@ def GenTests(api):
       }, swarm_hashes={
             'base_unittests_run': 'ffffffffffffffffffffffffffffffffffffffff',
       })
+  )
+
+  yield (
+      api.test('custom_webkit_tests_step_name') +
+      api.properties(
+          enable_swarming=True,
+          single_spec={
+              'name': 'custom_webkit_tests',
+              'isolate_name': 'webkit_tests',
+              'results_handler': 'layout tests',
+              'swarming': {
+                  'can_use_on_swarming_builders': True,
+              },
+          },
+          swarm_hashes={
+            'webkit_tests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
+          mastername='test_mastername',
+          buildername='test_buildername',
+          buildnumber=1
+      )
   )
 

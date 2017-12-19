@@ -89,9 +89,15 @@ def archive_layout(args):
   # TODO: Get rid of the need for the "latest" version.
 
   gs_build_dir = '/'.join([args.gs_bucket, builder_name, build_number])
+  if args.step_name:
+    gs_build_dir += '/' + args.step_name
   gs_build_results_dir = gs_build_dir + '/' + results_dir_basename
 
-  gs_latest_dir = '/'.join([args.gs_bucket, builder_name, 'results'])
+  if args.step_name:
+    gs_latest_dir = '/'.join([args.gs_bucket, builder_name, args.step_name,
+                              'results'])
+  else:
+    gs_latest_dir = '/'.join([args.gs_bucket, builder_name, 'results'])
   gs_latest_results_dir = gs_latest_dir + '/' + results_dir_basename
 
   gs_acl = args.gs_acl
@@ -188,6 +194,9 @@ def _ParseArgs():
                       help='The name of the builder running this script.')
   parser.add_argument('--build-number', type=int, required=True,
                       help='Build number of the builder running this script.')
+  parser.add_argument('--step-name',
+                      help='The name of the test step that produced '
+                           'these results.')
   parser.add_argument('--gs-bucket', required=True,
                       help='The Google Storage bucket to upload to.')
   parser.add_argument('--gs-acl',
