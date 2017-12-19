@@ -498,6 +498,11 @@ TRYBOTS = freeze({
             'buildername': 'GPU Mac Builder',
             'tester': 'Mac Retina Release (AMD)',
           },
+          {
+            'mastername': 'chromium.webkit',
+            'buildername': 'WebKit Mac Builder',
+            'tester': 'WebKit Mac10.12',
+          },
         ],
       },
       'mac_chromium_10.12_rel_ng': simple_bot({
@@ -614,6 +619,11 @@ TRYBOTS = freeze({
       },
       'win7_chromium_rel_ng': {
         'bot_ids': [
+          {
+            'mastername': 'chromium.webkit',
+            'buildername': 'WebKit Win Builder',
+            'tester': 'WebKit Win7',
+          },
           {
             'mastername': 'chromium.win',
             'buildername': 'Win Builder',
