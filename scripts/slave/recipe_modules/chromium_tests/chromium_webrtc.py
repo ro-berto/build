@@ -114,12 +114,16 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
             # the FYI bots can detect breakages.
             args=['--gtest_filter=WebRtc*']),
         steps.GTestTest(
-            name='content_browsertests_manual',
+            name='content_browsertests_sequential',
             target_name='content_browsertests',
             # These run a few tests that require webcam access. They need to
             # run sequentially, otherwise tests may interfere with each other.
-            args=['--gtest_filter=WebRtc*MANUAL*', '--run-manual',
+            args=['--gtest_filter=WebRtc*MANUAL*Webcam*', '--run-manual',
                   '--test-launcher-jobs=1']),
+        steps.GTestTest(
+            name='content_browsertests_manual',
+            target_name='content_browsertests',
+            args=['--gtest_filter=WebRtc*:-*Webcam*', '--run-manual']),
         steps.GTestTest(
             'browser_tests_functional',
             target_name='browser_tests',
