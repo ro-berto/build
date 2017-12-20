@@ -58,16 +58,19 @@ def GenTests(api):
     bot_type = bot_config.get('bot_type', 'builder_tester')
 
     chromium_kwargs = bot_config.get('chromium_config_kwargs', {})
-    test = (
-      api.test('%s_%s%s' % (_sanitize_nonalpha(mastername),
-                            _sanitize_nonalpha(buildername), suffix)) +
-      api.properties(mastername=mastername,
-                     buildername=buildername,
-                     bot_id='bot_id',
-                     BUILD_CONFIG=chromium_kwargs['BUILD_CONFIG']) +
-      api.platform(bot_config['testing']['platform'],
-                   chromium_kwargs.get('TARGET_BITS', 64))
-    )
+    test = api.test('%s_%s%s' % (_sanitize_nonalpha(mastername),
+                                 _sanitize_nonalpha(buildername), suffix))
+
+    if mastername.startswith('tryserver'):
+      test += api.properties.tryserver(gerrit_project='libyuv')
+
+    test += api.properties(
+        mastername=mastername,
+        buildername=buildername,
+        bot_id='bot_id',
+        BUILD_CONFIG=chromium_kwargs['BUILD_CONFIG'])
+    test += api.platform(bot_config['testing']['platform'],
+                         chromium_kwargs.get('TARGET_BITS', 64))
 
     if bot_config.get('parent_buildername'):
       test += api.properties(
@@ -78,9 +81,6 @@ def GenTests(api):
     if bot_type == 'tester':
       test += api.properties(parent_got_revision=revision)
 
-    if mastername.startswith('tryserver'):
-      test += api.properties(issue='123456789', patchset='1',
-                             rietveld='https://rietveld.example.com')
     test += api.properties(buildnumber=1337)
     return test
 

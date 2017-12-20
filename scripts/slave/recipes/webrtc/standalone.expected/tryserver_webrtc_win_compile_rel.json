@@ -52,12 +52,10 @@
       "[GIT_CACHE]",
       "--cleanup-dir",
       "[CLEANUP]\\bot_update",
-      "--issue",
-      "666666",
-      "--patchset",
-      "1",
-      "--rietveld_server",
-      "https://fake.rietveld.url",
+      "--gerrit_repo",
+      "https://chromium.googlesource.com/src",
+      "--gerrit_ref",
+      "refs/changes/89/456789/12",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -447,7 +445,7 @@
       "--buildbot-mastername",
       "tryserver.webrtc",
       "--buildbot-slavename",
-      "bot_id"
+      "test_bot"
     ],
     "cwd": "[BUILDER_CACHE]\\win_compile_rel\\src",
     "env": {

@@ -95,15 +95,13 @@ def GenTests(api):
   yield (
     api.test('trybot')
     + api.platform('mac', 64)
-    + api.properties(
+    + api.properties.tryserver(
       buildername='ios',
       buildnumber='0',
       mastername='chromium.fake',
       bot_id='fake-vm',
       path_config='kitchen',
-      issue=666666,
-      patchset=1,
-      rietveld='https://fake.rietveld.url'
+      gerrit_project='webrtc'
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
