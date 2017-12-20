@@ -1065,9 +1065,8 @@ class LayoutTestResultsHandler(JSONResultsHandler):
     # TODO: The naming of the archive step is clunky, but the step should
     # really be triggered src-side as part of the post-collect merge and
     # upload, and so this should go away when we make that change.
-    custom_step_name = step_name not in (
-        'webkit_tests', 'webkit_tests (with patch)',
-        'webkit_layout_tests', 'webkit_layout_tests (with patch)')
+    custom_step_name = not (step_name.startswith('webkit_tests') or
+                            step_name.startswith('webkit_layout_tests'))
     archive_step_name = 'archive_webkit_tests_results'
     if custom_step_name:
       archive_layout_test_args += ['--step-name', step_name]
