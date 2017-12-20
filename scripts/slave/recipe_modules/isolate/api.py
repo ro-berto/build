@@ -108,29 +108,11 @@ class IsolateApi(recipe_api.RecipeApi):
             implies this step can currently only be run once per recipe.
         use_exparchive (bool, int, float, long): Provide a boolean to
             enable/disable exparchive, or provide a number (between 0 and 100)
-            to have n% of builds run with exparchive.
+            to have n% of builds run with exparchive. IGNORED (deprecated).
     """
     # TODO(tansell): Make all steps in this function nested under one overall
     # 'isolate tests' master step.
 
-    # Work out a modulus for the build number to allow exparchive experiments.
-    if use_exparchive is False:
-      use_exparchive_mod = sys.maxint
-    elif use_exparchive is True:
-      use_exparchive_mod = 1  # pragma: no cover
-    else:
-      assert use_exparchive >= 0 and use_exparchive <= 100, (
-            'use_exparchive should be between 0 and 100, not %s' %
-            use_exparchive)
-      try:
-        use_exparchive_mod = int(100.0/use_exparchive)
-      except (ValueError, ZeroDivisionError):
-        use_exparchive_mod = sys.maxint
-    assert use_exparchive_mod > 0
-
-    buildnumber = self.m.properties.get('buildnumber', 1)
-    assert buildnumber >= 0, 'buildnumber %s should be >= 0' % buildnumber
-    use_exparchive_for_all_targets = (buildnumber % use_exparchive_mod) == 0
 
     # TODO(vadimsh): Always require |targets| to be passed explicitly. Currently
     # chromium_trybot, blink_trybot and swarming/canary recipes rely on targets
@@ -153,10 +135,10 @@ class IsolateApi(recipe_api.RecipeApi):
       return
 
     batch_targets = []
-    exparchive_targets = []
+    archive_targets = []
     for t in targets:
       if t.endswith('_exparchive'):
-        exparchive_targets.append(t)
+        archive_targets.append(t)
       else:
         batch_targets.append(t)
 
@@ -165,14 +147,12 @@ class IsolateApi(recipe_api.RecipeApi):
       args = [
           self.m.swarming_client.path,
           'archive',
-          '--exparchive',
           '--dump-json', self.m.json.output(),
           '--isolate-server', self._isolate_server,
           '--eventlog-endpoint', 'prod',
-          "--max-concurrent-uploads=8",
       ] + (['--verbose'] if verbose else [])
 
-      for target in exparchive_targets:
+      for target in archive_targets:
         isolate_steps.append(
             self.m.python(
                 'isolate %s' % target,
@@ -187,14 +167,12 @@ class IsolateApi(recipe_api.RecipeApi):
       if batch_targets:
         # TODO(vadimsh): Differentiate between bad *.isolate and upload errors.
         # Raise InfraFailure on upload errors.
-        exparchive_flags = ['--exparchive', "--max-concurrent-uploads=8"]
         args = [
             self.m.swarming_client.path,
             'batcharchive',
             '--dump-json', self.m.json.output(),
             '--isolate-server', self._isolate_server,
             '--eventlog-endpoint', 'prod',
-        ] + (exparchive_flags if use_exparchive_for_all_targets else []) +  [
         ] + (['--verbose'] if verbose else []) +  [
             build_dir.join('%s.isolated.gen.json' % t) for t in batch_targets
         ]
