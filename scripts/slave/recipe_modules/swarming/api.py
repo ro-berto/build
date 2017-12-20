@@ -17,6 +17,29 @@ from . import state
 # Minimally supported version of swarming.py script (reported by --version).
 MINIMAL_SWARMING_VERSION = (0, 8, 6)
 
+# The IMPLIED_*_BINARIES will be installed to the swarming task at this local
+# path.
+IMPLIED_BINARY_PATH = '.swarming_module'
+
+# These CIPD packages will be automatically put on $PATH for all swarming tasks
+# generated from this module. The first member of the tuple is the path relative
+# to IMPLIED_BINARY_PATH which should be added to $PATH.
+IMPLIED_CIPD_BINARIES = {
+  'infra/tools/luci/vpython/${platform}':
+    ('', 'git_revision:08e35087eaf8ee95207450d2a2e33152a2f245be'),
+  'infra/tools/luci/logdog/butler/${platform}':
+    ('', 'git_revision:08e35087eaf8ee95207450d2a2e33152a2f245be'),
+}
+
+# These CIPD packages will be automatically put on $PATH for all swarming tasks
+# generated from this module when triggering tasks from LUCI builders. The first
+# member of the tuple is the path relative to IMPLIED_BINARY_PATH which should
+# be added to $PATH.
+IMPLIED_CIPD_LUCI_BINARIES = {
+  'infra/python/cpython/${platform}':
+    ('bin', 'version:2.7.14.chromium14'),
+}
+
 
 def safe(f, *args, **kw):
   try:
@@ -24,7 +47,6 @@ def safe(f, *args, **kw):
     return True
   except Exception:
     return False
-
 
 def filter_outdir(dumps, output_dir, text_files=('.txt', '.json', ''),
                 msize=1024):
@@ -392,7 +414,7 @@ class SwarmingApi(recipe_api.RecipeApi):
            task_output_dir=None, extra_args=None, idempotent=None,
            cipd_packages=None, build_properties=None, merge=None,
            trigger_script=None, named_caches=None, service_account=None,
-           raw_cmd=None):
+           raw_cmd=None, env_prefixes=None):
     """Returns a new SwarmingTask instance to run an isolated executable on
     Swarming.
 
@@ -406,31 +428,33 @@ class SwarmingApi(recipe_api.RecipeApi):
     results.
 
     Args:
-      title: name of the test, used as part of a task ID.
-      isolated_hash: hash of isolated test on isolate server, the test should
+      * title: name of the test, used as part of a task ID.
+      * isolated_hash: hash of isolated test on isolate server, the test should
           be already isolated there, see 'isolate' recipe module.
-      ignore_task_failure: whether to ignore the test failure of swarming
+      * ignore_task_failure: whether to ignore the test failure of swarming
         tasks. By default, this is set to False.
-      shards: if defined, the number of shards to use for the task. By default
+      * shards: if defined, the number of shards to use for the task. By default
           this value is either 1 or based on the title.
-      task_output_dir: if defined, the directory where task results are placed.
-          The caller is responsible for removing this folder when finished.
-      extra_args: list of command line arguments to pass to isolated tasks.
-      idempotent: whether this task is considered idempotent. Defaults
+      * task_output_dir: if defined, the directory where task results are
+          placed. The caller is responsible for removing this folder when
+          finished.
+      * extra_args: list of command line arguments to pass to isolated tasks.
+      * idempotent: whether this task is considered idempotent. Defaults
           to self.default_idempotent if not specified.
-      cipd_packages: list of 3-tuples corresponding to CIPD packages needed for
-          the task: ('path', 'package_name', 'version'), defined as follows:
-              path: Path relative to the Swarming root dir in which to install
+      * cipd_packages: list of 3-tuples corresponding to CIPD packages needed
+          for the task: ('path', 'package_name', 'version'), defined as
+          follows:
+        * path: Path relative to the Swarming root dir in which to install
                   the package.
-              package_name: Name of the package to install,
+        * package_name: Name of the package to install,
                   eg. "infra/tools/authutil/${platform}"
-              version: Version of the package, either a package instance ID,
+        * version: Version of the package, either a package instance ID,
                   ref, or tag key/value pair.
-      build_properties: An optional dict containing various build properties.
+      * build_properties: An optional dict containing various build properties.
           These are typically but not necessarily the properties emitted by
           bot_update.
-      merge: An optional dict containing:
-          "script": path to a script to call to post process and merge the
+      * merge: An optional dict containing:
+        * "script": path to a script to call to post process and merge the
               collected outputs from the tasks. The script should take one
               named (but required) parameter, '-o' (for output), that represents
               the path that the merged results should be written to, and accept
@@ -440,23 +464,50 @@ class SwarmingApi(recipe_api.RecipeApi):
               and may optionally contain a top level "links" field that
               may contain a dict mapping link text to URLs, for a set of
               links that will be included in the buildbot output.
-          "args": an optional list of additional arguments to pass to the
+        * "args": an optional list of additional arguments to pass to the
               above script.
-      trigger_script: An optional dict containing:
-          "script": path to a script to call which will use custom logic to
+      * trigger_script: An optional dict containing:
+        * "script": path to a script to call which will use custom logic to
               trigger appropriate swarming jobs, using swarming.py.
-          "args": an optional list of additional arguments to pass to the
+        * "args": an optional list of additional arguments to pass to the
               script.
           See SwarmingTask.__init__ docstring for more details.
-      named_caches: a dict {name: relpath} requesting a cache named `name`
+      * named_caches: a dict {name: relpath} requesting a cache named `name`
           to be installed in `relpath` relative to the task root directory.
-      service_account: (string) a service account email to run the task under.
-      raw_cmd: Optional list of arguments to be used as raw command. Can be
+      * service_account: (string) a service account email to run the task under.
+      * raw_cmd: Optional list of arguments to be used as raw command. Can be
           used instead of extra args.
-
+      * env_prefixes: a dict {ENVVAR: [relative, paths]} which instructs
+          swarming to prepend the given relative paths to the PATH-style ENVVAR
+          specified.
     """
     if idempotent is None:
       idempotent = self.default_idempotent
+
+    # Mix in standard infra packages 'vpython' and 'logdog' so that the task can
+    # always access them on $PATH. If we're running on LUCI, also include the
+    # hermetic cpython bundle.
+    new_cipd_packages = list(cipd_packages or ())
+    for pkg in new_cipd_packages:
+      assert not pkg[0].startswith(IMPLIED_BINARY_PATH), \
+        'cipd_packages may not be installed to %r' % (IMPLIED_BINARY_PATH,)
+
+    to_add = dict(IMPLIED_CIPD_BINARIES)
+    if self.m.runtime.is_luci:
+      to_add.update(IMPLIED_CIPD_LUCI_BINARIES)
+
+    path_env_prefix = set()
+    for pkg, (subdir, vers) in sorted(to_add.items()):
+      path_env_prefix.add('/'.join((IMPLIED_BINARY_PATH, subdir)) if subdir
+                          else IMPLIED_BINARY_PATH)
+      vers = 'TEST_VERSION' if self._test_data.enabled else vers
+      new_cipd_packages.append((IMPLIED_BINARY_PATH, pkg, vers))
+
+    # update $PATH
+    env_prefixes = dict(env_prefixes or {})            # copy it
+    env_prefixes.setdefault('PATH', [])[:0] = sorted(  # prepend stuff
+      path_env_prefix, key=lambda x: (len(x), x))
+
     return SwarmingTask(
         title=title,
         isolated_hash=isolated_hash,
@@ -475,14 +526,15 @@ class SwarmingApi(recipe_api.RecipeApi):
         extra_args=extra_args,
         collect_step=self._default_collect_step,
         task_output_dir=task_output_dir,
-        cipd_packages=cipd_packages,
+        cipd_packages=new_cipd_packages,
         build_properties=build_properties,
         merge=merge,
         trigger_script=trigger_script,
         named_caches=named_caches,
         service_account=service_account,
         raw_cmd=raw_cmd,
-      )
+        env_prefixes=env_prefixes,
+    )
 
   def gtest_task(self, title, isolated_hash, test_launcher_summary_output=None,
                  extra_args=None, cipd_packages=None, merge=None, **kwargs):
@@ -664,6 +716,11 @@ class SwarmingApi(recipe_api.RecipeApi):
     if task.cipd_packages:
       for path, pkg, version in task.cipd_packages:
         args.extend(['--cipd-package', '%s:%s:%s' % (path, pkg, version)])
+
+    if task.env_prefixes:
+      for key, paths in sorted(task.env_prefixes.items()):
+        for path in paths:
+          args.extend(('--env-prefix', key, path))
 
     # What isolated command to trigger.
     args.extend(('--isolated', task.isolated_hash))
@@ -1172,65 +1229,66 @@ class SwarmingTask(object):
                user, io_timeout, hard_timeout, idempotent, extra_args,
                collect_step, task_output_dir, cipd_packages=None,
                build_properties=None, merge=None, trigger_script=None,
-               named_caches=None, service_account=None, raw_cmd=None):
+               named_caches=None, service_account=None, raw_cmd=None,
+               env_prefixes=None):
     """Configuration of a swarming task.
 
     Args:
-      title: display name of the task, hints to what task is doing. Usually
+      * title: display name of the task, hints to what task is doing. Usually
           corresponds to a name of a test executable. Doesn't have to be unique.
-      isolated_hash: hash of isolated file that describes all files needed to
+      * isolated_hash: hash of isolated file that describes all files needed to
           run the task as well as command line to launch. See 'isolate' recipe
           module.
-      ignore_task_failure: whether to ignore the test failure of swarming
-        tasks.
-      cipd_packages: list of 3-tuples corresponding to CIPD packages needed for
-          the task: ('path', 'package_name', 'version'), defined as follows:
-              path: Path relative to the Swarming root dir in which to install
-                  the package.
-              package_name: Name of the package to install,
-                  eg. "infra/tools/authutil/${platform}"
-              version: Version of the package, either a package instance ID,
-                  ref, or tag key/value pair.
-      collect_step: callback that will be called to collect and processes
+      * ignore_task_failure: whether to ignore the test failure of swarming
+          tasks.
+      * cipd_packages: list of 3-tuples corresponding to CIPD packages needed
+          for the task: ('path', 'package_name', 'version'), defined as follows:
+        * path: Path relative to the Swarming root dir in which to install
+            the package.
+        * package_name: Name of the package to install,
+            eg. "infra/tools/authutil/${platform}"
+        * version: Version of the package, either a package instance ID,
+            ref, or tag key/value pair.
+      * collect_step: callback that will be called to collect and processes
           results of task execution, signature is collect_step(task, **kwargs).
-      dimensions: key-value mapping with swarming dimensions that specify
+      * dimensions: key-value mapping with swarming dimensions that specify
           on what Swarming slaves task can run. One important dimension is 'os',
           which defines platform flavor to run the task on. See Swarming doc.
-      env: key-value mapping with additional environment variables to add to
+      * env: key-value mapping with additional environment variables to add to
           environment before launching the task executable.
-      priority: integer [0, 255] that defines how urgent the task is.
+      * priority: integer [0, 255] that defines how urgent the task is.
           Lower value corresponds to higher priority. Swarming service executes
           tasks with higher priority first.
-      shards: how many concurrent shards to run, makes sense only for
+      * shards: how many concurrent shards to run, makes sense only for
           isolated tests based on gtest. Swarming uses GTEST_SHARD_INDEX
           and GTEST_TOTAL_SHARDS environment variables to tell the executable
           what shard to run.
-      buildername: buildbot builder this task was triggered from.
-      buildnumber: build number of a build this task was triggered from.
-      expiration: number of schedule until the task shouldn't even be run if it
-          hadn't started yet.
-      user: user that requested this task, if applicable.
-      io_timeout: number of seconds that the task is allowed to not emit any
+      * buildername: buildbot builder this task was triggered from.
+      * buildnumber: build number of a build this task was triggered from.
+      * expiration: number of schedule until the task shouldn't even be run if
+          it hadn't started yet.
+      * user: user that requested this task, if applicable.
+      * io_timeout: number of seconds that the task is allowed to not emit any
           stdout bytes, after which it is forcibly killed.
-      hard_timeout: number of seconds for which the task is allowed to run,
+      * hard_timeout: number of seconds for which the task is allowed to run,
           after which it is forcibly killed.
-      idempotent: True if the results from a previous task can be reused. E.g.
+      * idempotent: True if the results from a previous task can be reused. E.g.
           this task has no side-effects.
-      extra_args: list of command line arguments to pass to isolated tasks.
-      task_output_dir: if defined, the directory where task results are placed
+      * extra_args: list of command line arguments to pass to isolated tasks.
+      * task_output_dir: if defined, the directory where task results are placed
           during the collect step.
-      build_properties: An optional dict containing various build properties.
+      * build_properties: An optional dict containing various build properties.
           These are typically but not necessarily the properties emitted by
           bot_update.
-      merge: An optional dict containing:
-          "script": path to a script to call to post process and merge the
+      * merge: An optional dict containing:
+        * "script": path to a script to call to post process and merge the
               collected outputs from the tasks.
-          "args": an optional list of additional arguments to pass to the
+        * "args": an optional list of additional arguments to pass to the
               above script.
-      trigger_script: An optional dict containing:
-          "script": path to a script to call which will use custom logic to
+      * trigger_script: An optional dict containing:
+        * "script": path to a script to call which will use custom logic to
               trigger appropriate swarming jobs, using swarming.py. Required.
-          "args": an optional list of additional arguments to pass to the
+        * "args": an optional list of additional arguments to pass to the
               script.
           The script will receive the exact same arguments that are normally
           passed to calls to `swarming.py trigger`, with two additions:
@@ -1238,12 +1296,16 @@ class SwarmingTask(object):
               swarming.py file which should be used for any trigger RPCs to the
               swarming server.
             2. Any additional arguments provided in the "args" entry.
-      named_caches: a dict {name: relpath} requesting a cache named `name`
+      * named_caches: a dict {name: relpath} requesting a cache named `name`
           to be installed in `relpath` relative to the task root directory.
-      service_account: (string) a service account email to run the task under.
-      raw_cmd: Optional list of arguments to be used as raw command. Can be
+      * service_account: (string) a service account email to run the task under.
+      * raw_cmd: Optional list of arguments to be used as raw command. Can be
           used instead of extra args.
+      * env_prefixes: a dict {ENVVAR: [relative, paths]} which instructs
+          swarming to prepend the given relative paths to the PATH-style ENVVAR
+          specified.
     """
+
     self._trigger_output = None
     self.build_properties = build_properties
     self.buildername = buildername
@@ -1270,6 +1332,8 @@ class SwarmingTask(object):
     self.task_output_dir = task_output_dir
     self.title = title
     self.user = user
+    self.env_prefixes = {
+      var: list(paths) for var, paths in (env_prefixes or {}).iteritems()}
 
   @property
   def task_name(self):
