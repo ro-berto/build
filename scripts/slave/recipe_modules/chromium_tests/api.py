@@ -574,7 +574,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         update_step.presentation.properties.get('got_src_revision'))
     build_archive_url = build_archive_url or self.m.properties.get(
         'parent_build_archive_url')
-    if build_archive_url is None:
+    if not build_archive_url:
       master_config = bot_db.get_master_settings(mastername)
       legacy_build_url = self._make_legacy_build_url(master_config, mastername)
 
