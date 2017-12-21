@@ -137,16 +137,6 @@
       # It's crucial to merge build requests on the testers.
       "mergeRequests": True,
       "slave_pools": ["win10_rel_intel_hd_630"],
-      "builder_timeout_s": 21600,
-      "category": "0Windows",
-    },
-    "Win10 Release Swarmed (Intel HD 630)": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": None,
-      # It's crucial to merge build requests on the testers.
-      "mergeRequests": True,
-      "slave_pools": ["win10_rel_swarmed_intel_hd_630"],
       "builder_timeout_s": 14400,
       "category": "0Windows",
     },
@@ -464,16 +454,6 @@
       # It's crucial to merge build requests on the testers.
       "mergeRequests": True,
       "slave_pools": ["linux_rel_intel_hd_630"],
-      "builder_timeout_s": 21600,
-      "category": "2Linux",
-    },
-    "Linux Release Swarmed (Intel HD 630)": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": None,
-      # It's crucial to merge build requests on the testers.
-      "mergeRequests": True,
-      "slave_pools": ["linux_rel_swarmed_intel_hd_630"],
       "builder_timeout_s": 7200,
       "category": "2Linux",
     },
@@ -649,14 +629,6 @@
       "slaves": ["vm339-m1"],
     },
     "win10_rel_intel_hd_630": {
-      "slave_data": {
-        "bits": 64,
-        "os": "win",
-        "version": "win10",
-      },
-      "slaves": ["build21-b1"],
-    },
-    "win10_rel_swarmed_intel_hd_630": {
       "slave_data": {
         "bits": 64,
         "os": "win",
@@ -921,14 +893,6 @@
       "slaves": ["build115-b1"],
     },
     "linux_rel_intel_hd_630": {
-      "slave_data": {
-        "bits": 64,
-        "os": "linux",
-        "version": "trusty",
-      },
-      "slaves": ["build22-b1"],
-    },
-    "linux_rel_swarmed_intel_hd_630": {
       "slave_data": {
         "bits": 64,
         "os": "linux",
