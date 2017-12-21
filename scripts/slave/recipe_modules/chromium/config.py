@@ -528,11 +528,11 @@ def win_asan(c):
 #### 'Full' configurations
 @config_ctx(includes=['ninja', 'default_compiler'])
 def chromium_no_goma(c):
-  c.compile_py.default_targets = ['All', 'all']
+  c.compile_py.default_targets = ['all']
 
 @config_ctx(includes=['ninja', 'default_compiler', 'goma'])
 def chromium(c):
-  c.compile_py.default_targets = ['All', 'all']
+  c.compile_py.default_targets = ['all']
   c.cros_sdk.external = True
 
 @config_ctx(includes=['ninja', 'clang', 'goma'])
@@ -646,19 +646,19 @@ def chromium_mac_mac_views(c):
 
 @config_ctx(includes=['ninja', 'clang', 'goma', 'msan', 'chromium_sanitizer'])
 def chromium_msan(c):
-  c.compile_py.default_targets = ['All', 'all']
+  c.compile_py.default_targets = ['all']
 
 @config_ctx(includes=['ninja', 'clang', 'goma', 'syzyasan'])
 def chromium_syzyasan(c):  # pragma: no cover
-  c.compile_py.default_targets = ['All', 'all']
+  c.compile_py.default_targets = ['all']
 
 @config_ctx(includes=['ninja', 'clang', 'goma', 'tsan2', 'chromium_sanitizer'])
 def chromium_tsan2(c):
-  c.compile_py.default_targets = ['All', 'all']
+  c.compile_py.default_targets = ['all']
 
 @config_ctx(includes=['ninja', 'default_compiler', 'goma', 'chromeos'])
 def chromium_chromeos(c):  # pragma: no cover
-  c.compile_py.default_targets = ['All', 'all']
+  c.compile_py.default_targets = ['all']
 
 @config_ctx(includes=['chromium_asan', 'chromiumos', 'asan_test_batch'])
 def chromium_chromiumos_asan(c):
@@ -666,15 +666,15 @@ def chromium_chromiumos_asan(c):
 
 @config_ctx(includes=['ninja', 'clang', 'goma', 'chromeos'])
 def chromium_chromeos_clang(c):  # pragma: no cover
-  c.compile_py.default_targets = ['All', 'all']
+  c.compile_py.default_targets = ['all']
 
 @config_ctx(includes=['chromium_chromeos', 'ozone'])
 def chromium_chromeos_ozone(c):  # pragma: no cover
-  c.compile_py.default_targets = ['All', 'all']
+  c.compile_py.default_targets = ['all']
 
 @config_ctx(includes=['ninja', 'clang', 'goma'])
 def chromium_clang(c):
-  c.compile_py.default_targets = ['All', 'all']
+  c.compile_py.default_targets = ['all']
 
 @config_ctx(includes=['chromium', 'official'])
 def chromium_official(c):
