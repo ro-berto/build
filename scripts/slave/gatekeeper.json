@@ -270,12 +270,14 @@
     ],
     "https://build.chromium.org/p/chromium.gpu.fyi": [
       {
-        "close_tree": false,
+        "forgive_all": true,
         "builders": {
           "*": {
-            "closing_optional": [ "*" ]
+            "forgiving_optional": ["*"]
           }
-        }
+        },
+        "excluded_builders": [ "*" ],
+        "close_tree": false
       }
     ],
     "https://build.chromium.org/p/chromium.clang": [
