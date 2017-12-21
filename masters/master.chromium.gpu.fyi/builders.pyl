@@ -486,22 +486,6 @@
       "category": "2Linux",
     },
 
-    "GPU Android arm Builder": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": "chromium_commits",
-      "slave_pools": ["android_arm_rel_builders"],
-      "builder_timeout_s": 7200,
-      "category": "3Android",
-    },
-    "GPU Android arm64 Builder": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": "chromium_commits",
-      "slave_pools": ["android_arm64_rel_builders"],
-      "builder_timeout_s": 7200,
-      "category": "3Android",
-    },
     "Android Release (Nexus 5)": {
       "recipe": "chromium",
       "use_remote_run": True,
@@ -969,22 +953,6 @@
       "slaves": ["build158-b1"],
     },
 
-    "android_arm_rel_builders": {
-      "slave_data": {
-        "bits": 64,
-        "os": "linux",
-        "version": "trusty",
-      },
-      "slaves": ["slave260-c1"],
-    },
-    "android_arm64_rel_builders": {
-      "slave_data": {
-        "bits": 64,
-        "os": "linux",
-        "version": "trusty",
-      },
-      "slaves": ["slave261-c1"],
-    },
     "android_rel_nexus_5": {
       "slave_data": {
         "bits": 64,
