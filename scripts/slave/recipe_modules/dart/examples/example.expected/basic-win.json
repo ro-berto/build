@@ -793,6 +793,7 @@
       "retry",
       "fetch",
       "origin",
+      "master",
       "--progress"
     ],
     "cwd": "[START_DIR]\\swarming.client",
@@ -812,7 +813,7 @@
       "git",
       "checkout",
       "-f",
-      "5c8043e54541c3cee7ea255e0416020f2e3a5904"
+      "FETCH_HEAD"
     ],
     "cwd": "[START_DIR]\\swarming.client",
     "env_prefixes": {

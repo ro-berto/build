@@ -35,8 +35,7 @@ class DartApi(recipe_api.RecipeApi):
         return
     except AttributeError:
       pass
-    self.m.swarming_client.checkout(
-      revision='5c8043e54541c3cee7ea255e0416020f2e3a5904')
+    self.m.swarming_client.checkout('master')
     self.__swarming_checked_out = True
 
   def build(self, build_args=[], isolate=None, name='build dart'):
