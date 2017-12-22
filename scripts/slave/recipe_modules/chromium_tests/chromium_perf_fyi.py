@@ -27,11 +27,11 @@ def chromium_perf_clang(c):
 
 
 def _AddBuildSpec(name, perf_id, platform, config_name='chromium_perf',
-                  target_bits=64, enable_swarming=False,
+                  target_bits=64,
                   compile_targets=None, extra_compile_targets=None,
                   force_exparchive=False, run_sizes=True):
   SPEC['builders'][name] = chromium_perf.BuildSpec(
-      config_name, perf_id, platform, target_bits, enable_swarming,
+      config_name, perf_id, platform, target_bits,
       compile_targets=compile_targets,
       extra_compile_targets=extra_compile_targets,
       force_exparchive=force_exparchive, run_sizes=run_sizes)
@@ -45,7 +45,6 @@ def _AddIsolatedTestSpec(name, perf_id, platform,
     spec['parent_mastername'] = 'chromium.perf'
   else:
     spec['parent_mastername'] = 'chromium.perf.fyi'
-  spec['enable_swarming'] = True
 
   SPEC['builders'][name] = spec
 
@@ -73,8 +72,7 @@ _AddBuildSpec('Android arm64 Builder FYI', 'android', 'android',
 _AddBuildSpec('Linux Compile FYI', 'linux-fyi', 'linux')
 
 
-_AddBuildSpec('Win Builder FYI', 'win', 'win', enable_swarming=True,
-              force_exparchive=True)
+_AddBuildSpec('Win Builder FYI', 'win', 'win', force_exparchive=True)
 _AddIsolatedTestSpec('Win 10 Low-End Perf Tests', 'win-10-low-end', 'win',
                      parent_buildername='Win Builder FYI')
 _AddIsolatedTestSpec('Win 10 4 Core Low-End Perf Tests',

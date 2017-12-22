@@ -30,7 +30,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
       # 5% of the linux_chromium_rel_ng builds will use exparchive instead of
       # batcharchive to allow comparison of performance.
       'force_exparchive': 5,
@@ -49,7 +48,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
     },
 
     'Fuchsia x64': {

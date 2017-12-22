@@ -21,7 +21,6 @@ SPEC = {
         'platform': 'linux',
       },
       'bot_type': 'builder_tester',
-      'enable_swarming': True,
     },
     'Android N5X Swarm': {
       'chromium_config': 'android',
@@ -38,7 +37,6 @@ SPEC = {
         'platform': 'linux',
       },
       'bot_type': 'builder_tester',
-      'enable_swarming': True,
     },
     'Linux Swarm': {
       'chromium_config': 'chromium',
@@ -51,7 +49,6 @@ SPEC = {
         'platform': 'linux',
       },
       'bot_type': 'builder_tester',
-      'enable_swarming': True,
     },
     'Mac Swarm': {
       'chromium_config': 'chromium',
@@ -64,7 +61,6 @@ SPEC = {
         'platform': 'mac',
       },
       'bot_type': 'builder_tester',
-      'enable_swarming': True,
     },
     'Windows Swarm': {
       'chromium_config': 'chromium',
@@ -77,7 +73,6 @@ SPEC = {
         'platform': 'win',
       },
       'bot_type': 'builder_tester',
-      'enable_swarming': True,
     },
   },
 }

@@ -30,7 +30,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
       'checkout_dir': 'linux',
     },
     'Linux - Future (dbg)': {
@@ -45,7 +44,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
       'checkout_dir': 'linux',
     },
     'Linux V8 API Stability': {

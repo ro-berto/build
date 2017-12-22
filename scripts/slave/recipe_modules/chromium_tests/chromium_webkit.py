@@ -30,7 +30,6 @@ SPEC['builders'] = {
     'testing': {
       'platform': 'win',
     },
-    'enable_swarming': True,
     'checkout_dir': 'win',
   },
   'WebKit Win7': {
@@ -47,7 +46,6 @@ SPEC['builders'] = {
     'testing': {
       'platform': 'win',
     },
-    'enable_swarming': True,
     'checkout_dir': 'win',
   },
   'WebKit Win10': {
@@ -64,7 +62,6 @@ SPEC['builders'] = {
     'testing': {
       'platform': 'win',
     },
-    'enable_swarming': True,
     'checkout_dir': 'win',
   },
   'WebKit Win x64 Builder': {
@@ -83,7 +80,6 @@ SPEC['builders'] = {
     'testing': {
       'platform': 'win',
     },
-    'enable_swarming': True,
     'checkout_dir': 'win',
   },
   'WebKit Win Builder (dbg)': {
@@ -98,7 +94,6 @@ SPEC['builders'] = {
     'testing': {
       'platform': 'win',
     },
-    'enable_swarming': True,
     'checkout_dir': 'win',
   },
   'WebKit Win7 (dbg)': {
@@ -115,7 +110,6 @@ SPEC['builders'] = {
     'testing': {
       'platform': 'win',
     },
-    'enable_swarming': True,
     'checkout_dir': 'win',
   },
   'WebKit Win x64 Builder (dbg)': {
@@ -134,7 +128,6 @@ SPEC['builders'] = {
     'testing': {
       'platform': 'win',
     },
-    'enable_swarming': True,
     'checkout_dir': 'win',
   },
   'WebKit Mac Builder': {
@@ -154,7 +147,6 @@ SPEC['builders'] = {
     'testing': {
       'platform': 'mac',
     },
-    'enable_swarming': True,
     'checkout_dir': 'mac',
   },
   'WebKit Mac10.11 (retina)': {
@@ -170,7 +162,6 @@ SPEC['builders'] = {
     'testing': {
       'platform': 'mac',
     },
-    'enable_swarming': True,
     'checkout_dir': 'mac',
   },
   'WebKit Mac10.10': {
@@ -187,7 +178,6 @@ SPEC['builders'] = {
     'testing': {
       'platform': 'mac',
     },
-    'enable_swarming': True,
     'checkout_dir': 'mac',
   },
   'WebKit Mac10.11': {
@@ -204,7 +194,6 @@ SPEC['builders'] = {
     'testing': {
       'platform': 'mac',
     },
-    'enable_swarming': True,
     'checkout_dir': 'mac',
   },
   'WebKit Mac10.12': {
@@ -221,7 +210,6 @@ SPEC['builders'] = {
     'testing': {
       'platform': 'mac',
     },
-    'enable_swarming': True,
     'checkout_dir': 'mac',
   },
   'WebKit Mac Builder (dbg)': {
@@ -236,7 +224,6 @@ SPEC['builders'] = {
     'testing': {
       'platform': 'mac',
     },
-    'enable_swarming': True,
     'checkout_dir': 'mac',
   },
   'WebKit Mac10.11 (dbg)': {
@@ -252,7 +239,6 @@ SPEC['builders'] = {
     'testing': {
       'platform': 'mac',
     },
-    'enable_swarming': True,
     'checkout_dir': 'mac',
   },
   'WebKit Linux Trusty': {
@@ -270,7 +256,6 @@ SPEC['builders'] = {
     'testing': {
       'platform': 'linux',
     },
-    'enable_swarming': True,
     'checkout_dir': 'linux_layout',
   },
   'WebKit Linux Trusty ASAN': {
@@ -285,7 +270,6 @@ SPEC['builders'] = {
     'testing': {
       'platform': 'linux',
     },
-    'enable_swarming': True,
     'checkout_dir': 'linux_layout',
   },
   'WebKit Linux Trusty MSAN': {
@@ -305,7 +289,6 @@ SPEC['builders'] = {
     'testing': {
       'platform': 'linux',
     },
-    'enable_swarming': True,
     'checkout_dir': 'linux_layout',
   },
   'WebKit Linux Trusty (dbg)': {
@@ -320,7 +303,6 @@ SPEC['builders'] = {
     'testing': {
       'platform': 'linux',
     },
-    'enable_swarming': True,
     'checkout_dir': 'linux_layout',
   },
   'Android Builder': {
@@ -377,6 +359,5 @@ SPEC['builders'] = {
     'testing': {
       'platform': 'linux',
     },
-    'enable_swarming': True,
   },
 }

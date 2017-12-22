@@ -32,7 +32,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
     },
     'Win10 Tests x64': {
       'chromium_config': 'chromium',
@@ -51,7 +50,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
       'swarming_dimensions': {
         'cpu': 'x86-64',
         'os': 'Windows-10-14393',
@@ -71,7 +69,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
       'swarming_dimensions': {
         'cpu': 'x86-32',
         'os': 'Windows-7-SP1',
@@ -94,7 +91,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
     },
     'Win x64 Builder': {
       'chromium_config': 'chromium',
@@ -109,7 +105,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
     },
     'Win 7 Tests x64 (1)': {
       'chromium_config': 'chromium',
@@ -128,7 +123,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
     },
     'Win x64 Builder (dbg)': {
       'chromium_config': 'chromium',
@@ -143,7 +137,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
     },
 
     'Win Builder (dbg)': {
@@ -159,7 +152,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
     },
     'Win7 Tests (dbg)(1)': {
       'chromium_config': 'chromium',
@@ -175,7 +167,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
     },
     'WinMSVC64': {
       'chromium_config': 'chromium',
@@ -194,7 +185,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -217,7 +207,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,

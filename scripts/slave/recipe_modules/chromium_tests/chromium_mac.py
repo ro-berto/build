@@ -30,7 +30,6 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      'enable_swarming': True,
       'checkout_dir': 'mac',
     },
     'Mac10.9 Tests': {
@@ -46,7 +45,6 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      'enable_swarming': True,
       'swarming_dimensions': {
         'os': 'Mac-10.9',
       },
@@ -64,7 +62,6 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      'enable_swarming': True,
       'swarming_dimensions': {
         'os': 'Mac-10.10',
       },
@@ -82,7 +79,6 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      'enable_swarming': True,
       'swarming_dimensions': {
         'os': 'Mac-10.11',
       },
@@ -100,7 +96,6 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      'enable_swarming': True,
       'swarming_dimensions': {
         'os': 'Mac-10.12',
       },
@@ -121,7 +116,6 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      'enable_swarming': True,
       'checkout_dir': 'mac',
     },
     'Mac10.9 Tests (dbg)': {
@@ -137,7 +131,6 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      'enable_swarming': True,
       'swarming_dimensions': {
         'os': 'Mac-10.9',
       },

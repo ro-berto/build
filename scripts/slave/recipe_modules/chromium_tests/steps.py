@@ -575,7 +575,7 @@ def get_args_for_test(api, chromium_tests_api, test_spec, bot_update_step):
 
 
 def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
-                   bot_update_step, enable_swarming=False,
+                   bot_update_step,
                    swarming_dimensions=None, scripts_compile_targets=None,
                    bot_config=None):
   def canonicalize_test(test):
@@ -604,21 +604,22 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
     swarming_expiration = None
     swarming_hard_timeout = None
     cipd_packages = None
-    if enable_swarming:
-      swarming_spec = test.get('swarming', {})
-      if swarming_spec.get('can_use_on_swarming_builders'):
-        use_swarming = True
-        swarming_shards = swarming_spec.get('shards', 1)
-        swarming_dimension_sets = swarming_spec.get('dimension_sets')
-        swarming_priority = swarming_spec.get('priority_adjustment')
-        swarming_expiration = swarming_spec.get('expiration')
-        swarming_hard_timeout = swarming_spec.get('hard_timeout')
-        packages = swarming_spec.get('cipd_packages')
-        if packages:
-          cipd_packages = [(p['location'],
-                            p['cipd_package'],
-                            p['revision'])
-                           for p in packages]
+
+    swarming_spec = test.get('swarming', {})
+    if swarming_spec.get('can_use_on_swarming_builders'):
+      use_swarming = True
+      swarming_shards = swarming_spec.get('shards', 1)
+      swarming_dimension_sets = swarming_spec.get('dimension_sets')
+      swarming_priority = swarming_spec.get('priority_adjustment')
+      swarming_expiration = swarming_spec.get('expiration')
+      swarming_hard_timeout = swarming_spec.get('hard_timeout')
+      packages = swarming_spec.get('cipd_packages')
+      if packages:
+        cipd_packages = [(p['location'],
+                          p['cipd_package'],
+                          p['revision'])
+                         for p in packages]
+
     override_compile_targets = test.get('override_compile_targets', None)
     override_isolate_target = test.get('override_isolate_target', None)
     upload_to_flake_predictor = test.get('upload_to_flake_predictor', False)
@@ -749,43 +750,33 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
 
 def generate_instrumentation_test(api, chromium_tests_api, mastername,
                                   buildername, test_spec, bot_update_step,
-                                  enable_swarming=False,
                                   swarming_dimensions=None,
                                   scripts_compile_targets=None,
                                   bot_config=None):
   for test in test_spec.get(buildername, {}).get('instrumentation_tests', []):
     target_name = str(test['test'])
     test_name = str(test.get('name', target_name))
-    use_swarming = False
-    if enable_swarming:
-      swarming_spec = test.get('swarming', {})
-      if swarming_spec.get('can_use_on_swarming_builders'):
-        use_swarming = True
-        swarming_shards = swarming_spec.get('shards', 1)
-        swarming_dimension_sets = swarming_spec.get('dimension_sets')
-        swarming_priority = swarming_spec.get('priority_adjustment')
-        swarming_expiration = swarming_spec.get('expiration')
     args = get_args_for_test(api, chromium_tests_api, test,
                              bot_update_step)
-    if use_swarming and swarming_dimension_sets:
-      for dimensions in swarming_dimension_sets:
-        # TODO(stip): Swarmify instrumentation tests
-        pass
-    else:
-      yield AndroidInstrumentationTest(
-          test_name,
-          target_name=target_name,
-          compile_targets=test.get('override_compile_targets'),
-          timeout_scale=test.get('timeout_scale'),
-          result_details=True,
-          trace_output=test.get('trace_output', False),
-          store_tombstones=True,
-          args=args,
-          waterfall_mastername=mastername, waterfall_buildername=buildername)
+
+    # Do not try to add swarming support here.
+    # Instead, swarmed instrumentation tests should be specified as gtests.
+    # (Yes, it's a little weird.)
+
+    yield AndroidInstrumentationTest(
+        test_name,
+        target_name=target_name,
+        compile_targets=test.get('override_compile_targets'),
+        timeout_scale=test.get('timeout_scale'),
+        result_details=True,
+        trace_output=test.get('trace_output', False),
+        store_tombstones=True,
+        args=args,
+        waterfall_mastername=mastername, waterfall_buildername=buildername)
 
 
 def generate_junit_test(api, chromium_tests_api, mastername, buildername,
-                        test_spec, bot_update_step, enable_swarming=False,
+                        test_spec, bot_update_step,
                         swarming_dimensions=None,
                         scripts_compile_targets=None,
                         bot_config=None):
@@ -796,7 +787,7 @@ def generate_junit_test(api, chromium_tests_api, mastername, buildername,
 
 
 def generate_cts_test(api, chromium_tests_api, mastername, buildername,
-                      test_spec, bot_update_step, enable_swarming=False,
+                      test_spec, bot_update_step,
                       swarming_dimensions=None,
                       scripts_compile_targets=None,
                       bot_config=None):
@@ -809,7 +800,7 @@ def generate_cts_test(api, chromium_tests_api, mastername, buildername,
 
 
 def generate_script(api, chromium_tests_api, mastername, buildername, test_spec,
-                    bot_update_step, enable_swarming=False,
+                    bot_update_step,
                     swarming_dimensions=None, scripts_compile_targets=None,
                     bot_config=None):
   for script_spec in test_spec.get(buildername, {}).get('scripts', []):
@@ -1741,7 +1732,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
 
 
 def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
-                             test_spec, bot_update_step, enable_swarming=False,
+                             test_spec, bot_update_step,
                              swarming_dimensions=None,
                              scripts_compile_targets=None,
                              bot_config=None):
@@ -1754,6 +1745,7 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
   for spec in test_spec.get(buildername, {}).get('isolated_scripts', []):
     perf_dashboard_id = spec.get('name', '')
     perf_id = spec.get('override_perf_id', default_perf_id)
+
     use_swarming = False
     swarming_ignore_task_failure = False
     swarming_shards = 1
@@ -1762,20 +1754,21 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
     swarming_expiration = None
     swarming_hard_timeout = None
     swarming_io_timeout = None
-    if enable_swarming:
-      swarming_spec = spec.get('swarming', {})
-      if swarming_spec.get('can_use_on_swarming_builders', False):
-        use_swarming = True
-        swarming_ignore_task_failure = (
-            swarming_spec.get('ignore_task_failure', False))
-        swarming_shards = swarming_spec.get('shards', 1)
-        swarming_dimension_sets = swarming_spec.get('dimension_sets')
-        swarming_priority = swarming_spec.get('priority_adjustment')
-        swarming_expiration = swarming_spec.get('expiration')
-        swarming_hard_timeout = swarming_spec.get('hard_timeout')
-        swarming_io_timeout = swarming_spec.get('io_timeout')
-        swarming_upload_test_results = (
-            swarming_spec.get('upload_test_results', True))
+
+    swarming_spec = spec.get('swarming', {})
+    if swarming_spec.get('can_use_on_swarming_builders', False):
+      use_swarming = True
+      swarming_ignore_task_failure = (
+          swarming_spec.get('ignore_task_failure', False))
+      swarming_shards = swarming_spec.get('shards', 1)
+      swarming_dimension_sets = swarming_spec.get('dimension_sets')
+      swarming_priority = swarming_spec.get('priority_adjustment')
+      swarming_expiration = swarming_spec.get('expiration')
+      swarming_hard_timeout = swarming_spec.get('hard_timeout')
+      swarming_io_timeout = swarming_spec.get('io_timeout')
+      swarming_upload_test_results = (
+          swarming_spec.get('upload_test_results', True))
+
     name = str(spec['name'])
     # The variable substitution and precommit/non-precommit arguments
     # could be supported for the other test types too, but that wasn't

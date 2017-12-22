@@ -234,7 +234,6 @@ SPEC = {
         'platform': 'win',
       },
       'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
-      'enable_swarming': True,
       'serialize_tests': True,
     },
     'Mac Release (Intel)': {
@@ -261,7 +260,6 @@ SPEC = {
         'platform': 'mac',
       },
       'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
-      'enable_swarming': True,
       'serialize_tests': True,
     },
     'Linux Release (NVIDIA)': {
@@ -288,7 +286,6 @@ SPEC = {
         'platform': 'linux',
       },
       'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
-      'enable_swarming': True,
       'serialize_tests': True,
     },
     'Linux Release - concurrent marking (NVIDIA)': {
@@ -315,7 +312,6 @@ SPEC = {
         'platform': 'linux',
       },
       'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
-      'enable_swarming': True,
       'serialize_tests': True,
     },
     'Android Release (Nexus 5X)': {
@@ -342,7 +338,6 @@ SPEC = {
         'platform': 'linux',
       },
       'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
-      'enable_swarming': True,
       'checkout_dir': 'android',
     },
   },

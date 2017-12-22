@@ -43,8 +43,7 @@ def RunSteps(api):
       'test_mastername',
       'test_buildername',
       test_spec,
-      update_step,
-      enable_swarming=api.properties.get('enable_swarming')):
+      update_step):
     try:
       test.pre_run(api, '')
       test.run(api, '')
@@ -90,7 +89,6 @@ def GenTests(api):
   yield (
       api.test('fake_results_handler') +
       api.properties(
-          enable_swarming=True,
           single_spec={
               'name': 'base_unittests',
               'isolate_name': 'base_unittests_run',
@@ -107,7 +105,7 @@ def GenTests(api):
 
   yield (
       api.test('swarming') +
-      api.properties(enable_swarming=True, single_spec={
+      api.properties(single_spec={
           'name': 'base_unittests',
           'isolate_name': 'base_unittests_run',
           'merge': {
@@ -134,7 +132,7 @@ def GenTests(api):
 
   yield (
       api.test('bad set up') +
-      api.properties(enable_swarming=True, single_spec={
+      api.properties(single_spec={
           'name': 'base_unittests',
           'isolate_name': 'base_unittests_run',
           'merge': {
@@ -157,7 +155,7 @@ def GenTests(api):
 
   yield (
       api.test('bad tear down') +
-      api.properties(enable_swarming=True, single_spec={
+      api.properties(single_spec={
           'name': 'base_unittests',
           'isolate_name': 'base_unittests_run',
           'merge': {
@@ -180,7 +178,7 @@ def GenTests(api):
 
   yield (
       api.test('swarming_trigger_script') +
-      api.properties(enable_swarming=True, single_spec={
+      api.properties(single_spec={
           'name': 'base_unittests',
           'isolate_name': 'base_unittests_run',
           'trigger_script': {
@@ -199,7 +197,7 @@ def GenTests(api):
 
   yield (
       api.test('swarming_trigger_script_invalid') +
-      api.properties(enable_swarming=True, single_spec={
+      api.properties(single_spec={
           'name': 'base_unittests',
           'isolate_name': 'base_unittests_run',
           'trigger_script': {
@@ -218,7 +216,7 @@ def GenTests(api):
 
   yield (
       api.test('swarming_dimension_sets') +
-      api.properties(enable_swarming=True, single_spec={
+      api.properties(single_spec={
           'name': 'base_unittests',
           'isolate_name': 'base_unittests_run',
           'swarming': {
@@ -246,7 +244,7 @@ def GenTests(api):
 
   yield (
       api.test('merge_invalid') +
-      api.properties(enable_swarming=True, single_spec={
+      api.properties(single_spec={
           'name': 'base_unittests',
           'isolate_name': 'base_unittests_run',
           'merge': {
@@ -277,7 +275,6 @@ def GenTests(api):
   yield (
       api.test('custom_webkit_tests_step_name') +
       api.properties(
-          enable_swarming=True,
           single_spec={
               'name': 'custom_webkit_tests',
               'isolate_name': 'webkit_tests',

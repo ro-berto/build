@@ -210,9 +210,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return update_step, bot_db
 
-  # TODO(phajdan.jr): remove enable_swarming (http://crbug.com/684067).
   def generate_tests_from_test_spec(self, test_spec, builder_dict,
-      buildername, mastername, enable_swarming, swarming_dimensions,
+      buildername, mastername, swarming_dimensions,
       scripts_compile_targets, generators, bot_update_step, bot_config):
     tests = builder_dict.get('tests', ())
     # TODO(phajdan.jr): Switch everything to scripts generators and simplify.
@@ -220,7 +219,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       tests = (
           tuple(generator(
               self.m, self, mastername, buildername, test_spec,
-              bot_update_step, enable_swarming=enable_swarming,
+              bot_update_step,
               swarming_dimensions=swarming_dimensions,
               scripts_compile_targets=scripts_compile_targets,
               bot_config=bot_config)) +

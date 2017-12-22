@@ -34,7 +34,6 @@ KITCHEN_TEST_SPEC = {
   'testing': {
     'platform': 'linux',
   },
-  'enable_swarming': True,
 }
 
 def stock_config(name, platform=None, config='Release'):
@@ -150,7 +149,6 @@ SPEC = {
         'platform': 'linux',
       },
       'archive_build': False,
-      'enable_swarming': True,
       'swarming_dimensions': {
         'cpu': 'armv7l-32',
         'os': 'Ubuntu-14.04',
@@ -175,7 +173,6 @@ SPEC = {
       'testing': {
           'platform': 'linux',
       },
-      'enable_swarming': True,
     },
     'WebKit Linux layout_ng Dummy Builder': {
       'chromium_config': 'chromium',
@@ -193,7 +190,6 @@ SPEC = {
       'testing': {
           'platform': 'linux',
       },
-      'enable_swarming': True,
     },
     'WebKit Linux root_layer_scrolls Dummy Builder': {
       'chromium_config': 'chromium',
@@ -211,7 +207,6 @@ SPEC = {
       'testing': {
           'platform': 'linux',
       },
-      'enable_swarming': True,
     },
     'Print Preview Linux': {
       'chromium_config': 'chromium',
@@ -356,7 +351,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
     },
     'Site Isolation Android': {
       'chromium_config': 'android',
@@ -378,7 +372,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
     },
     'Site Isolation Linux': {
       'chromium_config': 'chromium',
@@ -401,7 +394,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
     },
     'Site Isolation Win': {
       'chromium_config': 'chromium',
@@ -432,7 +424,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
     },
     'Browser Side Navigation Linux': {
       'chromium_config': 'chromium',
@@ -451,7 +442,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
     },
 
     'Win Builder Localoutputcache': chromium_apply_configs(
@@ -515,7 +505,6 @@ SPEC = {
         'platform': 'win',
       },
       'patch_root': 'src/third_party/angle',
-      'enable_swarming': True,
     },
     'Win7 Tests (ANGLE)': {
       'chromium_config': 'chromium',
@@ -531,7 +520,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
     },
 
     'Headless Linux (dbg)': {
@@ -591,7 +579,6 @@ SPEC = {
       'bot_type': 'tester',
       'android_config': 'main_builder',
       'root_devices': True,
-      'enable_swarming': False,
       'tests': [
         steps.GTestTest('remoting_unittests'),
         steps.AndroidInstrumentationTest('ChromotingTest'),
@@ -705,7 +692,6 @@ SPEC = {
       'compile_targets': [
         'chrome',
       ],
-      'enable_swarming': True,
       'checkout_dir': 'win',
       'test_results_config': 'staging_server',
       'testing': {
@@ -735,7 +721,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
     },
     'Linux remote_run Builder': {
       'chromium_config': 'chromium',
@@ -754,7 +739,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
     },
     'Linux remote_run Tester': {
       'chromium_config': 'chromium',
@@ -777,7 +761,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
     },
     'Mojo ChromiumOS': {
       'chromium_config': 'chromium',
@@ -791,7 +774,6 @@ SPEC = {
       'bot_type': 'builder_tester',
       'test_results_config': 'staging_server',
       'testing': { 'platform': 'linux', },
-      'enable_swarming': True,
     },
     'Mojo Linux': {
       'chromium_config': 'chromium',
@@ -806,7 +788,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
     },
     'Mojo Windows': {
       'chromium_config': 'chromium',
@@ -820,7 +801,6 @@ SPEC = {
       'bot_type': 'builder_tester',
       'test_results_config': 'staging_server',
       'testing': { 'platform': 'win', },
-      'enable_swarming': True,
     },
 
     'Out of Process Profiling Android': {
@@ -893,7 +873,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
     },
   },
 }

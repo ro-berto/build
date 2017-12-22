@@ -41,8 +41,7 @@ def RunSteps(api):
       'test_mastername',
       'test_buildername',
       test_spec,
-      update_step,
-      enable_swarming=True):
+      update_step):
     try:
       test.run(api, '')
     finally:
@@ -59,26 +58,6 @@ def GenTests(api):
       api.properties(
           single_spec={
               'test': 'example_instrumentation_test',
-          },
-          mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber=123,
-      )
-  )
-
-  yield (
-      api.test('swarming') +
-      api.properties(
-          single_spec={
-              'test': 'example_instrumentation_test',
-              'swarming': {
-                  'can_use_on_swarming_builders': True,
-                  'dimension_sets': [
-                      {
-                          'os': 'Linux',
-                      },
-                  ],
-              },
           },
           mastername='test_mastername',
           buildername='test_buildername',

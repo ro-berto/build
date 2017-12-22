@@ -33,7 +33,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
       'checkout_dir': 'win',
     },
     'GPU Win Builder (dbg)': {
@@ -54,7 +53,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
     },
     'Win7 Release (NVIDIA)': {
       'chromium_config': 'chromium',
@@ -69,7 +67,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
     },
     'Win7 Debug (NVIDIA)': {
       'chromium_config': 'chromium',
@@ -84,7 +81,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
     },
     'GPU Linux Builder': {
       'chromium_config': 'chromium',
@@ -105,7 +101,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
       # 5% of the linux_chromium_rel_ng builds will use exparchive instead of
       # batcharchive to allow comparison of performance.
       'force_exparchive': 5,
@@ -130,7 +125,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
     },
     'Linux Release (NVIDIA)': {
       'chromium_config': 'chromium',
@@ -145,7 +139,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
     },
     'Linux Debug (NVIDIA)': {
       'chromium_config': 'chromium',
@@ -160,7 +153,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
     },
     'GPU Mac Builder': {
       'chromium_config': 'chromium',
@@ -181,7 +173,6 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      'enable_swarming': True,
       'checkout_dir': 'mac',
     },
     'GPU Mac Builder (dbg)': {
@@ -203,7 +194,6 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      'enable_swarming': True,
     },
     'Mac Release (Intel)': {
       'chromium_config': 'chromium',
@@ -218,7 +208,6 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      'enable_swarming': True,
     },
     'Mac Debug (Intel)': {
       'chromium_config': 'chromium',
@@ -233,7 +222,6 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      'enable_swarming': True,
     },
     'Mac Retina Release (AMD)': {
       'chromium_config': 'chromium',
@@ -248,7 +236,6 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      'enable_swarming': True,
     },
     'Mac Retina Debug (AMD)': {
       'chromium_config': 'chromium',
@@ -263,10 +250,8 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      'enable_swarming': True,
     },
     'Android Release (Nexus 5X)': {
-      'enable_swarming': True,
       'chromium_config': 'android',
       'chromium_apply_config': [
         'chrome_with_codecs',

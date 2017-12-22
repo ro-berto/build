@@ -41,8 +41,6 @@ def config(name,
     # compile() call in the recipe should be smart enough to do this
     # automatically. This shouldn't be configurable per bot.
     'add_tests_as_compile_targets': False,
-
-    'enable_swarming': True,
   }
 
   if android_config:
@@ -105,7 +103,6 @@ SPEC = {
       },
       'bot_type': 'builder_tester',
       'testing': {'platform': 'linux'},
-      'enable_swarming': True,
     },
     'UBSanVptr Linux': {
       'chromium_config': 'chromium',
@@ -138,7 +135,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -161,7 +157,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -184,7 +179,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -206,7 +200,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -229,7 +222,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -252,7 +244,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -275,7 +266,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -297,7 +287,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -319,7 +308,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -341,7 +329,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -362,7 +349,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -383,7 +369,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -408,7 +393,6 @@ SPEC = {
       'tests': {
         steps.SizesStep(RESULTS_URL, 'ToTWinThinLTO64')
       },
-      'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -426,7 +410,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
       'compile_targets': [ 'chromium_builder_asan' ],
       # add_tests_as_compile_targets not needed for the asan bot, it doesn't
       # build everything.
@@ -445,7 +428,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
       'compile_targets': [ 'chromium_builder_asan' ],
       # add_tests_as_compile_targets not needed for the asan bot, it doesn't
       # build everything.
@@ -463,7 +445,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
       'compile_targets': [ 'chromium_builder_asan' ],
       # add_tests_as_compile_targets not needed for the asan bot, it doesn't
       # build everything.
@@ -536,7 +517,6 @@ SPEC = {
       'android_config': 'clang_builder_mb_x64',
       'test_results_config': 'staging_server',
       'testing': { 'platform': 'linux', },
-      'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -561,7 +541,6 @@ SPEC = {
       'tests': {
         steps.SizesStep(RESULTS_URL, 'ToTMac')
       },
-      'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -583,7 +562,6 @@ SPEC = {
       'tests': {
         steps.SizesStep(RESULTS_URL, 'ToTMac (dbg)')
       },
-      'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -605,7 +583,6 @@ SPEC = {
       'tests': {
         steps.SizesStep(RESULTS_URL, 'ToTMacASan')
       },
-      'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -626,7 +603,6 @@ SPEC = {
       'test_results_config': 'staging_server',
       'testing': { 'platform': 'win', },
       'tests': { steps.SizesStep(RESULTS_URL, 'ToTWin') },
-      'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -646,7 +622,6 @@ SPEC = {
       'test_results_config': 'staging_server',
       'testing': { 'platform': 'win', },
       'tests': { steps.SizesStep(RESULTS_URL, 'ToTWin(dbg)') },
-      'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -667,7 +642,6 @@ SPEC = {
       'test_results_config': 'staging_server',
       'testing': { 'platform': 'win', },
       'tests': { steps.SizesStep(RESULTS_URL, 'ToTWin(dll)') },
-      'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -688,7 +662,6 @@ SPEC = {
       'test_results_config': 'staging_server',
       'testing': { 'platform': 'win', },
       'tests': { steps.SizesStep(RESULTS_URL, 'ToTWin64') },
-      'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -708,7 +681,6 @@ SPEC = {
       'test_results_config': 'staging_server',
       'testing': { 'platform': 'win', },
       'tests': { steps.SizesStep(RESULTS_URL, 'ToTWin64(dbg)') },
-      'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -729,7 +701,6 @@ SPEC = {
       'test_results_config': 'staging_server',
       'testing': { 'platform': 'win', },
       'tests': { steps.SizesStep(RESULTS_URL, 'ToTWin64(dll)') },
-      'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,

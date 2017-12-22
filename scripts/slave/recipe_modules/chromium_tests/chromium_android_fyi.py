@@ -20,7 +20,6 @@ SPEC = {
         'cronet_builder',
         'cronet_official',
       ],
-      'enable_swarming': True,
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
@@ -40,7 +39,6 @@ SPEC = {
         'cronet_builder',
         'cronet_official',
       ],
-      'enable_swarming': True,
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
@@ -60,7 +58,6 @@ SPEC = {
         'cronet_builder',
         'cronet_official',
       ],
-      'enable_swarming': True,
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
@@ -157,7 +154,6 @@ SPEC = {
     },
 
     'Lollipop Low-end Tester': {
-      'enable_swarming': True,
       'chromium_config': 'android',
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
@@ -178,7 +174,6 @@ SPEC = {
     },
 
     'Memory Infra Tester': {
-      'enable_swarming': True,
       'chromium_config': 'android',
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
@@ -312,7 +307,6 @@ SPEC = {
     },
 
     'Nougat Phone Tester': {
-      'enable_swarming': True,
       'chromium_config': 'android',
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
@@ -333,7 +327,6 @@ SPEC = {
     },
 
     'Oreo Phone Tester': {
-      'enable_swarming': True,
       'chromium_config': 'android',
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
@@ -368,7 +361,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -392,7 +384,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
     },
   },
 }

@@ -70,7 +70,7 @@ def _BaseSpec(bot_type, config_name, platform, target_bits, tests,
 
 
 def BuildSpec(
-  config_name, perf_id, platform, target_bits, enable_swarming=False,
+  config_name, perf_id, platform, target_bits,
   compile_targets=None, extra_compile_targets=None, force_exparchive=False,
   run_sizes=True):
   if not compile_targets:
@@ -89,12 +89,10 @@ def BuildSpec(
       tests=tests,
   )
 
-  if enable_swarming:
-    spec['enable_swarming'] = True
-    spec['perf_isolate_lookup'] = True
+  spec['perf_isolate_lookup'] = True
 
-    if force_exparchive:
-      spec['force_exparchive'] = force_exparchive
+  if force_exparchive:
+    spec['force_exparchive'] = force_exparchive
 
   spec['compile_targets'] = compile_targets
   if extra_compile_targets:
@@ -127,12 +125,11 @@ def _AddIsolatedTestSpec(name, perf_id, platform, target_bits=64,
                          parent_buildername=None):
   spec = TestSpec('chromium_perf', perf_id, platform, target_bits,
                   parent_buildername=parent_buildername)
-  spec['enable_swarming'] = True
   SPEC['builders'][name] = spec
 
 
 def _AddBuildSpec(
-  name, platform, target_bits=64, add_to_bisect=False, enable_swarming=False,
+  name, platform, target_bits=64, add_to_bisect=False,
   extra_compile_targets=None, force_exparchive=False):
   if target_bits == 64:
     perf_id = platform
@@ -140,7 +137,7 @@ def _AddBuildSpec(
     perf_id = '%s-%d' % (platform, target_bits)
 
   SPEC['builders'][name] = BuildSpec(
-      'chromium_perf', perf_id, platform, target_bits, enable_swarming,
+      'chromium_perf', perf_id, platform, target_bits,
       extra_compile_targets=extra_compile_targets,
       force_exparchive=force_exparchive)
 
@@ -175,17 +172,13 @@ _AddBuildSpec('Android arm64 Compile', 'android',
                                      'system_webview_apk',
                                      'system_webview_shell_apk',])
 _AddBuildSpec(
-  'Win Builder', 'win', target_bits=32, enable_swarming=True,
-  force_exparchive=True)
+  'Win Builder', 'win', target_bits=32, force_exparchive=True)
 _AddBuildSpec(
-  'Win x64 Builder', 'win', add_to_bisect=True, enable_swarming=True,
-  force_exparchive=True)
+  'Win x64 Builder', 'win', add_to_bisect=True, force_exparchive=True)
 _AddBuildSpec(
-  'Mac Builder', 'mac', add_to_bisect=True, enable_swarming=True,
-  force_exparchive=True)
+  'Mac Builder', 'mac', add_to_bisect=True, force_exparchive=True)
 _AddBuildSpec(
-  'Linux Builder', 'linux', add_to_bisect=True, enable_swarming=True,
-  force_exparchive=True)
+  'Linux Builder', 'linux', add_to_bisect=True, force_exparchive=True)
 
 
 # 32 bit android swarming

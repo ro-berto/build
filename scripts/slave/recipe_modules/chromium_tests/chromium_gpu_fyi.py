@@ -34,7 +34,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
       'checkout_dir': 'win',
     },
     'GPU Win Builder (dbg)': {
@@ -57,7 +56,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
       'checkout_dir': 'win',
     },
     'GPU Win dEQP Builder': {
@@ -80,7 +78,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
       # When trybots are set up which mirror this configuration,
       # compiling might induce a clobber build if the pinned
       # buildtools version is different from Chromium's default. This
@@ -102,7 +99,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
       'serialize_tests': True,
     },
     'Win7 Debug (NVIDIA)': {
@@ -118,7 +114,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
       'serialize_tests': True,
     },
     'Win7 dEQP Release (NVIDIA)': {
@@ -134,7 +129,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
       'serialize_tests': True,
     },
     'Win7 Experimental Release (NVIDIA)': {
@@ -150,7 +144,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
       'serialize_tests': True,
     },
     'Win10 Release (NVIDIA)': {
@@ -166,7 +159,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
       'serialize_tests': True,
     },
     'Win10 Debug (NVIDIA)': {
@@ -182,7 +174,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
       'serialize_tests': True,
     },
     'Win7 Release (AMD)': {
@@ -198,7 +189,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
       'serialize_tests': True,
     },
     'Win7 Debug (AMD)': {
@@ -214,7 +204,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
       'serialize_tests': True,
     },
     'Win7 dEQP Release (AMD)': {
@@ -230,7 +219,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
       'serialize_tests': True,
     },
     'Win10 Release (Intel HD 630)': {
@@ -246,7 +234,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
       'serialize_tests': True,
     },
     'GPU Win x64 Builder': {
@@ -270,7 +257,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
       'checkout_dir': 'win',
     },
     'GPU Win x64 Builder (dbg)': {
@@ -293,7 +279,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
       'checkout_dir': 'win',
     },
     'GPU Win x64 dEQP Builder': {
@@ -317,7 +302,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
       # When trybots are set up which mirror this configuration,
       # compiling might induce a clobber build if the pinned
       # buildtools version is different from Chromium's default. This
@@ -339,7 +323,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
       'serialize_tests': True,
     },
     'Win7 x64 Debug (NVIDIA)': {
@@ -355,7 +338,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
       'serialize_tests': True,
     },
     'Win7 x64 dEQP Release (NVIDIA)': {
@@ -371,7 +353,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
       'serialize_tests': True,
     },
     'GPU Win Clang Builder (dbg)': {
@@ -399,7 +380,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -423,7 +403,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
       'checkout_dir': 'linux',
     },
     'GPU Linux Ozone Builder': {
@@ -444,7 +423,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': False,
     },
     'GPU Linux Builder (dbg)': {
       'chromium_config': 'chromium',
@@ -464,7 +442,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
       'checkout_dir': 'linux',
     },
     'GPU Linux dEQP Builder': {
@@ -486,7 +463,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
       # When trybots are set up which mirror this configuration,
       # compiling might induce a clobber build if the pinned
       # buildtools version is different from Chromium's default. This
@@ -508,7 +484,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
       'serialize_tests': True,
     },
     'Linux Debug (NVIDIA)': {
@@ -524,7 +499,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
       'serialize_tests': True,
     },
     'Linux dEQP Release (NVIDIA)': {
@@ -540,7 +514,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
       'serialize_tests': True,
     },
     'Linux Release (Intel HD 630)': {
@@ -556,7 +529,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
       'serialize_tests': True,
     },
     'Linux GPU TSAN Release': {
@@ -577,7 +549,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
       'serialize_tests': True,
     },
     'Linux Release (AMD R7 240)': {
@@ -593,10 +564,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      # Swarming is deliberately NOT enabled on this one-off configuration.
-      # Multiple copies of the machines have to be deployed into swarming
-      # in order to keep up with the faster cycle time of the tests.
-      'enable_swarming': False,
     },
     'GPU Mac Builder': {
       'chromium_config': 'chromium',
@@ -617,7 +584,6 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      'enable_swarming': True,
       'checkout_dir': 'mac',
     },
     'GPU Mac Builder (dbg)': {
@@ -639,7 +605,6 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      'enable_swarming': True,
       'checkout_dir': 'mac',
     },
     'GPU Mac dEQP Builder': {
@@ -661,7 +626,6 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      'enable_swarming': True,
       # When trybots are set up which mirror this configuration,
       # compiling might induce a clobber build if the pinned
       # buildtools version is different from Chromium's default. This
@@ -683,7 +647,6 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      'enable_swarming': True,
       'serialize_tests': True,
     },
     'Mac Debug (Intel)': {
@@ -699,7 +662,6 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      'enable_swarming': True,
       'serialize_tests': True,
     },
     'Mac Pro Release (AMD)': {
@@ -715,10 +677,6 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      # Swarming is deliberately NOT enabled on this one-off configuration.
-      # Multiple copies of the machines have to be deployed into swarming
-      # in order to keep up with the faster cycle time of the tests.
-      'enable_swarming': False,
     },
     'Mac Pro Debug (AMD)': {
       'chromium_config': 'chromium',
@@ -733,10 +691,6 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      # Swarming is deliberately NOT enabled on this one-off configuration.
-      # Multiple copies of the machines have to be deployed into swarming
-      # in order to keep up with the faster cycle time of the tests.
-      'enable_swarming': False,
     },
     'Mac Retina Release (NVIDIA)': {
       'chromium_config': 'chromium',
@@ -751,7 +705,6 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      'enable_swarming': True,
       'serialize_tests': True,
     },
     'Mac Retina Debug (NVIDIA)': {
@@ -767,7 +720,6 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      'enable_swarming': True,
       'serialize_tests': True,
     },
     'Mac Retina Release (AMD)': {
@@ -783,7 +735,6 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      'enable_swarming': True,
       'serialize_tests': True,
     },
     'Mac Retina Debug (AMD)': {
@@ -799,7 +750,6 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      'enable_swarming': True,
       'serialize_tests': True,
     },
     'Mac Experimental Release (Intel)': {
@@ -815,7 +765,6 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      'enable_swarming': True,
       'serialize_tests': True,
     },
     'Mac Experimental Retina Release (AMD)': {
@@ -831,7 +780,6 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      'enable_swarming': True,
       'serialize_tests': True,
     },
     'Mac Experimental Retina Release (NVIDIA)': {
@@ -847,10 +795,6 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      # Swarming is deliberately NOT enabled on this one-off configuration.
-      # Multiple copies of the machines have to be deployed into swarming
-      # in order to keep up with the faster cycle time of the tests.
-      'enable_swarming': False,
     },
     'Mac GPU ASAN Release': {
       'chromium_config': 'chromium',
@@ -867,7 +811,6 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      'enable_swarming': True,
       'serialize_tests': True,
     },
     'Mac dEQP Release AMD': {
@@ -886,7 +829,6 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      'enable_swarming': True,
       'serialize_tests': True,
     },
     'Mac dEQP Release Intel': {
@@ -905,7 +847,6 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      'enable_swarming': True,
       'serialize_tests': True,
     },
     'Android Release (Nexus 5)': {
@@ -926,7 +867,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': False,
     },
     'Android Release (Nexus 5X)': {
       'chromium_config': 'android',
@@ -946,7 +886,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
       'checkout_dir': 'android',
     },
     'Android Release (Nexus 6)': {
@@ -967,7 +906,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': False,
     },
     'Android Release (Nexus 6P)': {
       'chromium_config': 'android',
@@ -984,7 +922,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
       'checkout_dir': 'android',
     },
     'Android Release (Nexus 9)': {
@@ -1003,7 +940,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': False,
     },
     'Android Release (NVIDIA Shield TV)': {
       'chromium_config': 'android',
@@ -1021,7 +957,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': False,
     },
     'Android dEQP Release (Nexus 5X)': {
       'chromium_config': 'android',
@@ -1038,7 +973,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
       'checkout_dir': 'android',
     },
 
@@ -1057,7 +991,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
     },
     'Fake Linux Release (NVIDIA)': {
       'chromium_config': 'chromium',
@@ -1072,7 +1005,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
     },
 
     'Linux Ozone (Intel)': {
@@ -1088,10 +1020,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      # Swarming is deliberately NOT enabled on this one-off configuration.
-      # Multiple copies of the machines have to be deployed into swarming
-      # in order to keep up with the faster cycle time of the tests.
-      'enable_swarming': False,
     },
 
     # The following machines don't actually exist. They are specified
@@ -1111,7 +1039,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
     },
     'Optional Win7 Release (AMD)': {
       'chromium_config': 'chromium',
@@ -1126,7 +1053,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
     },
     'Optional Linux Release (NVIDIA)': {
       'chromium_config': 'chromium',
@@ -1141,7 +1067,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
     },
     'Optional Mac Release (Intel)': {
       'chromium_config': 'chromium',
@@ -1156,7 +1081,6 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      'enable_swarming': True,
     },
     'Optional Mac Retina Release (NVIDIA)': {
       'chromium_config': 'chromium',
@@ -1171,7 +1095,6 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      'enable_swarming': True,
     },
     'Optional Mac Retina Release (AMD)': {
       'chromium_config': 'chromium',
@@ -1186,7 +1109,6 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      'enable_swarming': True,
     },
 
     # This machine doesn't really exist either; it is a separate
@@ -1205,7 +1127,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'enable_swarming': True,
       'serialize_tests': True,
     },
   },

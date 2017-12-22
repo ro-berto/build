@@ -30,7 +30,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
       # 5% of the linux_chromium_rel_ng builds will use exparchive instead of
       # batcharchive to allow comparison of performance.
       'force_exparchive': 5,
@@ -49,7 +48,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
     },
     'Linux Builder (dbg)(32)': {
       'chromium_config': 'chromium',
@@ -67,7 +65,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
       'checkout_dir': 'linux',
       # Temporary hack because the binaries are too large to be isolated.
       'GYP_DEFINES': {
@@ -87,7 +84,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
     },
 
     'Linux Builder (dbg)': {
@@ -106,7 +102,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
       'checkout_dir': 'linux',
     },
     'Linux Tests (dbg)(1)': {
@@ -122,7 +117,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
     },
 
     'Cast Audio Linux': {

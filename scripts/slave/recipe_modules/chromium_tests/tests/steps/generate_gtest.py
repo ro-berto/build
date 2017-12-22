@@ -42,8 +42,7 @@ def RunSteps(api):
       'test_mastername',
       'test_buildername',
       test_spec,
-      update_step,
-      enable_swarming=True):
+      update_step):
     try:
       test.pre_run(api, '')
       test.run(api, '')

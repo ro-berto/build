@@ -25,7 +25,6 @@ SPEC = {
       'chromium_apply_config': ['lsan', 'mb'],
       'bot_type': 'builder',
       'testing': {'platform': 'linux'},
-      'enable_swarming': True,
     },
     'Linux ASan LSan Tests (1)': {
       'chromium_config': 'chromium_linux_asan',
@@ -40,7 +39,6 @@ SPEC = {
       'bot_type': 'tester',
       'parent_buildername': 'Linux ASan LSan Builder',
       'testing': {'platform': 'linux'},
-      'enable_swarming': True,
     },
     'Linux ASan Tests (sandboxed)': {
       'chromium_config': 'chromium_linux_asan',
@@ -54,7 +52,6 @@ SPEC = {
       'bot_type': 'tester',
       'parent_buildername': 'Linux ASan LSan Builder',
       'testing': {'platform': 'linux'},
-      'enable_swarming': True,
     },
     'Linux CFI': {
       'chromium_config': 'chromium',
@@ -66,7 +63,6 @@ SPEC = {
       },
       'bot_type': 'builder_tester',
       'testing': {'platform': 'linux'},
-      'enable_swarming': True,
     },
     'Linux MSan Builder': {
       'chromium_config': 'chromium_msan',
@@ -81,7 +77,6 @@ SPEC = {
       },
       'bot_type': 'builder',
       'testing': {'platform': 'linux'},
-      'enable_swarming': True,
     },
     'Linux MSan Tests': {
       'chromium_config': 'chromium_msan',
@@ -93,7 +88,6 @@ SPEC = {
       'bot_type': 'tester',
       'parent_buildername': 'Linux MSan Builder',
       'testing': {'platform': 'linux'},
-      'enable_swarming': True,
       'swarming_dimensions': {
         'cpu': 'x86-64',
         'os': 'Ubuntu-14.04',
@@ -113,7 +107,6 @@ SPEC = {
       },
       'bot_type': 'builder',
       'testing': {'platform': 'linux'},
-      'enable_swarming': True,
     },
     'Linux ChromiumOS MSan Tests': {
       'chromium_config': 'chromium_msan',
@@ -125,7 +118,6 @@ SPEC = {
       'bot_type': 'tester',
       'parent_buildername': 'Linux ChromiumOS MSan Builder',
       'testing': {'platform': 'linux'},
-      'enable_swarming': True,
       'swarming_dimensions': {
         'cpu': 'x86-64',
         'os': 'Ubuntu-14.04',
@@ -143,7 +135,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
     },
     'Linux TSan Tests': {
       'chromium_config': 'chromium_tsan2',
@@ -157,7 +148,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
     },
     'Mac ASan 64 Builder': {
       'chromium_config': 'chromium_mac_asan',
@@ -169,7 +159,6 @@ SPEC = {
       'chromium_apply_config': ['mb'],
       'bot_type': 'builder',
       'testing': {'platform': 'mac'},
-      'enable_swarming': True,
       'checkout_dir': 'mac',
     },
     'Mac ASan 64 Tests (1)': {
@@ -182,7 +171,6 @@ SPEC = {
       'bot_type': 'tester',
       'parent_buildername': 'Mac ASan 64 Builder',
       'testing': {'platform': 'mac'},
-      'enable_swarming': True,
     },
     'Linux Chromium OS ASan LSan Builder': {
       'chromium_config': 'chromium_chromiumos_asan',
@@ -194,7 +182,6 @@ SPEC = {
       'chromium_apply_config': ['lsan', 'mb'],
       'bot_type': 'builder',
       'testing': {'platform': 'linux'},
-      'enable_swarming': True,
     },
     'Linux Chromium OS ASan LSan Tests (1)': {
       'chromium_config': 'chromium_chromiumos_asan',
@@ -207,7 +194,6 @@ SPEC = {
       'parent_buildername': 'Linux Chromium OS ASan LSan Builder',
       'bot_type': 'tester',
       'testing': {'platform': 'linux'},
-      'enable_swarming': True,
     },
   },
 }

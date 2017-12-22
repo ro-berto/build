@@ -92,7 +92,6 @@ def _config(name,
       'platform': 'linux',
     },
     'tests': {},
-    'enable_swarming': True,
   }
   if cros_board:
     cfg['chromium_config_kwargs']['TARGET_CROS_BOARD'] = cros_board

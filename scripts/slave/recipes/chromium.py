@@ -1614,33 +1614,6 @@ def GenTests(api):
   )
 
   yield (
-    api.test('dynamic_swarmed_instrumentation_test') +
-    api.properties.generic(mastername='chromium.android',
-                           buildername='KitKat Phone Tester (rel)') +
-    api.override_step_data(
-        'read test spec (chromium.android.json)',
-        api.json.output({
-            'KitKat Phone Tester (rel)': {
-                'instrumentation_tests': [
-                    {
-                        'test': 'chrome_public_test',
-                        'swarming': {
-                            'can_use_on_swarming_builders': True,
-                            'dimension_sets': [
-                                {
-                                    'build.id': 'KTU84P',
-                                    'product.board': 'hammerhead',
-                                },
-                            ],
-                        },
-                    }
-                ],
-            },
-        })
-    )
-  )
-
-  yield (
     api.test('dynamic_swarmed_gn_instrumentation_test') +
     api.properties.generic(mastername='chromium.android',
                            buildername='KitKat Phone Tester (rel)') +
