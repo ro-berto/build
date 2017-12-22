@@ -569,9 +569,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
 
     legacy_build_url = None
-    build_revision = build_revision or self.m.properties.get(
-        'parent_got_revision') or update_step.presentation.properties.get('got_revision',
-        update_step.presentation.properties.get('got_src_revision'))
+    build_revision = (
+        build_revision
+        or self.m.properties.get('parent_got_revision')
+        or update_step.presentation.properties.get('got_revision')
+        or update_step.presentation.properties.get('got_src_revision'))
     build_archive_url = build_archive_url or self.m.properties.get(
         'parent_build_archive_url')
     if not build_archive_url:
