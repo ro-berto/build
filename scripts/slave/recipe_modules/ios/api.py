@@ -29,9 +29,12 @@ class iOSApi(recipe_api.RecipeApi):
   # Service account to use in swarming tasks.
   SWARMING_SERVICE_ACCOUNT = \
     'ios-isolated-tester@chops-service-accounts.iam.gserviceaccount.com'
+  CIPD_CREDENTIALS = \
+    '/creds/service_accounts/service-account-xcode-cipd-access.json'
 
   # Pinned version of
   # https://chromium.googlesource.com/infra/infra/+/master/go/src/infra/cmd/mac_toolchain
+  MAC_TOOLCHAIN_PACKAGE = 'infra/tools/mac_toolchain/${platform}'
   MAC_TOOLCHAIN_VERSION = 'git_revision:2b69be6203f56a970202d9b5984557c0453b4eb0'
   MAC_TOOLCHAIN_ROOT    = '.'
   XCODE_APP_PATH        = 'Xcode.app'
@@ -267,6 +270,35 @@ class iOSApi(recipe_api.RecipeApi):
 
     return copy.deepcopy(self.__config)
 
+  def get_mac_toolchain_cmd(self):
+    cipd_root = self.m.path['start_dir']
+    self.m.cipd.ensure(cipd_root, {
+        self.MAC_TOOLCHAIN_PACKAGE: self.MAC_TOOLCHAIN_VERSION})
+    return cipd_root.join('mac_toolchain')
+
+  def ensure_xcode(self, xcode_build_version):
+    xcode_build_version = xcode_build_version.lower()
+
+    # TODO(sergeyberezin): for LUCI migration, this must be a requested named
+    # cache. Make sure it exists, to avoid downloading Xcode on every build.
+    xcode_app_path = self.m.path['cache'].join(
+        'xcode_ios_%s.app' % xcode_build_version)
+    with self.m.step.nest('ensure xcode') as step_result:
+      step_result.presentation.step_text = (
+          'Ensuring Xcode version %s in %s' % (
+              xcode_build_version, xcode_app_path))
+
+      mac_toolchain_cmd = self.get_mac_toolchain_cmd()
+      self.m.step('install xcode', [
+          mac_toolchain_cmd, 'install',
+          '-kind', 'ios',
+          '-xcode-version', xcode_build_version,
+          '-output-dir', xcode_app_path,
+          '-service-account-json', self.CIPD_CREDENTIALS,
+      ])
+      self.m.step('select xcode', [
+          'sudo', 'xcode-select', '-switch', xcode_app_path])
+
   def build(
       self,
       analyze=False,
@@ -294,8 +326,12 @@ class iOSApi(recipe_api.RecipeApi):
 
     env = {
       'LANDMINES_VERBOSE': '1',
-      'FORCE_MAC_TOOLCHAIN': '1',
     }
+    if self.__config.get('use xcode build version'):
+      self.ensure_xcode(self.__config['xcode build version'])
+    else:
+      env['FORCE_MAC_TOOLCHAIN'] = '1'
+
     env.update(self.__config['env'])
 
     build_sub_path = '%s-%s' % (self.configuration, {
@@ -755,7 +791,7 @@ class iOSApi(recipe_api.RecipeApi):
         service_account=self.SWARMING_SERVICE_ACCOUNT,
         cipd_packages=[(
             self.MAC_TOOLCHAIN_ROOT,
-            'infra/tools/mac_toolchain/${platform}',
+            self.MAC_TOOLCHAIN_PACKAGE,
             self.MAC_TOOLCHAIN_VERSION,
         )],
       )

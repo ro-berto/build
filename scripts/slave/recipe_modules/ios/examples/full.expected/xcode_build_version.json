@@ -176,9 +176,72 @@
       "@@@STEP_LOG_LINE@json.output@      \"xcode build version\": \"9b456\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"use xcode build version\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"xcode build version\": \"9a123\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "ensure xcode",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Ensuring Xcode version 9a123 in [CACHE]/xcode_ios_9a123.app@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[START_DIR]",
+      "-ensure-file",
+      "infra/tools/mac_toolchain/${platform} git_revision:2b69be6203f56a970202d9b5984557c0453b4eb0",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "name": "ensure xcode.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-git_revision:2b6\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/mac_toolchain/${platform}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[START_DIR]/mac_toolchain",
+      "install",
+      "-kind",
+      "ios",
+      "-xcode-version",
+      "9a123",
+      "-output-dir",
+      "[CACHE]/xcode_ios_9a123.app",
+      "-service-account-json",
+      "/creds/service_accounts/service-account-xcode-cipd-access.json"
+    ],
+    "name": "ensure xcode.install xcode",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "sudo",
+      "xcode-select",
+      "-switch",
+      "[CACHE]/xcode_ios_9a123.app"
+    ],
+    "name": "ensure xcode.select xcode",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -190,7 +253,6 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
       "LANDMINES_VERBOSE": "1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -233,7 +295,6 @@
     ],
     "cwd": "[START_DIR]/src/out/Debug-iphonesimulator",
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
       "LANDMINES_VERBOSE": "1"
     },
     "name": "generate build files (gn)"
@@ -248,7 +309,6 @@
     ],
     "cwd": "[START_DIR]/src/out/Debug-iphonesimulator",
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
       "LANDMINES_VERBOSE": "1"
     },
     "name": "compile"

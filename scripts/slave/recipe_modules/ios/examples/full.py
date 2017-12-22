@@ -584,6 +584,7 @@ def GenTests(api):
     )
     + api.ios.make_test_build_config({
       'xcode build version': '9a123',
+      'use xcode build version': True,
       'gn_args': [
         'is_debug=true',
         'target_cpu="x86"',
