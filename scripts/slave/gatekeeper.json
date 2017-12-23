@@ -268,18 +268,6 @@
         ]
       }
     ],
-    "https://build.chromium.org/p/chromium.gpu.fyi": [
-      {
-        "forgive_all": true,
-        "builders": {
-          "*": {
-            "forgiving_optional": ["*"]
-          }
-        },
-        "excluded_builders": [ "*" ],
-        "close_tree": false
-      }
-    ],
     "https://build.chromium.org/p/chromium.clang": [
       {
         "close_tree": false,
