@@ -86,7 +86,7 @@ def RunSteps(api):
     api.python(
         'autoroll DEPS',
         api.path['checkout'].join('tools_webrtc', 'autoroller', 'roll_deps.py'),
-        ['--clean', '--verbose'],
+        ['--clean', '--verbose', '--cq-over=100'],
     )
 
 
