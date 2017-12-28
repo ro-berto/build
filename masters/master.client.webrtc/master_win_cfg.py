@@ -35,7 +35,6 @@ def Update(c):
           'Win64 Debug (Clang)',
           'Win64 Release (Clang)',
           'Win32 ASan',
-          'Win32 Release (MSVC)',
           'Win (more configs)',
       ]),
   ])
@@ -56,7 +55,6 @@ def Update(c):
     {'name': 'Win64 Debug (Clang)', 'slavebuilddir': 'win_clang'},
     {'name': 'Win64 Release (Clang)', 'slavebuilddir': 'win_clang'},
     {'name': 'Win32 ASan', 'slavebuilddir': 'win_asan'},
-    {'name': 'Win32 Release (MSVC)'},
     {
       'name': 'Win (more configs)',
       'recipe': 'webrtc/more_configs',

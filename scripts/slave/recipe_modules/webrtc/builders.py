@@ -186,15 +186,6 @@ BUILDERS = freeze({
           'cpu': 'x86-64',
         }
       },
-      'Win32 Release (MSVC)': {
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'win'},
-      },
       'Mac64 Debug': {
         'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
@@ -1136,15 +1127,6 @@ BUILDERS = freeze({
           'os': 'Windows-7-SP1',
           'cpu': 'x86-64',
         }
-      },
-      'win_msvc_rel': {
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'win'},
       },
       'win_x64_win8': {
         'recipe_config': 'webrtc',
