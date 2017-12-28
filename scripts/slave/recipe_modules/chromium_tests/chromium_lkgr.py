@@ -325,7 +325,7 @@ SPEC = {
     },
     'UBSan Release': {
       'chromium_config': 'chromium_linux_ubsan',
-      'chromium_apply_config': ['mb'],
+      'chromium_apply_config': ['mb', 'clobber'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -344,7 +344,7 @@ SPEC = {
     # http://dev.chromium.org/developers/testing/undefinedbehaviorsanitizer
     'UBSan vptr Release': {
       'chromium_config': 'chromium_linux_ubsan_vptr',
-      'chromium_apply_config': ['mb'],
+      'chromium_apply_config': ['mb', 'clobber'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
