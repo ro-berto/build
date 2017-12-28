@@ -196,6 +196,10 @@ def main(args):
     # 120 seconds are more than enough to upload test results.
     test_results_uploader.upload_test_results(
         options.test_results_server, attrs, files, 120)
+
+  # This logging is here to help debug why test results sometimes take so long
+  # to upload. See crbug.com/795118
+  logging.info('Done processing test results data')
   return 0
 
 
