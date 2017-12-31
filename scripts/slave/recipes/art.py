@@ -248,7 +248,7 @@ def setup_target(api,
   make_jobs = _TARGET_DEVICE_MAP[device]['make_jobs']
   env.update(
       {'TARGET_PRODUCT': _TARGET_DEVICE_MAP[device]['product'],
-       'ANDROID_PRODUCT_OUT': build_top_dir.join('out','target', 'product',
+       'PRODUCT_OUT': build_top_dir.join('out','target', 'product',
          _TARGET_DEVICE_MAP[device]['product'])
       })
 
