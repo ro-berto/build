@@ -55,10 +55,10 @@
       "123",
       "--test-type",
       "base_unittests",
-      "--chrome-revision",
-      "x@{#0}",
       "--test-results-server",
-      "test-results.appspot.com"
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "x@{#0}"
     ],
     "name": "Upload to test-results [base_unittests]"
   },

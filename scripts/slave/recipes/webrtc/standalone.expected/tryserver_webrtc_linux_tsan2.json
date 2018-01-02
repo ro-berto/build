@@ -2578,10 +2578,10 @@
       "1337",
       "--test-type",
       "audio_decoder_unittests",
-      "--chrome-revision",
-      "170242",
       "--test-results-server",
-      "test-results.appspot.com"
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
     ],
     "cwd": "[BUILDER_CACHE]/linux_tsan2",
     "name": "Upload to test-results [audio_decoder_unittests]"
@@ -2736,10 +2736,10 @@
       "1337",
       "--test-type",
       "common_audio_unittests",
-      "--chrome-revision",
-      "170242",
       "--test-results-server",
-      "test-results.appspot.com"
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
     ],
     "cwd": "[BUILDER_CACHE]/linux_tsan2",
     "name": "Upload to test-results [common_audio_unittests]"
@@ -2894,10 +2894,10 @@
       "1337",
       "--test-type",
       "common_video_unittests",
-      "--chrome-revision",
-      "170242",
       "--test-results-server",
-      "test-results.appspot.com"
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
     ],
     "cwd": "[BUILDER_CACHE]/linux_tsan2",
     "name": "Upload to test-results [common_video_unittests]"
@@ -3052,10 +3052,10 @@
       "1337",
       "--test-type",
       "low_bandwidth_audio_test",
-      "--chrome-revision",
-      "170242",
       "--test-results-server",
-      "test-results.appspot.com"
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
     ],
     "cwd": "[BUILDER_CACHE]/linux_tsan2",
     "name": "Upload to test-results [low_bandwidth_audio_test]"
@@ -3250,10 +3250,10 @@
       "1337",
       "--test-type",
       "modules_tests",
-      "--chrome-revision",
-      "170242",
       "--test-results-server",
-      "test-results.appspot.com"
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
     ],
     "cwd": "[BUILDER_CACHE]/linux_tsan2",
     "name": "Upload to test-results [modules_tests]"
@@ -3608,10 +3608,10 @@
       "1337",
       "--test-type",
       "modules_unittests",
-      "--chrome-revision",
-      "170242",
       "--test-results-server",
-      "test-results.appspot.com"
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
     ],
     "cwd": "[BUILDER_CACHE]/linux_tsan2",
     "name": "Upload to test-results [modules_unittests]"
@@ -3766,10 +3766,10 @@
       "1337",
       "--test-type",
       "ortc_unittests",
-      "--chrome-revision",
-      "170242",
       "--test-results-server",
-      "test-results.appspot.com"
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
     ],
     "cwd": "[BUILDER_CACHE]/linux_tsan2",
     "name": "Upload to test-results [ortc_unittests]"
@@ -4044,10 +4044,10 @@
       "1337",
       "--test-type",
       "peerconnection_unittests",
-      "--chrome-revision",
-      "170242",
       "--test-results-server",
-      "test-results.appspot.com"
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
     ],
     "cwd": "[BUILDER_CACHE]/linux_tsan2",
     "name": "Upload to test-results [peerconnection_unittests]"
@@ -4202,10 +4202,10 @@
       "1337",
       "--test-type",
       "rtc_media_unittests",
-      "--chrome-revision",
-      "170242",
       "--test-results-server",
-      "test-results.appspot.com"
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
     ],
     "cwd": "[BUILDER_CACHE]/linux_tsan2",
     "name": "Upload to test-results [rtc_media_unittests]"
@@ -4360,10 +4360,10 @@
       "1337",
       "--test-type",
       "rtc_pc_unittests",
-      "--chrome-revision",
-      "170242",
       "--test-results-server",
-      "test-results.appspot.com"
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
     ],
     "cwd": "[BUILDER_CACHE]/linux_tsan2",
     "name": "Upload to test-results [rtc_pc_unittests]"
@@ -4518,10 +4518,10 @@
       "1337",
       "--test-type",
       "rtc_stats_unittests",
-      "--chrome-revision",
-      "170242",
       "--test-results-server",
-      "test-results.appspot.com"
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
     ],
     "cwd": "[BUILDER_CACHE]/linux_tsan2",
     "name": "Upload to test-results [rtc_stats_unittests]"
@@ -4876,10 +4876,10 @@
       "1337",
       "--test-type",
       "rtc_unittests",
-      "--chrome-revision",
-      "170242",
       "--test-results-server",
-      "test-results.appspot.com"
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
     ],
     "cwd": "[BUILDER_CACHE]/linux_tsan2",
     "name": "Upload to test-results [rtc_unittests]"
@@ -5034,10 +5034,10 @@
       "1337",
       "--test-type",
       "system_wrappers_unittests",
-      "--chrome-revision",
-      "170242",
       "--test-results-server",
-      "test-results.appspot.com"
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
     ],
     "cwd": "[BUILDER_CACHE]/linux_tsan2",
     "name": "Upload to test-results [system_wrappers_unittests]"
@@ -5192,10 +5192,10 @@
       "1337",
       "--test-type",
       "test_support_unittests",
-      "--chrome-revision",
-      "170242",
       "--test-results-server",
-      "test-results.appspot.com"
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
     ],
     "cwd": "[BUILDER_CACHE]/linux_tsan2",
     "name": "Upload to test-results [test_support_unittests]"
@@ -5350,10 +5350,10 @@
       "1337",
       "--test-type",
       "tools_unittests",
-      "--chrome-revision",
-      "170242",
       "--test-results-server",
-      "test-results.appspot.com"
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
     ],
     "cwd": "[BUILDER_CACHE]/linux_tsan2",
     "name": "Upload to test-results [tools_unittests]"
@@ -5628,10 +5628,10 @@
       "1337",
       "--test-type",
       "video_engine_tests",
-      "--chrome-revision",
-      "170242",
       "--test-results-server",
-      "test-results.appspot.com"
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
     ],
     "cwd": "[BUILDER_CACHE]/linux_tsan2",
     "name": "Upload to test-results [video_engine_tests]"
@@ -5786,10 +5786,10 @@
       "1337",
       "--test-type",
       "voice_engine_unittests",
-      "--chrome-revision",
-      "170242",
       "--test-results-server",
-      "test-results.appspot.com"
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
     ],
     "cwd": "[BUILDER_CACHE]/linux_tsan2",
     "name": "Upload to test-results [voice_engine_unittests]"
@@ -5944,10 +5944,10 @@
       "1337",
       "--test-type",
       "webrtc_nonparallel_tests",
-      "--chrome-revision",
-      "170242",
       "--test-results-server",
-      "test-results.appspot.com"
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
     ],
     "cwd": "[BUILDER_CACHE]/linux_tsan2",
     "name": "Upload to test-results [webrtc_nonparallel_tests]"

@@ -599,10 +599,10 @@
       "571",
       "--test-type",
       "base_unittests",
-      "--chrome-revision",
-      "refs/heads/master@{#170242}",
       "--test-results-server",
-      "test-results-test.appspot.com"
+      "test-results-test.appspot.com",
+      "--chrome-revision",
+      "refs/heads/master@{#170242}"
     ],
     "env": {
       "CHROME_HEADLESS": "1"

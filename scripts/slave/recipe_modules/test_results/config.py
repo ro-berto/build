@@ -17,10 +17,6 @@ def BASE(c):
   pass
 
 @config_ctx()
-def no_server(c):
-  c.test_results_server = None
-
-@config_ctx()
 def public_server(c):
   c.test_results_server = 'test-results.appspot.com'
 

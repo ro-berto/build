@@ -173,10 +173,10 @@
       "123",
       "--test-type",
       "gtest_test",
-      "--chrome-revision",
-      "refs/heads/master@{#170242}",
       "--test-results-server",
-      "test-results-test.appspot.com"
+      "test-results-test.appspot.com",
+      "--chrome-revision",
+      "refs/heads/master@{#170242}"
     ],
     "name": "Upload to test-results [gtest_test]"
   },

@@ -734,10 +734,10 @@
       "1337",
       "--test-type",
       "webrtc_perf_tests on Android",
-      "--chrome-revision",
-      "170242",
       "--test-results-server",
-      "test-results.appspot.com"
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
     ],
     "cwd": "[BUILDER_CACHE]/Android_Perf__swarming_",
     "name": "Upload to test-results [webrtc_perf_tests on Android]"

@@ -14,10 +14,10 @@
       "123",
       "--test-type",
       "example-test-type",
-      "--chrome-revision",
-      "2",
       "--test-results-server",
-      "test-results.appspot.com"
+      "localhost",
+      "--chrome-revision",
+      "2"
     ],
     "name": "Upload to test-results [example-test-type]"
   },

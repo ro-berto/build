@@ -1332,10 +1332,10 @@
       "1",
       "--test-type",
       "test r1.affected_tests (r1)",
-      "--chrome-revision",
-      "170242",
       "--test-results-server",
-      "test-results.appspot.com"
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
     ],
     "cwd": "[BUILDER_CACHE]\\win",
     "name": "test r1.Upload to test-results [test r1.affected_tests (r1)]",

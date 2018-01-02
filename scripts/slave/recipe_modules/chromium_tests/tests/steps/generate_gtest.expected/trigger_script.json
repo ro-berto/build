@@ -199,10 +199,10 @@
       "123",
       "--test-type",
       "base_unittests",
-      "--chrome-revision",
-      "refs/heads/master@{#170242}",
       "--test-results-server",
-      "test-results.appspot.com"
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "refs/heads/master@{#170242}"
     ],
     "name": "Upload to test-results [base_unittests]"
   },

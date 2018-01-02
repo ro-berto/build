@@ -979,35 +979,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
-      "--input-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}]}]}",
-      "--master-name",
-      "tryserver.chromium.mac",
-      "--builder-name",
-      "mac_chromium_variable",
-      "--build-number",
-      "1",
-      "--test-type",
-      "gl_tests",
-      "--chrome-revision",
-      "refs/heads/master@{#170242}",
-      "--test-results-server",
-      "test-results.appspot.com"
-    ],
-    "cwd": "[BUILDER_CACHE]/mac",
-    "env": {
-      "FORCE_MAC_TOOLCHAIN": "1"
-    },
-    "name": "test r0.Upload to test-results [gl_tests]",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "import sys; sys.exit(0)"
     ],
     "name": "report",

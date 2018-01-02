@@ -2601,10 +2601,10 @@
       "1337",
       "--test-type",
       "AppRTCMobileTest on Android",
-      "--chrome-revision",
-      "170242",
       "--test-results-server",
-      "test-results.appspot.com"
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
     ],
     "cwd": "[BUILDER_CACHE]/android_dbg",
     "name": "Upload to test-results [AppRTCMobileTest on Android]"
@@ -2723,10 +2723,10 @@
       "1337",
       "--test-type",
       "audio_decoder_unittests on Android",
-      "--chrome-revision",
-      "170242",
       "--test-results-server",
-      "test-results.appspot.com"
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
     ],
     "cwd": "[BUILDER_CACHE]/android_dbg",
     "name": "Upload to test-results [audio_decoder_unittests on Android]"
@@ -2845,10 +2845,10 @@
       "1337",
       "--test-type",
       "common_audio_unittests on Android",
-      "--chrome-revision",
-      "170242",
       "--test-results-server",
-      "test-results.appspot.com"
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
     ],
     "cwd": "[BUILDER_CACHE]/android_dbg",
     "name": "Upload to test-results [common_audio_unittests on Android]"
@@ -2967,10 +2967,10 @@
       "1337",
       "--test-type",
       "common_video_unittests on Android",
-      "--chrome-revision",
-      "170242",
       "--test-results-server",
-      "test-results.appspot.com"
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
     ],
     "cwd": "[BUILDER_CACHE]/android_dbg",
     "name": "Upload to test-results [common_video_unittests on Android]"
@@ -3089,10 +3089,10 @@
       "1337",
       "--test-type",
       "libjingle_peerconnection_android_unittest on Android",
-      "--chrome-revision",
-      "170242",
       "--test-results-server",
-      "test-results.appspot.com"
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
     ],
     "cwd": "[BUILDER_CACHE]/android_dbg",
     "name": "Upload to test-results [libjingle_peerconnection_android_unittest on Android]"
@@ -3250,10 +3250,10 @@
       "1337",
       "--test-type",
       "modules_tests on Android",
-      "--chrome-revision",
-      "170242",
       "--test-results-server",
-      "test-results.appspot.com"
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
     ],
     "cwd": "[BUILDER_CACHE]/android_dbg",
     "name": "Upload to test-results [modules_tests on Android]"
@@ -3567,10 +3567,10 @@
       "1337",
       "--test-type",
       "modules_unittests on Android",
-      "--chrome-revision",
-      "170242",
       "--test-results-server",
-      "test-results.appspot.com"
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
     ],
     "cwd": "[BUILDER_CACHE]/android_dbg",
     "name": "Upload to test-results [modules_unittests on Android]"
@@ -3689,10 +3689,10 @@
       "1337",
       "--test-type",
       "ortc_unittests on Android",
-      "--chrome-revision",
-      "170242",
       "--test-results-server",
-      "test-results.appspot.com"
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
     ],
     "cwd": "[BUILDER_CACHE]/android_dbg",
     "name": "Upload to test-results [ortc_unittests on Android]"
@@ -3928,10 +3928,10 @@
       "1337",
       "--test-type",
       "peerconnection_unittests on Android",
-      "--chrome-revision",
-      "170242",
       "--test-results-server",
-      "test-results.appspot.com"
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
     ],
     "cwd": "[BUILDER_CACHE]/android_dbg",
     "name": "Upload to test-results [peerconnection_unittests on Android]"
@@ -4050,10 +4050,10 @@
       "1337",
       "--test-type",
       "rtc_stats_unittests on Android",
-      "--chrome-revision",
-      "170242",
       "--test-results-server",
-      "test-results.appspot.com"
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
     ],
     "cwd": "[BUILDER_CACHE]/android_dbg",
     "name": "Upload to test-results [rtc_stats_unittests on Android]"
@@ -4367,10 +4367,10 @@
       "1337",
       "--test-type",
       "rtc_unittests on Android",
-      "--chrome-revision",
-      "170242",
       "--test-results-server",
-      "test-results.appspot.com"
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
     ],
     "cwd": "[BUILDER_CACHE]/android_dbg",
     "name": "Upload to test-results [rtc_unittests on Android]"
@@ -4489,10 +4489,10 @@
       "1337",
       "--test-type",
       "system_wrappers_unittests on Android",
-      "--chrome-revision",
-      "170242",
       "--test-results-server",
-      "test-results.appspot.com"
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
     ],
     "cwd": "[BUILDER_CACHE]/android_dbg",
     "name": "Upload to test-results [system_wrappers_unittests on Android]"
@@ -4611,10 +4611,10 @@
       "1337",
       "--test-type",
       "test_support_unittests on Android",
-      "--chrome-revision",
-      "170242",
       "--test-results-server",
-      "test-results.appspot.com"
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
     ],
     "cwd": "[BUILDER_CACHE]/android_dbg",
     "name": "Upload to test-results [test_support_unittests on Android]"
@@ -4733,10 +4733,10 @@
       "1337",
       "--test-type",
       "tools_unittests on Android",
-      "--chrome-revision",
-      "170242",
       "--test-results-server",
-      "test-results.appspot.com"
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
     ],
     "cwd": "[BUILDER_CACHE]/android_dbg",
     "name": "Upload to test-results [tools_unittests on Android]"
@@ -4972,10 +4972,10 @@
       "1337",
       "--test-type",
       "video_engine_tests on Android",
-      "--chrome-revision",
-      "170242",
       "--test-results-server",
-      "test-results.appspot.com"
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
     ],
     "cwd": "[BUILDER_CACHE]/android_dbg",
     "name": "Upload to test-results [video_engine_tests on Android]"
@@ -5094,10 +5094,10 @@
       "1337",
       "--test-type",
       "voice_engine_unittests on Android",
-      "--chrome-revision",
-      "170242",
       "--test-results-server",
-      "test-results.appspot.com"
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
     ],
     "cwd": "[BUILDER_CACHE]/android_dbg",
     "name": "Upload to test-results [voice_engine_unittests on Android]"
@@ -5216,10 +5216,10 @@
       "1337",
       "--test-type",
       "webrtc_nonparallel_tests on Android",
-      "--chrome-revision",
-      "170242",
       "--test-results-server",
-      "test-results.appspot.com"
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
     ],
     "cwd": "[BUILDER_CACHE]/android_dbg",
     "name": "Upload to test-results [webrtc_nonparallel_tests on Android]"
@@ -5338,10 +5338,10 @@
       "1337",
       "--test-type",
       "webrtc_perf_tests on Android",
-      "--chrome-revision",
-      "170242",
       "--test-results-server",
-      "test-results.appspot.com"
+      "test-results.appspot.com",
+      "--chrome-revision",
+      "170242"
     ],
     "cwd": "[BUILDER_CACHE]/android_dbg",
     "name": "Upload to test-results [webrtc_perf_tests on Android]"
