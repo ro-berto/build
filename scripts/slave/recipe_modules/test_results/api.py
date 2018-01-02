@@ -8,6 +8,13 @@ from recipe_engine import recipe_api
 class TestResultsApi(recipe_api.RecipeApi):
   """Recipe module to upload gtest json results to test-results server."""
 
+  def initialize(self):
+    """Set the default config."""
+    if self.m.runtime.is_experimental:
+      self.set_config('staging_server')
+    else:
+      self.set_config('public_server')
+
   def upload(self, results_file, test_type, chrome_revision,
              test_results_server=None, downgrade_error_to_warning=True,
              builder_name_suffix=''):
