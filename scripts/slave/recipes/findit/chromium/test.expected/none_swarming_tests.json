@@ -1011,32 +1011,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::test_results]\\resources\\upload_test_results.py",
-      "--input-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":(\", \"status\": \"FAILURE\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":(\", \"status\": \"FAILURE\"}]}]}",
-      "--master-name",
-      "tryserver.chromium.win",
-      "--builder-name",
-      "win_chromium_variable",
-      "--build-number",
-      "1",
-      "--test-type",
-      "gl_tests",
-      "--test-results-server",
-      "test-results.appspot.com",
-      "--chrome-revision",
-      "refs/heads/master@{#170242}"
-    ],
-    "cwd": "[BUILDER_CACHE]\\win",
-    "name": "test r1.Upload to test-results [gl_tests]",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--",

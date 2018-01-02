@@ -7,7 +7,6 @@ from recipe_engine.recipe_api import Property
 DEPS = [
   'recipe_engine/json',
   'recipe_engine/properties',
-  'recipe_engine/runtime',
   'test_results',
 ]
 
@@ -52,14 +51,6 @@ def GenTests(api):
             buildername='ExampleBuilder',
             buildnumber=123,
             server_config=config))
-
-  yield (
-      api.test('upload_success_experimental') +
-      api.runtime(is_luci=True, is_experimental=True) +
-      api.properties(
-          mastername='example.master',
-          buildername='ExampleBuilder',
-          buildnumber=123))
 
   yield (
       api.test('upload_and_degrade_to_warning') +

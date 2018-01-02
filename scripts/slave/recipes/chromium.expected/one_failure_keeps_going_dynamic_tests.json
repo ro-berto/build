@@ -371,31 +371,6 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
-      "--input-json",
-      "{}",
-      "--master-name",
-      "chromium.linux",
-      "--builder-name",
-      "Linux Tests",
-      "--build-number",
-      "571",
-      "--test-type",
-      "base_unittests",
-      "--test-results-server",
-      "test-results.appspot.com",
-      "--chrome-revision",
-      "refs/heads/master@{#170242}"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "Upload to test-results [base_unittests]"
-  },
-  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -433,31 +408,6 @@
       "CHROME_HEADLESS": "1"
     },
     "name": "browser_tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
-      "--input-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}]}]}",
-      "--master-name",
-      "chromium.linux",
-      "--builder-name",
-      "Linux Tests",
-      "--build-number",
-      "571",
-      "--test-type",
-      "browser_tests",
-      "--test-results-server",
-      "test-results.appspot.com",
-      "--chrome-revision",
-      "refs/heads/master@{#170242}"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "Upload to test-results [browser_tests]"
   },
   {
     "name": "$result",
