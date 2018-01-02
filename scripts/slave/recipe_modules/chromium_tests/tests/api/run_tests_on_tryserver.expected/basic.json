@@ -510,10 +510,10 @@
       "571",
       "--test-type",
       "base_unittests (with patch)",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--chrome-revision",
-      "170242"
+      "170242",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "name": "Upload to test-results [base_unittests (with patch)]"
   },
@@ -1233,10 +1233,10 @@
       "571",
       "--test-type",
       "base_unittests (without patch)",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--chrome-revision",
-      "170242"
+      "170242",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "name": "Upload to test-results [base_unittests (without patch)]"
   },

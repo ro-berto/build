@@ -860,10 +860,10 @@
       "123",
       "--test-type",
       "browser_tests on Ubuntu",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--chrome-revision",
-      "170242"
+      "170242",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Swarm",
     "name": "Upload to test-results [browser_tests on Ubuntu]"

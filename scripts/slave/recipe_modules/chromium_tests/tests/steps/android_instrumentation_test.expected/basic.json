@@ -42,10 +42,10 @@
       "123",
       "--test-type",
       "ChromePublicTest",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--chrome-revision",
-      "x@{#0}"
+      "x@{#0}",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "name": "ChromePublicTest.Upload to test-results [ChromePublicTest]",
     "~followup_annotations": [

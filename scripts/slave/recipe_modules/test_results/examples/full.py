@@ -7,6 +7,7 @@ from recipe_engine.recipe_api import Property
 DEPS = [
   'recipe_engine/json',
   'recipe_engine/properties',
+  'recipe_engine/runtime',
   'test_results',
 ]
 
@@ -37,13 +38,12 @@ def RunSteps(api, warning, server_config):
       api.json.input(gtest_results),
       chrome_revision=2,
       test_type='example-test-type',
-      test_results_server='localhost',
       downgrade_error_to_warning=warning,
       builder_name_suffix='sample-suffix')
 
 
 def GenTests(api):
-  for config in ('public_server', 'staging_server'):
+  for config in ('no_server', 'public_server', 'staging_server'):
     yield (
         api.test('upload_success_%s' % config) +
         api.properties(
@@ -51,6 +51,14 @@ def GenTests(api):
             buildername='ExampleBuilder',
             buildnumber=123,
             server_config=config))
+
+  yield (
+      api.test('upload_success_experimental') +
+      api.runtime(is_luci=True, is_experimental=True) +
+      api.properties(
+          mastername='example.master',
+          buildername='ExampleBuilder',
+          buildnumber=123))
 
   yield (
       api.test('upload_and_degrade_to_warning') +

@@ -515,10 +515,10 @@
       "123",
       "--test-type",
       "browser_tests",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--chrome-revision",
-      "170242"
+      "170242",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "name": "Upload to test-results [browser_tests]"
   },

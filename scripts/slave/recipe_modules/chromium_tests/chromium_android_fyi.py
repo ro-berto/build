@@ -127,7 +127,6 @@ SPEC = {
       'bot_type': 'tester',
       'android_config': 'main_builder_mb',
       'android_apply_config': ['use_devil_provision'],
-      'test_results_config': 'public_server',
       'testing': {
         'platform': 'linux',
       },
@@ -146,8 +145,6 @@ SPEC = {
       'bot_type': 'tester',
       'android_config': 'arm64_builder_mb',
       'android_apply_config': ['use_devil_provision'],
-      'test_results_config': 'public_server',
-      'test_results_config': 'public_server',
       'testing': {
         'platform': 'linux',
       },
@@ -166,8 +163,6 @@ SPEC = {
       'bot_type': 'tester',
       'android_config': 'main_builder_mb',
       'android_apply_config': ['use_devil_provision'],
-      'test_results_config': 'public_server',
-      'test_results_config': 'public_server',
       'testing': {
         'platform': 'linux',
       },
@@ -279,8 +274,6 @@ SPEC = {
       },
       'android_config': 'main_builder_mb',
       'android_apply_config': ['use_devil_provision'],
-      'test_results_config': 'public_server',
-      'test_results_config': 'public_server',
       'bot_type': 'builder_tester',
       'testing': {
         'platform': 'linux',
@@ -298,8 +291,6 @@ SPEC = {
       },
       'android_config': 'arm64_builder_mb',
       'android_apply_config': ['use_devil_provision'],
-      'test_results_config': 'public_server',
-      'test_results_config': 'public_server',
       'bot_type': 'builder_tester',
       'testing': {
         'platform': 'linux',
@@ -319,8 +310,6 @@ SPEC = {
       'bot_type': 'tester',
       'android_config': 'arm64_builder_mb',
       'android_apply_config': ['use_devil_provision'],
-      'test_results_config': 'public_server',
-      'test_results_config': 'public_server',
       'testing': {
         'platform': 'linux',
       },
@@ -339,8 +328,6 @@ SPEC = {
       'bot_type': 'tester',
       'android_config': 'arm64_builder_mb',
       'android_apply_config': ['use_devil_provision'],
-      'test_results_config': 'public_server',
-      'test_results_config': 'public_server',
       'testing': {
         'platform': 'linux',
       },

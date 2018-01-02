@@ -1218,10 +1218,10 @@
       "1",
       "--test-type",
       "test r1.gl_tests (r1)",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--chrome-revision",
-      "170242"
+      "170242",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "cwd": "[BUILDER_CACHE]/mac",
     "env": {

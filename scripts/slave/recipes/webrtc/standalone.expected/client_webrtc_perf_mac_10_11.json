@@ -1004,10 +1004,10 @@
       "1337",
       "--test-type",
       "isac_fix_test",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--chrome-revision",
-      "170242"
+      "170242",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "cwd": "[BUILDER_CACHE]/Mac_10_11",
     "name": "Upload to test-results [isac_fix_test]"
@@ -1187,10 +1187,10 @@
       "1337",
       "--test-type",
       "low_bandwidth_audio_perf_test",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--chrome-revision",
-      "170242"
+      "170242",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "cwd": "[BUILDER_CACHE]/Mac_10_11",
     "name": "Upload to test-results [low_bandwidth_audio_perf_test]"
@@ -1370,10 +1370,10 @@
       "1337",
       "--test-type",
       "webrtc_perf_tests",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--chrome-revision",
-      "170242"
+      "170242",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "cwd": "[BUILDER_CACHE]/Mac_10_11",
     "name": "Upload to test-results [webrtc_perf_tests]"

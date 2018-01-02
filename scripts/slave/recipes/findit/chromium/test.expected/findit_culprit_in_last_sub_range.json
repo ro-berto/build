@@ -1223,10 +1223,10 @@
       "1",
       "--test-type",
       "test r2.gl_tests (r2)",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--chrome-revision",
-      "170242"
+      "170242",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "cwd": "[BUILDER_CACHE]/mac",
     "env": {
@@ -2145,10 +2145,10 @@
       "1",
       "--test-type",
       "test r3.gl_tests (r3)",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--chrome-revision",
-      "170242"
+      "170242",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "cwd": "[BUILDER_CACHE]/mac",
     "env": {

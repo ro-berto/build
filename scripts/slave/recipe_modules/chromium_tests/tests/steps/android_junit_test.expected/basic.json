@@ -38,10 +38,10 @@
       "123",
       "--test-type",
       "test_name",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--chrome-revision",
-      "x@{#0}"
+      "x@{#0}",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "name": "test_name.Upload to test-results [test_name]",
     "~followup_annotations": [

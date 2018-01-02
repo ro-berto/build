@@ -186,10 +186,10 @@
       "123",
       "--test-type",
       "base_unittests",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--chrome-revision",
-      "0"
+      "0",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "name": "Upload to test-results [base_unittests]"
   },
