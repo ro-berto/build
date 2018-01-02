@@ -2355,25 +2355,13 @@ class BlinkTest(Test):
                    '--skipped', 'always'])
 
     try:
-      if api.platform.is_win:
-        step_result = api.python(
-          step_name,
-          api.path['checkout'].join('third_party', 'WebKit', 'Tools',
-                                    'Scripts', 'run-webkit-tests'),
-          args,
-          step_test_data=lambda: api.test_utils.test_api.canned_test_output(
-              passing=True, minimal=True))
-      else:
-        step_result = api.chromium.runtest(
-          api.path['checkout'].join('third_party', 'WebKit', 'Tools',
-                                    'Scripts', 'run-webkit-tests'),
-          args,
-          name=step_name,
-          python_mode=True,
-          # TODO(phajdan.jr): Clean up the runtest.py mess.
-          disable_src_side_runtest_py=True,
-          step_test_data=lambda: api.test_utils.test_api.canned_test_output(
-              passing=True, minimal=True))
+      step_result = api.python(
+        step_name,
+        api.path['checkout'].join('third_party', 'WebKit', 'Tools',
+                                  'Scripts', 'run-webkit-tests'),
+        args,
+        step_test_data=lambda: api.test_utils.test_api.canned_test_output(
+            passing=True, minimal=True))
 
       # Mark steps with unexpected flakes as warnings. Do this here instead of
       # "finally" blocks because we only want to do this if step was successful.

@@ -3,23 +3,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
-      "--target",
-      "Release",
-      "--no-xvfb",
-      "--factory-properties",
-      "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"mastername\": \"test_mastername\", \"recipe\": \"chromium_tests:tests/steps/blink_test\", \"slavename\": \"test_bot_id\"}",
-      "--build-properties",
-      "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"mastername\": \"test_mastername\", \"recipe\": \"chromium_tests:tests/steps/blink_test\", \"slavename\": \"test_bot_id\"}",
-      "--step-name=webkit_tests (with patch)",
-      "--builder-name=test_buildername",
-      "--slave-name=test_bot_id",
-      "--build-number=123",
-      "--run-python-script",
       "None/third_party/WebKit/Tools/Scripts/run-webkit-tests",
       "--target",
       "Release",
@@ -46,10 +29,6 @@
       "--debug-rwt-logging",
       "--js-flags=--future"
     ],
-    "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "CHROME_HEADLESS": "1"
-    },
     "name": "webkit_tests (with patch)",
     "~followup_annotations": [
       "step returned non-zero exit code: 101",

@@ -548,23 +548,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
-      "--target",
-      "Release",
-      "--no-xvfb",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"V8-Blink Linux 64 - future\", \"buildnumber\": 571, \"mastername\": \"client.v8.fyi\", \"path_config\": \"kitchen\", \"recipe\": \"blink_downstream\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"V8-Blink Linux 64 - future\", \"buildnumber\": 571, \"mastername\": \"client.v8.fyi\", \"path_config\": \"kitchen\", \"recipe\": \"blink_downstream\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--step-name=webkit_tests (with patch)",
-      "--builder-name=V8-Blink Linux 64 - future",
-      "--slave-name=test_bot",
-      "--build-number=571",
-      "--run-python-script",
       "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src/third_party/WebKit/Tools/Scripts/run-webkit-tests",
       "--target",
       "Release",
@@ -598,10 +581,6 @@
       "--js-flags=--future"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
-    "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "CHROME_HEADLESS": "1"
-    },
     "name": "webkit_tests (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Total tests: 6<br/>* Passed: 5 (5 expected, 0 unexpected)<br/>* Skipped: 0 (0 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 0 (0 expected, 0 unexpected)<br/>@@@"

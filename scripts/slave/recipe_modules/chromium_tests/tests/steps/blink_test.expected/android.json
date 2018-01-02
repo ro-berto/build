@@ -3,25 +3,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
-      "--target",
-      "Release",
-      "--test-platform",
-      "android",
-      "--no-xvfb",
-      "--factory-properties",
-      "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"mastername\": \"test_mastername\", \"recipe\": \"chromium_tests:tests/steps/blink_test\", \"slavename\": \"test_bot_id\", \"target_platform\": \"android\"}",
-      "--build-properties",
-      "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"mastername\": \"test_mastername\", \"recipe\": \"chromium_tests:tests/steps/blink_test\", \"slavename\": \"test_bot_id\", \"target_platform\": \"android\"}",
-      "--step-name=webkit_tests (with patch)",
-      "--builder-name=test_buildername",
-      "--slave-name=test_bot_id",
-      "--build-number=123",
-      "--run-python-script",
       "None/third_party/WebKit/Tools/Scripts/run-webkit-tests",
       "--target",
       "Release",
@@ -50,10 +31,6 @@
       "android",
       "--js-flags=--future"
     ],
-    "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "CHROME_HEADLESS": "1"
-    },
     "name": "webkit_tests (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Total tests: 5<br/>* Passed: 4 (4 expected, 0 unexpected)<br/>* Skipped: 0 (0 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 0 (0 expected, 0 unexpected)<br/>@@@"
@@ -126,25 +103,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
-      "--target",
-      "Release",
-      "--test-platform",
-      "android",
-      "--no-xvfb",
-      "--factory-properties",
-      "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"mastername\": \"test_mastername\", \"recipe\": \"chromium_tests:tests/steps/blink_test\", \"slavename\": \"test_bot_id\", \"target_platform\": \"android\"}",
-      "--build-properties",
-      "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"mastername\": \"test_mastername\", \"recipe\": \"chromium_tests:tests/steps/blink_test\", \"slavename\": \"test_bot_id\", \"target_platform\": \"android\"}",
-      "--step-name=webkit_tests (without patch)",
-      "--builder-name=test_buildername",
-      "--slave-name=test_bot_id",
-      "--build-number=123",
-      "--run-python-script",
       "None/third_party/WebKit/Tools/Scripts/run-webkit-tests",
       "--target",
       "Release",
@@ -177,10 +135,6 @@
       "--skipped",
       "always"
     ],
-    "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "CHROME_HEADLESS": "1"
-    },
     "name": "webkit_tests (without patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Total tests: 5<br/>* Passed: 4 (4 expected, 0 unexpected)<br/>* Skipped: 0 (0 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 0 (0 expected, 0 unexpected)<br/>@@@"
