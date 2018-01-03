@@ -31,9 +31,8 @@ def collect_task(
             [--build-properties <string JSON>] \
             [merge arguments...] \
             --summary-json <summary json> \
-            --task-output-dir <task output directory> \
             -o <merged json path> \
-            <shard json path>...
+            <shard json>...
 
       where the merge arguments are the contents of merge_arguments_json.
     build_properties: A string containing build information to
@@ -129,7 +128,6 @@ def collect_task(
     merge_cmd.extend(('--summary-json', summary_json_file))
   else:
     logging.warn('Summary json file missing: %r', summary_json_file)
-  merge_cmd.extend(('--task-output-dir', task_output_dir))
   if merge_arguments:
     merge_cmd.extend(json.loads(merge_arguments))
   merge_cmd.extend(('-o', output_json))
