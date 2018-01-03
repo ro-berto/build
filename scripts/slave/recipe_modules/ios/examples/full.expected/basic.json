@@ -3012,10 +3012,10 @@
       "0",
       "--test-type",
       "fake test 1",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--chrome-revision",
-      "refs/heads/master@{#170242}"
+      "refs/heads/master@{#170242}",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "cwd": "[START_DIR]/src",
     "name": "Upload to test-results [fake test 1]"

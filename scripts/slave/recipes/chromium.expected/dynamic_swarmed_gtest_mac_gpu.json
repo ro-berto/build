@@ -680,10 +680,10 @@
       "571",
       "--test-type",
       "gl_tests on Intel GPU on Mac on Mac-10.10",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--chrome-revision",
-      "170242"
+      "170242",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "env": {
       "CHROME_HEADLESS": "1",
@@ -810,10 +810,10 @@
       "571",
       "--test-type",
       "gl_tests on NVIDIA GPU on Mac Retina",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--chrome-revision",
-      "170242"
+      "170242",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "env": {
       "CHROME_HEADLESS": "1",

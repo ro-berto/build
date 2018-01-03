@@ -491,15 +491,14 @@ class LocalGTestTest(Test):
           ])
 
         source = api.json.input(r.raw)
-        if api.test_results.c.test_results_server:
-          api.test_results.upload(
-              source,
-              test_type=self.name,
-              chrome_revision=api.bot_update.last_returned_properties.get(
-                  self._commit_position_property, 'x@{#0}'))
-          if (self._upload_to_flake_predictor and step_result.retcode != 0):
-            GTestTest.upload_to_gs_bucket(
-                api, source, 'flake-predictor-data/log_data', self.name)
+        api.test_results.upload(
+            source,
+            test_type=self.name,
+            chrome_revision=api.bot_update.last_returned_properties.get(
+                self._commit_position_property, 'x@{#0}'))
+        if (self._upload_to_flake_predictor and step_result.retcode != 0):
+          GTestTest.upload_to_gs_bucket(
+              api, source, 'flake-predictor-data/log_data', self.name)
 
     return step_result
 
@@ -893,7 +892,7 @@ class JSONResultsHandler(ResultsHandler):
         chrome_revision_cp))
     api.test_results.upload(
       api.json.input(results), chrome_revision=chrome_revision,
-      test_type=step_name, test_results_server='test-results.appspot.com')
+      test_type=step_name)
 
   def render_results(self, api, results, presentation):
     failure_status = (
@@ -1410,8 +1409,7 @@ class SwarmingGTestTest(SwarmingTest):
           api.test_results.upload(
               source,
               chrome_revision=chrome_revision,
-              test_type=step_result.step['name'],
-              test_results_server='test-results.appspot.com')
+              test_type=step_result.step['name'])
           if (self._upload_to_flake_predictor and step_result.retcode != 0):
             GTestTest.upload_to_gs_bucket(
                 api, source, 'flake-predictor-data/log_data', self.name)
@@ -2234,8 +2232,7 @@ class AndroidTest(Test):
               api.json.input(gtest_results.raw),
               test_type=self.name,
               chrome_revision=api.bot_update.last_returned_properties.get(
-                  'got_revision_cp', 'x@{#0}'),
-              test_results_server='test-results.appspot.com')
+                  'got_revision_cp', 'x@{#0}'))
 
   def compile_targets(self, _):
     return self._compile_targets

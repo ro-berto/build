@@ -72,10 +72,10 @@
       "123",
       "--test-type",
       "webkit_tests (with patch)",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--chrome-revision",
-      "0"
+      "0",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "name": "Upload to test-results [webkit_tests (with patch)]"
   },

@@ -2583,10 +2583,10 @@
       "1337",
       "--test-type",
       "audio_decoder_unittests",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--chrome-revision",
-      "170242"
+      "170242",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "cwd": "[BUILDER_CACHE]/mac_asan",
     "name": "Upload to test-results [audio_decoder_unittests]"
@@ -2741,10 +2741,10 @@
       "1337",
       "--test-type",
       "common_audio_unittests",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--chrome-revision",
-      "170242"
+      "170242",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "cwd": "[BUILDER_CACHE]/mac_asan",
     "name": "Upload to test-results [common_audio_unittests]"
@@ -2899,10 +2899,10 @@
       "1337",
       "--test-type",
       "common_video_unittests",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--chrome-revision",
-      "170242"
+      "170242",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "cwd": "[BUILDER_CACHE]/mac_asan",
     "name": "Upload to test-results [common_video_unittests]"
@@ -3057,10 +3057,10 @@
       "1337",
       "--test-type",
       "low_bandwidth_audio_test",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--chrome-revision",
-      "170242"
+      "170242",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "cwd": "[BUILDER_CACHE]/mac_asan",
     "name": "Upload to test-results [low_bandwidth_audio_test]"
@@ -3255,10 +3255,10 @@
       "1337",
       "--test-type",
       "modules_tests",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--chrome-revision",
-      "170242"
+      "170242",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "cwd": "[BUILDER_CACHE]/mac_asan",
     "name": "Upload to test-results [modules_tests]"
@@ -3613,10 +3613,10 @@
       "1337",
       "--test-type",
       "modules_unittests",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--chrome-revision",
-      "170242"
+      "170242",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "cwd": "[BUILDER_CACHE]/mac_asan",
     "name": "Upload to test-results [modules_unittests]"
@@ -3771,10 +3771,10 @@
       "1337",
       "--test-type",
       "ortc_unittests",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--chrome-revision",
-      "170242"
+      "170242",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "cwd": "[BUILDER_CACHE]/mac_asan",
     "name": "Upload to test-results [ortc_unittests]"
@@ -4049,10 +4049,10 @@
       "1337",
       "--test-type",
       "peerconnection_unittests",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--chrome-revision",
-      "170242"
+      "170242",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "cwd": "[BUILDER_CACHE]/mac_asan",
     "name": "Upload to test-results [peerconnection_unittests]"
@@ -4207,10 +4207,10 @@
       "1337",
       "--test-type",
       "rtc_media_unittests",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--chrome-revision",
-      "170242"
+      "170242",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "cwd": "[BUILDER_CACHE]/mac_asan",
     "name": "Upload to test-results [rtc_media_unittests]"
@@ -4365,10 +4365,10 @@
       "1337",
       "--test-type",
       "rtc_pc_unittests",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--chrome-revision",
-      "170242"
+      "170242",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "cwd": "[BUILDER_CACHE]/mac_asan",
     "name": "Upload to test-results [rtc_pc_unittests]"
@@ -4523,10 +4523,10 @@
       "1337",
       "--test-type",
       "rtc_stats_unittests",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--chrome-revision",
-      "170242"
+      "170242",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "cwd": "[BUILDER_CACHE]/mac_asan",
     "name": "Upload to test-results [rtc_stats_unittests]"
@@ -4881,10 +4881,10 @@
       "1337",
       "--test-type",
       "rtc_unittests",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--chrome-revision",
-      "170242"
+      "170242",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "cwd": "[BUILDER_CACHE]/mac_asan",
     "name": "Upload to test-results [rtc_unittests]"
@@ -5039,10 +5039,10 @@
       "1337",
       "--test-type",
       "system_wrappers_unittests",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--chrome-revision",
-      "170242"
+      "170242",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "cwd": "[BUILDER_CACHE]/mac_asan",
     "name": "Upload to test-results [system_wrappers_unittests]"
@@ -5197,10 +5197,10 @@
       "1337",
       "--test-type",
       "test_support_unittests",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--chrome-revision",
-      "170242"
+      "170242",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "cwd": "[BUILDER_CACHE]/mac_asan",
     "name": "Upload to test-results [test_support_unittests]"
@@ -5355,10 +5355,10 @@
       "1337",
       "--test-type",
       "tools_unittests",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--chrome-revision",
-      "170242"
+      "170242",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "cwd": "[BUILDER_CACHE]/mac_asan",
     "name": "Upload to test-results [tools_unittests]"
@@ -5633,10 +5633,10 @@
       "1337",
       "--test-type",
       "video_engine_tests",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--chrome-revision",
-      "170242"
+      "170242",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "cwd": "[BUILDER_CACHE]/mac_asan",
     "name": "Upload to test-results [video_engine_tests]"
@@ -5791,10 +5791,10 @@
       "1337",
       "--test-type",
       "voice_engine_unittests",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--chrome-revision",
-      "170242"
+      "170242",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "cwd": "[BUILDER_CACHE]/mac_asan",
     "name": "Upload to test-results [voice_engine_unittests]"
@@ -5949,10 +5949,10 @@
       "1337",
       "--test-type",
       "webrtc_nonparallel_tests",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--chrome-revision",
-      "170242"
+      "170242",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "cwd": "[BUILDER_CACHE]/mac_asan",
     "name": "Upload to test-results [webrtc_nonparallel_tests]"

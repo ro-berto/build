@@ -1336,10 +1336,10 @@
       "1",
       "--test-type",
       "test r5.gl_tests (r5)",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--chrome-revision",
-      "170242"
+      "170242",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "cwd": "[BUILDER_CACHE]/mac",
     "env": {
@@ -1468,10 +1468,10 @@
       "1",
       "--test-type",
       "test r5.browser_tests (r5)",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--chrome-revision",
-      "170242"
+      "170242",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "cwd": "[BUILDER_CACHE]/mac",
     "env": {
@@ -2396,10 +2396,10 @@
       "1",
       "--test-type",
       "test r6.browser_tests (r6)",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--chrome-revision",
-      "170242"
+      "170242",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "cwd": "[BUILDER_CACHE]/mac",
     "env": {
@@ -3320,10 +3320,10 @@
       "1",
       "--test-type",
       "test r2.gl_tests (r2)",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--chrome-revision",
-      "170242"
+      "170242",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "cwd": "[BUILDER_CACHE]/mac",
     "env": {
@@ -4248,10 +4248,10 @@
       "1",
       "--test-type",
       "test r3.gl_tests (r3)",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--chrome-revision",
-      "170242"
+      "170242",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "cwd": "[BUILDER_CACHE]/mac",
     "env": {

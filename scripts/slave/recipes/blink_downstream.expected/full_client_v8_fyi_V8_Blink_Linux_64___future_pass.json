@@ -622,10 +622,10 @@
       "571",
       "--test-type",
       "webkit_tests (with patch)",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--chrome-revision",
-      "43426"
+      "43426",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
     "name": "Upload to test-results [webkit_tests (with patch)]"

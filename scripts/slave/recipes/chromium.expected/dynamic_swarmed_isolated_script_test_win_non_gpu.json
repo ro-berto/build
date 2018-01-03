@@ -657,10 +657,10 @@
       "571",
       "--test-type",
       "telemetry_gpu_unittests",
-      "--test-results-server",
-      "test-results.appspot.com",
       "--chrome-revision",
-      "170242"
+      "170242",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "env": {
       "CHROME_HEADLESS": "1",
