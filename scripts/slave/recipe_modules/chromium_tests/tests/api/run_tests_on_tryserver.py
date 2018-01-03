@@ -19,8 +19,7 @@ def RunSteps(api):
   update_step, _bot_db = api.chromium_tests.prepare_checkout(bot_config_object)
   api.chromium_tests.run_tests_on_tryserver(
       bot_config_object,
-      tests=[api.chromium_tests.steps.GTestTest(
-          'base_unittests', enable_swarming=True)],
+      tests=[api.chromium_tests.steps.SwarmingGTestTest('base_unittests')],
       bot_update_step=update_step,
       affected_files=api.properties.get('affected_files', []),
       disable_deapply_patch=api.properties.get('disable_deapply_patch'))

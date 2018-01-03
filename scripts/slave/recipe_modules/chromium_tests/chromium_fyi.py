@@ -580,7 +580,7 @@ SPEC = {
       'android_config': 'main_builder',
       'root_devices': True,
       'tests': [
-        steps.GTestTest('remoting_unittests'),
+        steps.LocalGTestTest('remoting_unittests'),
         steps.AndroidInstrumentationTest('ChromotingTest'),
       ],
       'test_results_config': 'staging_server',
@@ -755,7 +755,7 @@ SPEC = {
       'bot_type': 'tester',
       'parent_buildername': 'Linux remote_run Builder',
       'tests': [
-        steps.GTestTest('base_unittests'),
+        steps.LocalGTestTest('base_unittests'),
       ],
       'test_results_config': 'staging_server',
       'testing': {

@@ -497,8 +497,16 @@ class LocalGTestTest(Test):
             chrome_revision=api.bot_update.last_returned_properties.get(
                 self._commit_position_property, 'x@{#0}'))
         if (self._upload_to_flake_predictor and step_result.retcode != 0):
-          GTestTest.upload_to_gs_bucket(
-              api, source, 'flake-predictor-data/log_data', self.name)
+          bucket = 'flake-predictor-data/log_data'
+          gs_dest = '%s/%s/%d/%s.json' % (api.properties['mastername'],
+                                          api.properties['buildername'],
+                                          api.properties['buildnumber'],
+                                          self.name)
+          api.gsutil.upload(
+              name='Uploading results to %s' % bucket,
+              source=source,
+              bucket=bucket,
+              dest=gs_dest)
 
     return step_result
 
@@ -706,45 +714,46 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
                   """ % (name, trigger_script_path))),
               as_log='details')
 
-    if use_swarming and swarming_dimension_sets:
-      for dimensions in swarming_dimension_sets:
+    if use_swarming:
+      for dimensions in swarming_dimension_sets or [{}]:
         # Yield potentially multiple invocations of the same test, on
         # different machine configurations.
         new_dimensions = dict(swarming_dimensions)
         new_dimensions.update(dimensions)
-        yield GTestTest(name, args=args, target_name=target_name,
-                        flakiness_dash=True,
-                        enable_swarming=True,
-                        swarming_shards=swarming_shards,
-                        swarming_dimensions=new_dimensions,
-                        swarming_priority=swarming_priority,
-                        swarming_expiration=swarming_expiration,
-                        swarming_hard_timeout=swarming_hard_timeout,
-                        override_compile_targets=override_compile_targets,
-                        override_isolate_target=override_isolate_target,
-                        upload_to_flake_predictor=upload_to_flake_predictor,
-                        use_xvfb=use_xvfb, cipd_packages=cipd_packages,
-                        waterfall_mastername=mastername,
-                        waterfall_buildername=buildername,
-                        merge=merge, trigger_script=trigger_script,
-                        set_up=set_up, tear_down=tear_down)
+        yield SwarmingGTestTest(
+            name,
+            args=args,
+            target_name=target_name,
+            shards=swarming_shards,
+            dimensions=new_dimensions,
+            priority=swarming_priority,
+            expiration=swarming_expiration,
+            hard_timeout=swarming_hard_timeout,
+            override_compile_targets=override_compile_targets,
+            override_isolate_target=override_isolate_target,
+            upload_to_flake_predictor=upload_to_flake_predictor,
+            cipd_packages=cipd_packages,
+            waterfall_mastername=mastername,
+            waterfall_buildername=buildername,
+            merge=merge,
+            trigger_script=trigger_script,
+            set_up=set_up,
+            tear_down=tear_down)
+
     else:
-      yield GTestTest(name, args=args, target_name=target_name,
-                      flakiness_dash=True,
-                      enable_swarming=use_swarming,
-                      swarming_dimensions=swarming_dimensions,
-                      swarming_shards=swarming_shards,
-                      swarming_priority=swarming_priority,
-                      swarming_expiration=swarming_expiration,
-                      swarming_hard_timeout=swarming_hard_timeout,
-                      override_compile_targets=override_compile_targets,
-                      override_isolate_target=override_isolate_target,
-                      upload_to_flake_predictor=upload_to_flake_predictor,
-                      use_xvfb=use_xvfb, cipd_packages=cipd_packages,
-                      waterfall_mastername=mastername,
-                      waterfall_buildername=buildername,
-                      merge=merge, trigger_script=trigger_script,
-                      set_up=set_up, tear_down=tear_down)
+      yield LocalGTestTest(
+          name,
+          args=args,
+          target_name=target_name,
+          flakiness_dash=True,
+          override_compile_targets=override_compile_targets,
+          override_isolate_target=override_isolate_target,
+          upload_to_flake_predictor=upload_to_flake_predictor,
+          use_xvfb=use_xvfb,
+          waterfall_mastername=mastername,
+          waterfall_buildername=buildername,
+          set_up=set_up,
+          tear_down=tear_down)
 
 
 def generate_instrumentation_test(api, chromium_tests_api, mastername,
@@ -1411,8 +1420,17 @@ class SwarmingGTestTest(SwarmingTest):
               chrome_revision=chrome_revision,
               test_type=step_result.step['name'])
           if (self._upload_to_flake_predictor and step_result.retcode != 0):
-            GTestTest.upload_to_gs_bucket(
-                api, source, 'flake-predictor-data/log_data', self.name)
+            bucket = 'flake-predictor-data/log_data'
+            gs_dest = '%s/%s/%d/%s.json' % (api.properties['mastername'],
+                                            api.properties['buildername'],
+                                            api.properties['buildnumber'],
+                                            self.name)
+            api.gsutil.upload(
+                name='Uploading results to %s' % bucket,
+                source=source,
+                bucket=bucket,
+                dest=gs_dest)
+
 
 class LocalIsolatedScriptTest(Test):
   def __init__(self, name, args=None, target_name=None,
@@ -1920,115 +1938,6 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
           override_compile_targets=override_compile_targets,
           results_handler=results_handler)
 
-
-# TODO(dpranke): Get rid of this whole class, it just causes confusion.
-class GTestTest(Test):
-  def __init__(self, name, args=None, target_name=None, enable_swarming=False,
-               swarming_shards=1, swarming_dimensions=None, swarming_tags=None,
-               swarming_extra_suffix=None, swarming_priority=None,
-               swarming_expiration=None, swarming_hard_timeout=None,
-               cipd_packages=None, waterfall_mastername=None,
-               waterfall_buildername=None, merge=None, trigger_script=None,
-               set_up=None, tear_down=None, **runtest_kwargs):
-    super(GTestTest, self).__init__(
-        waterfall_mastername=waterfall_mastername,
-        waterfall_buildername=waterfall_buildername)
-    if enable_swarming:
-      self._test = SwarmingGTestTest(
-          name, args, target_name, swarming_shards, swarming_dimensions,
-          swarming_tags, swarming_extra_suffix, swarming_priority,
-          swarming_expiration, swarming_hard_timeout,
-          cipd_packages=cipd_packages,
-          override_compile_targets=runtest_kwargs.get(
-              'override_compile_targets'),
-          override_isolate_target=runtest_kwargs.get(
-              'override_isolate_target'),
-          upload_to_flake_predictor=runtest_kwargs.get(
-              'upload_to_flake_predictor'),
-          waterfall_mastername=waterfall_mastername,
-          waterfall_buildername=waterfall_buildername,
-          merge=merge, trigger_script=trigger_script,
-          set_up=set_up, tear_down=tear_down)
-    else:
-      self._test = LocalGTestTest(
-          name, args, target_name, waterfall_mastername=waterfall_mastername,
-          waterfall_buildername=waterfall_buildername,
-          set_up=set_up, tear_down=tear_down, **runtest_kwargs)
-
-    self.enable_swarming = enable_swarming
-
-  @Test.test_options.setter
-  def test_options(self, value):
-    self._test.test_options = value
-
-  @property
-  def set_up(self):
-    return self._test.set_up
-
-  @property
-  def tear_down(self):
-    return self._test.tear_down
-
-  @property
-  def name(self):
-    return self._test.name
-
-  @property
-  def uses_local_devices(self):
-    # Return True unless this test has swarming enabled.
-    return not self.enable_swarming
-
-  def isolate_target(self, api):
-    return self._test.isolate_target(api)
-
-  def compile_targets(self, api):
-    return self._test.compile_targets(api)
-
-  def pre_run(self, api, suffix):
-    return self._test.pre_run(api, suffix)
-
-  def run(self, api, suffix):
-    return self._test.run(api, suffix)
-
-  def post_run(self, api, suffix):
-    return self._test.post_run(api, suffix)
-
-  def has_valid_results(self, api, suffix):
-    return self._test.has_valid_results(api, suffix)
-
-  def failures(self, api, suffix):
-    return self._test.failures(api, suffix)
-
-  def step_metadata(self, api, suffix):
-    return self._test.step_metadata(api, suffix)
-
-  @property
-  def uses_swarming(self):
-    return self._test.uses_swarming
-
-  def pass_fail_counts(self, suffix):
-    return self._test.pass_fail_counts(suffix)
-
-  @staticmethod
-  def upload_to_gs_bucket(api, source, bucket, file_name):
-    """Uses gsutil to upload data to a Google Storage bucket
-
-    Args:
-      api - The caller api.
-      source - Data to be uploaded.
-      bucket - Destination to upload the data to.
-      file_name - Name of the uploaded file.
-    """
-    gs_dest = '%s/%s/%d/%s.json' % (api.properties['mastername'],
-                                    api.properties['buildername'],
-                                    api.properties['buildnumber'],
-                                    file_name)
-    api.gsutil.upload(
-        name='Uploading results to %s' % bucket,
-        source=source,
-        bucket=bucket,
-        dest=gs_dest
-    )
 
 class PythonBasedTest(Test):
   @staticmethod

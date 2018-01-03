@@ -86,7 +86,7 @@ SPEC = {
       'remove_system_webview': True,
       'root_devices': True,
       'tests': [
-        steps.GTestTest('gfx_unittests'),
+        steps.LocalGTestTest('gfx_unittests'),
       ],
       'test_results_config': 'staging_server',
       'testing': {

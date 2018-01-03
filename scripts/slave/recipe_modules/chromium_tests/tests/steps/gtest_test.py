@@ -18,7 +18,7 @@ def RunSteps(api):
   api.chromium.set_config('chromium')
   api.test_results.set_config('public_server')
 
-  test = api.chromium_tests.steps.GTestTest('base_unittests')
+  test = api.chromium_tests.steps.LocalGTestTest('base_unittests')
 
   test_options = api.chromium_tests.steps.TestOptions(
       repeat_count=2,

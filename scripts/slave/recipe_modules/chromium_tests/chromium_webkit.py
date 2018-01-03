@@ -336,8 +336,8 @@ SPEC['builders'] = {
     'android_config': 'main_builder',
     'root_devices': True,
     'tests': [
-      steps.GTestTest('blink_heap_unittests'),
-      steps.GTestTest('webkit_unit_tests'),
+      steps.LocalGTestTest('blink_heap_unittests'),
+      steps.LocalGTestTest('webkit_unit_tests'),
       steps.BlinkTest(),
     ],
     'testing': {

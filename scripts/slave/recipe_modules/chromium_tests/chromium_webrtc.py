@@ -98,7 +98,7 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
   if platform == 'android':
     spec['root_devices'] = True
     spec['tests'] = [
-      steps.GTestTest(
+      steps.LocalGTestTest(
           'content_browsertests',
           args=['--gtest_filter=WebRtc*']),
     ]
@@ -108,23 +108,23 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
       pass  # Not implemented yet (see crbug.com/723989).
     else:
       spec['tests'] = [
-        steps.GTestTest(
+        steps.LocalGTestTest(
             'content_browsertests',
             # Run all normal WebRTC content_browsertests. This is mostly so
             # the FYI bots can detect breakages.
             args=['--gtest_filter=WebRtc*']),
-        steps.GTestTest(
+        steps.LocalGTestTest(
             name='content_browsertests_sequential',
             target_name='content_browsertests',
             # These run a few tests that require webcam access. They need to
             # run sequentially, otherwise tests may interfere with each other.
             args=['--gtest_filter=WebRtc*MANUAL*Webcam*', '--run-manual',
                   '--test-launcher-jobs=1']),
-        steps.GTestTest(
+        steps.LocalGTestTest(
             name='content_browsertests_manual',
             target_name='content_browsertests',
             args=['--gtest_filter=WebRtc*:-*Webcam*', '--run-manual']),
-        steps.GTestTest(
+        steps.LocalGTestTest(
             'browser_tests_functional',
             target_name='browser_tests',
             args=[
@@ -146,14 +146,16 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
             upload_wav_files_from_test=True),
 
         # Run capture unittests as well since our bots have real webcams.
-        steps.GTestTest('capture_unittests',
-                   args=['--enable-logging',
-                         '--v=1',
-                         '--test-launcher-jobs=1',
-                         '--test-launcher-print-test-stdio=always']),
-        steps.GTestTest('content_unittests'),
-        steps.GTestTest('jingle_unittests'),
-        steps.GTestTest('remoting_unittests', args=['--gtest_filter=Webrtc*']),
+        steps.LocalGTestTest(
+            'capture_unittests',
+             args=['--enable-logging',
+                   '--v=1',
+                   '--test-launcher-jobs=1',
+                   '--test-launcher-print-test-stdio=always']),
+        steps.LocalGTestTest('content_unittests'),
+        steps.LocalGTestTest('jingle_unittests'),
+        steps.LocalGTestTest(
+            'remoting_unittests', args=['--gtest_filter=Webrtc*']),
       ]
   return spec
 
