@@ -182,7 +182,6 @@
       "@@@STEP_LOG_LINE@json.output@      \"xcode version\": \"9.2\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"use xcode build version\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"xcode build version\": \"9a123\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -259,6 +258,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "FORCE_MAC_TOOLCHAIN": "",
       "LANDMINES_VERBOSE": "1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -301,6 +301,7 @@
     ],
     "cwd": "[START_DIR]/src/out/Debug-iphonesimulator",
     "env": {
+      "FORCE_MAC_TOOLCHAIN": "",
       "LANDMINES_VERBOSE": "1"
     },
     "name": "generate build files (gn)"
@@ -316,6 +317,7 @@
     ],
     "cwd": "[START_DIR]/src/out/Debug-iphonesimulator",
     "env": {
+      "FORCE_MAC_TOOLCHAIN": "",
       "LANDMINES_VERBOSE": "1"
     },
     "name": "compile"

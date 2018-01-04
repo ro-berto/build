@@ -327,8 +327,9 @@ class iOSApi(recipe_api.RecipeApi):
     env = {
       'LANDMINES_VERBOSE': '1',
     }
-    if self.__config.get('use xcode build version'):
+    if self.__config.get('xcode build version'):
       self.ensure_xcode(self.__config['xcode build version'])
+      env['FORCE_MAC_TOOLCHAIN'] = ''
     else:
       env['FORCE_MAC_TOOLCHAIN'] = '1'
 
