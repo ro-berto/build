@@ -244,7 +244,7 @@
     "cmd": [
       "cmd.exe",
       "/C",
-      "echo y | [START_DIR]\\flutter\\dev\\bots\\android_tools\\sdk\\tools\\android update sdk --no-ui --all --filter build-tools-27.0.3,android-25,extra-android-m2repository"
+      "echo y | [START_DIR]\\flutter\\dev\\bots\\android_tools\\sdk\\tools\\android update sdk --no-ui --all --filter build-tools-25.0.3,android-25,extra-android-m2repository"
     ],
     "name": "update android tools"
   },
