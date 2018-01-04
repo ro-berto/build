@@ -110,7 +110,7 @@ def InstallGradle(api, checkout):
       checkout.join('dev', 'bots', 'gradle'))
   update_android_cmd = ['cmd.exe', '/C'] if api.platform.is_win else ['sh', '-c']
   update_android_cmd.append(
-      'echo y | %s update sdk --no-ui --all --filter build-tools-25.0.3,android-25,extra-android-m2repository' %
+      'echo y | %s update sdk --no-ui --all --filter build-tools-27.0.3,android-25,extra-android-m2repository' %
       checkout.join('dev', 'bots', 'android_tools', 'sdk', 'tools', 'android'))
   api.step('update android tools', update_android_cmd)
 
