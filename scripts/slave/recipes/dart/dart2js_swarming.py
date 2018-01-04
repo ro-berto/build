@@ -107,7 +107,7 @@ def RunSteps(api):
                          "--write-test-outcome-log",
                          "--progress=buildbot", "-v", "--append_logs",
                          "--reset-browser-configuration",
-                         "--checked", "dart2js"])
+                         "--checked", "--timeout=120", "dart2js"])
         api.dart.read_result_file('read results of dart2js-unit tests', 'result.log')
 
     for task in tasks:

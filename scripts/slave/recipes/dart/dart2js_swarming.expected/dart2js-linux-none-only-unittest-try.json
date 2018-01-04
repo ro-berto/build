@@ -400,6 +400,7 @@
       "--append_logs",
       "--reset-browser-configuration",
       "--checked",
+      "--timeout=120",
       "dart2js"
     ],
     "cwd": "[CACHE]/builder/sdk",
