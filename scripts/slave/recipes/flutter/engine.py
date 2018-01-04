@@ -106,14 +106,14 @@ def UploadDartPackage(api, package_name):
 def UploadFlutterPatchedSdk(api):
   UploadFolder(api,
     'Upload Flutter patched sdk', # dir_label
-    'src/out/host_debug_unopt', # parent_dir
+    'src/out/host_debug', # parent_dir
     'flutter_patched_sdk', # folder_name
     'flutter_patched_sdk.zip') # zip_name
 
 def UploadDartSdk(api, archive_name):
   UploadFolder(api,
     'Upload Dart SDK', # dir_label
-    'src/out/host_debug_unopt', # parent_dir
+    'src/out/host_debug', # parent_dir
     'dart-sdk', # folder_name
     archive_name)
 
@@ -128,8 +128,8 @@ def MakeTempDir(api, label):
 
 
 def AnalyzeDartUI(api):
-  RunGN(api, '--unoptimized')
-  Build(api, 'host_debug_unopt', 'generate_dart_ui')
+  RunGN(api, '--runtime-mode', 'debug')
+  Build(api, 'host_debug', 'generate_dart_ui')
 
   checkout = api.path['start_dir'].join('src')
   with api.context(cwd=checkout):
@@ -193,17 +193,17 @@ def BuildLinuxAndroidArm(api):
 
 
 def BuildLinux(api):
-  RunGN(api, '--unoptimized')
+  RunGN(api, '--runtime-mode', 'debug')
   RunGN(api, '--runtime-mode', 'release', '--android', '--enable-vulkan')
-  Build(api, 'host_debug_unopt')
+  Build(api, 'host_debug')
   Build(api, 'android_release_vulkan')
-  RunHostTests(api, 'out/host_debug_unopt')
+  RunHostTests(api, 'out/host_debug')
   UploadArtifacts(api, 'linux-x64', [
-    'out/host_debug_unopt/icudtl.dat',
-    'out/host_debug_unopt/flutter_tester',
-    'out/host_debug_unopt/gen/flutter/lib/snapshot/isolate_snapshot.bin',
-    'out/host_debug_unopt/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
-    'out/host_debug_unopt/gen/frontend_server.dart.snapshot',
+    'out/host_debug/icudtl.dat',
+    'out/host_debug/flutter_tester',
+    'out/host_debug/gen/flutter/lib/snapshot/isolate_snapshot.bin',
+    'out/host_debug/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
+    'out/host_debug/gen/frontend_server.dart.snapshot',
   ])
   UploadFlutterPatchedSdk(api)
   UploadDartSdk(api, archive_name='dart-sdk-linux-x64.zip')
@@ -211,7 +211,7 @@ def BuildLinux(api):
 
 def TestObservatory(api):
   checkout = api.path['start_dir'].join('src')
-  flutter_tester_path = checkout.join('out/host_debug_unopt/flutter_tester')
+  flutter_tester_path = checkout.join('out/host_debug/flutter_tester')
   empty_main_path = \
       checkout.join('flutter/shell/testing/observatory/empty_main.dart')
   test_path = checkout.join('flutter/shell/testing/observatory/test.dart')
@@ -250,15 +250,13 @@ def SetupXcode(api):
 
 def BuildMac(api):
   RunGN(api, '--runtime-mode', 'debug')
-  RunGN(api, '--runtime-mode', 'debug', '--unoptimized')
   RunGN(api, '--runtime-mode', 'profile', '--android')
   RunGN(api, '--runtime-mode', 'release', '--android')
   RunGN(api, '--runtime-mode', 'release', '--android', '--enable-vulkan')
 
-  Build(api, 'host_debug_unopt')
-  RunHostTests(api, 'out/host_debug_unopt')
-
   Build(api, 'host_debug')
+  RunHostTests(api, 'out/host_debug')
+
   Build(api, 'android_profile', 'flutter/lib/snapshot')
   Build(api, 'android_release', 'flutter/lib/snapshot')
   Build(api, 'android_release_vulkan')
@@ -270,11 +268,11 @@ def BuildMac(api):
     host_debug_path.join('FlutterEmbedder.framework.zip'))
 
   UploadArtifacts(api, 'darwin-x64', [
-    'out/host_debug_unopt/icudtl.dat',
-    'out/host_debug_unopt/flutter_tester',
-    'out/host_debug_unopt/gen/flutter/lib/snapshot/isolate_snapshot.bin',
-    'out/host_debug_unopt/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
-    'out/host_debug_unopt/gen/frontend_server.dart.snapshot',
+    'out/host_debug/icudtl.dat',
+    'out/host_debug/flutter_tester',
+    'out/host_debug/gen/flutter/lib/snapshot/isolate_snapshot.bin',
+    'out/host_debug/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
+    'out/host_debug/gen/frontend_server.dart.snapshot',
   ])
 
   UploadArtifacts(api, 'darwin-x64', [
@@ -348,22 +346,22 @@ def BuildIOS(api):
 
 
 def BuildWindows(api):
-  RunGN(api, '--runtime-mode', 'debug', '--unoptimized')
+  RunGN(api, '--runtime-mode', 'debug')
   RunGN(api, '--runtime-mode', 'profile', '--android')
   RunGN(api, '--runtime-mode', 'release', '--android')
 
-  Build(api, 'host_debug_unopt')
+  Build(api, 'host_debug')
   Build(api, 'android_profile', 'gen_snapshot')
   Build(api, 'android_release', 'gen_snapshot')
 
-  RunHostTests(api, 'out\\host_debug_unopt', '.exe')
+  RunHostTests(api, 'out\\host_debug', '.exe')
 
   UploadArtifacts(api, 'windows-x64', [
-    'out/host_debug_unopt/icudtl.dat',
-    'out/host_debug_unopt/flutter_tester.exe',
-    'out/host_debug_unopt/gen/flutter/lib/snapshot/isolate_snapshot.bin',
-    'out/host_debug_unopt/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
-    'out/host_debug_unopt/gen/frontend_server.dart.snapshot',
+    'out/host_debug/icudtl.dat',
+    'out/host_debug/flutter_tester.exe',
+    'out/host_debug/gen/flutter/lib/snapshot/isolate_snapshot.bin',
+    'out/host_debug/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
+    'out/host_debug/gen/frontend_server.dart.snapshot',
   ])
 
   UploadArtifacts(api, "android-arm-profile" , [
