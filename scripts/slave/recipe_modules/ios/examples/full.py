@@ -591,15 +591,21 @@ def GenTests(api):
       ],
       'tests': [
         {
-          'app': 'fake test',
+          'app': 'build-global xcode build version',
           'device type': 'fake device',
           'os': '10.0',
         },
         {
-          'app': 'fake test 2',
+          'app': 'task-local xcode build version',
           'device type': 'fake device 2',
           'os': '11.0',
           'xcode build version': '9b456',
+        },
+        {
+          'app': 'task-local xcode version',
+          'device type': 'fake device 3',
+          'os': '11.0',
+          'xcode version': '9.2',
         },
       ],
     })
