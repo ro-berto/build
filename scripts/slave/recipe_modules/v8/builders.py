@@ -2072,7 +2072,7 @@ BUILDERS = {
           MjsunitSPFrameAccess,
           GCMole,
         ] + with_extra_variants(
-            [V8Testing, Test262Variants, Mozilla, Benchmarks]),
+            [V8Testing, Test262Variants(2), Mozilla, Benchmarks]),
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
           'cpu': 'x86-64-avx2',
@@ -2134,7 +2134,7 @@ BUILDERS = {
           Mozilla,
           Benchmarks,
         ] + with_extra_variants(
-            [V8Testing, Test262Variants, Mozilla, Benchmarks]),
+            [V8Testing, Test262Variants(2), Mozilla, Benchmarks]),
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
           'cpu': 'x86-64-avx2',
@@ -2170,7 +2170,7 @@ BUILDERS = {
           Benchmarks,
           MjsunitSPFrameAccess,
         ] + with_extra_variants(
-            [V8Testing, Test262Variants(2), Mozilla, Benchmarks]),
+            [V8Testing(2), Test262Variants(3), Mozilla, Benchmarks]),
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
           'cpu': 'x86-64-avx2',
@@ -2307,7 +2307,7 @@ BUILDERS = {
           OptimizeForSize,
           Test262Variants(4),
           MjsunitSPFrameAccess,
-        ] + with_extra_variants([V8Testing, Test262Variants]),
+        ] + with_extra_variants([V8Testing, Test262Variants(2)]),
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
           'cpu': 'x86-64-avx2',
@@ -2484,7 +2484,7 @@ BUILDERS = {
           Test262(2),
           Mozilla,
           Benchmarks,
-        ] + with_extra_variants([V8Testing]),
+        ] + with_extra_variants([V8Testing(2)]),
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_ubsan_rel_ng': {
@@ -2770,7 +2770,7 @@ BUILDERS = {
           V8Testing(3),
           Test262(2),
           Mozilla,
-        ] + with_extra_variants([V8Testing]),
+        ] + with_extra_variants([V8Testing(2)]),
         'testing': {'platform': 'win'},
       },
       'v8_mac_rel_ng': {
@@ -2860,7 +2860,7 @@ BUILDERS = {
           V8Testing(3),
           Test262,
           Mozilla,
-        ] + with_extra_variants([V8Testing]),
+        ] + with_extra_variants([V8Testing(2)]),
         'swarming_dimensions': {
           'os': 'Mac-10.9',
           'cpu': 'x86-64',
@@ -2934,7 +2934,7 @@ BUILDERS = {
           Test262,
           Mozilla,
           MjsunitSPFrameAccess,
-        ] + with_extra_variants([V8Testing(2)]),
+        ] + with_extra_variants([V8Testing(3)]),
         'testing': {'platform': 'linux'},
       },
       'v8_linux_arm_dbg': {
@@ -2951,7 +2951,7 @@ BUILDERS = {
           Test262,
           Mozilla,
           MjsunitSPFrameAccess,
-        ] + with_extra_variants([V8Testing(2)]),
+        ] + with_extra_variants([V8Testing(3)]),
         'testing': {'platform': 'linux'},
       },
       'v8_linux_arm64_rel_ng': {
@@ -2983,7 +2983,7 @@ BUILDERS = {
           Test262,
           Mozilla,
           MjsunitSPFrameAccess,
-        ] + with_extra_variants([V8Testing(2)]),
+        ] + with_extra_variants([V8Testing(3)]),
         'testing': {'platform': 'linux'},
       },
       'v8_linux_arm64_dbg': {
@@ -3000,7 +3000,7 @@ BUILDERS = {
           Test262,
           Mozilla,
           MjsunitSPFrameAccess,
-        ] + with_extra_variants([V8Testing(2)]),
+        ] + with_extra_variants([V8Testing(3)]),
         'testing': {'platform': 'linux'},
       },
       'v8_linux_arm64_gc_stress_dbg': {
