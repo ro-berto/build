@@ -108,11 +108,6 @@ def InstallGradle(api, checkout):
       'unzip gradle',
       checkout.join('dev', 'bots', 'gradle-2.14.1-bin.zip'),
       checkout.join('dev', 'bots', 'gradle'))
-  update_android_cmd = ['cmd.exe', '/C'] if api.platform.is_win else ['sh', '-c']
-  update_android_cmd.append(
-      'echo y | %s update sdk --no-ui --all --filter build-tools-25.0.3,android-25,extra-android-m2repository' %
-      checkout.join('dev', 'bots', 'android_tools', 'sdk', 'tools', 'android'))
-  api.step('update android tools', update_android_cmd)
 
 
 def UploadFlutterCoverage(api):
