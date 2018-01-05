@@ -1242,6 +1242,96 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport subprocess, sys\nproc = subprocess.Popen(\n    sys.argv[1], stdout=subprocess.PIPE, stderr=subprocess.PIPE)\nout, err = proc.communicate()\nwith open(sys.argv[2], 'w') as f:\n  f.writelines(out)\n",
+      "[START_DIR]/src/build/get_landmines.py",
+      "[START_DIR]/src/.landmines"
+    ],
+    "name": "clear landmines",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import subprocess, sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@proc = subprocess.Popen(@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.argv[1], stdout=subprocess.PIPE, stderr=subprocess.PIPE)@@@",
+      "@@@STEP_LOG_LINE@python.inline@out, err = proc.communicate()@@@",
+      "@@@STEP_LOG_LINE@python.inline@with open(sys.argv[2], 'w') as f:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  f.writelines(out)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
+      "runhooks"
+    ],
+    "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GYP_DEFINES": "component=static_library target_arch=x64",
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+    },
+    "name": "gclient runhooks (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
+      "--ninja_info_output",
+      "/path/to/tmp/json",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[START_DIR]/src/out/Release",
+      "quic_server"
+    ],
+    "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "compile (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/upload_goma_logs.py",
+      "--gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--skip-sendgomatsmon",
+      "--ninja-log-outdir",
+      "[START_DIR]/src/out/Release",
+      "--ninja-log-command",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/Release', 'quic_server']",
+      "--ninja-log-exit-status",
+      "0",
+      "--ninja-log-compiler",
+      "goma"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "upload_ninja_log"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/src/components/cronet/android/test/javaperftests/run.py"
+    ],
+    "name": "performance test"
+  },
+  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0

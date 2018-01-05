@@ -156,7 +156,8 @@ BUILDERS = freeze({
   },
   'Android Cronet Marshmallow 64bit Perf': {
     'recipe_config': 'arm64_builder_mb',
-    'run_tests': True,
+    'run_tests': False,
+    'run_perf_tests': True,
     'kwargs': {
       'BUILD_CONFIG': 'Release',
       'REPO_NAME': 'src',
@@ -194,6 +195,8 @@ def RunSteps(api, buildername):
     api.cronet.sizes(cronet_kwargs['PERF_ID'])
   if builder_config['run_tests']:
     api.cronet.run_tests(kwargs['BUILD_CONFIG'])
+  if 'run_perf_tests' in builder_config and builder_config['run_perf_tests']:
+    api.cronet.run_perf_tests()
 
 
 def _sanitize_nonalpha(text):

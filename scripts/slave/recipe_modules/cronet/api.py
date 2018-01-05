@@ -128,3 +128,30 @@ class CronetApi(recipe_api.RecipeApi):
             result_details=True,
             **suite.get('kwargs', {}))
       droid.common_tests_final_steps()
+
+  def run_perf_tests(self):
+    # Before running the perf test, build quic_server and quic_client for this
+    # host machine.
+    self.m.chromium.set_config('chromium')
+    # Make sure not to clobber all the Cronet binaries that were just built.
+    # Landmines are very target dependent so they'll likely be different
+    # between android and linux, so running runhooks now would make them go off.
+    # Prevent clobbering by clearing landmines that would otherwise go off
+    # when runhooks is run.It's safe to ignore landmines now because we just
+    # did a clobber build.
+    self.m.python.inline(
+        'clear landmines',
+        """
+        import subprocess, sys
+        proc = subprocess.Popen(
+            sys.argv[1], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        out, err = proc.communicate()
+        with open(sys.argv[2], 'w') as f:
+          f.writelines(out)
+        """,
+        args=[self.m.path['checkout'].join('build', 'get_landmines.py'),
+              self.m.path['checkout'].join('.landmines')])
+    self.m.chromium.runhooks()
+    self.m.chromium.compile(targets=['quic_server'])
+    self.m.python('performance test', self.m.path['checkout'].join(
+          'components', 'cronet', 'android', 'test', 'javaperftests', 'run.py'))

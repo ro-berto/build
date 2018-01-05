@@ -1565,6 +1565,8 @@ Common steps for recipes that sync/build Cronet sources.
 
 &mdash; **def [init\_and\_sync](/scripts/slave/recipe_modules/cronet/api.py#37)(self, recipe_config, kwargs, gyp_defs, chromium_apply_config=None):**
 
+&mdash; **def [run\_perf\_tests](/scripts/slave/recipe_modules/cronet/api.py#132)(self):**
+
 &mdash; **def [run\_tests](/scripts/slave/recipe_modules/cronet/api.py#113)(self, build_config, unit_tests=UNIT_TESTS, instrumentation_tests=INSTRUMENTATION_TESTS):**
 
 &mdash; **def [sizes](/scripts/slave/recipe_modules/cronet/api.py#101)(self, perf_id):**
@@ -4480,7 +4482,7 @@ Generates the sequence of steps that will be run by the slave.
 
 [DEPS](/scripts/slave/recipes/cronet.py#8): [cronet](#recipe_modules-cronet), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/cronet.py#177)(api, buildername):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/cronet.py#178)(api, buildername):**
 ### *recipes* / [cronet:examples/full](/scripts/slave/recipe_modules/cronet/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/cronet/examples/full.py#8): [cronet](#recipe_modules-cronet), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]

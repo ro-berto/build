@@ -67,6 +67,7 @@ def RunSteps(api, buildername):
   cronet.upload_package(kwargs['BUILD_CONFIG'])
   cronet.sizes('sample-perf-id')
   cronet.run_tests(kwargs['BUILD_CONFIG'])
+  cronet.run_perf_tests()
 
 def GenTests(api):
   for bot_id in BUILDERS.iterkeys():
