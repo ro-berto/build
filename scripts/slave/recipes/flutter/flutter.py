@@ -108,7 +108,12 @@ def InstallGradle(api, checkout):
       'unzip gradle',
       checkout.join('dev', 'bots', 'gradle-2.14.1-bin.zip'),
       checkout.join('dev', 'bots', 'gradle'))
-
+  sdkmanager_executable = 'sdkmanager.bat' if api.platform.is_win else 'sdkmanager'
+  sdkmanager_list_cmd = ['cmd.exe', '/C'] if api.platform.is_win else ['sh', '-c']
+  sdkmanager_list_cmd.append(
+      '%s --list' %
+      checkout.join('dev', 'bots', 'android_tools', 'sdk', 'tools', 'bin', sdkmanager_executable))
+  api.step('print installed android SDK components', sdkmanager_list_cmd)
 
 def UploadFlutterCoverage(api):
   """Uploads the Flutter coverage output to cloud storage and Coveralls.

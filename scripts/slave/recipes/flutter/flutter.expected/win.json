@@ -242,6 +242,14 @@
   },
   {
     "cmd": [
+      "cmd.exe",
+      "/C",
+      "[START_DIR]\\flutter\\dev\\bots\\android_tools\\sdk\\tools\\bin\\sdkmanager.bat --list"
+    ],
+    "name": "print installed android SDK components"
+  },
+  {
+    "cmd": [
       "dart.exe",
       "[START_DIR]\\flutter\\dev\\bots\\test.dart"
     ],

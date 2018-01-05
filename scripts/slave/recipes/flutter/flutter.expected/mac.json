@@ -353,6 +353,14 @@
   },
   {
     "cmd": [
+      "sh",
+      "-c",
+      "[START_DIR]/flutter/dev/bots/android_tools/sdk/tools/bin/sdkmanager --list"
+    ],
+    "name": "print installed android SDK components"
+  },
+  {
+    "cmd": [
       "dart",
       "[START_DIR]/flutter/dev/bots/test.dart"
     ],
