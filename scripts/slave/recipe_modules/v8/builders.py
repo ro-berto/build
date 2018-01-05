@@ -257,7 +257,7 @@ BUILDERS = {
             [Mjsunit, Mozilla, Test262, Benchmarks],
             V8Variant('default'),
         ) + with_extra_variants(
-            [V8Testing, Mozilla, Test262Variants, Benchmarks]),
+            [V8Testing, Mozilla, Test262Variants(2), Benchmarks]),
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
           'cpu': 'x86-64-avx2',
@@ -463,7 +463,7 @@ BUILDERS = {
             'noavx',
             ['--extra-flags', '--noenable-avx'],
             [V8Testing(2), Test262, Mozilla],
-        ) + with_extra_variants([V8Testing, Mozilla, Test262Variants]),
+        ) + with_extra_variants([V8Testing, Mozilla, Test262Variants(2)]),
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
           'cpu': 'x86-64-avx2',
@@ -1682,7 +1682,7 @@ BUILDERS = {
             ['--novfp3'],
             [V8Testing(4), Test262, Mozilla],
             V8NoExhaustiveVariants,
-        ) + with_extra_variants([V8Testing]),
+        ) + with_extra_variants([V8Testing(2)]),
         'testing': {'platform': 'linux'},
       },
 ####### Category: ARM64
@@ -1737,7 +1737,7 @@ BUILDERS = {
           Test262,
           Mozilla,
           MjsunitSPFrameAccess,
-        ] + with_extra_variants([V8Testing]),
+        ] + with_extra_variants([V8Testing(2)]),
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm64 - sim - nosnap - debug': {
