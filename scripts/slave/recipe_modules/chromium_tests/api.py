@@ -408,7 +408,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if bot_config.get('bot_type') == 'builder':
       if not bot_config.get('cf_archive_build'):
         master_config = bot_db.get_master_settings(mastername)
-        build_revision = update_step.presentation.properties['got_revision']
+        build_revision = update_step.presentation.properties.get(
+            'got_revision',
+            update_step.presentation.properties.get('got_src_revision'))
+
 
         # For archiving 'chromium.perf', the builder also archives a version
         # without perf test files for manual bisect.
