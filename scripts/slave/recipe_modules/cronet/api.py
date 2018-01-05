@@ -151,7 +151,8 @@ class CronetApi(recipe_api.RecipeApi):
         """,
         args=[self.m.path['checkout'].join('build', 'get_landmines.py'),
               self.m.path['checkout'].join('.landmines')])
+    self.m.chromium.ensure_goma()
     self.m.chromium.runhooks()
-    self.m.chromium.compile(targets=['quic_server'])
+    self.m.chromium.compile(targets=['quic_server'], use_goma_module=True)
     self.m.python('performance test', self.m.path['checkout'].join(
           'components', 'cronet', 'android', 'test', 'javaperftests', 'run.py'))
