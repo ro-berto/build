@@ -12,7 +12,11 @@ import sys
 
 from common import chromium_utils
 from slave import build_directory
-import config
+
+# Deprecated magic return code that buildbot used to interpret as "warnings"
+# instead of "error". Kept for backwards compatibility purposes, but essentially
+# useless.
+RETCODE_WARNINGS = 88
 
 
 # Environment variables that could point to the location of Program Files.
@@ -112,7 +116,7 @@ def main():
     debugger_dir = ProbeDebuggerDir()
   if not debugger_dir:
     print 'Cannot find debugger.'
-    return config.Master.retcode_warnings
+    return RETCODE_WARNINGS
 
   print 'Debugger directory: %s' % debugger_dir
 

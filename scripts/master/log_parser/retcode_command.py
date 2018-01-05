@@ -8,15 +8,13 @@ codes."""
 from buildbot.steps import shell
 from buildbot.status import builder
 
-import config
-
 
 class ReturnCodeCommand(shell.ShellCommand):
   """Buildbot command that knows how to display layout test output."""
 
   # magic return code to indicate that the command ran with warnings and
   # the buildbot should turn orange.  See evaluteCommand.
-  RETCODE_WARNINGS = config.Master.retcode_warnings
+  RETCODE_WARNINGS = 88
 
   def __init__(self, **kwargs):
     shell.ShellCommand.__init__(self, **kwargs)
