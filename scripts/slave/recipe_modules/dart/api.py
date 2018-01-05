@@ -447,10 +447,11 @@ class DartApi(recipe_api.RecipeApi):
         args = args + ['--exclude_suite=' + ','.join(step['exclude_tests'])]
     if 'tests' in step:
       args = args + step['tests']
-    self.run_script(step_name, 'tools/test.py', args, isolate_hash, shards,
-        local_shard, environment, tasks)
-    if shards == 0 or local_shard:
-      self.read_result_file('read results of %s' % step_name, 'result.log')
+    with self.m.step.defer_results():
+      self.run_script(step_name, 'tools/test.py', args, isolate_hash, shards,
+          local_shard, environment, tasks)
+      if shards == 0 or local_shard:
+        self.read_result_file('read results of %s' % step_name, 'result.log')
 
   def run_script(self, step_name, script, args, isolate_hash, shards,
       local_shard, environment, tasks):
@@ -493,11 +494,11 @@ class DartApi(recipe_api.RecipeApi):
         else:
           self.m.step(step_name, [script] + args)
 
-    if local_shard:
-      this_shard = shards + 1
-      args = args + [
-        '--shards=%s' % this_shard,
-        '--shard=%s' % this_shard
-      ]
-      self.run_script("%s_shard_%s" % (step_name, this_shard), script,
-          args, None, 0, False, environment, tasks)
+      if local_shard:
+        this_shard = shards + 1
+        args = args + [
+          '--shards=%s' % this_shard,
+          '--shard=%s' % this_shard
+        ]
+        self.run_script("%s_shard_%s" % (step_name, this_shard), script,
+            args, None, 0, False, environment, tasks)
