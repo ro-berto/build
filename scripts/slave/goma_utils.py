@@ -533,6 +533,76 @@ def MakeGomaStatusCounter(json_file, exit_status,
     infra_status = json_status.get('infra_status')
 
     result = 'success'
+
+    if exit_status is None:
+      result = 'exception'
+    elif exit_status != 0:
+      result = 'failure'
+      if (exit_status < 0 or
+          not infra_status or
+          infra_status['ping_status_code'] != 200 or
+          infra_status.get('num_user_error', 0) > 0):
+        result = 'exception'
+
+    num_failure = 0
+    ping_status_code = 0
+    if infra_status:
+      num_failure = infra_status['num_exec_compiler_proxy_failure']
+      ping_status_code = infra_status['ping_status_code']
+
+    counter = {
+        'name': 'goma/failure',
+        'value': num_failure,
+        'builder': builder,
+        'master': master,
+        'slave': slave,
+        'clobber': 1 if clobber else 0,
+        'os': chromium_utils.PlatformName(),
+        'ping_status_code': ping_status_code,
+        'result': result}
+    start_time = GetCompilerProxyStartTime()
+    if start_time:
+      counter['start_time'] = int(time.mktime(start_time.timetuple()))
+    return counter
+
+  except Exception as ex:
+    print('error while making goma status counter for ts_mon: jons_file=%s: %s'
+          % (json_file, ex))
+    return None
+
+
+def MakeGomaFailureReasonCounter(json_file, exit_status,
+                                 builder='unknown', master='unknown',
+                                 slave='unknown', clobber=''):
+  """Make latest Goma failure reason counter which will be sent to ts_mon.
+
+  Args:
+    json_file: json filename string that has goma_ctl.py jsonstatus.
+    exit_status: integer exit status of the build.
+
+  Returns:
+    counter dict if succeeded. None if failed.
+  """
+  try:
+    with open(json_file) as f:
+      json_statuses = json.load(f)
+
+    if not json_statuses:
+      print('no json status is recorded in %s' % json_file)
+      return None
+
+    if len(json_statuses.get('notice', [])) != 1:
+      print('unknown json statuses style: %s' % json_statuses)
+      return None
+
+    json_status = json_statuses['notice'][0]
+    if json_status['version'] != 1:
+      print('unknown version: %s' % json_status)
+      return None
+
+    infra_status = json_status.get('infra_status')
+
+    result = 'success'
     reason = 'OK'
 
     if infra_status is None:
@@ -552,21 +622,13 @@ def MakeGomaStatusCounter(json_file, exit_status,
     if reason != 'OK':
       result = 'exception'
 
-    num_failure = 0
-    ping_status_code = 0
-    if infra_status:
-      num_failure = infra_status['num_exec_compiler_proxy_failure']
-      ping_status_code = infra_status['ping_status_code']
-
     counter = {
-        'name': 'goma/failure',
-        'value': num_failure,
+        'name': 'goma/failure_reason',
         'builder': builder,
         'master': master,
         'slave': slave,
         'clobber': 1 if clobber else 0,
         'os': chromium_utils.PlatformName(),
-        'ping_status_code': ping_status_code,
         'result': result,
         'exception_reason': reason}
     start_time = GetCompilerProxyStartTime()

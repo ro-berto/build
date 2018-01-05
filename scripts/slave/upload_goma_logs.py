@@ -141,6 +141,16 @@ def main():
     if counter:
       tsmon_counters.append(counter)
 
+    counter = goma_utils.MakeGomaFailureReasonCounter(
+        args.json_status,
+        args.ninja_log_exit_status,
+        builder=args.buildbot_buildername,
+        master=args.buildbot_mastername,
+        slave=args.buildbot_slavename,
+        clobber=args.buildbot_clobber)
+    if counter:
+      tsmon_counters.append(counter)
+
   if tsmon_counters:
     goma_utils.SendCountersToTsMon(tsmon_counters)
 
