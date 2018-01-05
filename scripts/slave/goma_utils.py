@@ -199,7 +199,7 @@ def UploadGomaCompilerProxyInfo(override_gsutil=None,
       latest_info, os.path.basename(latest_info),
       metadata=metadata,
       override_gsutil=override_gsutil)
-  viewer_url = ('http://chromium-build-stats.appspot.com/compiler_proxy_log/'
+  viewer_url = ('https://chromium-build-stats.appspot.com/compiler_proxy_log/'
                 + log_path)
   print 'Visualization at %s' % viewer_url
 
@@ -297,7 +297,7 @@ def UploadNinjaLog(
   log_path = UploadToGomaLogGS(
       ninja_log_path, ninja_log_filename, text_to_append=additional_text,
       override_gsutil=override_gsutil)
-  viewer_url = 'http://chromium-build-stats.appspot.com/ninja_log/' + log_path
+  viewer_url = 'https://chromium-build-stats.appspot.com/ninja_log/' + log_path
   print 'Visualization at %s' % viewer_url
 
   return viewer_url
