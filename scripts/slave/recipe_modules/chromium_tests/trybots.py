@@ -129,6 +129,10 @@ TRYBOTS = freeze({
         'mastername': 'chromium.android',
         'buildername': 'Marshmallow Phone Tester (rel)',
       }),
+      'android_mojo': simple_bot({
+        'mastername': 'chromium.fyi',
+        'buildername': 'Mojo Android',
+      }),
       'android_optional_gpu_tests_rel': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'Android Release (Nexus 5X)',

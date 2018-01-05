@@ -762,6 +762,23 @@ SPEC = {
         'platform': 'linux',
       },
     },
+    'Mojo Android': {
+      'chromium_config': 'android',
+      'chromium_apply_config': ['android'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+        'TARGET_PLATFORM': 'android',
+      },
+      'bot_type': 'builder_tester',
+      'android_config': 'arm64_builder_mb',
+      'root_devices': True,
+      'testing': {
+        'platform': 'linux',
+      },
+      'enable_swarming': True,
+    },
     'Mojo ChromiumOS': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['chromeos', 'mb'],
