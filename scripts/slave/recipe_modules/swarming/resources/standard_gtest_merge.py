@@ -188,9 +188,8 @@ def standard_gtest_merge(
 def main(raw_args):
 
   parser = argparse.ArgumentParser()
-  parser.add_argument('--build-properties', help=argparse.SUPPRESS)
+  parser.add_argument('--build-properties')
   parser.add_argument('--summary-json')
-  parser.add_argument('--task-output-dir', help=argparse.SUPPRESS)
   parser.add_argument('-o', '--output-json', required=True)
   parser.add_argument('jsons_to_merge', nargs='*')
 
