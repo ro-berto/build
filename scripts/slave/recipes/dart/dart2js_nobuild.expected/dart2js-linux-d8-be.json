@@ -447,9 +447,7 @@
       "--dart2js-with-kernel",
       "--append_logs",
       "language",
-      "language_2",
       "corelib",
-      "corelib_2",
       "dart2js_extra",
       "dart2js_native"
     ],
@@ -510,6 +508,69 @@
       "--write-test-outcome-log",
       "--shards=4",
       "--shard=1",
+      "--strong",
+      "--dart2js-with-kernel",
+      "--append_logs",
+      "language_2",
+      "corelib_2"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "name": "dart2js-with-kernel-strong-d8 tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "infra_step": true,
+    "name": "read results of dart2js-with-kernel-strong-d8 tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[START_DIR]/sdk/logs/result.log"
+    ],
+    "cwd": "[START_DIR]/sdk",
+    "infra_step": true,
+    "name": "delete result.log (7)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/sdk/tools/test.py",
+      "--mode=release",
+      "--arch=x64",
+      "--use-sdk",
+      "--compiler=dart2js",
+      "--dart2js-batch",
+      "--runtime=d8",
+      "--progress=buildbot",
+      "-v",
+      "--reset-browser-configuration",
+      "--report",
+      "--time",
+      "--write-debug-log",
+      "--write-result-log",
+      "--write-test-outcome-log",
+      "--shards=4",
+      "--shard=1",
       "--fast-startup",
       "--append_logs",
       "--exclude-suite=observatory_ui,co19"
@@ -548,7 +609,7 @@
     ],
     "cwd": "[START_DIR]/sdk",
     "infra_step": true,
-    "name": "delete result.log (7)"
+    "name": "delete result.log (8)"
   },
   {
     "cmd": [
@@ -609,7 +670,7 @@
     ],
     "cwd": "[START_DIR]/sdk",
     "infra_step": true,
-    "name": "delete result.log (8)"
+    "name": "delete result.log (9)"
   },
   {
     "cmd": [
@@ -670,7 +731,7 @@
     ],
     "cwd": "[START_DIR]/sdk",
     "infra_step": true,
-    "name": "delete result.log (9)"
+    "name": "delete result.log (10)"
   },
   {
     "cmd": [
@@ -732,7 +793,7 @@
     ],
     "cwd": "[START_DIR]/sdk",
     "infra_step": true,
-    "name": "delete result.log (10)"
+    "name": "delete result.log (11)"
   },
   {
     "cmd": [
@@ -793,7 +854,7 @@
     ],
     "cwd": "[START_DIR]/sdk",
     "infra_step": true,
-    "name": "delete result.log (11)"
+    "name": "delete result.log (12)"
   },
   {
     "cmd": [
@@ -855,7 +916,7 @@
     ],
     "cwd": "[START_DIR]/sdk",
     "infra_step": true,
-    "name": "delete result.log (12)"
+    "name": "delete result.log (13)"
   },
   {
     "cmd": [
@@ -917,7 +978,7 @@
     ],
     "cwd": "[START_DIR]/sdk",
     "infra_step": true,
-    "name": "delete result.log (13)"
+    "name": "delete result.log (14)"
   },
   {
     "cmd": [
@@ -979,7 +1040,7 @@
     ],
     "cwd": "[START_DIR]/sdk",
     "infra_step": true,
-    "name": "delete result.log (14)"
+    "name": "delete result.log (15)"
   },
   {
     "cmd": [
@@ -1042,7 +1103,7 @@
     ],
     "cwd": "[START_DIR]/sdk",
     "infra_step": true,
-    "name": "delete result.log (15)"
+    "name": "delete result.log (16)"
   },
   {
     "cmd": [
@@ -1104,7 +1165,7 @@
     ],
     "cwd": "[START_DIR]/sdk",
     "infra_step": true,
-    "name": "delete result.log (16)"
+    "name": "delete result.log (17)"
   },
   {
     "cmd": [

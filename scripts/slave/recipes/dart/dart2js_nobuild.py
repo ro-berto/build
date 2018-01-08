@@ -172,10 +172,16 @@ def RunSteps(api):
         kernel_test_args = test_args + ['--dart2js-with-kernel']
         kernel_test_specs = [{
             'name': 'dart2js-with-kernel-d8 tests',
-            'tests': ['language', 'language_2', 'corelib', 'corelib_2',
-                'dart2js_extra', 'dart2js_native']
+            'tests': ['language', 'corelib', 'dart2js_extra', 'dart2js_native']
         }]
         RunTests(api, kernel_test_args, kernel_test_specs, use_xvfb=needs_xvfb)
+        kernel_strong_test_args = test_args + ['--strong', '--dart2js-with-kernel']
+        kernel_strong_test_specs = [{
+            'name': 'dart2js-with-kernel-strong-d8 tests',
+            'tests': ['language_2', 'corelib_2']
+        }]
+        RunTests(api, kernel_strong_test_args, kernel_strong_test_specs,
+                use_xvfb=needs_xvfb)
 
       test_args.append('--fast-startup')
       for spec in test_specs:
