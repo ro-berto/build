@@ -10,6 +10,8 @@ import sys
 import tempfile
 import unittest
 
+import common_merge_script_tests
+
 THIS_DIR = os.path.dirname(__file__)
 
 sys.path.insert(
@@ -55,6 +57,12 @@ class NoopMergeTest(unittest.TestCase):
     output_json = os.path.join(self.temp_dir, 'output.json')
     self.assertNotEqual(
         0, noop_merge.noop_merge(output_json, [input_json1, input_json2]))
+
+
+class CommandLineTest(common_merge_script_tests.CommandLineTest):
+
+  def __init__(self, methodName='runTest'):
+    super(CommandLineTest, self).__init__(methodName, noop_merge)
 
 
 if __name__ == '__main__':

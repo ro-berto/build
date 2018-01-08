@@ -7,6 +7,7 @@ import argparse
 import json
 import sys
 
+import merge_api
 import results_merger
 
 
@@ -34,16 +35,11 @@ def StandardIsolatedScriptMerge(output_json, jsons_to_merge):
   return 0
 
 
-def main():
-  parser = argparse.ArgumentParser()
-  parser.add_argument('-o', '--output-json', required=True)
-  parser.add_argument('--build-properties', help=argparse.SUPPRESS)
-  parser.add_argument('--summary-json', help=argparse.SUPPRESS)
-  parser.add_argument('jsons_to_merge', nargs='*')
-
-  args = parser.parse_args()
+def main(raw_args):
+  parser = merge_api.ArgumentParser()
+  args = parser.parse_args(raw_args)
   return StandardIsolatedScriptMerge(args.output_json, args.jsons_to_merge)
 
 
 if __name__ == '__main__':
-  sys.exit(main())
+  sys.exit(main(sys.argv[1:]))

@@ -12,6 +12,8 @@ import sys
 import tempfile
 import unittest
 
+import common_merge_script_tests
+
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # For 'test_env'.
@@ -26,6 +28,7 @@ import test_env
 
 # In depot_tools/
 from testing_support import auto_stub
+
 import standard_gtest_merge
 
 
@@ -426,6 +429,12 @@ class MergeShardResultsTest(_StandardGtestMergeTest):
           'shard %s test output exceeded the size limit' % large_shard, stdout)
     finally:
       standard_gtest_merge.OUTPUT_JSON_SIZE_LIMIT = old_json_limit
+
+
+class CommandLineTest(common_merge_script_tests.CommandLineTest):
+
+  def __init__(self, methodName='runTest'):
+    super(CommandLineTest, self).__init__(methodName, standard_gtest_merge)
 
 
 if __name__ == '__main__':

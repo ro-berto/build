@@ -8,6 +8,8 @@ import json
 import shutil
 import sys
 
+import merge_api
+
 
 def noop_merge(output_json, jsons_to_merge):
   """Use the first supplied JSON as the output JSON.
@@ -31,12 +33,7 @@ def noop_merge(output_json, jsons_to_merge):
 
 
 def main(raw_args):
-  parser = argparse.ArgumentParser()
-  parser.add_argument('--build-properties', help=argparse.SUPPRESS)
-  parser.add_argument('--summary-json', help=argparse.SUPPRESS)
-  parser.add_argument('-o', '--output-json', required=True)
-  parser.add_argument('jsons_to_merge', nargs='*')
-
+  parser = merge_api.ArgumentParser()
   args = parser.parse_args(raw_args)
 
   return noop_merge(args.output_json, args.jsons_to_merge)

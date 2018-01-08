@@ -11,6 +11,8 @@ import sys
 import tempfile
 import unittest
 
+import common_merge_script_tests
+
 THIS_DIR = os.path.dirname(__file__)
 
 sys.path.insert(
@@ -97,6 +99,12 @@ class StandardIsolatedScriptMergeTest(auto_stub.TestCase):
 
     self.assertEquals(0, exit_code)
     self.assertEquals([[]], self.merge_test_results_args)
+
+
+class CommandLineTest(common_merge_script_tests.CommandLineTest):
+
+  def __init__(self, methodName='runTest'):
+    super(CommandLineTest, self).__init__(methodName, standard_isolated_script_merge)
 
 
 if __name__ == '__main__':

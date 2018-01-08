@@ -11,6 +11,8 @@ import sys
 import tempfile
 import traceback
 
+import merge_api
+
 from common import gtest_utils
 from slave import annotation_utils
 from slave import slave_utils
@@ -187,12 +189,7 @@ def standard_gtest_merge(
 
 def main(raw_args):
 
-  parser = argparse.ArgumentParser()
-  parser.add_argument('--build-properties')
-  parser.add_argument('--summary-json')
-  parser.add_argument('-o', '--output-json', required=True)
-  parser.add_argument('jsons_to_merge', nargs='*')
-
+  parser = merge_api.ArgumentParser()
   args = parser.parse_args(raw_args)
 
   return standard_gtest_merge(

@@ -77,6 +77,8 @@ class CollectTaskTest(auto_stub.TestCase):
                 sys.executable,
                 'merge.py',
                 '--build-properties', build_props_json,
+                '--task-output-dir',
+                task_output_dir,
                 '-o', output_json,
             ]
         ],
@@ -126,6 +128,8 @@ class CollectTaskTest(auto_stub.TestCase):
             merge_script,
             '--build-properties', build_props_json,
             '--summary-json', summary_json,
+            '--task-output-dir',
+            task_output_dir,
             '-o', output_json,
             shard0_output_json
           ],
@@ -165,6 +169,8 @@ class CollectTaskTest(auto_stub.TestCase):
             sys.executable,
             merge_script,
             '--build-properties', build_props_json,
+            '--task-output-dir',
+            task_output_dir,
             '-o', output_json
           ],
         ],
@@ -209,6 +215,8 @@ class CollectTaskTest(auto_stub.TestCase):
             sys.executable,
             merge_script,
             '--build-properties', build_props,
+            '--task-output-dir',
+            task_output_dir,
             '--merge-arg0', 'merge-arg0-value',
             '-o', output_json
           ],
@@ -261,6 +269,8 @@ class CollectTaskTest(auto_stub.TestCase):
                 sys.executable,
                 'merge.py',
                 '--build-properties', build_props_json,
+                '--task-output-dir',
+                task_output_dir,
                 '-o', output_json,
                 extant_shard_json
             ]
