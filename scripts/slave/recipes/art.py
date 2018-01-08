@@ -75,7 +75,8 @@ def clobber(api):
 
 def setup_host_x86(api, debug, bitness, concurrent_collector=True,
     heap_poisoning=False,
-    gcstress=False):
+    gcstress=False,
+    cdex_level='none'):
   checkout(api)
   clobber(api)
 
@@ -111,6 +112,8 @@ def setup_host_x86(api, debug, bitness, concurrent_collector=True,
   else:
     env.update({ 'ART_HEAP_POISONING' : 'false' })
 
+  env.update({ 'ART_DEFAULT_COMPACT_DEX_LEVEL' : cdex_level })
+
   common_options = ['--verbose', '--host']
   if debug:
     common_options += ['--debug']
@@ -119,6 +122,11 @@ def setup_host_x86(api, debug, bitness, concurrent_collector=True,
 
   if gcstress:
     common_options += ['--gcstress']
+
+  # Pass down the cdex option to testrunner.py since it doesn't use the build
+  # default.
+  if cdex_level != 'none':
+    common_options += ['--cdex-' + cdex_level]
 
   with api.context(env=env):
     api.step('build sdk-eng',
@@ -479,6 +487,11 @@ _CONFIG_MAP = {
         'bitness': 32,
         'debug': True,
         'gcstress': True,
+      },
+      'host-x86_64-cdex-fast': {
+        'debug': True,
+        'bitness': 64,
+        'cdex_level': 'fast',
       },
     },
 

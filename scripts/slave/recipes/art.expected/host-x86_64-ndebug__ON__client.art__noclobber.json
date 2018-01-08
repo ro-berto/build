@@ -27,6 +27,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ART_DEFAULT_COMPACT_DEX_LEVEL": "none",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
@@ -51,6 +52,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ART_DEFAULT_COMPACT_DEX_LEVEL": "none",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
@@ -78,6 +80,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ART_DEFAULT_COMPACT_DEX_LEVEL": "none",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
@@ -106,6 +109,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ART_DEFAULT_COMPACT_DEX_LEVEL": "none",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
@@ -133,6 +137,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ART_DEFAULT_COMPACT_DEX_LEVEL": "none",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
@@ -160,6 +165,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ART_DEFAULT_COMPACT_DEX_LEVEL": "none",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
@@ -187,6 +193,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ART_DEFAULT_COMPACT_DEX_LEVEL": "none",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
@@ -211,6 +218,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ART_DEFAULT_COMPACT_DEX_LEVEL": "none",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
@@ -235,6 +243,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ART_DEFAULT_COMPACT_DEX_LEVEL": "none",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
@@ -260,6 +269,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ART_DEFAULT_COMPACT_DEX_LEVEL": "none",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
@@ -285,6 +295,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ART_DEFAULT_COMPACT_DEX_LEVEL": "none",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
@@ -309,6 +320,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ART_DEFAULT_COMPACT_DEX_LEVEL": "none",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
@@ -331,6 +343,7 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ART_DEFAULT_COMPACT_DEX_LEVEL": "none",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
