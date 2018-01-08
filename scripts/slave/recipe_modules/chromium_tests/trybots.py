@@ -731,4 +731,24 @@ TRYBOTS = freeze({
       }),
     },
   },
+  'tryserver.webrtc': {
+    'builders': {
+      'win_chromium_webrtc_compile_rel_ng': simple_bot({
+        'mastername': 'tryserver.webrtc',
+        'buildername': 'win_chromium_webrtc_compile_rel_ng',
+      }, analyze_mode='compile'),
+      'mac_chromium_webrtc_compile_rel_ng': simple_bot({
+        'mastername': 'tryserver.webrtc',
+        'buildername': 'mac_chromium_webrtc_compile_rel_ng',
+      }, analyze_mode='compile'),
+      'linux_chromium_webrtc_compile_rel_ng': simple_bot({
+        'mastername': 'tryserver.webrtc',
+        'buildername': 'linux_chromium_webrtc_compile_rel_ng',
+      }, analyze_mode='compile'),
+      'android_webrtc_compile_rel': simple_bot({
+        'mastername': 'tryserver.webrtc',
+        'buildername': 'android_webrtc_compile_rel',
+      }, analyze_mode='compile'),
+    },
+  },
 })
