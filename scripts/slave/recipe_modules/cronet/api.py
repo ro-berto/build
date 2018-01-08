@@ -54,7 +54,7 @@ class CronetApi(recipe_api.RecipeApi):
     droid.init_and_sync(use_bot_update=True)
 
 
-  def build(self, use_revision=True, use_goma=True):
+  def build(self, targets=None, use_revision=True, use_goma=True):
     if use_goma:
       self.m.chromium.ensure_goma()
     self.m.chromium.runhooks()
@@ -69,7 +69,7 @@ class CronetApi(recipe_api.RecipeApi):
           self.m.properties['mastername'],
           self.m.properties['buildername'],
           use_goma=use_goma)
-    self.m.chromium.compile(use_goma_module=use_goma)
+    self.m.chromium.compile(targets=targets, use_goma_module=use_goma)
 
 
   def get_version(self):
@@ -133,6 +133,7 @@ class CronetApi(recipe_api.RecipeApi):
     # Before running the perf test, build quic_server and quic_client for this
     # host machine.
     self.m.chromium.set_config('chromium')
+
     # Make sure not to clobber all the Cronet binaries that were just built.
     # Landmines are very target dependent so they'll likely be different
     # between android and linux, so running runhooks now would make them go off.
@@ -151,8 +152,6 @@ class CronetApi(recipe_api.RecipeApi):
         """,
         args=[self.m.path['checkout'].join('build', 'get_landmines.py'),
               self.m.path['checkout'].join('.landmines')])
-    self.m.chromium.ensure_goma()
-    self.m.chromium.runhooks()
-    self.m.chromium.compile(targets=['quic_server'], use_goma_module=True)
+    self.build(targets=['quic_server'])
     self.m.python('performance test', self.m.path['checkout'].join(
           'components', 'cronet', 'android', 'test', 'javaperftests', 'run.py'))

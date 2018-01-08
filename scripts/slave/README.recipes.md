@@ -1559,19 +1559,19 @@ Common steps for recipes that sync/build Cronet sources.
 
 #### **class [CronetApi](/scripts/slave/recipe_modules/cronet/api.py#10)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [build](/scripts/slave/recipe_modules/cronet/api.py#57)(self, use_revision=True, use_goma=True):**
+&mdash; **def [build](/scripts/slave/recipe_modules/cronet/api.py#56)(self, targets=None, use_revision=True, use_goma=True):**
 
-&mdash; **def [get\_version](/scripts/slave/recipe_modules/cronet/api.py#75)(self):**
+&mdash; **def [get\_version](/scripts/slave/recipe_modules/cronet/api.py#73)(self):**
 
 &mdash; **def [init\_and\_sync](/scripts/slave/recipe_modules/cronet/api.py#37)(self, recipe_config, kwargs, gyp_defs, chromium_apply_config=None):**
 
-&mdash; **def [run\_perf\_tests](/scripts/slave/recipe_modules/cronet/api.py#132)(self):**
+&mdash; **def [run\_perf\_tests](/scripts/slave/recipe_modules/cronet/api.py#130)(self):**
 
-&mdash; **def [run\_tests](/scripts/slave/recipe_modules/cronet/api.py#113)(self, build_config, unit_tests=UNIT_TESTS, instrumentation_tests=INSTRUMENTATION_TESTS):**
+&mdash; **def [run\_tests](/scripts/slave/recipe_modules/cronet/api.py#111)(self, build_config, unit_tests=UNIT_TESTS, instrumentation_tests=INSTRUMENTATION_TESTS):**
 
-&mdash; **def [sizes](/scripts/slave/recipe_modules/cronet/api.py#101)(self, perf_id):**
+&mdash; **def [sizes](/scripts/slave/recipe_modules/cronet/api.py#99)(self, perf_id):**
 
-&mdash; **def [upload\_package](/scripts/slave/recipe_modules/cronet/api.py#81)(self, build_config, cronetdir=None, platform='android'):**
+&mdash; **def [upload\_package](/scripts/slave/recipe_modules/cronet/api.py#79)(self, build_config, cronetdir=None, platform='android'):**
 ### *recipe_modules* / [crrev](/scripts/slave/recipe_modules/crrev)
 
 [DEPS](/scripts/slave/recipe_modules/crrev/__init__.py#1): [build](#recipe_modules-build), [commit\_position](#recipe_modules-commit_position), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
