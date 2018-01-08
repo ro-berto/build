@@ -54,7 +54,12 @@ class CronetApi(recipe_api.RecipeApi):
     droid.init_and_sync(use_bot_update=True)
 
 
-  def build(self, targets=None, use_revision=True, use_goma=True):
+  def build(self, mastername=None, buildername=None, targets=None,
+            use_revision=True, use_goma=True):
+    if not mastername:
+      mastername=self.m.properties['mastername']
+    if not buildername:
+      buildername=self.m.properties['buildername']
     if use_goma:
       self.m.chromium.ensure_goma()
     self.m.chromium.runhooks()
@@ -66,8 +71,8 @@ class CronetApi(recipe_api.RecipeApi):
           gn_path=self.m.path['checkout'].join('buildtools', 'linux64', 'gn'))
     elif self.m.chromium.c.project_generator.tool == 'mb':
       self.m.chromium.run_mb(
-          self.m.properties['mastername'],
-          self.m.properties['buildername'],
+          mastername,
+          buildername,
           use_goma=use_goma)
     self.m.chromium.compile(targets=targets, use_goma_module=use_goma)
 
@@ -152,6 +157,7 @@ class CronetApi(recipe_api.RecipeApi):
         """,
         args=[self.m.path['checkout'].join('build', 'get_landmines.py'),
               self.m.path['checkout'].join('.landmines')])
-    self.build(targets=['quic_server'])
+    self.build(targets=['quic_server'],
+               mastername='chromium.linux', buildername='Linux Builder')
     self.m.python('performance test', self.m.path['checkout'].join(
           'components', 'cronet', 'android', 'test', 'javaperftests', 'run.py'))
