@@ -697,7 +697,7 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython",
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
@@ -1149,7 +1149,7 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython",
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",

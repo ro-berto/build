@@ -384,6 +384,8 @@ class GomaApi(recipe_api.RecipeApi):
           self._goma_ctl_env['GOMACTL_CRASH_REPORT_ID_FILE'],
           '--build-data-dir', self.build_data_dir,
       ])
+    if 'build_id' in self.m.properties:
+      args.extend(['--build-id', self.m.properties['build_id']])
 
     # Set buildbot info used in goma_utils.MakeGomaStatusCounter etc.
     keys = [
@@ -403,6 +405,7 @@ class GomaApi(recipe_api.RecipeApi):
       script=self.package_repo_resource('scripts', 'slave',
                                         'upload_goma_logs.py'),
       args=args,
+      venv=True,
       step_test_data=(lambda: self.m.json.test_api.output(json_test_data)))
 
     for log in ('compiler_proxy_log', 'ninja_log'):

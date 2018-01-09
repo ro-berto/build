@@ -55,6 +55,7 @@ def GenTests(api):
       'ninja_log_outdir': 'out/Release',
       'ninja_log_compiler': 'goma',
       'build_data_dir': 'build_data_dir',
+      'build_id': 'buildbot/mastername/buildername/1',
   }
 
   for platform in ('linux', 'win', 'mac'):
