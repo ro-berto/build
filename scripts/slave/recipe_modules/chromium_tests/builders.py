@@ -30,6 +30,7 @@ from . import client_v8_chromium
 from . import client_v8_fyi
 from . import tryserver_chromium_mac
 from . import tryserver_chromium_perf
+from . import tryserver_webrtc
 
 BUILDERS = freeze({
   'chromium': chromium.SPEC,
@@ -58,6 +59,7 @@ BUILDERS = freeze({
   'client.v8.fyi': client_v8_fyi.SPEC,
   'tryserver.chromium.mac': tryserver_chromium_mac.SPEC,
   'tryserver.chromium.perf': tryserver_chromium_perf.SPEC,
+  'tryserver.webrtc': tryserver_webrtc.SPEC,
 
   # Additional build configurations to test against for coverage. This is useful
   # when adding configuration options that will only be exercised in other
