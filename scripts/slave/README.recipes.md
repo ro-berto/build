@@ -1401,17 +1401,17 @@ Args:
 Returns:
   A function that can be passed to setup_chromium_tests or run directly.
 
-&mdash; **def [deapply\_patch](/scripts/slave/recipe_modules/chromium_tests/api.py#668)(self, bot_update_step):**
+&mdash; **def [deapply\_patch](/scripts/slave/recipe_modules/chromium_tests/api.py#671)(self, bot_update_step):**
 
-&mdash; **def [download\_and\_unzip\_build](/scripts/slave/recipe_modules/chromium_tests/api.py#550)(self, mastername, buildername, update_step, bot_db, build_archive_url=None, build_revision=None, override_bot_type=None):**
+&mdash; **def [download\_and\_unzip\_build](/scripts/slave/recipe_modules/chromium_tests/api.py#553)(self, mastername, buildername, update_step, bot_db, build_archive_url=None, build_revision=None, override_bot_type=None):**
 
 &mdash; **def [generate\_tests\_from\_test\_spec](/scripts/slave/recipe_modules/chromium_tests/api.py#217)(self, test_spec, builder_dict, buildername, mastername, swarming_dimensions, scripts_compile_targets, generators, bot_update_step, bot_config):**
 
-&mdash; **def [get\_common\_args\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#761)(self, bot_config=None):**
+&mdash; **def [get\_common\_args\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#764)(self, bot_config=None):**
 
 &mdash; **def [get\_compile\_targets](/scripts/slave/recipe_modules/chromium_tests/api.py#287)(self, bot_config, bot_db, tests):**
 
-&mdash; **def [get\_compile\_targets\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#801)(self, bot_config=None):**
+&mdash; **def [get\_compile\_targets\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#804)(self, bot_config=None):**
 
 This gets the combined compile_targets information from the
 //testing/scripts/get_compile_targets.py script.
@@ -1446,15 +1446,15 @@ Returns a Boolean indicating whether this module is running in
 precommit mode; i.e., whether tests are running before the changes
 are committed.
 
-&mdash; **def [main\_waterfall\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#833)(self, mb_config_path=None, bot_config=None):**
+&mdash; **def [main\_waterfall\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#836)(self, mb_config_path=None, bot_config=None):**
 
 &mdash; **def [prepare\_checkout](/scripts/slave/recipe_modules/chromium_tests/api.py#198)(self, bot_config, root_solution_revision=None, disable_syntax_validation=False):**
 
 &mdash; **def [read\_test\_spec](/scripts/slave/recipe_modules/chromium_tests/api.py#233)(self, test_spec_file):**
 
-&mdash; **def [run\_mb\_and\_compile](/scripts/slave/recipe_modules/chromium_tests/api.py#530)(self, compile_targets, isolated_targets, name_suffix, mb_mastername=None, mb_buildername=None, mb_config_path=None):**
+&mdash; **def [run\_mb\_and\_compile](/scripts/slave/recipe_modules/chromium_tests/api.py#533)(self, compile_targets, isolated_targets, name_suffix, mb_mastername=None, mb_buildername=None, mb_config_path=None):**
 
-&mdash; **def [run\_tests\_on\_tryserver](/scripts/slave/recipe_modules/chromium_tests/api.py#680)(self, bot_config, tests, bot_update_step, affected_files, mb_mastername=None, mb_buildername=None, disable_deapply_patch=False):**
+&mdash; **def [run\_tests\_on\_tryserver](/scripts/slave/recipe_modules/chromium_tests/api.py#683)(self, bot_config, tests, bot_update_step, affected_files, mb_mastername=None, mb_buildername=None, disable_deapply_patch=False):**
 
 &mdash; **def [runhooks](/scripts/slave/recipe_modules/chromium_tests/api.py#179)(self, update_step):**
 
@@ -1478,11 +1478,11 @@ Runs command, checking for transience if this is a try job.
   patch") and runs the command.
 * update_step is the bot_update step used for deapplying the patch.
 
-&mdash; **def [trybot\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#862)(self):**
+&mdash; **def [trybot\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#865)(self):**
 
 &emsp; **@property**<br>&mdash; **def [trybots](/scripts/slave/recipe_modules/chromium_tests/api.py#44)(self):**
 
-&emsp; **@contextlib.contextmanager**<br>&mdash; **def [wrap\_chromium\_tests](/scripts/slave/recipe_modules/chromium_tests/api.py#604)(self, bot_config, tests=None):**
+&emsp; **@contextlib.contextmanager**<br>&mdash; **def [wrap\_chromium\_tests](/scripts/slave/recipe_modules/chromium_tests/api.py#607)(self, bot_config, tests=None):**
 ### *recipe_modules* / [codesearch](/scripts/slave/recipe_modules/codesearch)
 
 [DEPS](/scripts/slave/recipe_modules/codesearch/__init__.py#1): [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [commit\_position](#recipe_modules-commit_position), [goma](#recipe_modules-goma), [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -5053,21 +5053,21 @@ Recipe for building and running tests for Libyuv stand-alone.
 
 [DEPS](/scripts/slave/recipes/pdfium.py#5): [goma](#recipe_modules-goma), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/time][recipe_engine/recipe_modules/time]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/pdfium.py#204)(api, memory_tool, skia, xfa, v8, target_cpu, clang, msvc, rel, skip_test, target_os):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/pdfium.py#221)(api, memory_tool, skia, xfa, v8, target_cpu, clang, msvc, rel, skip_test, target_os):**
 
-&mdash; **def [dict\_to\_str](/scripts/slave/recipes/pdfium.py#254)(props):**
+&mdash; **def [dict\_to\_str](/scripts/slave/recipes/pdfium.py#271)(props):**
 
 Returns the given dictionary as a string of space
 separated key/value pairs sorted by keys.
 
-&mdash; **def [get\_gold\_ignore\_hashes](/scripts/slave/recipes/pdfium.py#289)(api, out_dir):**
+&mdash; **def [get\_gold\_ignore\_hashes](/scripts/slave/recipes/pdfium.py#306)(api, out_dir):**
 
 Downloads a list of MD5 hashes from Gold and
 writes them to a file. That file is then used by the
 test runner in the pdfium repository to ignore already
 known hashes.
 
-&mdash; **def [get\_gold\_params](/scripts/slave/recipes/pdfium.py#220)(api, build_config, revision):**
+&mdash; **def [get\_gold\_params](/scripts/slave/recipes/pdfium.py#237)(api, build_config, revision):**
 
 Get the parameters to be passed to the testing call to
 generate the dm.json file expected by Gold and to upload
@@ -5075,7 +5075,7 @@ the generated images. Returns:
     (properties_str, key_str)
 These strings can be passed directly into run_corpus_tests.py.
 
-&mdash; **def [gold\_build\_config](/scripts/slave/recipes/pdfium.py#263)(args):**
+&mdash; **def [gold\_build\_config](/scripts/slave/recipes/pdfium.py#280)(args):**
 
 Extracts key value pairs from the arguments handed to 'gn gen'
 and returns them as a dictionary. Since these are used as
@@ -5084,11 +5084,11 @@ some arguments. i.e. 'use_goma' since we don't care about how
 a binary was built.  Only arguments that follow the
 'key=value' pattern are considered.
 
-&mdash; **def [gs\_cp](/scripts/slave/recipes/pdfium.py#392)(api, name, src, dst, multithreaded=False, extra_args=None):**
+&mdash; **def [gs\_cp](/scripts/slave/recipes/pdfium.py#409)(api, name, src, dst, multithreaded=False, extra_args=None):**
 
 Copy the src to dst in Google storage.
 
-&mdash; **def [upload\_dm\_results](/scripts/slave/recipes/pdfium.py#344)(api, results_dir, revision):**
+&mdash; **def [upload\_dm\_results](/scripts/slave/recipes/pdfium.py#361)(api, results_dir, revision):**
 
 Uploads results of the tests to Gold.
 This assumes that results_dir contains a JSON file
@@ -5484,17 +5484,17 @@ The changes are:
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/zip/examples/full.py#14)(api):**
 
-[depot_tools/recipe_modules/bot_update]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/df27bf6f0034ac718433f8c745f9229514aca960/recipes/README.recipes.md#recipe_modules-bot_update
-[depot_tools/recipe_modules/cipd]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/df27bf6f0034ac718433f8c745f9229514aca960/recipes/README.recipes.md#recipe_modules-cipd
-[depot_tools/recipe_modules/depot_tools]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/df27bf6f0034ac718433f8c745f9229514aca960/recipes/README.recipes.md#recipe_modules-depot_tools
-[depot_tools/recipe_modules/gclient]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/df27bf6f0034ac718433f8c745f9229514aca960/recipes/README.recipes.md#recipe_modules-gclient
-[depot_tools/recipe_modules/gerrit]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/df27bf6f0034ac718433f8c745f9229514aca960/recipes/README.recipes.md#recipe_modules-gerrit
-[depot_tools/recipe_modules/git]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/df27bf6f0034ac718433f8c745f9229514aca960/recipes/README.recipes.md#recipe_modules-git
-[depot_tools/recipe_modules/gitiles]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/df27bf6f0034ac718433f8c745f9229514aca960/recipes/README.recipes.md#recipe_modules-gitiles
-[depot_tools/recipe_modules/gsutil]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/df27bf6f0034ac718433f8c745f9229514aca960/recipes/README.recipes.md#recipe_modules-gsutil
-[depot_tools/recipe_modules/infra_paths]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/df27bf6f0034ac718433f8c745f9229514aca960/recipes/README.recipes.md#recipe_modules-infra_paths
-[depot_tools/recipe_modules/presubmit]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/df27bf6f0034ac718433f8c745f9229514aca960/recipes/README.recipes.md#recipe_modules-presubmit
-[depot_tools/recipe_modules/tryserver]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/df27bf6f0034ac718433f8c745f9229514aca960/recipes/README.recipes.md#recipe_modules-tryserver
+[depot_tools/recipe_modules/bot_update]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/4fbf4bece21f87ac2b08d208698db06876d0988d/recipes/README.recipes.md#recipe_modules-bot_update
+[depot_tools/recipe_modules/cipd]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/4fbf4bece21f87ac2b08d208698db06876d0988d/recipes/README.recipes.md#recipe_modules-cipd
+[depot_tools/recipe_modules/depot_tools]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/4fbf4bece21f87ac2b08d208698db06876d0988d/recipes/README.recipes.md#recipe_modules-depot_tools
+[depot_tools/recipe_modules/gclient]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/4fbf4bece21f87ac2b08d208698db06876d0988d/recipes/README.recipes.md#recipe_modules-gclient
+[depot_tools/recipe_modules/gerrit]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/4fbf4bece21f87ac2b08d208698db06876d0988d/recipes/README.recipes.md#recipe_modules-gerrit
+[depot_tools/recipe_modules/git]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/4fbf4bece21f87ac2b08d208698db06876d0988d/recipes/README.recipes.md#recipe_modules-git
+[depot_tools/recipe_modules/gitiles]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/4fbf4bece21f87ac2b08d208698db06876d0988d/recipes/README.recipes.md#recipe_modules-gitiles
+[depot_tools/recipe_modules/gsutil]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/4fbf4bece21f87ac2b08d208698db06876d0988d/recipes/README.recipes.md#recipe_modules-gsutil
+[depot_tools/recipe_modules/infra_paths]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/4fbf4bece21f87ac2b08d208698db06876d0988d/recipes/README.recipes.md#recipe_modules-infra_paths
+[depot_tools/recipe_modules/presubmit]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/4fbf4bece21f87ac2b08d208698db06876d0988d/recipes/README.recipes.md#recipe_modules-presubmit
+[depot_tools/recipe_modules/tryserver]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/4fbf4bece21f87ac2b08d208698db06876d0988d/recipes/README.recipes.md#recipe_modules-tryserver
 [recipe_engine/recipe_modules/buildbucket]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/08d3beff2085cf4a5e1c62188c45eb0cb42d3833/README.recipes.md#recipe_modules-buildbucket
 [recipe_engine/recipe_modules/context]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/08d3beff2085cf4a5e1c62188c45eb0cb42d3833/README.recipes.md#recipe_modules-context
 [recipe_engine/recipe_modules/file]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/08d3beff2085cf4a5e1c62188c45eb0cb42d3833/README.recipes.md#recipe_modules-file
