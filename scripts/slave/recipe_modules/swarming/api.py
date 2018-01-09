@@ -36,6 +36,8 @@ IMPLIED_CIPD_BINARIES = {
 # member of the tuple is the path relative to IMPLIED_BINARY_PATH which should
 # be added to $PATH.
 IMPLIED_CIPD_LUCI_BINARIES = {
+  'infra/tools/luci/vpython-native/${platform}':
+    ('', 'git_revision:08e35087eaf8ee95207450d2a2e33152a2f245be'),
   'infra/python/cpython/${platform}':
     ('bin', 'version:2.7.14.chromium14'),
 }
