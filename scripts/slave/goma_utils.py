@@ -624,6 +624,7 @@ def MakeGomaFailureReasonCounter(json_file, exit_status,
 
     counter = {
         'name': 'goma/failure_reason',
+        'value': 1,
         'builder': builder,
         'master': master,
         'slave': slave,
