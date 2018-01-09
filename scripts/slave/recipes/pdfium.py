@@ -68,6 +68,8 @@ def _OutPath(memory_tool, skia, xfa, v8, clang, msvc, rel):
     out_dir += "_msvc"
   if memory_tool == 'asan':
     out_dir += "_asan"
+  elif memory_tool == 'msan':
+    out_dir += "_msan"
   return out_dir
 
 
@@ -108,14 +110,18 @@ def _GNGenBuilds(api, memory_tool, skia, xfa, v8, target_cpu, clang, msvc, rel,
     assert not clang
 
   if memory_tool == 'asan':
+    args.append('is_asan=true')
     if api.platform.is_win:
       # ASAN requires Clang. Until Clang is default on Windows for certain,
       # bots should set it explicitly.
       assert clang
       # No LSAN support.
-      args.append('is_asan=true')
     else:
-      args.append('is_asan=true is_lsan=true')
+      args.append('is_lsan=true')
+  elif memory_tool == 'msan':
+    assert not api.platform.is_win
+    args.extend(['is_msan=true', 'use_prebuilt_instrumented_libraries=true'])
+
   if target_os:
     args.append('target_os="%s"' % target_os)
   if target_cpu == 'x86':
@@ -143,15 +149,26 @@ def _BuildSteps(api, clang, out_dir):
 # _RunTests runs the tests and uploads the results to Gold.
 def _RunTests(api, memory_tool, v8, out_dir, build_config, revision):
   env = {}
+  COMMON_SANITIZER_OPTIONS = ['allocator_may_return_null=1']
+  COMMON_UNIX_SANITIZER_OPTIONS = [
+    'detect_leaks=1',
+    'symbolize=1',
+    # Note: deliberate lack of comma.
+    'external_symbolizer_path='
+    'third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer',
+  ]
   if memory_tool == 'asan':
-    options = ['allocator_may_return_null=1']
+    options = []
+    options.extend(COMMON_SANITIZER_OPTIONS)
     if not api.platform.is_win:
-      options.extend([
-          'detect_leaks=1',
-          'symbolize=1',
-          'external_symbolizer_path='
-          'third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer'])
+      options.extend(COMMON_UNIX_SANITIZER_OPTIONS)
     env.update({'ASAN_OPTIONS': ' '.join(options)})
+  elif memory_tool == 'msan':
+    assert not api.platform.is_win
+    options = []
+    options.extend(COMMON_SANITIZER_OPTIONS)
+    options.extend(COMMON_UNIX_SANITIZER_OPTIONS)
+    env.update({'MSAN_OPTIONS': ' '.join(options)})
 
   unittests_path = str(api.path['checkout'].join('out', out_dir,
                                                  'pdfium_unittests'))
@@ -626,12 +643,35 @@ def GenTests(api):
   )
 
   yield (
+      api.test('linux_msan') +
+      api.platform('linux', 64) +
+      api.properties(memory_tool='msan',
+                     rel=True,
+                     mastername="client.pdfium",
+                     buildername='linux_msan',
+                     buildnumber='1234',
+                     bot_id="test_slave")
+  )
+
+  yield (
       api.test('linux_xfa_asan_lsan') +
       api.platform('linux', 64) +
-      api.properties(xfa=True,
-                     memory_tool='asan',
+      api.properties(memory_tool='asan',
+                     xfa=True,
                      mastername="client.pdfium",
                      buildername='linux_xfa_asan_lsan',
+                     buildnumber='1234',
+                     bot_id="test_slave")
+  )
+
+  yield (
+      api.test('linux_xfa_msan') +
+      api.platform('linux', 64) +
+      api.properties(memory_tool='msan',
+                     rel=True,
+                     xfa=True,
+                     mastername="client.pdfium",
+                     buildername='linux_xfa_msan',
                      buildnumber='1234',
                      bot_id="test_slave")
   )
