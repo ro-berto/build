@@ -7,6 +7,7 @@ import os
 import shutil
 import SocketServer
 import subprocess
+import sys
 import tempfile
 import threading
 import time
@@ -30,13 +31,25 @@ class Master(object):
     slave_port = %(slave_port)d
 '''
 
+BOOTSTRAPPER_PY_TEMPLATE = '''#!/usr/bin/env python
+import sys, os
 
-# Force our copy of config_private.py to be imported before run_slave.py
-# prepends another directory to sys.path containing the real config_private.py.
-SITE_PY = '''
+# Hack up sys.path to import our hacked config_private.py module.
+sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 import config_private
-'''
+sys.path.pop(0)
 
+# These envvars reflect values in config_private.py above.
+os.environ['TESTING_MASTER'] = 'SmokeTest'
+os.environ['TESTING_SLAVENAME'] = 'test-slave-name'
+
+# We need to fake out __file__ because run_slave_py computes paths relative to
+# itself. We need to "become" run_slave.py.
+RUN_SLAVE_PY = %(run_slave_py)r
+__file__ = RUN_SLAVE_PY
+
+execfile(RUN_SLAVE_PY)
+'''
 
 class SlaveShouldSend(str):
   pass
@@ -104,31 +117,29 @@ class SlaveTest(unittest.TestCase):
     with open(os.path.join(self.temp_dir, 'config_private.py'), 'w') as fh:
       fh.write(CONFIG_PRIVATE_DOT_PY_TEMPLATE % {'slave_port': port})
 
-    with open(os.path.join(self.temp_dir, 'site.py'), 'w') as fh:
-      fh.write(SITE_PY)
-
     # Get the path to run_slave.py.
-    self.run_slave = os.path.abspath(
+    run_slave = os.path.abspath(
         os.path.join(os.path.dirname(__file__), '..', 'slave', 'run_slave.py'))
+
+    self.boostrapper_py = os.path.join(self.temp_dir, 'test_bootstrapper.py')
+
+    with open(self.boostrapper_py, 'w') as fh:
+      fh.write(BOOTSTRAPPER_PY_TEMPLATE % {'run_slave_py': run_slave})
+    os.chmod(self.boostrapper_py, 0777)
 
   def tearDown(self):
     shutil.rmtree(self.temp_dir)
     self.server.shutdown()
 
   def test_slave_connects(self):
-    env = dict(os.environ)
-    env['PYTHONPATH'] = self.temp_dir  # Let it find our config_private.py.
-    env['TESTING_MASTER'] = 'SmokeTest'  # Defined in config_private.py.
-    env['TESTING_SLAVENAME'] = 'test-slave-name'
-
     # Start the slave.
     handle = subprocess.Popen([
-        self.run_slave,
+        self.boostrapper_py,
         '--no-gclient-sync',
         '-y',
         'buildbot.tac',
         '--nodaemon',
-    ], env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    ], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
     # The HTTP handler will kill the slave after it's finished the handshake.
     self.server.slave_process = handle
