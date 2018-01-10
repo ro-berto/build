@@ -772,7 +772,7 @@ class V8Api(recipe_api.RecipeApi):
           'package build' + name_suffix,
           self.m.chromium.c.build_config_fs,
           archive,
-          src_dir='v8')
+          src_dir=self.checkout_root.join('v8'))
 
   @property
   def isolated_archive_path(self):
