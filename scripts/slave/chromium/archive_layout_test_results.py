@@ -141,45 +141,47 @@ def archive_layout(args):
       print "cp failed: %d" % rc
       return rc
 
-  # The 'latest' results need to be not cached at all (Cloud Storage defaults to
-  # caching w/ a max-age=3600), since they change with every build. We also
-  # do cloud->cloud copies for these, to save on network traffic.
-  cache_control = 'no-cache'
+  if args.store_latest:
+    # The 'latest' results need to be not cached at all (Cloud Storage defaults
+    # to caching w/ a max-age=3600), since they change with every build. We also
+    # do cloud->cloud copies for these, to save on network traffic.
+    cache_control = 'no-cache'
 
-  start = time.time()
-  rc = slave_utils.GSUtilCopyFile(zip_file,
-                                  gs_latest_dir,
-                                  gs_acl=gs_acl,
-                                  cache_control=cache_control,
-                                  add_quiet_flag=True)
-  print "took %.1f seconds" % (time.time() - start)
-  sys.stdout.flush()
-  if rc:
-      print "cp failed: %d" % rc
-      return rc
+    start = time.time()
+    rc = slave_utils.GSUtilCopyFile(zip_file,
+                                    gs_latest_dir,
+                                    gs_acl=gs_acl,
+                                    cache_control=cache_control,
+                                    add_quiet_flag=True)
+    print "took %.1f seconds" % (time.time() - start)
+    sys.stdout.flush()
+    if rc:
+        print "cp failed: %d" % rc
+        return rc
 
-  start = time.time()
-  rc = slave_utils.GSUtilCopyDir(args.results_dir,
-                                 gs_latest_dir,
-                                 gs_acl=gs_acl,
-                                 cache_control=cache_control,
-                                 add_quiet_flag=True)
-  print "took %.1f seconds" % (time.time() - start)
-  sys.stdout.flush()
-  if rc:
-      print "cp failed: %d" % rc
-      return rc
+    start = time.time()
+    rc = slave_utils.GSUtilCopyDir(args.results_dir,
+                                   gs_latest_dir,
+                                   gs_acl=gs_acl,
+                                   cache_control=cache_control,
+                                   add_quiet_flag=True)
+    print "took %.1f seconds" % (time.time() - start)
+    sys.stdout.flush()
+    if rc:
+        print "cp failed: %d" % rc
+        return rc
 
-  start = time.time()
-  rc = slave_utils.GSUtilCopyFile(last_change_file,
-                                  gs_latest_results_dir,
-                                  gs_acl=gs_acl,
-                                  cache_control=cache_control,
-                                  add_quiet_flag=True)
-  print "took %.1f seconds" % (time.time() - start)
-  sys.stdout.flush()
-  if rc:
-      print "cp failed: %d" % rc
+    start = time.time()
+    rc = slave_utils.GSUtilCopyFile(last_change_file,
+                                    gs_latest_results_dir,
+                                    gs_acl=gs_acl,
+                                    cache_control=cache_control,
+                                    add_quiet_flag=True)
+    print "took %.1f seconds" % (time.time() - start)
+    sys.stdout.flush()
+    if rc:
+        print "cp failed: %d" % rc
+        return rc
 
   return 0
 
@@ -201,6 +203,9 @@ def _ParseArgs():
                       help='The Google Storage bucket to upload to.')
   parser.add_argument('--gs-acl',
                       help='The access policy for Google Storage files.')
+  parser.add_argument('--store-latest', action='store_true',
+                      help='If this script should update the latest results in'
+                           'cloud storage.')
   parser.add_argument('--staging-dir',
                       help='Directory to use for staging the archives. '
                            'Default behavior is to automatically detect '

@@ -1060,6 +1060,8 @@ class LayoutTestResultsHandler(JSONResultsHandler):
       '--gs-bucket', 'gs://chromium-layout-test-archives',
       '--staging-dir', api.path['cache'].join('chrome_staging'),
     ]
+    if not api.tryserver.is_tryserver:
+      archive_layout_test_args.append('--store-latest')
 
     # TODO: The naming of the archive step is clunky, but the step should
     # really be triggered src-side as part of the post-collect merge and

@@ -402,6 +402,7 @@
       "gs://chromium-layout-test-archives",
       "--staging-dir",
       "[CACHE]/chrome_staging",
+      "--store-latest",
       "--step-name",
       "custom_webkit_tests",
       "--slave-utils-gsutil-py-path",
