@@ -22,7 +22,7 @@ SPEC = {
       },
       # This doesn't affect the build, but ensures that trybots get the right
       # runtime flags.
-      'chromium_apply_config': ['lsan', 'mb'],
+      'chromium_apply_config': ['lsan', 'mb', 'goma_high_parallel'],
       'bot_type': 'builder',
       'testing': {'platform': 'linux'},
     },
