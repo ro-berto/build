@@ -121,9 +121,10 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
             args=['--gtest_filter=WebRtc*MANUAL*Webcam*', '--run-manual',
                   '--test-launcher-jobs=1']),
         steps.LocalGTestTest(
-            name='content_browsertests_manual',
+            name='content_browsertests_stress',
             target_name='content_browsertests',
-            args=['--gtest_filter=WebRtc*:-*Webcam*', '--run-manual']),
+            args=['--gtest_filter=WebRtc*MANUAL*:-*Webcam*', '--run-manual',
+                  '--ui-test-action-max-timeout=120000']),
         steps.LocalGTestTest(
             'browser_tests_functional',
             target_name='browser_tests',
