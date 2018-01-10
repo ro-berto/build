@@ -210,7 +210,6 @@
   {
     "cmd": [
       "dart.exe",
-      "--assert-initializer",
       "[START_DIR]\\flutter\\dev\\bots\\prepare_package.dart",
       "--temp_dir=[START_DIR]\\archive",
       "--output=[START_DIR]\\output\\flutter_win_deadbeef.zip",

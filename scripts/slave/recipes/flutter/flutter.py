@@ -171,7 +171,7 @@ def CreateAndUploadFlutterPackage(api, git_hash):
   api.file.ensure_directory('(re)create archive output directory', output_dir)
   with api.context(cwd=api.path['start_dir']):
     api.step('prepare and create a flutter archive', [
-        dart_executable, '--assert-initializer', prepare_script,
+        dart_executable, prepare_script,
         '--temp_dir=%s' % work_dir,
         '--output=%s' % output_path,
         '--revision=%s' % git_hash
