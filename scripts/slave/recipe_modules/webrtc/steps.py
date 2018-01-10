@@ -313,7 +313,7 @@ class AndroidTest(SwarmingGTestTest):
 class SwarmingAndroidPerfTest(AndroidTest):
   def __init__(self, test, args=None, **kwargs):
     args = list(args or [])
-    args.append('--chartjson_result_file=${ISOLATED_OUTDIR}/perf_result.json')
+    args.append('--chartjson-result-file=${ISOLATED_OUTDIR}/perf_result.json')
     super(SwarmingAndroidPerfTest, self).__init__(test, args=args)
 
   def post_run(self, api, suffix):
