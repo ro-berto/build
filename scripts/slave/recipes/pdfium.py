@@ -521,29 +521,6 @@ def GenTests(api):
   )
 
   yield (
-      api.test('win_xfa_clang_32') +
-      api.platform('win', 64) +
-      api.properties(xfa=True,
-                     clang=True,
-                     target_cpu='x86',
-                     mastername="client.pdfium",
-                     buildername='windows_xfa_clang_32',
-                     buildnumber='1234',
-                     bot_id="test_slave")
-  )
-
-  yield (
-      api.test('win_xfa_clang') +
-      api.platform('win', 64) +
-      api.properties(xfa=True,
-                     clang=True,
-                     mastername="client.pdfium",
-                     buildername='windows_xfa_clang',
-                     buildnumber='1234',
-                     bot_id="test_slave")
-  )
-
-  yield (
       api.test('win_xfa_msvc_32') +
       api.platform('win', 64) +
       api.properties(xfa=True,
