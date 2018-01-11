@@ -107,6 +107,19 @@
       "python",
       "[START_DIR]\\src\\flutter/tools/gn",
       "--runtime-mode",
+      "debug",
+      "--unoptimized"
+    ],
+    "env": {
+      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
+    },
+    "name": "gn --runtime-mode debug --unoptimized"
+  },
+  {
+    "cmd": [
+      "python",
+      "[START_DIR]\\src\\flutter/tools/gn",
+      "--runtime-mode",
       "profile",
       "--android"
     ],
@@ -127,6 +140,17 @@
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
     "name": "gn --runtime-mode release --android"
+  },
+  {
+    "cmd": [
+      "ninja",
+      "-C",
+      "[START_DIR]\\src\\out/host_debug_unopt"
+    ],
+    "env": {
+      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
+    },
+    "name": "build host_debug_unopt"
   },
   {
     "cmd": [
