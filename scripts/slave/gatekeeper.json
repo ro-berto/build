@@ -790,11 +790,12 @@
           },
           "Ozone Linux": {
             "tree_notify": [
-              "thomasanderson@chromium.org",
-              "rjkroege@chromium.org",
               "fwang@chromium.org",
-              "tonikitoo@chromium.org",
-              "maksim.sisov@chromium.org"
+              "maksim.sisov@chromium.org",
+              "rjkroege@chromium.org",
+              "thomasanderson@chromium.org",
+              "timbrown@chromium.org",
+              "tonikitoo@chromium.org"
             ],
             "forgiving_optional": [
               "*"
