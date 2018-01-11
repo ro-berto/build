@@ -109,12 +109,7 @@ PERF_TESTS = freeze({
 ANDROID_PERF_TESTS = freeze({
     # TODO(ehmaldonado): Add low_bandwidth_audio_perf_test and
     # video_quality_loopback_test.
-    'webrtc_perf_tests': {
-        'args': [
-           '--gtest_filter='
-           'AudioEncoderOpusComplexityAdaptationTest.AdaptationOn',
-        ],
-    },
+    'webrtc_perf_tests': {},
 })
 
 

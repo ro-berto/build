@@ -599,7 +599,6 @@
       "--isolated",
       "[dummy hash for webrtc_perf_tests]",
       "--",
-      "--gtest_filter=AudioEncoderOpusComplexityAdaptationTest.AdaptationOn",
       "--chartjson-result-file=${ISOLATED_OUTDIR}/perf_result.json",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
