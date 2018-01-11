@@ -25,6 +25,7 @@ per-file tryserver_chromium_perf.py=dtu@chromium.org
 per-file tryserver_chromium_perf.py=prasadv@chromium.org
 per-file tryserver_chromium_perf.py=robertocn@chromium.org
 per-file tryserver_chromium_perf.py=simonhatch@chromium.org
+per-file tryserver_webrtc.py=phoglund@chromium.org
 
 # Waterfall owners should be able to update trybots.py.
 per-file trybots.py=dtu@chromium.org
