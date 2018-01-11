@@ -345,7 +345,7 @@ class SwarmingAndroidPerfTest(AndroidTest):
           }
         }
       }
-    return task_output_dir['perf_result.json']  # pragma: no cover
+    return task_output_dir['0/perf_result.json']  # pragma: no cover
 
   @composite_step
   def _upload_to_perf_dashboard(self, api, perf_results):
