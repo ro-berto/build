@@ -100,7 +100,8 @@ def GenTests(api):
 
     if revision:
       test += api.properties(revision=revision,
-                             git_revision='git' + revision)
+                             git_revision='git' + revision,
+                             got_revision_cp=revision)
     if bot_type == 'tester':
       parent_rev = parent_got_revision or revision
       test += api.properties(parent_got_revision=parent_rev)
