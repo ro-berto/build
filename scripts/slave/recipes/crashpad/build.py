@@ -39,17 +39,20 @@ FAKE_SWARMING_TEST_SPEC = """\
 def RunSteps(api):
   """Generates the sequence of steps that will be run by the slave."""
   api.gclient.set_config('crashpad')
-  api.bot_update.ensure_checkout()
-
-  # buildbot sets 'clobber' to the empty string which is falsey, check with 'in'
-  if 'clobber' in api.properties:
-    api.file.rmtree('out', api.path['checkout'].join('out'))
 
   buildername = api.properties['buildername']
   env = {}
 
   is_fuchsia = '_fuchsia' in buildername
   is_debug = '_dbg' in buildername
+
+  if is_fuchsia:
+    api.gclient.c.target_os = {'fuchsia'}
+  api.bot_update.ensure_checkout()
+
+  # buildbot sets 'clobber' to the empty string which is falsey, check with 'in'
+  if 'clobber' in api.properties:
+    api.file.rmtree('out', api.path['checkout'].join('out'))
 
   if '_x86' in buildername:
     env = {'GYP_DEFINES': 'target_arch=ia32'}
@@ -76,7 +79,8 @@ def RunSteps(api):
     dirname = 'fuch_' + ('dbg' if is_debug else 'rel')
     path = api.path['checkout'].join('out', dirname)
     args = 'target_os="fuchsia" is_debug=' + ('true' if is_debug else 'false')
-    api.step('generate build files', ['gn', 'gen', path, '--args', args])
+    with api.context(cwd=api.path['checkout']):
+      api.step('generate build files', ['gn', 'gen', path, '--args=' + args])
   else:
     # Other platforms still default to the gyp build, so the build files have
     # already been generated during runhooks.
