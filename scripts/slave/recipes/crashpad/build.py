@@ -47,6 +47,10 @@ def RunSteps(api):
 
   buildername = api.properties['buildername']
   env = {}
+
+  is_fuchsia = '_fuchsia' in buildername
+  is_debug = '_dbg' in buildername
+
   if '_x86' in buildername:
     env = {'GYP_DEFINES': 'target_arch=ia32'}
   with api.context(env=env):
@@ -66,11 +70,22 @@ def RunSteps(api):
   # generating Debug == x86 and Debug_x64 == x64 when target_arch==x64 (the
   # default). So, we just need to make sure to build both the suffixed and
   # unsuffixed trees, and then make sure to run the tests from the _x64 tree.
-  dirname = 'Debug' if '_dbg' in buildername else 'Release'
-  path = api.path['checkout'].join('out', dirname)
+
+  if is_fuchsia:
+    # Fuchsia has only a GN build.
+    dirname = 'fuch_' + ('dbg' if is_debug else 'rel')
+    path = api.path['checkout'].join('out', dirname)
+    args = 'target_os="fuchsia" is_debug=' + ('true' if is_debug else 'false')
+    api.step('generate build files', ['gn', 'gen', path, '--args', args])
+  else:
+    # Other platforms still default to the gyp build, so the build files have
+    # already been generated during runhooks.
+    dirname = 'Debug' if is_debug else 'Release'
+    path = api.path['checkout'].join('out', dirname)
+
   api.step('compile with ninja', ['ninja', '-C', path])
 
-  if '_x64' in buildername:
+  if '_x64' in buildername and not is_fuchsia:
     # Note that we modify the dirname on x64 because we want to handle variants
     # a) and b) above.
     dirname += '_x64'
@@ -116,6 +131,8 @@ def GenTests(api):
       'crashpad_win_x64_rel',
       'crashpad_try_win_x86_wow64_dbg',
       'crashpad_win_x86_wow64_rel',
+      'crashpad_fuchsia_x64_dbg',
+      'crashpad_fuchsia_x64_rel',
   ]
   for t in tests:
     yield(api.test(t) +
