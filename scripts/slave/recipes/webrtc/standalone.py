@@ -99,7 +99,8 @@ def GenTests(api):
           parent_buildername=bot_config['parent_buildername'])
 
     if revision:
-      test += api.properties(revision=revision)
+      test += api.properties(revision=revision,
+                             git_revision='git' + revision)
     if bot_type == 'tester':
       parent_rev = parent_got_revision or revision
       test += api.properties(parent_got_revision=parent_rev)
