@@ -155,6 +155,20 @@ def setup_host_x86(api, debug, bitness, concurrent_collector=True,
                             '-j8',
                             '--jit'] + common_options)
 
+      if cdex_level != "none":
+        api.step('test cdex-redefine-stress-optimizing',
+                 ['./art/test/testrunner/testrunner.py',
+                  '-j8',
+                  '--optimizing',
+                  '--redefine-stress',
+                  '--debuggable'] + common_options)
+        api.step('test cdex-redefine-stress-jit',
+                 ['./art/test/testrunner/testrunner.py',
+                  '-j8',
+                  '--jit',
+                  '--redefine-stress',
+                  '--debuggable'] + common_options)
+
       api.step('test speed-profile', ['./art/test/testrunner/testrunner.py',
                                       '-j8',
                                       '--speed-profile'] + common_options)
