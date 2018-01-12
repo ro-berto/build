@@ -154,14 +154,14 @@
       "--buildbot",
       "--timeout=200",
       "--random-seed=-358114921",
-      "mjsunit",
+      "d8_default",
       "--variants=more,dev",
       "--rerun-failures-count=2",
       "--json-test-results",
       "/path/to/tmp/json"
     ],
     "cwd": "[START_DIR]/v8",
-    "name": "Mjsunit",
+    "name": "Check - d8",
     "~followup_annotations": [
       "@@@STEP_TEXT@failures: 2<br/>@@@",
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -219,44 +219,6 @@
       "@@@STEP_LOG_LINE@slow@@@@",
       "@@@STEP_LOG_END@slow@@@",
       "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/v8/tools/run-tests.py",
-      "--progress=verbose",
-      "--mode",
-      "Release",
-      "--outdir",
-      "out",
-      "--buildbot",
-      "--timeout=200",
-      "--random-seed=-358114921",
-      "webkit",
-      "--variants=more,dev",
-      "--rerun-failures-count=2",
-      "--json-test-results",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[START_DIR]/v8",
-    "name": "Webkit",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
-      "@@@STEP_LOG_LINE@durations@00:00:101 mjsunit/Cool.Test2@@@",
-      "@@@STEP_LOG_LINE@durations@@@@",
-      "@@@STEP_LOG_LINE@durations@Details:@@@",
-      "@@@STEP_LOG_LINE@durations@@@@",
-      "@@@STEP_LOG_LINE@durations@Test: mjsunit/Cool.Test@@@",
-      "@@@STEP_LOG_LINE@durations@Flags: -f@@@",
-      "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test@@@",
-      "@@@STEP_LOG_LINE@durations@Duration: 01:01:002@@@",
-      "@@@STEP_LOG_LINE@durations@Test: mjsunit/Cool.Test2@@@",
-      "@@@STEP_LOG_LINE@durations@Flags: -f -g@@@",
-      "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test2@@@",
-      "@@@STEP_LOG_LINE@durations@Duration: 00:00:101@@@",
-      "@@@STEP_LOG_END@durations@@@"
     ]
   },
   {

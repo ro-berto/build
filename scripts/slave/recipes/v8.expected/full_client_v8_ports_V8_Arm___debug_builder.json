@@ -125,7 +125,7 @@
       "--goma-dir",
       "[CACHE]/goma_client",
       "--swarming-targets-file",
-      "bot_default\nmjsunit\noptimize_for_size\nwebkit\n",
+      "bot_default\nd8_default\noptimize_for_size\n",
       "--gyp-script=gypfiles/gyp_v8",
       "//out/Debug"
     ],
@@ -138,9 +138,8 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@bot_default@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@mjsunit@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@d8_default@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@optimize_for_size@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@webkit@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@",
       "@@@STEP_LOG_LINE@captured_stdout@Writing \"\"\"\\@@@",
       "@@@STEP_LOG_LINE@captured_stdout@goma_dir = \"/b/build/slave/cache/goma_client\"@@@",
@@ -191,17 +190,15 @@
       "prod",
       "--verbose",
       "[START_DIR]/v8/out/Debug/bot_default.isolated.gen.json",
-      "[START_DIR]/v8/out/Debug/mjsunit.isolated.gen.json",
-      "[START_DIR]/v8/out/Debug/optimize_for_size.isolated.gen.json",
-      "[START_DIR]/v8/out/Debug/webkit.isolated.gen.json"
+      "[START_DIR]/v8/out/Debug/d8_default.isolated.gen.json",
+      "[START_DIR]/v8/out/Debug/optimize_for_size.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"bot_default\": \"[dummy hash for bot_default]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"mjsunit\": \"[dummy hash for mjsunit]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"optimize_for_size\": \"[dummy hash for optimize_for_size]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"webkit\": \"[dummy hash for webkit]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"d8_default\": \"[dummy hash for d8_default]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"optimize_for_size\": \"[dummy hash for optimize_for_size]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -217,7 +214,7 @@
       "cp",
       "-a",
       "public-read",
-      "{\"bot_default\": \"[dummy hash for bot_default]\", \"mjsunit\": \"[dummy hash for mjsunit]\", \"optimize_for_size\": \"[dummy hash for optimize_for_size]\", \"webkit\": \"[dummy hash for webkit]\"}",
+      "{\"bot_default\": \"[dummy hash for bot_default]\", \"d8_default\": \"[dummy hash for d8_default]\", \"optimize_for_size\": \"[dummy hash for optimize_for_size]\"}",
       "gs://chromium-v8/isolated/client.v8.ports/V8 Arm - debug builder/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json"
     ],
     "infra_step": true,
@@ -272,9 +269,8 @@
           "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "swarm_hashes": {
             "bot_default": "[dummy hash for bot_default]",
-            "mjsunit": "[dummy hash for mjsunit]",
-            "optimize_for_size": "[dummy hash for optimize_for_size]",
-            "webkit": "[dummy hash for webkit]"
+            "d8_default": "[dummy hash for d8_default]",
+            "optimize_for_size": "[dummy hash for optimize_for_size]"
           }
         }
       },
@@ -290,9 +286,8 @@
           "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "swarm_hashes": {
             "bot_default": "[dummy hash for bot_default]",
-            "mjsunit": "[dummy hash for mjsunit]",
-            "optimize_for_size": "[dummy hash for optimize_for_size]",
-            "webkit": "[dummy hash for webkit]"
+            "d8_default": "[dummy hash for d8_default]",
+            "optimize_for_size": "[dummy hash for optimize_for_size]"
           }
         }
       }

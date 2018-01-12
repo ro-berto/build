@@ -304,7 +304,7 @@ def GenTests(api):
         'V8 Linux - predictable',
         'bisect',
     ) +
-    api.v8.fail('Mjsunit') +
+    api.v8.fail('Check - d8') +
     api.v8.fail('Bisect a2.Retry') +
     api.time.step(120)
   )
@@ -323,7 +323,7 @@ def GenTests(api):
           {'revision': 'a3'},
         ],
     ) +
-    api.v8.fail('Mjsunit') +
+    api.v8.fail('Check - d8') +
     api.v8.fail('Bisect a2.Retry') +
     api.time.step(120)
   )
@@ -336,7 +336,7 @@ def GenTests(api):
         'V8 Linux - predictable',
         'bisect_tests_too_long',
     ) +
-    api.v8.fail('Mjsunit') +
+    api.v8.fail('Check - d8') +
     api.time.step(7)
   )
 
@@ -410,7 +410,7 @@ def GenTests(api):
         'V8 Linux - predictable',
         'bisect_recurring_failure',
     ) +
-    api.v8.fail('Mjsunit') +
+    api.v8.fail('Check - d8') +
     api.v8.fail('Bisect a0.Retry') +
     api.time.step(120)
   )
@@ -422,7 +422,7 @@ def GenTests(api):
         'V8 Linux - predictable',
         'bisect_one_change',
     ) +
-    api.v8.fail('Mjsunit') +
+    api.v8.fail('Check - d8') +
     api.url.json(
         'Bisect.Fetch changes', api.v8.example_one_buildbot_change()) +
     api.override_step_data(

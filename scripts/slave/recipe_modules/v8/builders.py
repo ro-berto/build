@@ -65,6 +65,7 @@ class TestStepConfig(object):
 # Top-level test configs for convenience.
 Benchmarks = TestStepConfig('benchmarks')
 Deopt = TestStepConfig('deopt')
+D8Testing = TestStepConfig('d8testing')
 Fuzz = TestStepConfig('jsfunfuzz')
 GCFuzz = TestStepConfig('gcfuzz')
 GCMole = TestStepConfig('gcmole')
@@ -254,7 +255,7 @@ BUILDERS = {
         ) + with_test_args(
             'code serializer',
             ['--extra-flags', '--serialize-toplevel --cache=code'],
-            [Mjsunit, Mozilla, Test262, Benchmarks],
+            [D8Testing, Mozilla, Test262, Benchmarks],
             V8Variant('default'),
         ) + with_extra_variants(
             [V8Testing, Mozilla, Test262Variants(2), Benchmarks]),
@@ -808,7 +809,7 @@ BUILDERS = {
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
         'enable_swarming': True,
-        'tests': [Mjsunit(4), Webkit],
+        'tests': [D8Testing(5)],
         'testing': {'platform': 'linux'},
       },
       'V8 Mac GC Stress': {
@@ -821,7 +822,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [Mjsunit(3), Webkit],
+        'tests': [D8Testing(4)],
         'swarming_dimensions': {
           'os': 'Mac-10.9',
           'cpu': 'x86-64',
@@ -1069,7 +1070,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'tests': [Mjsunit, Webkit, Benchmarks, Mozilla],
+        'tests': [D8Testing, Benchmarks, Mozilla],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - full debug': {
@@ -1622,7 +1623,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'build_gs_archive': 'arm_dbg_archive',
         'parent_buildername': 'V8 Arm - debug builder',
-        'tests': [Mjsunit(2), Webkit],
+        'tests': [D8Testing(3)],
         'variants': V8Variant('default'),
         'enable_swarming': True,
         'swarming_properties': {
@@ -1775,7 +1776,7 @@ BUILDERS = {
           'default_hard_timeout': 2 * 60 * 60,
           'default_priority': 35,
         },
-        'tests': [Mjsunit(4), Webkit],
+        'tests': [D8Testing(5)],
         'testing': {'platform': 'linux'},
       },
 ####### Category: MIPS
@@ -2401,10 +2402,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [
-          Mjsunit(4),
-          Webkit,
-        ],
+        'tests': [D8Testing(5)],
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_asan_rel_ng': {
@@ -2877,7 +2875,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [Mjsunit(3), Webkit],
+        'tests': [D8Testing(4)],
         'swarming_dimensions': {
           'os': 'Mac-10.9',
           'cpu': 'x86-64',
@@ -3013,7 +3011,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
-        'tests': [Mjsunit(5), Webkit],
+        'tests': [D8Testing(6)],
         'testing': {'platform': 'linux'},
       },
       'v8_android_arm_compile_rel': {
