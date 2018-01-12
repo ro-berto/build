@@ -1553,7 +1553,7 @@ Resolve a commit position in the chromium repo to its commit hash.
 &emsp; **@classmethod**<br>&mdash; **def [parse\_revision](/scripts/slave/recipe_modules/commit_position/api.py#27)(cls, value):**
 ### *recipe_modules* / [cronet](/scripts/slave/recipe_modules/cronet)
 
-[DEPS](/scripts/slave/recipe_modules/cronet/__init__.py#1): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/cronet/__init__.py#1): [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [perf\_dashboard](#recipe_modules-perf_dashboard), [puppet\_service\_account](#recipe_modules-puppet_service_account), [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 Common steps for recipes that sync/build Cronet sources.
 
@@ -1565,7 +1565,7 @@ Common steps for recipes that sync/build Cronet sources.
 
 &mdash; **def [init\_and\_sync](/scripts/slave/recipe_modules/cronet/api.py#37)(self, recipe_config, kwargs, gyp_defs, chromium_apply_config=None):**
 
-&mdash; **def [run\_perf\_tests](/scripts/slave/recipe_modules/cronet/api.py#137)(self):**
+&mdash; **def [run\_perf\_tests](/scripts/slave/recipe_modules/cronet/api.py#137)(self, perf_id):**
 
 &mdash; **def [run\_tests](/scripts/slave/recipe_modules/cronet/api.py#118)(self, build_config, unit_tests=UNIT_TESTS, instrumentation_tests=INSTRUMENTATION_TESTS):**
 

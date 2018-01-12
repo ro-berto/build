@@ -134,7 +134,7 @@ class CronetApi(recipe_api.RecipeApi):
             **suite.get('kwargs', {}))
       droid.common_tests_final_steps()
 
-  def run_perf_tests(self):
+  def run_perf_tests(self, perf_id):
     # Before running the perf test, build quic_server and quic_client for this
     # host machine.
     self.m.chromium.set_config('chromium')
@@ -159,5 +159,38 @@ class CronetApi(recipe_api.RecipeApi):
               self.m.path['checkout'].join('.landmines')])
     self.build(targets=['quic_server'],
                mastername='chromium.linux', buildername='Linux Builder')
-    self.m.python('performance test', self.m.path['checkout'].join(
-          'components', 'cronet', 'android', 'test', 'javaperftests', 'run.py'))
+    data_dir = self.m.path.mkdtemp('perf_data')
+    args = ['--output-format', 'histograms', '--output-dir', data_dir]
+    self.m.python('performance test',
+                  self.m.path['checkout'].join('components', 'cronet',
+                                               'android', 'test',
+                                               'javaperftests', 'run.py'),
+                  args=args)
+
+    oauth_token = self.m.puppet_service_account.get_access_token(
+          'chromium-perf-histograms')
+
+    args = [
+        '--results-file', data_dir.join('histograms.json'),
+        # We are passing this in solely to have the output show up as a link
+        # in the step log, it will not be used after the upload is complete.
+        '--oauth-token-file', self.m.json.input(oauth_token),
+        '--perf-id', perf_id,
+        '--results-url', self.DASHBOARD_UPLOAD_URL,
+        '--name', 'cronet_perf_tests',
+        '--output-json-file', self.m.json.output(),
+        '--buildername', self.m.properties['buildername'],
+        '--buildnumber', self.m.properties['buildnumber'],
+        '--chromium-checkout-dir', self.m.path['start_dir'],
+        '--send-as-histograms',
+    ]
+
+    step_result = self.m.build.python(
+        'Perf Dashboard Upload',
+        self.m.chromium.package_repo_resource(
+            'scripts', 'slave', 'upload_perf_dashboard_results.py'),
+        args,
+        step_test_data=(
+            lambda: self.m.json.test_api.output('chromeperf.appspot.com',
+                                                name='dashboard_url') +
+                    self.m.json.test_api.output({})))

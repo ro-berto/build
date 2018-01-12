@@ -196,7 +196,7 @@ def RunSteps(api, buildername):
   if builder_config['run_tests']:
     api.cronet.run_tests(kwargs['BUILD_CONFIG'])
   if 'run_perf_tests' in builder_config and builder_config['run_perf_tests']:
-    api.cronet.run_perf_tests()
+    api.cronet.run_perf_tests(cronet_kwargs['PERF_ID'])
 
 
 def _sanitize_nonalpha(text):
