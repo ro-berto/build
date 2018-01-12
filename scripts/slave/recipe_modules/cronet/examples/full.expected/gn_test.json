@@ -1585,6 +1585,8 @@
       "refs/heads/master@{#291141}",
       "--git-revision",
       "asdfawe2342",
+      "--build-dir",
+      "[START_DIR]/src/out",
       "--send-as-histograms"
     ],
     "name": "Perf Dashboard Upload",
