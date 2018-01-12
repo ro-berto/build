@@ -96,10 +96,22 @@ def RunSteps(api):
     path = api.path['checkout'].join('out', dirname)
     api.step('compile with ninja', ['ninja', '-C', path])
 
+  if is_fuchsia:
+    # Start a QEMU instance.
+    api.python('start qemu',
+               api.path['checkout'].join('build', 'run_fuchsia_qemu.py'),
+               args=['start'])
+
   api.python('run tests',
              api.path['checkout'].join('build', 'run_tests.py'),
              args=[path],
              timeout=5*60)
+
+  if is_fuchsia:
+    # Shut down the QEMU instance.
+    api.python('stop qemu',
+               api.path['checkout'].join('build', 'run_fuchsia_qemu.py'),
+               args=['stop'])
 
   test_spec_path = api.path['checkout'].join('build', 'swarming_test_spec.pyl')
   if api.path.exists(test_spec_path):
