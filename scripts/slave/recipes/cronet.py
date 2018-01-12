@@ -211,6 +211,8 @@ def GenTests(api):
       repository='https://chromium.googlesource.com/chromium/src',
       branch='master',
       project='src',
+      got_revision_cp='refs/heads/master@{#291141}',
+      git_revision='asdfawe2342',
     )
     yield api.test(_sanitize_nonalpha(bot_id)) + props
 

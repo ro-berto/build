@@ -182,6 +182,8 @@ class CronetApi(recipe_api.RecipeApi):
         '--buildername', self.m.properties['buildername'],
         '--buildnumber', self.m.properties['buildnumber'],
         '--chromium-checkout-dir', self.m.path['start_dir'],
+        '--got-revision-cp', self.m.properties['got_revision_cp'],
+        '--git-revision', self.m.properties['git_revision'],
         '--send-as-histograms',
     ]
 
