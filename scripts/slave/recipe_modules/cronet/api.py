@@ -168,7 +168,7 @@ class CronetApi(recipe_api.RecipeApi):
                   args=args)
 
     oauth_token = self.m.puppet_service_account.get_access_token(
-          'chromium-perf-histograms')
+          'cronet-perf')
 
     args = [
         '--results-file', data_dir.join('histograms.json'),
