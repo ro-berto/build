@@ -1737,6 +1737,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
         api.chromium.package_repo_resource(
             'scripts', 'slave', 'upload_perf_dashboard_results.py'),
         args,
+        venv=True,
         step_test_data=(
             lambda: api.json.test_api.output('chromeperf.appspot.com',
                                              name='dashboard_url') +
