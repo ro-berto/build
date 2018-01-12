@@ -52,8 +52,6 @@ def _AddTestSpec(name, platform, target_bits=64):
        parent_buildername='dummy')
 
 
-_AddBuildSpec('android_perf_bisect_builder', 'android', target_bits=32)
-_AddBuildSpec('android_arm64_perf_bisect_builder', 'android')
 _AddBuildSpec('linux_perf_bisect_builder', 'linux')
 
 _AddTestSpec('linux_fyi_perf_bisect', 'linux')
