@@ -43,11 +43,13 @@ def RunSteps(api):
   buildername = api.properties['buildername']
   env = {}
 
-  is_fuchsia = '_fuchsia' in buildername
-  is_debug = '_dbg' in buildername
+  target_os = api.m.properties.get('target_os')
+  if target_os:
+    api.gclient.c.target_os = {target_os}
+  is_fuchsia = target_os == 'fuchsia'
+  config = api.m.properties['config']
+  is_debug = config == 'Debug'
 
-  if is_fuchsia:
-    api.gclient.c.target_os = {'fuchsia'}
   api.bot_update.ensure_checkout()
 
   # buildbot sets 'clobber' to the empty string which is falsey, check with 'in'
@@ -74,9 +76,9 @@ def RunSteps(api):
   # default). So, we just need to make sure to build both the suffixed and
   # unsuffixed trees, and then make sure to run the tests from the _x64 tree.
 
+  dirname = config
   if is_fuchsia:
     # Fuchsia has only a GN build.
-    dirname = 'fuch_' + ('dbg' if is_debug else 'rel')
     path = api.path['checkout'].join('out', dirname)
     args = 'target_os="fuchsia" is_debug=' + ('true' if is_debug else 'false')
     with api.context(cwd=api.path['checkout']):
@@ -84,7 +86,6 @@ def RunSteps(api):
   else:
     # Other platforms still default to the gyp build, so the build files have
     # already been generated during runhooks.
-    dirname = 'Debug' if is_debug else 'Release'
     path = api.path['checkout'].join('out', dirname)
 
   api.step('compile with ninja', ['ninja', '-C', path])
@@ -138,7 +139,7 @@ def GenTests(api):
   # Only test a single clobber case.
   test = 'crashpad_mac_dbg'
   yield(api.test(test + '_clobber') +
-        api.properties.generic(buildername=test, clobber=True))
+        api.properties.generic(buildername=test, config='Debug', clobber=True))
 
   tests = [
       test,
@@ -147,11 +148,22 @@ def GenTests(api):
       'crashpad_win_x64_rel',
       'crashpad_try_win_x86_wow64_dbg',
       'crashpad_win_x86_wow64_rel',
-      'crashpad_fuchsia_x64_dbg',
-      'crashpad_fuchsia_x64_rel',
   ]
   for t in tests:
     yield(api.test(t) +
-          api.properties.generic(buildername=t) +
+          api.properties.generic(buildername=t,
+                                 config='Debug' if '_dbg' in t else 'Release') +
+          api.path.exists(api.path['checkout'].join(
+              'build', 'swarming_test_spec.pyl')))
+
+  tests_with_target_os_fuchsia = [
+      'crashpad_fuchsia_x64_dbg',
+      'crashpad_fuchsia_x64_rel',
+  ]
+  for t in tests_with_target_os_fuchsia:
+    yield(api.test(t) +
+          api.properties.generic(buildername=t,
+                                 config='Debug' if '_dbg' in t else 'Release',
+                                 target_os='fuchsia') +
           api.path.exists(api.path['checkout'].join(
               'build', 'swarming_test_spec.pyl')))

@@ -19,7 +19,7 @@
       "auto_reboot": False,
       "properties": {
         "config": "Debug",
-        "target_os":" fuchsia",
+        "target_os": "fuchsia",
       },
     },
     "crashpad_fuchsia_x64_rel": {
@@ -31,7 +31,7 @@
       "auto_reboot": False,
       "properties": {
         "config": "Release",
-        "target_os":" fuchsia",
+        "target_os": "fuchsia",
       },
     },
     "crashpad_mac_dbg": {
@@ -111,7 +111,7 @@
       "auto_reboot": False,
       "properties": {
         "config": "Debug",
-        "target_os":" fuchsia",
+        "target_os": "fuchsia",
       },
     },
     "crashpad_try_fuchsia_x64_rel": {
@@ -123,7 +123,7 @@
       "auto_reboot": False,
       "properties": {
         "config": "Release",
-        "target_os":" fuchsia",
+        "target_os": "fuchsia",
       },
     },
     "crashpad_try_mac_dbg": {
