@@ -182,11 +182,14 @@ class CronetApi(recipe_api.RecipeApi):
         '--buildername', self.m.properties['buildername'],
         '--buildnumber', self.m.properties['buildnumber'],
         '--chromium-checkout-dir', self.m.path['start_dir'],
-        '--got-revision-cp', self.m.properties['got_revision_cp'],
-        '--git-revision', self.m.properties['git_revision'],
         '--build-dir', self.m.chromium.c.build_dir,
         '--send-as-histograms',
     ]
+
+    if 'got_revision_cp' in self.m.properties:
+      args.extend(['--got-revision-cp', self.m.properties['got_revision_cp']])
+    if 'git_revision' in self.m.properties:
+      args.extend(['--git-revision', self.m.properties['git_revision']])
 
     step_result = self.m.build.python(
         'Perf Dashboard Upload',

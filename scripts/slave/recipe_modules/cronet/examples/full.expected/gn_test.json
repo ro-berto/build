@@ -1581,13 +1581,13 @@
       "571",
       "--chromium-checkout-dir",
       "[START_DIR]",
+      "--build-dir",
+      "[START_DIR]/src/out",
+      "--send-as-histograms",
       "--got-revision-cp",
       "refs/heads/master@{#291141}",
       "--git-revision",
-      "asdfawe2342",
-      "--build-dir",
-      "[START_DIR]/src/out",
-      "--send-as-histograms"
+      "asdfawe2342"
     ],
     "name": "Perf Dashboard Upload",
     "~followup_annotations": [
