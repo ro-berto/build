@@ -48,7 +48,8 @@ class WebRTCApi(recipe_api.RecipeApi):
   @property
   def should_download_audio_quality_tools(self):
     return hasattr(self.c, 'TEST_SUITE') and self.c.TEST_SUITE in (
-        'android_perf', 'desktop_perf', 'desktop_perf_swarming', 'webrtc')
+        'android_perf', 'android_perf_swarming', 'desktop_perf_swarming',
+        'webrtc')
 
   def apply_bot_config(self, builders, recipe_configs):
     self.mastername = self.m.properties.get('mastername')
