@@ -89,11 +89,15 @@ def with_test_args(suffix, test_args, tests, variants=None):
     for t in tests
   ]
 
+def with_variant(tests, variant):
+  """Convenience wrapper. As above, but to run tests with specific variant."""
+  return with_test_args(variant, None, tests, variants=V8Variant(variant))
+
 def with_extra_variants(tests):
   """Convenience wrapper. As above, but to run tests with the 'extra' variant
   set.
   """
-  return with_test_args('extra', None, tests, variants=V8Variant('extra'))
+  return with_variant(tests, 'extra')
 
 
 SWARMING_FYI_PROPS = {
@@ -252,11 +256,9 @@ BUILDERS = {
             'nosse4',
             ['--extra-flags', '--noenable-sse4-1 --noenable-avx'],
             [V8Testing(2), Test262, Mozilla],
-        ) + with_test_args(
-            'code serializer',
-            ['--extra-flags', '--serialize-toplevel --cache=code'],
+        ) + with_variant(
             [D8Testing, Mozilla, Test262, Benchmarks],
-            V8Variant('default'),
+            'code_serializer',
         ) + with_extra_variants(
             [V8Testing, Mozilla, Test262Variants(2), Benchmarks]),
         'testing': {'platform': 'linux'},
