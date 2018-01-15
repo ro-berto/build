@@ -45,7 +45,6 @@ NORMAL_TESTS = freeze({
   'video_engine_tests': {
     'shards': 4,
   },
-  'voice_engine_unittests': {},
   'webrtc_nonparallel_tests': {},
 })
 
@@ -73,7 +72,6 @@ ANDROID_DEVICE_TESTS = freeze({
   'video_engine_tests': {
     'shards': 4,
   },
-  'voice_engine_unittests': {},
   'webrtc_nonparallel_tests': {},
 })
 
