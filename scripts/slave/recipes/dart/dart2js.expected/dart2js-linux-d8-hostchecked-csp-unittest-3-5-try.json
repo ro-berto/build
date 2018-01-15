@@ -880,6 +880,7 @@
       "--shards=5",
       "--shard=3",
       "--checked",
+      "--timeout=120",
       "dart2js"
     ],
     "cwd": "[START_DIR]/sdk",

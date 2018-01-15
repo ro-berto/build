@@ -169,7 +169,7 @@ def RunSteps(api):
                          "--progress=buildbot", "-v", "--append_logs",
                          "--reset-browser-configuration",
                          "--shards=%s" % num_shards, "--shard=%s" % shard,
-                         "--checked", "dart2js"])
+                         "--checked", "--timeout=120", "dart2js"])
         api.dart.read_result_file('read results of dart2js-unit tests',
                                   'result.log')
 
