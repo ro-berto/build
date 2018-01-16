@@ -440,6 +440,8 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
+      "--ninja-log-exit-status",
+      "0",
       "--buildbot-buildername",
       "analyzer-linux-release-be"
     ],
@@ -717,6 +719,8 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
+      "--ninja-log-exit-status",
+      "0",
       "--buildbot-buildername",
       "analyzer-linux-release-be"
     ],
@@ -1467,6 +1471,8 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
+      "--ninja-log-exit-status",
+      "0",
       "--buildbot-buildername",
       "analyzer-linux-release-be"
     ],

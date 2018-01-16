@@ -47,16 +47,21 @@ class DartApi(recipe_api.RecipeApi):
     with self.m.context(cwd=self.m.path['checkout']):
       with self.m.depot_tools.on_path():
         self.kill_tasks()
+        build_exit_status = None
         try:
           self.m.goma.start()
           self.m.python(name,
-                     self.m.path['checkout'].join('tools', 'build.py'),
-                     args=build_args,
-                     timeout=20 * 60)
+                        self.m.path['checkout'].join('tools', 'build.py'),
+                        args=build_args,
+                        timeout=20 * 60)
+          build_exit_status = 0
         except self.m.step.StepTimeout as e:
           raise self.m.step.StepFailure('Step "%s" timed out after 20 minutes' % name)
+        except self.m.step.StepFailure as e:
+          build_exit_status = e.retcode
+          raise e
         finally:
-          self.m.goma.stop()
+          self.m.goma.stop(ninja_log_exit_status=build_exit_status)
 
         if isolate is not None:
           self._swarming_checkout()

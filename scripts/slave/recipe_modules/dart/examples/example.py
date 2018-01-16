@@ -170,6 +170,10 @@ def GenTests(api):
       shards='1', buildername='times-out') +
       api.step_data('can_time_out', times_out_after=20 * 61 + 1))
 
+  yield (api.test('basic-failure') + api.properties(
+      shards='1', buildername='build-fail') +
+      api.step_data('can_time_out', retcode=1))
+
   yield (api.test('basic-win-stable') + api.platform('win', 64) + api.properties(
       buildername='dart2js-win10-debug-x64-ff-stable') +
       api.step_data('upload testing fileset fileset1',

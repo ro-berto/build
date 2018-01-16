@@ -87,6 +87,18 @@
     "cmd": [
       "python",
       "-u",
+      "[CACHE]/builder/sdk/tools/clean_output_directory.py"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "GOMA_DIR": "[CACHE]/goma_client"
+    },
+    "name": "clobber"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
@@ -98,14 +110,102 @@
     "name": "gclient runhooks"
   },
   {
+    "cmd": [],
+    "name": "ensure_goma (2)"
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[CACHE]/goma_client",
+      "-ensure-file",
+      "infra_internal/goma/client/linux-amd64 release",
+      "-json-output",
+      "/path/to/tmp/json",
+      "-service-account-json",
+      "/creds/service_accounts/service-account-goma-client.json"
+    ],
+    "infra_step": true,
+    "name": "ensure_goma.ensure_installed (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/linux-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/sdk/tools/task_kill.py",
-      "--kill_browsers=True",
-      "--kill_vsbuild=True"
+      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
+      "--spec-path",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'sdk', 'url': 'https://dart.googlesource.com/sdk.git'}]",
+      "--patch_root",
+      "sdk",
+      "--revision_mapping_file",
+      "{}",
+      "--git-cache-dir",
+      "[CACHE]/git",
+      "--cleanup-dir",
+      "[CLEANUP]/bot_update",
+      "--output_json",
+      "/path/to/tmp/json",
+      "--revision",
+      "sdk@HEAD"
     ],
-    "name": "kill processes"
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "GOMA_DIR": "[CACHE]/goma_client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "bot_update (2)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Some step text@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"sdk\": \"HEAD\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"manifest\": {}, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"sdk\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"properties\": {}, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"root\": \"sdk\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"source_manifest\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"directories\": {}, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"version\": 0@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"step_text\": \"Some step text\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
+      "runhooks"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "GOMA_DIR": "[CACHE]/goma_client",
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+    },
+    "name": "gclient runhooks (2)"
   },
   {
     "cmd": [
@@ -121,7 +221,7 @@
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
-    "name": "kill processes (2)"
+    "name": "kill processes"
   },
   {
     "cmd": [],
@@ -143,7 +243,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/builders_vm_linux_release_x64_try"
+      "[CACHE]/goma/build_fail"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env_prefixes": {
@@ -167,7 +267,7 @@
     "cwd": "[CACHE]/builder/sdk",
     "env": {
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/builders_vm_linux_release_x64_try",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/build_fail",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -217,7 +317,7 @@
       "python",
       "-u",
       "[CACHE]/builder/sdk/tools/build.py",
-      "runtime,sdk",
+      "--super-fast",
       "--no-start-goma",
       "-j200"
     ],
@@ -227,8 +327,12 @@
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
-    "name": "build dart",
-    "timeout": 1200
+    "name": "can_time_out",
+    "timeout": 1200,
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "cmd": [],
@@ -251,7 +355,7 @@
     "cwd": "[CACHE]/builder/sdk",
     "env": {
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/builders_vm_linux_release_x64_try",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/build_fail",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -286,7 +390,7 @@
     "cwd": "[CACHE]/builder/sdk",
     "env": {
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/builders_vm_linux_release_x64_try",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/build_fail",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -310,7 +414,7 @@
     "cwd": "[CACHE]/builder/sdk",
     "env": {
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/builders_vm_linux_release_x64_try",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/build_fail",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -341,13 +445,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-exit-status",
-      "0",
+      "1",
       "--buildbot-buildername",
-      "builders/vm-linux-release-x64-try",
-      "--buildbot-mastername",
-      "chromium.testing.master",
-      "--buildbot-slavename",
-      "test_bot"
+      "build-fail"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env_prefixes": {
@@ -391,32 +491,9 @@
     ]
   },
   {
-    "cmd": [
-      "tools/test.py",
-      "-rchrome"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "name": "tools/test.py -rchrome 0"
-  },
-  {
-    "cmd": [
-      "tools/test.py",
-      "-mdebug"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "name": "tools/test.py -mdebug 0"
-  },
-  {
-    "cmd": [
-      "tools/test.py",
-      "-mdebug"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "name": "tools/test.py -mdebug 1"
-  },
-  {
     "name": "$result",
+    "reason": "Step('can_time_out') failed with return_code 1",
     "recipe_result": null,
-    "status_code": 0
+    "status_code": 1
   }
 ]
