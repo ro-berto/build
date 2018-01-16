@@ -18,7 +18,7 @@
   # by builder name
   "builders": {
     "android_compile_mips_dbg": {
-      "builder_timeout_s": 6900,  # 60 * 115
+      "builder_timeout_s": 14400,  # 60 * 60 * 4
       "recipe": "chromium_trybot",
       "use_remote_run": True,
       "scheduler": None,
@@ -26,7 +26,7 @@
       "slavebuilddir": "android_compile_mips_dbg",
     },
     "android_compile_x64_dbg": {
-      "builder_timeout_s": 6900,  # 60 * 115
+      "builder_timeout_s": 14400,  # 60 * 60 * 4
       "recipe": "chromium_trybot",
       "use_remote_run": True,
       "scheduler": None,
@@ -34,7 +34,7 @@
       "slavebuilddir": "android_compile_x64_dbg",
     },
     "android_compile_x86_dbg": {
-      "builder_timeout_s": 6900,  # 60 * 115
+      "builder_timeout_s": 14400,  # 60 * 60 * 4
       "recipe": "chromium_trybot",
       "use_remote_run": True,
       "scheduler": None,
@@ -42,28 +42,28 @@
       "slavebuilddir": "android_compile_x86_dbg",
     },
     "android_archive_rel_ng": {
-      "builder_timeout_s": 6900,  # 60 * 115
+      "builder_timeout_s": 14400,  # 60 * 60 * 4
       "recipe": "chromium_trybot",
       "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["ccompute_bots_cq"],
     },
     "android_arm64_dbg_recipe": {
-      "builder_timeout_s": 6900,  # 60 * 115
+      "builder_timeout_s": 14400,  # 60 * 60 * 4
       "recipe": "chromium_trybot",
       "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["ccompute_bots_cq"],
     },
     "android_clang_dbg_recipe": {
-      "builder_timeout_s": 9000,  # 60 * 150
+      "builder_timeout_s": 14400,  # 60 * 60 * 4
       "recipe": "chromium_trybot",
       "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["ccompute_bots_cq"],
     },
     "android_compile_dbg": {
-      "builder_timeout_s": 6900,  # 60 * 115
+      "builder_timeout_s": 14400,  # 60 * 60 * 4
       "recipe": "chromium_trybot",
       "use_remote_run": True,
       "scheduler": None,
@@ -71,7 +71,7 @@
       "slave_pools": ["ccompute_bots_cq"],
     },
     "android_compile_rel": {
-      "builder_timeout_s": 6900,  # 60 * 115
+      "builder_timeout_s": 14400,  # 60 * 60 * 4
       "recipe": "chromium_trybot",
       "use_remote_run": True,
       "scheduler": None,
@@ -79,21 +79,21 @@
       "slave_pools": ["ccompute_bots_cq"],
     },
     "cast_shell_android": {
-      "builder_timeout_s": 6900,  # 60 * 115
+      "builder_timeout_s": 14400,  # 60 * 60 * 4
       "recipe": "chromium_trybot",
       "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["ccompute_bots_cq"],
     },
     "android_blink_rel": {
-      "builder_timeout_s": 6900,  # 60 * 115
+      "builder_timeout_s": 14400,  # 60 * 60 * 4
       "recipe": "chromium_trybot",
       "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["slaves_with_n5s"],
     },
     "android_coverage": {
-      "builder_timeout_s": 6900,  # 60 * 115
+      "builder_timeout_s": 14400,  # 60 * 60 * 4
       "recipe": "chromium_trybot",
       "use_remote_run": True,
       "scheduler": None,
@@ -101,7 +101,7 @@
       "slave_pools": ["slaves_with_n5s"],
     },
     "android_cronet": {
-      "builder_timeout_s": 6900,  # 60 * 115
+      "builder_timeout_s": 14400,  # 60 * 60 * 4
       "recipe": "chromium_trybot",
       "use_remote_run": True,
       "scheduler": None,
@@ -109,13 +109,13 @@
       "slave_pools": ["ccompute_bots_cq"],
     },
     "android_cronet_tester": {
-      "builder_timeout_s": 6900,  # 60 * 115
+      "builder_timeout_s": 14400,  # 60 * 60 * 4
       "recipe": "cronet",
       "scheduler": None,
       "slave_pools": ["slaves_with_n5s"],
     },
     "linux_android_dbg_ng": {
-      "builder_timeout_s": 6900,  # 60 * 115
+      "builder_timeout_s": 14400,  # 60 * 60 * 4
       "recipe": "chromium_trybot",
       "use_remote_run": True,
       "scheduler": None,
@@ -123,7 +123,7 @@
       "slave_pools": ["slaves_with_n5s"],
     },
     "linux_android_rel_ng": {
-      "builder_timeout_s": 11400,  # 60 * 190
+      "builder_timeout_s": 14400,  # 60 * 60 * 4
       "recipe": "chromium_trybot",
       "use_remote_run": True,
       "scheduler": None,
@@ -131,7 +131,7 @@
       "slave_pools": ["ccompute_android_launch"],
     },
     "android_n5x_swarming_dbg": {
-      "builder_timeout_s": 6900,  # 60 * 115
+      "builder_timeout_s": 14400,  # 60 * 60 * 4
       "recipe": "chromium_trybot",
       "use_remote_run": True,
       "scheduler": None,
@@ -139,7 +139,7 @@
       "slave_pools": ["ccompute_android_launch"],
     },
     "android_n5x_swarming_rel": {
-      "builder_timeout_s": 6900,  # 60 * 115
+      "builder_timeout_s": 14400,  # 60 * 60 * 4
       "recipe": "chromium_trybot",
       "use_remote_run": True,
       "scheduler": None,
@@ -203,7 +203,7 @@
       "slave_pools": ["ccompute_optional_bots_2"],
     },
     "android_mojo": {
-      "builder_timeout_s": 10800,  # 60 * 180
+      "builder_timeout_s": 10800,  # 60 * 60 * 4
       "recipe": "chromium_trybot",
       "use_remote_run": True,
       "scheduler": None,
@@ -211,7 +211,7 @@
       "slave_pools": ["ccompute_optional_bots_2"],
     },
     "android_optional_gpu_tests_rel": {
-      "builder_timeout_s": 10800,  # 60 * 180
+      "builder_timeout_s": 10800,  # 60 * 60 * 4
       "recipe": "chromium_trybot",
       "use_remote_run": True,
       "scheduler": None,
