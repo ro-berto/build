@@ -21,6 +21,7 @@ BUILDERS = freeze({
       'REPO_NAME': 'src',
     },
     'cronet_kwargs': {
+      'report_sizes': True,
       'PERF_ID': 'android_cronet_local_test_builder',
     },
     'gyp_defs': {
@@ -34,6 +35,7 @@ BUILDERS = freeze({
       'BUILD_CONFIG': 'Debug',
     },
     'cronet_kwargs': {
+      'report_sizes': True,
       'PERF_ID': 'android_cronet_builder_dbg',
     },
   },
@@ -45,6 +47,7 @@ BUILDERS = freeze({
       'REPO_NAME': 'src',
     },
     'cronet_kwargs': {
+      'report_sizes': True,
       'PERF_ID': 'android_cronet_builder',
     },
     'chromium_apply_config': ['cronet_official'],
@@ -57,6 +60,7 @@ BUILDERS = freeze({
       'REPO_NAME': 'src',
     },
     'cronet_kwargs': {
+      'report_sizes': True,
       'PERF_ID': 'android_cronet_l_builder',
     },
     'chromium_apply_config': ['cronet_official'],
@@ -69,6 +73,7 @@ BUILDERS = freeze({
       'REPO_NAME': 'src',
     },
     'cronet_kwargs': {
+      'report_sizes': True,
       'PERF_ID': 'android_cronet_m64_builder',
     },
     'chromium_apply_config': ['cronet_official'],
@@ -90,6 +95,7 @@ BUILDERS = freeze({
       'BUILD_CONFIG': 'Release',
     },
     'cronet_kwargs': {
+      'report_sizes': True,
       'PERF_ID': 'android_cronet_armv6_builder',
     },
     'gyp_defs': {
@@ -101,6 +107,7 @@ BUILDERS = freeze({
     'recipe_config': 'arm64_builder_mb',
     'run_tests': False,
     'cronet_kwargs': {
+      'report_sizes': True,
       'PERF_ID': 'android_cronet_arm64_builder',
     },
     'kwargs': {
@@ -112,6 +119,7 @@ BUILDERS = freeze({
     'recipe_config': 'arm64_builder_mb',
     'run_tests': False,
     'cronet_kwargs': {
+      'report_sizes': True,
       'PERF_ID': 'android_cronet_arm64_builder_dbg',
     },
     'kwargs': {
@@ -122,6 +130,7 @@ BUILDERS = freeze({
     'recipe_config': 'x86_builder_mb',
     'run_tests': False,
     'cronet_kwargs': {
+      'report_sizes': True,
       'PERF_ID': 'android_cronet_x86_builder',
     },
     'kwargs': {
@@ -133,6 +142,7 @@ BUILDERS = freeze({
     'recipe_config': 'x86_builder_mb',
     'run_tests': False,
     'cronet_kwargs': {
+      'report_sizes': True,
       'PERF_ID': 'android_cronet_x86_builder_dbg',
     },
     'kwargs': {
@@ -163,6 +173,7 @@ BUILDERS = freeze({
       'REPO_NAME': 'src',
     },
     'cronet_kwargs': {
+      'report_sizes': False,
       'PERF_ID': 'android_cronet_m64_perf',
     },
     'chromium_apply_config': ['cronet_official'],
@@ -191,11 +202,11 @@ def RunSteps(api, buildername):
     use_goma = False
   api.cronet.build(use_goma=use_goma)
 
-  if cronet_kwargs.get('PERF_ID'):
+  if cronet_kwargs.get('report_sizes') and cronet_kwargs.get('PERF_ID'):
     api.cronet.sizes(cronet_kwargs['PERF_ID'])
-  if builder_config['run_tests']:
+  if builder_config.get('run_tests'):
     api.cronet.run_tests(kwargs['BUILD_CONFIG'])
-  if 'run_perf_tests' in builder_config and builder_config['run_perf_tests']:
+  if builder_config.get('run_perf_tests'):
     api.cronet.run_perf_tests(cronet_kwargs['PERF_ID'])
 
 
