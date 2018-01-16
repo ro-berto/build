@@ -17,6 +17,8 @@ from chromium_tests.steps import SwarmingIsolatedScriptTest
 
 PERF_CONFIG = {'a_default_rev': 'r_webrtc_git'}
 DASHBOARD_UPLOAD_URL = 'https://chromeperf.appspot.com'
+# adb path relative to out dir (e.g. out/Release)
+ADB_PATH = '../../third_party/android_tools/sdk/platform-tools/adb'
 
 NORMAL_TESTS = freeze({
   'audio_decoder_unittests': {},
@@ -317,7 +319,7 @@ class SwarmingAndroidPerfTest(AndroidTest):
     ])
     if add_adb_path:
       args.extend([
-          '--adb-path', '${ADB_PATH}'
+          '--adb-path', ADB_PATH
       ])
     super(SwarmingAndroidPerfTest, self).__init__(test, args=args)
 

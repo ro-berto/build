@@ -620,7 +620,7 @@
       "--chartjson-result-file",
       "${ISOLATED_OUTDIR}/perf_result.json",
       "--adb-path",
-      "${ADB_PATH}",
+      "../../third_party/android_tools/sdk/platform-tools/adb",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Android_Perf__swarming_",
