@@ -159,8 +159,7 @@ def generate_tests(api, test_suite, revision):
       tests.append(SwarmingPerfTest(test, api, **extra_args))
   elif test_suite == 'android_perf_swarming' and api.c.PERF_ID:
     for test, extra_args in sorted(ANDROID_PERF_TESTS.items()):
-      tests.append(SwarmingAndroidPerfTest(test, api.m.adb.adb_path(),
-                                           **extra_args))
+      tests.append(SwarmingAndroidPerfTest(test, **extra_args))
   elif test_suite == 'android_perf' and api.c.PERF_ID:
     # TODO(kjellander): Fix the Android ASan bot so we can have an assert here.
     tests.append(AndroidPerfTest(
@@ -311,11 +310,15 @@ class AndroidTest(SwarmingGTestTest):
 
 
 class SwarmingAndroidPerfTest(AndroidTest):
-  def __init__(self, test, adb_path, args=None, add_adb_path=False, **kwargs):
+  def __init__(self, test, args=None, add_adb_path=False, **kwargs):
     args = list(args or [])
-    args.append('--chartjson-result-file=${ISOLATED_OUTDIR}/perf_result.json')
+    args.extend([
+        '--chartjson-result-file', '${ISOLATED_OUTDIR}/perf_result.json'
+    ])
     if add_adb_path:
-      args.extend(['--adb-path', str(adb_path)])
+      args.extend([
+          '--adb-path', '${ADB_PATH}'
+      ])
     super(SwarmingAndroidPerfTest, self).__init__(test, args=args)
 
   def _get_perf_data(self, api, task_output_dir):

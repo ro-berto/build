@@ -617,9 +617,10 @@
       "[dummy hash for low_bandwidth_audio_perf_test]",
       "--",
       "--android",
-      "--chartjson-result-file=${ISOLATED_OUTDIR}/perf_result.json",
+      "--chartjson-result-file",
+      "${ISOLATED_OUTDIR}/perf_result.json",
       "--adb-path",
-      "[BUILDER_CACHE]/Android_Perf__swarming_/src/third_party/android_tools/sdk/platform-tools/adb",
+      "${ADB_PATH}",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Android_Perf__swarming_",
@@ -709,7 +710,8 @@
       "--isolated",
       "[dummy hash for webrtc_perf_tests]",
       "--",
-      "--chartjson-result-file=${ISOLATED_OUTDIR}/perf_result.json",
+      "--chartjson-result-file",
+      "${ISOLATED_OUTDIR}/perf_result.json",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Android_Perf__swarming_",
