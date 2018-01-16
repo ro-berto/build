@@ -100,7 +100,8 @@
   },
   {
     "cmd": [
-      "[START_DIR]/node.js/configure"
+      "[START_DIR]/node.js/configure",
+      "--build-v8-with-gn"
     ],
     "cwd": "[START_DIR]/node.js",
     "name": "configure node.js"

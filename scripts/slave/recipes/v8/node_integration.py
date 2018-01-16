@@ -85,7 +85,7 @@ def _build_and_test(api, suffix=''):
   with api.context(cwd=api.v8.checkout_root.join('node.js')):
     api.step(
       'configure node.js%s' % suffix,
-      [api.v8.checkout_root.join('node.js', 'configure')],
+      [api.v8.checkout_root.join('node.js', 'configure'), '--build-v8-with-gn'],
     )
 
     api.step(
@@ -106,6 +106,7 @@ def _build_and_upload(api):
         api.v8.checkout_root.join('node.js', 'configure'),
         '--prefix=/',
         '--tag=v8-build-%s' % api.v8.revision,
+        '--build-v8-with-gn',
       ],
     )
 
