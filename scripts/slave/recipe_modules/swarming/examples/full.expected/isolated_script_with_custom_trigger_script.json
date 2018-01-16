@@ -65,9 +65,7 @@
       "hash_for_win",
       "--",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
-      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json",
-      "--swarming-py-path",
-      "[START_DIR]/swarming.client/swarming.py"
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
     "infra_step": true,
     "name": "[trigger] hello_world on Windows-7-SP1",

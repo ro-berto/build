@@ -743,7 +743,6 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     script = self.m.swarming_client.path.join('swarming.py')
     if task.trigger_script:
-      args.extend(['--swarming-py-path', script])
       script = task.trigger_script['script']
       if task.trigger_script.get('args'):
         args = task.trigger_script['args'] + args
@@ -1296,11 +1295,21 @@ class SwarmingTask(object):
         * "args": an optional list of additional arguments to pass to the
               script.
           The script will receive the exact same arguments that are normally
-          passed to calls to `swarming.py trigger`, with two additions:
-            1. --swarming-py-path, which will contain the path to the
-              swarming.py file which should be used for any trigger RPCs to the
-              swarming server.
-            2. Any additional arguments provided in the "args" entry.
+          passed to calls to `swarming.py trigger`, along with any arguments
+          provided in the "args" entry.
+
+          The script is required to output a json file to the location provided
+          by the --dump-json argument. This json file should describe the
+          swarming tasks it launched, as well as some information about the
+          request, which is used when swarming collects the tasks.
+
+          If the script launches multiple swarming shards, it needs to pass the
+          appropriate environment variables to each shard (this is normally done
+          by swarming.py trigger). Specifically, each shard should receive
+          GTEST_SHARD_INDEX, which is its shard index, and
+          GTEST_TOTAL_SHARDS, which is the total number of shards.
+          This can be done by passing `--env GTEST_SHARD_INDEX [NUM]` and
+          `--env GTEST_SHARD_SHARDS [NUM]` when calling swarming.py trigger.
       * named_caches: a dict {name: relpath} requesting a cache named `name`
           to be installed in `relpath` relative to the task root directory.
       * service_account: (string) a service account email to run the task under.
