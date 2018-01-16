@@ -256,9 +256,6 @@ BUILDERS = {
             'nosse4',
             ['--extra-flags', '--noenable-sse4-1 --noenable-avx'],
             [V8Testing(2), Test262, Mozilla],
-        ) + with_variant(
-            [D8Testing, Mozilla, Test262, Benchmarks],
-            'code_serializer',
         ) + with_extra_variants(
             [V8Testing, Mozilla, Test262Variants(2), Benchmarks]),
         'testing': {'platform': 'linux'},
