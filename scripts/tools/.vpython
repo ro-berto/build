@@ -1,9 +1,0 @@
-#
-# "vpython" specification file for build/scripts/tools
-#
-
-python_version: "2.7"
-wheel: <
-  name: "infra/python/wheels/httplib2-py2_py3"
-  version: "version:0.10.3"
->

@@ -56,11 +56,11 @@ hooks = [
     ],
   },
   {
-    "name": "vpython_sync_unittests",
+    "name": "vpython_sync",
     "pattern": ".",
     "action": [
       "vpython",
-      "-vpython-spec", "build/scripts/slave/unittests/.vpython",
+      "-vpython-spec", "build/.vpython",
       "-vpython-tool", "install",
     ],
   },

@@ -1,0 +1,27 @@
+#
+# "vpython" specification file for build
+#
+
+python_version: "2.7"
+
+wheel: <
+  name: "infra/python/wheels/httplib2-py2_py3"
+  version: "version:0.10.3"
+>
+
+wheel: <
+  name: "infra/python/wheels/pypiwin32/${vpython_platform}"
+  version: "version:219"
+  match_tag: < platform: "win32" >
+  match_tag: < platform: "win_amd64" >
+>
+
+wheel: <
+  name: "infra/python/wheels/psutil/${vpython_platform}"
+  version: "version:5.2.2"
+>
+
+wheel: <
+  name: "infra/python/wheels/coverage/${vpython_platform}"
+  version: "version:4.3.4"
+>
