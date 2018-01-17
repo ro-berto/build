@@ -69,6 +69,8 @@ class AutoBisectStagingTestApi(recipe_test_api.RecipeTestApi):
   def revision_list(self, items):
     result = {}
     for item in items:
+      if item.get('hidden'):
+        continue
       depot = item.get('depot', 'chromium')
       result.setdefault(depot, [])
       result[depot].append([item['hash'], item.get('commit_pos')])

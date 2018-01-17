@@ -389,6 +389,64 @@ class Bisector(object):
      self.surface_result('BAD_REV')
      raise
 
+  def _get_chain(self, a):
+    chain = [a.depot]
+
+    while True:
+      depot = chain[-1]
+
+      if not depot['from']:  # pragma: no cover
+        break
+
+      parent_name = depot['from'][0]
+      parent_depot = depot_config.DEPOT_DEPS_NAME.get(parent_name)
+      if not parent_depot:
+        break
+
+      chain.append(parent_depot)
+    return chain
+
+  def _find_expand_chain(self, a, b):
+    chain1 = self._get_chain(a)
+    chain2 = self._get_chain(b)
+
+    if chain1[-1] != chain2[-1]:  # pragma: no cover
+      return None
+
+    # TODO: Check they're not different chains
+
+    if len(chain1) > len(chain2):  # pragma: no cover
+      return chain1
+    return chain2
+
+  def _create_rev_from_deps(self, parent_rev, depot, base_revision):
+    depot_name = None
+    for k, v in depot_config.DEPOT_DEPS_NAME.iteritems():
+      if depot == v:
+        depot_name = k
+        break
+    if not depot_name:  # pragma: no cover
+      return None
+
+    commit_hash = parent_rev.deps[depot_name]
+
+    return self.revision_class(
+        bisector=self,
+        commit_hash=commit_hash,
+        depot_name=depot_name,
+        base_revision=base_revision)
+
+  def _expand_chain(self, a, chain, base_revision):
+    chain = [c for c in reversed(chain)]
+    start = chain.index(a.depot)
+
+    rev = a
+    for c in chain[start:]:
+      if c == rev.depot:
+        continue
+      rev = self._create_rev_from_deps(rev, c, base_revision)
+    return rev
+
   def _expand_deps_revisions(self, revision_to_expand):
     """Populates the revisions attribute with additional deps revisions.
 
@@ -406,6 +464,20 @@ class Bisector(object):
     try:
       min_revision = revision_to_expand.previous_revision
       max_revision = revision_to_expand
+
+      # The revisions may not be pointing to the same depots. Ie. the min
+      # might be android, while max is chrome, we need to expand deps in
+      # both first so that we can do a revision range between them.
+      expand_chain = self._find_expand_chain(min_revision, max_revision)
+
+      min_revision = self._expand_chain(min_revision, expand_chain,
+          base_revision=min_revision)
+      max_revision = self._expand_chain(max_revision, expand_chain,
+          base_revision=min_revision)
+
+      assert min_revision
+      assert max_revision
+
       # Parses DEPS file and sets the .deps property.
       min_revision.read_deps(self.get_perf_tester_name())
       max_revision.read_deps(self.get_perf_tester_name())

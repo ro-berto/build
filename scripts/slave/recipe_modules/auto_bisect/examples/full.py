@@ -37,11 +37,117 @@ def RunSteps(api):
       api.auto_bisect.working_dir.join('catapult'))
   api.path.c.dynamic_paths['bisect_results'] = api.path['start_dir'].join(
       'bisect_results')
+  api.auto_bisect.set_additional_depot_info({
+    'fake' : {
+        'src' : 'src/fake',
+        'recurse' : True,
+        'depends' : None,
+        'from' : ['v8'],
+        'deps_file': 'DEPS',
+        'url': 'https://chromium.googlesource.com/fake',
+        'deps_var': 'fake'
+    }})
   api.auto_bisect.start_try_job(
       api, update_step=update_step, bot_db=bot_db,
       do_not_nest_wait_for_revision=True)
 
 def GenTests(api):
+
+  yield (
+      api.test('multi_depot_recurse_with_uneven_deps_expansion')
+      + api.properties(
+          mastername='tryserver.chromium.perf',
+          buildername='linux_perf_bisect',
+          bot_id='dummybot',
+          buildnumber=571,
+          bisect_config={
+              'test_type': 'perf',
+              'command':
+                  ('src/tools/perf/run_benchmark -v --browser=release '
+                   '--output-format=valueset smoothness.tough_scrolling_cases'),
+              'good_revision': '314015',
+              'bad_revision': '314017',
+              'metric': 'mean_input_event_latency/mean_input_event_latency',
+              'bug_id': '-1',
+              'gs_bucket': 'chrome-perf',
+              'dummy_builds': 'True',
+              'dummy_tests': 'True',
+              'dummy_job_names': 'True',
+              'bypass_stats_check': 'True',
+              'skip_gclient_ops': 'True',
+              'recipe_tester_name': 'linux_perf_tester'
+          })
+
+      + api.auto_bisect([
+          {
+              'hash': '6cb98fd574',
+              'commit_pos': '314015',
+              'parsed_values': [19, 20, 21, 22, 1],
+              'test_results': 5 * [{'retcode': 0}],
+          },
+          {
+              'hash': '3673c419cb',
+              'commit_pos': '314016',
+              'parsed_values': [19, 20, 21, 22, 1],
+              'test_results': 5 * [{'retcode': 0}],
+              "DEPS": ("vars={'v8_revision': '001'};"
+                       "deps = {'src/v8': 'v8.git@' + Var('v8_revision'),"
+                       "'src/third_party/WebKit': 'webkit.git@010'}"),
+          },
+          {
+              'depot':'v8',
+              'hash': '001',
+              'hidden': True,
+              'parsed_values': [19, 20, 21, 22, 1],
+              'test_results': 5 * [{'retcode': 0}],
+              "DEPS": ("vars={'fake': 'f1'};"
+                       "deps = {'src/fake': 'fake.git@' + Var('fake'),"
+                       "'src/third_party/WebKit': 'webkit.git@010'}"),
+          },
+          {
+              'depot':'fake',
+              'hash': 'f2',
+              'parsed_values': [12, 13, 14, 15, 7],
+              'test_results': 5 * [{'retcode': 0}],
+              'gsutil_exists': 10 * [False],
+              'cl_info': {
+                  'author': 'DummyAuthor',
+                  'email': 'dummy@nowhere.com',
+                  'subject': 'Some random CL',
+                  'date': '01/01/2015',
+                  'body': ('A long description for a CL.\n'
+                           'Containing multiple lines'),
+              },
+          },
+          {
+              'depot': 'fake',
+              'hash': 'f3',
+              'parsed_values': [12, 13, 14, 15, 7],
+              'test_results': 5 * [{'retcode': 0}],
+          },
+          {
+              'depot':'v8',
+              'hash': '003',
+              'parsed_values': [12, 13, 14, 15, 7],
+              'test_results': 5 * [{'retcode': 0}],
+              'DEPS_change': 'True',
+              "DEPS": ("vars={'fake': 'f3'};"
+                       "deps = {'src/fake': 'fake.git@' + Var('fake'),"
+                       "'src/third_party/WebKit': 'webkit.git@010'}"),
+              'DEPS_interval': {'fake': 'f1 f2 f3'.split()},
+          },
+          {
+              'hash': 'dd09cd29a0',
+              'commit_pos': '314017',
+              'parsed_values': [12, 13, 14, 15, 7],
+              'test_results': 5 * [{'retcode': 0}],
+              'DEPS_change': 'True',
+              "DEPS": ("vars={'v8_revision': '004'};"
+                       "deps = {'src/v8': 'v8.git@' + Var('v8_revision'),"
+                       "'src/third_party/WebKit': 'webkit.git@010'}"),
+              'DEPS_interval': {'v8': '002 003 004'.split()},
+          }]))
+
   yield (
       api.test('basic_linux_bisect')
       + api.properties(
