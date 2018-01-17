@@ -746,6 +746,7 @@
       "--write-result-log",
       "--write-test-outcome-log",
       "--append_logs",
+      "--timeout=120",
       "pkg/front_end"
     ],
     "cwd": "[START_DIR]/sdk",

@@ -426,6 +426,7 @@
       "--write-result-log",
       "--write-test-outcome-log",
       "--builder-tag=no_ipv6",
+      "--timeout=120",
       "pkg"
     ],
     "cwd": "[CACHE]/builder/sdk",

@@ -425,6 +425,7 @@
       "--write-debug-log",
       "--write-result-log",
       "--write-test-outcome-log",
+      "--timeout=120",
       "pkg"
     ],
     "cwd": "[CACHE]/builder/sdk",

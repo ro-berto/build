@@ -127,13 +127,13 @@ def RunSteps(api):
         {'name': 'analyzer_cli unit tests',
          'tests': ['pkg/analyzer_cli']},
         {'name': 'front end unit tests',
-         'tests': ['pkg/front_end']},
+         'tests': ['--timeout=120', 'pkg/front_end']},
       ]
     else:
       assert builder_type == 'pkg'
       test_specs = [
         {'name': 'package unit tests',
-         'tests': ['pkg']},
+         'tests': ['--timeout=120', 'pkg']},
         {'name': 'third_party/pkg_tested unit tests',
          'tests': ['pkg_tested']},
         {'name': 'pub get dependencies',

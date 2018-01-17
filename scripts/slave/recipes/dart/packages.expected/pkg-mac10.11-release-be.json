@@ -141,6 +141,7 @@
       "--write-debug-log",
       "--write-result-log",
       "--write-test-outcome-log",
+      "--timeout=120",
       "pkg"
     ],
     "cwd": "[START_DIR]/sdk",

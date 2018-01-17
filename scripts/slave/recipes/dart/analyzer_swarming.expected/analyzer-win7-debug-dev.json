@@ -996,6 +996,7 @@
       "--write-test-outcome-log",
       "--builder-tag=win7",
       "--append_logs",
+      "--timeout=120",
       "pkg/front_end"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
