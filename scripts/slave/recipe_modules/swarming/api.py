@@ -38,9 +38,9 @@ IMPLIED_CIPD_BINARIES = {
 IMPLIED_CIPD_LUCI_BINARIES = {
   # Both vpython versions MUSTH be changed together.
   'infra/tools/luci/vpython/${platform}':
-    ('', 'git_revision:56ccb3b1167e96bae7805ed167a24ba591c98a31'),
+    ('', 'git_revision:38335de5a4644c7cccf5c5949095fc4b62b3d14c'),
   'infra/tools/luci/vpython-native/${platform}':
-    ('', 'git_revision:56ccb3b1167e96bae7805ed167a24ba591c98a31'),
+    ('', 'git_revision:38335de5a4644c7cccf5c5949095fc4b62b3d14c'),
   'infra/python/cpython/${platform}':
     ('bin', 'version:2.7.14.chromium14'),
 }
