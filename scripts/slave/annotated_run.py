@@ -346,6 +346,9 @@ def _exec_recipe(rt, opts, stream, basedir, tdir, properties):
       properties['recipe'],
   ]
 
+  environ = os.environ.copy()
+  environ['VPYTHON_CLEAR_PYTHONPATH'] = '1'
+
   # Default to return code != 0 is for the benefit of buildbot, which uses
   # return code to decide if a step failed or not.
   recipe_return_code = 1
@@ -355,11 +358,12 @@ def _exec_recipe(rt, opts, stream, basedir, tdir, properties):
 
     LOGGER.info('Bootstrapping through LogDog: %s', bs.cmd)
     bs.annotate(stream)
-    _, _ = _run_command(bs.cmd, dry_run=opts.dry_run)
+    _, _ = _run_command(bs.cmd, dry_run=opts.dry_run, env=environ)
     recipe_return_code = bs.get_result()
   except logdog_bootstrap.NotBootstrapped as e:
     LOGGER.info('Not using LogDog. Invoking `recipes.py` directly: %s', e)
-    recipe_return_code, _ = _run_command(recipe_cmd, dry_run=opts.dry_run)
+    recipe_return_code, _ = _run_command(recipe_cmd, dry_run=opts.dry_run,
+                                         env=environ)
 
   # Try to open recipe result JSON. Any failure will result in an exception
   # and an infra failure.
