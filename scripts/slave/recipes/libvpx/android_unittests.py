@@ -20,6 +20,7 @@ DEPS = [
 
 # Constants
 ANDROID_TOOLS_GIT = 'https://chromium.googlesource.com/android_tools'
+ANDROID_NDK_GIT = 'https://chromium.googlesource.com/android_ndk'
 TEST_FILES_URL = 'http://downloads.webmproject.org/test_data/libvpx'
 
 # Device root is a special folder on the device which we have permissions to
@@ -50,7 +51,7 @@ def RunSteps(api, libvpx_git_url, buildername):
   # Android tools DEPS
   android_tools_root = build_root.join('android_tools')
   adb = android_tools_root.join('sdk', 'platform-tools', 'adb')
-  ndk_root = android_tools_root.join('ndk')
+  ndk_root = build_root.join('android_ndk')
 
   # libvpx paths
   libvpx_root = build_root.join('libvpx')
@@ -69,10 +70,12 @@ def RunSteps(api, libvpx_git_url, buildername):
               shutil.rmtree(path)
       """, args=[build_root, 'libs', 'obj', 'armeabi-v7a'])
 
-  # Checkout android_tools and libvpx.  NDK and SDK are required to build
-  # libvpx for android
+  # Checkout android_tools, android_ndk and libvpx.  NDK and SDK are required
+  # to build libvpx for android
   api.git.checkout(
       ANDROID_TOOLS_GIT, dir_path=android_tools_root, recursive=True)
+  api.git.checkout(
+      ANDROID_NDK_GIT, dir_path=ndk_root)
   api.git.checkout(
       libvpx_git_url, dir_path=libvpx_root, recursive=True)
 

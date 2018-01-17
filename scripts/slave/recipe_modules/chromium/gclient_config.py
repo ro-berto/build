@@ -219,7 +219,7 @@ def valgrind(c):  # pragma: no cover
 
 @CONFIG_CTX()
 def ndk_next(c):
-  c.revisions['src/third_party/android_tools/ndk'] = 'origin/next'
+  c.revisions['src/third_party/android_ndk'] = 'origin/next'
 
 # TODO(iannucci,vadimsh): Switch this to src-limited
 @CONFIG_CTX()
