@@ -207,14 +207,18 @@
   },
   {
     "cmd": [
-      "[START_DIR]/src/ios/build/tools/setup-gn.py",
-      "--import",
-      "src/example/args.gn"
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[START_DIR]/src/out/Release-iphoneos"
     ],
-    "env": {
-      "CHROMIUM_BUILDTOOLS_PATH": "[START_DIR]/src/buildtools"
-    },
-    "name": "setup-gn.py"
+    "infra_step": true,
+    "name": "ensure_directory //out/Release-iphoneos"
   },
   {
     "cmd": [

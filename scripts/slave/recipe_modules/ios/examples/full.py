@@ -15,8 +15,7 @@ DEPS = [
 def RunSteps(api):
   api.ios.checkout()
   api.ios.read_build_config()
-  api.ios.build(
-    default_gn_args_path='src/example/args.gn', setup_gn=True, use_mb=False)
+  api.ios.build(use_mb=False)
   api.ios.upload()
   api.ios.test_swarming()
 

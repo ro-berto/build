@@ -302,9 +302,7 @@ class iOSApi(recipe_api.RecipeApi):
   def build(
       self,
       analyze=False,
-      default_gn_args_path=None,
       mb_path=None,
-      setup_gn=False,
       suffix=None,
       use_mb=True,
   ):
@@ -313,10 +311,7 @@ class iOSApi(recipe_api.RecipeApi):
     Args:
       analyze: Whether to use the gyp_chromium analyzer to only build affected
         targets and filter out unaffected tests.
-      default_gn_args_path: Path to default gn args file to import with
-        setup-gn.py.
       mb_path: Custom path to MB. Uses the default if unspecified.
-      setup_gn: Whether or not to call setup-gn.py.
       suffix: Suffix to use at the end of step names.
       use_mb: Whether or not to use mb to generate build files.
     """
@@ -347,17 +342,6 @@ class iOSApi(recipe_api.RecipeApi):
     with self.m.context(cwd=self.m.path['checkout'], env=env):
       self.m.gclient.runhooks(name='runhooks' + suffix)
 
-    if setup_gn:
-      cmd = [
-        self.m.path['checkout'].join('ios', 'build', 'tools', 'setup-gn.py'),
-      ]
-      if default_gn_args_path:
-        cmd.extend(['--import', default_gn_args_path])
-      with self.m.context(env={
-          'CHROMIUM_BUILDTOOLS_PATH':
-          self.m.path['checkout'].join('buildtools')}):
-        self.m.step('setup-gn.py', cmd)
-
     if use_mb:
       with self.m.context(env=env):
         self.m.chromium.run_mb(
@@ -369,6 +353,11 @@ class iOSApi(recipe_api.RecipeApi):
             use_goma=self.use_goma,
         )
     else:
+      # Ensure the directory containing args.gn exists before creating the file.
+      self.m.file.ensure_directory(
+          'ensure_directory //out/%s' % build_sub_path,
+          self.m.path['checkout'].join('out', build_sub_path))
+
       # If mb is not being used, set goma_dir before generating build files.
       if self.use_goma:
         self.__config['gn_args'].append('goma_dir="%s"' % self.m.goma.goma_dir)
