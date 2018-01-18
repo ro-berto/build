@@ -105,3 +105,28 @@ wheel: <
   name: "infra/python/wheels/pyparsing-py2_py3"
   version: "version:2.2.0"
 >
+
+wheel: <
+  name: "infra/python/wheels/infra_libs-py2"
+  version: "version:1.2.0"
+>
+
+wheel: <
+  name: "infra/python/wheels/oauth2client-py2_py3"
+  version: "version:4.0.0"
+>
+
+wheel: <
+  name: "infra/python/wheels/google_api_python_client-py2_py3"
+  version: "version:1.6.2"
+>
+
+wheel: <
+  name: "infra/python/wheels/uritemplate-py2_py3"
+  version: "version:3.0.0"
+>
+
+wheel: <
+  name: "infra/python/wheels/httplib2-py2_py3"
+  version: "version:0.10.3"
+>
