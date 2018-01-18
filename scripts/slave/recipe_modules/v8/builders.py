@@ -1456,12 +1456,12 @@ BUILDERS = {
         'enable_swarming': True,
         'parent_buildername': 'V8 Linux64 TSAN - release builder',
         'tests': with_test_args(
-            'compaction',
-            ['--coverage=1.0', '--stress-compaction'],
+            'combined',
+            ['--coverage=1.0', '--stress-marking', '--stress-compaction'],
             [GCFuzz],
         ) + with_test_args(
-            '',
-            ['--coverage=1.0'],
+            'marking',
+            ['--coverage=1.0', '--stress-marking',],
             [GCFuzz],
         ),
         'variants': V8NoExhaustiveVariants,
