@@ -1481,12 +1481,12 @@ BUILDERS = {
         'enable_swarming': True,
         'parent_buildername': 'V8 Linux64 - debug builder',
         'tests': with_test_args(
-            'compaction',
-            ['--coverage=0.9', '--stress-compaction'],
+            'combined',
+            ['--coverage=0.9', '--stress-marking', '--stress-compaction'],
             [GCFuzz],
         ) + with_test_args(
-            '',
-            ['--coverage=0.9'],
+            'marking',
+            ['--coverage=0.9', '--stress-marking'],
             [GCFuzz],
         ),
         'variants': V8NoExhaustiveVariants,
