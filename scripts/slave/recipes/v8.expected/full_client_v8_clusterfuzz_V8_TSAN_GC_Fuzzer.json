@@ -186,6 +186,10 @@
       "--random-gc-stress",
       "--variants=more,dev",
       "--rerun-failures-count=2",
+      "--mastername",
+      "client.v8.clusterfuzz",
+      "--buildername",
+      "V8 TSAN GC Fuzzer",
       "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"

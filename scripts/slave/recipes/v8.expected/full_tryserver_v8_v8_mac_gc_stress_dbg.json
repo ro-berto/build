@@ -337,6 +337,10 @@
       "--gc-stress",
       "--variants=more,dev",
       "--rerun-failures-count=2",
+      "--mastername",
+      "tryserver.v8",
+      "--buildername",
+      "v8_mac_gc_stress_dbg",
       "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"

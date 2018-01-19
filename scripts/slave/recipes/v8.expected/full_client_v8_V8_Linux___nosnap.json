@@ -184,6 +184,10 @@
       "--random-seed=-275937916",
       "bot_default",
       "--rerun-failures-count=2",
+      "--mastername",
+      "client.v8",
+      "--buildername",
+      "V8 Linux - nosnap",
       "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
@@ -300,6 +304,10 @@
       "test262",
       "--variants=default",
       "--rerun-failures-count=2",
+      "--mastername",
+      "client.v8",
+      "--buildername",
+      "V8 Linux - nosnap",
       "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
@@ -409,6 +417,10 @@
       "--random-seed=-275937916",
       "mozilla",
       "--rerun-failures-count=2",
+      "--mastername",
+      "client.v8",
+      "--buildername",
+      "V8 Linux - nosnap",
       "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"

@@ -187,6 +187,10 @@
       "--no-harness",
       "--variants=more,dev",
       "--rerun-failures-count=2",
+      "--mastername",
+      "client.v8",
+      "--buildername",
+      "V8 Linux64 GC Stress - custom snapshot",
       "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"

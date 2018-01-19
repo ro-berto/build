@@ -130,6 +130,10 @@
       "mjsunit",
       "--variants=sweet",
       "--rerun-failures-count=2",
+      "--mastername",
+      "client.v8",
+      "--buildername",
+      "V8 Mac64",
       "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"

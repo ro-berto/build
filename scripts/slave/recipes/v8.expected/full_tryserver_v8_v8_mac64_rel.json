@@ -342,6 +342,10 @@
       "bot_default",
       "--variants=more,dev",
       "--rerun-failures-count=2",
+      "--mastername",
+      "tryserver.v8",
+      "--buildername",
+      "v8_mac64_rel",
       "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
@@ -450,6 +454,10 @@
       "test262",
       "--variants=default",
       "--rerun-failures-count=2",
+      "--mastername",
+      "tryserver.v8",
+      "--buildername",
+      "v8_mac64_rel",
       "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
@@ -558,6 +566,10 @@
       "mozilla",
       "--variants=more,dev",
       "--rerun-failures-count=2",
+      "--mastername",
+      "tryserver.v8",
+      "--buildername",
+      "v8_mac64_rel",
       "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
@@ -666,6 +678,10 @@
       "bot_default",
       "--variants=extra",
       "--rerun-failures-count=2",
+      "--mastername",
+      "tryserver.v8",
+      "--buildername",
+      "v8_mac64_rel",
       "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"

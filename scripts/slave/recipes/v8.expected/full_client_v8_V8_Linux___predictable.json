@@ -157,6 +157,10 @@
       "d8_default",
       "--variants=more,dev",
       "--rerun-failures-count=2",
+      "--mastername",
+      "client.v8",
+      "--buildername",
+      "V8 Linux - predictable",
       "--json-test-results",
       "/path/to/tmp/json"
     ],
@@ -195,6 +199,10 @@
       "benchmarks",
       "--variants=more,dev",
       "--rerun-failures-count=2",
+      "--mastername",
+      "client.v8",
+      "--buildername",
+      "V8 Linux - predictable",
       "--json-test-results",
       "/path/to/tmp/json"
     ],
@@ -233,6 +241,10 @@
       "mozilla",
       "--variants=more,dev",
       "--rerun-failures-count=2",
+      "--mastername",
+      "client.v8",
+      "--buildername",
+      "V8 Linux - predictable",
       "--json-test-results",
       "/path/to/tmp/json"
     ],

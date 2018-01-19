@@ -335,6 +335,10 @@
       "bot_default",
       "--variants=more,dev",
       "--rerun-failures-count=2",
+      "--mastername",
+      "tryserver.v8",
+      "--buildername",
+      "v8_linux64_msan_rel",
       "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
@@ -467,6 +471,10 @@
       "test262",
       "--variants=default",
       "--rerun-failures-count=2",
+      "--mastername",
+      "tryserver.v8",
+      "--buildername",
+      "v8_linux64_msan_rel",
       "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"

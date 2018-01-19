@@ -189,6 +189,10 @@
       "bot_default",
       "--variants=more,dev",
       "--rerun-failures-count=2",
+      "--mastername",
+      "tryserver.v8",
+      "--buildername",
+      "v8_linux64_asan_rel_ng_triggered",
       "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
@@ -309,6 +313,10 @@
       "test262",
       "--variants=more,dev",
       "--rerun-failures-count=2",
+      "--mastername",
+      "tryserver.v8",
+      "--buildername",
+      "v8_linux64_asan_rel_ng_triggered",
       "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
@@ -453,6 +461,10 @@
       "bot_default",
       "--variants=extra",
       "--rerun-failures-count=2",
+      "--mastername",
+      "tryserver.v8",
+      "--buildername",
+      "v8_linux64_asan_rel_ng_triggered",
       "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"

@@ -156,6 +156,10 @@
       "--random-seed=-358114921",
       "bot_default",
       "--rerun-failures-count=2",
+      "--mastername",
+      "client.v8",
+      "--buildername",
+      "V8 Linux - full debug",
       "--json-test-results",
       "/path/to/tmp/json"
     ],

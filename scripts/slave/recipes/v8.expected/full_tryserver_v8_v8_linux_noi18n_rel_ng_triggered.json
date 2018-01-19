@@ -188,6 +188,10 @@
       "--random-seed=-275937916",
       "bot_default",
       "--rerun-failures-count=2",
+      "--mastername",
+      "tryserver.v8",
+      "--buildername",
+      "v8_linux_noi18n_rel_ng_triggered",
       "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
@@ -302,6 +306,10 @@
       "test262",
       "--variants=default",
       "--rerun-failures-count=2",
+      "--mastername",
+      "tryserver.v8",
+      "--buildername",
+      "v8_linux_noi18n_rel_ng_triggered",
       "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
@@ -409,6 +417,10 @@
       "--random-seed=-275937916",
       "mozilla",
       "--rerun-failures-count=2",
+      "--mastername",
+      "tryserver.v8",
+      "--buildername",
+      "v8_linux_noi18n_rel_ng_triggered",
       "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"

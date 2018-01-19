@@ -299,6 +299,10 @@
       "--extra-flags=--verify-heap-skip-remembered-set",
       "--variants=default",
       "--rerun-failures-count=2",
+      "--mastername",
+      "client.v8.ports",
+      "--buildername",
+      "V8 Linux - arm64 - sim - nosnap - debug",
       "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"

@@ -186,6 +186,10 @@
       "--gc-stress",
       "--variants=more,dev",
       "--rerun-failures-count=2",
+      "--mastername",
+      "client.v8",
+      "--buildername",
+      "V8 Linux - gc stress",
       "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"

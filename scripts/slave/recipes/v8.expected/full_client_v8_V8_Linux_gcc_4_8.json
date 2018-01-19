@@ -157,6 +157,10 @@
       "bot_default",
       "--variants=more,dev",
       "--rerun-failures-count=2",
+      "--mastername",
+      "client.v8",
+      "--buildername",
+      "V8 Linux gcc 4.8",
       "--json-test-results",
       "/path/to/tmp/json"
     ],

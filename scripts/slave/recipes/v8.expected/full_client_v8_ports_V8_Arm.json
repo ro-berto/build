@@ -188,6 +188,10 @@
       "bot_default",
       "--variants=more,dev",
       "--rerun-failures-count=2",
+      "--mastername",
+      "client.v8.ports",
+      "--buildername",
+      "V8 Arm",
       "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
@@ -301,6 +305,10 @@
       "benchmarks",
       "--variants=more,dev",
       "--rerun-failures-count=2",
+      "--mastername",
+      "client.v8.ports",
+      "--buildername",
+      "V8 Arm",
       "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
@@ -409,6 +417,10 @@
       "--extra-flags=--optimize-for-size",
       "--variants=default",
       "--rerun-failures-count=2",
+      "--mastername",
+      "client.v8.ports",
+      "--buildername",
+      "V8 Arm",
       "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"

@@ -186,6 +186,10 @@
       "--no-harness",
       "--variants=more,dev",
       "--rerun-failures-count=2",
+      "--mastername",
+      "client.v8",
+      "--buildername",
+      "V8 Linux64 - custom snapshot - debug",
       "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
@@ -506,6 +510,10 @@
       "--no-harness",
       "--variants=default",
       "--rerun-failures-count=0",
+      "--mastername",
+      "client.v8",
+      "--buildername",
+      "V8 Linux64 - custom snapshot - debug",
       "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
@@ -692,6 +700,10 @@
       "--no-harness",
       "--variants=default",
       "--rerun-failures-count=0",
+      "--mastername",
+      "client.v8",
+      "--buildername",
+      "V8 Linux64 - custom snapshot - debug",
       "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"

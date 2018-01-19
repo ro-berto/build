@@ -188,6 +188,10 @@
       "bot_default",
       "--extra-flags=--verify-heap-skip-remembered-set",
       "--rerun-failures-count=2",
+      "--mastername",
+      "client.v8.ports",
+      "--buildername",
+      "V8 Arm - debug",
       "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
@@ -309,6 +313,10 @@
       "--extra-flags=--verify-heap-skip-remembered-set",
       "--variants=default",
       "--rerun-failures-count=2",
+      "--mastername",
+      "client.v8.ports",
+      "--buildername",
+      "V8 Arm - debug",
       "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"

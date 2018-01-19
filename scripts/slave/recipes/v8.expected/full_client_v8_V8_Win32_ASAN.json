@@ -314,6 +314,10 @@
       "bot_default",
       "--variants=more,dev",
       "--rerun-failures-count=2",
+      "--mastername",
+      "client.v8",
+      "--buildername",
+      "V8 Win32 ASAN",
       "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"

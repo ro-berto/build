@@ -191,6 +191,10 @@
       "--command_prefix",
       "[START_DIR]/dynamorio/build/bin64/drrun -reset_every_nth_pending 0 --",
       "--rerun-failures-count=2",
+      "--mastername",
+      "client.dynamorio",
+      "--buildername",
+      "linux-v8-dr",
       "--json-test-results",
       "/path/to/tmp/json"
     ],

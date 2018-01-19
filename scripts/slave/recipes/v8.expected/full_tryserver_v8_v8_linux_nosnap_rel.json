@@ -305,6 +305,10 @@
       "--random-seed=-976563914",
       "bot_default",
       "--rerun-failures-count=2",
+      "--mastername",
+      "tryserver.v8",
+      "--buildername",
+      "v8_linux_nosnap_rel",
       "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"

@@ -334,6 +334,10 @@
       "--extra-flags=--stress-incremental-marking",
       "--variants=more,dev",
       "--rerun-failures-count=2",
+      "--mastername",
+      "client.v8",
+      "--buildername",
+      "V8 Linux64 TSAN - concurrent marking",
       "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
@@ -445,6 +449,10 @@
       "--extra-flags=--stress-incremental-marking",
       "--variants=default",
       "--rerun-failures-count=2",
+      "--mastername",
+      "client.v8",
+      "--buildername",
+      "V8 Linux64 TSAN - concurrent marking",
       "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
@@ -568,6 +576,10 @@
       "--extra-flags=--stress-incremental-marking",
       "--variants=more,dev",
       "--rerun-failures-count=2",
+      "--mastername",
+      "client.v8",
+      "--buildername",
+      "V8 Linux64 TSAN - concurrent marking",
       "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
@@ -673,6 +685,10 @@
       "--extra-flags=--stress-incremental-marking",
       "--variants=more,dev",
       "--rerun-failures-count=2",
+      "--mastername",
+      "client.v8",
+      "--buildername",
+      "V8 Linux64 TSAN - concurrent marking",
       "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
