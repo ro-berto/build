@@ -71,3 +71,9 @@ class ChromiumSwarmingApi(recipe_api.RecipeApi):
       self.m.swarming.default_priority = MASTER_SWARMING_PRIORITIES[mastername]
       self.m.swarming.add_default_tag('purpose:post-commit')
       self.m.swarming.add_default_tag('purpose:CI')
+
+    if self.m.runtime.is_experimental:
+      # The experimental half of LUCI conversions should be lower than the CQ.
+      self.m.swarming.default_priority = 35
+    if self.m.runtime.is_luci:
+      self.m.swarming.add_default_tag('purpose:luci')

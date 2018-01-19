@@ -9,6 +9,7 @@ DEPS = [
     'chromium',
     'chromium_swarming',
     'recipe_engine/properties',
+    'recipe_engine/runtime',
 ]
 
 
@@ -42,3 +43,15 @@ def GenTests(api):
       api.properties(precommit=False) +
       api.post_process(post_process.DropExpectation)
   )
+
+  yield (
+      api.test('experimental') +
+      api.properties(precommit=False) +
+      api.runtime(is_luci=False, is_experimental=True) +
+      api.post_process(post_process.DropExpectation))
+
+  yield (
+      api.test('luci') +
+      api.properties(precommit=False) +
+      api.runtime(is_luci=True, is_experimental=False) +
+      api.post_process(post_process.DropExpectation))
