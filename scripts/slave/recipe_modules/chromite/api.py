@@ -225,7 +225,7 @@ class ChromiteApi(recipe_api.RecipeApi):
         "No 'master_config' configuration for '%s'" % (master,))
     self.set_config(master_config, **KWARGS)
 
-  def run_cbuildbot(self, args=('--buildbot',)):
+  def run_cbuildbot(self, args=None):
     """Performs a Chromite repository checkout, then runs cbuildbot.
 
     Args:

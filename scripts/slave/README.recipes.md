@@ -934,7 +934,7 @@ Args:
   args (list): Initial argument list, expanded based on other values.
 Returns: (Step) the 'cbuildbot' execution step.
 
-&mdash; **def [run\_cbuildbot](/scripts/slave/recipe_modules/chromite/api.py#228)(self, args=('--buildbot',)):**
+&mdash; **def [run\_cbuildbot](/scripts/slave/recipe_modules/chromite/api.py#228)(self, args=None):**
 
 Performs a Chromite repository checkout, then runs cbuildbot.
 
