@@ -184,6 +184,7 @@
       "--random-seed=94603393",
       "d8_default",
       "--random-gc-stress",
+      "--variants=more,dev",
       "--rerun-failures-count=2",
       "--swarming",
       "--json-test-results",

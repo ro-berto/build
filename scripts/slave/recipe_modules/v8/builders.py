@@ -1475,7 +1475,6 @@ BUILDERS = {
             ['--coverage=0.9', '--stress-scavenge'],
             [GCFuzz],
         ),
-        'variants': V8NoExhaustiveVariants,
         'testing': {'platform': 'linux'},
         'swarming_properties': {
           'default_expiration': 2 * 60 * 60,
@@ -1510,7 +1509,6 @@ BUILDERS = {
             ['--coverage=0.8', '--stress-scavenge'],
             [GCFuzz],
         ),
-        'variants': V8NoExhaustiveVariants,
         'testing': {'platform': 'linux'},
         'swarming_properties': {
           'default_expiration': 2 * 60 * 60,
