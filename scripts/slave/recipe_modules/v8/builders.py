@@ -66,6 +66,7 @@ class TestStepConfig(object):
 Benchmarks = TestStepConfig('benchmarks')
 Deopt = TestStepConfig('deopt')
 D8Testing = TestStepConfig('d8testing')
+D8TestingRandomGC = TestStepConfig('d8testing_random_gc')
 Fuzz = TestStepConfig('jsfunfuzz')
 GCFuzz = TestStepConfig('gcfuzz')
 GCMole = TestStepConfig('gcmole')
@@ -1455,13 +1456,23 @@ BUILDERS = {
         'bot_type': 'tester',
         'enable_swarming': True,
         'parent_buildername': 'V8 Linux64 TSAN - release builder',
-        'tests': with_test_args(
+        'tests': [D8TestingRandomGC(3)] + with_test_args(
             'combined',
-            ['--coverage=1.0', '--stress-marking', '--stress-compaction'],
+            [
+              '--coverage=0.8',
+              '--stress-compaction',
+              '--stress-gc',
+              '--stress-marking',
+              '--stress-scavenge',
+            ],
             [GCFuzz],
         ) + with_test_args(
             'marking',
             ['--coverage=1.0', '--stress-marking',],
+            [GCFuzz],
+        ) + with_test_args(
+            'scavenge',
+            ['--coverage=0.9', '--stress-scavenge'],
             [GCFuzz],
         ),
         'variants': V8NoExhaustiveVariants,
@@ -1480,13 +1491,23 @@ BUILDERS = {
         'bot_type': 'tester',
         'enable_swarming': True,
         'parent_buildername': 'V8 Linux64 - debug builder',
-        'tests': with_test_args(
+        'tests': [D8TestingRandomGC(3)] + with_test_args(
             'combined',
-            ['--coverage=0.9', '--stress-marking', '--stress-compaction'],
+            [
+              '--coverage=0.7',
+              '--stress-compaction',
+              '--stress-gc',
+              '--stress-marking',
+              '--stress-scavenge',
+            ],
             [GCFuzz],
         ) + with_test_args(
             'marking',
             ['--coverage=0.9', '--stress-marking'],
+            [GCFuzz],
+        ) + with_test_args(
+            'scavenge',
+            ['--coverage=0.8', '--stress-scavenge'],
             [GCFuzz],
         ),
         'variants': V8NoExhaustiveVariants,

@@ -77,6 +77,19 @@ TEST_CONFIGS = freeze({
       'webkit',
     ],
   },
+  'd8testing_random_gc': {
+    'name': 'Check - d8',
+    'tests': ['d8_default'],
+    'suite_mapping': [
+      'debugger',
+      'intl',
+      'message',
+      'mjsunit',
+      'preparser',
+      'webkit',
+    ],
+    'test_args': ['--random-gc-stress'],
+  },
   'jsfunfuzz': {
     'tool': 'jsfunfuzz',
     'isolated_target': 'jsfunfuzz',
