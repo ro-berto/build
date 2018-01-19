@@ -19,7 +19,7 @@ _MASTER_CONFIG_MAP = {
 
 def RunSteps(api):
   api.chromite.configure(api.properties, _MASTER_CONFIG_MAP)
-  api.chromite.run_cbuildbot()
+  api.chromite.run_cbuildbot(args=['--buildbot'])
 
 
 def GenTests(api):

@@ -31,7 +31,7 @@ def RunSteps(api):
       _MASTER_CONFIG_MAP)
 
   # Run 'cbuildbot' common recipe.
-  api.chromite.run_cbuildbot()
+  api.chromite.run_cbuildbot(args=['--buildbot'])
 
 
 def GenTests(api):

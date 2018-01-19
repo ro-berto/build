@@ -225,8 +225,11 @@ class ChromiteApi(recipe_api.RecipeApi):
         "No 'master_config' configuration for '%s'" % (master,))
     self.set_config(master_config, **KWARGS)
 
-  def run_cbuildbot(self):
+  def run_cbuildbot(self, args=('--buildbot',)):
     """Performs a Chromite repository checkout, then runs cbuildbot.
+
+    Args:
+      args (list): Initial argument list, see run() for details.
     """
     # Fetch chromite and depot_tools.
     self.checkout_chromite()
@@ -234,7 +237,7 @@ class ChromiteApi(recipe_api.RecipeApi):
     # Update or install goma client via cipd.
     self.m.goma.ensure_goma()
 
-    self.run()
+    self.run(args)
 
   def checkout_chromite(self):
     """Checks out the configured Chromite branch.
@@ -270,7 +273,7 @@ class ChromiteApi(recipe_api.RecipeApi):
     # python2 a context manager to insert that directory at the front of PATH.
     return self.m.context(env_prefixes={'PATH': [python_bin]})
 
-  def run(self, args=[]):
+  def run(self, args=None):
     """Runs the configured 'cbuildbot' build.
 
     This workflow uses the registered configuration dictionary to make master-
@@ -289,8 +292,7 @@ class ChromiteApi(recipe_api.RecipeApi):
     - Executes the 'cbuildbot' command.
 
     Args:
-      args (list): If True, use this argument list as the base instead of the
-          default, which is '--buildbot'.
+      args (list): Initial argument list, expanded based on other values.
     Returns: (Step) the 'cbuildbot' execution step.
     """
     # Assert correct configuration.
@@ -316,8 +318,9 @@ class ChromiteApi(recipe_api.RecipeApi):
     cbb_args = [
         '--buildroot', self.m.path['cache'].join('cbuild'),
     ]
-    if not args:
-      cbb_args.append('--buildbot')
+
+    if args:
+      cbb_args.extend(args)
     if self.c.chromite_branch:
       cbb_args.extend(['--branch', self.c.chromite_branch])
     if self.c.cbb.build_number is not None:

@@ -93,7 +93,7 @@ def RunSteps(api):
   api.chromite.m.goma.ensure_goma()
 
   # Run our 'cbuildbot'.
-  api.chromite.run(args=tryjob_args)
+  api.chromite.run(args=[])
 
 
 def GenTests(api):
