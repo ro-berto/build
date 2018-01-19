@@ -117,6 +117,11 @@ TEST_CONFIGS = freeze({
     'name': 'Mozilla',
     'tests': ['mozilla'],
   },
+  'numfuzz': {
+    'name': 'Num Fuzz',
+    'tool': 'run-num-fuzzer',
+    'isolated_target': 'run-num-fuzzer',
+  },
   'optimize_for_size': {
     'name': 'OptimizeForSize',
     'tests': ['optimize_for_size'],
@@ -693,6 +698,16 @@ class V8GCFuzzer(V8GenericSwarmingTest):
     ] + self.api.v8.c.testing.test_args + self.test_step_config.test_args
 
 
+class V8NumFuzzer(V8GenericSwarmingTest):
+  @property
+  def command(self):
+    return [
+      'tools/run-num-fuzzer.py',
+      '--mode', self.api.chromium.c.build_config_fs,
+      '--progress', 'verbose',
+    ] + self.api.v8.c.testing.test_args + self.test_step_config.test_args
+
+
 class V8GCMole(V8CompositeSwarmingTest):
   @property
   def composite_tests(self):
@@ -721,6 +736,7 @@ TOOL_TO_TEST_SWARMING = freeze({
   'run-deopt-fuzzer': V8DeoptFuzzer,
   'run-gc-fuzzer': V8GCFuzzer,
   'run-gcmole': V8GCMole,
+  'run-num-fuzzer': V8NumFuzzer,
   'run-tests': V8SwarmingTest,
 })
 

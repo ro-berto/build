@@ -73,6 +73,7 @@ GCMole = TestStepConfig('gcmole')
 Mjsunit = TestStepConfig('mjsunit')
 MjsunitSPFrameAccess = TestStepConfig('mjsunit_sp_frame_access')
 Mozilla = TestStepConfig('mozilla')
+NumFuzz = TestStepConfig('numfuzz')
 OptimizeForSize = TestStepConfig('optimize_for_size')
 Presubmit = TestStepConfig('presubmit')
 Test262 = TestStepConfig('test262')
@@ -1474,6 +1475,16 @@ BUILDERS = {
             'scavenge',
             ['--coverage=0.9', '--stress-scavenge'],
             [GCFuzz],
+        ) + with_test_args(
+            'combined',
+            [
+              '--tests-count=2',
+              '--stress-compaction=1',
+              '--stress-gc=2',
+              '--stress-marking=2',
+              '--stress-scavenge=2',
+            ],
+            [NumFuzz],
         ),
         'testing': {'platform': 'linux'},
         'swarming_properties': {
@@ -1508,6 +1519,16 @@ BUILDERS = {
             'scavenge',
             ['--coverage=0.8', '--stress-scavenge'],
             [GCFuzz],
+        ) + with_test_args(
+            'combined',
+            [
+              '--tests-count=3',
+              '--stress-compaction=1',
+              '--stress-gc=2',
+              '--stress-marking=2',
+              '--stress-scavenge=2',
+            ],
+            [NumFuzz],
         ),
         'testing': {'platform': 'linux'},
         'swarming_properties': {
