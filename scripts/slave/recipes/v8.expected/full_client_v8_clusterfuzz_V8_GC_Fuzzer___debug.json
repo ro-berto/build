@@ -299,7 +299,7 @@
       "Debug",
       "--progress",
       "verbose",
-      "--coverage=0.7",
+      "--coverage=0.5",
       "--stress-compaction",
       "--stress-gc",
       "--stress-marking",

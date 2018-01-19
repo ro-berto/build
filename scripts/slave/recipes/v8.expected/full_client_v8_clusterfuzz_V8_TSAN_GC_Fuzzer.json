@@ -299,7 +299,7 @@
       "Release",
       "--progress",
       "verbose",
-      "--coverage=0.8",
+      "--coverage=0.6",
       "--stress-compaction",
       "--stress-gc",
       "--stress-marking",

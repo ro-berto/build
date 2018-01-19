@@ -1459,7 +1459,7 @@ BUILDERS = {
         'tests': [D8TestingRandomGC(3)] + with_test_args(
             'combined',
             [
-              '--coverage=0.8',
+              '--coverage=0.6',
               '--stress-compaction',
               '--stress-gc',
               '--stress-marking',
@@ -1493,7 +1493,7 @@ BUILDERS = {
         'tests': [D8TestingRandomGC(3)] + with_test_args(
             'combined',
             [
-              '--coverage=0.7',
+              '--coverage=0.5',
               '--stress-compaction',
               '--stress-gc',
               '--stress-marking',
