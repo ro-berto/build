@@ -121,6 +121,7 @@ TEST_CONFIGS = freeze({
     'name': 'Num Fuzz',
     'tool': 'run-num-fuzzer',
     'isolated_target': 'run-num-fuzzer',
+    'variants': V8NoExhaustiveVariants,
   },
   'optimize_for_size': {
     'name': 'OptimizeForSize',
@@ -519,13 +520,15 @@ class V8SwarmingTest(V8Test):
       if self.api.v8.c.testing.SHARD_COUNT > 1:  # pragma: no cover
         shards = self.api.v8.c.testing.SHARD_COUNT
 
+    command = 'tools/%s.py' % self.test.get('tool', 'run-tests')
+
     # Initialize swarming task with custom data-collection step for v8
     # test-runner output.
     self.task = self.api.swarming.task(
         title=self.test['name'] + self.test_step_config.suffix,
         isolated_hash=self._get_isolated_hash(self.test),
         shards=shards,
-        raw_cmd=['tools/run-tests.py'] + extra_args,
+        raw_cmd=[command] + extra_args,
     )
     self.task.collect_step = lambda task, **kw: (
         self._v8_collect_step(task, coverage_context, **kw))
@@ -698,16 +701,6 @@ class V8GCFuzzer(V8GenericSwarmingTest):
     ] + self.api.v8.c.testing.test_args + self.test_step_config.test_args
 
 
-class V8NumFuzzer(V8GenericSwarmingTest):
-  @property
-  def command(self):
-    return [
-      'tools/run-num-fuzzer.py',
-      '--mode', self.api.chromium.c.build_config_fs,
-      '--progress', 'verbose',
-    ] + self.api.v8.c.testing.test_args + self.test_step_config.test_args
-
-
 class V8GCMole(V8CompositeSwarmingTest):
   @property
   def composite_tests(self):
@@ -736,7 +729,7 @@ TOOL_TO_TEST_SWARMING = freeze({
   'run-deopt-fuzzer': V8DeoptFuzzer,
   'run-gc-fuzzer': V8GCFuzzer,
   'run-gcmole': V8GCMole,
-  'run-num-fuzzer': V8NumFuzzer,
+  'run-num-fuzzer': V8SwarmingTest,
   'run-tests': V8SwarmingTest,
 })
 

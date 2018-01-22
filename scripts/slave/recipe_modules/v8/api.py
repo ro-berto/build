@@ -1273,7 +1273,7 @@ class V8Api(recipe_api.RecipeApi):
     if applied_test_filter:
       full_args += applied_test_filter
     else:
-      full_args += list(test['tests'])
+      full_args += list(test.get('tests', []))
 
     # Add test-specific test arguments.
     full_args += test.get('test_args', [])
