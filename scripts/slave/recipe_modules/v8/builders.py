@@ -1478,13 +1478,13 @@ BUILDERS = {
         ) + with_test_args(
             'combined',
             [
-              '--tests-count=2',
+              '--total-timeout-sec=2100', # 35 minutes
               '--stress-compaction=1',
               '--stress-gc=2',
               '--stress-marking=2',
               '--stress-scavenge=2',
             ],
-            [NumFuzz],
+            [NumFuzz(4)],
         ),
         'testing': {'platform': 'linux'},
         'swarming_properties': {
@@ -1522,13 +1522,13 @@ BUILDERS = {
         ) + with_test_args(
             'combined',
             [
-              '--tests-count=3',
+              '--total-timeout-sec=2100', # 35 minutes
               '--stress-compaction=1',
               '--stress-gc=2',
               '--stress-marking=2',
               '--stress-scavenge=2',
             ],
-            [NumFuzz],
+            [NumFuzz(3)],
         ),
         'testing': {'platform': 'linux'},
         'swarming_properties': {
