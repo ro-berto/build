@@ -229,9 +229,12 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def create_supersize_archive(self, apk_path, size_path):
     """Creates a .size file for the given .apk."""
+    download_objdump_path = self.m.path['checkout'].join(
+        'tools', 'clang', 'scripts', 'download_objdump.py')
     supersize_path = self.m.path['checkout'].join(
         'tools', 'binary_size', 'supersize')
     with self.m.context(env=self.m.chromium.get_env()):
+      self.m.python('download objdump', download_objdump_path)
       return self.m.step(
           'supersize_archive',
           [supersize_path, 'archive', size_path, '--apk-file', apk_path, '-v']
