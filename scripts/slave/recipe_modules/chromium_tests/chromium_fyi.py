@@ -129,6 +129,9 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
+      'swarming_dimensions': {
+        'os': 'Mac-10.13',
+      },
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'mac',
