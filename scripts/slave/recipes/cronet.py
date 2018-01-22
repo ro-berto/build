@@ -88,21 +88,6 @@ BUILDERS = freeze({
     },
     'chromium_apply_config': ['mb', 'chromium_asan'],
   },
-  'Android Cronet ARMv6 Builder': {
-    'recipe_config': 'main_builder_mb',
-    'run_tests': True,
-    'kwargs': {
-      'BUILD_CONFIG': 'Release',
-    },
-    'cronet_kwargs': {
-      'report_sizes': True,
-      'PERF_ID': 'android_cronet_armv6_builder',
-    },
-    'gyp_defs': {
-      'arm_version': 6
-    },
-    'chromium_apply_config': ['cronet_official'],
-  },
   'Android Cronet ARM64 Builder': {
     'recipe_config': 'arm64_builder_mb',
     'run_tests': False,
@@ -148,14 +133,6 @@ BUILDERS = freeze({
     'kwargs': {
       'BUILD_CONFIG': 'Debug',
     },
-  },
-  'Android Cronet MIPS Builder': {
-    'recipe_config': 'mipsel_builder_mb',
-    'run_tests': False,
-    'kwargs': {
-      'BUILD_CONFIG': 'Release',
-    },
-    'chromium_apply_config': ['cronet_official'],
   },
   'android_cronet_tester': {
     'recipe_config': 'main_builder_mb',

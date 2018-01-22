@@ -15,14 +15,6 @@
   },
 
   "builders": {
-    "Android Cronet ARMv6 Builder": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": "chromium_commits",
-      "slave_pools": ["cronet_armv6"],
-      "category": "5Cronet",
-      "mergeRequests": True,
-    },
     "Android Cronet Builder (dbg)": {
       "recipe": "chromium",
       "use_remote_run": True,
@@ -172,14 +164,6 @@
   },
 
   "slave_pools": {
-    "cronet_armv6": {
-      "slave_data": {
-        "os": "linux",
-        "version": "trusty",
-        "bits": "64",
-      },
-      "slaves": ["slave219-c1"],
-    },
     "cronet_dbg": {
       "slave_data": {
         "os": "linux",
