@@ -42,6 +42,10 @@ class WebRTCApi(recipe_api.RecipeApi):
     return self.bot_config.get('triggers')
 
   @property
+  def should_test_android_studio_project_generation(self):
+    return self.bot_config.get('test_android_studio_project_generation')
+
+  @property
   def should_download_build(self):
     return self.bot_config.get('parent_buildername')
 
