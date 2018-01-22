@@ -55,11 +55,6 @@ class WebRTCApi(recipe_api.RecipeApi):
         'android_perf', 'android_perf_swarming', 'desktop_perf_swarming',
         'webrtc')
 
-  @property
-  def should_download_video_quality_tools(self):
-    return hasattr(self.c, 'TEST_SUITE') and self.c.TEST_SUITE in (
-        'android_perf', 'android_perf_swarming')
-
   def apply_bot_config(self, builders, recipe_configs):
     self.mastername = self.m.properties.get('mastername')
     self.buildername = self.m.properties.get('buildername')
@@ -171,14 +166,6 @@ class WebRTCApi(recipe_api.RecipeApi):
                                                  'download_tools.py'),
                     args=[self.m.path['checkout'].join('tools_webrtc',
                                                        'audio_quality')])
-
-  def download_video_quality_tools(self):
-    with self.m.depot_tools.on_path():
-      self.m.python('download video quality tools',
-                    self.m.path['checkout'].join('tools_webrtc',
-                                                 'download_tools.py'),
-                    args=[self.m.path['checkout'].join(
-                        'tools_webrtc', 'video_quality_toolchain', 'linux')])
 
   def check_swarming_version(self):
     if self.c.enable_swarming:
