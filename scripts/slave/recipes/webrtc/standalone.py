@@ -41,6 +41,8 @@ def RunSteps(api):
   webrtc.checkout()
   if webrtc.should_download_audio_quality_tools:
     webrtc.download_audio_quality_tools()
+  if webrtc.should_download_video_quality_tools:
+    webrtc.download_video_quality_tools()
   webrtc.cleanup()
 
   if webrtc.should_build:
