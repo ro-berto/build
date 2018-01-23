@@ -17,7 +17,6 @@
 
   'WATCHLISTS': {
     'chromium_masters': [
-      'estaab+masters@chromium.org',
       'hinoka+masters@chromium.org',
     ],
     'goma': [
