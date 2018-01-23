@@ -78,7 +78,6 @@
   * [boringssl](#recipes-boringssl)
   * [boringssl_docs](#recipes-boringssl_docs) &mdash; Generates BoringSSL documentation and uploads it to Cloud Storage.
   * [build:examples/full](#recipes-build_examples_full)
-  * [build_from_tarball](#recipes-build_from_tarball)
   * [buildbucket:examples/full](#recipes-buildbucket_examples_full) &mdash; This file is a recipe demonstrating the buildbucket recipe module.
   * [buildbucket:tests/get](#recipes-buildbucket_tests_get)
   * [buildbucket:tests/properties](#recipes-buildbucket_tests_properties)
@@ -3766,11 +3765,6 @@ Generates BoringSSL documentation and uploads it to Cloud Storage.
 [DEPS](/scripts/slave/recipe_modules/build/examples/full.py#5): [build](#recipe_modules-build)
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/build/examples/full.py#9)(api):**
-### *recipes* / [build\_from\_tarball](/scripts/slave/recipes/build_from_tarball.py)
-
-[DEPS](/scripts/slave/recipes/build_from_tarball.py#5): [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/build_from_tarball.py#17)(api):**
 ### *recipes* / [buildbucket:examples/full](/scripts/slave/recipe_modules/buildbucket/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/buildbucket/examples/full.py#8): [buildbucket](#recipe_modules-buildbucket), [puppet\_service\_account](#recipe_modules-puppet_service_account), [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
