@@ -285,6 +285,7 @@
   * [perf_dashboard:examples/full](#recipes-perf_dashboard_examples_full)
   * [pgo:examples/full](#recipes-pgo_examples_full) &mdash; Example of using the PGO recipe module.
   * [pgo:tests/archive_profile_database](#recipes-pgo_tests_archive_profile_database)
+  * [pinpoint/builder](#recipes-pinpoint_builder)
   * [puppet_service_account:examples/full](#recipes-puppet_service_account_examples_full) &mdash; Small example of using the puppet_service_account api.
   * [remote_run_test](#recipes-remote_run_test) &mdash; Checks that properties get to recipes from remote_run properly.
   * [repo:examples/full](#recipes-repo_examples_full)
@@ -5126,6 +5127,11 @@ Example of using the PGO recipe module.
 [DEPS](/scripts/slave/recipe_modules/pgo/tests/archive_profile_database.py#5): [chromium](#recipe_modules-chromium), [pgo](#recipe_modules-pgo), [recipe\_engine/platform][recipe_engine/recipe_modules/platform]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/pgo/tests/archive_profile_database.py#12)(api):**
+### *recipes* / [pinpoint/builder](/scripts/slave/recipes/pinpoint/builder.py)
+
+[DEPS](/scripts/slave/recipes/pinpoint/builder.py#5): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+
+&mdash; **def [RunSteps](/scripts/slave/recipes/pinpoint/builder.py#13)(api):**
 ### *recipes* / [puppet\_service\_account:examples/full](/scripts/slave/recipe_modules/puppet_service_account/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/puppet_service_account/examples/full.py#7): [puppet\_service\_account](#recipe_modules-puppet_service_account), [recipe\_engine/platform][recipe_engine/recipe_modules/platform]

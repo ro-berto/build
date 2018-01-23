@@ -1,0 +1,51 @@
+# Copyright 2018 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+DEPS = [
+  'chromium',
+  'chromium_tests',
+  'recipe_engine/json',
+  'recipe_engine/properties',
+]
+
+
+def RunSteps(api):
+  with api.chromium.chromium_layout():
+    mastername = api.properties.get('mastername')
+    buildername = api.properties.get('buildername')
+
+    bot = api.chromium_tests.trybots[mastername]['builders'][buildername]
+    bot_config = api.chromium_tests.create_generalized_bot_config_object(
+        bot['bot_ids'])
+
+    api.chromium_tests.configure_build(bot_config)
+    update_step, bot_db = api.chromium_tests.prepare_checkout(bot_config)
+    _, tests_including_triggered = api.chromium_tests.get_tests(
+        bot_config, bot_db)
+    compile_targets = api.chromium_tests.get_compile_targets(
+        bot_config, bot_db, tests_including_triggered)
+    api.chromium_tests.compile_specific_targets(
+        bot_config, update_step, bot_db,
+        compile_targets, tests_including_triggered)
+
+
+def GenTests(api):
+  yield (
+    api.test('basic') +
+    api.properties.generic(mastername='tryserver.chromium.perf',
+                           buildername='Android Compile') +
+    api.override_step_data(
+        'read test spec (chromium.perf.json)',
+        api.json.output({
+            'Android One Perf': {
+                'isolated_scripts': [
+                    {
+                        'isolate_name': 'telemetry_perf_tests',
+                        'name': 'benchmark',
+                    },
+                ],
+            },
+        })
+    )
+  )
