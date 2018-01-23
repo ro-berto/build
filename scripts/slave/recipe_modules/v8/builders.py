@@ -1112,6 +1112,7 @@ BUILDERS = {
         'cf_archive_name': 'd8',
         'triggers': [
           'V8 Deopt Fuzzer',
+          'V8 NumFuzz',
         ],
         'testing': {'platform': 'linux'},
       },
@@ -1136,6 +1137,7 @@ BUILDERS = {
         'cf_archive_name': 'd8',
         'triggers': [
           'V8 GC Fuzzer - debug',
+          'V8 NumFuzz - debug',
           'V8 Random Deopt Fuzzer - debug',
         ],
         'testing': {'platform': 'linux'},
@@ -1318,6 +1320,7 @@ BUILDERS = {
         'slim_swarming_builder': True,
         'enable_swarming': True,
         'triggers': [
+          'V8 NumFuzz - TSAN',
           'V8 TSAN GC Fuzzer',
         ],
         'testing': {'platform': 'linux'},
@@ -1457,17 +1460,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'enable_swarming': True,
         'parent_buildername': 'V8 Linux64 TSAN - release builder',
-        'tests': [D8TestingRandomGC(3)] + with_test_args(
-            'combined',
-            [
-              '--coverage=0.6',
-              '--stress-compaction',
-              '--stress-gc',
-              '--stress-marking',
-              '--stress-scavenge',
-            ],
-            [GCFuzz],
-        ) + with_test_args(
+        'tests': with_test_args(
             'marking',
             ['--coverage=1.0', '--stress-marking',],
             [GCFuzz],
@@ -1475,16 +1468,6 @@ BUILDERS = {
             'scavenge',
             ['--coverage=0.9', '--stress-scavenge'],
             [GCFuzz],
-        ) + with_test_args(
-            'combined',
-            [
-              '--total-timeout-sec=2100', # 35 minutes
-              '--stress-compaction=1',
-              '--stress-gc=2',
-              '--stress-marking=2',
-              '--stress-scavenge=2',
-            ],
-            [NumFuzz(4)],
         ),
         'testing': {'platform': 'linux'},
         'swarming_properties': {
@@ -1501,17 +1484,7 @@ BUILDERS = {
         'bot_type': 'tester',
         'enable_swarming': True,
         'parent_buildername': 'V8 Linux64 - debug builder',
-        'tests': [D8TestingRandomGC(3)] + with_test_args(
-            'combined',
-            [
-              '--coverage=0.5',
-              '--stress-compaction',
-              '--stress-gc',
-              '--stress-marking',
-              '--stress-scavenge',
-            ],
-            [GCFuzz],
-        ) + with_test_args(
+        'tests': with_test_args(
             'marking',
             ['--coverage=0.9', '--stress-marking'],
             [GCFuzz],
@@ -1519,6 +1492,55 @@ BUILDERS = {
             'scavenge',
             ['--coverage=0.8', '--stress-scavenge'],
             [GCFuzz],
+        ),
+        'testing': {'platform': 'linux'},
+        'swarming_properties': {
+          'default_expiration': 2 * 60 * 60,
+          'default_hard_timeout': 2 * 60 * 60,
+          'default_priority': 35,
+        },
+      },
+      'V8 NumFuzz': {
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'enable_swarming': True,
+        'parent_buildername': 'V8 Linux64 - release builder',
+        'tests': with_test_args(
+            'deopt',
+            [
+              '--total-timeout-sec=2100', # 35 minutes
+              '--stress-deopt=1',
+            ],
+            [NumFuzz],
+        ),
+        'testing': {'platform': 'linux'},
+        'swarming_properties': SWARMING_FYI_PROPS,
+      },
+      'V8 NumFuzz - debug': {
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'enable_swarming': True,
+        'parent_buildername': 'V8 Linux64 - debug builder',
+        'tests': [D8TestingRandomGC] + with_test_args(
+            'marking',
+            [
+              '--total-timeout-sec=2100', # 35 minutes
+              '--stress-marking=1',
+            ],
+            [NumFuzz(2)],
+        )  + with_test_args(
+            'scavenge',
+            [
+              '--total-timeout-sec=2100', # 35 minutes
+              '--stress-scavenge=1',
+            ],
+            [NumFuzz],
         ) + with_test_args(
             'combined',
             [
@@ -1529,13 +1551,52 @@ BUILDERS = {
               '--stress-scavenge=2',
             ],
             [NumFuzz(3)],
+        ) + with_test_args(
+            'deopt',
+            [
+              '--total-timeout-sec=2100', # 35 minutes
+              '--stress-deopt=1',
+            ],
+            [NumFuzz(2)],
         ),
         'testing': {'platform': 'linux'},
-        'swarming_properties': {
-          'default_expiration': 2 * 60 * 60,
-          'default_hard_timeout': 2 * 60 * 60,
-          'default_priority': 35,
+        'swarming_properties': SWARMING_FYI_PROPS,
+      },
+      'V8 NumFuzz - TSAN': {
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
         },
+        'bot_type': 'tester',
+        'enable_swarming': True,
+        'parent_buildername': 'V8 Linux64 TSAN - release builder',
+        'tests': [D8TestingRandomGC(2)] + with_test_args(
+            'marking',
+            [
+              '--total-timeout-sec=2100', # 35 minutes
+              '--stress-marking=1',
+            ],
+            [NumFuzz],
+        )  + with_test_args(
+            'scavenge',
+            [
+              '--total-timeout-sec=2100', # 35 minutes
+              '--stress-scavenge=1',
+            ],
+            [NumFuzz],
+        ) + with_test_args(
+            'combined',
+            [
+              '--total-timeout-sec=2100', # 35 minutes
+              '--stress-compaction=1',
+              '--stress-gc=2',
+              '--stress-marking=2',
+              '--stress-scavenge=2',
+            ],
+            [NumFuzz(4)],
+        ),
+        'testing': {'platform': 'linux'},
+        'swarming_properties': SWARMING_FYI_PROPS,
       },
     },
   },

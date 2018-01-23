@@ -225,6 +225,22 @@
     "name": "trigger",
     "trigger_specs": [
       {
+        "builder_name": "V8 NumFuzz - TSAN",
+        "properties": {
+          "parent_build_environment": {
+            "gn_args": "target_cpu = \"x86\" use_goma = true"
+          },
+          "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
+          "parent_got_revision_cp": "refs/heads/master@{#50110}",
+          "parent_got_swarming_client_revision": "e4fee0b18f8163be6097c9c571640038896debc4",
+          "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
+          "swarm_hashes": {
+            "d8_default": "[dummy hash for d8_default]",
+            "run-num-fuzzer": "[dummy hash for run-num-fuzzer]"
+          }
+        }
+      },
+      {
         "builder_name": "V8 TSAN GC Fuzzer",
         "properties": {
           "parent_build_environment": {
@@ -242,7 +258,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@V8 TSAN GC Fuzzer@@@"
+      "@@@STEP_TEXT@V8 NumFuzz - TSAN<br />V8 TSAN GC Fuzzer@@@"
     ]
   },
   {
