@@ -444,7 +444,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
       "--json-status",
       "[TMP_BASE]\\goma_jsonstatus.json",
-      "--ninja-log-exit-status",
+      "--build-exit-status",
       "0",
       "--buildbot-buildername",
       "dart2js-win10-debug-x64-ff-stable"
@@ -727,7 +727,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
       "--json-status",
       "[TMP_BASE]\\goma_jsonstatus.json",
-      "--ninja-log-exit-status",
+      "--build-exit-status",
       "0",
       "--buildbot-buildername",
       "dart2js-win10-debug-x64-ff-stable"
@@ -1485,7 +1485,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
       "--json-status",
       "[TMP_BASE]\\goma_jsonstatus.json",
-      "--ninja-log-exit-status",
+      "--build-exit-status",
       "0",
       "--buildbot-buildername",
       "dart2js-win10-debug-x64-ff-stable"

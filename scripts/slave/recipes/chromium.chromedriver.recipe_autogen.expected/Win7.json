@@ -365,7 +365,7 @@
       "[START_DIR]/src/out/Default",
       "--ninja-log-command",
       "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-C', '[START_DIR]/src/out/Default', '-j', 50, 'chromedriver', 'chromedriver_tests', 'chromedriver_unittests']",
-      "--ninja-log-exit-status",
+      "--build-exit-status",
       "0",
       "--ninja-log-compiler",
       "goma",

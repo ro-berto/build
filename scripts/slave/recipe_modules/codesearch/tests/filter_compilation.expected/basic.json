@@ -249,7 +249,7 @@
       "None/out/Debug",
       "--ninja-log-command",
       "['ninja', '-C', Path('checkout', 'out','Debug'), '-t', 'compdb', 'cc', 'cxx', 'objc', 'objcxx', '-j', 50]",
-      "--ninja-log-exit-status",
+      "--build-exit-status",
       "0",
       "--ninja-log-compiler",
       "goma",

@@ -307,7 +307,7 @@
       "[START_DIR]\\pdfium\\out\\debug_skia_xfa_v8",
       "--ninja-log-command",
       "['ninja', '-C', Path('checkout', 'out','debug_skia_xfa_v8'), '-j', 50, 'pdfium_all']",
-      "--ninja-log-exit-status",
+      "--build-exit-status",
       "0",
       "--ninja-log-compiler",
       "unknown",

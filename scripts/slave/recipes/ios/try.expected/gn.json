@@ -548,7 +548,7 @@
       "[BUILDER_CACHE]/ios_simulator_gn/src/out/Debug-iphonesimulator",
       "--ninja-log-command",
       "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-C', Path('checkout', 'out','Debug-iphonesimulator'), '-j', '50', 'fake tests']",
-      "--ninja-log-exit-status",
+      "--build-exit-status",
       "0",
       "--ninja-log-compiler",
       "goma",

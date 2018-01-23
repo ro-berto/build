@@ -285,7 +285,7 @@
       "None/out_x86-generic/Release",
       "--ninja-log-command",
       "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', 'None/out_x86-generic/Release', '-j', 150, 'all']",
-      "--ninja-log-exit-status",
+      "--build-exit-status",
       "0",
       "--ninja-log-compiler",
       "goma-clang",

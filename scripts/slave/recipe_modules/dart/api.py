@@ -61,7 +61,7 @@ class DartApi(recipe_api.RecipeApi):
           build_exit_status = e.retcode
           raise e
         finally:
-          self.m.goma.stop(ninja_log_exit_status=build_exit_status)
+          self.m.goma.stop(build_exit_status=build_exit_status)
 
         if isolate is not None:
           self._swarming_checkout()

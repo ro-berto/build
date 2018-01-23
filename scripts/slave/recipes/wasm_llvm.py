@@ -39,7 +39,7 @@ def RunSteps(api):
     exit_status = e.retcode
     raise e
   finally:
-    api.goma.stop(ninja_log_exit_status=exit_status)
+    api.goma.stop(build_exit_status=exit_status)
 
 
 def GenTests(api):

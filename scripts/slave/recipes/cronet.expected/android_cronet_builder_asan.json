@@ -544,7 +544,7 @@
       "[START_DIR]/src/out/Release",
       "--ninja-log-command",
       "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/Release', '-j', 50, 'cronet_package', 'cronet_perf_test_apk', 'cronet_sample_test_apk', 'cronet_smoketests_missing_native_library_instrumentation_apk', 'cronet_smoketests_platform_only_instrumentation_apk', 'cronet_test_instrumentation_apk', 'cronet_unittests', 'net_unittests']",
-      "--ninja-log-exit-status",
+      "--build-exit-status",
       "0",
       "--ninja-log-compiler",
       "goma-clang",

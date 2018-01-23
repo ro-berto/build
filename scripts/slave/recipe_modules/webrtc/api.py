@@ -257,7 +257,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     # overwritten (and it's a multi-arch build so one is enough).
     goma_dir = self.m.goma.ensure_goma()
     self.m.goma.start()
-    ninja_log_exit_status = 1
+    build_exit_status = 1
     try:
       build_script = self.m.path['checkout'].join('tools_webrtc', 'android',
                                                   'build_aar.py')
@@ -275,13 +275,13 @@ class WebRTCApi(recipe_api.RecipeApi):
               build_script,
               args=args,
           )
-      ninja_log_exit_status = step_result.retcode
+      build_exit_status = step_result.retcode
     except self.m.step.StepFailure as e:
-      ninja_log_exit_status = e.retcode
+      build_exit_status = e.retcode
       raise e
     finally:
       self.m.goma.stop(ninja_log_compiler='goma',
-                       ninja_log_exit_status=ninja_log_exit_status)
+                       build_exit_status=build_exit_status)
 
     if not self.m.tryserver.is_tryserver:
       self.m.gsutil.upload(

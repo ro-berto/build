@@ -394,7 +394,7 @@
       "[START_DIR]\\src\\out\\Release_x64",
       "--ninja-log-command",
       "['RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe', '-w', 'dupbuild=err', '-C', '[START_DIR]\\\\src\\\\out\\\\Release_x64', '-j', 50]",
-      "--ninja-log-exit-status",
+      "--build-exit-status",
       "0",
       "--ninja-log-compiler",
       "goma-clang",

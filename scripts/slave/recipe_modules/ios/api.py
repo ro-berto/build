@@ -439,7 +439,7 @@ class iOSApi(recipe_api.RecipeApi):
             ninja_log_outdir=cwd,
             ninja_log_compiler='goma',
             ninja_log_command=cmd,
-            ninja_log_exit_status=exit_status)
+            build_exit_status=exit_status)
 
   def symupload(self, artifact, url):
     """Uploads the given symbols file.

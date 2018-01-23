@@ -308,7 +308,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       occurs something failure on goma steps.
     """
 
-    ninja_log_exit_status = None
+    build_exit_status = None
 
     self.m.goma.start(goma_env)
 
@@ -319,16 +319,16 @@ class ChromiumApi(recipe_api.RecipeApi):
 
       self._run_ninja(ninja_command, name, ninja_env,
                       ninja_confirm_noop, **kwargs)
-      ninja_log_exit_status = 0
+      build_exit_status = 0
     except self.m.step.StepFailure as e:
-      ninja_log_exit_status = e.retcode
+      build_exit_status = e.retcode
       raise e
 
     finally:
       self.m.goma.stop(ninja_log_outdir=ninja_log_outdir,
                        ninja_log_compiler=ninja_log_compiler,
                        ninja_log_command=ninja_command,
-                       ninja_log_exit_status=ninja_log_exit_status)
+                       build_exit_status=build_exit_status)
 
   # TODO(tikuta): Remove use_goma_module.
   # Decrease the number of ways configuring with or without goma.

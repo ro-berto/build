@@ -46,19 +46,19 @@ class CodesearchApi(recipe_api.RecipeApi):
     # TODO(tikuta): Support returning step result in api.m.goma.build_with_goma
     self.m.goma.start()
 
-    ninja_log_exit_status = 1
+    build_exit_status = 1
     try:
       step_result = self.m.step('generate compilation database for %s' % platform,
                                 command, stdout=self.m.raw_io.output_text())
-      ninja_log_exit_status = step_result.retcode
+      build_exit_status = step_result.retcode
     except self.m.step.StepFailure as e:
-      ninja_log_exit_status = e.retcode
+      build_exit_status = e.retcode
       raise e
     finally:
       self.m.goma.stop(ninja_log_outdir=self.c.debug_path,
                        ninja_log_command=command,
                        ninja_log_compiler='goma',
-                       ninja_log_exit_status=ninja_log_exit_status)
+                       build_exit_status=build_exit_status)
 
     return step_result
 

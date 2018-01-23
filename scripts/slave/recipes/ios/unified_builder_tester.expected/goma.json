@@ -428,7 +428,7 @@
       "[BUILDER_CACHE]/ios/src/out/Release-iphoneos",
       "--ninja-log-command",
       "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-C', Path('checkout', 'out','Release-iphoneos'), '-j', '50']",
-      "--ninja-log-exit-status",
+      "--build-exit-status",
       "0",
       "--ninja-log-compiler",
       "goma",

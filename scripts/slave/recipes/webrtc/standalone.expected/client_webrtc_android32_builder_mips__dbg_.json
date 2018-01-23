@@ -417,7 +417,7 @@
       "[BUILDER_CACHE]/Android32_Builder_MIPS__dbg_/src/out/Debug",
       "--ninja-log-command",
       "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Android32_Builder_MIPS__dbg_/src/out/Debug', '-j', 50]",
-      "--ninja-log-exit-status",
+      "--build-exit-status",
       "0",
       "--ninja-log-compiler",
       "goma",

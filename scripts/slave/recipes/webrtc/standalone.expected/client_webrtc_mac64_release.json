@@ -480,7 +480,7 @@
       "[BUILDER_CACHE]/Mac64_Release/src/out/Release",
       "--ninja-log-command",
       "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]/Mac64_Release/src/out/Release', '-j', 50]",
-      "--ninja-log-exit-status",
+      "--build-exit-status",
       "0",
       "--ninja-log-compiler",
       "goma-clang",

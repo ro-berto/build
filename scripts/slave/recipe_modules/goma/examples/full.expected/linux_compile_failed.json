@@ -217,7 +217,7 @@
       "out/Release",
       "--ninja-log-command",
       "['ninja', '-j', '80', '-C', 'out/Release']",
-      "--ninja-log-exit-status",
+      "--build-exit-status",
       "1",
       "--ninja-log-compiler",
       "goma",

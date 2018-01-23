@@ -282,7 +282,7 @@
       "None/out/Release",
       "--ninja-log-command",
       "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', 'None/out/Release', '-k', '0', '-j', 150, 'all']",
-      "--ninja-log-exit-status",
+      "--build-exit-status",
       "0",
       "--ninja-log-compiler",
       "goma-clang",

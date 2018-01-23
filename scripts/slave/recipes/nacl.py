@@ -90,7 +90,7 @@ def _AnnotatedStepsSteps(api, got_revision):
     raise e
   finally:
     if goma_dir:
-      api.goma.stop(ninja_log_exit_status=exit_status)
+      api.goma.stop(build_exit_status=exit_status)
 
 def _TriggerTestsSteps(api):
   if api.properties['buildername'] in trigger_map:

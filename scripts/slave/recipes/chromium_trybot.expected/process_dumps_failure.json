@@ -798,7 +798,7 @@
       "[BUILDER_CACHE]\\win\\src\\out\\Release",
       "--ninja-log-command",
       "['RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe', '-w', 'dupbuild=err', '-C', '[BUILDER_CACHE]\\\\win\\\\src\\\\out\\\\Release', '-j', 150, 'mini_installer', 'next_version_mini_installer']",
-      "--ninja-log-exit-status",
+      "--build-exit-status",
       "0",
       "--ninja-log-compiler",
       "goma",

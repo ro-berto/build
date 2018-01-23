@@ -31,10 +31,10 @@ def main():
   parser.add_argument('--ninja-log-command',
                       metavar='COMMAND',
                       help='command line options of the build.')
-  parser.add_argument('--ninja-log-exit-status',
+  parser.add_argument('--build-exit-status',
                       type=int,
                       metavar='EXIT_STATUS',
-                      help='ninja exit status.')
+                      help='build command exit status.')
   parser.add_argument('--goma-stats-file',
                       metavar='FILENAME',
                       help='Filename of a GomaStats binary protobuf. '
@@ -102,7 +102,7 @@ def main():
         args.ninja_log_outdir,
         args.ninja_log_compiler,
         args.ninja_log_command,
-        args.ninja_log_exit_status,
+        args.build_exit_status,
         override_gsutil=override_gsutil
     )
     if viewer_url is not None:
@@ -138,7 +138,7 @@ def main():
     assert args.json_status is not None and os.path.exists(args.json_status)
     counter = goma_utils.MakeGomaStatusCounter(
         args.json_status,
-        args.ninja_log_exit_status,
+        args.build_exit_status,
         builder=args.buildbot_buildername,
         master=args.buildbot_mastername,
         slave=args.buildbot_slavename,
@@ -148,7 +148,7 @@ def main():
 
     counter = goma_utils.MakeGomaFailureReasonCounter(
         args.json_status,
-        args.ninja_log_exit_status,
+        args.build_exit_status,
         builder=args.buildbot_buildername,
         master=args.buildbot_mastername,
         slave=args.buildbot_slavename,

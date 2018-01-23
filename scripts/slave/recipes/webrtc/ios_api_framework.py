@@ -33,7 +33,7 @@ def RunSteps(api):
 
   goma_dir = api.goma.ensure_goma()
   api.goma.start()
-  ninja_log_exit_status = 1
+  build_exit_status = 1
 
   try:
     build_script = api.path['checkout'].join('tools_webrtc', 'ios',
@@ -51,13 +51,13 @@ def RunSteps(api):
                 '--extra-gn-args=goma_dir=\"%s\"' % goma_dir,
                 '--verbose'],
       )
-    ninja_log_exit_status = step_result.retcode
+    build_exit_status = step_result.retcode
   except api.step.StepFailure as e:
-    ninja_log_exit_status = e.retcode
+    build_exit_status = e.retcode
     raise e
   finally:
     api.goma.stop(ninja_log_compiler='goma',
-                  ninja_log_exit_status=ninja_log_exit_status)
+                  build_exit_status=build_exit_status)
 
   if not api.tryserver.is_tryserver:
     output_dir = api.path['checkout'].join('out_ios_libs')
