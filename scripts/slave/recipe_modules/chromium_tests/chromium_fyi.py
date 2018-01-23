@@ -130,6 +130,8 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'swarming_dimensions': {
+        # This can be removed once (if?) we get 10.13 VMs.
+        'gpu': '8086:0a2e',
         'os': 'Mac-10.13',
       },
       'test_results_config': 'staging_server',
