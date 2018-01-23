@@ -44,19 +44,6 @@ def v8(c):
 
 
 @config_ctx()
-def deopt_fuzz_normal(c):
-  c.testing.test_args.append('--coverage=0.4')
-  c.testing.test_args.append('--distribution-mode=smooth')
-
-
-@config_ctx()
-def deopt_fuzz_random(c):
-  c.testing.test_args.append('--coverage=0.3')
-  c.testing.test_args.append('--coverage-lift=50')
-  c.testing.test_args.append('--distribution-mode=random')
-
-
-@config_ctx()
 def gc_stress(c):
   c.testing.test_args.append('--gc-stress')
 

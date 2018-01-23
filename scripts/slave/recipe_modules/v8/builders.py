@@ -64,11 +64,9 @@ class TestStepConfig(object):
 
 # Top-level test configs for convenience.
 Benchmarks = TestStepConfig('benchmarks')
-Deopt = TestStepConfig('deopt')
 D8Testing = TestStepConfig('d8testing')
 D8TestingRandomGC = TestStepConfig('d8testing_random_gc')
 Fuzz = TestStepConfig('jsfunfuzz')
-GCFuzz = TestStepConfig('gcfuzz')
 GCMole = TestStepConfig('gcmole')
 Mjsunit = TestStepConfig('mjsunit')
 MjsunitSPFrameAccess = TestStepConfig('mjsunit_sp_frame_access')
@@ -1111,7 +1109,6 @@ BUILDERS = {
         'cf_gs_acl': 'public-read',
         'cf_archive_name': 'd8',
         'triggers': [
-          'V8 Deopt Fuzzer',
           'V8 NumFuzz',
         ],
         'testing': {'platform': 'linux'},
@@ -1136,9 +1133,7 @@ BUILDERS = {
         'cf_gs_acl': 'public-read',
         'cf_archive_name': 'd8',
         'triggers': [
-          'V8 GC Fuzzer - debug',
           'V8 NumFuzz - debug',
-          'V8 Random Deopt Fuzzer - debug',
         ],
         'testing': {'platform': 'linux'},
       },
@@ -1321,7 +1316,6 @@ BUILDERS = {
         'enable_swarming': True,
         'triggers': [
           'V8 NumFuzz - TSAN',
-          'V8 TSAN GC Fuzzer',
         ],
         'testing': {'platform': 'linux'},
       },
@@ -1420,86 +1414,6 @@ BUILDERS = {
         'cf_archive_name': 'd8-asan',
         'testing': {'platform': 'win'},
       },
-      'V8 Deopt Fuzzer': {
-        'v8_apply_config': ['deopt_fuzz_normal'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'tester',
-        'enable_swarming': True,
-        'parent_buildername': 'V8 Linux64 - release builder',
-        'tests': [Deopt],
-        'variants': V8NoExhaustiveVariants,
-        'testing': {'platform': 'linux'},
-        'swarming_properties': SWARMING_FYI_PROPS,
-      },
-      'V8 Random Deopt Fuzzer - debug': {
-        'v8_apply_config': ['deopt_fuzz_random'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'tester',
-        'enable_swarming': True,
-        'parent_buildername': 'V8 Linux64 - debug builder',
-        'tests': [Deopt],
-        'variants': V8NoExhaustiveVariants,
-        'testing': {'platform': 'linux'},
-        'swarming_properties': {
-          'default_expiration': 2 * 60 * 60,
-          'default_hard_timeout': 2 * 60 * 60,
-          'default_priority': 35,
-        },
-      },
-      'V8 TSAN GC Fuzzer': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'tester',
-        'enable_swarming': True,
-        'parent_buildername': 'V8 Linux64 TSAN - release builder',
-        'tests': with_test_args(
-            'marking',
-            ['--coverage=1.0', '--stress-marking',],
-            [GCFuzz],
-        ) + with_test_args(
-            'scavenge',
-            ['--coverage=0.9', '--stress-scavenge'],
-            [GCFuzz],
-        ),
-        'testing': {'platform': 'linux'},
-        'swarming_properties': {
-          'default_expiration': 2 * 60 * 60,
-          'default_hard_timeout': 2 * 60 * 60,
-          'default_priority': 35,
-        },
-      },
-      'V8 GC Fuzzer - debug': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'tester',
-        'enable_swarming': True,
-        'parent_buildername': 'V8 Linux64 - debug builder',
-        'tests': with_test_args(
-            'marking',
-            ['--coverage=0.9', '--stress-marking'],
-            [GCFuzz],
-        ) + with_test_args(
-            'scavenge',
-            ['--coverage=0.8', '--stress-scavenge'],
-            [GCFuzz],
-        ),
-        'testing': {'platform': 'linux'},
-        'swarming_properties': {
-          'default_expiration': 2 * 60 * 60,
-          'default_hard_timeout': 2 * 60 * 60,
-          'default_priority': 35,
-        },
-      },
       'V8 NumFuzz': {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -1545,6 +1459,7 @@ BUILDERS = {
             'combined',
             [
               '--total-timeout-sec=2100', # 35 minutes
+              '--stress-deopt=1',
               '--stress-compaction=1',
               '--stress-gc=2',
               '--stress-marking=2',
@@ -1588,6 +1503,7 @@ BUILDERS = {
             'combined',
             [
               '--total-timeout-sec=2100', # 35 minutes
+              '--stress-deopt=1',
               '--stress-compaction=1',
               '--stress-gc=2',
               '--stress-marking=2',

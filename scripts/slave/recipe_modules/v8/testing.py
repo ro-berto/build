@@ -60,11 +60,6 @@ TEST_CONFIGS = freeze({
     'name': 'Benchmarks',
     'tests': ['benchmarks'],
   },
-  'deopt': {
-    'name': 'Deopt Fuzz',
-    'tool': 'run-deopt-fuzzer',
-    'isolated_target': 'run-num-fuzzer',
-  },
   'd8testing': {
     'name': 'Check - d8',
     'tests': ['d8_default'],
@@ -93,11 +88,6 @@ TEST_CONFIGS = freeze({
   'jsfunfuzz': {
     'tool': 'jsfunfuzz',
     'isolated_target': 'jsfunfuzz',
-  },
-  'gcfuzz': {
-    'name': 'GC Fuzz',
-    'tool': 'run-gc-fuzzer',
-    'isolated_target': 'run-num-fuzzer',
   },
   'gcmole': {
     'tool': 'run-gcmole',
@@ -681,26 +671,6 @@ class V8Fuzzer(V8GenericSwarmingTest):
     return TestResults.empty()
 
 
-class V8DeoptFuzzer(V8GenericSwarmingTest):
-  @property
-  def command(self):
-    return [
-      'tools/run-deopt-fuzzer.py',
-      '--mode', self.api.chromium.c.build_config_fs,
-      '--progress', 'verbose',
-    ] + self.api.v8.c.testing.test_args + self.test_step_config.test_args
-
-
-class V8GCFuzzer(V8GenericSwarmingTest):
-  @property
-  def command(self):
-    return [
-      'tools/run-gc-fuzzer.py',
-      '--mode', self.api.chromium.c.build_config_fs,
-      '--progress', 'verbose',
-    ] + self.api.v8.c.testing.test_args + self.test_step_config.test_args
-
-
 class V8GCMole(V8CompositeSwarmingTest):
   @property
   def composite_tests(self):
@@ -726,8 +696,6 @@ TOOL_TO_TEST = freeze({
 TOOL_TO_TEST_SWARMING = freeze({
   'check-static-initializers': V8CheckInitializers,
   'jsfunfuzz': V8Fuzzer,
-  'run-deopt-fuzzer': V8DeoptFuzzer,
-  'run-gc-fuzzer': V8GCFuzzer,
   'run-gcmole': V8GCMole,
   'run-num-fuzzer': V8SwarmingTest,
   'run-tests': V8SwarmingTest,

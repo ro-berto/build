@@ -514,6 +514,7 @@
       "--timeout=200",
       "--random-seed=94603393",
       "--total-timeout-sec=2100",
+      "--stress-deopt=1",
       "--stress-compaction=1",
       "--stress-gc=2",
       "--stress-marking=2",

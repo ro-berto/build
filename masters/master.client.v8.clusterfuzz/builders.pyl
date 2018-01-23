@@ -142,6 +142,8 @@
       "bot_pools": ["linux6"],
       "category": "2Linux",
     },
+    # TODO(machenbach): Remove the following 4 bots after 2018/1/31. They are
+    # kept only for log links on buildbot.
     "V8 Deopt Fuzzer": {
       "recipe": "v8",
       "use_remote_run": False,
