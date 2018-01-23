@@ -38,6 +38,7 @@ def Update(_config, active_master, c):
           'Fuchsia ARM64',
           'Fuchsia x64 Cast Audio',
           'Fuchsia x64',
+          'Ozone Linux',
       ]),
   ])
 
@@ -59,6 +60,7 @@ def Update(_config, active_master, c):
     {'name': 'Fuchsia ARM64', 'category': '5fuchsia'},
     {'name': 'Fuchsia x64 Cast Audio', 'category': '5fuchsia'},
     {'name': 'Fuchsia x64', 'category': '5fuchsia'},
+    {'name': 'Ozone Linux'},
   ]
 
   c['builders'].extend([

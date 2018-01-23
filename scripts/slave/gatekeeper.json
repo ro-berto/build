@@ -391,6 +391,19 @@
               "yyanagisawa@chromium.org"
             ],
             "forgiving_optional": ["*"]
+          },
+          "Ozone Linux": {
+            "tree_notify": [
+              "fwang@chromium.org",
+              "maksim.sisov@chromium.org",
+              "rjkroege@chromium.org",
+              "thomasanderson@chromium.org",
+              "timbrown@chromium.org",
+              "tonikitoo@chromium.org"
+            ],
+            "forgiving_optional": [
+              "*"
+            ]
           }
         }
       }
@@ -787,19 +800,6 @@
             ],
             "forgive_all": "true",
             "forgiving_optional": ["*"]
-          },
-          "Ozone Linux": {
-            "tree_notify": [
-              "fwang@chromium.org",
-              "maksim.sisov@chromium.org",
-              "rjkroege@chromium.org",
-              "thomasanderson@chromium.org",
-              "timbrown@chromium.org",
-              "tonikitoo@chromium.org"
-            ],
-            "forgiving_optional": [
-              "*"
-            ]
           },
           "Site Isolation Android": {
             "tree_notify": [

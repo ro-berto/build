@@ -403,7 +403,7 @@ TRYBOTS = freeze({
         'buildername': 'UBSanVptr Linux',
       }),
       'linux_chromium_ozone_compile_only_ng': simple_bot({
-        'mastername': 'chromium.fyi',
+        'mastername': 'chromium.linux',
         'buildername': 'Ozone Linux',
       }),
       'linux_site_isolation': simple_bot({
