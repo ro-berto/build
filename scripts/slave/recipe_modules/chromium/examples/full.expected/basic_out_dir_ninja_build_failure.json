@@ -347,7 +347,7 @@
       "/tmp/Debug",
       "--ninja-log-command",
       "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '/tmp/Debug', 'All']",
-      "--ninja-log-exit-status",
+      "--build-exit-status",
       "1",
       "--ninja-log-compiler",
       "goma"

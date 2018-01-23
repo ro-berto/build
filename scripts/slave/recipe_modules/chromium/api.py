@@ -447,7 +447,7 @@ class ChromiumApi(recipe_api.RecipeApi):
             '--skip-sendgomatsmon',
             '--ninja-log-outdir', target_output_dir,
             '--ninja-log-command', str(command),
-            '--ninja-log-exit-status', compile_exit_status,
+            '--build-exit-status', compile_exit_status,
             '--ninja-log-compiler', self.c.compile_py.compiler or 'unknown'
         ]
         self.m.build.python(
