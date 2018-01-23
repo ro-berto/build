@@ -46,7 +46,6 @@ def RunSteps(api):
           'build',
           build_script,
           args=['-r', api.webrtc.revision_number,
-                '-e',
                 '--use-goma',
                 '--extra-gn-args=goma_dir=\"%s\"' % goma_dir,
                 '--verbose'],
