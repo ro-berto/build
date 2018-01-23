@@ -581,6 +581,140 @@ def get_args_for_test(api, chromium_tests_api, test_spec, bot_update_step):
   return [string.Template(arg).safe_substitute(substitutions) for arg in args]
 
 
+def generator_common(api, spec, swarming_delegate, local_delegate, swarming_dimensions):
+  """Common logic for generating tests from JSON specs.
+
+  Args:
+    spec: the configuration of the test(s) that should be generated.
+    swarming_delegate: function to call to create a swarming test.
+    local_delgate: function to call to create a local test.
+
+  Yields:
+    instances of Test.
+  """
+
+  tests = []
+  kwargs = {}
+
+  target_name = str(spec['test'])
+  name = str(spec.get('name', target_name))
+
+  kwargs['target_name'] = target_name
+  kwargs['name'] = name
+
+  set_up = list(spec.get('setup', []))
+  processed_set_up = []
+  for set_up_step in set_up:
+    set_up_step_script = set_up_step.get('script')
+    if set_up_step_script:
+      if set_up_step_script.startswith('//'):
+        set_up_step_new = dict(set_up_step)
+        set_up_step_new['script'] = api.path['checkout'].join(
+            set_up_step_script[2:].replace('/', api.path.sep))
+        processed_set_up.append(set_up_step_new)
+      else:
+        api.python.failing_step(
+          'test spec format error',
+          textwrap.wrap(textwrap.dedent("""\
+              The test target "%s" contains a custom set up script "%s"
+              that doesn't match the expected format. Custom set up script entries
+              should be a path relative to the top-level chromium src directory and
+              should start with "//".
+              """ % (name, set_up_step_script))),
+          as_log='details')
+  kwargs['set_up'] = processed_set_up
+
+  tear_down = list(spec.get('teardown', []))
+  processed_tear_down = []
+  for tear_down_step in tear_down:
+    tear_down_step_script = tear_down_step.get('script')
+    if tear_down_step_script:
+      if tear_down_step_script.startswith('//'):
+        tear_down_step_new = dict(tear_down_step)
+        tear_down_step_new['script'] = api.path['checkout'].join(
+            tear_down_step_script[2:].replace('/', api.path.sep))
+        processed_tear_down.append(tear_down_step_new)
+      else:
+        api.python.failing_step(
+          'test spec format error',
+          textwrap.wrap(textwrap.dedent("""\
+              The test target "%s" contains a custom tear down script "%s"
+              that doesn't match the expected format. Custom tear down script entries
+              should be a path relative to the top-level chromium src directory and
+              should start with "//".
+              """ % (name, tear_down_step_script))),
+          as_log='details')
+  kwargs['tear_down'] = processed_tear_down
+
+  swarming_spec = spec.get('swarming', {})
+  if swarming_spec.get('can_use_on_swarming_builders'):
+    swarming_dimension_sets = swarming_spec.get('dimension_sets')
+    kwargs['expiration'] = swarming_spec.get('expiration')
+    kwargs['hard_timeout'] = swarming_spec.get('hard_timeout')
+    kwargs['priority'] = swarming_spec.get('priority_adjustment')
+    kwargs['shards'] = swarming_spec.get('shards', 1)
+    packages = swarming_spec.get('cipd_packages')
+    if packages:
+      kwargs['cipd_packages'] = [
+          (p['location'], p['cipd_package'], p['revision'])
+          for p in packages
+      ]
+
+    merge = dict(spec.get('merge', {}))
+    if merge:
+      merge_script = merge.get('script')
+      if merge_script:
+        if merge_script.startswith('//'):
+          merge['script'] = api.path['checkout'].join(
+              merge_script[2:].replace('/', api.path.sep))
+        else:
+          api.python.failing_step(
+              'test spec format error',
+              textwrap.wrap(textwrap.dedent("""\
+                  The test target "%s" contains a custom merge_script "%s"
+                  that doesn't match the expected format. Custom merge_script entries
+                  should be a path relative to the top-level chromium src directory and
+                  should start with "//".
+                  """ % (name, merge_script))),
+              as_log='details')
+    kwargs['merge'] = merge
+
+    trigger_script = dict(spec.get('trigger_script', {}))
+    if trigger_script:
+      trigger_script_path = trigger_script.get('script')
+      if trigger_script_path:
+        if trigger_script_path.startswith('//'):
+          trigger_script['script'] = api.path['checkout'].join(
+              trigger_script_path[2:].replace('/', api.path.sep))
+        else:
+          api.python.failing_step(
+              'test spec format error',
+              textwrap.wrap(textwrap.dedent("""\
+                  The test target "%s" contains a custom trigger_script "%s"
+                  that doesn't match the expected format. Custom trigger_script entries
+                  should be a path relative to the top-level chromium src directory and
+                  should start with "//".
+                  """ % (name, trigger_script_path))),
+              as_log='details')
+    kwargs['trigger_script'] = trigger_script
+
+    swarming_dimensions = swarming_dimensions or {}
+    for dimensions in swarming_dimension_sets or [{}]:
+      # Yield potentially multiple invocations of the same test, on
+      # different machine configurations.
+      new_dimensions = dict(swarming_dimensions)
+      new_dimensions.update(dimensions)
+      kwargs['dimensions'] = new_dimensions
+
+      tests.append(swarming_delegate(spec, **kwargs))
+
+  else:
+    tests.append(local_delegate(spec, **kwargs))
+
+  for t in tests:
+    yield t
+
+
 def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
                    bot_update_step,
                    swarming_dimensions=None, scripts_compile_targets=None,
@@ -599,161 +733,42 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
     return [canonicalize_test(t) for t in
             test_spec.get(buildername, {}).get('gtest_tests', [])]
 
-  for test in get_tests(api):
-    args = test.get('args', [])
-    if test['shard_index'] != 0 or test['total_shards'] != 1:
-      args.extend(['--test-launcher-shard-index=%d' % test['shard_index'],
-                   '--test-launcher-total-shards=%d' % test['total_shards']])
-    use_swarming = False
-    swarming_shards = 1
-    swarming_dimension_sets = None
-    swarming_priority = None
-    swarming_expiration = None
-    swarming_hard_timeout = None
-    cipd_packages = None
+  def gtest_delegate_common(spec, name=None, **kwargs):
+    common_gtest_kwargs = {}
+    args = spec.get('args', [])
+    if spec['shard_index'] != 0 or spec['total_shards'] != 1:
+      args.extend(['--test-launcher-shard-index=%d' % spec['shard_index'],
+                   '--test-launcher-total-shards=%d' % spec['total_shards']])
+    common_gtest_kwargs['args'] = args
 
-    swarming_spec = test.get('swarming', {})
-    if swarming_spec.get('can_use_on_swarming_builders'):
-      use_swarming = True
-      swarming_shards = swarming_spec.get('shards', 1)
-      swarming_dimension_sets = swarming_spec.get('dimension_sets')
-      swarming_priority = swarming_spec.get('priority_adjustment')
-      swarming_expiration = swarming_spec.get('expiration')
-      swarming_hard_timeout = swarming_spec.get('hard_timeout')
-      packages = swarming_spec.get('cipd_packages')
-      if packages:
-        cipd_packages = [(p['location'],
-                          p['cipd_package'],
-                          p['revision'])
-                         for p in packages]
+    common_gtest_kwargs['override_compile_targets'] = spec.get(
+        'override_compile_targets', None)
+    common_gtest_kwargs['override_isolate_target'] = spec.get(
+        'override_isolate_target', None)
+    common_gtest_kwargs['upload_to_flake_predictor'] = spec.get(
+        'upload_to_flake_predictor', False)
 
-    override_compile_targets = test.get('override_compile_targets', None)
-    override_isolate_target = test.get('override_isolate_target', None)
-    upload_to_flake_predictor = test.get('upload_to_flake_predictor', False)
-    target_name = str(test['test'])
-    name = str(test.get('name', target_name))
-    swarming_dimensions = swarming_dimensions or {}
-    use_xvfb = test.get('use_xvfb', True)
-    merge = dict(test.get('merge', {}))
-    if merge:
-      merge_script = merge.get('script')
-      if merge_script:
-        if merge_script.startswith('//'):
-          merge['script'] = api.path['checkout'].join(
-              merge_script[2:].replace('/', api.path.sep))
-        else:
-          api.python.failing_step(
-              'gtest spec format error',
-              textwrap.wrap(textwrap.dedent("""\
-                  The gtest target "%s" contains a custom merge_script "%s"
-                  that doesn't match the expected format. Custom merge_script entries
-                  should be a path relative to the top-level chromium src directory and
-                  should start with "//".
-                  """ % (name, merge_script))),
-              as_log='details')
+    common_gtest_kwargs['waterfall_mastername'] = mastername
+    common_gtest_kwargs['waterfall_buildername'] = buildername
 
-    set_up = list(test.get('setup', []))
-    processed_set_up = []
-    for set_up_step in set_up:
-      set_up_step_script = set_up_step.get('script')
-      if set_up_step_script:
-        if set_up_step_script.startswith('//'):
-          set_up_step_new = dict(set_up_step)
-          set_up_step_new['script'] = api.path['checkout'].join(
-              set_up_step_script[2:].replace('/', api.path.sep))
-          processed_set_up.append(set_up_step_new)
-        else:
-          api.python.failing_step(
-            'gtest spec format error',
-            textwrap.wrap(textwrap.dedent("""\
-                The gtest target "%s" contains a custom set up script "%s"
-                that doesn't match the expected format. Custom set up script entries
-                should be a path relative to the top-level chromium src directory and
-                should start with "//".
-                """ % (name, set_up_step_script))),
-            as_log='details')
-    set_up = processed_set_up
+    return common_gtest_kwargs
 
-    tear_down = list(test.get('teardown', []))
-    processed_tear_down = []
-    for tear_down_step in tear_down:
-      tear_down_step_script = tear_down_step.get('script')
-      if tear_down_step_script:
-        if tear_down_step_script.startswith('//'):
-          tear_down_step_new = dict(tear_down_step)
-          tear_down_step_new['script'] = api.path['checkout'].join(
-              tear_down_step_script[2:].replace('/', api.path.sep))
-          processed_tear_down.append(tear_down_step_new)
-        else:
-          api.python.failing_step(
-            'gtest spec format error',
-            textwrap.wrap(textwrap.dedent("""\
-                The gtest target "%s" contains a custom tear down script "%s"
-                that doesn't match the expected format. Custom tear down script entries
-                should be a path relative to the top-level chromium src directory and
-                should start with "//".
-                """ % (name, tear_down_step_script))),
-            as_log='details')
-    tear_down = processed_tear_down
+  def gtest_swarming_delegate(spec, **kwargs):
+    kwargs.update(gtest_delegate_common(spec, **kwargs))
+    return SwarmingGTestTest(**kwargs)
 
-    trigger_script = dict(test.get('trigger_script', {}))
-    if trigger_script:
-      trigger_script_path = trigger_script.get('script')
-      if trigger_script_path:
-        if trigger_script_path.startswith('//'):
-          trigger_script['script'] = api.path['checkout'].join(
-              trigger_script_path[2:].replace('/', api.path.sep))
-        else:
-          api.python.failing_step(
-              'isolated_scripts spec format error',
-              textwrap.wrap(textwrap.dedent("""\
-                  The gtest target "%s" contains a custom trigger_script "%s"
-                  that doesn't match the expected format. Custom trigger_script entries
-                  should be a path relative to the top-level chromium src directory and
-                  should start with "//".
-                  """ % (name, trigger_script_path))),
-              as_log='details')
+  def gtest_local_delegate(spec, **kwargs):
+    kwargs.update(gtest_delegate_common(spec, **kwargs))
+    # TODO(jbudorick): Stop passing flakiness_dash.
+    kwargs['flakiness_dash'] = True
+    kwargs['use_xvfb'] = spec.get('use_xvfb', True)
+    return LocalGTestTest(**kwargs)
 
-    if use_swarming:
-      for dimensions in swarming_dimension_sets or [{}]:
-        # Yield potentially multiple invocations of the same test, on
-        # different machine configurations.
-        new_dimensions = dict(swarming_dimensions)
-        new_dimensions.update(dimensions)
-        yield SwarmingGTestTest(
-            name,
-            args=args,
-            target_name=target_name,
-            shards=swarming_shards,
-            dimensions=new_dimensions,
-            priority=swarming_priority,
-            expiration=swarming_expiration,
-            hard_timeout=swarming_hard_timeout,
-            override_compile_targets=override_compile_targets,
-            override_isolate_target=override_isolate_target,
-            upload_to_flake_predictor=upload_to_flake_predictor,
-            cipd_packages=cipd_packages,
-            waterfall_mastername=mastername,
-            waterfall_buildername=buildername,
-            merge=merge,
-            trigger_script=trigger_script,
-            set_up=set_up,
-            tear_down=tear_down)
-
-    else:
-      yield LocalGTestTest(
-          name,
-          args=args,
-          target_name=target_name,
-          flakiness_dash=True,
-          override_compile_targets=override_compile_targets,
-          override_isolate_target=override_isolate_target,
-          upload_to_flake_predictor=upload_to_flake_predictor,
-          use_xvfb=use_xvfb,
-          waterfall_mastername=mastername,
-          waterfall_buildername=buildername,
-          set_up=set_up,
-          tear_down=tear_down)
+  for spec in get_tests(api):
+    for t in generator_common(
+        api, spec, gtest_swarming_delegate, gtest_local_delegate,
+        swarming_dimensions):
+      yield t
 
 
 def generate_instrumentation_test(api, chromium_tests_api, mastername,

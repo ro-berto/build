@@ -109,11 +109,17 @@ def GenTests(api):
               'merge': {
                   'script': '//merge_script.py',
               },
+              'swarming': {
+                'can_use_on_swarming_builders': True,
+              },
           },
           mastername='test_mastername',
           buildername='test_buildername',
           buildnumber=123,
           bot_id='test_bot_id',
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
       )
   )
 
@@ -125,11 +131,17 @@ def GenTests(api):
               'merge': {
                   'script': 'merge_script.py',
               },
+              'swarming': {
+                'can_use_on_swarming_builders': True,
+              },
           },
           mastername='test_mastername',
           buildername='test_buildername',
           buildnumber=123,
           bot_id='test_bot_id',
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
       )
   )
 
@@ -228,11 +240,17 @@ def GenTests(api):
               'trigger_script': {
                   'script': '//trigger_script.py',
               },
+              'swarming': {
+                'can_use_on_swarming_builders': True,
+              },
           },
           mastername='test_mastername',
           buildername='test_buildername',
           buildnumber=123,
           bot_id='test_bot_id',
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
       )
   )
 
@@ -244,11 +262,17 @@ def GenTests(api):
               'trigger_script': {
                   'script': 'trigger_script.py',
               },
+              'swarming': {
+                'can_use_on_swarming_builders': True,
+              },
           },
           mastername='test_mastername',
           buildername='test_buildername',
           buildnumber=123,
           bot_id='test_bot_id',
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
       )
   )
 

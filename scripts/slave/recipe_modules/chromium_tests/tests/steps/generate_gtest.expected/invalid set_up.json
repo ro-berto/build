@@ -154,10 +154,10 @@
       "-u",
       "import sys; sys.exit(1)"
     ],
-    "name": "gtest spec format error",
+    "name": "test spec format error",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
-      "@@@STEP_LOG_LINE@details@The gtest target \"base_unittests\" contains a custom set up script@@@",
+      "@@@STEP_LOG_LINE@details@The test target \"base_unittests\" contains a custom set up script@@@",
       "@@@STEP_LOG_LINE@details@\"set_up_script2.py\" that doesn't match the expected format. Custom set@@@",
       "@@@STEP_LOG_LINE@details@up script entries should be a path relative to the top-level chromium@@@",
       "@@@STEP_LOG_LINE@details@src directory and should start with \"//\".@@@",
@@ -167,7 +167,7 @@
   },
   {
     "name": "$result",
-    "reason": "Step('gtest spec format error') failed with return_code 1",
+    "reason": "Step('test spec format error') failed with return_code 1",
     "recipe_result": null,
     "status_code": 1
   }

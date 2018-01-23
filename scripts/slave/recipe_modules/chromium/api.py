@@ -508,7 +508,7 @@ class ChromiumApi(recipe_api.RecipeApi):
               **kwargs):
     """Return a runtest.py invocation."""
     args = args or []
-    assert isinstance(args, list)
+    assert isinstance(args, list), '%r' % args
 
     t_name, ext = self.m.path.splitext(self.m.path.basename(test))
     if not python_mode and self.m.platform.is_win and ext == '':
