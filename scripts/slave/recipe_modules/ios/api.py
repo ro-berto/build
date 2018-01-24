@@ -324,6 +324,7 @@ class iOSApi(recipe_api.RecipeApi):
     }
     if self.__config.get('xcode build version'):
       self.ensure_xcode(self.__config['xcode build version'])
+      self.m.chromium.c.env.FORCE_MAC_TOOLCHAIN = 0
       env['FORCE_MAC_TOOLCHAIN'] = ''
     else:
       env['FORCE_MAC_TOOLCHAIN'] = '1'
