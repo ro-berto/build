@@ -776,28 +776,26 @@ def generate_instrumentation_test(api, chromium_tests_api, mastername,
                                   swarming_dimensions=None,
                                   scripts_compile_targets=None,
                                   bot_config=None):
-  # Do not try to add swarming support here.
-  # Instead, swarmed instrumentation tests should be specified as gtests.
-  # (Yes, it's a little weird.)
-  def instrumentation_swarming_delegate(spec, **kwargs):
-    api.python.failing_step(
-        'instrumentation test swarming error',
-        'The tests can only be run locally.')
+  for test in test_spec.get(buildername, {}).get('instrumentation_tests', []):
+    target_name = str(test['test'])
+    test_name = str(test.get('name', target_name))
+    args = get_args_for_test(api, chromium_tests_api, test,
+                             bot_update_step)
 
-  def instrumentation_local_delegate(spec, **kwargs):
-    kwargs['result_details'] = True
-    kwargs['store_tombstones'] = True
-    kwargs['trace_output'] = spec.get('trace_output', False)
-    kwargs['timeout_scale'] = spec.get('timeout_scale')
-    kwargs.update(get_args_for_test(
-        api, chromium_tests_api, spec, bot_update_step))
-    return AndroidInstrumentationTest(**kwargs)
+    # Do not try to add swarming support here.
+    # Instead, swarmed instrumentation tests should be specified as gtests.
+    # (Yes, it's a little weird.)
 
-  for spec in test_spec.get(buildername, {}).get('instrumentation_tests', []):
-    for t in generator_common(
-        api, spec, instrumentation_swarming_delegate,
-        instrumentation_local_delegate, None):
-      yield t
+    yield AndroidInstrumentationTest(
+        test_name,
+        target_name=target_name,
+        compile_targets=test.get('override_compile_targets'),
+        timeout_scale=test.get('timeout_scale'),
+        result_details=True,
+        trace_output=test.get('trace_output', False),
+        store_tombstones=True,
+        args=args,
+        waterfall_mastername=mastername, waterfall_buildername=buildername)
 
 
 def generate_junit_test(api, chromium_tests_api, mastername, buildername,
@@ -2249,7 +2247,7 @@ class AndroidInstrumentationTest(AndroidTest):
                tool=None, additional_apks=None, store_tombstones=False,
                trace_output=False, result_details=False, args=None,
                waterfall_mastername=None, waterfall_buildername=None,
-               target_name=None, set_up=None, tear_down=None):
+               target_name=None):
     suite_defaults = (
         AndroidInstrumentationTest._DEFAULT_SUITES.get(name)
         or AndroidInstrumentationTest._DEFAULT_SUITES_BY_TARGET.get(name)
@@ -2280,16 +2278,6 @@ class AndroidInstrumentationTest(AndroidTest):
     self._store_tombstones = store_tombstones
     self._result_details = result_details
     self._args = args
-    self._set_up = set_up
-    self._tear_down = tear_down
-
-  @property
-  def set_up(self):
-    return self._set_up
-
-  @property
-  def tear_down(self):
-    return self._tear_down
 
   @property
   def uses_local_devices(self):

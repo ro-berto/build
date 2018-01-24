@@ -32,12 +32,6 @@ def RunSteps(api):
         {'script.py': ['compile_target']},
         script_args=['some', 'args'],
         override_compile_targets=['other_target']))
-  if api.properties.get('instrumentation_test'):
-    tests.append(api.chromium_tests.steps.AndroidInstrumentationTest(
-        'sample_android_instrumentation_test',
-        set_up=[{'name': 'set_up', 'script': 'set_up_script', 'args': []}],
-        tear_down=[{'name': 'tear_down',
-                    'script': 'tear_down_script', 'args': []}]))
   if api.tryserver.is_tryserver:
     bot_config = api.chromium_tests.trybots[
         api.properties['mastername']]['builders'][api.properties['buildername']]
@@ -104,12 +98,4 @@ def GenTests(api):
           mastername='chromium.linux',
           buildername='Linux Tests',
           script_test=True)
-  )
-
-  yield (
-      api.test('instrumentation_test') +
-      api.properties.generic(
-          mastername='chromium.fyi',
-          buildername='Android VR Tests',
-          instrumentation_test=True)
   )
