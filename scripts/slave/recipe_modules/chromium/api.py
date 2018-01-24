@@ -730,6 +730,62 @@ class ChromiumApi(recipe_api.RecipeApi):
     self.c.gyp_env.GYP_DEFINES['use_goma'] = 1
     self.c.compile_py.goma_dir = goma_dir
 
+  def get_mac_toolchain_installer(self):
+    cipd_root = self.m.path['start_dir']
+    cipd_pkg = self.c.mac_toolchain.installer_cipd_package
+    pkg_version = self.c.mac_toolchain.installer_version
+    cmd = self.c.mac_toolchain.installer_cmd
+    self.m.cipd.ensure(cipd_root, {cipd_pkg: pkg_version})
+    return cipd_root.join(cmd)
+
+  # TODO(crbug.com/797051): remove this when the old "hermetic" flow is
+  # no longer used.
+  def delete_old_mac_toolchain(self):
+    """Remove the old "hermetic" toolchain cache.
+
+    This is to expose any lingering dependencies on the old cache.
+    """
+    old_cache = self.m.path['checkout'].join(
+        'build', '%s_files' % self.m.chromium.c.TARGET_PLATFORM)
+    self.m.file.rmtree('delete deprecated Xcode cache', old_cache)
+
+  def ensure_mac_toolchain(self):
+    if not self.c.mac_toolchain.enabled:
+      return
+    xcode_build_version = self.c.mac_toolchain.xcode_build_version.lower()
+    kind = self.c.TARGET_PLATFORM
+    cipd_credentials = self.c.mac_toolchain.cipd_credentials
+    # TODO(sergeyberezin): for LUCI migration, this must be a requested named
+    # cache. Make sure it exists, to avoid downloading Xcode on every build.
+    xcode_app_path = self.m.path['cache'].join(
+        'xcode_%s_%s.app' % (kind, xcode_build_version))
+
+    with self.m.step.nest('ensure xcode') as step_result:
+      step_result.presentation.step_text = (
+          'Ensuring Xcode version %s in %s' % (
+              xcode_build_version, xcode_app_path))
+
+      self.delete_old_mac_toolchain()
+
+      mac_toolchain_cmd = self.get_mac_toolchain_installer()
+      install_args = [
+          mac_toolchain_cmd, 'install',
+          '-kind', kind,
+          '-xcode-version', xcode_build_version,
+          '-output-dir', xcode_app_path,
+      ]
+
+      if cipd_credentials:
+        install_args.extend(['-service-account-json', cipd_credentials])
+
+      self.m.step('install xcode', install_args)
+      self.m.step('select xcode', [
+          'sudo', 'xcode-select', '-switch', xcode_app_path])
+
+  def ensure_toolchains(self):
+    if self.c.HOST_PLATFORM == 'mac':
+      self.ensure_mac_toolchain()
+
   def clobber_if_needed(self):
     """Add an explicit clobber step if requested."""
     # clobber_before_runhooks is true for bots that apply the 'clobber' config,

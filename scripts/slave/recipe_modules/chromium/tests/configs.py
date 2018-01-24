@@ -341,3 +341,23 @@ def GenTests(api):
       api.properties(chromium_apply_config=['fetch_telemetry_dependencies']) +
       api.post_process(post_process.DropExpectation)
   )
+
+  yield (
+      api.test('mac_toolchain') +
+      api.platform('mac', 64) +
+      api.properties(
+          target_platform='mac',
+          chromium_apply_config=['mac_toolchain'],
+      ) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('ios_toolchain') +
+      api.platform('mac', 64) +
+      api.properties(
+          target_platform='ios',
+          chromium_apply_config=['mac_toolchain'],
+      ) +
+      api.post_process(post_process.DropExpectation)
+  )

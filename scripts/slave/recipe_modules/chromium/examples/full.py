@@ -20,6 +20,7 @@ def RunSteps(api):
   out_dir = api.properties.get('out_dir', None)
   failfast = api.properties.get('failfast', False);
   ninja_confirm_noop = api.properties.get('ninja_confirm_noop', False)
+  configs = api.properties.get('configs', [])
 
   with api.chromium.chromium_layout():
     bot_config = api.chromium_tests.create_bot_config_object(
@@ -31,6 +32,9 @@ def RunSteps(api):
 
     if ninja_confirm_noop:
       api.chromium.apply_config('ninja_confirm_noop')
+
+    for config in configs:
+      api.chromium.apply_config(config)
 
     api.chromium_tests.prepare_checkout(bot_config)
 
@@ -180,3 +184,28 @@ def GenTests(api):
                          },
                      ],
                  })))
+
+  yield (api.test('mac_basic') +
+         api.platform('mac', 64) +
+         api.properties(
+             mastername='chromium.mac',
+             buildername='Mac Builder',
+             bot_id='build1-a1',
+             buildnumber='77457',
+             out_dir='/tmp',
+             target_platform='mac',
+         )
+  )
+
+  yield (api.test('mac_toolchain') +
+         api.platform('mac', 64) +
+         api.properties(
+             mastername='chromium.mac',
+             buildername='Mac Builder',
+             bot_id='build1-a1',
+             buildnumber='77457',
+             out_dir='/tmp',
+             target_platform='mac',
+             configs=['mac_toolchain'],
+         )
+  )

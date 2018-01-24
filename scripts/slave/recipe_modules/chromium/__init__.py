@@ -1,5 +1,6 @@
 DEPS = [
   'depot_tools/bot_update',
+  'depot_tools/cipd',
   'depot_tools/depot_tools',
   # in order to have set_config automatically populate gclient
   'depot_tools/gclient',

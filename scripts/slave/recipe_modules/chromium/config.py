@@ -46,7 +46,6 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       goma_max_active_fail_fallback_tasks = Single(int, empty_val=None, required=False),
       goma_enable_localoutputcache = Single(bool, empty_val=False, required=False),
       goma_enable_global_file_id_cache = Single(bool, empty_val=False, required=False),
-      xcode_sdk = Single(basestring, required=False),
       ninja_confirm_noop = Single(bool, empty_val=False, required=False),
       set_build_data_dir = Single(bool, empty_val=False, required=False),
       goma_high_parallel = Single(bool, empty_val=False, required=False),
@@ -72,6 +71,20 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       GOMA_STUBBY_PROXY_IP_ADDRESS = Single(basestring, required=False),
       GOMA_SETTINGS_SERVER = Single(basestring, required=False),
       FORCE_MAC_TOOLCHAIN = Single(int, required=False),
+    ),
+    mac_toolchain = ConfigGroup(
+      enabled = Single(bool, empty_val=False, required=False),
+      # The build version of Xcode itself. Update its value to change the Xcode
+      # version.
+      xcode_build_version = Single(basestring),
+      # Xcode installer configs. These normally don't change with Xcode version.
+      installer_cipd_package = Single(basestring),
+      installer_version = Single(basestring),
+      installer_cmd = Single(basestring),
+      # CIPD cannot distribute Xcode publicly, hence its package requires
+      # credentials on buildbot slaves. LUCI bots should NOT set this var, to
+      # let CIPD use credentials from the LUCI context.
+      cipd_credentials = Single(basestring, required=False),
     ),
     project_generator = ConfigGroup(
       tool = Single(basestring, empty_val='mb'),
@@ -190,6 +203,14 @@ def BASE(c):
     c.gyp_env.GYP_DEFINES['target_arch'] = gyp_arch
 
   if c.TARGET_PLATFORM == 'mac':
+    c.mac_toolchain.xcode_build_version = '9C40b'
+    c.mac_toolchain.installer_cipd_package = \
+        'infra/tools/mac_toolchain/${platform}'
+    c.mac_toolchain.installer_version = \
+        'git_revision:2b69be6203f56a970202d9b5984557c0453b4eb0'
+    c.mac_toolchain.installer_cmd = 'mac_toolchain'
+    # TODO(crbug.com/797051): remove this when all builds switch to the new
+    # Xcode flow.
     c.env.FORCE_MAC_TOOLCHAIN = 1
 
   if c.BUILD_CONFIG in ['Coverage', 'Release']:
@@ -792,3 +813,18 @@ def download_vr_test_apks(c):
 @config_ctx()
 def fetch_telemetry_dependencies(c):
   c.gyp_env.GYP_DEFINES['fetch_telemetry_dependencies'] = 1
+
+@config_ctx()
+def mac_toolchain(c, xcode_build_version=None):
+  if c.HOST_PLATFORM != 'mac': # pragma: no cover
+    raise BadConf('Cannot setup Xcode on "%s"' % c.HOST_PLATFORM)
+
+  c.mac_toolchain.enabled = True
+  if xcode_build_version: # pragma: no cover
+    c.mac_toolchain.xcode_build_version = xcode_build_version
+  # TODO(crbug.com/790154): make this conditional, do not set for LUCI bots.
+  c.mac_toolchain.cipd_credentials = \
+        '/creds/service_accounts/service-account-xcode-cipd-access.json'
+  # TODO(crbug.com/797051): remove this when all builds switch to the new Xcode
+  # flow.
+  c.env.FORCE_MAC_TOOLCHAIN = 0

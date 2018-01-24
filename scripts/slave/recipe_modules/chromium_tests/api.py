@@ -206,6 +206,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.m.chromium.ensure_goma(
           canary=self.m.chromium.c.compile_py.goma_canary)
 
+    # Installs toolchains configured in the current bot, if any.
+    self.m.chromium.ensure_toolchains()
+
     self.set_up_swarming(bot_config)
     self.runhooks(update_step)
 
