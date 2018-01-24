@@ -64,3 +64,24 @@ def GenTests(api):
           buildnumber=123,
       )
   )
+
+  yield (
+      api.test('invalid_swarming_dimensions') +
+      api.properties(
+          single_spec={
+              'test': 'example_instrumentation_test',
+              'swarming': {
+                  'dimension_sets': [{
+                      'device_os': 'some_os',
+                      'device_type': 'some_device_type'
+                  }],
+                  'can_use_on_swarming_builders': True
+              },
+              'precommit_mode': False
+          },
+          mastername='test_mastername',
+          buildername='test_buildername',
+          buildnumber=123,
+          bot_id='test_bot_id',
+      )
+  )
