@@ -986,7 +986,7 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [V8Testing(5)],
         'swarming_dimensions': {
-          'os': 'Windows-7-SP1',
+          'os': 'Windows-10',
         },
         'testing': {'platform': 'win'},
       },
@@ -2591,8 +2591,7 @@ BUILDERS = {
         'parent_buildername': 'v8_win_asan_rel_ng',
         'enable_swarming': True,
         'swarming_dimensions': {
-          'os': 'Windows-7-SP1',
-          'cpu': 'x86-64',
+          'os': 'Windows-10',
         },
         'tests': [V8Testing(5)],
         'testing': {'platform': 'linux'},
