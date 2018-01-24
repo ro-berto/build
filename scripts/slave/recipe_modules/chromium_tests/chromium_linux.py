@@ -20,6 +20,10 @@ SPEC = {
         'ninja_confirm_noop',
         'chrome_with_codecs',
         'fetch_telemetry_dependencies',
+
+        # This is specified because 'linux_chromium_rel_ng' builder
+        # is one of the slowest builder in CQ (crbug.com/804251).
+        'goma_high_parallel',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {

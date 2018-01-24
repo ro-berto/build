@@ -89,6 +89,7 @@ SPEC = {
         'ninja_confirm_noop',
         'chrome_with_codecs',
         'fetch_telemetry_dependencies',
+        'goma_high_parallel',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {

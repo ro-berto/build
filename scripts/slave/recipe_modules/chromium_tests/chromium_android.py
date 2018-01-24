@@ -355,6 +355,10 @@ SPEC = {
       'chromium_apply_config': [
         'chrome_with_codecs',
         'download_vr_test_apks',
+
+        # This is specified because 'android_n5x_swarming_rel' builder
+        # is one of the slowest builder in CQ (crbug.com/804251).
+        'goma_high_parallel',
       ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
