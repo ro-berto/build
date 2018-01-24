@@ -39,6 +39,7 @@ PROPERTIES = {
   'clang': Property(default=False, kind=bool),
   'msvc': Property(default=False, kind=bool),
   'rel': Property(default=False, kind=bool),
+  'jumbo': Property(default=False, kind=bool),
   'skip_test': Property(default=False, kind=bool),
   'target_os': Property(default=None, kind=str),
 }
@@ -54,7 +55,7 @@ def _CheckoutSteps(api, target_os):
   api.gclient.runhooks()
   return update_step.presentation.properties['got_revision']
 
-def _OutPath(memory_tool, skia, xfa, v8, clang, msvc, rel):
+def _OutPath(memory_tool, skia, xfa, v8, clang, msvc, rel, jumbo):
   out_dir = 'release' if rel else 'debug'
   if skia:
     out_dir += "_skia"
@@ -66,6 +67,8 @@ def _OutPath(memory_tool, skia, xfa, v8, clang, msvc, rel):
     out_dir += "_clang"
   elif msvc:
     out_dir += "_msvc"
+  if jumbo:
+    out_dir += "_jumbo"
   if memory_tool == 'asan':
     out_dir += "_asan"
   elif memory_tool == 'msan':
@@ -76,7 +79,7 @@ def _OutPath(memory_tool, skia, xfa, v8, clang, msvc, rel):
 # _GNGenBuilds calls 'gn gen' and returns a dictionary of
 # the used build configuration to be used by Gold.
 def _GNGenBuilds(api, memory_tool, skia, xfa, v8, target_cpu, clang, msvc, rel,
-                 target_os, out_dir):
+                 jumbo, target_os, out_dir):
   api.goma.ensure_goma()
   gn_bool = {True: 'true', False: 'false'}
   # Generate build files by GN.
@@ -108,6 +111,9 @@ def _GNGenBuilds(api, memory_tool, skia, xfa, v8, target_cpu, clang, msvc, rel,
   else:
     # All other platforms already build with Clang, so no need to set it.
     assert not clang
+
+  if jumbo:
+    args.append('use_jumbo_build=true')
 
   if memory_tool == 'asan':
     args.append('is_asan=true')
@@ -219,13 +225,13 @@ def _RunTests(api, memory_tool, v8, out_dir, build_config, revision):
 
 
 def RunSteps(api, memory_tool, skia, xfa, v8, target_cpu, clang, msvc, rel,
-             skip_test, target_os):
+             jumbo, skip_test, target_os):
   revision = _CheckoutSteps(api, target_os)
 
-  out_dir = _OutPath(memory_tool, skia, xfa, v8, clang, msvc, rel)
+  out_dir = _OutPath(memory_tool, skia, xfa, v8, clang, msvc, rel, jumbo)
 
   build_config = _GNGenBuilds(api, memory_tool, skia, xfa, v8, target_cpu,
-                              clang, msvc, rel, target_os, out_dir)
+                              clang, msvc, rel, jumbo, target_os, out_dir)
 
   _BuildSteps(api, clang, out_dir)
 
@@ -521,6 +527,17 @@ def GenTests(api):
   )
 
   yield (
+      api.test('win_xfa_jumbo') +
+      api.platform('win', 64) +
+      api.properties(xfa=True,
+                     jumbo=True,
+                     mastername="client.pdfium",
+                     buildername='windows_xfa_jumbo',
+                     buildnumber='1234',
+                     bot_id="test_slave")
+  )
+
+  yield (
       api.test('win_xfa_msvc_32') +
       api.platform('win', 64) +
       api.properties(xfa=True,
@@ -577,6 +594,17 @@ def GenTests(api):
   )
 
   yield (
+      api.test('linux_xfa_jumbo') +
+      api.platform('linux', 64) +
+      api.properties(xfa=True,
+                     jumbo=True,
+                     mastername="client.pdfium",
+                     buildername='linux_xfa_jumbo',
+                     buildnumber='1234',
+                     bot_id="test_slave")
+  )
+
+  yield (
       api.test('mac_skia') +
       api.platform('mac', 64) +
       api.properties(skia=True,
@@ -605,6 +633,17 @@ def GenTests(api):
                      rel=True,
                      mastername="client.pdfium",
                      buildername='mac_xfa_rel',
+                     buildnumber='1234',
+                     bot_id="test_slave")
+  )
+
+  yield (
+      api.test('mac_xfa_jumbo') +
+      api.platform('mac', 64) +
+      api.properties(xfa=True,
+                     jumbo=True,
+                     mastername="client.pdfium",
+                     buildername='mac_xfa_jumbo',
                      buildnumber='1234',
                      bot_id="test_slave")
   )
