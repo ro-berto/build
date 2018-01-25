@@ -1457,10 +1457,10 @@ BUILDERS = {
         ) + with_test_args(
             'endurance',
             [
-              '--total-timeout-sec=2100', # 35 minutes
+              '--total-timeout-sec=1200', # 20 minutes
               '--combine-tests',
               '--combine-min=5',
-              '--combine-max=50',
+              '--combine-max=20',
               '--stress-deopt=1',
               '--stress-compaction=1',
               '--stress-gc=3',
@@ -1515,10 +1515,10 @@ BUILDERS = {
         ) + with_test_args(
             'endurance',
             [
-              '--total-timeout-sec=2100', # 35 minutes
+              '--total-timeout-sec=1200', # 20 minutes
               '--combine-tests',
               '--combine-min=5',
-              '--combine-max=30',
+              '--combine-max=15',
               '--stress-compaction=1',
               '--stress-gc=3',
               '--stress-marking=5',
