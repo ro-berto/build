@@ -1,0 +1,37 @@
+// Copyright 2018 The Chromium Authors. All Rights Reserved.
+
+syntax = "proto3";
+
+// https://chromium.googlesource.com/infra/goma/client/+/master/lib/goma_stats.proto
+import "goma_stats.proto";
+
+package devtools_goma;
+
+// This is BigQuery schema for goma-related events stored in chrome-infra.
+// NEXT ID TO USE: 6
+message CompileEvent {
+  // The reason why GomaStats is not available or OK if GomaStats is available.
+  enum GomaExitStatus {
+    // GomaStats is available.
+    OK = 0;
+    // GomaStats is not available due to unknown reason.
+    DIED_WITH_UNKOWN_REASON = 1;
+    // Compiler_proxy crashed (crash id should be set).
+    CRASHED = 2;
+    // Compiler_proxy crashed with log fatal.
+    DIED_WITH_LOG_FATAL = 3;
+  }
+
+  // ID of the build.
+  string build_id = 1;
+  // Name of the compile step.
+  // If one build has more than two compile steps, they should have different
+  // names. e.g. compile (with patch) and compile (without patch).
+  string step_name = 2;
+  // Goma compiler_proxy statistics.
+  GomaStats stats = 3;
+  // Exit status of compiler_proxy.
+  GomaExitStatus exit_status = 4;
+  // If the compiler_proxy crashed, crash_id is stored.
+  string crash_id = 5;
+}
