@@ -1455,6 +1455,20 @@ BUILDERS = {
             ],
             [NumFuzz(3)],
         ) + with_test_args(
+            'endurance',
+            [
+              '--total-timeout-sec=2100', # 35 minutes
+              '--combine-tests',
+              '--combine-min=5',
+              '--combine-max=50',
+              '--stress-deopt=1',
+              '--stress-compaction=1',
+              '--stress-gc=3',
+              '--stress-marking=5',
+              '--stress-scavenge=2',
+            ],
+            [NumFuzz],
+        ) + with_test_args(
             'deopt',
             [
               '--total-timeout-sec=2100', # 35 minutes
@@ -1498,6 +1512,19 @@ BUILDERS = {
               '--stress-scavenge=2',
             ],
             [NumFuzz(4)],
+        ) + with_test_args(
+            'endurance',
+            [
+              '--total-timeout-sec=2100', # 35 minutes
+              '--combine-tests',
+              '--combine-min=5',
+              '--combine-max=30',
+              '--stress-compaction=1',
+              '--stress-gc=3',
+              '--stress-marking=5',
+              '--stress-scavenge=2',
+            ],
+            [NumFuzz],
         ),
         'testing': {'platform': 'linux'},
         'swarming_properties': SWARMING_FYI_PROPS,
