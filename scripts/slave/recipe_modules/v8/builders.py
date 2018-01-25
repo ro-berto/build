@@ -976,11 +976,11 @@ BUILDERS = {
         },
         'testing': {'platform': 'mac'},
       },
-      'V8 Win32 ASAN': {
+      'V8 Win64 ASAN': {
         'chromium_apply_config': ['v8_ninja', 'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
+          'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
@@ -2559,43 +2559,6 @@ BUILDERS = {
         ],
         'testing': {'platform': 'linux'},
       },
-      'v8_win_asan_rel_ng': {
-        'chromium_apply_config': [
-          'default_compiler',
-          'v8_ninja',
-          'goma',
-          'mb',
-        ],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder',
-        'enable_swarming': True,
-        'slim_swarming_builder': True,
-        'triggers': [
-          'v8_win_asan_rel_ng_triggered',
-        ],
-        'testing': {'platform': 'win'},
-      },
-      'v8_win_asan_rel_ng_triggered': {
-        'chromium_apply_config': [
-          'use_windows_swarming_slaves',
-          'no_dcheck',
-        ],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'tester',
-        'parent_buildername': 'v8_win_asan_rel_ng',
-        'enable_swarming': True,
-        'swarming_dimensions': {
-          'os': 'Windows-10',
-        },
-        'tests': [V8Testing(5)],
-        'testing': {'platform': 'linux'},
-      },
       'v8_win_dbg': {
         'chromium_apply_config': [
           'default_compiler',
@@ -2710,6 +2673,43 @@ BUILDERS = {
         },
         'tests': [V8Testing(3)],
         'variants': V8NoExhaustiveVariants,
+        'testing': {'platform': 'linux'},
+      },
+      'v8_win64_asan_rel_ng': {
+        'chromium_apply_config': [
+          'default_compiler',
+          'v8_ninja',
+          'goma',
+          'mb',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'enable_swarming': True,
+        'slim_swarming_builder': True,
+        'triggers': [
+          'v8_win64_asan_rel_ng_triggered',
+        ],
+        'testing': {'platform': 'win'},
+      },
+      'v8_win64_asan_rel_ng_triggered': {
+        'chromium_apply_config': [
+          'use_windows_swarming_slaves',
+          'no_dcheck',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'v8_win64_asan_rel_ng',
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Windows-10',
+        },
+        'tests': [V8Testing(5)],
         'testing': {'platform': 'linux'},
       },
       'v8_win64_msvc_compile_rel': {
