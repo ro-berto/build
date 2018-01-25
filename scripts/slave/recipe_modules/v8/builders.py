@@ -372,18 +372,6 @@ BUILDERS = {
         ],
         'triggers_proxy': True,
       },
-      'V8 Linux64 - concurrent marking - builder': {
-        'chromium_apply_config': [
-          'default_compiler', 'v8_ninja', 'goma', 'mb'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder',
-        'build_gs_archive': 'linux64_rel_cm_archive',
-        'testing': {'platform': 'linux'},
-        'triggers_proxy': True,
-      },
       'V8 Linux64 - debug builder': {
         'chromium_apply_config': [
           'default_compiler', 'v8_ninja', 'goma', 'jsfunfuzz', 'mb'],
