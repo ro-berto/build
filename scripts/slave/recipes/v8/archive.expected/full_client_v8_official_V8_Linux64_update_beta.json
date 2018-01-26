@@ -11,12 +11,12 @@
       "-a",
       "public-read",
       "[START_DIR]/archive.zip",
-      "gs://chromium-v8/official/latest/v8-linux64-rel.zip"
+      "gs://chromium-v8/official/refbuild/v8-linux64-rel.zip"
     ],
     "infra_step": true,
-    "name": "gsutil update latest beta binaries",
+    "name": "gsutil update refbuild binaries",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/official/latest/v8-linux64-rel.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/official/refbuild/v8-linux64-rel.zip@@@"
     ]
   },
   {
@@ -31,12 +31,12 @@
       "-a",
       "public-read",
       "[START_DIR]/archive.zip",
-      "gs://chromium-v8/official/latest/v8-linux64-libs-rel.zip"
+      "gs://chromium-v8/official/refbuild/v8-linux64-libs-rel.zip"
     ],
     "infra_step": true,
-    "name": "gsutil update latest beta binaries (libs)",
+    "name": "gsutil update refbuild binaries (libs)",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/official/latest/v8-linux64-libs-rel.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/official/refbuild/v8-linux64-libs-rel.zip@@@"
     ]
   }
 ]

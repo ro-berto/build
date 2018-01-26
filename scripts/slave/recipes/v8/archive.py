@@ -86,11 +86,11 @@ def make_archive(api, branch, version, archive_type, step_suffix='',
       FIRST_BUILD_IN_MILESTONE_RE.match(version)):
     api.gsutil.upload(
         zip_file,
-        'chromium-v8/official/latest',
+        'chromium-v8/official/refbuild',
         'v8-%s%s%s%s-rel.zip' % (api.chromium.c.TARGET_PLATFORM, arch_name,
                                  api.chromium.c.TARGET_BITS, archive_suffix),
         args=['-a', 'public-read'],
-        name='update latest beta binaries' + step_suffix,
+        name='update refbuild binaries' + step_suffix,
     )
 
 
@@ -209,7 +209,7 @@ def GenTests(api):
       api.override_step_data(
         'git describe', api.raw_io.stream_output('3.4.3')) +
       api.post_process(Filter(
-        'gsutil update latest beta binaries',
-        'gsutil update latest beta binaries (libs)',
+        'gsutil update refbuild binaries',
+        'gsutil update refbuild binaries (libs)',
       ))
   )
