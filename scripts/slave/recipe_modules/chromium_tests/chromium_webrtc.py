@@ -96,16 +96,12 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
   spec['test_results_config'] = 'public_server'
 
   if platform == 'android':
-    # TODO(crbug.com/805410): Skippoing content_browsertests on
-    # Android Nexus 7.2 in order to unblock LKGR and investigate
-    # on all the OOM errors.
-    if perf_id != 'chromium-webrtc-trunk-tot-dbg-android-nexus72':
-      spec['root_devices'] = True
-      spec['tests'] = [
-          steps.LocalGTestTest(
-              'content_browsertests',
-              args=['--gtest_filter=WebRtc*']),
-      ]
+    spec['root_devices'] = True
+    spec['tests'] = [
+      steps.LocalGTestTest(
+          'content_browsertests',
+          args=['--gtest_filter=WebRtc*']),
+    ]
   else:
     spec['gclient_apply_config'].append('webrtc_test_resources')
     if perf_id.endswith('-long'):
