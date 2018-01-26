@@ -1012,7 +1012,7 @@
       "Linux",
       "--dimension",
       "pool",
-      "Dart.LUCI",
+      "dart.tests",
       "--tag",
       "buildername:this-name-does-not-exist-in-test-matrix",
       "--tag",

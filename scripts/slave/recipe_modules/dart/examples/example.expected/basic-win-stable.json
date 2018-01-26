@@ -1795,7 +1795,7 @@
       "Windows",
       "--dimension",
       "pool",
-      "Dart.LUCI",
+      "dart.tests",
       "--tag",
       "buildername:dart2js-win10-debug-x64-ff-stable",
       "--tag",

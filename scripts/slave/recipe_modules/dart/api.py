@@ -120,8 +120,8 @@ class DartApi(recipe_api.RecipeApi):
                  '--target=.'],
         stdout=self.m.raw_io.output('out'))
 
-  def shard(self, title, isolate_hash, test_args, os=None, cpu='x86-64', pool='Dart.LUCI',
-      num_shards=0, last_shard_is_local=False):
+  def shard(self, title, isolate_hash, test_args, os=None, cpu='x86-64',
+      pool='dart.tests', num_shards=0, last_shard_is_local=False):
     """Runs test.py in the given isolate, sharded over several swarming tasks.
        Requires the 'shards' build property to be set to the number of tasks.
        Returns the created task(s), which are meant to be passed into collect().

@@ -1679,7 +1679,7 @@ Args:
 
 &mdash; **def [run\_trigger](/scripts/slave/recipe_modules/dart/api.py#383)(self, step_name, step, isolate_hash):**
 
-&mdash; **def [shard](/scripts/slave/recipe_modules/dart/api.py#123)(self, title, isolate_hash, test_args, os=None, cpu='x86-64', pool='Dart.LUCI', num_shards=0, last_shard_is_local=False):**
+&mdash; **def [shard](/scripts/slave/recipe_modules/dart/api.py#123)(self, title, isolate_hash, test_args, os=None, cpu='x86-64', pool='dart.tests', num_shards=0, last_shard_is_local=False):**
 
 Runs test.py in the given isolate, sharded over several swarming tasks.
 Requires the 'shards' build property to be set to the number of tasks.
