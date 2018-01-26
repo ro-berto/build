@@ -533,10 +533,6 @@
           "chromium_perf_steps"
         ],
 
-        "excluded_builders" : [
-            "Mac Mini 8GB 10.12 Perf"
-        ],
-
         "builders": {
           "*": {}
         }

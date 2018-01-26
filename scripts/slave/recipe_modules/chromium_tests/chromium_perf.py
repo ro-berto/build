@@ -220,8 +220,6 @@ _AddIsolatedTestSpec('Mac 10.12 Perf', 'chromium-rel-mac12', 'mac')
 _AddIsolatedTestSpec('Mac Retina Perf', 'chromium-rel-mac-retina', 'mac')
 _AddIsolatedTestSpec('Mac Pro 10.11 Perf', 'chromium-rel-mac11-pro', 'mac')
 _AddIsolatedTestSpec('Mac Air 10.11 Perf', 'chromium-rel-mac11-air', 'mac')
-_AddIsolatedTestSpec('Mac Mini 8GB 10.12 Perf',
-                     'chromium-rel-mac12-mini-8gb', 'mac')
 
 
 _AddIsolatedTestSpec('Linux Perf', 'linux-release', 'linux')
