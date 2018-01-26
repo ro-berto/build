@@ -177,7 +177,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gn.py",
       "--root=[START_DIR]/src",
       "gen",
-      "//out/Debug",
+      "//out/minimal",
       "--args=is_debug=true target_os=\"android\" target_cpu=\"arm\" use_goma=true goma_dir=\"[CACHE]/goma_client\""
     ],
     "cwd": "[START_DIR]/src",
@@ -303,7 +303,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]/src/out/Debug",
+      "[START_DIR]/src/out/minimal",
       "-j",
       "50"
     ],
@@ -409,9 +409,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[START_DIR]/src/out/Debug",
+      "[START_DIR]/src/out/minimal",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/Debug', '-j', 50]",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/minimal', '-j', 50]",
       "--build-exit-status",
       "0",
       "--ninja-log-compiler",
@@ -469,7 +469,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gn.py",
       "--root=[START_DIR]/src",
       "gen",
-      "//out/Debug",
+      "//out/intelligibility_enhancer",
       "--args=rtc_enable_intelligibility_enhancer=true is_debug=true target_os=\"android\" target_cpu=\"arm\" use_goma=true goma_dir=\"[CACHE]/goma_client\""
     ],
     "cwd": "[START_DIR]/src",
@@ -480,7 +480,7 @@
     },
     "name": "gn (2)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@gn (rtc_enable_intelligibility_enhancer=true)@@@"
+      "@@@STEP_TEXT@gn (intelligibility_enhancer)@@@"
     ]
   },
   {
@@ -577,7 +577,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]/src/out/Debug",
+      "[START_DIR]/src/out/intelligibility_enhancer",
       "-j",
       "50"
     ],
@@ -683,9 +683,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[START_DIR]/src/out/Debug",
+      "[START_DIR]/src/out/intelligibility_enhancer",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/Debug', '-j', 50]",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/intelligibility_enhancer', '-j', 50]",
       "--build-exit-status",
       "0",
       "--ninja-log-compiler",
@@ -743,7 +743,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gn.py",
       "--root=[START_DIR]/src",
       "gen",
-      "//out/Debug",
+      "//out/no_include_tests",
       "--args=rtc_include_tests=false is_debug=true target_os=\"android\" target_cpu=\"arm\" use_goma=true goma_dir=\"[CACHE]/goma_client\""
     ],
     "cwd": "[START_DIR]/src",
@@ -754,7 +754,7 @@
     },
     "name": "gn (3)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@gn (rtc_include_tests=false)@@@"
+      "@@@STEP_TEXT@gn (no_include_tests)@@@"
     ]
   },
   {
@@ -851,7 +851,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]/src/out/Debug",
+      "[START_DIR]/src/out/no_include_tests",
       "-j",
       "50"
     ],
@@ -957,9 +957,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[START_DIR]/src/out/Debug",
+      "[START_DIR]/src/out/no_include_tests",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/Debug', '-j', 50]",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/no_include_tests', '-j', 50]",
       "--build-exit-status",
       "0",
       "--ninja-log-compiler",
@@ -1017,7 +1017,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gn.py",
       "--root=[START_DIR]/src",
       "gen",
-      "//out/Debug",
+      "//out/no_protobuf",
       "--args=rtc_enable_protobuf=false is_debug=true target_os=\"android\" target_cpu=\"arm\" use_goma=true goma_dir=\"[CACHE]/goma_client\""
     ],
     "cwd": "[START_DIR]/src",
@@ -1028,7 +1028,7 @@
     },
     "name": "gn (4)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@gn (rtc_enable_protobuf=false)@@@"
+      "@@@STEP_TEXT@gn (no_protobuf)@@@"
     ]
   },
   {
@@ -1125,7 +1125,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]/src/out/Debug",
+      "[START_DIR]/src/out/no_protobuf",
       "-j",
       "50"
     ],
@@ -1231,9 +1231,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[START_DIR]/src/out/Debug",
+      "[START_DIR]/src/out/no_protobuf",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/Debug', '-j', 50]",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/no_protobuf', '-j', 50]",
       "--build-exit-status",
       "0",
       "--ninja-log-compiler",
@@ -1291,7 +1291,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gn.py",
       "--root=[START_DIR]/src",
       "gen",
-      "//out/Debug",
+      "//out/bwe_test_logging",
       "--args=rtc_enable_bwe_test_logging=true is_debug=true target_os=\"android\" target_cpu=\"arm\" use_goma=true goma_dir=\"[CACHE]/goma_client\""
     ],
     "cwd": "[START_DIR]/src",
@@ -1302,7 +1302,7 @@
     },
     "name": "gn (5)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@gn (rtc_enable_bwe_test_logging=true)@@@"
+      "@@@STEP_TEXT@gn (bwe_test_logging)@@@"
     ]
   },
   {
@@ -1399,7 +1399,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]/src/out/Debug",
+      "[START_DIR]/src/out/bwe_test_logging",
       "-j",
       "50"
     ],
@@ -1505,9 +1505,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[START_DIR]/src/out/Debug",
+      "[START_DIR]/src/out/bwe_test_logging",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/Debug', '-j', 50]",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/bwe_test_logging', '-j', 50]",
       "--build-exit-status",
       "0",
       "--ninja-log-compiler",
@@ -1565,7 +1565,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gn.py",
       "--root=[START_DIR]/src",
       "gen",
-      "//out/Debug",
+      "//out/dummy_audio_file_devices",
       "--args=rtc_use_dummy_audio_file_devices=true is_debug=true target_os=\"android\" target_cpu=\"arm\" use_goma=true goma_dir=\"[CACHE]/goma_client\""
     ],
     "cwd": "[START_DIR]/src",
@@ -1576,7 +1576,7 @@
     },
     "name": "gn (6)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@gn (rtc_use_dummy_audio_file_devices=true)@@@"
+      "@@@STEP_TEXT@gn (dummy_audio_file_devices)@@@"
     ]
   },
   {
@@ -1673,7 +1673,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]/src/out/Debug",
+      "[START_DIR]/src/out/dummy_audio_file_devices",
       "-j",
       "50"
     ],
@@ -1779,9 +1779,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[START_DIR]/src/out/Debug",
+      "[START_DIR]/src/out/dummy_audio_file_devices",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/Debug', '-j', 50]",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/dummy_audio_file_devices', '-j', 50]",
       "--build-exit-status",
       "0",
       "--ninja-log-compiler",
@@ -1839,7 +1839,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gn.py",
       "--root=[START_DIR]/src",
       "gen",
-      "//out/Debug",
+      "//out/rtti",
       "--args=use_rtti=true is_debug=true target_os=\"android\" target_cpu=\"arm\" use_goma=true goma_dir=\"[CACHE]/goma_client\""
     ],
     "cwd": "[START_DIR]/src",
@@ -1850,7 +1850,7 @@
     },
     "name": "gn (7)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@gn (use_rtti=true)@@@"
+      "@@@STEP_TEXT@gn (rtti)@@@"
     ]
   },
   {
@@ -1947,7 +1947,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]/src/out/Debug",
+      "[START_DIR]/src/out/rtti",
       "-j",
       "50"
     ],
@@ -2053,9 +2053,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[START_DIR]/src/out/Debug",
+      "[START_DIR]/src/out/rtti",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/Debug', '-j', 50]",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/rtti', '-j', 50]",
       "--build-exit-status",
       "0",
       "--ninja-log-compiler",
@@ -2113,7 +2113,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gn.py",
       "--root=[START_DIR]/src",
       "gen",
-      "//out/Debug",
+      "//out/no_sctp",
       "--args=rtc_enable_sctp=false is_debug=true target_os=\"android\" target_cpu=\"arm\" use_goma=true goma_dir=\"[CACHE]/goma_client\""
     ],
     "cwd": "[START_DIR]/src",
@@ -2124,7 +2124,7 @@
     },
     "name": "gn (8)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@gn (rtc_enable_sctp=false)@@@"
+      "@@@STEP_TEXT@gn (no_sctp)@@@"
     ]
   },
   {
@@ -2221,7 +2221,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]/src/out/Debug",
+      "[START_DIR]/src/out/no_sctp",
       "-j",
       "50"
     ],
@@ -2327,9 +2327,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[START_DIR]/src/out/Debug",
+      "[START_DIR]/src/out/no_sctp",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/Debug', '-j', 50]",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/no_sctp', '-j', 50]",
       "--build-exit-status",
       "0",
       "--ninja-log-compiler",
