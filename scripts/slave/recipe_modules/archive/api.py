@@ -230,11 +230,15 @@ class ArchiveApi(recipe_api.RecipeApi):
     # by 'win32').
     if use_legacy:
       platform_name = self.legacy_platform_name()
+      target_name = target.lower()
     else:
       # Always qualify platform with bitness on new bots. E.g. linux32 or win64.
       platform_name = self.m.platform.name + str(bitness)
+      # Split off redundant _x64 suffix on windows. The bitness is part of the
+      # platform.
+      target_name = target.lower().split('_')[0]
 
-    pieces = [platform_name, target.lower()]
+    pieces = [platform_name, target_name]
     if archive_subdir_suffix:
       pieces.append(archive_subdir_suffix)
     subdir = '-'.join(pieces)
@@ -248,7 +252,7 @@ class ArchiveApi(recipe_api.RecipeApi):
         cp_branch, cp_number)
     zip_file_base_name = '%s-%s-%s%s-%s' % (archive_prefix,
                                             platform_name,
-                                            target.lower(),
+                                            target_name,
                                             component,
                                             sortkey_path)
     zip_file_name = '%s.zip' % zip_file_base_name

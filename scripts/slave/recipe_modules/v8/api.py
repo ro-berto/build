@@ -792,6 +792,10 @@ class V8Api(recipe_api.RecipeApi):
 
   def maybe_create_clusterfuzz_archive(self, update_step):
     if self.bot_config.get('cf_archive_build', False):
+      kwargs = {}
+      if self.bot_config.get('cf_archive_bitness'):
+        kwargs['use_legacy'] = False
+        kwargs['bitness'] = self.bot_config['cf_archive_bitness']
       self.m.archive.clusterfuzz_archive(
           revision_dir='v8',
           build_dir=self.m.chromium.c.build_dir.join(
@@ -800,6 +804,7 @@ class V8Api(recipe_api.RecipeApi):
           gs_bucket=self.bot_config.get('cf_gs_bucket'),
           gs_acl=self.bot_config.get('cf_gs_acl'),
           archive_prefix=self.bot_config.get('cf_archive_name'),
+          **kwargs
       )
 
   def download_build(self, name_suffix='', archive=None):

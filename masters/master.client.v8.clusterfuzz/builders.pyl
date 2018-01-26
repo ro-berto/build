@@ -30,6 +30,22 @@
       "bot_pools": ["win"],
       "category": "0Windows",
     },
+    "V8 Win64 ASAN - release builder": {
+      "recipe": "v8",
+      "use_remote_run": True,
+      "scheduler": "v8_commits",
+      "mergeRequests": False,
+      "bot_pools": ["win"],
+      "category": "0Windows",
+    },
+    "V8 Win64 ASAN - debug builder": {
+      "recipe": "v8",
+      "use_remote_run": True,
+      "scheduler": "v8_commits",
+      "mergeRequests": False,
+      "bot_pools": ["win"],
+      "category": "0Windows",
+    },
     "V8 Mac64 ASAN - release builder": {
       "recipe": "v8",
       "use_remote_run": False,
