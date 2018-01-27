@@ -111,6 +111,8 @@ TEST_CONFIGS = freeze({
     'name': 'Num Fuzz',
     'tool': 'run-num-fuzzer',
     'isolated_target': 'run-num-fuzzer',
+    'idempotent': False,
+    'use_random_seed': False,
     'variants': V8NoExhaustiveVariants,
   },
   'optimize_for_size': {
@@ -511,11 +513,13 @@ class V8SwarmingTest(V8Test):
         shards = self.api.v8.c.testing.SHARD_COUNT
 
     command = 'tools/%s.py' % self.test.get('tool', 'run-tests')
+    idempotent = self.test.get('idempotent')
 
     # Initialize swarming task with custom data-collection step for v8
     # test-runner output.
     self.task = self.api.swarming.task(
         title=self.test['name'] + self.test_step_config.suffix,
+        idempotent=idempotent,
         isolated_hash=self._get_isolated_hash(self.test),
         shards=shards,
         raw_cmd=[command] + extra_args,
