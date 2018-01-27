@@ -1449,11 +1449,11 @@ BUILDERS = {
             'combined',
             [
               '--total-timeout-sec=2100', # 35 minutes
-              '--stress-deopt=1',
-              '--stress-compaction=1',
-              '--stress-gc=2',
-              '--stress-marking=2',
-              '--stress-scavenge=2',
+              '--stress-deopt=2',
+              '--stress-compaction=2',
+              '--stress-gc=4',
+              '--stress-marking=4',
+              '--stress-scavenge=4',
             ],
             [NumFuzz(3)],
         ) + with_test_args(
@@ -1461,13 +1461,13 @@ BUILDERS = {
             [
               '--total-timeout-sec=1200', # 20 minutes
               '--combine-tests',
-              '--combine-min=5',
-              '--combine-max=20',
-              '--stress-deopt=1',
-              '--stress-compaction=1',
-              '--stress-gc=3',
-              '--stress-marking=5',
-              '--stress-scavenge=2',
+              '--combine-min=30',
+              '--combine-max=100',
+              '--stress-deopt=2',
+              '--stress-compaction=2',
+              '--stress-gc=6',
+              '--stress-marking=6',
+              '--stress-scavenge=4',
             ],
             [NumFuzz],
         ) + with_test_args(
@@ -1507,11 +1507,11 @@ BUILDERS = {
             'combined',
             [
               '--total-timeout-sec=2100', # 35 minutes
-              '--stress-deopt=1',
-              '--stress-compaction=1',
-              '--stress-gc=2',
-              '--stress-marking=2',
-              '--stress-scavenge=2',
+              '--stress-deopt=2',
+              '--stress-compaction=2',
+              '--stress-gc=4',
+              '--stress-marking=4',
+              '--stress-scavenge=4',
             ],
             [NumFuzz(4)],
         ) + with_test_args(
@@ -1519,12 +1519,12 @@ BUILDERS = {
             [
               '--total-timeout-sec=1200', # 20 minutes
               '--combine-tests',
-              '--combine-min=5',
-              '--combine-max=15',
-              '--stress-compaction=1',
-              '--stress-gc=3',
-              '--stress-marking=5',
-              '--stress-scavenge=2',
+              '--combine-min=20',
+              '--combine-max=60',
+              '--stress-compaction=2',
+              '--stress-gc=6',
+              '--stress-marking=6',
+              '--stress-scavenge=4',
             ],
             [NumFuzz],
         ),
