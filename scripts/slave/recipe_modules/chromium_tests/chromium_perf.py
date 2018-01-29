@@ -201,7 +201,6 @@ _AddIsolatedTestSpec('Android Nexus6 WebView Perf', 'android-webview-nexus6',
                      parent_buildername='Android Compile')
 
 
-_AddIsolatedTestSpec('Win Zenbook Perf', 'win-zenbook', 'win')
 _AddIsolatedTestSpec('Win 10 High-DPI Perf', 'win-high-dpi', 'win')
 _AddIsolatedTestSpec('Win 10 Perf', 'chromium-rel-win10', 'win')
 _AddIsolatedTestSpec('Win 8 Perf', 'chromium-rel-win8-dual', 'win')
