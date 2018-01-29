@@ -80,7 +80,6 @@ SUPPRESSIONS = {
         'WebKit Mac10.11 (dbg)',
 
         'WebKit Linux Trusty ASAN',
-        'WebKit Linux Trusty Leak',
         'WebKit Linux Trusty MSAN',
         'WebKit Win x64 Builder',
         'WebKit Win x64 Builder (dbg)',

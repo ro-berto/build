@@ -452,6 +452,10 @@ TRYBOTS = freeze({
           'mastername': 'chromium.fyi',
           'buildername': 'Leak Detection Linux',
       }),
+      'layout_test_leak_detection': simple_bot({
+          'mastername': 'chromium.webkit',
+          'buildername': 'WebKit Linux Trusty Leak',
+      }),
     },
   },
   'tryserver.chromium.chromiumos': {
