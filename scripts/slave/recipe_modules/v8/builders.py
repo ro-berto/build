@@ -1142,6 +1142,7 @@ BUILDERS = {
         'enable_swarming': True,
         'testing': {'platform': 'linux'},
         'triggers': [
+          'V8 NumFuzz - nosnap',
         ],
       },
       'V8 Linux64 - nosnap debug builder': {
@@ -1161,6 +1162,7 @@ BUILDERS = {
         'enable_swarming': True,
         'testing': {'platform': 'linux'},
         'triggers': [
+          'V8 NumFuzz - nosnap debug',
         ],
       },
       'V8 Linux64 ASAN no inline - release builder': {
@@ -1563,6 +1565,46 @@ BUILDERS = {
               '--stress-gc=6',
               '--stress-marking=6',
               '--stress-scavenge=4',
+            ],
+            [NumFuzz],
+        ),
+        'testing': {'platform': 'linux'},
+        'swarming_properties': SWARMING_FYI_PROPS,
+      },
+      'V8 NumFuzz - nosnap': {
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'enable_swarming': True,
+        'parent_buildername': 'V8 Linux64 - nosnap release builder',
+        'tests': with_test_args(
+            'interrupt-budget',
+            [
+              '--total-timeout-sec=2100', # 35 minutes
+              '--stress-interrupt-budget=10',
+              '--stress-deopt=5',
+            ],
+            [NumFuzz],
+        ),
+        'testing': {'platform': 'linux'},
+        'swarming_properties': SWARMING_FYI_PROPS,
+      },
+      'V8 NumFuzz - nosnap debug': {
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'enable_swarming': True,
+        'parent_buildername': 'V8 Linux64 - nosnap debug builder',
+        'tests': with_test_args(
+            'interrupt-budget',
+            [
+              '--total-timeout-sec=2100', # 35 minutes
+              '--stress-interrupt-budget=10',
+              '--stress-deopt=5',
             ],
             [NumFuzz],
         ),
