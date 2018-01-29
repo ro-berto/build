@@ -492,8 +492,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
-        'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64 - verify csa': {
@@ -2485,24 +2483,7 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
-        'bot_type': 'builder',
-        'enable_swarming': True,
-        'slim_swarming_builder': True,
-        'triggers': [
-          'v8_linux64_gyp_rel_ng_triggered',
-        ],
-        'testing': {'platform': 'linux'},
-      },
-      'v8_linux64_gyp_rel_ng_triggered': {
-        'chromium_apply_config': ['no_dcheck'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'tester',
-        'parent_buildername': 'v8_linux64_gyp_rel_ng',
-        'enable_swarming': True,
-        'tests': [V8Testing],
+        'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
       },
       'v8_linux_gc_stress_dbg': {
