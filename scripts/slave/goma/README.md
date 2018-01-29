@@ -9,5 +9,5 @@ This directory contains goma-related protobuf to be uploaded with
 1. Install the latest [protobuf library](https://github.com/google/protobuf).
 1. Execute following command to generate pb2.py files, and check them in.
 ```
- $ protoc --python_out=. build_events.proto goma_stats.proto
+ $ protoc --python_out=. compile_events.proto goma_stats.proto
 ```
