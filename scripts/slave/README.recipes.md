@@ -5439,6 +5439,8 @@ Ensures a clean state of the git checkout.
 &mdash; **def [PushRef](/scripts/slave/recipes/v8/auto_tag.py#70)(api, repo, ref, hsh):**
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/v8/auto_tag.py#155)(api):**
+
+&mdash; **def [UpdateRef](/scripts/slave/recipes/v8/auto_tag.py#212)(api, repo, head, lkgr_ref):**
 ### *recipes* / [v8/infra\_end\_to\_end](/scripts/slave/recipes/v8/infra_end_to_end.py)
 
 [DEPS](/scripts/slave/recipes/v8/infra_end_to_end.py#7): [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]

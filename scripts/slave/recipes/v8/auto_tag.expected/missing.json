@@ -190,7 +190,7 @@
     ],
     "cwd": "[START_DIR]/v8",
     "infra_step": true,
-    "name": "git ls-remote 3.4-lkgr",
+    "name": "git ls-remote refs_heads_3.4-lkgr",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@ref@refs/heads/3.4-lkgr@@@",
@@ -207,6 +207,33 @@
     "cwd": "[START_DIR]/v8",
     "infra_step": true,
     "name": "git push"
+  },
+  {
+    "cmd": [
+      "git",
+      "ls-remote",
+      "https://chromium.googlesource.com/v8/v8",
+      "refs/heads/lkgr/3.4"
+    ],
+    "cwd": "[START_DIR]/v8",
+    "infra_step": true,
+    "name": "git ls-remote refs_heads_lkgr_3.4",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@ref@refs/heads/lkgr/3.4@@@",
+      "@@@STEP_LOG_END@ref@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "push",
+      "https://chromium.googlesource.com/v8/v8",
+      "+c1a7fd0c98a80c52fcf6763850d2ee1c41cfe8d6:refs/heads/lkgr/3.4"
+    ],
+    "cwd": "[START_DIR]/v8",
+    "infra_step": true,
+    "name": "git push (2)"
   },
   {
     "name": "$result",
