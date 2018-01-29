@@ -62,6 +62,22 @@
       "bot_pools": ["linux1"],
       "category": "2Linux",
     },
+    "V8 Linux64 - nosnap release builder": {
+      "recipe": "v8",
+      "use_remote_run": False,
+      "scheduler": "v8_commits",
+      "mergeRequests": True,
+      "bot_pools": ["linux1"],
+      "category": "2Linux",
+    },
+    "V8 Linux64 - nosnap debug builder": {
+      "recipe": "v8",
+      "use_remote_run": False,
+      "scheduler": "v8_commits",
+      "mergeRequests": True,
+      "bot_pools": ["linux1"],
+      "category": "2Linux",
+    },
     "V8 Linux64 ASAN no inline - release builder": {
       "recipe": "v8",
       "use_remote_run": False,
