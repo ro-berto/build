@@ -35,6 +35,10 @@ def llvm_compiler_rt(c):
     ChromiumGitURL(c, 'external', 'llvm.org', 'compiler-rt'))
 
 @CONFIG_CTX()
+def download_mips_toolchain(c):
+  c.solutions[0].custom_vars['download_mips_toolchain'] = 'True'
+
+@CONFIG_CTX()
 def node_js(c):
   soln = c.solutions.add()
   soln.name = 'node.js'

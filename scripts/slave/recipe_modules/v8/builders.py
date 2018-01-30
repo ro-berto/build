@@ -1873,6 +1873,7 @@ BUILDERS = {
 ####### Category: MIPS
       'V8 Mips - builder': {
         # TODO(machenbach): Switch this bot manually to gn.
+        'gclient_apply_config': ['download_mips_toolchain'],
         'chromium_apply_config': ['no_snapshot', 'no_i18n'],
         'v8_apply_config': ['mips_cross_compile'],
         'v8_config_kwargs': {
