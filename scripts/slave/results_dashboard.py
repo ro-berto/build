@@ -176,13 +176,14 @@ def _GetData(line):
 
 def MakeHistogramSetWithDiagnostics(histograms_file, chromium_checkout_path,
                                     test_name, bot, buildername, buildnumber,
-                                    revisions_dict, is_reference_build):
+                                    revisions_dict, is_reference_build,
+                                    perf_dashboard_mastername):
   add_diagnostics_args = []
   add_diagnostics_args.extend([
       '--benchmarks', test_name,
       '--bots', bot,
       '--builds', buildnumber,
-      '--masters', chromium_utils.GetActiveMaster(),
+      '--masters', perf_dashboard_mastername,
       '--is_reference_build', 'true' if is_reference_build else '',
   ])
 
@@ -213,7 +214,9 @@ def MakeHistogramSetWithDiagnostics(histograms_file, chromium_checkout_path,
 
 
 def MakeListOfPoints(charts, bot, test_name, buildername,
-                     buildnumber, supplemental_columns, revisions_dict=None):
+                     buildnumber, supplemental_columns,
+                     perf_dashboard_mastername,
+                     revisions_dict=None):
   """Constructs a list of point dictionaries to send.
 
   The format output by this function is the original format for sending data
@@ -227,6 +230,7 @@ def MakeListOfPoints(charts, bot, test_name, buildername,
     buildername: Builder name (for stdio links).
     buildnumber: Build number (for stdio links).
     supplemental_columns: A dictionary of extra data to send with a point.
+    perf_dashboard_mastername: Builder's master name.
 
   Returns:
     A list of dictionaries in the format accepted by the perf dashboard.
@@ -234,10 +238,6 @@ def MakeListOfPoints(charts, bot, test_name, buildername,
     The full details of this format are described at http://goo.gl/TcJliv.
   """
   results = []
-
-  # The master name used for the dashboard is the CamelCase name returned by
-  # GetActiveMaster(), and not the canonical master name with dots.
-  master = chromium_utils.GetActiveMaster()
 
   for chart_name, chart_data in sorted(charts.items()):
     point_id, revision_columns = _RevisionNumberColumns(
@@ -247,7 +247,7 @@ def MakeListOfPoints(charts, bot, test_name, buildername,
       is_important = trace_name in chart_data.get('important', [])
       test_path = _TestPath(test_name, chart_name, trace_name)
       result = {
-          'master': master,
+          'master': perf_dashboard_mastername,
           'bot': bot,
           'test': test_path,
           'revision': point_id,
@@ -276,7 +276,8 @@ def MakeListOfPoints(charts, bot, test_name, buildername,
 
 
 def MakeDashboardJsonV1(chart_json, revision_dict, test_name, bot, buildername,
-                        buildnumber, supplemental_dict, is_ref):
+                        buildnumber, supplemental_dict, is_ref,
+                        perf_dashboard_mastername):
   """Generates Dashboard JSON in the new Telemetry format.
 
   See http://goo.gl/mDZHPl for more info on the format.
@@ -292,6 +293,7 @@ def MakeDashboardJsonV1(chart_json, revision_dict, test_name, bot, buildername,
     supplemental_dict: A dictionary of extra data to send with a point;
         this includes revisions and annotation data.
     is_ref: True if this is a reference build, False otherwise.
+    perf_dashboard_mastername: Builder's perf master name.
 
   Returns:
     A dictionary in the format accepted by the perf dashboard.
@@ -300,9 +302,6 @@ def MakeDashboardJsonV1(chart_json, revision_dict, test_name, bot, buildername,
     print 'Error: No json output from telemetry.'
     print '@@@STEP_FAILURE@@@'
 
-  # The master name used for the dashboard is the CamelCase name returned by
-  # GetActiveMaster(), and not the canonical master name with dots.
-  master = chromium_utils.GetActiveMaster()
   point_id, versions = _RevisionNumberColumns(revision_dict, prefix='')
 
   supplemental = {}
@@ -322,7 +321,7 @@ def MakeDashboardJsonV1(chart_json, revision_dict, test_name, bot, buildername,
   test_name = test_name.replace('.reference', '')
 
   fields = {
-      'master': master,
+      'master': perf_dashboard_mastername,
       'bot': bot,
       'test_suite_name': test_name,
       'point_id': point_id,

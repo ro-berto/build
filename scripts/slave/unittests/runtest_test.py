@@ -71,11 +71,13 @@ class SendResultsToDashboardTest(unittest.TestCase):
   # Testing private method _GetDataFromLogProcessor.
   # Also, this test method doesn't reference self.
   # pylint: disable=W0212,R0201
+  @mock.patch('common.chromium_utils.GetActiveMaster')
   @mock.patch('slave.runtest._GetDataFromLogProcessor')
   @mock.patch('slave.results_dashboard.MakeListOfPoints')
   @mock.patch('slave.results_dashboard.SendResults')
   def test_SendResultsToDashboard_SimpleCase(
-      self, SendResults, MakeListOfPoints, GetDataFromLogProcessor):
+      self, SendResults, MakeListOfPoints, GetDataFromLogProcessor,
+      GetActiveMaster):
     """Tests that the right methods get called in _SendResultsToDashboard."""
     # Since this method just tests that certain methods get called when
     # a call to _SendResultsDashboard is made, the data used below is arbitrary.
@@ -85,6 +87,7 @@ class SendResultsToDashboardTest(unittest.TestCase):
     fake_results_tracker.IsChartJson = mock.MagicMock(return_value=False)
     GetDataFromLogProcessor.return_value = fake_charts_data
     MakeListOfPoints.return_value = fake_points_data
+    GetActiveMaster.return_value = 'SithLord'
 
     result = runtest._SendResultsToDashboard(
         fake_results_tracker, {
@@ -102,7 +105,7 @@ class SendResultsToDashboardTest(unittest.TestCase):
 
     # Then the data is re-formatted to a format that the dashboard accepts.
     MakeListOfPoints.assert_called_with(
-        fake_charts_data, 'linux', 'sunspider', 'Builder', 123, {})
+        fake_charts_data, 'linux', 'sunspider', 'Builder', 123, {}, 'SithLord')
 
     # Then a function is called to send the data (and any cached data).
     SendResults.assert_called_with(
@@ -111,10 +114,12 @@ class SendResultsToDashboardTest(unittest.TestCase):
     # No errors, should return True.
     self.assertTrue(result)
 
+
+  @mock.patch('common.chromium_utils.GetActiveMaster')
   @mock.patch('slave.results_dashboard.MakeDashboardJsonV1')
   @mock.patch('slave.results_dashboard.SendResults')
   def test_SendResultsToDashboard_Telemetry(
-      self, SendResults, MakeDashboardJsonV1):
+      self, SendResults, MakeDashboardJsonV1, GetActiveMaster):
     """Tests that the right methods get called in _SendResultsToDashboard."""
     # Since this method just tests that certain methods get called when
     # a call to _SendResultsDashboard is made, the data used below is arbitrary.
@@ -127,6 +132,7 @@ class SendResultsToDashboardTest(unittest.TestCase):
     fake_results_tracker.Cleanup = mock.MagicMock()
     fake_results = {'doesnt': 'matter', 'chart_data': {'enabled': True}}
     MakeDashboardJsonV1.return_value = fake_results
+    GetActiveMaster.return_value = 'PaiMei'
 
     result = runtest._SendResultsToDashboard(
         fake_results_tracker, {
@@ -143,7 +149,7 @@ class SendResultsToDashboardTest(unittest.TestCase):
     # Then the data is re-formatted to a format that the dashboard accepts.
     MakeDashboardJsonV1.assert_called_with(
         fake_json_data, {'rev': 343}, 'sunspider', 'linux',
-        'Builder', 123, {}, False)
+        'Builder', 123, {}, False, 'PaiMei')
 
     # Then a function is called to send the data (and any cached data).
     SendResults.assert_called_with(
@@ -153,10 +159,11 @@ class SendResultsToDashboardTest(unittest.TestCase):
     # No errors, should return True.
     self.assertTrue(result)
 
+  @mock.patch('common.chromium_utils.GetActiveMaster')
   @mock.patch('slave.results_dashboard.MakeDashboardJsonV1')
   @mock.patch('slave.results_dashboard.SendResults')
   def test_SendResultsToDashboard_DisabledBenchmark(
-      self, SendResults, MakeDashboardJsonV1):
+      self, SendResults, MakeDashboardJsonV1, GetActiveMaster):
     """Tests that the right methods get called in _SendResultsToDashboard."""
     # Since this method just tests that certain methods get called when
     # a call to _SendResultsDashboard is made, the data used below is arbitrary.
@@ -169,6 +176,7 @@ class SendResultsToDashboardTest(unittest.TestCase):
     fake_results_tracker.Cleanup = mock.MagicMock()
     fake_results = {'doesnt': 'matter', 'chart_data': {'enabled': False}}
     MakeDashboardJsonV1.return_value = fake_results
+    GetActiveMaster.return_value = 'cat'
 
     result = runtest._SendResultsToDashboard(
         fake_results_tracker, {
@@ -185,7 +193,7 @@ class SendResultsToDashboardTest(unittest.TestCase):
     # Then the data is re-formatted to a format that the dashboard accepts.
     MakeDashboardJsonV1.assert_called_with(
         fake_json_data, {'rev': 343}, 'sunspider', 'linux',
-        'Builder', 123, {}, False)
+        'Builder', 123, {}, False, 'cat')
 
     # Make sure SendResults isn't called because the benchmarks is disabled
     self.assertFalse(SendResults.called)
@@ -193,16 +201,19 @@ class SendResultsToDashboardTest(unittest.TestCase):
     # No errors, should return True since disabled run is successful.
     self.assertTrue(result)
 
+  @mock.patch('common.chromium_utils.GetActiveMaster')
   @mock.patch('slave.results_dashboard.MakeDashboardJsonV1')
   @mock.patch('slave.results_dashboard.SendResults')
   def test_SendResultsToDashboard_NoTelemetryOutput(
-      self, SendResults, MakeDashboardJsonV1):
+      self, SendResults, MakeDashboardJsonV1, GetActiveMaster):
     """Tests that the right methods get called in _SendResultsToDashboard."""
     fake_results_tracker = mock.Mock()
     fake_results_tracker.IsChartJson = mock.MagicMock(return_value=True)
     fake_results_tracker.ChartJson = mock.MagicMock(return_value=None)
     fake_results_tracker.IsReferenceBuild = mock.MagicMock(return_value=False)
     fake_results_tracker.Cleanup = mock.MagicMock()
+
+    GetActiveMaster.return_value = 'Foo'
 
     runtest._SendResultsToDashboard(
         fake_results_tracker, {

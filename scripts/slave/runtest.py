@@ -494,7 +494,8 @@ def _GenerateDashboardJson(log_processor, args):
         chart_json,
         args['revisions'], args['test'], args['system'],
         args['buildername'], args['buildnumber'],
-        args['supplemental_columns'], log_processor.IsReferenceBuild())
+        args['supplemental_columns'], log_processor.IsReferenceBuild(),
+        chromium_utils.GetActiveMaster())
   return None
 
 
@@ -561,7 +562,8 @@ def _SendResultsToDashboard(log_processor, args):
     charts = _GetDataFromLogProcessor(log_processor)
     results = results_dashboard.MakeListOfPoints(
         charts, args['system'], args['test'], args['buildername'],
-        args['buildnumber'], args['supplemental_columns'])
+        args['buildnumber'], args['supplemental_columns'],
+        chromium_utils.GetActiveMaster())
 
   if not results:
     return False

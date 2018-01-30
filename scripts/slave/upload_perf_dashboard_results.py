@@ -13,6 +13,8 @@ import sys
 from slave import results_dashboard
 from slave import slave_utils
 
+from common import chromium_utils # pylint: disable=W0611
+
 
 def _GetMainRevision(commit_pos, build_dir, revision=None):
   """Return revision to use as the numerical x-value in the perf dashboard.
@@ -45,14 +47,28 @@ def _GetDashboardJson(options):
     # These are legacy results.
     dashboard_json = results_dashboard.MakeListOfPoints(
       results, options.perf_id, stripped_test_name, options.buildername,
-      options.buildnumber, {}, revisions_dict=revisions)
+      options.buildnumber, {}, _GetMasterName(options),
+      revisions_dict=revisions)
   else:
     dashboard_json = results_dashboard.MakeDashboardJsonV1(
       results,
       revisions, stripped_test_name, options.perf_id,
       options.buildername, options.buildnumber,
-      {}, reference_build)
+      {}, reference_build, perf_dashboard_mastername=_GetMasterName(options))
   return dashboard_json
+
+
+def _GetMasterName(options):
+  perf_dashboard_mastername = options.perf_dashboard_mastername
+  if options.is_luci_builder and not perf_dashboard_mastername:
+    raise ValueError(
+        "Luci builder must set 'perf_dashboard_mastername'. See "
+        'bit.ly/perf-mastername for more details')
+  elif not options.is_luci_builder:
+    # TODO(crbug.com/801289):
+    # Remove this code path once all builders are converted to LUCI.
+    perf_dashboard_mastername = chromium_utils.GetActiveMaster()
+  return perf_dashboard_mastername
 
 
 def _GetDashboardHistogramData(options):
@@ -69,12 +85,14 @@ def _GetDashboardHistogramData(options):
 
   is_reference_build = 'reference' in options.name
   stripped_test_name = options.name.replace('.reference', '')
+
   return results_dashboard.MakeHistogramSetWithDiagnostics(
       options.results_file, options.chromium_checkout_dir, stripped_test_name,
-      options.perf_id, options.buildername, options.buildnumber, revisions, is_reference_build)
+      options.perf_id, options.buildername, options.buildnumber, revisions,
+      is_reference_build, perf_dashboard_mastername=_GetMasterName(options))
 
 
-def main(args):
+def _CreateParser():
   # Parse options
   parser = optparse.OptionParser()
   parser.add_option('--name')
@@ -84,6 +102,8 @@ def main(args):
   parser.add_option('--build-dir')
   parser.add_option('--perf-id')
   parser.add_option('--results-url')
+  parser.add_option('--is-luci-builder', action='store_true', default=False)
+  parser.add_option('--perf-dashboard-mastername')
   parser.add_option('--buildername')
   parser.add_option('--buildnumber')
   parser.add_option('--got-webrtc-revision')
@@ -94,6 +114,11 @@ def main(args):
   parser.add_option('--send-as-histograms', action='store_true')
   parser.add_option('--oauth-token-file')
   parser.add_option('--chromium-checkout-dir')
+  return parser
+
+
+def main(args):
+  parser = _CreateParser()
   options, extra_args = parser.parse_args(args)
 
   # Validate options.

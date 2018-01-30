@@ -8,6 +8,8 @@ from slave import build_directory
 from slave import performance_log_processor
 from slave import results_dashboard
 
+from common import chromium_utils
+
 
 def _GetDataFromLogProcessor(log_processor):
   charts = {}
@@ -69,7 +71,8 @@ def main():
   results = results_dashboard.MakeListOfPoints(
       charts=charts, bot=args.perf_id, test_name=args.test_name,
       buildername=args.buildername, buildnumber=args.buildnumber,
-      supplemental_columns=args.perf_config)
+      supplemental_columns=args.perf_config,
+      perf_dashboard_mastername=chromium_utils.GetActiveMaster())
 
   build_dir = build_directory.GetBuildOutputDirectory()
   results_dashboard.SendResults(results, args.url, build_dir)
