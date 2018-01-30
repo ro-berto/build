@@ -116,6 +116,7 @@ ANDROID_PERF_TESTS = freeze({
             '--android',
         ]
     },
+    'video_quality_loopback_test': {},
 })
 
 
