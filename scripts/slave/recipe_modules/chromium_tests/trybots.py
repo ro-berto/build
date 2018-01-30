@@ -50,6 +50,10 @@ TRYBOTS = freeze({
         'buildername': 'WebKit Mac Builder',
         'tester': 'WebKit Mac10.12',
       }),
+      'mac10.13_blink_rel': simple_bot({
+        'mastername': 'chromium.fyi',
+        'buildername': 'Dummy WebKit Mac10.13',
+      }),
       'win7_blink_dbg': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Win Builder (dbg)',
@@ -517,6 +521,10 @@ TRYBOTS = freeze({
         'mastername': 'chromium.mac',
         'buildername': 'Mac Builder',
         'tester': 'Mac10.12 Tests',
+      }),
+      'mac_chromium_10.13_rel_ng': simple_bot({
+        'mastername': 'chromium.fyi',
+        'buildername': 'Chromium Mac 10.13',
       }),
       'mac_chromium_10.10': simple_bot({
         'mastername': 'chromium.mac',

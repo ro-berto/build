@@ -889,6 +889,7 @@ SPEC['builders']['Android Builder (dbg) Goma Canary'] = chromium_apply_configs(
     ['goma_canary'])
 
 SPEC['builders'].update([
+    stock_config('Dummy WebKit Mac10.13', platform='mac'),
     stock_config('Jumbo Linux x64'),
     stock_config('Jumbo Mac'),
     stock_config('Jumbo Win x64'),
