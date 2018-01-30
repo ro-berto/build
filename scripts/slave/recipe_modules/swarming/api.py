@@ -26,7 +26,7 @@ IMPLIED_BINARY_PATH = '.swarming_module'
 # to IMPLIED_BINARY_PATH which should be added to $PATH.
 IMPLIED_CIPD_BINARIES = {
   'infra/tools/luci/vpython/${platform}':
-    ('', 'git_revision:66dd1c796e42ff9d98c7cb72c5e26e44ad2b5f97'),
+    ('', 'git_revision:27f5f70f88c13f5af0f05171a3b704c027c92d21'),
   'infra/tools/luci/logdog/butler/${platform}':
     ('', 'git_revision:08e35087eaf8ee95207450d2a2e33152a2f245be'),
 }
@@ -36,11 +36,11 @@ IMPLIED_CIPD_BINARIES = {
 # member of the tuple is the path relative to IMPLIED_BINARY_PATH which should
 # be added to $PATH.
 IMPLIED_CIPD_LUCI_BINARIES = {
-  # Both vpython versions MUSTH be changed together.
+  # Both vpython versions MUST be changed together.
   'infra/tools/luci/vpython/${platform}':
-    ('', 'git_revision:66dd1c796e42ff9d98c7cb72c5e26e44ad2b5f97'),
+    ('', 'git_revision:27f5f70f88c13f5af0f05171a3b704c027c92d21'),
   'infra/tools/luci/vpython-native/${platform}':
-    ('', 'git_revision:66dd1c796e42ff9d98c7cb72c5e26e44ad2b5f97'),
+    ('', 'git_revision:27f5f70f88c13f5af0f05171a3b704c027c92d21'),
   'infra/python/cpython/${platform}':
     ('bin', 'version:2.7.14.chromium14'),
 }
