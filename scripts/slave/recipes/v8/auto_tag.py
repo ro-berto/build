@@ -58,7 +58,7 @@ def GetCommitForRef(api, repo, ref):
   result = Git(
       api, 'ls-remote', repo, ref,
       # Need str() to turn unicode into ascii in production.
-      name=str('git ls-remote %s' % ref.replace('/', '_')),
+      name=str('git ls-remote %s' % ref.split('/')[-1]),
   ).strip()
   if result:
     # Extract hash if available. Otherwise keep empty string.
@@ -160,6 +160,7 @@ def RunSteps(api):
   repo = api.properties.get('repo', REPO)
 
   local_branch_ref = 'refs/remotes/branch-heads/%s' % branch
+  lkgr_ref = 'refs/heads/%s-lkgr' % branch
 
   api.gclient.set_config('v8')
   api.gclient.checkout()
@@ -203,13 +204,6 @@ def RunSteps(api):
         api.git('tag', str(head_version), head)
         api.git('push', repo, str(head_version))
 
-  # Update lkgr ref. Both legacy and new ref location.
-  # TODO(machenbach): Remove legacy version after M68.
-  UpdateRef(api, repo, head, 'refs/heads/%s-lkgr' % branch)
-  UpdateRef(api, repo, head, 'refs/heads/lkgr/%s' % branch)
-
-
-def UpdateRef(api, repo, head, lkgr_ref):
   # Get the branch's current lkgr ref and update to HEAD.
   current_lkgr = GetCommitForRef(api, repo, lkgr_ref)
   # If the lkgr_ref doesn't exist, it's an empty string. In this case the push
@@ -245,12 +239,8 @@ def GenTests(api):
         stdout('git log', head) +
         stdout('git describe', head_tag) +
         stdout(
-            'git ls-remote refs_heads_3.4-lkgr',
+            'git ls-remote 3.4-lkgr',
             current_lkgr + '\trefs/heads/3.4-lkgr',
-        ) +
-        stdout(
-            'git ls-remote refs_heads_lkgr_3.4',
-            current_lkgr + '\trefs/heads/lkgr/3.4',
         )
     )
     if dry_run:
