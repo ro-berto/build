@@ -136,59 +136,51 @@ def AnalyzeDartUI(api):
     api.step('analyze dart_ui', ['/bin/sh', 'flutter/travis/analyze.sh'])
 
 
-def BuildLinuxAndroidx86(api):
-  for x86_variant in ['x64', 'x86']:
-    RunGN(api, '--android', '--android-cpu=' + x86_variant)
-    out_dir = 'android_debug_' + x86_variant
-    Build(api, out_dir)
-    folder = 'android-' + x86_variant
-    UploadArtifacts(api, folder, [
-      'out/%s/flutter.jar' % out_dir,
-      'out/%s/lib.stripped/libflutter.so' % out_dir,
-    ])
-    UploadArtifacts(api, folder, [
-      'out/%s/libflutter.so' % out_dir
-    ], archive_name='symbols.zip')
-
-
-def AddPathPrefix(api, prefix, paths):
-  return map(lambda path: api.path.join(prefix, path), paths)
-
-
-def BuildLinuxAndroidArm(api):
-  out_paths = [
-    'flutter.jar',
+def BuildLinuxAndroid(api):
+  debug_variants = [
+    ('arm', 'android_debug', 'android-arm'),
+    ('arm64', 'android_debug_arm64', 'android-arm64'),
+    ('x86', 'android_debug_x86', 'android-x86'),
+    ('x64', 'android_debug_x64', 'android-x64'),
   ]
-  RunGN(api, '--android')
-  Build(api, 'android_debug')
-  Build(api, 'android_debug', ':dist')
-  UploadArtifacts(api, 'android-arm',
-                  AddPathPrefix(api, 'out/android_debug', out_paths))
-  UploadArtifacts(api, 'android-arm', [
-      'out/android_debug/libflutter.so'
-  ], archive_name='symbols.zip')
+  for android_cpu, out_dir, artifact_dir in debug_variants:
+    RunGN(api, '--android', '--android-cpu=%s' % android_cpu)
+    Build(api, out_dir)
+    UploadArtifacts(api, artifact_dir, [
+        'out/%s/flutter.jar' % out_dir,
+        'out/%s/lib.stripped/libflutter.so' % out_dir,
+    ])
+    UploadArtifacts(api, artifact_dir, ['out/%s/libflutter.so' % out_dir],
+                    archive_name='symbols.zip')
 
   # Build and upload engines for the runtime modes that use AOT compilation.
-  for runtime_mode in ['profile', 'release']:
-    build_output_dir = 'android_' + runtime_mode
-    upload_dir = 'android-arm-' + runtime_mode
+  aot_variants = [
+    ('arm', 'android_%s', 'android-arm-%s', 'clang_x86'),
+    ('arm64', 'android_%s_arm64', 'android-arm64-%s', 'clang_x64'),
+  ]
+  for android_cpu, out_dir, artifact_dir, clang_dir in aot_variants:
+    for runtime_mode in ['profile', 'release']:
+      build_output_dir = out_dir % runtime_mode
+      upload_dir = artifact_dir % runtime_mode
 
-    RunGN(api, '--android', '--runtime-mode=' + runtime_mode)
-    Build(api, build_output_dir)
+      RunGN(api, '--android', '--runtime-mode=' + runtime_mode, '--android-cpu=%s' % android_cpu)
+      Build(api, build_output_dir)
 
-    UploadArtifacts(api, upload_dir, [
-      'third_party/dart/runtime/bin/dart_io_entries.txt',
-      'flutter/runtime/dart_vm_entry_points.txt',
-    ] + AddPathPrefix(api, 'out/%s' % build_output_dir, out_paths))
+      UploadArtifacts(api, upload_dir, [
+        'third_party/dart/runtime/bin/dart_io_entries.txt',
+        'flutter/runtime/dart_vm_entry_points.txt',
+        'out/%s/flutter.jar' % build_output_dir,
+      ])
 
-    # Upload artifacts used for AOT compilation on Linux hosts.
-    UploadArtifacts(api, upload_dir, [
-      'out/%s/clang_x86/gen_snapshot' % build_output_dir,
-    ], archive_name='linux-x64.zip')
-    UploadArtifacts(api, upload_dir, [
-        'out/%s/libflutter.so' % build_output_dir
-    ], archive_name='symbols.zip')
+      # Upload artifacts used for AOT compilation on Linux hosts.
+      UploadArtifacts(api, upload_dir, [
+        'out/%s/%s/gen_snapshot' % (build_output_dir, clang_dir),
+      ], archive_name='linux-x64.zip')
+      UploadArtifacts(api, upload_dir, [
+          'out/%s/libflutter.so' % build_output_dir
+      ], archive_name='symbols.zip')
 
+  Build(api, 'android_debug', ':dist')
   UploadDartPackage(api, 'sky_engine')
 
 
@@ -447,8 +439,7 @@ def RunSteps(api):
       BuildLinux(api)
       TestObservatory(api)
       TestEngine(api)
-      BuildLinuxAndroidArm(api)
-      BuildLinuxAndroidx86(api)
+      BuildLinuxAndroid(api)
       BuildJavadoc(api)
 
     if api.platform.is_mac:
