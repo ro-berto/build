@@ -38,10 +38,6 @@ MAX_FAILURE_LOGS = 10
 # ongoing build's total.
 BISECT_DURATION_FACTOR = 5
 
-MIPS_TOOLCHAIN = ('Codescape.GNU.Tools.Package.2015.01-7.for.MIPS.MTI.Linux'
-                  '.CentOS-5.x86_64.tar.gz')
-MIPS_DIR = 'mips-mti-linux-gnu/2015.01-7'
-
 TEST_RUNNER_PARSER = argparse.ArgumentParser()
 TEST_RUNNER_PARSER.add_argument('--extra-flags')
 
@@ -376,16 +372,7 @@ class V8Api(recipe_api.RecipeApi):
     self.m.chromium.runhooks(env=env, **kwargs)
 
   def setup_mips_toolchain(self):
-    # TODO(machenbach): Deprecate this before migrating to LUCI.
-    mips_dir = self.m.path['start_dir'].join(MIPS_DIR, 'bin')
-    if not self.m.path.exists(mips_dir):
-      self.m.gsutil.download_url(
-          'gs://chromium-v8/%s' % MIPS_TOOLCHAIN,
-          self.m.path['start_dir'],
-          name='bootstrapping mips toolchain')
-      with self.m.context(cwd=self.m.path['start_dir']):
-        self.m.step('unzipping', ['tar', 'xf', MIPS_TOOLCHAIN])
-
+    mips_dir = self.m.path['checkout'].join('tools', 'mips_toolchain', 'bin')
     self.c.gyp_env.CC = self.m.path.join(mips_dir, 'mips-mti-linux-gnu-gcc')
     self.c.gyp_env.CXX = self.m.path.join(mips_dir, 'mips-mti-linux-gnu-g++')
     self.c.gyp_env.AR = self.m.path.join(mips_dir, 'mips-mti-linux-gnu-ar')

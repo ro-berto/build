@@ -69,44 +69,21 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "cp",
-      "gs://chromium-v8/Codescape.GNU.Tools.Package.2015.01-7.for.MIPS.MTI.Linux.CentOS-5.x86_64.tar.gz",
-      "[START_DIR]"
-    ],
-    "infra_step": true,
-    "name": "gsutil bootstrapping mips toolchain"
-  },
-  {
-    "cmd": [
-      "tar",
-      "xf",
-      "Codescape.GNU.Tools.Package.2015.01-7.for.MIPS.MTI.Linux.CentOS-5.x86_64.tar.gz"
-    ],
-    "name": "unzipping"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
-      "AR": "[START_DIR]/mips-mti-linux-gnu/2015.01-7/bin/mips-mti-linux-gnu-ar",
-      "CC": "[START_DIR]/mips-mti-linux-gnu/2015.01-7/bin/mips-mti-linux-gnu-gcc",
+      "AR": "[START_DIR]/v8/tools/mips_toolchain/bin/mips-mti-linux-gnu-ar",
+      "CC": "[START_DIR]/v8/tools/mips_toolchain/bin/mips-mti-linux-gnu-gcc",
       "CHROME_HEADLESS": "1",
-      "CXX": "[START_DIR]/mips-mti-linux-gnu/2015.01-7/bin/mips-mti-linux-gnu-g++",
+      "CXX": "[START_DIR]/v8/tools/mips_toolchain/bin/mips-mti-linux-gnu-g++",
       "GYP_CHROMIUM_NO_ACTION": "0",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "target_arch=mips v8_enable_i18n_support=0 v8_target_arch=mips v8_use_snapshot=false",
-      "LINK": "[START_DIR]/mips-mti-linux-gnu/2015.01-7/bin/mips-mti-linux-gnu-g++",
+      "LINK": "[START_DIR]/v8/tools/mips_toolchain/bin/mips-mti-linux-gnu-g++",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]",
-      "RANLIB": "[START_DIR]/mips-mti-linux-gnu/2015.01-7/bin/mips-mti-linux-gnu-ranlib"
+      "RANLIB": "[START_DIR]/v8/tools/mips_toolchain/bin/mips-mti-linux-gnu-ranlib"
     },
     "name": "gclient runhooks"
   },
