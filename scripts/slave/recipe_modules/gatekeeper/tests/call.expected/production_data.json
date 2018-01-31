@@ -103,6 +103,20 @@
       "@@@STEP_LOG_LINE@json.output@      ]@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"dart\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"build-db\": \"dart_build_db.json\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"config\": \"dart/gatekeeper_dart.json\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"masters\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.dart\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"*\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      ], @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.dart.fyi\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"*\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      ]@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"open-tree\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"set-status\": false@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"infra\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"build-db\": \"infra_db.json\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"masters\": {@@@",
@@ -599,6 +613,28 @@
       "https://build.chromium.org/p/chromium.webkit:Android Builder,Webkit Android (Nexus4)"
     ],
     "name": "gatekeeper: android"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/gatekeeper_ng.py",
+      "--json",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/dart/gatekeeper_dart.json",
+      "--email-app-secret-file",
+      "/creds/gatekeeper/mailer_password",
+      "--milo-creds",
+      "/creds/service_accounts/service-account-gatekeeper.json",
+      "--build-db",
+      "dart_build_db.json",
+      "https://build.chromium.org/p/client.dart",
+      "https://build.chromium.org/p/client.dart.fyi"
+    ],
+    "name": "gatekeeper: dart"
   },
   {
     "cmd": [
