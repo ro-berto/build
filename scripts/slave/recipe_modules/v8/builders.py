@@ -598,7 +598,7 @@ BUILDERS = {
         'parent_buildername': 'V8 Win32 - debug builder',
         'enable_swarming': True,
         'tests': [
-          V8Testing(3),
+          V8Testing(4),
           Test262,
           Mozilla,
         ],
@@ -652,10 +652,10 @@ BUILDERS = {
           'os': 'Windows-7-SP1',
         },
         'tests': [
-          V8Testing(3),
+          V8Testing(4),
           Test262,
           Mozilla,
-        ] + with_extra_variants([V8Testing]),
+        ] + with_extra_variants([V8Testing(2)]),
         'testing': {'platform': 'win'},
       },
       'V8 Win64 - msvc': {
@@ -886,7 +886,7 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [
-          V8Testing(2),
+          V8Testing(4),
           Test262(4),
           Mozilla,
           Benchmarks,
