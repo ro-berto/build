@@ -1852,26 +1852,6 @@ BUILDERS = {
         ] + with_extra_variants([V8Testing(2)]),
         'testing': {'platform': 'linux'},
       },
-      'V8 Linux - arm64 - sim - nosnap - debug': {
-        'chromium_apply_config': [
-          'default_compiler', 'v8_ninja', 'goma', 'simulate_arm',
-          'no_snapshot', 'mb'],
-        'v8_apply_config': ['verify_heap_skip_remembered_set'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'enable_swarming': True,
-        'tests': [V8Testing(7)],
-        'variants': V8Variant('default'),
-        'testing': {'platform': 'linux'},
-        'swarming_properties': {
-          'default_expiration': 2 * 60 * 60,
-          'default_hard_timeout': 2 * 60 * 60,
-          'default_priority': 35,
-        },
-      },
       'V8 Linux - arm64 - sim - gc stress': {
         'chromium_apply_config': [
           'default_compiler', 'v8_ninja', 'goma', 'simulate_arm', 'mb'],
