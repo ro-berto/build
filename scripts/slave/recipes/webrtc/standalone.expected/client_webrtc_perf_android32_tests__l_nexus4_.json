@@ -122,6 +122,38 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/download_from_google_storage.py",
+      "--bucket=chromium-webrtc-resources",
+      "--directory",
+      "[BUILDER_CACHE]/Android32_Tests__L_Nexus4_/src/rtc_tools/testing"
+    ],
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "download apprtc"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/download_from_google_storage.py",
+      "--bucket=chromium-webrtc-resources",
+      "--directory",
+      "[BUILDER_CACHE]/Android32_Tests__L_Nexus4_/src/rtc_tools/testing/golang/linux"
+    ],
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "download golang"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[build::webrtc]/resources/cleanup_files.py",
       "[BUILDER_CACHE]/Android32_Tests__L_Nexus4_/src/out"
     ],

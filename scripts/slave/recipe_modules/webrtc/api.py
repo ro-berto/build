@@ -179,6 +179,18 @@ class WebRTCApi(recipe_api.RecipeApi):
                                                  'download_tools.py'),
                     args=[self.m.path['checkout'].join(
                         'tools_webrtc', 'video_quality_toolchain', 'linux')])
+      self.m.python('download apprtc',
+                    self.m.depot_tools.download_from_google_storage_path,
+                    args=['--bucket=chromium-webrtc-resources',
+                          '--directory',
+                          self.m.path['checkout'].join('rtc_tools', 'testing')])
+      self.m.python('download golang',
+                    self.m.depot_tools.download_from_google_storage_path,
+                    args=['--bucket=chromium-webrtc-resources',
+                          '--directory',
+                          self.m.path['checkout'].join(
+                              'rtc_tools', 'testing', 'golang', 'linux')])
+
 
   def check_swarming_version(self):
     if self.c.enable_swarming:
