@@ -450,7 +450,7 @@
       "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/linux/dart-sdk/bin:<PATH>"
     },
     "name": "Zip android-arm artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"flutter.jar\", \"path\": \"[START_DIR]/src/out/android_debug/flutter.jar\", \"type\": \"file\"}, {\"archive_name\": \"libflutter.so\", \"path\": \"[START_DIR]/src/out/android_debug/lib.stripped/libflutter.so\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_4/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"flutter.jar\", \"path\": \"[START_DIR]/src/out/android_debug/flutter.jar\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_4/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -571,7 +571,7 @@
       "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/linux/dart-sdk/bin:<PATH>"
     },
     "name": "Zip android-arm64 artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"flutter.jar\", \"path\": \"[START_DIR]/src/out/android_debug_arm64/flutter.jar\", \"type\": \"file\"}, {\"archive_name\": \"libflutter.so\", \"path\": \"[START_DIR]/src/out/android_debug_arm64/lib.stripped/libflutter.so\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_6/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"flutter.jar\", \"path\": \"[START_DIR]/src/out/android_debug_arm64/flutter.jar\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_6/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [

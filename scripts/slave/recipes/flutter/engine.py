@@ -146,10 +146,10 @@ def BuildLinuxAndroid(api):
   for android_cpu, out_dir, artifact_dir in debug_variants:
     RunGN(api, '--android', '--android-cpu=%s' % android_cpu)
     Build(api, out_dir)
-    UploadArtifacts(api, artifact_dir, [
-        'out/%s/flutter.jar' % out_dir,
-        'out/%s/lib.stripped/libflutter.so' % out_dir,
-    ])
+    artifacts = ['out/%s/flutter.jar' % out_dir]
+    if android_cpu in ['x86', 'x64']:
+        artifacts.append('out/%s/lib.stripped/libflutter.so' % out_dir)
+    UploadArtifacts(api, artifact_dir, artifacts)
     UploadArtifacts(api, artifact_dir, ['out/%s/libflutter.so' % out_dir],
                     archive_name='symbols.zip')
 
