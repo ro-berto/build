@@ -105,7 +105,7 @@ class ArchiveApi(recipe_api.RecipeApi):
       key = 'got_%s_revision_cp' % primary_project
     else:
       key = 'got_revision_cp'
-    return update_properties[key]
+    return update_properties.get(key, update_properties.get('got_src_revision_cp'))
 
   def _get_git_commit(self, update_properties, primary_project):
     """Returns: (str/None) the git commit hash for a given project.
