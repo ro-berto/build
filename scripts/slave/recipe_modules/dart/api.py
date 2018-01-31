@@ -4,13 +4,9 @@ from recipe_engine import recipe_api
 class DartApi(recipe_api.RecipeApi):
   """Recipe module for code commonly used in dart recipes. Shouldn't be used elsewhere."""
 
-  def checkout(self, channel=None, clobber=False):
+  def checkout(self, clobber=False):
     """Checks out the dart code and prepares it for building."""
     self.m.gclient.set_config('dart')
-    # TODO(athom): Remove channel parameter from this function and fix URL
-    # in gclient 'dart' config, remove line below.
-    self.m.gclient.c.solutions[0].url = 'https://dart.googlesource.com/sdk.git'
-
     self.m.goma.ensure_goma()
 
     with self.m.context(cwd=self.m.path['cache'].join('builder'),

@@ -77,7 +77,7 @@ def RunSteps(api):
     assert all_options.has_key(option)
   mode = 'debug' if 'debug' in options else 'release'
 
-  api.dart.checkout(channel)
+  api.dart.checkout()
 
   build_args = ['-m%s' % mode, '--arch=ia32', 'dart2js_bot']
   if 'unittest' in options:

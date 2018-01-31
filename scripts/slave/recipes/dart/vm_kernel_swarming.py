@@ -41,7 +41,7 @@ def RunSteps(api):
   if mode == 'debug':
     test_args.append('--vm-options=--no-enable-malloc-hooks')
 
-  api.dart.checkout(channel)
+  api.dart.checkout()
 
   build_args = ['-m%s' % mode, '--arch=%s' % arch, 'create_sdk', 'runtime_kernel']
   isolate_hash = api.dart.build(build_args, 'dart_tests_extended')

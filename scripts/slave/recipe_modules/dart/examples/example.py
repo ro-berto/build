@@ -122,10 +122,8 @@ TEST_MATRIX = {
 }
 
 def RunSteps(api):
-  channel = 'try'
-  api.dart.checkout(channel, True)
-  channel = 'release'
-  api.dart.checkout(channel, False)
+  api.dart.checkout(True)
+  api.dart.checkout(False)
 
   build_args = ['--super-fast']
   api.dart.build(build_args, name='can_time_out')

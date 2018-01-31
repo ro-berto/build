@@ -74,7 +74,7 @@ def RunSteps(api):
     if channel not in ['be', 'dev', 'stable', 'integration', 'try']:
       channel = 'be'
     clobber = 'clobber' in api.properties
-    api.dart.checkout(channel, clobber)
+    api.dart.checkout(clobber)
 
   api.dart.kill_tasks()
 

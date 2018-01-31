@@ -52,7 +52,7 @@ def RunSteps(api):
   channel = builder_fragments[-1]
   assert channel in ['be', 'dev', 'stable', 'integration', 'try']
 
-  api.dart.checkout(channel=channel)
+  api.dart.checkout()
 
   with api.context(cwd=api.path['checkout']):
     with api.depot_tools.on_path():

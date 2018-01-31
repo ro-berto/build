@@ -23,7 +23,7 @@ def RunSteps(api, buildername):
   assert channel in ['be', 'dev', 'stable', 'try']
 
   try:
-    api.dart.checkout(channel=channel, clobber=True)
+    api.dart.checkout(clobber=True)
 
     with api.context(cwd=api.path['checkout'],
                    env={'BUILDBOT_BUILDERNAME':buildername}):
