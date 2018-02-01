@@ -102,7 +102,6 @@
     'client.v8.fyi': {},
     'client.v8.official': {},
     'client.v8.ports': {},
-    'tryserver.v8': {},
 
     # NaCl / WASM
     'client.nacl': {},

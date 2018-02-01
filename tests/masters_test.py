@@ -286,7 +286,6 @@ def main(argv):
       'master.tryserver.blink': 'BlinkTryServer',
       'master.tryserver.libyuv': 'LibyuvTryServer',
       'master.tryserver.nacl': 'NativeClientTryServer',
-      'master.tryserver.v8': 'V8TryServer',
       'master.tryserver.webrtc': 'WebRTCTryServer',
   }
   all_masters = {base_dir: public_masters}
