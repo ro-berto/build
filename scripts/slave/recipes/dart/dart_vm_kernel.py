@@ -115,7 +115,12 @@ def RunSteps(api):
         test_args.append('--copy-coredumps')
       test_args.extend(shard_args)
       if 'precomp' not in buildername:
-        front_end_args = ['pkg/front_end', '-rvm', '-cnone', '--checked']
+        front_end_args = ['pkg/front_end',
+                          '-rvm',
+                          '-cnone',
+                          '--checked',
+                          "--timeout=120",
+        ]
         front_end_args.extend(test_args)
         test_args.append('--append_logs')
         api.python('front-end tests',

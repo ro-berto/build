@@ -92,6 +92,7 @@
       "-rvm",
       "-cnone",
       "--checked",
+      "--timeout=120",
       "-mdebug",
       "--arch=x64",
       "--progress=line",
