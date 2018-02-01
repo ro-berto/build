@@ -5,14 +5,18 @@
     "https://build.chromium.org/p/client.dart": [
       {
         "builders": {
-          "*": {}
+          "*": {
+            "respect_build_status": true
+          }
         }
       }
     ],
     "https://build.chromium.org/p/client.dart.fyi": [
       {
         "builders": {
-          "*": {}
+          "*": {
+            "respect_build_status": true
+          }
         }
       }
     ]
