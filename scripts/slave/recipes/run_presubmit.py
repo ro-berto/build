@@ -142,6 +142,7 @@ def GenTests(api):
       'internal_deps',
       'master_deps',
       'nacl',
+      'pdfium',
       'skia',
       'slave_deps',
       'v8',
