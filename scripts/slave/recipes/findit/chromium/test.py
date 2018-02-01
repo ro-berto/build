@@ -764,7 +764,7 @@ def GenTests(api):
           {'gl_tests': ['Test.gl_One'], 'browser_tests': ['Test.browser_One']},
           'mac', 'Mac10.9 Tests', use_analyze=False,
            good_revision='r0', bad_revision='r6',
-           suspected_revisions=['r3','r6']) +
+           suspected_revisions=['r3', 'r6']) +
       api.override_step_data(
           'test r2.read test spec (chromium.mac.json)',
           api.json.output({
@@ -773,6 +773,10 @@ def GenTests(api):
                       {
                           'test': 'gl_tests',
                           'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                      {
+                        'test': 'gl_tests',
+                        'swarming': {'can_use_on_swarming_builders': True},
                       },
                       {
                           'test': 'browser_tests',

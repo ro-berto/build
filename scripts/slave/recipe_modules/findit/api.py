@@ -2,8 +2,9 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import json
 from collections import defaultdict
+import json
+import logging
 import re
 
 from recipe_engine import recipe_api
@@ -158,6 +159,9 @@ class FinditApi(recipe_api.RecipeApi):
           If True, do not actually run the tests. Useful when we only want to
           isolate the targets for running elsewhere.
     """
+
+    logging.debug('compile_and_test_at_revision: %s' % revision)
+
     results = {}
     abbreviated_revision = revision[:7]
     with api.m.step.nest('test %s' % str(abbreviated_revision)):
@@ -166,6 +170,7 @@ class FinditApi(recipe_api.RecipeApi):
           'mastername': target_mastername,
           'buildername': target_buildername,
           'tester': target_testername}
+      logging.debug('bot_id: %s', json.dumps(bot_id))
       bot_config = api.m.chromium_tests.create_generalized_bot_config_object(
           [bot_id])
       bot_update_step, bot_db = api.m.chromium_tests.prepare_checkout(
@@ -173,8 +178,21 @@ class FinditApi(recipe_api.RecipeApi):
 
       # Figure out which test steps to run.
       all_tests, _ = api.m.chromium_tests.get_tests(bot_config, bot_db)
-      requested_tests_to_run = [
-          test for test in all_tests if test.name in requested_tests]
+
+      # Adding debug logging messages.
+      all_tests_names = [t.name for t in all_tests]
+      logging.debug('actual_tests_to_run: %s',
+                    json.dumps(all_tests_names))
+
+      # Makes sure there are no steps with the same step name.
+      requested_tests_to_run_dict = {}
+      for test in all_tests:
+        if test.name in requested_tests:
+          if not requested_tests_to_run_dict.get(test.name):
+            requested_tests_to_run_dict[test.name] = test
+          else:
+            logging.debug('%s showed repeatedly in all_tests.', test.name)
+      requested_tests_to_run = requested_tests_to_run_dict.values()
 
       # Figure out the test targets to be compiled.
       requested_test_targets = []
@@ -245,6 +263,7 @@ class FinditApi(recipe_api.RecipeApi):
                   'valid': True
               } for x in requested_tests.keys()
           }, defaultdict(list)
+
         failed_tests = api.m.test_utils.run_tests(
             api.chromium_tests.m, actual_tests_to_run,
             suffix=abbreviated_revision)

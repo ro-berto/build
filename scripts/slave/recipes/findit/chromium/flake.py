@@ -86,7 +86,7 @@ def RunSteps(api, target_mastername, target_testername,
   }
 
   try:
-    test_results[test_revision], _  = (
+    test_results[test_revision], _ = (
         api.findit.compile_and_test_at_revision(
           api, target_mastername, target_buildername, target_testername,
           test_revision, tests, False, test_repeat_count, skip_tests))
