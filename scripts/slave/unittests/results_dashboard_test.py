@@ -153,7 +153,7 @@ class ResultsDashboardFormatTest(unittest.TestCase):
         },
         'my-bot', 'foo_test', 'Builder',
         10, {}, revisions_dict={'rev': '377777'},
-        perf_dashboard_mastername='MyMaster')
+        perf_dashboard_machine_group='MyMaster')
     expected_points = [
         {
             'master': 'MyMaster',

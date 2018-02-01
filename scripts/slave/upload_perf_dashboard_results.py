@@ -47,28 +47,28 @@ def _GetDashboardJson(options):
     # These are legacy results.
     dashboard_json = results_dashboard.MakeListOfPoints(
       results, options.perf_id, stripped_test_name, options.buildername,
-      options.buildnumber, {}, _GetMasterName(options),
+      options.buildnumber, {}, _GetMachineGroup(options),
       revisions_dict=revisions)
   else:
     dashboard_json = results_dashboard.MakeDashboardJsonV1(
       results,
       revisions, stripped_test_name, options.perf_id,
       options.buildername, options.buildnumber,
-      {}, reference_build, perf_dashboard_mastername=_GetMasterName(options))
+      {}, reference_build, perf_dashboard_machine_group=_GetMachineGroup(options))
   return dashboard_json
 
 
-def _GetMasterName(options):
-  perf_dashboard_mastername = options.perf_dashboard_mastername
-  if options.is_luci_builder and not perf_dashboard_mastername:
+def _GetMachineGroup(options):
+  perf_dashboard_machine_group = options.perf_dashboard_machine_group
+  if options.is_luci_builder and not perf_dashboard_machine_group:
     raise ValueError(
-        "Luci builder must set 'perf_dashboard_mastername'. See "
-        'bit.ly/perf-mastername for more details')
+        "Luci builder must set 'perf_dashboard_machine_group'. See "
+        'bit.ly/perf-dashboard-machine-group for more details')
   elif not options.is_luci_builder:
     # TODO(crbug.com/801289):
     # Remove this code path once all builders are converted to LUCI.
-    perf_dashboard_mastername = chromium_utils.GetActiveMaster()
-  return perf_dashboard_mastername
+    perf_dashboard_machine_group = chromium_utils.GetActiveMaster()
+  return perf_dashboard_machine_group
 
 
 def _GetDashboardHistogramData(options):
@@ -89,7 +89,7 @@ def _GetDashboardHistogramData(options):
   return results_dashboard.MakeHistogramSetWithDiagnostics(
       options.results_file, options.chromium_checkout_dir, stripped_test_name,
       options.perf_id, options.buildername, options.buildnumber, revisions,
-      is_reference_build, perf_dashboard_mastername=_GetMasterName(options))
+      is_reference_build, perf_dashboard_machine_group=_GetMachineGroup(options))
 
 
 def _CreateParser():
@@ -103,7 +103,7 @@ def _CreateParser():
   parser.add_option('--perf-id')
   parser.add_option('--results-url')
   parser.add_option('--is-luci-builder', action='store_true', default=False)
-  parser.add_option('--perf-dashboard-mastername')
+  parser.add_option('--perf-dashboard-machine-group')
   parser.add_option('--buildername')
   parser.add_option('--buildnumber')
   parser.add_option('--got-webrtc-revision')

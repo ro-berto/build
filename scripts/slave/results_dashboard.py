@@ -177,13 +177,13 @@ def _GetData(line):
 def MakeHistogramSetWithDiagnostics(histograms_file, chromium_checkout_path,
                                     test_name, bot, buildername, buildnumber,
                                     revisions_dict, is_reference_build,
-                                    perf_dashboard_mastername):
+                                    perf_dashboard_machine_group):
   add_diagnostics_args = []
   add_diagnostics_args.extend([
       '--benchmarks', test_name,
       '--bots', bot,
       '--builds', buildnumber,
-      '--masters', perf_dashboard_mastername,
+      '--masters', perf_dashboard_machine_group,
       '--is_reference_build', 'true' if is_reference_build else '',
   ])
 
@@ -215,7 +215,7 @@ def MakeHistogramSetWithDiagnostics(histograms_file, chromium_checkout_path,
 
 def MakeListOfPoints(charts, bot, test_name, buildername,
                      buildnumber, supplemental_columns,
-                     perf_dashboard_mastername,
+                     perf_dashboard_machine_group,
                      revisions_dict=None):
   """Constructs a list of point dictionaries to send.
 
@@ -230,7 +230,7 @@ def MakeListOfPoints(charts, bot, test_name, buildername,
     buildername: Builder name (for stdio links).
     buildnumber: Build number (for stdio links).
     supplemental_columns: A dictionary of extra data to send with a point.
-    perf_dashboard_mastername: Builder's master name.
+    perf_dashboard_machine_group: Builder's perf machine group.
 
   Returns:
     A list of dictionaries in the format accepted by the perf dashboard.
@@ -247,7 +247,7 @@ def MakeListOfPoints(charts, bot, test_name, buildername,
       is_important = trace_name in chart_data.get('important', [])
       test_path = _TestPath(test_name, chart_name, trace_name)
       result = {
-          'master': perf_dashboard_mastername,
+          'master': perf_dashboard_machine_group,
           'bot': bot,
           'test': test_path,
           'revision': point_id,
@@ -277,7 +277,7 @@ def MakeListOfPoints(charts, bot, test_name, buildername,
 
 def MakeDashboardJsonV1(chart_json, revision_dict, test_name, bot, buildername,
                         buildnumber, supplemental_dict, is_ref,
-                        perf_dashboard_mastername):
+                        perf_dashboard_machine_group):
   """Generates Dashboard JSON in the new Telemetry format.
 
   See http://goo.gl/mDZHPl for more info on the format.
@@ -293,7 +293,7 @@ def MakeDashboardJsonV1(chart_json, revision_dict, test_name, bot, buildername,
     supplemental_dict: A dictionary of extra data to send with a point;
         this includes revisions and annotation data.
     is_ref: True if this is a reference build, False otherwise.
-    perf_dashboard_mastername: Builder's perf master name.
+    perf_dashboard_machine_group: Builder's perf machine group.
 
   Returns:
     A dictionary in the format accepted by the perf dashboard.
@@ -321,7 +321,7 @@ def MakeDashboardJsonV1(chart_json, revision_dict, test_name, bot, buildername,
   test_name = test_name.replace('.reference', '')
 
   fields = {
-      'master': perf_dashboard_mastername,
+      'master': perf_dashboard_machine_group,
       'bot': bot,
       'test_suite_name': test_name,
       'point_id': point_id,

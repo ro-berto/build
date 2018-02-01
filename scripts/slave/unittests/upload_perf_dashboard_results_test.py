@@ -27,8 +27,8 @@ class UploadPerfDashboardResultsTest(unittest.TestCase):
   def tearDown(self):
     self.mox.UnsetStubs()
 
-  def GetPerfDashboardMasterName(self, options):
-    return upload_perf_dashboard_results._GetMasterName(options)
+  def GetPerfDashboardMachineGroup(self, options):
+    return upload_perf_dashboard_results._GetMachineGroup(options)
 
   def testGetMasterName_Buildbot_PerfDashboardMasterNameNotSet(self):
     self.mox.StubOutWithMock(chromium_utils, 'GetActiveMaster')
@@ -36,7 +36,7 @@ class UploadPerfDashboardResultsTest(unittest.TestCase):
     self.mox.ReplayAll()
 
     options, _ = self.parser.parse_args([])
-    self.assertEquals('ChromiumPerf', self.GetPerfDashboardMasterName(options))
+    self.assertEquals('ChromiumPerf', self.GetPerfDashboardMachineGroup(options))
 
   def testGetMasterName_Buildbot_PerfDashboardMasterNameSet(self):
     self.mox.StubOutWithMock(chromium_utils, 'GetActiveMaster')
@@ -44,8 +44,8 @@ class UploadPerfDashboardResultsTest(unittest.TestCase):
     self.mox.ReplayAll()
 
     options, _ = self.parser.parse_args(
-        ['--perf-dashboard-mastername', 'sensei'])
-    self.assertEquals('ChromiumPerf', self.GetPerfDashboardMasterName(options))
+        ['--perf-dashboard-machine-group', 'sensei'])
+    self.assertEquals('ChromiumPerf', self.GetPerfDashboardMachineGroup(options))
 
   def testGetMasterName_LUCI_PerfDashboardMasterNameNotSet(self):
     self.mox.StubOutWithMock(chromium_utils, 'GetActiveMaster')
@@ -55,7 +55,7 @@ class UploadPerfDashboardResultsTest(unittest.TestCase):
     options, _ = self.parser.parse_args(['--is-luci-builder'])
 
     with self.assertRaises(ValueError):
-      self.GetPerfDashboardMasterName(options)
+      self.GetPerfDashboardMachineGroup(options)
 
   def testGetMasterName_LUCI_PerfDashboardMasterNameSet(self):
     self.mox.StubOutWithMock(chromium_utils, 'GetActiveMaster')
@@ -63,9 +63,9 @@ class UploadPerfDashboardResultsTest(unittest.TestCase):
     self.mox.ReplayAll()
 
     options, _ = self.parser.parse_args(
-        ['--is-luci-builder', '--perf-dashboard-mastername', 'Yoda'])
+        ['--is-luci-builder', '--perf-dashboard-machine-group', 'Yoda'])
 
-    self.assertEquals('Yoda', self.GetPerfDashboardMasterName(options))
+    self.assertEquals('Yoda', self.GetPerfDashboardMachineGroup(options))
 
 
 if __name__ == '__main__':

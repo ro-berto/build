@@ -72,7 +72,7 @@ def main():
       charts=charts, bot=args.perf_id, test_name=args.test_name,
       buildername=args.buildername, buildnumber=args.buildnumber,
       supplemental_columns=args.perf_config,
-      perf_dashboard_mastername=chromium_utils.GetActiveMaster())
+      perf_dashboard_machine_group=chromium_utils.GetActiveMaster())
 
   build_dir = build_directory.GetBuildOutputDirectory()
   results_dashboard.SendResults(results, args.url, build_dir)
