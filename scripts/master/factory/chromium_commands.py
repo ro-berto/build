@@ -65,7 +65,6 @@ class ChromiumCommands(commands.FactoryCommands):
     self._archive_tool = J(s_dir, 'archive_build.py')
     self._sizes_tool = J(s_dir, 'sizes.py')
     self._windows_syzyasan_tool = J(s_dir, 'win_apply_syzyasan.py')
-    self._dynamorio_coverage_tool = J(s_dir, 'dynamorio_coverage.py')
     self._checkbins_tool = J(s_dir, 'checkbins_wrapper.py')
     self._mini_installer_tests_tool = J(s_dir, 'test_mini_installer_wrapper.py')
     self._device_status_check = J(self._bb_dir, 'bb_device_status_check.py')
@@ -839,82 +838,6 @@ class ChromiumCommands(commands.FactoryCommands):
         schedulerNames=[factory_properties.get('coverage_trigger')],
         updateSourceStamp=True,
         waitForFinish=True))
-
-  def AddPreProcessCoverage(self, dynamorio_dir, factory_properties):
-    """Prepare dynamorio before running coverage tests."""
-    cmd = [self._python,
-           self._dynamorio_coverage_tool,
-           '--pre-process',
-           '--dynamorio-dir', dynamorio_dir]
-    cmd = self.AddFactoryProperties(factory_properties, cmd)
-    self.AddTestStep(shell.ShellCommand,
-                     'pre-process coverage', cmd,
-                     timeout=900, halt_on_failure=True)
-
-  def AddCreateCoverageFile(self, test, dynamorio_dir, factory_properties):
-    # Create coverage file.
-    cmd = [self._python,
-           self._dynamorio_coverage_tool,
-           '--post-process',
-           '--build-id', WithProperties('%(got_revision)s'),
-           '--platform', factory_properties['test_platform'],
-           '--dynamorio-dir', dynamorio_dir,
-           '--test-to-upload', test]
-    cmd = self.AddFactoryProperties(factory_properties, cmd)
-    self.AddTestStep(shell.ShellCommand,
-                     'create_coverage_' + test, cmd,
-                     timeout=900, halt_on_failure=True)
-
-  def AddCoverageTests(self, factory_properties):
-    """Add tests to run with dynamorio code coverage tool."""
-    factory_properties['coverage_gtest_exclusions'] = True
-    # TODO(thakis): Don't look at _build_dir here.
-    dynamorio_dir = self.PathJoin(self._build_dir, 'dynamorio')
-    ddrun_bin = self.PathJoin(dynamorio_dir, 'bin32',
-                              self.GetExecutableName('drrun'))
-    ddrun_cmd = [ddrun_bin, '-t', 'bbcov', '--']
-    # Run browser tests with dynamorio environment vars.
-    tests = factory_properties['tests']
-    if 'browser_tests' in tests:
-      browser_tests_prop = factory_properties.copy()
-      browser_tests_prop['testing_env'] = {
-          'BROWSER_WRAPPER': ' '.join(ddrun_cmd)}
-      arg_list = ['--lib=browser_tests']
-      arg_list += ['--ui-test-action-timeout=1200000',
-                   '--ui-test-action-max-timeout=2400000',
-                   '--ui-test-terminate-timeout=1200000']
-      # Run single thread.
-      arg_list += ['--jobs=1']
-      arg_list = filter(None, arg_list)
-      total_shards = factory_properties.get('browser_total_shards')
-      shard_index = factory_properties.get('browser_shard_index')
-      self.AddPreProcessCoverage(dynamorio_dir, browser_tests_prop)
-      self.AddGTestTestStep('browser_tests',
-                            browser_tests_prop,
-                            description='',
-                            arg_list=arg_list,
-                            total_shards=total_shards,
-                            shard_index=shard_index,
-                            timeout=3*10*60,
-                            max_time=24*60*60)
-      self.AddCreateCoverageFile('browser_tests',
-                                 dynamorio_dir,
-                                 factory_properties)
-
-    # Add all other tests without sharding.
-    shard_index = factory_properties.get('browser_shard_index')
-    if not shard_index or shard_index == 1:
-      # TODO(thakis): Don't look at _build_dir here.
-      test_path = self.PathJoin(self._build_dir, self._target)
-      for test in tests:
-        if test != 'browser_tests':
-          cmd = ddrun_cmd + [self.PathJoin(test_path,
-                             self.GetExecutableName(test))]
-          self.AddPreProcessCoverage(dynamorio_dir, factory_properties)
-          self.AddTestStep(shell.ShellCommand, test, cmd)
-          self.AddCreateCoverageFile(test,
-                                     dynamorio_dir,
-                                     factory_properties)
 
 
 def _GetArchiveUrl(archive_type, builder_name='%(build_name)s'):

@@ -335,9 +335,6 @@ class FactoryCommands(object):
     self._update_clang_py_tool = self.PathJoin(
         self._repository_root, 'tools', 'clang', 'scripts', 'update.py')
 
-    self._extract_dynamorio_tool = self.PathJoin(
-        self._script_dir, 'extract_dynamorio_build.py')
-
     self._update_nacl_sdk_tool = self.PathJoin(self._script_dir,
                                                'update_nacl_sdk.py')
 
@@ -1296,20 +1293,6 @@ class FactoryCommands(object):
     goma_dir = self.PathJoin('..', '..', '..', 'goma')
     cmd = [self._python, self.PathJoin(goma_dir, 'diagnose_goma_log.py')]
     self.AddTestStep(shell.ShellCommand, 'diagnose_goma', cmd, timeout=60)
-
-  def AddExtractDynamorioBuild(self, factory_properties=None):
-    """Extract Dynamorio build."""
-    factory_properties = factory_properties or {}
-
-    cmd = [self._python, self._extract_dynamorio_tool,
-           '--target', 'dynamorio',
-           '--build-url', factory_properties.get('dynamorio_build_url')]
-
-    cmd = self.AddBuildProperties(cmd)
-    cmd = self.AddFactoryProperties(factory_properties, cmd)
-    self.AddTestStep(retcode_command.ReturnCodeCommand,
-                     'extract_dynamorio_build', cmd,
-                     halt_on_failure=True)
 
 
 class CanCancelBuildShellCommand(shell.ShellCommand):

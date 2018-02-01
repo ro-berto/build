@@ -855,16 +855,6 @@
             ],
             "forgiving_optional": ["*"]
           },
-          "Windows LKGR (DrMemory)": {
-            "tree_notify": [
-              "bruening@chromium.org",
-              "zhaoqin@chromium.org"
-            ],
-            "forgiving_optional": [
-              "compile"
-            ],
-            "subject_template": "LKGR buildbot %(result)s in %(project_name)s on %(builder_name)s, revision %(revision)s"
-          },
           "Win SyzyASAN LKGR": {
             "tree_notify": [
               "syzyzy-team@chromium.org"

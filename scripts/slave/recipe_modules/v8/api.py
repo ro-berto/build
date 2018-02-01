@@ -729,29 +729,6 @@ class V8Api(recipe_api.RecipeApi):
         itertools.chain(*(test_spec or {}).values()))
     self.isolate_tests(extra_targets)
 
-  # TODO(machenbach): This should move to a dynamorio module as soon as one
-  # exists.
-  def dr_compile(self):
-    # TODO(machenbach): Figure out where to put this before the corresponding
-    # bot migrates to LUCI.
-    self.m.file.ensure_directory(
-      'Create Build Dir',
-      self.m.path['start_dir'].join('dynamorio', 'build'))
-    with self.m.context(
-        cwd=self.m.path['start_dir'].join('dynamorio', 'build')):
-      self.m.step(
-        'Configure Release x64 DynamoRIO',
-        ['cmake', '..', '-DDEBUG=OFF'],
-      )
-      self.m.step(
-        'Compile Release x64 DynamoRIO',
-        ['make', '-j5'],
-      )
-
-  @property
-  def run_dynamorio(self):
-    return self.m.gclient.c.solutions[-1].name == 'dynamorio'
-
   def upload_build(self, name_suffix='', archive=None):
     archive = archive or self.GS_ARCHIVES[self.bot_config['build_gs_archive']]
     self.m.archive.zip_and_upload_build(
@@ -1284,15 +1261,6 @@ class V8Api(recipe_api.RecipeApi):
     full_args += test_step_config.test_args
 
     full_args = self._with_extra_flags(full_args)
-
-    if self.run_dynamorio:
-      # TODO(machenbach): Needs to use cache for LUCI migration.
-      drrun = self.m.path['start_dir'].join(
-          'dynamorio', 'build', 'bin64', 'drrun')
-      full_args += [
-        '--command_prefix',
-        '%s -reset_every_nth_pending 0 --' % drrun,
-      ]
 
     full_args += [
       '--rerun-failures-count=%d' % self.rerun_failures_count,

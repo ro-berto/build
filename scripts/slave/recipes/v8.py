@@ -82,9 +82,6 @@ def RunSteps(api):
     if v8.should_build:
       v8.compile(test_spec)
 
-    if v8.run_dynamorio:
-      v8.dr_compile()
-
     if v8.should_upload_build:
       v8.upload_build()
 

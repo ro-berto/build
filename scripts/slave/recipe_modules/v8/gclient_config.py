@@ -23,13 +23,6 @@ def v8(c):
 
 
 @CONFIG_CTX(includes=['v8'])
-def dynamorio(c):
-  soln = c.solutions.add()
-  soln.name = 'dynamorio'
-  soln.url = ChromiumGitURL(c, 'external', 'dynamorio')
-
-
-@CONFIG_CTX(includes=['v8'])
 def llvm_compiler_rt(c):
   c.solutions[0].custom_deps['v8/third_party/llvm/projects/compiler-rt'] = (
     ChromiumGitURL(c, 'external', 'llvm.org', 'compiler-rt'))

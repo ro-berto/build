@@ -618,25 +618,11 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         continue
       if M(test, 'tsan_', 'tsan', fp):
         continue
-      if M(test, 'drmemory_light_', 'drmemory_light', fp):
-        continue
-      if M(test, 'drmemory_full_', 'drmemory_full', fp):
-        continue
-      if M(test, 'drmemory_pattern_', 'drmemory_pattern', fp):
-        continue
 
     if R('chromedriver_tests'):
       f.AddChromeDriverTest()
     if R('webdriver_tests'):
       f.AddWebDriverTest()
-
-    # Dynamorio coverage.
-    if R('trigger_coverage_tests'):
-      f.AddTriggerCoverageTests(fp)
-    if R('extract_dynamorio_build'):
-      f.AddExtractDynamorioBuild(fp)
-    if R('coverage_tests'):
-      f.AddCoverageTests(fp)
 
     # When adding a test that uses a new executable, update kill_processes.py.
 

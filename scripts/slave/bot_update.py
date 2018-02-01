@@ -258,7 +258,6 @@ ENABLED_MASTERS = [
     'chromium.win',
     'client.catapult',
     'client.dart',
-    'client.drmemory',
     'client.nacl',
     'client.nacl.ports',
     'client.nacl.sdk',
@@ -291,9 +290,6 @@ ENABLED_BUILDERS = {
         'v8-linux-release',
         'v8-mac-release',
         'v8-win-release',
-    ],
-    'client.dynamorio': [
-        'linux-v8-dr',
     ],
 }
 ENABLED_BUILDERS.update(internal_data.get('ENABLED_BUILDERS', {}))

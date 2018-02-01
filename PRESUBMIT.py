@@ -40,10 +40,6 @@ def GetBlackList(input_api):
       r'.*masters/.*/templates/.*\.css$',
       r'.*masters/.*/public_html/.*\.html$',
       r'.*masters/.*/public_html/.*\.css$',
-      # These gitpoller directories are working directories for
-      # master.client.drmemory and master.client.dynamorio and do not contain
-      # checked-in code.
-      r'.*masters/.*/gitpoller/.*',
 
       # Exclude all "...recipe_deps" directories.
       #
