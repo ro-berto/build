@@ -6,6 +6,8 @@
       {
         "builders": {
           "*": {
+            "subject_template": "Dart build %(result)s on %(builder_name)s, revision %(revision)s",
+            "status_template": "New %(result) on \"%(builder_name)s\" (%(blamelist)s)",
             "respect_build_status": true
           }
         }
@@ -15,6 +17,8 @@
       {
         "builders": {
           "*": {
+            "subject_template": "Dart build %(result)s on %(builder_name)s, revision %(revision)s",
+            "status_template": "New %(result) on \"%(builder_name)s\" (%(blamelist)s)",
             "respect_build_status": true
           }
         }
