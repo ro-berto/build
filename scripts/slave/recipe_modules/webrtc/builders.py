@@ -738,6 +738,7 @@ BUILDERS = freeze({
         'swarming_dimensions': {
           'os': 'Android',
           'android_devices': '1',
+          'device_os': 'M',
         }
       },
     },
