@@ -596,7 +596,7 @@ def generator_common(api, spec, swarming_delegate, local_delegate, swarming_dime
   tests = []
   kwargs = {}
 
-  target_name = str(spec['test'])
+  target_name = str(spec.get('test') or spec.get('isolate_name'))
   name = str(spec.get('name', target_name))
 
   kwargs['target_name'] = target_name
@@ -651,8 +651,12 @@ def generator_common(api, spec, swarming_delegate, local_delegate, swarming_dime
     swarming_dimension_sets = swarming_spec.get('dimension_sets')
     kwargs['expiration'] = swarming_spec.get('expiration')
     kwargs['hard_timeout'] = swarming_spec.get('hard_timeout')
+    kwargs['io_timeout'] = swarming_spec.get('io_timeout')
     kwargs['priority'] = swarming_spec.get('priority_adjustment')
     kwargs['shards'] = swarming_spec.get('shards', 1)
+    kwargs['upload_test_results'] = swarming_spec.get(
+        'upload_test_results', True)
+
     packages = swarming_spec.get('cipd_packages')
     if packages:
       kwargs['cipd_packages'] = [
@@ -1343,14 +1347,15 @@ class SwarmingTest(Test):
 class SwarmingGTestTest(SwarmingTest):
   def __init__(self, name, args=None, target_name=None, shards=1,
                dimensions=None, tags=None, extra_suffix=None, priority=None,
-               expiration=None, hard_timeout=None, upload_test_results=True,
-               override_compile_targets=None, override_isolate_target=None,
-               upload_to_flake_predictor=False, cipd_packages=None,
-               waterfall_mastername=None, waterfall_buildername=None,
-               merge=None, trigger_script=None, set_up=None, tear_down=None):
+               expiration=None, hard_timeout=None, io_timeout=None,
+               upload_test_results=True, override_compile_targets=None,
+               override_isolate_target=None, upload_to_flake_predictor=False,
+               cipd_packages=None, waterfall_mastername=None,
+               waterfall_buildername=None, merge=None, trigger_script=None,
+               set_up=None, tear_down=None):
     super(SwarmingGTestTest, self).__init__(
         name, dimensions, tags, target_name, extra_suffix, priority, expiration,
-        hard_timeout, waterfall_mastername=waterfall_mastername,
+        hard_timeout, io_timeout, waterfall_mastername=waterfall_mastername,
         waterfall_buildername=waterfall_buildername,
         set_up=set_up, tear_down=tear_down)
     self._args = args or []
@@ -1787,131 +1792,28 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
     # Get the perf id and results url if present.
     bot_config = (chromium_tests_api.builders.get(mastername, {})
         .get('builders', {}).get(buildername, {}))
-  default_perf_id = bot_config.get('perf-id')
-  results_url = bot_config.get('results-url')
-  for spec in test_spec.get(buildername, {}).get('isolated_scripts', []):
-    perf_dashboard_id = spec.get('name', '')
-    perf_id = spec.get('override_perf_id', default_perf_id)
 
-    use_swarming = False
-    swarming_ignore_task_failure = False
-    swarming_shards = 1
-    swarming_dimension_sets = None
-    swarming_priority = None
-    swarming_expiration = None
-    swarming_hard_timeout = None
-    swarming_io_timeout = None
+  def isolated_script_delegate_common(test, name=None, **kwargs):
 
-    swarming_spec = spec.get('swarming', {})
-    if swarming_spec.get('can_use_on_swarming_builders', False):
-      use_swarming = True
-      swarming_ignore_task_failure = (
-          swarming_spec.get('ignore_task_failure', False))
-      swarming_shards = swarming_spec.get('shards', 1)
-      swarming_dimension_sets = swarming_spec.get('dimension_sets')
-      swarming_priority = swarming_spec.get('priority_adjustment')
-      swarming_expiration = swarming_spec.get('expiration')
-      swarming_hard_timeout = swarming_spec.get('hard_timeout')
-      swarming_io_timeout = swarming_spec.get('io_timeout')
-      swarming_upload_test_results = (
-          swarming_spec.get('upload_test_results', True))
+    common_kwargs = {}
 
-    name = str(spec['name'])
     # The variable substitution and precommit/non-precommit arguments
     # could be supported for the other test types too, but that wasn't
     # desired at the time of this writing.
-    args = get_args_for_test(api, chromium_tests_api, spec, bot_update_step)
-    target_name = spec['isolate_name']
+    common_kwargs['args'] = get_args_for_test(
+        api, chromium_tests_api, test, bot_update_step)
     # This features is only needed for the cases in which the *_run compile
     # target is needed to generate isolate files that contains dynamically libs.
     # TODO(nednguyen, kbr): Remove this once all the GYP builds are converted
     # to GN.
-    override_compile_targets = spec.get('override_compile_targets', None)
-    merge = dict(spec.get('merge', {}))
-    if merge:
-      merge_script = merge.get('script')
-      if merge_script:
-        if merge_script.startswith('//'):
-          merge['script'] = api.path['checkout'].join(
-              merge_script[2:].replace('/', api.path.sep))
-        else:
-          api.python.failing_step(
-              'isolated_scripts spec format error',
-              textwrap.wrap(textwrap.dedent("""\
-                  The isolated_scripts target "%s" contains a custom merge_script "%s"
-                  that doesn't match the expected format. Custom merge_script entries
-                  should be a path relative to the top-level chromium src directory and
-                  should start with "//".
-                  """ % (name, merge_script))),
-              as_log='details')
-
-    set_up = list(spec.get('setup', []))
-    processed_set_up = []
-    for set_up_step in set_up:
-      set_up_step_script = set_up_step.get('script')
-      if set_up_step_script:
-        if set_up_step_script.startswith('//'):
-          set_up_step_new = dict(set_up_step)
-          set_up_step_new['script'] = api.path['checkout'].join(
-              set_up_step_script[2:].replace('/', api.path.sep))
-          processed_set_up.append(set_up_step_new)
-        else:
-          api.python.failing_step(
-            'isolated_scripts spec format error',
-            textwrap.wrap(textwrap.dedent("""\
-                The isolated_scripts target "%s" contains a custom set up script "%s"
-                that doesn't match the expected format. Custom set up script entries
-                should be a path relative to the top-level chromium src directory and
-                should start with "//".
-                """ % (name, set_up_step_script))),
-            as_log='details')
-    set_up = processed_set_up
-
-    tear_down = list(spec.get('teardown', []))
-    processed_tear_down = []
-    for tear_down_step in tear_down:
-      tear_down_step_script = tear_down_step.get('script')
-      if tear_down_step_script:
-        if tear_down_step_script.startswith('//'):
-          tear_down_step_new = dict(tear_down_step)
-          tear_down_step_new['script'] = api.path['checkout'].join(
-              tear_down_step_script[2:].replace('/', api.path.sep))
-          processed_tear_down.append(tear_down_step_new)
-        else:
-          api.python.failing_step(
-            'isolated_scripts spec format error',
-            textwrap.wrap(textwrap.dedent("""\
-                The isolated_scripts target "%s" contains a custom tear down script "%s"
-                that doesn't match the expected format. Custom tear down script entries
-                should be a path relative to the top-level chromium src directory and
-                should start with "//".
-                """ % (name, tear_down_step_script))),
-            as_log='details')
-    tear_down = processed_tear_down
-
-    trigger_script = dict(spec.get('trigger_script', {}))
-    if trigger_script:
-      trigger_script_path = trigger_script.get('script')
-      if trigger_script_path:
-        if trigger_script_path.startswith('//'):
-          trigger_script['script'] = api.path['checkout'].join(
-              trigger_script_path[2:].replace('/', api.path.sep))
-        else:
-          api.python.failing_step(
-              'isolated_scripts spec format error',
-              textwrap.wrap(textwrap.dedent("""\
-                  The isolated_scripts target "%s" contains a custom trigger_script "%s"
-                  that doesn't match the expected format. Custom trigger_script entries
-                  should be a path relative to the top-level chromium src directory and
-                  should start with "//".
-                  """ % (name, trigger_script_path))),
-              as_log='details')
+    common_kwargs['override_compile_targets'] = test.get(
+        'override_compile_targets', None)
 
     # TODO(tansell): Remove this once custom handling of results is no longer
     # needed.
     results_handler_name = spec.get('results_handler', 'default')
     try:
-        results_handler = {
+        common_kwargs['results_handler'] = {
             'default': lambda: None,
             'fake': FakeCustomResultsHandler,
             'layout tests': LayoutTestResultsHandler,
@@ -1925,49 +1827,33 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
               """ % (name, results_handler_name))),
           as_log='details')
 
-    swarming_dimensions = swarming_dimensions or {}
-    if use_swarming:
-      if swarming_dimension_sets:
-        for dimensions in swarming_dimension_sets:
-          # Yield potentially multiple invocations of the same test,
-          # on different machine configurations.
-          new_dimensions = dict(swarming_dimensions)
-          new_dimensions.update(dimensions)
-          yield SwarmingIsolatedScriptTest(
-              name=name, args=args, target_name=target_name,
-              shards=swarming_shards, dimensions=new_dimensions,
-              override_compile_targets=override_compile_targets,
-              ignore_task_failure=swarming_ignore_task_failure,
-              priority=swarming_priority, expiration=swarming_expiration,
-              hard_timeout=swarming_hard_timeout,
-              upload_test_results=swarming_upload_test_results, perf_id=perf_id,
-              results_url=results_url, perf_dashboard_id=perf_dashboard_id,
-              io_timeout=swarming_io_timeout,
-              waterfall_mastername=mastername,
-              waterfall_buildername=buildername,
-              merge=merge, trigger_script=trigger_script,
-              set_up=set_up, tear_down=tear_down,
-              results_handler=results_handler)
-      else:
-        yield SwarmingIsolatedScriptTest(
-            name=name, args=args, target_name=target_name,
-            shards=swarming_shards, dimensions=swarming_dimensions,
-            override_compile_targets=override_compile_targets,
-            ignore_task_failure=swarming_ignore_task_failure,
-            priority=swarming_priority, expiration=swarming_expiration,
-            hard_timeout=swarming_hard_timeout,
-            upload_test_results=swarming_upload_test_results, perf_id=perf_id,
-            results_url=results_url, perf_dashboard_id=perf_dashboard_id,
-            io_timeout=swarming_io_timeout,
-            waterfall_mastername=mastername, waterfall_buildername=buildername,
-            merge=merge, trigger_script=trigger_script,
-            set_up=set_up, tear_down=tear_down,
-            results_handler=results_handler)
-    else:
-      yield LocalIsolatedScriptTest(
-          name=name, args=args, target_name=target_name,
-          override_compile_targets=override_compile_targets,
-          results_handler=results_handler)
+    return common_kwargs
+
+  def isolated_script_swarming_delegate(spec, **kwargs):
+    kwargs.update(isolated_script_delegate_common(spec, **kwargs))
+
+    default_perf_id = bot_config.get('perf-id')
+    swarming_spec = spec.get('swarming', {})
+
+    kwargs['ignore_task_failure'] = swarming_spec.get(
+        'ignore_task_failure', False)
+    kwargs['perf_id'] = spec.get('override_perf_id', default_perf_id)
+    kwargs['perf_dashboard_id'] = spec.get('name', '')
+    kwargs['results_url'] = bot_config.get('results-url')
+    kwargs['waterfall_buildername'] = buildername
+    kwargs['waterfall_mastername'] = mastername
+
+    return SwarmingIsolatedScriptTest(**kwargs)
+
+  def isolated_script_local_delegate(spec, **kwargs):
+    kwargs.update(isolated_script_delegate_common(spec, **kwargs))
+    return LocalIsolatedScriptTest(**kwargs)
+
+  for spec in test_spec.get(buildername, {}).get('isolated_scripts', []):
+    for t in generator_common(
+        api, spec, isolated_script_swarming_delegate,
+        isolated_script_local_delegate, swarming_dimensions):
+      yield t
 
 
 class PythonBasedTest(Test):

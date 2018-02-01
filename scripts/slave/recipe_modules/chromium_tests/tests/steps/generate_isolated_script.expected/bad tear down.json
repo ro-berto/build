@@ -154,20 +154,20 @@
       "-u",
       "import sys; sys.exit(1)"
     ],
-    "name": "isolated_scripts spec format error",
+    "name": "test spec format error",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
-      "@@@STEP_LOG_LINE@details@The isolated_scripts target \"base_unittests\" contains a custom set up@@@",
-      "@@@STEP_LOG_LINE@details@script \"path/to/setup2.py\" that doesn't match the expected format.@@@",
-      "@@@STEP_LOG_LINE@details@Custom set up script entries should be a path relative to the top-@@@",
-      "@@@STEP_LOG_LINE@details@level chromium src directory and should start with \"//\".@@@",
+      "@@@STEP_LOG_LINE@details@The test target \"base_unittests\" contains a custom set up script@@@",
+      "@@@STEP_LOG_LINE@details@\"path/to/setup2.py\" that doesn't match the expected format. Custom set@@@",
+      "@@@STEP_LOG_LINE@details@up script entries should be a path relative to the top-level chromium@@@",
+      "@@@STEP_LOG_LINE@details@src directory and should start with \"//\".@@@",
       "@@@STEP_LOG_END@details@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
   {
     "name": "$result",
-    "reason": "Step('isolated_scripts spec format error') failed with return_code 1",
+    "reason": "Step('test spec format error') failed with return_code 1",
     "recipe_result": null,
     "status_code": 1
   }
