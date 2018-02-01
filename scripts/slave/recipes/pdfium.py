@@ -30,6 +30,10 @@ GS_BUCKET = 'skia-pdfium-gm'
 # Number of times the upload routine will retry to upload Gold results.
 UPLOAD_ATTEMPTS = 5
 
+# Constant to indicate building with jumbo + goma, but with a different
+# jumbo_file_merge_limit value.
+JUMBO_NON_GOMA_CHUNKS = 'jumbo_no_goma_chunks'
+
 PROPERTIES = {
   'skia': Property(default=False, kind=bool),
   'xfa': Property(default=False, kind=bool),
@@ -39,7 +43,7 @@ PROPERTIES = {
   'clang': Property(default=False, kind=bool),
   'msvc': Property(default=False, kind=bool),
   'rel': Property(default=False, kind=bool),
-  'jumbo': Property(default=False, kind=bool),
+  'jumbo': Property(default=None, kind=str),
   'skip_test': Property(default=False, kind=bool),
   'target_os': Property(default=None, kind=str),
 }
@@ -68,6 +72,8 @@ def _OutPath(memory_tool, skia, xfa, v8, clang, msvc, rel, jumbo):
   elif msvc:
     out_dir += "_msvc"
   if jumbo:
+    # No need to distinguish the different kinds of jumbo builds here. As only
+    # Linux builds with jumbo_no_goma_chunks.
     out_dir += "_jumbo"
   if memory_tool == 'asan':
     out_dir += "_asan"
@@ -114,6 +120,12 @@ def _GNGenBuilds(api, memory_tool, skia, xfa, v8, target_cpu, clang, msvc, rel,
 
   if jumbo:
     args.append('use_jumbo_build=true')
+    if jumbo == JUMBO_NON_GOMA_CHUNKS:
+      # Note: The jumbo_file_merge_limit value below comes from
+      # build/config/jumbo.gni. It is set here to make this jumbo/goma build act
+      # more like a jumbo without goma build. If the value changes in jumbo.gni,
+      # it needs to be updated here as well.
+      args.append('jumbo_file_merge_limit=50')
 
   if memory_tool == 'asan':
     args.append('is_asan=true')
@@ -530,7 +542,7 @@ def GenTests(api):
       api.test('win_xfa_jumbo') +
       api.platform('win', 64) +
       api.properties(xfa=True,
-                     jumbo=True,
+                     jumbo='jumbo',
                      mastername="client.pdfium",
                      buildername='windows_xfa_jumbo',
                      buildnumber='1234',
@@ -597,7 +609,7 @@ def GenTests(api):
       api.test('linux_xfa_jumbo') +
       api.platform('linux', 64) +
       api.properties(xfa=True,
-                     jumbo=True,
+                     jumbo=JUMBO_NON_GOMA_CHUNKS,
                      mastername="client.pdfium",
                      buildername='linux_xfa_jumbo',
                      buildnumber='1234',
@@ -641,7 +653,7 @@ def GenTests(api):
       api.test('mac_xfa_jumbo') +
       api.platform('mac', 64) +
       api.properties(xfa=True,
-                     jumbo=True,
+                     jumbo='jumbo',
                      mastername="client.pdfium",
                      buildername='mac_xfa_jumbo',
                      buildnumber='1234',
