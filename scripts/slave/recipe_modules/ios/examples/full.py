@@ -68,6 +68,7 @@ def GenTests(api):
           'device type': 'fake device 2',
           'os': '8.1',
           'host os': 'Mac-10.12',
+          'shards': 4,
         },
         {
           'include': 'fake include.json',

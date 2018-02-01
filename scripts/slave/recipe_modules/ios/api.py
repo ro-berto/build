@@ -579,6 +579,7 @@ class iOSApi(recipe_api.RecipeApi):
       '--config-variable', 'app_path', app_path,
       '--config-variable', 'restart', (
         'true' if test.get('restart') else 'false'),
+      '--config-variable', 'shards', self.m.json.dumps(test.get('shards') or 1),
       '--config-variable', 'test_args', self.m.json.dumps(
           test.get('test args') or []),
       '--config-variable', 'test_cases', self.m.json.dumps(test_cases or []),
@@ -681,6 +682,7 @@ class iOSApi(recipe_api.RecipeApi):
         "restart": <(restart)}',
       '--out-dir', '${ISOLATED_OUTDIR}',
       '--retries', '3',
+      '--shards', '<(shards)',
       '--<(xcode_arg_name)', '<(xcode_version)',
       '--mac-toolchain-cmd', '%s/mac_toolchain' % self.MAC_TOOLCHAIN_ROOT,
       '--xcode-path', self.XCODE_APP_PATH,
