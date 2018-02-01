@@ -99,7 +99,8 @@ def upload_to_cipd(api, buildername, rel_dir, gn_exe, gn_version, git_revision):
 
   pkg_def = api.cipd.PackageDefinition(
       package_name=cipd_pkg_name,
-      package_root=rel_dir)
+      package_root=rel_dir,
+      install_mode='copy')
   pkg_def.add_file(rel_dir.join(gn_exe))
   pkg_def.add_version_file('.versions/%s.cipd_version' % gn_exe)
 

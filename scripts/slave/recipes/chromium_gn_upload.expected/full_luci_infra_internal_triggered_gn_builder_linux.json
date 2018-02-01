@@ -599,7 +599,7 @@
       "cipd",
       "create",
       "-pkg-def",
-      "{\"data\": [{\"file\": \"gn\"}, {\"version_file\": \".versions/gn.cipd_version\"}], \"install_mode\": \"\", \"package\": \"infra/tools/gn/linux-amd64\", \"root\": \"[START_DIR]/src/out/Release\"}",
+      "{\"data\": [{\"file\": \"gn\"}, {\"version_file\": \".versions/gn.cipd_version\"}], \"install_mode\": \"copy\", \"package\": \"infra/tools/gn/linux-amd64\", \"root\": \"[START_DIR]/src/out/Release\"}",
       "-json-output",
       "/path/to/tmp/json",
       "-ref",
