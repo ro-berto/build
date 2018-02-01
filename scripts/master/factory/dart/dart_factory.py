@@ -17,6 +17,7 @@ from master import master_utils
 
 import config
 
+dart_git_server = 'https://dart.googlesource.com'
 github_mirror = 'https://chromium.googlesource.com/external/github.com'
 
 # We set these paths relative to the dart root, the scripts need to
@@ -99,6 +100,14 @@ class DartUtils(object):
     return DartUtils.get_git_poller(
         repository, project, name, revlink, branch, master,
         hostid='github_mirror')
+
+  @staticmethod
+  def get_dart_poller(name, branch=None, master=None):
+    repository = '%s/%s.git' % (dart_git_server, name)
+    revlink = ('https://github.com/dart-lang/' + name + '/commit/%s')
+    return DartUtils.get_git_poller(
+        repository, 'dart-lang', name, revlink, branch, master,
+        hostid='dart_git_server')
 
   @staticmethod
   def prioritize_builders(buildmaster, builders):
