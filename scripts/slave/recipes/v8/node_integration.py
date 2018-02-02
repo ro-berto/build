@@ -172,7 +172,7 @@ def RunSteps(api):
   api.python(
       name='update v8',
       script=api.v8.checkout_root.join(
-          'v8', 'tools', 'release', 'update_node.py'),
+          'v8', 'tools', 'node', 'update_node.py'),
       args=args,
   )
 

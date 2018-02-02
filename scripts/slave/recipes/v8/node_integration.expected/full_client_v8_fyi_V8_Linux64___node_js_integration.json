@@ -102,7 +102,7 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/v8/tools/release/update_node.py",
+      "[START_DIR]/v8/tools/node/update_node.py",
       "[START_DIR]/v8",
       "[START_DIR]/node.js"
     ],
