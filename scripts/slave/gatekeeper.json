@@ -158,7 +158,10 @@
             ]
           },
           "*": {}
-        }
+        },
+        "excluded_builders": [
+          "Android MIPS Builder (dbg)"
+        ]
       }
     ],
     "https://build.chromium.org/p/chromium.android.fyi": [
