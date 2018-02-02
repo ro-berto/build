@@ -18,6 +18,7 @@ DEPS = [
     'recipe_engine/properties',
     'recipe_engine/python',
     'recipe_engine/raw_io',
+    'recipe_engine/runtime',
     'recipe_engine/step',
     'swarming',
     'test_results',
@@ -352,6 +353,37 @@ def GenTests(api):
           got_webrtc_revision='ffffffffffffffffffffffffffffffffffffffff',
           got_v8_revision='ffffffffffffffffffffffffffffffffffffffff',
           perf_id='test-perf-id',
+          perf_dashboard_machine_group='ChromePerf',
+          results_url='https://example/url') +
+      api.override_step_data(
+          'base_unittests on Intel GPU on Linux',
+          api.swarming.canned_summary_output(2)
+          + api.test_utils.canned_isolated_script_output(
+              passing=True, swarming=True,
+              shards=2, isolated_script_passing=True,
+              output_chartjson=True, benchmark_enabled=True,
+              use_json_test_format=True, output_histograms=True),
+          retcode=0) +
+      api.runtime(is_luci=True, is_experimental=False)
+  )
+
+  yield (
+      api.test(
+          'histograms_LUCI_missing_perf_dashboard_machine_group_property') +
+      api.properties.generic(
+          mastername='chromium.linux',
+          buildername='Linux Tests') +
+      api.properties(
+          buildnumber=123,
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
+          git_revision='test_sha',
+          version='test-version',
+          got_revision_cp='refs/heads/master@{#123456}',
+          got_webrtc_revision='ffffffffffffffffffffffffffffffffffffffff',
+          got_v8_revision='ffffffffffffffffffffffffffffffffffffffff',
+          perf_id='test-perf-id',
           results_url='https://example/url') +
       api.override_step_data(
           'base_unittests on Intel GPU on Linux',
@@ -362,6 +394,7 @@ def GenTests(api):
               output_chartjson=True, benchmark_enabled=True,
               use_json_test_format=True, output_histograms=True),
           retcode=0)
+      + api.runtime(is_luci=True, is_experimental=False)
   )
 
   yield (

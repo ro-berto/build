@@ -1748,6 +1748,17 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
       args.append('--output-json-dashboard-url')
       args.append(api.json.output(add_json_log=False, name='dashboard_url'))
 
+    if api.runtime.is_luci:
+      mastername = api.properties.get('perf_dashboard_machine_group')
+      if mastername:
+        args.extend(
+            ['--is-luci-builder', '--perf-dashboard-machine-group', mastername])
+      else:
+        raise api.step.StepFailure(
+            'LUCI builder must set perf_dashboard_machine_group property '
+            'for perf dashboard uploading. For more details, see '
+            'bit.ly/perf-dashboard-machine-group.')
+
     step_name = '%s Dashboard Upload' % self._perf_dashboard_id
     step_result = api.build.python(
         step_name,

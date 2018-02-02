@@ -3,44 +3,23 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
-      "--show-path",
-      "--",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\kill_processes.py"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
-    "infra_step": true,
-    "name": "taskkill"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
+      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]\\\\git'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}, {'custom_deps': {'src/chrome/test/data/firefox2_profile/searchplugins': None, 'src/chrome/test/data/firefox2_searchplugins': None, 'src/chrome/test/data/firefox3_profile/searchplugins': None, 'src/chrome/test/data/firefox3_searchplugins': None, 'src/chrome/test/data/osdd': None, 'src/chrome/test/data/perf/frame_rate/private': None, 'src/chrome/test/data/plugin': None, 'src/chrome/test/data/ssl/certs': None, 'src/data/autodiscovery': None, 'src/data/esctf': None, 'src/data/mach_ports': None, 'src/data/memory_test': None, 'src/data/mozilla_js_tests': None, 'src/data/page_cycler': None, 'src/data/selenium_core': None, 'src/data/tab_switching': None, 'src/tools/grit/grit/test/data': None, 'src/webkit/data/bmp_decoder': None, 'src/webkit/data/ico_decoder': None, 'src/webkit/data/test_shell/plugins': None, 'src/webkit/data/xbm_decoder': None}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src-internal', 'url': 'https://chrome-internal.googlesource.com/chrome/src-internal.git'}]",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
       "--patch_root",
       "src",
       "--revision_mapping_file",
       "{\"got_angle_revision\": \"src/third_party/angle\", \"got_buildtools_revision\": \"src/buildtools\", \"got_nacl_revision\": \"src/native_client\", \"got_revision\": \"src\", \"got_swarming_client_revision\": \"src/tools/swarming_client\", \"got_v8_revision\": \"src/v8\", \"got_webrtc_revision\": \"src/third_party/webrtc\"}",
       "--git-cache-dir",
-      "[CACHE]\\git",
+      "[CACHE]/git",
       "--cleanup-dir",
-      "[CLEANUP]\\bot_update",
+      "[CLEANUP]/bot_update",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
       "src@HEAD"
     ],
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -171,29 +150,21 @@
   },
   {
     "cmd": [],
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
     "name": "ensure_goma"
   },
   {
     "cmd": [
-      "cipd.bat",
+      "cipd",
       "ensure",
       "-root",
-      "[CACHE]\\goma_client",
+      "[CACHE]/goma_client",
       "-ensure-file",
-      "infra_internal/goma/client/windows-amd64 release",
+      "infra_internal/goma/client/linux-amd64 release",
       "-json-output",
       "/path/to/tmp/json",
       "-service-account-json",
-      "C:\\creds\\service_accounts\\service-account-goma-client.json"
+      "/creds/service_accounts/service-account-goma-client.json"
     ],
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
     "infra_step": true,
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
@@ -202,7 +173,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/windows-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/linux-amd64\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -213,13 +184,9 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]\\src\\tools\\swarming_client\\swarming.py",
+      "[START_DIR]/src/tools/swarming_client/swarming.py",
       "--version"
     ],
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -230,15 +197,14 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[START_DIR]/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
-      "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library fastbuild=1 gomadir='[CACHE]\\goma_client' target_arch=x64 use_goma=1",
-      "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
+      "GYP_DEFINES": "component=static_library gomadir='[CACHE]/goma_client' target_arch=x64 use_goma=1",
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
   },
@@ -246,21 +212,18 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]\\src\\testing\\scripts\\get_compile_targets.py",
+      "[START_DIR]/src/testing/scripts/get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
-      "Release_x64",
+      "Release",
+      "--use-src-side-runtest-py",
       "--paths",
-      "{\"checkout\": \"[START_DIR]\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
+      "{\"checkout\": \"[START_DIR]/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"test_bot\", \"buildername\": \"Win 10 Low-End Perf Tests\", \"buildnumber\": \"1234\", \"mastername\": \"chromium.perf.fyi\", \"perf-id\": \"win-10-low-end\", \"results-url\": \"https://chromeperf.appspot.com\", \"slavename\": \"test_bot\", \"target_platform\": \"win\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"Linux Tests\", \"buildnumber\": 123, \"mastername\": \"chromium.linux\", \"slavename\": \"test_bot\", \"target_platform\": \"linux\"}"
     ],
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
     "name": "get compile targets for scripts",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -272,39 +235,13 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[START_DIR]\\src\\testing\\buildbot\\chromium.perf.fyi.json",
+      "[START_DIR]/src/testing/buildbot/chromium.linux.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
-    "name": "read test spec (chromium.perf.fyi.json)",
+    "name": "read test spec (chromium.linux.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [START_DIR]\\src\\testing\\buildbot\\chromium.perf.fyi.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Win 10 Low-End Perf Tests\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"isolated_scripts\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"isolate_name\": \"telemetry_perf_tests\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"name\": \"benchmark\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true, @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"dimension_sets\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@            {@@@",
-      "@@@STEP_LOG_LINE@json.output@              \"gpu\": \"8086:22b1\", @@@",
-      "@@@STEP_LOG_LINE@json.output@              \"id\": \"build187-b4\", @@@",
-      "@@@STEP_LOG_LINE@json.output@              \"os\": \"Windows-10-10586\", @@@",
-      "@@@STEP_LOG_LINE@json.output@              \"pool\": \"Chrome-perf\"@@@",
-      "@@@STEP_LOG_LINE@json.output@            }@@@",
-      "@@@STEP_LOG_LINE@json.output@          ], @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"io_timeout\": 900, @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"shards\": 2@@@",
-      "@@@STEP_LOG_LINE@json.output@        }@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_TEXT@path: [START_DIR]/src/testing/buildbot/chromium.linux.json@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
@@ -312,227 +249,125 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "rmtree",
-      "[START_DIR]\\src\\out\\Release_x64"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
-    "infra_step": true,
-    "name": "build directory"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
-      "--show-path",
-      "--",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\extract_build.py",
-      "--gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "--target",
-      "Release_x64",
-      "--src-dir",
-      "[START_DIR]\\src",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "--build-url",
-      "gs://chrome-perf/Win Builder FYI/full-build-win32.zip",
-      "--build_revision",
-      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "--master-name",
-      "chromium.perf.fyi",
-      "--build-number",
-      "1234"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
-    "infra_step": true,
-    "name": "extract build"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::isolate]\\resources\\find_isolated_tests.py",
-      "--build-dir",
-      "[START_DIR]\\src\\out\\Release_x64",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
-    "name": "find isolated tests",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"dummy_target_1\": \"[dummy hash for dummy_target_1]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"dummy_target_2\": \"[dummy hash for dummy_target_2]\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"dummy_target_1\": \"[dummy hash for dummy_target_1]\", \"dummy_target_2\": \"[dummy hash for dummy_target_2]\"}@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
-    "name": "test_pre_run"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]\\src\\tools\\swarming_client\\swarming.py",
+      "[START_DIR]/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--priority",
-      "25",
+      "210",
       "--shards",
-      "2",
+      "1",
       "--task-name",
-      "benchmark on Intel GPU on Windows/Windows-10-10586/eeeeeeeeee/Win 10 Low-End Perf Tests/1234",
+      "base_unittests on Intel GPU on Linux/Ubuntu-14.04/ffffffffff/Linux Tests/123",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
-      "3600",
+      "7200",
       "--io-timeout",
-      "900",
+      "120",
       "--hard-timeout",
-      "3600",
+      "360",
       "--dimension",
       "cpu",
       "x86-64",
       "--dimension",
       "gpu",
-      "8086:22b1",
-      "--dimension",
-      "id",
-      "build187-b4",
+      "8086",
       "--dimension",
       "os",
-      "Windows-10-10586",
-      "--dimension",
-      "pool",
-      "Chrome-perf",
+      "Ubuntu-14.04",
       "--tag",
-      "buildername:Win 10 Low-End Perf Tests",
+      "buildername:Linux Tests",
       "--tag",
-      "buildnumber:1234",
+      "buildnumber:123",
       "--tag",
-      "data:eeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "data:ffffffffffffffffffffffffffffffffffffffff",
       "--tag",
-      "master:chromium.perf.fyi",
+      "master:chromium.linux",
       "--tag",
-      "name:benchmark",
+      "name:base_unittests",
       "--tag",
-      "os:Windows-10-10586",
-      "--tag",
-      "project:chromium",
-      "--tag",
-      "purpose:CI",
-      "--tag",
-      "purpose:post-commit",
+      "os:Ubuntu-14.04",
       "--tag",
       "slavename:test_bot",
       "--tag",
-      "stepname:benchmark on Intel GPU on Windows on Windows-10-10586",
+      "stepname:base_unittests on Intel GPU on Linux",
+      "--cipd-package",
+      ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
       "--cipd-package",
       ".swarming_module:infra/tools/luci/logdog/butler/${platform}:TEST_VERSION",
+      "--cipd-package",
+      ".swarming_module:infra/tools/luci/vpython-native/${platform}:TEST_VERSION",
       "--cipd-package",
       ".swarming_module:infra/tools/luci/vpython/${platform}:TEST_VERSION",
       "--env-prefix",
       "PATH",
       ".swarming_module",
+      "--env-prefix",
+      "PATH",
+      ".swarming_module/bin",
       "--isolated",
-      "eeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "ffffffffffffffffffffffffffffffffffffffff",
       "--",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
     "infra_step": true,
-    "name": "test_pre_run.[trigger] benchmark on Intel GPU on Windows on Windows-10-10586",
+    "name": "[trigger] base_unittests on Intel GPU on Linux",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@Bot id: 'build187-b4'<br/>Run on OS: 'Windows-10-10586'@@@",
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"benchmark on Intel GPU on Windows/Windows-10-10586/eeeeeeeeee/Win 10 Low-End Perf Tests/1234\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"base_unittests on Intel GPU on Linux/Ubuntu-14.04/ffffffffff/Linux Tests/123\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"benchmark on Intel GPU on Windows/Windows-10-10586/eeeeeeeeee/Win 10 Low-End Perf Tests/1234:2:0\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"base_unittests on Intel GPU on Linux/Ubuntu-14.04/ffffffffff/Linux Tests/123\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"benchmark on Intel GPU on Windows/Windows-10-10586/eeeeeeeeee/Win 10 Low-End Perf Tests/1234:2:1\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 1, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10100\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
-      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/10100@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--",
       "python",
-      "RECIPE_MODULE[build::swarming]\\resources\\collect_task.py",
+      "RECIPE_MODULE[build::swarming]/resources/collect_task.py",
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
       "/path/to/tmp/",
       "--merge-script",
-      "RECIPE_MODULE[build::swarming]\\resources\\standard_isolated_script_merge.py",
+      "RECIPE_MODULE[build::swarming]/resources/standard_isolated_script_merge.py",
       "--merge-additional-args",
       "[]",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildbotURL\": \"http://c.org/p/cr/\", \"buildername\": \"Win 10 Low-End Perf Tests\", \"buildnumber\": \"1234\", \"git_revision\": \"asdfawe2342\", \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/master@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/master@{#182578}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/master@{#274981}\", \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"got_revision_cp\": \"refs/heads/master@{#291141}\", \"got_swarming_client_revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\", \"got_swarming_client_revision_cp\": \"refs/heads/master@{#276089}\", \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_v8_revision_cp\": \"refs/heads/master@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/master@{#120644}\", \"mastername\": \"chromium.perf.fyi\", \"parent_buildername\": \"Win Builder FYI\", \"perf-id\": \"testid\", \"recipe\": \"chromium\", \"results-url\": \"https://test-results-url\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"telemetry_perf_tests\": \"eeeeeeeeeeeeeeeeeeeeeeeeeeeeee\"}, \"version\": \"v23523\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildbotURL\": \"http://c.org/p/cr/\", \"buildername\": \"Linux Tests\", \"buildnumber\": 123, \"git_revision\": \"test_sha\", \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/master@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/master@{#182578}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/master@{#274981}\", \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"got_revision_cp\": \"refs/heads/master@{#123456}\", \"got_swarming_client_revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\", \"got_swarming_client_revision_cp\": \"refs/heads/master@{#276089}\", \"got_v8_revision\": \"ffffffffffffffffffffffffffffffffffffffff\", \"got_v8_revision_cp\": \"refs/heads/master@{#43426}\", \"got_webrtc_revision\": \"ffffffffffffffffffffffffffffffffffffffff\", \"got_webrtc_revision_cp\": \"refs/heads/master@{#120644}\", \"mastername\": \"chromium.linux\", \"perf_id\": \"test-perf-id\", \"recipe\": \"chromium_tests:tests/steps/swarming_isolated_script_test\", \"results_url\": \"https://example/url\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"base_unittests\": \"ffffffffffffffffffffffffffffffffffffffff\"}, \"version\": \"test-version\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--",
       "python",
       "-u",
-      "[START_DIR]\\src\\tools\\swarming_client\\swarming.py",
+      "[START_DIR]/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"benchmark on Intel GPU on Windows/Windows-10-10586/eeeeeeeeee/Win 10 Low-End Perf Tests/1234\", \"tasks\": {\"benchmark on Intel GPU on Windows/Windows-10-10586/eeeeeeeeee/Win 10 Low-End Perf Tests/1234:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"benchmark on Intel GPU on Windows/Windows-10-10586/eeeeeeeeee/Win 10 Low-End Perf Tests/1234:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}}}",
+      "{\"base_task_name\": \"base_unittests on Intel GPU on Linux/Ubuntu-14.04/ffffffffff/Linux Tests/123\", \"tasks\": {\"base_unittests on Intel GPU on Linux/Ubuntu-14.04/ffffffffff/Linux Tests/123\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
-    "name": "benchmark on Intel GPU on Windows on Windows-10-10586",
+    "name": "base_unittests on Intel GPU on Linux",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Bot id: 'build187-b4'<br/>Run on OS: 'Windows-10-10586'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",
@@ -645,155 +480,57 @@
       "@@@STEP_LOG_LINE@swarming.summary@}@@@",
       "@@@STEP_LOG_END@swarming.summary@@@",
       "@@@STEP_LOG_LINE@outdir_json@{@@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"0\\\\output.json\": \"{\\\"tests\\\": {\\\"test1\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"PASS\\\"}, \\\"Test3\\\": {\\\"expected\\\": \\\"SKIP\\\", \\\"actual\\\": \\\"SKIP\\\"}, \\\"Test2\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"TIMEOUT\\\"}}, \\\"test_common\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL PASS\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000000, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"SKIP\\\": 1, \\\"PASS\\\": 2}}\", @@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"0\\\\perftest-output.json\": \"{\\\"dummy\\\": \\\"dummy0\\\", \\\"enabled\\\": true, \\\"charts\\\": {\\\"entry2\\\": \\\"chart2\\\", \\\"entry1\\\": \\\"chart1\\\"}}\", @@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"1\\\\output.json\": \"{\\\"tests\\\": {\\\"test_common\\\": {\\\"Test4\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL PASS\\\"}}, \\\"test4\\\": {\\\"Test5\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"TIMEOUT\\\"}, \\\"Test4\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"PASS\\\"}, \\\"Test6\\\": {\\\"expected\\\": \\\"SKIP\\\", \\\"actual\\\": \\\"SKIP\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000001, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"SKIP\\\": 1, \\\"PASS\\\": 2}}\", @@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"1\\\\perftest-output.json\": \"{\\\"dummy\\\": \\\"dummy1\\\", \\\"enabled\\\": true, \\\"charts\\\": {\\\"entry3\\\": \\\"chart3\\\", \\\"entry4\\\": \\\"chart4\\\"}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/output.json\": \"{\\\"tests\\\": {\\\"test1\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"PASS\\\"}, \\\"Test3\\\": {\\\"expected\\\": \\\"SKIP\\\", \\\"actual\\\": \\\"SKIP\\\"}, \\\"Test2\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"TIMEOUT\\\"}}, \\\"test_common\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL PASS\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000000, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"SKIP\\\": 1, \\\"PASS\\\": 2}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/perftest-output.json\": \"[{\\\"guid\\\": \\\"1\\\", \\\"name\\\": \\\"foo1\\\", \\\"unit\\\": \\\"count\\\"}]\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"1/output.json\": \"{\\\"tests\\\": {\\\"test_common\\\": {\\\"Test4\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL PASS\\\"}}, \\\"test4\\\": {\\\"Test5\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"TIMEOUT\\\"}, \\\"Test4\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"PASS\\\"}, \\\"Test6\\\": {\\\"expected\\\": \\\"SKIP\\\", \\\"actual\\\": \\\"SKIP\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000001, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"SKIP\\\": 1, \\\"PASS\\\": 2}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"1/perftest-output.json\": \"[{\\\"guid\\\": \\\"3\\\", \\\"name\\\": \\\"foo3\\\", \\\"unit\\\": \\\"count\\\"}]\", @@@",
       "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}, {\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}]}\"@@@",
       "@@@STEP_LOG_LINE@outdir_json@}@@@",
       "@@@STEP_LOG_END@outdir_json@@@",
       "@@@STEP_LOG_LINE@chartjson_info@Info: Setting up arguments for perf dashboard@@@",
       "@@@STEP_LOG_END@chartjson_info@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
-      "@@@STEP_LINK@shard #1 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/10100@@@"
+      "@@@STEP_LINK@shard #1 isolated out@blah@@@"
     ]
   },
   {
     "cmd": [
-      "authutil.exe",
+      "authutil",
       "token",
       "-service-account-json",
-      "C:\\creds\\service_accounts\\service-account-chromium-perf-histograms.json",
+      "/creds/service_accounts/service-account-chromium-perf-histograms.json",
       "-lifetime",
       "600s"
     ],
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
     "name": "get access token for service-account-chromium-perf-histograms.json",
     "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
-      "--show-path",
-      "--",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\upload_perf_dashboard_results.py",
-      "--results-file",
-      "{\"dummy\": \"dummy0\", \"enabled\": true, \"charts\": {\"entry2\": \"chart2\", \"entry3\": \"chart3\", \"entry1\": \"chart1\", \"entry4\": \"chart4\"}}",
-      "--oauth-token-file",
-      "\"extra.secret.token.should.not.be.logged\"",
-      "--perf-id",
-      "win-10-low-end",
-      "--results-url",
-      "https://chromeperf.appspot.com",
-      "--output-json-file",
-      "/path/to/tmp/json",
-      "--name",
-      "benchmark",
-      "--buildername",
-      "Win 10 Low-End Perf Tests",
-      "--buildnumber",
-      "1234",
-      "--build-dir",
-      "[START_DIR]\\src\\out",
-      "--got-webrtc-revision",
-      "0f90628433546e61d9268596da93418c623137f4",
-      "--got-v8-revision",
-      "801ada225ddc271c132c3a35f03975671d43e399",
-      "--got-revision-cp",
-      "refs/heads/master@{#291141}",
-      "--git-revision",
-      "asdfawe2342",
-      "--version",
-      "v23523",
-      "--output-json-dashboard-url",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
-    "name": "benchmark Dashboard Upload",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@step_metadata@{@@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"benchmark\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"cpu\": \"x86-64\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"gpu\": \"8086:22b1\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"id\": \"build187-b4\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Windows-10-10586\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome-perf\"@@@",
-      "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"benchmark on Intel GPU on Windows on Windows-10-10586\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10100\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
-      "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": \"Win 10 Low-End Perf Tests\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": \"chromium.perf.fyi\"@@@",
-      "@@@STEP_LOG_LINE@step_metadata@}@@@",
-      "@@@STEP_LOG_END@step_metadata@@@",
-      "@@@STEP_LINK@Results Dashboard@chromeperf.appspot.com@@@"
-    ]
-  },
-  {
-    "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::test_results]\\resources\\upload_test_results.py",
+      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
       "--input-json",
       "{\"interrupted\": false, \"num_failures_by_type\": {\"FAIL\": 0, \"PASS\": 2, \"SKIP\": 1}, \"path_delimiter\": \".\", \"seconds_since_epoch\": 14000000, \"tests\": {\"test1\": {\"Test1\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"Test2\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}, \"Test3\": {\"actual\": \"SKIP\", \"expected\": \"SKIP\"}}, \"test_common\": {\"Test1\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}}}, \"version\": 3}",
       "--master-name",
-      "chromium.perf.fyi",
+      "chromium.linux",
       "--builder-name",
-      "Win 10 Low-End Perf Tests",
+      "Linux Tests",
       "--build-number",
-      "1234",
+      "123",
       "--test-type",
-      "benchmark on Intel GPU on Windows",
+      "base_unittests on Intel GPU on Linux",
       "--chrome-revision",
       "170242",
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
-    "name": "Upload to test-results [benchmark on Intel GPU on Windows]"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
-      "--show-path",
-      "--",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\process_dumps.py",
-      "--target",
-      "Release_x64"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
-    "infra_step": true,
-    "name": "process_dumps"
+    "name": "Upload to test-results [base_unittests on Intel GPU on Linux]"
   },
   {
     "name": "$result",
+    "reason": "LUCI builder must set perf_dashboard_machine_group property for perf dashboard uploading. For more details, see bit.ly/perf-dashboard-machine-group.",
     "recipe_result": null,
-    "status_code": 0
+    "status_code": 1
   }
 ]

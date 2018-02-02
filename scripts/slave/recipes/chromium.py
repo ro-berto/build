@@ -22,6 +22,7 @@ DEPS = [
   'recipe_engine/python',
   'recipe_engine/step',
   'recipe_engine/tempfile',
+  'recipe_engine/runtime',
   'swarming',
   'test_results',
   'test_utils',
@@ -616,7 +617,10 @@ def GenTests(api):
     api.properties(
       swarm_hashes={
       'telemetry_perf_tests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
-      }, **{'perf-id': 'testid', 'results-url': 'https://test-results-url'}) +
+      },**{
+         'perf-id': 'testid',
+         'results-url': 'https://test-results-url',
+         'perf_dashboard_machine_group': 'ChromiumPerf'}) +
     api.platform('win', 64) +
     api.override_step_data(
         'read test spec (chromium.perf.fyi.json)',
@@ -652,13 +656,15 @@ def GenTests(api):
             shards=2, isolated_script_passing=True, output_chartjson=True,
             use_json_test_format=True, output_histograms=True),
         retcode=0) +
+    api.runtime(is_luci=True, is_experimental=False) +
     # TODO(nednguyen): also assert the content of the benchmark dashboard upload
     # once post_process allows to do so.
-    api.post_process(post_process.MustRun, 'benchmark Dashboard Upload')
+    api.post_process(post_process.MustRun, 'benchmark Dashboard Upload') +
+    api.post_process(post_process.StatusCodeIn, 0)
   )
 
   yield (
-    api.test('dynamic_swarmed_sharded_passed_isolated_script_perf_test') +
+    api.test('dynamic_swarmed_sharded_passed_isolated_script_perf_test_failed_upload') +
     api.properties.generic(mastername='chromium.perf.fyi',
                            buildername='Win 10 Low-End Perf Tests',
                            parent_buildername='Win Builder FYI',
@@ -706,9 +712,10 @@ def GenTests(api):
             shards=2, isolated_script_passing=True,
             output_chartjson=True, use_json_test_format=True),
         retcode=0) +
-    # TODO(nednguyen): also assert the content of the benchmark dashboard upload
-    # once post_process allows to do so.
-    api.post_process(post_process.MustRun, 'benchmark Dashboard Upload')
+    api.runtime(is_luci=True, is_experimental=False) +
+    # Status code is 1 because this builder is missing
+    # perf_dashboard_machine_group property.
+    api.post_process(post_process.StatusCodeIn, 1)
   )
 
   yield (
