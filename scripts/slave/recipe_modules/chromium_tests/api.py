@@ -470,7 +470,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def _trigger_child_builds(self, mastername, buildername, bot_db, update_step):
     # If you modify parameters or properties, make sure to modify it for both
-    # legacy and luci cases below.
+    # legacy and LUCI cases below.
     if not self.m.runtime.is_luci:
       # Legacy buildbot-only triggering.
       # TODO(tandrii): get rid of legacy triggering.
@@ -494,7 +494,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         self.m.trigger(*trigger_specs)
       return
 
-    # Buildbucket-based triggering (required on luci stack).
+    # LUCI-Scheduler-based triggering (required on luci stack).
     properties = {
       'parent_mastername': mastername,
       'parent_buildername': buildername,
@@ -507,31 +507,37 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if 'parent_got_revision' in properties:
       properties['revision'] = properties['parent_got_revision']
 
-    buildbucket_builds = []
+    scheduler_jobs = []
     for loop_mastername, loop_buildername, builder_dict in sorted(
         bot_db.bot_configs_matching_parent_buildername(
             mastername, buildername)):
-      # Luci mode will emulate triggering of builds inside master.chromium*
-      # masters which are all mapped into luci.chromium.ci bucket.
-      # If you use this recipe module with a different bucket (or migrating from
-      # a different master), refactor the
-      # `bot_configs_matching_parent_buildername` to return bucket instead of
-      # master.
+      # LUCI mode will emulate triggering of builds inside master.chromium*
+      # masters which are all mapped into luci.chromium.ci bucket. The
+      # triggering will go through LUCI Scheduler to ensure that outstanding
+      # triggers get merged if triggered builder (aka loop_buildername) is too
+      # slow. LUCI Scheduler `project` is chromium and `job` names are the same
+      # as builder names. Config is located here:
+      # https://chromium.googlesource.com/chromium/src/+/infra/config/luci-scheduler.cfg
+      #
+      # Schematically:
+      #   <this build> --triggers--> LUCI Scheduler --triggers--> Buildbucket.
+      #
+      # If you use this recipe module with a different master/bucket/project
+      # refactor the `bot_configs_matching_parent_buildername` to return LUCI
+      # Scheduler project instead of master.
       if not loop_mastername.startswith('chromium'):  # pragma: no cover
         # If you hit this condition, then you have a test case for coverage,
         # so please add your test and remove the pragma above.
         self.m.python.failing_step('trigger', 'unknown destination bucket')
 
-      buildbucket_builds.append({
-        'bucket': 'luci.chromium.ci',
-        'parameters': {
-          'builder_name': loop_buildername,
-          'properties': properties,
-        },
-        # Default tags are fine.
-      })
-    if buildbucket_builds:
-      self.m.buildbucket.put(buildbucket_builds, name='trigger')
+      scheduler_jobs.append(loop_buildername)
+
+    if scheduler_jobs:
+      self.m.scheduler.emit_trigger(
+          self.m.scheduler.buildbucket_trigger(properties=properties),
+          project='chromium',
+          jobs=scheduler_jobs,
+          step_name='trigger')
 
   def run_mb_and_compile(self, compile_targets, isolated_targets, name_suffix,
                          mb_mastername=None, mb_buildername=None,
