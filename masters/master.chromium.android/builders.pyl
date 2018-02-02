@@ -152,6 +152,7 @@
       "slave_pools": ["kit_kat_phone_dbg"],
       "category": "3Testers",
       "slavebuilddir": "android_build",
+      "mergeRequests": True,
     },
     "KitKat Tablet Tester": {
       "recipe": "chromium",
