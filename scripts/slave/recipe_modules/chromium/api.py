@@ -921,6 +921,10 @@ class ChromiumApi(recipe_api.RecipeApi):
         '--config-file', mb_config_path,
     ]
 
+    if self.c.project_generator.isolate_map_paths:
+      for isolate_map_path in self.c.project_generator.isolate_map_paths:
+        args += ['--isolate-map-file', isolate_map_path]
+
     if phase is not None:
       args += [ '--phase', str(phase) ]
 

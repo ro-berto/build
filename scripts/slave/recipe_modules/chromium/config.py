@@ -90,6 +90,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       tool = Single(basestring, empty_val='mb'),
       config_path = Single(Path),
       args = Set(basestring),
+      isolate_map_paths = List(Path),
     ),
     build_dir = Single(Path),
     cros_sdk = ConfigGroup(

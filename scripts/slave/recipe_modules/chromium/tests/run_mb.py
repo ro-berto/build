@@ -4,6 +4,7 @@
 
 DEPS = [
   'chromium',
+  'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
 ]
@@ -18,6 +19,10 @@ def RunSteps(api):
   for config in api.properties.get('chromium_apply_config', []):
     api.chromium.apply_config(config)
 
+  if api.properties.get('use_explicit_isolate_map_path'):
+    api.chromium.c.project_generator.isolate_map_paths = [
+        api.path['checkout'].join(
+            'testing', 'buildbot', 'gn_isolate_map.pyl')]
   api.chromium.run_mb(
       mastername='test_mastername',
       buildername='test_buildername',
@@ -47,4 +52,11 @@ def GenTests(api):
       api.test('mac') +
       api.platform('mac', 64) +
       api.properties(target_platform='mac')
+  )
+
+  yield (
+      api.test('explicit_mb') +
+      api.properties(
+          use_explicit_isolate_map_path=True,
+          chromium_apply_config=['chromium_official'])
   )
