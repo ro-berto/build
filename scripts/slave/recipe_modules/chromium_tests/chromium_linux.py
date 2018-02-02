@@ -212,6 +212,23 @@ SPEC = {
         'platform': 'linux',
       },
     },
+    'Leak Detection Linux': {
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
+      'chromium_apply_config': [
+          'mb',
+          'ninja_confirm_noop',
+        ],
+      'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+      },
+      'chromium_tests_apply_config': [ 'staging' ],
+      'test_results_config': 'staging_server',
+      'testing': {
+          'platform': 'linux',
+      },
+    },
     'Ozone Linux': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ozone'],
