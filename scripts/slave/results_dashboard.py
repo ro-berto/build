@@ -17,8 +17,6 @@ import traceback
 import urllib
 import urllib2
 
-from common import chromium_utils # pylint: disable=W0611
-
 # The paths in the results dashboard URLs for sending and viewing results.
 SEND_RESULTS_PATH = '/add_point'
 SEND_HISTOGRAMS_PATH = '/add_histograms'
