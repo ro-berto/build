@@ -1500,7 +1500,7 @@ BUILDERS = {
               '--total-timeout-sec=1200', # 20 minutes
               '--combine-tests',
               '--combine-min=30',
-              '--combine-max=100',
+              '--combine-max=50',
               '--stress-deopt=2',
               '--stress-compaction=2',
               '--stress-gc=6',
@@ -1557,8 +1557,8 @@ BUILDERS = {
             [
               '--total-timeout-sec=1200', # 20 minutes
               '--combine-tests',
-              '--combine-min=20',
-              '--combine-max=60',
+              '--combine-min=10',
+              '--combine-max=30',
               '--stress-compaction=2',
               '--stress-gc=6',
               '--stress-marking=6',

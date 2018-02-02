@@ -632,7 +632,7 @@
       "--total-timeout-sec=1200",
       "--combine-tests",
       "--combine-min=30",
-      "--combine-max=100",
+      "--combine-max=50",
       "--stress-deopt=2",
       "--stress-compaction=2",
       "--stress-gc=6",
