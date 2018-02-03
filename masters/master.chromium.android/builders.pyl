@@ -105,14 +105,6 @@
       "category": "1Webview",
       "mergeRequests": True,
     },
-    "Android MIPS Builder (dbg)": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": "chromium_commits",
-      "slave_pools": ["mips_builder"],
-      "category": "2Builders",
-      "slavebuilddir": "android_build",
-    },
     "Android x64 Builder (dbg)": {
       "recipe": "chromium",
       "use_remote_run": True,
@@ -414,16 +406,6 @@
         "bits": "64",
       },
       "slaves": ["slave218-c1"],
-    },
-    "mips_builder": {
-      "slave_data": {
-        "os": "linux",
-        "version": "trusty",
-        "bits": 64,
-      },
-      "slaves": [
-        "slave75-c1",
-      ],
     },
     "nougat_phone": {
       "slave_data": {

@@ -182,23 +182,6 @@ SPEC = {
       },
     },
 
-    'Android MIPS Builder (dbg)': {
-      'chromium_config': 'android',
-      'chromium_apply_config': ['chrome_with_codecs'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
-        'TARGET_PLATFORM': 'android',
-      },
-      'android_config': 'mipsel_builder_mb',
-      'bot_type': 'builder',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-
     'Android x64 Builder (dbg)': {
       'chromium_config': 'android',
       'chromium_apply_config': ['chrome_with_codecs'],

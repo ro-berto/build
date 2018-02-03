@@ -104,10 +104,6 @@ TRYBOTS = freeze({
         'mastername': 'chromium.android',
         'buildername': 'Android arm Builder (dbg)',
       }, analyze_mode='compile'),
-      'android_compile_mips_dbg': simple_bot({
-        'mastername': 'chromium.android',
-        'buildername': 'Android MIPS Builder (dbg)',
-      }, analyze_mode='compile'),
       'android_compile_x64_dbg': simple_bot({
         'mastername': 'chromium.android',
         'buildername': 'Android x64 Builder (dbg)',

@@ -17,14 +17,6 @@
   # This is sorted first alphabetically by slave pool, and then alphabetically
   # by builder name
   "builders": {
-    "android_compile_mips_dbg": {
-      "builder_timeout_s": 14400,  # 60 * 60 * 4
-      "recipe": "chromium_trybot",
-      "use_remote_run": True,
-      "scheduler": None,
-      "slave_pools": ["ccompute_optional_bots"],
-      "slavebuilddir": "android_compile_mips_dbg",
-    },
     "android_compile_x64_dbg": {
       "builder_timeout_s": 14400,  # 60 * 60 * 4
       "recipe": "chromium_trybot",
