@@ -109,21 +109,22 @@ def RunSteps(api):
   api.chromium.ensure_goma()
   api.chromium.runhooks()
 
-  BuildSteps(api, 'minimal')
-  BuildSteps(api, 'intelligibility_enhancer',
-             'rtc_enable_intelligibility_enhancer=true')
-  BuildSteps(api, 'no_include_tests', 'rtc_include_tests=false')
-  BuildSteps(api, 'no_protobuf', 'rtc_enable_protobuf=false')
-  BuildSteps(api, 'bwe_test_logging', 'rtc_enable_bwe_test_logging=true')
+  BuildSteps(api, 'intelligibility_enhancer_no_include_tests',
+             'rtc_enable_intelligibility_enhancer=true',
+             'rtc_include_tests=false')
+  BuildSteps(api, 'bwe_test_logging',
+             'rtc_enable_bwe_test_logging=true')
   if api.chromium.c.TARGET_PLATFORM != 'android':
     # Sanity check for the rtc_enable_bwe_test_logging=true build.
     api.webrtc.run_baremetal_test('bwe_simulations_tests',
         gtest_args=['--gtest_filter=VideoSendersTest/'
                     'BweSimulation.Choke1000kbps500kbps1000kbps/1'])
-  BuildSteps(api, 'dummy_audio_file_devices',
-             'rtc_use_dummy_audio_file_devices=true')
-  BuildSteps(api, 'rtti', 'use_rtti=true')
-  BuildSteps(api, 'no_sctp', 'rtc_enable_sctp=false')
+  BuildSteps(api, 'dummy_audio_file_devices_no_protobuf',
+             'rtc_use_dummy_audio_file_devices=true',
+             'rtc_enable_protobuf=false')
+  BuildSteps(api, 'rtti_no_sctp',
+             'use_rtti=true',
+             'rtc_enable_sctp=false')
   if api.chromium.c.TARGET_PLATFORM != 'android':
     # Sanity check for the rtc_enable_sctp=false build.
     api.webrtc.run_baremetal_test('peerconnection_unittests')
