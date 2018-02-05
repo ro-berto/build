@@ -261,7 +261,8 @@ def _UploadToPerfDashboard(name, api, task_output_dir):
       }
     }
   else:  # pragma: no cover
-    perf_results = api.json.loads(task_output_dir['0/perftest-output.json'])
+    perf_results = api.json.loads(
+        task_output_dir[api.path.join('0', 'perftest-output.json')])
 
   perf_results['benchmark_name'] = name
 
