@@ -666,8 +666,8 @@
       "[dummy hash for low_bandwidth_audio_perf_test]",
       "--",
       "--android",
-      "--chartjson-result-file",
-      "${ISOLATED_OUTDIR}/perf_result.json",
+      "--isolated-script-test-perf-output",
+      "${ISOLATED_OUTDIR}/perftest-output.json",
       "--adb-path",
       "../../third_party/android_tools/sdk/platform-tools/adb",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
@@ -759,8 +759,8 @@
       "--isolated",
       "[dummy hash for video_quality_loopback_test]",
       "--",
-      "--chartjson-result-file",
-      "${ISOLATED_OUTDIR}/perf_result.json",
+      "--isolated-script-test-perf-output",
+      "${ISOLATED_OUTDIR}/perftest-output.json",
       "--adb-path",
       "../../third_party/android_tools/sdk/platform-tools/adb",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
@@ -852,8 +852,8 @@
       "--isolated",
       "[dummy hash for webrtc_perf_tests]",
       "--",
-      "--chartjson-result-file",
-      "${ISOLATED_OUTDIR}/perf_result.json",
+      "--isolated-script-test-perf-output",
+      "${ISOLATED_OUTDIR}/perftest-output.json",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Android_Perf__swarming_",
