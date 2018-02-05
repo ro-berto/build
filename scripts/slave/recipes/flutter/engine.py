@@ -284,7 +284,7 @@ def BuildMac(api):
   ], archive_name='darwin-x64.zip')
 
   UploadArtifacts(api, "android-arm64-profile" , [
-    'out/android_profile_arm64/clang_x86/gen_snapshot',
+    'out/android_profile_arm64/clang_x64/gen_snapshot',
   ], archive_name='darwin-x64.zip')
 
   UploadArtifacts(api, "android-arm-release" , [
@@ -292,7 +292,7 @@ def BuildMac(api):
   ], archive_name='darwin-x64.zip')
 
   UploadArtifacts(api, "android-arm64-release" , [
-    'out/android_release_arm64/clang_x86/gen_snapshot',
+    'out/android_release_arm64/clang_x64/gen_snapshot',
   ], archive_name='darwin-x64.zip')
 
   UploadDartSdk(api, archive_name='dart-sdk-darwin-x64.zip')
