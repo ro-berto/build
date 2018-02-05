@@ -364,7 +364,9 @@ def BuildWindows(api):
   Build(api, 'host_debug_unopt')
   Build(api, 'host_debug')
   Build(api, 'android_profile', 'gen_snapshot')
+  Build(api, 'android_profile_arm64', 'gen_snapshot')
   Build(api, 'android_release', 'gen_snapshot')
+  Build(api, 'android_release_arm64', 'gen_snapshot')
 
   RunHostTests(api, 'out\\host_debug', '.exe')
 

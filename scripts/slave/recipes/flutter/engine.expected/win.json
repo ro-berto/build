@@ -207,6 +207,18 @@
     "cmd": [
       "ninja",
       "-C",
+      "[START_DIR]\\src\\out/android_profile_arm64",
+      "gen_snapshot"
+    ],
+    "env": {
+      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
+    },
+    "name": "build android_profile_arm64 gen_snapshot"
+  },
+  {
+    "cmd": [
+      "ninja",
+      "-C",
       "[START_DIR]\\src\\out/android_release",
       "gen_snapshot"
     ],
@@ -214,6 +226,18 @@
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
     "name": "build android_release gen_snapshot"
+  },
+  {
+    "cmd": [
+      "ninja",
+      "-C",
+      "[START_DIR]\\src\\out/android_release_arm64",
+      "gen_snapshot"
+    ],
+    "env": {
+      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
+    },
+    "name": "build android_release_arm64 gen_snapshot"
   },
   {
     "cmd": [
