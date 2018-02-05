@@ -246,7 +246,9 @@ def BuildMac(api):
   RunGN(api, '--runtime-mode', 'debug')
   RunGN(api, '--runtime-mode', 'debug', '--unoptimized')
   RunGN(api, '--runtime-mode', 'profile', '--android')
+  RunGN(api, '--runtime-mode', 'profile', '--android', '--android-cpu=arm64')
   RunGN(api, '--runtime-mode', 'release', '--android')
+  RunGN(api, '--runtime-mode', 'release', '--android', '--android-cpu=arm64')
   RunGN(api, '--runtime-mode', 'release', '--android', '--enable-vulkan')
 
   Build(api, 'host_debug_unopt')
@@ -254,7 +256,9 @@ def BuildMac(api):
   RunHostTests(api, 'out/host_debug_unopt')
 
   Build(api, 'android_profile', 'flutter/lib/snapshot')
+  Build(api, 'android_profile_arm64', 'flutter/lib/snapshot')
   Build(api, 'android_release', 'flutter/lib/snapshot')
+  Build(api, 'android_release_arm64', 'flutter/lib/snapshot')
   Build(api, 'android_release_vulkan')
 
   host_debug_path = api.path['start_dir'].join('src', 'out', 'host_debug')
@@ -279,8 +283,16 @@ def BuildMac(api):
     'out/android_profile/clang_x86/gen_snapshot',
   ], archive_name='darwin-x64.zip')
 
+  UploadArtifacts(api, "android-arm64-profile" , [
+    'out/android_profile_arm64/clang_x86/gen_snapshot',
+  ], archive_name='darwin-x64.zip')
+
   UploadArtifacts(api, "android-arm-release" , [
     'out/android_release/clang_x86/gen_snapshot',
+  ], archive_name='darwin-x64.zip')
+
+  UploadArtifacts(api, "android-arm64-release" , [
+    'out/android_release_arm64/clang_x86/gen_snapshot',
   ], archive_name='darwin-x64.zip')
 
   UploadDartSdk(api, archive_name='dart-sdk-darwin-x64.zip')
@@ -345,7 +357,9 @@ def BuildWindows(api):
   RunGN(api, '--runtime-mode', 'debug')
   RunGN(api, '--runtime-mode', 'debug', '--unoptimized')
   RunGN(api, '--runtime-mode', 'profile', '--android')
+  RunGN(api, '--runtime-mode', 'profile', '--android', '--android-cpu=arm64')
   RunGN(api, '--runtime-mode', 'release', '--android')
+  RunGN(api, '--runtime-mode', 'release', '--android', '--android-cpu=arm64')
 
   Build(api, 'host_debug_unopt')
   Build(api, 'host_debug')
@@ -366,8 +380,16 @@ def BuildWindows(api):
     'out/android_profile/gen_snapshot.exe',
   ], archive_name='windows-x64.zip')
 
+  UploadArtifacts(api, "android-arm64-profile" , [
+    'out/android_profile_arm64/gen_snapshot.exe',
+  ], archive_name='windows-x64.zip')
+
   UploadArtifacts(api, "android-arm-release" , [
     'out/android_release/gen_snapshot.exe',
+  ], archive_name='windows-x64.zip')
+
+  UploadArtifacts(api, "android-arm64-release" , [
+    'out/android_release_arm64/gen_snapshot.exe',
   ], archive_name='windows-x64.zip')
 
   UploadDartSdk(api, archive_name='dart-sdk-windows-x64.zip')

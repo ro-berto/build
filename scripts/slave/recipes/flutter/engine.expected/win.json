@@ -133,6 +133,20 @@
       "python",
       "[START_DIR]\\src\\flutter/tools/gn",
       "--runtime-mode",
+      "profile",
+      "--android",
+      "--android-cpu=arm64"
+    ],
+    "env": {
+      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
+    },
+    "name": "gn --runtime-mode profile --android --android-cpu=arm64"
+  },
+  {
+    "cmd": [
+      "python",
+      "[START_DIR]\\src\\flutter/tools/gn",
+      "--runtime-mode",
       "release",
       "--android"
     ],
@@ -140,6 +154,20 @@
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
     "name": "gn --runtime-mode release --android"
+  },
+  {
+    "cmd": [
+      "python",
+      "[START_DIR]\\src\\flutter/tools/gn",
+      "--runtime-mode",
+      "release",
+      "--android",
+      "--android-cpu=arm64"
+    ],
+    "env": {
+      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
+    },
+    "name": "gn --runtime-mode release --android --android-cpu=arm64"
   },
   {
     "cmd": [
@@ -345,8 +373,8 @@
     "env": {
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
-    "name": "Zip android-arm-release windows-x64.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot.exe\", \"path\": \"[START_DIR]\\\\src\\\\out/android_release/gen_snapshot.exe\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]\\\\tmp_tmp_3\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
+    "name": "Zip android-arm64-profile windows-x64.zip",
+    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot.exe\", \"path\": \"[START_DIR]\\\\src\\\\out/android_profile_arm64/gen_snapshot.exe\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]\\\\tmp_tmp_3\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
   },
   {
     "cmd": [
@@ -358,6 +386,55 @@
       "----",
       "cp",
       "[TMP_BASE]\\tmp_tmp_3\\artifacts.zip",
+      "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm64-profile/windows-x64.zip"
+    ],
+    "env": {
+      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
+    },
+    "infra_step": true,
+    "name": "gsutil upload \"android-arm64-profile/windows-x64.zip\"",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm64-profile/windows-x64.zip@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[TMP_BASE]\\tmp_tmp_3"
+    ],
+    "env": {
+      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
+    },
+    "infra_step": true,
+    "name": "temp dir for android-arm64-profile UploadArtifacts windows-x64.zip"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::zip]\\resources\\zip.py"
+    ],
+    "env": {
+      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
+    },
+    "name": "Zip android-arm-release windows-x64.zip",
+    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot.exe\", \"path\": \"[START_DIR]\\\\src\\\\out/android_release/gen_snapshot.exe\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]\\\\tmp_tmp_4\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "----",
+      "cp",
+      "[TMP_BASE]\\tmp_tmp_4\\artifacts.zip",
       "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm-release/windows-x64.zip"
     ],
     "env": {
@@ -377,7 +454,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[TMP_BASE]\\tmp_tmp_3"
+      "[TMP_BASE]\\tmp_tmp_4"
     ],
     "env": {
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
@@ -394,8 +471,8 @@
     "env": {
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
-    "name": "Zip dart-sdk",
-    "stdin": "{\"entries\": [{\"path\": \"[START_DIR]\\\\src/out/host_debug\\\\dart-sdk\", \"type\": \"dir\"}], \"output\": \"[TMP_BASE]\\\\tmp_tmp_4\\\\dart-sdk-windows-x64.zip\", \"root\": \"[START_DIR]\\\\src/out/host_debug\"}"
+    "name": "Zip android-arm64-release windows-x64.zip",
+    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot.exe\", \"path\": \"[START_DIR]\\\\src\\\\out/android_release_arm64/gen_snapshot.exe\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]\\\\tmp_tmp_5\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
   },
   {
     "cmd": [
@@ -406,7 +483,56 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]\\tmp_tmp_4\\dart-sdk-windows-x64.zip",
+      "[TMP_BASE]\\tmp_tmp_5\\artifacts.zip",
+      "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm64-release/windows-x64.zip"
+    ],
+    "env": {
+      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
+    },
+    "infra_step": true,
+    "name": "gsutil upload \"android-arm64-release/windows-x64.zip\"",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm64-release/windows-x64.zip@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[TMP_BASE]\\tmp_tmp_5"
+    ],
+    "env": {
+      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
+    },
+    "infra_step": true,
+    "name": "temp dir for android-arm64-release UploadArtifacts windows-x64.zip"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::zip]\\resources\\zip.py"
+    ],
+    "env": {
+      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
+    },
+    "name": "Zip dart-sdk",
+    "stdin": "{\"entries\": [{\"path\": \"[START_DIR]\\\\src/out/host_debug\\\\dart-sdk\", \"type\": \"dir\"}], \"output\": \"[TMP_BASE]\\\\tmp_tmp_6\\\\dart-sdk-windows-x64.zip\", \"root\": \"[START_DIR]\\\\src/out/host_debug\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "----",
+      "cp",
+      "[TMP_BASE]\\tmp_tmp_6\\dart-sdk-windows-x64.zip",
       "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/dart-sdk-windows-x64.zip"
     ],
     "env": {
@@ -426,7 +552,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[TMP_BASE]\\tmp_tmp_4"
+      "[TMP_BASE]\\tmp_tmp_6"
     ],
     "env": {
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
