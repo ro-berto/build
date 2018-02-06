@@ -195,6 +195,16 @@ class Test(object):
       return self.name
     return '%s (%s)' % (self.name, suffix)
 
+  def step_metadata(self, api, suffix=None):
+    data = {
+        'waterfall_mastername': self._waterfall_mastername,
+        'waterfall_buildername': self._waterfall_buildername,
+        'canonical_step_name': self.name,
+    }
+    if suffix is not None:
+      data['patched'] = (suffix == 'with patch')
+    return data
+
 
 class ArchiveBuildStep(Test):
   def __init__(self, gs_bucket, gs_acl=None):
@@ -527,14 +537,6 @@ class LocalGTestTest(Test):
 
   def failures(self, api, suffix):
     return self._test_runs[suffix].test_utils.gtest_results.failures
-
-  def step_metadata(self, api, suffix):
-    return {
-        'waterfall_mastername': self._waterfall_mastername,
-        'waterfall_buildername': self._waterfall_buildername,
-        'canonical_step_name': self._name,
-        'patched': suffix == 'with patch',
-    }
 
 
 def get_args_for_test(api, chromium_tests_api, test_spec, bot_update_step):
@@ -1331,17 +1333,17 @@ class SwarmingTest(Test):
   def uses_swarming(self):
     return True
 
-  def step_metadata(self, api, suffix):
-    return {
-      'waterfall_mastername': self._waterfall_mastername,
-      'waterfall_buildername': self._waterfall_buildername,
-      'canonical_step_name': self._name,
-      'full_step_name': api.swarming.get_step_name(
-          prefix=None, task=self._tasks[suffix]),
-      'dimensions': self._tasks[suffix].dimensions,
-      'patched': suffix == 'with patch',
-      'swarm_task_ids': self._tasks[suffix].get_task_ids(),
-    }
+  def step_metadata(self, api, suffix=None):
+    data = super(SwarmingTest, self).step_metadata(api, suffix)
+    # canonical_step_name should not contain any suffix.
+    data['canonical_step_name'] = self._name
+    if suffix is not None:
+      data['full_step_name'] = api.swarming.get_step_name(
+          prefix=None, task=self._tasks[suffix])
+      data['patched'] = (suffix == 'with patch')
+      data['dimensions'] = self._tasks[suffix].dimensions
+      data['swarm_task_ids'] = self._tasks[suffix].get_task_ids()
+    return data
 
 
 class SwarmingGTestTest(SwarmingTest):

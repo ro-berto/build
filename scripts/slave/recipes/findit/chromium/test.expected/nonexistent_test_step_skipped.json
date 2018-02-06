@@ -600,6 +600,26 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "name": "test r1.debug_get_requested_tests_to_run",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@debug_get_requested_tests_to_run@{@@@",
+      "@@@STEP_LOG_LINE@debug_get_requested_tests_to_run@  \"actual_tests_to_run\": {}, @@@",
+      "@@@STEP_LOG_LINE@debug_get_requested_tests_to_run@  \"bot_id\": {@@@",
+      "@@@STEP_LOG_LINE@debug_get_requested_tests_to_run@    \"tester\": \"Win7 Tests (1)\", @@@",
+      "@@@STEP_LOG_LINE@debug_get_requested_tests_to_run@    \"mastername\": \"chromium.win\", @@@",
+      "@@@STEP_LOG_LINE@debug_get_requested_tests_to_run@    \"buildername\": \"Win Builder\"@@@",
+      "@@@STEP_LOG_LINE@debug_get_requested_tests_to_run@  }@@@",
+      "@@@STEP_LOG_LINE@debug_get_requested_tests_to_run@}@@@",
+      "@@@STEP_LOG_END@debug_get_requested_tests_to_run@@@"
+    ]
+  },
+  {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]\\win",
     "name": "test r1.test_pre_run",

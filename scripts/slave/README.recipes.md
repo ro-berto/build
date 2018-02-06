@@ -1805,9 +1805,9 @@ are affected by the set of files that have changed.
 
 [DEPS](/scripts/slave/recipe_modules/findit/__init__.py#5): [buildbucket](#recipe_modules-buildbucket), [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [test\_utils](#recipe_modules-test_utils), [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-#### **class [FinditApi](/scripts/slave/recipe_modules/findit/api.py#19)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
+#### **class [FinditApi](/scripts/slave/recipe_modules/findit/api.py#18)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [compile\_and\_test\_at\_revision](/scripts/slave/recipe_modules/findit/api.py#131)(self, api, target_mastername, target_buildername, target_testername, revision, requested_tests, use_analyze, test_repeat_count=None, skip_tests=False):**
+&mdash; **def [compile\_and\_test\_at\_revision](/scripts/slave/recipe_modules/findit/api.py#130)(self, api, target_mastername, target_buildername, target_testername, revision, requested_tests, use_analyze, test_repeat_count=None, skip_tests=False):**
 
 Compile the targets needed to execute the specified tests and run them.
 
@@ -1862,7 +1862,7 @@ Args:
                   test.
 Returns: (tests, target_buildername)
 
-&mdash; **def [existing\_targets](/scripts/slave/recipe_modules/findit/api.py#99)(self, targets, mb_mastername, mb_buildername):**
+&mdash; **def [existing\_targets](/scripts/slave/recipe_modules/findit/api.py#98)(self, targets, mb_mastername, mb_buildername):**
 
 Returns a sublist of the given targets that exist in the build graph.
 
@@ -1880,7 +1880,7 @@ Args:
  mb_mastername (str): The mastername to run MB with.
  mb_buildername (str): The buildername to run MB with.
 
-&mdash; **def [files\_changed\_by\_revision](/scripts/slave/recipe_modules/findit/api.py#35)(self, revision, solution_name='src'):**
+&mdash; **def [files\_changed\_by\_revision](/scripts/slave/recipe_modules/findit/api.py#34)(self, revision, solution_name='src'):**
 
 Returns the files changed by the given revision.
 
@@ -1904,7 +1904,7 @@ Returns:
   A pair of revisions (checked_out_revision, cached_revision), or None, None
   if the checkout directory does not exist.
 
-&mdash; **def [revisions\_between](/scripts/slave/recipe_modules/findit/api.py#67)(self, start_revision, end_revision, solution_name='src'):**
+&mdash; **def [revisions\_between](/scripts/slave/recipe_modules/findit/api.py#66)(self, start_revision, end_revision, solution_name='src'):**
 
 Returns the git commit hashes between the given range.
 

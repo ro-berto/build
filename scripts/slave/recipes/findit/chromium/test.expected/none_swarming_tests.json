@@ -603,6 +603,34 @@
     "cmd": [
       "python",
       "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "name": "test r1.debug_get_requested_tests_to_run",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@debug_get_requested_tests_to_run@{@@@",
+      "@@@STEP_LOG_LINE@debug_get_requested_tests_to_run@  \"actual_tests_to_run\": {@@@",
+      "@@@STEP_LOG_LINE@debug_get_requested_tests_to_run@    \"gl_tests\": [@@@",
+      "@@@STEP_LOG_LINE@debug_get_requested_tests_to_run@      {@@@",
+      "@@@STEP_LOG_LINE@debug_get_requested_tests_to_run@        \"waterfall_mastername\": \"chromium.win\", @@@",
+      "@@@STEP_LOG_LINE@debug_get_requested_tests_to_run@        \"canonical_step_name\": \"gl_tests\", @@@",
+      "@@@STEP_LOG_LINE@debug_get_requested_tests_to_run@        \"waterfall_buildername\": \"Win7 Tests (1)\"@@@",
+      "@@@STEP_LOG_LINE@debug_get_requested_tests_to_run@      }@@@",
+      "@@@STEP_LOG_LINE@debug_get_requested_tests_to_run@    ]@@@",
+      "@@@STEP_LOG_LINE@debug_get_requested_tests_to_run@  }, @@@",
+      "@@@STEP_LOG_LINE@debug_get_requested_tests_to_run@  \"bot_id\": {@@@",
+      "@@@STEP_LOG_LINE@debug_get_requested_tests_to_run@    \"tester\": \"Win7 Tests (1)\", @@@",
+      "@@@STEP_LOG_LINE@debug_get_requested_tests_to_run@    \"mastername\": \"chromium.win\", @@@",
+      "@@@STEP_LOG_LINE@debug_get_requested_tests_to_run@    \"buildername\": \"Win Builder\"@@@",
+      "@@@STEP_LOG_LINE@debug_get_requested_tests_to_run@  }@@@",
+      "@@@STEP_LOG_LINE@debug_get_requested_tests_to_run@}@@@",
+      "@@@STEP_LOG_END@debug_get_requested_tests_to_run@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[BUILDER_CACHE]\\win\\src\\tools\\mb\\mb.py",
       "gen",
       "-m",

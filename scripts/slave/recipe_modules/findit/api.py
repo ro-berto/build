@@ -4,7 +4,6 @@
 
 from collections import defaultdict
 import json
-import logging
 import re
 
 from recipe_engine import recipe_api
@@ -160,9 +159,8 @@ class FinditApi(recipe_api.RecipeApi):
           isolate the targets for running elsewhere.
     """
 
-    logging.debug('compile_and_test_at_revision: %s' % revision)
-
     results = {}
+    debug_info = {}
     abbreviated_revision = revision[:7]
     with api.m.step.nest('test %s' % str(abbreviated_revision)):
       # Checkout code at the given revision to recompile.
@@ -170,7 +168,7 @@ class FinditApi(recipe_api.RecipeApi):
           'mastername': target_mastername,
           'buildername': target_buildername,
           'tester': target_testername}
-      logging.debug('bot_id: %s', json.dumps(bot_id))
+      debug_info['bot_id'] = bot_id
       bot_config = api.m.chromium_tests.create_generalized_bot_config_object(
           [bot_id])
       bot_update_step, bot_db = api.m.chromium_tests.prepare_checkout(
@@ -179,20 +177,20 @@ class FinditApi(recipe_api.RecipeApi):
       # Figure out which test steps to run.
       all_tests, _ = api.m.chromium_tests.get_tests(bot_config, bot_db)
 
-      # Adding debug logging messages.
-      all_tests_names = [t.name for t in all_tests]
-      logging.debug('actual_tests_to_run: %s',
-                    json.dumps(all_tests_names))
-
       # Makes sure there are no steps with the same step name.
       requested_tests_to_run_dict = {}
+      tests_metadata = defaultdict(list)
       for test in all_tests:
         if test.name in requested_tests:
           if not requested_tests_to_run_dict.get(test.name):
             requested_tests_to_run_dict[test.name] = test
-          else:
-            logging.debug('%s showed repeatedly in all_tests.', test.name)
+          tests_metadata[test.name].append(test.step_metadata(api))
+      debug_info['actual_tests_to_run'] = tests_metadata
       requested_tests_to_run = requested_tests_to_run_dict.values()
+
+      api.python.succeeding_step(
+        'debug_get_requested_tests_to_run', [json.dumps(debug_info, indent=2)],
+        as_log='debug_get_requested_tests_to_run')
 
       # Figure out the test targets to be compiled.
       requested_test_targets = []
@@ -294,9 +292,8 @@ class FinditApi(recipe_api.RecipeApi):
           pass_fail_counts = test.pass_fail_counts(suffix=abbreviated_revision)
           results[test.name]['pass_fail_counts'] = pass_fail_counts
 
-        if hasattr(test, 'step_metadata'):
-          step_metadata = test.step_metadata(api, suffix=abbreviated_revision)
-          results[test.name]['step_metadata'] = step_metadata
+        results[test.name]['step_metadata'] = test.step_metadata(
+            api, suffix=abbreviated_revision)
 
       # Process skipped tests in two scenarios:
       # 1. Skipped by "analyze": tests are not affected by the given revision.
