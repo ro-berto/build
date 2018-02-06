@@ -113,7 +113,11 @@ def _GNGenBuilds(api, memory_tool, skia, xfa, v8, target_cpu, clang, msvc, rel,
     assert not clang
 
   if jumbo:
-    args.append('use_jumbo_build=true')
+    # Note: The jumbo_file_merge_limit value below comes from
+    # build/config/jumbo.gni. It is set here to make this jumbo/goma build act
+    # more like a jumbo without goma build. If the value changes in jumbo.gni,
+    # it needs to be updated here as well.
+    args.extend(['use_jumbo_build=true', 'jumbo_file_merge_limit=50'])
 
   if memory_tool == 'asan':
     args.append('is_asan=true')
