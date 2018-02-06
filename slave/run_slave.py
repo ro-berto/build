@@ -168,7 +168,7 @@ def HotPatchSlaveBuilder(is_testing):
   def cleanup(self, wanted):
     retval = self.old_remote_setBuilderList(wanted)
     wanted_dirs = sorted(
-        ['info', 'cert', '.svn', 'cache_dir', 'goma_cache'] +
+        ['info', 'cert', '.svn', 'cache_dir', 'goma_cache', 'tests'] +
         [r[1] for r in wanted])
     Log('Wanted directories: %s' % wanted_dirs)
     actual_dirs = sorted(
