@@ -1350,12 +1350,13 @@ class V8Api(recipe_api.RecipeApi):
           except (TypeError, KeyError) as e:
             bucket_name = 'master.%s' % self.m.properties['mastername']
           if not self.m.runtime.is_luci:
-            service_account = self.m.puppet_service_account.get_key_path(
-                BBUCKET_SERVICE_ACCOUNT)
+            self.m.buildbucket.use_service_account_key(
+                self.m.puppet_service_account.get_key_path(
+                  BBUCKET_SERVICE_ACCOUNT))
           else:
             # LUCI builders are automatically using service account from
             # swarming env, which is specified in the cr-buildbucket.cfg.
-            service_account = None
+            pass
           step_result = self.m.buildbucket.put(
               [
                 {
@@ -1385,7 +1386,6 @@ class V8Api(recipe_api.RecipeApi):
                 }
                 for builder_name in triggers
               ],
-              service_account,
               name='trigger',
               step_test_data=lambda: self.m.json.test_api.output_stream({}),
           )

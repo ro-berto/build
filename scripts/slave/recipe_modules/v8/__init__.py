@@ -1,7 +1,6 @@
 DEPS = [
   'archive',
   'build',
-  'buildbucket',
   'chromium',
   'commit_position',
   'depot_tools/bot_update',
@@ -17,6 +16,7 @@ DEPS = [
   # recipe_engine/service_account once buildbucket module supports passing
   # access_token instead of path to JSON file containing credentials.
   'puppet_service_account',
+  'recipe_engine/buildbucket',
   'recipe_engine/context',
   'recipe_engine/file',
   'recipe_engine/json',
