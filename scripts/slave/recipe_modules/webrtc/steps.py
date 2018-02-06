@@ -161,7 +161,7 @@ def generate_tests(api, test_suite, revision):
             args=['--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/']))
   elif test_suite == 'desktop_perf_swarming':
     for test, extra_args in sorted(PERF_TESTS.items()):
-      tests.append(SwarmingPerfTest(test, **extra_args))
+      tests.append(SwarmingPerfTest(test, api, **extra_args))
   elif test_suite == 'android_perf_swarming' and api.c.PERF_ID:
     for test, extra_args in sorted(ANDROID_PERF_TESTS.items()):
       tests.append(SwarmingAndroidPerfTest(test, **extra_args))
@@ -228,74 +228,6 @@ def _MergeFiles(output_dir, suffix):
     if file_name.endswith(suffix): # pragma: no cover
       result += contents
   return result
-
-
-@composite_step
-def _UploadToPerfDashboard(name, api, task_output_dir):
-  if api.webrtc._test_data.enabled:
-    perf_results = {
-      "format_version": "1.0",
-      "charts": {
-        "warm_times": {
-          "http://www.google.com/": {
-            "type": "list_of_scalar_values",
-            "values": [9, 9, 8, 9],
-            "units": "sec"
-          },
-        },
-        "html_size": {
-          "http://www.google.com/": {
-            "type": "scalar",
-            "value": 13579,
-            "units": "bytes"
-          }
-        },
-        "load_times": {
-          "http://www.google.com/": {
-            "type": "list_of_scalar_values",
-            "value": [4.2],
-            "std": 1.25,
-            "units": "sec"
-          }
-        }
-      }
-    }
-  else:  # pragma: no cover
-    perf_results = api.json.loads(
-        task_output_dir[api.path.join('0', 'perftest-output.json')])
-
-  perf_results['benchmark_name'] = name
-
-  args = [
-      '--build-dir', api.path['checkout'].join('out'),
-      '--buildername', api.properties['buildername'],
-      '--buildnumber', api.properties['buildnumber'],
-      '--name', name,
-      '--perf-id', api.webrtc.c.PERF_ID,
-      '--results-file', api.json.input(perf_results),
-      '--results-url', DASHBOARD_UPLOAD_URL,
-  ]
-
-  if 'got_revision_cp' in api.properties:
-    args.extend(['--got-revision-cp', api.properties['got_revision_cp']])
-  if 'git_revision' in api.properties:
-    args.extend(['--git-revision', api.properties['git_revision']])
-
-  args.append('--output-json-dashboard-url')
-  args.append(api.json.output(add_json_log=False, name='dashboard_url'))
-
-  step_result = api.build.python(
-      '%s Dashboard Upload' % name,
-      api.chromium.package_repo_resource(
-          'scripts', 'slave', 'upload_perf_dashboard_results.py'),
-      args,
-      step_test_data=(
-          lambda: api.json.test_api.output('chromeperf.appspot.com',
-                                           name='dashboard_url') +
-          api.json.test_api.output({})))
-
-  step_result.presentation.links['Results Dashboard'] = (
-      step_result.json.outputs.get('dashboard_url', ''))
 
 
 # TODO(kjellander): Continue refactoring an integrate the classes in the
@@ -407,6 +339,72 @@ class SwarmingAndroidPerfTest(AndroidTest):
       ])
     super(SwarmingAndroidPerfTest, self).__init__(test, args=args)
 
+  def _get_perf_data(self, api, task_output_dir):
+    if api.webrtc._test_data.enabled:
+      return {
+        "format_version": "1.0",
+        "charts": {
+          "warm_times": {
+            "http://www.google.com/": {
+              "type": "list_of_scalar_values",
+              "values": [9, 9, 8, 9],
+              "units": "sec"
+            },
+          },
+          "html_size": {
+            "http://www.google.com/": {
+              "type": "scalar",
+              "value": 13579,
+              "units": "bytes"
+            }
+          },
+          "load_times": {
+            "http://www.google.com/": {
+              "type": "list_of_scalar_values",
+              "value": [4.2],
+              "std": 1.25,
+              "units": "sec"
+            }
+          }
+        }
+      }
+    else:  # pragma: no cover
+      return api.json.loads(task_output_dir['0/perftest-output.json'])
+
+  @composite_step
+  def _upload_to_perf_dashboard(self, api, perf_results):
+    perf_results['benchmark_name'] = self.name
+
+    args = [
+        '--build-dir', api.path['checkout'].join('out'),
+        '--buildername', api.properties['buildername'],
+        '--buildnumber', api.properties['buildnumber'],
+        '--name', self.name,
+        '--perf-id', api.webrtc.c.PERF_ID,
+        '--results-file', api.json.input(perf_results),
+        '--results-url', DASHBOARD_UPLOAD_URL,
+    ]
+
+    if 'got_revision_cp' in api.properties:
+      args.extend(['--got-revision-cp', api.properties['got_revision_cp']])
+    if 'git_revision' in api.properties:
+      args.extend(['--git-revision', api.properties['git_revision']])
+
+    args.append('--output-json-dashboard-url')
+    args.append(api.json.output(add_json_log=False, name='dashboard_url'))
+
+    step_result = api.build.python(
+        '%s Dashboard Upload' % self.name,
+        api.chromium.package_repo_resource(
+            'scripts', 'slave', 'upload_perf_dashboard_results.py'),
+        args,
+        step_test_data=(
+            lambda: api.json.test_api.output('chromeperf.appspot.com',
+                                             name='dashboard_url') +
+            api.json.test_api.output({})))
+
+    step_result.presentation.links['Results Dashboard'] = (
+        step_result.json.outputs.get('dashboard_url', ''))
 
   def post_run(self, api, suffix):
     try:
@@ -417,7 +415,8 @@ class SwarmingAndroidPerfTest(AndroidTest):
       logcats = _MergeFiles(task_output_dir, 'logcats')
       step_result.presentation.logs['logcats'] = logcats.splitlines()
 
-      _UploadToPerfDashboard(self.name, api, task_output_dir)
+      self._upload_to_perf_dashboard(api,
+                                     self._get_perf_data(api, task_output_dir))
 
       if (hasattr(step_result, 'test_utils') and
           hasattr(step_result.test_utils, 'gtest_results')):
@@ -439,6 +438,18 @@ class SwarmingAndroidPerfTest(AndroidTest):
 
 
 class SwarmingPerfTest(SwarmingIsolatedScriptTest):
+  def __init__(self, name, api, **kwargs):
+    super(SwarmingPerfTest, self).__init__(name, **kwargs)
+    self._buildername = api.m.properties.get('buildername')
+    self._buildnumber = api.m.properties.get('buildnumber')
+    self._perf_config = PERF_CONFIG.copy()
+    self._perf_config['r_webrtc_git'] = api.revision
+    self._perf_config = api.m.json.dumps(self._perf_config)
+    self._perf_id = api.c.PERF_ID
+    self._revision = api.revision_number
+    self._name = name
+    self._upload_script = api.resource('upload_to_perf_dashboard.py')
+
   def post_run(self, api, suffix):
     try:
       # We have to call super of SwarmingIsolatedScriptTest since we need access
@@ -446,7 +457,20 @@ class SwarmingPerfTest(SwarmingIsolatedScriptTest):
       super(SwarmingIsolatedScriptTest, self).post_run(api, suffix)
     finally:
       task_output_dir = api.step.active_result.raw_io.output_dir
-      _UploadToPerfDashboard(self.name, api, task_output_dir)
+      logs_file = api.raw_io.input_text(
+          _MergeFiles(task_output_dir, 'passed-tests.log'))
+      api.python('Upload perf results',
+                 script=self._upload_script,
+                 args=[
+                     '--buildername', self._buildername,
+                     '--buildnumber', self._buildnumber,
+                     '--perf_id', self._perf_id,
+                     '--perf_config', self._perf_config,
+                     '--revision', self._revision,
+                     '--test_name', self._name,
+                     '--url', DASHBOARD_UPLOAD_URL,
+                     '--logs_file', logs_file,
+                 ])
 
       # Copied from SwarmingIsolatedScriptTest.post_run
       results = self._isolated_script_results

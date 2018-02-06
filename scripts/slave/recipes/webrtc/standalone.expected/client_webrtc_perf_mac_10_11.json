@@ -968,37 +968,26 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/upload_perf_dashboard_results.py",
-      "--build-dir",
-      "[BUILDER_CACHE]/Mac_10_11/src/out",
+      "RECIPE_MODULE[build::webrtc]/resources/upload_to_perf_dashboard.py",
       "--buildername",
       "Mac 10.11",
       "--buildnumber",
       "1337",
-      "--name",
-      "isac_fix_test",
-      "--perf-id",
+      "--perf_id",
       "webrtc-mac-large-tests",
-      "--results-file",
-      "{\"benchmark_name\": \"isac_fix_test\", \"charts\": {\"html_size\": {\"http://www.google.com/\": {\"type\": \"scalar\", \"units\": \"bytes\", \"value\": 13579}}, \"load_times\": {\"http://www.google.com/\": {\"std\": 1.25, \"type\": \"list_of_scalar_values\", \"units\": \"sec\", \"value\": [4.2]}}, \"warm_times\": {\"http://www.google.com/\": {\"type\": \"list_of_scalar_values\", \"units\": \"sec\", \"values\": [9, 9, 8, 9]}}}, \"format_version\": \"1.0\"}",
-      "--results-url",
+      "--perf_config",
+      "{\"a_default_rev\": \"r_webrtc_git\", \"r_webrtc_git\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"}",
+      "--revision",
+      "170242",
+      "--test_name",
+      "isac_fix_test",
+      "--url",
       "https://chromeperf.appspot.com",
-      "--got-revision-cp",
-      "12345",
-      "--git-revision",
-      "git12345",
-      "--output-json-dashboard-url",
-      "/path/to/tmp/json"
+      "--logs_file",
+      ""
     ],
     "cwd": "[BUILDER_CACHE]/Mac_10_11",
-    "name": "isac_fix_test Dashboard Upload",
-    "~followup_annotations": [
-      "@@@STEP_LINK@Results Dashboard@chromeperf.appspot.com@@@"
-    ]
+    "name": "Upload perf results"
   },
   {
     "cmd": [
@@ -1162,37 +1151,26 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/upload_perf_dashboard_results.py",
-      "--build-dir",
-      "[BUILDER_CACHE]/Mac_10_11/src/out",
+      "RECIPE_MODULE[build::webrtc]/resources/upload_to_perf_dashboard.py",
       "--buildername",
       "Mac 10.11",
       "--buildnumber",
       "1337",
-      "--name",
-      "low_bandwidth_audio_perf_test",
-      "--perf-id",
+      "--perf_id",
       "webrtc-mac-large-tests",
-      "--results-file",
-      "{\"benchmark_name\": \"low_bandwidth_audio_perf_test\", \"charts\": {\"html_size\": {\"http://www.google.com/\": {\"type\": \"scalar\", \"units\": \"bytes\", \"value\": 13579}}, \"load_times\": {\"http://www.google.com/\": {\"std\": 1.25, \"type\": \"list_of_scalar_values\", \"units\": \"sec\", \"value\": [4.2]}}, \"warm_times\": {\"http://www.google.com/\": {\"type\": \"list_of_scalar_values\", \"units\": \"sec\", \"values\": [9, 9, 8, 9]}}}, \"format_version\": \"1.0\"}",
-      "--results-url",
+      "--perf_config",
+      "{\"a_default_rev\": \"r_webrtc_git\", \"r_webrtc_git\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"}",
+      "--revision",
+      "170242",
+      "--test_name",
+      "low_bandwidth_audio_perf_test",
+      "--url",
       "https://chromeperf.appspot.com",
-      "--got-revision-cp",
-      "12345",
-      "--git-revision",
-      "git12345",
-      "--output-json-dashboard-url",
-      "/path/to/tmp/json"
+      "--logs_file",
+      ""
     ],
     "cwd": "[BUILDER_CACHE]/Mac_10_11",
-    "name": "low_bandwidth_audio_perf_test Dashboard Upload",
-    "~followup_annotations": [
-      "@@@STEP_LINK@Results Dashboard@chromeperf.appspot.com@@@"
-    ]
+    "name": "Upload perf results (2)"
   },
   {
     "cmd": [
@@ -1356,37 +1334,26 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/upload_perf_dashboard_results.py",
-      "--build-dir",
-      "[BUILDER_CACHE]/Mac_10_11/src/out",
+      "RECIPE_MODULE[build::webrtc]/resources/upload_to_perf_dashboard.py",
       "--buildername",
       "Mac 10.11",
       "--buildnumber",
       "1337",
-      "--name",
-      "webrtc_perf_tests",
-      "--perf-id",
+      "--perf_id",
       "webrtc-mac-large-tests",
-      "--results-file",
-      "{\"benchmark_name\": \"webrtc_perf_tests\", \"charts\": {\"html_size\": {\"http://www.google.com/\": {\"type\": \"scalar\", \"units\": \"bytes\", \"value\": 13579}}, \"load_times\": {\"http://www.google.com/\": {\"std\": 1.25, \"type\": \"list_of_scalar_values\", \"units\": \"sec\", \"value\": [4.2]}}, \"warm_times\": {\"http://www.google.com/\": {\"type\": \"list_of_scalar_values\", \"units\": \"sec\", \"values\": [9, 9, 8, 9]}}}, \"format_version\": \"1.0\"}",
-      "--results-url",
+      "--perf_config",
+      "{\"a_default_rev\": \"r_webrtc_git\", \"r_webrtc_git\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"}",
+      "--revision",
+      "170242",
+      "--test_name",
+      "webrtc_perf_tests",
+      "--url",
       "https://chromeperf.appspot.com",
-      "--got-revision-cp",
-      "12345",
-      "--git-revision",
-      "git12345",
-      "--output-json-dashboard-url",
-      "/path/to/tmp/json"
+      "--logs_file",
+      ""
     ],
     "cwd": "[BUILDER_CACHE]/Mac_10_11",
-    "name": "webrtc_perf_tests Dashboard Upload",
-    "~followup_annotations": [
-      "@@@STEP_LINK@Results Dashboard@chromeperf.appspot.com@@@"
-    ]
+    "name": "Upload perf results (3)"
   },
   {
     "cmd": [
