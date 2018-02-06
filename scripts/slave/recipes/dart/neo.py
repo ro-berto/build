@@ -4,6 +4,7 @@
 
 DEPS = [
   'dart',
+  'depot_tools/bot_update',
   'depot_tools/depot_tools',
   'depot_tools/gclient',
   'recipe_engine/context',
@@ -11,6 +12,7 @@ DEPS = [
   'recipe_engine/properties',
   'recipe_engine/step',
   'test_utils',
+  'swarming_client',
 ]
 
 TEST_MATRIX = {
@@ -66,6 +68,8 @@ def RunSteps(api):
   # another builder, and we should not download the sdk.
   # We rely on all files being in the isolate
   if 'parent_fileset' in api.properties:
+    # TODO(athom): this doesn't work on windows, see bug 785362.
+    api.swarming_client.checkout('master')
     api.dart.download_parent_isolate()
   else:
     builder_name = api.properties.get('buildername')

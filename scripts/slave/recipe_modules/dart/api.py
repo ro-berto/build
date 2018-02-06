@@ -1,12 +1,20 @@
 
 from recipe_engine import recipe_api
 
+# TODO(athom): move to third_party when swarming_client.path has a setter
+SWARMING_CLIENT_PATH = 'tools/swarming_client'
+SWARMING_CLIENT_REPO = 'https://chromium.googlesource.com/infra/luci/client-py.git'
+SWARMING_CLIENT_REV = '88229872dd17e71658fe96763feaa77915d8cbd6'
+
 class DartApi(recipe_api.RecipeApi):
   """Recipe module for code commonly used in dart recipes. Shouldn't be used elsewhere."""
 
   def checkout(self, clobber=False):
     """Checks out the dart code and prepares it for building."""
     self.m.gclient.set_config('dart')
+    sdk = self.m.gclient.c.solutions[0]
+    sdk.custom_deps['sdk/%s' % SWARMING_CLIENT_PATH] = \
+        '%s@%s' % (SWARMING_CLIENT_REPO, SWARMING_CLIENT_REV)
     self.m.goma.ensure_goma()
 
     with self.m.context(cwd=self.m.path['cache'].join('builder'),
@@ -24,15 +32,6 @@ class DartApi(recipe_api.RecipeApi):
                self.m.path['checkout'].join('tools', 'task_kill.py'),
                args=['--kill_browsers=True', '--kill_vsbuild=True'],
                ok_ret='any')
-
-  def _swarming_checkout(self):
-    try:
-      if self.__swarming_checked_out:
-        return
-    except AttributeError:
-      pass
-    self.m.swarming_client.checkout('master')
-    self.__swarming_checked_out = True
 
   def build(self, build_args=[], isolate=None, name='build dart'):
     """Builds dart using the specified build_args
@@ -60,7 +59,6 @@ class DartApi(recipe_api.RecipeApi):
           self.m.goma.stop(build_exit_status=build_exit_status)
 
         if isolate is not None:
-          self._swarming_checkout()
           bots_path = self.m.path['checkout'].join('tools', 'bots')
           isolate_paths = self.m.file.glob_paths("find isolate files", bots_path, '*.isolate',
                                             test_data=[bots_path.join('a.isolate'),
@@ -87,7 +85,6 @@ class DartApi(recipe_api.RecipeApi):
     """Builds an isolate"""
     if isolate_fileset == self.m.properties.get('parent_fileset_name', None):
       return self.m.properties.get('parent_fileset')
-    self._swarming_checkout()
     step_result = self.m.python(
         'upload testing fileset %s' % isolate_fileset,
         self.m.swarming_client.path.join('isolate.py'),
@@ -102,7 +99,6 @@ class DartApi(recipe_api.RecipeApi):
     return isolate_hash
 
   def download_parent_isolate(self):
-    self._swarming_checkout()
     self.m.path['checkout'] = self.m.path['cleanup']
     isolate_hash = self.m.properties['parent_fileset']
     fileset_name = self.m.properties['parent_fileset_name']
