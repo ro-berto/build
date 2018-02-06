@@ -136,7 +136,7 @@
       "--use-sdk",
       "--compiler=dart2js",
       "--dart2js-batch",
-      "--runtime=drt",
+      "--runtime=chrome",
       "--progress=buildbot",
       "-v",
       "--reset-browser-configuration",
@@ -150,7 +150,7 @@
       "--exclude-suite=observatory_ui,co19"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js-drt tests"
+    "name": "dart2js-chrome tests"
   },
   {
     "cmd": [
@@ -165,7 +165,7 @@
     ],
     "cwd": "[START_DIR]/sdk",
     "infra_step": true,
-    "name": "read results of dart2js-drt tests",
+    "name": "read results of dart2js-chrome tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@result.log@@@@",
       "@@@STEP_LOG_END@result.log@@@"
@@ -198,7 +198,7 @@
       "--use-sdk",
       "--compiler=dart2js",
       "--dart2js-batch",
-      "--runtime=drt",
+      "--runtime=chrome",
       "--progress=buildbot",
       "-v",
       "--reset-browser-configuration",
@@ -213,7 +213,7 @@
       "pkg"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js-drt-package tests"
+    "name": "dart2js-chrome-package tests"
   },
   {
     "cmd": [
@@ -228,7 +228,7 @@
     ],
     "cwd": "[START_DIR]/sdk",
     "infra_step": true,
-    "name": "read results of dart2js-drt-package tests",
+    "name": "read results of dart2js-chrome-package tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@result.log@@@@",
       "@@@STEP_LOG_END@result.log@@@"
@@ -261,7 +261,7 @@
       "--use-sdk",
       "--compiler=dart2js",
       "--dart2js-batch",
-      "--runtime=drt",
+      "--runtime=chrome",
       "--progress=buildbot",
       "-v",
       "--reset-browser-configuration",
@@ -276,7 +276,7 @@
       "observatory_ui"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js-drt-observatory_ui tests"
+    "name": "dart2js-chrome-observatory_ui tests"
   },
   {
     "cmd": [
@@ -291,7 +291,7 @@
     ],
     "cwd": "[START_DIR]/sdk",
     "infra_step": true,
-    "name": "read results of dart2js-drt-observatory_ui tests",
+    "name": "read results of dart2js-chrome-observatory_ui tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@result.log@@@@",
       "@@@STEP_LOG_END@result.log@@@"
@@ -324,7 +324,7 @@
       "--use-sdk",
       "--compiler=dart2js",
       "--dart2js-batch",
-      "--runtime=drt",
+      "--runtime=chrome",
       "--progress=buildbot",
       "-v",
       "--reset-browser-configuration",
@@ -340,7 +340,7 @@
       "dart2js_native"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js-drt-extra tests"
+    "name": "dart2js-chrome-extra tests"
   },
   {
     "cmd": [
@@ -355,7 +355,7 @@
     ],
     "cwd": "[START_DIR]/sdk",
     "infra_step": true,
-    "name": "read results of dart2js-drt-extra tests",
+    "name": "read results of dart2js-chrome-extra tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@result.log@@@@",
       "@@@STEP_LOG_END@result.log@@@"
@@ -388,7 +388,7 @@
       "--use-sdk",
       "--compiler=dart2js",
       "--dart2js-batch",
-      "--runtime=drt",
+      "--runtime=chrome",
       "--progress=buildbot",
       "-v",
       "--reset-browser-configuration",
@@ -403,7 +403,7 @@
       "co19"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js-drt-co19 tests"
+    "name": "dart2js-chrome-co19 tests"
   },
   {
     "cmd": [
@@ -418,7 +418,7 @@
     ],
     "cwd": "[START_DIR]/sdk",
     "infra_step": true,
-    "name": "read results of dart2js-drt-co19 tests",
+    "name": "read results of dart2js-chrome-co19 tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@result.log@@@@",
       "@@@STEP_LOG_END@result.log@@@"
@@ -451,7 +451,7 @@
       "--use-sdk",
       "--compiler=dart2js",
       "--dart2js-batch",
-      "--runtime=drt",
+      "--runtime=chrome",
       "--progress=buildbot",
       "-v",
       "--reset-browser-configuration",
@@ -467,7 +467,7 @@
       "--exclude-suite=observatory_ui,co19"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js-drt-fast-startup tests"
+    "name": "dart2js-chrome-fast-startup tests"
   },
   {
     "cmd": [
@@ -482,7 +482,7 @@
     ],
     "cwd": "[START_DIR]/sdk",
     "infra_step": true,
-    "name": "read results of dart2js-drt-fast-startup tests",
+    "name": "read results of dart2js-chrome-fast-startup tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@result.log@@@@",
       "@@@STEP_LOG_END@result.log@@@"
@@ -515,7 +515,7 @@
       "--use-sdk",
       "--compiler=dart2js",
       "--dart2js-batch",
-      "--runtime=drt",
+      "--runtime=chrome",
       "--progress=buildbot",
       "-v",
       "--reset-browser-configuration",
@@ -531,7 +531,7 @@
       "pkg"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js-drt-package-fast-startup tests"
+    "name": "dart2js-chrome-package-fast-startup tests"
   },
   {
     "cmd": [
@@ -546,7 +546,7 @@
     ],
     "cwd": "[START_DIR]/sdk",
     "infra_step": true,
-    "name": "read results of dart2js-drt-package-fast-startup tests",
+    "name": "read results of dart2js-chrome-package-fast-startup tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@result.log@@@@",
       "@@@STEP_LOG_END@result.log@@@"
@@ -579,7 +579,7 @@
       "--use-sdk",
       "--compiler=dart2js",
       "--dart2js-batch",
-      "--runtime=drt",
+      "--runtime=chrome",
       "--progress=buildbot",
       "-v",
       "--reset-browser-configuration",
@@ -595,7 +595,7 @@
       "observatory_ui"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js-drt-observatory_ui-fast-startup tests"
+    "name": "dart2js-chrome-observatory_ui-fast-startup tests"
   },
   {
     "cmd": [
@@ -610,7 +610,7 @@
     ],
     "cwd": "[START_DIR]/sdk",
     "infra_step": true,
-    "name": "read results of dart2js-drt-observatory_ui-fast-startup tests",
+    "name": "read results of dart2js-chrome-observatory_ui-fast-startup tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@result.log@@@@",
       "@@@STEP_LOG_END@result.log@@@"
@@ -643,7 +643,7 @@
       "--use-sdk",
       "--compiler=dart2js",
       "--dart2js-batch",
-      "--runtime=drt",
+      "--runtime=chrome",
       "--progress=buildbot",
       "-v",
       "--reset-browser-configuration",
@@ -660,7 +660,7 @@
       "dart2js_native"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js-drt-extra-fast-startup tests"
+    "name": "dart2js-chrome-extra-fast-startup tests"
   },
   {
     "cmd": [
@@ -675,7 +675,7 @@
     ],
     "cwd": "[START_DIR]/sdk",
     "infra_step": true,
-    "name": "read results of dart2js-drt-extra-fast-startup tests",
+    "name": "read results of dart2js-chrome-extra-fast-startup tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@result.log@@@@",
       "@@@STEP_LOG_END@result.log@@@"
@@ -708,7 +708,7 @@
       "--use-sdk",
       "--compiler=dart2js",
       "--dart2js-batch",
-      "--runtime=drt",
+      "--runtime=chrome",
       "--progress=buildbot",
       "-v",
       "--reset-browser-configuration",
@@ -724,7 +724,7 @@
       "co19"
     ],
     "cwd": "[START_DIR]/sdk",
-    "name": "dart2js-drt-co19-fast-startup tests"
+    "name": "dart2js-chrome-co19-fast-startup tests"
   },
   {
     "cmd": [
@@ -739,7 +739,7 @@
     ],
     "cwd": "[START_DIR]/sdk",
     "infra_step": true,
-    "name": "read results of dart2js-drt-co19-fast-startup tests",
+    "name": "read results of dart2js-chrome-co19-fast-startup tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@result.log@@@@",
       "@@@STEP_LOG_END@result.log@@@"
@@ -758,332 +758,6 @@
     "cwd": "[START_DIR]/sdk",
     "infra_step": true,
     "name": "delete result.log (10)"
-  },
-  {
-    "cmd": [
-      "xvfb-run",
-      "-a",
-      "--server-args=-screen 0 1024x768x24",
-      "python",
-      "-u",
-      "./tools/test.py",
-      "--mode=release",
-      "--arch=x64",
-      "--use-sdk",
-      "--compiler=dart2js",
-      "--dart2js-batch",
-      "--runtime=drt",
-      "--progress=buildbot",
-      "-v",
-      "--reset-browser-configuration",
-      "--report",
-      "--time",
-      "--write-debug-log",
-      "--write-result-log",
-      "--write-test-outcome-log",
-      "--shards=105",
-      "--shard=93",
-      "--fast-startup",
-      "--checked",
-      "--append_logs",
-      "--exclude-suite=observatory_ui,co19"
-    ],
-    "cwd": "[START_DIR]/sdk",
-    "name": "dart2js-drt-fast-startup-checked tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[START_DIR]/sdk/logs/result.log",
-      "/path/to/tmp/"
-    ],
-    "cwd": "[START_DIR]/sdk",
-    "infra_step": true,
-    "name": "read results of dart2js-drt-fast-startup-checked tests",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@result.log@@@@",
-      "@@@STEP_LOG_END@result.log@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "remove",
-      "[START_DIR]/sdk/logs/result.log"
-    ],
-    "cwd": "[START_DIR]/sdk",
-    "infra_step": true,
-    "name": "delete result.log (11)"
-  },
-  {
-    "cmd": [
-      "xvfb-run",
-      "-a",
-      "--server-args=-screen 0 1024x768x24",
-      "python",
-      "-u",
-      "./tools/test.py",
-      "--mode=release",
-      "--arch=x64",
-      "--use-sdk",
-      "--compiler=dart2js",
-      "--dart2js-batch",
-      "--runtime=drt",
-      "--progress=buildbot",
-      "-v",
-      "--reset-browser-configuration",
-      "--report",
-      "--time",
-      "--write-debug-log",
-      "--write-result-log",
-      "--write-test-outcome-log",
-      "--shards=105",
-      "--shard=93",
-      "--fast-startup",
-      "--checked",
-      "--append_logs",
-      "pkg"
-    ],
-    "cwd": "[START_DIR]/sdk",
-    "name": "dart2js-drt-package-fast-startup-checked tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[START_DIR]/sdk/logs/result.log",
-      "/path/to/tmp/"
-    ],
-    "cwd": "[START_DIR]/sdk",
-    "infra_step": true,
-    "name": "read results of dart2js-drt-package-fast-startup-checked tests",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@result.log@@@@",
-      "@@@STEP_LOG_END@result.log@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "remove",
-      "[START_DIR]/sdk/logs/result.log"
-    ],
-    "cwd": "[START_DIR]/sdk",
-    "infra_step": true,
-    "name": "delete result.log (12)"
-  },
-  {
-    "cmd": [
-      "xvfb-run",
-      "-a",
-      "--server-args=-screen 0 1024x768x24",
-      "python",
-      "-u",
-      "./tools/test.py",
-      "--mode=release",
-      "--arch=x64",
-      "--use-sdk",
-      "--compiler=dart2js",
-      "--dart2js-batch",
-      "--runtime=drt",
-      "--progress=buildbot",
-      "-v",
-      "--reset-browser-configuration",
-      "--report",
-      "--time",
-      "--write-debug-log",
-      "--write-result-log",
-      "--write-test-outcome-log",
-      "--shards=105",
-      "--shard=93",
-      "--fast-startup",
-      "--checked",
-      "--append_logs",
-      "observatory_ui"
-    ],
-    "cwd": "[START_DIR]/sdk",
-    "name": "dart2js-drt-observatory_ui-fast-startup-checked tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[START_DIR]/sdk/logs/result.log",
-      "/path/to/tmp/"
-    ],
-    "cwd": "[START_DIR]/sdk",
-    "infra_step": true,
-    "name": "read results of dart2js-drt-observatory_ui-fast-startup-checked tests",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@result.log@@@@",
-      "@@@STEP_LOG_END@result.log@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "remove",
-      "[START_DIR]/sdk/logs/result.log"
-    ],
-    "cwd": "[START_DIR]/sdk",
-    "infra_step": true,
-    "name": "delete result.log (13)"
-  },
-  {
-    "cmd": [
-      "xvfb-run",
-      "-a",
-      "--server-args=-screen 0 1024x768x24",
-      "python",
-      "-u",
-      "./tools/test.py",
-      "--mode=release",
-      "--arch=x64",
-      "--use-sdk",
-      "--compiler=dart2js",
-      "--dart2js-batch",
-      "--runtime=drt",
-      "--progress=buildbot",
-      "-v",
-      "--reset-browser-configuration",
-      "--report",
-      "--time",
-      "--write-debug-log",
-      "--write-result-log",
-      "--write-test-outcome-log",
-      "--shards=105",
-      "--shard=93",
-      "--fast-startup",
-      "--checked",
-      "--append_logs",
-      "dart2js_extra",
-      "dart2js_native"
-    ],
-    "cwd": "[START_DIR]/sdk",
-    "name": "dart2js-drt-extra-fast-startup-checked tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[START_DIR]/sdk/logs/result.log",
-      "/path/to/tmp/"
-    ],
-    "cwd": "[START_DIR]/sdk",
-    "infra_step": true,
-    "name": "read results of dart2js-drt-extra-fast-startup-checked tests",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@result.log@@@@",
-      "@@@STEP_LOG_END@result.log@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "remove",
-      "[START_DIR]/sdk/logs/result.log"
-    ],
-    "cwd": "[START_DIR]/sdk",
-    "infra_step": true,
-    "name": "delete result.log (14)"
-  },
-  {
-    "cmd": [
-      "xvfb-run",
-      "-a",
-      "--server-args=-screen 0 1024x768x24",
-      "python",
-      "-u",
-      "./tools/test.py",
-      "--mode=release",
-      "--arch=x64",
-      "--use-sdk",
-      "--compiler=dart2js",
-      "--dart2js-batch",
-      "--runtime=drt",
-      "--progress=buildbot",
-      "-v",
-      "--reset-browser-configuration",
-      "--report",
-      "--time",
-      "--write-debug-log",
-      "--write-result-log",
-      "--write-test-outcome-log",
-      "--shards=105",
-      "--shard=93",
-      "--fast-startup",
-      "--checked",
-      "--append_logs",
-      "co19"
-    ],
-    "cwd": "[START_DIR]/sdk",
-    "name": "dart2js-drt-co19-fast-startup-checked tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[START_DIR]/sdk/logs/result.log",
-      "/path/to/tmp/"
-    ],
-    "cwd": "[START_DIR]/sdk",
-    "infra_step": true,
-    "name": "read results of dart2js-drt-co19-fast-startup-checked tests",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@result.log@@@@",
-      "@@@STEP_LOG_END@result.log@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "remove",
-      "[START_DIR]/sdk/logs/result.log"
-    ],
-    "cwd": "[START_DIR]/sdk",
-    "infra_step": true,
-    "name": "delete result.log (15)"
   },
   {
     "cmd": [

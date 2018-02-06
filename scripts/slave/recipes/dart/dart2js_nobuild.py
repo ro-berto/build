@@ -20,7 +20,7 @@ DEPS = [
 
 
 all_runtimes = ['d8', 'jsshell', 'ie9', 'ie10', 'ie11', 'ff',
-            'safari', 'chrome', 'safarimobilesim', 'drt', 'chromeff',
+            'safari', 'chrome', 'chromeff',
             'ie10chrome', 'ie11ff']
 
 multiple_runtimes = {'chromeff': ['chrome', 'ff'],
@@ -164,7 +164,7 @@ def RunSteps(api):
            'tests': ['co19']},
         ]
 
-      needs_xvfb = (runtime in ['drt', 'dartium', 'chrome', 'ff'] and
+      needs_xvfb = (runtime in ['dartium', 'chrome', 'ff'] and
                     system == 'linux')
       RunTests(api, test_args, test_specs, use_xvfb=needs_xvfb)
 
@@ -188,7 +188,7 @@ def RunSteps(api):
         spec['name'] = spec['name'].replace(' tests', '-fast-startup tests')
       RunTests(api, test_args, test_specs, use_xvfb=needs_xvfb)
 
-      if runtime in ['d8', 'drt']:
+      if runtime in ['d8']:
         test_args.append('--checked')
         for spec in test_specs:
           spec['name'] = spec['name'].replace(' tests', '-checked tests')
@@ -222,10 +222,10 @@ def GenTests(api):
         buildername='dart2js-win7-ie10-dev',
         revision='hash_of_revision'))
    yield (
-      api.test('dart2js-linux-drt-be') + api.platform('linux', 64) +
+      api.test('dart2js-linux-chrome-be') + api.platform('linux', 64) +
       api.properties.generic(
         mastername='client.dart',
-        buildername='dart2js-linux-drt-93-105-dev',
+        buildername='dart2js-linux-chrome-93-105-dev',
         revision='hash_of_revision'))
    yield (
       api.test('dart2js-linux-d8-be') + api.platform('linux', 64) +

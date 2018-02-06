@@ -106,8 +106,6 @@ for arch in ['x64', 'ia32']:
   opt['test_args'] = opt_args
   builders['vm-linux-release-%s-optcounter-threshold' % arch] = opt
 
-builders['vm-win-debug-ia32-russian'] = builders['vm-win-debug-ia32']
-
 for mode in ['debug', 'release', 'product']:
   builders['app-linux-%s-x64' % mode] = {
     'mode': mode,
