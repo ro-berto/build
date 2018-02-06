@@ -756,9 +756,7 @@
       "--strong",
       "--builder-tag=strong",
       "--append_logs",
-      "language_strong",
-      "lib_strong",
-      "corelib_strong"
+      "--exclude-suite=co19"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
@@ -841,9 +839,7 @@
       "--builder-tag=strong",
       "--append_logs",
       "--checked",
-      "language_strong",
-      "lib_strong",
-      "corelib_strong"
+      "--exclude-suite=co19"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {

@@ -92,10 +92,9 @@ def RunSteps(api):
         test_args.extend(['--strong', '--builder-tag=strong'])
         test_specs.extend([
           {'name': 'analyze strong tests',
-           'tests': ['language_strong', 'lib_strong', 'corelib_strong']},
+           'tests': ['--exclude-suite=co19']},
           {'name': 'analyze strong tests checked',
-           'tests': ['--checked', 'language_strong', 'lib_strong',
-                     'corelib_strong']},
+           'tests': ['--checked', '--exclude-suite=co19']},
         ])
       RunTests(api, test_args, test_specs)
 
