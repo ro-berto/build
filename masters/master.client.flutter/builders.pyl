@@ -7,35 +7,19 @@
   "templates": ["../master.chromium/templates"],
 
   "builders": {
-    "Linux": {
-      "recipe": "flutter/flutter",
-      "scheduler": "flutter_commits",
-      "slave_pools": ["linux"],
-      "builder_timeout_s": 7200, # 2 hours max
-    },
-    "Mac": {
-      "recipe": "flutter/flutter",
-      "scheduler": "flutter_commits",
-      "slave_pools": ["mac"],
-      "builder_timeout_s": 7200, # 2 hours max
-    },
-    "Windows": {
-      "recipe": "flutter/flutter",
-      "scheduler": "flutter_commits",
-      "slave_pools": ["windows"],
-      "builder_timeout_s": 7200, # 2 hours max
-    },
     "Linux Engine": {
       "recipe": "flutter/engine",
       "scheduler": "engine_commits",
       "slave_pools": ["linux"],
       "mergeRequests": False, # Build every revision.
+      "category": "0Engine",
       "builder_timeout_s": 7200, # 2 hours max
     },
     "Mac Engine": {
       "recipe": "flutter/engine",
       "scheduler": "engine_commits",
       "slave_pools": ["mac"],
+      "category": "0Engine",
       "mergeRequests": False, # Build every revision.
       "builder_timeout_s": 7200, # 2 hours max
     },
@@ -43,6 +27,52 @@
       "recipe": "flutter/engine",
       "scheduler": "engine_commits",
       "slave_pools": ["windows"],
+      "category": "0Engine",
+      "mergeRequests": False, # Build every revision.
+      "builder_timeout_s": 7200, # 2 hours max
+    },
+    "Linux": {
+      "recipe": "flutter/flutter",
+      "scheduler": "flutter_commits",
+      "slave_pools": ["linux"],
+      "category": "1Flutter",
+      "builder_timeout_s": 7200, # 2 hours max
+    },
+    "Mac": {
+      "recipe": "flutter/flutter",
+      "scheduler": "flutter_commits",
+      "slave_pools": ["mac"],
+      "category": "1Flutter",
+      "builder_timeout_s": 7200, # 2 hours max
+    },
+    "Windows": {
+      "recipe": "flutter/flutter",
+      "scheduler": "flutter_commits",
+      "slave_pools": ["windows"],
+      "category": "1Flutter",
+      "builder_timeout_s": 7200, # 2 hours max
+    },
+    "Linux Flutter Packaging": {
+      "recipe": "flutter/flutter",
+      "scheduler": "flutter_packaging_commits",
+      "slave_pools": ["linux"],
+      "category": "2Flutter Packaging",
+      "mergeRequests": False, # Build every revision.
+      "builder_timeout_s": 7200, # 2 hours max
+    },
+    "Mac Flutter Packaging": {
+      "recipe": "flutter/flutter",
+      "scheduler": "flutter_packaging_commits",
+      "slave_pools": ["mac"],
+      "category": "2Flutter Packaging",
+      "mergeRequests": False, # Build every revision.
+      "builder_timeout_s": 7200, # 2 hours max
+    },
+    "Windows Flutter Packaging": {
+      "recipe": "flutter/flutter",
+      "scheduler": "flutter_packaging_commits",
+      "slave_pools": ["windows"],
+      "category": "2Flutter Packaging",
       "mergeRequests": False, # Build every revision.
       "builder_timeout_s": 7200, # 2 hours max
     },
@@ -51,6 +81,12 @@
   "schedulers": {
     "flutter_commits": {
       "type": "git_poller",
+      "branch": "master",
+      "git_repo_url": "https://chromium.googlesource.com/external/github.com/flutter/flutter",
+    },
+    "flutter_packaging_commits": {
+      "type": "git_poller_any",
+      "branch": [r"remotes/origin/(dev|beta|release)"],
       "git_repo_url": "https://chromium.googlesource.com/external/github.com/flutter/flutter",
     },
     "engine_commits": {

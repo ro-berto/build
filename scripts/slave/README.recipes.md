@@ -4814,35 +4814,33 @@ Locates and switches to a version of Xcode matching target_version.
 &mdash; **def [UploadFolder](/scripts/slave/recipes/flutter/engine.py#85)(api, dir_label, parent_dir, folder_name, zip_name):**
 ### *recipes* / [flutter/flutter](/scripts/slave/recipes/flutter/flutter.py)
 
-[DEPS](/scripts/slave/recipes/flutter/flutter.py#7): [build](#recipe_modules-build), [zip](#recipe_modules-zip), [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/url][recipe_engine/recipe_modules/url]
+[DEPS](/scripts/slave/recipes/flutter/flutter.py#8): [build](#recipe_modules-build), [zip](#recipe_modules-zip), [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/url][recipe_engine/recipe_modules/url]
 
-&mdash; **def [BuildExamples](/scripts/slave/recipes/flutter/flutter.py#40)(api, git_hash, flutter_executable):**
+&mdash; **def [BuildExamples](/scripts/slave/recipes/flutter/flutter.py#42)(api, git_hash, flutter_executable):**
 
-&mdash; **def [CreateAndUploadFlutterPackage](/scripts/slave/recipes/flutter/flutter.py#159)(api, git_hash):**
+&mdash; **def [CreateAndUploadFlutterPackage](/scripts/slave/recipes/flutter/flutter.py#156)(api, git_hash):**
 
 Prepares, builds, and uploads an all-inclusive archive package.
 
-&mdash; **def [GetArchiveName](/scripts/slave/recipes/flutter/flutter.py#154)(api, git_hash):**
+&mdash; **def [GetCloudPath](/scripts/slave/recipes/flutter/flutter.py#38)(api, git_hash, path):**
 
-&mdash; **def [GetCloudPath](/scripts/slave/recipes/flutter/flutter.py#36)(api, git_hash, path):**
-
-&mdash; **def [GetPuppetApiTokenPath](/scripts/slave/recipes/flutter/flutter.py#27)(api, token_name):**
+&mdash; **def [GetPuppetApiTokenPath](/scripts/slave/recipes/flutter/flutter.py#29)(api, token_name):**
 
 Returns the path to a the token file
 
 The file is located where ChromeOps Puppet drops generic secrets.
 
-&mdash; **def [InstallGradle](/scripts/slave/recipes/flutter/flutter.py#114)(api, checkout):**
+&mdash; **def [InstallGradle](/scripts/slave/recipes/flutter/flutter.py#116)(api, checkout):**
 
-&mdash; **def [RunFindXcode](/scripts/slave/recipes/flutter/flutter.py#83)(api, ios_tools_path, target_version):**
+&mdash; **def [RunFindXcode](/scripts/slave/recipes/flutter/flutter.py#85)(api, ios_tools_path, target_version):**
 
 Locates and switches to a version of Xcode matching target_version.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/flutter/flutter.py#188)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/flutter/flutter.py#174)(api):**
 
-&mdash; **def [SetupXcode](/scripts/slave/recipes/flutter/flutter.py#97)(api):**
+&mdash; **def [SetupXcode](/scripts/slave/recipes/flutter/flutter.py#99)(api):**
 
-&mdash; **def [UploadFlutterCoverage](/scripts/slave/recipes/flutter/flutter.py#131)(api):**
+&mdash; **def [UploadFlutterCoverage](/scripts/slave/recipes/flutter/flutter.py#133)(api):**
 
 Uploads the Flutter coverage output to cloud storage and Coveralls.
   

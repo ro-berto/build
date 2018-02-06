@@ -1,0 +1,383 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmcontents",
+      "[START_DIR]"
+    ],
+    "infra_step": true,
+    "name": "everything"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::git]/resources/git_setup.py",
+      "--path",
+      "[START_DIR]/flutter",
+      "--url",
+      "https://chromium.googlesource.com/external/github.com/flutter/flutter"
+    ],
+    "name": "git setup"
+  },
+  {
+    "cmd": [
+      "git",
+      "retry",
+      "fetch",
+      "origin",
+      "dev",
+      "--recurse-submodules",
+      "--progress"
+    ],
+    "cwd": "[START_DIR]/flutter",
+    "env": {
+      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:<PATH>"
+    },
+    "infra_step": true,
+    "name": "git fetch"
+  },
+  {
+    "cmd": [
+      "git",
+      "checkout",
+      "-f",
+      "FETCH_HEAD"
+    ],
+    "cwd": "[START_DIR]/flutter",
+    "infra_step": true,
+    "name": "git checkout"
+  },
+  {
+    "cmd": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "cwd": "[START_DIR]/flutter",
+    "infra_step": true,
+    "name": "read revision",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>checked out 'deadbeef'<br/>@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision@\"deadbeef\"@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "clean",
+      "-f",
+      "-d",
+      "-x"
+    ],
+    "cwd": "[START_DIR]/flutter",
+    "infra_step": true,
+    "name": "git clean"
+  },
+  {
+    "cmd": [
+      "git",
+      "submodule",
+      "sync"
+    ],
+    "cwd": "[START_DIR]/flutter",
+    "infra_step": true,
+    "name": "submodule sync"
+  },
+  {
+    "cmd": [
+      "git",
+      "submodule",
+      "update",
+      "--init",
+      "--recursive"
+    ],
+    "cwd": "[START_DIR]/flutter",
+    "infra_step": true,
+    "name": "submodule update"
+  },
+  {
+    "cmd": [
+      "flutter",
+      "doctor"
+    ],
+    "cwd": "[START_DIR]/flutter",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
+      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "name": "flutter doctor"
+  },
+  {
+    "cmd": [
+      "flutter",
+      "update-packages"
+    ],
+    "cwd": "[START_DIR]/flutter",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
+      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "name": "download dependencies"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[START_DIR]/archive"
+    ],
+    "cwd": "[START_DIR]/flutter",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
+      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "infra_step": true,
+    "name": "clean archive work directory"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[START_DIR]/archive"
+    ],
+    "cwd": "[START_DIR]/flutter",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
+      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "infra_step": true,
+    "name": "(re)create archive work directory"
+  },
+  {
+    "cmd": [
+      "dart",
+      "--assert-initializer",
+      "[START_DIR]/flutter/dev/bots/prepare_package.dart",
+      "--temp_dir=[START_DIR]/archive",
+      "--revision=deadbeef",
+      "--branch=dev",
+      "--publish"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
+      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "name": "prepare, create and publish a flutter archive"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/flutter/dev/bots/download_android_tools.py",
+      "-t",
+      "sdk"
+    ],
+    "name": "download android tools"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::url]/resources/pycurl.py",
+      "--url",
+      "https://services.gradle.org/distributions/gradle-2.14.1-bin.zip",
+      "--status-json",
+      "/path/to/tmp/json",
+      "--outfile",
+      "[START_DIR]/flutter/dev/bots/gradle-2.14.1-bin.zip"
+    ],
+    "name": "download gradle"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::zip]/resources/unzip.py"
+    ],
+    "name": "unzip gradle",
+    "stdin": "{\"output\": \"[START_DIR]/flutter/dev/bots/gradle\", \"quiet\": false, \"zip_file\": \"[START_DIR]/flutter/dev/bots/gradle-2.14.1-bin.zip\"}"
+  },
+  {
+    "cmd": [
+      "sh",
+      "-c",
+      "[START_DIR]/flutter/dev/bots/android_tools/sdk/tools/bin/sdkmanager --list"
+    ],
+    "name": "print installed android SDK components"
+  },
+  {
+    "cmd": [
+      "dart",
+      "[START_DIR]/flutter/dev/bots/test.dart"
+    ],
+    "cwd": "[START_DIR]/flutter",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
+      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache",
+      "SHARD": "tests"
+    },
+    "name": "run test.dart for tests shard"
+  },
+  {
+    "cmd": [
+      "dart",
+      "[START_DIR]/flutter/dev/bots/test.dart"
+    ],
+    "cwd": "[START_DIR]/flutter",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
+      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache",
+      "SHARD": "coverage"
+    },
+    "name": "run test.dart for coverage shard"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[START_DIR]/flutter/packages/flutter/coverage/lcov.info",
+      "gs://flutter_infra/flutter/coverage/lcov.info"
+    ],
+    "cwd": "[START_DIR]/flutter",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
+      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "infra_step": true,
+    "name": "gsutil upload coverage data",
+    "~followup_annotations": [
+      "@@@STEP_LINK@lcov.info@https://storage.cloud.google.com/flutter_infra/flutter/coverage/lcov.info@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
+      "RECIPE[build::flutter/flutter].resources/upload_to_coveralls.py",
+      "--token-file=/creds/generic/generic-flutter-coveralls-api-token",
+      "--coverage-path=[START_DIR]/flutter/packages/flutter/coverage/lcov.info"
+    ],
+    "cwd": "[START_DIR]/flutter/packages/flutter",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
+      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "name": "upload coverage data to Coveralls"
+  },
+  {
+    "cmd": [
+      "flutter",
+      "-v",
+      "build",
+      "apk"
+    ],
+    "cwd": "[START_DIR]/flutter/examples/stocks",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
+      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "name": "flutter build apk stocks"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[START_DIR]/flutter/examples/stocks/build/app/outputs/apk/app.apk",
+      "gs://flutter_infra/flutter/deadbeef/examples/Stocks.apk"
+    ],
+    "cwd": "[START_DIR]/flutter",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
+      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "infra_step": true,
+    "name": "gsutil upload Stocks.apk",
+    "~followup_annotations": [
+      "@@@STEP_LINK@Stocks.apk@https://storage.cloud.google.com/flutter_infra/flutter/deadbeef/examples/Stocks.apk@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "flutter",
+      "-v",
+      "build",
+      "apk"
+    ],
+    "cwd": "[START_DIR]/flutter/examples/flutter_gallery",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
+      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "name": "flutter build apk flutter_gallery"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[START_DIR]/flutter/examples/flutter_gallery/build/app/outputs/apk/app.apk",
+      "gs://flutter_infra/flutter/deadbeef/examples/Gallery.apk"
+    ],
+    "cwd": "[START_DIR]/flutter",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
+      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "infra_step": true,
+    "name": "gsutil upload Gallery.apk",
+    "~followup_annotations": [
+      "@@@STEP_LINK@Gallery.apk@https://storage.cloud.google.com/flutter_infra/flutter/deadbeef/examples/Gallery.apk@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]

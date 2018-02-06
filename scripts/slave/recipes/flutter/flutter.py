@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import contextlib
+import re
 
 DEPS = [
     'build',
@@ -22,6 +23,7 @@ DEPS = [
 ]
 
 BUCKET_NAME = 'flutter_infra'
+PACKAGED_BRANCH_RE = re.compile(r'^(dev|beta|release)$')
 
 
 def GetPuppetApiTokenPath(api, token_name):
@@ -151,38 +153,22 @@ def UploadFlutterCoverage(api):
          '--coverage-path=%s' % coverage_path])
 
 
-def GetArchiveName(api, git_hash):
-  suffix = '.tar.xz' if not api.platform.is_win else '.zip'
-  return 'flutter_%s_%s%s' % (api.platform.name, git_hash[:10], suffix)
-
-
 def CreateAndUploadFlutterPackage(api, git_hash):
   """Prepares, builds, and uploads an all-inclusive archive package."""
   dart_executable = 'dart' if not api.platform.is_win else 'dart.exe'
-  output_file = GetArchiveName(api, git_hash)
   work_dir = api.path['start_dir'].join('archive')
-  output_dir = api.path['start_dir'].join('output')
-  output_path = api.path.join(output_dir, output_file)
   prepare_script = api.path['checkout'].join('dev', 'bots',
                                              'prepare_package.dart')
   api.file.rmtree('clean archive work directory', work_dir)
   api.file.ensure_directory('(re)create archive work directory', work_dir)
-  api.file.rmtree('clean archive output directory', output_dir)
-  api.file.ensure_directory('(re)create archive output directory', output_dir)
   with api.context(cwd=api.path['start_dir']):
-    api.step('prepare and create a flutter archive', [
-        dart_executable, prepare_script,
+    api.step('prepare, create and publish a flutter archive', [
+        dart_executable, '--assert-initializer', prepare_script,
         '--temp_dir=%s' % work_dir,
-        '--output=%s' % output_path,
-        '--revision=%s' % git_hash
+        '--revision=%s' % git_hash,
+        '--branch=%s' % api.properties['branch'],
+        '--publish'
     ])
-    cloud_path = GetCloudPath(api, git_hash, output_file)
-    api.gsutil.upload(
-        output_path,
-        BUCKET_NAME,
-        cloud_path,
-        link_name=output_file,
-        name='upload package file %s' % cloud_path)
 
 
 def RunSteps(api):
@@ -227,7 +213,9 @@ def RunSteps(api):
   with api.context(env=env, cwd=checkout):
     api.step('flutter doctor', [flutter_executable, 'doctor'])
     api.step('download dependencies', [flutter_executable, 'update-packages'])
-    CreateAndUploadFlutterPackage(api, git_hash)
+    if (api.properties.get('branch') and
+        PACKAGED_BRANCH_RE.match(api.properties['branch'])):
+      CreateAndUploadFlutterPackage(api, git_hash)
 
   if api.platform.is_mac:
     SetupXcode(api)
@@ -253,22 +241,23 @@ def RunSteps(api):
 
 def GenTests(api):
   for platform in ('mac', 'linux', 'win'):
-    test = (
-        api.test(platform) + api.platform(platform, 64) +
-        api.properties(clobber=''))
-    if platform == 'mac':
-      test += (
-          api.step_data('set_xcode_version',
-                        api.json.output({
-                            'matches': {
-                                '/Applications/Xcode9.0.app': '9.0.1 (9A1004)'
-                            }
-                        })))
-    if platform == 'linux':
-      test += (
-          api.override_step_data('upload coverage data to Coveralls',
-                                 api.raw_io.output('')))
-    yield test
+    for branch in ('master', 'dev', 'beta', 'release'):
+      test = (
+          api.test('%s_%s' % (platform, branch)) + api.platform(platform, 64) +
+          api.properties(clobber='', branch=branch))
+      if platform == 'mac':
+        test += (
+            api.step_data('set_xcode_version',
+                          api.json.output({
+                              'matches': {
+                                  '/Applications/Xcode9.0.app': '9.0.1 (9A1004)'
+                              }
+                          })))
+      if platform == 'linux':
+        test += (
+            api.override_step_data('upload coverage data to Coveralls',
+                                   api.raw_io.output('')))
+      yield test
 
   yield (api.test('mac_cannot_find_xcode') + api.platform('mac', 64) +
          api.properties(revision='1234abcd') + api.properties(clobber='') +
