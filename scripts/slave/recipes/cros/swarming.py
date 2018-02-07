@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import json
+
 DEPS = [
   'chromite',
   'depot_tools/gitiles',
@@ -10,8 +12,20 @@ DEPS = [
 
 
 def RunSteps(api):
-  # We have no configuration, except what's received from buildbucket.
-  api.chromite.configure({}, {})
+  # Get parameters specified in the tryjob description.
+  tryjob_args = api.properties.get('cbb_extra_args', [])
+
+  # If tryjob_args is a string, translate from json to list.
+  if isinstance(tryjob_args, basestring):
+    tryjob_args = json.loads(tryjob_args)
+
+  assert isinstance(tryjob_args, list), tryjob_args
+
+  # Apply our adjusted configuration.
+  api.chromite.configure(
+      api.properties,
+      {},
+      CBB_EXTRA_ARGS=tryjob_args)
 
   # Fetch chromite and pinned depot tools.
   api.chromite.checkout_chromite()
@@ -26,17 +40,64 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  #
-  # master.chromiumos.chromium
-  #
+
+  common_properties = {
+    'buildername': 'Test',
+    'bot_id': 'test_builder',
+    'buildbucket': {'build': {'id':'12345'}},
+  }
 
   # Test a minimal invocation.
   yield (
       api.test('swarming_builder')
       + api.properties(
           bot_id='test',
-          path_config='generic',
           cbb_config='swarming-build-config',
       )
   )
 
+  # Test a plain tryjob.
+  yield (
+      api.test('tryjob_simple')
+      + api.properties(
+          cbb_config='tryjob_config',
+          cbb_extra_args='["--remote-trybot"]',
+          email='user@google.com',
+          **common_properties
+      )
+  )
+
+  # Test a tryjob with a branch and CLs.
+  yield (
+      api.test('tryjob_complex')
+      + api.properties(
+          cbb_config='tryjob_config',
+          cbb_extra_args='["--remote-trybot", "-b", "release-R65-10323.B",'
+                         ' "-g", "900169", "-g", "902706"]',
+          email='user@google.com',
+          **common_properties
+      )
+  )
+
+  # Test a tryjob with a branch and CLs.
+  yield (
+      api.test('master_builder')
+      + api.properties(
+          branch='',
+          cbb_branch='slave_branch',
+          cbb_config='master_config',
+          **common_properties
+      )
+  )
+
+  # Test a tryjob with a branch and CLs.
+  yield (
+      api.test('complex_slave_builder')
+      + api.properties(
+          branch='',
+          cbb_branch='slave_branch',
+          cbb_config='slave_config',
+          cbb_master_build_id=123,
+          **common_properties
+      )
+  )

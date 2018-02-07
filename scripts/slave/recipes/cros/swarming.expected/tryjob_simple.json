@@ -146,13 +146,16 @@
       "[CACHE]/cbuild",
       "--branch",
       "master",
+      "--buildbucket-id",
+      "12345",
       "--git-cache-dir",
       "[CACHE]/git",
       "--goma_dir",
       "[CACHE]/goma_client",
       "--goma_client_json",
       "/creds/service_accounts/service-account-goma-client.json",
-      "swarming-build-config"
+      "--remote-trybot",
+      "tryjob_config"
     ],
     "env": {
       "DEPOT_TOOLS_UPDATE": "0"
@@ -163,7 +166,7 @@
         "[START_DIR]/python_bin"
       ]
     },
-    "name": "cbuildbot [swarming-build-config]"
+    "name": "cbuildbot [tryjob_config]"
   },
   {
     "name": "$result",
