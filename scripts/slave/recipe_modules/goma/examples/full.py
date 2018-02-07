@@ -37,6 +37,8 @@ def RunSteps(api):
   if api.properties.get('custom_tmp_dir'):
     env['GOMA_TMP_DIR'] = api.properties.get('custom_tmp_dir')
 
+  command += ['-j', str(api.goma.jobs)]
+
   api.goma.build_with_goma(
       name='ninja',
       ninja_log_outdir=api.properties.get('ninja_log_outdir'),
@@ -51,7 +53,7 @@ def GenTests(api):
       'mastername': 'test_master',
       'bot_id': 'test_slave',
       'clobber': '1',
-      'build_command': ['ninja', '-j', '80', '-C', 'out/Release'],
+      'build_command': ['ninja', '-C', 'out/Release'],
       'ninja_log_outdir': 'out/Release',
       'ninja_log_compiler': 'goma',
       'build_data_dir': 'build_data_dir',
@@ -61,6 +63,9 @@ def GenTests(api):
   for platform in ('linux', 'win', 'mac'):
     yield (api.test(platform) + api.platform.name(platform) +
            api.properties.generic(**properties))
+
+  yield (api.test('linux_custom_jobs') + api.platform.name('linux') +
+           api.properties.generic(**properties) + api.goma(jobs=80))
 
   yield (api.test('linux_compile_failed') + api.platform.name('linux') +
          api.step_data('ninja', retcode=1) +

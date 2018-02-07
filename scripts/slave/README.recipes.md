@@ -250,6 +250,7 @@
   * [git_clone_bundler:examples/full](#recipes-git_clone_bundler_examples_full)
   * [goma:examples/full](#recipes-goma_examples_full)
   * [goma:tests/build_with_goma](#recipes-goma_tests_build_with_goma)
+  * [goma:tests/jobs](#recipes-goma_tests_jobs)
   * [goma:tests/recommended_goma_jobs](#recipes-goma_tests_recommended_goma_jobs)
   * [goma:tests/start](#recipes-goma_tests_start)
   * [gyp](#recipes-gyp)
@@ -2005,9 +2006,9 @@ For local running of goma recipe module,
 set local goma dir like below at the beginning of recipe running.
 `api.goma.set_goma_dir_for_local_test(goma_dir)`
 
-&emsp; **@property**<br>&mdash; **def [build\_data\_dir](/scripts/slave/recipe_modules/goma/api.py#152)(self):**
+&emsp; **@property**<br>&mdash; **def [build\_data\_dir](/scripts/slave/recipe_modules/goma/api.py#162)(self):**
 
-&mdash; **def [build\_with\_goma](/scripts/slave/recipe_modules/goma/api.py#426)(self, ninja_command, name=None, ninja_log_outdir=None, ninja_log_compiler=None, goma_env=None, ninja_env=None, \*\*kwargs):**
+&mdash; **def [build\_with\_goma](/scripts/slave/recipe_modules/goma/api.py#436)(self, ninja_command, name=None, ninja_log_outdir=None, ninja_log_compiler=None, goma_env=None, ninja_env=None, \*\*kwargs):**
 
 Build with ninja_command using goma
 
@@ -2028,47 +2029,57 @@ Raises:
   StepFailure or InfraFailure if it fails to build or
   occurs something failure on goma steps.
 
-&emsp; **@property**<br>&mdash; **def [cloudtail\_exe](/scripts/slave/recipe_modules/goma/api.py#50)(self):**
+&emsp; **@property**<br>&mdash; **def [cloudtail\_exe](/scripts/slave/recipe_modules/goma/api.py#51)(self):**
 
-&emsp; **@property**<br>&mdash; **def [cloudtail\_pid\_file](/scripts/slave/recipe_modules/goma/api.py#57)(self):**
+&emsp; **@property**<br>&mdash; **def [cloudtail\_pid\_file](/scripts/slave/recipe_modules/goma/api.py#58)(self):**
 
-&emsp; **@property**<br>&mdash; **def [cloudtail\_service\_account\_json\_path](/scripts/slave/recipe_modules/goma/api.py#46)(self):**
+&emsp; **@property**<br>&mdash; **def [cloudtail\_service\_account\_json\_path](/scripts/slave/recipe_modules/goma/api.py#47)(self):**
 
-&emsp; **@property**<br>&mdash; **def [default\_cache\_path](/scripts/slave/recipe_modules/goma/api.py#80)(self):**
+&emsp; **@property**<br>&mdash; **def [default\_cache\_path](/scripts/slave/recipe_modules/goma/api.py#81)(self):**
 
-&emsp; **@property**<br>&mdash; **def [default\_cache\_path\_per\_slave](/scripts/slave/recipe_modules/goma/api.py#71)(self):**
+&emsp; **@property**<br>&mdash; **def [default\_cache\_path\_per\_slave](/scripts/slave/recipe_modules/goma/api.py#72)(self):**
 
-&mdash; **def [ensure\_goma](/scripts/slave/recipe_modules/goma/api.py#118)(self, canary=False):**
+&mdash; **def [ensure\_goma](/scripts/slave/recipe_modules/goma/api.py#128)(self, canary=False):**
 
-&emsp; **@property**<br>&mdash; **def [goma\_ctl](/scripts/slave/recipe_modules/goma/api.py#143)(self):**
+&emsp; **@property**<br>&mdash; **def [goma\_ctl](/scripts/slave/recipe_modules/goma/api.py#153)(self):**
 
-&emsp; **@property**<br>&mdash; **def [goma\_dir](/scripts/slave/recipe_modules/goma/api.py#147)(self):**
+&emsp; **@property**<br>&mdash; **def [goma\_dir](/scripts/slave/recipe_modules/goma/api.py#157)(self):**
 
-&emsp; **@property**<br>&mdash; **def [json\_path](/scripts/slave/recipe_modules/goma/api.py#61)(self):**
+&emsp; **@property**<br>&mdash; **def [jobs](/scripts/slave/recipe_modules/goma/api.py#87)(self):**
 
-&emsp; **@property**<br>&mdash; **def [jsonstatus](/scripts/slave/recipe_modules/goma/api.py#66)(self):**
+Returns number of jobs for parallel build using Goma.
 
-&emsp; **@property**<br>&mdash; **def [recommended\_goma\_jobs](/scripts/slave/recipe_modules/goma/api.py#86)(self):**
+Uses value from property "$build/goma:{"jobs": JOBS}" if configured
+(typically in cr-buildbucket.cfg), else defaults to `recommended_goma_jobs`.
+
+&emsp; **@property**<br>&mdash; **def [json\_path](/scripts/slave/recipe_modules/goma/api.py#62)(self):**
+
+&emsp; **@property**<br>&mdash; **def [jsonstatus](/scripts/slave/recipe_modules/goma/api.py#67)(self):**
+
+&emsp; **@property**<br>&mdash; **def [recommended\_goma\_jobs](/scripts/slave/recipe_modules/goma/api.py#96)(self):**
 
 Return the recommended number of jobs for parallel build using Goma.
 
-This function caches the _goma_jobs.
+Prefer to use just `goma.jobs` and configure it through default builder
+properties in cr-buildbucket.cfg.
 
-&emsp; **@property**<br>&mdash; **def [service\_account\_json\_path](/scripts/slave/recipe_modules/goma/api.py#42)(self):**
+This function caches the _recommended_jobs.
 
-&mdash; **def [set\_goma\_dir\_for\_local\_test](/scripts/slave/recipe_modules/goma/api.py#110)(self, goma_dir):**
+&emsp; **@property**<br>&mdash; **def [service\_account\_json\_path](/scripts/slave/recipe_modules/goma/api.py#43)(self):**
+
+&mdash; **def [set\_goma\_dir\_for\_local\_test](/scripts/slave/recipe_modules/goma/api.py#120)(self, goma_dir):**
 
 This function is made for local recipe test only.
 Do not use in recipes used by buildbots.
 
-&mdash; **def [start](/scripts/slave/recipe_modules/goma/api.py#215)(self, env=None, \*\*kwargs):**
+&mdash; **def [start](/scripts/slave/recipe_modules/goma/api.py#225)(self, env=None, \*\*kwargs):**
 
 Start goma compiler_proxy.
 
 A user MUST execute ensure_goma beforehand.
 It is user's responsibility to handle failure of starting compiler_proxy.
 
-&mdash; **def [stop](/scripts/slave/recipe_modules/goma/api.py#295)(self, ninja_log_outdir=None, ninja_log_compiler=None, ninja_log_command=None, build_exit_status=None, \*\*kwargs):**
+&mdash; **def [stop](/scripts/slave/recipe_modules/goma/api.py#305)(self, ninja_log_outdir=None, ninja_log_compiler=None, ninja_log_command=None, build_exit_status=None, \*\*kwargs):**
 
 Stop goma compiler_proxy.
 
@@ -4883,6 +4894,11 @@ Repeatedly fails as a way to ensure the gatekeeper is alive and well.
 [DEPS](/scripts/slave/recipe_modules/goma/tests/build_with_goma.py#5): [goma](#recipe_modules-goma), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/goma/tests/build_with_goma.py#13)(api):**
+### *recipes* / [goma:tests/jobs](/scripts/slave/recipe_modules/goma/tests/jobs.py)
+
+[DEPS](/scripts/slave/recipe_modules/goma/tests/jobs.py#5): [goma](#recipe_modules-goma), [recipe\_engine/platform][recipe_engine/recipe_modules/platform]
+
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/goma/tests/jobs.py#11)(api):**
 ### *recipes* / [goma:tests/recommended\_goma\_jobs](/scripts/slave/recipe_modules/goma/tests/recommended_goma_jobs.py)
 
 [DEPS](/scripts/slave/recipe_modules/goma/tests/recommended_goma_jobs.py#5): [goma](#recipe_modules-goma)

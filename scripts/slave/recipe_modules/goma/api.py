@@ -16,7 +16,7 @@ class GomaApi(recipe_api.RecipeApi):
   `api.goma.set_goma_dir_for_local_test(goma_dir)`
   """
 
-  def __init__(self, **kwargs):
+  def __init__(self, properties, **kwargs):
     super(GomaApi, self).__init__(**kwargs)
     self._goma_dir = None
 
@@ -26,7 +26,8 @@ class GomaApi(recipe_api.RecipeApi):
     self._goma_started = False
 
     self._goma_ctl_env = {}
-    self._goma_jobs = None
+    self._jobs = properties.get('jobs', None)
+    self._recommended_jobs = None
     self._jsonstatus = None
     self._goma_jsonstatus_called = False
     self._cloudtail_running = False
@@ -84,28 +85,37 @@ class GomaApi(recipe_api.RecipeApi):
     return self.default_cache_path_per_slave.join(safe_buildername)
 
   @property
+  def jobs(self):
+    """Returns number of jobs for parallel build using Goma.
+
+    Uses value from property "$build/goma:{\"jobs\": JOBS}" if configured
+    (typically in cr-buildbucket.cfg), else defaults to `recommended_goma_jobs`.
+    """
+    return self._jobs or self.recommended_goma_jobs
+
+  @property
   def recommended_goma_jobs(self):
+    """Return the recommended number of jobs for parallel build using Goma.
+
+    Prefer to use just `goma.jobs` and configure it through default builder
+    properties in cr-buildbucket.cfg.
+
+    This function caches the _recommended_jobs.
     """
-    Return the recommended number of jobs for parallel build using Goma.
+    if self._recommended_jobs is None:
+      step_result = self.m.build.python(
+        'calculate the number of recommended jobs',
+        self.resource('utils.py'),
+        args=[
+            'jobs',
+            '--file-path', self.m.raw_io.output_text()
+        ],
+        step_test_data=(
+            lambda: self.m.raw_io.test_api.output_text('50'))
+      )
+      self._recommended_jobs = int(step_result.raw_io.output_text)
 
-    This function caches the _goma_jobs.
-    """
-    if self._goma_jobs:
-      return self._goma_jobs
-
-    step_result = self.m.build.python(
-      'calculate the number of recommended jobs',
-      self.resource('utils.py'),
-      args=[
-          'jobs',
-          '--file-path', self.m.raw_io.output_text()
-      ],
-      step_test_data=(
-          lambda: self.m.raw_io.test_api.output_text('50'))
-    )
-    self._goma_jobs = int(step_result.raw_io.output_text)
-
-    return self._goma_jobs
+    return self._recommended_jobs
 
   def set_goma_dir_for_local_test(self, goma_dir):
     """

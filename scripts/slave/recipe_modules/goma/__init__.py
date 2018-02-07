@@ -15,3 +15,19 @@ DEPS = [
   'recipe_engine/step',
   'recipe_engine/time',
 ]
+
+from recipe_engine.recipe_api import Property
+from recipe_engine.config import ConfigGroup, Single
+
+
+PROPERTIES = {
+  '$build/goma': Property(
+    help='Properties specifically for the goma module',
+    param_name='properties',
+    kind=ConfigGroup(
+      # How many jobs to run in parallel.
+      jobs=Single(int),
+    ),
+    default={},
+  ),
+}
