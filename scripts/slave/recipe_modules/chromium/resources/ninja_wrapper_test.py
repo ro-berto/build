@@ -355,10 +355,16 @@ class NinjaWrapperTestCase(unittest.TestCase):
     failed_target_list = ninja_parser.failed_target_list
     target_dict = ninja_wrapper.get_detailed_info('', '', failed_target_list,
                                                   warning_collector)
+    failure_outputs = ninja_parser.failure_outputs
 
     expected_deps1 = set([])
     expected_deps2 = set(['../../base/b.cc', '../../base/b.h', '../../b.cc'])
     expected_deps3 = set([])
+
+    expected_failure_outputs = (
+        # Drop last line containing 'ninja: build stopped: ....'
+        # and concat with newline
+        '\n'.join(_NINJA_STDOUT_MIXED_RULE.splitlines()[:-1]) + '\n')
     self.assertSetEqual(set(target_dict['failures'][0]['dependencies']),
                         expected_deps1)
     self.assertSetEqual(set(target_dict['failures'][1]['dependencies']),
@@ -366,6 +372,7 @@ class NinjaWrapperTestCase(unittest.TestCase):
     self.assertSetEqual(set(target_dict['failures'][2]['dependencies']),
                         expected_deps3)
     self.assertListEqual(warning_collector.get(), [])
+    self.assertEqual(failure_outputs, expected_failure_outputs)
 
   def testParseArgs(self):
     expected_file_name = 'file.json'

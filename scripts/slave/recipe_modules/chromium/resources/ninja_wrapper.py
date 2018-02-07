@@ -14,7 +14,9 @@ Ninja environment should be set before calling wrapper from recipe:
     self.m.python(name, ninja_wrapper.py)
 
 Example:
-python ninja_wrapper.py [--ninja_info_output file_name.json]
+python ninja_wrapper.py \
+  [--ninja_info_output file_name.json] \
+  [--failure_output failure_output] \
   -- /absolute/path/to/ninja -C build/path build_target
 
 The wrapper writes detailed info in JSON format:
@@ -314,12 +316,14 @@ class NinjaBuildOutputStreamingParser(object):
     self._failure_begins = False
     self._last_target = None
     self._warning_collector = warning_collector
+    self.failure_outputs = ''
 
   def parse(self, line):
     line = line.strip()
     if self._failure_begins and self._last_target:
       if not _RULE_RE.match(line) and not _FAILED_END_RE.match(line):
         self._last_target['output'] += line +'\n'
+        self.failure_outputs += line +'\n'
       else:
         # Output of failed edge ends, save its info.
         self._failure_begins = False
@@ -342,6 +346,7 @@ class NinjaBuildOutputStreamingParser(object):
           target['output'] = ''
           target['dependencies'] = []
           self._last_target = target
+          self.failure_outputs += self._last_line + '\n' + line +'\n'
         else:
           self._warning_collector.add(
               'Unknown line when parsing ninja '
@@ -417,6 +422,8 @@ def parse_args(args):
                       help=('Ninja build command, e.g., '
                             '/absolute/path/to/ninja -C build/path '
                             'build_target'))
+  parser.add_argument('--failure_output',
+                      help=('Save output of failed build edges in file.'))
   options = parser.parse_args(args)
   return options
 
@@ -459,6 +466,15 @@ def main():
     data['warnings'] = warning_collector.get()
     with open(options.ninja_info_output, 'w') as fw:
       json.dump(data, fw)
+
+    if options.failure_output:
+      with open(options.failure_output, 'w') as fw:
+        if ninja_parser.failure_outputs:
+          fw.write(ninja_parser.failure_outputs)
+        else:
+          fw.write("Unrecognized failures, "
+                   "please check the original stdout instead.")
+
   return return_code
 
 

@@ -6,6 +6,7 @@ import collections
 import contextlib
 import functools
 import re
+import textwrap
 
 from recipe_engine import recipe_api
 from recipe_engine import util as recipe_util
@@ -234,7 +235,10 @@ class ChromiumApi(recipe_api.RecipeApi):
 
       script_args = [
           '--ninja_info_output',
-          self.m.json.output(add_json_log='on_failure', name='ninja_info')
+          self.m.json.output(add_json_log='on_failure', name='ninja_info'),
+          '--failure_output',
+          self.m.raw_io.output(add_output_log='on_failure',
+                               name='failure_summary'),
       ]
       script_args.append('--')
       script_args.extend(ninja_command)
@@ -245,8 +249,14 @@ class ChromiumApi(recipe_api.RecipeApi):
           'output': 'error info',
           'dependencies': ['b/a.cc']
       }]}
+      example_failure_output = textwrap.dedent("""\
+      [1/1] CXX a.o
+      error info
+      """)
       step_test_data = (lambda: self.m.json.test_api.output(
-                            example_json, name='ninja_info'))
+                            example_json, name='ninja_info') +
+                        self.m.raw_io.test_api.output(
+                            example_failure_output, name='failure_summary'))
 
       with self.m.context(env=ninja_env):
         self.m.python(name or 'compile', script=script,
