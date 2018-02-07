@@ -28,10 +28,8 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ART_USE_READ_BARRIER": "false",
-      "EXPERIMENTAL_USE_OPENJDK9": "false",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
-      "PATH": "/usr/lib/jvm/java-8-openjdk-amd64/bin/:<PATH>",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_x86"
@@ -46,10 +44,8 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ART_USE_READ_BARRIER": "false",
-      "EXPERIMENTAL_USE_OPENJDK9": "false",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
-      "PATH": "/usr/lib/jvm/java-8-openjdk-amd64/bin/:<PATH>",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_x86"
@@ -69,10 +65,8 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ART_USE_READ_BARRIER": "false",
-      "EXPERIMENTAL_USE_OPENJDK9": "false",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
-      "PATH": "/usr/lib/jvm/java-8-openjdk-amd64/bin/:<PATH>",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_x86_64"
@@ -87,10 +81,8 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ART_USE_READ_BARRIER": "false",
-      "EXPERIMENTAL_USE_OPENJDK9": "false",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
-      "PATH": "/usr/lib/jvm/java-8-openjdk-amd64/bin/:<PATH>",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_x86_64"
@@ -106,10 +98,8 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ART_USE_READ_BARRIER": "false",
-      "EXPERIMENTAL_USE_OPENJDK9": "false",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
-      "PATH": "/usr/lib/jvm/java-8-openjdk-amd64/bin/:<PATH>",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_arm"
@@ -124,10 +114,8 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ART_USE_READ_BARRIER": "false",
-      "EXPERIMENTAL_USE_OPENJDK9": "false",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
-      "PATH": "/usr/lib/jvm/java-8-openjdk-amd64/bin/:<PATH>",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_arm"
@@ -143,10 +131,8 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ART_USE_READ_BARRIER": "false",
-      "EXPERIMENTAL_USE_OPENJDK9": "false",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
-      "PATH": "/usr/lib/jvm/java-8-openjdk-amd64/bin/:<PATH>",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_arm64"
@@ -161,10 +147,8 @@
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ART_USE_READ_BARRIER": "false",
-      "EXPERIMENTAL_USE_OPENJDK9": "false",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
-      "PATH": "/usr/lib/jvm/java-8-openjdk-amd64/bin/:<PATH>",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_arm64"

@@ -87,14 +87,9 @@ def setup_host_x86(api, debug, bitness, concurrent_collector=True,
           'TARGET_BUILD_TYPE': 'release',
           'SOONG_ALLOW_MISSING_DEPENDENCIES': 'true',
           'ANDROID_BUILD_TOP': build_top_dir,
-          'EXPERIMENTAL_USE_OPENJDK9': 'false',
           'JACK_SERVER': 'false',
           'JACK_REPOSITORY': str(build_top_dir.join('prebuilts', 'sdk',
                                                     'tools', 'jacks')),
-          'PATH': str(build_top_dir.join('out', 'host', 'linux-x86', 'bin')) +
-                      api.path.pathsep +
-                      '/usr/lib/jvm/java-8-openjdk-amd64/bin/' +
-                      api.path.pathsep + '%(PATH)s',
           'ART_TEST_RUN_TEST_2ND_ARCH': 'false',
           'ART_TEST_FULL': 'false',
           'ART_TEST_KEEP_GOING': 'true' }
@@ -240,11 +235,6 @@ def setup_target(api,
          'SOONG_ALLOW_MISSING_DEPENDENCIES': 'true',
          'ANDROID_SERIAL': serial,
          'ANDROID_BUILD_TOP': build_top_dir,
-         'PATH': str(build_top_dir.join('out', 'host', 'linux-x86', 'bin')) +
-                     api.path.pathsep +
-                     '/usr/lib/jvm/java-8-openjdk-amd64/bin/' +
-                     api.path.pathsep + '%(PATH)s',
-         'EXPERIMENTAL_USE_OPENJDK9': 'false',
          'JACK_SERVER': 'false',
          'JACK_REPOSITORY': str(build_top_dir.join('prebuilts', 'sdk', 'tools',
                                                    'jacks')),
@@ -423,9 +413,6 @@ def setup_aosp_builder(api, read_barrier):
               'TARGET_BUILD_VARIANT': 'eng',
               'TARGET_BUILD_TYPE': 'release',
               'ANDROID_BUILD_TOP': build_top_dir,
-              'PATH': '/usr/lib/jvm/java-8-openjdk-amd64/bin/' +
-                      api.path.pathsep + '%(PATH)s',
-              'EXPERIMENTAL_USE_OPENJDK9': 'false',
               'JACK_SERVER': 'false',
               'JACK_REPOSITORY': str(build_top_dir.join('prebuilts', 'sdk',
                                                         'tools', 'jacks')),
@@ -446,9 +433,6 @@ def setup_valgrind_runner(api, bitness):
             'TARGET_BUILD_VARIANT': 'eng',
             'TARGET_BUILD_TYPE': 'release',
             'ANDROID_BUILD_TOP': build_top_dir,
-            'PATH': '/usr/lib/jvm/java-8-openjdk-amd64/bin/' +
-                    api.path.pathsep + '%(PATH)s',
-            'EXPERIMENTAL_USE_OPENJDK9': 'false',
             'JACK_SERVER': 'false',
             'JACK_REPOSITORY': str(build_top_dir.join('prebuilts', 'sdk',
                                                       'tools', 'jacks')) }

@@ -40,10 +40,8 @@
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
-      "EXPERIMENTAL_USE_OPENJDK9": "false",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
-      "PATH": "/usr/lib/jvm/java-8-openjdk-amd64/bin/:<PATH>",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "sdk"
