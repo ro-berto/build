@@ -24,7 +24,7 @@ DEPS = [
 FAKE_SWARMING_TEST_SPEC = """\
 [
   {
-    'builders': ['crashpad_win_x86_wow64_rel'],
+    'builders': ['crashpad_try_win_dbg'],
     'step_name': 'run_tests_on_x86',
     'isolate': 'out/Debug/run_tests.isolate',
     'args': [
@@ -47,6 +47,7 @@ def RunSteps(api):
   if target_os:
     api.gclient.c.target_os = {target_os}
   is_fuchsia = target_os == 'fuchsia'
+  is_win = target_os == 'win'
   config = api.m.properties['config']
   is_debug = config == 'Debug'
 
@@ -56,63 +57,72 @@ def RunSteps(api):
   if 'clobber' in api.properties:
     api.file.rmtree('out', api.path['checkout'].join('out'))
 
-  if '_x86' in buildername:
-    env = {'GYP_DEFINES': 'target_arch=ia32'}
   with api.context(env=env):
     api.gclient.runhooks()
 
-  # On Windows, we need to test:
-  # a) x64 OS, x64 handler, x64 client
-  # b) x64 OS, x64 handler, x86 client
-  # c) x64 OS, x86 handler, x86 client
-  # d) x86 OS, x86 handler, x86 client
-  #
-  # c) is tested on the _x86_wow64 bots.
-  #
-  # d) is tested on the _x86 bots.
-  #
-  # a) and b) are tested on the _x64 bots. Crashpad's gclient takes care of
-  # generating Debug == x86 and Debug_x64 == x64 when target_arch==x64 (the
-  # default). So, we just need to make sure to build both the suffixed and
-  # unsuffixed trees, and then make sure to run the tests from the _x64 tree.
-
   dirname = config
   if is_fuchsia:
-    # Fuchsia has only a GN build.
+    # Generic GN build.
     path = api.path['checkout'].join('out', dirname)
-    args = 'target_os="fuchsia" is_debug=' + ('true' if is_debug else 'false')
+    args = 'target_os="' + target_os + \
+           '" is_debug=' + ('true' if is_debug else 'false')
     with api.context(cwd=api.path['checkout']):
       api.step('generate build files', ['gn', 'gen', path, '--args=' + args])
+  elif is_win:
+    # On Windows, we ought to test:
+    # a) x64 OS, x64 handler, x64 client
+    # b) x64 OS, x64 handler, x86 client
+    # c) x64 OS, x86 handler, x86 client
+    # d) x86 OS, x86 handler, x86 client
+    #
+    # d) used to be tested on _x86 bots, but they have been removed.
+    #
+    # Two build directories are generated, one for x86 and one for x64, which
+    # allows testing a), b), and c). As the bot time is dominated by machine
+    # setup and build time, we do not separate these onto separate slaves.
+    # Additionally, they're all on the same physical machine currently, so
+    # there's no upside in parallelism.
+
+    x86_path = api.path['checkout'].join('out', dirname + '_x86')
+    x64_path = api.path['checkout'].join('out', dirname + '_x64')
+    args = 'target_os="win" is_debug=' + ('true' if is_debug else 'false')
+    with api.context(cwd=api.path['checkout']):
+      api.step('generate build files x86',
+               ['gn', 'gen', x86_path, '--args=' + args + ' target_cpu="x86"'])
+      api.step('generate build files x64',
+               ['gn', 'gen', x64_path, '--args=' + args + ' target_cpu="x64"'])
   else:
     # Other platforms still default to the gyp build, so the build files have
     # already been generated during runhooks.
     path = api.path['checkout'].join('out', dirname)
 
-  api.step('compile with ninja', ['ninja', '-C', path])
+  def run_tests(build_dir, env=None):
+    if is_fuchsia:
+      # Start a QEMU instance.
+      api.python('start qemu',
+                 api.path['checkout'].join('build', 'run_fuchsia_qemu.py'),
+                 args=['start'])
 
-  if '_x64' in buildername and not is_fuchsia:
-    # Note that we modify the dirname on x64 because we want to handle variants
-    # a) and b) above.
-    dirname += '_x64'
-    path = api.path['checkout'].join('out', dirname)
+    with api.context(env=env):
+      api.python('run tests',
+                api.path['checkout'].join('build', 'run_tests.py'),
+                args=[build_dir],
+                timeout=5*60)
+
+    if is_fuchsia:
+      # Shut down the QEMU instance.
+      api.python('stop qemu',
+                 api.path['checkout'].join('build', 'run_fuchsia_qemu.py'),
+                 args=['stop'])
+
+  if is_win:
+    api.step('compile with ninja x86', ['ninja', '-C', x86_path])
+    api.step('compile with ninja x64', ['ninja', '-C', x64_path])
+    run_tests(x86_path)
+    run_tests(x64_path, env={'CRASHPAD_TEST_32_BIT_OUTPUT':x86_path})
+  else:
     api.step('compile with ninja', ['ninja', '-C', path])
-
-  if is_fuchsia:
-    # Start a QEMU instance.
-    api.python('start qemu',
-               api.path['checkout'].join('build', 'run_fuchsia_qemu.py'),
-               args=['start'])
-
-  api.python('run tests',
-             api.path['checkout'].join('build', 'run_tests.py'),
-             args=[path],
-             timeout=5*60)
-
-  if is_fuchsia:
-    # Shut down the QEMU instance.
-    api.python('stop qemu',
-               api.path['checkout'].join('build', 'run_fuchsia_qemu.py'),
-               args=['stop'])
+    run_tests(path)
 
   test_spec_path = api.path['checkout'].join('build', 'swarming_test_spec.pyl')
   if api.path.exists(test_spec_path):
@@ -132,7 +142,8 @@ def RunSteps(api):
         api.python(
             spec['step_name'],
             api.path['checkout'].join('build', 'run_on_swarming.py'),
-            args=[api.path['checkout'].join(spec['isolate'][2:])] + spec['args'])
+            args=[api.path['checkout'].join(spec['isolate'][2:])] +
+                 spec['args'])
 
 
 def GenTests(api):
@@ -142,28 +153,16 @@ def GenTests(api):
         api.properties.generic(buildername=test, config='Debug', clobber=True))
 
   tests = [
-      test,
-      'crashpad_try_mac_rel',
-      'crashpad_try_win_x64_dbg',
-      'crashpad_win_x64_rel',
-      'crashpad_try_win_x86_wow64_dbg',
-      'crashpad_win_x86_wow64_rel',
+      (test, 'mac'),
+      ('crashpad_try_mac_rel', 'mac'),
+      ('crashpad_try_win_dbg', 'win'),
+      ('crashpad_fuchsia_x64_dbg', 'fuchsia'),
+      ('crashpad_fuchsia_x64_rel', 'fuchsia'),
   ]
-  for t in tests:
-    yield(api.test(t) +
-          api.properties.generic(buildername=t,
-                                 config='Debug' if '_dbg' in t else 'Release') +
-          api.path.exists(api.path['checkout'].join(
-              'build', 'swarming_test_spec.pyl')))
-
-  tests_with_target_os_fuchsia = [
-      'crashpad_fuchsia_x64_dbg',
-      'crashpad_fuchsia_x64_rel',
-  ]
-  for t in tests_with_target_os_fuchsia:
+  for t, os in tests:
     yield(api.test(t) +
           api.properties.generic(buildername=t,
                                  config='Debug' if '_dbg' in t else 'Release',
-                                 target_os='fuchsia') +
+                                 target_os=os) +
           api.path.exists(api.path['checkout'].join(
               'build', 'swarming_test_spec.pyl')))
