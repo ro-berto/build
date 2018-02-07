@@ -1548,12 +1548,12 @@
   },
   {
     "cmd": [
-      "/opt/infra-tools/buildbucket",
+      "buildbucket",
       "put",
-      "--host",
+      "-host",
       "cr-buildbucket.appspot.com",
-      "{\"bucket\": \"luci.dart.ci\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"foo-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"analyzer-linux-release-be\\\", \\\"parent_fileset\\\": \\\"test isolate hash\\\", \\\"parent_fileset_name\\\": \\\"fileset1\\\"}}\", \"tags\": [\"builder:foo-builder\", \"parent_buildername:analyzer-linux-release-be\", \"user_agent:recipe\"]}",
-      "{\"bucket\": \"luci.dart.ci\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"bar-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"analyzer-linux-release-be\\\", \\\"parent_fileset\\\": \\\"test isolate hash\\\", \\\"parent_fileset_name\\\": \\\"fileset1\\\"}}\", \"tags\": [\"builder:bar-builder\", \"parent_buildername:analyzer-linux-release-be\", \"user_agent:recipe\"]}"
+      "{\"bucket\": \"luci.dart.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"foo-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"analyzer-linux-release-be\\\", \\\"parent_fileset\\\": \\\"test isolate hash\\\", \\\"parent_fileset_name\\\": \\\"fileset1\\\"}}\", \"tags\": [\"builder:foo-builder\", \"parent_buildername:analyzer-linux-release-be\", \"user_agent:recipe\"]}",
+      "{\"bucket\": \"luci.dart.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"bar-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"analyzer-linux-release-be\\\", \\\"parent_fileset\\\": \\\"test isolate hash\\\", \\\"parent_fileset_name\\\": \\\"fileset1\\\"}}\", \"tags\": [\"builder:bar-builder\", \"parent_buildername:analyzer-linux-release-be\", \"user_agent:recipe\"]}"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
@@ -1564,6 +1564,7 @@
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
+    "infra_step": true,
     "name": "buildbucket.put",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [

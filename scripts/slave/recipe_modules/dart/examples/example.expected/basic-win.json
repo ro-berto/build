@@ -1714,12 +1714,12 @@
   },
   {
     "cmd": [
-      "C:\\infra-tools\\buildbucket.exe",
+      "buildbucket",
       "put",
-      "--host",
+      "-host",
       "cr-buildbucket.appspot.com",
-      "{\"bucket\": \"luci.dart.ci\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"foo-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"dart2js-win10-debug-x64-ff\\\", \\\"parent_fileset\\\": \\\"test isolate hash\\\", \\\"parent_fileset_name\\\": \\\"fileset1\\\", \\\"revision\\\": \\\"revision-foo\\\"}}\", \"tags\": [\"builder:foo-builder\", \"parent_buildername:dart2js-win10-debug-x64-ff\", \"user_agent:recipe\"]}",
-      "{\"bucket\": \"luci.dart.ci\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"bar-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"dart2js-win10-debug-x64-ff\\\", \\\"parent_fileset\\\": \\\"test isolate hash\\\", \\\"parent_fileset_name\\\": \\\"fileset1\\\", \\\"revision\\\": \\\"revision-foo\\\"}}\", \"tags\": [\"builder:bar-builder\", \"parent_buildername:dart2js-win10-debug-x64-ff\", \"user_agent:recipe\"]}"
+      "{\"bucket\": \"luci.dart.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"foo-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"dart2js-win10-debug-x64-ff\\\", \\\"parent_fileset\\\": \\\"test isolate hash\\\", \\\"parent_fileset_name\\\": \\\"fileset1\\\", \\\"revision\\\": \\\"revision-foo\\\"}}\", \"tags\": [\"builder:foo-builder\", \"parent_buildername:dart2js-win10-debug-x64-ff\", \"user_agent:recipe\"]}",
+      "{\"bucket\": \"luci.dart.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"bar-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"dart2js-win10-debug-x64-ff\\\", \\\"parent_fileset\\\": \\\"test isolate hash\\\", \\\"parent_fileset_name\\\": \\\"fileset1\\\", \\\"revision\\\": \\\"revision-foo\\\"}}\", \"tags\": [\"builder:bar-builder\", \"parent_buildername:dart2js-win10-debug-x64-ff\", \"user_agent:recipe\"]}"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
@@ -1730,6 +1730,7 @@
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
+    "infra_step": true,
     "name": "buildbucket.put",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [

@@ -1602,7 +1602,7 @@ Fetches the corresponding commit hash for a commit position.
 Fetches a commit position string given a commit hash.
 ### *recipe_modules* / [dart](/scripts/slave/recipe_modules/dart)
 
-[DEPS](/scripts/slave/recipe_modules/dart/__init__.py#1): [buildbucket](#recipe_modules-buildbucket), [goma](#recipe_modules-goma), [swarming](#recipe_modules-swarming), [swarming\_client](#recipe_modules-swarming_client), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/dart/__init__.py#1): [goma](#recipe_modules-goma), [swarming](#recipe_modules-swarming), [swarming\_client](#recipe_modules-swarming_client), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 #### **class [DartApi](/scripts/slave/recipe_modules/dart/api.py#9)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
@@ -1836,7 +1836,7 @@ Args:
       If True, do not actually run the tests. Useful when we only want to
       isolate the targets for running elsewhere.
 
-&mdash; **def [configure\_and\_sync](/scripts/slave/recipe_modules/findit/api.py#314)(self, api, tests, buildbucket, target_mastername, target_testername, revision):**
+&mdash; **def [configure\_and\_sync](/scripts/slave/recipe_modules/findit/api.py#311)(self, api, tests, buildbucket, target_mastername, target_testername, revision):**
 
 Loads tests from buildbucket, applies bot/swarming configs & syncs code.
 
@@ -1889,7 +1889,7 @@ Args:
   solution_name (str): the gclient solution name, eg:
       "src" for chromium, "src/third_party/pdfium" for pdfium.
 
-&mdash; **def [record\_previous\_revision](/scripts/slave/recipe_modules/findit/api.py#393)(self, api, bot_config):**
+&mdash; **def [record\_previous\_revision](/scripts/slave/recipe_modules/findit/api.py#390)(self, api, bot_config):**
 
 Records the latest checked out and cached revisions.
 
