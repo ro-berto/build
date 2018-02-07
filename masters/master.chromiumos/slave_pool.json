@@ -4,6 +4,9 @@
       "amd64-generic-full": [
         "build98-m2"
       ], 
+      "amd64-generic-fuzzer": [
+        "build182-m2"
+      ], 
       "amd64-generic-incremental": [
         "cros-beefy423-c2"
       ], 
@@ -57,7 +60,6 @@
     }
   }, 
   "unallocated": [
-    "build182-m2", 
     "build203-m2", 
     "build245-m2", 
     "build263-m2", 
