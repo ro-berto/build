@@ -534,7 +534,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     if scheduler_jobs:
       self.m.scheduler.emit_trigger(
-          self.m.scheduler.buildbucket_trigger(properties=properties),
+          self.m.scheduler.BuildbucketTrigger(properties=properties),
           project='chromium',
           jobs=scheduler_jobs,
           step_name='trigger')
