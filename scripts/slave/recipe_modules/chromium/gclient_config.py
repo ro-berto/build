@@ -261,3 +261,6 @@ def checkout_instrumented_libraries(c):
 def chromium_no_telemetry_dependencies(c):  # pragma: no cover
   c.solutions[0].custom_vars['checkout_telemetry_dependencies'] = 'False'
 
+@CONFIG_CTX()
+def arm(c):
+  c.target_cpu.add('arm')

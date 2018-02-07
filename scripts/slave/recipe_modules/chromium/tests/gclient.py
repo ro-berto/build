@@ -10,6 +10,7 @@ DEPS = [
 
 TEST_CONFIGS = [
   'android_bare',
+  'arm',
   'blink',
   'chrome_internal',
   'chromedriver',

@@ -142,6 +142,7 @@ SPEC = {
     'Linux ARM': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
+      'gclient_apply_config': ['arm'],
       'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
