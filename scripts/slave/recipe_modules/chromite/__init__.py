@@ -1,11 +1,11 @@
 DEPS = [
-  'buildbucket',
   'depot_tools/bot_update',
   'depot_tools/gclient',
   'depot_tools/git',
   'depot_tools/gitiles',
   'depot_tools/infra_paths',
   'goma',
+  'recipe_engine/buildbucket',
   'recipe_engine/context',
   'recipe_engine/file',
   'recipe_engine/json',
