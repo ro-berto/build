@@ -372,16 +372,31 @@
         "builders": {
           "*": {}
         },
-        "comment": [
-          "Fuchsia bots should be un-excluded once trybots are fully set up."
-        ],
-        "excluded_builders": [
-          "Fuchsia ARM64 Cast Audio",
-          "Fuchsia ARM64",
-          "Fuchsia x64 Cast Audio"
-        ],
         "tree_notify": [
           "thomasanderson@chromium.org"
+        ]
+      },
+      {
+        "builders": {
+          "Fuchsia ARM64": {
+            "categories": [
+              "chromium_tree_closer"
+            ]
+          },
+          "Fuchsia ARM64 Cast Audio": {
+            "forgiving_optional": ["*"]
+          },
+          "Fuchsia x64": {
+            "categories": [
+              "chromium_tree_closer"
+            ]
+          },
+          "Fuchsia x64 Cast Audio": {
+            "forgiving_optional": ["*"]
+          }
+        },
+        "tree_notify": [
+          "cr-fuchsia+bot@chromium.org"
         ]
       },
       {
