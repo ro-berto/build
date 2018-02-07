@@ -1912,8 +1912,8 @@
       "--bar",
       "--append_logs",
       "--builder-tag=win10",
-      "--shards=3",
-      "--shard=3"
+      "--shards=2",
+      "--shard=2"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
@@ -1924,7 +1924,7 @@
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
-    "name": "Test-step 3_shard_3"
+    "name": "Test-step 3_shard_2"
   },
   {
     "cmd": [

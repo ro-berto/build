@@ -493,10 +493,9 @@ class DartApi(recipe_api.RecipeApi):
           self.m.step(step_name, [script] + args)
 
       if local_shard:
-        this_shard = shards + 1
         args = args + [
-          '--shards=%s' % this_shard,
-          '--shard=%s' % this_shard
+          '--shards=%s' % shards,
+          '--shard=%s' % shards
         ]
-        self.run_script("%s_shard_%s" % (step_name, this_shard), script,
+        self.run_script("%s_shard_%s" % (step_name, shards), script,
             args, None, 0, False, environment, tasks)
