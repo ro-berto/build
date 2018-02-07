@@ -491,14 +491,15 @@
   },
   {
     "cmd": [
-      "/opt/infra-tools/buildbucket",
+      "buildbucket",
       "put",
-      "--host",
+      "-host",
       "cr-buildbucket.appspot.com",
-      "--service-account-json",
+      "-service-account-json",
       "/creds/service_accounts/service-account-chromium-bisect.json",
-      "{\"bucket\": \"master.tryserver.chromium.perf\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"a6298e4afedbf2cd461755ea6f45b0ad64222222\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"parent_buildername:linux_perf_bisect\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
+      "{\"bucket\": \"master.tryserver.chromium.perf\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"a6298e4afedbf2cd461755ea6f45b0ad64222222\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"parent_buildername:linux_perf_bisect\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
     ],
+    "infra_step": true,
     "name": "Gathering reference values.buildbucket.put",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -559,14 +560,15 @@
   },
   {
     "cmd": [
-      "/opt/infra-tools/buildbucket",
+      "buildbucket",
       "get",
-      "--host",
+      "-host",
       "cr-buildbucket.appspot.com",
-      "--service-account-json",
+      "-service-account-json",
       "/creds/service_accounts/service-account-chromium-bisect.json",
       "1201331270"
     ],
+    "infra_step": true,
     "name": "Gathering reference values.Waiting for build.buildbucket.get",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -617,14 +619,15 @@
   },
   {
     "cmd": [
-      "/opt/infra-tools/buildbucket",
+      "buildbucket",
       "get",
-      "--host",
+      "-host",
       "cr-buildbucket.appspot.com",
-      "--service-account-json",
+      "-service-account-json",
       "/creds/service_accounts/service-account-chromium-bisect.json",
       "1201331270"
     ],
+    "infra_step": true,
     "name": "Gathering reference values.Waiting for build.buildbucket.get (2)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -675,14 +678,15 @@
   },
   {
     "cmd": [
-      "/opt/infra-tools/buildbucket",
+      "buildbucket",
       "get",
-      "--host",
+      "-host",
       "cr-buildbucket.appspot.com",
-      "--service-account-json",
+      "-service-account-json",
       "/creds/service_accounts/service-account-chromium-bisect.json",
       "1201331270"
     ],
+    "infra_step": true,
     "name": "Gathering reference values.Waiting for build.buildbucket.get (3)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -733,14 +737,15 @@
   },
   {
     "cmd": [
-      "/opt/infra-tools/buildbucket",
+      "buildbucket",
       "get",
-      "--host",
+      "-host",
       "cr-buildbucket.appspot.com",
-      "--service-account-json",
+      "-service-account-json",
       "/creds/service_accounts/service-account-chromium-bisect.json",
       "1201331270"
     ],
+    "infra_step": true,
     "name": "Gathering reference values.Waiting for build.buildbucket.get (4)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -791,14 +796,15 @@
   },
   {
     "cmd": [
-      "/opt/infra-tools/buildbucket",
+      "buildbucket",
       "get",
-      "--host",
+      "-host",
       "cr-buildbucket.appspot.com",
-      "--service-account-json",
+      "-service-account-json",
       "/creds/service_accounts/service-account-chromium-bisect.json",
       "1201331270"
     ],
+    "infra_step": true,
     "name": "Gathering reference values.Waiting for build.buildbucket.get (5)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -849,14 +855,15 @@
   },
   {
     "cmd": [
-      "/opt/infra-tools/buildbucket",
+      "buildbucket",
       "get",
-      "--host",
+      "-host",
       "cr-buildbucket.appspot.com",
-      "--service-account-json",
+      "-service-account-json",
       "/creds/service_accounts/service-account-chromium-bisect.json",
       "1201331270"
     ],
+    "infra_step": true,
     "name": "Gathering reference values.Waiting for build.buildbucket.get (6)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -907,14 +914,15 @@
   },
   {
     "cmd": [
-      "/opt/infra-tools/buildbucket",
+      "buildbucket",
       "get",
-      "--host",
+      "-host",
       "cr-buildbucket.appspot.com",
-      "--service-account-json",
+      "-service-account-json",
       "/creds/service_accounts/service-account-chromium-bisect.json",
       "1201331270"
     ],
+    "infra_step": true,
     "name": "Gathering reference values.Waiting for build.buildbucket.get (7)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -965,14 +973,15 @@
   },
   {
     "cmd": [
-      "/opt/infra-tools/buildbucket",
+      "buildbucket",
       "get",
-      "--host",
+      "-host",
       "cr-buildbucket.appspot.com",
-      "--service-account-json",
+      "-service-account-json",
       "/creds/service_accounts/service-account-chromium-bisect.json",
       "1201331270"
     ],
+    "infra_step": true,
     "name": "Gathering reference values.Waiting for build.buildbucket.get (8)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -1023,14 +1032,15 @@
   },
   {
     "cmd": [
-      "/opt/infra-tools/buildbucket",
+      "buildbucket",
       "get",
-      "--host",
+      "-host",
       "cr-buildbucket.appspot.com",
-      "--service-account-json",
+      "-service-account-json",
       "/creds/service_accounts/service-account-chromium-bisect.json",
       "1201331270"
     ],
+    "infra_step": true,
     "name": "Gathering reference values.Waiting for build.buildbucket.get (9)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [

@@ -1,6 +1,5 @@
 DEPS = [
     'bisect_tester_staging',
-    'buildbucket',
     'chromium',
     'chromium_android',
     'chromium_tests',
@@ -14,6 +13,7 @@ DEPS = [
     'math_utils',
     'perf_dashboard',
     'puppet_service_account',
+    'recipe_engine/buildbucket',
     'recipe_engine/context',
     'recipe_engine/file',
     'recipe_engine/json',

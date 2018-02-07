@@ -702,15 +702,16 @@
   },
   {
     "cmd": [
-      "/opt/infra-tools/buildbucket",
+      "buildbucket",
       "put",
-      "--host",
+      "-host",
       "cr-buildbucket.appspot.com",
-      "--service-account-json",
+      "-service-account-json",
       "/creds/service_accounts/service-account-chromium-bisect.json",
-      "{\"bucket\": \"master.tryserver.chromium.perf\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"android_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf-tryjob/Android Builder/full-build-linux_bad49c331def2a3bbf3ddd0096eb51551155_123456.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"bad49c331def2a3bbf3ddd0096eb51551155\\\", \\\"patch_gerrit_url\\\": \\\"https://chromium-review.googlesource.com\\\", \\\"patch_issue\\\": 456789, \\\"patch_project\\\": \\\"chromium\\\", \\\"patch_ref\\\": \\\"refs/changes/89/456789/12\\\", \\\"patch_repository_url\\\": \\\"https://chromium.googlesource.com/chromium\\\", \\\"patch_set\\\": 12, \\\"patch_storage\\\": \\\"gerrit\\\"}}\", \"tags\": [\"builder:android_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"parent_buildername:staging_android_nexus5X_perf_bisect\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
+      "{\"bucket\": \"master.tryserver.chromium.perf\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"android_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf-tryjob/Android Builder/full-build-linux_bad49c331def2a3bbf3ddd0096eb51551155_123456.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"bad49c331def2a3bbf3ddd0096eb51551155\\\", \\\"patch_gerrit_url\\\": \\\"https://chromium-review.googlesource.com\\\", \\\"patch_issue\\\": 456789, \\\"patch_project\\\": \\\"chromium\\\", \\\"patch_ref\\\": \\\"refs/changes/89/456789/12\\\", \\\"patch_repository_url\\\": \\\"https://chromium.googlesource.com/chromium\\\", \\\"patch_set\\\": 12, \\\"patch_storage\\\": \\\"gerrit\\\"}}\", \"tags\": [\"builder:android_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"parent_buildername:staging_android_nexus5X_perf_bisect\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
     ],
     "cwd": "[BUILDER_CACHE]/staging_android_nexus5X_perf_bisect",
+    "infra_step": true,
     "name": "Running WITH patch.buildbucket.put",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -740,13 +741,16 @@
   },
   {
     "cmd": [
-      "/opt/infra-tools/buildbucket",
+      "buildbucket",
       "get",
-      "--host",
+      "-host",
       "cr-buildbucket.appspot.com",
+      "-service-account-json",
+      "/creds/service_accounts/service-account-chromium-bisect.json",
       "9016911228971028736"
     ],
     "cwd": "[BUILDER_CACHE]/staging_android_nexus5X_perf_bisect",
+    "infra_step": true,
     "name": "Running WITH patch.buildbucket.get",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -768,13 +772,16 @@
   },
   {
     "cmd": [
-      "/opt/infra-tools/buildbucket",
+      "buildbucket",
       "get",
-      "--host",
+      "-host",
       "cr-buildbucket.appspot.com",
+      "-service-account-json",
+      "/creds/service_accounts/service-account-chromium-bisect.json",
       "9016911228971028736"
     ],
     "cwd": "[BUILDER_CACHE]/staging_android_nexus5X_perf_bisect",
+    "infra_step": true,
     "name": "Running WITH patch.buildbucket.get (2)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -1214,15 +1221,16 @@
   },
   {
     "cmd": [
-      "/opt/infra-tools/buildbucket",
+      "buildbucket",
       "put",
-      "--host",
+      "-host",
       "cr-buildbucket.appspot.com",
-      "--service-account-json",
+      "-service-account-json",
       "/creds/service_accounts/service-account-chromium-bisect.json",
-      "{\"bucket\": \"master.tryserver.chromium.perf\", \"parameters_json\": \"{\\\"builder_name\\\": \\\"android_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Android Builder/full-build-linux_d49c331def2a3bbf3ddd0096eb51551155.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"d49c331def2a3bbf3ddd0096eb51551155\\\"}}\", \"tags\": [\"builder:android_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"parent_buildername:staging_android_nexus5X_perf_bisect\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
+      "{\"bucket\": \"master.tryserver.chromium.perf\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"android_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Android Builder/full-build-linux_d49c331def2a3bbf3ddd0096eb51551155.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"d49c331def2a3bbf3ddd0096eb51551155\\\"}}\", \"tags\": [\"builder:android_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"parent_buildername:staging_android_nexus5X_perf_bisect\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
     ],
     "cwd": "[BUILDER_CACHE]/staging_android_nexus5X_perf_bisect",
+    "infra_step": true,
     "name": "Running WITHOUT patch.buildbucket.put",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -1252,13 +1260,16 @@
   },
   {
     "cmd": [
-      "/opt/infra-tools/buildbucket",
+      "buildbucket",
       "get",
-      "--host",
+      "-host",
       "cr-buildbucket.appspot.com",
+      "-service-account-json",
+      "/creds/service_accounts/service-account-chromium-bisect.json",
       "9016911228971028736"
     ],
     "cwd": "[BUILDER_CACHE]/staging_android_nexus5X_perf_bisect",
+    "infra_step": true,
     "name": "Running WITHOUT patch.buildbucket.get",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
@@ -1273,13 +1284,16 @@
   },
   {
     "cmd": [
-      "/opt/infra-tools/buildbucket",
+      "buildbucket",
       "get",
-      "--host",
+      "-host",
       "cr-buildbucket.appspot.com",
+      "-service-account-json",
+      "/creds/service_accounts/service-account-chromium-bisect.json",
       "9016911228971028736"
     ],
     "cwd": "[BUILDER_CACHE]/staging_android_nexus5X_perf_bisect",
+    "infra_step": true,
     "name": "Running WITHOUT patch.buildbucket.get (2)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [

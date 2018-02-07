@@ -322,10 +322,11 @@ class RevisionState(object):
     if self._built:  # pragma: no cover
       return self._failed_build
     api = self.bisector.api
+    api.m.buildbucket.use_service_account_key(
+        api.m.puppet_service_account.get_key_path(api.SERVICE_ACCOUNT))
     try:
       result = api.m.buildbucket.get_build(
           self.build_id,
-          api.m.puppet_service_account.get_key_path(api.SERVICE_ACCOUNT),
           step_test_data=lambda: api.test_api.buildbot_job_status_mock(
               api._test_data.get('build_status', {}).get(self.commit_hash, [])))
     except StepFailure:
@@ -384,10 +385,11 @@ class RevisionState(object):
       build_details['parameters']['properties']['deps_revision_overrides'] = \
           self.revision_overrides
 
+    api.m.buildbucket.use_service_account_key(
+        api.m.puppet_service_account.get_key_path(api.SERVICE_ACCOUNT))
     try:
       result = api.m.buildbucket.put(
           [build_details],
-          api.m.puppet_service_account.get_key_path(api.SERVICE_ACCOUNT),
           step_test_data=lambda: api.m.json.test_api.output_stream(
               {'results':[{'build':{'id':'1201331270'}}]}))
     except StepFailure:  # pragma: no cover

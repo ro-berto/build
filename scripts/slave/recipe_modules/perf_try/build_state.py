@@ -114,9 +114,9 @@ class BuildState(object):
       },
       'tags':{}
     }
-    result = self.api.m.buildbucket.put(
-      [build_details],
-      self.api.m.puppet_service_account.get_key_path(SERVICE_ACCOUNT))
+    self.api.m.buildbucket.use_service_account_key(
+        self.api.m.puppet_service_account.get_key_path(SERVICE_ACCOUNT))
+    result = self.api.m.buildbucket.put([build_details])
     self.build_id = result.stdout['results'][0]['build']['id']
 
   def wait_for(self): # pragma: no cover
