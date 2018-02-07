@@ -73,6 +73,10 @@ AUX_BINARY_PACKAGES = {
       cipd.CipdPackage(
           name='infra/tools/cloudtail/${platform}',
           version='git_revision:43acdc268b04a3eae197db17d81accbdfe928d94'),
+
+      cipd.CipdPackage(
+          name='infra/tools/luci-auth/${platform}',
+          version='git_revision:bf5820217a310115ae8b971dee6ff6cb894ea3bf'),
     ),
 
     STAGING: (
@@ -109,6 +113,10 @@ AUX_BINARY_PACKAGES = {
       cipd.CipdPackage(
           name='infra/tools/cloudtail/${platform}',
           version='git_revision:43acdc268b04a3eae197db17d81accbdfe928d94'),
+
+      cipd.CipdPackage(
+          name='infra/tools/luci-auth/${platform}',
+          version='git_revision:bf5820217a310115ae8b971dee6ff6cb894ea3bf'),
     ),
 
     CANARY: (
@@ -146,6 +154,10 @@ AUX_BINARY_PACKAGES = {
 
       cipd.CipdPackage(
           name='infra/tools/cloudtail/${platform}',
+          version='latest'),
+
+      cipd.CipdPackage(
+          name='infra/tools/luci-auth/${platform}',
           version='latest'),
     ),
 }
