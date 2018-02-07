@@ -18,7 +18,6 @@ DEPS = [
   'isolate',
   'perf_dashboard',
   'puppet_service_account',
-  'recipe_engine/buildbucket',
   'recipe_engine/context',
   'recipe_engine/file',
   'recipe_engine/json',
