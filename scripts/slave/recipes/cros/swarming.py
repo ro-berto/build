@@ -19,8 +19,6 @@ def RunSteps(api):
   if isinstance(tryjob_args, basestring):
     tryjob_args = json.loads(tryjob_args)
 
-  assert isinstance(tryjob_args, list), tryjob_args
-
   # Apply our adjusted configuration.
   api.chromite.configure(
       api.properties,
@@ -98,6 +96,18 @@ def GenTests(api):
           cbb_branch='slave_branch',
           cbb_config='slave_config',
           cbb_master_build_id=123,
+          **common_properties
+      )
+  )
+
+  # Test tuple args. I'm not sure what mechanism gets them here, but it
+  # can happen.
+  yield (
+      api.test('tuple_args')
+      + api.properties(
+          cbb_config='tryjob_config',
+          cbb_extra_args=('--remote-trybot', '-foo'),
+          email='user@google.com',
           **common_properties
       )
   )
