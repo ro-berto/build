@@ -422,7 +422,8 @@ def GenTests(api):
 
   yield (
       api.test('compile_specified_targets_from_parameter') +
-      props(buildbucket=json.dumps({'build': {'id': 'id1'}})) +
+      # TODO: Pass a dict instead of a json string for buildbucket property.
+      props(buildbucket=json.dumps({'build': {'id': 1}})) +
       simulated_buildbucket_output({
           'additional_build_parameters': {
               'compile_targets': ['target_name']
@@ -447,7 +448,7 @@ def GenTests(api):
 
   yield (
       api.test('compile_default_targets') +
-      props(buildbucket=json.dumps({'build': {'id': 'id1'}})) +
+      props(buildbucket=json.dumps({'build': {'id': 1}})) +
       simulated_buildbucket_output({
           'additional_build_parameters': {
               'compile_targets': None
@@ -464,7 +465,7 @@ def GenTests(api):
 
   yield (
       api.test('compile_succeeded') +
-      props(buildbucket=json.dumps({'build': {'id': 'id1'}})) +
+      props(buildbucket=json.dumps({'build': {'id': 1}})) +
       simulated_buildbucket_output({}) +
       base_unittests_additional_compile_target() +
       api.override_step_data('test r1.compile', retcode=0)
@@ -472,7 +473,7 @@ def GenTests(api):
 
   yield (
       api.test('compile_succeeded_non_json_buildbucket') +
-      props(buildbucket={'build': {'id': 'id1'}}) +
+      props(buildbucket={'build': {'id': 1}}) +
       simulated_buildbucket_output({}) +
       base_unittests_additional_compile_target() +
       api.override_step_data('test r1.compile', retcode=0)
@@ -480,7 +481,7 @@ def GenTests(api):
 
   yield (
       api.test('compile_failed') +
-      props(buildbucket=json.dumps({'build': {'id': 'id1'}})) +
+      props(buildbucket=json.dumps({'build': {'id': 1}})) +
       simulated_buildbucket_output({}) +
       base_unittests_additional_compile_target() +
       api.override_step_data('test r1.compile', retcode=1)
@@ -560,7 +561,7 @@ def GenTests(api):
   yield (
       api.test('compile_skipped') +
       props(use_analyze=True,
-            buildbucket=json.dumps({'build': {'id': 'id1'}}),
+            buildbucket=json.dumps({'build': {'id': 1}}),
             good_revision='r0',
             bad_revision='r2') +
       simulated_buildbucket_output({}) +
@@ -586,7 +587,7 @@ def GenTests(api):
   yield (
       api.test('previous_revision_directory_does_not_exist') +
       props(use_analyze=True,
-            buildbucket=json.dumps({'build': {'id': 'id1'}}),
+            buildbucket=json.dumps({'build': {'id': 1}}),
             good_revision='r0',
             bad_revision='r2') +
       simulated_buildbucket_output({}) +
@@ -607,7 +608,7 @@ def GenTests(api):
   yield (
       api.test('previous_revision_error_code') +
       props(use_analyze=True,
-            buildbucket=json.dumps({'build': {'id': 'id1'}}),
+            buildbucket=json.dumps({'build': {'id': 1}}),
             good_revision='r0',
             bad_revision='r2') +
       simulated_buildbucket_output({}) +
@@ -634,7 +635,7 @@ def GenTests(api):
   yield (
       api.test('previous_revision_bad_output') +
       props(use_analyze=True,
-            buildbucket=json.dumps({'build': {'id': 'id1'}}),
+            buildbucket=json.dumps({'build': {'id': 1}}),
             good_revision='r0',
             bad_revision='r2') +
       simulated_buildbucket_output({}) +
@@ -659,7 +660,7 @@ def GenTests(api):
   yield (
       api.test('previous_revision_valid') +
       props(use_analyze=True,
-            buildbucket=json.dumps({'build': {'id': 'id1'}}),
+            buildbucket=json.dumps({'build': {'id': 1}}),
             good_revision='r0',
             bad_revision='r2') +
       simulated_buildbucket_output({}) +
@@ -681,7 +682,7 @@ def GenTests(api):
   yield (
       api.test('compile_affected_targets_only') +
       props(use_analyze=True,
-            buildbucket=json.dumps({'build': {'id': 'id1'}}),
+            buildbucket=json.dumps({'build': {'id': 1}}),
             good_revision='r0',
             bad_revision='r2') +
       simulated_buildbucket_output({}) +

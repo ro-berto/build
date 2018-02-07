@@ -49,7 +49,7 @@ def get_results_map_from(contents):
 
 def generate_json_results_file_for_json(
     results_json, builder_name, build_number,
-    results_directory, chrome_revision, master_name):
+    results_directory, chrome_revision, master_name, build_id):
   """Generates JSON results file from the given |results_json|.
 
   Args:
@@ -66,6 +66,7 @@ def generate_json_results_file_for_json(
       os.path.join(results_directory, FULL_RESULTS_FILENAME))
   results_json['builder_name'] = builder_name
   results_json['build_number'] = build_number
+  results_json['build_id'] = build_id
   results_json['chromium_revision'] = chrome_revision
   results_json['master_name'] = master_name
   with open(json_results_file_path, 'w') as f:
@@ -75,7 +76,7 @@ def generate_json_results_file_for_json(
 
 def generate_json_results_file_for_gtest(
     gtest_json, builder_name, build_number, results_directory, chrome_revision,
-    master_name):
+    master_name, build_id):
   """Generates JSON results files from the given |gtest_json|.
 
   Args:
@@ -96,11 +97,12 @@ def generate_json_results_file_for_gtest(
       'builder_name:%s, build_number:%s, '
       'results_directory:%s, '
       'chrome_revision:%s '
-      'master_name:%s' %
+      'master_name:%s '
+      'build_id: %s' %
       (builder_name, build_number,
        results_directory,
        chrome_revision,
-       master_name))
+       master_name, build_id))
 
   # TODO(estaab): This doesn't need to be an object. Make it a simple function.
   generator = JSONResultsGenerator(
@@ -108,7 +110,8 @@ def generate_json_results_file_for_gtest(
       results_directory,
       test_results_map,
       master_name=master_name,
-      test_locations=contents.get('test_locations'))
+      test_locations=contents.get('test_locations'),
+      build_id=build_id)
   generator.generate_json_output()
   generator.generate_times_ms_file()
   return [(f, os.path.join(results_directory, f)) for f in
@@ -130,6 +133,10 @@ def main(args):
                                 'waterfall running this script e.g. WebKit.')
   option_parser.add_option('--build-number',
                            help='The build number of the builder running'
+                                'this script.')
+  option_parser.add_option('--build-id',
+                           type=int,
+                           help='The buildbucket build ID of the builder running'
                                 'this script.')
   option_parser.add_option('--test-results-server',
                            help='The test results server to upload the '
@@ -172,7 +179,8 @@ def main(args):
       build_number=options.build_number,
       results_directory=options.results_directory,
       chrome_revision=options.chrome_revision,
-      master_name=options.master_name)
+      master_name=options.master_name,
+      build_id=options.build_id)
   else:
     logging.info(
         'Input JSON file probably has gtest format. Converting to full json'
@@ -182,7 +190,8 @@ def main(args):
         build_number=options.build_number,
         results_directory=options.results_directory,
         chrome_revision=options.chrome_revision,
-        master_name=options.master_name)
+        master_name=options.master_name,
+        build_id=options.build_id)
 
   # Upload to a test results server if specified.
   if options.test_results_server and options.master_name:

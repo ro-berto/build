@@ -52,6 +52,16 @@ def GenTests(api):
             buildnumber=123,
             server_config=config))
 
+  for config in ('no_server', 'public_server', 'staging_server'):
+    yield (
+        api.test('upload_success_buildbucket_%s' % config) +
+        api.properties(
+            mastername='example.master',
+            buildername='ExampleBuilder',
+            buildnumber=123,
+            buildbucket={'build':{'id':2345}},
+            server_config=config))
+
   yield (
       api.test('upload_success_experimental') +
       api.runtime(is_luci=True, is_experimental=True) +

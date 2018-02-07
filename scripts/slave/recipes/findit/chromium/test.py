@@ -1074,7 +1074,7 @@ def GenTests(api):
       props({}, 'mac', 'Mac10.9 Tests', use_analyze=False,
             good_revision='r0', bad_revision='r6',
             suspected_revisions=['r3', 'r4'],
-            buildbucket=json.dumps({'build': {'id': 'id1'}})) +
+            buildbucket=json.dumps({'build': {'id': 1}})) +
       api.buildbucket.simulated_buildbucket_output({
           'additional_build_parameters' : {
               'tests': {
@@ -1145,7 +1145,7 @@ def GenTests(api):
       props({}, 'mac', 'Mac10.9 Tests', use_analyze=False,
             good_revision='r0', bad_revision='r6',
             suspected_revisions=['r3', 'r4'],
-            buildbucket={'build': {'id': 'id1'}}) +
+            buildbucket={'build': {'id': 1}}) +
       api.buildbucket.simulated_buildbucket_output({
           'additional_build_parameters' : {
               'tests': {

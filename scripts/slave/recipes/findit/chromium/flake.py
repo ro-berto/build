@@ -195,7 +195,7 @@ def GenTests(api):
       api.test('use_build_parameter_for_tests') +
       props({}, 'mac', 'Mac10.9 Tests',
             revision='r0',
-            buildbucket=json.dumps({'build': {'id': 'id1'}})) +
+            buildbucket=json.dumps({'build': {'id': 1}})) +
       api.buildbucket.simulated_buildbucket_output({
           'additional_build_parameters' : {
               'tests': {

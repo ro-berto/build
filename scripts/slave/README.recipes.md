@@ -3160,7 +3160,7 @@ Args:
       of each untared file.
 ### *recipe_modules* / [test\_results](/scripts/slave/recipe_modules/test_results)
 
-[DEPS](/scripts/slave/recipe_modules/test_results/__init__.py#5): [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/test_results/__init__.py#5): [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 #### **class [TestResultsApi](/scripts/slave/recipe_modules/test_results/api.py#8)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 

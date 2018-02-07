@@ -5,7 +5,7 @@
       "get",
       "-host",
       "cr-buildbucket.appspot.com",
-      "id1"
+      "1"
     ],
     "infra_step": true,
     "name": "buildbucket.get",

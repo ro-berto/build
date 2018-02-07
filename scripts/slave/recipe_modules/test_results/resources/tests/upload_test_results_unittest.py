@@ -150,6 +150,7 @@ class UploadTestResultsTest(unittest.TestCase):
         '--test-results-server=foo',
         '--builder-name=hobbit',
         '--build-number=1234',
+        '--build-id=2345',
         '--chrome-revision=99999',
         '--master-name=sauron',
       ])
@@ -162,6 +163,7 @@ class UploadTestResultsTest(unittest.TestCase):
       self.assertEquals(augmented_json.get('master_name'), 'sauron')
       self.assertEquals(augmented_json.get('builder_name'), 'hobbit')
       self.assertEquals(augmented_json.get('build_number'), '1234')
+      self.assertEquals(augmented_json.get('build_id'), '2345')
       self.assertEquals(augmented_json.get('chromium_revision'), '99999')
 
       files = [('full_results.json', uploaded_json_result_path)]

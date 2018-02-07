@@ -71,6 +71,7 @@ class JSONResultsGenerator(object):
 
   ACTUAL = 'actual'
   BUILD_NUMBER = 'build_number'
+  BUILD_ID = 'build_id'
   BUILDER_NAME = 'builder_name'
   CHROMIUM_REVISION = 'chromium_revision'
   EXPECTED = 'expected'
@@ -93,13 +94,15 @@ class JSONResultsGenerator(object):
                master_name='',
                path_delimiter='/',
                file_writer=None,
-               test_locations=None):
+               test_locations=None,
+               build_id=None):
     """Modifies the results.json file. Grabs it off the archive directory
     if it is not found locally.
 
     Args:
       builder_name: The builder name.
       build_number: The build number.
+      build_id: The buildbucket build ID.
       results_file_base_path: Absolute path to the directory containing the
           results json file.
       test_results_map: A dictionary that maps test_name to a list of
@@ -114,6 +117,7 @@ class JSONResultsGenerator(object):
     """
     self._builder_name = builder_name
     self._build_number = build_number
+    self._build_id = build_id
     self._path_delimiter = path_delimiter
     self._results_directory = results_file_base_path
     self._test_locations = test_locations
@@ -140,6 +144,7 @@ class JSONResultsGenerator(object):
     # Metadata generic to all results.
     results[self.BUILDER_NAME] = self._builder_name
     results[self.BUILD_NUMBER] = self._build_number
+    results[self.BUILD_ID] = self._build_id
     results[self.PATH_DELIMITER] = self._path_delimiter
     results[self.SECONDS_SINCE_EPOCH] = int(time.time())
 

@@ -40,6 +40,7 @@ class JSONGeneratorTest(unittest.TestCase):
     self.builder_name = 'DUMMY_BUILDER_NAME'
     self.build_name = 'DUMMY_BUILD_NAME'
     self.build_number = 'DUMMY_BUILDER_NUMBER'
+    self.build_id = 2345
 
   def _generate_and_test_full_results_json(self, passed_tests_list,
                                            failed_tests_list):
@@ -72,7 +73,8 @@ class JSONGeneratorTest(unittest.TestCase):
         '',
         test_results_map,
         file_writer=mock_writer,
-        test_locations=MOCK_LOCATION_DATA)
+        test_locations=MOCK_LOCATION_DATA,
+        build_id=self.build_id)
 
     results_json = generator.get_full_results_json()
     self._verify_full_json_results(results_json, tests_set, PASS_tests,

@@ -15,3 +15,4 @@ Example usage:
       --master-name=chromium.webkit --build-number=2257
       --builder-name='WebKit Win7 (dbg)'
       --chrome-revision=344402
+      --build-id=2345
