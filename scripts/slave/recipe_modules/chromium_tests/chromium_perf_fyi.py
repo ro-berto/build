@@ -73,12 +73,6 @@ _AddBuildSpec('Linux Compile FYI', 'linux-fyi', 'linux')
 
 
 _AddBuildSpec('Win Builder FYI', 'win', 'win', force_exparchive=True)
-_AddIsolatedTestSpec('Win 10 Low-End Perf Tests', 'win-10-low-end', 'win',
-                     parent_buildername='Win Builder FYI')
-_AddIsolatedTestSpec('Win 10 4 Core Low-End Perf Tests',
-                     'win-10-4-core-low-end', 'win',
-                     parent_buildername='Win Builder FYI')
-
 
 _AddBuildSpec('Win Clang Builder', 'win-clang-builder', 'win',
               config_name='chromium_perf_clang', target_bits=32)

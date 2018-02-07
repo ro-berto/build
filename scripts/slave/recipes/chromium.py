@@ -606,9 +606,9 @@ def GenTests(api):
   yield (
     api.test(
         'dynamic_swarmed_sharded_passed_isolated_script_perf_test_histograms') +
-    api.properties.generic(mastername='chromium.perf.fyi',
-                           buildername='Win 10 Low-End Perf Tests',
-                           parent_buildername='Win Builder FYI',
+    api.properties.generic(mastername='chromium.perf',
+                           buildername='Win 10 Perf',
+                           parent_buildername='Win Builder',
                            got_revision_cp='refs/heads/master@{#291141}',
                            buildnumber='1234',
                            version='v23523',
@@ -623,9 +623,9 @@ def GenTests(api):
          'perf_dashboard_machine_group': 'ChromiumPerf'}) +
     api.platform('win', 64) +
     api.override_step_data(
-        'read test spec (chromium.perf.fyi.json)',
+        'read test spec (chromium.perf.json)',
         api.json.output({
-            'Win 10 Low-End Perf Tests': {
+            'Win 10 Perf': {
                 'isolated_scripts': [
                     {
                         'isolate_name': 'telemetry_perf_tests',
@@ -665,9 +665,9 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_swarmed_sharded_passed_isolated_script_perf_test_failed_upload') +
-    api.properties.generic(mastername='chromium.perf.fyi',
-                           buildername='Win 10 Low-End Perf Tests',
-                           parent_buildername='Win Builder FYI',
+    api.properties.generic(mastername='chromium.perf',
+                           buildername='Win 10 Perf',
+                           parent_buildername='Win Builder',
                            got_revision_cp='refs/heads/master@{#291141}',
                            buildnumber='1234',
                            version='v23523',
@@ -679,9 +679,9 @@ def GenTests(api):
       }, **{'perf-id': 'testid', 'results-url': 'https://test-results-url'}) +
     api.platform('win', 64) +
     api.override_step_data(
-        'read test spec (chromium.perf.fyi.json)',
+        'read test spec (chromium.perf.json)',
         api.json.output({
-            'Win 10 Low-End Perf Tests': {
+            'Win 10 Perf': {
                 'isolated_scripts': [
                     {
                         'isolate_name': 'telemetry_perf_tests',
@@ -720,9 +720,9 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_swarmed_isolated_script_perf_test_ignore_task_failure') +
-    api.properties.generic(mastername='chromium.perf.fyi',
-                           buildername='Win 10 Low-End Perf Tests',
-                           parent_buildername='Win Builder FYI',
+    api.properties.generic(mastername='chromium.perf',
+                           buildername='Win 10 Perf',
+                           parent_buildername='Win Builder',
                            got_revision_cp='refs/heads/master@{#291141}',
                            buildnumber='1234',
                            version='v23523',
@@ -734,9 +734,9 @@ def GenTests(api):
       }, **{'perf-id': 'testid', 'results-url': 'https://test-results-url'}) +
     api.platform('win', 64) +
     api.override_step_data(
-        'read test spec (chromium.perf.fyi.json)',
+        'read test spec (chromium.perf.json)',
         api.json.output({
-            'Win 10 Low-End Perf Tests': {
+            'Win 10 Perf': {
                 'isolated_scripts': [
                     {
                         'isolate_name': 'telemetry_perf_tests',
@@ -771,9 +771,9 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_swarmed_sharded_passed_isolated_script_perf_test_no_chartjson') +
-    api.properties.generic(mastername='chromium.perf.fyi',
-                           buildername='Win 10 Low-End Perf Tests',
-                           parent_buildername='Win Builder FYI',
+    api.properties.generic(mastername='chromium.perf',
+                           buildername='Win 10 Perf',
+                           parent_buildername='Win Builder',
                            got_revision_cp='refs/heads/master@{#291141}',
                            buildnumber='1234',
                            version='v23523',
@@ -785,9 +785,9 @@ def GenTests(api):
       }, **{'perf-id': 'testid', 'results-url': 'http://test-results-url'}) +
     api.platform('win', 64) +
     api.override_step_data(
-        'read test spec (chromium.perf.fyi.json)',
+        'read test spec (chromium.perf.json)',
         api.json.output({
-            'Win 10 Low-End Perf Tests': {
+            'Win 10 Perf': {
                 'isolated_scripts': [
                     {
                         'isolate_name': 'telemetry_perf_tests',
@@ -823,9 +823,9 @@ def GenTests(api):
   yield (
     api.test(
         'dynamic_swarmed_sharded_passed_isolated_script_perf_test_disabled') +
-    api.properties.generic(mastername='chromium.perf.fyi',
-                           buildername='Win 10 Low-End Perf Tests',
-                           parent_buildername='Win Builder FYI',
+    api.properties.generic(mastername='chromium.perf',
+                           buildername='Win 10 Perf',
+                           parent_buildername='Win Builder',
                            got_revision_cp='refs/heads/master@{#291141}',
                            buildnumber='1234',
                            version='v23523',
@@ -837,9 +837,9 @@ def GenTests(api):
       }, **{'perf-id': 'testid', 'results-url': 'https://test-results-url'}) +
     api.platform('win', 64) +
     api.override_step_data(
-        'read test spec (chromium.perf.fyi.json)',
+        'read test spec (chromium.perf.json)',
         api.json.output({
-            'Win 10 Low-End Perf Tests': {
+            'Win 10 Perf': {
                 'isolated_scripts': [
                     {
                         'isolate_name': 'telemetry_perf_tests',
@@ -878,9 +878,9 @@ def GenTests(api):
   yield (
     api.test(
         'dynamic_swarmed_sharded_passed_isolated_script_perf_test_empty') +
-    api.properties.generic(mastername='chromium.perf.fyi',
-                           buildername='Win 10 Low-End Perf Tests',
-                           parent_buildername='Win Builder FYI',
+    api.properties.generic(mastername='chromium.perf',
+                           buildername='Win 10 Perf',
+                           parent_buildername='Win Builder',
                            got_revision_cp='refs/heads/master@{#291141}',
                            buildnumber='1234',
                            version='v23523',
@@ -892,9 +892,9 @@ def GenTests(api):
       }, **{'perf-id': 'testid', 'results-url': 'https://test-results-url'}) +
     api.platform('win', 64) +
     api.override_step_data(
-        'read test spec (chromium.perf.fyi.json)',
+        'read test spec (chromium.perf.json)',
         api.json.output({
-            'Win 10 Low-End Perf Tests': {
+            'Win 10 Perf': {
                 'isolated_scripts': [
                     {
                         'isolate_name': 'telemetry_perf_tests',
