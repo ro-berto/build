@@ -8,7 +8,8 @@
           "*": {
             "subject_template": "Dart build %(result)s on %(builder_name)s, revision %(revision)s",
             "status_template": "New %(result) on \"%(builder_name)s\" (%(blamelist)s)",
-            "respect_build_status": true
+            "respect_build_status": true,
+            "close_tree": false
           }
         }
       }
@@ -19,7 +20,8 @@
           "*": {
             "subject_template": "Dart build %(result)s on %(builder_name)s, revision %(revision)s",
             "status_template": "New %(result) on \"%(builder_name)s\" (%(blamelist)s)",
-            "respect_build_status": true
+            "respect_build_status": true,
+            "close_tree": false
           }
         }
       }
