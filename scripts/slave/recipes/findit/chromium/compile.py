@@ -10,7 +10,6 @@ from recipe_engine.recipe_api import Property
 
 
 DEPS = [
-    'buildbucket',
     'chromium',
     'chromium_checkout',
     'chromium_tests',
@@ -18,6 +17,7 @@ DEPS = [
     'findit',
     'depot_tools/gclient',
     'depot_tools/git',
+    'recipe_engine/buildbucket',
     'recipe_engine/context',
     'recipe_engine/json',
     'recipe_engine/path',

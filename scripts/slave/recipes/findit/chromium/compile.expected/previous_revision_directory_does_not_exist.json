@@ -1,12 +1,13 @@
 [
   {
     "cmd": [
-      "/opt/infra-tools/buildbucket",
+      "buildbucket",
       "get",
-      "--host",
+      "-host",
       "cr-buildbucket.appspot.com",
       "id1"
     ],
+    "infra_step": true,
     "name": "buildbucket.get",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [

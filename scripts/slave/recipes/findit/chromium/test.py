@@ -13,7 +13,6 @@ from recipe_engine.recipe_api import Property
 
 DEPS = [
     'adb',
-    'buildbucket',
     'depot_tools/bot_update',
     'chromium',
     'chromium_android',
@@ -27,6 +26,7 @@ DEPS = [
     'filter',
     'findit',
     'isolate',
+    'recipe_engine/buildbucket',
     'recipe_engine/context',
     'recipe_engine/json',
     'recipe_engine/path',

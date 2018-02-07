@@ -3,12 +3,12 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'buildbucket',
   'chromium',
   'chromium_checkout',
   'depot_tools/depot_tools',
   'depot_tools/gclient',
   'depot_tools/git',
+  'recipe_engine/buildbucket',
   'recipe_engine/context',
   'recipe_engine/json',
   'recipe_engine/path',
