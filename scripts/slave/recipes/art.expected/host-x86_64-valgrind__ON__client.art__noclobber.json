@@ -29,6 +29,7 @@
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:<PATH>",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "sdk"

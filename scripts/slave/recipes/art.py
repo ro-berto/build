@@ -90,6 +90,8 @@ def setup_host_x86(api, debug, bitness, concurrent_collector=True,
           'JACK_SERVER': 'false',
           'JACK_REPOSITORY': str(build_top_dir.join('prebuilts', 'sdk',
                                                     'tools', 'jacks')),
+          'PATH': str(build_top_dir.join('out', 'host', 'linux-x86', 'bin')) +
+                  api.path.pathsep + '%(PATH)s',
           'ART_TEST_RUN_TEST_2ND_ARCH': 'false',
           'ART_TEST_FULL': 'false',
           'ART_TEST_KEEP_GOING': 'true' }
@@ -238,6 +240,8 @@ def setup_target(api,
          'JACK_SERVER': 'false',
          'JACK_REPOSITORY': str(build_top_dir.join('prebuilts', 'sdk', 'tools',
                                                    'jacks')),
+         'PATH': str(build_top_dir.join('out', 'host', 'linux-x86', 'bin')) +
+                 api.path.pathsep + '%(PATH)s',
          'ART_TEST_RUN_TEST_2ND_ARCH': 'false',
          'ART_TEST_FULL': 'false',
          'ART_TEST_ANDROID_ROOT': android_root,
@@ -416,6 +420,8 @@ def setup_aosp_builder(api, read_barrier):
               'JACK_SERVER': 'false',
               'JACK_REPOSITORY': str(build_top_dir.join('prebuilts', 'sdk',
                                                         'tools', 'jacks')),
+              'PATH': str(build_top_dir.join('out', 'host', 'linux-x86', 'bin')) +
+                      api.path.pathsep + '%(PATH)s',
               'ART_USE_READ_BARRIER': 'true' if read_barrier else 'false'}
       with api.context(env=env):
         api.step('Clean oat %s' % build, ['make', '-j8', 'clean-oat-host'])
@@ -433,6 +439,8 @@ def setup_valgrind_runner(api, bitness):
             'TARGET_BUILD_VARIANT': 'eng',
             'TARGET_BUILD_TYPE': 'release',
             'ANDROID_BUILD_TOP': build_top_dir,
+            'PATH': str(build_top_dir.join('out', 'host', 'linux-x86', 'bin')) +
+                    api.path.pathsep + '%(PATH)s',
             'JACK_SERVER': 'false',
             'JACK_REPOSITORY': str(build_top_dir.join('prebuilts', 'sdk',
                                                       'tools', 'jacks')) }

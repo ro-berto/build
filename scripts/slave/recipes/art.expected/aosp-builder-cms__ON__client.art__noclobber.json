@@ -30,6 +30,7 @@
       "ART_USE_READ_BARRIER": "false",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:<PATH>",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_x86"
@@ -46,6 +47,7 @@
       "ART_USE_READ_BARRIER": "false",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:<PATH>",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_x86"
@@ -63,6 +65,7 @@
       "ART_USE_READ_BARRIER": "false",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:<PATH>",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_x86_64"
@@ -79,6 +82,7 @@
       "ART_USE_READ_BARRIER": "false",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:<PATH>",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_x86_64"
@@ -96,6 +100,7 @@
       "ART_USE_READ_BARRIER": "false",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:<PATH>",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_arm"
@@ -112,6 +117,7 @@
       "ART_USE_READ_BARRIER": "false",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:<PATH>",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_arm"
@@ -129,6 +135,7 @@
       "ART_USE_READ_BARRIER": "false",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:<PATH>",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_arm64"
@@ -145,6 +152,7 @@
       "ART_USE_READ_BARRIER": "false",
       "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
       "JACK_SERVER": "false",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:<PATH>",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_arm64"
