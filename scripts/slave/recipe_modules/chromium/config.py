@@ -207,11 +207,14 @@ def BASE(c):
 
   if c.TARGET_PLATFORM == 'mac':
     c.mac_toolchain.xcode_build_version = '9C40b'
-    c.mac_toolchain.installer_cipd_package = \
-        'infra/tools/mac_toolchain/${platform}'
-    c.mac_toolchain.installer_version = \
-        'git_revision:d4dc0c29a004b59dcca1e69ae84eba0c932eb010'
+    c.mac_toolchain.installer_cipd_package = (
+        'infra/tools/mac_toolchain/${platform}')
+    c.mac_toolchain.installer_version = (
+        'git_revision:d4dc0c29a004b59dcca1e69ae84eba0c932eb010')
     c.mac_toolchain.installer_cmd = 'mac_toolchain'
+    # TODO(crbug.com/790154): make this conditional, do not set for LUCI bots.
+    c.mac_toolchain.cipd_credentials = (
+        '/creds/service_accounts/service-account-xcode-cipd-access.json')
     # TODO(crbug.com/797051): remove this when all builds switch to the new
     # Xcode flow.
     c.env.FORCE_MAC_TOOLCHAIN = 1
@@ -296,8 +299,8 @@ def goma_staging(c):
 def goma_gce(c):
   c.compile_py.goma_failfast = True
   c.compile_py.goma_connection_retry = True
-  c.env.GOMA_SETTINGS_SERVER = \
-    'https://cxx-compiler-service.appspot.com/settings'
+  c.env.GOMA_SETTINGS_SERVER = (
+      'https://cxx-compiler-service.appspot.com/settings')
 
 @config_ctx()
 def goma_hermetic_fallback(c):
@@ -825,9 +828,6 @@ def mac_toolchain(c, xcode_build_version=None):
   c.mac_toolchain.enabled = True
   if xcode_build_version: # pragma: no cover
     c.mac_toolchain.xcode_build_version = xcode_build_version
-  # TODO(crbug.com/790154): make this conditional, do not set for LUCI bots.
-  c.mac_toolchain.cipd_credentials = \
-        '/creds/service_accounts/service-account-xcode-cipd-access.json'
   # TODO(crbug.com/797051): remove this when all builds switch to the new Xcode
   # flow.
   c.env.FORCE_MAC_TOOLCHAIN = 0

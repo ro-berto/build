@@ -142,6 +142,7 @@
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[CACHE]/goma_client' target_arch=arm use_goma=1",
       "GYP_GENERATORS": "ninja",
+      "MAC_TOOLCHAIN_CREDS": null,
       "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
