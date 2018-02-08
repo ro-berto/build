@@ -1,6 +1,7 @@
 
 from recipe_engine import recipe_api
 
+BLACKLIST = '^(out|xcodebuild)[/\\\\](Release|Debug|Product)\w*[/\\\\]generated_tests'
 # TODO(athom): move to third_party when swarming_client.path has a setter
 SWARMING_CLIENT_PATH = 'tools/swarming_client'
 SWARMING_CLIENT_REPO = 'https://chromium.googlesource.com/infra/luci/client-py.git'
@@ -89,6 +90,7 @@ class DartApi(recipe_api.RecipeApi):
         'upload testing fileset %s' % isolate_fileset,
         self.m.swarming_client.path.join('isolate.py'),
         args= ['archive',
+                 '--blacklist=%s' % BLACKLIST,
                  '--ignore_broken_items', # TODO(athom) find a way to avoid that
                  '-Ihttps://isolateserver.appspot.com',
                  '-i%s' % self.m.path['checkout'].join('%s' % isolate_fileset),
