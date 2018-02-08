@@ -410,8 +410,8 @@
     ],
     "name": "archive results for custom_webkit_tests",
     "~followup_annotations": [
-      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/test_buildername/1/custom_webkit_tests/layout-test-results/results.html@@@",
-      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/test_buildername/1/custom_webkit_tests/layout-test-results.zip@@@"
+      "@@@STEP_LINK@layout_test_results@https://storage.googleapis.com/chromium-layout-test-archives/test_buildername/1/custom_webkit_tests/layout-test-results/results.html@@@",
+      "@@@STEP_LINK@(zip)@https://storage.googleapis.com/chromium-layout-test-archives/test_buildername/1/custom_webkit_tests/layout-test-results.zip@@@"
     ]
   },
   {

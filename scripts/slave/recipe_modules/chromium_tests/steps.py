@@ -1108,7 +1108,7 @@ class LayoutTestResultsHandler(JSONResultsHandler):
     # TODO(tansell): Move this to render_results function
     sanitized_buildername = re.sub('[ .()]', '_', buildername)
     base = (
-      "https://test-results.appspot.com/data/layout_results/%s/%s"
+      "https://storage.googleapis.com/chromium-layout-test-archives/%s/%s"
       % (sanitized_buildername, buildnumber))
     if custom_step_name:
       base += '/' + step_name
