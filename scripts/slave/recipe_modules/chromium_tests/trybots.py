@@ -169,11 +169,20 @@ TRYBOTS = freeze({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'Android dEQP Release (Nexus 5X)',
       }),
-      'linux_angle_rel_ng': simple_bot({
-        'mastername': 'chromium.gpu.fyi',
-        'buildername': 'GPU Linux Builder',
-        'tester': 'Linux Release (NVIDIA)',
-      }),
+      'linux_angle_rel_ng': {
+        'bot_ids': [
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU Linux Builder',
+            'tester': 'Linux Release (NVIDIA)',
+          },
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU Linux Builder',
+            'tester': 'Linux Release (Intel HD 630)',
+          },
+        ],
+      },
       'linux_angle_dbg_ng': simple_bot({
         # This bot is compile-only.
         # TODO(jmadill): Remove or repurpose this config.
@@ -234,6 +243,11 @@ TRYBOTS = freeze({
             'mastername': 'chromium.gpu.fyi',
             'buildername': 'GPU Win Builder',
             'tester': 'Win7 ANGLE Tryserver (AMD)',
+          },
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU Win Builder',
+            'tester': 'Win10 Release (Intel HD 630)',
           },
         ],
       },
@@ -441,6 +455,11 @@ TRYBOTS = freeze({
             'mastername': 'chromium.gpu.fyi',
             'buildername': 'GPU Linux Builder',
             'tester': 'Optional Linux Release (NVIDIA)',
+          },
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU Linux Builder',
+            'tester': 'Optional Linux Release (Intel HD 630)',
           },
         ],
       },
@@ -717,6 +736,11 @@ TRYBOTS = freeze({
             'mastername': 'chromium.gpu.fyi',
             'buildername': 'GPU Win Builder',
             'tester': 'Optional Win10 Release (NVIDIA)',
+          },
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU Win Builder',
+            'tester': 'Optional Win10 Release (Intel HD 630)',
           },
         ],
       },

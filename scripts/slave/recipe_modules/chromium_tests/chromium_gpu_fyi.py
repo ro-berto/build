@@ -1040,7 +1040,7 @@ SPEC = {
         'platform': 'win',
       },
     },
-    'Optional Win7 Release (AMD)': {
+    'Optional Win10 Release (Intel HD 630)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -1055,6 +1055,20 @@ SPEC = {
       },
     },
     'Optional Linux Release (NVIDIA)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU Linux Builder',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+    'Optional Linux Release (Intel HD 630)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
       'gclient_config': 'chromium',
