@@ -32,23 +32,23 @@
       "builder_timeout_s": 7200,
       "category": "0Windows",
     },
-    "Win7 Release (NVIDIA)": {
+    "Win10 Release (NVIDIA)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
       # It's crucial to merge build requests on the testers.
       "mergeRequests": True,
-      "slave_pools": ["win7_rel_nvidia"],
+      "slave_pools": ["win10_rel_nvidia"],
       "builder_timeout_s": 10800,
       "category": "0Windows",
     },
-    "Win7 Debug (NVIDIA)": {
+    "Win10 Debug (NVIDIA)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
       # It's crucial to merge build requests on the testers.
       "mergeRequests": True,
-      "slave_pools": ["win7_dbg_nvidia"],
+      "slave_pools": ["win10_dbg_nvidia"],
       "builder_timeout_s": 21600,
       "category": "0Windows",
     },
@@ -181,7 +181,7 @@
       },
       "slaves": ["vm89-m1"],
     },
-    "win7_rel_nvidia": {
+    "win10_rel_nvidia": {
       "slave_data": {
         "bits": 64,
         "os": "win",
@@ -189,7 +189,7 @@
       },
       "slaves": ["vm90-m1"],
     },
-    "win7_dbg_nvidia": {
+    "win10_dbg_nvidia": {
       "slave_data": {
         "bits": 64,
         "os": "win",

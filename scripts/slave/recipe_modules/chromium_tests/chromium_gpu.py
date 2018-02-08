@@ -54,7 +54,7 @@ SPEC = {
         'platform': 'win',
       },
     },
-    'Win7 Release (NVIDIA)': {
+    'Win10 Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -68,7 +68,7 @@ SPEC = {
         'platform': 'win',
       },
     },
-    'Win7 Debug (NVIDIA)': {
+    'Win10 Debug (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',

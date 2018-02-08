@@ -116,7 +116,7 @@ SPEC = {
       },
       'serialize_tests': True,
     },
-    'Win7 dEQP Release (NVIDIA)': {
+    'Win10 dEQP Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -131,7 +131,7 @@ SPEC = {
       },
       'serialize_tests': True,
     },
-    'Win7 Experimental Release (NVIDIA)': {
+    'Win10 Experimental Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -1026,7 +1026,7 @@ SPEC = {
     # here only in order to allow the associated src-side JSON entries
     # to be read, and the "optional" GPU tryservers to be specified in
     # terms of them.
-    'Optional Win7 Release (NVIDIA)': {
+    'Optional Win10 Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',

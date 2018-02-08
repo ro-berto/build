@@ -228,7 +228,7 @@ TRYBOTS = freeze({
           {
             'mastername': 'chromium.gpu.fyi',
             'buildername': 'GPU Win Builder',
-            'tester': 'Win7 Release (NVIDIA)',
+            'tester': 'Win10 Release (NVIDIA)',
           },
           {
             'mastername': 'chromium.gpu.fyi',
@@ -271,7 +271,7 @@ TRYBOTS = freeze({
           {
             'mastername': 'chromium.gpu.fyi',
             'buildername': 'GPU Win dEQP Builder',
-            'tester': 'Win7 dEQP Release (NVIDIA)',
+            'tester': 'Win10 dEQP Release (NVIDIA)',
           },
           {
             'mastername': 'chromium.gpu.fyi',
@@ -625,7 +625,7 @@ TRYBOTS = freeze({
           {
             'mastername': 'chromium.gpu',
             'buildername': 'GPU Win Builder',
-            'tester': 'Win7 Release (NVIDIA)',
+            'tester': 'Win10 Release (NVIDIA)',
           },
         ],
       },
@@ -644,7 +644,7 @@ TRYBOTS = freeze({
           {
             'mastername': 'chromium.gpu',
             'buildername': 'GPU Win Builder',
-            'tester': 'Win7 Release (NVIDIA)',
+            'tester': 'Win10 Release (NVIDIA)',
           },
         ],
       },
@@ -716,7 +716,7 @@ TRYBOTS = freeze({
           {
             'mastername': 'chromium.gpu.fyi',
             'buildername': 'GPU Win Builder',
-            'tester': 'Optional Win7 Release (NVIDIA)',
+            'tester': 'Optional Win10 Release (NVIDIA)',
           },
         ],
       },

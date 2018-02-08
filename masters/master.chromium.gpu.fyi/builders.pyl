@@ -60,23 +60,23 @@
       "builder_timeout_s": 21600,
       "category": "0Windows",
     },
-    "Win7 dEQP Release (NVIDIA)": {
+    "Win10 dEQP Release (NVIDIA)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
       # It's crucial to merge build requests on the testers.
       "mergeRequests": True,
-      "slave_pools": ["win7_deqp_rel_nvidia"],
+      "slave_pools": ["win10_deqp_rel_nvidia"],
       "builder_timeout_s": 14400,
       "category": "0Windows",
     },
-    "Win7 Experimental Release (NVIDIA)": {
+    "Win10 Experimental Release (NVIDIA)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
       # It's crucial to merge build requests on the testers.
       "mergeRequests": True,
-      "slave_pools": ["win7_exp_rel_nvidia"],
+      "slave_pools": ["win10_exp_rel_nvidia"],
       "builder_timeout_s": 14400,
       "category": "0Windows",
     },
@@ -572,7 +572,7 @@
       },
       "slaves": ["vm83-m1"],
     },
-    "win7_deqp_rel_nvidia": {
+    "win10_deqp_rel_nvidia": {
       "slave_data": {
         "bits": 64,
         "os": "win",
@@ -580,7 +580,7 @@
       },
       "slaves": ["vm338-m1"],
     },
-    "win7_exp_rel_nvidia": {
+    "win10_exp_rel_nvidia": {
       "slave_data": {
         "bits": 64,
         "os": "win",
