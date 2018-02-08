@@ -119,7 +119,7 @@ def archive_layout(args):
 
   # TODO(martiniss): Remove this. This is temporary because it's timing out
   # on this bot. See crbug.com/808167
-  if builder_name not in ('mac_chromium_rel_ng'):
+  if builder_name not in ['mac_chromium_rel_ng']:
     start = time.time()
     rc = slave_utils.GSUtilCopyDir(args.results_dir,
                                    gs_build_dir,
