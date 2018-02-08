@@ -876,13 +876,14 @@ class ChromiumApi(recipe_api.RecipeApi):
     elif self.c.TARGET_PLATFORM in ('mac', 'win'):
       assert self.c.TARGET_ARCH == 'intel'
     elif self.c.TARGET_PLATFORM == 'linux':
-      assert self.c.TARGET_ARCH in ('arm', 'intel')
+      assert self.c.TARGET_ARCH in ('arm', 'intel', 'mips')
 
     gn_cpu = {
       ('intel', 32): 'x86',
       ('intel', 64): 'x64',
       ('arm',   32): 'arm',
       ('arm',   64): 'arm64',
+      ('mips',  32): 'mips',
       ('mipsel',  32): 'mipsel',
     }.get((self.c.TARGET_ARCH, self.c.TARGET_BITS))
     if gn_cpu:

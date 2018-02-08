@@ -354,31 +354,11 @@ class V8Api(recipe_api.RecipeApi):
       # that don't support the goma executables.
       self.m.chromium.ensure_goma()
     env = {}
-    # TODO(machenbach): Remove this after mb migration.
-    if self.c.gyp_env.AR:
-      env['AR'] = self.c.gyp_env.AR
-    if self.c.gyp_env.CC:
-      env['CC'] = self.c.gyp_env.CC
-    if self.c.gyp_env.CXX:
-      env['CXX'] = self.c.gyp_env.CXX
-    if self.c.gyp_env.LINK:
-      env['LINK'] = self.c.gyp_env.LINK
-    if self.c.gyp_env.RANLIB:
-      env['RANLIB'] = self.c.gyp_env.RANLIB
     if self.m.chromium.c.project_generator.tool != 'gyp':
       env['GYP_CHROMIUM_NO_ACTION'] = 1
     else:
       env['GYP_CHROMIUM_NO_ACTION'] = 0
     self.m.chromium.runhooks(env=env, **kwargs)
-
-  def setup_mips_toolchain(self):
-    mips_dir = self.m.path['checkout'].join('tools', 'mips_toolchain', 'bin')
-    self.c.gyp_env.CC = self.m.path.join(mips_dir, 'mips-mti-linux-gnu-gcc')
-    self.c.gyp_env.CXX = self.m.path.join(mips_dir, 'mips-mti-linux-gnu-g++')
-    self.c.gyp_env.AR = self.m.path.join(mips_dir, 'mips-mti-linux-gnu-ar')
-    self.c.gyp_env.RANLIB = self.m.path.join(
-        mips_dir, 'mips-mti-linux-gnu-ranlib')
-    self.c.gyp_env.LINK = self.m.path.join(mips_dir, 'mips-mti-linux-gnu-g++')
 
   @property
   def bot_type(self):
@@ -694,7 +674,7 @@ class V8Api(recipe_api.RecipeApi):
     elif self.m.chromium.c.project_generator.tool == 'gn':
       self.m.chromium.run_gn(use_goma=use_goma)
 
-    if self.m.properties['buildername'] != 'V8 Mips - builder':
+    if use_goma:
       kwargs['use_goma_module'] = True
     self.m.chromium.compile(**kwargs)
 

@@ -74,18 +74,47 @@
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
-      "AR": "[START_DIR]/v8/tools/mips_toolchain/bin/mips-mti-linux-gnu-ar",
-      "CC": "[START_DIR]/v8/tools/mips_toolchain/bin/mips-mti-linux-gnu-gcc",
       "CHROME_HEADLESS": "1",
-      "CXX": "[START_DIR]/v8/tools/mips_toolchain/bin/mips-mti-linux-gnu-g++",
-      "GYP_CHROMIUM_NO_ACTION": "0",
+      "GYP_CHROMIUM_NO_ACTION": "1",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "target_arch=mips v8_enable_i18n_support=0 v8_target_arch=mips v8_use_snapshot=false",
-      "LINK": "[START_DIR]/v8/tools/mips_toolchain/bin/mips-mti-linux-gnu-g++",
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]",
-      "RANLIB": "[START_DIR]/v8/tools/mips_toolchain/bin/mips-mti-linux-gnu-ranlib"
+      "GYP_DEFINES": "target_arch=mips v8_target_arch=mips",
+      "GYP_GENERATORS": "ninja",
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/v8/tools/mb/mb.py",
+      "gen",
+      "-m",
+      "client.v8.ports",
+      "-b",
+      "V8 Mips - builder",
+      "--config-file",
+      "[START_DIR]/v8/infra/mb/mb_config.pyl",
+      "--gyp-script=gypfiles/gyp_v8",
+      "//out/Release"
+    ],
+    "cwd": "[START_DIR]/v8",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "generate_build_files",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@captured_stdout@Writing \"\"\"\\@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@goma_dir = \"/b/build/slave/cache/goma_client\"@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@target_cpu = \"x86\"@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@use_goma = true@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@\"\"\" to /b/build/slave/linux-builder/build/v8/out/Release/args.gn@@@",
+      "@@@STEP_LOG_LINE@captured_stdout@moar text@@@",
+      "@@@STEP_LOG_END@captured_stdout@@@",
+      "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\" use_goma = true@@@",
+      "@@@STEP_LOG_END@gn_args@@@"
+    ]
   },
   {
     "cmd": [
@@ -172,7 +201,9 @@
       {
         "builder_name": "V8 Mips - big endian - nosnap - 1",
         "properties": {
-          "parent_build_environment": {},
+          "parent_build_environment": {
+            "gn_args": "target_cpu = \"x86\" use_goma = true"
+          },
           "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "parent_got_revision_cp": "refs/heads/master@{#50110}",
           "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c"
@@ -181,7 +212,9 @@
       {
         "builder_name": "V8 Mips - big endian - nosnap - 2",
         "properties": {
-          "parent_build_environment": {},
+          "parent_build_environment": {
+            "gn_args": "target_cpu = \"x86\" use_goma = true"
+          },
           "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "parent_got_revision_cp": "refs/heads/master@{#50110}",
           "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c"
