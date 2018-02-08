@@ -5,7 +5,7 @@
 """**[DEPRECATED]** API for generating OAuth2 access tokens from service account
 keys predeployed to Chrome Ops bots via Puppet.
 
-Depends on 'authutil' being in PATH.
+Depends on 'luci-auth' being in PATH.
 
 This module exists only to support Buildbot code. On LUCI use default account
 exposed through 'recipe_engine/service_account' module.

@@ -2577,7 +2577,7 @@ it and then compiling the optimized version of it.
 **[DEPRECATED]** API for generating OAuth2 access tokens from service account
 keys predeployed to Chrome Ops bots via Puppet.
 
-Depends on 'authutil' being in PATH.
+Depends on 'luci-auth' being in PATH.
 
 This module exists only to support Buildbot code. On LUCI use default account
 exposed through 'recipe_engine/service_account' module.
@@ -2837,7 +2837,7 @@ Args:
     * path: Path relative to the Swarming root dir in which to install
               the package.
     * package_name: Name of the package to install,
-              eg. "infra/tools/authutil/${platform}"
+              eg. "infra/tools/luci-auth/${platform}"
     * version: Version of the package, either a package instance ID,
               ref, or tag key/value pair.
   * build_properties: An optional dict containing various build properties.

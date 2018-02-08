@@ -450,7 +450,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         * path: Path relative to the Swarming root dir in which to install
                   the package.
         * package_name: Name of the package to install,
-                  eg. "infra/tools/authutil/${platform}"
+                  eg. "infra/tools/luci-auth/${platform}"
         * version: Version of the package, either a package instance ID,
                   ref, or tag key/value pair.
       * build_properties: An optional dict containing various build properties.
@@ -1248,7 +1248,7 @@ class SwarmingTask(object):
         * path: Path relative to the Swarming root dir in which to install
             the package.
         * package_name: Name of the package to install,
-            eg. "infra/tools/authutil/${platform}"
+            eg. "infra/tools/luci-auth/${platform}"
         * version: Version of the package, either a package instance ID,
             ref, or tag key/value pair.
       * collect_step: callback that will be called to collect and processes
