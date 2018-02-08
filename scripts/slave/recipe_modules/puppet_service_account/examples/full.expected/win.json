@@ -1,7 +1,7 @@
 [
   {
     "cmd": [
-      "authutil.exe",
+      "luci-auth",
       "token",
       "-service-account-json",
       "C:\\creds\\service_accounts\\service-account-fake-account.json",

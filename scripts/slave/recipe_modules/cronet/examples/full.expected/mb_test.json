@@ -1601,7 +1601,7 @@
   },
   {
     "cmd": [
-      "authutil",
+      "luci-auth",
       "token",
       "-service-account-json",
       "/creds/service_accounts/service-account-cronet-perf.json",
