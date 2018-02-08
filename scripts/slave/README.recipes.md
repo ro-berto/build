@@ -821,7 +821,7 @@ Returns (bool): True if the value was found.
 
 &mdash; **def [checkout](/scripts/slave/recipe_modules/chromite/api.py#161)(self, manifest_url=None, repo_url=None, repo_sync_args=None):**
 
-&mdash; **def [checkout\_chromite](/scripts/slave/recipe_modules/chromite/api.py#242)(self):**
+&mdash; **def [checkout\_chromite](/scripts/slave/recipe_modules/chromite/api.py#246)(self):**
 
 Checks out the configured Chromite branch.
     
@@ -865,7 +865,7 @@ Args:
   repository (str): The URL of the repository hosting the change.
   revision (str): The revision hash to load the build ID from.
 
-&mdash; **def [run](/scripts/slave/recipe_modules/chromite/api.py#276)(self, args=None):**
+&mdash; **def [run](/scripts/slave/recipe_modules/chromite/api.py#280)(self, args=None):**
 
 Runs the configured 'cbuildbot' build.
 
@@ -888,12 +888,13 @@ Args:
   args (list): Initial argument list, expanded based on other values.
 Returns: (Step) the 'cbuildbot' execution step.
 
-&mdash; **def [run\_cbuildbot](/scripts/slave/recipe_modules/chromite/api.py#228)(self, args=None):**
+&mdash; **def [run\_cbuildbot](/scripts/slave/recipe_modules/chromite/api.py#231)(self, args=None, goma_canary=False):**
 
 Performs a Chromite repository checkout, then runs cbuildbot.
 
 Args:
   args (list): Initial argument list, see run() for details.
+  goma_canary (bool): Use canary version of goma if True.
 
 &mdash; **def [setup\_board](/scripts/slave/recipe_modules/chromite/api.py#188)(self, board, args=None, \*\*kwargs):**
 
@@ -901,7 +902,7 @@ Run the setup_board script inside the chroot.
 
 Used by the internal goma recipe.
 
-&mdash; **def [with\_system\_python](/scripts/slave/recipe_modules/chromite/api.py#251)(self):**
+&mdash; **def [with\_system\_python](/scripts/slave/recipe_modules/chromite/api.py#255)(self):**
 
 Prepare a directory with the system python binary available.
 

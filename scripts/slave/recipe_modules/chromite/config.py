@@ -71,6 +71,9 @@ def BaseConfig(CBB_CONFIG=None, CBB_BRANCH=None, CBB_BUILD_NUMBER=None,
     #
     # Set in "base".
     branch_version = Single(int),
+
+    # If true, the canary version of goma is used instead of the stable version.
+    use_goma_canary = Single(bool),
   )
 
   if CBB_EXTRA_ARGS:
@@ -154,3 +157,7 @@ def master_chromiumos_tryserver(c):
 def chromiumos_coverage(c):
   c.use_chrome_version = True
   c.cbb.config_repo = 'https://example.com/repo.git'
+
+@config_ctx()
+def use_goma_canary(c):
+  c.use_goma_canary = True

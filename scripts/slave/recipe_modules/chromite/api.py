@@ -225,17 +225,21 @@ class ChromiteApi(recipe_api.RecipeApi):
         "No 'master_config' configuration for '%s'" % (master,))
     self.set_config(master_config, **KWARGS)
 
-  def run_cbuildbot(self, args=None):
+    if properties.get('use_goma_canary', False):
+      self.set_config('use_goma_canary')
+
+  def run_cbuildbot(self, args=None, goma_canary=False):
     """Performs a Chromite repository checkout, then runs cbuildbot.
 
     Args:
       args (list): Initial argument list, see run() for details.
+      goma_canary (bool): Use canary version of goma if True.
     """
     # Fetch chromite and depot_tools.
     self.checkout_chromite()
 
     # Update or install goma client via cipd.
-    self.m.goma.ensure_goma()
+    self.m.goma.ensure_goma(canary=goma_canary)
 
     self.run(args)
 

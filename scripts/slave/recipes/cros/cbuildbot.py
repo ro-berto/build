@@ -31,7 +31,8 @@ def RunSteps(api):
       _MASTER_CONFIG_MAP)
 
   # Run 'cbuildbot' common recipe.
-  api.chromite.run_cbuildbot(args=['--buildbot'])
+  api.chromite.run_cbuildbot(args=['--buildbot'],
+                             goma_canary=api.chromite.c.use_goma_canary)
 
 
 def GenTests(api):
@@ -143,6 +144,30 @@ def GenTests(api):
             },
           }),
           **common_properties
+      )
+  )
+
+  # Test with a property use_goma_canary=True.
+  yield (
+      api.test('chromiumos_goma_canary')
+      + api.properties(
+          mastername='chromiumos',
+          buildername='goma_canary',
+          buildnumber='12345',
+          cbb_config='auron-paladin',
+          cbb_branch='master',
+          cbb_master_build_id='24601',
+          repository='https://chromium.googlesource.com/chromiumos/'
+                     'manifest-versions',
+          revision=api.gitiles.make_hash('test'),
+          buildbucket=json.dumps({
+            'build': {
+              'id': '1337',
+            },
+          }),
+          path_config='buildbot',
+          bot_id='test',
+          use_goma_canary=True,
       )
   )
 
