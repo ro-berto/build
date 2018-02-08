@@ -4,7 +4,9 @@
 
 DEPS = [
   'chromium',
+  'goma',
   'recipe_engine/properties',
+  'recipe_engine/runtime',
 ]
 
 
@@ -59,4 +61,10 @@ def GenTests(api):
       api.properties(
           buildername='test_buildername',
           chromium_apply_config=['goma_canary'])
+  )
+
+  yield (
+      api.test('goma_custom_jobs') +
+      api.properties(buildername='test_buildername') +
+      api.goma(jobs=500) + api.runtime(is_luci=True, is_experimental=False)
   )

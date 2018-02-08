@@ -420,14 +420,20 @@ class ChromiumApi(recipe_api.RecipeApi):
     # TODO(tikuta): Remove this and let goma module set '-j'
     #               inside build_with_goma.
     if use_goma_module:
-      # Set -j just before 'with self.m.goma.build_with_goma('
-      # for ninja_log_command being set correctly if starting goma
-      # fails.
-      if self.c.compile_py.goma_high_parallel:
-        # This flag is set for experiment.
-        command += ['-j', 3 * self.m.goma.recommended_goma_jobs]
+      if self.m.runtime.is_luci:
+        # The right way to configure goma jobs number is in cr-buildbucket.cfg.
+        # See also doc for goma.jobs.
+        command += ['-j', self.m.goma.jobs]
       else:
-        command += ['-j', self.m.goma.recommended_goma_jobs]
+        # TODO(tandrii): delete this block after we migrate off buildbot.
+        # Set -j just before 'with self.m.goma.build_with_goma('
+        # for ninja_log_command being set correctly if starting goma
+        # fails.
+        if self.c.compile_py.goma_high_parallel:
+          # This flag is set for experiment.
+          command += ['-j', 3 * self.m.goma.recommended_goma_jobs]
+        else:
+          command += ['-j', self.m.goma.recommended_goma_jobs]
 
     if targets is not None:
       # Add build targets to command ('All', 'chrome' etc).
@@ -442,11 +448,12 @@ class ChromiumApi(recipe_api.RecipeApi):
       compile_exit_status = 1
       try:
         with self.m.context(cwd=self.m.context.cwd or self.m.path['checkout']):
-          self._run_ninja(ninja_command=command,
-                          name=name or 'compile',
-                          ninja_env=ninja_env,
-                          ninja_confirm_noop=self.c.compile_py.ninja_confirm_noop,
-                          **kwargs)
+          self._run_ninja(
+              ninja_command=command,
+              name=name or 'compile',
+              ninja_env=ninja_env,
+              ninja_confirm_noop=self.c.compile_py.ninja_confirm_noop,
+              **kwargs)
         compile_exit_status = 0
       except self.m.step.StepFailure as e:
         compile_exit_status = e.retcode
