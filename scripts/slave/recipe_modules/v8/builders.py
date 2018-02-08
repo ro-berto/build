@@ -483,17 +483,6 @@ BUILDERS = {
         'tests': [Mjsunit],
         'testing': {'platform': 'linux'},
       },
-      'V8 Linux64 - gyp': {
-        'chromium_apply_config': [
-          'v8_ninja', 'default_compiler', 'goma', 'mb',
-        ],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'linux'},
-      },
       'V8 Linux64 - verify csa': {
         'chromium_apply_config': [
           'default_compiler', 'v8_ninja', 'goma', 'mb'],
@@ -2453,16 +2442,6 @@ BUILDERS = {
         'parent_buildername': 'v8_linux64_verify_csa_rel_ng',
         'enable_swarming': True,
         'tests': [V8Testing],
-        'testing': {'platform': 'linux'},
-      },
-      'v8_linux64_gyp_rel_ng': {
-        'chromium_apply_config': [
-          'default_compiler', 'v8_ninja', 'goma', 'no_dcheck', 'mb'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
       },
       'v8_linux_gc_stress_dbg': {
