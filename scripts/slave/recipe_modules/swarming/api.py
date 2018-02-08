@@ -5,10 +5,8 @@
 import datetime
 import functools
 import hashlib
-import logging
 import os.path
 
-from recipe_engine import config_types
 from recipe_engine import recipe_api
 from recipe_engine import util as recipe_util
 
@@ -26,9 +24,9 @@ IMPLIED_BINARY_PATH = '.swarming_module'
 # to IMPLIED_BINARY_PATH which should be added to $PATH.
 IMPLIED_CIPD_BINARIES = {
   'infra/tools/luci/vpython/${platform}':
-    ('', 'git_revision:f88d8d9aa7e92a94f9d5dd94a54594da6b675f97'),
+    ('', 'git_revision:e1abc57be62d198b5c2f487bfb2fa2d2eb0e867c'),
   'infra/tools/luci/logdog/butler/${platform}':
-    ('', 'git_revision:08e35087eaf8ee95207450d2a2e33152a2f245be'),
+    ('', 'git_revision:e1abc57be62d198b5c2f487bfb2fa2d2eb0e867c'),
 }
 
 # These CIPD packages will be automatically put on $PATH for all swarming tasks
@@ -38,9 +36,9 @@ IMPLIED_CIPD_BINARIES = {
 IMPLIED_CIPD_LUCI_BINARIES = {
   # Both vpython versions MUST be changed together.
   'infra/tools/luci/vpython/${platform}':
-    ('', 'git_revision:f88d8d9aa7e92a94f9d5dd94a54594da6b675f97'),
+    ('', 'git_revision:e1abc57be62d198b5c2f487bfb2fa2d2eb0e867c'),
   'infra/tools/luci/vpython-native/${platform}':
-    ('', 'git_revision:f88d8d9aa7e92a94f9d5dd94a54594da6b675f97'),
+    ('', 'git_revision:e1abc57be62d198b5c2f487bfb2fa2d2eb0e867c'),
   'infra/python/cpython/${platform}':
     ('bin', 'version:2.7.14.chromium14'),
 }
