@@ -264,3 +264,7 @@ def chromium_no_telemetry_dependencies(c):  # pragma: no cover
 @CONFIG_CTX()
 def arm(c):
   c.target_cpu.add('arm')
+
+@CONFIG_CTX()
+def arm64(c):
+  c.target_cpu.add('arm64')
