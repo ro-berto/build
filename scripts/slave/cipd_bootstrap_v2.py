@@ -18,7 +18,7 @@ from slave import cipd
 CLIENT_NAME = 'cipd' + infra_platform.exe_suffix()
 
 
-DEFAULT_CIPD_VERSION = 'git_revision:a1f61935faa60feb73e37556fdf791262c2dedce'
+DEFAULT_CIPD_VERSION = 'git_revision:e1abc57be62d198b5c2f487bfb2fa2d2eb0e867c'
 STAGING_CIPD_VERSION = 'git_revision:e1abc57be62d198b5c2f487bfb2fa2d2eb0e867c'
 
 PROD = None
@@ -42,11 +42,11 @@ AUX_BINARY_PACKAGES = {
     None: (
       cipd.CipdPackage(
           name='infra/tools/luci/vpython/${platform}',
-          version='git_revision:f88d8d9aa7e92a94f9d5dd94a54594da6b675f97'),
+          version='git_revision:e1abc57be62d198b5c2f487bfb2fa2d2eb0e867c'),
 
       cipd.CipdPackage(
           name='infra/tools/git/${platform}',
-          version='git_revision:5cf65fdf804a9b3f3023f79d5b3cab2a88ccd09e'),
+          version='git_revision:e1abc57be62d198b5c2f487bfb2fa2d2eb0e867c'),
 
       ## The Python package installs its binaries into "bin/".
       #cipd.CipdPackage(
@@ -63,20 +63,16 @@ AUX_BINARY_PACKAGES = {
           version='version:2.15.1.2.chromium12'),
 
       cipd.CipdPackage(
-          name='infra/tools/authutil/${platform}',
-          version='git_revision:9c63809842a277ce10a86afd51b61c639a665d11'),
-
-      cipd.CipdPackage(
           name='infra/tools/buildbucket/${platform}',
-          version='git_revision:43acdc268b04a3eae197db17d81accbdfe928d94'),
+          version='git_revision:e1abc57be62d198b5c2f487bfb2fa2d2eb0e867c'),
 
       cipd.CipdPackage(
           name='infra/tools/cloudtail/${platform}',
-          version='git_revision:43acdc268b04a3eae197db17d81accbdfe928d94'),
+          version='git_revision:e1abc57be62d198b5c2f487bfb2fa2d2eb0e867c'),
 
       cipd.CipdPackage(
           name='infra/tools/luci-auth/${platform}',
-          version='git_revision:bf5820217a310115ae8b971dee6ff6cb894ea3bf'),
+          version='git_revision:e1abc57be62d198b5c2f487bfb2fa2d2eb0e867c'),
     ),
 
     STAGING: (
