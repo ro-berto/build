@@ -862,7 +862,7 @@ BUILDERS = {
           Test262(2),
           Mozilla,
           Benchmarks,
-        ] + with_extra_variants([V8Testing]),
+        ] + with_extra_variants([V8Testing(2)]),
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64 TSAN - concurrent marking': {
@@ -2490,7 +2490,7 @@ BUILDERS = {
         'tests': [
           V8Testing(3),
           Test262Variants(7),
-        ] + with_extra_variants([V8Testing]),
+        ] + with_extra_variants([V8Testing(2)]),
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_msan_rel': {
@@ -2536,7 +2536,7 @@ BUILDERS = {
           Test262(2),
           Mozilla,
           Benchmarks,
-        ] + with_extra_variants([V8Testing(2)]),
+        ] + with_extra_variants([V8Testing(3)]),
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_ubsan_rel_ng': {
