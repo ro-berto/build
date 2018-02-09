@@ -273,6 +273,7 @@ BUILDERS = freeze({
       },
       'Linux32 Debug (ARM)': {
         'recipe_config': 'webrtc',
+        'gclient_apply_config': ['arm'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_ARCH': 'arm',
@@ -283,6 +284,7 @@ BUILDERS = freeze({
       },
       'Linux32 Release (ARM)': {
         'recipe_config': 'webrtc',
+        'gclient_apply_config': ['arm'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_ARCH': 'arm',
@@ -323,6 +325,7 @@ BUILDERS = freeze({
       },
       'Linux64 Debug (ARM)': {
         'recipe_config': 'webrtc',
+        'gclient_apply_config': ['arm64'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_ARCH': 'arm',
@@ -333,6 +336,7 @@ BUILDERS = freeze({
       },
       'Linux64 Release (ARM)': {
         'recipe_config': 'webrtc',
+        'gclient_apply_config': ['arm64'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_ARCH': 'arm',
@@ -1312,6 +1316,7 @@ BUILDERS = freeze({
       },
       'linux_arm64_dbg': {
         'recipe_config': 'webrtc',
+        'gclient_apply_config': ['arm64'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_ARCH': 'arm',
@@ -1322,6 +1327,7 @@ BUILDERS = freeze({
       },
       'linux_arm64_rel': {
         'recipe_config': 'webrtc',
+        'gclient_apply_config': ['arm64'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_ARCH': 'arm',
@@ -1362,6 +1368,7 @@ BUILDERS = freeze({
       },
       'linux32_arm_dbg': {
         'recipe_config': 'webrtc',
+        'gclient_apply_config': ['arm'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_ARCH': 'arm',
@@ -1372,6 +1379,7 @@ BUILDERS = freeze({
       },
       'linux32_arm_rel': {
         'recipe_config': 'webrtc',
+        'gclient_apply_config': ['arm'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_ARCH': 'arm',
