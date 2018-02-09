@@ -108,7 +108,7 @@
       "--target",
       "Release",
       "--src-dir",
-      "v8",
+      "[START_DIR]/v8",
       "--slave-utils-gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--build-url",

@@ -761,7 +761,7 @@ class V8Api(recipe_api.RecipeApi):
           'extract build' + name_suffix,
           self.m.chromium.c.build_config_fs,
           archive,
-          src_dir='v8')
+          src_dir=self.checkout_root.join('v8'))
 
   def download_isolated_json(self, revision):
     archive = 'gs://' + self.isolated_archive_path + '/%s.json' % revision
