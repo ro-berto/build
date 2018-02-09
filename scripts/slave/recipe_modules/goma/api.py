@@ -125,7 +125,7 @@ class GomaApi(recipe_api.RecipeApi):
     self._goma_dir = goma_dir
     self._is_local = True
 
-  def ensure_goma(self, canary=False, warn_if_canary=False):
+  def ensure_goma(self, canary=False):
     if self._is_local:
       # When using goma module on local debug, we need to skip cipd step.
       return self._goma_dir
@@ -135,8 +135,7 @@ class GomaApi(recipe_api.RecipeApi):
     with self.m.step.nest('ensure_goma') as step_result:
       if canary:
         step_result.presentation.step_text = 'canary goma client is selected'
-        if warn_if_canary:
-          step_result.presentation.status = self.m.step.WARNING
+        step_result.presentation.status = self.m.step.WARNING
 
       with self.m.context(infra_steps=True):
         self.m.cipd.set_service_account_credentials(
