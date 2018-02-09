@@ -698,8 +698,8 @@
     "cwd": "[BUILDER_CACHE]/V8_Blink_Mac",
     "name": "archive_webkit_tests_results",
     "~followup_annotations": [
-      "@@@STEP_LINK@layout_test_results@https://storage.googleapis.com/chromium-layout-test-archives/V8-Blink_Mac/571/layout-test-results/results.html@@@",
-      "@@@STEP_LINK@(zip)@https://storage.googleapis.com/chromium-layout-test-archives/V8-Blink_Mac/571/layout-test-results.zip@@@"
+      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/V8-Blink_Mac/571/layout-test-results/results.html@@@",
+      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/V8-Blink_Mac/571/layout-test-results.zip@@@"
     ]
   },
   {
