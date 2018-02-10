@@ -31,18 +31,6 @@
         "status-url": "https://chromium-status.appspot.com",
         "track-revisions": true
     },
-    "chromium.sandbox": {
-        "build-db": "chromium.sandbox.json",
-        "masters": {
-            "https://build.chromium.org/p/chromium.sandbox": ["*"]
-        },
-        "open-tree": true,
-        "password-file": "/creds/gatekeeper/luci_sandbox_status_password",
-        "revision-properties": "got_revision_cp",
-        "set-status": true,
-        "status-url": "https://luci-sandbox-tree-status.appspot.com",
-        "track-revisions": true
-    },
     "android": {
         "open-tree": false,
         "set-status": false,

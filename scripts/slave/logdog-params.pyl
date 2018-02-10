@@ -72,7 +72,6 @@
     'chromium.mac': {},
     'chromium.linux': {},
     'chromium.lkgr': {},
-    'chromium.sandbox': {},
     'chromium.win': {},
     'chromium.fyi': {},
     'chromium.gpu': {},

@@ -556,20 +556,6 @@
         }
       }
     ],
-    "https://build.chromium.org/p/chromium.sandbox": [
-      {
-        "categories": [
-          "chromium_sandbox"
-        ],
-        "builders": {
-          "*": {}
-        },
-        "forgive_all": "true",
-        "tree_notify": [
-          "tandrii+master-sandbox@google.com"
-        ]
-      }
-    ],
     "https://build.chromium.org/p/chromium.tools.build": [
       {
         "builders": {
@@ -975,17 +961,6 @@
         "update"
       ],
       "sheriff_classes": ["sheriff"],
-      "status_template": "Tree is closed (Automatic: \"%(unsatisfied)s\" on %(build_url)s \"%(builder_name)s\" from %(revision)s: %(blamelist)s)"
-    },
-
-    "chromium_sandbox": {
-      "closing_optional": [
-        "bot_update",
-        "compile",
-        "gclient runhooks",
-        "runhooks",
-        "update"
-      ],
       "status_template": "Tree is closed (Automatic: \"%(unsatisfied)s\" on %(build_url)s \"%(builder_name)s\" from %(revision)s: %(blamelist)s)"
     },
 
