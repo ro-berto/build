@@ -20,7 +20,6 @@ from . import chromium_mac
 from . import chromium_memory
 from . import chromium_perf
 from . import chromium_perf_fyi
-from . import chromium_sandbox
 from . import chromium_swarm
 from . import chromium_webkit
 from . import chromium_webrtc
@@ -44,7 +43,6 @@ BUILDERS = freeze({
   'chromium.gpu': chromium_gpu.SPEC,
   'chromium.gpu.fyi': chromium_gpu_fyi.SPEC,
   'chromium.linux': chromium_linux.SPEC,
-  'chromium.sandbox': chromium_sandbox.SPEC,
   'chromium.lkgr': chromium_lkgr.SPEC,
   'chromium.mac': chromium_mac.SPEC,
   'chromium.memory': chromium_memory.SPEC,
