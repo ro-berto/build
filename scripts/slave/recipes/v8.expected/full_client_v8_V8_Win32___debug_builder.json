@@ -117,7 +117,6 @@
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GYP_DEFINES": "fastbuild=1 gomadir='[CACHE]\\goma_client' target_arch=ia32 use_goma=1 v8_enable_slow_dchecks=1 v8_optimized_debug=1 v8_target_arch=ia32",
-      "GYP_GENERATORS": "ninja",
       "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"

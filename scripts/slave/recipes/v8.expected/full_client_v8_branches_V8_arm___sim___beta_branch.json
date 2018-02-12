@@ -103,8 +103,7 @@
     "cwd": "[START_DIR]/v8",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "gomadir='[CACHE]/goma_client' target_arch=ia32 use_goma=1 v8_target_arch=arm",
-      "GYP_GENERATORS": "ninja",
+      "GYP_DEFINES": "gomadir='[CACHE]/goma_client' target_arch=ia32 use_goma=1 v8_target_arch=ia32",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"

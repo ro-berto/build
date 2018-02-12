@@ -103,8 +103,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "arm_float_abi=hard gomadir='[CACHE]/goma_client' target_arch=arm use_goma=1 v8_enable_slow_dchecks=1 v8_optimized_debug=1 v8_target_arch=arm",
-      "GYP_GENERATORS": "ninja",
+      "GYP_DEFINES": "gomadir='[CACHE]/goma_client' target_arch=arm use_goma=1 v8_enable_slow_dchecks=1 v8_optimized_debug=1 v8_target_arch=arm",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"

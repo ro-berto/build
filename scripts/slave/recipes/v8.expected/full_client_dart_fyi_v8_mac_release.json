@@ -106,8 +106,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
-      "GYP_DEFINES": "clang=1 gomadir='[CACHE]/goma_client' target_arch=ia32 use_goma=1 v8_enable_disassembler=1 v8_target_arch=ia32",
-      "GYP_GENERATORS": "ninja",
+      "GYP_DEFINES": "clang=1 gomadir='[CACHE]/goma_client' target_arch=ia32 use_goma=1 v8_target_arch=ia32",
       "MAC_TOOLCHAIN_CREDS": "/creds/service_accounts/service-account-xcode-cipd-access.json",
       "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"

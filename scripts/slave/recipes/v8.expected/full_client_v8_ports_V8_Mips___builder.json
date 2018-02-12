@@ -77,7 +77,6 @@
       "CHROME_HEADLESS": "1",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "target_arch=mips v8_target_arch=mips",
-      "GYP_GENERATORS": "ninja",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
