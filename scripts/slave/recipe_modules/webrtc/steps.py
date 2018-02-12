@@ -339,6 +339,15 @@ class SwarmingAndroidPerfTest(AndroidTest):
       ])
     super(SwarmingAndroidPerfTest, self).__init__(test, args=args)
 
+  def create_task(self, api, suffix, isolated_hash):
+    return api.swarming.task(
+        title=self._step_name(suffix),
+        isolated_hash=isolated_hash,
+        shards=self._shards,
+        cipd_packages=self._cipd_packages,
+        extra_args=self._args,
+        build_properties=api.chromium.build_properties)
+
   def _get_perf_data(self, api, task_output_dir):
     if api.webrtc._test_data.enabled:
       return {
@@ -417,24 +426,6 @@ class SwarmingAndroidPerfTest(AndroidTest):
 
       self._upload_to_perf_dashboard(api,
                                      self._get_perf_data(api, task_output_dir))
-
-      if (hasattr(step_result, 'test_utils') and
-          hasattr(step_result.test_utils, 'gtest_results')):
-        gtest_results = getattr(step_result.test_utils, 'gtest_results', None)
-        self._gtest_results[suffix] = gtest_results
-        # Only upload test results if we have gtest results.
-        if self._upload_test_results and gtest_results and gtest_results.raw:
-          parsed_gtest_data = gtest_results.raw
-          chrome_revision_cp = api.bot_update.last_returned_properties.get(
-              'got_revision_cp', 'x@{#0}')
-          chrome_revision = str(api.commit_position.parse_revision(
-              chrome_revision_cp))
-          source = api.json.input(parsed_gtest_data)
-          api.test_results.upload(
-              source,
-              chrome_revision=chrome_revision,
-              test_type=step_result.step['name'],
-              test_results_server='test-results.appspot.com')
 
 
 class SwarmingPerfTest(SwarmingIsolatedScriptTest):

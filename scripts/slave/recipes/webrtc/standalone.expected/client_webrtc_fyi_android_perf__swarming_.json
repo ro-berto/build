@@ -680,8 +680,7 @@
       "--isolated-script-test-perf-output",
       "${ISOLATED_OUTDIR}/perftest-output.json",
       "--adb-path",
-      "../../third_party/android_tools/sdk/platform-tools/adb",
-      "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
+      "../../third_party/android_tools/sdk/platform-tools/adb"
     ],
     "cwd": "[BUILDER_CACHE]/Android_Perf__swarming_",
     "infra_step": true,
@@ -782,8 +781,7 @@
       "--isolated-script-test-perf-output",
       "${ISOLATED_OUTDIR}/perftest-output.json",
       "--adb-path",
-      "../../third_party/android_tools/sdk/platform-tools/adb",
-      "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
+      "../../third_party/android_tools/sdk/platform-tools/adb"
     ],
     "cwd": "[BUILDER_CACHE]/Android_Perf__swarming_",
     "infra_step": true,
@@ -882,8 +880,7 @@
       "[dummy hash for webrtc_perf_tests]",
       "--",
       "--isolated-script-test-perf-output",
-      "${ISOLATED_OUTDIR}/perftest-output.json",
-      "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
+      "${ISOLATED_OUTDIR}/perftest-output.json"
     ],
     "cwd": "[BUILDER_CACHE]/Android_Perf__swarming_",
     "infra_step": true,
@@ -905,7 +902,6 @@
     ]
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -919,7 +915,7 @@
       "--task-output-dir",
       "/path/to/tmp/",
       "--merge-script",
-      "RECIPE_MODULE[build::swarming]/resources/standard_gtest_merge.py",
+      "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
       "--merge-additional-args",
       "[]",
       "--",
@@ -939,6 +935,8 @@
     "name": "low_bandwidth_audio_perf_test on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
@@ -1042,30 +1040,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
-      "--input-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}]}]}",
-      "--master-name",
-      "client.webrtc.fyi",
-      "--builder-name",
-      "Android Perf (swarming)",
-      "--build-number",
-      "1337",
-      "--test-type",
-      "low_bandwidth_audio_perf_test on Android",
-      "--chrome-revision",
-      "170242",
-      "--test-results-server",
-      "test-results.appspot.com"
-    ],
-    "cwd": "[BUILDER_CACHE]/Android_Perf__swarming_",
-    "name": "Upload to test-results [low_bandwidth_audio_perf_test on Android]"
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--",
@@ -1076,7 +1050,7 @@
       "--task-output-dir",
       "/path/to/tmp/",
       "--merge-script",
-      "RECIPE_MODULE[build::swarming]/resources/standard_gtest_merge.py",
+      "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
       "--merge-additional-args",
       "[]",
       "--",
@@ -1096,6 +1070,8 @@
     "name": "video_quality_loopback_test on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
@@ -1199,30 +1175,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
-      "--input-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}]}]}",
-      "--master-name",
-      "client.webrtc.fyi",
-      "--builder-name",
-      "Android Perf (swarming)",
-      "--build-number",
-      "1337",
-      "--test-type",
-      "video_quality_loopback_test on Android",
-      "--chrome-revision",
-      "170242",
-      "--test-results-server",
-      "test-results.appspot.com"
-    ],
-    "cwd": "[BUILDER_CACHE]/Android_Perf__swarming_",
-    "name": "Upload to test-results [video_quality_loopback_test on Android]"
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--",
@@ -1233,7 +1185,7 @@
       "--task-output-dir",
       "/path/to/tmp/",
       "--merge-script",
-      "RECIPE_MODULE[build::swarming]/resources/standard_gtest_merge.py",
+      "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
       "--merge-additional-args",
       "[]",
       "--",
@@ -1253,6 +1205,8 @@
     "name": "webrtc_perf_tests on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
@@ -1351,29 +1305,6 @@
     "~followup_annotations": [
       "@@@STEP_LINK@Results Dashboard@chromeperf.appspot.com@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
-      "--input-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}]}]}",
-      "--master-name",
-      "client.webrtc.fyi",
-      "--builder-name",
-      "Android Perf (swarming)",
-      "--build-number",
-      "1337",
-      "--test-type",
-      "webrtc_perf_tests on Android",
-      "--chrome-revision",
-      "170242",
-      "--test-results-server",
-      "test-results.appspot.com"
-    ],
-    "cwd": "[BUILDER_CACHE]/Android_Perf__swarming_",
-    "name": "Upload to test-results [webrtc_perf_tests on Android]"
   },
   {
     "name": "$result",
