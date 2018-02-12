@@ -197,8 +197,7 @@ class V8Api(recipe_api.RecipeApi):
     self._isolate_targets_cached = []
 
     # This is inferred from the run_mb step or from the parent bot. If mb is
-    # run multiple times, it is overwritten. It contains either gyp or gn
-    # properties.
+    # run multiple times, it is overwritten. It contains gn arguments.
     self.build_environment = self.m.properties.get(
         'parent_build_environment', {})
 
@@ -516,33 +515,9 @@ class V8Api(recipe_api.RecipeApi):
       self.upload_isolated_json()
 
   def _update_build_environment(self, mb_output):
-    """Sets the build_environment property based on gyp or gn properties in mb
-    output.
+    """Sets the build_environment property based on gn arguments in mb output.
     """
     self.build_environment = {}
-    # Get the client's gyp flags from MB's output. Group 1 captures with posix,
-    # group 2 with windows output semantics.
-    #
-    # Posix:
-    # GYP_DEFINES='foo=1 path=a/b/c'
-    #
-    # Windows:
-    # set GYP_DEFINES=foo=1 path='a/b/c'
-    # TODO(machenbach): Remove the gyp case after gyp is deprecated.
-    for match in re.finditer('^(?:set )?GYP_([^=]*)=(?:(?:\'(.*)\')|(?:(.*)))$',
-                             mb_output, re.M):  # pragma: no cover
-      # Yield the property name (e.g. GYP_DEFINES) and the value. Either the
-      # windows or the posix group matches.
-      self.build_environment['GYP_' + match.group(1)] = (
-          match.group(2) or match.group(3))
-
-    if 'GYP_DEFINES' in self.build_environment:  # pragma: no cover
-      # Filter out gomadir.
-      self.build_environment['GYP_DEFINES'] = ' '.join(
-          d for d in self.build_environment['GYP_DEFINES'].split()
-          if not d.startswith('gomadir')
-      )
-
     # Check if the output looks like gn. Space-join all gn args, except
     # goma_dir.
     # TODO(machenbach): Instead of scanning the output, we could also read
@@ -661,8 +636,8 @@ class V8Api(recipe_api.RecipeApi):
       # user on test failures for easier build reproduction.
       self._update_build_environment(self.m.step.active_result.stdout)
 
-      # Create logs surfacing GN arguments and GYP environment. This information
-      # is critical to developers for reproducing failures locally.
+      # Create logs surfacing GN arguments. This information is critical to
+      # developers for reproducing failures locally.
       if 'gn_args' in self.build_environment:
         self.m.step.active_result.presentation.logs['gn_args'] = (
             self.build_environment['gn_args'].splitlines())
