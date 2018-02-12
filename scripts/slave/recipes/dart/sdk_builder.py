@@ -72,8 +72,7 @@ def RunSteps(api, revision, buildername):
           BuildBuilderNames('analyzer-linux-release-strong', channel) +
           BuildBuilderNames('dart2js-linux-chromeff', channel, 4) +
           BuildBuilderNames('dart2js-linux-d8-minified', channel, 5) +
-          BuildBuilderNames('dart2js-linux-drt', channel, 2) +
-          BuildBuilderNames('dart2js-linux-drt-csp-minified', channel) +
+          BuildBuilderNames('dart2js-linux-chrome-csp-minified', channel) +
           BuildBuilderNames('dart2js-linux-jsshell', channel, 4) +
           BuildBuilderNames('pkg-linux-release', channel)
       ),
