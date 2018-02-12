@@ -913,10 +913,8 @@ class V8Api(recipe_api.RecipeApi):
     # Suppress using shards to be able to rerun single tests.
     self.c.testing.may_shard = False
 
-    # Only rebuild the target of the test to retry. Works only with ninja.
-    targets = None
-    if 'ninja' in self.m.chromium.c.gyp_env.GYP_GENERATORS:
-      targets = [failure.failure_dict.get('target_name', 'All')]
+    # Only rebuild the target of the test to retry.
+    targets = [failure.failure_dict.get('target_name', 'All')]
 
     test = self.create_test(failure.test_step_config)
     def test_func(revision):
