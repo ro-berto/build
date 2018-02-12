@@ -112,6 +112,7 @@ BUILDERS = {
     'builders': {
 ####### Category: Linux
       'V8 Linux - builder': {
+        'gclient_apply_config': ['download_gcmole'],
         'chromium_apply_config': [
           'default_compiler', 'v8_ninja', 'goma', 'gcmole', 'mb'],
         'v8_config_kwargs': {
@@ -372,6 +373,7 @@ BUILDERS = {
         'triggers_proxy': True,
       },
       'V8 Linux64 - debug builder': {
+        'gclient_apply_config': ['download_jsfunfuzz'],
         'chromium_apply_config': [
           'default_compiler', 'v8_ninja', 'goma', 'jsfunfuzz', 'mb'],
         'v8_config_kwargs': {
@@ -2113,6 +2115,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_rel_ng': {
+        'gclient_apply_config': ['download_gcmole'],
         'chromium_apply_config': [
           'default_compiler', 'v8_ninja', 'goma', 'gcmole', 'mb'],
         'v8_config_kwargs': {
