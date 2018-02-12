@@ -896,4 +896,5 @@ SPEC['builders'].update([
     stock_config('Jumbo Win x64'),
     stock_config('VR Linux'),
     stock_config('Linux Viz'),
+    stock_config('linux-gcc-rel', platform='linux'),
 ])
