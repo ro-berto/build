@@ -114,7 +114,7 @@ BUILDERS = {
       'V8 Linux - builder': {
         'gclient_apply_config': ['download_gcmole'],
         'chromium_apply_config': [
-          'default_compiler', 'v8_ninja', 'goma', 'gcmole', 'mb'],
+          'default_compiler', 'v8_ninja', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -375,7 +375,7 @@ BUILDERS = {
       'V8 Linux64 - debug builder': {
         'gclient_apply_config': ['download_jsfunfuzz'],
         'chromium_apply_config': [
-          'default_compiler', 'v8_ninja', 'goma', 'jsfunfuzz', 'mb'],
+          'default_compiler', 'v8_ninja', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -2117,7 +2117,7 @@ BUILDERS = {
       'v8_linux_rel_ng': {
         'gclient_apply_config': ['download_gcmole'],
         'chromium_apply_config': [
-          'default_compiler', 'v8_ninja', 'goma', 'gcmole', 'mb'],
+          'default_compiler', 'v8_ninja', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,

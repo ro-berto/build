@@ -49,18 +49,6 @@ def default_target_v8_archive(c):
   c.compile_py.default_targets = ['v8_archive']
 
 
-# TODO(machenbach): Set up gclient variable for this.
-@CONFIG_CTX(includes=['v8'])
-def gcmole(c):
-  c.gyp_env.GYP_DEFINES['gcmole'] = 1
-
-
-# TODO(machenbach): Set up gclient variable for this.
-@CONFIG_CTX(includes=['v8'])
-def jsfunfuzz(c):
-  c.gyp_env.GYP_DEFINES['jsfunfuzz'] = 1
-
-
 @CONFIG_CTX(includes=['ninja'])
 def v8_ninja(c):
   if c.HOST_PLATFORM == 'win' and c.TARGET_BITS == 64:
