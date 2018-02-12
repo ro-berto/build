@@ -138,10 +138,6 @@ def perf(c):
 def chromium_perf(c):
   pass
 
-@CONFIG_CTX(includes=['chromium_perf', 'android'])
-def chromium_perf_android(c):
-  pass
-
 @CONFIG_CTX(includes=['chromium'])
 def chromium_skia(c):
   c.solutions[0].revision = 'HEAD'
