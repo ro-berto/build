@@ -19,6 +19,18 @@ MINIMAL_SWARMING_VERSION = (0, 8, 6)
 # path.
 IMPLIED_BINARY_PATH = '.swarming_module'
 
+# This is the name and path for the cache used for the implied binaries
+# (specifically vpython). The name of the implied cache will be prepended with
+# IMPLIED_CACHE_NAME, and the path will be relative to IMPLIED_CACHE_BASE.
+IMPLIED_CACHE_NAME = 'swarming_module_cache'
+IMPLIED_CACHE_BASE = '.swarming_module_cache'
+IMPLIED_CACHES = {
+  'vpython': 'vpython',
+}
+IMPLIED_ENV_PREFIXES = {
+  'VPYTHON_VIRTUALENV_ROOT': '/'.join((IMPLIED_CACHE_BASE, 'vpython')),
+}
+
 # These CIPD packages will be automatically put on $PATH for all swarming tasks
 # generated from this module. The first member of the tuple is the path relative
 # to IMPLIED_BINARY_PATH which should be added to $PATH.
@@ -506,10 +518,22 @@ class SwarmingApi(recipe_api.RecipeApi):
       vers = 'TEST_VERSION' if self._test_data.enabled else vers
       new_cipd_packages.append((IMPLIED_BINARY_PATH, pkg, vers))
 
+    # update implied caches
+    if named_caches is None:
+      named_caches = {}
+    else:
+      named_caches = named_caches.copy()
+    named_caches.update({
+      '_'.join((IMPLIED_CACHE_NAME, k)): '/'.join((IMPLIED_CACHE_BASE,v))
+      for k, v in IMPLIED_CACHES.iteritems()
+    })
+
     # update $PATH
     env_prefixes = dict(env_prefixes or {})            # copy it
     env_prefixes.setdefault('PATH', [])[:0] = sorted(  # prepend stuff
       path_env_prefix, key=lambda x: (len(x), x))
+    for k, path in IMPLIED_ENV_PREFIXES.iteritems():
+      env_prefixes.setdefault(k, [path])
 
     return SwarmingTask(
         title=title,
