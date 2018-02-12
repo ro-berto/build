@@ -29,8 +29,7 @@ def RunSteps(api):
       phase='test_phase',
       isolated_targets=['base_unittests_run'],
       android_version_code=3,
-      android_version_name='example',
-      gyp_script='gypfiles/gyp_v8')
+      android_version_name='example')
 
 
 def GenTests(api):

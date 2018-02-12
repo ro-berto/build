@@ -57,7 +57,6 @@
       "base_unittests_run\n",
       "--android-version-code=3",
       "--android-version-name=example",
-      "--gyp-script=gypfiles/gyp_v8",
       "//out/Release"
     ],
     "cwd": "None",

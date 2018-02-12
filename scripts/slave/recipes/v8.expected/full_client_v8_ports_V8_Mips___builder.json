@@ -95,7 +95,6 @@
       "V8 Mips - builder",
       "--config-file",
       "[START_DIR]/v8/infra/mb/mb_config.pyl",
-      "--gyp-script=gypfiles/gyp_v8",
       "//out/Release"
     ],
     "cwd": "[START_DIR]/v8",

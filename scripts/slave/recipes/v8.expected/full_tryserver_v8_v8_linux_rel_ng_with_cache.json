@@ -145,7 +145,6 @@
       "[CACHE]/goma_client",
       "--swarming-targets-file",
       "benchmarks\nbot_default\nmjsunit\nmozilla\noptimize_for_size\nrun-gcmole\ntest262\n",
-      "--gyp-script=gypfiles/gyp_v8",
       "//out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/v8_linux_rel_ng/v8",

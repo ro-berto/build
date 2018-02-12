@@ -143,7 +143,6 @@
       "[CACHE]\\goma_client",
       "--swarming-targets-file",
       "bot_default\nmozilla\n",
-      "--gyp-script=gypfiles\\gyp_v8",
       "//out/Debug"
     ],
     "cwd": "[START_DIR]\\v8",

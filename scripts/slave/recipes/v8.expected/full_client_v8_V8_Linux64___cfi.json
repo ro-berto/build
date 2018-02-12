@@ -125,7 +125,6 @@
       "[CACHE]/goma_client",
       "--swarming-targets-file",
       "benchmarks\nbot_default\nmozilla\noptimize_for_size\ntest262\n",
-      "--gyp-script=gypfiles/gyp_v8",
       "//out/Release"
     ],
     "cwd": "[START_DIR]/v8",
