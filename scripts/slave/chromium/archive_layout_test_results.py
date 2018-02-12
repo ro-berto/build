@@ -83,9 +83,8 @@ def archive_layout(args):
     f.write(last_change)
 
   # In addition to the last_change file, above, we upload a zip file containing
-  # all of the results, and an unzipped directory of the results. And, we
-  # actually need two copies of each, one archived by build number and one
-  # representing the "latest" version.
+  # all of the results. And, we actually need two copies of each, one archived
+  # by build number and one representing the "latest" version.
   # TODO: Get rid of the need for the "latest" version.
 
   gs_build_dir = '/'.join([args.gs_bucket, builder_name, build_number])
@@ -117,32 +116,17 @@ def archive_layout(args):
       print "cp failed: %d" % rc
       return rc
 
-  # TODO(martiniss): Remove this. This is temporary because it's timing out
-  # on this bot. See crbug.com/808167
-  if builder_name not in ['mac_chromium_rel_ng']:
-    start = time.time()
-    rc = slave_utils.GSUtilCopyDir(args.results_dir,
-                                   gs_build_dir,
-                                   gs_acl=gs_acl,
-                                   cache_control=cache_control,
-                                   add_quiet_flag=True)
-    print "took %.1f seconds" % (time.time() - start)
-    sys.stdout.flush()
-    if rc:
-        print "cp failed: %d" % rc
-        return rc
-
-    start = time.time()
-    rc = slave_utils.GSUtilCopyFile(last_change_file,
-                                    gs_build_results_dir,
-                                    gs_acl=gs_acl,
-                                    cache_control=cache_control,
-                                    add_quiet_flag=True)
-    print "took %.1f seconds" % (time.time() - start)
-    sys.stdout.flush()
-    if rc:
-        print "cp failed: %d" % rc
-        return rc
+  start = time.time()
+  rc = slave_utils.GSUtilCopyFile(last_change_file,
+                                  gs_build_results_dir,
+                                  gs_acl=gs_acl,
+                                  cache_control=cache_control,
+                                  add_quiet_flag=True)
+  print "took %.1f seconds" % (time.time() - start)
+  sys.stdout.flush()
+  if rc:
+      print "cp failed: %d" % rc
+      return rc
 
   if args.store_latest:
     # The 'latest' results need to be not cached at all (Cloud Storage defaults
@@ -156,18 +140,6 @@ def archive_layout(args):
                                     gs_acl=gs_acl,
                                     cache_control=cache_control,
                                     add_quiet_flag=True)
-    print "took %.1f seconds" % (time.time() - start)
-    sys.stdout.flush()
-    if rc:
-        print "cp failed: %d" % rc
-        return rc
-
-    start = time.time()
-    rc = slave_utils.GSUtilCopyDir(args.results_dir,
-                                   gs_latest_dir,
-                                   gs_acl=gs_acl,
-                                   cache_control=cache_control,
-                                   add_quiet_flag=True)
     print "took %.1f seconds" % (time.time() - start)
     sys.stdout.flush()
     if rc:
