@@ -141,8 +141,7 @@ class V8Api(recipe_api.RecipeApi):
 
   VERSION_FILE = 'include/v8-version.h'
 
-  # TODO(machenbach): Remove tryserver_check flag when removed on build_limited.
-  def apply_bot_config(self, builders, tryserver_check='Deprecated'):
+  def apply_bot_config(self, builders):
     """Entry method for using the v8 api.
 
     Requires the presence of a bot_config dict for any master/builder pair.
