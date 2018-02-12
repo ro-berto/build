@@ -354,10 +354,6 @@ class V8Api(recipe_api.RecipeApi):
       # that don't support the goma executables.
       self.m.chromium.ensure_goma()
     env = {}
-    if self.m.chromium.c.project_generator.tool != 'gyp':
-      env['GYP_CHROMIUM_NO_ACTION'] = 1
-    else:
-      env['GYP_CHROMIUM_NO_ACTION'] = 0
     self.m.chromium.runhooks(env=env, **kwargs)
 
   @property

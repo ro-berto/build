@@ -93,7 +93,6 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
-      "GYP_CHROMIUM_NO_ACTION": "0",
       "GYP_DEFINES": "target_arch=ia32 v8_target_arch=ia32",
       "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
     },
