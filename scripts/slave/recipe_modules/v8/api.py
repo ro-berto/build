@@ -141,7 +141,8 @@ class V8Api(recipe_api.RecipeApi):
 
   VERSION_FILE = 'include/v8-version.h'
 
-  def apply_bot_config(self, builders, tryserver_check=True):
+  # TODO(machenbach): Remove tryserver_check flag when removed on build_limited.
+  def apply_bot_config(self, builders, tryserver_check='Deprecated'):
     """Entry method for using the v8 api.
 
     Requires the presence of a bot_config dict for any master/builder pair.
@@ -165,12 +166,6 @@ class V8Api(recipe_api.RecipeApi):
       self.m.gclient.apply_config(c)
     for c in self.bot_config.get('chromium_apply_config', []):
       self.m.chromium.apply_config(c)
-    if tryserver_check and self.m.tryserver.is_tryserver:
-      # TODO(machenbach): This sets the trybot flavor only for gyp. GN
-      # is controlled through MB. Unfortunately also the v8 test driver
-      # reads this and passes e.g. --dcheck-always-on flag. This should
-      # be untangled.
-      self.init_tryserver()
     for c in self.bot_config.get('v8_apply_config', []):
       self.apply_config(c)
 
@@ -230,14 +225,6 @@ class V8Api(recipe_api.RecipeApi):
       # passing 0 and creates a new one.
       seed = r.randint(-2147483648, 2147483647)
     return seed
-
-  def init_tryserver(self):
-    if self.m.chromium.c.BUILD_CONFIG != 'Debug':
-      # TODO(machenbach): This is only for passing --dchecks-always-on to
-      # the test driver. All real build flags are passed by MB on the V8 side.
-      # This can be removed after the GN switch is complete as the test
-      # driver auto-detects it for GN.
-      self.m.chromium.apply_config('trybot_flavor')
 
   def checkout(self, revision=None, **kwargs):
     # Set revision for bot_update.

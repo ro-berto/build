@@ -122,7 +122,7 @@
     "cwd": "[BUILDER_CACHE]/v8_linux_rel_ng/v8",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "dcheck_always_on=1 fastbuild=1 gcmole=1 gomadir='[CACHE]/goma_client' target_arch=ia32 use_goma=1 v8_target_arch=ia32",
+      "GYP_DEFINES": "gcmole=1 gomadir='[CACHE]/goma_client' target_arch=ia32 use_goma=1 v8_target_arch=ia32",
       "GYP_GENERATORS": "ninja",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
