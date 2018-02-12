@@ -100,7 +100,7 @@ PERF_TESTS = freeze({
     'low_bandwidth_audio_perf_test': {},
     'webrtc_perf_tests': {
         'args': [
-            '--store-test-artifacts',
+            '--test-artifacts-dir', '${ISOLATED_OUTDIR}',
             '--save_worst_frame',
         ],
     },
