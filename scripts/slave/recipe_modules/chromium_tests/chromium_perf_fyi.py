@@ -71,12 +71,6 @@ _AddBuildSpec('Android arm64 Builder FYI', 'android', 'android',
                                      'system_webview_shell_apk',])
 _AddBuildSpec('Linux Compile FYI', 'linux-fyi', 'linux')
 
-
-_AddBuildSpec('Win Builder FYI', 'win', 'win', force_exparchive=True)
-
-_AddBuildSpec('Win Clang Builder', 'win-clang-builder', 'win',
-              config_name='chromium_perf_clang', target_bits=32)
-
 _AddIsolatedTestSpec('Mojo Linux Perf', 'mojo-linux-perf', 'linux')
 _AddIsolatedTestSpec(
     'One Buildbot Step Test Builder', 'buildbot-test', 'linux',
