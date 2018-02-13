@@ -17,7 +17,6 @@ per-file chromium_fyi*=thakis@chromium.org
 per-file chromium_gpu*=kbr@chromium.org
 per-file chromium_perf*=dtu@chromium.org
 per-file chromium_perf*=eakuefner@chromium.org
-per-file chromium_perf*=fmeawad@chromium.org
 per-file chromium_webrtc*.py=ehmaldonado@chromium.org
 per-file chromium_webrtc*.py=phoglund@chromium.org
 per-file client_v8_*=machenbach@chromium.org
@@ -30,7 +29,6 @@ per-file tryserver_webrtc.py=phoglund@chromium.org
 # Waterfall owners should be able to update trybots.py.
 per-file trybots.py=dtu@chromium.org
 per-file trybots.py=eakuefner@chromium.org
-per-file trybots.py=fmeawad@chromium.org
 per-file trybots.py=jbudorick@chromium.org
 per-file trybots.py=kbr@chromium.org
 per-file trybots.py=ehmaldonado@chromium.org
