@@ -923,7 +923,7 @@
         "os": "linux",
         "version": "trusty",
       },
-      "slaves": ["build59-b1"],
+      "slaves": ["slave260-c1"],
     },
     "android_rel_nexus_5x": {
       "slave_data": {

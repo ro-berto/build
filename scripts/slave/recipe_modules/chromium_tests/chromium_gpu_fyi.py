@@ -860,13 +860,13 @@ SPEC = {
         'TARGET_PLATFORM': 'android',
       },
       'android_config': 'main_builder',
-      'android_apply_config': ['restart_usb', 'use_devil_adb'],
       'bot_type': 'builder_tester',
       'compile_targets': [
       ],
       'testing': {
         'platform': 'linux',
       },
+      'checkout_dir': 'android',
     },
     'Android FYI Release (Nexus 5X)': {
       'chromium_config': 'android',
