@@ -115,7 +115,7 @@
   },
   {
     "cmd": [
-      "/bin/sh",
+      "/bin/bash",
       "flutter/travis/analyze.sh"
     ],
     "cwd": "[START_DIR]/src",

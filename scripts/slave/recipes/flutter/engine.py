@@ -133,7 +133,7 @@ def AnalyzeDartUI(api):
 
   checkout = api.path['start_dir'].join('src')
   with api.context(cwd=checkout):
-    api.step('analyze dart_ui', ['/bin/sh', 'flutter/travis/analyze.sh'])
+    api.step('analyze dart_ui', ['/bin/bash', 'flutter/travis/analyze.sh'])
 
 
 def BuildLinuxAndroid(api):
