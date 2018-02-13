@@ -292,8 +292,6 @@
       "--tag",
       "name:base_unittests",
       "--tag",
-      "os:Mac",
-      "--tag",
       "slavename:test_bot",
       "--tag",
       "stepname:base_unittests on Intel GPU on Mac on Mac",

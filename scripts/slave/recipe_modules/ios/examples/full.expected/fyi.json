@@ -591,8 +591,6 @@
       "--tag",
       "name:fake",
       "--tag",
-      "os:Mac",
-      "--tag",
       "platform:simulator",
       "--tag",
       "slavename:fake-vm",

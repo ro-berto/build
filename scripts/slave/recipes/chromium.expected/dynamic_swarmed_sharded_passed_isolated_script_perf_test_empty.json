@@ -443,8 +443,6 @@
       "--tag",
       "name:benchmark",
       "--tag",
-      "os:Windows-10-10586",
-      "--tag",
       "project:chromium",
       "--tag",
       "purpose:CI",

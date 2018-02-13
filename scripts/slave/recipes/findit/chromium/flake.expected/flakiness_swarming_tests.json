@@ -1130,8 +1130,6 @@
       "--tag",
       "name:browser_tests",
       "--tag",
-      "os:Mac-10.9",
-      "--tag",
       "project:chromium",
       "--tag",
       "purpose:CI",

@@ -409,8 +409,6 @@
       "--tag",
       "name:telemetry_gpu_unittests",
       "--tag",
-      "os:Linux",
-      "--tag",
       "project:chromium",
       "--tag",
       "purpose:CI",

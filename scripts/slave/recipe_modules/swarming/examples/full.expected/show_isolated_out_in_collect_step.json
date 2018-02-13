@@ -165,8 +165,6 @@
       "--tag",
       "name:hello_world",
       "--tag",
-      "os:Windows-7-SP1",
-      "--tag",
       "os:win",
       "--tag",
       "rietveld:https://codereview.chromium.org/123/#ps1001",

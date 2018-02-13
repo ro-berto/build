@@ -165,8 +165,6 @@
       "--tag",
       "name:hello_world",
       "--tag",
-      "os:Windows-7-SP1",
-      "--tag",
       "os:win",
       "--tag",
       "stepname:hello_world on Windows-7-SP1",

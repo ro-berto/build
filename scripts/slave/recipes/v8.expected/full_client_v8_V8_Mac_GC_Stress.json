@@ -326,8 +326,6 @@
       "--tag",
       "name:Check",
       "--tag",
-      "os:Mac-10.9",
-      "--tag",
       "project:v8",
       "--tag",
       "purpose:CI",

@@ -155,8 +155,6 @@
       "--tag",
       "name:Check",
       "--tag",
-      "os:Windows-10",
-      "--tag",
       "patch_project:v8",
       "--tag",
       "project:v8",

@@ -195,8 +195,6 @@
       "--tag",
       "name:base_unittests",
       "--tag",
-      "os:Ubuntu-14.04",
-      "--tag",
       "slavename:test_bot_id",
       "--tag",
       "stepname:base_unittests",

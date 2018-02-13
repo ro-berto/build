@@ -171,8 +171,6 @@
       "--tag",
       "name:hello_world",
       "--tag",
-      "os:Mac-10.9",
-      "--tag",
       "os:mac",
       "--tag",
       "stepname:hello_world on Mac-10.9",

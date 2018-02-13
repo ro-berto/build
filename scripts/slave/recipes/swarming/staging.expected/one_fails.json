@@ -696,8 +696,6 @@
       "--tag",
       "name:browser_tests",
       "--tag",
-      "os:Ubuntu",
-      "--tag",
       "project:chromium",
       "--tag",
       "purpose:staging",

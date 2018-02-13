@@ -271,8 +271,6 @@
       "--tag",
       "name:Check",
       "--tag",
-      "os:Ubuntu-14.04",
-      "--tag",
       "patch_project:v8",
       "--tag",
       "project:v8",

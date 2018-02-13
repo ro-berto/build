@@ -281,8 +281,6 @@
       "--tag",
       "name:Check",
       "--tag",
-      "os:Windows-10",
-      "--tag",
       "project:v8",
       "--tag",
       "purpose:CI",

@@ -922,8 +922,6 @@
       "--tag",
       "name:gl_tests",
       "--tag",
-      "os:Ubuntu-14.04",
-      "--tag",
       "patch_project:chromium/src",
       "--tag",
       "project:chromium",

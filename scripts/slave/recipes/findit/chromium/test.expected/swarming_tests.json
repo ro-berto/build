@@ -1145,8 +1145,6 @@
       "--tag",
       "name:gl_tests",
       "--tag",
-      "os:Mac-10.9",
-      "--tag",
       "project:chromium",
       "--tag",
       "purpose:CI",

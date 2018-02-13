@@ -49,8 +49,6 @@
       "--tag",
       "name:Mjsunit",
       "--tag",
-      "os:Ubuntu-14.04",
-      "--tag",
       "project:v8",
       "--tag",
       "purpose:CI",

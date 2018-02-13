@@ -931,8 +931,6 @@
       "--tag",
       "name:fake",
       "--tag",
-      "os:Mac",
-      "--tag",
       "platform:simulator",
       "--tag",
       "rietveld:fake://rietveld.url/123456/#ps1",

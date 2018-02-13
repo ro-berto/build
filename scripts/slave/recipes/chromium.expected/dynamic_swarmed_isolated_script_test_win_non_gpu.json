@@ -436,8 +436,6 @@
       "--tag",
       "name:telemetry_gpu_unittests",
       "--tag",
-      "os:Windows",
-      "--tag",
       "project:chromium",
       "--tag",
       "purpose:CI",

@@ -361,8 +361,6 @@
       "--tag",
       "name:base_unittests",
       "--tag",
-      "os:Ubuntu-14.04",
-      "--tag",
       "slavename:test_bot",
       "--tag",
       "stepname:base_unittests (with patch)",

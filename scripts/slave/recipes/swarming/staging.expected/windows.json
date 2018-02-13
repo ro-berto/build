@@ -727,8 +727,6 @@
       "--tag",
       "name:browser_tests",
       "--tag",
-      "os:Windows-10",
-      "--tag",
       "project:chromium",
       "--tag",
       "purpose:staging",

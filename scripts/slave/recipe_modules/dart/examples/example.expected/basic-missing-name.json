@@ -897,8 +897,6 @@
       "--tag",
       "name:vm_tests_shard_1",
       "--tag",
-      "os:Linux",
-      "--tag",
       "stepname:vm_tests_shard_1",
       "--cipd-package",
       ".swarming_module:infra/tools/luci/logdog/butler/${platform}:TEST_VERSION",

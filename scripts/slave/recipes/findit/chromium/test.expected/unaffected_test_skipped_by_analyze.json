@@ -1209,8 +1209,6 @@
       "--tag",
       "name:affected_tests",
       "--tag",
-      "os:Windows-7-SP1",
-      "--tag",
       "project:chromium",
       "--tag",
       "purpose:CI",
