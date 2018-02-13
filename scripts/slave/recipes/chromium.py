@@ -99,8 +99,8 @@ def GenTests(api):
     # The chromium.gpu.fyi bots use serialize_tests in order to reduce
     # load on the GPU bots in the Swarming pool.
     api.properties.generic(mastername='chromium.gpu.fyi',
-                           buildername='Linux Release (NVIDIA)',
-                           parent_buildername='GPU Linux Builder') +
+                           buildername='Linux FYI Release (NVIDIA)',
+                           parent_buildername='GPU FYI Linux Builder') +
     api.platform('linux', 64) +
     api.properties(swarm_hashes={
       'base_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
@@ -109,7 +109,7 @@ def GenTests(api):
     api.override_step_data(
         'read test spec (chromium.gpu.fyi.json)',
         api.json.output({
-            'Linux Release (NVIDIA)': {
+            'Linux FYI Release (NVIDIA)': {
                 'gtest_tests': [
                     {
                         'test': 'base_unittests',

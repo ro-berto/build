@@ -210,7 +210,7 @@ SPEC = {
       },
     },
     # GPU bots.
-    'Win Release (NVIDIA)': {
+    'Win V8 FYI Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'chrome_with_codecs',
@@ -236,7 +236,7 @@ SPEC = {
       'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
       'serialize_tests': True,
     },
-    'Mac Release (Intel)': {
+    'Mac V8 FYI Release (Intel)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'chrome_with_codecs',
@@ -262,7 +262,7 @@ SPEC = {
       'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
       'serialize_tests': True,
     },
-    'Linux Release (NVIDIA)': {
+    'Linux V8 FYI Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'chrome_with_codecs',
@@ -288,7 +288,7 @@ SPEC = {
       'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
       'serialize_tests': True,
     },
-    'Linux Release - concurrent marking (NVIDIA)': {
+    'Linux V8 FYI Release - concurrent marking (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'chrome_with_codecs',
@@ -314,7 +314,7 @@ SPEC = {
       'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
       'serialize_tests': True,
     },
-    'Android Release (Nexus 5X)': {
+    'Android V8 FYI Release (Nexus 5X)': {
       'chromium_config': 'android',
       'chromium_apply_config': [
         'chrome_with_codecs',

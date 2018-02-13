@@ -13,7 +13,7 @@ SPEC = {
     'src_side_runtest_py': True,
   },
   'builders': {
-    'GPU Win Builder': {
+    'GPU FYI Win Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'build_angle_deqp_tests',
@@ -36,7 +36,7 @@ SPEC = {
       },
       'checkout_dir': 'win',
     },
-    'GPU Win Builder (dbg)': {
+    'GPU FYI Win Builder (dbg)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'chrome_with_codecs',
@@ -58,7 +58,7 @@ SPEC = {
       },
       'checkout_dir': 'win',
     },
-    'GPU Win dEQP Builder': {
+    'GPU FYI Win dEQP Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'build_angle_deqp_tests',
@@ -86,7 +86,7 @@ SPEC = {
       # than the common case.
       'checkout_dir': 'win',
     },
-    'Win7 Release (NVIDIA)': {
+    'Win7 FYI Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -95,13 +95,13 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU Win Builder',
+      'parent_buildername': 'GPU FYI Win Builder',
       'testing': {
         'platform': 'win',
       },
       'serialize_tests': True,
     },
-    'Win7 Debug (NVIDIA)': {
+    'Win7 FYI Debug (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -110,13 +110,13 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU Win Builder (dbg)',
+      'parent_buildername': 'GPU FYI Win Builder (dbg)',
       'testing': {
         'platform': 'win',
       },
       'serialize_tests': True,
     },
-    'Win10 dEQP Release (NVIDIA)': {
+    'Win10 FYI dEQP Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -125,13 +125,13 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU Win dEQP Builder',
+      'parent_buildername': 'GPU FYI Win dEQP Builder',
       'testing': {
         'platform': 'win',
       },
       'serialize_tests': True,
     },
-    'Win10 Experimental Release (NVIDIA)': {
+    'Win10 FYI Experimental Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -140,13 +140,13 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU Win Builder',
+      'parent_buildername': 'GPU FYI Win Builder',
       'testing': {
         'platform': 'win',
       },
       'serialize_tests': True,
     },
-    'Win10 Release (NVIDIA)': {
+    'Win10 FYI Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -155,13 +155,13 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU Win Builder',
+      'parent_buildername': 'GPU FYI Win Builder',
       'testing': {
         'platform': 'win',
       },
       'serialize_tests': True,
     },
-    'Win10 Debug (NVIDIA)': {
+    'Win10 FYI Debug (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -170,13 +170,13 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU Win Builder (dbg)',
+      'parent_buildername': 'GPU FYI Win Builder (dbg)',
       'testing': {
         'platform': 'win',
       },
       'serialize_tests': True,
     },
-    'Win7 Release (AMD)': {
+    'Win7 FYI Release (AMD)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -185,13 +185,13 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU Win Builder',
+      'parent_buildername': 'GPU FYI Win Builder',
       'testing': {
         'platform': 'win',
       },
       'serialize_tests': True,
     },
-    'Win7 Debug (AMD)': {
+    'Win7 FYI Debug (AMD)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -200,13 +200,13 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU Win Builder (dbg)',
+      'parent_buildername': 'GPU FYI Win Builder (dbg)',
       'testing': {
         'platform': 'win',
       },
       'serialize_tests': True,
     },
-    'Win7 dEQP Release (AMD)': {
+    'Win7 FYI dEQP Release (AMD)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -215,13 +215,13 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU Win dEQP Builder',
+      'parent_buildername': 'GPU FYI Win dEQP Builder',
       'testing': {
         'platform': 'win',
       },
       'serialize_tests': True,
     },
-    'Win10 Release (Intel HD 630)': {
+    'Win10 FYI Release (Intel HD 630)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -230,13 +230,13 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU Win Builder',
+      'parent_buildername': 'GPU FYI Win Builder',
       'testing': {
         'platform': 'win',
       },
       'serialize_tests': True,
     },
-    'GPU Win x64 Builder': {
+    'GPU FYI Win x64 Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'build_angle_deqp_tests',
@@ -259,7 +259,7 @@ SPEC = {
       },
       'checkout_dir': 'win',
     },
-    'GPU Win x64 Builder (dbg)': {
+    'GPU FYI Win x64 Builder (dbg)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'chrome_with_codecs',
@@ -281,7 +281,7 @@ SPEC = {
       },
       'checkout_dir': 'win',
     },
-    'GPU Win x64 dEQP Builder': {
+    'GPU FYI Win x64 dEQP Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'build_angle_deqp_tests',
@@ -310,7 +310,7 @@ SPEC = {
       # than the common case.
       'checkout_dir': 'win',
     },
-    'Win7 x64 Release (NVIDIA)': {
+    'Win7 FYI x64 Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -319,13 +319,13 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU Win x64 Builder',
+      'parent_buildername': 'GPU FYI Win x64 Builder',
       'testing': {
         'platform': 'win',
       },
       'serialize_tests': True,
     },
-    'Win7 x64 Debug (NVIDIA)': {
+    'Win7 FYI x64 Debug (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -334,13 +334,13 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU Win x64 Builder (dbg)',
+      'parent_buildername': 'GPU FYI Win x64 Builder (dbg)',
       'testing': {
         'platform': 'win',
       },
       'serialize_tests': True,
     },
-    'Win7 x64 dEQP Release (NVIDIA)': {
+    'Win7 FYI x64 dEQP Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -349,13 +349,13 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU Win x64 dEQP Builder',
+      'parent_buildername': 'GPU FYI Win x64 dEQP Builder',
       'testing': {
         'platform': 'win',
       },
       'serialize_tests': True,
     },
-    'GPU Win Clang Builder (dbg)': {
+    'GPU FYI Win Clang Builder (dbg)': {
       # This bot is on the chromium.gpu.fyi waterfall to help ensure
       # that ANGLE rolls aren't reverted due to Clang build failures
       # on Windows. We don't run the binaries that are built on this
@@ -384,7 +384,7 @@ SPEC = {
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
     },
-    'GPU Linux Builder': {
+    'GPU FYI Linux Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop',
                                 'chrome_with_codecs',
@@ -405,7 +405,7 @@ SPEC = {
       },
       'checkout_dir': 'linux',
     },
-    'GPU Linux Ozone Builder': {
+    'GPU FYI Linux Ozone Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'internal_gles2_conform_tests',
@@ -424,7 +424,7 @@ SPEC = {
         'platform': 'linux',
       },
     },
-    'GPU Linux Builder (dbg)': {
+    'GPU FYI Linux Builder (dbg)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop',
                                 'chrome_with_codecs',
@@ -444,7 +444,7 @@ SPEC = {
       },
       'checkout_dir': 'linux',
     },
-    'GPU Linux dEQP Builder': {
+    'GPU FYI Linux dEQP Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop',
                                 'chrome_with_codecs',
@@ -471,7 +471,7 @@ SPEC = {
       # than the common case.
       'checkout_dir': 'linux',
     },
-    'Linux Release (NVIDIA)': {
+    'Linux FYI Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -480,13 +480,13 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU Linux Builder',
+      'parent_buildername': 'GPU FYI Linux Builder',
       'testing': {
         'platform': 'linux',
       },
       'serialize_tests': True,
     },
-    'Linux Debug (NVIDIA)': {
+    'Linux FYI Debug (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -495,13 +495,13 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU Linux Builder (dbg)',
+      'parent_buildername': 'GPU FYI Linux Builder (dbg)',
       'testing': {
         'platform': 'linux',
       },
       'serialize_tests': True,
     },
-    'Linux dEQP Release (NVIDIA)': {
+    'Linux FYI dEQP Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -510,13 +510,13 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU Linux dEQP Builder',
+      'parent_buildername': 'GPU FYI Linux dEQP Builder',
       'testing': {
         'platform': 'linux',
       },
       'serialize_tests': True,
     },
-    'Linux Release (Intel HD 630)': {
+    'Linux FYI Release (Intel HD 630)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -525,13 +525,13 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU Linux Builder',
+      'parent_buildername': 'GPU FYI Linux Builder',
       'testing': {
         'platform': 'linux',
       },
       'serialize_tests': True,
     },
-    'Linux GPU TSAN Release': {
+    'Linux FYI GPU TSAN Release': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb',
                                 'ninja_confirm_noop',
@@ -551,7 +551,7 @@ SPEC = {
       },
       'serialize_tests': True,
     },
-    'Linux Release (AMD R7 240)': {
+    'Linux FYI Release (AMD R7 240)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -560,12 +560,12 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU Linux Builder',
+      'parent_buildername': 'GPU FYI Linux Builder',
       'testing': {
         'platform': 'linux',
       },
     },
-    'GPU Mac Builder': {
+    'GPU FYI Mac Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config':['chrome_with_codecs',
                                'internal_gles2_conform_tests',
@@ -586,7 +586,7 @@ SPEC = {
       },
       'checkout_dir': 'mac',
     },
-    'GPU Mac Builder (dbg)': {
+    'GPU FYI Mac Builder (dbg)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['chrome_with_codecs',
                                 'internal_gles2_conform_tests',
@@ -607,7 +607,7 @@ SPEC = {
       },
       'checkout_dir': 'mac',
     },
-    'GPU Mac dEQP Builder': {
+    'GPU FYI Mac dEQP Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config':['chrome_with_codecs',
                                'internal_gles2_conform_tests',
@@ -634,7 +634,7 @@ SPEC = {
       # than the common case.
       'checkout_dir': 'mac',
     },
-    'Mac Release (Intel)': {
+    'Mac FYI Release (Intel)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -643,13 +643,13 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU Mac Builder',
+      'parent_buildername': 'GPU FYI Mac Builder',
       'testing': {
         'platform': 'mac',
       },
       'serialize_tests': True,
     },
-    'Mac Debug (Intel)': {
+    'Mac FYI Debug (Intel)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -658,13 +658,13 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU Mac Builder (dbg)',
+      'parent_buildername': 'GPU FYI Mac Builder (dbg)',
       'testing': {
         'platform': 'mac',
       },
       'serialize_tests': True,
     },
-    'Mac Pro Release (AMD)': {
+    'Mac Pro FYI Release (AMD)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -673,12 +673,12 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU Mac Builder',
+      'parent_buildername': 'GPU FYI Mac Builder',
       'testing': {
         'platform': 'mac',
       },
     },
-    'Mac Pro Debug (AMD)': {
+    'Mac Pro FYI Debug (AMD)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -687,12 +687,12 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU Mac Builder (dbg)',
+      'parent_buildername': 'GPU FYI Mac Builder (dbg)',
       'testing': {
         'platform': 'mac',
       },
     },
-    'Mac Retina Release (NVIDIA)': {
+    'Mac FYI Retina Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -701,13 +701,13 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU Mac Builder',
+      'parent_buildername': 'GPU FYI Mac Builder',
       'testing': {
         'platform': 'mac',
       },
       'serialize_tests': True,
     },
-    'Mac Retina Debug (NVIDIA)': {
+    'Mac FYI Retina Debug (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -716,13 +716,13 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU Mac Builder (dbg)',
+      'parent_buildername': 'GPU FYI Mac Builder (dbg)',
       'testing': {
         'platform': 'mac',
       },
       'serialize_tests': True,
     },
-    'Mac Retina Release (AMD)': {
+    'Mac FYI Retina Release (AMD)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -731,13 +731,13 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU Mac Builder',
+      'parent_buildername': 'GPU FYI Mac Builder',
       'testing': {
         'platform': 'mac',
       },
       'serialize_tests': True,
     },
-    'Mac Retina Debug (AMD)': {
+    'Mac FYI Retina Debug (AMD)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -746,13 +746,13 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU Mac Builder (dbg)',
+      'parent_buildername': 'GPU FYI Mac Builder (dbg)',
       'testing': {
         'platform': 'mac',
       },
       'serialize_tests': True,
     },
-    'Mac Experimental Release (Intel)': {
+    'Mac FYI Experimental Release (Intel)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -761,13 +761,13 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU Mac Builder',
+      'parent_buildername': 'GPU FYI Mac Builder',
       'testing': {
         'platform': 'mac',
       },
       'serialize_tests': True,
     },
-    'Mac Experimental Retina Release (AMD)': {
+    'Mac FYI Experimental Retina Release (AMD)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -776,13 +776,13 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU Mac Builder',
+      'parent_buildername': 'GPU FYI Mac Builder',
       'testing': {
         'platform': 'mac',
       },
       'serialize_tests': True,
     },
-    'Mac Experimental Retina Release (NVIDIA)': {
+    'Mac FYI Experimental Retina Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -791,12 +791,12 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU Mac Builder',
+      'parent_buildername': 'GPU FYI Mac Builder',
       'testing': {
         'platform': 'mac',
       },
     },
-    'Mac GPU ASAN Release': {
+    'Mac FYI GPU ASAN Release': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb',
                                 'ninja_confirm_noop',
@@ -813,7 +813,7 @@ SPEC = {
       },
       'serialize_tests': True,
     },
-    'Mac dEQP Release AMD': {
+    'Mac FYI dEQP Release AMD': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb',
                                 'ninja_confirm_noop',
@@ -825,13 +825,13 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU Mac dEQP Builder',
+      'parent_buildername': 'GPU FYI Mac dEQP Builder',
       'testing': {
         'platform': 'mac',
       },
       'serialize_tests': True,
     },
-    'Mac dEQP Release Intel': {
+    'Mac FYI dEQP Release Intel': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb',
                                 'ninja_confirm_noop',
@@ -843,13 +843,13 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU Mac dEQP Builder',
+      'parent_buildername': 'GPU FYI Mac dEQP Builder',
       'testing': {
         'platform': 'mac',
       },
       'serialize_tests': True,
     },
-    'Android Release (Nexus 5)': {
+    'Android FYI Release (Nexus 5)': {
       'chromium_config': 'android',
       'chromium_apply_config': ['chrome_with_codecs', 'mb'],
       'gclient_config': 'chromium',
@@ -868,7 +868,7 @@ SPEC = {
         'platform': 'linux',
       },
     },
-    'Android Release (Nexus 5X)': {
+    'Android FYI Release (Nexus 5X)': {
       'chromium_config': 'android',
       'chromium_apply_config': [
         'chrome_with_codecs',
@@ -888,7 +888,7 @@ SPEC = {
       },
       'checkout_dir': 'android',
     },
-    'Android Release (Nexus 6)': {
+    'Android FYI Release (Nexus 6)': {
       'chromium_config': 'android',
       'chromium_apply_config': ['chrome_with_codecs', 'mb'],
       'gclient_config': 'chromium',
@@ -907,7 +907,7 @@ SPEC = {
         'platform': 'linux',
       },
     },
-    'Android Release (Nexus 6P)': {
+    'Android FYI Release (Nexus 6P)': {
       'chromium_config': 'android',
       'chromium_apply_config': ['chrome_with_codecs'],
       'gclient_config': 'chromium',
@@ -924,7 +924,7 @@ SPEC = {
       },
       'checkout_dir': 'android',
     },
-    'Android Release (Nexus 9)': {
+    'Android FYI Release (Nexus 9)': {
       'chromium_config': 'android',
       'chromium_apply_config': ['chrome_with_codecs'],
       'gclient_config': 'chromium',
@@ -941,7 +941,7 @@ SPEC = {
         'platform': 'linux',
       },
     },
-    'Android Release (NVIDIA Shield TV)': {
+    'Android FYI Release (NVIDIA Shield TV)': {
       'chromium_config': 'android',
       'chromium_apply_config': ['chrome_with_codecs'],
       'gclient_config': 'chromium',
@@ -958,7 +958,7 @@ SPEC = {
         'platform': 'linux',
       },
     },
-    'Android dEQP Release (Nexus 5X)': {
+    'Android FYI dEQP Release (Nexus 5X)': {
       'chromium_config': 'android',
       'chromium_apply_config': ['chrome_with_codecs'],
       'gclient_config': 'chromium',
@@ -1007,7 +1007,7 @@ SPEC = {
       },
     },
 
-    'Linux Ozone (Intel)': {
+    'Linux FYI Ozone (Intel)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -1016,7 +1016,7 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU Linux Ozone Builder',
+      'parent_buildername': 'GPU FYI Linux Ozone Builder',
       'testing': {
         'platform': 'linux',
       },
@@ -1035,7 +1035,7 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU Win Builder',
+      'parent_buildername': 'GPU FYI Win Builder',
       'testing': {
         'platform': 'win',
       },
@@ -1049,7 +1049,7 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU Win Builder',
+      'parent_buildername': 'GPU FYI Win Builder',
       'testing': {
         'platform': 'win',
       },
@@ -1063,7 +1063,7 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU Linux Builder',
+      'parent_buildername': 'GPU FYI Linux Builder',
       'testing': {
         'platform': 'linux',
       },
@@ -1077,7 +1077,7 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU Linux Builder',
+      'parent_buildername': 'GPU FYI Linux Builder',
       'testing': {
         'platform': 'linux',
       },
@@ -1091,7 +1091,7 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU Mac Builder',
+      'parent_buildername': 'GPU FYI Mac Builder',
       'testing': {
         'platform': 'mac',
       },
@@ -1105,7 +1105,7 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU Mac Builder',
+      'parent_buildername': 'GPU FYI Mac Builder',
       'testing': {
         'platform': 'mac',
       },
@@ -1119,7 +1119,7 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU Mac Builder',
+      'parent_buildername': 'GPU FYI Mac Builder',
       'testing': {
         'platform': 'mac',
       },
@@ -1137,7 +1137,7 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU Win Builder',
+      'parent_buildername': 'GPU FYI Win Builder',
       'testing': {
         'platform': 'win',
       },

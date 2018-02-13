@@ -135,7 +135,7 @@ TRYBOTS = freeze({
       }),
       'android_optional_gpu_tests_rel': simple_bot({
         'mastername': 'chromium.gpu.fyi',
-        'buildername': 'Android Release (Nexus 5X)',
+        'buildername': 'Android FYI Release (Nexus 5X)',
       }),
       'cast_shell_android': simple_bot({
         'mastername': 'chromium.android',
@@ -163,23 +163,23 @@ TRYBOTS = freeze({
     'builders': {
       'android_angle_rel_ng': simple_bot({
         'mastername': 'chromium.gpu.fyi',
-        'buildername': 'Android Release (Nexus 5X)',
+        'buildername': 'Android FYI Release (Nexus 5X)',
       }),
       'android_angle_deqp_rel_ng': simple_bot({
         'mastername': 'chromium.gpu.fyi',
-        'buildername': 'Android dEQP Release (Nexus 5X)',
+        'buildername': 'Android FYI dEQP Release (Nexus 5X)',
       }),
       'linux_angle_rel_ng': {
         'bot_ids': [
           {
             'mastername': 'chromium.gpu.fyi',
             'buildername': 'GPU Linux Builder',
-            'tester': 'Linux Release (NVIDIA)',
+            'tester': 'Linux FYI Release (NVIDIA)',
           },
           {
             'mastername': 'chromium.gpu.fyi',
             'buildername': 'GPU Linux Builder',
-            'tester': 'Linux Release (Intel HD 630)',
+            'tester': 'Linux FYI Release (Intel HD 630)',
           },
         ],
       },
@@ -187,38 +187,38 @@ TRYBOTS = freeze({
         # This bot is compile-only.
         # TODO(jmadill): Remove or repurpose this config.
         'mastername': 'chromium.gpu.fyi',
-        'buildername': 'GPU Linux Builder (dbg)',
+        'buildername': 'GPU FYI Linux Builder (dbg)',
       }, analyze_mode='compile'),
       'linux_angle_compile_dbg_ng': simple_bot({
         'mastername': 'chromium.gpu.fyi',
-        'buildername': 'GPU Linux Builder (dbg)',
+        'buildername': 'GPU FYI Linux Builder (dbg)',
       }, analyze_mode='compile'),
       # TODO(fjhenigman): Add Ozone testers when possible.
       'linux_angle_ozone_rel_ng': simple_bot({
         'mastername': 'chromium.gpu.fyi',
-        'buildername': 'GPU Linux Ozone Builder',
+        'buildername': 'GPU FYI Linux Ozone Builder',
       }, analyze_mode='compile'),
       'linux_angle_deqp_rel_ng': simple_bot({
         'mastername': 'chromium.gpu.fyi',
-        'buildername': 'GPU Linux dEQP Builder',
-        'tester': 'Linux dEQP Release (NVIDIA)',
+        'buildername': 'GPU FYI Linux dEQP Builder',
+        'tester': 'Linux FYI dEQP Release (NVIDIA)',
       }),
       'mac_angle_rel_ng': {
         'bot_ids': [
           {
             'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU Mac Builder',
-            'tester': 'Mac Release (Intel)',
+            'buildername': 'GPU FYI Mac Builder',
+            'tester': 'Mac FYI Release (Intel)',
           },
           {
             'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU Mac Builder',
-            'tester': 'Mac Retina Release (NVIDIA)',
+            'buildername': 'GPU FYI Mac Builder',
+            'tester': 'Mac FYI Retina Release (NVIDIA)',
           },
           {
             'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU Mac Builder',
-            'tester': 'Mac Retina Release (AMD)',
+            'buildername': 'GPU FYI Mac Builder',
+            'tester': 'Mac FYI Retina Release (AMD)',
           },
         ],
       },
@@ -226,28 +226,28 @@ TRYBOTS = freeze({
         # This bot is compile-only.
         # TODO(jmadill): Remove or repurpose this config.
         'mastername': 'chromium.gpu.fyi',
-        'buildername': 'GPU Mac Builder (dbg)',
+        'buildername': 'GPU FYI Mac Builder (dbg)',
       }, analyze_mode='compile'),
       'mac_angle_compile_dbg_ng': simple_bot({
         'mastername': 'chromium.gpu.fyi',
-        'buildername': 'GPU Mac Builder (dbg)',
+        'buildername': 'GPU FYI Mac Builder (dbg)',
       }, analyze_mode='compile'),
       'win_angle_rel_ng': {
         'bot_ids': [
           {
             'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU Win Builder',
-            'tester': 'Win10 Release (NVIDIA)',
+            'buildername': 'GPU FYI Win Builder',
+            'tester': 'Win10 FYI Release (NVIDIA)',
           },
           {
             'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU Win Builder',
+            'buildername': 'GPU FYI Win Builder',
             'tester': 'Win7 ANGLE Tryserver (AMD)',
           },
           {
             'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU Win Builder',
-            'tester': 'Win10 Release (Intel HD 630)',
+            'buildername': 'GPU FYI Win Builder',
+            'tester': 'Win10 FYI Release (Intel HD 630)',
           },
         ],
       },
@@ -255,49 +255,49 @@ TRYBOTS = freeze({
         # This bot is compile-only.
         # TODO(jmadill): Remove or repurpose this config.
         'mastername': 'chromium.gpu.fyi',
-        'buildername': 'GPU Win Builder (dbg)',
+        'buildername': 'GPU FYI Win Builder (dbg)',
       }, analyze_mode='compile'),
       'win_angle_compile_dbg_ng': simple_bot({
         'mastername': 'chromium.gpu.fyi',
-        'buildername': 'GPU Win Builder (dbg)',
+        'buildername': 'GPU FYI Win Builder (dbg)',
       }, analyze_mode='compile'),
       'win_angle_x64_rel_ng': simple_bot({
         'mastername': 'chromium.gpu.fyi',
-        'buildername': 'GPU Win x64 Builder',
-        'tester': 'Win7 x64 Release (NVIDIA)',
+        'buildername': 'GPU FYI Win x64 Builder',
+        'tester': 'Win7 FYI x64 Release (NVIDIA)',
       }),
       'win_angle_compile_x64_rel_ng': simple_bot({
         'mastername': 'chromium.gpu.fyi',
-        'buildername': 'GPU Win x64 Builder',
+        'buildername': 'GPU FYI Win x64 Builder',
       }, analyze_mode='compile'),
       'win_angle_x64_dbg_ng': simple_bot({
         # This bot is compile-only.
         # TODO(jmadill): Remove or repurpose this config.
         'mastername': 'chromium.gpu.fyi',
-        'buildername': 'GPU Win x64 Builder (dbg)',
+        'buildername': 'GPU FYI Win x64 Builder (dbg)',
       }, analyze_mode='compile'),
       'win_angle_compile_x64_dbg_ng': simple_bot({
         'mastername': 'chromium.gpu.fyi',
-        'buildername': 'GPU Win x64 Builder (dbg)',
+        'buildername': 'GPU FYI Win x64 Builder (dbg)',
       }, analyze_mode='compile'),
       'win_angle_deqp_rel_ng': {
         'bot_ids': [
           {
             'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU Win dEQP Builder',
-            'tester': 'Win10 dEQP Release (NVIDIA)',
+            'buildername': 'GPU FYI Win dEQP Builder',
+            'tester': 'Win10 FYI dEQP Release (NVIDIA)',
           },
           {
             'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU Win dEQP Builder',
-            'tester': 'Win7 dEQP Release (AMD)',
+            'buildername': 'GPU FYI Win dEQP Builder',
+            'tester': 'Win7 FYI dEQP Release (AMD)',
           },
         ],
       },
       'win_angle_x64_deqp_rel_ng': simple_bot({
         'mastername': 'chromium.gpu.fyi',
-        'buildername': 'GPU Win x64 dEQP Builder',
-        'tester': 'Win7 x64 dEQP Release (NVIDIA)',
+        'buildername': 'GPU FYI Win x64 dEQP Builder',
+        'tester': 'Win7 FYI x64 dEQP Release (NVIDIA)',
       }),
     },
   },
@@ -453,12 +453,12 @@ TRYBOTS = freeze({
         'bot_ids': [
           {
             'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU Linux Builder',
+            'buildername': 'GPU FYI Linux Builder',
             'tester': 'Optional Linux Release (NVIDIA)',
           },
           {
             'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU Linux Builder',
+            'buildername': 'GPU FYI Linux Builder',
             'tester': 'Optional Linux Release (Intel HD 630)',
           },
         ],
@@ -569,17 +569,17 @@ TRYBOTS = freeze({
         'bot_ids': [
           {
             'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU Mac Builder',
+            'buildername': 'GPU FYI Mac Builder',
             'tester': 'Optional Mac Release (Intel)',
           },
           {
             'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU Mac Builder',
+            'buildername': 'GPU FYI Mac Builder',
             'tester': 'Optional Mac Retina Release (NVIDIA)',
           },
           {
             'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU Mac Builder',
+            'buildername': 'GPU FYI Mac Builder',
             'tester': 'Optional Mac Retina Release (AMD)',
           },
         ],
@@ -734,12 +734,12 @@ TRYBOTS = freeze({
         'bot_ids': [
           {
             'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU Win Builder',
+            'buildername': 'GPU FYI Win Builder',
             'tester': 'Optional Win10 Release (NVIDIA)',
           },
           {
             'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU Win Builder',
+            'buildername': 'GPU FYI Win Builder',
             'tester': 'Optional Win10 Release (Intel HD 630)',
           },
         ],

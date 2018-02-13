@@ -16,7 +16,7 @@
   # This is organized first by platform, then builders, followed by
   # testers.
   "builders": {
-    "GPU Win Builder": {
+    "GPU FYI Win Builder": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": "chromium_commits",
@@ -24,7 +24,7 @@
       "builder_timeout_s": 3600,
       "category": "0Windows",
     },
-    "GPU Win Builder (dbg)": {
+    "GPU FYI Win Builder (dbg)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": "chromium_commits",
@@ -32,7 +32,7 @@
       "builder_timeout_s": 7200,
       "category": "0Windows",
     },
-    "GPU Win dEQP Builder": {
+    "GPU FYI Win dEQP Builder": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": "chromium_commits",
@@ -40,7 +40,7 @@
       "builder_timeout_s": 3600,
       "category": "0Windows",
     },
-    "Win7 Release (NVIDIA)": {
+    "Win7 FYI Release (NVIDIA)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
@@ -50,7 +50,7 @@
       "builder_timeout_s": 14400,
       "category": "0Windows",
     },
-    "Win7 Debug (NVIDIA)": {
+    "Win7 FYI Debug (NVIDIA)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
@@ -60,7 +60,7 @@
       "builder_timeout_s": 21600,
       "category": "0Windows",
     },
-    "Win10 dEQP Release (NVIDIA)": {
+    "Win10 FYI dEQP Release (NVIDIA)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
@@ -70,7 +70,7 @@
       "builder_timeout_s": 14400,
       "category": "0Windows",
     },
-    "Win10 Experimental Release (NVIDIA)": {
+    "Win10 FYI Experimental Release (NVIDIA)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
@@ -80,7 +80,7 @@
       "builder_timeout_s": 14400,
       "category": "0Windows",
     },
-    "Win10 Release (NVIDIA)": {
+    "Win10 FYI Release (NVIDIA)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
@@ -90,7 +90,7 @@
       "builder_timeout_s": 10800,
       "category": "0Windows",
     },
-    "Win10 Debug (NVIDIA)": {
+    "Win10 FYI Debug (NVIDIA)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
@@ -100,7 +100,7 @@
       "builder_timeout_s": 21600,
       "category": "0Windows",
     },
-    "Win7 Release (AMD)": {
+    "Win7 FYI Release (AMD)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
@@ -110,7 +110,7 @@
       "builder_timeout_s": 10800,
       "category": "0Windows",
     },
-    "Win7 Debug (AMD)": {
+    "Win7 FYI Debug (AMD)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
@@ -120,7 +120,7 @@
       "builder_timeout_s": 21600,
       "category": "0Windows",
     },
-    "Win7 dEQP Release (AMD)": {
+    "Win7 FYI dEQP Release (AMD)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
@@ -130,7 +130,7 @@
       "builder_timeout_s": 10800,
       "category": "0Windows",
     },
-    "Win10 Release (Intel HD 630)": {
+    "Win10 FYI Release (Intel HD 630)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
@@ -140,7 +140,7 @@
       "builder_timeout_s": 14400,
       "category": "0Windows",
     },
-    "GPU Win x64 Builder": {
+    "GPU FYI Win x64 Builder": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": "chromium_commits",
@@ -148,7 +148,7 @@
       "builder_timeout_s": 7200,
       "category": "0Windows",
     },
-    "GPU Win x64 Builder (dbg)": {
+    "GPU FYI Win x64 Builder (dbg)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": "chromium_commits",
@@ -156,7 +156,7 @@
       "builder_timeout_s": 7200,
       "category": "0Windows",
     },
-    "GPU Win x64 dEQP Builder": {
+    "GPU FYI Win x64 dEQP Builder": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": "chromium_commits",
@@ -164,7 +164,7 @@
       "builder_timeout_s": 7200,
       "category": "0Windows",
     },
-    "Win7 x64 Release (NVIDIA)": {
+    "Win7 FYI x64 Release (NVIDIA)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
@@ -174,7 +174,7 @@
       "builder_timeout_s": 10800,
       "category": "0Windows",
     },
-    "Win7 x64 Debug (NVIDIA)": {
+    "Win7 FYI x64 Debug (NVIDIA)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
@@ -184,7 +184,7 @@
       "builder_timeout_s": 21600,
       "category": "0Windows",
     },
-    "Win7 x64 dEQP Release (NVIDIA)": {
+    "Win7 FYI x64 dEQP Release (NVIDIA)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
@@ -194,7 +194,7 @@
       "builder_timeout_s": 10800,
       "category": "0Windows",
     },
-    "GPU Win Clang Builder (dbg)": {
+    "GPU FYI Win Clang Builder (dbg)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": "chromium_commits",
@@ -203,7 +203,7 @@
       "category": "0Windows",
     },
 
-    "GPU Mac Builder": {
+    "GPU FYI Mac Builder": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": "chromium_commits",
@@ -211,7 +211,7 @@
       "builder_timeout_s": 10800,
       "category": "1Mac",
     },
-    "GPU Mac Builder (dbg)": {
+    "GPU FYI Mac Builder (dbg)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": "chromium_commits",
@@ -219,7 +219,7 @@
       "builder_timeout_s": 3600,
       "category": "1Mac",
     },
-    "GPU Mac dEQP Builder": {
+    "GPU FYI Mac dEQP Builder": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": "chromium_commits",
@@ -227,7 +227,7 @@
       "builder_timeout_s": 10800,
       "category": "1Mac",
     },
-    "Mac Release (Intel)": {
+    "Mac FYI Release (Intel)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
@@ -237,7 +237,7 @@
       "builder_timeout_s": 7200,
       "category": "1Mac",
     },
-    "Mac Debug (Intel)": {
+    "Mac FYI Debug (Intel)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
@@ -247,7 +247,7 @@
       "builder_timeout_s": 7200,
       "category": "1Mac",
     },
-    "Mac Pro Release (AMD)": {
+    "Mac Pro FYI Release (AMD)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
@@ -257,7 +257,7 @@
       "builder_timeout_s": 21600,
       "category": "1Mac",
     },
-    "Mac Pro Debug (AMD)": {
+    "Mac Pro FYI Debug (AMD)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
@@ -267,7 +267,7 @@
       "builder_timeout_s": 7200,
       "category": "1Mac",
     },
-    "Mac Retina Release (NVIDIA)": {
+    "Mac FYI Retina Release (NVIDIA)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
@@ -277,7 +277,7 @@
       "builder_timeout_s": 21600,
       "category": "1Mac",
     },
-    "Mac Retina Debug (NVIDIA)": {
+    "Mac FYI Retina Debug (NVIDIA)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
@@ -287,7 +287,7 @@
       "builder_timeout_s": 21600,
       "category": "1Mac",
     },
-    "Mac Retina Release (AMD)": {
+    "Mac FYI Retina Release (AMD)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
@@ -297,7 +297,7 @@
       "builder_timeout_s": 7200,
       "category": "1Mac",
     },
-    "Mac Retina Debug (AMD)": {
+    "Mac FYI Retina Debug (AMD)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
@@ -307,7 +307,7 @@
       "builder_timeout_s": 7200,
       "category": "1Mac",
     },
-    "Mac Experimental Release (Intel)": {
+    "Mac FYI Experimental Release (Intel)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
@@ -317,7 +317,7 @@
       "builder_timeout_s": 21600,
       "category": "1Mac",
     },
-    "Mac Experimental Retina Release (AMD)": {
+    "Mac FYI Experimental Retina Release (AMD)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
@@ -327,7 +327,7 @@
       "builder_timeout_s": 21600,
       "category": "1Mac",
     },
-    "Mac Experimental Retina Release (NVIDIA)": {
+    "Mac FYI Experimental Retina Release (NVIDIA)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
@@ -337,7 +337,7 @@
       "builder_timeout_s": 21600,
       "category": "1Mac",
     },
-    "Mac GPU ASAN Release": {
+    "Mac FYI GPU ASAN Release": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": "chromium_commits",
@@ -345,7 +345,7 @@
       "builder_timeout_s": 21600,
       "category": "1Mac",
     },
-    "Mac dEQP Release AMD": {
+    "Mac FYI dEQP Release AMD": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
@@ -355,7 +355,7 @@
       "builder_timeout_s": 7200,
       "category": "1Mac",
     },
-    "Mac dEQP Release Intel": {
+    "Mac FYI dEQP Release Intel": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
@@ -365,7 +365,7 @@
       "builder_timeout_s": 7200,
       "category": "1Mac",
     },
-    "GPU Linux Builder": {
+    "GPU FYI Linux Builder": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": "chromium_commits",
@@ -373,7 +373,7 @@
       "builder_timeout_s": 3600,
       "category": "2Linux",
     },
-    "GPU Linux Ozone Builder": {
+    "GPU FYI Linux Ozone Builder": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": "chromium_commits",
@@ -381,7 +381,7 @@
       "builder_timeout_s": 7200,
       "category": "2Linux",
     },
-    "GPU Linux Builder (dbg)": {
+    "GPU FYI Linux Builder (dbg)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": "chromium_commits",
@@ -389,7 +389,7 @@
       "builder_timeout_s": 3600,
       "category": "2Linux",
     },
-    "GPU Linux dEQP Builder": {
+    "GPU FYI Linux dEQP Builder": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": "chromium_commits",
@@ -397,7 +397,7 @@
       "builder_timeout_s": 3600,
       "category": "2Linux",
     },
-    "Linux Ozone (Intel)": {
+    "Linux FYI Ozone (Intel)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
@@ -407,7 +407,7 @@
       "builder_timeout_s": 21600,
       "category": "2Linux",
     },
-    "Linux Release (NVIDIA)": {
+    "Linux FYI Release (NVIDIA)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
@@ -417,7 +417,7 @@
       "builder_timeout_s": 7200,
       "category": "2Linux",
     },
-    "Linux Debug (NVIDIA)": {
+    "Linux FYI Debug (NVIDIA)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
@@ -427,7 +427,7 @@
       "builder_timeout_s": 10800,
       "category": "2Linux",
     },
-    "Linux dEQP Release (NVIDIA)": {
+    "Linux FYI dEQP Release (NVIDIA)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
@@ -437,7 +437,7 @@
       "builder_timeout_s": 7200,
       "category": "2Linux",
     },
-    "Linux Release (AMD R7 240)": {
+    "Linux FYI Release (AMD R7 240)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
@@ -447,7 +447,7 @@
       "builder_timeout_s": 21600,
       "category": "2Linux",
     },
-    "Linux Release (Intel HD 630)": {
+    "Linux FYI Release (Intel HD 630)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
@@ -457,7 +457,7 @@
       "builder_timeout_s": 7200,
       "category": "2Linux",
     },
-    "Linux GPU TSAN Release": {
+    "Linux FYI GPU TSAN Release": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": "chromium_commits",
@@ -466,7 +466,7 @@
       "category": "2Linux",
     },
 
-    "Android Release (Nexus 5)": {
+    "Android FYI Release (Nexus 5)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": "chromium_commits",
@@ -474,7 +474,7 @@
       "builder_timeout_s": 21600,
       "category": "3Android",
     },
-    "Android Release (Nexus 5X)": {
+    "Android FYI Release (Nexus 5X)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": "chromium_commits",
@@ -482,7 +482,7 @@
       "builder_timeout_s": 21600,
       "category": "3Android",
     },
-    "Android Release (Nexus 6)": {
+    "Android FYI Release (Nexus 6)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": "chromium_commits",
@@ -490,7 +490,7 @@
       "builder_timeout_s": 21600,
       "category": "3Android",
     },
-    "Android Release (Nexus 6P)": {
+    "Android FYI Release (Nexus 6P)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": "chromium_commits",
@@ -498,7 +498,7 @@
       "builder_timeout_s": 21600,
       "category": "3Android",
     },
-    "Android Release (Nexus 9)": {
+    "Android FYI Release (Nexus 9)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": "chromium_commits",
@@ -506,7 +506,7 @@
       "builder_timeout_s": 21600,
       "category": "3Android",
     },
-    "Android Release (NVIDIA Shield TV)": {
+    "Android FYI Release (NVIDIA Shield TV)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": "chromium_commits",
@@ -514,7 +514,7 @@
       "builder_timeout_s": 21600,
       "category": "3Android",
     },
-    "Android dEQP Release (Nexus 5X)": {
+    "Android FYI dEQP Release (Nexus 5X)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": "chromium_commits",
