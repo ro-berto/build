@@ -459,8 +459,7 @@ def GenTests(api):
           buildername='linux_chromium_rel_ng') +
     suppress_analyze() +
     base_unittests_additional_compile_target() +
-    api.step_data('compile (with patch)', retcode=1) +
-    api.step_data('compile (without patch)', retcode=1)
+    api.step_data('compile (with patch)', retcode=1)
   )
 
   yield (
@@ -631,8 +630,7 @@ def GenTests(api):
      ) +
     api.post_process(
         Filter('gerrit get_patch_destination_branch',
-               'bot_update',
-               'bot_update (without patch)'))
+               'bot_update'))
   )
 
   yield (

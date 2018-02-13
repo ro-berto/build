@@ -294,24 +294,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     compile_targets = bot_config.get_compile_targets(self, bot_db, tests)
     return sorted(set(compile_targets))
 
-  def transient_check(self, update_step, command):
-    """Runs command, checking for transience if this is a try job.
-
-    * command is a function which takes an argument of type (str -> str),
-      which is a test name transformation (it adds "with patch" or "without
-      patch") and runs the command.
-    * update_step is the bot_update step used for deapplying the patch.
-    """
-    if self.m.tryserver.is_tryserver:
-      try:
-        command(lambda name: '%s (with patch)' % name)
-      except self.m.step.StepFailure:
-        self.deapply_patch(update_step)
-        command(lambda name: '%s (without patch)' % name)
-        raise
-    else:
-      command(lambda name: name)
-
   def compile_specific_targets(
       self, bot_config, update_step, bot_db,
       compile_targets, tests_including_triggered,
@@ -355,12 +337,15 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           self.m.chromium.update_clang()
 
       try:
-        self.transient_check(update_step, lambda transform_name:
-            self.run_mb_and_compile(compile_targets, isolated_targets,
-                                    name_suffix=transform_name(''),
-                                    mb_mastername=mb_mastername,
-                                    mb_buildername=mb_buildername,
-                                    mb_config_path=mb_config_path))
+        name_suffix = ''
+        if self.m.tryserver.is_tryserver:
+          name_suffix=' (with patch)'
+
+        self.run_mb_and_compile(compile_targets, isolated_targets,
+                                name_suffix=name_suffix,
+                                mb_mastername=mb_mastername,
+                                mb_buildername=mb_buildername,
+                                mb_config_path=mb_config_path)
       except self.m.step.StepFailure:
         self.m.tryserver.set_compile_failure_tryjob_result()
         raise
