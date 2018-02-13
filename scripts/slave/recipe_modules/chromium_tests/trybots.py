@@ -331,6 +331,10 @@ TRYBOTS = freeze({
         'mastername': 'chromium.fyi',
         'buildername': 'Linux ARM',
       }),
+      'linux_chromium_xenial_rel_ng': simple_bot({
+        'mastername': 'chromium.fyi',
+        'buildername': 'Linux Xenial',
+      }),
       'linux_chromium_browser_side_navigation_rel': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'Browser Side Navigation Linux',

@@ -794,6 +794,12 @@
             ],
             "forgiving_optional": ["*"]
           },
+          "Linux Xenial": {
+            "tree_notify": [
+              "thomasanderson@chromium.org"
+            ],
+            "forgiving_optional": ["*"]
+          },
           "Mojo Linux": {
             "tree_notify": [
               "network-service-sheriffs@chromium.org"

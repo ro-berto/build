@@ -52,7 +52,7 @@ def stock_config(name, platform=None, config='Release'):
       'chromium_apply_config': [
           'mb',
           'ninja_confirm_noop',
-        ],
+      ],
       'chromium_config_kwargs': {
           'BUILD_CONFIG': config,
           'TARGET_BITS': 64,
@@ -881,6 +881,30 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
+    },
+
+    'Linux Xenial': {
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
+      'chromium_apply_config': [
+        'mb',
+        'ninja_confirm_noop',
+      ],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'chromium_tests_apply_config': [ 'staging' ],
+      'test_results_config': 'staging_server',
+      'testing': {
+        'platform': 'linux',
+      },
+      'enable_swarming': True,
+      'swarming_dimensions': {
+        'cpu': 'x86-64',
+        'os': 'Ubuntu-16.04',
+      },
+      'serialize_tests': True,
     },
   },
 }
