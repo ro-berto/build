@@ -173,12 +173,12 @@ TRYBOTS = freeze({
         'bot_ids': [
           {
             'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU Linux Builder',
+            'buildername': 'GPU FYI Linux Builder',
             'tester': 'Linux FYI Release (NVIDIA)',
           },
           {
             'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU Linux Builder',
+            'buildername': 'GPU FYI Linux Builder',
             'tester': 'Linux FYI Release (Intel HD 630)',
           },
         ],
