@@ -3,6 +3,8 @@
   "master_port": 20307,
   "master_port_alt": 40307,
   "slave_port": 30307,
+  "pubsub_service_account_file": "service-account-luci-milo.json",
+  "pubsub_topic": "projects/luci-milo/topics/public-buildbot",
   # TODO(eseidel): We should create our own templates.
   "templates": ["../master.chromium/templates"],
 
