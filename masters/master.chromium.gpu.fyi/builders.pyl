@@ -70,7 +70,7 @@
       "builder_timeout_s": 14400,
       "category": "0Windows",
     },
-    "Win10 FYI Experimental Release (NVIDIA)": {
+    "Win10 FYI Exp Release (NVIDIA)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,

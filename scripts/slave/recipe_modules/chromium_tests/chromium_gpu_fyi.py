@@ -131,7 +131,7 @@ SPEC = {
       },
       'serialize_tests': True,
     },
-    'Win10 FYI Experimental Release (NVIDIA)': {
+    'Win10 FYI Exp Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
