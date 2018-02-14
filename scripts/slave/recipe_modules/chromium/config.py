@@ -661,6 +661,12 @@ def chromium_asan(c):
 def chromium_linux_asan(c):
   pass
 
+@config_ctx(includes=['ninja', 'clang', 'goma', 'asan'])
+def chromium_linux_asan_no_test_args(c):
+  # TODO(jbudorick): Once all bots have migrated to this,
+  # remove chromium_linux_asan and rename this.
+  pass
+
 @config_ctx(includes=['chromium_asan', 'static_library'])
 def chromium_mac_asan(c):
   # Need to explicitly set host arch for mac asan 64.

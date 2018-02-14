@@ -27,7 +27,7 @@ SPEC = {
       'testing': {'platform': 'linux'},
     },
     'Linux ASan LSan Tests (1)': {
-      'chromium_config': 'chromium_linux_asan',
+      'chromium_config': 'chromium_linux_asan_no_test_args',
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
