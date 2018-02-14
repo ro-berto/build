@@ -205,7 +205,7 @@ def BASE(c):
   if gyp_arch:
     c.gyp_env.GYP_DEFINES['target_arch'] = gyp_arch
 
-  if c.TARGET_PLATFORM == 'mac':
+  if c.HOST_PLATFORM == 'mac':
     c.mac_toolchain.xcode_build_version = '9C40b'
     c.mac_toolchain.installer_cipd_package = (
         'infra/tools/mac_toolchain/${platform}')
@@ -215,8 +215,10 @@ def BASE(c):
     # TODO(crbug.com/790154): make this conditional, do not set for LUCI bots.
     c.mac_toolchain.cipd_credentials = (
         '/creds/service_accounts/service-account-xcode-cipd-access.json')
-    # TODO(crbug.com/797051): remove this when all builds switch to the new
-    # Xcode flow.
+
+  # TODO(crbug.com/797051): remove this when all builds switch to the new
+  # Xcode flow.
+  if c.TARGET_PLATFORM == 'mac':
     c.env.FORCE_MAC_TOOLCHAIN = 1
 
   if c.BUILD_CONFIG in ['Coverage', 'Release']:

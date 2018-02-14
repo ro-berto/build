@@ -918,9 +918,9 @@ Returns: (context manager) A context manager that inserts system python
 
 #### **class [ChromiumApi](/scripts/slave/recipe_modules/chromium/api.py#29)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [apply\_syzyasan](/scripts/slave/recipe_modules/chromium/api.py#1052)(self):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [apply\_syzyasan](/scripts/slave/recipe_modules/chromium/api.py#1056)(self):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [archive\_build](/scripts/slave/recipe_modules/chromium/api.py#1064)(self, step_name, gs_bucket, gs_acl=None, mode=None, \*\*kwargs):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [archive\_build](/scripts/slave/recipe_modules/chromium/api.py#1068)(self, step_name, gs_bucket, gs_acl=None, mode=None, \*\*kwargs):**
 
 Returns a step invoking archive_build.py to archive a Chromium build.
 
@@ -933,7 +933,7 @@ recipe operations. This is responsible for basic enviornment initialization.
 
 See "ensure_chromium_layout" for more information.
 
-&mdash; **def [clobber\_if\_needed](/scripts/slave/recipe_modules/chromium/api.py#806)(self):**
+&mdash; **def [clobber\_if\_needed](/scripts/slave/recipe_modules/chromium/api.py#810)(self):**
 
 Add an explicit clobber step if requested.
 
@@ -955,7 +955,7 @@ as appropriate.
 Returns a tuple of (buildername, bot_config) for subsequent use in
    the recipe.
 
-&mdash; **def [delete\_old\_mac\_toolchain](/scripts/slave/recipe_modules/chromium/api.py#760)(self):**
+&mdash; **def [delete\_old\_mac\_toolchain](/scripts/slave/recipe_modules/chromium/api.py#764)(self):**
 
 Remove the old "hermetic" toolchain cache.
 
@@ -972,11 +972,11 @@ Returns (ChromiumApi.Layout): The configured Chromium build layout.
 
 &mdash; **def [ensure\_goma](/scripts/slave/recipe_modules/chromium/api.py#732)(self, canary=False):**
 
-&mdash; **def [ensure\_mac\_toolchain](/scripts/slave/recipe_modules/chromium/api.py#769)(self):**
+&mdash; **def [ensure\_mac\_toolchain](/scripts/slave/recipe_modules/chromium/api.py#773)(self):**
 
-&mdash; **def [ensure\_toolchains](/scripts/slave/recipe_modules/chromium/api.py#802)(self):**
+&mdash; **def [ensure\_toolchains](/scripts/slave/recipe_modules/chromium/api.py#806)(self):**
 
-&mdash; **def [get\_annotate\_by\_test\_name](/scripts/slave/recipe_modules/chromium/api.py#1105)(self, test_name):**
+&mdash; **def [get\_annotate\_by\_test\_name](/scripts/slave/recipe_modules/chromium/api.py#1109)(self, test_name):**
 
 &emsp; **@_with_chromium_layout**<br>&mdash; **def [get\_clang\_version](/scripts/slave/recipe_modules/chromium/api.py#688)(self, \*\*kwargs):**
 
@@ -1002,15 +1002,15 @@ Args:
 
 Return the path to the built executable directory.
 
-&mdash; **def [process\_dumps](/scripts/slave/recipe_modules/chromium/api.py#1040)(self, \*\*kwargs):**
+&mdash; **def [process\_dumps](/scripts/slave/recipe_modules/chromium/api.py#1044)(self, \*\*kwargs):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [run\_gn](/scripts/slave/recipe_modules/chromium/api.py#860)(self, use_goma=False, gn_path=None, build_dir=None, \*\*kwargs):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [run\_gn](/scripts/slave/recipe_modules/chromium/api.py#864)(self, use_goma=False, gn_path=None, build_dir=None, \*\*kwargs):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [run\_gyp\_chromium](/scripts/slave/recipe_modules/chromium/api.py#852)(self):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [run\_gyp\_chromium](/scripts/slave/recipe_modules/chromium/api.py#856)(self):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [run\_mb](/scripts/slave/recipe_modules/chromium/api.py#924)(self, mastername, buildername, use_goma=True, mb_path=None, mb_config_path=None, isolated_targets=None, name=None, build_dir=None, android_version_code=None, android_version_name=None, phase=None, \*\*kwargs):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [run\_mb](/scripts/slave/recipe_modules/chromium/api.py#928)(self, mastername, buildername, use_goma=True, mb_path=None, mb_config_path=None, isolated_targets=None, name=None, build_dir=None, android_version_code=None, android_version_name=None, phase=None, \*\*kwargs):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [runhooks](/scripts/slave/recipe_modules/chromium/api.py#816)(self, env=None, \*\*kwargs):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [runhooks](/scripts/slave/recipe_modules/chromium/api.py#820)(self, env=None, \*\*kwargs):**
 
 Run the build-configuration hooks for chromium.
 
@@ -1025,11 +1025,11 @@ Return a runtest.py invocation.
 Return a sizes.py invocation.
 This uses runtests.py to upload the results to the perf dashboard.
 
-&mdash; **def [taskkill](/scripts/slave/recipe_modules/chromium/api.py#1034)(self):**
+&mdash; **def [taskkill](/scripts/slave/recipe_modules/chromium/api.py#1038)(self):**
 
 &emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_launcher\_filter](/scripts/slave/recipe_modules/chromium/api.py#513)(self, tests):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [update\_clang](/scripts/slave/recipe_modules/chromium/api.py#1024)(self):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [update\_clang](/scripts/slave/recipe_modules/chromium/api.py#1028)(self):**
 
 &emsp; **@property**<br>&mdash; **def [version](/scripts/slave/recipe_modules/chromium/api.py#143)(self):**
 

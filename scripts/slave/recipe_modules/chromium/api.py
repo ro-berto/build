@@ -748,6 +748,10 @@ class ChromiumApi(recipe_api.RecipeApi):
     self.c.compile_py.goma_dir = goma_dir
 
   def get_mac_toolchain_installer(self):
+    assert self.c.mac_toolchain.installer_cipd_package
+    assert self.c.mac_toolchain.installer_version
+    assert self.c.mac_toolchain.installer_cmd
+
     cipd_root = self.m.path['start_dir']
     cipd_pkg = self.c.mac_toolchain.installer_cipd_package
     pkg_version = self.c.mac_toolchain.installer_version

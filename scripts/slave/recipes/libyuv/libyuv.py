@@ -96,6 +96,8 @@ def GenTests(api):
                          suffix='_forced')
   yield generate_builder(mastername, 'Android Tester ARM32 Debug (Nexus 5X)',
                          revision=None, suffix='_forced_invalid')
+  yield generate_builder(mastername, 'iOS Debug', revision=None,
+                         suffix='_forced')
 
   yield generate_builder('tryserver.libyuv', 'linux', revision=None,
                          suffix='_forced')

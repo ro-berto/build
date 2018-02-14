@@ -14,14 +14,10 @@
       "[CACHE]/git",
       "--cleanup-dir",
       "[CLEANUP]/bot_update",
-      "--gerrit_repo",
-      "https://chromium.googlesource.com/libyuv",
-      "--gerrit_ref",
-      "refs/changes/89/456789/12",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@deadbeef"
+      "src@HEAD"
     ],
     "env_prefixes": {
       "PATH": [
@@ -35,7 +31,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src\": \"deadbeef\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"HEAD\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
@@ -140,7 +136,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[CACHE]/goma_client' target_arch=arm use_goma=1",
+      "GYP_DEFINES": "clang=1 component=static_library gomadir='[CACHE]/goma_client' target_arch=arm use_goma=1",
       "GYP_GENERATORS": "ninja",
       "MAC_TOOLCHAIN_CREDS": "/creds/service_accounts/service-account-xcode-cipd-access.json",
       "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain",
@@ -155,8 +151,8 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gn.py",
       "--root=[START_DIR]/src",
       "gen",
-      "//out/Release-iphoneos",
-      "--args=is_clang=true ios_enable_code_signing=false target_os=\"ios\" symbol_level=2 dcheck_always_on=true is_debug=false target_cpu=\"arm\" use_goma=true goma_dir=\"[CACHE]/goma_client\""
+      "//out/Debug-iphoneos",
+      "--args=is_clang=true ios_enable_code_signing=false target_os=\"ios\" is_component_build=false is_debug=true target_cpu=\"arm\" use_goma=true goma_dir=\"[CACHE]/goma_client\""
     ],
     "cwd": "[START_DIR]/src",
     "env": {
@@ -227,7 +223,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/ios_rel"
+      "[CACHE]/goma/iOS_Debug"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
@@ -249,10 +245,10 @@
     "cwd": "[START_DIR]/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/ios_rel",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/iOS_Debug",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
-      "GOMA_FAIL_FAST": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -304,7 +300,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]/src/out/Release-iphoneos",
+      "[START_DIR]/src/out/Debug-iphoneos",
       "-j",
       "50"
     ],
@@ -409,17 +405,17 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[START_DIR]/src/out/Release-iphoneos",
+      "[START_DIR]/src/out/Debug-iphoneos",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/Release-iphoneos', '-j', 50]",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/Debug-iphoneos', '-j', 50]",
       "--build-exit-status",
       "0",
       "--ninja-log-compiler",
       "goma-clang",
       "--buildbot-buildername",
-      "ios_rel",
+      "iOS Debug",
       "--buildbot-mastername",
-      "tryserver.libyuv",
+      "client.libyuv",
       "--buildbot-slavename",
       "bot_id"
     ],
