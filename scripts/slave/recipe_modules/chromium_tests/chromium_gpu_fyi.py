@@ -564,6 +564,7 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
+      'serialize_tests': True,
     },
     'GPU FYI Mac Builder': {
       'chromium_config': 'chromium',
@@ -677,20 +678,7 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-    },
-    'Mac Pro FYI Debug (AMD)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'GPU FYI Mac Builder (dbg)',
-      'testing': {
-        'platform': 'mac',
-      },
+      'serialize_tests': True,
     },
     'Mac FYI Retina Release (NVIDIA)': {
       'chromium_config': 'chromium',
@@ -795,6 +783,7 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
+      'serialize_tests': True,
     },
     'Mac FYI GPU ASAN Release': {
       'chromium_config': 'chromium',
@@ -1020,6 +1009,7 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
+      'serialize_tests': True,
     },
 
     # The following machines don't actually exist. They are specified
