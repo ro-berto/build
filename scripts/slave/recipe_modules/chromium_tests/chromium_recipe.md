@@ -24,13 +24,31 @@ section once you have read this section.
 1. Add the builder to [`src/testing/buildbot/chromium.linux.json`](https://chromium.googlesource.com/chromium/src/+/master/testing/buildbot/chromium.linux.json)
    .
 1. Add the new builder to the buildbot master config.
-  1. If the builder is not using [`builders.pyl`](https://chromium.googlesource.com/infra/infra/+/master/doc/users/services/buildbot/builders.pyl.md)
-     , then you need to declare the new builder in [`master.cfg`](https://chromium.googlesource.com/chromium/tools/build.git/+/master/masters/master.chromium.linux/master.cfg)
-     , assign it a recipe name and a slave pool (`slaves.cfg`).
-  2. If the builder is using `builders.pyl`, then look at the [docs](https://chromium.googlesource.com/infra/infra/+/master/doc/users/services/buildbot/builders.pyl.md)
-     and modify the corresponding file.
+    1. If the builder is not using [`builders.pyl`](https://chromium.googlesource.com/infra/infra/+/master/doc/users/services/buildbot/builders.pyl.md)
+      , then you need to declare the new builder in [`master.cfg`](https://chromium.googlesource.com/chromium/tools/build.git/+/master/masters/master.chromium.linux/master.cfg)
+      , assign it a recipe name and a slave pool (`slaves.cfg`).
+    2. If the builder is using `builders.pyl`, then look at the [docs](https://chromium.googlesource.com/infra/infra/+/master/doc/users/services/buildbot/builders.pyl.md)
+      and modify the corresponding file.
 1. Request a master restart [here](https://chromium.googlesource.com/infra/infra/+/master/doc/users/contacting_troopers.md)
    .
+1. Add the new builder to the console for the desired master in `luci-milo.cfg`
+  and `luci-milo-dev.cfg` in the
+  [ `infra/config` branch of `chromium/src`](https://chromium.googlesource.com/chromium/src/+/infra/config)
+  . Existing entries in those configurations should be good examples. Your new
+  entry should minimally include:
+    1. `name`: a string matching either `buildbot/$MASTER_NAME/$BUILDER_NAME`
+      (for buildbot bots) or `buildbucket/$BUCKET_NAME/$BUILDER_NAME` (for LUCI
+      bots).
+    1. `category`: a string containing one or more categories separated by `|`.
+
+        **Note**: the order of builders within a console's configuration
+        determines the order in which the builders appear on that console, and
+        adjacent builders that share one or more categories will have those
+        categories merged in the UI. As such, it's best to list your new builder
+        next to other builders that share its categories.
+
+    1. `short_name`: a string containing at most three characters that will be
+      used to represent the builder on the console.
 
 You also need to think about provisioning hardware for the new slaves. File a
 ticket with the label `Infra-Labs` (http://go/infrasys-bug is a good place to
