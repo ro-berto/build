@@ -146,7 +146,10 @@ class RevisionState(object):
   def std_dev(self):
     if self.debug_values:
       mn = self.mean
-      return math.sqrt(sum(pow(x - mn, 2) for x in self.debug_values))
+      numer = sum(pow(x - mn, 2) for x in self.debug_values)
+      # Sample standard deviation
+      N = float(max(1, len(self.debug_values) - 1))
+      return math.sqrt(numer / N)
 
   def _check_values_produced(self):
     """Checks if any values were output from tests."""
