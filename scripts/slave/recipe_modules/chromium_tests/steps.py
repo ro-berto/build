@@ -360,7 +360,6 @@ class LocalGTestTest(Test):
                revision=None, webkit_revision=None,
                android_shard_timeout=None, android_tool=None,
                override_compile_targets=None, override_isolate_target=None,
-               upload_to_flake_predictor=False,
                commit_position_property='got_revision_cp', use_xvfb=True,
                waterfall_mastername=None, waterfall_buildername=None,
                set_up=None, tear_down=None, **runtest_kwargs):
@@ -401,7 +400,6 @@ class LocalGTestTest(Test):
     self._android_tool = android_tool
     self._override_compile_targets = override_compile_targets
     self._override_isolate_target = override_isolate_target
-    self._upload_to_flake_predictor = upload_to_flake_predictor
     self._commit_position_property = commit_position_property
     self._use_xvfb = use_xvfb
     self._runtest_kwargs = runtest_kwargs
@@ -500,23 +498,11 @@ class LocalGTestTest(Test):
             ['failures:', r.failures]
           ])
 
-        source = api.json.input(r.raw)
         api.test_results.upload(
-            source,
+            api.json.input(r.raw),
             test_type=self.name,
             chrome_revision=api.bot_update.last_returned_properties.get(
                 self._commit_position_property, 'x@{#0}'))
-        if (self._upload_to_flake_predictor and step_result.retcode != 0):
-          bucket = 'flake-predictor-data/log_data'
-          gs_dest = '%s/%s/%d/%s.json' % (api.properties['mastername'],
-                                          api.properties['buildername'],
-                                          api.properties['buildnumber'],
-                                          self.name)
-          api.gsutil.upload(
-              name='Uploading results to %s' % bucket,
-              source=source,
-              bucket=bucket,
-              dest=gs_dest)
 
     return step_result
 
@@ -751,8 +737,6 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
         'override_compile_targets', None)
     common_gtest_kwargs['override_isolate_target'] = spec.get(
         'override_isolate_target', None)
-    common_gtest_kwargs['upload_to_flake_predictor'] = spec.get(
-        'upload_to_flake_predictor', False)
 
     common_gtest_kwargs['waterfall_mastername'] = mastername
     common_gtest_kwargs['waterfall_buildername'] = buildername
@@ -1351,7 +1335,7 @@ class SwarmingGTestTest(SwarmingTest):
                dimensions=None, tags=None, extra_suffix=None, priority=None,
                expiration=None, hard_timeout=None, io_timeout=None,
                upload_test_results=True, override_compile_targets=None,
-               override_isolate_target=None, upload_to_flake_predictor=False,
+               override_isolate_target=None,
                cipd_packages=None, waterfall_mastername=None,
                waterfall_buildername=None, merge=None, trigger_script=None,
                set_up=None, tear_down=None):
@@ -1365,7 +1349,6 @@ class SwarmingGTestTest(SwarmingTest):
     self._upload_test_results = upload_test_results
     self._override_compile_targets = override_compile_targets
     self._override_isolate_target = override_isolate_target
-    self._upload_to_flake_predictor = upload_to_flake_predictor
     self._cipd_packages = cipd_packages
     self._gtest_results = {}
     self._merge = merge
@@ -1440,22 +1423,10 @@ class SwarmingGTestTest(SwarmingTest):
               'got_revision_cp', 'x@{#0}')
           chrome_revision = str(api.commit_position.parse_revision(
               chrome_revision_cp))
-          source = api.json.input(parsed_gtest_data)
           api.test_results.upload(
-              source,
+              api.json.input(parsed_gtest_data),
               chrome_revision=chrome_revision,
               test_type=step_result.step['name'])
-          if (self._upload_to_flake_predictor and step_result.retcode != 0):
-            bucket = 'flake-predictor-data/log_data'
-            gs_dest = '%s/%s/%d/%s.json' % (api.properties['mastername'],
-                                            api.properties['buildername'],
-                                            api.properties['buildnumber'],
-                                            self.name)
-            api.gsutil.upload(
-                name='Uploading results to %s' % bucket,
-                source=source,
-                bucket=bucket,
-                dest=gs_dest)
 
 
 class LocalIsolatedScriptTest(Test):
