@@ -22,6 +22,8 @@ DEPS = [
     'test_utils',
 ]
 
+from recipe_engine import post_process
+
 
 def RunSteps(api):
   api.gclient.set_config('chromium')
@@ -293,3 +295,16 @@ def GenTests(api):
       )
   )
 
+  yield (
+    api.test('experimental') +
+      api.properties(single_spec={
+          'experiment_percentage': '100',
+          'name': 'base_unittests',
+          'isolate_name': 'base_unittests_run',
+      },
+      swarm_hashes={
+        'base_unittests_run': 'ffffffffffffffffffffffffffffffffffffffff',
+      }) +
+    api.step_data('base_unittests', retcode=1) +
+    api.post_process(post_process.StatusCodeIn, 0) +
+    api.post_process(post_process.DropExpectation))

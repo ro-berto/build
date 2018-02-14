@@ -4,9 +4,11 @@
 
 import contextlib
 import datetime
+import hashlib
 import json
 import re
 import string
+import struct
 import textwrap
 import traceback
 
@@ -149,8 +151,7 @@ class Test(object):
     """
     return self.name  # pragma: no cover
 
-  @staticmethod
-  def compile_targets(api):
+  def compile_targets(self, api):
     """List of compile targets needed by this test."""
     raise NotImplementedError()  # pragma: no cover
 
@@ -206,6 +207,122 @@ class Test(object):
     return data
 
 
+class TestWrapper(Test):  # pragma: no cover
+
+  def __init__(self, test):
+    super(TestWrapper, self).__init__()
+    self._test = test
+
+  @property
+  def test_options(self):
+    return self._test.test_options
+
+  @test_options.setter
+  def test_options(self, value):
+    self._test.test_options = value
+
+  def name(self):
+    return self._test.name
+
+  def compile_targets(self, api):
+    return self._test.compile_targets(api)
+
+  def pre_run(self, api, suffix):
+    return self._test.pre_run(api, suffix)
+
+  def run(self, api, suffix):
+    return self._test.run(api, suffix)
+
+  def post_run(self, api, suffix):
+    return self._test.post_run(api, suffix)
+
+  def has_valid_results(self, api, suffix):
+    return self._test.has_valid_results(api, suffix)
+
+  def failures(self, api, suffix):
+    return self._test.failures(api, suffix)
+
+
+class ExperimentalTest(TestWrapper):
+
+  def __init__(self, test, experiment_percentage):
+    super(ExperimentalTest, self).__init__(test)
+    self._experiment_percentage = max(0, min(100, int(experiment_percentage)))
+
+  def _is_in_experiment(self, api):
+    # Arbitrarily determine whether to run the test based on its experiment
+    # key. Tests with the same experiment key should always either be in the
+    # experiment or not; i.e., given the same key, this should always either
+    # return True or False, but not both.
+    #
+    # The experiment key is either:
+    #   - builder name + patchset + name of the test, for trybots
+    #   - builder name + build number + name of the test, for CI bots
+    #
+    # These keys:
+    #   - ensure that the same experiment configuration is always used for
+    #     a given patchset
+    #   - allow independent variation of experiments on the same test
+    #     across different builders
+    #   - allow independent variation of experiments on different tests
+    #     across a single build
+    #
+    # The overall algorithm is copied from the CQ's implementation of
+    # experimental builders, albeit with different experiment keys.
+
+    criteria = [
+      api.properties.get('buildername', ''),
+      api.properties.get('patch_issue') or api.properties.get('buildnumber') or '0',
+      self.name,
+    ]
+
+    digest = hashlib.sha1(''.join(str(c) for c in criteria)).digest()
+    short = struct.unpack_from('<H', digest)[0]
+    return self._experiment_percentage * 0xffff >= short * 100
+
+  #override
+  def pre_run(self, api, suffix):
+    if not self._is_in_experiment(api):
+      return []
+
+    try:
+      return super(ExperimentalTest, self).pre_run(api, suffix)
+    except api.step.StepFailure:
+      pass
+
+  #override
+  def run(self, api, suffix):
+    if not self._is_in_experiment(api):
+      return []
+
+    try:
+      return super(ExperimentalTest, self).run(api, suffix)
+    except api.step.StepFailure:
+      pass
+
+  #override
+  def post_run(self, api, suffix):
+    if not self._is_in_experiment(api):
+      return []
+
+    try:
+      return super(ExperimentalTest, self).post_run(api, suffix)
+    except api.step.StepFailure:
+      pass
+
+  #override
+  def has_valid_results(self, api, suffix):
+    if not self._is_in_experiment(api):
+      return True
+    return super(ExperimentalTest, self).has_valid_results(api, suffix)
+
+  #override
+  def failures(self, api, suffix):
+    if not self._is_in_experiment(api):
+      return []
+    return super(ExperimentalTest, self).failures(api, suffix)
+
+
 class ArchiveBuildStep(Test):
   def __init__(self, gs_bucket, gs_acl=None):
     self.gs_bucket = gs_bucket
@@ -218,8 +335,7 @@ class ArchiveBuildStep(Test):
         gs_acl=self.gs_acl,
     )
 
-  @staticmethod
-  def compile_targets(_):
+  def compile_targets(self, _):
     return []
 
 
@@ -231,8 +347,7 @@ class SizesStep(Test):
   def run(self, api, suffix):
     return api.chromium.sizes(self.results_url, self.perf_id)
 
-  @staticmethod
-  def compile_targets(_):
+  def compile_targets(self, _):
     return ['chrome']
 
   @property
@@ -703,8 +818,12 @@ def generator_common(api, spec, swarming_delegate, local_delegate, swarming_dime
   else:
     tests.append(local_delegate(spec, **kwargs))
 
+  experiment_percentage = spec.get('experiment_percentage')
   for t in tests:
-    yield t
+    if experiment_percentage is not None:
+      yield ExperimentalTest(t, experiment_percentage)
+    else:
+      yield t
 
 
 def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
@@ -1830,8 +1949,7 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
 
 
 class PythonBasedTest(Test):
-  @staticmethod
-  def compile_targets(_):
+  def compile_targets(self, _):
     return []  # pragma: no cover
 
   def run_step(self, api, suffix, cmd_args, **kwargs):
@@ -1901,8 +2019,7 @@ class PrintPreviewTests(PythonBasedTest):  # pylint: disable=W032
           python_mode=True,
           **kwargs)
 
-  @staticmethod
-  def compile_targets(api):
+  def compile_targets(self, api):
     return ['browser_tests', 'blink_tests']
 
 
@@ -1923,8 +2040,7 @@ class BisectTest(Test):  # pylint: disable=W0232
   def uses_local_devices(self):
     return False
 
-  @staticmethod
-  def compile_targets(_):  # pragma: no cover
+  def compile_targets(self, _):  # pragma: no cover
     return ['chrome'] # Bisect always uses a separate bot for building.
 
   def pre_run(self, api, _):
@@ -1960,8 +2076,7 @@ class BisectTestStaging(Test):  # pylint: disable=W0232
   def uses_local_devices(self):
     return False
 
-  @staticmethod
-  def compile_targets(_):  # pragma: no cover
+  def compile_targets(self, _):  # pragma: no cover
     return ['chrome'] # Bisect always uses a separate bot for building.
 
   def pre_run(self, api, _):
@@ -2197,8 +2312,7 @@ class BlinkTest(Test):
 
   name = 'webkit_tests'
 
-  @staticmethod
-  def compile_targets(api):
+  def compile_targets(self, api):
     return ['blink_tests']
 
   @property
@@ -2283,8 +2397,7 @@ class BlinkTest(Test):
 class MiniInstallerTest(PythonBasedTest):  # pylint: disable=W0232
   name = 'test_installer'
 
-  @staticmethod
-  def compile_targets(_):
+  def compile_targets(self, _):
     return ['mini_installer', 'next_version_mini_installer']
 
   def run_step(self, api, suffix, cmd_args, **kwargs):
@@ -2322,8 +2435,7 @@ class WebViewCTSTest(Test):
   def uses_local_devices(self):
     return True
 
-  @staticmethod
-  def compile_targets(api):
+  def compile_targets(self, api):
     return ['system_webview_apk']
 
   def run(self, api, suffix):
@@ -2354,8 +2466,7 @@ class IncrementalCoverageTest(Test):
     """Name of the test."""
     return IncrementalCoverageTest._name
 
-  @staticmethod
-  def compile_targets(api):
+  def compile_targets(self, api):
     """List of compile targets needed by this test."""
     return []
 
@@ -2373,8 +2484,7 @@ class FindAnnotatedTest(Test):
       'webview_instrumentation_test_apk': 'WebViewInstrumentationTest',
   }
 
-  @staticmethod
-  def compile_targets(api):
+  def compile_targets(self, api):
     return FindAnnotatedTest._TEST_APKS.keys()
 
   def run(self, api, suffix):
@@ -2510,9 +2620,11 @@ class MockTest(Test):
 
   def __init__(self, name='MockTest',
                waterfall_mastername=None, waterfall_buildername=None,
-               abort_on_failure=False):
+               abort_on_failure=False, has_valid_results=True, failures=None):
     super(MockTest, self).__init__(waterfall_mastername, waterfall_buildername)
     self._abort_on_failure = abort_on_failure
+    self._failures = failures or []
+    self._has_valid_results = has_valid_results
     self._name = name
 
   @property
@@ -2541,6 +2653,12 @@ class MockTest(Test):
   def post_run(self, api, suffix):
     with self._mock_exit_codes(api):
       api.step('post_run %s%s' % (self.name, suffix), None)
+
+  def has_valid_results(self, api, suffix):
+    return self._has_valid_results
+
+  def failures(self, api, suffix):
+    return self._failures
 
   @property
   def abort_on_failure(self):
