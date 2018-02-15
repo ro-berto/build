@@ -60,7 +60,6 @@
 
 **[Recipes](#Recipes)**
   * [adb:examples/full](#recipes-adb_examples_full)
-  * [android/afdo_auto_roller](#recipes-android_afdo_auto_roller) &mdash; Autoroller recipe for Android's AFDO profiles.
   * [android/builder](#recipes-android_builder)
   * [annotated_run_test](#recipes-annotated_run_test) &mdash; Checks that properties get to recipes from annotated_run properly.
   * [archive:examples/full](#recipes-archive_examples_full)
@@ -3606,17 +3605,6 @@ Args:
 [DEPS](/scripts/slave/recipe_modules/adb/examples/full.py#5): [adb](#recipe_modules-adb), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/adb/examples/full.py#12)(api):**
-### *recipes* / [android/afdo\_auto\_roller](/scripts/slave/recipes/android/afdo_auto_roller.py)
-
-[DEPS](/scripts/slave/recipes/android/afdo_auto_roller.py#14): [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-Autoroller recipe for Android's AFDO profiles.
-
-These profiles live in gs://, and are generated+vetted+uploaded by our Chrome OS
-friends on a ~daily basis. This script tries to keep us on the latest one at all
-times.
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/android/afdo_auto_roller.py#80)(api):**
 ### *recipes* / [android/builder](/scripts/slave/recipes/android/builder.py)
 
 [DEPS](/scripts/slave/recipes/android/builder.py#9): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_tests](#recipe_modules-chromium_tests), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
