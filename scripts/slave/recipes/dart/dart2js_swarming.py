@@ -17,7 +17,7 @@ DEPS = [
 ]
 
 all_runtimes = ['none', 'd8', 'jsshell', 'ie9', 'ie10', 'ie11', 'ff',
-            'safari', 'chrome', 'safarimobilesim', 'drt', 'chromeff',
+            'safari', 'chrome', 'chromeff',
             'ie10chrome', 'ie11ff']
 
 multiple_runtimes = {'chromeff': ['chrome', 'ff'],
@@ -25,8 +25,8 @@ multiple_runtimes = {'chromeff': ['chrome', 'ff'],
                      'ie11ff': ['ie11', 'ff']}
 all_options = {'hostchecked': '--host-checked',
                'minified': '--minified',
-               'cps': '--cps-ir',
                'csp': '--csp',
+               'kernel': '--dart2js-with-kernel',
                'only': '', # prevents other tests to be run, use in combination with unittest
                'unittest': '',  # unittest is handled specially.
                'debug': ''} # debug is handled specially.
@@ -80,7 +80,7 @@ def RunSteps(api):
   api.dart.checkout()
 
   build_args = ['-m%s' % mode, '--arch=ia32', 'dart2js_bot']
-  if 'unittest' in options:
+  if 'unittest' in options or 'kernel' in options:
     build_args.append('compile_dart2js_platform')
   isolate = 'dart_tests'
   if 'only' in options:
@@ -121,8 +121,7 @@ def RunSteps(api):
       api.dart.read_debug_log()
 
 def test_runtime(api, system, runtime, options, mode, tasks, isolate_hash):
-  needs_xvfb = (runtime in ['drt', 'chrome', 'ff'] and
-                system == 'linux')
+  needs_xvfb = (runtime in ['chrome', 'ff'] and system == 'linux')
   command = xvfb_cmd if needs_xvfb else ['./tools/test.py']
 
   test_args = ['-m%s' % mode, '-aia32', '-cdart2js',
@@ -137,33 +136,41 @@ def test_runtime(api, system, runtime, options, mode, tasks, isolate_hash):
     test_args.append('--builder-tag=%s' % system)
   shard_args = command + test_args + use_sdk
 
-  tests = ['--exclude-suite=observatory_ui,service,co19']
-  tasks.append(api.dart.shard('dart2js_tests', isolate_hash, shard_args + tests))
+  if 'kernel' in options:
+    tests = ['language', 'corelib', 'dart2js_extra', 'dart2js_native']
+    tasks.append(api.dart.shard('dart2js_kernel_tests', isolate_hash, shard_args + tests))
 
-  tests = ['co19']
-  tasks.append(api.dart.shard('dart2js_co19_tests', isolate_hash, shard_args + tests))
-
-  test_args.extend(['--write-debug-log', '--write-test-outcome-log'])
-
-  if runtime in ['ie10', 'ie11']:
-    test_specs = [{'name': 'dart2js-%s tests' % runtime,
-                   'tests': ['html', 'pkg', 'samples']}]
+    tests = ['language_2', 'corelib_2']
+    tasks.append(api.dart.shard('dart2js_kernel_strong_tests', isolate_hash,
+        shard_args + ['--strong'] + tests))
   else:
-    test_specs = [
-      {'name': 'dart2js-%s-package tests' % runtime,
-       'tests': ['pkg']},
-      {'name': 'dart2js-%s-observatory-ui tests' % runtime,
-       'tests': ['observatory_ui']},
-      {'name': 'dart2js-%s-extra tests' % runtime,
-       'tests': ['dart2js_extra', 'dart2js_native']},
-    ]
+    tests = ['--exclude-suite=observatory_ui,service,co19']
+    tasks.append(api.dart.shard('dart2js_tests', isolate_hash, shard_args + tests))
 
-  RunTests(api, test_args, test_specs, use_xvfb=needs_xvfb)
-  if runtime in ['d8', 'drt']:
-    test_args.append('--checked')
-    for spec in test_specs:
-      spec['name'] = spec['name'].replace(' tests', '-checked tests')
+    tests = ['co19']
+    tasks.append(api.dart.shard('dart2js_co19_tests', isolate_hash, shard_args + tests))
+
+    test_args.extend(['--write-debug-log', '--write-test-outcome-log'])
+
+    if runtime in ['ie10', 'ie11']:
+      test_specs = [{'name': 'dart2js-%s tests' % runtime,
+                     'tests': ['html', 'pkg', 'samples']}]
+    else:
+      test_specs = [
+        {'name': 'dart2js-%s-package tests' % runtime,
+         'tests': ['pkg']},
+        {'name': 'dart2js-%s-observatory-ui tests' % runtime,
+         'tests': ['observatory_ui']},
+        {'name': 'dart2js-%s-extra tests' % runtime,
+         'tests': ['dart2js_extra', 'dart2js_native']},
+      ]
+
     RunTests(api, test_args, test_specs, use_xvfb=needs_xvfb)
+    if runtime in ['d8']:
+      test_args.append('--checked')
+      for spec in test_specs:
+        spec['name'] = spec['name'].replace(' tests', '-checked tests')
+      RunTests(api, test_args, test_specs, use_xvfb=needs_xvfb)
 
 
 def GenTests(api):
@@ -194,9 +201,19 @@ def GenTests(api):
       api.properties(shards='2')
    )
    yield (
-      api.test('dart2js-linux-drt-try') + api.platform('linux', 64) +
+      api.test('dart2js-linux-chrome-try') + api.platform('linux', 64) +
       api.properties.generic(mastername='client.dart',
-                             buildername='dart2js-linux-drt-try') +
+                             buildername='dart2js-linux-chrome-try') +
+      api.step_data('upload testing isolate',
+                    stdout=api.raw_io.output('test isolate hash')) +
+      api.properties(shards='3')
+   )
+   yield (
+      api.test('dart2js-linux-d8-kernel-minified-try') +
+      api.platform('linux', 64) +
+      api.properties.generic(
+          mastername='client.dart',
+          buildername='dart2js-linux-d8-kernel-minified-try') +
       api.step_data('upload testing isolate',
                     stdout=api.raw_io.output('test isolate hash')) +
       api.properties(shards='3')

@@ -133,7 +133,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/dart2js_linux_drt_try"
+      "[CACHE]/goma/dart2js_linux_chrome_try"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env_prefixes": {
@@ -157,7 +157,7 @@
     "cwd": "[CACHE]/builder/sdk",
     "env": {
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/dart2js_linux_drt_try",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/dart2js_linux_chrome_try",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -243,7 +243,7 @@
     "cwd": "[CACHE]/builder/sdk",
     "env": {
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/dart2js_linux_drt_try",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/dart2js_linux_chrome_try",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -278,7 +278,7 @@
     "cwd": "[CACHE]/builder/sdk",
     "env": {
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/dart2js_linux_drt_try",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/dart2js_linux_chrome_try",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -302,7 +302,7 @@
     "cwd": "[CACHE]/builder/sdk",
     "env": {
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/dart2js_linux_drt_try",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/dart2js_linux_chrome_try",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -335,7 +335,7 @@
       "--build-exit-status",
       "0",
       "--buildbot-buildername",
-      "dart2js-linux-drt-try",
+      "dart2js-linux-chrome-try",
       "--buildbot-mastername",
       "client.dart",
       "--buildbot-slavename",
@@ -486,7 +486,7 @@
       "--shards",
       "1",
       "--task-name",
-      "dart2js_tests_shard_1/Linux/test isola/dart2js-linux-drt-try/571",
+      "dart2js_tests_shard_1/Linux/test isola/dart2js-linux-chrome-try/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -499,6 +499,9 @@
       "cpu",
       "x86-64",
       "--dimension",
+      "kvm",
+      "0",
+      "--dimension",
       "os",
       "Linux",
       "--dimension",
@@ -508,7 +511,7 @@
       "swarming_module_cache_vpython",
       ".swarming_module_cache/vpython",
       "--tag",
-      "buildername:dart2js-linux-drt-try",
+      "buildername:dart2js-linux-chrome-try",
       "--tag",
       "buildnumber:571",
       "--tag",
@@ -551,7 +554,7 @@
       "--progress=buildbot",
       "--write-result-log",
       "-v",
-      "-rdrt",
+      "-rchrome",
       "--use-sdk",
       "--exclude-suite=observatory_ui,service,co19",
       "--shards=3",
@@ -563,9 +566,9 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Linux'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"dart2js_tests_shard_1/Linux/test isola/dart2js-linux-drt-try/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"dart2js_tests_shard_1/Linux/test isola/dart2js-linux-chrome-try/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"dart2js_tests_shard_1/Linux/test isola/dart2js-linux-drt-try/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"dart2js_tests_shard_1/Linux/test isola/dart2js-linux-chrome-try/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -591,7 +594,7 @@
       "--shards",
       "1",
       "--task-name",
-      "dart2js_tests_shard_2/Linux/test isola/dart2js-linux-drt-try/571",
+      "dart2js_tests_shard_2/Linux/test isola/dart2js-linux-chrome-try/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -604,6 +607,9 @@
       "cpu",
       "x86-64",
       "--dimension",
+      "kvm",
+      "0",
+      "--dimension",
       "os",
       "Linux",
       "--dimension",
@@ -613,7 +619,7 @@
       "swarming_module_cache_vpython",
       ".swarming_module_cache/vpython",
       "--tag",
-      "buildername:dart2js-linux-drt-try",
+      "buildername:dart2js-linux-chrome-try",
       "--tag",
       "buildnumber:571",
       "--tag",
@@ -656,7 +662,7 @@
       "--progress=buildbot",
       "--write-result-log",
       "-v",
-      "-rdrt",
+      "-rchrome",
       "--use-sdk",
       "--exclude-suite=observatory_ui,service,co19",
       "--shards=3",
@@ -668,9 +674,9 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Linux'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"dart2js_tests_shard_2/Linux/test isola/dart2js-linux-drt-try/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"dart2js_tests_shard_2/Linux/test isola/dart2js-linux-chrome-try/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"dart2js_tests_shard_2/Linux/test isola/dart2js-linux-drt-try/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"dart2js_tests_shard_2/Linux/test isola/dart2js-linux-chrome-try/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -696,7 +702,7 @@
       "--shards",
       "1",
       "--task-name",
-      "dart2js_tests_shard_3/Linux/test isola/dart2js-linux-drt-try/571",
+      "dart2js_tests_shard_3/Linux/test isola/dart2js-linux-chrome-try/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -709,6 +715,9 @@
       "cpu",
       "x86-64",
       "--dimension",
+      "kvm",
+      "0",
+      "--dimension",
       "os",
       "Linux",
       "--dimension",
@@ -718,7 +727,7 @@
       "swarming_module_cache_vpython",
       ".swarming_module_cache/vpython",
       "--tag",
-      "buildername:dart2js-linux-drt-try",
+      "buildername:dart2js-linux-chrome-try",
       "--tag",
       "buildnumber:571",
       "--tag",
@@ -761,7 +770,7 @@
       "--progress=buildbot",
       "--write-result-log",
       "-v",
-      "-rdrt",
+      "-rchrome",
       "--use-sdk",
       "--exclude-suite=observatory_ui,service,co19",
       "--shards=3",
@@ -773,9 +782,9 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Linux'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"dart2js_tests_shard_3/Linux/test isola/dart2js-linux-drt-try/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"dart2js_tests_shard_3/Linux/test isola/dart2js-linux-chrome-try/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"dart2js_tests_shard_3/Linux/test isola/dart2js-linux-drt-try/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"dart2js_tests_shard_3/Linux/test isola/dart2js-linux-chrome-try/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -801,7 +810,7 @@
       "--shards",
       "1",
       "--task-name",
-      "dart2js_co19_tests_shard_1/Linux/test isola/dart2js-linux-drt-try/571",
+      "dart2js_co19_tests_shard_1/Linux/test isola/dart2js-linux-chrome-try/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -814,6 +823,9 @@
       "cpu",
       "x86-64",
       "--dimension",
+      "kvm",
+      "0",
+      "--dimension",
       "os",
       "Linux",
       "--dimension",
@@ -823,7 +835,7 @@
       "swarming_module_cache_vpython",
       ".swarming_module_cache/vpython",
       "--tag",
-      "buildername:dart2js-linux-drt-try",
+      "buildername:dart2js-linux-chrome-try",
       "--tag",
       "buildnumber:571",
       "--tag",
@@ -866,7 +878,7 @@
       "--progress=buildbot",
       "--write-result-log",
       "-v",
-      "-rdrt",
+      "-rchrome",
       "--use-sdk",
       "co19",
       "--shards=3",
@@ -878,9 +890,9 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Linux'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"dart2js_co19_tests_shard_1/Linux/test isola/dart2js-linux-drt-try/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"dart2js_co19_tests_shard_1/Linux/test isola/dart2js-linux-chrome-try/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"dart2js_co19_tests_shard_1/Linux/test isola/dart2js-linux-drt-try/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"dart2js_co19_tests_shard_1/Linux/test isola/dart2js-linux-chrome-try/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -906,7 +918,7 @@
       "--shards",
       "1",
       "--task-name",
-      "dart2js_co19_tests_shard_2/Linux/test isola/dart2js-linux-drt-try/571",
+      "dart2js_co19_tests_shard_2/Linux/test isola/dart2js-linux-chrome-try/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -919,6 +931,9 @@
       "cpu",
       "x86-64",
       "--dimension",
+      "kvm",
+      "0",
+      "--dimension",
       "os",
       "Linux",
       "--dimension",
@@ -928,7 +943,7 @@
       "swarming_module_cache_vpython",
       ".swarming_module_cache/vpython",
       "--tag",
-      "buildername:dart2js-linux-drt-try",
+      "buildername:dart2js-linux-chrome-try",
       "--tag",
       "buildnumber:571",
       "--tag",
@@ -971,7 +986,7 @@
       "--progress=buildbot",
       "--write-result-log",
       "-v",
-      "-rdrt",
+      "-rchrome",
       "--use-sdk",
       "co19",
       "--shards=3",
@@ -983,9 +998,9 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Linux'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"dart2js_co19_tests_shard_2/Linux/test isola/dart2js-linux-drt-try/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"dart2js_co19_tests_shard_2/Linux/test isola/dart2js-linux-chrome-try/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"dart2js_co19_tests_shard_2/Linux/test isola/dart2js-linux-drt-try/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"dart2js_co19_tests_shard_2/Linux/test isola/dart2js-linux-chrome-try/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -1011,7 +1026,7 @@
       "--shards",
       "1",
       "--task-name",
-      "dart2js_co19_tests_shard_3/Linux/test isola/dart2js-linux-drt-try/571",
+      "dart2js_co19_tests_shard_3/Linux/test isola/dart2js-linux-chrome-try/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1024,6 +1039,9 @@
       "cpu",
       "x86-64",
       "--dimension",
+      "kvm",
+      "0",
+      "--dimension",
       "os",
       "Linux",
       "--dimension",
@@ -1033,7 +1051,7 @@
       "swarming_module_cache_vpython",
       ".swarming_module_cache/vpython",
       "--tag",
-      "buildername:dart2js-linux-drt-try",
+      "buildername:dart2js-linux-chrome-try",
       "--tag",
       "buildnumber:571",
       "--tag",
@@ -1076,7 +1094,7 @@
       "--progress=buildbot",
       "--write-result-log",
       "-v",
-      "-rdrt",
+      "-rchrome",
       "--use-sdk",
       "co19",
       "--shards=3",
@@ -1088,9 +1106,9 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Linux'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"dart2js_co19_tests_shard_3/Linux/test isola/dart2js-linux-drt-try/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"dart2js_co19_tests_shard_3/Linux/test isola/dart2js-linux-chrome-try/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"dart2js_co19_tests_shard_3/Linux/test isola/dart2js-linux-drt-try/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"dart2js_co19_tests_shard_3/Linux/test isola/dart2js-linux-chrome-try/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -1119,7 +1137,7 @@
       "--progress=buildbot",
       "--write-result-log",
       "-v",
-      "-rdrt",
+      "-rchrome",
       "--write-debug-log",
       "--write-test-outcome-log",
       "pkg"
@@ -1130,7 +1148,7 @@
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
-    "name": "dart2js-drt-package tests"
+    "name": "dart2js-chrome-package tests"
   },
   {
     "cmd": [
@@ -1150,7 +1168,7 @@
       ]
     },
     "infra_step": true,
-    "name": "read results of dart2js-drt-package tests",
+    "name": "read results of dart2js-chrome-package tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@result.log@@@@",
       "@@@STEP_LOG_END@result.log@@@"
@@ -1193,7 +1211,7 @@
       "--progress=buildbot",
       "--write-result-log",
       "-v",
-      "-rdrt",
+      "-rchrome",
       "--write-debug-log",
       "--write-test-outcome-log",
       "--append_logs",
@@ -1205,7 +1223,7 @@
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
-    "name": "dart2js-drt-observatory-ui tests"
+    "name": "dart2js-chrome-observatory-ui tests"
   },
   {
     "cmd": [
@@ -1225,7 +1243,7 @@
       ]
     },
     "infra_step": true,
-    "name": "read results of dart2js-drt-observatory-ui tests",
+    "name": "read results of dart2js-chrome-observatory-ui tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@result.log@@@@",
       "@@@STEP_LOG_END@result.log@@@"
@@ -1268,7 +1286,7 @@
       "--progress=buildbot",
       "--write-result-log",
       "-v",
-      "-rdrt",
+      "-rchrome",
       "--write-debug-log",
       "--write-test-outcome-log",
       "--append_logs",
@@ -1281,7 +1299,7 @@
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
-    "name": "dart2js-drt-extra tests"
+    "name": "dart2js-chrome-extra tests"
   },
   {
     "cmd": [
@@ -1301,7 +1319,7 @@
       ]
     },
     "infra_step": true,
-    "name": "read results of dart2js-drt-extra tests",
+    "name": "read results of dart2js-chrome-extra tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@result.log@@@@",
       "@@@STEP_LOG_END@result.log@@@"
@@ -1325,235 +1343,6 @@
     },
     "infra_step": true,
     "name": "delete result.log (3)"
-  },
-  {
-    "cmd": [
-      "/usr/bin/xvfb-run",
-      "-a",
-      "--server-args=-screen 0 1024x768x24",
-      "python",
-      "-u",
-      "./tools/test.py",
-      "-mrelease",
-      "-aia32",
-      "-cdart2js",
-      "--dart2js-batch",
-      "--reset-browser-configuration",
-      "--report",
-      "--time",
-      "--progress=buildbot",
-      "--write-result-log",
-      "-v",
-      "-rdrt",
-      "--write-debug-log",
-      "--write-test-outcome-log",
-      "--checked",
-      "--append_logs",
-      "pkg"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
-      ]
-    },
-    "name": "dart2js-drt-package-checked tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[CACHE]/builder/sdk/logs/result.log",
-      "/path/to/tmp/"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
-      ]
-    },
-    "infra_step": true,
-    "name": "read results of dart2js-drt-package-checked tests",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@result.log@@@@",
-      "@@@STEP_LOG_END@result.log@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "remove",
-      "[CACHE]/builder/sdk/logs/result.log"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
-      ]
-    },
-    "infra_step": true,
-    "name": "delete result.log (4)"
-  },
-  {
-    "cmd": [
-      "/usr/bin/xvfb-run",
-      "-a",
-      "--server-args=-screen 0 1024x768x24",
-      "python",
-      "-u",
-      "./tools/test.py",
-      "-mrelease",
-      "-aia32",
-      "-cdart2js",
-      "--dart2js-batch",
-      "--reset-browser-configuration",
-      "--report",
-      "--time",
-      "--progress=buildbot",
-      "--write-result-log",
-      "-v",
-      "-rdrt",
-      "--write-debug-log",
-      "--write-test-outcome-log",
-      "--checked",
-      "--append_logs",
-      "observatory_ui"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
-      ]
-    },
-    "name": "dart2js-drt-observatory-ui-checked tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[CACHE]/builder/sdk/logs/result.log",
-      "/path/to/tmp/"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
-      ]
-    },
-    "infra_step": true,
-    "name": "read results of dart2js-drt-observatory-ui-checked tests",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@result.log@@@@",
-      "@@@STEP_LOG_END@result.log@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "remove",
-      "[CACHE]/builder/sdk/logs/result.log"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
-      ]
-    },
-    "infra_step": true,
-    "name": "delete result.log (5)"
-  },
-  {
-    "cmd": [
-      "/usr/bin/xvfb-run",
-      "-a",
-      "--server-args=-screen 0 1024x768x24",
-      "python",
-      "-u",
-      "./tools/test.py",
-      "-mrelease",
-      "-aia32",
-      "-cdart2js",
-      "--dart2js-batch",
-      "--reset-browser-configuration",
-      "--report",
-      "--time",
-      "--progress=buildbot",
-      "--write-result-log",
-      "-v",
-      "-rdrt",
-      "--write-debug-log",
-      "--write-test-outcome-log",
-      "--checked",
-      "--append_logs",
-      "dart2js_extra",
-      "dart2js_native"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
-      ]
-    },
-    "name": "dart2js-drt-extra-checked tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[CACHE]/builder/sdk/logs/result.log",
-      "/path/to/tmp/"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
-      ]
-    },
-    "infra_step": true,
-    "name": "read results of dart2js-drt-extra-checked tests",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@result.log@@@@",
-      "@@@STEP_LOG_END@result.log@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "remove",
-      "[CACHE]/builder/sdk/logs/result.log"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
-      ]
-    },
-    "infra_step": true,
-    "name": "delete result.log (6)"
   },
   {
     "cmd": [
@@ -1582,7 +1371,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"dart2js_tests_shard_1/Linux/test isola/dart2js-linux-drt-try/571\", \"tasks\": {\"dart2js_tests_shard_1/Linux/test isola/dart2js-linux-drt-try/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"dart2js_tests_shard_1/Linux/test isola/dart2js-linux-chrome-try/571\", \"tasks\": {\"dart2js_tests_shard_1/Linux/test isola/dart2js-linux-chrome-try/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -1662,7 +1451,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"dart2js_tests_shard_2/Linux/test isola/dart2js-linux-drt-try/571\", \"tasks\": {\"dart2js_tests_shard_2/Linux/test isola/dart2js-linux-drt-try/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"dart2js_tests_shard_2/Linux/test isola/dart2js-linux-chrome-try/571\", \"tasks\": {\"dart2js_tests_shard_2/Linux/test isola/dart2js-linux-chrome-try/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -1742,7 +1531,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"dart2js_tests_shard_3/Linux/test isola/dart2js-linux-drt-try/571\", \"tasks\": {\"dart2js_tests_shard_3/Linux/test isola/dart2js-linux-drt-try/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"dart2js_tests_shard_3/Linux/test isola/dart2js-linux-chrome-try/571\", \"tasks\": {\"dart2js_tests_shard_3/Linux/test isola/dart2js-linux-chrome-try/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -1822,7 +1611,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"dart2js_co19_tests_shard_1/Linux/test isola/dart2js-linux-drt-try/571\", \"tasks\": {\"dart2js_co19_tests_shard_1/Linux/test isola/dart2js-linux-drt-try/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"dart2js_co19_tests_shard_1/Linux/test isola/dart2js-linux-chrome-try/571\", \"tasks\": {\"dart2js_co19_tests_shard_1/Linux/test isola/dart2js-linux-chrome-try/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -1902,7 +1691,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"dart2js_co19_tests_shard_2/Linux/test isola/dart2js-linux-drt-try/571\", \"tasks\": {\"dart2js_co19_tests_shard_2/Linux/test isola/dart2js-linux-drt-try/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"dart2js_co19_tests_shard_2/Linux/test isola/dart2js-linux-chrome-try/571\", \"tasks\": {\"dart2js_co19_tests_shard_2/Linux/test isola/dart2js-linux-chrome-try/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -1982,7 +1771,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"dart2js_co19_tests_shard_3/Linux/test isola/dart2js-linux-drt-try/571\", \"tasks\": {\"dart2js_co19_tests_shard_3/Linux/test isola/dart2js-linux-drt-try/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"dart2js_co19_tests_shard_3/Linux/test isola/dart2js-linux-chrome-try/571\", \"tasks\": {\"dart2js_co19_tests_shard_3/Linux/test isola/dart2js-linux-chrome-try/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
