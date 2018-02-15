@@ -491,6 +491,10 @@ TRYBOTS = freeze({
         'mastername': 'chromium.chromiumos',
         'buildername': 'chromeos-daisy-rel',
       }),
+      'linux-chromeos-compile-dbg': simple_bot({
+        'mastername': 'chromium.chromiumos',
+        'buildername': 'linux-chromeos-dbg',
+      }, analyze_mode='compile'),
       'linux-chromeos-dbg': simple_bot({
         'mastername': 'chromium.chromiumos',
         'buildername': 'linux-chromeos-dbg',
