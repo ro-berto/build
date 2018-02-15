@@ -153,6 +153,11 @@
       "bot_pool": "build130-m1",
       "category": "3ToTWindows",
     },
+    "ToTWinLibcxx64": {
+      "mixins": ["win10"],
+      "bot": "build457-m1",
+      "category": "3ToTWindows",
+    },
     "ToTWinThinLTO64": {
       "mixins": ["win10"],
       "bot": "win76-c1",
