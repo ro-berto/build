@@ -12,21 +12,8 @@ CONFIG_CTX = DEPS['chromium'].CONFIG_CTX
 
 @CONFIG_CTX()
 def v8(c):
-  # TODO(machenbach): Remove 'gyp' related logic.
-  # project_generator.tool has been set default as 'mb' everywhere else.
-  c.project_generator.tool = 'gyp'
-  targ_arch = c.gyp_env.GYP_DEFINES.get('target_arch')
-  if not targ_arch:  # pragma: no cover
-    raise recipe_config.BadConf('v8 must have a valid target_arch.')
-  c.gyp_env.GYP_DEFINES['v8_target_arch'] = targ_arch
-  if c.TARGET_PLATFORM == 'android':
-    c.gyp_env.GYP_DEFINES['OS'] = 'android'
-  del c.gyp_env.GYP_DEFINES['component']
+  c.project_generator.tool = 'mb'
   c.build_dir = c.CHECKOUT_PATH.join('out')
-
-  if c.BUILD_CONFIG == 'Debug':
-    c.gyp_env.GYP_DEFINES['v8_optimized_debug'] = 1
-    c.gyp_env.GYP_DEFINES['v8_enable_slow_dchecks'] = 1
 
   # Chromium adds '_x64' to the output folder, which is only understood when
   # compiling v8 standalone with ninja.

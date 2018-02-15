@@ -102,7 +102,7 @@
     "cwd": "[START_DIR]/v8",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "component=shared_library gomadir='[CACHE]/goma_client' target_arch=ia32 use_goma=1 v8_target_arch=ia32",
+      "GYP_DEFINES": "component=shared_library gomadir='[CACHE]/goma_client' target_arch=ia32 use_goma=1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -957,7 +957,7 @@
     "cwd": "[START_DIR]/v8",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "component=shared_library gomadir='[CACHE]/goma_client' target_arch=ia32 use_goma=1 v8_target_arch=ia32",
+      "GYP_DEFINES": "component=shared_library gomadir='[CACHE]/goma_client' target_arch=ia32 use_goma=1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "Bisect a0.gclient runhooks",
@@ -1654,7 +1654,7 @@
     "cwd": "[START_DIR]/v8",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "component=shared_library gomadir='[CACHE]/goma_client' target_arch=ia32 use_goma=1 v8_target_arch=ia32",
+      "GYP_DEFINES": "component=shared_library gomadir='[CACHE]/goma_client' target_arch=ia32 use_goma=1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "Bisect a2.gclient runhooks",
@@ -2384,7 +2384,7 @@
     "cwd": "[START_DIR]/v8",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "component=shared_library gomadir='[CACHE]/goma_client' target_arch=ia32 use_goma=1 v8_target_arch=ia32",
+      "GYP_DEFINES": "component=shared_library gomadir='[CACHE]/goma_client' target_arch=ia32 use_goma=1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "Bisect a1.gclient runhooks",
