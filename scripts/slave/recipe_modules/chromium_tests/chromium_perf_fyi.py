@@ -86,6 +86,3 @@ _AddBuildSpec('Battor Agent Win', 'win', 'win', run_sizes=False,
 _AddIsolatedTestSpec('Histogram Pipeline Linux Perf',
                      'histogram-pipeline-linux-perf',
                      'linux')
-
-_AddIsolatedTestSpec('Linux ChromeOS Perf (mus-viz)', 'chromeos-mus-viz-perf',
-                     'linux')
