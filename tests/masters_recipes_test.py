@@ -55,8 +55,6 @@ SUPPRESSIONS = {
         'Mac Debug (Intel)',
         'Mac Retina Debug (AMD)',
         'Win10 Debug (NVIDIA)',
-        # TODO(kbr): remove as soon as this is part of android_n5x_swarming_rel.
-        'Android Release (Nexus 5X)',
     ],
     'master.chromium.linux': [
         'Deterministic Linux',
