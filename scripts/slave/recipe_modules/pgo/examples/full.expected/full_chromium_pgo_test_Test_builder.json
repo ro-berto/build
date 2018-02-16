@@ -5,6 +5,7 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
+      "--with-third-party-lib",
       "--",
       "python",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\kill_processes.py"
@@ -246,6 +247,7 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
+      "--with-third-party-lib",
       "--",
       "python",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
@@ -450,6 +452,7 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
+      "--with-third-party-lib",
       "--",
       "python",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",

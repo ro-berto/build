@@ -238,6 +238,7 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
+      "--with-third-party-lib",
       "--",
       "python",
       "RECIPE_MODULE[build::swarming]/resources/collect_task.py",
