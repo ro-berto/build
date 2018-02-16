@@ -29,11 +29,9 @@ def RunSteps(api):
   experimental_test.run(api.chromium_tests.m, '')
   experimental_test.post_run(api.chromium_tests.m, '')
 
-  if experimental_test.has_valid_results(api.chromium_tests.m, ''):
-    api.python.succeeding_step('valid results present', '')
-    if experimental_test.failures(api.chromium_tests.m, ''):
-      api.python.succeeding_step('failures present', '')
-      assert not experimental_test.abort_on_failure
+  assert experimental_test.has_valid_results(api.chromium_tests.m, '')
+  assert not experimental_test.failures(api.chromium_tests.m, '')
+  assert not experimental_test.abort_on_failure
 
 
 def GenTests(api):
@@ -75,7 +73,6 @@ def GenTests(api):
           patch_issue='456',
           experiment_percentage='100',
           has_valid_results=False) +
-      api.post_process(post_process.DoesNotRun, 'valid results present') +
       api.post_process(post_process.DropExpectation))
 
   yield (
@@ -87,7 +84,6 @@ def GenTests(api):
           patch_issue='456',
           experiment_percentage='0',
           has_valid_results=False) +
-      api.post_process(post_process.MustRun, 'valid results present') +
       api.post_process(post_process.DropExpectation))
 
   yield (
@@ -99,8 +95,6 @@ def GenTests(api):
           patch_issue='456',
           experiment_percentage='100',
           failures=['foo']) +
-      api.post_process(post_process.MustRun, 'valid results present') +
-      api.post_process(post_process.MustRun, 'failures present') +
       api.post_process(post_process.DropExpectation))
 
   yield (
@@ -112,8 +106,6 @@ def GenTests(api):
           patch_issue='456',
           experiment_percentage='0',
           failures=['foo']) +
-      api.post_process(post_process.MustRun, 'valid results present') +
-      api.post_process(post_process.DoesNotRun, 'failures present') +
       api.post_process(post_process.DropExpectation))
 
   yield (
@@ -167,5 +159,4 @@ def GenTests(api):
           abort_on_failure=True) +
       api.post_process(post_process.MustRun, 'post_run inner_test') +
       api.post_process(post_process.StatusCodeIn, 0) +
-      api.post_process(post_process.DoesNotRun, 'aborting on failure') +
       api.post_process(post_process.DropExpectation))

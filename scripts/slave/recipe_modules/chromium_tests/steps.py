@@ -353,15 +353,19 @@ class ExperimentalTest(TestWrapper):
 
   #override
   def has_valid_results(self, api, suffix):
-    if not self._is_in_experiment(api):
-      return True
-    return super(ExperimentalTest, self).has_valid_results(api, suffix)
+    if self._is_in_experiment(api):
+      # Call the wrapped test's implementation in case it has side effects,
+      # but ignore the result.
+      super(ExperimentalTest, self).has_valid_results(api, suffix)
+    return True
 
   #override
   def failures(self, api, suffix):
-    if not self._is_in_experiment(api):
-      return []
-    return super(ExperimentalTest, self).failures(api, suffix)
+    if self._is_in_experiment(api):
+      # Call the wrapped test's implementation in case it has side effects,
+      # but ignore the result.
+      super(ExperimentalTest, self).failures(api, suffix)
+    return []
 
 
 class ArchiveBuildStep(Test):
