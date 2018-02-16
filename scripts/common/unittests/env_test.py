@@ -214,7 +214,7 @@ class BuildPythonPathIsValidTestCase(unittest.TestCase):
 
   def testAllBuildPythonPathsExist(self):
     """Checks the real local checkout to assert all paths actually exist."""
-    for path in env.GetBuildPythonPath():
+    for path in env.GetBuildPythonPath(True):
       self.assertTrue(os.path.exists(path),
           "Build path does not exist: %s" % (path,))
 

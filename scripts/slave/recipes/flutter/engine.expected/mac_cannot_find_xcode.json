@@ -96,6 +96,7 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
+      "--with-third-party-lib",
       "--",
       "python",
       "[START_DIR]/src/ios_tools/build/bots/scripts/find_xcode.py",
