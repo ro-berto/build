@@ -4,7 +4,6 @@
       "python",
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--with-third-party-lib",
       "--",
       "python",
       "RECIPE_MODULE[build::crrev]/resources/crrev_client.py",

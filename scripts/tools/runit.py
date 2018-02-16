@@ -30,8 +30,6 @@ def main():
   option_parser = optparse.OptionParser(usage=USAGE)
   option_parser.add_option('-s', '--show-path', action='store_true',
                            help='display new PYTHONPATH before running command')
-  option_parser.add_option('--with-third-party-lib', action='store_true',
-                           help='use third_party library in the build path')
   option_parser.disable_interspersed_args()
   options, args = option_parser.parse_args()
   if not args:
@@ -41,8 +39,7 @@ def main():
   if args[0] == 'python':
     args[0] = sys.executable
 
-  with common.env.GetInfraPythonPath(
-      with_third_party=options.with_third_party_lib).Enter():
+  with common.env.GetInfraPythonPath().Enter():
     if options.show_path:
       print 'Set PYTHONPATH: %s' % os.environ['PYTHONPATH']
     # Use subprocess instead of execv because otherwise windows destroys
