@@ -15,11 +15,15 @@ def RunSteps(api):
 
   inner_test = api.chromium_tests.steps.MockTest(
       'inner_test',
+      abort_on_failure=api.properties.get('abort_on_failure', False),
       has_valid_results=api.properties.get('has_valid_results', True),
       failures=api.properties.get('failures'))
   experimental_test = api.chromium_tests.steps.ExperimentalTest(
       inner_test,
       experiment_percentage=api.properties['experiment_percentage'])
+
+  api.python.succeeding_step(
+      'Configured experimental test %s' % experimental_test.name, '')
 
   experimental_test.pre_run(api.chromium_tests.m, '')
   experimental_test.run(api.chromium_tests.m, '')
@@ -29,6 +33,8 @@ def RunSteps(api):
     api.python.succeeding_step('valid results present', '')
     if experimental_test.failures(api.chromium_tests.m, ''):
       api.python.succeeding_step('failures present', '')
+      assert not experimental_test.abort_on_failure
+
 
 def GenTests(api):
 
@@ -147,4 +153,19 @@ def GenTests(api):
       api.override_step_data('post_run inner_test', retcode=1) +
       api.post_process(post_process.MustRun, 'post_run inner_test') +
       api.post_process(post_process.StatusCodeIn, 0) +
+      api.post_process(post_process.DropExpectation))
+
+  yield (
+      api.test('abort_on_failure') +
+      api.properties(
+          mastername='test_mastername',
+          buildername='test_buildername',
+          buildnumber='123',
+          patch_issue='456',
+          experiment_percentage='100',
+          failures=['foo'],
+          abort_on_failure=True) +
+      api.post_process(post_process.MustRun, 'post_run inner_test') +
+      api.post_process(post_process.StatusCodeIn, 0) +
+      api.post_process(post_process.DoesNotRun, 'aborting on failure') +
       api.post_process(post_process.DropExpectation))

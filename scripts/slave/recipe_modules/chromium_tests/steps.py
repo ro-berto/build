@@ -208,10 +208,22 @@ class Test(object):
 
 
 class TestWrapper(Test):  # pragma: no cover
+  """ A base class for Tests that wrap other Tests.
+
+  By default, all functionality defers to the wrapped Test.
+  """
 
   def __init__(self, test):
     super(TestWrapper, self).__init__()
     self._test = test
+
+  @property
+  def set_up(self):
+    return self._test.set_up
+
+  @property
+  def tear_down(self):
+    return self._test.tear_down
 
   @property
   def test_options(self):
@@ -221,8 +233,16 @@ class TestWrapper(Test):  # pragma: no cover
   def test_options(self, value):
     self._test.test_options = value
 
+  @property
+  def abort_on_failure(self):
+    return self._test.abort_on_failure
+
+  @property
   def name(self):
     return self._test.name
+
+  def isolate_target(self, api):
+    return self._test.isolate_target(api)
 
   def compile_targets(self, api):
     return self._test.compile_targets(api)
@@ -242,8 +262,25 @@ class TestWrapper(Test):  # pragma: no cover
   def failures(self, api, suffix):
     return self._test.failures(api, suffix)
 
+  @property
+  def uses_swarming(self):
+    return self._test.uses_swarming
+
+  @property
+  def uses_local_devices(self):
+    return self._test.uses_local_devices
+
+  def step_metadata(self, api, suffix=None):
+    return self._test.step_metadata(api, suffix=suffix)
+
 
 class ExperimentalTest(TestWrapper):
+  """A test wrapper that runs the wrapped test on an experimental test.
+
+  Experimental tests:
+    - can run at <= 100%, depending on the experiment_percentage.
+    - will not cause the build to fail.
+  """
 
   def __init__(self, test, experiment_percentage):
     super(ExperimentalTest, self).__init__(test)
@@ -279,6 +316,10 @@ class ExperimentalTest(TestWrapper):
     digest = hashlib.sha1(''.join(str(c) for c in criteria)).digest()
     short = struct.unpack_from('<H', digest)[0]
     return self._experiment_percentage * 0xffff >= short * 100
+
+  @property
+  def abort_on_failure(self):
+    return False
 
   #override
   def pre_run(self, api, suffix):
