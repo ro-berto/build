@@ -921,7 +921,7 @@
         "os": "linux",
         "version": "trusty",
       },
-      "slaves": ["build60-b1"],
+      "slaves": ["slave261-c1"],
     },
     "android_rel_nexus_6p": {
       "slave_data": {
