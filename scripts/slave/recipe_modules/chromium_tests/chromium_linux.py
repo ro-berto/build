@@ -150,7 +150,7 @@ SPEC = {
 
     'Fuchsia ARM64 Cast Audio': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['fuchsia'],
       'chromium_config_kwargs': {
@@ -166,7 +166,7 @@ SPEC = {
     },
     'Fuchsia ARM64': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['fuchsia'],
       'chromium_config_kwargs': {
@@ -182,7 +182,7 @@ SPEC = {
     },
     'Fuchsia x64 Cast Audio': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['fuchsia'],
       'chromium_config_kwargs': {
@@ -198,7 +198,7 @@ SPEC = {
     },
     'Fuchsia x64': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['fuchsia'],
       'chromium_config_kwargs': {
