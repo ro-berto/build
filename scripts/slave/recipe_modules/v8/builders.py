@@ -1458,11 +1458,18 @@ BUILDERS = {
               '--stress-marking=1',
             ],
             [NumFuzz(2)],
-        )  + with_test_args(
+        ) + with_test_args(
             'scavenge',
             [
               '--total-timeout-sec=2100', # 35 minutes
               '--stress-scavenge=1',
+            ],
+            [NumFuzz],
+        ) + with_test_args(
+            'threads',
+            [
+              '--total-timeout-sec=2100', # 35 minutes
+              '--stress-thread-pool-size=1',
             ],
             [NumFuzz],
         ) + with_test_args(
@@ -1474,6 +1481,7 @@ BUILDERS = {
               '--stress-gc=4',
               '--stress-marking=4',
               '--stress-scavenge=4',
+              '--stress-thread-pool-size=2',
             ],
             [NumFuzz(3)],
         ) + with_test_args(
@@ -1488,6 +1496,7 @@ BUILDERS = {
               '--stress-gc=6',
               '--stress-marking=6',
               '--stress-scavenge=4',
+              '--stress-thread-pool-size=1',
             ],
             [NumFuzz],
         ) + with_test_args(
@@ -1516,11 +1525,18 @@ BUILDERS = {
               '--stress-marking=1',
             ],
             [NumFuzz],
-        )  + with_test_args(
+        ) + with_test_args(
             'scavenge',
             [
               '--total-timeout-sec=2100', # 35 minutes
               '--stress-scavenge=1',
+            ],
+            [NumFuzz],
+        ) + with_test_args(
+            'threads',
+            [
+              '--total-timeout-sec=2100', # 35 minutes
+              '--stress-thread-pool-size=1',
             ],
             [NumFuzz],
         ) + with_test_args(
@@ -1532,6 +1548,7 @@ BUILDERS = {
               '--stress-gc=4',
               '--stress-marking=4',
               '--stress-scavenge=4',
+              '--stress-thread-pool-size=2',
             ],
             [NumFuzz(4)],
         ) + with_test_args(
@@ -1545,6 +1562,7 @@ BUILDERS = {
               '--stress-gc=6',
               '--stress-marking=6',
               '--stress-scavenge=4',
+              '--stress-thread-pool-size=1',
             ],
             [NumFuzz],
         ),
