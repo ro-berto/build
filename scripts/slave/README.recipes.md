@@ -715,7 +715,7 @@ Exposes perf tests implementation.
 Augments environment with `slave_utils.py` parameters.
     
 
-&mdash; **def [python](/scripts/slave/recipe_modules/build/api.py#38)(self, name, script, args=None, show_path=True, with_third_party_lib=True, \*\*kwargs):**
+&mdash; **def [python](/scripts/slave/recipe_modules/build/api.py#38)(self, name, script, args=None, show_path=True, \*\*kwargs):**
 
 Bootstraps a Python through "tools/build"'s "runit.py".
 

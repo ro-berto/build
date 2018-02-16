@@ -117,7 +117,7 @@ def SplitPath(path):
   return parts
 
 
-def ExtendPath(base, root_dir, with_third_party):
+def ExtendPath(base, root_dir):
   """Returns (PythonPath): The extended python path.
 
   This method looks for the ENV_EXTENSION_NAME file within "root_dir". If
@@ -144,11 +144,7 @@ def ExtendPath(base, root_dir, with_third_party):
     extend_func = getattr(extension_module, 'Extend', None)
     assert extend_func, (
         "The environment extension module is missing the 'Extend()' method.")
-    # TODO(yyanagisawa): remove this hack when all dependencies are updated.
-    if extend_func.__code__.co_argcount == 3:
-      base = extend_func(base, root_dir, with_third_party)
-    else:
-      base = extend_func(base, root_dir)
+    base = extend_func(base, root_dir)
     if not isinstance(base, PythonPath):
       raise TypeError("Extension module returned non-PythonPath object (%s)" % (
           type(base).__name__,))
@@ -345,23 +341,19 @@ def GetMasterPythonPath(master_dir):
   return PythonPath.FromPaths(master_dir)
 
 
-def GetBuildPythonPath(with_third_party):
-  """Returns (PythonPath): The Chrome Infra build path.
-
-  Args:
-    with_third_party (bool): True, use third_party libraries in the build path.
-  """
+def GetBuildPythonPath():
+  """Returns (PythonPath): The Chrome Infra build path."""
   build_path = PythonPath()
   for extension_dir in (
       Build,
       BuildInternal,
       ):
     if extension_dir:
-      build_path = ExtendPath(build_path, extension_dir, with_third_party)
+      build_path = ExtendPath(build_path, extension_dir)
   return build_path
 
 
-def GetInfraPythonPath(hermetic=True, master_dir=None, with_third_party=True):
+def GetInfraPythonPath(hermetic=True, master_dir=None):
   """Returns (PythonPath): The full working Chrome Infra utility path.
 
   This path is consistent for master, slave, and tool usage. It includes (in
@@ -374,12 +366,11 @@ def GetInfraPythonPath(hermetic=True, master_dir=None, with_third_party=True):
   Args:
     hermetic (bool): True, prune any non-system path from the system path.
     master_dir (str): If not None, include a master path component.
-    with_third_party (bool): True, use third_party libraries in the build path.
   """
   path = PythonPath()
   if master_dir:
     path += GetMasterPythonPath(master_dir)
-  path += GetBuildPythonPath(with_third_party)
+  path += GetBuildPythonPath()
   path += GetSysPythonPath(hermetic=hermetic)
   return path
 
