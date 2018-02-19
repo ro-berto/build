@@ -46,7 +46,9 @@ def RunSteps(api):
   target_os = api.m.properties.get('target_os')
   if target_os:
     api.gclient.c.target_os = {target_os}
+  target_cpu = api.m.properties.get('target_cpu')
   is_fuchsia = target_os == 'fuchsia'
+  is_linux = target_os == 'linux'
   is_win = target_os == 'win'
   config = api.m.properties['config']
   is_debug = config == 'Debug'
@@ -61,11 +63,11 @@ def RunSteps(api):
     api.gclient.runhooks()
 
   dirname = config
-  if is_fuchsia:
+  if is_fuchsia or is_linux:
     # Generic GN build.
     path = api.path['checkout'].join('out', dirname)
-    args = 'target_os="' + target_os + \
-           '" is_debug=' + ('true' if is_debug else 'false')
+    args = 'target_os="' + target_os + '" target_cpu="' + target_cpu + '"' + \
+           ' is_debug=' + ('true' if is_debug else 'false')
     with api.context(cwd=api.path['checkout']):
       api.step('generate build files', ['gn', 'gen', path, '--args=' + args])
   elif is_win:
@@ -153,16 +155,17 @@ def GenTests(api):
         api.properties.generic(buildername=test, config='Debug', clobber=True))
 
   tests = [
-      (test, 'mac'),
-      ('crashpad_try_mac_rel', 'mac'),
-      ('crashpad_try_win_dbg', 'win'),
-      ('crashpad_fuchsia_x64_dbg', 'fuchsia'),
-      ('crashpad_fuchsia_x64_rel', 'fuchsia'),
+      (test, 'mac', None),
+      ('crashpad_try_mac_rel', 'mac', None),
+      ('crashpad_try_win_dbg', 'win', None),
+      ('crashpad_fuchsia_x64_dbg', 'fuchsia', 'x64'),
+      ('crashpad_fuchsia_arm64_rel', 'fuchsia', 'arm64'),
   ]
-  for t, os in tests:
+  for t, os, cpu in tests:
     yield(api.test(t) +
           api.properties.generic(buildername=t,
                                  config='Debug' if '_dbg' in t else 'Release',
-                                 target_os=os) +
+                                 target_os=os,
+                                 target_cpu=cpu) +
           api.path.exists(api.path['checkout'].join(
               'build', 'swarming_test_spec.pyl')))

@@ -65,7 +65,7 @@
       "gn",
       "gen",
       "[START_DIR]/crashpad/out/Release",
-      "--args=target_os=\"fuchsia\" is_debug=false"
+      "--args=target_os=\"fuchsia\" target_cpu=\"arm64\" is_debug=false"
     ],
     "cwd": "[START_DIR]/crashpad",
     "name": "generate build files"
