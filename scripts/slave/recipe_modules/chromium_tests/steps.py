@@ -286,6 +286,11 @@ class ExperimentalTest(TestWrapper):
     super(ExperimentalTest, self).__init__(test)
     self._experiment_percentage = max(0, min(100, int(experiment_percentage)))
 
+  def _experimental_suffix(self, suffix):
+    if not suffix:
+      return 'experimental'
+    return '%s, experimental' % (suffix)
+
   def _is_in_experiment(self, api):
     # Arbitrarily determine whether to run the test based on its experiment
     # key. Tests with the same experiment key should always either be in the
@@ -327,7 +332,8 @@ class ExperimentalTest(TestWrapper):
       return []
 
     try:
-      return super(ExperimentalTest, self).pre_run(api, suffix)
+      return super(ExperimentalTest, self).pre_run(
+          api, self._experimental_suffix(suffix))
     except api.step.StepFailure:
       pass
 
@@ -337,7 +343,8 @@ class ExperimentalTest(TestWrapper):
       return []
 
     try:
-      return super(ExperimentalTest, self).run(api, suffix)
+      return super(ExperimentalTest, self).run(
+          api, self._experimental_suffix(suffix))
     except api.step.StepFailure:
       pass
 
@@ -347,7 +354,8 @@ class ExperimentalTest(TestWrapper):
       return []
 
     try:
-      return super(ExperimentalTest, self).post_run(api, suffix)
+      return super(ExperimentalTest, self).post_run(
+          api, self._experimental_suffix(suffix))
     except api.step.StepFailure:
       pass
 
@@ -356,7 +364,8 @@ class ExperimentalTest(TestWrapper):
     if self._is_in_experiment(api):
       # Call the wrapped test's implementation in case it has side effects,
       # but ignore the result.
-      super(ExperimentalTest, self).has_valid_results(api, suffix)
+      super(ExperimentalTest, self).has_valid_results(
+          api, self._experimental_suffix(suffix))
     return True
 
   #override
@@ -364,7 +373,8 @@ class ExperimentalTest(TestWrapper):
     if self._is_in_experiment(api):
       # Call the wrapped test's implementation in case it has side effects,
       # but ignore the result.
-      super(ExperimentalTest, self).failures(api, suffix)
+      super(ExperimentalTest, self).failures(
+          api, self._experimental_suffix(suffix))
     return []
 
 
@@ -2687,17 +2697,20 @@ class MockTest(Test):
         raise i
       raise
 
+  def _mock_suffix(self, suffix):
+    return ' (%s)' % suffix if suffix else ''
+
   def pre_run(self, api, suffix):
     with self._mock_exit_codes(api):
-      api.step('pre_run %s%s' % (self.name, suffix), None)
+      api.step('pre_run %s%s' % (self.name, self._mock_suffix(suffix)), None)
 
   def run(self, api, suffix):
     with self._mock_exit_codes(api):
-      api.step('%s%s' % (self.name, suffix), None)
+      api.step('%s%s' % (self.name, self._mock_suffix(suffix)), None)
 
   def post_run(self, api, suffix):
     with self._mock_exit_codes(api):
-      api.step('post_run %s%s' % (self.name, suffix), None)
+      api.step('post_run %s%s' % (self.name, self._mock_suffix(suffix)), None)
 
   def has_valid_results(self, api, suffix):
     return self._has_valid_results
