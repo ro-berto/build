@@ -204,6 +204,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     self._default_tags = set()
     self._default_user = None
     self._pending_tasks = set()
+    self._service_account_json = None
     self._show_isolated_out_in_collect_step = True
     self._show_shards_in_collect_step = False
     self._swarming_server = 'https://chromium-swarm.appspot.com'
@@ -212,6 +213,16 @@ class SwarmingApi(recipe_api.RecipeApi):
   @recipe_util.returns_placeholder
   def summary(self):
     return self.m.json.output()
+
+  @property
+  def service_account_json(self):
+    """Service account json to use for swarming."""
+    return self._service_account_json
+
+  @service_account_json.setter
+  def service_account_json(self, value):
+    """Service account json to use for swarming."""
+    self._service_account_json = value
 
   @property
   def swarming_server(self):
@@ -696,6 +707,9 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     if task.service_account:
       args.extend(['--service-account', task.service_account])
+
+    if self.service_account_json:
+      args.extend(['--auth-service-account-json', self.service_account_json])
 
     # Default tags.
     tags = set(task.tags)
@@ -1220,6 +1234,8 @@ class SwarmingApi(recipe_api.RecipeApi):
     if self.verbose:
       args.append('--verbose')
     args.extend(('--json', self.m.json.input(task.trigger_output)))
+    if self.service_account_json:
+      args.extend(['--auth-service-account-json', self.service_account_json])
     return args
 
   def _gen_trigger_step_test_data(self, task):

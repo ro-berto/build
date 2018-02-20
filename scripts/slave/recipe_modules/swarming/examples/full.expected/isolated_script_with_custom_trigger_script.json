@@ -40,6 +40,8 @@
       "--named-cache",
       "swarming_module_cache_vpython",
       ".swarming_module_cache/vpython",
+      "--auth-service-account-json",
+      "/creds/service_accounts/service-account-chromium-builder.json",
       "--tag",
       "data:hash_for_win",
       "--tag",

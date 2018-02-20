@@ -21,5 +21,6 @@ def GenTests(api):
           'isolate_server': 'https://example/isolate',
           'swarming_server': 'https://example/swarming',
           'swarming_dimensions': {'os': 'Windows'},
+          'swarming_service_account': 'chromium-builder'
       }))
   )

@@ -55,6 +55,8 @@ def RunSteps(api, platforms, show_isolated_out_in_collect_step,
   api.swarming.default_user = 'joe'
   api.swarming.set_default_env('TESTING', '1')
   api.swarming.verbose = True
+  api.swarming.service_account_json = (
+      '/creds/service_accounts/service-account-chromium-builder.json')
 
   api.swarming.set_default_dimension('inexistent', None)
 
