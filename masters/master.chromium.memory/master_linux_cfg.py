@@ -27,6 +27,7 @@ def Update(_config, active_master, c):
                 branch='master',
                 treeStableTimer=60,
                 builderNames=[
+          'Android CFI',
           'Linux ASan LSan Builder',
           'Linux CFI',
           'Linux ChromiumOS MSan Builder',
@@ -45,6 +46,10 @@ def Update(_config, active_master, c):
                   builderNames=['Linux TSan Tests']),
   ])
   specs = [
+    {
+      'name': 'Android CFI',
+      'category': '2android cfi',
+    },
     {
       'name': 'Linux ASan LSan Builder',
       'triggers': ['linux_asan_rel_trigger'],

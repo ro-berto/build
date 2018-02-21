@@ -13,6 +13,20 @@ SPEC = {
     'src_side_runtest_py': True,
   },
   'builders': {
+    'Android CFI': {
+      'chromium_config': 'android',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+        'TARGET_PLATFORM': 'android',
+      },
+      'android_config': 'main_builder',
+      'bot_type': 'builder_tester',
+      'testing': {'platform': 'linux'},
+    },
     'Linux ASan LSan Builder': {
       'chromium_config': 'chromium_linux_asan',
       'gclient_config': 'chromium',

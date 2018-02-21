@@ -84,6 +84,13 @@
       "scheduler": None,
       "slave_pools": ["slaves_with_n5s"],
     },
+    'android_cfi_rel_ng': {
+      'builder_timeout_s': 14400, # 60 * 60 * 4
+      "recipe": "chromium_trybot",
+      "use_remote_run": True,
+      "scheduler": None,
+      "slave_pools": ["ccompute_highmem_bots"],
+    },
     "android_coverage": {
       "builder_timeout_s": 14400,  # 60 * 60 * 4
       "recipe": "chromium_trybot",
@@ -379,6 +386,16 @@
         "slave1046-c4",
         "slave1047-c4",
         "slave1048-c4",
+      ],
+    },
+    "ccompute_highmem_bots": {
+      "slave_data": {
+        "os": "linux",
+        "version": "trusty",
+        "bits": 64,
+      },
+      "slaves": [
+        "slave400-c4",
       ],
     },
     "ccompute_optional_bots": {

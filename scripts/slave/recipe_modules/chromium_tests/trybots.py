@@ -96,6 +96,10 @@ TRYBOTS = freeze({
         'buildername': 'Android Builder',
         'tester': 'WebKit Android (Nexus4)',
       }),
+      'android_cfi_rel_ng': simple_bot({
+        'mastername': 'chromium.memory',
+        'buildername': 'Android CFI',
+      }),
       'android_clang_dbg_recipe': simple_bot({
         'mastername': 'chromium.android',
         'buildername': 'Android ASAN (dbg)',
