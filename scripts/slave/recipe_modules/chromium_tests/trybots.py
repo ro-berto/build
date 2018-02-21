@@ -120,30 +120,22 @@ TRYBOTS = freeze({
         'mastername': 'chromium.android',
         'buildername': 'Android Cronet Builder'
       }),
-      'android_mojo': simple_bot({
-        'mastername': 'chromium.fyi',
-        'buildername': 'Mojo Android',
-      }),
       'android_n5x_swarming_dbg': simple_bot({
         'mastername': 'chromium.android',
         'buildername': 'Android arm64 Builder (dbg)',
         'tester': 'Marshmallow 64 bit Tester',
        }),
-      'android_n5x_swarming_rel': {
-        'bot_ids': [
-          {
-            'mastername': 'chromium.android',
-            'buildername': 'Marshmallow Phone Tester (rel)',
-          },
-          {
-            'mastername': 'chromium.gpu',
-            'buildername': 'Android Release (Nexus 5X)',
-          },
-        ],
-      },
+      'android_n5x_swarming_rel': simple_bot({
+        'mastername': 'chromium.android',
+        'buildername': 'Marshmallow Phone Tester (rel)',
+      }),
+      'android_mojo': simple_bot({
+        'mastername': 'chromium.fyi',
+        'buildername': 'Mojo Android',
+      }),
       'android_optional_gpu_tests_rel': simple_bot({
         'mastername': 'chromium.gpu.fyi',
-        'buildername': 'Optional Android Release (Nexus 5X)',
+        'buildername': 'Android FYI Release (Nexus 5X)',
       }),
       'cast_shell_android': simple_bot({
         'mastername': 'chromium.android',

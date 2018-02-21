@@ -1072,29 +1072,6 @@ SPEC = {
         'platform': 'mac',
       },
     },
-    'Optional Android Release (Nexus 5X)': {
-      'chromium_config': 'android',
-      'chromium_apply_config': [
-        'chrome_with_codecs',
-        'download_vr_test_apks',
-
-        # This is specified in order to match the same configuration
-        # in 'chromium.android:Marshmallow Phone Tester (rel)'.
-        'goma_high_parallel',
-      ],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-        'TARGET_PLATFORM': 'android',
-      },
-      'android_config': 'main_builder_mb',
-      'bot_type': 'builder_tester',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
 
     # This machine doesn't really exist either; it is a separate
     # configuration because we don't have the capacity to run all of
