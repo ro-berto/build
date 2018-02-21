@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import copy
+import re
 
 from recipe_engine import recipe_api
 
@@ -548,7 +549,7 @@ class iOSApi(recipe_api.RecipeApi):
     test_cases = test_cases or []
     step_name = self.get_step_name(test)
     test_id = test['id']
-    if test.get('sharding') and test_cases and shard_num is not None:
+    if test_cases and shard_num is not None:
       test_id = '%s_%s' % (test_id, shard_num)
       step_name = '%s shard %s' % (step_name, shard_num)
     task = {
@@ -631,34 +632,50 @@ class iOSApi(recipe_api.RecipeApi):
 
   def isolate_earlgrey_test(self, test, shard_size, tmp_dir, isolate_template):
     """Isolate earlgrey test into small shards"""
-    regex = '@interface\s\w*\s:\sChromeTestCase'
-    cmd = [
-      'grep',
-      '-roh',
-      '%s' % regex,
-      '%s' % self.m.path['checkout'].join(test['sharding']),
-    ]
-
+    cmd = ['otool', '-ov', '%s/%s' % ('<(app_path)', test['app'])]
     step_result = self.m.step(
       'shard EarlGrey test',
       cmd,
       stdout=self.m.raw_io.output(),
       step_test_data=(
         lambda: self.m.raw_io.test_api.stream_output(
-          '@interface CacheTestCase : ChromeTestCase\n' \
-          '@interface KeyboardTestCase : ChromeTestCase\n' \
-          '@interface PasswordsTestCase : ChromeTestCase\n' \
-          '@interface TabUITestCase : ChromeTestCase\n' \
-          '@interface ToolBarTestCase : ChromeTestCase\n' \
+          'name 0x1064b8438 CacheTestCase' \
+          'baseMethods 0x1068586d8 (struct method_list_t *)' \
+          'imp -[CacheTestCase testA]' \
+          'types 0x1064cc3e1' \
+          'imp -[CacheTestCase testB]' \
+          'imp -[CacheTestCase testc]' \
+          'name 0x1064b8438 TabUITestCase' \
+          'baseMethods 0x1068586d8 (struct method_list_t *)' \
+          'imp -[TabUITestCase testD]' \
+          'types 0x1064cc3e1 v16@0:8' \
+          'imp -[TabUITestCase testE]' \
+          'name 0x1064b8438 KeyboardTestCase' \
+          'imp -[KeyboardTestCase testF]' \
+          'name 0x1064b8438 PasswordsTestCase' \
+          'imp -[PasswordsTestCase testG]' \
+          'name 0x1064b8438 ToolBarTestCase' \
+          'imp -[ToolBarTestCase testH]' \
         )
       )
     )
-    lines = step_result.stdout.strip().splitlines()
-    # Extract testcase names from stdout and split them into smaller sizes.
-    testcases = [line.split(' ')[1] for line in lines]
+
+    # Shard tests by testSuites first.  Get the information of testMethods
+    # as well in case we want to shard tests more evenly.
+    test_pattern = re.compile(
+      'imp -\[(?P<testSuite>[A-Za-z_][A-Za-z0-9_]*Test[Case]*) '
+      '(?P<testMethod>test[A-Za-z0-9_]*)\]')
+    test_names = test_pattern.findall(step_result.stdout)
+    tests_set = set()
+    for test_name in test_names:
+      # 'ChromeTestCase' is the parent class of all EarlGrey test classes. It
+      # has no real tests.
+      if 'ChromeTestCase' != test_name[0]:
+        tests_set.add('%s' % test_name[0])
+    testcases = sorted(tests_set)
+
     sublists = [testcases[i : i + shard_size]
                   for i in range(0, len(testcases), shard_size)]
-
     tasks = []
     for i, sublist in enumerate(sublists):
       tasks.append(self.isolate_test(
@@ -724,7 +741,7 @@ class iOSApi(recipe_api.RecipeApi):
     tmp_dir = self.m.path.mkdtemp('isolate')
 
     for test in self.__config['tests']:
-      if test.get('sharding') and test.get('shard size'):
+      if test.get('shard size'):
         tasks += self.isolate_earlgrey_test(test, test['shard size'],
                                             tmp_dir, isolate_template)
       else:
