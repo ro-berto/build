@@ -245,6 +245,10 @@ SPEC = {
       'chromium_apply_config': [
         'chrome_with_codecs',
         'download_vr_test_apks',
+
+        # This is specified in order to match the same configuration
+        # in 'chromium.android:Marshmallow Phone Tester (rel)'.
+        'goma_high_parallel',
       ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
@@ -254,7 +258,6 @@ SPEC = {
         'TARGET_PLATFORM': 'android',
       },
       'android_config': 'main_builder_mb',
-      'test_results_config': 'public_server',
       'bot_type': 'builder_tester',
       'testing': {
         'platform': 'linux',
