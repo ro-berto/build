@@ -268,7 +268,7 @@
         "os":  "linux",
         "version": "trusty",
       },
-      "slaves": ["slave36-c3"],
+      "slaves": ["slave36-c3", "slave214-c3", "slave215-c3"],
     },
     "mac10.9": {
       "slave_data": {
