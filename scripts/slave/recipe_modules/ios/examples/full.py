@@ -115,6 +115,10 @@ def GenTests(api):
         stdout=api.raw_io.output_text('1.2.3'),
     )
     + api.path.exists(
+        api.path['tmp_base'].join('0_0_tmp_2', '0'),
+        api.path['tmp_base'].join('0_0_tmp_2', '0', 'full_results.json'),
+        api.path['tmp_base'].join('0_1_tmp_3', '0'),
+        api.path['tmp_base'].join('0_1_tmp_3', '0', 'full_results.json'),
         api.path['tmp_base'].join('1_tmp_5', '0'),
         api.path['tmp_base'].join('1_tmp_5', '0', 'full_results.json'),
         api.path['tmp_base'].join('1_tmp_5', '0', 'Documents', 'perf_result.json'),

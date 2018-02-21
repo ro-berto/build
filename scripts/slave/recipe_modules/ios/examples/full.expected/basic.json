@@ -2842,6 +2842,29 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
+      "--input-json",
+      "[TMP_BASE]/0_0_tmp_2/0/full_results.json",
+      "--master-name",
+      "chromium.fake",
+      "--builder-name",
+      "ios-fake device 0-11.0",
+      "--build-number",
+      "0",
+      "--test-type",
+      "fake test 0 shard 0",
+      "--chrome-revision",
+      "refs/heads/master@{#170242}",
+      "--test-results-server",
+      "test-results.appspot.com"
+    ],
+    "cwd": "[START_DIR]/src",
+    "name": "Upload to test-results [fake test 0 shard 0]"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--",
@@ -2918,6 +2941,29 @@
       "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
       "@@@STEP_LINK@test data@blah@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
+      "--input-json",
+      "[TMP_BASE]/0_1_tmp_3/0/full_results.json",
+      "--master-name",
+      "chromium.fake",
+      "--builder-name",
+      "ios-fake device 0-11.0",
+      "--build-number",
+      "0",
+      "--test-type",
+      "fake test 0 shard 1",
+      "--chrome-revision",
+      "refs/heads/master@{#170242}",
+      "--test-results-server",
+      "test-results.appspot.com"
+    ],
+    "cwd": "[START_DIR]/src",
+    "name": "Upload to test-results [fake test 0 shard 1]"
   },
   {
     "cmd": [
