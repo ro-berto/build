@@ -23,7 +23,7 @@ DEPS = [
 ]
 
 BUCKET_NAME = 'flutter_infra'
-PACKAGED_BRANCH_RE = re.compile(r'^(dev|beta|release)$')
+PACKAGED_BRANCH_RE = re.compile(r'(dev|beta|release)$')
 
 
 def GetPuppetApiTokenPath(api, token_name):
@@ -213,9 +213,11 @@ def RunSteps(api):
   with api.context(env=env, cwd=checkout):
     api.step('flutter doctor', [flutter_executable, 'doctor'])
     api.step('download dependencies', [flutter_executable, 'update-packages'])
-    if (api.properties.get('branch') and
-        PACKAGED_BRANCH_RE.match(api.properties['branch'])):
+    branch = api.properties.get('branch')
+    if (branch and PACKAGED_BRANCH_RE.match(branch)):
       CreateAndUploadFlutterPackage(api, git_hash)
+    else:
+      api.step("Skipping packaging on %s branch." % branch, cmd=None)
 
   if api.platform.is_mac:
     SetupXcode(api)
