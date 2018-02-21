@@ -29,8 +29,6 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'builder',
-      'compile_targets': [
-      ],
       'testing': {
         'platform': 'win',
       },
@@ -51,8 +49,6 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'builder',
-      'compile_targets': [
-      ],
       'testing': {
         'platform': 'win',
       },
@@ -73,8 +69,6 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'builder',
-      'compile_targets': [
-      ],
       'testing': {
         'platform': 'win',
       },
@@ -252,8 +246,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder',
-      'compile_targets': [
-      ],
       'testing': {
         'platform': 'win',
       },
@@ -274,8 +266,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder',
-      'compile_targets': [
-      ],
       'testing': {
         'platform': 'win',
       },
@@ -297,8 +287,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder',
-      'compile_targets': [
-      ],
       'testing': {
         'platform': 'win',
       },
@@ -398,8 +386,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder',
-      'compile_targets': [
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -437,8 +423,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder',
-      'compile_targets': [
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -458,8 +442,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder',
-      'compile_targets': [
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -544,8 +526,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder_tester',
-      'compile_targets': [
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -580,8 +560,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder',
-      'compile_targets': [
-      ],
       'testing': {
         'platform': 'mac',
       },
@@ -601,8 +579,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder',
-      'compile_targets': [
-      ],
       'testing': {
         'platform': 'mac',
       },
@@ -622,8 +598,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder',
-      'compile_targets': [
-      ],
       'testing': {
         'platform': 'mac',
       },
@@ -850,8 +824,6 @@ SPEC = {
       },
       'android_config': 'main_builder',
       'bot_type': 'builder_tester',
-      'compile_targets': [
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -870,8 +842,6 @@ SPEC = {
       },
       'android_config': 'arm64_builder_rel_mb',
       'bot_type': 'builder_tester',
-      'compile_targets': [
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -889,8 +859,6 @@ SPEC = {
       },
       'android_config': 'main_builder',
       'bot_type': 'builder_tester',
-      'compile_targets': [
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -906,8 +874,6 @@ SPEC = {
       },
       'android_config': 'arm64_builder_rel_mb',
       'bot_type': 'builder_tester',
-      'compile_targets': [
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -924,8 +890,6 @@ SPEC = {
       'android_config': 'arm64_builder_rel_mb',
       'android_apply_config': ['restart_usb', 'use_devil_adb'],
       'bot_type': 'builder_tester',
-      'compile_targets': [
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -941,8 +905,6 @@ SPEC = {
       'android_config': 'arm64_builder_rel_mb',
       'android_apply_config': ['restart_usb', 'use_devil_adb'],
       'bot_type': 'builder_tester',
-      'compile_targets': [
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -957,8 +919,6 @@ SPEC = {
       },
       'android_config': 'arm64_builder_rel_mb',
       'bot_type': 'builder_tester',
-      'compile_targets': [
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -975,8 +935,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder',
-      'compile_targets': [
-      ],
       'testing': {
         'platform': 'linux',
       },

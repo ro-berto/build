@@ -30,6 +30,10 @@ class BotConfig(object):
         raise Exception('No configuration present for builder %s in master %s' % (b, m))
 
   def _consistent_get(self, getter, name, default=None):
+    # This logic must be kept in sync with checkConsistentGet in
+    # tests/masters_recipes_test.py . It's not feasible to otherwise write an
+    # integration test for this code which runs against all of the bots in
+    # trybots.py.
     result = getter(self._bot_ids[0], name, default)
     for bot_id in self._bot_ids:
       other_result = getter(bot_id, name, default)

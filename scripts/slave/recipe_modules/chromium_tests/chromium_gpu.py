@@ -28,8 +28,6 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'builder',
-      'compile_targets': [
-      ],
       'testing': {
         'platform': 'win',
       },
@@ -48,8 +46,6 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'builder',
-      'compile_targets': [
-      ],
       'testing': {
         'platform': 'win',
       },
@@ -97,8 +93,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder',
-      'compile_targets': [
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -121,8 +115,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder',
-      'compile_targets': [
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -169,8 +161,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder',
-      'compile_targets': [
-      ],
       'testing': {
         'platform': 'mac',
       },
@@ -190,8 +180,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder',
-      'compile_targets': [
-      ],
       'testing': {
         'platform': 'mac',
       },

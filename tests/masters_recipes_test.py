@@ -146,6 +146,102 @@ def mutualDifference(a, b):
   return a - b, b - a
 
 
+def getBotFromWaterfall(builders, mastername, botname):
+  return builders.get(mastername, {}).get('builders', {}).get(botname)
+
+
+def botExists(builders, waterfallname, trybotname, mastername, botname,
+              undefined_bots):
+  if getBotFromWaterfall(builders, mastername, botname):
+    return True
+  undefined_bots.add('%s on %s: %s on %s' % (trybotname, waterfallname, botname,
+                                             mastername))
+  return False
+
+
+def checkConsistentGet(builders, trybot, key):
+  # This logic must be kept in sync with _consistent_get in
+  # recipe_modules/chromium_tests/bot_config_and_test_db.py. It's not feasible
+  # to otherwise write a unit test for that code against all of the bots in
+  # trybots.py.
+  result = True
+  first_bot = trybot['bot_ids'][0]
+  val = getBotFromWaterfall(
+    builders, first_bot['mastername'], first_bot['buildername']).get(key)
+  for ii in xrange(1, len(trybot['bot_ids'])):
+    bot = trybot['bot_ids'][ii]
+    other_val = getBotFromWaterfall(
+      builders, bot['mastername'], bot['buildername']).get(key)
+    if val != other_val:
+      print 'key "%s" differs in specification between %s:%s and %s:%s' % (
+        key, first_bot['mastername'], first_bot['buildername'],
+        bot['mastername'], bot['buildername'])
+      print '  %s != %s' % (str(val), str(other_val))
+      result = False
+  return result
+
+
+def checkTrybotConsistency(builders, trybot):
+  result = True
+  keys_to_query = set()
+  # Look at all of the builders' keys, in order to ensure as best as possible
+  # that they're all equal, without prior knowledge of which keys
+  # recipe_modules/chromium_tests/api.py might look at.
+  for bot in trybot['bot_ids']:
+    # We only need to ensure consistency among the builders, not the testers.
+    bot = getBotFromWaterfall(builders, bot['mastername'],
+                              bot['buildername'])
+    keys_to_query.update(bot.keys())
+  for key in keys_to_query:
+    if not checkConsistentGet(builders, trybot, key):
+      result = False
+  return result
+
+
+def verifyTrybotConfigsAreConsistent(builders, trybots):
+  # In chromium_tests/bot_config_and_test_db.py, BotConfig._consistent_get
+  # asserts at runtime that when fetching any property from multiple mirrored
+  # bots, the property must be identical for all of them.
+  #
+  # It's difficult to write a unit test for this code, because it's all within
+  # the recipe boundary, and that essentially only executes at runtime. This
+  # test acts as an integration test for this same logic, so that presubmit
+  # checks can catch errors in trybots' specifications before they land and
+  # break the trybot.
+  return_value = True
+  undefined_bots = set()
+
+  # To keep things simple, first check for undefined bots, and then afterward
+  # check all bots for consistency.
+  for waterfall_name, waterfall in trybots.iteritems():
+    for trybot_name, trybot in waterfall['builders'].iteritems():
+      for trybot_id in trybot['bot_ids']:
+        if not botExists(builders, waterfall_name, trybot_name,
+                         trybot_id['mastername'], trybot_id['buildername'],
+                         undefined_bots):
+          return_value = False
+        if 'tester' in trybot_id:
+          if not botExists(builders, waterfall_name, trybot_name,
+                           trybot_id['mastername'], trybot_id['tester'],
+                           undefined_bots):
+            return_value = False
+
+  if undefined_bots:
+    print 'The following bots referenced by trybots.py are not defined:'
+    for bb in undefined_bots:
+      print '  %s' % bb
+
+  # If trybots reference nonexistent builders, the consistency checks will raise
+  # an exception internally, but the misconfigured bots' names will be printed
+  # first in order to give a hint about what needs to be fixed.
+  for waterfall_name, waterfall in trybots.iteritems():
+    for trybot_name, trybot in waterfall['builders'].iteritems():
+      if not checkTrybotConsistency(builders, trybot):
+        return_value = False
+
+  return return_value
+
+
 def main(argv):
   parser = argparse.ArgumentParser()
   parser.add_argument('--cq-config', help='Path to CQ config')
@@ -259,6 +355,11 @@ def main(argv):
     print 'Unused suppressions:'
     print '\n'.join(sorted(
         '\t%s:%s' % (b[0], b[1]) for b in unused_suppressions))
+
+  if not verifyTrybotConfigsAreConsistent(chromium_BUILDERS,
+                                          chromium_trybot_BUILDERS):
+    # The function above prints out its own errors.
+    exit_code = 1
 
   return exit_code
 

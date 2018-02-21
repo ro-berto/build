@@ -416,10 +416,6 @@ TRYBOTS = freeze({
         'mastername': 'chromium.memory',
         'buildername': 'Linux CFI',
       }),
-      'linux_chromium_ubsan_rel_ng': simple_bot({
-        'mastername': 'chromium.fyi',
-        'buildername': 'UBSanVptr Linux',
-      }),
       'linux_chromium_ozone_compile_only_ng': simple_bot({
         'mastername': 'chromium.linux',
         'buildername': 'Ozone Linux',
@@ -713,23 +709,6 @@ TRYBOTS = freeze({
       'win_chromium_syzyasan_rel': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'Win SyzyAsan (rel)',
-      }),
-      # Experimental clang/win bots.
-      'win_clang_dbg': simple_bot({
-        'mastername': 'chromium.fyi',
-        'buildername': 'CrWinClang(dbg)',
-      }),
-      'win_clang_rel': simple_bot({
-        'mastername': 'chromium.fyi',
-        'buildername': 'CrWinClang',
-      }),
-      'win_clang_x64_dbg': simple_bot({
-        'mastername': 'chromium.fyi',
-        'buildername': 'CrWinClang64(dbg)',
-      }),
-      'win_clang_x64_rel': simple_bot({
-        'mastername': 'chromium.fyi',
-        'buildername': 'CrWinClang64',
       }),
       'win_mojo': simple_bot({
         'mastername': 'chromium.fyi',
