@@ -123,6 +123,10 @@ def v8_tot(c):
 def fuchsia(c):
   c.target_os.add('fuchsia')
 
+@CONFIG_CTX()
+def win(c):
+  c.target_os.add('win')
+
 @CONFIG_CTX(includes=['chromium', 'chrome_internal'])
 def perf(c):
   s = c.solutions[0]

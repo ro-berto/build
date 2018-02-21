@@ -333,6 +333,29 @@ SPEC = {
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
     },
+    'linux-win_cross-rel': {
+      'chromium_config': 'chromium_win_clang',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['win'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+        'TARGET_PLATFORM': 'win',
+      },
+      'compile_targets': [
+        'all',
+      ],
+      'GYP_DEFINES': { 'component': 'shared_library' },
+      'bot_type': 'builder_tester',
+      'test_results_config': 'staging_server',
+      'testing': {
+        'platform': 'win',
+      },
+      # Workaround so that recipes doesn't add random build targets to our
+      # compile line. We want to build everything.
+      'add_tests_as_compile_targets': False,
+    },
     'ToTWinCFI': {
       'chromium_config': 'chromium_win_clang_tot',
       'chromium_apply_config': ['mb'],

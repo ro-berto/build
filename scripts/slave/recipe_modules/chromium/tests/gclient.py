@@ -30,6 +30,7 @@ TEST_CONFIGS = [
   'v8_canary',
   'v8_tot',
   'webrtc_test_resources',
+  'win',
 ]
 
 

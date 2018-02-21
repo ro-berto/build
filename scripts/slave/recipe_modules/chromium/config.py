@@ -157,7 +157,7 @@ def BASE(c):
     # host -> potential target platforms
     'win':   ('win',),
     'mac':   ('mac', 'ios'),
-    'linux': ('linux', 'chromeos', 'android', 'fuchsia'),
+    'linux': ('linux', 'chromeos', 'android', 'fuchsia', 'win'),
   }.get(c.HOST_PLATFORM)
 
   if not potential_platforms:  # pragma: no cover
