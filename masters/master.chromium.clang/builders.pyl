@@ -43,7 +43,7 @@
   "builders": {
     "ToTLinux": {
       "mixins": ["trusty"],
-      "bot_pool": "slave162-c1",
+      "bot": "slave162-c1",
       "category": "0ToTLinux",
     },
     "ToTLinux (dbg)": {
@@ -220,8 +220,7 @@
     },
     "linux-win_cross-rel": {
       "mixins": ["trusty"],
-      # TODO(thakis): Use dedicated slave once available, crbug.com/813075
-      "bot_pool": "slave162-c1",
+      "bot": "slave169-c1",
       "category": "4Windows",
     },
 
@@ -306,11 +305,6 @@
       "version": "win7",
       "bots": "build154-m1",
     },
-    "slave162-c1": {
-      "os": "linux",
-      "version": "trusty",
-      "bots": "slave162-c1",
-    }
   },
 
   "schedulers": {
