@@ -218,7 +218,7 @@
       "bot_pool": "build70-m1",
       "category": "4Windows",
     },
-    "WinCross": {
+    "linux-win_cross-rel": {
       "mixins": ["trusty"],
       # TODO(thakis): Use dedicated slave once available, crbug.com/813075
       "bot_pool": "slave162-c1",
