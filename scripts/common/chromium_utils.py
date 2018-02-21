@@ -655,6 +655,7 @@ def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
   MaybeMakeDirectory(archive_dir)
   for needed_file in file_list:
     needed_file = needed_file.rstrip()
+    print 'Copying: %s' % needed_file
     # These paths are relative to the file_relative_dir.  We need to copy
     # them over maintaining the relative directories, where applicable.
     src_path = os.path.join(file_relative_dir, needed_file)
