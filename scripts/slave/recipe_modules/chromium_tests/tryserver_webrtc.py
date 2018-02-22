@@ -18,7 +18,7 @@ def AddBuildSpec(name, platform):
   SPEC['builders'][name] = spec
 
 
-AddBuildSpec('android_webrtc_compile_rel', 'android')
-AddBuildSpec('mac_chromium_webrtc_compile_rel_ng', 'mac')
-AddBuildSpec('linux_chromium_webrtc_compile_rel_ng', 'linux')
-AddBuildSpec('win_chromium_webrtc_compile_rel_ng', 'win')
+AddBuildSpec('android_chromium_compile', 'android')
+AddBuildSpec('mac_chromium_compile', 'mac')
+AddBuildSpec('linux_chromium_compile', 'linux')
+AddBuildSpec('win_chromium_compile', 'win')

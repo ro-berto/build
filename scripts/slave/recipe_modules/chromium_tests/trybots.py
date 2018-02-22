@@ -752,21 +752,21 @@ TRYBOTS = freeze({
   },
   'tryserver.webrtc': {
     'builders': {
-      'win_chromium_webrtc_compile_rel_ng': simple_bot({
+      'win_chromium_compile': simple_bot({
         'mastername': 'tryserver.webrtc',
-        'buildername': 'win_chromium_webrtc_compile_rel_ng',
+        'buildername': 'win_chromium_compile',
       }, analyze_mode='compile'),
-      'mac_chromium_webrtc_compile_rel_ng': simple_bot({
+      'mac_chromium_compile': simple_bot({
         'mastername': 'tryserver.webrtc',
-        'buildername': 'mac_chromium_webrtc_compile_rel_ng',
+        'buildername': 'mac_chromium_compile',
       }, analyze_mode='compile'),
-      'linux_chromium_webrtc_compile_rel_ng': simple_bot({
+      'linux_chromium_compile': simple_bot({
         'mastername': 'tryserver.webrtc',
-        'buildername': 'linux_chromium_webrtc_compile_rel_ng',
+        'buildername': 'linux_chromium_compile',
       }, analyze_mode='compile'),
-      'android_webrtc_compile_rel': simple_bot({
+      'android_chromium_compile': simple_bot({
         'mastername': 'tryserver.webrtc',
-        'buildername': 'android_webrtc_compile_rel',
+        'buildername': 'android_chromium_compile',
       }, analyze_mode='compile'),
     },
   },
