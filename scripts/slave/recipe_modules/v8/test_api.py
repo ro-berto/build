@@ -456,15 +456,18 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
           try_job_key='1234',
       )
 
-    # Skip some goma-related steps in expectations.
-    skip_prefixes = [
+    # Skip some goma and swarming related steps in expectations.
+    skip_fragments = map(re.escape, [
       'ensure_goma',
       'calculate the number of recommended jobs',
       'preprocess_for_goma',
       'postprocess_for_goma',
-    ]
+      'read revision',
+      'swarming_client',
+      'swarming.py --version',
+    ])
     test += self.post_process(
-        Filter().include_re(r'^(?!%s).*$' % '|'.join(skip_prefixes)))
+        Filter().include_re(r'^((?!%s).)*$' % '|'.join(skip_fragments)))
     return test
 
   def fail(self, step_name, variant='default'):
