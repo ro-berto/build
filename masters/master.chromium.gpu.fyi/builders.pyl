@@ -937,7 +937,7 @@
         "os": "linux",
         "version": "trusty",
       },
-      "slaves": ["build61-b1"],
+      "slaves": ["slave262-c1"],
     },
     "android_rel_nvidia_shield_tv": {
       "slave_data": {
