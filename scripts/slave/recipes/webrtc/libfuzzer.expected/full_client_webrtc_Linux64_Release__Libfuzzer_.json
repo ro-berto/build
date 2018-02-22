@@ -3,16 +3,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::webrtc]/resources/cleanup_symlinks.py",
-      "[START_DIR]"
-    ],
-    "infra_step": true,
-    "name": "clean symlinks"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
       "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://webrtc.googlesource.com/src'}]",

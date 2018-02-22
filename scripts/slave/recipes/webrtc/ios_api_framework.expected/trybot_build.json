@@ -18,16 +18,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::webrtc]/resources/cleanup_symlinks.py",
-      "[BUILDER_CACHE]/ios_api_framework"
-    ],
-    "infra_step": true,
-    "name": "clean symlinks"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]/gerrit_client.py",
       "changes",
       "--host",

@@ -147,12 +147,6 @@ class WebRTCApi(recipe_api.RecipeApi):
   def checkout(self, **kwargs):
     self._working_dir = self.m.chromium_checkout.get_checkout_dir({})
 
-    # Cleanup symlinks if there are any created.
-    self.m.python('clean symlinks',
-                  script=self.resource('cleanup_symlinks.py'),
-                  args=[self._working_dir],
-                  infra_step=True)
-
     with self.m.context(cwd=self.m.context.cwd or self._working_dir):
       update_step = self.m.bot_update.ensure_checkout(**kwargs)
     assert update_step.json.output['did_run']
