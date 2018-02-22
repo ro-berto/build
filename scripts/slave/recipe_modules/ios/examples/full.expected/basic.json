@@ -821,7 +821,7 @@
     "cmd": [
       "otool",
       "-ov",
-      "<(app_path)/fake test 0"
+      "[START_DIR]/src/out/Debug-iphonesimulator/fake test 0.app/fake test 0"
     ],
     "cwd": "[START_DIR]/src",
     "name": "isolate.shard EarlGrey test",

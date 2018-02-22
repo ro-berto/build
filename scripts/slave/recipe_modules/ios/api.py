@@ -632,7 +632,9 @@ class iOSApi(recipe_api.RecipeApi):
 
   def isolate_earlgrey_test(self, test, shard_size, tmp_dir, isolate_template):
     """Isolate earlgrey test into small shards"""
-    cmd = ['otool', '-ov', '%s/%s' % ('<(app_path)', test['app'])]
+    cmd = ['otool', '-ov', '%s/%s' %
+      (self.m.path.join(self.most_recent_app_path, '%s.app' % test['app']),
+       test['app'])]
     step_result = self.m.step(
       'shard EarlGrey test',
       cmd,
