@@ -1943,7 +1943,11 @@ BUILDERS = {
         },
         'bot_type': 'builder',
         'build_gs_archive': 'mips64el_sim_rel_archive',
+        'enable_swarming': True,
         'testing': {'platform': 'linux'},
+        'triggers': [
+          'V8 Linux - mips64el - sim',
+        ],
       },
       'V8 Linux - mipsel - sim': {
         'v8_config_kwargs': {
@@ -1956,11 +1960,20 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [V8Testing(4), Test262],
         'testing': {'platform': 'linux'},
-        'swarming_properties': {
-          'default_expiration': 2 * 60 * 60,
-          'default_hard_timeout': 2 * 60 * 60,
-          'default_priority': 35,
+        'swarming_properties': SWARMING_FYI_PROPS,
+      },
+      'V8 Linux - mips64el - sim': {
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
         },
+        'bot_type': 'tester',
+        'parent_buildername': 'V8 Linux - mips64el - sim - builder',
+        'build_gs_archive': 'mips64el_sim_rel_archive',
+        'enable_swarming': True,
+        'tests': [V8Testing(4), Test262],
+        'testing': {'platform': 'linux'},
+        'swarming_properties': SWARMING_FYI_PROPS,
       },
 ####### Category: PPC
       'V8 Linux - ppc - sim': {
