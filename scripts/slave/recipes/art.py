@@ -284,6 +284,11 @@ def setup_target(api,
     api.step('build target', [art_tools.join('buildbot-build.sh'),
                               '-j8', '--target'])
 
+  # Volantis devices are getting replaced
+  # https://bugs.chromium.org/p/chromium/issues/detail?id=812583
+  if device == 'volantis-armv8' or device == 'volantis-armv7':
+    return
+
   with api.step.defer_results():
     with api.context(env=env):
       api.step('setup device', [art_tools.join('setup-buildbot-device.sh')])
