@@ -4,6 +4,7 @@
 # found in the LICENSE file.
 
 import argparse
+import copy
 import json
 import os
 import subprocess
@@ -55,8 +56,6 @@ SUPPRESSIONS = {
         'Mac Debug (Intel)',
         'Mac Retina Debug (AMD)',
         'Win10 Debug (NVIDIA)',
-        # TODO(kbr): remove as soon as this is part of android_n5x_swarming_rel.
-        'Android Release (Nexus 5X)',
     ],
     'master.chromium.linux': [
         'Deterministic Linux',
@@ -146,6 +145,24 @@ def mutualDifference(a, b):
   return a - b, b - a
 
 
+def copyAndFlattenSettings(waterfalls):
+  # The "settings" dictionary per waterfall applies to all bots.
+  # src_side_runtest_py in particular is flattened by the Chromium recipe into
+  # all bots' definitions. This flattening must be done here as well in order to
+  # catch all the same errors that the recipe does. It's possible that other
+  # fields must be flattened in as well, but some are deliberately not required
+  # to be the same among bots that a given trybot mirrors, like build_gs_bucket.
+  waterfalls = copy.deepcopy(waterfalls)
+  # Only insert this key if it's actually in the spec, to allow 'None', 'False',
+  # and 'True' to show up in the destination bots' configurations.
+  for waterfall in waterfalls.itervalues():
+    if 'src_side_runtest_py' in waterfall.get('settings', {}):
+      val = waterfall['settings']['src_side_runtest_py']
+      for builder in waterfall['builders'].itervalues():
+        builder['src_side_runtest_py'] = val
+  return waterfalls
+
+
 def getBotFromWaterfall(builders, mastername, botname):
   return builders.get(mastername, {}).get('builders', {}).get(botname)
 
@@ -210,6 +227,8 @@ def verifyTrybotConfigsAreConsistent(builders, trybots):
   # break the trybot.
   return_value = True
   undefined_bots = set()
+
+  builders = copyAndFlattenSettings(builders)
 
   # To keep things simple, first check for undefined bots, and then afterward
   # check all bots for consistency.
