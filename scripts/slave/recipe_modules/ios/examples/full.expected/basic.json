@@ -2926,14 +2926,14 @@
       "--build-number",
       "0",
       "--test-type",
-      "fake test 0 shard 0",
+      "fake test 0_shard_0",
       "--chrome-revision",
       "refs/heads/master@{#170242}",
       "--test-results-server",
       "test-results.appspot.com"
     ],
     "cwd": "[START_DIR]/src",
-    "name": "Upload to test-results [fake test 0 shard 0]"
+    "name": "Upload to test-results [fake test 0_shard_0]"
   },
   {
     "cmd": [
@@ -3031,14 +3031,14 @@
       "--build-number",
       "0",
       "--test-type",
-      "fake test 0 shard 1",
+      "fake test 0_shard_1",
       "--chrome-revision",
       "refs/heads/master@{#170242}",
       "--test-results-server",
       "test-results.appspot.com"
     ],
     "cwd": "[START_DIR]/src",
-    "name": "Upload to test-results [fake test 0 shard 1]"
+    "name": "Upload to test-results [fake test 0_shard_1]"
   },
   {
     "cmd": [
