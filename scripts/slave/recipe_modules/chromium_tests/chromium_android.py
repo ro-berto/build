@@ -10,6 +10,10 @@ RESULTS_URL = 'https://chromeperf.appspot.com'
 SPEC = {
   'settings': {
     'build_gs_bucket': 'chromium-android-archive',
+    # WARNING: src-side runtest.py is only tested with chromium CQ builders.
+    # Usage not covered by chromium CQ is not supported and can break
+    # without notice.
+    'src_side_runtest_py': True,
   },
   'builders': {
     'Android arm Builder (dbg)': {
