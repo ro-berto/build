@@ -65,11 +65,6 @@ class GomaApi(recipe_api.RecipeApi):
     return self.m.path['tmp_base'].join('goma_jsonstatus.json')
 
   @property
-  def counterz_path(self):
-    assert self._goma_dir
-    return self.m.path['tmp_base'].join('goma_counterz.json')
-
-  @property
   def jsonstatus(self):
     assert self._jsonstatus
     return self._jsonstatus
@@ -250,9 +245,6 @@ class GomaApi(recipe_api.RecipeApi):
         self._goma_ctl_env['GOMACTL_CRASH_REPORT_ID_FILE'] = (
             self.m.path.join(self.build_data_dir, 'crash_report_id_file'))
 
-      self._goma_ctl_env['GOMA_ENABLE_COUNTERZ'] = 'true'
-      self._goma_ctl_env['GOMA_DUMP_COUNTERZ_FILE'] = self.counterz_path
-
       if not self._is_local:
         self._goma_ctl_env['GOMA_SERVICE_ACCOUNT_JSON_FILE'] = (
             self.service_account_json_path)
@@ -415,14 +407,8 @@ class GomaApi(recipe_api.RecipeApi):
           '--goma-stats-file', self._goma_ctl_env['GOMA_DUMP_STATS_FILE'],
           '--goma-crash-report-id-file',
           self._goma_ctl_env['GOMACTL_CRASH_REPORT_ID_FILE'],
-          '--build-data-dir', self.build_data_dir
+          '--build-data-dir', self.build_data_dir,
       ])
-
-    args.extend(['--goma-counterz-json', self.counterz_path])
-    json_test_data['counterz'] = (
-        'https://storage.cloud.google.com/chrome-goma-log/'
-        '2017/03/30/build11-m1/counterz.json.gz')
-
     if 'build_id' in self.m.properties:
       args.extend(['--build-id', self.m.properties['build_id']])
 
@@ -447,7 +433,7 @@ class GomaApi(recipe_api.RecipeApi):
       venv=True,
       step_test_data=(lambda: self.m.json.test_api.output(json_test_data)))
 
-    for log in ('compiler_proxy_log', 'ninja_log', 'counterz'):
+    for log in ('compiler_proxy_log', 'ninja_log'):
       if log in result.json.output:
         result.presentation.links[log] = result.json.output[log]
 

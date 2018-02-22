@@ -40,9 +40,6 @@ def main():
                       help='Filename of a GomaStats binary protobuf. '
                       'If empty or non-existing file, it will report error '
                       'to chrome infra monitoring system.')
-  parser.add_argument('--goma-counterz-json',
-                      metavar='FILENAME',
-                      help='Filename of a Goma counterz stats json.')
   parser.add_argument('--goma-crash-report-id-file',
                       metavar='FILENAME',
                       help='Filename that has a crash report id.')
@@ -110,14 +107,6 @@ def main():
     )
     if viewer_url is not None:
       viewer_urls['ninja_log'] = viewer_url
-
-  if args.goma_counterz_json:
-    filename = goma_utils.UploadToGomaLogGS(
-        args.goma_counterz_json, 'counterz.json',
-        override_gsutil=override_gsutil)
-    viewer_urls['counterz'] = (
-        'https://storage.cloud.google.com/' + goma_utils.GOMA_LOG_GS_BUCKET + '/' +
-        filename)
 
   if args.log_url_json_file:
     with open(args.log_url_json_file, 'w') as f:
