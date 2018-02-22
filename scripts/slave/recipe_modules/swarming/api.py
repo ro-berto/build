@@ -35,22 +35,16 @@ IMPLIED_ENV_PREFIXES = {
 # generated from this module. The first member of the tuple is the path relative
 # to IMPLIED_BINARY_PATH which should be added to $PATH.
 IMPLIED_CIPD_BINARIES = {
-  'infra/tools/luci/vpython/${platform}':
-    ('', 'git_revision:e1abc57be62d198b5c2f487bfb2fa2d2eb0e867c'),
-  'infra/tools/luci/logdog/butler/${platform}':
-    ('', 'git_revision:e1abc57be62d198b5c2f487bfb2fa2d2eb0e867c'),
-}
-
-# These CIPD packages will be automatically put on $PATH for all swarming tasks
-# generated from this module when triggering tasks from LUCI builders. The first
-# member of the tuple is the path relative to IMPLIED_BINARY_PATH which should
-# be added to $PATH.
-IMPLIED_CIPD_LUCI_BINARIES = {
   # Both vpython versions MUST be changed together.
   'infra/tools/luci/vpython/${platform}':
     ('', 'git_revision:e1abc57be62d198b5c2f487bfb2fa2d2eb0e867c'),
   'infra/tools/luci/vpython-native/${platform}':
     ('', 'git_revision:e1abc57be62d198b5c2f487bfb2fa2d2eb0e867c'),
+
+  'infra/tools/luci/logdog/butler/${platform}':
+    ('', 'git_revision:e1abc57be62d198b5c2f487bfb2fa2d2eb0e867c'),
+  # NOTE(crbug.com/812693): this isn't currently available on arm. See
+  # SwarmingApi.trigger_task for hack.
   'infra/python/cpython/${platform}':
     ('bin', 'version:2.7.14.chromium14'),
 }
@@ -510,42 +504,6 @@ class SwarmingApi(recipe_api.RecipeApi):
     if idempotent is None:
       idempotent = self.default_idempotent
 
-    # Mix in standard infra packages 'vpython' and 'logdog' so that the task can
-    # always access them on $PATH. If we're running on LUCI, also include the
-    # hermetic cpython bundle.
-    new_cipd_packages = list(cipd_packages or ())
-    for pkg in new_cipd_packages:
-      assert not pkg[0].startswith(IMPLIED_BINARY_PATH), \
-        'cipd_packages may not be installed to %r' % (IMPLIED_BINARY_PATH,)
-
-    to_add = dict(IMPLIED_CIPD_BINARIES)
-    if self.m.runtime.is_luci:
-      to_add.update(IMPLIED_CIPD_LUCI_BINARIES)
-
-    path_env_prefix = set()
-    for pkg, (subdir, vers) in sorted(to_add.items()):
-      path_env_prefix.add('/'.join((IMPLIED_BINARY_PATH, subdir)) if subdir
-                          else IMPLIED_BINARY_PATH)
-      vers = 'TEST_VERSION' if self._test_data.enabled else vers
-      new_cipd_packages.append((IMPLIED_BINARY_PATH, pkg, vers))
-
-    # update implied caches
-    if named_caches is None:
-      named_caches = {}
-    else:
-      named_caches = named_caches.copy()
-    named_caches.update({
-      '_'.join((IMPLIED_CACHE_NAME, k)): '/'.join((IMPLIED_CACHE_BASE,v))
-      for k, v in IMPLIED_CACHES.iteritems()
-    })
-
-    # update $PATH
-    env_prefixes = dict(env_prefixes or {})            # copy it
-    env_prefixes.setdefault('PATH', [])[:0] = sorted(  # prepend stuff
-      path_env_prefix, key=lambda x: (len(x), x))
-    for k, path in IMPLIED_ENV_PREFIXES.iteritems():
-      env_prefixes.setdefault(k, [path])
-
     return SwarmingTask(
         title=title,
         isolated_hash=isolated_hash,
@@ -564,7 +522,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         extra_args=extra_args,
         collect_step=self._default_collect_step,
         task_output_dir=task_output_dir,
-        cipd_packages=new_cipd_packages,
+        cipd_packages=cipd_packages or [],
         build_properties=build_properties,
         merge=merge,
         trigger_script=trigger_script,
@@ -680,6 +638,43 @@ class SwarmingApi(recipe_api.RecipeApi):
     assert 'os' in task.dimensions, task.dimensions
     self._pending_tasks.add(task.task_name)
 
+    # Mix in standard infra packages 'vpython' and 'logdog' so that the task can
+    # always access them on $PATH.
+    cipd_packages = list(task.cipd_packages or ())
+    for pkg in cipd_packages:
+      assert not pkg[0].startswith(IMPLIED_BINARY_PATH), \
+        'cipd_packages may not be installed to %r' % (IMPLIED_BINARY_PATH,)
+
+    to_add = dict(IMPLIED_CIPD_BINARIES)
+
+    # HACK(crbug.com/812693) - we don't support cpython on arm yet, so remove
+    # it from packages to inject.
+    if 'arm' in task.dimensions.get('cpu', ''):
+      for k in to_add.keys():
+        if 'cpython' in k:
+          to_add.pop(k)
+
+    path_env_prefix = set()
+    for pkg, (subdir, vers) in sorted(to_add.items()):
+      path_env_prefix.add('/'.join((IMPLIED_BINARY_PATH, subdir)) if subdir
+                          else IMPLIED_BINARY_PATH)
+      vers = 'TEST_VERSION' if self._test_data.enabled else vers
+      cipd_packages.append((IMPLIED_BINARY_PATH, pkg, vers))
+
+    # update implied caches
+    named_caches = dict(task.named_caches or {})
+    named_caches.update({
+      '_'.join((IMPLIED_CACHE_NAME, k)): '/'.join((IMPLIED_CACHE_BASE,v))
+      for k, v in IMPLIED_CACHES.iteritems()
+    })
+
+    # update $PATH
+    env_prefixes = dict(task.env_prefixes or {})            # copy it
+    env_prefixes.setdefault('PATH', [])[:0] = sorted(  # prepend stuff
+      path_env_prefix, key=lambda x: (len(x), x))
+    for k, path in IMPLIED_ENV_PREFIXES.iteritems():
+      env_prefixes.setdefault(k, [path])
+
     # Trigger parameters.
     args = [
       'trigger',
@@ -702,7 +697,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         'env var %s is not a string: %s' % (name, value)
       args.extend(['--env', name, value])
 
-    for name, relpath in sorted(task.named_caches.iteritems()):
+    for name, relpath in sorted(named_caches.iteritems()):
       args.extend(['--named-cache', name, relpath])
 
     if task.service_account:
@@ -752,12 +747,12 @@ class SwarmingApi(recipe_api.RecipeApi):
     if task.user:
       args.extend(['--user', task.user])
 
-    if task.cipd_packages:
-      for path, pkg, version in task.cipd_packages:
+    if cipd_packages:
+      for path, pkg, version in cipd_packages:
         args.extend(['--cipd-package', '%s:%s:%s' % (path, pkg, version)])
 
-    if task.env_prefixes:
-      for key, paths in sorted(task.env_prefixes.items()):
+    if env_prefixes:
+      for key, paths in sorted(env_prefixes.items()):
         for path in paths:
           args.extend(('--env-prefix', key, path))
 
