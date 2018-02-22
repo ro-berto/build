@@ -633,7 +633,7 @@ def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
   """
   if not strip_files:
     strip_files = []
-  start_time = time.clock()
+  start_time = time.time()
   # Collect files into the archive directory.
   archive_dir = os.path.join(output_dir, archive_name)
   print 'output_dir: %s, archive_name: %s' % (output_dir, archive_name)
@@ -683,7 +683,7 @@ def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
     except PathNotFound:
       if raise_error:
         raise
-  end_time = time.clock()
+  end_time = time.time()
   print 'Took %f seconds to create archive directory.' % (end_time - start_time)
 
   # Pack the zip file.
@@ -699,7 +699,7 @@ def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
   # On Windows we use the python zip module; on Linux and Mac, we use the zip
   # command as it will handle links and file bits (executable).  Which is much
   # easier then trying to do that with ZipInfo options.
-  start_time = time.clock()
+  start_time = time.time()
   if IsWindows() and not windows_zip_cmd:
     print 'Creating %s' % output_file
 
@@ -735,7 +735,7 @@ def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
     if result and raise_error:
       raise ExternalError('zip failed: %s => %s' %
                           (str(command), result))
-  end_time = time.clock()
+  end_time = time.time()
   print 'Took %f seconds to create zip.' % (end_time - start_time)
   return (archive_dir, output_file)
 

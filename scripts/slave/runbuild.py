@@ -363,10 +363,10 @@ def execute_builder(my_builder, mastername, options):
     print >>sys.stderr, 'using %s builder \'%s\'' % (mastername,
         my_builder['name'])
 
-  start_time = time.clock()
+  start_time = time.time()
   commands_executed, err = runbuild_utils.Execute(filtered_commands,
       options.annotate, options.log, fail_fast=options.fail_fast)
-  end_time = time.clock()
+  end_time = time.time()
 
   if err:
     print >>sys.stderr, ('error occurred in previous step, aborting! (%0.2fs'
