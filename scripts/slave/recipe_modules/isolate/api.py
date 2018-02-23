@@ -14,6 +14,7 @@ class IsolateApi(recipe_api.RecipeApi):
     super(IsolateApi, self).__init__(**kwargs)
     self._isolate_server = 'https://isolateserver.appspot.com'
     self._isolated_tests = {}
+    self._service_account_json = None
 
   @property
   def isolate_server(self):
@@ -24,6 +25,16 @@ class IsolateApi(recipe_api.RecipeApi):
   def isolate_server(self, value):
     """Changes URL of Isolate server to use."""
     self._isolate_server = value
+
+  @property
+  def service_account_json(self):
+    """Service account json to use."""
+    return self._service_account_json
+
+  @service_account_json.setter
+  def service_account_json(self, value):
+    """Service account json to use."""
+    self._service_account_json = value
 
   def clean_isolated_files(self, build_dir):
     """Cleans out all *.isolated files from the build directory in
@@ -152,6 +163,9 @@ class IsolateApi(recipe_api.RecipeApi):
           '--eventlog-endpoint', 'prod',
       ] + (['--verbose'] if verbose else [])
 
+      if self.service_account_json:
+        args.extend(['--service-account-json', self.service_account_json])
+
       for target in archive_targets:
         isolate_steps.append(
             self.m.python(
@@ -173,9 +187,14 @@ class IsolateApi(recipe_api.RecipeApi):
             '--dump-json', self.m.json.output(),
             '--isolate-server', self._isolate_server,
             '--eventlog-endpoint', 'prod',
-        ] + (['--verbose'] if verbose else []) +  [
-            build_dir.join('%s.isolated.gen.json' % t) for t in batch_targets
-        ]
+        ] + (['--verbose'] if verbose else [])
+
+        if self.service_account_json:
+          args.extend(['--service-account-json', self.service_account_json])
+
+        args.extend([
+            build_dir.join('%s.isolated.gen.json' % t) for t in batch_targets])
+
         isolate_steps.append(
             self.m.python(
                 'isolate tests', self.resource('isolate.py'), args,

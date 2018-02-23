@@ -29,6 +29,10 @@ def RunSteps(api, use_exparchive):
   api.isolate.isolate_server = 'https://isolateserver-dev.appspot.com'
   assert api.isolate.isolate_server == 'https://isolateserver-dev.appspot.com'
 
+  # Code coverage for service_account_json property.
+  api.isolate.service_account_json = 'chromium_builder'
+  assert api.isolate.service_account_json == 'chromium_builder'
+
   # That would read a list of files to search for, generated in GenTests.
   step_result = api.step('read test spec', ['cat'], stdout=api.json.output())
   expected_targets = step_result.stdout

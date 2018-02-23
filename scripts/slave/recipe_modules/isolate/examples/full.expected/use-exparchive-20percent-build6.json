@@ -135,6 +135,8 @@
       "https://isolateserver-dev.appspot.com",
       "--eventlog-endpoint",
       "prod",
+      "--service-account-json",
+      "chromium_builder",
       "--isolate",
       "RECIPE_PACKAGE_REPO[build]/test_exparchive.isolate",
       "--isolated",
@@ -161,6 +163,8 @@
       "https://isolateserver-dev.appspot.com",
       "--eventlog-endpoint",
       "prod",
+      "--service-account-json",
+      "chromium_builder",
       "RECIPE_PACKAGE_REPO[build]/test1.isolated.gen.json",
       "RECIPE_PACKAGE_REPO[build]/test2.isolated.gen.json"
     ],

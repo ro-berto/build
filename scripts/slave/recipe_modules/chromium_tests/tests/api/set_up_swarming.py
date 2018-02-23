@@ -19,6 +19,7 @@ def GenTests(api):
       api.platform.name('win') +
       api.properties(bot_config=api.chromium_tests.bot_config({
           'isolate_server': 'https://example/isolate',
+          'isolate_service_account': 'chromium_builder',
           'swarming_server': 'https://example/swarming',
           'swarming_dimensions': {'os': 'Windows'},
           'swarming_service_account': 'chromium-builder'

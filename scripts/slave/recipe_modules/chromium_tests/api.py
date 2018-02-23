@@ -181,6 +181,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           self.m.puppet_service_account.get_key_path(
               bot_config.get('swarming_service_account')))
 
+    if bot_config.get('isolate_service_account'):
+      self.m.isolate.service_account_json = (
+          self.m.puppet_service_account.get_key_path(
+              bot_config.get('isolate_service_account')))
+
   def runhooks(self, update_step):
     if self.m.tryserver.is_tryserver:
       try:
