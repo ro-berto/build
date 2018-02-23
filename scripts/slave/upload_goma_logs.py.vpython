@@ -113,7 +113,7 @@ wheel: <
 
 wheel: <
   name: "infra/python/wheels/oauth2client-py2_py3"
-  version: "version:4.0.0"
+  version: "version:3.0.0"
 >
 
 wheel: <
