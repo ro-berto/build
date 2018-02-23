@@ -1783,18 +1783,18 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [
-          V8Testing(4),
+          V8Testing(5),
           Test262,
           Mozilla,
           MjsunitSPFrameAccess,
         ] + with_test_args(
             'armv8-a',
             ['--extra-flags', '--enable-armv8'],
-            [V8Testing(4), Test262, Mozilla],
+            [V8Testing(5), Test262, Mozilla],
         ) + with_test_args(
             'novfp3',
             ['--novfp3'],
-            [V8Testing(4), Test262, Mozilla],
+            [V8Testing(5), Test262, Mozilla],
             V8NoExhaustiveVariants,
         ) + with_extra_variants([V8Testing(2)]),
         'testing': {'platform': 'linux'},
