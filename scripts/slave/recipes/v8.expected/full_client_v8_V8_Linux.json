@@ -83,23 +83,7 @@
       "tools/check-static-initializers.sh",
       "out/Release/d8"
     ],
-    "infra_step": true,
-    "name": "[trigger] Static-Initializers",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Static-Initializers/Ubuntu-14.04/[dummy has/V8 Linux/571\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Static-Initializers/Ubuntu-14.04/[dummy has/V8 Linux/571\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
-    ]
+    "name": "[trigger] Static-Initializers"
   },
   {
     "cmd": [
@@ -202,23 +186,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "infra_step": true,
-    "name": "[trigger] Check",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Check/Ubuntu-14.04/[dummy has/V8 Linux/571\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Check/Ubuntu-14.04/[dummy has/V8 Linux/571\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
-    ]
+    "name": "[trigger] Check"
   },
   {
     "cmd": [
@@ -322,23 +290,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "infra_step": true,
-    "name": "[trigger] OptimizeForSize",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"OptimizeForSize/Ubuntu-14.04/[dummy has/V8 Linux/571\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"OptimizeForSize/Ubuntu-14.04/[dummy has/V8 Linux/571\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
-    ]
+    "name": "[trigger] OptimizeForSize"
   },
   {
     "cmd": [
@@ -441,23 +393,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "infra_step": true,
-    "name": "[trigger] Benchmarks",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Benchmarks/Ubuntu-14.04/[dummy has/V8 Linux/571\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Benchmarks/Ubuntu-14.04/[dummy has/V8 Linux/571\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
-    ]
+    "name": "[trigger] Benchmarks"
   },
   {
     "cmd": [
@@ -560,29 +496,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "infra_step": true,
-    "name": "[trigger] Test262",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test262/Ubuntu-14.04/[dummy has/V8 Linux/571\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Test262/Ubuntu-14.04/[dummy has/V8 Linux/571:2:0\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Test262/Ubuntu-14.04/[dummy has/V8 Linux/571:2:1\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 1, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10100\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
-      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/10100@@@"
-    ]
+    "name": "[trigger] Test262"
   },
   {
     "cmd": [
@@ -685,23 +599,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "infra_step": true,
-    "name": "[trigger] Mozilla",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Mozilla/Ubuntu-14.04/[dummy has/V8 Linux/571\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Mozilla/Ubuntu-14.04/[dummy has/V8 Linux/571\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
-    ]
+    "name": "[trigger] Mozilla"
   },
   {
     "cmd": [
@@ -805,23 +703,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "infra_step": true,
-    "name": "[trigger] Mjsunit - sp frame access",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Mjsunit - sp frame access/Ubuntu-14.04/[dummy has/V8 Linux/571\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Mjsunit - sp frame access/Ubuntu-14.04/[dummy has/V8 Linux/571\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
-    ]
+    "name": "[trigger] Mjsunit - sp frame access"
   },
   {
     "cmd": [
@@ -907,23 +789,7 @@
       "tools/gcmole/run-gcmole.py",
       "ia32"
     ],
-    "infra_step": true,
-    "name": "[trigger] GCMole ia32",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"GCMole ia32/Ubuntu-14.04/[dummy has/V8 Linux/571\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"GCMole ia32/Ubuntu-14.04/[dummy has/V8 Linux/571\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
-    ]
+    "name": "[trigger] GCMole ia32"
   },
   {
     "cmd": [
@@ -1009,23 +875,7 @@
       "tools/gcmole/run-gcmole.py",
       "x64"
     ],
-    "infra_step": true,
-    "name": "[trigger] GCMole x64",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"GCMole x64/Ubuntu-14.04/[dummy has/V8 Linux/571\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"GCMole x64/Ubuntu-14.04/[dummy has/V8 Linux/571\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
-    ]
+    "name": "[trigger] GCMole x64"
   },
   {
     "cmd": [
@@ -1111,23 +961,7 @@
       "tools/gcmole/run-gcmole.py",
       "arm"
     ],
-    "infra_step": true,
-    "name": "[trigger] GCMole arm",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"GCMole arm/Ubuntu-14.04/[dummy has/V8 Linux/571\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"GCMole arm/Ubuntu-14.04/[dummy has/V8 Linux/571\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
-    ]
+    "name": "[trigger] GCMole arm"
   },
   {
     "cmd": [
@@ -1213,23 +1047,7 @@
       "tools/gcmole/run-gcmole.py",
       "arm64"
     ],
-    "infra_step": true,
-    "name": "[trigger] GCMole arm64",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"GCMole arm64/Ubuntu-14.04/[dummy has/V8 Linux/571\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"GCMole arm64/Ubuntu-14.04/[dummy has/V8 Linux/571\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
-    ]
+    "name": "[trigger] GCMole arm64"
   },
   {
     "cmd": [
@@ -1333,23 +1151,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "infra_step": true,
-    "name": "[trigger] Check - isolates",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Check - isolates/Ubuntu-14.04/[dummy has/V8 Linux/571\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Check - isolates/Ubuntu-14.04/[dummy has/V8 Linux/571\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
-    ]
+    "name": "[trigger] Check - isolates"
   },
   {
     "cmd": [
@@ -1454,23 +1256,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "infra_step": true,
-    "name": "[trigger] Check - nosse3",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Check - nosse3/Ubuntu-14.04/[dummy has/V8 Linux/571\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Check - nosse3/Ubuntu-14.04/[dummy has/V8 Linux/571\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
-    ]
+    "name": "[trigger] Check - nosse3"
   },
   {
     "cmd": [
@@ -1575,23 +1361,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "infra_step": true,
-    "name": "[trigger] Mozilla - nosse3",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Mozilla - nosse3/Ubuntu-14.04/[dummy has/V8 Linux/571\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Mozilla - nosse3/Ubuntu-14.04/[dummy has/V8 Linux/571\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
-    ]
+    "name": "[trigger] Mozilla - nosse3"
   },
   {
     "cmd": [
@@ -1696,23 +1466,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "infra_step": true,
-    "name": "[trigger] Check - nosse4",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Check - nosse4/Ubuntu-14.04/[dummy has/V8 Linux/571\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Check - nosse4/Ubuntu-14.04/[dummy has/V8 Linux/571\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
-    ]
+    "name": "[trigger] Check - nosse4"
   },
   {
     "cmd": [
@@ -1817,23 +1571,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "infra_step": true,
-    "name": "[trigger] Mozilla - nosse4",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Mozilla - nosse4/Ubuntu-14.04/[dummy has/V8 Linux/571\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Mozilla - nosse4/Ubuntu-14.04/[dummy has/V8 Linux/571\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
-    ]
+    "name": "[trigger] Mozilla - nosse4"
   },
   {
     "cmd": [
@@ -1936,23 +1674,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "infra_step": true,
-    "name": "[trigger] Check - extra",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Check - extra/Ubuntu-14.04/[dummy has/V8 Linux/571\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Check - extra/Ubuntu-14.04/[dummy has/V8 Linux/571\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
-    ]
+    "name": "[trigger] Check - extra"
   },
   {
     "cmd": [
@@ -2055,23 +1777,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "infra_step": true,
-    "name": "[trigger] Mozilla - extra",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Mozilla - extra/Ubuntu-14.04/[dummy has/V8 Linux/571\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Mozilla - extra/Ubuntu-14.04/[dummy has/V8 Linux/571\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
-    ]
+    "name": "[trigger] Mozilla - extra"
   },
   {
     "cmd": [
@@ -2174,23 +1880,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "infra_step": true,
-    "name": "[trigger] Test262 - extra",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test262 - extra/Ubuntu-14.04/[dummy has/V8 Linux/571\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Test262 - extra/Ubuntu-14.04/[dummy has/V8 Linux/571\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
-    ]
+    "name": "[trigger] Test262 - extra"
   },
   {
     "cmd": [
@@ -2293,23 +1983,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "infra_step": true,
-    "name": "[trigger] Benchmarks - extra",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Benchmarks - extra/Ubuntu-14.04/[dummy has/V8 Linux/571\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Benchmarks - extra/Ubuntu-14.04/[dummy has/V8 Linux/571\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
-    ]
+    "name": "[trigger] Benchmarks - extra"
   },
   {
     "cmd": [

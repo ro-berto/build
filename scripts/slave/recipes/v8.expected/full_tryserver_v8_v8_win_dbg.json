@@ -331,35 +331,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "infra_step": true,
-    "name": "[trigger] Check",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Check/Windows-7-SP1/[dummy has/v8_win_dbg/571\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Check/Windows-7-SP1/[dummy has/v8_win_dbg/571:3:0\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Check/Windows-7-SP1/[dummy has/v8_win_dbg/571:3:1\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 1, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10100\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Check/Windows-7-SP1/[dummy has/v8_win_dbg/571:3:2\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 2, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10200\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
-      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/10100@@@",
-      "@@@STEP_LINK@shard #2@https://chromium-swarm.appspot.com/user/task/10200@@@"
-    ]
+    "name": "[trigger] Check"
   },
   {
     "cmd": [
@@ -466,23 +438,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "infra_step": true,
-    "name": "[trigger] Mozilla",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Mozilla/Windows-7-SP1/[dummy has/v8_win_dbg/571\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Mozilla/Windows-7-SP1/[dummy has/v8_win_dbg/571\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
-    ]
+    "name": "[trigger] Mozilla"
   },
   {
     "allow_subannotations": true,

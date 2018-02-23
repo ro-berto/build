@@ -6,6 +6,7 @@
 
 
 import argparse
+from collections import OrderedDict
 import re
 
 from recipe_engine import recipe_test_api
@@ -468,6 +469,30 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     ])
     test += self.post_process(
         Filter().include_re(r'^((?!%s).)*$' % '|'.join(skip_fragments)))
+
+    # Only show the command for swarming trigger steps (i.e. drop logs).
+    # List of (step-name regexp, tuple of fields to keep).
+    keep_fields_spec = [
+      ('\[trigger\].*', ('cmd',)),
+    ]
+
+    # TODO(machenbach): Add a better field/step dropping mechanism to the
+    # engine.
+    def keep_fields(check, step_odict):
+      to_ret = OrderedDict()
+      for name, step in step_odict.iteritems():
+        for rx, fields in keep_fields_spec:
+          if re.match(rx, name):
+            to_ret[name] = {
+              k: v for k, v in step.iteritems()
+              if k in fields or k == 'name'
+            }
+            break
+        else:
+          to_ret[name] = step
+      return to_ret
+
+    test += self.post_process(keep_fields)
     return test
 
   def fail(self, step_name, variant='default'):
