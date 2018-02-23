@@ -334,7 +334,7 @@ SPEC = {
       'add_tests_as_compile_targets': False,
     },
     'linux-win_cross-rel': {
-      'chromium_config': 'chromium_win_clang',
+      'chromium_config': 'chromium_win_clang_tot',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['win'],
