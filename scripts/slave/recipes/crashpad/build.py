@@ -66,6 +66,8 @@ def RunSteps(api):
   if is_fuchsia or is_linux:
     # Generic GN build.
     path = api.path['checkout'].join('out', dirname)
+    if target_cpu is None:
+      target_cpu = 'x64'
     args = 'target_os="' + target_os + '" target_cpu="' + target_cpu + '"' + \
            ' is_debug=' + ('true' if is_debug else 'false')
     with api.context(cwd=api.path['checkout']):
@@ -158,6 +160,7 @@ def GenTests(api):
       (test, 'mac', None),
       ('crashpad_try_mac_rel', 'mac', None),
       ('crashpad_try_win_dbg', 'win', None),
+      ('crashpad_linux_debug', 'linux', None),
       ('crashpad_fuchsia_x64_dbg', 'fuchsia', 'x64'),
       ('crashpad_fuchsia_arm64_rel', 'fuchsia', 'arm64'),
   ]
