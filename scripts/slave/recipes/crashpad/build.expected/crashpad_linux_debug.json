@@ -5,7 +5,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'crashpad', 'url': 'https://chromium.googlesource.com/crashpad/crashpad.git'}]\ntarget_os = ['linux']",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'pull_linux_clang': True}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'crashpad', 'url': 'https://chromium.googlesource.com/crashpad/crashpad.git'}]\ntarget_os = ['linux']",
       "--patch_root",
       "crashpad",
       "--revision_mapping_file",
@@ -65,7 +65,7 @@
       "gn",
       "gen",
       "[START_DIR]/crashpad/out/Release",
-      "--args=target_os=\"linux\" target_cpu=\"x64\" is_debug=false"
+      "--args=target_os=\"linux\" target_cpu=\"x64\" is_debug=false clang_path=\"//third_party/linux/clang/linux-amd64\""
     ],
     "cwd": "[START_DIR]/crashpad",
     "name": "generate build files"

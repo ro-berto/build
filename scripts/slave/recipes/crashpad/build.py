@@ -53,6 +53,13 @@ def RunSteps(api):
   config = api.m.properties['config']
   is_debug = config == 'Debug'
 
+  if is_linux:
+    # The Linux build uses the system compiler by default, but bots do not have
+    # a clang installed by default, so use a local copy. Setting this variable
+    # causes DEPS to download a clang cipd package in runhooks. See also the
+    # setting of clang_path below.
+    api.gclient.c.solutions[0].custom_vars['pull_linux_clang'] = True
+
   api.bot_update.ensure_checkout()
 
   # buildbot sets 'clobber' to the empty string which is falsey, check with 'in'
@@ -70,6 +77,9 @@ def RunSteps(api):
       target_cpu = 'x64'
     args = 'target_os="' + target_os + '" target_cpu="' + target_cpu + '"' + \
            ' is_debug=' + ('true' if is_debug else 'false')
+    if is_linux:
+      # Point at the local copy of clang that was downloaded by runhooks.
+      args += ' clang_path="//third_party/linux/clang/linux-amd64"'
     with api.context(cwd=api.path['checkout']):
       api.step('generate build files', ['gn', 'gen', path, '--args=' + args])
   elif is_win:
