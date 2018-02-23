@@ -82,34 +82,6 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/crashpad/build/run_fuchsia_qemu.py",
-      "start"
-    ],
-    "name": "start qemu"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/crashpad/build/run_tests.py",
-      "[START_DIR]/crashpad/out/Release"
-    ],
-    "name": "run tests",
-    "timeout": 300
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/crashpad/build/run_fuchsia_qemu.py",
-      "stop"
-    ],
-    "name": "stop qemu"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
