@@ -37,11 +37,9 @@ def main():
   if not args:
     option_parser.error('Must provide a command to run.')
 
-  # If vpython is used for invoking runit.py and the first argument is 'python',
-  # replace it with 'vpython'
-  # Note: if vpython is used hasattr(sys, 'real_prefix') is True.
-  if args[0] == 'python' and hasattr(sys, 'real_prefix'):
-    args[0] = 'vpython'
+  # If the first argument is 'python', replace it with the system executable.
+  if args[0] == 'python':
+    args[0] = sys.executable
 
   with common.env.GetInfraPythonPath(
       with_third_party=options.with_third_party_lib).Enter():
