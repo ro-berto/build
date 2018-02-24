@@ -6,6 +6,7 @@ from recipe_engine.types import freeze
 from recipe_engine.recipe_api import Property
 
 DEPS = [
+  'chromium',
   'cronet',
   'recipe_engine/properties',
 ]
@@ -82,3 +83,4 @@ def GenTests(api):
       git_revision='asdfawe2342',
     )
     yield api.test(bot_id) + props
+

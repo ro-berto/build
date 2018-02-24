@@ -2188,26 +2188,6 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
-      "/path/to/tmp/"
-    ],
-    "env": {
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
-    },
-    "infra_step": true,
-    "name": "Gathering reference values.get version (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
       "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_install_apk.py",
       "ChromePublic.apk",
       "-v",
@@ -3185,26 +3165,6 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
-      "/path/to/tmp/"
-    ],
-    "env": {
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
-    },
-    "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.get version",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
-    ]
-  },
-  {
-    "cmd": [
       "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_install_apk.py",
       "ChromePublic.apk",
       "-v",
@@ -3845,26 +3805,6 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
-      "/path/to/tmp/"
-    ],
-    "env": {
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
-    },
-    "infra_step": true,
-    "name": "Re-testing reference range.Retesting BAD revision.get version",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
-    ]
-  },
-  {
-    "cmd": [
       "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_install_apk.py",
       "ChromePublic.apk",
       "-v",
@@ -4499,26 +4439,6 @@
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
     "infra_step": true,
     "name": "Re-testing reference range.Retesting GOOD revision.unzip_build_product (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
-      "/path/to/tmp/"
-    ],
-    "env": {
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
-    },
-    "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.get version (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -5387,26 +5307,6 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
-      "/path/to/tmp/"
-    ],
-    "env": {
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
-    },
-    "infra_step": true,
-    "name": "Re-testing reference range.Retesting BAD revision.get version (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
-    ]
-  },
-  {
-    "cmd": [
       "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_install_apk.py",
       "ChromePublic.apk",
       "-v",
@@ -6263,26 +6163,6 @@
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
     "infra_step": true,
     "name": "Re-testing reference range.Retesting GOOD revision.unzip_build_product (3)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
-      "/path/to/tmp/"
-    ],
-    "env": {
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
-    },
-    "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.get version (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -7490,21 +7370,6 @@
     },
     "infra_step": true,
     "name": "stack_tool_with_logcat_dump"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[BUILDER_CACHE]/android_one_perf_bisect/src/chrome/VERSION",
-      "/path/to/tmp/"
-    ],
-    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "infra_step": true,
-    "name": "get version"
   },
   {
     "cmd": [

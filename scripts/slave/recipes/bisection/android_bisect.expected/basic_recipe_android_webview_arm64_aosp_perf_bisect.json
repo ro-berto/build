@@ -650,23 +650,6 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[BUILDER_CACHE]/android_webview_arm64_aosp_perf_bisect/src/chrome/VERSION",
-      "/path/to/tmp/"
-    ],
-    "env": {
-      "PATH": "[BUILDER_CACHE]/android_webview_arm64_aosp_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_webview_arm64_aosp_perf_bisect/src/build/android:<PATH>"
-    },
-    "infra_step": true,
-    "name": "get version (2)"
-  },
-  {
-    "cmd": [
       "[BUILDER_CACHE]/android_webview_arm64_aosp_perf_bisect/src/build/android/adb_install_apk.py",
       "SystemWebViewShell.apk",
       "-v",
@@ -1104,21 +1087,6 @@
     },
     "infra_step": true,
     "name": "stack_tool_with_logcat_dump"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[BUILDER_CACHE]/android_webview_arm64_aosp_perf_bisect/src/chrome/VERSION",
-      "/path/to/tmp/"
-    ],
-    "cwd": "[BUILDER_CACHE]/android_webview_arm64_aosp_perf_bisect",
-    "infra_step": true,
-    "name": "get version (3)"
   },
   {
     "cmd": [

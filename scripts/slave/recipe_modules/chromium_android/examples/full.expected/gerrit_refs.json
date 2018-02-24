@@ -1303,20 +1303,6 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[START_DIR]/src/chrome/VERSION",
-      "/path/to/tmp/"
-    ],
-    "infra_step": true,
-    "name": "get version (2)"
-  },
-  {
-    "cmd": [
       "[START_DIR]/src/build/android/tombstones.py",
       "-a",
       "-s",

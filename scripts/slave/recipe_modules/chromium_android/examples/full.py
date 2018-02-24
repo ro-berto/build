@@ -365,9 +365,7 @@ def GenTests(api):
 
   yield (api.test('tombstones_m53') +
          properties_for('tester') +
-         api.override_step_data(
-             'get version (2)',
-             api.file.read_text('MAJOR=53\nMINOR=0\nBUILD=2800\nPATCH=0\n')))
+         api.chromium.override_version(major=53))
 
   yield (api.test('telemetry_browser_tests_failures') +
          properties_for('telemetry_browser_tests_tester') +

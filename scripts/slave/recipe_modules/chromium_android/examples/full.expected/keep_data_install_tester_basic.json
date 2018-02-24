@@ -301,20 +301,6 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[START_DIR]/src/chrome/VERSION",
-      "/path/to/tmp/"
-    ],
-    "infra_step": true,
-    "name": "get version (2)"
-  },
-  {
-    "cmd": [
       "[START_DIR]/src/build/android/adb_install_apk.py",
       "Chrome.apk",
       "-v",
@@ -1027,20 +1013,6 @@
     },
     "infra_step": true,
     "name": "stack_tool_with_logcat_dump"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[START_DIR]/src/chrome/VERSION",
-      "/path/to/tmp/"
-    ],
-    "infra_step": true,
-    "name": "get version (3)"
   },
   {
     "cmd": [

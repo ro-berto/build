@@ -6,6 +6,18 @@ from recipe_engine import recipe_test_api
 
 
 class ChromiumTestApi(recipe_test_api.RecipeTestApi):
+
+  def override_version(self, major=64, minor=0, build=3282, patch=0):
+    assert isinstance(major, int)
+    assert isinstance(minor, int)
+    assert isinstance(build, int)
+    assert isinstance(patch, int)
+    version_file_contents = 'MAJOR=%d\nMINOR=%d\nBUILD=%d\nPATCH=%d\n' % (
+        major, minor, build, patch)
+    return self.override_step_data(
+        'get version',
+        self.m.file.read_text(version_file_contents))
+
   def gen_tests_for_builders(self, builder_dict):
     # TODO: crbug.com/354674. Figure out where to put "simulation"
     # tests. Is this really the right place?

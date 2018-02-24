@@ -889,7 +889,7 @@
     "cmd": [
       "vpython",
       "-u",
-      "[START_DIR]/src/out/Debug/bin/run_cronet_unittests_android",
+      "[START_DIR]/src/out/Debug/bin/run_cronet_unittests",
       "--blacklist-file",
       "[START_DIR]/src/out/bad_devices.json",
       "--verbose",
@@ -901,7 +901,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
-    "name": "cronet_unittests_android"
+    "name": "cronet_unittests"
   },
   {
     "cmd": [
@@ -1151,20 +1151,6 @@
     },
     "infra_step": true,
     "name": "stack_tool_with_logcat_dump"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[START_DIR]/src/chrome/VERSION",
-      "/path/to/tmp/"
-    ],
-    "infra_step": true,
-    "name": "get version (2)"
   },
   {
     "cmd": [

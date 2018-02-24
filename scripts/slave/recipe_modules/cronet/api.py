@@ -4,6 +4,8 @@
 
 """Common steps for recipes that sync/build Cronet sources."""
 
+import sys
+
 from recipe_engine.types import freeze
 from recipe_engine import recipe_api
 
@@ -29,6 +31,13 @@ class CronetApi(recipe_api.RecipeApi):
 
   UNIT_TESTS = freeze([
     'cronet_unittests_android',
+    'net_unittests',
+  ])
+
+  # TODO(jbudorick): Remove this once we're no longer building
+  # M65 or below.
+  UNIT_TESTS_M65_AND_BELOW = freeze ([
+    'cronet_unittests',
     'net_unittests',
   ])
 
@@ -116,8 +125,17 @@ class CronetApi(recipe_api.RecipeApi):
 
 
   def run_tests(
-      self, build_config, unit_tests=UNIT_TESTS,
+      self, build_config, unit_tests=None,
       instrumentation_tests=INSTRUMENTATION_TESTS):
+
+    if unit_tests is None:
+      # The Android-specific cronet unit test target was renamed from
+      # 'cronet_unittests' to 'cronet_unittests_android' starting in M66.
+      if int(self.m.chromium.get_version().get('MAJOR', sys.maxint)) > 65:
+        unit_tests = self.UNIT_TESTS
+      else:
+        unit_tests = self.UNIT_TESTS_M65_AND_BELOW
+
     droid = self.m.chromium_android
     checkout_path = self.m.path['checkout']
     droid.common_tests_setup_steps()

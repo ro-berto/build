@@ -34,6 +34,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     super(ChromiumApi, self).__init__(*args, **kwargs)
     self._build_properties = None
     self._layout = None
+    self._version = None
 
   def ensure_chromium_layout(self):
     """Ensures that Chromium build layout is installed.
@@ -154,11 +155,15 @@ class ChromiumApi(recipe_api.RecipeApi):
     return output
 
   def get_version(self):
+    if self._version is None:
+      self.reload_version()
+    return self.version
+
+  def reload_version(self):
     self._version = self.m.file.read_text(
         'get version',
         self.m.path['checkout'].join('chrome', 'VERSION'),
         test_data="MAJOR=51\nMINOR=0\nBUILD=2704\nPATCH=0\n")
-    return self.version
 
   def set_build_properties(self, props):
     self._build_properties = props
