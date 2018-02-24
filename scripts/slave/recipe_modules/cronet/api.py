@@ -28,6 +28,7 @@ class CronetApi(recipe_api.RecipeApi):
   ])
 
   UNIT_TESTS = freeze([
+    'cronet_unittests_android',
     'net_unittests',
   ])
 

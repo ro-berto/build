@@ -83,6 +83,7 @@ def cronet_builder(c):
                                 'cronet_smoketests_missing_native_library_instrumentation_apk',
                                 'cronet_smoketests_platform_only_instrumentation_apk',
                                 'cronet_test_instrumentation_apk',
+                                'cronet_unittests_android',
                                 'net_unittests']
 
 @CONFIG_CTX()

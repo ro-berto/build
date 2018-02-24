@@ -413,6 +413,7 @@
       "cronet_smoketests_missing_native_library_instrumentation_apk",
       "cronet_smoketests_platform_only_instrumentation_apk",
       "cronet_test_instrumentation_apk",
+      "cronet_unittests_android",
       "net_unittests"
     ],
     "cwd": "[START_DIR]/src",
@@ -520,7 +521,7 @@
       "--ninja-log-outdir",
       "[START_DIR]/src/out/Debug",
       "--ninja-log-command",
-      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/Debug', '-j', 50, 'cronet_package', 'cronet_perf_test_apk', 'cronet_sample_test_apk', 'cronet_smoketests_missing_native_library_instrumentation_apk', 'cronet_smoketests_platform_only_instrumentation_apk', 'cronet_test_instrumentation_apk', 'net_unittests']",
+      "['RECIPE_PACKAGE_REPO[depot_tools]/ninja', '-w', 'dupbuild=err', '-C', '[START_DIR]/src/out/Debug', '-j', 50, 'cronet_package', 'cronet_perf_test_apk', 'cronet_sample_test_apk', 'cronet_smoketests_missing_native_library_instrumentation_apk', 'cronet_smoketests_platform_only_instrumentation_apk', 'cronet_test_instrumentation_apk', 'cronet_unittests_android', 'net_unittests']",
       "--build-exit-status",
       "0",
       "--ninja-log-compiler",
@@ -840,6 +841,24 @@
       "@@@STEP_LOG_LINE@03e0363a003c6ad6: blacklisted@}@@@",
       "@@@STEP_LOG_END@03e0363a003c6ad6: blacklisted@@@"
     ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "[START_DIR]/src/out/Debug/bin/run_cronet_unittests_android",
+      "--blacklist-file",
+      "[START_DIR]/src/out/bad_devices.json",
+      "--verbose",
+      "-t",
+      "180",
+      "--adb-path",
+      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
+    ],
+    "env": {
+      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
+    },
+    "name": "cronet_unittests_android"
   },
   {
     "cmd": [
