@@ -920,5 +920,7 @@ SPEC['builders'].update([
     stock_config('Jumbo Win x64'),
     stock_config('VR Linux'),
     stock_config('Linux Viz'),
+    stock_config('linux-blink-heap-incremental-marking', platform='linux',
+                 config='Debug'),
     stock_config('linux-gcc-rel', platform='linux'),
 ])
