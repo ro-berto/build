@@ -78,8 +78,10 @@ def RunSteps(api):
     args = 'target_os="' + target_os + '" target_cpu="' + target_cpu + '"' + \
            ' is_debug=' + ('true' if is_debug else 'false')
     if is_linux:
-      # Point at the local copy of clang that was downloaded by runhooks.
+      # Point at the local copy of clang and a sysroot that were downloaded by
+      # gclient runhooks.
       args += ' clang_path="//third_party/linux/clang/linux-amd64"'
+      args += ' target_sysroot = "//third_party/linux/sysroot"'
     with api.context(cwd=api.path['checkout']):
       api.step('generate build files', ['gn', 'gen', path, '--args=' + args])
   elif is_win:
