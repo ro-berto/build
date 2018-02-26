@@ -430,14 +430,15 @@ class SwarmingAndroidPerfTest(AndroidTest):
 
 class SwarmingPerfTest(SwarmingIsolatedScriptTest):
   def __init__(self, name, api, **kwargs):
-    super(SwarmingPerfTest, self).__init__(
-        name, perf_id=api.c.PERF_ID, results_url=DASHBOARD_UPLOAD_URL, **kwargs)
+    super(SwarmingPerfTest, self).__init__(name, **kwargs)
     self._buildername = api.m.properties.get('buildername')
     self._buildnumber = api.m.properties.get('buildnumber')
     self._perf_config = PERF_CONFIG.copy()
     self._perf_config['r_webrtc_git'] = api.revision
     self._perf_config = api.m.json.dumps(self._perf_config)
+    self._perf_id = api.c.PERF_ID
     self._revision = api.revision_number
+    self._name = name
     self._upload_script = api.resource('upload_to_perf_dashboard.py')
 
   def post_run(self, api, suffix):
@@ -458,7 +459,7 @@ class SwarmingPerfTest(SwarmingIsolatedScriptTest):
                      '--perf_config', self._perf_config,
                      '--revision', self._revision,
                      '--test_name', self._name,
-                     '--url', self._results_url,
+                     '--url', DASHBOARD_UPLOAD_URL,
                      '--logs_file', logs_file,
                  ])
 
