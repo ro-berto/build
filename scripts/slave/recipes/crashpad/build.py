@@ -113,7 +113,7 @@ def RunSteps(api):
     path = api.path['checkout'].join('out', dirname)
 
   def run_tests(build_dir, env=None):
-    if is_fuchsia: # pragma: no cover
+    if is_fuchsia:
       # Start a QEMU instance.
       api.python('start qemu',
                  api.path['checkout'].join('build', 'run_fuchsia_qemu.py'),
@@ -125,7 +125,7 @@ def RunSteps(api):
                 args=[build_dir],
                 timeout=5*60)
 
-    if is_fuchsia: # pragma: no cover
+    if is_fuchsia:
       # Shut down the QEMU instance.
       api.python('stop qemu',
                  api.path['checkout'].join('build', 'run_fuchsia_qemu.py'),
@@ -138,12 +138,7 @@ def RunSteps(api):
     run_tests(x64_path, env={'CRASHPAD_TEST_32_BIT_OUTPUT':x86_path})
   else:
     api.step('compile with ninja', ['ninja', '-C', path])
-
-    # TODO(scottmg): Temporarily disable running on Fuchsia, as something about
-    # QEMU or networking got very flaky recently.
-    # https://crashpad.chromium.org/bug/219.
-    if not is_fuchsia:
-      run_tests(path)
+    run_tests(path)
 
   test_spec_path = api.path['checkout'].join('build', 'swarming_test_spec.pyl')
   if api.path.exists(test_spec_path):
