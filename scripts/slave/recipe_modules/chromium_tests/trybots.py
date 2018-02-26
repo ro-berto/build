@@ -339,6 +339,10 @@ TRYBOTS = freeze({
         'mastername': 'chromium.linux',
         'buildername': 'Fuchsia x64 Cast Audio',
       }),
+      'linux-annotator-rel': simple_bot({
+        'mastername': 'chromium.fyi',
+        'buildername': 'linux-annotator-rel',
+      }),
       'linux_arm': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'Linux ARM',

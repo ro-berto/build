@@ -36,14 +36,13 @@ KITCHEN_TEST_SPEC = {
   },
 }
 
-def stock_config(name, platform=None, config='Release'):
-  if platform is None:
-    if 'Mac' in name:
-      platform = 'mac'
-    elif 'Win' in name:
-      platform = 'win'
-    elif 'Linux' in name:
-      platform = 'linux'
+def stock_config(name, config='Release'):
+  if 'mac' in name.lower():
+    platform = 'mac'
+  elif 'win' in name.lower():
+    platform = 'win'
+  elif 'linux' in name.lower():
+    platform = 'linux'
   assert(platform)
 
   return name, {
@@ -914,13 +913,13 @@ SPEC['builders']['Android Builder (dbg) Goma Canary'] = chromium_apply_configs(
     ['goma_canary'])
 
 SPEC['builders'].update([
-    stock_config('Dummy WebKit Mac10.13', platform='mac'),
+    stock_config('Dummy WebKit Mac10.13'),
     stock_config('Jumbo Linux x64'),
     stock_config('Jumbo Mac'),
     stock_config('Jumbo Win x64'),
     stock_config('VR Linux'),
     stock_config('Linux Viz'),
-    stock_config('linux-blink-heap-incremental-marking', platform='linux',
-                 config='Debug'),
-    stock_config('linux-gcc-rel', platform='linux'),
+    stock_config('linux-blink-heap-incremental-marking', config='Debug'),
+    stock_config('linux-gcc-rel'),
+    stock_config('linux-annotator-rel'),
 ])
