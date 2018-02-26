@@ -170,7 +170,6 @@
   {
     "cmd": [
       "dart",
-      "--assert-initializer",
       "[START_DIR]/flutter/dev/bots/prepare_package.dart",
       "--temp_dir=[START_DIR]/archive",
       "--revision=deadbeef",

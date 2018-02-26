@@ -163,7 +163,8 @@ def CreateAndUploadFlutterPackage(api, git_hash):
   api.file.ensure_directory('(re)create archive work directory', work_dir)
   with api.context(cwd=api.path['start_dir']):
     api.step('prepare, create and publish a flutter archive', [
-        dart_executable, '--assert-initializer', prepare_script,
+        dart_executable,
+        prepare_script,
         '--temp_dir=%s' % work_dir,
         '--revision=%s' % git_hash,
         '--branch=%s' % api.properties['branch'],
