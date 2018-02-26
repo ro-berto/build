@@ -81,7 +81,11 @@ def RunSteps(api):
       # Point at the local copy of clang and a sysroot that were downloaded by
       # gclient runhooks.
       args += ' clang_path="//third_party/linux/clang/linux-amd64"'
-      args += ' target_sysroot = "//third_party/linux/sysroot"'
+      args += ' target_sysroot="//third_party/linux/sysroot"'
+
+      # There's no libcurl in the sysroot, stub out the HTTPTransport
+      # implementation that relies on it.
+      args += ' enable_http_transport_libcurl=false'
     with api.context(cwd=api.path['checkout']):
       api.step('generate build files', ['gn', 'gen', path, '--args=' + args])
   elif is_win:
