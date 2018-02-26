@@ -16,6 +16,7 @@ DEPS = [
   'depot_tools/tryserver',
   'goma',
   'isolate',
+  'puppet_service_account',
   'recipe_engine/context',
   'recipe_engine/file',
   'recipe_engine/json',
