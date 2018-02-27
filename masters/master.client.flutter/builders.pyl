@@ -88,7 +88,7 @@
     },
     "flutter_packaging_commits": {
       "type": "git_poller_any",
-      "branch": [r"remotes/origin/(dev|beta|release)"],
+      "branch": [r"refs/heads/(dev|beta|release)", r"refs/branch\-heads/(dev|beta|release)"],
       "git_repo_url": "https://chromium.googlesource.com/external/github.com/flutter/flutter",
     },
     "engine_commits": {
