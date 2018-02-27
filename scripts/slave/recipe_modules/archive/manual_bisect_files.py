@@ -34,7 +34,7 @@ CHROME_REQUIRED_FILES = {
     'product_logo_48.png',
     'resources',
     'resources.pak',
-    'snapshot_blob.bin',
+    'v8_context_snapshot.bin',
     'xdg-mime',
     'xdg-settings'
   ],
@@ -58,7 +58,7 @@ CHROME_REQUIRED_FILES = {
     'PepperFlash',
     'resources.pak',
     'SecondaryTile.png',
-    'snapshot_blob.bin'
+    'v8_context_snapshot.bin'
   ],
   'mac': [
     'chromedriver',

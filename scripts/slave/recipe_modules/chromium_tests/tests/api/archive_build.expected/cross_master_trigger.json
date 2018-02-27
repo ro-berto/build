@@ -285,7 +285,7 @@
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--include-files",
-      "chrome.dll,chrome.exe,chrome_100_percent.pak,chrome_200_percent.pak,chrome_child.dll,chrome_elf.dll,chrome_watcher.dll,chromedriver.exe,default_apps,d3dcompiler_47.dll,icudtl.dat,libEGL.dll,libGLESv2.dll,locales,nacl_irt_x86_64.nexe,natives_blob.bin,PepperFlash,resources.pak,SecondaryTile.png,snapshot_blob.bin",
+      "chrome.dll,chrome.exe,chrome_100_percent.pak,chrome_200_percent.pak,chrome_child.dll,chrome_elf.dll,chrome_watcher.dll,chromedriver.exe,default_apps,d3dcompiler_47.dll,icudtl.dat,libEGL.dll,libGLESv2.dll,locales,nacl_irt_x86_64.nexe,natives_blob.bin,PepperFlash,resources.pak,SecondaryTile.png,v8_context_snapshot.bin",
       "--whitelist",
       "^\\d+\\.\\d+\\.\\d+\\.\\d+\\.manifest$",
       "--exclude-extra",

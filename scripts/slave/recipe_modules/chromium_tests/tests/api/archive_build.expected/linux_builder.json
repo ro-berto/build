@@ -270,7 +270,7 @@
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--include-files",
-      "chrome,chrome_100_percent.pak,chrome_200_percent.pak,chromedriver,default_apps,icudtl.dat,libclearkeycdm.so,libclearkeycdmadapter.so,libwidevinecdm.so,libwidevinecdmadapter.so,locales,nacl_helper,nacl_helper_bootstrap,nacl_helper_nonsfi,nacl_irt_x86_64.nexe,natives_blob.bin,PepperFlash,pnacl,product_logo_48.png,resources,resources.pak,snapshot_blob.bin,xdg-mime,xdg-settings",
+      "chrome,chrome_100_percent.pak,chrome_200_percent.pak,chromedriver,default_apps,icudtl.dat,libclearkeycdm.so,libclearkeycdmadapter.so,libwidevinecdm.so,libwidevinecdmadapter.so,locales,nacl_helper,nacl_helper_bootstrap,nacl_helper_nonsfi,nacl_irt_x86_64.nexe,natives_blob.bin,PepperFlash,pnacl,product_logo_48.png,resources,resources.pak,v8_context_snapshot.bin,xdg-mime,xdg-settings",
       "--strip-files",
       "chrome,chromedriver,nacl_helper",
       "--exclude-extra",
