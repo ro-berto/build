@@ -10,7 +10,7 @@
       "--json_file",
       "/path/to/tmp/json",
       "--limit",
-      "1",
+      "20",
       "-p",
       "project=v8/v8",
       "-p",

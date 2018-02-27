@@ -5308,11 +5308,11 @@ Recipe for archiving officially tagged v8 builds.
 &mdash; **def [RunSteps](/scripts/slave/recipes/v8/auto_roll_release_process.py#44)(api):**
 ### *recipes* / [v8/auto\_roll\_v8\_deps](/scripts/slave/recipes/v8/auto_roll_v8_deps.py)
 
-[DEPS](/scripts/slave/recipes/v8/auto_roll_v8_deps.py#9): [v8](#recipe_modules-v8), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gerrit][depot_tools/recipe_modules/gerrit], [depot\_tools/git][depot_tools/recipe_modules/git], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/v8/auto_roll_v8_deps.py#10): [v8](#recipe_modules-v8), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gerrit][depot_tools/recipe_modules/gerrit], [depot\_tools/git][depot_tools/recipe_modules/git], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [GetDEPS](/scripts/slave/recipes/v8/auto_roll_v8_deps.py#44)(api, name, repo):**
+&mdash; **def [GetDEPS](/scripts/slave/recipes/v8/auto_roll_v8_deps.py#61)(api, name, repo):**
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/v8/auto_roll_v8_deps.py#85)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/v8/auto_roll_v8_deps.py#102)(api):**
 ### *recipes* / [v8/auto\_roll\_v8rel](/scripts/slave/recipes/v8/auto_roll_v8rel.py)
 
 [DEPS](/scripts/slave/recipes/v8/auto_roll_v8rel.py#5): [chromium](#recipe_modules-chromium), [v8](#recipe_modules-v8), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]

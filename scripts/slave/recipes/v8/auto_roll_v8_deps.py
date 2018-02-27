@@ -3,7 +3,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from recipe_engine.post_process import DoesNotRun, DropExpectation, MustRun
+from recipe_engine.post_process import (
+    DoesNotRun, DropExpectation, Filter, MustRun)
 from recipe_engine.types import freeze
 
 DEPS = [
@@ -21,25 +22,41 @@ DEPS = [
   'v8',
 ]
 
-AUTO_REVIEWERS = [
-  'machenbach@chromium.org',
-  'hablich@chromium.org',
-  'sergiyb@chromium.org',
-]
 BASE_URL = 'https://chromium.googlesource.com'
 V8_REPO = BASE_URL + '/v8/v8'
 CR_REPO = BASE_URL + '/chromium/src'
 LOG_TEMPLATE = 'Rolling v8/%s: %s/+log/%s..%s'
 
-# Skip these dependencies (list without solution name prefix).
-BLACKLIST = [
-  'test/mozilla/data',
-  'test/simdjs/data',
-  'test/test262/data',
-  'test/wasm-js',
-  'testing/gtest',
-  'third_party/WebKit/Source/platform/inspector_protocol',
-]
+BOT_CONFIGS = {
+  'Auto-roll - test262': {
+    'subject': 'Update test262.',
+    'whitelist': [
+      # Only roll these dependencies (list without solution name prefix).
+      'test/test262/data',
+    ],
+    'reviewers': [
+      'adamk@chromium.org',
+      'gsathya@chromium.org',
+    ],
+  },
+  'Auto-roll - v8 deps': {
+    'subject': 'Update V8 DEPS.',
+    'blacklist': [
+      # Skip these dependencies (list without solution name prefix).
+      'test/mozilla/data',
+      'test/simdjs/data',
+      'test/test262/data',
+      'test/wasm-js',
+      'testing/gtest',
+      'third_party/WebKit/Source/platform/inspector_protocol',
+    ],
+    'reviewers': [
+      'machenbach@chromium.org',
+      'hablich@chromium.org',
+      'sergiyb@chromium.org',
+    ],
+  },
+}
 
 def GetDEPS(api, name, repo):
   # Make a fake spec. Gclient is not nice to us when having two solutions
@@ -83,6 +100,9 @@ def GetDEPS(api, name, repo):
 
 
 def RunSteps(api):
+  # Configure this particular instance of the auto-roller.
+  bot_config = BOT_CONFIGS[api.properties.get('buildername')]
+
   # Bail out on existing roll. Needs to be manually closed.
   # TODO(machenbach): Add auto-abandon on stale roll.
   commits = api.gerrit.get_changes(
@@ -92,12 +112,14 @@ def RunSteps(api):
           ('owner', 'v8-autoroll@chromium.org'),
           ('status', 'open'),
       ],
-      limit=1,
+      limit=20,
       step_test_data=api.gerrit.test_api.get_empty_changes_response_data,
   )
-  if commits:
-    api.step('Existing rolls found.', cmd=None)
-    return
+  for commit in commits:
+    # The auto-roller might have a CL open for a particular roll config.
+    if commit['subject'] == bot_config['subject']:
+      api.step('Existing rolls found.', cmd=None)
+      return
 
   api.gclient.set_config('v8')
   api.gclient.apply_config('chromium')
@@ -138,9 +160,15 @@ def RunSteps(api):
 
   commit_message = []
 
+  # White/blacklist certain deps keys.
+  blacklist = bot_config.get('blacklist', [])
+  whitelist = bot_config.get('whitelist', [])
+
   # Iterate over all v8 deps.
   for name in sorted(v8_deps.keys()):
-    if name in BLACKLIST:
+    if blacklist and name in blacklist:
+      continue
+    if whitelist and name not in whitelist:
       continue
     def SplitValue(solution_name, value):
       assert '@' in value, (
@@ -186,10 +214,10 @@ def RunSteps(api):
 
   # Commit deps change and send to CQ.
   if diff:
-    args = ['commit', '-a', '-m', 'Update V8 DEPS.']
+    args = ['commit', '-a', '-m', bot_config['subject']]
     for message in commit_message:
       args.extend(['-m', message])
-    args.extend(['-m', 'TBR=%s' % ','.join(AUTO_REVIEWERS)])
+    args.extend(['-m', 'TBR=%s' % ','.join(bot_config['reviewers'])])
     kwargs = {'stdout': api.raw_io.output_text()}
     with api.context(cwd=api.path['checkout']):
       api.git(*args, **kwargs)
@@ -213,18 +241,27 @@ src/third_party/snappy/src: https://chromium.googlesource.com/external/snappy.gi
 src/tools/gyp: https://chromium.googlesource.com/external/gyp.git@e7079f0e0e14108ab0dba58728ff219637458563
 v8/tools/swarming_client: https://chromium.googlesource.com/external/swarming.client.git@380e32662312eb107f06fcba6409b0409f8fe001"""
 
+  def template(testname, buildername):
+    return (
+        api.test(testname) +
+        api.properties.generic(mastername='client.v8.fyi',
+                               buildername=buildername) +
+        api.override_step_data(
+            'gclient get v8 deps',
+            api.raw_io.stream_output(v8_deps_info, stream='stdout'),
+        ) +
+        api.override_step_data(
+            'gclient get src deps',
+            api.raw_io.stream_output(cr_deps_info, stream='stdout'),
+        ) +
+        api.override_step_data(
+            'git diff',
+            api.raw_io.stream_output('some difference', stream='stdout'),
+        )
+    )
+
   yield (
-      api.test('roll') +
-      api.properties.generic(mastername='client.v8.fyi',
-                             buildername='Auto-roll - v8 deps') +
-      api.override_step_data(
-          'gclient get v8 deps',
-          api.raw_io.stream_output(v8_deps_info, stream='stdout'),
-      ) +
-      api.override_step_data(
-          'gclient get src deps',
-          api.raw_io.stream_output(cr_deps_info, stream='stdout'),
-      ) +
+      template('roll', 'Auto-roll - v8 deps') +
       api.override_step_data(
           'roll dependency base_trace_event_common',
           retcode=1,
@@ -236,17 +273,24 @@ v8/tools/swarming_client: https://chromium.googlesource.com/external/swarming.cl
       api.override_step_data(
           'look up base_trace_event_common',
           api.raw_io.stream_output('deadbeef\tHEAD', stream='stdout'),
-      ) +
-      api.override_step_data(
-          'git diff',
-          api.raw_io.stream_output('some difference', stream='stdout'),
       )
+  )
+  yield (
+      template('test262', 'Auto-roll - test262') +
+      api.override_step_data(
+          'look up test_test262_data',
+          api.raw_io.stream_output('deadbeef\tHEAD', stream='stdout'),
+      ) +
+      api.post_process(Filter('git commit', 'git cl'))
   )
 
   yield (
       api.test('stale_roll') +
+      api.properties.generic(mastername='client.v8.fyi',
+                             buildername='Auto-roll - v8 deps') +
       api.override_step_data(
-          'gerrit changes', api.json.output([{'_number': '123'}])) +
+          'gerrit changes', api.json.output(
+              [{'_number': '123', 'subject': 'Update V8 DEPS.'}])) +
       api.post_process(MustRun, 'Existing rolls found.') +
       api.post_process(DoesNotRun, 'look up build') +
       api.post_process(DropExpectation)
