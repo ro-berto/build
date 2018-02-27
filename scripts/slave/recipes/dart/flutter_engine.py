@@ -27,9 +27,6 @@ def RunGN(api, *args):
   api.step('gn %s' % ' '.join(args), gn_cmd)
 
 def AnalyzeDartUI(api):
-  RunGN(api, '--unoptimized')
-  Build(api, 'host_debug_unopt', 'generate_dart_ui')
-
   checkout = api.path['start_dir'].join('src')
   with api.context(cwd=checkout):
     api.step('analyze dart_ui', ['/bin/bash', 'flutter/travis/analyze.sh'])
@@ -53,7 +50,7 @@ def BuildLinuxAndroidArm(api):
 
 def BuildLinux(api):
   RunGN(api, '--unoptimized')
-  Build(api, 'host_debug_unopt')
+  Build(api, 'host_debug_unopt', 'generate_dart_ui')
 
 def TestObservatory(api):
   checkout = api.path['start_dir'].join('src')
@@ -117,16 +114,16 @@ def RunSteps(api):
     api.file.rmcontents('everything', api.path['start_dir'])
   GetCheckout(api)
 
+  BuildLinux(api)
   checkout = api.path['start_dir'].join('src')
   dart_bin = checkout.join(
-      'third_party', 'dart', 'tools', 'sdks', 'linux', 'dart-sdk', 'bin')
+      'out', 'host_debug_unopt', 'dart-sdk', 'bin')
   env = { 'PATH': api.path.pathsep.join((str(dart_bin), '%(PATH)s')) }
 
-  # The context adds dart to the path, only needed for the analyze step for now.
+  # The context adds dart-sdk/bin to the path.
   with api.context(env=env):
     AnalyzeDartUI(api)
 
-    BuildLinux(api)
     TestObservatory(api)
     BuildLinuxAndroidArm(api)
     BuildLinuxAndroidx86(api)
