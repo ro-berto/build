@@ -37,9 +37,10 @@ def main():
   if not args:
     option_parser.error('Must provide a command to run.')
 
-  # If the first argument is 'python', replace it with the system executable.
-  if args[0] == 'python':
-    args[0] = sys.executable
+  # If the first argument is 'python' and --with-third-party-lib is not set,
+  # it is natural for us to think the user want to use vpython.
+  if args[0] == 'python' and not options.with_third_party_lib:
+    args[0] = 'vpython.bat' if sys.platform == 'win32' else 'vpython'
 
   with common.env.GetInfraPythonPath(
       with_third_party=options.with_third_party_lib).Enter():
