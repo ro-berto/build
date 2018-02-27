@@ -3,11 +3,13 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from recipe_engine.post_process import DoesNotRun, DropExpectation, MustRun
 from recipe_engine.types import freeze
 
 DEPS = [
   'depot_tools/bot_update',
   'depot_tools/gclient',
+  'depot_tools/gerrit',
   'depot_tools/git',
   'recipe_engine/context',
   'recipe_engine/json',
@@ -81,6 +83,22 @@ def GetDEPS(api, name, repo):
 
 
 def RunSteps(api):
+  # Bail out on existing roll. Needs to be manually closed.
+  # TODO(machenbach): Add auto-abandon on stale roll.
+  commits = api.gerrit.get_changes(
+      'https://chromium-review.googlesource.com',
+      query_params=[
+          ('project', 'v8/v8'),
+          ('owner', 'v8-autoroll@chromium.org'),
+          ('status', 'open'),
+      ],
+      limit=1,
+      step_test_data=api.gerrit.test_api.get_empty_changes_response_data,
+  )
+  if commits:
+    api.step('Existing rolls found.', cmd=None)
+    return
+
   api.gclient.set_config('v8')
   api.gclient.apply_config('chromium')
 
@@ -223,4 +241,13 @@ v8/tools/swarming_client: https://chromium.googlesource.com/external/swarming.cl
           'git diff',
           api.raw_io.stream_output('some difference', stream='stdout'),
       )
+  )
+
+  yield (
+      api.test('stale_roll') +
+      api.override_step_data(
+          'gerrit changes', api.json.output([{'_number': '123'}])) +
+      api.post_process(MustRun, 'Existing rolls found.') +
+      api.post_process(DoesNotRun, 'look up build') +
+      api.post_process(DropExpectation)
   )
