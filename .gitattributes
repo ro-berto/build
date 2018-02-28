@@ -1,2 +1,2 @@
-/.vpython           recipes
+*.vpython           recipes
 /environment.cfg.py recipes
