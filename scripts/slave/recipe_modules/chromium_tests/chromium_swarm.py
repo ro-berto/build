@@ -48,7 +48,8 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_ARCH': 'arm',
         'TARGET_BITS': 64,
-        'TARGET_CROS_BOARD': 'kevin',
+        # TODO(bpastene): Change this to kevin when full builds are available.
+        'TARGET_CROS_BOARD': 'arm-generic',
         'TARGET_PLATFORM': 'chromeos',
       },
       'bot_type': 'builder_tester',
