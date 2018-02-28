@@ -4,7 +4,6 @@
 
 DEPS = [
   'ios',
-  'depot_tools/bot_update',
   'depot_tools/gclient',
   'depot_tools/tryserver',
   'recipe_engine/json',
@@ -16,15 +15,10 @@ DEPS = [
 
 def RunSteps(api):
   with api.tryserver.set_failure_hash():
-    bot_update_step = api.ios.checkout()
+    api.ios.checkout()
     # Ensure try bots mirror configs from chromium.mac.
     api.ios.read_build_config(master_name='chromium.mac')
-    try:
-      api.ios.build(analyze=True, suffix='with patch')
-    except api.step.StepFailure:
-      api.bot_update.deapply_patch(bot_update_step)
-      api.ios.build(suffix='without patch')
-      raise
+    api.ios.build(analyze=True, suffix='with patch')
     api.ios.test_swarming()
 
 def GenTests(api):
@@ -214,69 +208,6 @@ def GenTests(api):
         stdout=api.raw_io.output_text('1.2.3'),
     )
     + suppress_analyze()
-  )
-
-  yield (
-    api.test('without_patch_success')
-    + api.platform('mac', 64)
-    + api.properties(
-      buildername='ios',
-      buildnumber='0',
-      issue=123456,
-      mastername='tryserver.fake',
-      patchset=1,
-      rietveld='fake://rietveld.url',
-      bot_id='fake-vm',
-      path_config='kitchen',
-    )
-    + api.ios.make_test_build_config({
-      'xcode version': 'fake xcode version',
-      'gn_args': [
-        'is_debug=true',
-        'target_cpu="x86"',
-      ],
-      'tests': [
-        {
-          'app': 'fake tests',
-          'device type': 'fake device',
-          'os': '8.1',
-        },
-      ],
-    })
-    + suppress_analyze()
-    + api.step_data('compile (with patch)', retcode=1)
-  )
-
-  yield (
-    api.test('without_patch_failure')
-    + api.platform('mac', 64)
-    + api.properties(
-      buildername='ios',
-      buildnumber='0',
-      issue=123456,
-      mastername='tryserver.fake',
-      patchset=1,
-      rietveld='fake://rietveld.url',
-      bot_id='fake-vm',
-      path_config='kitchen',
-    )
-    + api.ios.make_test_build_config({
-      'xcode version': 'fake xcode version',
-      'gn_args': [
-        'is_debug=true',
-        'target_cpu="x86"',
-      ],
-      'tests': [
-        {
-          'app': 'fake tests',
-          'device type': 'fake device',
-          'os': '8.1',
-        },
-      ],
-    })
-    + suppress_analyze()
-    + api.step_data('compile (with patch)', retcode=1)
-    + api.step_data('compile (without patch)', retcode=1)
   )
 
   yield (
