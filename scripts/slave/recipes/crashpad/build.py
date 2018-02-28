@@ -86,6 +86,10 @@ def RunSteps(api):
       # There's no libcurl in the sysroot, stub out the HTTPTransport
       # implementation that relies on it.
       args += ' enable_http_transport_libcurl=false'
+
+      # The 14.04 systems do not include a compatible libstdc++ that can deal
+      # with -std=c++14, so force static linkage of libstdc++ from the sysroot.
+      args += ' link_libstdcpp_statically = true'
     with api.context(cwd=api.path['checkout']):
       api.step('generate build files', ['gn', 'gen', path, '--args=' + args])
   elif is_win:

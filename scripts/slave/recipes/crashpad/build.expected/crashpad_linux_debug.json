@@ -65,7 +65,7 @@
       "gn",
       "gen",
       "[START_DIR]/crashpad/out/Release",
-      "--args=target_os=\"linux\" target_cpu=\"x64\" is_debug=false clang_path=\"//third_party/linux/clang/linux-amd64\" target_sysroot=\"//third_party/linux/sysroot\" enable_http_transport_libcurl=false"
+      "--args=target_os=\"linux\" target_cpu=\"x64\" is_debug=false clang_path=\"//third_party/linux/clang/linux-amd64\" target_sysroot=\"//third_party/linux/sysroot\" enable_http_transport_libcurl=false link_libstdcpp_statically = true"
     ],
     "cwd": "[START_DIR]/crashpad",
     "name": "generate build files"
