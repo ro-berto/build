@@ -16,6 +16,10 @@ _MASTER_CONFIG_MAP = {
   },
   'chromiumos.chromium': {
     'master_config': 'master_chromiumos_chromium',
+    # per-builder settings
+    'builder_config': {
+      'amd64-generic-goma-canary-chromium-pfq-informational': 'use_goma_canary',
+    },
   },
 
   # Fake master name for Coverage.
@@ -151,10 +155,10 @@ def GenTests(api):
   yield (
       api.test('chromiumos_goma_canary')
       + api.properties(
-          mastername='chromiumos',
-          buildername='goma_canary',
+          mastername='chromiumos.chromium',
+          buildername='amd64-generic-goma-canary-chromium-pfq-informational',
           buildnumber='12345',
-          cbb_config='auron-paladin',
+          cbb_config='amd64-generic-goma-canary-chromium-pfq-informational',
           cbb_branch='master',
           cbb_master_build_id='24601',
           repository='https://chromium.googlesource.com/chromiumos/'
@@ -167,7 +171,6 @@ def GenTests(api):
           }),
           path_config='buildbot',
           bot_id='test',
-          use_goma_canary=True,
       )
   )
 

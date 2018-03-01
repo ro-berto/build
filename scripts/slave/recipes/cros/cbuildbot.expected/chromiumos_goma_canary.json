@@ -107,7 +107,7 @@
       "[CACHE]/goma_client",
       "--goma_client_json",
       "/creds/service_accounts/service-account-goma-client.json",
-      "auron-paladin"
+      "amd64-generic-goma-canary-chromium-pfq-informational"
     ],
     "env": {
       "DEPOT_TOOLS_UPDATE": "0"
@@ -117,7 +117,7 @@
         "[START_DIR]/depot_tools"
       ]
     },
-    "name": "cbuildbot [auron-paladin]"
+    "name": "cbuildbot [amd64-generic-goma-canary-chromium-pfq-informational]"
   },
   {
     "name": "$result",

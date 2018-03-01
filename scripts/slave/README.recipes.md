@@ -825,7 +825,7 @@ Returns (bool): True if the value was found.
 
 &mdash; **def [checkout](/scripts/slave/recipe_modules/chromite/api.py#161)(self, manifest_url=None, repo_url=None, repo_sync_args=None):**
 
-&mdash; **def [checkout\_chromite](/scripts/slave/recipe_modules/chromite/api.py#246)(self):**
+&mdash; **def [checkout\_chromite](/scripts/slave/recipe_modules/chromite/api.py#249)(self):**
 
 Checks out the configured Chromite branch.
     
@@ -869,7 +869,7 @@ Args:
   repository (str): The URL of the repository hosting the change.
   revision (str): The revision hash to load the build ID from.
 
-&mdash; **def [run](/scripts/slave/recipe_modules/chromite/api.py#280)(self, args=None):**
+&mdash; **def [run](/scripts/slave/recipe_modules/chromite/api.py#283)(self, args=None):**
 
 Runs the configured 'cbuildbot' build.
 
@@ -892,7 +892,7 @@ Args:
   args (list): Initial argument list, expanded based on other values.
 Returns: (Step) the 'cbuildbot' execution step.
 
-&mdash; **def [run\_cbuildbot](/scripts/slave/recipe_modules/chromite/api.py#231)(self, args=None, goma_canary=False):**
+&mdash; **def [run\_cbuildbot](/scripts/slave/recipe_modules/chromite/api.py#234)(self, args=None, goma_canary=False):**
 
 Performs a Chromite repository checkout, then runs cbuildbot.
 
@@ -906,7 +906,7 @@ Run the setup_board script inside the chroot.
 
 Used by the internal goma recipe.
 
-&mdash; **def [with\_system\_python](/scripts/slave/recipe_modules/chromite/api.py#255)(self):**
+&mdash; **def [with\_system\_python](/scripts/slave/recipe_modules/chromite/api.py#258)(self):**
 
 Prepare a directory with the system python binary available.
 
@@ -4436,7 +4436,7 @@ Generates the sequence of steps that will be run by the slave.
 
 [DEPS](/scripts/slave/recipes/cros/cbuildbot.py#5): [chromite](#recipe_modules-chromite), [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/cros/cbuildbot.py#27)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/cros/cbuildbot.py#31)(api):**
 ### *recipes* / [cros/cbuildbot\_tryjob](/scripts/slave/recipes/cros/cbuildbot_tryjob.py)
 
 [DEPS](/scripts/slave/recipes/cros/cbuildbot_tryjob.py#10): [chromite](#recipe_modules-chromite), [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]

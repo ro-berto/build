@@ -213,6 +213,7 @@ class ChromiteApi(recipe_api.RecipeApi):
       KWARGS: Additional keyword arguments to forward to the configuration.
     """
     master = properties.get('mastername')
+    builder = properties.get('buildername')
 
     if master is None:
       self.set_config('master_swarming', **KWARGS)
@@ -225,8 +226,10 @@ class ChromiteApi(recipe_api.RecipeApi):
         "No 'master_config' configuration for '%s'" % (master,))
     self.set_config(master_config, **KWARGS)
 
-    if properties.get('use_goma_canary', False):
-      self.set_config('use_goma_canary')
+    # Set per-builder configuration if any.
+    builder_config = config_map.get('builder_config', {}).get(builder, None)
+    if builder_config:
+      self.set_config(builder_config, **KWARGS)
 
   def run_cbuildbot(self, args=None, goma_canary=False):
     """Performs a Chromite repository checkout, then runs cbuildbot.
