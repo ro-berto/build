@@ -96,7 +96,8 @@ ANDROID_CIPD_PACKAGES = [
 ]
 
 PERF_TESTS = freeze({
-    'isac_fix_test': {},
+    # Temporarily disabled while bisecting http://crbug.com/817310.
+    # 'isac_fix_test': {},
     'low_bandwidth_audio_perf_test': {},
     'webrtc_perf_tests': {
         'args': [
