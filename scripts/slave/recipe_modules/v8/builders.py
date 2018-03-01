@@ -942,7 +942,7 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [V8Testing(5)],
         'swarming_dimensions': {
-          'os': 'Mac-10.13',
+          'os': 'Mac-10.9',
           'cpu': 'x86-64',
         },
         'testing': {'platform': 'mac'},
