@@ -19,7 +19,7 @@ DEPS = [
 ]
 
 
-all_runtimes = ['d8', 'jsshell', 'ie9', 'ie10', 'ie11', 'ff',
+all_runtimes = ['d8', 'ie9', 'ie10', 'ie11', 'ff',
             'safari', 'chrome', 'chromeff',
             'ie10chrome', 'ie11ff']
 
@@ -209,11 +209,11 @@ def RunSteps(api):
 
 def GenTests(api):
    yield (
-      api.test('dart2js-linux-jsshell-hostchecked-csp-3-5-be') +
+      api.test('dart2js-linux-d8-hostchecked-csp-3-5-be') +
       api.platform('linux', 64) +
       api.properties.generic(
         mastername='client.dart',
-        buildername='dart2js-linux-jsshell-hostchecked-csp-3-5-be',
+        buildername='dart2js-linux-d8-hostchecked-csp-3-5-be',
         revision='hash_of_revision'))
    yield (
       api.test('dart2js-win7-ie10-dev') + api.platform('win', 32) +

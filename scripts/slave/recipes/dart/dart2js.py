@@ -17,7 +17,7 @@ DEPS = [
 ]
 
 
-all_runtimes = ['none', 'd8', 'jsshell', 'ie9', 'ie10', 'ie11', 'ff',
+all_runtimes = ['none', 'd8', 'ie9', 'ie10', 'ie11', 'ff',
             'safari', 'chrome', 'safarimobilesim', 'drt', 'chromeff',
             'ie10chrome', 'ie11ff']
 
