@@ -169,6 +169,8 @@ def BuildLinuxAndroid(api):
       UploadArtifacts(api, upload_dir, [
         'third_party/dart/runtime/bin/dart_io_entries.txt',
         'flutter/runtime/dart_vm_entry_points.txt',
+        'out/%s/dart_entry_points/entry_points.json' % build_output_dir,
+        'out/%s/dart_entry_points/entry_points_extra.json' % build_output_dir,
         'out/%s/flutter.jar' % build_output_dir,
       ])
 
@@ -321,14 +323,20 @@ def PackageIOSVariant(api, label, device_out, sim_out, bucket_name):
     label_dir.join('Flutter.framework'),
     label_dir.join('Flutter.framework.zip'))
 
-  UploadArtifacts(api, bucket_name, [
+  artifacts = [
     'third_party/dart/runtime/bin/dart_io_entries.txt',
     'flutter/runtime/dart_vm_entry_points.txt',
     'flutter/lib/snapshot/snapshot.dart',
     'flutter/shell/platform/darwin/ios/framework/Flutter.podspec',
     'out/%s/clang_x64/gen_snapshot' % device_out,
     'out/%s/Flutter.framework.zip' % label,
-  ])
+  ]
+  if label in ['profile', 'release']:
+    artifacts.append('out/%s/dart_entry_points/entry_points.json' % device_out)
+    artifacts.append(
+      'out/%s/dart_entry_points/entry_points_extra.json' % device_out)
+
+  UploadArtifacts(api, bucket_name, artifacts)
 
 
 def BuildIOS(api):
