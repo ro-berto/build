@@ -512,6 +512,22 @@
       "builder_timeout_s": 21600,
       "category": "3Android",
     },
+    "Android FYI 32 Vk Release (Nexus 5X)": {
+      "recipe": "chromium",
+      "use_remote_run": True,
+      "scheduler": "chromium_commits",
+      "slave_pools": ["android_32_vk_rel_nexus_5x"],
+      "builder_timeout_s": 21600,
+      "category": "3Android",
+    },
+    "Android FYI 64 Vk Release (Nexus 5X)": {
+      "recipe": "chromium",
+      "use_remote_run": True,
+      "scheduler": "chromium_commits",
+      "slave_pools": ["android_64_vk_rel_nexus_5x"],
+      "builder_timeout_s": 21600,
+      "category": "3Android",
+    },
   },
 
   "schedulers": {
@@ -954,6 +970,22 @@
         "version": "trusty",
       },
       "slaves": ["slave66-c1"],
+    },
+    "android_32_vk_rel_nexus_5x": {
+      "slave_data": {
+        "bits": 64,
+        "os": "linux",
+        "version": "trusty",
+      },
+      "slaves": ["slave263-c1"],
+    },
+    "android_64_vk_rel_nexus_5x": {
+      "slave_data": {
+        "bits": 64,
+        "os": "linux",
+        "version": "trusty",
+      },
+      "slaves": ["slave264-c1"],
     },
   }
 }
