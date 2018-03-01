@@ -289,7 +289,7 @@
       "--shards",
       "3",
       "--task-name",
-      "Check/Mac-10.9/[dummy has/v8_mac_dbg/571",
+      "Check/Mac-10.13/[dummy has/v8_mac_dbg/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -306,7 +306,7 @@
       "none",
       "--dimension",
       "os",
-      "Mac-10.9",
+      "Mac-10.13",
       "--dimension",
       "pool",
       "Chrome",
@@ -336,7 +336,7 @@
       "--tag",
       "slavename:test_bot",
       "--tag",
-      "stepname:Check",
+      "stepname:Check on Mac-10.13",
       "--idempotent",
       "--cipd-package",
       ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
@@ -379,7 +379,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Check"
+    "name": "[trigger] Check on Mac-10.13"
   },
   {
     "cmd": [
@@ -396,7 +396,7 @@
       "--shards",
       "1",
       "--task-name",
-      "Test262 - no variants/Mac-10.9/[dummy has/v8_mac_dbg/571",
+      "Test262 - no variants/Mac-10.13/[dummy has/v8_mac_dbg/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -413,7 +413,7 @@
       "none",
       "--dimension",
       "os",
-      "Mac-10.9",
+      "Mac-10.13",
       "--dimension",
       "pool",
       "Chrome",
@@ -443,7 +443,7 @@
       "--tag",
       "slavename:test_bot",
       "--tag",
-      "stepname:Test262 - no variants",
+      "stepname:Test262 - no variants on Mac-10.13",
       "--idempotent",
       "--cipd-package",
       ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
@@ -486,7 +486,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Test262 - no variants"
+    "name": "[trigger] Test262 - no variants on Mac-10.13"
   },
   {
     "cmd": [
@@ -503,7 +503,7 @@
       "--shards",
       "1",
       "--task-name",
-      "Mozilla/Mac-10.9/[dummy has/v8_mac_dbg/571",
+      "Mozilla/Mac-10.13/[dummy has/v8_mac_dbg/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -520,7 +520,7 @@
       "none",
       "--dimension",
       "os",
-      "Mac-10.9",
+      "Mac-10.13",
       "--dimension",
       "pool",
       "Chrome",
@@ -550,7 +550,7 @@
       "--tag",
       "slavename:test_bot",
       "--tag",
-      "stepname:Mozilla",
+      "stepname:Mozilla on Mac-10.13",
       "--idempotent",
       "--cipd-package",
       ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
@@ -593,7 +593,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Mozilla"
+    "name": "[trigger] Mozilla on Mac-10.13"
   },
   {
     "allow_subannotations": true,
@@ -619,7 +619,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Check/Mac-10.9/[dummy has/v8_mac_dbg/571\", \"tasks\": {\"Check/Mac-10.9/[dummy has/v8_mac_dbg/571:3:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"Check/Mac-10.9/[dummy has/v8_mac_dbg/571:3:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"Check/Mac-10.9/[dummy has/v8_mac_dbg/571:3:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}}}"
+      "{\"base_task_name\": \"Check/Mac-10.13/[dummy has/v8_mac_dbg/571\", \"tasks\": {\"Check/Mac-10.13/[dummy has/v8_mac_dbg/571:3:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"Check/Mac-10.13/[dummy has/v8_mac_dbg/571:3:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"Check/Mac-10.13/[dummy has/v8_mac_dbg/571:3:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}}}"
     ],
     "infra_step": true,
     "name": "Check",
@@ -664,7 +664,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Test262 - no variants/Mac-10.9/[dummy has/v8_mac_dbg/571\", \"tasks\": {\"Test262 - no variants/Mac-10.9/[dummy has/v8_mac_dbg/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"Test262 - no variants/Mac-10.13/[dummy has/v8_mac_dbg/571\", \"tasks\": {\"Test262 - no variants/Mac-10.13/[dummy has/v8_mac_dbg/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "infra_step": true,
     "name": "Test262 - no variants",
@@ -709,7 +709,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Mozilla/Mac-10.9/[dummy has/v8_mac_dbg/571\", \"tasks\": {\"Mozilla/Mac-10.9/[dummy has/v8_mac_dbg/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"Mozilla/Mac-10.13/[dummy has/v8_mac_dbg/571\", \"tasks\": {\"Mozilla/Mac-10.13/[dummy has/v8_mac_dbg/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "infra_step": true,
     "name": "Mozilla",

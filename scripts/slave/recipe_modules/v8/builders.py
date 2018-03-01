@@ -689,7 +689,7 @@ BUILDERS = {
           Mozilla,
         ],
         'swarming_dimensions': {
-          'os': 'Mac-10.9',
+          'os': 'Mac-10.13',
           'cpu': 'x86-64',
         },
         'testing': {'platform': 'mac'},
@@ -709,7 +709,7 @@ BUILDERS = {
           Mozilla,
         ],
         'swarming_dimensions': {
-          'os': 'Mac-10.9',
+          'os': 'Mac-10.13',
           'cpu': 'x86-64',
         },
         'testing': {'platform': 'mac'},
@@ -733,7 +733,7 @@ BUILDERS = {
           Mozilla,
         ] + with_extra_variants([V8Testing]),
         'swarming_dimensions': {
-          'os': 'Mac-10.9',
+          'os': 'Mac-10.13',
           'cpu': 'x86-64',
         },
         'testing': {'platform': 'mac'},
@@ -753,7 +753,7 @@ BUILDERS = {
           Mozilla,
         ] + with_extra_variants([V8Testing]),
         'swarming_dimensions': {
-          'os': 'Mac-10.9',
+          'os': 'Mac-10.13',
           'cpu': 'x86-64',
         },
         'testing': {'platform': 'mac'},
@@ -797,7 +797,7 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [D8Testing(4)],
         'swarming_dimensions': {
-          'os': 'Mac-10.9',
+          'os': 'Mac-10.13',
           'cpu': 'x86-64',
         },
         'testing': {'platform': 'mac'},
@@ -942,7 +942,7 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [V8Testing(5)],
         'swarming_dimensions': {
-          'os': 'Mac-10.9',
+          'os': 'Mac-10.13',
           'cpu': 'x86-64',
         },
         'testing': {'platform': 'mac'},
@@ -2858,7 +2858,7 @@ BUILDERS = {
         'parent_buildername': 'v8_mac_rel_ng',
         'enable_swarming': True,
         'swarming_dimensions': {
-          'os': 'Mac-10.9',
+          'os': 'Mac-10.13',
           'cpu': 'x86-64',
         },
         'tests': [
@@ -2883,7 +2883,7 @@ BUILDERS = {
           Mozilla,
         ],
         'swarming_dimensions': {
-          'os': 'Mac-10.9',
+          'os': 'Mac-10.13',
           'cpu': 'x86-64',
         },
         'testing': {'platform': 'mac'},
@@ -2903,7 +2903,7 @@ BUILDERS = {
           Mozilla,
         ] + with_extra_variants([V8Testing]),
         'swarming_dimensions': {
-          'os': 'Mac-10.9',
+          'os': 'Mac-10.13',
           'cpu': 'x86-64',
         },
         'testing': {'platform': 'mac'},
@@ -2923,7 +2923,7 @@ BUILDERS = {
           Mozilla,
         ] + with_extra_variants([V8Testing(2)]),
         'swarming_dimensions': {
-          'os': 'Mac-10.9',
+          'os': 'Mac-10.13',
           'cpu': 'x86-64',
         },
         'testing': {'platform': 'mac'},
@@ -2940,7 +2940,7 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [D8Testing(4)],
         'swarming_dimensions': {
-          'os': 'Mac-10.9',
+          'os': 'Mac-10.13',
           'cpu': 'x86-64',
         },
         'testing': {'platform': 'mac'},
@@ -2960,7 +2960,7 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [V8Testing(4)],
         'swarming_dimensions': {
-          'os': 'Mac-10.9',
+          'os': 'Mac-10.13',
           'cpu': 'x86-64',
         },
         'testing': {'platform': 'mac'},

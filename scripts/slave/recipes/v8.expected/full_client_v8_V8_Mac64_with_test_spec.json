@@ -63,7 +63,7 @@
       "--shards",
       "2",
       "--task-name",
-      "Mjsunit - sweet/Mac-10.9/[dummy has/V8 Mac64/571",
+      "Mjsunit - sweet/Mac-10.13/[dummy has/V8 Mac64/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -80,7 +80,7 @@
       "none",
       "--dimension",
       "os",
-      "Mac-10.9",
+      "Mac-10.13",
       "--dimension",
       "pool",
       "Chrome",
@@ -106,7 +106,7 @@
       "--tag",
       "slavename:test_bot",
       "--tag",
-      "stepname:Mjsunit - sweet",
+      "stepname:Mjsunit - sweet on Mac-10.13",
       "--idempotent",
       "--cipd-package",
       ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
@@ -149,7 +149,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Mjsunit - sweet"
+    "name": "[trigger] Mjsunit - sweet on Mac-10.13"
   },
   {
     "allow_subannotations": true,
@@ -175,7 +175,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Mjsunit - sweet/Mac-10.9/[dummy has/V8 Mac64/571\", \"tasks\": {\"Mjsunit - sweet/Mac-10.9/[dummy has/V8 Mac64/571:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"Mjsunit - sweet/Mac-10.9/[dummy has/V8 Mac64/571:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}}}"
+      "{\"base_task_name\": \"Mjsunit - sweet/Mac-10.13/[dummy has/V8 Mac64/571\", \"tasks\": {\"Mjsunit - sweet/Mac-10.13/[dummy has/V8 Mac64/571:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"Mjsunit - sweet/Mac-10.13/[dummy has/V8 Mac64/571:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}}}"
     ],
     "infra_step": true,
     "name": "Mjsunit - sweet",
