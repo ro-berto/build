@@ -818,6 +818,10 @@ class iOSApi(recipe_api.RecipeApi):
         named_cache = cache_name(task['xcode build version'])
         swarming_task.named_caches[named_cache] = self.XCODE_APP_PATH
 
+      if ('internal' not in self.m.properties['mastername'] and
+        'official' not in self.m.properties['mastername']):
+        # 4 cores are better than 8! See https://crbug.com/711845.
+        swarming_task.dimensions['cores'] = '4'
       if self.platform == 'simulator':
         swarming_task.dimensions['os'] = task['test'].get('host os') or 'Mac'
       elif self.platform == 'device':
