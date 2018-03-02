@@ -171,7 +171,7 @@ def GenTests(api):
                                 }, {
                                     'gpu': '10de:0fe9',  # NVIDIA GeForce GT750M
                                     'hidpi': '1',
-                                    'os': 'Mac-10.9',
+                                    'os': 'Mac-10.13',
                                 },
                             ],
                         },
@@ -1319,7 +1319,7 @@ def GenTests(api):
                                 }, {
                                     'gpu': '10de:0fe9',  # NVIDIA GeForce GT750M
                                     'hidpi': '1',
-                                    'os': 'Mac-10.9',
+                                    'os': 'Mac-10.13',
                                 },
                             ],
                         },

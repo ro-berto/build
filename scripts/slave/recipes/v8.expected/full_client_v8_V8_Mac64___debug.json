@@ -328,7 +328,7 @@
       "--tag",
       "slavename:test_bot",
       "--tag",
-      "stepname:Check on Mac-10.13",
+      "stepname:Check",
       "--idempotent",
       "--cipd-package",
       ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
@@ -371,7 +371,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Check on Mac-10.13"
+    "name": "[trigger] Check"
   },
   {
     "cmd": [
@@ -431,7 +431,7 @@
       "--tag",
       "slavename:test_bot",
       "--tag",
-      "stepname:Test262 - no variants on Mac-10.13",
+      "stepname:Test262 - no variants",
       "--idempotent",
       "--cipd-package",
       ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
@@ -474,7 +474,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Test262 - no variants on Mac-10.13"
+    "name": "[trigger] Test262 - no variants"
   },
   {
     "cmd": [
@@ -534,7 +534,7 @@
       "--tag",
       "slavename:test_bot",
       "--tag",
-      "stepname:Mozilla on Mac-10.13",
+      "stepname:Mozilla",
       "--idempotent",
       "--cipd-package",
       ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
@@ -577,7 +577,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Mozilla on Mac-10.13"
+    "name": "[trigger] Mozilla"
   },
   {
     "cmd": [
@@ -637,7 +637,7 @@
       "--tag",
       "slavename:test_bot",
       "--tag",
-      "stepname:Check - extra on Mac-10.13",
+      "stepname:Check - extra",
       "--idempotent",
       "--cipd-package",
       ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
@@ -680,7 +680,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Check - extra on Mac-10.13"
+    "name": "[trigger] Check - extra"
   },
   {
     "allow_subannotations": true,

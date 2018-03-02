@@ -46,7 +46,7 @@ SPEC = {
         'platform': 'mac',
       },
       'swarming_dimensions': {
-        'os': 'Mac-10.9',
+        'os': 'Mac-10.13',
       },
     },
     'Mac10.10 Tests': {
@@ -132,7 +132,7 @@ SPEC = {
         'platform': 'mac',
       },
       'swarming_dimensions': {
-        'os': 'Mac-10.9',
+        'os': 'Mac-10.13',
       },
     },
   },

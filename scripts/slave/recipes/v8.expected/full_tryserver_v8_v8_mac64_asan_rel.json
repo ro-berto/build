@@ -330,7 +330,7 @@
       "--tag",
       "slavename:test_bot",
       "--tag",
-      "stepname:Check on Mac-10.13",
+      "stepname:Check",
       "--idempotent",
       "--cipd-package",
       ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
@@ -373,7 +373,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Check on Mac-10.13"
+    "name": "[trigger] Check"
   },
   {
     "allow_subannotations": true,

@@ -106,7 +106,7 @@
       "--tag",
       "slavename:test_bot",
       "--tag",
-      "stepname:Mjsunit - sweet on Mac-10.13",
+      "stepname:Mjsunit - sweet",
       "--idempotent",
       "--cipd-package",
       ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
@@ -149,7 +149,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Mjsunit - sweet on Mac-10.13"
+    "name": "[trigger] Mjsunit - sweet"
   },
   {
     "allow_subannotations": true,
