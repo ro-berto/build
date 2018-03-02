@@ -130,7 +130,7 @@ def generate_tests(api, test_suite, revision):
 
   if test_suite == 'webrtc':
     for test, extra_args in sorted(NORMAL_TESTS.items()):
-      tests.append(SwarmingIsolatedScriptTest(test, **extra_args))
+      tests.append(SwarmingWebRtcGtestTest(test, **extra_args))
     if api.mastername == 'client.webrtc.fyi' and api.m.platform.is_win:
       tests.append(BaremetalTest(
           'modules_tests',
@@ -430,20 +430,19 @@ class SwarmingAndroidPerfTest(AndroidTest):
 
 
 class SwarmingPerfTest(SwarmingIsolatedScriptTest):
-  def post_run(self, api, suffix):
-    try:
-      # We have to call super of SwarmingIsolatedScriptTest since we need access
-      # to the swarming collect step's output_dir data.
-      super(SwarmingIsolatedScriptTest, self).post_run(api, suffix)
-    finally:
-      task_output_dir = api.step.active_result.raw_io.output_dir
-      _UploadToPerfDashboard(self.name, api, task_output_dir)
+  def _output_perf_results_if_present(self, api, step_result):
+    # We use our own custom upload mechanism.
+    # TODO(phoglund): investigate if we can move off our custom mechanism.
+    task_output_dir = step_result.raw_io.output_dir
+    _UploadToPerfDashboard(self.name, api, task_output_dir)
 
-      # Copied from SwarmingIsolatedScriptTest.post_run
-      results = self._isolated_script_results
-      if results and self._upload_test_results:
-        self.results_handler.upload_results(
-            api, results, self._step_name(suffix), suffix)
+
+class SwarmingWebRtcGtestTest(SwarmingIsolatedScriptTest):
+  def _output_perf_results_if_present(self, api, step_result):
+    # TODO(phoglund): find out why our regular tests use
+    # SwarmingIsolatedScriptTest rather than SwarmingGTestTest. For now, stop
+    # it from trying to perf report, at least.
+    pass
 
 
 class PerfTest(Test):
