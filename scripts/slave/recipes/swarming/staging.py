@@ -86,8 +86,13 @@ def RunSteps(api, buildername, mastername):
   api.chromium_tests.compile_specific_targets(
       bot_config, update_step, bot_db, compile_targets, tests)
 
-  if api.chromium.c.TARGET_PLATFORM == 'android':
-    api.swarming.set_default_dimension('os', 'Android')
+  platform_to_os = {
+      'android': 'Android',
+      'chromeos': 'ChromeOS',
+  }
+  if api.chromium.c.TARGET_PLATFORM in platform_to_os:
+    api.swarming.set_default_dimension(
+        'os', platform_to_os[api.chromium.c.TARGET_PLATFORM])
     api.swarming.set_default_dimension('gpu', None)
     api.swarming.set_default_dimension('cpu', None)
 
@@ -114,7 +119,35 @@ def GenTests(api):
         mastername='chromium.swarm',
         bot_id='TestSlave',
         buildnumber=123,
-        path_config='kitchen')
+        path_config='kitchen') +
+        api.override_step_data(
+            'read test spec (chromium.swarm.json)',
+             api.json.output({
+               'ChromeOS Swarm': {
+                 'gtest_tests': [
+                     {
+                       'test': 'browser_tests',
+                       'swarming': {
+                         'can_use_on_swarming_builders': True,
+                         'dimension_sets': [
+                           {
+                             'device_type': 'kevin-signed-mpkeys',
+                             'os': 'ChromeOS',
+                             'pool': 'ChromeOS',
+                           }
+                         ],
+                       }
+                     },
+                  ],
+               },
+            })
+        ) +
+        api.override_step_data(
+            'find isolated tests',
+            api.json.output({
+                'browser_tests': 'deadbeef',
+            })
+        )
   )
 
   # One 'collect' fails due to a missing shard and failing test, should not
