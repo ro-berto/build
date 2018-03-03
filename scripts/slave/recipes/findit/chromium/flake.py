@@ -127,11 +127,11 @@ def GenTests(api):
 
   yield (
       api.test('flakiness_isolate_only') +
-      props({'browser_tests': ['Test.One']}, 'mac', 'Mac10.9 Tests', skip_tests=True) +
+      props({'browser_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests', skip_tests=True) +
       api.override_step_data(
           'test r0.read test spec (chromium.mac.json)',
           api.json.output({
-              'Mac10.9 Tests': {
+              'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
                           'test': 'browser_tests',
@@ -146,11 +146,11 @@ def GenTests(api):
   )
   yield (
       api.test('flakiness_swarming_tests') +
-      props({'browser_tests': ['Test.One']}, 'mac', 'Mac10.9 Tests') +
+      props({'browser_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests') +
       api.override_step_data(
           'test r0.read test spec (chromium.mac.json)',
           api.json.output({
-              'Mac10.9 Tests': {
+              'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
                           'test': 'browser_tests',
@@ -170,11 +170,11 @@ def GenTests(api):
   )
   yield (
       api.test('flakiness_non-swarming_tests') +
-      props({'gl_tests': ['Test.One']}, 'mac', 'Mac10.9 Tests') +
+      props({'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests') +
       api.override_step_data(
           'test r0.read test spec (chromium.mac.json)',
           api.json.output({
-              'Mac10.9 Tests': {
+              'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
                           'test': 'gl_tests',
@@ -193,7 +193,7 @@ def GenTests(api):
   )
   yield (
       api.test('use_build_parameter_for_tests') +
-      props({}, 'mac', 'Mac10.9 Tests',
+      props({}, 'mac', 'Mac10.13 Tests',
             revision='r0',
             buildbucket=json.dumps({'build': {'id': 1}})) +
       api.buildbucket.simulated_buildbucket_output({
@@ -205,7 +205,7 @@ def GenTests(api):
       api.override_step_data(
           'test r0.read test spec (chromium.mac.json)',
           api.json.output({
-              'Mac10.9 Tests': {
+              'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
                           'test': 'gl_tests',
@@ -223,11 +223,11 @@ def GenTests(api):
   )
   yield (
       api.test('record_infra_failure') +
-      props({'gl_tests': ['Test.One']}, 'mac', 'Mac10.9 Tests') +
+      props({'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests') +
       api.override_step_data(
           'test r0.read test spec (chromium.mac.json)',
           api.json.output({
-              'Mac10.9 Tests': {
+              'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
                           'test': 'gl_tests',

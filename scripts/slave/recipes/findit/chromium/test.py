@@ -542,11 +542,11 @@ def GenTests(api):
 
   yield (
       api.test('swarming_tests') +
-      props({'gl_tests': ['Test.One']}, 'mac', 'Mac10.9 Tests') +
+      props({'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests') +
       api.override_step_data(
           'test r1.read test spec (chromium.mac.json)',
           api.json.output({
-              'Mac10.9 Tests': {
+              'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
                           'test': 'gl_tests',
@@ -566,12 +566,12 @@ def GenTests(api):
   yield (
       api.test('findit_culprit_in_last_sub_range') +
       props(
-          {'gl_tests': ['Test.One']}, 'mac', 'Mac10.9 Tests', use_analyze=False,
+          {'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests', use_analyze=False,
            good_revision='r0', bad_revision='r6', suspected_revisions=['r3']) +
       api.override_step_data(
           'test r2.read test spec (chromium.mac.json)',
           api.json.output({
-              'Mac10.9 Tests': {
+              'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
                           'test': 'gl_tests',
@@ -584,7 +584,7 @@ def GenTests(api):
       api.override_step_data(
           'test r3.read test spec (chromium.mac.json)',
           api.json.output({
-              'Mac10.9 Tests': {
+              'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
                           'test': 'gl_tests',
@@ -612,13 +612,13 @@ def GenTests(api):
   yield (
       api.test('findit_culprit_in_middle_sub_range') +
       props(
-          {'gl_tests': ['Test.One']}, 'mac', 'Mac10.9 Tests', use_analyze=False,
+          {'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests', use_analyze=False,
            good_revision='r0', bad_revision='r6',
            suspected_revisions=['r3', 'r6']) +
       api.override_step_data(
           'test r2.read test spec (chromium.mac.json)',
           api.json.output({
-              'Mac10.9 Tests': {
+              'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
                           'test': 'gl_tests',
@@ -631,7 +631,7 @@ def GenTests(api):
       api.override_step_data(
           'test r3.read test spec (chromium.mac.json)',
           api.json.output({
-              'Mac10.9 Tests': {
+              'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
                           'test': 'gl_tests',
@@ -644,7 +644,7 @@ def GenTests(api):
       api.override_step_data(
           'test r5.read test spec (chromium.mac.json)',
           api.json.output({
-              'Mac10.9 Tests': {
+              'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
                           'test': 'gl_tests',
@@ -657,7 +657,7 @@ def GenTests(api):
       api.override_step_data(
           'test r6.read test spec (chromium.mac.json)',
           api.json.output({
-              'Mac10.9 Tests': {
+              'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
                           'test': 'gl_tests',
@@ -695,13 +695,13 @@ def GenTests(api):
   yield (
       api.test('findit_culprit_in_first_sub_range') +
       props(
-          {'gl_tests': ['Test.One']}, 'mac', 'Mac10.9 Tests', use_analyze=False,
+          {'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests', use_analyze=False,
            good_revision='r0', bad_revision='r6',
            suspected_revisions=['r6'], test_on_good_revision=False) +
       api.override_step_data(
           'test r1.read test spec (chromium.mac.json)',
           api.json.output({
-              'Mac10.9 Tests': {
+              'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
                           'test': 'gl_tests',
@@ -714,7 +714,7 @@ def GenTests(api):
       api.override_step_data(
           'test r5.read test spec (chromium.mac.json)',
           api.json.output({
-              'Mac10.9 Tests': {
+              'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
                           'test': 'gl_tests',
@@ -727,7 +727,7 @@ def GenTests(api):
       api.override_step_data(
           'test r6.read test spec (chromium.mac.json)',
           api.json.output({
-              'Mac10.9 Tests': {
+              'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
                           'test': 'gl_tests',
@@ -761,13 +761,13 @@ def GenTests(api):
       api.test('findit_steps_multiple_culprits') +
       props(
           {'gl_tests': ['Test.gl_One'], 'browser_tests': ['Test.browser_One']},
-          'mac', 'Mac10.9 Tests', use_analyze=False,
+          'mac', 'Mac10.13 Tests', use_analyze=False,
            good_revision='r0', bad_revision='r6',
            suspected_revisions=['r3', 'r6']) +
       api.override_step_data(
           'test r2.read test spec (chromium.mac.json)',
           api.json.output({
-              'Mac10.9 Tests': {
+              'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
                           'test': 'gl_tests',
@@ -788,7 +788,7 @@ def GenTests(api):
       api.override_step_data(
           'test r3.read test spec (chromium.mac.json)',
           api.json.output({
-              'Mac10.9 Tests': {
+              'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
                           'test': 'gl_tests',
@@ -805,7 +805,7 @@ def GenTests(api):
       api.override_step_data(
           'test r5.read test spec (chromium.mac.json)',
           api.json.output({
-              'Mac10.9 Tests': {
+              'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
                           'test': 'gl_tests',
@@ -822,7 +822,7 @@ def GenTests(api):
       api.override_step_data(
           'test r6.read test spec (chromium.mac.json)',
           api.json.output({
-              'Mac10.9 Tests': {
+              'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
                           'test': 'gl_tests',
@@ -871,13 +871,13 @@ def GenTests(api):
       api.test('findit_tests_multiple_culprits') +
       props(
           {'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']},
-          'mac', 'Mac10.9 Tests', use_analyze=False,
+          'mac', 'Mac10.13 Tests', use_analyze=False,
            good_revision='r0', bad_revision='r6',
            suspected_revisions=['r3', 'r5']) +
       api.override_step_data(
           'test r2.read test spec (chromium.mac.json)',
           api.json.output({
-              'Mac10.9 Tests': {
+              'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
                           'test': 'gl_tests',
@@ -890,7 +890,7 @@ def GenTests(api):
       api.override_step_data(
           'test r3.read test spec (chromium.mac.json)',
           api.json.output({
-              'Mac10.9 Tests': {
+              'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
                           'test': 'gl_tests',
@@ -903,7 +903,7 @@ def GenTests(api):
       api.override_step_data(
           'test r4.read test spec (chromium.mac.json)',
           api.json.output({
-              'Mac10.9 Tests': {
+              'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
                           'test': 'gl_tests',
@@ -915,7 +915,7 @@ def GenTests(api):
       ) +
       api.override_step_data(
           'test r5.read test spec (chromium.mac.json)', api.json.output({
-              'Mac10.9 Tests': {
+              'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
                           'test': 'gl_tests',
@@ -928,7 +928,7 @@ def GenTests(api):
       api.override_step_data(
           'test r6.read test spec (chromium.mac.json)',
           api.json.output({
-              'Mac10.9 Tests': {
+              'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
                           'test': 'gl_tests',
@@ -974,13 +974,13 @@ def GenTests(api):
       api.test('findit_consecutive_culprits') +
       props(
           {'gl_tests': ['Test.One']},
-          'mac', 'Mac10.9 Tests', use_analyze=False,
+          'mac', 'Mac10.13 Tests', use_analyze=False,
            good_revision='r0', bad_revision='r6',
            suspected_revisions=['r3', 'r4']) +
       api.override_step_data(
           'test r2.read test spec (chromium.mac.json)',
           api.json.output({
-              'Mac10.9 Tests': {
+              'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
                           'test': 'gl_tests',
@@ -993,7 +993,7 @@ def GenTests(api):
       api.override_step_data(
           'test r3.read test spec (chromium.mac.json)',
           api.json.output({
-              'Mac10.9 Tests': {
+              'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
                           'test': 'gl_tests',
@@ -1006,7 +1006,7 @@ def GenTests(api):
       api.override_step_data(
           'test r4.read test spec (chromium.mac.json)',
           api.json.output({
-              'Mac10.9 Tests': {
+              'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
                           'test': 'gl_tests',
@@ -1038,11 +1038,11 @@ def GenTests(api):
 
   yield (
       api.test('record_infra_failure') +
-      props({'gl_tests': ['Test.One']}, 'mac', 'Mac10.9 Tests') +
+      props({'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests') +
       api.override_step_data(
           'test r1.read test spec (chromium.mac.json)',
           api.json.output({
-              'Mac10.9 Tests': {
+              'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
                           'test': 'gl_tests',
@@ -1070,7 +1070,7 @@ def GenTests(api):
 
   yield (
       api.test('use_build_parameter_for_tests') +
-      props({}, 'mac', 'Mac10.9 Tests', use_analyze=False,
+      props({}, 'mac', 'Mac10.13 Tests', use_analyze=False,
             good_revision='r0', bad_revision='r6',
             suspected_revisions=['r3', 'r4'],
             buildbucket=json.dumps({'build': {'id': 1}})) +
@@ -1083,7 +1083,7 @@ def GenTests(api):
       api.override_step_data(
           'test r2.read test spec (chromium.mac.json)',
           api.json.output({
-              'Mac10.9 Tests': {
+              'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
                           'test': 'gl_tests',
@@ -1096,7 +1096,7 @@ def GenTests(api):
       api.override_step_data(
           'test r3.read test spec (chromium.mac.json)',
           api.json.output({
-              'Mac10.9 Tests': {
+              'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
                           'test': 'gl_tests',
@@ -1109,7 +1109,7 @@ def GenTests(api):
       api.override_step_data(
           'test r4.read test spec (chromium.mac.json)',
           api.json.output({
-              'Mac10.9 Tests': {
+              'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
                           'test': 'gl_tests',
@@ -1141,7 +1141,7 @@ def GenTests(api):
 
   yield (
       api.test('use_build_parameter_for_tests_non_json_buildbucket') +
-      props({}, 'mac', 'Mac10.9 Tests', use_analyze=False,
+      props({}, 'mac', 'Mac10.13 Tests', use_analyze=False,
             good_revision='r0', bad_revision='r6',
             suspected_revisions=['r3', 'r4'],
             buildbucket={'build': {'id': 1}}) +
@@ -1154,7 +1154,7 @@ def GenTests(api):
       api.override_step_data(
           'test r2.read test spec (chromium.mac.json)',
           api.json.output({
-              'Mac10.9 Tests': {
+              'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
                           'test': 'gl_tests',
@@ -1167,7 +1167,7 @@ def GenTests(api):
       api.override_step_data(
           'test r3.read test spec (chromium.mac.json)',
           api.json.output({
-              'Mac10.9 Tests': {
+              'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
                           'test': 'gl_tests',
@@ -1180,7 +1180,7 @@ def GenTests(api):
       api.override_step_data(
           'test r4.read test spec (chromium.mac.json)',
           api.json.output({
-              'Mac10.9 Tests': {
+              'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
                           'test': 'gl_tests',
@@ -1213,12 +1213,12 @@ def GenTests(api):
   yield (
       api.test('use_analyze_set_to_False_for_non_linear_try_job') +
       props(
-          {'gl_tests': ['Test.One']}, 'mac', 'Mac10.9 Tests', use_analyze=True,
+          {'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests', use_analyze=True,
            good_revision='r0', bad_revision='r6', suspected_revisions=['r3']) +
       api.override_step_data(
           'test r2.read test spec (chromium.mac.json)',
           api.json.output({
-              'Mac10.9 Tests': {
+              'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
                           'test': 'gl_tests',
@@ -1231,7 +1231,7 @@ def GenTests(api):
       api.override_step_data(
           'test r3.read test spec (chromium.mac.json)',
           api.json.output({
-              'Mac10.9 Tests': {
+              'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
                           'test': 'gl_tests',
@@ -1304,13 +1304,13 @@ def GenTests(api):
   yield (
       api.test('use_abbreviated_revision_in_step_name') +
       props(
-          {'gl_tests': ['Test.One']}, 'mac', 'Mac10.9 Tests', use_analyze=False,
+          {'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests', use_analyze=False,
            good_revision='1234567890abcdefg', bad_revision='gfedcba0987654321',
            test_on_good_revision=False) +
       api.override_step_data(
           'test gfedcba.read test spec (chromium.mac.json)',
           api.json.output({
-              'Mac10.9 Tests': {
+              'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
                           'test': 'gl_tests',
@@ -1334,13 +1334,13 @@ def GenTests(api):
       api.test('remove_culprits_for_flaky_failures') +
       props(
           {'gl_tests': ['Test.One', 'Test.Two']},
-          'mac', 'Mac10.9 Tests', use_analyze=False,
+          'mac', 'Mac10.13 Tests', use_analyze=False,
            good_revision='r0', bad_revision='r6',
            suspected_revisions=['r4']) +
       api.override_step_data(
         'test r3.read test spec (chromium.mac.json)',
         api.json.output({
-          'Mac10.9 Tests': {
+          'Mac10.13 Tests': {
             'gtest_tests': [
               {
                 'test': 'gl_tests',
@@ -1353,7 +1353,7 @@ def GenTests(api):
       api.override_step_data(
           'test r4.read test spec (chromium.mac.json)',
           api.json.output({
-              'Mac10.9 Tests': {
+              'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
                           'test': 'gl_tests',

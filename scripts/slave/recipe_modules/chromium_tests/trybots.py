@@ -526,14 +526,14 @@ TRYBOTS = freeze({
       'mac_chromium_dbg_ng': simple_bot({
         'mastername': 'chromium.mac',
         'buildername': 'Mac Builder (dbg)',
-        'tester': 'Mac10.9 Tests (dbg)',
+        'tester': 'Mac10.13 Tests (dbg)',
       }),
       'mac_chromium_rel_ng': {
         'bot_ids': [
           {
             'mastername': 'chromium.mac',
             'buildername': 'Mac Builder',
-            'tester': 'Mac10.9 Tests',
+            'tester': 'Mac10.13 Tests',
           },
           {
             'mastername': 'chromium.gpu',

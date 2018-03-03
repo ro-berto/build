@@ -148,7 +148,7 @@ def GenTests(api):
   yield (
     api.test('dynamic_swarmed_gtest_mac_gpu') +
     api.properties.generic(mastername='chromium.mac',
-                           buildername='Mac10.9 Tests',
+                           buildername='Mac10.13 Tests',
                            parent_buildername='Mac Builder') +
     api.properties(swarm_hashes={
       'gl_tests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
@@ -157,7 +157,7 @@ def GenTests(api):
     api.override_step_data(
         'read test spec (chromium.mac.json)',
         api.json.output({
-            'Mac10.9 Tests': {
+            'Mac10.13 Tests': {
                 'gtest_tests': [
                     {
                         'test': 'gl_tests',
@@ -1295,7 +1295,7 @@ def GenTests(api):
   yield (
     api.test('dynamic_swarmed_isolated_script_test_mac_gpu') +
     api.properties.generic(mastername='chromium.mac',
-                           buildername='Mac10.9 Tests',
+                           buildername='Mac10.13 Tests',
                            parent_buildername='Mac Builder') +
     api.properties(swarm_hashes={
       'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
@@ -1304,7 +1304,7 @@ def GenTests(api):
     api.override_step_data(
         'read test spec (chromium.mac.json)',
         api.json.output({
-            'Mac10.9 Tests': {
+            'Mac10.13 Tests': {
                 'isolated_scripts': [
                     {
                         'isolate_name': 'telemetry_gpu_unittests',

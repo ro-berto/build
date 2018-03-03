@@ -32,7 +32,7 @@ SPEC = {
       },
       'checkout_dir': 'mac',
     },
-    'Mac10.9 Tests': {
+    'Mac10.13 Tests': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -118,7 +118,7 @@ SPEC = {
       },
       'checkout_dir': 'mac',
     },
-    'Mac10.9 Tests (dbg)': {
+    'Mac10.13 Tests (dbg)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
       'gclient_config': 'chromium',
