@@ -83,7 +83,8 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
              build_config='Release', perf_config_mappings=None,
              commit_position_property='got_revision_cp',
              gclient_config='chromium_webrtc',
-             test_spec_file='chromium.webrtc.json'):
+             test_spec_file='chromium.webrtc.json',
+             enable_performance_tests=True):
   spec = BaseSpec(
       bot_type='tester',
       chromium_apply_config=[],
@@ -107,32 +108,34 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
     if perf_id.endswith('-long'):
       pass  # Not implemented yet (see crbug.com/723989).
     else:
-      spec['tests'] = [
-        steps.LocalGTestTest(
-            'content_browsertests',
-            # Run all normal WebRTC content_browsertests. This is mostly so
-            # the FYI bots can detect breakages.
-            args=['--gtest_filter=WebRtc*']),
-        steps.LocalGTestTest(
-            name='content_browsertests_sequential',
-            target_name='content_browsertests',
-            # These run a few tests that require webcam access. They need to
-            # run sequentially, otherwise tests may interfere with each other.
-            args=['--gtest_filter=UsingRealWebcam*', '--run-manual',
-                  '--test-launcher-jobs=1']),
-        steps.LocalGTestTest(
-            name='content_browsertests_stress',
-            target_name='content_browsertests',
-            args=['--gtest_filter=WebRtc*MANUAL*:-UsingRealWebcam*',
-                  '--run-manual', '--ui-test-action-max-timeout=120000']),
-        steps.LocalGTestTest(
-            'browser_tests_functional',
-            target_name='browser_tests',
-            args=[
-              '--gtest_filter=%s' % ':'.join(FUNCTIONAL_BROWSER_TESTS_FILTER),
-               '--run-manual', '--test-launcher-jobs=1'
-            ]),
-        steps.WebRTCPerfTest(
+      spec['tests'] = tests = []
+      tests.append(steps.LocalGTestTest(
+          'content_browsertests',
+          # Run all normal WebRTC content_browsertests. This is mostly so
+          # the FYI bots can detect breakages.
+          args=['--gtest_filter=WebRtc*']))
+      tests.append(steps.LocalGTestTest(
+          name='content_browsertests_sequential',
+          target_name='content_browsertests',
+          # These run a few tests that require webcam access. They need to
+          # run sequentially, otherwise tests may interfere with each other.
+          args=['--gtest_filter=UsingRealWebcam*', '--run-manual',
+                '--test-launcher-jobs=1']))
+      tests.append(steps.LocalGTestTest(
+          name='content_browsertests_stress',
+          target_name='content_browsertests',
+          args=['--gtest_filter=WebRtc*MANUAL*:-UsingRealWebcam*',
+                '--run-manual', '--ui-test-action-max-timeout=120000']))
+      tests.append(steps.LocalGTestTest(
+          'browser_tests_functional',
+          target_name='browser_tests',
+          args=[
+            '--gtest_filter=%s' % ':'.join(FUNCTIONAL_BROWSER_TESTS_FILTER),
+              '--run-manual', '--test-launcher-jobs=1'
+          ]))
+
+      if enable_performance_tests:
+        tests.append(steps.WebRTCPerfTest(
             name='browser_tests',
             # These tests needs --test-launcher-jobs=1 since some of them are
             # not able to run in parallel (they record system audio, etc).
@@ -144,20 +147,20 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
             perf_id=perf_id,
             perf_config_mappings=perf_config_mappings,
             commit_position_property=commit_position_property,
-            upload_wav_files_from_test=True),
+            upload_wav_files_from_test=True))
 
-        # Run capture unittests as well since our bots have real webcams.
-        steps.LocalGTestTest(
-            'capture_unittests',
-             args=['--enable-logging',
-                   '--v=1',
-                   '--test-launcher-jobs=1',
-                   '--test-launcher-print-test-stdio=always']),
-        steps.LocalGTestTest('content_unittests'),
-        steps.LocalGTestTest('jingle_unittests'),
-        steps.LocalGTestTest(
-            'remoting_unittests', args=['--gtest_filter=Webrtc*']),
-      ]
+      # Run capture unittests as well since our bots have real webcams.
+      tests.append(steps.LocalGTestTest(
+          'capture_unittests',
+            args=['--enable-logging',
+                  '--v=1',
+                  '--test-launcher-jobs=1',
+                  '--test-launcher-print-test-stdio=always']))
+      tests.append(steps.LocalGTestTest('content_unittests'))
+      tests.append(steps.LocalGTestTest('jingle_unittests'))
+      tests.append(steps.LocalGTestTest(
+          'remoting_unittests', args=['--gtest_filter=Webrtc*']))
+
   return spec
 
 
