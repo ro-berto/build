@@ -256,7 +256,11 @@ SPEC = {
 
     'KitKat Phone Tester (rel)': {
       'chromium_config': 'android',
-      'chromium_apply_config': ['chrome_with_codecs', 'mb'],
+      'chromium_apply_config': [
+        'chrome_with_codecs',
+        'download_vr_test_apks',
+        'mb'
+      ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
