@@ -60,9 +60,10 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (api.test('goma_client_linux_rel') +
-         api.platform('linux', 64) +
-         api.properties(
-             buildername='linux_rel',
-             mastername='client.goma',
-             revision='f3cdb946812584bc1789076599929fac4dc5da2b'))
+  for platform in ['linux', 'mac', 'win']:
+    yield (api.test('goma_client_%s_rel' % platform) +
+           api.platform(platform, 64) +
+           api.properties(
+               buildername='%s_rel' % platform,
+               mastername='client.goma',
+               revision='f3cdb946812584bc1789076599929fac4dc5da2b'))
