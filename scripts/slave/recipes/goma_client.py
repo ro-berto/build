@@ -48,7 +48,7 @@ def RunSteps(api):
           '--args=%s' % ' '.join(gn_args)])
 
   # 2-2. ninja
-  api.step('build', ['ninja', '-C', build_dir])
+  api.step('build', [api.depot_tools.ninja_path, '-C', build_dir])
 
   # 3. Run test
   with api.context():
