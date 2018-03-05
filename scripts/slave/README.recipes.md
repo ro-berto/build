@@ -251,6 +251,7 @@
   * [goma:tests/jobs](#recipes-goma_tests_jobs)
   * [goma:tests/recommended_goma_jobs](#recipes-goma_tests_recommended_goma_jobs)
   * [goma:tests/start](#recipes-goma_tests_start)
+  * [goma_client](#recipes-goma_client)
   * [gyp](#recipes-gyp)
   * [halt:examples/full](#recipes-halt_examples_full)
   * [infra/gae_sdk_cipd_packager](#recipes-infra_gae_sdk_cipd_packager)
@@ -4851,6 +4852,11 @@ Repeatedly fails as a way to ensure the gatekeeper is alive and well.
 [DEPS](/scripts/slave/recipe_modules/goma/tests/start.py#5): [goma](#recipe_modules-goma), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/goma/tests/start.py#11)(api):**
+### *recipes* / [goma\_client](/scripts/slave/recipes/goma_client.py)
+
+[DEPS](/scripts/slave/recipes/goma_client.py#5): [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+
+&mdash; **def [RunSteps](/scripts/slave/recipes/goma_client.py#18)(api):**
 ### *recipes* / [gyp](/scripts/slave/recipes/gyp.py)
 
 [DEPS](/scripts/slave/recipes/gyp.py#5): [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
