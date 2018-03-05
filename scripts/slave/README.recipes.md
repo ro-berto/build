@@ -1960,7 +1960,7 @@ set local goma dir like below at the beginning of recipe running.
 
 &emsp; **@property**<br>&mdash; **def [build\_data\_dir](/scripts/slave/recipe_modules/goma/api.py#166)(self):**
 
-&mdash; **def [build\_with\_goma](/scripts/slave/recipe_modules/goma/api.py#440)(self, ninja_command, name=None, ninja_log_outdir=None, ninja_log_compiler=None, goma_env=None, ninja_env=None, \*\*kwargs):**
+&mdash; **def [build\_with\_goma](/scripts/slave/recipe_modules/goma/api.py#441)(self, ninja_command, name=None, ninja_log_outdir=None, ninja_log_compiler=None, goma_env=None, ninja_env=None, \*\*kwargs):**
 
 Build with ninja_command using goma
 

@@ -431,6 +431,7 @@ class GomaApi(recipe_api.RecipeApi):
                                         'upload_goma_logs.py'),
       args=args,
       venv=True,
+      with_third_party_lib=False,
       step_test_data=(lambda: self.m.json.test_api.output(json_test_data)))
 
     for log in ('compiler_proxy_log', 'ninja_log'):
