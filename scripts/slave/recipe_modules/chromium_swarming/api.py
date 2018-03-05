@@ -13,11 +13,6 @@ PER_TARGET_SWARMING_DIMS.update({
       'cpu': None,
       'gpu': None,
       'os': 'Android',
-    },
-    'chromeos': {
-      'cpu': None,
-      'gpu': None,
-      'os': 'ChromeOS',
     }
 })
 

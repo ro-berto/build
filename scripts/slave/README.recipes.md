@@ -1305,9 +1305,9 @@ Args:
 
 [DEPS](/scripts/slave/recipe_modules/chromium_swarming/__init__.py#1): [chromium](#recipe_modules-chromium), [swarming](#recipe_modules-swarming), [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
 
-#### **class [ChromiumSwarmingApi](/scripts/slave/recipe_modules/chromium_swarming/api.py#34)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
+#### **class [ChromiumSwarmingApi](/scripts/slave/recipe_modules/chromium_swarming/api.py#29)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [configure\_swarming](/scripts/slave/recipe_modules/chromium_swarming/api.py#35)(self, project_name, precommit, mastername=None):**
+&mdash; **def [configure\_swarming](/scripts/slave/recipe_modules/chromium_swarming/api.py#30)(self, project_name, precommit, mastername=None):**
 
 Configures default swarming dimensions and tags.
 
