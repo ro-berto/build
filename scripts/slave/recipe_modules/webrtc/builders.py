@@ -492,7 +492,7 @@ BUILDERS = freeze({
         'enable_swarming': True,
         'use_isolate': True,
         'swarming_dimensions': {
-          'device_os': 'M',
+          'device_os': 'MMB29Q', # 6.0.1
           'device_type': 'bullhead', # Nexus 5X
           'os': 'Android',
           'android_devices': '1',
@@ -515,7 +515,7 @@ BUILDERS = freeze({
         'enable_swarming': True,
         'use_isolate': True,
         'swarming_dimensions': {
-          'device_os': 'M',
+          'device_os': 'MMB29Q', # 6.0.1
           'device_type': 'bullhead', # Nexus 5X
           'os': 'Android',
           'android_devices': '1',
@@ -536,7 +536,7 @@ BUILDERS = freeze({
         'use_isolate': True,
         'swarming_dimensions': {
           'device_type': 'bullhead', # Nexus 5X
-          'device_os': 'M',
+          'device_os': 'MMB29Q', # 6.0.1
           'os': 'Android',
           'android_devices': '1',
         }
@@ -556,7 +556,7 @@ BUILDERS = freeze({
         'use_isolate': True,
         'swarming_dimensions': {
           'device_type': 'bullhead', # Nexus 5X
-          'device_os': 'M',
+          'device_os': 'MMB29Q', # 6.0.1
           'os': 'Android',
           'android_devices': '1',
         }
@@ -731,7 +731,7 @@ BUILDERS = freeze({
         'swarming_dimensions': {
           'os': 'Android',
           'android_devices': '1',
-          'device_os': 'M',
+          'device_os': 'MMB29Q', # 6.0.1
         }
       },
     },
@@ -1610,7 +1610,7 @@ BUILDERS = freeze({
         'enable_swarming': True,
         'swarming_dimensions': {
           'device_type': 'bullhead', # Nexus 5X
-          'device_os': 'M',
+          'device_os': 'MMB29Q', # 6.0.1
           'os': 'Android',
           'android_devices': '1',
         }
@@ -1632,7 +1632,7 @@ BUILDERS = freeze({
         'enable_swarming': True,
         'swarming_dimensions': {
           'device_type': 'bullhead', # Nexus 5X
-          'device_os': 'M',
+          'device_os': 'MMB29Q', # 6.0.1
           'os': 'Android',
           'android_devices': '1',
         }
@@ -1651,7 +1651,7 @@ BUILDERS = freeze({
         'enable_swarming': True,
         'swarming_dimensions': {
           'device_type': 'bullhead', # Nexus 5X
-          'device_os': 'M',
+          'device_os': 'MMB29Q', # 6.0.1
           'os': 'Android',
           'android_devices': '1',
         }
@@ -1671,7 +1671,7 @@ BUILDERS = freeze({
         'enable_swarming': True,
         'swarming_dimensions': {
           'device_type': 'bullhead', # Nexus 5X
-          'device_os': 'M',
+          'device_os': 'MMB29Q', # 6.0.1
           'os': 'Android',
           'android_devices': '1',
         }
