@@ -775,7 +775,7 @@ SPEC = {
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
-        'TARGET_PLATFORM': 'chromeos',
+        'TARGET_PLATFORM': 'linux',
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder_tester',
