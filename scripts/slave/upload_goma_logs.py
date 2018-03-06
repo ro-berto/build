@@ -10,27 +10,7 @@ import json
 import os
 import sys
 
-from google.cloud import bigquery
-from google.oauth2 import service_account
-
-from slave import goma_bq_utils
 from slave import goma_utils
-
-GOMA_LOGS_PROJECT = 'goma-logs'
-
-
-def GetBigQueryClient(service_account_json):
-  """Returns bigquery client for goma logs.
-
-  Args:
-    service_account_json: a JSON file for BigQuery service account.
-  """
-  if not service_account_json:
-    return None
-
-  creds = service_account.Credentials.from_service_account_file(
-      service_account_json)
-  return bigquery.client.Client(project=GOMA_LOGS_PROJECT, credentials=creds)
 
 
 def main():
@@ -95,8 +75,6 @@ def main():
 
   parser.add_argument('--build-id', default='',
                       help='unique ID of the current build')
-  parser.add_argument('--bigquery-service-account-json', default='',
-                      help='Service account json for BigQuery')
 
   args = parser.parse_args()
   tsmon_counters = []
@@ -134,13 +112,7 @@ def main():
     with open(args.log_url_json_file, 'w') as f:
       f.write(json.dumps(viewer_urls))
 
-  bqclient = GetBigQueryClient(args.bigquery_service_account_json)
-  if args.goma_stats_file and bqclient:
-      goma_bq_utils.SendCompileEvent(args.goma_stats_file,
-                                     args.goma_crash_report_id_file,
-                                     args.build_id,
-                                     '',
-                                     bqclient)
+  # TODO(yyanagisawa): upload BuildEvent to BQ (crbug.com/776430).
 
   if args.goma_stats_file:
     # MakeGomaExitStatusCounter should be callbed before
