@@ -75,6 +75,7 @@ _AddIsolatedTestSpec('Mojo Linux Perf', 'mojo-linux-perf', 'linux')
 _AddIsolatedTestSpec(
     'One Buildbot Step Test Builder', 'buildbot-test', 'linux',
     parent_buildername='Linux Compile FYI')
+_AddIsolatedTestSpec('Mac 10.12 Laptop Low End', '', 'mac')
 
 _AddBuildSpec('Battor Agent Linux', 'linux', 'linux', run_sizes=False,
               compile_targets=['battor_agent'])
