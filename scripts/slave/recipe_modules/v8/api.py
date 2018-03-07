@@ -1275,6 +1275,9 @@ class V8Api(recipe_api.RecipeApi):
           trigger_props['parent_buildername'] = self.m.properties['buildername']
           if 'build_id' in self.m.properties:
             trigger_props['parent_build_id'] = self.m.properties['build_id']
+          # TODO(machenbach): Remove workaround for https://crbug.com/819555
+          if self.m.buildbucket.build_id:  # pragma: no cover
+            trigger_props['parent_id'] = str(self.m.buildbucket.build_id)
           if 'buildnumber' in self.m.properties:
             trigger_props['parent_buildnumber'] = (
                 self.m.properties['buildnumber'])
