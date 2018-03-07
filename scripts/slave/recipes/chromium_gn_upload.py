@@ -68,7 +68,7 @@ def b(master, builder):
 
 
 # Equivalent LUCI-based builders (all in a single bucket).
-BUILDERS['luci.infra-internal.triggered'] = {
+BUILDERS['luci.infra-internal.prod'] = {
   'builders': {
     'gn-builder-linux':
         b('tryserver.chromium.linux', 'linux_chromium_gn_upload'),
@@ -156,7 +156,7 @@ def RunSteps(api):
       test_data='0123456789abcdeffedcba987654321012345678')
   api.step.active_result.presentation.step_text = sha1
 
-  if mastername == 'luci.infra-internal.triggered':
+  if mastername == 'luci.infra-internal.prod':
     upload_to_cipd(api, buildername, rel_dir, gn_exe, gn_version, git_revision)
 
 
@@ -173,7 +173,7 @@ def GenTests(api):
         api.cipd.example_search(pkg_name, instances=instances))
 
   for test in api.chromium.gen_tests_for_builders(BUILDERS):
-    if test.properties['mastername'] == 'luci.infra-internal.triggered':
+    if test.properties['mastername'] == 'luci.infra-internal.prod':
       exists = 'mac' in test.properties['buildername']
       yield test + version() + cipd_pkg(test.properties['buildername'], exists)
     else:
