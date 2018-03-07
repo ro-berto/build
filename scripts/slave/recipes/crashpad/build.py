@@ -6,6 +6,7 @@
 """
 
 import ast
+from recipe_engine.recipe_api import Property
 
 DEPS = [
   'depot_tools/bot_update',
@@ -20,6 +21,13 @@ DEPS = [
   'recipe_engine/step',
 ]
 
+PROPERTIES = {
+  'buildername': Property(kind=str, help='The builder name', default=None),
+  'config': Property(kind=str, help='Debug or Release', default='Debug'),
+  'target_os':
+    Property(kind=str, help='win, mac, linux, or fuchsia', default=None),
+  'target_cpu': Property(kind=str, help='x64, arm64, or ""', default=''),
+}
 
 FAKE_SWARMING_TEST_SPEC = """\
 [
@@ -43,15 +51,25 @@ def RunSteps(api):
   buildername = api.properties['buildername']
   env = {}
 
+  is_fuchsia = is_linux = is_mac = is_win = False
   target_os = api.m.properties.get('target_os')
-  if target_os:
-    api.gclient.c.target_os = {target_os}
-  target_cpu = api.m.properties.get('target_cpu')
-  is_fuchsia = target_os == 'fuchsia'
-  is_linux = target_os == 'linux'
-  is_win = target_os == 'win'
+  if target_os == 'fuchsia':
+    is_fuchsia = True
+  elif target_os == 'linux':
+    is_linux = True
+  elif target_os == 'mac':
+    is_mac = True
+  elif target_os == 'win':
+    is_win = True
+
+  assert is_fuchsia or is_linux or is_mac or is_win
+
+  api.gclient.c.target_os = {target_os}
+
   config = api.m.properties['config']
   is_debug = config == 'Debug'
+
+  target_cpu = api.m.properties.get('target_cpu')
 
   if is_linux:
     # The Linux build uses the system compiler by default, but bots do not have
@@ -73,7 +91,7 @@ def RunSteps(api):
   if is_fuchsia or is_linux:
     # Generic GN build.
     path = api.path['checkout'].join('out', dirname)
-    if target_cpu is None:
+    if target_cpu is "":
       target_cpu = 'x64'
     args = 'target_os="' + target_os + '" target_cpu="' + target_cpu + '"' + \
            ' is_debug=' + ('true' if is_debug else 'false')
@@ -116,6 +134,7 @@ def RunSteps(api):
       api.step('generate build files x64',
                ['gn', 'gen', x64_path, '--args=' + args + ' target_cpu="x64"'])
   else:
+    assert is_mac
     # Other platforms still default to the gyp build, so the build files have
     # already been generated during runhooks.
     path = api.path['checkout'].join('out', dirname)
@@ -174,13 +193,16 @@ def GenTests(api):
   # Only test a single clobber case.
   test = 'crashpad_mac_dbg'
   yield(api.test(test + '_clobber') +
-        api.properties.generic(buildername=test, config='Debug', clobber=True))
+        api.properties.generic(buildername=test,
+                               target_os='mac',
+                               config='Debug',
+                               clobber=True))
 
   tests = [
-      (test, 'mac', None),
-      ('crashpad_try_mac_rel', 'mac', None),
-      ('crashpad_try_win_dbg', 'win', None),
-      ('crashpad_linux_debug', 'linux', None),
+      (test, 'mac', ''),
+      ('crashpad_try_mac_rel', 'mac', ''),
+      ('crashpad_try_win_dbg', 'win', ''),
+      ('crashpad_linux_debug', 'linux', ''),
       ('crashpad_fuchsia_x64_dbg', 'fuchsia', 'x64'),
       ('crashpad_fuchsia_arm64_rel', 'fuchsia', 'arm64'),
   ]
