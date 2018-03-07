@@ -6,6 +6,7 @@
 """Test cases for results_dashboard."""
 
 import datetime
+import httplib2
 import json
 import os
 import shutil
@@ -424,8 +425,8 @@ class ResultsDashboardSendDataTest(unittest.TestCase):
         False)
 
   def _TestSendHistogramResults(
-        self, new_data, expected_data, errors, expected_result,
-        send_as_histograms=False, oauth_token=''):
+        self, new_data, expected_data, errors, status_codes,
+        expected_result, send_as_histograms=False, oauth_token=''):
     """Test one call of SendResults with the given set of arguments.
 
     This method will fail a test case if the JSON that gets sent and the
@@ -436,20 +437,22 @@ class ResultsDashboardSendDataTest(unittest.TestCase):
       new_data: The new (not cached) data to send.
       expected_data: A list of data expected to be sent.
       errors: A list of corresponding errors expected to be received.
+      status_codes: A list of corresponding status_codes for responses.
       expected_result: Expected return value of SendResults
     """
     self.mox.UnsetStubs()
 
     self.mox.StubOutWithMock(results_dashboard, '_Httplib2Request')
-    for data, error in zip(expected_data, errors):
+    for data, error, status_code in zip(expected_data, errors, status_codes):
       if error:
         results_dashboard._Httplib2Request(
             'https://fake.dashboard', json.dumps(data), oauth_token).AndRaise(
                 error)
       else:
+        response = httplib2.Response({'status': status_code, 'reason': 'foo'})
         results_dashboard._Httplib2Request(
             'https://fake.dashboard', json.dumps(data), oauth_token).AndReturn(
-                ('', '{}'))
+                (response, ''))
     self.mox.ReplayAll()
     result = results_dashboard.SendResults(
         new_data, 'https://fake.dashboard', self.build_dir,
@@ -457,20 +460,63 @@ class ResultsDashboardSendDataTest(unittest.TestCase):
     self.assertEqual(expected_result, result)
     self.mox.VerifyAll()
 
-  def test_Histogram_FailureRetried(self):
+  def test_Histogram_500_Fatal(self):
+    """500 responses are fatal."""
+    # First, some data is sent but it fails for some reason.
+    self._TestSendHistogramResults(
+        [{'histogram': 'data1'}],
+        [[{'histogram': 'data1'}]],
+        [None], [500], False,
+        send_as_histograms=True, oauth_token='fake')
+
+  def test_Histogram_403_Retried(self):
     """After failing once, the same JSON is sent the next time."""
     # First, some data is sent but it fails for some reason.
     self._TestSendHistogramResults(
         [{'histogram': 'data1'}],
         [[{'histogram': 'data1'}]],
-        [ValueError('some reason')], True,
+        [None], [403], True,
         send_as_histograms=True, oauth_token='fake')
 
     # The next time, the old data is sent with the new data.
     self._TestSendHistogramResults(
         [{'histogram': 'data2'}],
         [[{'histogram': 'data1'}], [{'histogram': 'data2'}]],
-        [None, None], True,
+        [None, None], [200, 200], True,
+        send_as_histograms=True, oauth_token='fake')
+
+  def test_Histogram_UnexpectedException_Fatal(self):
+    """Unexpected exceptions are fatal."""
+    # First, some data is sent but it fails for some reason.
+    self._TestSendHistogramResults(
+        [{'histogram': 'data1'}],
+        [[{'histogram': 'data1'}]],
+        [ValueError('foo')], [200], False,
+        send_as_histograms=True, oauth_token='fake')
+
+  def test_Histogram_UnexpectedException_Fatal(self):
+    """Unexpected exceptions are fatal."""
+    # First, some data is sent but it fails for some reason.
+    self._TestSendHistogramResults(
+        [{'histogram': 'data1'}],
+        [[{'histogram': 'data1'}]],
+        [ValueError('foo')], [200], False,
+        send_as_histograms=True, oauth_token='fake')
+
+  def test_Histogram_TransientFailure_Retried(self):
+    """After failing once, the same JSON is sent the next time."""
+    # First, some data is sent but it fails for some reason.
+    self._TestSendHistogramResults(
+        [{'histogram': 'data1'}],
+        [[{'histogram': 'data1'}]],
+        [httplib2.HttpLib2Error('some reason')], [200], True,
+        send_as_histograms=True, oauth_token='fake')
+
+    # The next time, the old data is sent with the new data.
+    self._TestSendHistogramResults(
+        [{'histogram': 'data2'}],
+        [[{'histogram': 'data1'}], [{'histogram': 'data2'}]],
+        [None, None], [200, 200], True,
         send_as_histograms=True, oauth_token='fake')
 
 
