@@ -961,7 +961,7 @@
         "os": "linux",
         "version": "trusty",
       },
-      "slaves": ["build162-b1"],
+      "slaves": ["slave265-c1"],
     },
     "android_deqp_rel_nexus_5x": {
       "slave_data": {
