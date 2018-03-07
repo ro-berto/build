@@ -29,7 +29,8 @@ def RunSteps(api):
   api.chromite.checkout_chromite()
 
   # Update or install goma client via cipd.
-  api.chromite.m.goma.ensure_goma()
+  use_goma_canary = api.properties.get('cbb_goma_canary', False)
+  api.chromite.m.goma.ensure_goma(canary=use_goma_canary)
 
   # Use the system python, not "bundled python" so that we have access
   # to system python packages.
@@ -107,6 +108,16 @@ def GenTests(api):
       + api.properties(
           cbb_config='tryjob_config',
           cbb_extra_args=('--remote-trybot', '-foo'),
+          email='user@google.com',
+          **common_properties
+      )
+  )
+
+  yield (
+      api.test('goma_canary')
+      + api.properties(
+          cbb_config='amd64-generic-goma-canary-chromium-pfq-informational',
+          cbb_goma_canary=True,
           email='user@google.com',
           **common_properties
       )
