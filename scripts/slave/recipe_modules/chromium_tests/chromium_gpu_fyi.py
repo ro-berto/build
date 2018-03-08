@@ -377,8 +377,7 @@ SPEC = {
       'chromium_apply_config': ['mb', 'ninja_confirm_noop',
                                 'chrome_with_codecs',
                                 'internal_gles2_conform_tests',
-                                'build_angle_deqp_tests',
-                                'fetch_telemetry_dependencies'],
+                                'build_angle_deqp_tests'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
@@ -414,8 +413,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop',
                                 'chrome_with_codecs',
-                                'internal_gles2_conform_tests',
-                                'fetch_telemetry_dependencies'],
+                                'internal_gles2_conform_tests'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
@@ -433,8 +431,7 @@ SPEC = {
       'chromium_apply_config': ['mb', 'ninja_confirm_noop',
                                 'chrome_with_codecs',
                                 'internal_gles2_conform_tests',
-                                'build_angle_deqp_tests',
-                                'fetch_telemetry_dependencies'],
+                                'build_angle_deqp_tests'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
@@ -516,8 +513,7 @@ SPEC = {
     'Linux FYI GPU TSAN Release': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb',
-                                'ninja_confirm_noop',
-                                'fetch_telemetry_dependencies'],
+                                'ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal',
                                'angle_top_of_tree'],
@@ -551,8 +547,7 @@ SPEC = {
       'chromium_apply_config':['chrome_with_codecs',
                                'internal_gles2_conform_tests',
                                'mb',
-                               'ninja_confirm_noop',
-                               'fetch_telemetry_dependencies'],
+                               'ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
@@ -570,8 +565,7 @@ SPEC = {
       'chromium_apply_config': ['chrome_with_codecs',
                                 'internal_gles2_conform_tests',
                                 'mb',
-                                'ninja_confirm_noop',
-                                'fetch_telemetry_dependencies'],
+                                'ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
@@ -589,8 +583,7 @@ SPEC = {
       'chromium_apply_config':['chrome_with_codecs',
                                'internal_gles2_conform_tests',
                                'mb',
-                               'ninja_confirm_noop',
-                               'fetch_telemetry_dependencies'],
+                               'ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
@@ -762,8 +755,7 @@ SPEC = {
     'Mac FYI GPU ASAN Release': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb',
-                                'ninja_confirm_noop',
-                                'fetch_telemetry_dependencies'],
+                                'ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
@@ -779,8 +771,7 @@ SPEC = {
     'Mac FYI dEQP Release AMD': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb',
-                                'ninja_confirm_noop',
-                                'fetch_telemetry_dependencies'],
+                                'ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
@@ -797,8 +788,7 @@ SPEC = {
     'Mac FYI dEQP Release Intel': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb',
-                                'ninja_confirm_noop',
-                                'fetch_telemetry_dependencies'],
+                                'ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
