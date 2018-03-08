@@ -476,7 +476,8 @@ class ChromiumApi(recipe_api.RecipeApi):
             name='upload_ninja_log',
             script=self.package_repo_resource(
                 'scripts', 'slave', 'upload_goma_logs.py'),
-            args=upload_ninja_log_args)
+            args=upload_ninja_log_args,
+            venv=True)
 
       return
 

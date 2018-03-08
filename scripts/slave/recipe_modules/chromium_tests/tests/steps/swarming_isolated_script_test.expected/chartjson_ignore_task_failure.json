@@ -507,7 +507,6 @@
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
-      "--with-third-party-lib",
       "--",
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/upload_perf_dashboard_results.py",
