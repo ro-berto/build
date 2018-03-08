@@ -28,9 +28,7 @@ def Update(_config, active_master, c):
                             branch='master',
                             treeStableTimer=60,
                             builderNames=[
-          'Linux Builder',
           'Linux Builder (dbg)(32)',
-          'Linux Builder (dbg)',
           'Cast Linux',
           'Cast Audio Linux',
           'Deterministic Linux',
@@ -47,12 +45,8 @@ def Update(_config, active_master, c):
   # recipe (str): optional (default: 'chromium'), the recipe to use for
   #   this builder.
   specs = [
-    {'name': 'Linux Builder'},
-    {'name': 'Linux Tests'},
     {'name': 'Linux Builder (dbg)(32)'},
     {'name': 'Linux Tests (dbg)(1)(32)'},
-    {'name': 'Linux Builder (dbg)'},
-    {'name': 'Linux Tests (dbg)(1)'},
     {'name': 'Cast Linux'},
     {'name': 'Cast Audio Linux'},
     {'name': 'Deterministic Linux',

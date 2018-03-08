@@ -49,10 +49,12 @@ SUPPRESSIONS = {
         'Linux ChromiumOS Full',
     ],
     'master.chromium.gpu': [
+        'GPU Linux Builder',  # linux_chromium_compile_rel_ng migrated to LUCI.
         'GPU Linux Builder (dbg)',
         'GPU Mac Builder (dbg)',
         'GPU Win Builder (dbg)',
         'Linux Debug (NVIDIA)',
+        'Linux Release (NVIDIA)',  # linux_chromium_rel_ng migrated to LUCI.
         'Mac Debug (Intel)',
         'Mac Retina Debug (AMD)',
         'Win10 Debug (NVIDIA)',
@@ -87,14 +89,30 @@ SUPPRESSIONS = {
         'Win7 (32) Tests',
         'Win x64 Builder (dbg)',
     ],
+
 }
 
 
-# FIXME(tansell): Remove fake when BlinkTests are removed.
+# TODO(hinoka): Remove this after LUCI migration.
 FAKE_BUILDERS = {
+    'master.chromium.linux': [
+        # These have been migrated to LUCI.
+        'Linux Builder',
+        'Linux Builder (dbg)',
+        'Linux Tests',
+        'Linux Tests (dbg)(1)',
+    ],
     'master.tryserver.chromium.win' : [
+        # FIXME(tansell): Remove fake when BlinkTests are removed.
         'old_chromium_rel_ng',
     ],
+    'master.tryserver.chromium.linux': [
+        # These have been migrated to LUCI.
+        'linux_chromium_compile_dbg_ng',
+        'linux_chromium_compile_rel_ng',
+        'linux_chromium_dbg_ng',
+        'linux_chromium_rel_ng',
+    ]
 }
 
 
@@ -292,14 +310,20 @@ def main(argv):
     if recipe_side_builders is not None:
       bogus_builders = set(recipe_side_builders.keys()).difference(
           set(builders.keys()))
+      other_recipe_builders = set(recipe_side_builders.keys()).difference(
+          set(chromium_recipe_builders[master]))
+
+      for fake in FAKE_BUILDERS.get(master, []):
+        if fake in bogus_builders:
+          bogus_builders.remove(fake)
+          other_recipe_builders.remove(fake)
+
       if bogus_builders:
         exit_code = 1
         print 'The following builders from chromium recipe'
         print 'do not exist in master config for %s:' % master
         print '\n'.join('\t%s' % b for b in sorted(bogus_builders))
 
-      other_recipe_builders = set(recipe_side_builders.keys()).difference(
-          set(chromium_recipe_builders[master]))
       if other_recipe_builders:
         exit_code = 1
         print 'The following builders from chromium recipe'
@@ -316,7 +340,6 @@ def main(argv):
     bogus_builders = set(recipe_side_builders.keys()).difference(
         set(builders.keys()))
 
-    # FIXME(tansell): Remove fake when BlinkTests are removed.
     for fake in FAKE_BUILDERS.get(master, []):
       if fake in bogus_builders:
         bogus_builders.remove(fake)
