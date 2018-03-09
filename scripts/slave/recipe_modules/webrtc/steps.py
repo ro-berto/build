@@ -96,8 +96,7 @@ ANDROID_CIPD_PACKAGES = [
 ]
 
 PERF_TESTS = freeze({
-    # Temporarily disabled while bisecting http://crbug.com/817310.
-    # 'isac_fix_test': {},
+    'isac_fix_test': {},
     'low_bandwidth_audio_perf_test': {},
     'webrtc_perf_tests': {
         'args': [
@@ -400,7 +399,10 @@ class SwarmingAndroidPerfTest(AndroidTest):
     args = list(args or [])
     args.extend([
         '--isolated-script-test-perf-output',
-        '${ISOLATED_OUTDIR}/perftest-output.json'
+        '${ISOLATED_OUTDIR}/perftest-output.json',
+        # Disable retries, since retrying will re-invoke the binary, which in
+        # turn overwrites the perf result .json file.
+        '--num-retries=0',
     ])
     if add_adb_path:
       args.extend([

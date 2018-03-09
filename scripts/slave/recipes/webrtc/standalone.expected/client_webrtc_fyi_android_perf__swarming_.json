@@ -677,6 +677,7 @@
       "--android",
       "--isolated-script-test-perf-output",
       "${ISOLATED_OUTDIR}/perftest-output.json",
+      "--num-retries=0",
       "--adb-path",
       "../../third_party/android_tools/sdk/platform-tools/adb"
     ],
@@ -783,6 +784,7 @@
       "--",
       "--isolated-script-test-perf-output",
       "${ISOLATED_OUTDIR}/perftest-output.json",
+      "--num-retries=0",
       "--adb-path",
       "../../third_party/android_tools/sdk/platform-tools/adb"
     ],
@@ -888,7 +890,8 @@
       "[dummy hash for webrtc_perf_tests]",
       "--",
       "--isolated-script-test-perf-output",
-      "${ISOLATED_OUTDIR}/perftest-output.json"
+      "${ISOLATED_OUTDIR}/perftest-output.json",
+      "--num-retries=0"
     ],
     "cwd": "[BUILDER_CACHE]/Android_Perf__swarming_",
     "infra_step": true,
