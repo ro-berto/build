@@ -65,9 +65,11 @@
       "restart"
     ],
     "env": {
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[CACHE]/goma/test_buildername",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -115,9 +117,11 @@
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
     "env": {
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[CACHE]/goma/test_buildername",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -145,9 +149,11 @@
       "stat"
     ],
     "env": {
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[CACHE]/goma/test_buildername",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -164,9 +170,11 @@
       "stop"
     ],
     "env": {
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[CACHE]/goma/test_buildername",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -191,6 +199,10 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
+      "--goma-stats-file",
+      "[TMP_BASE]/goma_stats",
+      "--goma-crash-report-id-file",
+      "[TMP_BASE]/crash_report_id",
       "--buildbot-buildername",
       "test_buildername"
     ],

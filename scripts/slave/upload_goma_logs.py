@@ -136,13 +136,14 @@ def main():
 
   bqclient = GetBigQueryClient(args.bigquery_service_account_json)
   if args.goma_stats_file and bqclient:
-      goma_bq_utils.SendCompileEvent(args.goma_stats_file,
-                                     args.goma_crash_report_id_file,
-                                     args.build_id,
-                                     '',
-                                     bqclient)
+    # TODO(yyanagisawa): set step name etc.
+    goma_bq_utils.SendCompileEvent(args.goma_stats_file,
+                                   args.goma_crash_report_id_file,
+                                   args.build_id,
+                                   '',
+                                   bqclient)
 
-  if args.goma_stats_file:
+  if args.build_data_dir:
     # MakeGomaExitStatusCounter should be callbed before
     # goma_utils.SendGomaStats, since SendGomaStats removes stats file.
     counter = goma_utils.MakeGomaExitStatusCounter(

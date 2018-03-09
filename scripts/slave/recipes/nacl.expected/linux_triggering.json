@@ -144,9 +144,11 @@
       "BUILDBOT_MASTERNAME": "client.nacl",
       "BUILDBOT_REVISION": "abcd",
       "BUILDBOT_SLAVE_TYPE": "BuilderTester",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[CACHE]/goma/precise_64_newlib_arm_qemu_pnacl_dbg",
       "GOMA_DIR": "[CACHE]/goma_client",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GOMA_TMP_DIR": "[TMP_BASE]/goma",
@@ -218,8 +220,10 @@
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
     "env": {
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[CACHE]/goma/precise_64_newlib_arm_qemu_pnacl_dbg",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GOMA_TMP_DIR": "[TMP_BASE]/goma"
@@ -248,8 +252,10 @@
       "stat"
     ],
     "env": {
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[CACHE]/goma/precise_64_newlib_arm_qemu_pnacl_dbg",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GOMA_TMP_DIR": "[TMP_BASE]/goma"
@@ -267,8 +273,10 @@
       "stop"
     ],
     "env": {
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[CACHE]/goma/precise_64_newlib_arm_qemu_pnacl_dbg",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GOMA_TMP_DIR": "[TMP_BASE]/goma"
@@ -296,6 +304,10 @@
       "[TMP_BASE]/goma_jsonstatus.json",
       "--build-exit-status",
       "0",
+      "--goma-stats-file",
+      "[TMP_BASE]/goma_stats",
+      "--goma-crash-report-id-file",
+      "[TMP_BASE]/crash_report_id",
       "--buildbot-buildername",
       "precise_64-newlib-arm_qemu-pnacl-dbg",
       "--buildbot-mastername",

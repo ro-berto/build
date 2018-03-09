@@ -574,9 +574,11 @@
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[GOMA_CACHE]/linux_chromium_rel_ng",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_FAIL_FAST": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -683,7 +685,9 @@
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -713,7 +717,9 @@
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -732,7 +738,9 @@
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -765,6 +773,10 @@
       "0",
       "--ninja-log-compiler",
       "goma",
+      "--goma-stats-file",
+      "[TMP_BASE]/goma_stats",
+      "--goma-crash-report-id-file",
+      "[TMP_BASE]/crash_report_id",
       "--buildbot-buildername",
       "linux_chromium_rel_ng",
       "--buildbot-mastername",
@@ -1339,9 +1351,11 @@
     "cwd": "[BUILDER_CACHE]/linux",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[GOMA_CACHE]/linux_chromium_rel_ng",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_FAIL_FAST": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -1448,7 +1462,9 @@
     "cwd": "[BUILDER_CACHE]/linux",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1478,7 +1494,9 @@
     "cwd": "[BUILDER_CACHE]/linux",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1497,7 +1515,9 @@
     "cwd": "[BUILDER_CACHE]/linux",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1530,6 +1550,10 @@
       "0",
       "--ninja-log-compiler",
       "goma",
+      "--goma-stats-file",
+      "[TMP_BASE]/goma_stats",
+      "--goma-crash-report-id-file",
+      "[TMP_BASE]/crash_report_id",
       "--buildbot-buildername",
       "linux_chromium_rel_ng",
       "--buildbot-mastername",

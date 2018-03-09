@@ -244,6 +244,11 @@ class GomaApi(recipe_api.RecipeApi):
             self.m.path.join(self.build_data_dir, 'goma_stats_proto'))
         self._goma_ctl_env['GOMACTL_CRASH_REPORT_ID_FILE'] = (
             self.m.path.join(self.build_data_dir, 'crash_report_id_file'))
+      else:
+        self._goma_ctl_env['GOMA_DUMP_STATS_FILE'] = (
+            self.m.path['tmp_base'].join('goma_stats'))
+        self._goma_ctl_env['GOMACTL_CRASH_REPORT_ID_FILE'] = (
+            self.m.path['tmp_base'].join('crash_report_id'))
 
       if not self._is_local:
         self._goma_ctl_env['GOMA_SERVICE_ACCOUNT_JSON_FILE'] = (
@@ -404,11 +409,20 @@ class GomaApi(recipe_api.RecipeApi):
 
     if self.build_data_dir:
       args.extend([
-          '--goma-stats-file', self._goma_ctl_env['GOMA_DUMP_STATS_FILE'],
-          '--goma-crash-report-id-file',
-          self._goma_ctl_env['GOMACTL_CRASH_REPORT_ID_FILE'],
           '--build-data-dir', self.build_data_dir,
       ])
+
+    if self._goma_ctl_env.get('GOMA_DUMP_STATS_FILE'):
+      args.extend([
+          '--goma-stats-file', self._goma_ctl_env['GOMA_DUMP_STATS_FILE'],
+      ])
+
+    if self._goma_ctl_env.get('GOMACTL_CRASH_REPORT_ID_FILE'):
+      args.extend([
+          '--goma-crash-report-id-file',
+          self._goma_ctl_env['GOMACTL_CRASH_REPORT_ID_FILE'],
+      ])
+
     if 'build_id' in self.m.properties:
       args.extend(['--build-id', self.m.properties['build_id']])
 

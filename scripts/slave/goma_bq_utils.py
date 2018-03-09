@@ -49,6 +49,8 @@ def SendCompileEvent(goma_stats_file, goma_crash_report, build_id, step_name,
     bigquery.helper.send_rows(bqclient,
                               COMPILE_EVENTS_DATASET,
                               COMPILE_EVENTS_TABLE,
-                              event)
+                              [event])
+    print 'Uploaded CompileEvent to BQ %s.%s' % (
+        COMPILE_EVENTS_DATASET, COMPILE_EVENTS_TABLE)
   except Exception, inst:  # safety net
     print('failed to send CompileEvent to BQ: %s' % inst)

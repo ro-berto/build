@@ -826,9 +826,11 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[GOMA_CACHE]/mac_chromium_variable",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_FAIL_FAST": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -946,7 +948,9 @@
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -976,7 +980,9 @@
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -995,7 +1001,9 @@
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1028,6 +1036,10 @@
       "0",
       "--ninja-log-compiler",
       "goma-clang",
+      "--goma-stats-file",
+      "[TMP_BASE]/goma_stats",
+      "--goma-crash-report-id-file",
+      "[TMP_BASE]/crash_report_id",
       "--buildbot-buildername",
       "mac_chromium_variable",
       "--buildbot-mastername",
@@ -1823,9 +1835,11 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[GOMA_CACHE]/mac_chromium_variable",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_FAIL_FAST": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -1943,7 +1957,9 @@
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1973,7 +1989,9 @@
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -1992,7 +2010,9 @@
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -2025,6 +2045,10 @@
       "0",
       "--ninja-log-compiler",
       "goma-clang",
+      "--goma-stats-file",
+      "[TMP_BASE]/goma_stats",
+      "--goma-crash-report-id-file",
+      "[TMP_BASE]/crash_report_id",
       "--buildbot-buildername",
       "mac_chromium_variable",
       "--buildbot-mastername",
@@ -2820,9 +2844,11 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[GOMA_CACHE]/mac_chromium_variable",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_FAIL_FAST": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -2940,7 +2966,9 @@
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -2970,7 +2998,9 @@
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -2989,7 +3019,9 @@
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -3022,6 +3054,10 @@
       "0",
       "--ninja-log-compiler",
       "goma-clang",
+      "--goma-stats-file",
+      "[TMP_BASE]/goma_stats",
+      "--goma-crash-report-id-file",
+      "[TMP_BASE]/crash_report_id",
       "--buildbot-buildername",
       "mac_chromium_variable",
       "--buildbot-mastername",

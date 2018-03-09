@@ -168,8 +168,10 @@
       "restart"
     ],
     "env": {
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[CACHE]/goma/linux_xfa_rel",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -228,8 +230,10 @@
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
     "env": {
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[CACHE]/goma/linux_xfa_rel",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -257,8 +261,10 @@
       "stat"
     ],
     "env": {
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[CACHE]/goma/linux_xfa_rel",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -275,8 +281,10 @@
       "stop"
     ],
     "env": {
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[CACHE]/goma/linux_xfa_rel",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -309,6 +317,10 @@
       "0",
       "--ninja-log-compiler",
       "unknown",
+      "--goma-stats-file",
+      "[TMP_BASE]/goma_stats",
+      "--goma-crash-report-id-file",
+      "[TMP_BASE]/crash_report_id",
       "--buildbot-buildername",
       "linux_xfa_rel",
       "--buildbot-mastername",

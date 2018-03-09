@@ -174,8 +174,10 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\analyzer_win7_debug_dev",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_MACRO_CACHE": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
@@ -266,8 +268,10 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\analyzer_win7_debug_dev",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_MACRO_CACHE": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
@@ -303,8 +307,10 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\analyzer_win7_debug_dev",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_MACRO_CACHE": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
@@ -329,8 +335,10 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\analyzer_win7_debug_dev",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_MACRO_CACHE": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
@@ -364,6 +372,10 @@
       "[TMP_BASE]\\goma_jsonstatus.json",
       "--build-exit-status",
       "0",
+      "--goma-stats-file",
+      "[TMP_BASE]\\goma_stats",
+      "--goma-crash-report-id-file",
+      "[TMP_BASE]\\crash_report_id",
       "--buildbot-buildername",
       "analyzer-win7-debug-dev",
       "--buildbot-mastername",

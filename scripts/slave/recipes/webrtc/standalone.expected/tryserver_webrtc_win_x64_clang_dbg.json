@@ -285,9 +285,11 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[GOMA_CACHE]\\win_x64_clang_dbg",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_MACRO_CACHE": "true",
       "GOMA_FAIL_FAST": "true",
       "GOMA_HERMETIC": "error",
@@ -376,7 +378,9 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_MACRO_CACHE": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
@@ -408,7 +412,9 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_MACRO_CACHE": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
@@ -429,7 +435,9 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_MACRO_CACHE": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
@@ -463,6 +471,10 @@
       "0",
       "--ninja-log-compiler",
       "goma-clang",
+      "--goma-stats-file",
+      "[TMP_BASE]\\goma_stats",
+      "--goma-crash-report-id-file",
+      "[TMP_BASE]\\crash_report_id",
       "--buildbot-buildername",
       "win_x64_clang_dbg",
       "--buildbot-mastername",
