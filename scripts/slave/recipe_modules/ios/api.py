@@ -797,23 +797,27 @@ class iOSApi(recipe_api.RecipeApi):
 
       task['tmp_dir'] = self.m.path.mkdtemp(task['task_id'])
 
+      # Experiment trigger_multiple_dimensions.py script on FYI bots first
+      # before fully enabled on all iOS bots.
       # TODO(huangml): Move the dimensions logic into configuration files.
-      trigger_script = {
-        'script': self.m.path['checkout'].join(
-          'testing', 'trigger_scripts', 'trigger_multiple_dimensions.py'),
-        'args': [
-          '--multiple-trigger-configs', self.m.json.dumps([
-            {
-              'os': 'Mac-10.12',
-              'pool': 'Chrome',
-            },
-            {
-              'os': 'Mac-10.13',
-              'pool': 'Chrome',
-            },
-          ]),
-        ],
-      }
+      trigger_script = None
+      if self.m.properties['mastername'] == 'chromium.fyi':
+        trigger_script = {
+          'script': self.m.path['checkout'].join(
+            'testing', 'trigger_scripts', 'trigger_multiple_dimensions.py'),
+          'args': [
+            '--multiple-trigger-configs', self.m.json.dumps([
+              {
+                'os': 'Mac-10.12',
+                'pool': 'Chrome',
+              },
+              {
+                'os': 'Mac-10.13',
+                'pool': 'Chrome',
+              },
+            ]),
+          ],
+        }
 
       swarming_task = self.m.swarming.task(
         task['step name'],
@@ -838,6 +842,11 @@ class iOSApi(recipe_api.RecipeApi):
         named_cache = cache_name(task['xcode build version'])
         swarming_task.named_caches[named_cache] = self.XCODE_APP_PATH
 
+      if ('internal' not in self.m.properties['mastername'] and
+        'official' not in self.m.properties['mastername'] and
+        trigger_script is None):
+        # 4 cores are better than 8! See https://crbug.com/711845.
+        swarming_task.dimensions['cores'] = '4'
       if self.platform == 'simulator':
         swarming_task.dimensions['os'] = task['test'].get('host os') or 'Mac'
       elif self.platform == 'device':
