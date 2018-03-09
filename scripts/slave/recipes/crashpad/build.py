@@ -44,15 +44,13 @@ FAKE_SWARMING_TEST_SPEC = """\
 ]
 """
 
-def RunSteps(api):
+def RunSteps(api, buildername, config, target_os, target_cpu):
   """Generates the sequence of steps that will be run by the slave."""
   api.gclient.set_config('crashpad')
 
-  buildername = api.properties['buildername']
   env = {}
 
   is_fuchsia = is_linux = is_mac = is_win = False
-  target_os = api.m.properties.get('target_os')
   if target_os == 'fuchsia':
     is_fuchsia = True
   elif target_os == 'linux':
@@ -66,10 +64,7 @@ def RunSteps(api):
 
   api.gclient.c.target_os = {target_os}
 
-  config = api.m.properties['config']
   is_debug = config == 'Debug'
-
-  target_cpu = api.m.properties.get('target_cpu')
 
   if is_linux:
     # The Linux build uses the system compiler by default, but bots do not have

@@ -4414,7 +4414,7 @@ Returns: the list of matched targets.
 
 Buildbot recipe definition for the various Crashpad continuous builders.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/crashpad/build.py#47)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/crashpad/build.py#47)(api, buildername, config, target_os, target_cpu):**
 
 Generates the sequence of steps that will be run by the slave.
 ### *recipes* / [cronet](/scripts/slave/recipes/cronet.py)
