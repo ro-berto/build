@@ -20,6 +20,7 @@ PERF_BROWSER_TESTS_FILTER = [
   'WebRtcAudioQualityBrowserTest.*',
   'WebRtcInternalsPerfBrowserTest.*',
   'WebRtcStatsPerfBrowserTest.*',
+  'WebRtcVideoDisplayPerfBrowserTests.*',
   'WebRtcVideoQualityBrowserTests*',
 ]
 
