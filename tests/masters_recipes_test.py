@@ -102,6 +102,11 @@ FAKE_BUILDERS = {
         'Linux Tests',
         'Linux Tests (dbg)(1)',
     ],
+    'master.chromium.mac': [
+        # These have been migrated to LUCI.
+        'Mac Builder (dbg)',
+        'Mac10.13 Tests (dbg)',
+    ],
     'master.tryserver.chromium.win' : [
         # FIXME(tansell): Remove fake when BlinkTests are removed.
         'old_chromium_rel_ng',
