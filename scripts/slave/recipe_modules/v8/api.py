@@ -1219,6 +1219,7 @@ class V8Api(recipe_api.RecipeApi):
   def maybe_trigger(self, test_spec=None, **additional_properties):
     triggers = self.bot_config.get('triggers', [])
     triggers_proxy = self.bot_config.get('triggers_proxy', False)
+    triggered_build_ids = []
     if triggers or triggers_proxy:
       # Careful! Before adding new properties, note the following:
       # Triggered bots on CQ will either need new properties to be explicitly
@@ -1326,7 +1327,12 @@ class V8Api(recipe_api.RecipeApi):
               name='trigger',
               step_test_data=lambda: self.m.json.test_api.output_stream({}),
           )
+
+          triggered_build_ids.extend(
+              build['build']['id'] for build in step_result.stdout['results'])
       else:
+        # TODO(sergiyb): Add triggered child IDs to triggered_build_ids once
+        # this starts using buildbucket.
         self.m.trigger(*[{
           'builder_name': builder_name,
           # Attach additional builder-specific test-spec properties.
@@ -1341,6 +1347,8 @@ class V8Api(recipe_api.RecipeApi):
           'archive': self.GS_ARCHIVES[self.bot_config['build_gs_archive']],
         }
         proxy_properties.update(properties)
+        # TODO(sergiyb): Add triggered child IDs to triggered_build_ids once
+        # this starts using buildbucket.
         self.m.trigger(*[{
           'builder_name': 'v8_trigger_proxy',
           'bucket': 'master.internal.client.v8',
@@ -1350,6 +1358,10 @@ class V8Api(recipe_api.RecipeApi):
             'revision': self.revision,
           }]
         }])
+
+    if triggered_build_ids:
+      output_properties = self.m.step.active_result.presentation.properties
+      output_properties['triggered_build_ids'] = triggered_build_ids
 
   def get_change_range(self):
     if self.m.properties.get('override_changes'):

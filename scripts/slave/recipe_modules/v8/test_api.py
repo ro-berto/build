@@ -457,6 +457,11 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
           try_job_key='1234',
       )
 
+    if 'triggers' in bot_config:
+      num_triggers = len(bot_config['triggers'])
+      test += self.step_data('trigger', stdout=self.m.json.output({
+        'results': [{'build': {'id': '1234567890'}}] * num_triggers}))
+
     # Skip some goma and swarming related steps in expectations.
     skip_fragments = map(re.escape, [
       'ensure_goma',
