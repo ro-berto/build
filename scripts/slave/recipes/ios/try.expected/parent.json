@@ -33,8 +33,6 @@
       "123456",
       "--patchset",
       "1",
-      "--rietveld_server",
-      "fake://rietveld.url",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
