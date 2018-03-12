@@ -1331,8 +1331,6 @@ class V8Api(recipe_api.RecipeApi):
           triggered_build_ids.extend(
               build['build']['id'] for build in step_result.stdout['results'])
       else:
-        # TODO(sergiyb): Add triggered child IDs to triggered_build_ids once
-        # this starts using buildbucket.
         self.m.trigger(*[{
           'builder_name': builder_name,
           # Attach additional builder-specific test-spec properties.
@@ -1347,8 +1345,6 @@ class V8Api(recipe_api.RecipeApi):
           'archive': self.GS_ARCHIVES[self.bot_config['build_gs_archive']],
         }
         proxy_properties.update(properties)
-        # TODO(sergiyb): Add triggered child IDs to triggered_build_ids once
-        # this starts using buildbucket.
         self.m.trigger(*[{
           'builder_name': 'v8_trigger_proxy',
           'bucket': 'master.internal.client.v8',
