@@ -63,8 +63,7 @@ def main():
 
   result = {}
 
-  # Clean up generated *.isolated.gen.json files, produced by isolate_driver.py
-  # in test_isolation_mode='prepare'.
+  # Clean up generated *.isolated.gen.json files produced by mb.
   if options.clean_isolated_files:
     pattern = os.path.join(options.build_dir, '*.isolated.gen.json')
     for filepath in sorted(glob.glob(pattern)):

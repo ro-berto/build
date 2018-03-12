@@ -2222,8 +2222,8 @@ Changes URL of Isolate server to use.
 
 Archives prepared tests in |build_dir| to isolate server.
 
-src/tools/isolate_driver.py is invoked by ninja during compilation
-to produce *.isolated.gen.json files that describe how to archive tests.
+src/tools/mb.py is invoked to produce *.isolated.gen.json files that describe
+how to archive tests.
 
 This step then uses *.isolated.gen.json files to actually performs the
 archival. By archiving all tests at once it is able to reduce the total

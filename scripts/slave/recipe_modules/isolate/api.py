@@ -101,8 +101,8 @@ class IsolateApi(recipe_api.RecipeApi):
                     **kwargs):
     """Archives prepared tests in |build_dir| to isolate server.
 
-    src/tools/isolate_driver.py is invoked by ninja during compilation
-    to produce *.isolated.gen.json files that describe how to archive tests.
+    src/tools/mb/mb.py is invoked to produce *.isolated.gen.json files that
+    describe how to archive tests.
 
     This step then uses *.isolated.gen.json files to actually performs the
     archival. By archiving all tests at once it is able to reduce the total
@@ -130,7 +130,7 @@ class IsolateApi(recipe_api.RecipeApi):
     # autodiscovery. The code path in chromium_trybot that needs it is being
     # deprecated in favor of to *_ng builders, that pass targets explicitly.
     if targets is None:
-      # Ninja builds <target>.isolated.gen.json files via isolate_driver.py.
+      # mb generates <target>.isolated.gen.json files.
       paths = self.m.file.glob_paths(
           'find isolated targets',
           build_dir, '*.isolated.gen.json',
