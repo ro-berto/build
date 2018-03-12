@@ -114,21 +114,6 @@ def RunSteps(api):
       if b.get('archive_core_dumps', False):
         test_args.append('--copy-coredumps')
       test_args.extend(shard_args)
-      if 'precomp' not in buildername:
-        front_end_args = ['pkg/front_end',
-                          '-rvm',
-                          '-cnone',
-                          '--checked',
-                          "--timeout=120",
-        ]
-        front_end_args.extend(test_args)
-        test_args.append('--append_logs')
-        api.python('front-end tests',
-                   api.path['checkout'].join('tools', 'test.py'),
-                   args=front_end_args)
-        api.dart.read_result_file('read results of front-end tests',
-                                  'result.log')
-
       test_args.extend(b.get('test_args', []))
 
       non_strong_args = (test_args +
@@ -138,6 +123,7 @@ def RunSteps(api):
                  args=non_strong_args)
       api.dart.read_result_file('read results of vm tests', 'result.log')
 
+      test_args.append('--append_logs')
       strong_args = (test_args +
               ['--strong', 'language_2', 'corelib_2', 'lib_2', 'standalone_2'])
       api.python('vm strong tests',

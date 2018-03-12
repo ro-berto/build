@@ -48,9 +48,7 @@ def RunSteps(api):
 
   with api.context(cwd=api.path['checkout']):
     with api.depot_tools.on_path():
-      front_end_args = ['pkg/front_end', '-cnone', '--checked', '--timeout=120']
-      front_end_args.extend(test_args)
-      test_args.extend(['--append_logs', '-cdartk'])
+      test_args.extend(['-cdartk'])
 
       shard_test_args = (['./tools/test.py',
                          '--use-sdk',
@@ -64,12 +62,6 @@ def RunSteps(api):
       tasks += [api.dart.shard('vm_strong_tests', isolate_hash, strong_test_args)]
 
       with api.step.defer_results():
-        api.python('front-end tests',
-                   api.path['checkout'].join('tools', 'test.py'),
-                   args=front_end_args)
-        api.dart.read_result_file('read results of front-end tests',
-                                  'result.log')
-
         api.python('samples, service, standalone, and vm tests',
                    api.path['checkout'].join('tools', 'test.py'),
                    args=test_args + ['samples', 'service', 'standalone', 'vm'])

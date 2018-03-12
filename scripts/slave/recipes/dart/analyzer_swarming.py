@@ -125,8 +125,6 @@ def RunSteps(api):
          'tests': ['pkg/analysis_server']},
         {'name': 'analyzer_cli unit tests',
          'tests': ['pkg/analyzer_cli']},
-        {'name': 'front end unit tests',
-         'tests': ['--timeout=120', 'pkg/front_end']},
       ]
     else:
       assert builder_type == 'pkg'
