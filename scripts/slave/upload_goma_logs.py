@@ -135,7 +135,7 @@ def main():
       f.write(json.dumps(viewer_urls))
 
   bqclient = GetBigQueryClient(args.bigquery_service_account_json)
-  if args.goma_stats_file and bqclient:
+  if args.goma_stats_file and args.build_id and bqclient:
     # TODO(yyanagisawa): set step name etc.
     goma_bq_utils.SendCompileEvent(args.goma_stats_file,
                                    args.goma_crash_report_id_file,

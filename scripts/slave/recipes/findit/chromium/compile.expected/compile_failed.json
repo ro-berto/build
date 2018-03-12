@@ -867,6 +867,8 @@
       "[TMP_BASE]/goma_stats",
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
+      "--build-id",
+      "1",
       "--buildbot-buildername",
       "linux_variable",
       "--buildbot-mastername",

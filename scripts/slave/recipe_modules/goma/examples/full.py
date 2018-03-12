@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import json
 import re
 
 DEPS = [
@@ -57,7 +58,7 @@ def GenTests(api):
       'ninja_log_outdir': 'out/Release',
       'ninja_log_compiler': 'goma',
       'build_data_dir': 'build_data_dir',
-      'build_id': 'buildbot/mastername/buildername/1',
+      'buildbucket': json.dumps({'build': {'id': 1}}),
   }
 
   for platform in ('linux', 'win', 'mac'):

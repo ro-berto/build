@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='compile_events.proto',
   package='devtools_goma',
   syntax='proto3',
-  serialized_pb=_b('\n\x14\x63ompile_events.proto\x12\rdevtools_goma\x1a\x10goma_stats.proto\"\x8c\x02\n\x0c\x43ompileEvent\x12\x10\n\x08\x62uild_id\x18\x01 \x01(\t\x12\x11\n\tstep_name\x18\x02 \x01(\t\x12\'\n\x05stats\x18\x03 \x01(\x0b\x32\x18.devtools_goma.GomaStats\x12?\n\x0b\x65xit_status\x18\x04 \x01(\x0e\x32*.devtools_goma.CompileEvent.GomaExitStatus\x12\x10\n\x08\x63rash_id\x18\x05 \x01(\t\"[\n\x0eGomaExitStatus\x12\x06\n\x02OK\x10\x00\x12\x1b\n\x17\x44IED_WITH_UNKOWN_REASON\x10\x01\x12\x0b\n\x07\x43RASHED\x10\x02\x12\x17\n\x13\x44IED_WITH_LOG_FATAL\x10\x03\x62\x06proto3')
+  serialized_pb=_b('\n\x14\x63ompile_events.proto\x12\rdevtools_goma\x1a\x10goma_stats.proto\"\x8c\x02\n\x0c\x43ompileEvent\x12\x10\n\x08\x62uild_id\x18\x01 \x01(\x03\x12\x11\n\tstep_name\x18\x02 \x01(\t\x12\'\n\x05stats\x18\x03 \x01(\x0b\x32\x18.devtools_goma.GomaStats\x12?\n\x0b\x65xit_status\x18\x04 \x01(\x0e\x32*.devtools_goma.CompileEvent.GomaExitStatus\x12\x10\n\x08\x63rash_id\x18\x05 \x01(\t\"[\n\x0eGomaExitStatus\x12\x06\n\x02OK\x10\x00\x12\x1b\n\x17\x44IED_WITH_UNKOWN_REASON\x10\x01\x12\x0b\n\x07\x43RASHED\x10\x02\x12\x17\n\x13\x44IED_WITH_LOG_FATAL\x10\x03\x62\x06proto3')
   ,
   dependencies=[goma__stats__pb2.DESCRIPTOR,])
 
@@ -66,8 +66,8 @@ _COMPILEEVENT = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='build_id', full_name='devtools_goma.CompileEvent.build_id', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
+      number=1, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),

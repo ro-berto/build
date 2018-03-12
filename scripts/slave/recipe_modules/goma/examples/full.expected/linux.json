@@ -241,7 +241,7 @@
       "--goma-crash-report-id-file",
       "build_data_dir/crash_report_id_file",
       "--build-id",
-      "buildbot/mastername/buildername/1",
+      "1",
       "--buildbot-buildername",
       "test_builder",
       "--buildbot-mastername",

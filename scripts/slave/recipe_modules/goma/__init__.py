@@ -4,6 +4,7 @@ DEPS = [
   'depot_tools/depot_tools',
   'depot_tools/gclient',
   'puppet_service_account',
+  'recipe_engine/buildbucket',
   'recipe_engine/context',
   'recipe_engine/file',
   'recipe_engine/json',

@@ -23,7 +23,7 @@ message CompileEvent {
   }
 
   // ID of the build.
-  string build_id = 1;
+  int64 build_id = 1;
   // Name of the compile step.
   // If one build has more than two compile steps, they should have different
   // names. e.g. compile (with patch) and compile (without patch).

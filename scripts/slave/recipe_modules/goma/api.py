@@ -423,8 +423,9 @@ class GomaApi(recipe_api.RecipeApi):
           self._goma_ctl_env['GOMACTL_CRASH_REPORT_ID_FILE'],
       ])
 
-    if 'build_id' in self.m.properties:
-      args.extend(['--build-id', self.m.properties['build_id']])
+    build_id = self.m.buildbucket.build_id
+    if build_id:
+      args.extend(['--build-id', build_id])
 
     # Set buildbot info used in goma_utils.MakeGomaStatusCounter etc.
     keys = [
