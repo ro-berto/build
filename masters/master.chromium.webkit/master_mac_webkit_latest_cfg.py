@@ -48,11 +48,11 @@ F('f_webkit_rel_tests_1010', m_remote_run('chromium'))
 B('WebKit Mac10.11', 'f_webkit_rel_tests_1011')
 F('f_webkit_rel_tests_1011', m_remote_run('chromium'))
 
-B('WebKit Mac10.11 (retina)', 'f_webkit_rel_tests_1011_retina')
-F('f_webkit_rel_tests_1011_retina', m_remote_run('chromium'))
-
 B('WebKit Mac10.12', 'f_webkit_rel_tests_1012')
 F('f_webkit_rel_tests_1012', m_remote_run('chromium'))
+
+B('WebKit Mac10.12 (retina)', 'f_webkit_rel_tests_1012_retina')
+F('f_webkit_rel_tests_1012_retina', m_remote_run('chromium'))
 
 
 ################################################################################

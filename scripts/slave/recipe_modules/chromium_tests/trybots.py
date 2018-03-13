@@ -41,14 +41,14 @@ TRYBOTS = freeze({
         'buildername': 'WebKit Mac Builder',
         'tester': 'WebKit Mac10.11',
       }),
-      'mac10.11_retina_blink_rel': simple_bot({
-        'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Mac10.11 (retina)',
-      }),
       'mac10.12_blink_rel': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Mac Builder',
         'tester': 'WebKit Mac10.12',
+      }),
+      'mac10.12_retina_blink_rel': simple_bot({
+        'mastername': 'chromium.webkit',
+        'buildername': 'WebKit Mac10.12 (retina)',
       }),
       'mac10.13_blink_rel': simple_bot({
         'mastername': 'chromium.fyi',

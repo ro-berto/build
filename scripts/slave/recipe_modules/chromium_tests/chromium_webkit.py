@@ -149,7 +149,7 @@ SPEC['builders'] = {
     },
     'checkout_dir': 'mac',
   },
-  'WebKit Mac10.11 (retina)': {
+  'WebKit Mac10.12 (retina)': {
     'chromium_config': 'chromium',
     'chromium_apply_config': ['mb'],
     'gclient_config': 'chromium',
