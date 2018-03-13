@@ -23,7 +23,6 @@ DEPS = [
 
 def _RunStepsInternal(api):
   repo_name = api.properties.get('repo_name')
-  codereview_auth = api.properties.get('codereview_auth', False)
 
   gclient_config = None
   if repo_name:
@@ -35,11 +34,8 @@ def _RunStepsInternal(api):
     solution.name = api.properties['solution_name']
     gclient_config.got_revision_mapping[solution.name] = 'got_revision'
 
-  kwargs = {}
   bot_update_step = api.bot_update.ensure_checkout(
-      gclient_config=gclient_config,
-      oauth2_json=codereview_auth,
-      **kwargs)
+      gclient_config=gclient_config)
   relative_root = api.gclient.calculate_patch_root(
       api.properties['patch_project'],
       gclient_config=gclient_config).rstrip('/')
@@ -180,19 +176,6 @@ def GenTests(api):
         repo_name='chromium',
         gerrit_project='chromium/src',
         dry_run=True) +
-    api.step_data('presubmit', api.json.output([['chromium_presubmit',
-                                                 ['compile']]]))
-  )
-
-  yield (
-    api.test('chromium_with_auth') +
-    api.properties.tryserver(
-        mastername='tryserver.chromium.linux',
-        buildername='chromium_presubmit',
-        repo_name='chromium',
-        codereview_auth=True,
-        path_config='buildbot', # codereview_auth works only on Buildbot
-        gerrit_project='chromium/src') +
     api.step_data('presubmit', api.json.output([['chromium_presubmit',
                                                  ['compile']]]))
   )
