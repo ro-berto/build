@@ -702,7 +702,11 @@ def get_args_for_test(api, chromium_tests_api, test_spec, bot_update_step):
   the form of variable substitutions in the tests' argument lists:
 
       buildername
+      buildnumber
       got_revision
+      mastername
+      patch_issue
+      patch_set
 
   so, for example, a test can declare the argument:
 
@@ -732,9 +736,13 @@ def get_args_for_test(api, chromium_tests_api, test_spec, bot_update_step):
   # Perform substitution of known variables.
   substitutions = {
       'buildername': api.properties.get('buildername'),
+      'buildnumber': api.properties.get('buildnumber'),
       'got_revision': (
           bot_update_step.presentation.properties.get('got_revision',
-          bot_update_step.presentation.properties.get('got_src_revision')))
+          bot_update_step.presentation.properties.get('got_src_revision'))),
+      'mastername': api.properties.get('mastername'),
+      'patch_issue': api.properties.get('patch_issue'),
+      'patch_set': api.properties.get('patch_set'),
   }
   return [string.Template(arg).safe_substitute(substitutions) for arg in args]
 
