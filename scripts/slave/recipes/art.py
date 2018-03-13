@@ -14,12 +14,12 @@ DEPS = [
 _TARGET_DEVICE_MAP = {
     'volantis-armv7': {
       'bitness': 32,
-      'make_jobs': 2,
+      'make_jobs': 4,
       'product': 'arm_krait',
       },
     'volantis-armv8': {
       'bitness': 64,
-      'make_jobs': 2,
+      'make_jobs': 4,
       'product': 'armv8',
       },
     'angler-armv7': {
@@ -284,11 +284,6 @@ def setup_target(api,
     api.step('build target', [art_tools.join('buildbot-build.sh'),
                               '-j8', '--target'])
 
-  # Volantis devices are getting replaced
-  # https://bugs.chromium.org/p/chromium/issues/detail?id=812583
-  if device == 'volantis-armv8' or device == 'volantis-armv7':
-    return
-
   with api.step.defer_results():
     with api.context(env=env):
       api.step('setup device', [art_tools.join('setup-buildbot-device.sh')])
@@ -505,7 +500,7 @@ _CONFIG_MAP = {
         'cdex_level': 'fast',
       },
     },
-
+    # TODO: Remove device names.
     'target': {
       'angler-armv7-ndebug': {
         'serial': '84B7N16728001219',
@@ -518,19 +513,19 @@ _CONFIG_MAP = {
         'debug': True,
       },
       'volantis-armv7-poison-debug': {
-        'serial': 'HT591JT00517',
+        'serial': 'FA7BN1A04406',
         'device': 'volantis-armv7',
         'debug': True,
         'heap_poisoning': True
       },
       'volantis-armv8-poison-ndebug': {
-        'serial': 'HT4CTJT03670',
+        'serial': 'FA7BN1A04412',
         'device': 'volantis-armv8',
         'debug': False,
         'heap_poisoning': True,
       },
       'volantis-armv8-poison-debug': {
-        'serial': 'HT4CTJT04201',
+        'serial': 'FA7BN1A04433',
         'device': 'volantis-armv8',
         'debug': True,
         'heap_poisoning': True
