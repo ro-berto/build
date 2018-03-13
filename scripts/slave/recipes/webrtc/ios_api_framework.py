@@ -8,9 +8,10 @@ DEPS = [
   'commit_position',
   'depot_tools/bot_update',
   'depot_tools/gclient',
+  'depot_tools/gsutil',
   'depot_tools/tryserver',
   'goma',
-  'depot_tools/gsutil',
+  'ios',
   'recipe_engine/context',
   'recipe_engine/path',
   'recipe_engine/properties',
@@ -25,15 +26,13 @@ def RunSteps(api):
   api.gclient.set_config('webrtc_ios')
 
   api.webrtc.checkout()
-
-  # Enforce use of the hermetic Xcode toolchain.
-  env = {'FORCE_MAC_TOOLCHAIN': '1'}
-  with api.context(cwd=api.path['checkout'], env=env):
-    api.gclient.runhooks()
+  api.gclient.runhooks()
 
   goma_dir = api.goma.ensure_goma()
   api.goma.start()
   build_exit_status = 1
+
+  api.ios.ensure_xcode("9C40b")
 
   try:
     build_script = api.path['checkout'].join('tools_webrtc', 'ios',
@@ -41,15 +40,14 @@ def RunSteps(api):
     if not api.tryserver.is_tryserver:
       api.step('cleanup', [build_script, '-c'])
 
-    with api.context(cwd=api.path['checkout'], env=env):
-      step_result = api.python(
-          'build',
-          build_script,
-          args=['-r', api.webrtc.revision_number,
-                '--use-goma',
-                '--extra-gn-args=goma_dir=\"%s\"' % goma_dir,
-                '--verbose'],
-      )
+    step_result = api.python(
+        'build',
+        build_script,
+        args=['-r', api.webrtc.revision_number,
+              '--use-goma',
+              '--extra-gn-args=goma_dir=\"%s\"' % goma_dir,
+              '--verbose'],
+    )
     build_exit_status = step_result.retcode
   except api.step.StepFailure as e:
     build_exit_status = e.retcode
