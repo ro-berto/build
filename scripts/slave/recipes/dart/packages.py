@@ -118,12 +118,14 @@ def RunSteps(api):
          'tests': ['--checked', 'pkg']},
       ]
       if strong:
-        test_args.extend(['--strong', '--builder-tag=strong'])
+        test_args.append('--strong')
         test_specs.extend([
           {'name': 'analyze strong tests',
            'tests': ['--exclude-suite=co19']},
           {'name': 'analyze strong tests checked',
            'tests': ['--checked', '--exclude-suite=co19']},
+          {'name': 'analyze tests preview-dart2',
+           'tests': ['--preview-dart-2']},
         ])
       RunTests(api, test_args, test_specs)
 
