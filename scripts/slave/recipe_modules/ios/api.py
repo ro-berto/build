@@ -554,6 +554,7 @@ class iOSApi(recipe_api.RecipeApi):
       step_name = '%s shard %s' % (step_name, shard_num)
     task = {
         'bot id': test.get('bot id'),
+        'dimensions': test.get('dimensions'),
         'isolate.gen': None,
         'isolated hash': None,
         'pool': test.get('pool'),
@@ -797,25 +798,15 @@ class iOSApi(recipe_api.RecipeApi):
 
       task['tmp_dir'] = self.m.path.mkdtemp(task['task_id'])
 
-      # Experiment trigger_multiple_dimensions.py script on FYI bots first
-      # before fully enabled on all iOS bots.
-      # TODO(huangml): Move the dimensions logic into configuration files.
+      # TODO(huangml): Move all dimensions into configuration files.
       trigger_script = None
-      if self.m.properties['mastername'] == 'chromium.fyi':
+      if task.get('dimensions'):
         trigger_script = {
           'script': self.m.path['checkout'].join(
             'testing', 'trigger_scripts', 'trigger_multiple_dimensions.py'),
           'args': [
-            '--multiple-trigger-configs', self.m.json.dumps([
-              {
-                'os': 'Mac-10.12',
-                'pool': 'Chrome',
-              },
-              {
-                'os': 'Mac-10.13',
-                'pool': 'Chrome',
-              },
-            ]),
+            '--multiple-trigger-configs', self.m.json.dumps(task['dimensions']),
+            '--multiple-dimension-script-verbose', 'True',
           ],
         }
 
