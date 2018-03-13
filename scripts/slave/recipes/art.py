@@ -8,6 +8,7 @@ DEPS = [
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/step',
+  'recipe_engine/tempfile',
   'repo',
 ]
 
@@ -293,12 +294,15 @@ def setup_target(api,
 
       api.step('sync target', ['make', 'test-art-target-sync'])
 
-    def test_logging(api, test_name):
+    def test_logging(api, test_name, logcat_result = None):
       with api.context(env=env):
-        api.step(test_name + ': adb logcat',
-                 ['adb', 'logcat', '-d', '-v', 'threadtime'])
-        api.step(test_name + ': crashes',
-                 [art_tools.join('symbolize-buildbot-crashes.sh')])
+        if logcat_result is None:
+          api.step(test_name + ': adb logcat', ['adb', 'logcat', '-d', '-v', 'threadtime'])
+          api.step(test_name + ': crashes', [art_tools.join('symbolize-buildbot-crashes.sh')])
+        else:
+          api.step(test_name + ': adb logcat', ['cat', logcat_result])
+          api.step(test_name + ': crashes',
+                   [art_tools.join('symbolize-buildbot-crashes.sh'), logcat_result])
         api.step(test_name + ': adb clear log', ['adb', 'logcat', '-c'])
 
     test_env = env.copy()
@@ -316,40 +320,52 @@ def setup_target(api,
     if not debug and device == 'fugu':
       optimizing_make_jobs = 1
 
-    common_options = ['--target', '--verbose']
-    if debug:
-      common_options += ['--debug']
-    else:
-      common_options += ['--ndebug']
+    with api.tempfile.temp_dir("art-test-lc-dir") as tmpdir_path:
+      tmp_lc_file = tmpdir_path.join("out_art_logcat.txt")
 
-    if gcstress:
-      common_options += ['--gcstress']
+      def wrap_log(args):
+        # TODO We really should do something like ' '.join(map(shlex.quote, args)) but the coverage
+        # code doesn't seem to be able to understand that. For all of these this works fine.
+        return [art_tools.join('wrap-logcat.py'),
+                '-o', tmp_lc_file,
+                '--logcat-invoke', 'adb logcat -v threadtime',
+                ' '.join(args)]
 
-    with api.context(env=test_env):
-      api.step('test optimizing', ['./art/test/testrunner/testrunner.py',
-                                   '-j%d' % (optimizing_make_jobs),
-                                   '--optimizing',
-                                   '--debuggable',
-                                   '--ndebuggable'] + common_options)
-    test_logging(api, 'test optimizing')
+      common_options = ['--target', '--verbose']
+      if debug:
+        common_options += ['--debug']
+      else:
+        common_options += ['--ndebug']
 
-    with api.context(env=test_env):
-      api.step('test interpreter', ['./art/test/testrunner/testrunner.py',
-                                    '-j%d' % (make_jobs),
-                                    '--interpreter'] + common_options)
-    test_logging(api, 'test interpreter')
+      if gcstress:
+        common_options += ['--gcstress']
 
-    with api.context(env=test_env):
-      api.step('test jit', ['./art/test/testrunner/testrunner.py',
-                            '-j%d' % (make_jobs),
-                            '--jit'] + common_options)
-    test_logging(api, 'test jit')
+      with api.context(env=test_env):
+        api.step('test optimizing', wrap_log(['./art/test/testrunner/testrunner.py',
+                                              '-j%d' % (optimizing_make_jobs),
+                                              '--optimizing',
+                                              '--debuggable',
+                                              '--ndebuggable'] + common_options))
+      test_logging(api, 'test optimizing', tmp_lc_file)
 
-    with api.context(env=test_env):
-      api.step('test speed-profile', ['./art/test/testrunner/testrunner.py',
-                                      '-j%d' % (make_jobs),
-                                      '--speed-profile'] + common_options)
-    test_logging(api, 'test speed-profile')
+      with api.context(env=test_env):
+        api.step('test interpreter', wrap_log(['./art/test/testrunner/testrunner.py',
+                                               '-j%d' % (make_jobs),
+                                               '--interpreter'] + common_options))
+      test_logging(api, 'test interpreter', tmp_lc_file)
+
+      with api.context(env=test_env):
+        api.step('test jit', wrap_log(['./art/test/testrunner/testrunner.py',
+                                       '-j%d' % (make_jobs),
+                                       '--jit'] + common_options))
+      test_logging(api, 'test jit', tmp_lc_file)
+
+      with api.context(env=test_env):
+        api.step('test speed-profile', wrap_log(['./art/test/testrunner/testrunner.py',
+                                                 '-j%d' % (make_jobs),
+                                                 '--speed-profile'] + common_options))
+      test_logging(api, 'test speed-profile', tmp_lc_file)
+    # end with tempfile
 
     libcore_command = [art_tools.join('run-libcore-tests.sh'),
                        '--mode=device',

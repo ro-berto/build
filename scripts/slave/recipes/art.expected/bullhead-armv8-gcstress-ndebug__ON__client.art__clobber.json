@@ -271,15 +271,12 @@
   },
   {
     "cmd": [
-      "./art/test/testrunner/testrunner.py",
-      "-j4",
-      "--optimizing",
-      "--debuggable",
-      "--ndebuggable",
-      "--target",
-      "--verbose",
-      "--ndebug",
-      "--gcstress"
+      "[START_DIR]/art/tools/wrap-logcat.py",
+      "-o",
+      "[TMP_BASE]/art-test-lc-dir_tmp_1/out_art_logcat.txt",
+      "--logcat-invoke",
+      "adb logcat -v threadtime",
+      "./art/test/testrunner/testrunner.py -j4 --optimizing --debuggable --ndebuggable --target --verbose --ndebug --gcstress"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -308,11 +305,8 @@
   },
   {
     "cmd": [
-      "adb",
-      "logcat",
-      "-d",
-      "-v",
-      "threadtime"
+      "cat",
+      "[TMP_BASE]/art-test-lc-dir_tmp_1/out_art_logcat.txt"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -339,7 +333,8 @@
   },
   {
     "cmd": [
-      "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh"
+      "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh",
+      "[TMP_BASE]/art-test-lc-dir_tmp_1/out_art_logcat.txt"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -395,13 +390,12 @@
   },
   {
     "cmd": [
-      "./art/test/testrunner/testrunner.py",
-      "-j4",
-      "--interpreter",
-      "--target",
-      "--verbose",
-      "--ndebug",
-      "--gcstress"
+      "[START_DIR]/art/tools/wrap-logcat.py",
+      "-o",
+      "[TMP_BASE]/art-test-lc-dir_tmp_1/out_art_logcat.txt",
+      "--logcat-invoke",
+      "adb logcat -v threadtime",
+      "./art/test/testrunner/testrunner.py -j4 --interpreter --target --verbose --ndebug --gcstress"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -430,11 +424,8 @@
   },
   {
     "cmd": [
-      "adb",
-      "logcat",
-      "-d",
-      "-v",
-      "threadtime"
+      "cat",
+      "[TMP_BASE]/art-test-lc-dir_tmp_1/out_art_logcat.txt"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -461,7 +452,8 @@
   },
   {
     "cmd": [
-      "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh"
+      "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh",
+      "[TMP_BASE]/art-test-lc-dir_tmp_1/out_art_logcat.txt"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -517,13 +509,12 @@
   },
   {
     "cmd": [
-      "./art/test/testrunner/testrunner.py",
-      "-j4",
-      "--jit",
-      "--target",
-      "--verbose",
-      "--ndebug",
-      "--gcstress"
+      "[START_DIR]/art/tools/wrap-logcat.py",
+      "-o",
+      "[TMP_BASE]/art-test-lc-dir_tmp_1/out_art_logcat.txt",
+      "--logcat-invoke",
+      "adb logcat -v threadtime",
+      "./art/test/testrunner/testrunner.py -j4 --jit --target --verbose --ndebug --gcstress"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -552,11 +543,8 @@
   },
   {
     "cmd": [
-      "adb",
-      "logcat",
-      "-d",
-      "-v",
-      "threadtime"
+      "cat",
+      "[TMP_BASE]/art-test-lc-dir_tmp_1/out_art_logcat.txt"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -583,7 +571,8 @@
   },
   {
     "cmd": [
-      "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh"
+      "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh",
+      "[TMP_BASE]/art-test-lc-dir_tmp_1/out_art_logcat.txt"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -639,13 +628,12 @@
   },
   {
     "cmd": [
-      "./art/test/testrunner/testrunner.py",
-      "-j4",
-      "--speed-profile",
-      "--target",
-      "--verbose",
-      "--ndebug",
-      "--gcstress"
+      "[START_DIR]/art/tools/wrap-logcat.py",
+      "-o",
+      "[TMP_BASE]/art-test-lc-dir_tmp_1/out_art_logcat.txt",
+      "--logcat-invoke",
+      "adb logcat -v threadtime",
+      "./art/test/testrunner/testrunner.py -j4 --speed-profile --target --verbose --ndebug --gcstress"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -674,11 +662,8 @@
   },
   {
     "cmd": [
-      "adb",
-      "logcat",
-      "-d",
-      "-v",
-      "threadtime"
+      "cat",
+      "[TMP_BASE]/art-test-lc-dir_tmp_1/out_art_logcat.txt"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -705,7 +690,8 @@
   },
   {
     "cmd": [
-      "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh"
+      "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh",
+      "[TMP_BASE]/art-test-lc-dir_tmp_1/out_art_logcat.txt"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -758,6 +744,19 @@
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test speed-profile: adb clear log"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[TMP_BASE]/art-test-lc-dir_tmp_1"
+    ],
+    "infra_step": true,
+    "name": "rmtree [TMP_BASE]/art-test-lc-dir_tmp_1"
   },
   {
     "cmd": [
