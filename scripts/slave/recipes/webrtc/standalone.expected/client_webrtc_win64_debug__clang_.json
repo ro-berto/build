@@ -98,20 +98,6 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win64_Debug__Clang_\\src\\tools_webrtc\\download_tools.py",
-      "[BUILDER_CACHE]\\Win64_Debug__Clang_\\src\\tools_webrtc\\audio_quality"
-    ],
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
-      ]
-    },
-    "name": "download audio quality tools"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[build::webrtc]\\resources\\cleanup_files.py",
       "[BUILDER_CACHE]\\Win64_Debug__Clang_\\src\\out"
     ],
