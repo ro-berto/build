@@ -26,8 +26,7 @@ sys.path.insert(
 # Imported for side effects on sys.path.
 import test_env
 
-# In depot_tools/
-from testing_support import auto_stub
+import mock
 
 import standard_gtest_merge
 
@@ -250,15 +249,13 @@ BAD_GTEST_JSON_ONLY_1_SHARD = {
 }
 
 
-class _StandardGtestMergeTest(auto_stub.TestCase):
+class _StandardGtestMergeTest(unittest.TestCase):
 
   def setUp(self):
-    super(_StandardGtestMergeTest, self).setUp()
     self.temp_dir = tempfile.mkdtemp()
 
   def tearDown(self):
     shutil.rmtree(self.temp_dir)
-    super(_StandardGtestMergeTest, self).tearDown()
 
   def _write_temp_file(self, path, content):
     abs_path = os.path.join(self.temp_dir, path.replace('/', os.sep))
@@ -311,10 +308,10 @@ class MergeShardResultsTest(_StandardGtestMergeTest):
 
   def call(self, exit_code=0):
     stdout = cStringIO.StringIO()
-    self.mock(sys, 'stdout', stdout)
-    merged = standard_gtest_merge.merge_shard_results(
-        self.summary, self.test_files)
-    return merged, stdout.getvalue().strip()
+    with mock.patch('sys.stdout', stdout):
+      merged = standard_gtest_merge.merge_shard_results(
+          self.summary, self.test_files)
+      return merged, stdout.getvalue().strip()
 
   def test_ok(self):
     # Two shards, both successfully finished.

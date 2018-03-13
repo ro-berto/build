@@ -25,8 +25,10 @@ sys.path.insert(0, DEPOT_TOOLS_DIR)
 # Trick reboot_tools to accept a dummy master config
 import config_bootstrap
 import slave.reboot_tools
-from testing_support import auto_stub
 
+import test_env
+
+import mock
 
 class DummyMasterReboot(config_bootstrap.Master.Master1):
   project_name = 'Dummy Master Reboot'
@@ -48,17 +50,22 @@ def MockSleep(desired_sleep):
   raise SleepException
 
 
-class BotRebootTest(auto_stub.TestCase):
-
+class BotRebootTest(unittest.TestCase):
   def setUp(self):
     super(BotRebootTest, self).setUp()
     self.log_messages = []
     self.subprocess_calls = []
     if hasattr(os.environ, 'TESTING_MASTER'):
       del os.environ['TESTING_MASTER']
-    self.mock(slave.reboot_tools, 'Log', self.MockLog)
-    self.mock(subprocess, 'call', self.MockCall)
-    self.mock(slave.reboot_tools, 'Sleep', MockSleep)
+
+    mocks = [
+      mock.patch('slave.reboot_tools.Log', side_effect=self.MockLog),
+      mock.patch('subprocess.call', side_effect=self.MockCall),
+      mock.patch('slave.reboot_tools.Sleep', side_effect=MockSleep),
+    ]
+    for m in mocks:
+      m.start()
+      self.addCleanup(m.stop)
 
   def tearDown(self):
     if hasattr(os.environ, 'TESTING_MASTER'):

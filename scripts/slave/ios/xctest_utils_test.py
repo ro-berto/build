@@ -17,8 +17,6 @@ import xctest_utils
 import test_env
 from common import find_depot_tools  # pylint: disable=W0611
 
-from testing_support import auto_stub
-
 
 TAP_ERRORS = ('Exception: NoMatchingElementException'
               'Reason: Action \'Tap\' was not performed because no UI element '
@@ -82,7 +80,7 @@ Test Case '-[ChromeSmokeTestCase testTimeout]' started.
          'timeout_errors': TIMEOUT_ERRORS})
 
 
-class TestXCTestLogParserTests(auto_stub.TestCase):
+class TestXCTestLogParserTests(unittest.TestCase):
   """Test xctest log parser, xctest_utils.py."""
 
   def testXCTestLogParserStdout(self):

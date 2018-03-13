@@ -21,10 +21,10 @@ RESOURCES_DIR = os.path.abspath(os.path.join(THIS_DIR, '..', 'resources'))
 sys.path.insert(0, RESOURCES_DIR)
 import collect_task
 
-from testing_support import auto_stub
+import mock
 
 
-class CollectTaskTest(auto_stub.TestCase):
+class CollectTaskTest(unittest.TestCase):
 
   def setUp(self):
     super(CollectTaskTest, self).setUp()
@@ -33,10 +33,9 @@ class CollectTaskTest(auto_stub.TestCase):
     def mocked_subprocess_call(args):
       self.subprocess_calls.append(args)
       return 0
-    self.mock(
-        collect_task.subprocess,
-        'call',
-        mocked_subprocess_call)
+    m = mock.patch('subprocess.call', side_effect=mocked_subprocess_call)
+    m.start()
+    self.addCleanup(m.stop)
 
     self.temp_dir = tempfile.mkdtemp()
 

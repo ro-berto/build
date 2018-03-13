@@ -22,13 +22,17 @@ import test_env  # pylint: disable=W0403,W0611
 
 from slave import results_dashboard
 from common import chromium_utils
-from testing_support.super_mox import mox
 
+import mock
 
 class FakeDateTime(object):
   # pylint: disable=R0201
   def utctimetuple(self):
     return time.struct_time((2013, 8, 1, 0, 0, 0, 3, 217, 0))
+
+  @classmethod
+  def utcnow(cls):
+    return cls()
 
 
 class ResultsDashboardFormatTest(unittest.TestCase):
@@ -36,79 +40,74 @@ class ResultsDashboardFormatTest(unittest.TestCase):
 
   def setUp(self):
     super(ResultsDashboardFormatTest, self).setUp()
-    self.mox = mox.Mox()
     self.maxDiff = None
     os.environ['BUILDBOT_BUILDBOTURL'] = (
         'http://build.chromium.org/p/my.master/')
-
-  def tearDown(self):
-    self.mox.UnsetStubs()
 
   def test_MakeDashboardJsonV1(self):
     self.internal_Test_MakeDashboardJsonV1()
 
   def test_MakeDashboardJsonV1WithDisabledBenchmark(self):
-    self.internal_Test_MakeDashboardJsonV1(False)
+    self.internal_Test_MakeDashboardJsonV1(enabled=False)
 
   def internal_Test_MakeDashboardJsonV1(self, enabled=True):
-    self.mox.StubOutWithMock(results_dashboard, '_GetTimestamp')
-    # pylint: disable=W0212
-    results_dashboard._GetTimestamp().AndReturn(307226)
-    results_dashboard._GetTimestamp().AndReturn(307226)
-    self.mox.ReplayAll()
+    with mock.patch('slave.results_dashboard._GetTimestamp') as getTS:
+      getTS.side_effect = [307226, 307226]
 
-    v1json = results_dashboard.MakeDashboardJsonV1(
-        {'some_json': 'from_telemetry', 'enabled': enabled},
-        {
-            'rev': 'f46bf3c',
-             'git_revision': 'f46bf3c',
-             'v8_rev': '73a34f',
-             'commit_pos': 307226
-        },
-        'foo_test',
-        'my-bot',
-        'Builder',
-        '10',
-        {'a_annotation': 'xyz', 'r_my_rev': '789abc01'},
-        True, 'ChromiumPerf')
-    self.assertEqual(
-        {
-            'master': 'ChromiumPerf',
-            'bot': 'my-bot',
-            'chart_data': {'some_json': 'from_telemetry', 'enabled': enabled},
-            'is_ref': True,
-            'test_suite_name': 'foo_test',
-            'point_id': 307226,
-            'supplemental': {
-                'annotation': 'xyz',
-                'a_stdio_uri': ('[Buildbot stdio](http://build.chromium.org/p'
-                                '/my.master/builders/Builder/builds/10/steps/'
-                                'foo_test/logs/stdio)')
-            },
-            'versions': {
-                'v8_rev': '73a34f',
-                'chromium': 'f46bf3c',
-                'my_rev': '789abc01'
-              }
-        },
-        v1json)
+      v1json = results_dashboard.MakeDashboardJsonV1(
+          {'some_json': 'from_telemetry', 'enabled': enabled},
+          {
+              'rev': 'f46bf3c',
+               'git_revision': 'f46bf3c',
+               'v8_rev': '73a34f',
+               'commit_pos': 307226
+          },
+          'foo_test',
+          'my-bot',
+          'Builder',
+          '10',
+          {'a_annotation': 'xyz', 'r_my_rev': '789abc01'},
+          True, 'ChromiumPerf')
+      self.assertEqual(
+          {
+              'master': 'ChromiumPerf',
+              'bot': 'my-bot',
+              'chart_data': {'some_json': 'from_telemetry', 'enabled': enabled},
+              'is_ref': True,
+              'test_suite_name': 'foo_test',
+              'point_id': 307226,
+              'supplemental': {
+                  'annotation': 'xyz',
+                  'a_stdio_uri': ('[Buildbot stdio](http://build.chromium.org/p'
+                                  '/my.master/builders/Builder/builds/10/steps/'
+                                  'foo_test/logs/stdio)')
+              },
+              'versions': {
+                  'v8_rev': '73a34f',
+                  'chromium': 'f46bf3c',
+                  'my_rev': '789abc01'
+                }
+          },
+          v1json)
 
-  def test_MakeHistogramSetWithDiagnostics_CallsAddReservedDiagnostics(self):
+  @mock.patch('subprocess.call')
+  def test_MakeHistogramSetWithDiagnostics_CallsAddReservedDiagnostics(
+      self, call):
     with tempfile.NamedTemporaryFile(
         suffix='.json', prefix='test') as f:
       f.write(json.dumps({'histogram': 'data'}))
       f.flush()
 
-      self.mox.StubOutWithMock(subprocess, 'call')
-      expected_cmd = [sys.executable,
-          '/path/to/chromium/src/third_party/catapult/tracing/bin/'
-          'add_reserved_diagnostics', '--benchmarks', 'foo.test', '--bots',
-          'bot', '--builds', '1', '--masters', 'ChromiumPerf',
-          '--is_reference_build', '', '--log_urls',
-          'http://build.chromium.org/p/my.master/builders/builder/builds/1/steps/foo.test/logs/stdio',
-          f.name]
-      subprocess.call(expected_cmd)
-      self.mox.ReplayAll()
+      def _mock_call(args):
+        self.assertEqual(args, [
+          sys.executable,
+         '/path/to/chromium/src/third_party/catapult/tracing/bin/'
+         'add_reserved_diagnostics', '--benchmarks', 'foo.test', '--bots',
+         'bot', '--builds', '1', '--masters', 'ChromiumPerf',
+         '--is_reference_build', '', '--log_urls',
+         'http://build.chromium.org/p/my.master/builders/builder/builds/1/steps/foo.test/logs/stdio',
+         f.name])
+      call.side_effect = _mock_call
 
       results_dashboard.MakeHistogramSetWithDiagnostics(
           f.name, '/path/to/chromium', 'foo.test', 'bot', 'builder', 1, {},
@@ -260,12 +259,9 @@ class ResultsDashboardFormatTest(unittest.TestCase):
     ]
     self.assertEqual(expected_points, actual_points)
 
+  @mock.patch('datetime.datetime', new=FakeDateTime)
   def test_MakeListOfPoints_TimestampUsedWhenRevisionIsNaN(self):
     """Tests sending data with a git hash as "revision"."""
-    self.mox.StubOutWithMock(datetime, 'datetime')
-    datetime.datetime.utcnow().AndReturn(FakeDateTime())
-    self.mox.ReplayAll()
-
     actual_points = results_dashboard.MakeListOfPoints(
         {
             'bar': {
@@ -294,11 +290,8 @@ class ResultsDashboardFormatTest(unittest.TestCase):
     self.assertEqual(expected_points, actual_points)
 
 
+  @mock.patch('datetime.datetime', new=FakeDateTime)
   def test_GetStdioUri(self):
-    self.mox.StubOutWithMock(datetime, 'datetime')
-    datetime.datetime.utcnow().AndReturn(FakeDateTime())
-    self.mox.ReplayAll()
-
     expected_supplemental_column = {
         'a_stdio_uri': ('[Buildbot stdio](http://build.chromium.org/p'
                         '/my.master/builders/Builder/builds/10/steps/'
@@ -309,24 +302,11 @@ class ResultsDashboardFormatTest(unittest.TestCase):
     self.assertEqual(expected_supplemental_column, stdio_uri_column)
 
 
-class IsEncodedJson(mox.Comparator):
-  def __init__(self, expected_json):
-    self._json = expected_json
-
-  def equals(self, rhs):
-    rhs_json = urllib.unquote_plus(rhs.data.replace('data=', ''))
-    return sorted(json.loads(self._json)) == sorted(json.loads(rhs_json))
-
-  def __repr__(self):
-    return '<Is Request JSON %s>' % self._json
-
-
 class ResultsDashboardSendDataTest(unittest.TestCase):
   """Tests related to sending requests and saving data from failed requests."""
 
   def setUp(self):
     super(ResultsDashboardSendDataTest, self).setUp()
-    self.mox = mox.Mox()
     self.build_dir = tempfile.mkdtemp()
     os.makedirs(os.path.join(self.build_dir, results_dashboard.CACHE_DIR))
     self.cache_file_name = os.path.join(self.build_dir,
@@ -334,7 +314,6 @@ class ResultsDashboardSendDataTest(unittest.TestCase):
                                         results_dashboard.CACHE_FILENAME)
 
   def tearDown(self):
-    self.mox.UnsetStubs()
     shutil.rmtree(self.build_dir)
 
   def _TestSendResults(self, new_data, expected_json, errors, expected_result):
@@ -350,23 +329,21 @@ class ResultsDashboardSendDataTest(unittest.TestCase):
       errors: A list of corresponding errors expected to be received.
       expected_result: Expected return value of SendResults
     """
-    self.mox.UnsetStubs()
-    # urllib2.urlopen is the function that's called to send data to
-    # the server. Here it is replaced with a mock object which is used
-    # to record the expected JSON.
-    # Because the JSON expected might be equivalent without being exactly
-    # equal (in the string sense), a Mox Comparator is used.
-    self.mox.StubOutWithMock(urllib2, 'urlopen')
-    for json_line, error in zip(expected_json, errors):
-      if error:
-        urllib2.urlopen(IsEncodedJson(json_line)).AndRaise(error)
-      else:
-        urllib2.urlopen(IsEncodedJson(json_line))
-    self.mox.ReplayAll()
-    result = results_dashboard.SendResults(
-        new_data, 'https:/x.com', self.build_dir)
-    self.assertEqual(expected_result, result)
-    self.mox.VerifyAll()
+    idx = [0] # ref
+    def _mock_urlopen(url):
+      i = idx[0]
+      idx[0] += 1
+      data, err = expected_json[i], errors[i]
+      rhs_json = urllib.unquote_plus(url.data.replace('data=', ''))
+      self.assertEqual(sorted(json.loads(data)),
+                       sorted(json.loads(rhs_json)))
+      if err:
+        raise err
+
+    with mock.patch('urllib2.urlopen', side_effect=_mock_urlopen):
+      result = results_dashboard.SendResults(
+          new_data, 'https:/x.com', self.build_dir)
+      self.assertEqual(expected_result, result)
 
   def test_FailureRetried(self):
     """After failing once, the same JSON is sent the next time."""
@@ -440,25 +417,26 @@ class ResultsDashboardSendDataTest(unittest.TestCase):
       status_codes: A list of corresponding status_codes for responses.
       expected_result: Expected return value of SendResults
     """
-    self.mox.UnsetStubs()
+    idx = [0]
+    def _fake_httplib2_req(url, data, token):
+      i = idx[0]
+      idx[0] += 1
+      exp_data, err = expected_data[i], errors[i],
+      self.assertEqual(url, 'https://fake.dashboard')
+      self.assertEqual(data, json.dumps(exp_data))
+      self.assertEqual(token, oauth_token)
 
-    self.mox.StubOutWithMock(results_dashboard, '_Httplib2Request')
-    for data, error, status_code in zip(expected_data, errors, status_codes):
-      if error:
-        results_dashboard._Httplib2Request(
-            'https://fake.dashboard', json.dumps(data), oauth_token).AndRaise(
-                error)
-      else:
-        response = httplib2.Response({'status': status_code, 'reason': 'foo'})
-        results_dashboard._Httplib2Request(
-            'https://fake.dashboard', json.dumps(data), oauth_token).AndReturn(
-                (response, ''))
-    self.mox.ReplayAll()
-    result = results_dashboard.SendResults(
-        new_data, 'https://fake.dashboard', self.build_dir,
-        send_as_histograms=send_as_histograms, oauth_token=oauth_token)
-    self.assertEqual(expected_result, result)
-    self.mox.VerifyAll()
+      if err:
+        raise err
+
+      return httplib2.Response({'status': status_codes[i], 'reason': 'foo'}), ''
+
+    with mock.patch('slave.results_dashboard._Httplib2Request',
+                    side_effect=_fake_httplib2_req):
+      result = results_dashboard.SendResults(
+          new_data, 'https://fake.dashboard', self.build_dir,
+          send_as_histograms=send_as_histograms, oauth_token=oauth_token)
+      self.assertEqual(expected_result, result)
 
   def test_Histogram_500_Fatal(self):
     """500 responses are fatal."""

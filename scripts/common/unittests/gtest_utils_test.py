@@ -16,7 +16,7 @@ from common import chromium_utils
 from common import find_depot_tools  # pylint: disable=W0611
 from common import gtest_utils
 
-from testing_support import auto_stub
+import mock
 
 FAILURES = ['NavigationControllerTest.Reload',
             'NavigationControllerTest/SpdyNetworkTransTest.Constructor/0',
@@ -450,7 +450,7 @@ End output from shard index 0 (machine tag: swarm12.c, id: swarm12). Return 1
 """
 
 
-class TestGTestLogParserTests(auto_stub.TestCase):
+class TestGTestLogParserTests(unittest.TestCase):
 
   def testGTestLogParserNoSharing(self):
     # Tests for log parsing without sharding.
@@ -681,7 +681,7 @@ class TestGTestLogParserTests(auto_stub.TestCase):
     self.assertEqual(['Foo.Bar'], parser.FailedTests(True, True))
 
 
-class TestGTestJSONParserTests(auto_stub.TestCase):
+class TestGTestJSONParserTests(unittest.TestCase):
   def testPassedTests(self):
     parser = gtest_utils.GTestJSONParser()
     parser.ProcessJSONData({
@@ -867,34 +867,35 @@ class TestGTestJSONParserTests(auto_stub.TestCase):
     spec_fd.write(TEST_IGNORED_FAILED_TESTS_SPEC)
     spec_fd.close()
 
-    self.mock(chromium_utils, 'FindUpward', lambda *_: spec_filename)
-    parser = gtest_utils.GTestJSONParser()
+    with mock.patch('common.chromium_utils.FindUpward',
+                    new=lambda *_: spec_filename):
+      parser = gtest_utils.GTestJSONParser()
 
-    try:
-      parser.ProcessJSONData({
-        'disabled_tests': ['Test.Six'],
-        'per_iteration_data': [
-          {
-            'Test.One': [{'status': 'FAILURE', 'output_snippet': ''}],
-            'Test.Two/2': [{'status': 'FAILURE', 'output_snippet': ''}],
-            'Perf/Test.Three': [{'status': 'FAILURE', 'output_snippet': ''}],
-            'Test.Four': [{'status': 'FAILURE', 'output_snippet': ''}],
-            'Test.Five': [{'status': 'FAILURE', 'output_snippet': ''}],
-          }
-        ],
-        'global_tags': ['OS_WIN', 'CPU_64_BITS', 'MODE_RELEASE', 'OTHER_FLAG']
-      }, '/fake/path/to/build')
-    finally:
-      os.remove(spec_filename)
+      try:
+        parser.ProcessJSONData({
+          'disabled_tests': ['Test.Six'],
+          'per_iteration_data': [
+            {
+              'Test.One': [{'status': 'FAILURE', 'output_snippet': ''}],
+              'Test.Two/2': [{'status': 'FAILURE', 'output_snippet': ''}],
+              'Perf/Test.Three': [{'status': 'FAILURE', 'output_snippet': ''}],
+              'Test.Four': [{'status': 'FAILURE', 'output_snippet': ''}],
+              'Test.Five': [{'status': 'FAILURE', 'output_snippet': ''}],
+            }
+          ],
+          'global_tags': ['OS_WIN', 'CPU_64_BITS', 'MODE_RELEASE', 'OTHER_FLAG']
+        }, '/fake/path/to/build')
+      finally:
+        os.remove(spec_filename)
 
-    self.assertEqual(['Test.Five', 'Test.Four'], parser.FailedTests())
-    self.assertEqual(['Perf/Test.Three', 'Test.One', 'Test.Two/2'],
-                     parser.IgnoredFailedTests())
-    self.assertEqual(['FAILURE'], parser.TriesForTest('Test.One'))
-    self.assertEqual(['FAILURE'], parser.TriesForTest('Test.Two/2'))
-    self.assertEqual(['FAILURE'], parser.TriesForTest('Perf/Test.Three'))
-    self.assertEqual(['FAILURE'], parser.TriesForTest('Test.Four'))
-    self.assertEqual(['FAILURE'], parser.TriesForTest('Test.Five'))
+      self.assertEqual(['Test.Five', 'Test.Four'], parser.FailedTests())
+      self.assertEqual(['Perf/Test.Three', 'Test.One', 'Test.Two/2'],
+                       parser.IgnoredFailedTests())
+      self.assertEqual(['FAILURE'], parser.TriesForTest('Test.One'))
+      self.assertEqual(['FAILURE'], parser.TriesForTest('Test.Two/2'))
+      self.assertEqual(['FAILURE'], parser.TriesForTest('Perf/Test.Three'))
+      self.assertEqual(['FAILURE'], parser.TriesForTest('Test.Four'))
+      self.assertEqual(['FAILURE'], parser.TriesForTest('Test.Five'))
 
   # pylint: disable=R0201
   def testDoesNotThrowExceptionOnMissingIgnoredFailedTestsFile(self):

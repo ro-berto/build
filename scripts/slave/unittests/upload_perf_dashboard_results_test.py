@@ -12,56 +12,42 @@ import test_env  # pylint: disable=W0403,W0611
 
 from common import chromium_utils
 from slave import upload_perf_dashboard_results
-from testing_support.super_mox import mox
 
+import mock
 
 class UploadPerfDashboardResultsTest(unittest.TestCase):
   """Tests related to functions which retrieve perfmastername."""
 
   def setUp(self):
     super(UploadPerfDashboardResultsTest, self).setUp()
-    self.mox = mox.Mox()
     self.maxDiff = None
     self.parser = upload_perf_dashboard_results._CreateParser()
-
-  def tearDown(self):
-    self.mox.UnsetStubs()
+    gam = mock.patch('common.chromium_utils.GetActiveMaster',
+                     new=lambda: 'ChromiumPerf')
+    gam.start()
+    self.addCleanup(gam.stop)
 
   def GetPerfDashboardMachineGroup(self, options):
     return upload_perf_dashboard_results._GetMachineGroup(options)
 
   def testGetMasterName_Buildbot_PerfDashboardMasterNameNotSet(self):
-    self.mox.StubOutWithMock(chromium_utils, 'GetActiveMaster')
-    chromium_utils.GetActiveMaster().AndReturn('ChromiumPerf')
-    self.mox.ReplayAll()
-
     options, _ = self.parser.parse_args([])
-    self.assertEquals('ChromiumPerf', self.GetPerfDashboardMachineGroup(options))
+    self.assertEquals(
+      'ChromiumPerf', self.GetPerfDashboardMachineGroup(options))
 
   def testGetMasterName_Buildbot_PerfDashboardMasterNameSet(self):
-    self.mox.StubOutWithMock(chromium_utils, 'GetActiveMaster')
-    chromium_utils.GetActiveMaster().AndReturn('ChromiumPerf')
-    self.mox.ReplayAll()
-
     options, _ = self.parser.parse_args(
         ['--perf-dashboard-machine-group', 'sensei'])
-    self.assertEquals('ChromiumPerf', self.GetPerfDashboardMachineGroup(options))
+    self.assertEquals(
+      'ChromiumPerf', self.GetPerfDashboardMachineGroup(options))
 
   def testGetMasterName_LUCI_PerfDashboardMasterNameNotSet(self):
-    self.mox.StubOutWithMock(chromium_utils, 'GetActiveMaster')
-    chromium_utils.GetActiveMaster().AndReturn('ChromiumPerf')
-    self.mox.ReplayAll()
-
     options, _ = self.parser.parse_args(['--is-luci-builder'])
 
     with self.assertRaises(ValueError):
       self.GetPerfDashboardMachineGroup(options)
 
   def testGetMasterName_LUCI_PerfDashboardMasterNameSet(self):
-    self.mox.StubOutWithMock(chromium_utils, 'GetActiveMaster')
-    chromium_utils.GetActiveMaster().AndReturn('ChromiumPerf')
-    self.mox.ReplayAll()
-
     options, _ = self.parser.parse_args(
         ['--is-luci-builder', '--perf-dashboard-machine-group', 'Yoda'])
 

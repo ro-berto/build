@@ -23,10 +23,10 @@ sys.path.insert(
     0, os.path.abspath(os.path.join(THIS_DIR, '..', 'resources')))
 import standard_isolated_script_merge
 
-from testing_support import auto_stub
+import mock
 
 
-class StandardIsolatedScriptMergeTest(auto_stub.TestCase):
+class StandardIsolatedScriptMergeTest(unittest.TestCase):
 
   def setUp(self):
     self.merge_test_results_args = []
@@ -39,10 +39,11 @@ class StandardIsolatedScriptMergeTest(auto_stub.TestCase):
         ],
       }
 
-    self.mock(
-        standard_isolated_script_merge.results_merger,
-        'merge_test_results',
-        mock_merge_test_results)
+    m = mock.patch(
+      'standard_isolated_script_merge.results_merger.merge_test_results',
+      side_effect=mock_merge_test_results)
+    m.start()
+    self.addCleanup(m.stop)
 
     self.temp_dir = tempfile.mkdtemp()
 
