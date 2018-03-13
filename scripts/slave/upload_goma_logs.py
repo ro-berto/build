@@ -93,7 +93,7 @@ def main():
   parser.add_argument('--buildbot-clobber', default='',
                       help='buildbot clobber')
 
-  parser.add_argument('--build-id', default='',
+  parser.add_argument('--build-id', default=0, type=long,
                       help='unique ID of the current build')
   parser.add_argument('--bigquery-service-account-json', default='',
                       help='Service account json for BigQuery')

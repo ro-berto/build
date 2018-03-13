@@ -49,6 +49,10 @@ class GomaApi(recipe_api.RecipeApi):
     return self.m.puppet_service_account.get_key_path('goma-cloudtail')
 
   @property
+  def bigquery_service_account_json_path(self):
+    return self.m.puppet_service_account.get_key_path('goma-bigquery')
+
+  @property
   def cloudtail_exe(self):
     assert self._goma_dir
     if self.m.platform.is_win:
@@ -383,6 +387,8 @@ class GomaApi(recipe_api.RecipeApi):
         '--upload-compiler-proxy-info',
         '--log-url-json-file', self.m.json.output(),
         '--gsutil-py-path', self.m.depot_tools.gsutil_py_path,
+        '--bigquery-service-account-json',
+        self.bigquery_service_account_json_path,
     ]
 
     json_test_data = {
