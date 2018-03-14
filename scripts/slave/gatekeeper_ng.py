@@ -487,8 +487,7 @@ SCOPES = ['https://www.googleapis.com/auth/userinfo.email']
 def _http_req_auth(url, method, body, http):
   http = http or httplib2.Http()
 
-  resp, content = http.request(
-      url, method, body=urllib.urlencode({'json': json.dumps(body)}))
+  resp, content = http.request(url, method, body=body)
   return resp.status, content
 
 
