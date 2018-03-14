@@ -48,9 +48,15 @@ def main():
   parser.add_argument('--ninja-log-compiler',
                       metavar='COMPILER',
                       help='compiler name used for the build.')
+  # TODO(shinyak): Remove this when everyone is using --ninja-log-command-file.
   parser.add_argument('--ninja-log-command',
                       metavar='COMMAND',
                       help='command line options of the build.')
+  parser.add_argument('--ninja-log-command-file',
+                      metavar='FILE',
+                      help='command line options of the build, which is '
+                      'written in the file. this option is preferred to '
+                      '--ninja-log-command.')
   parser.add_argument('--build-exit-status',
                       type=int,
                       metavar='EXIT_STATUS',
@@ -119,11 +125,18 @@ def main():
     if viewer_url is not None:
       viewer_urls['compiler_proxy_log'] = viewer_url
 
+  if args.ninja_log_command_file:
+    # TODO(shinyak): Assuming file exists.
+    with open(args.ninja_log_command_file, 'r') as f:
+      ninja_log_command = f.read()
+  else:
+    ninja_log_command = args.ninja_log_command
+
   if args.ninja_log_outdir:
     viewer_url = goma_utils.UploadNinjaLog(
         args.ninja_log_outdir,
         args.ninja_log_compiler,
-        args.ninja_log_command,
+        ninja_log_command,
         args.build_exit_status,
         override_gsutil=override_gsutil
     )
