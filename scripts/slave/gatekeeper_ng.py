@@ -18,6 +18,7 @@ import fnmatch
 import getpass
 import hashlib
 import hmac
+import httplib2
 import itertools
 import json
 import logging
@@ -33,6 +34,8 @@ import urllib2
 from slave import build_scan
 from slave import build_scan_db
 from slave import gatekeeper_ng_config
+
+from master import auth
 
 DATA_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -478,7 +481,18 @@ def hash_message(message, url, secret):
          }
 
 
-def submit_email(email_app, build_data, secret, simulate):
+SCOPES = ['https://www.googleapis.com/auth/userinfo.email']
+
+
+def _http_req_auth(url, method, body, http):
+  http = http or httplib2.Http()
+
+  resp, content = http.request(
+      url, method, body=urllib.urlencode({'json': json.dumps(body)}))
+  return resp.status, content
+
+
+def submit_email(email_app, build_data, secret, simulate, creds):
   """Submit json to a mailer app which sends out the alert email."""
   if simulate:
     logging.info("Simulate: Sending e-mail via [%s]: %s", email_app, build_data)
@@ -487,13 +501,17 @@ def submit_email(email_app, build_data, secret, simulate):
   url = email_app + '/email'
   data = hash_message(json.dumps(build_data, sort_keys=True), url, secret)
 
-  req = urllib2.Request(url, urllib.urlencode({'json': json.dumps(data)}))
-  with closing(logging_urlopen(req)) as f:
-    code = f.getcode()
-    if code != 200:
-      response = f.read()
-      raise Exception('error connecting to email app: code %d %s' % (
-          code, response))
+  http = httplib2.Http()
+  if creds:
+    creds = auth.create_service_account_credentials(creds, SCOPES)
+    http = creds.authorize(http)
+    creds.refresh(http)
+
+  code, content = _http_req_auth(
+      url, "POST", urllib.urlencode({'json': json.dumps(data)}), http)
+  if code != 200:
+    raise Exception('error connecting to email app: code %d %s' % (
+        code, content))
 
 
 def open_tree_if_possible(build_db, master_jsons, successful_builder_steps,
@@ -649,7 +667,7 @@ def close_tree_if_necessary(build_db, failed_builds, username, password,
 
 def notify_failures(failed_builds, sheriff_url, default_from_email,
                     email_app_url, secret, domain, filter_domain,
-                    disable_domain_filter, simulate):
+                    disable_domain_filter, simulate, creds):
   # Email everyone that should be notified.
   emails_to_send = []
   for failed_build in failed_builds:
@@ -735,7 +753,7 @@ def notify_failures(failed_builds, sheriff_url, default_from_email,
     watchers = list(reduce(operator.or_, [set(e[0]) for e in g], set()))
     build_data = json.loads(k)
     build_data['recipients'] = watchers
-    submit_email(email_app_url, build_data, secret, simulate)
+    submit_email(email_app_url, build_data, secret, simulate, creds)
 
 
 def simulate_build_failure(build_db, master, builder, *steps):
@@ -775,9 +793,11 @@ def simulate_build_failure(build_db, master, builder, *steps):
 def get_args(argv):
   parser = argparse.ArgumentParser(description='Closes the tree if annotated '
                                                'builds fail.')
-  parser.add_argument('--milo-creds',
-                      help='Location of service account credentials to access '
-                           'Milo')
+  parser.add_argument('--service-account-path',
+                      help='Location of service account credentials. Used to'
+                           'access Milo and Chromium build')
+  parser.add_argument('--milo-creds', help='DEPRECATED. Use'
+                      '--service--acount-path')
   parser.add_argument('--build-db', default='build_db.json',
                       help='records the last-seen build for each builder')
   parser.add_argument('--clear-build-db', action='store_true',
@@ -856,6 +876,11 @@ def get_args(argv):
 
   args = parser.parse_args(argv)
 
+  if args.milo_creds:
+    if args.service_account_path:
+      parser.error('only specify one of --milo-creds and'
+                   '--service-account-path')
+    args.service_account_path = args.milo_creds
   args.email_app_secret = None
   args.password = None
 
@@ -942,7 +967,7 @@ def main(argv):
 
   if not simulate:
     master_jsons, build_jsons = build_scan.get_updated_builds(
-        masters, build_db, args.parallelism, args.milo_creds)
+        masters, build_db, args.parallelism, args.service_account_path)
   else:
     master_jsons, build_jsons = simulate_build_failure(
         build_db, args.simulate_master, args.simulate_builder,
@@ -995,7 +1020,7 @@ def main(argv):
                     args.default_from_email, args.email_app_url,
                     args.email_app_secret, args.email_domain,
                     args.filter_domain, args.disable_domain_filter,
-                    simulate)
+                    simulate, args.service_account_path)
   finally:
     if not args.skip_build_db_update and not simulate:
       build_scan_db.save_build_db(build_db, gatekeeper_config,

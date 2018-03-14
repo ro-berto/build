@@ -29,7 +29,7 @@ class Gatekeeper(recipe_api.RecipeApi):
       args = [
           '--json', gatekeeper_json, '--email-app-secret-file',
           '/creds/gatekeeper/mailer_password',
-          '--milo-creds',
+          '--service-account-path',
           self.m.puppet_service_account.get_key_path('gatekeeper'),
       ]
 

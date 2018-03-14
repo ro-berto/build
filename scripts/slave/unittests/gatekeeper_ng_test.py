@@ -148,6 +148,14 @@ class GatekeeperTest(unittest.TestCase):
 
     self.url_calls = []
 
+    auth_req_patcher = mock.patch('slave.gatekeeper_ng._http_req_auth')
+    self.auth_req = auth_req_patcher.start()
+    self.addCleanup(auth_req_patcher.stop)
+    self.auth_req.side_effect = self._auth_http_req_handler
+
+    # Maps (url, method) -> ((code, content), (code, content), ...)
+    self._auth_calls = {}
+
     self.status_url_root = 'https://chromium-status.appspot.com'
     self.get_status_url = self.status_url_root + '/current?format=json'
     self.set_status_url = self.status_url_root + '/status'
@@ -188,6 +196,8 @@ class GatekeeperTest(unittest.TestCase):
         os.remove(filename)
 
     build_scan.MAX_ATTEMPTS = self._old_attempts
+
+    assert len(self._auth_calls) == 0, 'unmocked authenticated requests'
 
   def handle_build_tree(self, masters):
     """Before calling gatekeeper, synthesize master and build json.
@@ -395,6 +405,24 @@ class GatekeeperTest(unittest.TestCase):
       url, 404, 'Not Found: %s. Avail: %s' % (url, self.urls.keys()),
       None, StringIO.StringIO(''))
 
+  def _auth_http_req_handler(self, url, method, body, http):
+    """Used by the mocked _http_req_auth to respond to different URLs."""
+    # Make pylint be quiet about unused variable
+    http = http
+
+    tup = (url, method)
+    assert tup in self._auth_calls, '%s not in %r' % (tup, self._auth_calls)
+    val = self._auth_calls[tup][0]
+
+    self.url_calls.append({'url': url, 'params': body})
+    if len(self._auth_calls[tup]) > 1:
+      # Remove first auth call
+      self._auth_calls[tup] = self._auth_calls[tup][1:]
+    else:
+      # Delete this set of auth calls
+      del self._auth_calls[tup]
+    return val
+
   def update_status_handler(self, tree_message, status_url_root, username,
                             password, simulate):
     self.url_calls.append({'url': status_url_root + '/status'})
@@ -451,6 +479,10 @@ class GatekeeperTest(unittest.TestCase):
 
   def testFailedBuildDetected(self):
     """Test that an erroneous build result closes the tree."""
+    self._auth_calls[(
+        'https://chromium-build.appspot.com/mailer/email', 'POST')] = (
+            (200, "ok"),)
+
     self.argv.extend([m.url for m in self.masters])
     self.argv.extend(['--skip-build-db-update',
                       '--email-app-secret-file=%s' % self.email_secret_file])
@@ -541,6 +573,10 @@ class GatekeeperTest(unittest.TestCase):
 
   def testStepCloserFailureDetected(self):
     """Test that a failed closing step closes the tree."""
+    self._auth_calls[(
+        'https://chromium-build.appspot.com/mailer/email', 'POST')] = (
+            (200, "ok"),)
+
     self.argv.extend([m.url for m in self.masters])
     self.argv.extend(['--skip-build-db-update',
                       '--email-app-secret-file=%s' % self.email_secret_file])
@@ -549,6 +585,9 @@ class GatekeeperTest(unittest.TestCase):
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
                                 {'closing_optional': ['step1']})
+    self._auth_calls[(
+        'https://chromium-build.appspot.com/mailer/email', 'POST')] = (
+            (200, "ok"),)
 
     self.call_gatekeeper()
 
@@ -574,6 +613,10 @@ class GatekeeperTest(unittest.TestCase):
 
   def testStepCloserFailureOptional(self):
     """Test that a failed closing_optional step closes the tree."""
+    self._auth_calls[(
+        'https://chromium-build.appspot.com/mailer/email', 'POST')] = (
+            (200, "ok"),)
+
     self.argv.extend([m.url for m in self.masters])
     self.argv.extend(['--skip-build-db-update',
                       '--email-app-secret-file=%s' % self.email_secret_file])
@@ -593,6 +636,10 @@ class GatekeeperTest(unittest.TestCase):
 
   def testStepCloserFailureOptionalStar(self):
     """Test that a failed closing_optional * step closes the tree."""
+    self._auth_calls[(
+        'https://chromium-build.appspot.com/mailer/email', 'POST')] = (
+            (200, "ok"),)
+
     self.argv.extend([m.url for m in self.masters])
     self.argv.extend(['--skip-build-db-update',
                       '--email-app-secret-file=%s' % self.email_secret_file])
@@ -643,6 +690,10 @@ class GatekeeperTest(unittest.TestCase):
 
   def testGatekeeperOOO(self):
     """Test that gatekeeper_spec works even if not the first step."""
+    self._auth_calls[(
+        'https://chromium-build.appspot.com/mailer/email', 'POST')] = (
+            (200, "ok"),)
+
     self.argv.extend([m.url for m in self.masters])
     self.argv.extend(['--skip-build-db-update',
                       '--email-app-secret-file=%s' % self.email_secret_file])
@@ -1044,6 +1095,9 @@ class GatekeeperTest(unittest.TestCase):
 
   def testBuilderWhitelisted(self):
     """Test that a whitelisted builder successfully closes the tree."""
+    self._auth_calls[(
+        'https://chromium-build.appspot.com/mailer/email', 'POST')] = (
+            (200, "ok"),)
 
     whitelisted_builders = ','.join(['mybuilder', 'some_other_builder'])
 
@@ -1067,7 +1121,6 @@ class GatekeeperTest(unittest.TestCase):
 
   def testBuilderNotWhitelisted(self):
     """Test that a non-whitelisted builder does not close the tree."""
-
     whitelisted_builders = ','.join(['doesnt_exist_builder',
                                      'some_other_builder'])
 
@@ -1133,6 +1186,10 @@ class GatekeeperTest(unittest.TestCase):
 
   def testDefaultSubjectTemplate(self):
     """Test that the subject template is set by default."""
+    self._auth_calls[(
+        'https://chromium-build.appspot.com/mailer/email', 'POST')] = (
+            (200, "ok"),)
+
     self.argv.extend([m.url for m in self.masters])
     self.argv.extend(['--skip-build-db-update',
                       '--email-app-secret-file=%s' % self.email_secret_file])
@@ -1221,6 +1278,10 @@ class GatekeeperTest(unittest.TestCase):
 
   def testEmailJson(self):
     """Test that the email json is formatted correctly."""
+    self._auth_calls[(
+        'https://chromium-build.appspot.com/mailer/email', 'POST')] = (
+            (200, "ok"),)
+
     self.argv.extend([m.url for m in self.masters])
     self.argv.extend(['--skip-build-db-update',
                       '--email-app-secret-file=%s' % self.email_secret_file])
@@ -1280,6 +1341,10 @@ class GatekeeperTest(unittest.TestCase):
 
   def testIgnorePastFailures(self):
     """If the build_db is nonexistent, don't fail on past builds."""
+    self._auth_calls[(
+        'https://chromium-build.appspot.com/mailer/email', 'POST')] = (
+            (200, "ok"),)
+
     self.argv.extend([m.url for m in self.masters])
     self.argv.extend(['--email-app-secret-file=%s' % self.email_secret_file])
 
@@ -1319,6 +1384,10 @@ class GatekeeperTest(unittest.TestCase):
 
   def testIncrementalScanning(self):
     """Test that builds in the build DB are skipped."""
+    self._auth_calls[(
+        'https://chromium-build.appspot.com/mailer/email', 'POST')] = (
+            (200, "ok"),)
+
     build_db = build_scan_db.gen_db(masters={
         self.masters[0].url: {
             'mybuilder': {
@@ -1360,6 +1429,10 @@ class GatekeeperTest(unittest.TestCase):
 
   def testSheriffParsing(self):
     """Test that sheriff annotations are properly parsed."""
+    self._auth_calls[(
+        'https://chromium-build.appspot.com/mailer/email', 'POST')] = (
+            (200, "ok"),)
+
     self.argv.extend([m.url for m in self.masters])
     self.argv.extend(['--skip-build-db-update',
                       '--email-app-secret-file=%s' % self.email_secret_file])
@@ -1416,6 +1489,10 @@ class GatekeeperTest(unittest.TestCase):
 
   def testNoSheriffButBlame(self):
     """Test that no-sheriff works ok with a blamelist."""
+    self._auth_calls[(
+        'https://chromium-build.appspot.com/mailer/email', 'POST')] = (
+            (200, "ok"),)
+
     self.argv.extend([m.url for m in self.masters])
     self.argv.extend(['--skip-build-db-update',
                       '--email-app-secret-file=%s' % self.email_secret_file])
@@ -1440,6 +1517,10 @@ class GatekeeperTest(unittest.TestCase):
 
   def testMultiSheriff(self):
     """Test that multiple sheriff lists can be merged."""
+    self._auth_calls[(
+        'https://chromium-build.appspot.com/mailer/email', 'POST')] = (
+            (200, "ok"),)
+
     self.argv.extend([m.url for m in self.masters])
     self.argv.extend(['--skip-build-db-update',
                       '--email-app-secret-file=%s' % self.email_secret_file])
@@ -1476,6 +1557,10 @@ class GatekeeperTest(unittest.TestCase):
 
   def testNotifyParsing(self):
     """Test that additional watchers can be merged to the mailing list."""
+    self._auth_calls[(
+        'https://chromium-build.appspot.com/mailer/email', 'POST')] = (
+            (200, "ok"),)
+
     self.argv.extend([m.url for m in self.masters])
     self.argv.extend(['--skip-build-db-update',
                       '--email-app-secret-file=%s' % self.email_secret_file])
@@ -1503,6 +1588,10 @@ class GatekeeperTest(unittest.TestCase):
 
   def testNotifyNoBlame(self):
     """Test that notify works with no blamelist."""
+    self._auth_calls[(
+        'https://chromium-build.appspot.com/mailer/email', 'POST')] = (
+            (200, "ok"),)
+
     self.argv.extend([m.url for m in self.masters])
     self.argv.extend(['--skip-build-db-update',
                       '--email-app-secret-file=%s' % self.email_secret_file])
@@ -1930,6 +2019,7 @@ class GatekeeperTest(unittest.TestCase):
 
   def testSequentialFailures(self):
     """Test that the status app is only hit once if many failures are seen."""
+
     self.argv.extend([m.url for m in self.masters])
     self.argv.extend(['--skip-build-db-update',
                       '--email-app-secret-file=%s' % self.email_secret_file,
@@ -1947,7 +2037,12 @@ class GatekeeperTest(unittest.TestCase):
 
     self.masters[0].builders[0].builds[1].steps[2].results = [2, None]
 
+    self._auth_calls[(
+        'https://chromium-build.appspot.com/mailer/email', 'POST')] = ((
+            200, "ok"), (200, "ok"))
+    print self._auth_calls
     urls = self.call_gatekeeper()
+    print self._auth_calls
     self.assertEquals(urls.count(self.set_status_url), 1)
 
     self.assertEquals(self.url_calls[-2]['url'], self.mailer_url)
@@ -1962,6 +2057,10 @@ class GatekeeperTest(unittest.TestCase):
 
   def testSequentialOneFailure(self):
     """Test that failing builds aren't mixed with good ones."""
+    self._auth_calls[(
+        'https://chromium-build.appspot.com/mailer/email', 'POST')] = (
+            (200, "ok"),)
+
     self.argv.extend([m.url for m in self.masters])
     self.argv.extend(['--skip-build-db-update',
                       '--email-app-secret-file=%s' % self.email_secret_file,
@@ -1990,6 +2089,10 @@ class GatekeeperTest(unittest.TestCase):
 
   def testStarBuilder(self):
     """Test that * captures failures across all builders."""
+    self._auth_calls[(
+        'https://chromium-build.appspot.com/mailer/email', 'POST')] = (
+            (200, "ok"),)
+
     self.argv.extend([m.url for m in self.masters])
     self.argv.extend(['--skip-build-db-update',
                       '--email-app-secret-file=%s' % self.email_secret_file])
@@ -2008,6 +2111,10 @@ class GatekeeperTest(unittest.TestCase):
 
   def testStarBuilderOverride(self):
     """Test that * can be explicitly overridden."""
+    self._auth_calls[(
+        'https://chromium-build.appspot.com/mailer/email', 'POST')] = (
+            (200, "ok"),)
+
     self.argv.extend([m.url for m in self.masters])
     self.argv.extend(['--skip-build-db-update',
                       '--email-app-secret-file=%s' % self.email_secret_file])
@@ -2054,6 +2161,10 @@ class GatekeeperTest(unittest.TestCase):
 
   def testMultiBuilderOneFailure(self):
     """Test that failure in one build doesn't affect another."""
+    self._auth_calls[(
+        'https://chromium-build.appspot.com/mailer/email', 'POST')] = (
+            (200, "ok"),)
+
     self.argv.extend([m.url for m in self.masters])
     self.argv.extend(['--skip-build-db-update',
                       '--email-app-secret-file=%s' % self.email_secret_file,
@@ -2094,6 +2205,10 @@ class GatekeeperTest(unittest.TestCase):
 
   def testMultiBuilderFailures(self):
     """Test that failures on several builders are handled properly."""
+    self._auth_calls[(
+        'https://chromium-build.appspot.com/mailer/email', 'POST')] = (
+            (200, "ok"), (200, "ok"))
+
     master_url = 'http://build.chromium.org/p/chromium.fyi'
     self.argv.extend([master_url,
                       '--skip-build-db-update',
@@ -2139,6 +2254,10 @@ class GatekeeperTest(unittest.TestCase):
 
   def testMultiMaster(self):
     """Test that multiple master failures are handled properly."""
+    self._auth_calls[(
+        'https://chromium-build.appspot.com/mailer/email', 'POST')] = (
+            (200, "ok"), (200, "ok"))
+
     self.masters.append(self.create_generic_build_tree('Chromium FYI 2',
                                                        'chromium2.fyi'))
 
@@ -2208,6 +2327,10 @@ class GatekeeperTest(unittest.TestCase):
 
   def testFailedBuildInProgress(self):
     """Test that a still-running build can close the tree."""
+    self._auth_calls[(
+        'https://chromium-build.appspot.com/mailer/email', 'POST')] = (
+            (200, "ok"),)
+
     self.argv.extend([m.url for m in self.masters])
     self.argv.extend(['--skip-build-db-update',
                       '--email-app-secret-file=%s' % self.email_secret_file,
@@ -2357,6 +2480,10 @@ class GatekeeperTest(unittest.TestCase):
 
   def testTriggerIsRemovedIfNoFailure(self):
     """Test that build_db triggers aren't present if a step hasn't failed."""
+    self._auth_calls[(
+        'https://chromium-build.appspot.com/mailer/email', 'POST')] = (
+            (200, "ok"),)
+
     self.argv.extend([m.url for m in self.masters])
     self.argv.extend(['--email-app-secret-file=%s' % self.email_secret_file,
                       '--set-status', '--password-file', self.status_secret_file
@@ -2384,6 +2511,10 @@ class GatekeeperTest(unittest.TestCase):
 
   def testOnlyFireOnNewFailures(self):
     """Test that the tree isn't closed if only an old test failed."""
+    self._auth_calls[(
+        'https://chromium-build.appspot.com/mailer/email', 'POST')] = (
+            (200, "ok"),)
+
     self.argv.extend([m.url for m in self.masters])
     self.argv.extend(['--email-app-secret-file=%s' % self.email_secret_file,
                       '--set-status', '--password-file', self.status_secret_file
@@ -2419,6 +2550,9 @@ class GatekeeperTest(unittest.TestCase):
                                 self.masters[0].builders[0].name,
                                 {'closing_optional': ['step1', 'step2']})
 
+    self._auth_calls[(
+        'https://chromium-build.appspot.com/mailer/email', 'POST')] = (
+            (200, "ok"),)
     urls = self.call_gatekeeper()
     self.assertEquals(urls.count(self.set_status_url), 1)
 
@@ -2442,6 +2576,10 @@ class GatekeeperTest(unittest.TestCase):
 
   def testFireOnNewAndOldTests(self):
     """Test that build_db triggers when new steps go green and red."""
+    self._auth_calls[(
+        'https://chromium-build.appspot.com/mailer/email', 'POST')] = (
+            (200, "ok"), (200, "ok"))
+
     self.argv.extend([m.url for m in self.masters])
     self.argv.extend(['--email-app-secret-file=%s' % self.email_secret_file,
                       '--set-status', '--password-file', self.status_secret_file
@@ -2474,6 +2612,10 @@ class GatekeeperTest(unittest.TestCase):
 
   def testRecordsAllFailuresInBuild(self):
     """Test that all failures are recorded, even after initial trigger."""
+    self._auth_calls[(
+        'https://chromium-build.appspot.com/mailer/email', 'POST')] = (
+            (200, "ok"),)
+
     self.argv.extend([m.url for m in self.masters])
     self.argv.extend(['--email-app-secret-file=%s' % self.email_secret_file,
                       '--set-status', '--password-file', self.status_secret_file
@@ -2506,6 +2648,10 @@ class GatekeeperTest(unittest.TestCase):
 
   def testInheritFromCategory(self):
     """Check that steps in categories are inherited by builders."""
+    self._auth_calls[(
+        'https://chromium-build.appspot.com/mailer/email', 'POST')] = (
+            (200, "ok"),)
+
     self.argv.extend([m.url for m in self.masters])
     self.argv.extend(['--skip-build-db-update',
                       '--email-app-secret-file=%s' % self.email_secret_file])
@@ -2526,6 +2672,10 @@ class GatekeeperTest(unittest.TestCase):
 
   def testMultiCategory(self):
     """Check that steps in categories are inherited by builders."""
+    self._auth_calls[(
+        'https://chromium-build.appspot.com/mailer/email', 'POST')] = (
+            (200, "ok"),)
+
     self.argv.extend([m.url for m in self.masters])
     self.argv.extend(['--skip-build-db-update',
                       '--email-app-secret-file=%s' % self.email_secret_file])
@@ -2547,6 +2697,10 @@ class GatekeeperTest(unittest.TestCase):
 
   def testAddonCategory(self):
     """Check that builders can add-on to categories."""
+    self._auth_calls[(
+        'https://chromium-build.appspot.com/mailer/email', 'POST')] = (
+            (200, "ok"),)
+
     self.argv.extend([m.url for m in self.masters])
     self.argv.extend(['--skip-build-db-update',
                       '--email-app-secret-file=%s' % self.email_secret_file])
@@ -2568,6 +2722,10 @@ class GatekeeperTest(unittest.TestCase):
 
   def testInheritFromMaster(self):
     """Check that steps in masters are inherited by builders."""
+    self._auth_calls[(
+        'https://chromium-build.appspot.com/mailer/email', 'POST')] = (
+            (200, "ok"),)
+
     self.argv.extend([m.url for m in self.masters])
     self.argv.extend(['--skip-build-db-update',
                       '--email-app-secret-file=%s' % self.email_secret_file])
@@ -2600,6 +2758,10 @@ class GatekeeperTest(unittest.TestCase):
 
   def testAddonToMaster(self):
     """Check that steps in masters can be added by builders."""
+    self._auth_calls[(
+        'https://chromium-build.appspot.com/mailer/email', 'POST')] = (
+            (200, "ok"),)
+
     self.argv.extend([m.url for m in self.masters])
     self.argv.extend(['--skip-build-db-update',
                       '--email-app-secret-file=%s' % self.email_secret_file])
@@ -2640,6 +2802,10 @@ class GatekeeperTest(unittest.TestCase):
 
   def testInheritCategoryFromMaster(self):
     """Check that steps can inherit categories from masters."""
+    self._auth_calls[(
+        'https://chromium-build.appspot.com/mailer/email', 'POST')] = (
+            (200, "ok"),)
+
     self.argv.extend([m.url for m in self.masters])
     self.argv.extend(['--skip-build-db-update',
                       '--email-app-secret-file=%s' % self.email_secret_file])
@@ -2663,6 +2829,10 @@ class GatekeeperTest(unittest.TestCase):
 
   def testMasterSections(self):
     """Check that master sections work correctly."""
+    self._auth_calls[(
+        'https://chromium-build.appspot.com/mailer/email', 'POST')] = (
+            (200, "ok"),)
+
     self.argv.extend([m.url for m in self.masters])
     self.argv.extend(['--skip-build-db-update',
                       '--email-app-secret-file=%s' % self.email_secret_file])
@@ -2691,6 +2861,10 @@ class GatekeeperTest(unittest.TestCase):
 
   def testMasterSectionEmails(self):
     """Check that master section handles email properly."""
+    self._auth_calls[(
+        'https://chromium-build.appspot.com/mailer/email', 'POST')] = (
+            (200, "ok"),)
+
     self.argv.extend([m.url for m in self.masters])
     self.argv.extend(['--skip-build-db-update',
                       '--email-app-secret-file=%s' % self.email_secret_file])
@@ -2736,6 +2910,10 @@ class GatekeeperTest(unittest.TestCase):
 
   def testDisableEmailFilter(self):
     """Test that no email is sent if the email isn't in the domain filter."""
+    self._auth_calls[(
+        'https://chromium-build.appspot.com/mailer/email', 'POST')] = (
+            (200, "ok"),)
+
     self.argv.extend([m.url for m in self.masters])
     self.argv.extend(['--skip-build-db-update',
                       '--email-app-secret-file=%s' % self.email_secret_file,
