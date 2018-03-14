@@ -122,7 +122,7 @@
   * [chromium_android:tests/upload_apks_for_bisect](#recipes-chromium_android_tests_upload_apks_for_bisect)
   * [chromium_android:tests/upload_build](#recipes-chromium_android_tests_upload_build)
   * [chromium_android:tests/zip_and_upload_build](#recipes-chromium_android_tests_zip_and_upload_build)
-  * [chromium_checkout:examples/full](#recipes-chromium_checkout_examples_full)
+  * [chromium_checkout:tests/full](#recipes-chromium_checkout_tests_full)
   * [chromium_codesearch](#recipes-chromium_codesearch)
   * [chromium_gn_upload](#recipes-chromium_gn_upload)
   * [chromium_gsutil:examples/full](#recipes-chromium_gsutil_examples_full)
@@ -1259,11 +1259,11 @@ Uploads android apks for functional bisects.
 &mdash; **def [zip\_and\_upload\_build](/scripts/slave/recipe_modules/chromium_android/api.py#311)(self, bucket):**
 ### *recipe_modules* / [chromium\_checkout](/scripts/slave/recipe_modules/chromium_checkout)
 
-[DEPS](/scripts/slave/recipe_modules/chromium_checkout/__init__.py#1): [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/chromium_checkout/__init__.py#1): [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 #### **class [ChromiumCheckoutApi](/scripts/slave/recipe_modules/chromium_checkout/api.py#8)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [ensure\_checkout](/scripts/slave/recipe_modules/chromium_checkout/api.py#63)(self, bot_config, root_solution_revision=None, disable_syntax_validation=False):**
+&mdash; **def [ensure\_checkout](/scripts/slave/recipe_modules/chromium_checkout/api.py#80)(self, bot_config, root_solution_revision=None, disable_syntax_validation=False):**
 
 Wrapper for bot_update.ensure_checkout with chromium-specific additions.
     
@@ -1275,7 +1275,7 @@ Returns directory where checkout can be created.
 TODO: Cache this result for a given "bot_config.checkout_dir" value so we
 don't have to "makedirs" each time the checkout dir is queried.
 
-&mdash; **def [get\_files\_affected\_by\_patch](/scripts/slave/recipe_modules/chromium_checkout/api.py#45)(self, relative_to='src/', cwd=None):**
+&mdash; **def [get\_files\_affected\_by\_patch](/scripts/slave/recipe_modules/chromium_checkout/api.py#62)(self, relative_to='src/', cwd=None):**
 
 Returns list of POSIX paths of files affected by patch for "analyze".
 
@@ -3983,11 +3983,11 @@ Returns: the list of matched targets.
 [DEPS](/scripts/slave/recipe_modules/chromium_android/tests/zip_and_upload_build.py#5): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android)
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_android/tests/zip_and_upload_build.py#11)(api):**
-### *recipes* / [chromium\_checkout:examples/full](/scripts/slave/recipe_modules/chromium_checkout/examples/full.py)
+### *recipes* / [chromium\_checkout:tests/full](/scripts/slave/recipe_modules/chromium_checkout/tests/full.py)
 
-[DEPS](/scripts/slave/recipe_modules/chromium_checkout/examples/full.py#5): [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/chromium_checkout/tests/full.py#5): [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_checkout/examples/full.py#14)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_checkout/tests/full.py#16)(api):**
 ### *recipes* / [chromium\_codesearch](/scripts/slave/recipes/chromium_codesearch.py)
 
 [DEPS](/scripts/slave/recipes/chromium_codesearch.py#7): [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [codesearch](#recipe_modules-codesearch), [goma](#recipe_modules-goma), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]

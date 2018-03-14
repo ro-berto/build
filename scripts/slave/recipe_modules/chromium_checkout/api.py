@@ -27,6 +27,23 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
     TODO: Cache this result for a given "bot_config.checkout_dir" value so we
     don't have to "makedirs" each time the checkout dir is queried.
     """
+    if self.m.runtime.is_luci:
+      # On LUCI, Buildbucket by default maps a per-builder unique directory in
+      # as the 'builder' cache. Builders that are intended to share a cache
+      # should have a CacheEntry config like:
+      #
+      #   caches {
+      #     path: "builder"
+      #     name: "some common name shared by different builders"
+      #   }
+      #
+      # Which will mount that named cache to exactly the same folder.
+      #
+      # It's important to maintain the same mounted location because file paths
+      # can end up in cached goma keys/objects; mounting the named cache to an
+      # alternate location could result in goma cache bloating.
+      return self.m.path['cache'].join('builder')
+
     # If explicitly specified, use the named builder cache base directory.
     try:
       builder_cache = self.m.path['builder_cache']
