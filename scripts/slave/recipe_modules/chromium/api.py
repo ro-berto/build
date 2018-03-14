@@ -468,7 +468,7 @@ class ChromiumApi(recipe_api.RecipeApi):
             '--gsutil-py-path', self.m.depot_tools.gsutil_py_path,
             '--skip-sendgomatsmon',
             '--ninja-log-outdir', target_output_dir,
-            '--ninja-log-command', str(command),
+            '--ninja-log-command-file', self.m.json.input(command),
             '--build-exit-status', compile_exit_status,
             '--ninja-log-compiler', self.c.compile_py.compiler or 'unknown'
         ]
