@@ -84,7 +84,8 @@ def RunSteps(api):
       )
 
       if not cq_commits:
-        with api.context(cwd=api.path['start_dir']):
+        api.bot_update.ensure_checkout(no_shallow=True)
+        with api.context(cwd=api.path['checkout']):
           api.git('cl', 'set-commit', '--gerrit', '-i', commits[0]['_number'])
           api.step.active_result.presentation.step_text = (
             'Stale roll found. Resubmitted to CQ.')
