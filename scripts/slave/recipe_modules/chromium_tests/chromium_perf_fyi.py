@@ -69,6 +69,24 @@ _AddBuildSpec('Android arm64 Builder FYI', 'android', 'android',
                                      'push_apps_to_background_apk',
                                      'system_webview_apk',
                                      'system_webview_shell_apk',])
+
+_AddBuildSpec('Android CFI Builder FYI', 'android', 'android', target_bits=32,
+              extra_compile_targets=['android_tools',
+                                     'cc_perftests',
+                                     'chrome_public_apk',
+                                     'gpu_perftests',
+                                     'push_apps_to_background_apk',
+                                     'system_webview_apk',
+                                     'system_webview_shell_apk',])
+_AddBuildSpec('Android CFI arm64 Builder FYI', 'android', 'android',
+              extra_compile_targets=['android_tools',
+                                     'cc_perftests',
+                                     'chrome_public_apk',
+                                     'gpu_perftests',
+                                     'push_apps_to_background_apk',
+                                     'system_webview_apk',
+                                     'system_webview_shell_apk',])
+
 _AddBuildSpec('Linux Compile FYI', 'linux-fyi', 'linux')
 
 _AddIsolatedTestSpec('Mojo Linux Perf', 'mojo-linux-perf', 'linux')
