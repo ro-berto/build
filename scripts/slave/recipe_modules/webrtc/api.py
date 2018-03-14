@@ -51,12 +51,13 @@ class WebRTCApi(recipe_api.RecipeApi):
 
   @property
   def should_download_audio_quality_tools(self):
-    return self.should_test and getattr(self.c, 'TEST_SUITE', None) in (
-        'android_perf', 'android_perf_swarming', 'desktop_perf_swarming')
+    return hasattr(self.c, 'TEST_SUITE') and self.c.TEST_SUITE in (
+        'android_perf', 'android_perf_swarming', 'desktop_perf_swarming',
+        'webrtc')
 
   @property
   def should_download_video_quality_tools(self):
-    return self.should_test and getattr(self.c, 'TEST_SUITE', None) in (
+    return hasattr(self.c, 'TEST_SUITE') and self.c.TEST_SUITE in (
         'android_perf', 'android_perf_swarming')
 
   def apply_bot_config(self, builders, recipe_configs):
