@@ -828,27 +828,6 @@ class SwarmingApi(recipe_api.RecipeApi):
         # so we eat this exception and let that one propagate.
         pass
 
-  def trigger(self, tasks, **kwargs):  # pragma: no cover
-    """Batch version of 'trigger_task'.
-
-    Deprecated, to be removed soon. Use 'trigger_task' in a loop instead,
-    properly handling exceptions. This method doesn't handle trigger failures
-    well (it aborts on a first failure).
-    """
-    return [self.trigger_task(t, **kwargs) for t in tasks]
-
-  def collect(self, tasks, **kwargs):  # pragma: no cover
-    """Batch version of 'collect_task'.
-
-    Deprecated, to be removed soon. Use 'collect_task' in a loop instead,
-    properly handling exceptions. This method doesn't handle collect failures
-    well (it aborts on a first failure).
-    """
-    return [self.collect_task(t, **kwargs) for t in tasks]
-
-  # To keep compatibility with some build_internal code. To be removed as well.
-  collect_each = collect
-
   @staticmethod
   def _display_pending(shards, step_presentation):
     """Shows max pending time in seconds across all shards if it exceeds 10s,
