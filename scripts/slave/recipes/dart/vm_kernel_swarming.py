@@ -49,17 +49,10 @@ def RunSteps(api):
   with api.context(cwd=api.path['checkout']):
     with api.depot_tools.on_path():
       test_args.extend(['-cdartk'])
-
-      shard_test_args = (['./tools/test.py',
-                         '--use-sdk',
-                         '--exclude-suite=samples,service,standalone,vm,language_2,corelib_2,lib_2,standalone_2']
-                         + test_args)
-      tasks = [api.dart.shard('vm_tests', isolate_hash, shard_test_args)]
-
       strong_test_args = (['./tools/test.py', '--strong', '--use-sdk',
                          'language_2', 'corelib_2', 'lib_2', 'standalone_2']
                          + test_args)
-      tasks += [api.dart.shard('vm_strong_tests', isolate_hash, strong_test_args)]
+      tasks = api.dart.shard('vm_strong_tests', isolate_hash, strong_test_args)
 
       with api.step.defer_results():
         api.python('samples, service, standalone, and vm tests',
@@ -68,8 +61,7 @@ def RunSteps(api):
         api.dart.read_result_file('read results of samples, service, standalone, and vm tests',
                                   'result.log')
 
-        for task in tasks:
-          api.dart.collect(task)
+        api.dart.collect(tasks)
 
         api.dart.kill_tasks()
         api.step('debug log', ['cat', '.debug.log'])

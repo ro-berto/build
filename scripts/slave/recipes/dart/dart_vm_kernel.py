@@ -116,14 +116,6 @@ def RunSteps(api):
       test_args.extend(shard_args)
       test_args.extend(b.get('test_args', []))
 
-      non_strong_args = (test_args +
-              ['--exclude-suite=language_2,corelib_2,lib_2,standalone_2'])
-      api.python('vm tests',
-                 api.path['checkout'].join('tools', 'test.py'),
-                 args=non_strong_args)
-      api.dart.read_result_file('read results of vm tests', 'result.log')
-
-      test_args.append('--append_logs')
       strong_args = (test_args +
               ['--strong', 'language_2', 'corelib_2', 'lib_2', 'standalone_2'])
       api.python('vm strong tests',
