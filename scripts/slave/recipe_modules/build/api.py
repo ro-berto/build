@@ -35,7 +35,8 @@ class ToolsBuildApi(recipe_api.RecipeApi):
         self.m.depot_tools.gsutil_py_path}):
       yield
 
-  def python(self, name, script, args=None, show_path=True, **kwargs):
+  def python(self, name, script, args=None, show_path=True, venv=False,
+             **kwargs):
     """Bootstraps a Python through "tools/build"'s "runit.py".
 
     This function has the same semantics as the "recipe_engine/python" module's
@@ -47,7 +48,7 @@ class ToolsBuildApi(recipe_api.RecipeApi):
     runit_args = []
     if show_path:
       runit_args += ['--show-path']
-    if not kwargs.get('venv'):
+    if not venv:
       runit_args += ['--with-third-party-lib']
     runit_args += ['--', 'python', script]
     if args:
