@@ -14,7 +14,7 @@ SPEC = {
       'gclient_config': 'chromium',
       'gclient_apply_config': [
         'v8_tot',
-        'chromium_lkcr',
+        'chromium_lkgr',
         'show_v8_revision',
       ],
       'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
@@ -34,7 +34,7 @@ SPEC = {
       'gclient_config': 'chromium',
       'gclient_apply_config': [
         'v8_tot',
-        'chromium_lkcr',
+        'chromium_lkgr',
         'show_v8_revision',
       ],
       'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
@@ -64,7 +64,7 @@ SPEC = {
       'gclient_config': 'chromium',
       'gclient_apply_config': [
         'android',
-        'chromium_lkcr',
+        'chromium_lkgr',
         'perf',
         'show_v8_revision',
         'v8_tot',
@@ -99,7 +99,7 @@ SPEC = {
       'gclient_apply_config': [
         'android',
         'v8_tot',
-        'chromium_lkcr',
+        'chromium_lkgr',
         'show_v8_revision',
       ],
       'chromium_config_kwargs': {
@@ -127,7 +127,7 @@ SPEC = {
       'gclient_config': 'chromium',
       'gclient_apply_config': [
         'v8_tot',
-        'chromium_lkcr',
+        'chromium_lkgr',
         'show_v8_revision',
       ],
       'chromium_config_kwargs': {
@@ -148,7 +148,7 @@ SPEC = {
       'gclient_config': 'chromium',
       'gclient_apply_config': [
         'v8_tot',
-        'chromium_lkcr',
+        'chromium_lkgr',
         'show_v8_revision',
       ],
       'chromium_config_kwargs': {
@@ -168,7 +168,7 @@ SPEC = {
       'gclient_config': 'chromium',
       'gclient_apply_config': [
         'v8_tot',
-        'chromium_lkcr',
+        'chromium_lkgr',
         'show_v8_revision',
       ],
       'chromium_config_kwargs': {
@@ -189,7 +189,7 @@ SPEC = {
       'gclient_config': 'chromium',
       'gclient_apply_config': [
         'v8_tot',
-        'chromium_lkcr',
+        'chromium_lkgr',
         'show_v8_revision',
       ],
       'chromium_config_kwargs': {
@@ -220,7 +220,7 @@ SPEC = {
       'gclient_config': 'chromium',
       'gclient_apply_config': [
         'v8_tot',
-        'chromium_lkcr',
+        'chromium_lkgr',
         'show_v8_revision',
       ],
       'chromium_config_kwargs': {
@@ -246,7 +246,7 @@ SPEC = {
       'gclient_config': 'chromium',
       'gclient_apply_config': [
         'v8_tot',
-        'chromium_lkcr',
+        'chromium_lkgr',
         'show_v8_revision',
       ],
       'chromium_config_kwargs': {
@@ -272,7 +272,7 @@ SPEC = {
       'gclient_config': 'chromium',
       'gclient_apply_config': [
         'v8_tot',
-        'chromium_lkcr',
+        'chromium_lkgr',
         'show_v8_revision',
       ],
       'chromium_config_kwargs': {
@@ -298,7 +298,7 @@ SPEC = {
       'gclient_config': 'chromium',
       'gclient_apply_config': [
         'v8_tot',
-        'chromium_lkcr',
+        'chromium_lkgr',
         'show_v8_revision',
       ],
       'chromium_config_kwargs': {
@@ -324,7 +324,7 @@ SPEC = {
       'gclient_apply_config': [
         'android',
         'v8_tot',
-        'chromium_lkcr',
+        'chromium_lkgr',
         'show_v8_revision',
       ],
       'chromium_config_kwargs': {

@@ -100,7 +100,7 @@ BUILDERS = freeze({
         'android',
         'perf',
         'v8_tot',
-        'chromium_lkcr',
+        'chromium_lkgr',
         'show_v8_revision',
       ],
       'kwargs': {

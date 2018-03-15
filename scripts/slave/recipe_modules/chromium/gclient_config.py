@@ -66,11 +66,6 @@ def chromium(c):
   s.custom_deps = mirror_only(c, {})
 
 @CONFIG_CTX(includes=['chromium'])
-def chromium_lkcr(c):
-  s = c.solutions[0]
-  s.revision = 'origin/lkcr'
-
-@CONFIG_CTX(includes=['chromium'])
 def chromium_lkgr(c):
   s = c.solutions[0]
   s.revision = 'origin/lkgr'
