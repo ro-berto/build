@@ -1315,7 +1315,7 @@ class GatekeeperTest(unittest.TestCase):
                    'text': step.text}
 
       step_json['started'] = step.isStarted
-      step_json['urls'] = []
+      step_json['urls'] = {}
 
       for log in step.logs:
         log_url = step_url + '/logs/%s' % log.name
