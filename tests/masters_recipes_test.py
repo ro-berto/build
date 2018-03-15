@@ -113,6 +113,7 @@ FAKE_BUILDERS = {
     ],
     'master.tryserver.chromium.linux': [
         # These have been migrated to LUCI.
+        'linux-blink-heap-verification-try',
         'linux_chromium_compile_dbg_ng',
         'linux_chromium_compile_rel_ng',
         'linux_chromium_dbg_ng',

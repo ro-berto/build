@@ -343,6 +343,10 @@ TRYBOTS = freeze({
         'mastername': 'chromium.fyi',
         'buildername': 'linux-annotator-rel',
       }),
+      'linux-blink-heap-verification-try': simple_bot({
+        'mastername': 'chromium.fyi',
+        'buildername': 'linux-blink-heap-verification',
+      }),
       'linux_arm': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'Linux ARM',
