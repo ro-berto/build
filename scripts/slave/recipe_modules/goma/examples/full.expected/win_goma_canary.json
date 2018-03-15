@@ -94,7 +94,9 @@
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\test_builder",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
+      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "build_data_dir\\goma_stats_proto",
+      "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_ENABLE_MACRO_CACHE": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
@@ -157,7 +159,9 @@
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\test_builder",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
+      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "build_data_dir\\goma_stats_proto",
+      "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_ENABLE_MACRO_CACHE": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
@@ -190,7 +194,9 @@
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\test_builder",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
+      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "build_data_dir\\goma_stats_proto",
+      "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_ENABLE_MACRO_CACHE": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
@@ -212,7 +218,9 @@
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\test_builder",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
+      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "build_data_dir\\goma_stats_proto",
+      "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_ENABLE_MACRO_CACHE": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
@@ -252,6 +260,8 @@
       "build_data_dir",
       "--goma-stats-file",
       "build_data_dir\\goma_stats_proto",
+      "--goma-counterz-file",
+      "[TMP_BASE]\\goma_counterz",
       "--goma-crash-report-id-file",
       "build_data_dir\\crash_report_id_file",
       "--build-id",

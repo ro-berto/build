@@ -4,11 +4,13 @@ syntax = "proto3";
 
 // https://chromium.googlesource.com/infra/goma/client/+/master/lib/goma_stats.proto
 import "goma_stats.proto";
+// https://chromium.googlesource.com/infra/goma/client/+/master/client/counterz.proto
+import "counterz.proto";
 
 package devtools_goma;
 
 // This is BigQuery schema for goma-related events stored in chrome-infra.
-// NEXT ID TO USE: 6
+// NEXT ID TO USE: 7
 message CompileEvent {
   // The reason why GomaStats is not available or OK if GomaStats is available.
   enum GomaExitStatus {
@@ -34,4 +36,6 @@ message CompileEvent {
   GomaExitStatus exit_status = 4;
   // If the compiler_proxy crashed, crash_id is stored.
   string crash_id = 5;
+  // Goma compiler_proxy's counterz (walltime profiler) stats.
+  CounterzStats counterz_stats = 6;
 }

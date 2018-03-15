@@ -16,12 +16,14 @@ COMPILE_EVENTS_DATASET = 'client_events'
 COMPILE_EVENTS_TABLE = 'compile_events'
 
 
-def SendCompileEvent(goma_stats_file, goma_crash_report, build_id, step_name,
+def SendCompileEvent(goma_stats_file, goma_counterz_file,
+                     goma_crash_report, build_id, step_name,
                      bqclient):
   """Insert CompileEvent to BigQuery table.
 
   Args:
     goma_stats_file: a file that has binary representation of GomaStats.
+    goma_counterz_file: a file that has binary representation of CounterzStats.
     goma_crash_report: a file that has compiler_proxy crash report id
                        if it crashed.
     build_id: Build ID string.
@@ -37,6 +39,11 @@ def SendCompileEvent(goma_stats_file, goma_crash_report, build_id, step_name,
       with open(goma_stats_file) as f:
         event.stats.ParseFromString(f.read())
         event.exit_status = compile_events_pb2.CompileEvent.OK
+
+      if goma_counterz_file and os.path.exists(goma_counterz_file):
+        with open(goma_counterz_file) as f:
+          event.counterz_stats.ParseFromString(f.read())
+
     else:
       if goma_crash_report and os.path.exists(goma_crash_report):
         with open(goma_crash_report) as f:

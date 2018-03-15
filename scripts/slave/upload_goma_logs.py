@@ -66,6 +66,10 @@ def main():
                       help='Filename of a GomaStats binary protobuf. '
                       'If empty or non-existing file, it will report error '
                       'to chrome infra monitoring system.')
+  parser.add_argument('--goma-counterz-file',
+                      help='Filename of a CounterzStats binary protobuf. '
+                      'If empty or non-existing file, it will report error '
+                      'to chrome infra monitoring system.')
   parser.add_argument('--goma-crash-report-id-file',
                       metavar='FILENAME',
                       help='Filename that has a crash report id.')
@@ -151,6 +155,7 @@ def main():
   if args.goma_stats_file and args.build_id and bqclient:
     # TODO(yyanagisawa): set step name etc.
     goma_bq_utils.SendCompileEvent(args.goma_stats_file,
+                                   args.goma_counterz_file,
                                    args.goma_crash_report_id_file,
                                    args.build_id,
                                    '',

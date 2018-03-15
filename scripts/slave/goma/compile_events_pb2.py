@@ -14,15 +14,16 @@ _sym_db = _symbol_database.Default()
 
 
 import goma_stats_pb2 as goma__stats__pb2
+import counterz_pb2 as counterz__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='compile_events.proto',
   package='devtools_goma',
   syntax='proto3',
-  serialized_pb=_b('\n\x14\x63ompile_events.proto\x12\rdevtools_goma\x1a\x10goma_stats.proto\"\x8c\x02\n\x0c\x43ompileEvent\x12\x10\n\x08\x62uild_id\x18\x01 \x01(\x03\x12\x11\n\tstep_name\x18\x02 \x01(\t\x12\'\n\x05stats\x18\x03 \x01(\x0b\x32\x18.devtools_goma.GomaStats\x12?\n\x0b\x65xit_status\x18\x04 \x01(\x0e\x32*.devtools_goma.CompileEvent.GomaExitStatus\x12\x10\n\x08\x63rash_id\x18\x05 \x01(\t\"[\n\x0eGomaExitStatus\x12\x06\n\x02OK\x10\x00\x12\x1b\n\x17\x44IED_WITH_UNKOWN_REASON\x10\x01\x12\x0b\n\x07\x43RASHED\x10\x02\x12\x17\n\x13\x44IED_WITH_LOG_FATAL\x10\x03\x62\x06proto3')
+  serialized_pb=_b('\n\x14\x63ompile_events.proto\x12\rdevtools_goma\x1a\x10goma_stats.proto\x1a\x0e\x63ounterz.proto\"\xc2\x02\n\x0c\x43ompileEvent\x12\x10\n\x08\x62uild_id\x18\x01 \x01(\x03\x12\x11\n\tstep_name\x18\x02 \x01(\t\x12\'\n\x05stats\x18\x03 \x01(\x0b\x32\x18.devtools_goma.GomaStats\x12?\n\x0b\x65xit_status\x18\x04 \x01(\x0e\x32*.devtools_goma.CompileEvent.GomaExitStatus\x12\x10\n\x08\x63rash_id\x18\x05 \x01(\t\x12\x34\n\x0e\x63ounterz_stats\x18\x06 \x01(\x0b\x32\x1c.devtools_goma.CounterzStats\"[\n\x0eGomaExitStatus\x12\x06\n\x02OK\x10\x00\x12\x1b\n\x17\x44IED_WITH_UNKOWN_REASON\x10\x01\x12\x0b\n\x07\x43RASHED\x10\x02\x12\x17\n\x13\x44IED_WITH_LOG_FATAL\x10\x03\x62\x06proto3')
   ,
-  dependencies=[goma__stats__pb2.DESCRIPTOR,])
+  dependencies=[goma__stats__pb2.DESCRIPTOR,counterz__pb2.DESCRIPTOR,])
 
 
 
@@ -51,8 +52,8 @@ _COMPILEEVENT_GOMAEXITSTATUS = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=235,
-  serialized_end=326,
+  serialized_start=305,
+  serialized_end=396,
 )
 _sym_db.RegisterEnumDescriptor(_COMPILEEVENT_GOMAEXITSTATUS)
 
@@ -99,6 +100,13 @@ _COMPILEEVENT = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    _descriptor.FieldDescriptor(
+      name='counterz_stats', full_name='devtools_goma.CompileEvent.counterz_stats', index=5,
+      number=6, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -112,12 +120,13 @@ _COMPILEEVENT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=58,
-  serialized_end=326,
+  serialized_start=74,
+  serialized_end=396,
 )
 
 _COMPILEEVENT.fields_by_name['stats'].message_type = goma__stats__pb2._GOMASTATS
 _COMPILEEVENT.fields_by_name['exit_status'].enum_type = _COMPILEEVENT_GOMAEXITSTATUS
+_COMPILEEVENT.fields_by_name['counterz_stats'].message_type = counterz__pb2._COUNTERZSTATS
 _COMPILEEVENT_GOMAEXITSTATUS.containing_type = _COMPILEEVENT
 DESCRIPTOR.message_types_by_name['CompileEvent'] = _COMPILEEVENT
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)

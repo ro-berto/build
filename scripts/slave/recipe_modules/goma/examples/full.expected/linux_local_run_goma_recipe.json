@@ -73,7 +73,9 @@
       "GOMACTL_CRASH_REPORT_ID_FILE": "build_data_dir/crash_report_id_file",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[CACHE]/goma/test_builder",
+      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "build_data_dir/goma_stats_proto",
+      "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error"
     },
     "infra_step": true,
@@ -108,7 +110,9 @@
       "GOMACTL_CRASH_REPORT_ID_FILE": "build_data_dir/crash_report_id_file",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[CACHE]/goma/test_builder",
+      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "build_data_dir/goma_stats_proto",
+      "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error"
     },
     "name": "postprocess_for_goma.goma_jsonstatus",
@@ -138,7 +142,9 @@
       "GOMACTL_CRASH_REPORT_ID_FILE": "build_data_dir/crash_report_id_file",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[CACHE]/goma/test_builder",
+      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "build_data_dir/goma_stats_proto",
+      "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error"
     },
     "name": "postprocess_for_goma.goma_stat",
@@ -157,7 +163,9 @@
       "GOMACTL_CRASH_REPORT_ID_FILE": "build_data_dir/crash_report_id_file",
       "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[CACHE]/goma/test_builder",
+      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "build_data_dir/goma_stats_proto",
+      "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error"
     },
     "name": "postprocess_for_goma.stop_goma",
@@ -195,6 +203,8 @@
       "build_data_dir",
       "--goma-stats-file",
       "build_data_dir/goma_stats_proto",
+      "--goma-counterz-file",
+      "[TMP_BASE]/goma_counterz",
       "--goma-crash-report-id-file",
       "build_data_dir/crash_report_id_file",
       "--build-id",

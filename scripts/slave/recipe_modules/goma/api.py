@@ -49,6 +49,11 @@ class GomaApi(recipe_api.RecipeApi):
     return self.m.puppet_service_account.get_key_path('goma-cloudtail')
 
   @property
+  def counterz_path(self):
+    assert self._goma_dir
+    return self.m.path['tmp_base'].join('goma_counterz')
+
+  @property
   def bigquery_service_account_json_path(self):
     return self.m.puppet_service_account.get_key_path('goma-bigquery')
 
@@ -263,6 +268,9 @@ class GomaApi(recipe_api.RecipeApi):
 
       self._goma_ctl_env['GOMA_BACKEND_SOFT_STICKINESS'] = 'false'
 
+      self._goma_ctl_env['GOMA_DUMP_COUNTERZ_FILE'] = self.counterz_path
+      self._goma_ctl_env['GOMA_ENABLE_COUNTERZ'] = 'true'
+
       if self._is_canary:
         # Set larger entry limit to store result of included file analysis.
         # TODO(tikuta): make this default
@@ -424,6 +432,13 @@ class GomaApi(recipe_api.RecipeApi):
       args.extend([
           '--goma-stats-file', self._goma_ctl_env['GOMA_DUMP_STATS_FILE'],
       ])
+
+      # We upload counterz stats when we upload goma_stats.
+      if 'GOMA_DUMP_COUNTERZ_FILE' in self._goma_ctl_env:
+        args.extend([
+            '--goma-counterz-file',
+            self._goma_ctl_env['GOMA_DUMP_COUNTERZ_FILE'],
+        ])
 
     if self._goma_ctl_env.get('GOMACTL_CRASH_REPORT_ID_FILE'):
       args.extend([
