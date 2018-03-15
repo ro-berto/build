@@ -132,6 +132,8 @@ def RunSteps(api):
       return
 
     with api.context(cwd=api.path['checkout'].join('v8')):
+      safe_buildername = ''.join(
+        c if c.isalnum() else '_' for c in api.properties['buildername'])
       result = api.python(
           'roll deps',
           api.path['checkout'].join(
@@ -143,7 +145,7 @@ def RunSteps(api):
            'kozyatinskiy@chromium.org,sergiyb@chromium.org',
            '--roll',
            '--json-output', api.json.output(),
-           '--work-dir', api.path['start_dir'].join('workdir')],
+           '--work-dir', api.path['cache'].join(safe_buildername, 'workdir')],
           step_test_data=lambda: api.json.test_api.output(
               {'monitoring_state': 'success'}),
       )

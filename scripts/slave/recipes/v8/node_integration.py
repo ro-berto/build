@@ -110,12 +110,10 @@ def _build_and_upload(api):
       ],
     )
 
-  # TODO(machenbach): Use a proper temp dir for putting archive-build and the
-  # zip file to not depend on start_dir.
-  archive_dir = api.path['start_dir'].join('archive-build')
+  archive_dir = api.path['cleanup'].join('archive-build')
   archive_name = ('node-%s-rel-%s-%s.zip' %
                   (api.platform.name, api.v8.revision_number, api.v8.revision))
-  zip_file = api.path['start_dir'].join(archive_name)
+  zip_file = api.path['cleanup'].join(archive_name)
 
   # Make archive directory.
   api.file.ensure_directory('install directory', archive_dir)
@@ -143,10 +141,6 @@ def _build_and_upload(api):
   api.step('Archive link', cmd=None)
   api.step.active_result.presentation.links['download'] = (
       ARCHIVE_LINK % (api.platform.name, archive_name))
-
-  # Clean up.
-  api.file.remove('cleanup archive', zip_file)
-  api.file.rmtree('archive directory', archive_dir)
 
 
 def RunSteps(api):

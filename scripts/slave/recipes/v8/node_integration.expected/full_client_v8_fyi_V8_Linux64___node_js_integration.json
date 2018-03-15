@@ -152,7 +152,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[START_DIR]/archive-build"
+      "[CLEANUP]/archive-build"
     ],
     "infra_step": true,
     "name": "install directory"
@@ -162,7 +162,7 @@
       "make",
       "-j8",
       "install",
-      "DESTDIR=[START_DIR]/archive-build"
+      "DESTDIR=[CLEANUP]/archive-build"
     ],
     "cwd": "[START_DIR]/node.js",
     "name": "build and install node.js"
@@ -174,7 +174,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "name": "zipping",
-    "stdin": "{\"entries\": [{\"path\": \"[START_DIR]/archive-build\", \"type\": \"dir\"}], \"output\": \"[START_DIR]/node-linux-rel-50110-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.zip\", \"root\": \"[START_DIR]/archive-build\"}"
+    "stdin": "{\"entries\": [{\"path\": \"[CLEANUP]/archive-build\", \"type\": \"dir\"}], \"output\": \"[CLEANUP]/node-linux-rel-50110-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.zip\", \"root\": \"[CLEANUP]/archive-build\"}"
   },
   {
     "cmd": [
@@ -187,7 +187,7 @@
       "cp",
       "-a",
       "public-read",
-      "[START_DIR]/node-linux-rel-50110-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.zip",
+      "[CLEANUP]/node-linux-rel-50110-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.zip",
       "gs://chromium-v8/node-linux-rel/node-linux-rel-50110-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.zip"
     ],
     "infra_step": true,
@@ -202,32 +202,6 @@
     "~followup_annotations": [
       "@@@STEP_LINK@download@https://storage.googleapis.com/chromium-v8/node-linux-rel/node-linux-rel-50110-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.zip@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "remove",
-      "[START_DIR]/node-linux-rel-50110-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.zip"
-    ],
-    "infra_step": true,
-    "name": "cleanup archive"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "rmtree",
-      "[START_DIR]/archive-build"
-    ],
-    "infra_step": true,
-    "name": "archive directory"
   },
   {
     "cmd": [],

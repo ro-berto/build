@@ -156,11 +156,11 @@
       "-c",
       "[START_DIR]/src",
       "--json",
-      "[START_DIR]/v8-releases-update.json",
+      "[CLEANUP]/v8-releases-update.json",
       "--branch",
       "recent",
       "--work-dir",
-      "[START_DIR]/workdir"
+      "[CACHE]/TestBuilder/workdir"
     ],
     "cwd": "[START_DIR]/v8",
     "name": "V8Releases"
@@ -174,7 +174,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[START_DIR]/v8-releases-update.json",
+      "[CLEANUP]/v8-releases-update.json",
       "gs://chromium-v8-auto-roll/v8rel/v8-releases-update.json"
     ],
     "infra_step": true,

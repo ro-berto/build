@@ -253,7 +253,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "--work-dir",
-      "[START_DIR]/workdir"
+      "[CACHE]/TestBuilder/workdir"
     ],
     "cwd": "[START_DIR]/src/v8",
     "name": "roll deps",

@@ -53,8 +53,7 @@ def make_archive(api, branch, version, archive_type, step_suffix='',
   ).json.output
 
   # Zip build.
-  # TODO(machenbach): Remove usage of start_dir. Use a temp dir instead.
-  zip_file = api.path['start_dir'].join('archive.zip')
+  zip_file = api.path['cleanup'].join('archive.zip')
   package = api.zip.make_package(build_dir, zip_file)
   map(package.add_file, map(api.path.abs_to_path, file_list))
   package.zip('zipping' + step_suffix)
@@ -98,9 +97,6 @@ def make_archive(api, branch, version, archive_type, step_suffix='',
   api.step('archive link' + step_suffix, cmd=None)
   api.step.active_result.presentation.links['download'] = (
       ARCHIVE_LINK % (gs_path_suffix, archive_name))
-
-  # Clean up.
-  api.file.remove('cleanup archive' + step_suffix, zip_file)
 
 
 def RunSteps(api):

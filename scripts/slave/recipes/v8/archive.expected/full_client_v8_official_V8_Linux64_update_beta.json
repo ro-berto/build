@@ -10,7 +10,7 @@
       "cp",
       "-a",
       "public-read",
-      "[START_DIR]/archive.zip",
+      "[CLEANUP]/archive.zip",
       "gs://chromium-v8/official/refbuild/v8-linux64-rel.zip"
     ],
     "infra_step": true,
@@ -30,7 +30,7 @@
       "cp",
       "-a",
       "public-read",
-      "[START_DIR]/archive.zip",
+      "[CLEANUP]/archive.zip",
       "gs://chromium-v8/official/refbuild/v8-linux64-libs-rel.zip"
     ],
     "infra_step": true,

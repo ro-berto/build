@@ -75,7 +75,7 @@
       "RECIPE_MODULE[build::zip]\\resources\\zip.py"
     ],
     "name": "zipping",
-    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[START_DIR]\\\\v8\\\\out\\\\Release\\\\d8\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[START_DIR]\\\\v8\\\\out\\\\Release\\\\icudtl.dat\", \"type\": \"file\"}], \"output\": \"[START_DIR]\\\\archive.zip\", \"root\": \"[START_DIR]\\\\v8\\\\out\\\\Release\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[START_DIR]\\\\v8\\\\out\\\\Release\\\\d8\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[START_DIR]\\\\v8\\\\out\\\\Release\\\\icudtl.dat\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\archive.zip\", \"root\": \"[START_DIR]\\\\v8\\\\out\\\\Release\"}"
   },
   {
     "cmd": [
@@ -88,7 +88,7 @@
       "cp",
       "-a",
       "public-read",
-      "[START_DIR]\\archive.zip",
+      "[CLEANUP]\\archive.zip",
       "gs://chromium-v8/official/3.4/v8-win32-rel-3.4.3.17.zip"
     ],
     "infra_step": true,
@@ -135,7 +135,7 @@
       "RECIPE_MODULE[build::zip]\\resources\\zip.py"
     ],
     "name": "zipping (libs)",
-    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[START_DIR]\\\\v8\\\\out\\\\Release\\\\d8\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[START_DIR]\\\\v8\\\\out\\\\Release\\\\icudtl.dat\", \"type\": \"file\"}], \"output\": \"[START_DIR]\\\\archive.zip\", \"root\": \"[START_DIR]\\\\v8\\\\out\\\\Release\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[START_DIR]\\\\v8\\\\out\\\\Release\\\\d8\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[START_DIR]\\\\v8\\\\out\\\\Release\\\\icudtl.dat\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\archive.zip\", \"root\": \"[START_DIR]\\\\v8\\\\out\\\\Release\"}"
   },
   {
     "cmd": [
@@ -148,7 +148,7 @@
       "cp",
       "-a",
       "public-read",
-      "[START_DIR]\\archive.zip",
+      "[CLEANUP]\\archive.zip",
       "gs://chromium-v8/official/3.4/v8-win32-libs-rel-3.4.3.17.zip"
     ],
     "infra_step": true,

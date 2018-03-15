@@ -26,16 +26,18 @@ def RunSteps(api):
   api.bot_update.ensure_checkout(
       no_shallow=True, with_branch_heads=True)
   with api.context(cwd=api.path['start_dir'].join('v8')):
+    safe_buildername = ''.join(
+      c if c.isalnum() else '_' for c in api.properties['buildername'])
     api.step(
         'V8Releases',
         [api.path['start_dir'].join(
              'v8', 'tools', 'release', 'releases.py'),
          '-c', api.path['checkout'],
-         '--json', api.path['start_dir'].join('v8-releases-update.json'),
+         '--json', api.path['cleanup'].join('v8-releases-update.json'),
          '--branch', 'recent',
-         '--work-dir', api.path['start_dir'].join('workdir')],
+         '--work-dir', api.path['cache'].join(safe_buildername, 'workdir')],
       )
-  api.gsutil.upload(api.path['start_dir'].join('v8-releases-update.json'),
+  api.gsutil.upload(api.path['cleanup'].join('v8-releases-update.json'),
                     'chromium-v8-auto-roll',
                     api.path.join('v8rel', 'v8-releases-update.json'))
 

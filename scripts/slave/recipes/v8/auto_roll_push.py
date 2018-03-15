@@ -33,6 +33,8 @@ def RunSteps(api):
     api.step.active_result.presentation.step_text = "Pushing activated"
 
   with api.context(cwd=api.path['checkout']):
+    safe_buildername = ''.join(
+      c if c.isalnum() else '_' for c in api.properties['buildername'])
     api.python(
         'push candidate',
         api.path['checkout'].join(
@@ -40,7 +42,7 @@ def RunSteps(api):
         ['--author', 'v8-autoroll@chromium.org',
          '--reviewer', 'v8-autoroll@chromium.org',
          '--push',
-         '--work-dir', api.path['start_dir'].join('workdir')],
+         '--work-dir', api.path['cache'].join(safe_buildername, 'workdir')],
       )
 
 
