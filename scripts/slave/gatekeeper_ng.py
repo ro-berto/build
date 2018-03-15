@@ -712,8 +712,9 @@ def notify_failures(failed_builds, sheriff_url, default_from_email,
 
     for step in failed_build['build']['steps']:
       new_step = {}
-      for field in ['text', 'name', 'logs']:
-        new_step[field] = step[field]
+      for field, default in [('text', ''), ('name', '')]:
+        new_step[field] = step.get(field) or default
+      new_step['logs'] = step['logs']
       new_step['started'] = step.get('isStarted', False)
       new_step['urls'] = step.get('urls') or {}
       new_step['results'] = step.get('results', [0, None])[0]
