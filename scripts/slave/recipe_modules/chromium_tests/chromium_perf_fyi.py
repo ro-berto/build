@@ -88,12 +88,19 @@ _AddBuildSpec('Android CFI arm64 Builder FYI', 'android', 'android',
                                      'system_webview_shell_apk',])
 
 _AddBuildSpec('Linux Compile FYI', 'linux-fyi', 'linux')
+_AddBuildSpec('Mac Builder FYI', 'mac-fyi', 'mac')
 
 _AddIsolatedTestSpec('Mojo Linux Perf', 'mojo-linux-perf', 'linux')
 _AddIsolatedTestSpec(
     'One Buildbot Step Test Builder', 'buildbot-test', 'linux',
     parent_buildername='Linux Compile FYI')
-_AddIsolatedTestSpec('Mac 10.12 Laptop Low End', '', 'mac')
+
+_AddIsolatedTestSpec('Mac 10.12 Laptop Low End', '', 'mac',
+                     parent_buildername='Mac Builder FYI')
+_AddIsolatedTestSpec('Mac 10.13 Laptop High End', '', 'mac',
+                     parent_buildername='Mac Builder FYI')
+_AddIsolatedTestSpec('Android Go', '', 'android',
+                     parent_buildername='Android Builder FYI')
 
 _AddBuildSpec('Battor Agent Linux', 'linux', 'linux', run_sizes=False,
               compile_targets=['battor_agent'])
