@@ -2888,6 +2888,74 @@ BUILDERS = {
         },
         'testing': {'platform': 'mac'},
       },
+      'v8_mac64_rel_ng': {
+        'chromium_apply_config': [
+          'v8_ninja', 'default_compiler', 'goma', 'mb'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'enable_swarming': True,
+        'slim_swarming_builder': True,
+        'triggers': [
+          'v8_mac64_rel_ng_triggered',
+        ],
+        'testing': {'platform': 'mac'},
+      },
+      'v8_mac64_rel_ng_triggered': {
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'v8_mac64_rel_ng',
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Mac-10.13',
+          'cpu': 'x86-64',
+        },
+        'tests': [
+          V8Testing,
+          Test262,
+          Mozilla,
+        ] + with_extra_variants([V8Testing]),
+        'testing': {'platform': 'linux'},
+      },
+      'v8_mac64_dbg_ng': {
+        'chromium_apply_config': [
+          'v8_ninja', 'default_compiler', 'goma', 'mb'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'enable_swarming': True,
+        'slim_swarming_builder': True,
+        'triggers': [
+          'v8_mac64_dbg_ng_triggered',
+        ],
+        'testing': {'platform': 'mac'},
+      },
+      'v8_mac64_dbg_ng_triggered': {
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'v8_mac64_dbg_ng',
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Mac-10.13',
+          'cpu': 'x86-64',
+        },
+        'tests': [
+          V8Testing(3),
+          Test262,
+          Mozilla,
+        ] + with_extra_variants([V8Testing(2)]),
+        'testing': {'platform': 'linux'},
+      },
       'v8_mac64_rel': {
         'chromium_apply_config': [
           'v8_ninja', 'default_compiler', 'goma', 'mb'],
