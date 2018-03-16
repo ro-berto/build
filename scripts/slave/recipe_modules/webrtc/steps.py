@@ -276,10 +276,15 @@ def _UploadToPerfDashboard(name, api, task_output_dir):
       '--results-url', DASHBOARD_UPLOAD_URL,
   ]
 
+  # This will create a Chromium git hash range and a WebRTC git hash range
+  # in the perf dashboard.
   if 'got_revision_cp' in api.properties:
     args.extend(['--got-revision-cp', api.properties['got_revision_cp']])
   if 'git_revision' in api.properties:
-    args.extend(['--git-revision', api.properties['git_revision']])
+    # This is the WebRTC hash we built at.
+    revision = api.properties['git_revision']
+    args.extend(['--git-revision', revision])
+    args.extend(['--webrtc-got-revision', revision])
 
   args.append('--output-json-dashboard-url')
   args.append(api.json.output(add_json_log=False, name='dashboard_url'))
