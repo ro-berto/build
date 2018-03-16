@@ -262,12 +262,14 @@
   },
   {
     "cmd": [
-      "[START_DIR]/art/tools/wrap-logcat.py",
-      "-o",
-      "[TMP_BASE]/art-test-lc-dir_tmp_1/out_art_logcat.txt",
-      "--logcat-invoke",
-      "adb logcat -v threadtime",
-      "./art/test/testrunner/testrunner.py -j4 --optimizing --debuggable --ndebuggable --target --verbose --ndebug"
+      "./art/test/testrunner/testrunner.py",
+      "-j4",
+      "--optimizing",
+      "--debuggable",
+      "--ndebuggable",
+      "--target",
+      "--verbose",
+      "--ndebug"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -296,8 +298,11 @@
   },
   {
     "cmd": [
-      "cat",
-      "[TMP_BASE]/art-test-lc-dir_tmp_1/out_art_logcat.txt"
+      "adb",
+      "logcat",
+      "-d",
+      "-v",
+      "threadtime"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -324,8 +329,7 @@
   },
   {
     "cmd": [
-      "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh",
-      "[TMP_BASE]/art-test-lc-dir_tmp_1/out_art_logcat.txt"
+      "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -381,12 +385,12 @@
   },
   {
     "cmd": [
-      "[START_DIR]/art/tools/wrap-logcat.py",
-      "-o",
-      "[TMP_BASE]/art-test-lc-dir_tmp_1/out_art_logcat.txt",
-      "--logcat-invoke",
-      "adb logcat -v threadtime",
-      "./art/test/testrunner/testrunner.py -j4 --interpreter --target --verbose --ndebug"
+      "./art/test/testrunner/testrunner.py",
+      "-j4",
+      "--interpreter",
+      "--target",
+      "--verbose",
+      "--ndebug"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -415,8 +419,11 @@
   },
   {
     "cmd": [
-      "cat",
-      "[TMP_BASE]/art-test-lc-dir_tmp_1/out_art_logcat.txt"
+      "adb",
+      "logcat",
+      "-d",
+      "-v",
+      "threadtime"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -443,8 +450,7 @@
   },
   {
     "cmd": [
-      "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh",
-      "[TMP_BASE]/art-test-lc-dir_tmp_1/out_art_logcat.txt"
+      "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -500,12 +506,12 @@
   },
   {
     "cmd": [
-      "[START_DIR]/art/tools/wrap-logcat.py",
-      "-o",
-      "[TMP_BASE]/art-test-lc-dir_tmp_1/out_art_logcat.txt",
-      "--logcat-invoke",
-      "adb logcat -v threadtime",
-      "./art/test/testrunner/testrunner.py -j4 --jit --target --verbose --ndebug"
+      "./art/test/testrunner/testrunner.py",
+      "-j4",
+      "--jit",
+      "--target",
+      "--verbose",
+      "--ndebug"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -534,8 +540,11 @@
   },
   {
     "cmd": [
-      "cat",
-      "[TMP_BASE]/art-test-lc-dir_tmp_1/out_art_logcat.txt"
+      "adb",
+      "logcat",
+      "-d",
+      "-v",
+      "threadtime"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -562,8 +571,7 @@
   },
   {
     "cmd": [
-      "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh",
-      "[TMP_BASE]/art-test-lc-dir_tmp_1/out_art_logcat.txt"
+      "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -619,12 +627,12 @@
   },
   {
     "cmd": [
-      "[START_DIR]/art/tools/wrap-logcat.py",
-      "-o",
-      "[TMP_BASE]/art-test-lc-dir_tmp_1/out_art_logcat.txt",
-      "--logcat-invoke",
-      "adb logcat -v threadtime",
-      "./art/test/testrunner/testrunner.py -j4 --speed-profile --target --verbose --ndebug"
+      "./art/test/testrunner/testrunner.py",
+      "-j4",
+      "--speed-profile",
+      "--target",
+      "--verbose",
+      "--ndebug"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -653,8 +661,11 @@
   },
   {
     "cmd": [
-      "cat",
-      "[TMP_BASE]/art-test-lc-dir_tmp_1/out_art_logcat.txt"
+      "adb",
+      "logcat",
+      "-d",
+      "-v",
+      "threadtime"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -681,8 +692,7 @@
   },
   {
     "cmd": [
-      "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh",
-      "[TMP_BASE]/art-test-lc-dir_tmp_1/out_art_logcat.txt"
+      "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -735,19 +745,6 @@
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test speed-profile: adb clear log"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "rmtree",
-      "[TMP_BASE]/art-test-lc-dir_tmp_1"
-    ],
-    "infra_step": true,
-    "name": "rmtree [TMP_BASE]/art-test-lc-dir_tmp_1"
   },
   {
     "cmd": [
@@ -1343,7 +1340,7 @@
   },
   {
     "name": "$result",
-    "reason": "1 out of 44 aggregated steps failed. Failures: Step('device cleanup') failed with return_code 1",
+    "reason": "1 out of 43 aggregated steps failed. Failures: Step('device cleanup') failed with return_code 1",
     "recipe_result": null,
     "status_code": 1
   }
