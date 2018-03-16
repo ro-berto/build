@@ -87,7 +87,6 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "build_data_dir/crash_report_id_file",
-      "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[CACHE]/goma/test_builder",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "build_data_dir/goma_stats_proto",
@@ -150,7 +149,6 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "build_data_dir/crash_report_id_file",
-      "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[CACHE]/goma/test_builder",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "build_data_dir/goma_stats_proto",
@@ -175,7 +173,6 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "build_data_dir/crash_report_id_file",
-      "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[CACHE]/goma/test_builder",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "build_data_dir/goma_stats_proto",
@@ -197,7 +194,6 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "build_data_dir/crash_report_id_file",
-      "GOMA_BACKEND_SOFT_STICKINESS": "false",
       "GOMA_CACHE_DIR": "[CACHE]/goma/test_builder",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "build_data_dir/goma_stats_proto",

@@ -266,8 +266,6 @@ class GomaApi(recipe_api.RecipeApi):
       # Do not continue to build when unsupported compiler is used.
       self._goma_ctl_env['GOMA_HERMETIC'] = 'error'
 
-      self._goma_ctl_env['GOMA_BACKEND_SOFT_STICKINESS'] = 'false'
-
       self._goma_ctl_env['GOMA_DUMP_COUNTERZ_FILE'] = self.counterz_path
       self._goma_ctl_env['GOMA_ENABLE_COUNTERZ'] = 'true'
 
