@@ -10,10 +10,6 @@ import json
 import os
 import sys
 
-from google.cloud import bigquery
-from google.oauth2 import service_account
-
-from slave import goma_bq_utils
 from slave import goma_utils
 
 GOMA_LOGS_PROJECT = 'goma-logs'
@@ -27,6 +23,11 @@ def GetBigQueryClient(service_account_json):
   """
   if not service_account_json:
     return None
+
+  # TODO(yyanagisawa): move this back to the top line when flakiness solved
+  #                    (crbug.com/822042)
+  from google.cloud import bigquery
+  from google.oauth2 import service_account
 
   creds = service_account.Credentials.from_service_account_file(
       service_account_json)
@@ -153,8 +154,18 @@ def main():
     with open(args.log_url_json_file, 'w') as f:
       f.write(json.dumps(viewer_urls))
 
-  bqclient = GetBigQueryClient(args.bigquery_service_account_json)
+  bqclient = None
+  # TODO(yyanagisawa): remove move this when flakiness is solved
+  #                    (crbug.com/822042)
+  # Without Build ID, we do not use BigQuery.  Let me minimize the
+  # points that cause crbug.com/822042.
+  if args.build_id:
+    bqclient = GetBigQueryClient(args.bigquery_service_account_json)
+
   if args.goma_stats_file and args.build_id and bqclient:
+    # TODO(yyanagisawa): move this back to the top line when flakiness is solved
+    #                    (crbug.com/822042)
+    from slave import goma_bq_utils
     goma_bq_utils.SendCompileEvent(args.goma_stats_file,
                                    args.goma_counterz_file,
                                    args.goma_crash_report_id_file,
