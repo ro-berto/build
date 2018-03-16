@@ -681,4 +681,5 @@ def DetermineGomaJobs():
       ['slave%d-c4' % x for x in [799] + range(873, 878)]):
     return min(10 * number_of_processors, 200)
 
-  return 50
+  # TODO(yyanagisawa): increase the lower limit (crbug.com/822533)
+  return min(10 * number_of_processors, 50)
