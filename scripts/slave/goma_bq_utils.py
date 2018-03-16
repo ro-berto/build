@@ -36,12 +36,12 @@ def SendCompileEvent(goma_stats_file, goma_counterz_file,
   event.exit_status = compile_events_pb2.CompileEvent.DIED_WITH_UNKOWN_REASON
   try:
     if goma_stats_file and os.path.exists(goma_stats_file):
-      with open(goma_stats_file) as f:
+      with open(goma_stats_file, 'rb') as f:
         event.stats.ParseFromString(f.read())
         event.exit_status = compile_events_pb2.CompileEvent.OK
 
       if goma_counterz_file and os.path.exists(goma_counterz_file):
-        with open(goma_counterz_file) as f:
+        with open(goma_counterz_file, 'rb') as f:
           event.counterz_stats.ParseFromString(f.read())
 
     else:
