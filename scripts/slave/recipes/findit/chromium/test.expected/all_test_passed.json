@@ -967,6 +967,8 @@
       "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]\\\\win\\\\src\\\\out\\\\Release\", \"-j\", 150, \"gl_tests\"]",
       "--build-exit-status",
       "0",
+      "--build-step-name",
+      "compile",
       "--ninja-log-compiler",
       "goma",
       "--goma-stats-file",

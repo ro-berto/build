@@ -582,6 +582,8 @@
       "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]/src/out/Release\", \"-j\", 150, \"tab_capture_end2end_tests_run\"]",
       "--build-exit-status",
       "0",
+      "--build-step-name",
+      "compile",
       "--ninja-log-compiler",
       "goma",
       "--goma-stats-file",

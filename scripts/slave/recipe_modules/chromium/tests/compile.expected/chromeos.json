@@ -304,6 +304,8 @@
       "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"None/out_x86-generic/Release\", \"-j\", 150, \"all\"]",
       "--build-exit-status",
       "0",
+      "--build-step-name",
+      "compile",
       "--ninja-log-compiler",
       "goma-clang",
       "--goma-stats-file",

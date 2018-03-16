@@ -321,6 +321,8 @@
       "[\"ninja\", \"-C\", \"[START_DIR]/pdfium/out/debug_v8\", \"-j\", 50, \"pdfium_all\"]",
       "--build-exit-status",
       "0",
+      "--build-step-name",
+      "compile with ninja",
       "--ninja-log-compiler",
       "unknown",
       "--goma-stats-file",

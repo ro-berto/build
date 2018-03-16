@@ -511,6 +511,8 @@
       "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/Mac_10_11/src/out/Release\", \"-j\", 50, \"isac_fix_test\", \"low_bandwidth_audio_test\", \"webrtc_perf_tests\"]",
       "--build-exit-status",
       "0",
+      "--build-step-name",
+      "compile",
       "--ninja-log-compiler",
       "goma-clang",
       "--goma-stats-file",

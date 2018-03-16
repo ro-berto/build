@@ -383,6 +383,8 @@
       "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]\\\\src\\\\out\\\\Release_x64\", \"-j\", 50]",
       "--build-exit-status",
       "0",
+      "--build-step-name",
+      "compile",
       "--ninja-log-compiler",
       "goma",
       "--goma-stats-file",

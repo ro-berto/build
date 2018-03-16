@@ -238,6 +238,8 @@
       "[\"ninja\", \"-C\", \"out/Release\", \"-j\", \"50\"]",
       "--build-exit-status",
       "0",
+      "--build-step-name",
+      "ninja",
       "--ninja-log-compiler",
       "goma",
       "--build-data-dir",

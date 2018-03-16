@@ -459,6 +459,8 @@
       "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/Linux32_Debug/src/out/Debug\", \"-j\", 50]",
       "--build-exit-status",
       "0",
+      "--build-step-name",
+      "compile",
       "--ninja-log-compiler",
       "goma",
       "--goma-stats-file",

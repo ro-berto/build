@@ -207,6 +207,8 @@
       "[TMP_BASE]/goma_jsonstatus.json",
       "--build-exit-status",
       "0",
+      "--build-step-name",
+      "compile",
       "--goma-stats-file",
       "[TMP_BASE]/goma_stats",
       "--goma-counterz-file",

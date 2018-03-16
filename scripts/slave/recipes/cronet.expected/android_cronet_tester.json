@@ -537,6 +537,8 @@
       "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]/src/out/Debug\", \"-j\", 50, \"cronet_package\", \"cronet_perf_test_apk\", \"cronet_sample_test_apk\", \"cronet_smoketests_missing_native_library_instrumentation_apk\", \"cronet_smoketests_platform_only_instrumentation_apk\", \"cronet_test_instrumentation_apk\", \"cronet_unittests_android\", \"net_unittests\"]",
       "--build-exit-status",
       "0",
+      "--build-step-name",
+      "compile",
       "--ninja-log-compiler",
       "goma",
       "--goma-stats-file",

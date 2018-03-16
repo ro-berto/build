@@ -777,6 +777,8 @@
       "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/linux/src/out/Release\", \"-j\", 150, \"telemetry_gpu_unittests\"]",
       "--build-exit-status",
       "0",
+      "--build-step-name",
+      "compile (with patch)",
       "--ninja-log-compiler",
       "goma",
       "--goma-stats-file",

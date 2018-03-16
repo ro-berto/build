@@ -385,6 +385,8 @@
       "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-C\", \"[START_DIR]/src/out/Default\", \"-j\", 50, \"chromedriver\", \"chromedriver_tests\", \"chromedriver_unittests\"]",
       "--build-exit-status",
       "0",
+      "--build-step-name",
+      "compile",
       "--ninja-log-compiler",
       "goma",
       "--goma-stats-file",

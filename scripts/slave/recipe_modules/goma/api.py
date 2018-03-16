@@ -322,7 +322,8 @@ class GomaApi(recipe_api.RecipeApi):
         raise e
 
   def stop(self, ninja_log_outdir=None, ninja_log_compiler=None,
-           ninja_log_command=None, build_exit_status=None, **kwargs):
+           ninja_log_command=None, build_exit_status=None,
+           build_step_name='', **kwargs):
     """Stop goma compiler_proxy.
 
     A user is expected to execute start beforehand.
@@ -354,8 +355,11 @@ class GomaApi(recipe_api.RecipeApi):
                           **kwargs)
             self.m.python(name='stop_goma', script=self.goma_ctl,
                           args=['stop'], **kwargs)
-          self._upload_logs(ninja_log_outdir, ninja_log_compiler,
-                            ninja_log_command, build_exit_status)
+          self._upload_logs(ninja_log_outdir=ninja_log_outdir,
+                            ninja_log_compiler=ninja_log_compiler,
+                            ninja_log_command=ninja_log_command,
+                            build_exit_status=build_exit_status,
+                            build_step_name=build_step_name)
           if self._cloudtail_running:
             self._stop_cloudtail()
 
@@ -367,7 +371,7 @@ class GomaApi(recipe_api.RecipeApi):
 
   def _upload_logs(self, ninja_log_outdir=None, ninja_log_compiler=None,
                    ninja_log_command=None, build_exit_status=None,
-                   name=None):
+                   build_step_name='', name=None):
     """
     Upload some logs to goma client log/monitoring server.
     * log of compiler_proxy
@@ -417,6 +421,11 @@ class GomaApi(recipe_api.RecipeApi):
 
     if build_exit_status is not None:
       args.extend(['--build-exit-status', build_exit_status])
+
+    if build_step_name:
+      args.extend([
+          '--build-step-name', build_step_name,
+      ])
 
     if ninja_log_compiler:
       args.extend(['--ninja-log-compiler', ninja_log_compiler])
@@ -506,9 +515,10 @@ class GomaApi(recipe_api.RecipeApi):
 
     self.start(goma_env)
 
+    build_step_name = name or 'compile'
     try:
       with self.m.context(env=ninja_env):
-        self.m.step(name or 'compile', ninja_command, **kwargs)
+        self.m.step(build_step_name, ninja_command, **kwargs)
       build_exit_status = 0
     except self.m.step.StepFailure as e:
       build_exit_status = e.retcode
@@ -517,4 +527,5 @@ class GomaApi(recipe_api.RecipeApi):
       self.stop(ninja_log_outdir=ninja_log_outdir,
                 ninja_log_compiler=ninja_log_compiler,
                 ninja_log_command=ninja_command,
-                build_exit_status=build_exit_status)
+                build_exit_status=build_exit_status,
+                build_step_name=build_step_name)

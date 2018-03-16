@@ -105,6 +105,8 @@ def main():
 
   parser.add_argument('--build-id', default=0, type=long,
                       help='unique ID of the current build')
+  parser.add_argument('--build-step-name', default='',
+                      help='step name of the current build')
   parser.add_argument('--bigquery-service-account-json', default='',
                       help='Service account json for BigQuery')
 
@@ -153,12 +155,11 @@ def main():
 
   bqclient = GetBigQueryClient(args.bigquery_service_account_json)
   if args.goma_stats_file and args.build_id and bqclient:
-    # TODO(yyanagisawa): set step name etc.
     goma_bq_utils.SendCompileEvent(args.goma_stats_file,
                                    args.goma_counterz_file,
                                    args.goma_crash_report_id_file,
                                    args.build_id,
-                                   '',
+                                   args.build_step_name,
                                    bqclient)
 
   if args.build_data_dir:

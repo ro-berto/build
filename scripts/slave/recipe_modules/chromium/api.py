@@ -343,7 +343,8 @@ class ChromiumApi(recipe_api.RecipeApi):
       self.m.goma.stop(ninja_log_outdir=ninja_log_outdir,
                        ninja_log_compiler=ninja_log_compiler,
                        ninja_log_command=ninja_command,
-                       build_exit_status=build_exit_status)
+                       build_exit_status=build_exit_status,
+                       build_step_name=name)
 
   # TODO(tikuta): Remove use_goma_module.
   # Decrease the number of ways configuring with or without goma.

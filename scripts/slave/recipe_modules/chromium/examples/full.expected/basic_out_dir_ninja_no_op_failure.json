@@ -558,6 +558,8 @@
       "/tmp/Debug",
       "--ninja-log-command-file",
       "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"/tmp/Debug\", \"-j\", 50, \"All\"]",
+      "--build-step-name",
+      "compile",
       "--ninja-log-compiler",
       "goma",
       "--goma-stats-file",
