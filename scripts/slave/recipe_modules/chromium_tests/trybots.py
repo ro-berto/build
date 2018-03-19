@@ -695,6 +695,11 @@ TRYBOTS = freeze({
         'mastername': 'chromium.fyi',
         'buildername': 'Win Builder Localoutputcache',
       }),
+      'win10_chromium_x64_dbg_ng': simple_bot({
+        'mastername': 'chromium.win',
+        'buildername': 'Win x64 Builder (dbg)',
+        'tester': 'Win10 Tests x64 (dbg)',
+      }),
       'win10_chromium_x64_rel_ng': simple_bot({
         'mastername': 'chromium.win',
         'buildername': 'Win x64 Builder',

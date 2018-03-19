@@ -107,9 +107,15 @@ FAKE_BUILDERS = {
         'Mac Builder (dbg)',
         'Mac10.13 Tests (dbg)',
     ],
+    'master.chromium.win': [
+        # These have been migrated to LUCI.
+        'Win10 Tests x64 (dbg)',
+    ],
     'master.tryserver.chromium.win' : [
         # FIXME(tansell): Remove fake when BlinkTests are removed.
         'old_chromium_rel_ng',
+        # These have been migrated to LUCI.
+        'win10_chromium_x64_dbg_ng',
     ],
     'master.tryserver.chromium.linux': [
         # These have been migrated to LUCI.
@@ -125,7 +131,7 @@ FAKE_BUILDERS = {
         'linux_angle_deqp_rel_ng',
         'linux_angle_ozone_rel_ng',
         'linux_angle_rel_ng',
-    ]
+    ],
 }
 
 

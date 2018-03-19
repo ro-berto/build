@@ -168,6 +168,25 @@ SPEC = {
         'platform': 'win',
       },
     },
+    'Win10 Tests x64 (dbg)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'Win x64 Builder (dbg)',
+      'checkout_dir': 'win',
+      'testing': {
+        'platform': 'win',
+      },
+      'swarming_dimensions': {
+        'cpu': 'x86-64',
+        'os': 'Windows-10',
+      },
+    },
     'WinMSVC64': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
