@@ -188,6 +188,7 @@ def AddTestSpec(name, perf_id, platform, target_bits=64):
 AddBuildSpec('Win Builder', 'win', target_bits=32)
 AddBuildSpec('Mac Builder', 'mac')
 AddBuildSpec('Linux Builder', 'linux')
+AddBuildSpec('Linux Builder (Chromium w/o WebRTC)', 'linux', target_bits=32)
 
 AddTestSpec('Win7 Tester', 'chromium-webrtc-rel-7', 'win', target_bits=32)
 AddTestSpec('Win7 Tester (long-running)', 'chromium-webrtc-rel-7-long', 'win',
