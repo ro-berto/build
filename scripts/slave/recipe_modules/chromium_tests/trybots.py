@@ -222,11 +222,13 @@ TRYBOTS = freeze({
             'buildername': 'GPU FYI Mac Builder',
             'tester': 'Mac FYI Release (Intel)',
           },
-          {
-            'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU FYI Mac Builder',
-            'tester': 'Mac FYI Retina Release (NVIDIA)',
-          },
+          # Disable these testers to preserve limited capacity.
+          # TODO(jmadill): Enable when possible. crbug.com/822310
+          # {
+          #   'mastername': 'chromium.gpu.fyi',
+          #   'buildername': 'GPU FYI Mac Builder',
+          #   'tester': 'Mac FYI Retina Release (NVIDIA)',
+          # },
           {
             'mastername': 'chromium.gpu.fyi',
             'buildername': 'GPU FYI Mac Builder',
