@@ -1020,7 +1020,7 @@
       "12345",
       "--git-revision",
       "git12345",
-      "--webrtc-got-revision",
+      "--got-webrtc-revision",
       "git12345",
       "--output-json-dashboard-url",
       "/path/to/tmp/json"
@@ -1218,7 +1218,7 @@
       "12345",
       "--git-revision",
       "git12345",
-      "--webrtc-got-revision",
+      "--got-webrtc-revision",
       "git12345",
       "--output-json-dashboard-url",
       "/path/to/tmp/json"
@@ -1416,7 +1416,7 @@
       "12345",
       "--git-revision",
       "git12345",
-      "--webrtc-got-revision",
+      "--got-webrtc-revision",
       "git12345",
       "--output-json-dashboard-url",
       "/path/to/tmp/json"

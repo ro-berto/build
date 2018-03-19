@@ -284,7 +284,7 @@ def _UploadToPerfDashboard(name, api, task_output_dir):
     # This is the WebRTC hash we built at.
     revision = api.properties['git_revision']
     args.extend(['--git-revision', revision])
-    args.extend(['--webrtc-got-revision', revision])
+    args.extend(['--got-webrtc-revision', revision])
 
   args.append('--output-json-dashboard-url')
   args.append(api.json.output(add_json_log=False, name='dashboard_url'))
