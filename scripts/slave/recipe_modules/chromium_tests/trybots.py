@@ -181,6 +181,40 @@ TRYBOTS = freeze({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'Android FYI dEQP Release (Nexus 5X)',
       }),
+      'linux_angle_rel_ng': {
+        'bot_ids': [
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU FYI Linux Builder',
+            'tester': 'Linux FYI Release (NVIDIA)',
+          },
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU FYI Linux Builder',
+            'tester': 'Linux FYI Release (Intel HD 630)',
+          },
+        ],
+      },
+      'linux_angle_dbg_ng': simple_bot({
+        # This bot is compile-only.
+        # TODO(jmadill): Remove or repurpose this config.
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Linux Builder (dbg)',
+      }, analyze_mode='compile'),
+      'linux_angle_compile_dbg_ng': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Linux Builder (dbg)',
+      }, analyze_mode='compile'),
+      # TODO(fjhenigman): Add Ozone testers when possible.
+      'linux_angle_ozone_rel_ng': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Linux Ozone Builder',
+      }, analyze_mode='compile'),
+      'linux_angle_deqp_rel_ng': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Linux dEQP Builder',
+        'tester': 'Linux FYI dEQP Release (NVIDIA)',
+      }),
       'mac_angle_rel_ng': {
         'bot_ids': [
           {

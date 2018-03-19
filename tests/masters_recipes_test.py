@@ -118,6 +118,13 @@ FAKE_BUILDERS = {
         'linux_chromium_compile_rel_ng',
         'linux_chromium_dbg_ng',
         'linux_chromium_rel_ng',
+    ],
+    'master.tryserver.chromium.angle': [
+        'linux_angle_compile_dbg_ng',
+        'linux_angle_dbg_ng',
+        'linux_angle_deqp_rel_ng',
+        'linux_angle_ozone_rel_ng',
+        'linux_angle_rel_ng',
     ]
 }
 
