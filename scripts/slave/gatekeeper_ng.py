@@ -465,22 +465,6 @@ def get_sheriffs(classes, base_url):
   return reduce(operator.or_, sheriff_sets, set())
 
 
-def hash_message(message, url, secret):
-  utc_now = time.time()
-  salt = random.getrandbits(32)
-  hasher = hmac.new(secret, message, hashlib.sha256)
-  hasher.update(str(utc_now))
-  hasher.update(str(salt))
-  client_hash = hasher.hexdigest()
-
-  return {'message': message,
-          'time': utc_now,
-          'salt': salt,
-          'url': url,
-          'hmac-sha256': client_hash,
-         }
-
-
 SCOPES = ['https://www.googleapis.com/auth/userinfo.email']
 
 
@@ -498,7 +482,14 @@ def submit_email(email_app, build_data, secret, simulate, creds):
     return
 
   url = email_app + '/email'
-  data = hash_message(json.dumps(build_data, sort_keys=True), url, secret)
+
+  # The data is wrapped because it used to pass other auth data in this message,
+  # which is now done by service accounts. Theoretically this wrapping should be
+  # removed, but it requires coordinating a change on the server and client,
+  # which is complicated.
+  data = {
+    'message': json.dumps(build_data, sort_keys=True),
+  }
 
   http = httplib2.Http()
   if creds:
