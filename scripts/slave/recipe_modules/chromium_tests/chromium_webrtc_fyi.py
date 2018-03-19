@@ -61,7 +61,7 @@ def AddTestSpec(name, perf_id, platform, target_bits=64,
       commit_position_property='got_cr_revision_cp',
       gclient_config='chromium_webrtc_tot',
       test_spec_file='chromium.webrtc.fyi.json',
-      enable_performance_tests=False)
+      enable_baremetal_tests=False)
   _ConfigureSyncingWebRTCToT(spec)
   SPEC['builders'][name] = spec
 
