@@ -243,6 +243,27 @@
   },
   {
     "cmd": [
+      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[START_DIR]\\src\\out\\Release",
+      "chrome",
+      "-d",
+      "explain",
+      "-n"
+    ],
+    "cwd": "[START_DIR]\\src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
+      "PATH": "[START_DIR]\\src\\out\\Release;<PATH>"
+    },
+    "name": "Compile: Instrumentation phase. confirm no-op",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
       "vpython",
       "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
@@ -444,6 +465,26 @@
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Compile: Optimization phase."
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[START_DIR]\\src\\out\\Release",
+      "chrome",
+      "-d",
+      "explain",
+      "-n"
+    ],
+    "cwd": "[START_DIR]\\src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
+    "name": "Compile: Optimization phase. confirm no-op",
+    "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [

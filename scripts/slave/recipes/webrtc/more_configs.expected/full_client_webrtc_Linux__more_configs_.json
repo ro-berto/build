@@ -261,6 +261,27 @@
     "name": "compile"
   },
   {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[START_DIR]/src/out/intelligibility_enhancer_no_include_tests",
+      "-j",
+      "50",
+      "-d",
+      "explain",
+      "-n"
+    ],
+    "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "name": "compile confirm no-op",
+    "stdout": "/path/to/tmp/"
+  },
+  {
     "cmd": [],
     "cwd": "[START_DIR]/src",
     "env": {
@@ -556,6 +577,27 @@
       "GOMA_USE_LOCAL": "false"
     },
     "name": "compile (2)"
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[START_DIR]/src/out/bwe_test_logging",
+      "-j",
+      "50",
+      "-d",
+      "explain",
+      "-n"
+    ],
+    "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "name": "compile confirm no-op (2)",
+    "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [],
@@ -888,6 +930,27 @@
     "name": "compile (3)"
   },
   {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[START_DIR]/src/out/dummy_audio_file_devices_no_protobuf",
+      "-j",
+      "50",
+      "-d",
+      "explain",
+      "-n"
+    ],
+    "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "name": "compile confirm no-op (3)",
+    "stdout": "/path/to/tmp/"
+  },
+  {
     "cmd": [],
     "cwd": "[START_DIR]/src",
     "env": {
@@ -1183,6 +1246,27 @@
       "GOMA_USE_LOCAL": "false"
     },
     "name": "compile (4)"
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[START_DIR]/src/out/rtti_no_sctp",
+      "-j",
+      "50",
+      "-d",
+      "explain",
+      "-n"
+    ],
+    "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "name": "compile confirm no-op (4)",
+    "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [],

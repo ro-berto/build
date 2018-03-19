@@ -425,6 +425,37 @@
     "name": "compile"
   },
   {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[START_DIR]/src/out/Release",
+      "-j",
+      "50",
+      "android_tools",
+      "chrome_modern_public_apk",
+      "chrome_public_apk",
+      "dump_syms",
+      "microdump_stackwalk",
+      "push_apps_to_background_apk",
+      "system_webview_apk",
+      "system_webview_shell_apk",
+      "chromium_builder_perf",
+      "-d",
+      "explain",
+      "-n"
+    ],
+    "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false",
+      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
+    },
+    "name": "compile confirm no-op",
+    "stdout": "/path/to/tmp/"
+  },
+  {
     "cmd": [],
     "cwd": "[START_DIR]/src",
     "env": {

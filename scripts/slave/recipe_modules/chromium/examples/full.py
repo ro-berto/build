@@ -12,6 +12,7 @@ DEPS = [
   'recipe_engine/step',
 ]
 
+from recipe_engine import post_process
 
 def RunSteps(api):
   mastername = api.properties.get('mastername')
@@ -140,6 +141,23 @@ def GenTests(api):
              'compile confirm no-op',
              stdout=api.raw_io.output(
                  "ninja explain: chrome is dirty\n")))
+
+  yield (api.test('basic_out_dir_ninja_no_op_warning') +
+         api.properties(
+             mastername='chromium.android',
+             buildername='Android arm Builder (dbg)',
+             bot_id='build1-a1',
+             buildnumber='77457',
+             out_dir='/tmp',
+             use_goma_module=True,
+             ninja_confirm_noop=False,
+         ) + api.override_step_data(
+             'compile confirm no-op',
+             stdout=api.raw_io.output(
+                 "ninja explain: chrome is dirty\n")) +
+         api.post_process(post_process.MustRun, 'compile confirm no-op') +
+         api.post_process(post_process.StatusCodeIn, 0) +
+         api.post_process(post_process.DropExpectation))
 
   yield (api.test('basic_out_dir_goma_module_start_failure') +
          api.properties(

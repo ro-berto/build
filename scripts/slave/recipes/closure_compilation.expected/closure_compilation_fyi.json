@@ -187,6 +187,24 @@
   },
   {
     "cmd": [
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[START_DIR]/src/out/Release",
+      "-d",
+      "explain",
+      "-n"
+    ],
+    "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "compile confirm no-op",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
       "vpython",
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",

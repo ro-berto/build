@@ -271,6 +271,28 @@
     "name": "compile"
   },
   {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[START_DIR]\\src\\out\\Release",
+      "-j",
+      "50",
+      "-d",
+      "explain",
+      "-n"
+    ],
+    "cwd": "[START_DIR]\\src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "name": "compile confirm no-op",
+    "stdout": "/path/to/tmp/"
+  },
+  {
     "cmd": [],
     "cwd": "[START_DIR]\\src",
     "env": {

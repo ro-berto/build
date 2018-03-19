@@ -322,6 +322,28 @@
     "name": "compile"
   },
   {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[BUILDER_CACHE]/android_compile_x86_dbg/src/out/Debug",
+      "-j",
+      "50",
+      "-d",
+      "explain",
+      "-n"
+    ],
+    "cwd": "[BUILDER_CACHE]/android_compile_x86_dbg/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false",
+      "PATH": "[BUILDER_CACHE]/android_compile_x86_dbg/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_compile_x86_dbg/src/build/android:<PATH>"
+    },
+    "name": "compile confirm no-op",
+    "stdout": "/path/to/tmp/"
+  },
+  {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]/android_compile_x86_dbg/src",
     "env": {

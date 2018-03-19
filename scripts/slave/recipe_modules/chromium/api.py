@@ -269,9 +269,6 @@ class ChromiumApi(recipe_api.RecipeApi):
                       step_test_data=step_test_data,
                       **kwargs)
 
-    if not ninja_confirm_noop:
-      return
-
     ninja_command_explain = ninja_command + ['-d', 'explain', '-n']
 
     ninja_no_work = 'ninja: no work to do.'
@@ -286,16 +283,23 @@ class ChromiumApi(recipe_api.RecipeApi):
                   ninja_no_work
               )))
 
-    if ninja_no_work not in step_result.stdout:
+    if ninja_no_work in step_result.stdout:
+      # No dependency issue found.
+      return
+
+    step_result.presentation.step_text = (
+        "This should have been a no-op, but it wasn't.")
+
+    if ninja_confirm_noop:
       step_result.presentation.status = self.m.step.FAILURE
-      step_result.presentation.step_text = (
-          "This should have been a no-op, but it wasn't.")
       raise self.m.step.StepFailure(
           """Failing build because ninja reported work to do.
           This means that after completing a compile, another was run and
           it resulted in still having work to do (that is, a no-op build
           wasn't a no-op). Consult the first "ninja explain:" line for a
           likely culprit.""")
+
+    step_result.presentation.status = self.m.step.WARNING
 
 
   def _run_ninja_with_goma(self, ninja_command, ninja_env, name=None,
