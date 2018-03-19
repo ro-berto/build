@@ -785,13 +785,13 @@ BUILDERS = {
         'tests': [D8Testing(5)],
         'testing': {'platform': 'linux'},
       },
-      'V8 Mac GC Stress': {
+      'V8 Mac64 GC Stress': {
         'chromium_apply_config': [
           'v8_ninja', 'default_compiler', 'goma', 'mb'],
         'v8_apply_config': ['gc_stress'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
+          'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,
@@ -2996,13 +2996,13 @@ BUILDERS = {
         },
         'testing': {'platform': 'mac'},
       },
-      'v8_mac_gc_stress_dbg': {
+      'v8_mac64_gc_stress_dbg': {
         'chromium_apply_config': [
           'v8_ninja', 'default_compiler', 'goma', 'mb'],
         'v8_apply_config': ['gc_stress'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
+          'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
         'enable_swarming': True,

@@ -119,7 +119,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
-      "GYP_DEFINES": "clang=1 component=shared_library gomadir='[CACHE]/goma_client' target_arch=ia32 use_goma=1",
+      "GYP_DEFINES": "clang=1 component=shared_library gomadir='[CACHE]/goma_client' target_arch=x64 use_goma=1",
       "MAC_TOOLCHAIN_CREDS": "/creds/service_accounts/service-account-xcode-cipd-access.json",
       "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -135,7 +135,7 @@
       "-m",
       "client.v8",
       "-b",
-      "V8 Mac GC Stress",
+      "V8 Mac64 GC Stress",
       "--config-file",
       "[START_DIR]/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
@@ -278,12 +278,12 @@
       "-a",
       "public-read",
       "{\"d8_default\": \"[dummy hash for d8_default]\"}",
-      "gs://chromium-v8/isolated/client.v8/V8 Mac GC Stress/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json"
+      "gs://chromium-v8/isolated/client.v8/V8 Mac64 GC Stress/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json"
     ],
     "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/isolated/client.v8/V8 Mac GC Stress/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/isolated/client.v8/V8 Mac64 GC Stress/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json@@@"
     ]
   },
   {
@@ -301,7 +301,7 @@
       "--shards",
       "4",
       "--task-name",
-      "Check - d8/Mac-10.13/[dummy has/V8 Mac GC Stress/571",
+      "Check - d8/Mac-10.13/[dummy has/V8 Mac64 GC Stress/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -326,7 +326,7 @@
       "swarming_module_cache_vpython",
       ".swarming_module_cache/vpython",
       "--tag",
-      "buildername:V8 Mac GC Stress",
+      "buildername:V8 Mac64 GC Stress",
       "--tag",
       "buildnumber:571",
       "--tag",
@@ -383,7 +383,7 @@
       "--mastername",
       "client.v8",
       "--buildername",
-      "V8 Mac GC Stress",
+      "V8 Mac64 GC Stress",
       "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
@@ -414,7 +414,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Check - d8/Mac-10.13/[dummy has/V8 Mac GC Stress/571\", \"tasks\": {\"Check - d8/Mac-10.13/[dummy has/V8 Mac GC Stress/571:4:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"Check - d8/Mac-10.13/[dummy has/V8 Mac GC Stress/571:4:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"Check - d8/Mac-10.13/[dummy has/V8 Mac GC Stress/571:4:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}, \"Check - d8/Mac-10.13/[dummy has/V8 Mac GC Stress/571:4:3\": {\"shard_index\": 3, \"task_id\": \"10300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10300\"}}}"
+      "{\"base_task_name\": \"Check - d8/Mac-10.13/[dummy has/V8 Mac64 GC Stress/571\", \"tasks\": {\"Check - d8/Mac-10.13/[dummy has/V8 Mac64 GC Stress/571:4:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"Check - d8/Mac-10.13/[dummy has/V8 Mac64 GC Stress/571:4:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"Check - d8/Mac-10.13/[dummy has/V8 Mac64 GC Stress/571:4:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}, \"Check - d8/Mac-10.13/[dummy has/V8 Mac64 GC Stress/571:4:3\": {\"shard_index\": 3, \"task_id\": \"10300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10300\"}}}"
     ],
     "infra_step": true,
     "name": "Check - d8",
