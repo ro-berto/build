@@ -41,8 +41,6 @@
       "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "--force-version",
-      "4.7",
       "----",
       "cp",
       "None/out/build_product.zip",

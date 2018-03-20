@@ -263,8 +263,7 @@ class AndroidApi(recipe_api.RecipeApi):
         name='upload_apks_for_bisect',
         source=zipfile,
         bucket=bucket,
-        dest=path % rev,
-        version='4.7')
+        dest=path % rev)
 
   def upload_build(self, bucket, path):
     archive_name = 'build_product.zip'
@@ -288,8 +287,7 @@ class AndroidApi(recipe_api.RecipeApi):
         name='upload_build_product',
         source=zipfile,
         bucket=bucket,
-        dest=path,
-        version='4.7')
+        dest=path)
 
   def download_build(self, bucket, path, extract_path=None):
     zipfile = self.m.path['checkout'].join('out', 'build_product.zip')
@@ -297,9 +295,7 @@ class AndroidApi(recipe_api.RecipeApi):
         name='download_build_product',
         bucket=bucket,
         source=path,
-        dest=zipfile,
-        version='4.7',
-    )
+        dest=zipfile)
     extract_path = extract_path or self.m.path['checkout']
     with self.m.context(cwd=extract_path):
       self.m.step(
