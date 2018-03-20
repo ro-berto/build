@@ -24,10 +24,26 @@ def GetBigQueryClient(service_account_json):
   if not service_account_json:
     return None
 
+  # TODO(yyanagisawa): remove following debug print.
+  #                    (crbug.com/822042)
+
+  for env in ('PYTHONPATH', 'VPYTHON_CLEAR_PYTHONPATH'):
+    print >> sys.stderr, '%s=%s' % (env, os.environ.get(env, '<not set>'))
+  print >> sys.stderr, 'sys.path=%s' % sys.path
+
   # TODO(yyanagisawa): move this back to the top line when flakiness solved
   #                    (crbug.com/822042)
-  from google.cloud import bigquery
-  from google.oauth2 import service_account
+  try:
+    from google.cloud import bigquery
+    from google.oauth2 import service_account
+  except ImportError as e:
+    print >> sys.stderr, e
+    for p in sys.path:
+      print 'path=%s' % p
+      for root, dirs, files in os.walk(p):
+        print >> sys.stderr, ' root=%s, dirs=%s, files=%s' % (root, dirs, files)
+      print
+    raise
 
   creds = service_account.Credentials.from_service_account_file(
       service_account_json)
