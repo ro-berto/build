@@ -2730,6 +2730,47 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
       },
+      'v8_win64_msvc_rel_ng': {
+        'chromium_apply_config': [
+          'default_compiler',
+          'v8_ninja',
+          'goma',
+          'mb',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'enable_swarming': True,
+        'slim_swarming_builder': True,
+        'triggers': [
+          'v8_win64_msvc_rel_ng_triggered',
+        ],
+        'testing': {'platform': 'win'},
+      },
+      'v8_win64_msvc_rel_ng_triggered': {
+        'chromium_apply_config': [
+          'use_windows_swarming_slaves',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'v8_win64_msvc_rel_ng',
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Windows-7-SP1',
+          'cpu': 'x86-64',
+        },
+        'tests': [
+          V8Testing,
+          Test262,
+          Mozilla,
+        ],
+        'testing': {'platform': 'linux'},
+      },
       'v8_win64_rel_ng': {
         'chromium_apply_config': [
           'default_compiler',
