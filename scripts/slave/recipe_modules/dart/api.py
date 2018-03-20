@@ -149,6 +149,8 @@ class DartApi(recipe_api.RecipeApi):
       task.dimensions['cpu'] = cpu
       task.dimensions['pool'] = pool
       task.dimensions.pop('gpu', None)
+      if 'shard_timeout' in self.m.properties:
+        task.hard_timeout = int(self.m.properties['shard_timeout'])
       self.m.swarming.trigger_task(task)
       tasks.append(task)
     return tasks
