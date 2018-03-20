@@ -447,7 +447,7 @@
       "--build-dir",
       "out/debug",
       "--gold_properties",
-      "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder linux_no_v8 build_number 1234",
+      "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder linux_no_v8 build_number 1234 buildbucket_build_id 9876",
       "--gold_key",
       "debug true is_standalone true os linux skia false v8 false xfa false",
       "--gold_output_dir",

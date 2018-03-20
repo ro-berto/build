@@ -474,7 +474,7 @@
       "--build-dir",
       "out\\release_xfa_v8_clang_asan",
       "--gold_properties",
-      "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder windows_xfa_asan build_number 1234",
+      "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder windows_xfa_asan build_number 1234 buildbucket_build_id 9876",
       "--gold_key",
       "asan true clang true debug false is_standalone true os windows skia false target_cpu \"x86\" v8 true xfa true",
       "--gold_output_dir",

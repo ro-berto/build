@@ -462,7 +462,7 @@
       "--build-dir",
       "out\\debug_xfa_v8",
       "--gold_properties",
-      "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder windows_xfa build_number 1234",
+      "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder windows_xfa build_number 1234 buildbucket_build_id 9876",
       "--gold_key",
       "clang true debug true is_standalone true os windows skia false symbol_level 1 v8 true xfa true",
       "--gold_output_dir",
