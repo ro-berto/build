@@ -103,7 +103,7 @@ SPEC = {
     'build_gs_bucket': 'chromium-fyi-archive',
   },
   'builders': {
-    'Chromium Mac 10.10 MacViews': {
+    'mac-views-rel': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
       'chromium_apply_config': [

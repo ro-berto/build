@@ -570,9 +570,9 @@ TRYBOTS = freeze({
         'buildername': 'Mac Builder',
         'tester': 'Mac10.10 Tests',
       }),
-      'mac_chromium_10.10_macviews': simple_bot({
+      'mac-views-rel': simple_bot({
         'mastername': 'chromium.fyi',
-        'buildername': 'Chromium Mac 10.10 MacViews',
+        'buildername': 'mac-views-rel',
       }),
       'mac_chromium_compile_dbg_ng': simple_bot({
         'mastername': 'chromium.mac',
