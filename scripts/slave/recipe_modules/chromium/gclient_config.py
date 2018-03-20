@@ -92,7 +92,7 @@ def blink_merged(c):  # pragma: no cover
   c.solutions[0].url = \
       'https://chromium.googlesource.com/playground/chromium-blink-merge.git'
 
-@CONFIG_CTX(includes=['chromium', 'chrome_internal'])
+@CONFIG_CTX(includes=['chrome_internal'])
 def ios(c):
   c.target_os.add('ios')
 
@@ -122,7 +122,7 @@ def fuchsia(c):
 def win(c):
   c.target_os.add('win')
 
-@CONFIG_CTX(includes=['chromium', 'chrome_internal'])
+@CONFIG_CTX(includes=['chrome_internal'])
 def perf(c):
   s = c.solutions[0]
   s.managed = False
@@ -130,10 +130,9 @@ def perf(c):
     "src/data/page_cycler",
   ]
   for key in needed_components_internal:
-    del c.solutions[1].custom_deps[key]
-  c.solutions[1].managed = False
+    s.custom_deps.pop(key, None)
 
-@CONFIG_CTX(includes=['chromium', 'chrome_internal'])
+@CONFIG_CTX(includes=['chrome_internal'])
 def chromium_perf(c):
   pass
 
@@ -216,14 +215,12 @@ def valgrind(c):  # pragma: no cover
 def ndk_next(c):
   c.revisions['src/third_party/android_ndk'] = 'origin/next'
 
-# TODO(iannucci,vadimsh): Switch this to src-limited
-@CONFIG_CTX()
+@CONFIG_CTX(includes=['chromium'])
 def chrome_internal(c):
-  s = c.solutions.add()
-  s.name = 'src-internal'
-  s.url = ChromeInternalGitURL(c, 'chrome', 'src-internal.git')
+  c.solutions[0].custom_vars['checkout_src_internal'] = 'True'
+  c.solutions[0].custom_vars['checkout_google_internal'] = 'True'
   # Remove some things which are generally not needed
-  s.custom_deps = {
+  c.solutions[0].custom_deps = {
     "src/data/autodiscovery" : None,
     "src/data/page_cycler" : None,
     "src/tools/grit/grit/test/data" : None,
