@@ -42,23 +42,6 @@ SPEC = {
       'compile_targets': [ 'chromium_builder_asan' ],
       'testing': { 'platform': 'win' },
     },
-    'Win SyzyASAN LKGR': {
-      'chromium_config': 'chromium_no_goma',
-      'chromium_apply_config': ['clobber', 'mb', 'syzyasan'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'builder',
-      'disable_tests': True,
-      'cf_archive_build': True,
-      'cf_gs_bucket': 'chromium-browser-syzyasan',
-      'cf_gs_acl': 'public-read',
-      'cf_archive_name': 'asan',
-      'compile_targets': [ 'chromium_builder_asan' ],
-      'testing': { 'platform': 'win' },
-    },
     'Mac ASAN Release': {
       'chromium_config': 'chromium_mac_asan',
       'chromium_apply_config': ['mb', 'clobber', 'v8_verify_heap',

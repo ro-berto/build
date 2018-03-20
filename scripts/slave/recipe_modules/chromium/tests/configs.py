@@ -116,12 +116,6 @@ def GenTests(api):
   )
 
   yield (
-      api.test('chromium_syzyasan') +
-      api.properties(chromium_config='chromium_syzyasan') +
-      api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
       api.test('trybot_flavor') +
       api.properties(chromium_apply_config=['trybot_flavor']) +
       api.post_process(post_process.DropExpectation)

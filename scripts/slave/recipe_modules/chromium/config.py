@@ -520,21 +520,6 @@ def tsan2(c):
   gyp_defs['disable_nacl'] = 1
 
 @config_ctx()
-def syzyasan_compile_only(c):
-  gyp_defs = c.gyp_env.GYP_DEFINES
-  gyp_defs['syzyasan'] = 1
-  gyp_defs['win_z7'] = 0
-
-@config_ctx(
-    deps=['compiler'], group='memory_tool', includes=['syzyasan_compile_only'])
-def syzyasan(c):
-  if c.gyp_env.GYP_DEFINES['component'] != 'static_library':  # pragma: no cover
-    raise BadConf('SyzyASan requires component=static_library')
-  gyp_defs = c.gyp_env.GYP_DEFINES
-  gyp_defs['win_z7'] = 1
-  gyp_defs['chromium_win_pch'] = 0
-
-@config_ctx()
 def trybot_flavor(c):
   fastbuild(c, optional=True)
   dcheck(c, optional=True)
@@ -681,10 +666,6 @@ def chromium_mac_mac_views(c):
 
 @config_ctx(includes=['ninja', 'clang', 'goma', 'msan', 'chromium_sanitizer'])
 def chromium_msan(c):
-  c.compile_py.default_targets = ['all']
-
-@config_ctx(includes=['ninja', 'clang', 'goma', 'syzyasan'])
-def chromium_syzyasan(c):  # pragma: no cover
   c.compile_py.default_targets = ['all']
 
 @config_ctx(includes=['ninja', 'clang', 'goma', 'tsan2', 'chromium_sanitizer'])

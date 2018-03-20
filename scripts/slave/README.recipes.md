@@ -86,7 +86,6 @@
   * [chromium.chromedriver.recipe_autogen](#recipes-chromium.chromedriver.recipe_autogen)
   * [chromium:examples/full](#recipes-chromium_examples_full)
   * [chromium:tests/analyze](#recipes-chromium_tests_analyze)
-  * [chromium:tests/apply_syzyasan](#recipes-chromium_tests_apply_syzyasan)
   * [chromium:tests/archive_build](#recipes-chromium_tests_archive_build)
   * [chromium:tests/compile](#recipes-chromium_tests_compile)
   * [chromium:tests/configs](#recipes-chromium_tests_configs)
@@ -921,9 +920,7 @@ Returns: (context manager) A context manager that inserts system python
 
 #### **class [ChromiumApi](/scripts/slave/recipe_modules/chromium/api.py#29)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [apply\_syzyasan](/scripts/slave/recipe_modules/chromium/api.py#1067)(self):**
-
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [archive\_build](/scripts/slave/recipe_modules/chromium/api.py#1079)(self, step_name, gs_bucket, gs_acl=None, mode=None, \*\*kwargs):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [archive\_build](/scripts/slave/recipe_modules/chromium/api.py#1067)(self, step_name, gs_bucket, gs_acl=None, mode=None, \*\*kwargs):**
 
 Returns a step invoking archive_build.py to archive a Chromium build.
 
@@ -979,7 +976,7 @@ Returns (ChromiumApi.Layout): The configured Chromium build layout.
 
 &mdash; **def [ensure\_toolchains](/scripts/slave/recipe_modules/chromium/api.py#817)(self):**
 
-&mdash; **def [get\_annotate\_by\_test\_name](/scripts/slave/recipe_modules/chromium/api.py#1120)(self, test_name):**
+&mdash; **def [get\_annotate\_by\_test\_name](/scripts/slave/recipe_modules/chromium/api.py#1108)(self, test_name):**
 
 &emsp; **@_with_chromium_layout**<br>&mdash; **def [get\_clang\_version](/scripts/slave/recipe_modules/chromium/api.py#699)(self, \*\*kwargs):**
 
@@ -3800,11 +3797,6 @@ Generates BoringSSL documentation and uploads it to Cloud Storage.
 [DEPS](/scripts/slave/recipe_modules/chromium/tests/analyze.py#5): [chromium](#recipe_modules-chromium), [filter](#recipe_modules-filter)
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium/tests/analyze.py#11)(api):**
-### *recipes* / [chromium:tests/apply\_syzyasan](/scripts/slave/recipe_modules/chromium/tests/apply_syzyasan.py)
-
-[DEPS](/scripts/slave/recipe_modules/chromium/tests/apply_syzyasan.py#5): [chromium](#recipe_modules-chromium)
-
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium/tests/apply_syzyasan.py#10)(api):**
 ### *recipes* / [chromium:tests/archive\_build](/scripts/slave/recipe_modules/chromium/tests/archive_build.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium/tests/archive_build.py#5): [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]

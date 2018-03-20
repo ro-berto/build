@@ -873,15 +873,6 @@
             ],
             "forgiving_optional": ["*"]
           },
-          "Win SyzyASAN LKGR": {
-            "tree_notify": [
-              "syzyzy-team@chromium.org"
-            ],
-            "forgiving_optional": [
-              "compile"
-            ],
-            "subject_template": "buildbot %(result)s in %(project_name)s on %(builder_name)s, revision %(revision)s"
-          },
           "CFI Linux ToT": {
             "tree_notify": [
               "pcc@chromium.org"

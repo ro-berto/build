@@ -731,10 +731,6 @@ TRYBOTS = freeze({
         'mastername': 'chromium.win',
         'buildername': 'WinMSVC64 (dbg)',
       }),
-      'win_chromium_syzyasan_rel': simple_bot({
-        'mastername': 'chromium.fyi',
-        'buildername': 'Win SyzyAsan (rel)',
-      }),
       'win_mojo': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'Mojo Windows',

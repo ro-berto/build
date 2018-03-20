@@ -47,11 +47,6 @@ B('Win ASan Release Media', 'win_asan_rel_media', scheduler='chromium_master',
   slavebuilddir='win')
 F('win_asan_rel_media', m_remote_run('chromium'))
 
-# Win SyzyASan bot.
-B('Win SyzyASAN LKGR', 'win_syzyasan_lkgr', 'compile', 'chromium_master',
-  slavebuilddir='win')
-F('win_syzyasan_lkgr', m_remote_run('chromium', timeout=7200))
-
 ################################################################################
 ## Mac
 ################################################################################

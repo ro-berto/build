@@ -665,28 +665,6 @@ SPEC = {
         'platform': 'linux',
       },
     },
-    'Win SyzyAsan (rel)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-          'mb',
-          'syzyasan_compile_only',
-          'shared_library',
-      ],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_PLATFORM': 'win',
-        'TARGET_BITS': 32,
-      },
-      'compile_targets': [
-        'chrome',
-      ],
-      'checkout_dir': 'win',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'win',
-      },
-    },
     'Android VR Tests': {
       'chromium_config': 'android',
       'chromium_apply_config': ['download_vr_test_apks'],

@@ -64,7 +64,6 @@ class ChromiumCommands(commands.FactoryCommands):
     self._archive_coverage = J(s_dir, 'archive_coverage.py')
     self._archive_tool = J(s_dir, 'archive_build.py')
     self._sizes_tool = J(s_dir, 'sizes.py')
-    self._windows_syzyasan_tool = J(s_dir, 'win_apply_syzyasan.py')
     self._checkbins_tool = J(s_dir, 'checkbins_wrapper.py')
     self._mini_installer_tests_tool = J(s_dir, 'test_mini_installer_wrapper.py')
     self._device_status_check = J(self._bb_dir, 'bb_device_status_check.py')
@@ -123,12 +122,6 @@ class ChromiumCommands(commands.FactoryCommands):
 
     self._factory.addStep(FileUpload(slavesrc=slavesrc,
                                      masterdest=masterdest))
-
-  def AddWindowsSyzyASanStep(self):
-    """Adds a step to run syzyASan over the output directory."""
-    cmd = [self._python, self._windows_syzyasan_tool,
-           '--target', self._target]
-    self.AddTestStep(shell.ShellCommand, 'apply_syzyasan', cmd)
 
   def AddArchiveBuild(self, mode='dev', show_url=True, factory_properties=None):
     """Adds a step to the factory to archive a build."""

@@ -1065,18 +1065,6 @@ class ChromiumApi(recipe_api.RecipeApi):
       pass
 
   @_with_chromium_layout
-  def apply_syzyasan(self):
-    args = [
-        '--src-dir', self.m.path['checkout'],
-        '--target', self.c.BUILD_CONFIG,
-    ]
-    self.m.build.python(
-      'apply_syzyasan',
-      self.package_repo_resource(
-          'scripts', 'slave', 'chromium', 'win_apply_syzyasan.py'),
-      args)
-
-  @_with_chromium_layout
   def archive_build(self, step_name, gs_bucket, gs_acl=None, mode=None,
                     **kwargs):
     """Returns a step invoking archive_build.py to archive a Chromium build."""
