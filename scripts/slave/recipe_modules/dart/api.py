@@ -124,28 +124,30 @@ class DartApi(recipe_api.RecipeApi):
       num_shards = int(self.m.properties['shards'])
     assert(num_shards > 0)
     tasks = []
-    for shard in range(num_shards - 1) if last_shard_is_local else range(num_shards):
+    if os is None:
+      os = self.m.platform.name
+    cipd_packages = []
+    if os == 'linux' and (
+          '-rchrome' in test_args or '--runtime=chrome' in test_args):
+      cipd_packages.append(('browsers',
+                            'dart/browsers/chrome/${platform}',
+                            'stable'))
+    for shard in range(num_shards):
       # TODO(athom) collect all the triggers, and present as a single step
+      if last_shard_is_local and shard == num_shards - 1: break
       task = self.m.swarming.task("%s_shard_%s" % (title, (shard + 1)),
                                isolate_hash,
+                               cipd_packages=cipd_packages,
                                raw_cmd=test_args +
                                  ['--shards=%s' % num_shards,
                                   '--shard=%s' % (shard + 1),
                                   '--output_directory=${ISOLATED_OUTDIR}'])
-      if os is None:
-        os = self.m.platform.name
       os_names = {
         'win': 'Windows',
         'linux': 'Linux',
         'mac': 'Mac'
       }
-      if os in os_names:
-        os = os_names[os]
-      task.dimensions['os'] = os
-      # TODO(athom) remove this once all linux machines have chrome
-      if os == 'Linux' and (
-          '-rchrome' in test_args or '--runtime=chrome' in test_args):
-        task.dimensions['kvm'] = '0'
+      task.dimensions['os'] = os_names.get(os, os)
       task.dimensions['cpu'] = cpu
       task.dimensions['pool'] = pool
       task.dimensions.pop('gpu', None)
@@ -316,6 +318,8 @@ class DartApi(recipe_api.RecipeApi):
                    'arch': arch}
     if runtime is not None:
       environment['runtime'] = runtime
+      if runtime == 'chrome' and system == 'linux':
+        self._download_browser(runtime)
     channel = 'try'
     if 'branch' in self.m.properties:
       channels = {
@@ -376,6 +380,19 @@ class DartApi(recipe_api.RecipeApi):
   def _copy_property(self, src, dest, key):
     if key in src:
       dest[key] = src[key]
+
+  def _download_browser(self, runtime):
+    # Download CIPD package
+    #  dart/browsers/chrome/${platform} stable
+    # to directory
+    #  [sdk root]/browsers
+    # Shards must install this CIPD package to the same location -
+    # there is an argument to the swarming module task creation api for this.
+    self.m.file.ensure_directory('create browser cache',
+        self.m.path['checkout'].join('browsers'))
+    self.m.cipd.set_service_account_credentials( None )
+    self.m.cipd.ensure(self.m.path['checkout'].join('browsers'),
+                       {'dart/browsers/chrome/${platform}': 'stable'})
 
   def run_trigger(self, step_name, step, isolate_hash):
     trigger_props = {}
@@ -445,6 +462,18 @@ class DartApi(recipe_api.RecipeApi):
       args = args + ['--append_logs']
     if environment['system'] in ['win7', 'win8', 'win10']:
       args = args + ['--builder-tag=%s' % environment['system']]
+    # The --chrome flag is added here if the runtime for the bot is
+    # chrome. This misses the case where there is a specific
+    # argument -r or --runtime. It also misses the case where
+    # a recipe calls run_script directly with a test.py command.
+    # The download of the browser from CIPD should also be moved
+    # here (perhaps checking if it is already done) so we catch
+    # specific test steps with runtime chrome in a bot without that
+    # global runtime.
+    if (environment['system'] == 'linux' and
+        environment.get('runtime') == 'chrome'):
+      args = args + ['--chrome=%s' % self.m.path['checkout'].join(
+        'browsers', 'chrome', 'google-chrome')]
     if 'exclude_tests' in step:
         args = args + ['--exclude_suite=' + ','.join(step['exclude_tests'])]
     if 'tests' in step:

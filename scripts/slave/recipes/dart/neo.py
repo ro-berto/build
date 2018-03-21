@@ -123,6 +123,11 @@ def GenTests(api):
         clobber='true')
    )
    yield (
+      api.test('builders/dart2js-linux-x64-chrome-dev') +
+      api.properties.generic(
+        buildername='builders/dart2js-linux-x64-chrome-dev')
+   )
+   yield (
       api.test('builders/try-cl-builder') +
       api.properties.generic(
           buildername='builders/vm-linux-release-x64-try',

@@ -135,7 +135,8 @@ def test_runtime(api, system, runtime, options, mode, tasks, isolate_hash):
   if system in ['win7', 'win8', 'win10']:
     test_args.append('--builder-tag=%s' % system)
   shard_args = command + test_args + use_sdk
-
+  if system == 'linux' and runtime == 'chrome':
+    shard_args.append('--chrome=browsers/chrome/google-chrome')
   if 'kernel' in options:
     tests = ['language', 'corelib', 'dart2js_extra', 'dart2js_native']
     tasks.append(api.dart.shard('dart2js_kernel_tests', isolate_hash, shard_args + tests))

@@ -1,5 +1,6 @@
 DEPS = [
   'depot_tools/bot_update',
+  'depot_tools/cipd',
   'depot_tools/depot_tools',
   'depot_tools/gclient',
   'goma',
