@@ -126,21 +126,10 @@ AddTestSpec('Android Tests (dbg) (K Nexus5)', 'android',
               'device_os': 'K',
               'os': 'Android',
             })
-AddTestSpec('Android Tests (dbg) (L Nexus5)', 'android',
-            target_bits=32, build_config='Debug',
+AddTestSpec('Android Tests (dbg) (N Nexus5X)', 'android',
+            build_config='Debug',
             swarming={
-              'device_type': 'hammerhead',
-              'device_os': 'L',
+              'device_type': 'bullhead',
+              'device_os': 'N',
               'os': 'Android',
             })
-AddTestSpec('Android Tests (dbg) (L Nexus6)', 'android',
-            target_bits=32, build_config='Debug')
-AddTestSpec('Android Tests (dbg) (L Nexus7.2)', 'android',
-            target_bits=32, build_config='Debug',
-            swarming={
-              'device_type': 'flo',
-              'device_os': 'L',
-              'os': 'Android',
-            })
-AddTestSpec('Android Tests (dbg) (L Nexus9)', 'android',
-            build_config='Debug')
