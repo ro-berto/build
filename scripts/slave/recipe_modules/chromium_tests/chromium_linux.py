@@ -75,6 +75,23 @@ SPEC = {
         'fastbuild': 2,
       },
     },
+    'linux-gcc-rel': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'mb',
+        'ninja_confirm_noop',
+      ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'linux',
+      },
+      'checkout_dir': 'linux',
+    },
     'Linux Tests (dbg)(1)(32)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop'],

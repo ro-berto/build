@@ -420,6 +420,10 @@ TRYBOTS = freeze({
         'mastername': 'chromium.linux',
         'buildername': 'Linux Builder (dbg)(32)',
       }, analyze_mode='compile'),
+      'linux-gcc-rel': simple_bot({
+        'mastername': 'chromium.linux',
+        'buildername': 'linux-gcc-rel',
+      }, analyze_mode='compile'),
       'linux_chromium_msan_rel_ng': simple_bot({
         'mastername': 'chromium.memory',
         'buildername': 'Linux MSan Builder',

@@ -800,14 +800,6 @@
             ],
             "forgiving_optional": ["*"]
           },
-          "linux-gcc-rel": {
-            "tree_notify": [
-              "webrtc-trooper@grotations.appspotmail.com",
-              "sergiyb@chromium.org",
-              "machenbach@chromium.org"
-            ],
-            "forgiving_optional": ["*"]
-          },
           "Mojo Linux": {
             "tree_notify": [
               "network-service-sheriffs@chromium.org"

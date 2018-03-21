@@ -57,6 +57,7 @@ def Update(_config, active_master, c):
     {'name': 'Fuchsia x64', 'category': '5fuchsia'},
     {'name': 'Leak Detection Linux'},
     {'name': 'Ozone Linux'},
+    {'name': 'linux-gcc-rel'}
   ]
 
   c['builders'].extend([
