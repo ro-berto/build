@@ -1273,15 +1273,6 @@ class V8Api(recipe_api.RecipeApi):
           trigger_props = {}
           self._copy_property(self.m.properties, trigger_props, 'git_revision')
           self._copy_property(self.m.properties, trigger_props, 'revision')
-          trigger_props['parent_buildername'] = self.m.properties['buildername']
-          if 'build_id' in self.m.properties:
-            trigger_props['parent_build_id'] = self.m.properties['build_id']
-          # TODO(machenbach): Remove workaround for https://crbug.com/819555
-          if self.m.buildbucket.build_id:  # pragma: no cover
-            trigger_props['parent_id'] = str(self.m.buildbucket.build_id)
-          if 'buildnumber' in self.m.properties:
-            trigger_props['parent_buildnumber'] = (
-                self.m.properties['buildnumber'])
           trigger_props.update(properties)
           try:
             bucket_name = self.m.buildbucket.properties['build']['bucket']
