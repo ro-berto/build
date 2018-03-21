@@ -32,7 +32,6 @@ def Update(c):
                               'Win Builder',
                               'Mac Builder',
                               'Linux Builder',
-                              'Linux Builder (Chromium w/o WebRTC)',
                             ]),
   )
   specs = [
@@ -45,7 +44,6 @@ def Update(c):
     {'name': 'Mac Tester', 'category': 'mac'},
     {'name': 'Mac Tester (long-running)', 'category': 'mac'},
     {'name': 'Linux Builder', 'category': 'linux'},
-    {'name': 'Linux Builder (Chromium w/o WebRTC)', 'category': 'linux'},
     {'name': 'Linux Tester', 'category': 'linux'},
   ]
 
