@@ -5000,12 +5000,12 @@ Recipe for building and running tests for Libyuv stand-alone.
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/pdfium.py#231)(api, memory_tool, skia, xfa, v8, target_cpu, clang, msvc, rel, jumbo, skip_test, target_os):**
 
-&mdash; **def [dict\_to\_str](/scripts/slave/recipes/pdfium.py#282)(props):**
+&mdash; **def [dict\_to\_str](/scripts/slave/recipes/pdfium.py#281)(props):**
 
 Returns the given dictionary as a string of space
 separated key/value pairs sorted by keys.
 
-&mdash; **def [get\_gold\_ignore\_hashes](/scripts/slave/recipes/pdfium.py#317)(api, out_dir):**
+&mdash; **def [get\_gold\_ignore\_hashes](/scripts/slave/recipes/pdfium.py#316)(api, out_dir):**
 
 Downloads a list of MD5 hashes from Gold and
 writes them to a file. That file is then used by the
@@ -5020,7 +5020,7 @@ the generated images. Returns:
     (properties_str, key_str)
 These strings can be passed directly into run_corpus_tests.py.
 
-&mdash; **def [gold\_build\_config](/scripts/slave/recipes/pdfium.py#291)(args):**
+&mdash; **def [gold\_build\_config](/scripts/slave/recipes/pdfium.py#290)(args):**
 
 Extracts key value pairs from the arguments handed to 'gn gen'
 and returns them as a dictionary. Since these are used as
@@ -5029,11 +5029,11 @@ some arguments. i.e. 'use_goma' since we don't care about how
 a binary was built.  Only arguments that follow the
 'key=value' pattern are considered.
 
-&mdash; **def [gs\_cp](/scripts/slave/recipes/pdfium.py#420)(api, name, src, dst, multithreaded=False, extra_args=None):**
+&mdash; **def [gs\_cp](/scripts/slave/recipes/pdfium.py#419)(api, name, src, dst, multithreaded=False, extra_args=None):**
 
 Copy the src to dst in Google storage.
 
-&mdash; **def [upload\_dm\_results](/scripts/slave/recipes/pdfium.py#372)(api, results_dir, revision):**
+&mdash; **def [upload\_dm\_results](/scripts/slave/recipes/pdfium.py#371)(api, results_dir, revision):**
 
 Uploads results of the tests to Gold.
 This assumes that results_dir contains a JSON file

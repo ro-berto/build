@@ -256,8 +256,7 @@ def get_gold_params(api, build_config, revision):
     'gitHash', revision,
     'master', api.m.properties['mastername'],
     'builder', builder_name,
-    'build_number', str(api.m.properties['buildnumber']),
-    'buildbucket_build_id', api.m.properties.get('buildbucket_build_id', ''),
+    'build_number', str(api.m.properties['buildnumber'])
   ]
 
   # Add the trybot information if this is a trybot run.
@@ -440,7 +439,6 @@ def GenTests(api):
       api.properties(mastername="client.pdfium",
                      buildername='windows',
                      buildnumber='1234',
-                     buildbucket_build_id='9876',
                      bot_id="test_slave")
   )
   yield (
@@ -449,7 +447,6 @@ def GenTests(api):
       api.properties(mastername="client.pdfium",
                      buildername='linux',
                      buildnumber='1234',
-                     buildbucket_build_id='9876',
                      bot_id="test_slave")
   )
   yield (
@@ -458,7 +455,6 @@ def GenTests(api):
       api.properties(mastername="client.pdfium",
                      buildername='mac',
                      buildnumber='1234',
-                     buildbucket_build_id='9876',
                      bot_id="test_slave")
   )
 
@@ -469,7 +465,6 @@ def GenTests(api):
                      mastername="client.pdfium",
                      buildername='windows_no_v8',
                      buildnumber='1234',
-                     buildbucket_build_id='9876',
                      bot_id="test_slave")
   )
   yield (
@@ -479,7 +474,6 @@ def GenTests(api):
                      mastername="client.pdfium",
                      buildername='linux_no_v8',
                      buildnumber='1234',
-                     buildbucket_build_id='9876',
                      bot_id="test_slave")
   )
   yield (
@@ -489,7 +483,6 @@ def GenTests(api):
                      mastername="client.pdfium",
                      buildername='mac_no_v8',
                      buildnumber='1234',
-                     buildbucket_build_id='9876',
                      bot_id="test_slave")
   )
 
@@ -502,7 +495,6 @@ def GenTests(api):
                      mastername="client.pdfium",
                      buildername='windows_skia',
                      buildnumber='1234',
-                     buildbucket_build_id='9876',
                      bot_id="test_slave")
   )
 
@@ -514,7 +506,6 @@ def GenTests(api):
                      mastername="client.pdfium",
                      buildername='windows_xfa_32',
                      buildnumber='1234',
-                     buildbucket_build_id='9876',
                      bot_id="test_slave")
   )
 
@@ -525,7 +516,6 @@ def GenTests(api):
                      mastername="client.pdfium",
                      buildername='windows_xfa',
                      buildnumber='1234',
-                     buildbucket_build_id='9876',
                      bot_id="test_slave")
   )
 
@@ -537,7 +527,6 @@ def GenTests(api):
                      mastername="client.pdfium",
                      buildername='windows_xfa_rel',
                      buildnumber='1234',
-                     buildbucket_build_id='9876',
                      bot_id="test_slave")
   )
 
@@ -549,7 +538,6 @@ def GenTests(api):
                      mastername="client.pdfium",
                      buildername='windows_xfa_jumbo',
                      buildnumber='1234',
-                     buildbucket_build_id='9876',
                      bot_id="test_slave")
   )
 
@@ -562,7 +550,6 @@ def GenTests(api):
                      mastername="client.pdfium",
                      buildername='windows_xfa_msvc_32',
                      buildnumber='1234',
-                     buildbucket_build_id='9876',
                      bot_id="test_slave")
   )
 
@@ -574,7 +561,6 @@ def GenTests(api):
                      mastername="client.pdfium",
                      buildername='windows_xfa_msvc',
                      buildnumber='1234',
-                     buildbucket_build_id='9876',
                      bot_id="test_slave")
   )
 
@@ -587,7 +573,6 @@ def GenTests(api):
                      mastername="client.pdfium",
                      buildername='linux_skia',
                      buildnumber='1234',
-                     buildbucket_build_id='9876',
                      bot_id="test_slave")
   )
 
@@ -598,7 +583,6 @@ def GenTests(api):
                      mastername="client.pdfium",
                      buildername='linux_xfa',
                      buildnumber='1234',
-                     buildbucket_build_id='9876',
                      bot_id="test_slave")
   )
 
@@ -610,7 +594,6 @@ def GenTests(api):
                      mastername="client.pdfium",
                      buildername='linux_xfa_rel',
                      buildnumber='1234',
-                     buildbucket_build_id='9876',
                      bot_id="test_slave")
   )
 
@@ -622,7 +605,6 @@ def GenTests(api):
                      mastername="client.pdfium",
                      buildername='linux_xfa_jumbo',
                      buildnumber='1234',
-                     buildbucket_build_id='9876',
                      bot_id="test_slave")
   )
 
@@ -635,7 +617,6 @@ def GenTests(api):
                      mastername="client.pdfium",
                      buildername='mac_skia',
                      buildnumber='1234',
-                     buildbucket_build_id='9876',
                      bot_id="test_slave")
   )
 
@@ -646,7 +627,6 @@ def GenTests(api):
                      mastername="client.pdfium",
                      buildername='mac_xfa',
                      buildnumber='1234',
-                     buildbucket_build_id='9876',
                      bot_id="test_slave")
   )
 
@@ -658,7 +638,6 @@ def GenTests(api):
                      mastername="client.pdfium",
                      buildername='mac_xfa_rel',
                      buildnumber='1234',
-                     buildbucket_build_id='9876',
                      bot_id="test_slave")
   )
 
@@ -670,7 +649,6 @@ def GenTests(api):
                      mastername="client.pdfium",
                      buildername='mac_xfa_jumbo',
                      buildnumber='1234',
-                     buildbucket_build_id='9876',
                      bot_id="test_slave")
   )
 
@@ -681,7 +659,6 @@ def GenTests(api):
                      mastername="client.pdfium",
                      buildername='linux_asan_lsan',
                      buildnumber='1234',
-                     buildbucket_build_id='9876',
                      bot_id="test_slave")
   )
 
@@ -693,7 +670,6 @@ def GenTests(api):
                      mastername="client.pdfium",
                      buildername='linux_msan',
                      buildnumber='1234',
-                     buildbucket_build_id='9876',
                      bot_id="test_slave")
   )
 
@@ -705,7 +681,6 @@ def GenTests(api):
                      mastername="client.pdfium",
                      buildername='linux_xfa_asan_lsan',
                      buildnumber='1234',
-                     buildbucket_build_id='9876',
                      bot_id="test_slave")
   )
 
@@ -718,7 +693,6 @@ def GenTests(api):
                      mastername="client.pdfium",
                      buildername='linux_xfa_msan',
                      buildnumber='1234',
-                     buildbucket_build_id='9876',
                      bot_id="test_slave")
   )
 
@@ -732,7 +706,6 @@ def GenTests(api):
                      mastername="client.pdfium",
                      buildername='windows_asan',
                      buildnumber='1234',
-                     buildbucket_build_id='9876',
                      bot_id="test_slave")
   )
 
@@ -747,7 +720,6 @@ def GenTests(api):
                      mastername="client.pdfium",
                      buildername='windows_xfa_asan',
                      buildnumber='1234',
-                     buildbucket_build_id='9876',
                      bot_id="test_slave")
   )
 
@@ -758,7 +730,6 @@ def GenTests(api):
                                 memory_tool='asan',
                                 mastername='tryserver.client.pdfium',
                                 buildnumber='1234',
-                                buildbucket_build_id='9876',
                                 buildername='linux_xfa_asan_lsan')
   )
 
@@ -769,7 +740,6 @@ def GenTests(api):
                                 memory_tool='asan',
                                 mastername='tryserver.client.pdfium',
                                 buildnumber='1234',
-                                buildbucket_build_id='9876',
                                 buildername='linux_xfa_asan_lsan',
                                 patch_issue='1234',
                                 patch_set=5,
@@ -784,7 +754,6 @@ def GenTests(api):
                      bot_id='test_slave',
                      target_os='android',
                      buildnumber='1234',
-                     buildbucket_build_id='9876',
                      skip_test=True)
   )
 
@@ -796,8 +765,7 @@ def GenTests(api):
                    buildername='android',
                    bot_id='test_slave',
                    target_os='android',
-                   buildnumber='1234',
-                   buildbucket_build_id='9876') +
+                   buildnumber='1234') +
     api.path.exists(
       api.path['checkout'].join('out', 'debug', 'ignore_hashes.txt')
     )
@@ -810,8 +778,7 @@ def GenTests(api):
                    buildername='android',
                    bot_id='test_slave',
                    target_os='android',
-                   buildnumber='1234',
-                   buildbucket_build_id='9876') +
+                   buildnumber='1234') +
     api.step_data(
           'get uninteresting hashes', retcode=1)
   )
