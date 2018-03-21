@@ -23,7 +23,6 @@ FUNCTIONAL_BROWSER_TESTS_FILTER = [
   'MediaStreamDevicesControllerBrowserTestInstance*',
 
   # Runs (fake) hardware-exercising test and/or video calling tests.
-  'WebRtcApprtcBrowserTest.*',
   'WebrtcAudioPrivateTest.*',
   'WebRtcBrowserTest.*',
   'WebRtcDisableEncryptionFlagBrowserTest.*',
@@ -144,12 +143,16 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
           args=['--gtest_filter=WebRtc*MANUAL*:-UsingRealWebcam*',
                 '--run-manual', '--ui-test-action-max-timeout=120000']))
       tests.append(MakeTest(
-          'browser_tests_functional',
+          name='browser_tests_functional',
           target_name='browser_tests',
-          args=[
-            '--gtest_filter=%s' % ':'.join(FUNCTIONAL_BROWSER_TESTS_FILTER),
-              '--run-manual', '--test-launcher-jobs=1'
-          ]))
+          args=['--gtest_filter=%s' % ':'.join(FUNCTIONAL_BROWSER_TESTS_FILTER),
+                '--run-manual', '--test-launcher-jobs=1']))
+
+      tests.append(steps.LocalGTestTest(
+          'browser_tests_apprtc',
+          target_name='browser_tests',
+          args=['--gtest_filter=WebRtcApprtcBrowserTest.*',
+                '--run-manual', '--test-launcher-jobs=1']))
 
       if enable_baremetal_tests:
         tests.append(steps.WebRTCPerfTest(
