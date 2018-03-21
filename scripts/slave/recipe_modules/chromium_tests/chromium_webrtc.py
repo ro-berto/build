@@ -88,7 +88,7 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
              commit_position_property='got_revision_cp',
              gclient_config='chromium_webrtc',
              test_spec_file='chromium.webrtc.json',
-             enable_baremetal_tests=True):
+             enable_baremetal_tests=True, swarming=None):
   spec = BaseSpec(
       bot_type='tester',
       chromium_apply_config=[],
@@ -97,13 +97,23 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
       target_bits=target_bits,
       build_config=build_config)
 
+  if swarming is not None:
+    spec['enable_swarming'] = True
+    spec['use_isolate'] = True
+    spec['swarming_dimensions'] = swarming
+
   spec['parent_buildername'] = parent_builder
   spec['test_results_config'] = 'public_server'
+
+  if swarming is not None:
+    MakeTest = steps.SwarmingGTestTest
+  else:
+    MakeTest = steps.LocalGTestTest
 
   if platform == 'android':
     spec['root_devices'] = True
     spec['tests'] = [
-      steps.LocalGTestTest(
+      MakeTest(
           'content_browsertests',
           args=['--gtest_filter=WebRtc*']),
     ]
@@ -113,7 +123,7 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
       pass  # Not implemented yet (see crbug.com/723989).
     else:
       spec['tests'] = tests = []
-      tests.append(steps.LocalGTestTest(
+      tests.append(MakeTest(
           'content_browsertests',
           # Run all normal WebRTC content_browsertests. This is mostly so
           # the FYI bots can detect breakages.
@@ -128,12 +138,12 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
             args=['--gtest_filter=UsingRealWebcam*', '--run-manual',
                   '--test-launcher-jobs=1']))
 
-      tests.append(steps.LocalGTestTest(
+      tests.append(MakeTest(
           name='content_browsertests_stress',
           target_name='content_browsertests',
           args=['--gtest_filter=WebRtc*MANUAL*:-UsingRealWebcam*',
                 '--run-manual', '--ui-test-action-max-timeout=120000']))
-      tests.append(steps.LocalGTestTest(
+      tests.append(MakeTest(
           'browser_tests_functional',
           target_name='browser_tests',
           args=[
@@ -165,9 +175,9 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
                   '--test-launcher-jobs=1',
                   '--test-launcher-print-test-stdio=always']))
 
-      tests.append(steps.LocalGTestTest('content_unittests'))
-      tests.append(steps.LocalGTestTest('jingle_unittests'))
-      tests.append(steps.LocalGTestTest(
+      tests.append(MakeTest('content_unittests'))
+      tests.append(MakeTest('jingle_unittests'))
+      tests.append(MakeTest(
           'remoting_unittests', args=['--gtest_filter=Webrtc*']))
 
   return spec

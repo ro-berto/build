@@ -49,7 +49,7 @@ def AddBuildSpec(name, platform, target_bits=64, build_config='Release',
 
 
 def AddTestSpec(name, perf_id, platform, target_bits=64,
-                build_config='Release'):
+                build_config='Release', swarming=None):
   parent_builder = _builders['%s_%s' % (platform, build_config)][target_bits]
   spec = chromium_webrtc.TestSpec(
       parent_builder,
@@ -61,7 +61,8 @@ def AddTestSpec(name, perf_id, platform, target_bits=64,
       commit_position_property='got_cr_revision_cp',
       gclient_config='chromium_webrtc_tot',
       test_spec_file='chromium.webrtc.fyi.json',
-      enable_baremetal_tests=False)
+      enable_baremetal_tests=False,
+      swarming=swarming)
   _ConfigureSyncingWebRTCToT(spec)
   SPEC['builders'][name] = spec
 
@@ -94,25 +95,60 @@ AddBuildSpec('Android Builder (dbg)', 'android', target_bits=32,
 AddBuildSpec('Android Builder ARM64 (dbg)', 'android', build_config='Debug')
 
 AddTestSpec('Win7 Tester', 'chromium-webrtc-trunk-tot-rel-win7', 'win',
-            target_bits=32)
+            target_bits=32,
+            swarming={
+              'os': 'Windows-7-SP1',
+              'cpu': 'x86-64',
+            })
 AddTestSpec('Win8 Tester', 'chromium-webrtc-trunk-tot-rel-win8', 'win',
-            target_bits=32)
+            target_bits=32,
+            swarming={
+              'os': 'Windows-8.1-SP0',
+              'cpu': 'x86-64',
+            })
 AddTestSpec('Win10 Tester', 'chromium-webrtc-trunk-tot-rel-win10', 'win',
-            target_bits=32)
-AddTestSpec('Mac Tester', 'chromium-webrtc-trunk-tot-rel-mac', 'mac')
-AddTestSpec('Linux Tester', 'chromium-webrtc-trunk-tot-rel-linux', 'linux')
+            target_bits=32,
+            swarming={
+              'os': 'Windows-10',
+              'cpu': 'x86-64',
+            })
+AddTestSpec('Mac Tester', 'chromium-webrtc-trunk-tot-rel-mac', 'mac',
+            swarming={
+              'os': 'Mac-10.12',
+              'cpu': 'x86-64',
+            })
+AddTestSpec('Linux Tester', 'chromium-webrtc-trunk-tot-rel-linux', 'linux',
+            swarming={
+              'os': 'Ubuntu-14.04',
+              'cpu': 'x86-64',
+            })
 AddTestSpec('Android Tests (dbg) (K Nexus5)',
             'chromium-webrtc-trunk-tot-dbg-android-nexus5-k', 'android',
-            target_bits=32, build_config='Debug')
+            target_bits=32, build_config='Debug',
+            swarming={
+              'device_type': 'hammerhead',
+              'device_os': 'K',
+              'os': 'Android',
+            })
 AddTestSpec('Android Tests (dbg) (L Nexus5)',
             'chromium-webrtc-trunk-tot-dbg-android-nexus5', 'android',
-            target_bits=32, build_config='Debug')
+            target_bits=32, build_config='Debug',
+            swarming={
+              'device_type': 'hammerhead',
+              'device_os': 'L',
+              'os': 'Android',
+            })
 AddTestSpec('Android Tests (dbg) (L Nexus6)',
             'chromium-webrtc-trunk-tot-dbg-android-nexus6', 'android',
             target_bits=32, build_config='Debug')
 AddTestSpec('Android Tests (dbg) (L Nexus7.2)',
             'chromium-webrtc-trunk-tot-dbg-android-nexus72', 'android',
-            target_bits=32, build_config='Debug')
+            target_bits=32, build_config='Debug',
+            swarming={
+              'device_type': 'flo',
+              'device_os': 'L',
+              'os': 'Android',
+            })
 AddTestSpec('Android Tests (dbg) (L Nexus9)',
             'chromium-webrtc-trunk-tot-dbg-android-nexus9', 'android',
             build_config='Debug')
