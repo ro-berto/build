@@ -118,7 +118,7 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
     ]
   else:
     spec['gclient_apply_config'].append('webrtc_test_resources')
-    if perf_id.endswith('-long'):
+    if enable_baremetal_tests and perf_id.endswith('-long'):
       pass  # Not implemented yet (see crbug.com/723989).
     else:
       spec['tests'] = tests = []
