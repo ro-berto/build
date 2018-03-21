@@ -132,6 +132,11 @@ FAKE_BUILDERS = {
         'linux_angle_ozone_rel_ng',
         'linux_angle_rel_ng',
     ],
+    'master.tryserver.chromium.mac': [
+        # These have been migrated to LUCI.
+        'mac_chromium_compile_dbg_ng',
+        'mac_chromium_dbg_ng',
+    ],
 }
 
 
