@@ -101,7 +101,8 @@ for arch in ['x64', 'ia32']:
   builders['vm-linux-release-%s-asan' % arch] = asan
 
   opt = builders['vm-linux-release-%s' % arch].copy()
-  opt_args = ['--vm-options=--optimization-counter-threshold=5']
+  opt_args = ['--vm-options=--optimization-counter-threshold=5',
+              '--builder-tag=optimization_counter_threshold']
   opt_args.extend(opt.get('test_args', []))
   opt['test_args'] = opt_args
   builders['vm-linux-release-%s-optcounter-threshold' % arch] = opt
