@@ -144,6 +144,14 @@ class _FakeMaster(_FakeMasterBase):
 
 
 class PopulateBuildmasterConfigTest(unittest.TestCase):
+  def setUp(self):
+    super(PopulateBuildmasterConfigTest, self).setUp()
+    os.environ['BUILDBOT_TEST_PASSWORD'] = 'hot bananas'
+
+  def tearDown(self):
+    super(PopulateBuildmasterConfigTest, self).tearDown()
+    os.environ.pop('BUILDBOT_TEST_PASSWORD', None)
+
   def verify_timeouts(self, builder, expected_builder_timeout=None,
                       expected_no_output_timeout=2400):
     steps = builder['factory'].steps
@@ -244,6 +252,14 @@ OLD_TRYSERVER_PYL = """\
 """
 
 class OldNomenclature(unittest.TestCase):
+  def setUp(self):
+    super(OldNomenclature, self).setUp()
+    os.environ['BUILDBOT_TEST_PASSWORD'] = 'hot bananas'
+
+  def tearDown(self):
+    super(OldNomenclature, self).tearDown()
+    os.environ.pop('BUILDBOT_TEST_PASSWORD', None)
+
   def test_old_nomenclature(self):
     try:
       fp = tempfile.NamedTemporaryFile(delete=False)

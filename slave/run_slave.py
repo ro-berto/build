@@ -414,7 +414,8 @@ def main():
     error('You must put a copy of depot_tools in %s' % depot_tools)
   bot_password_file = os.path.normpath(
       os.path.join(BUILD_DIR, 'site_config', '.bot_password'))
-  if not os.path.isfile(bot_password_file):
+  if (not os.path.isfile(bot_password_file) and
+      'BUILDBOT_TEST_PASSWORD' not in os.environ):
     error('You forgot to put the password at %s' % bot_password_file)
 
   if SpawnSubdirBuildbotsIfNeeded():

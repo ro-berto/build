@@ -143,7 +143,6 @@ def CommitChecks(input_api, output_api):
       env=test_env))
 
   with pythonpath(infra_path + sys.path):
-    import common.master_cfg_utils  # pylint: disable=F0401
     # Fetch recipe dependencies once in serial so that we don't hit a race
     # condition where multiple tests are trying to fetch at once.
     output = input_api.RunTests([input_api.Command(
@@ -154,8 +153,7 @@ def CommitChecks(input_api, output_api):
         message=output_api.PresubmitError,
     )])
     # Run the tests.
-    with common.master_cfg_utils.TemporaryMasterPasswords():
-      output.extend(input_api.RunTests(tests))
+    output.extend(input_api.RunTests(tests))
 
     output.extend(input_api.canned_checks.PanProjectChecks(
         input_api, output_api, excluded_paths=GetBlackList(input_api)))

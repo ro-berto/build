@@ -40,6 +40,14 @@ def _GetCallArgumentFromMock(mock_call, position, keyword=None):
 
 
 class RunSlaveTest(unittest.TestCase):
+  def setUp(self):
+    super(RunSlaveTest, self).setUp()
+    os.environ['BUILDBOT_TEST_PASSWORD'] = 'hot bananas'
+
+  def tearDown(self):
+    super(RunSlaveTest, self).tearDown()
+    os.environ.pop('BUILDBOT_TEST_PASSWORD', None)
+
   @mock.patch('subprocess.call')
   @mock.patch('subprocess.Popen')
   @mock.patch('sys.exit', mock.Mock(side_effect=ExitInvoked))

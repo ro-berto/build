@@ -76,10 +76,14 @@ class Master(config_private.Master):
     """
     # Note: could be overriden by config_private.
     if not getattr(Master, 'bot_password', None):
-      # If the bot_password has been requested, the file is required to exist
-      # if not overriden in config_private.
-      bot_password_path = os.path.join(BASE_DIR, '.bot_password')
-      Master.bot_password = open(bot_password_path).read().strip('\n\r')
+      envPass = os.environ.get('BUILDBOT_TEST_PASSWORD')
+      if envPass is not None:
+        Master.bot_password = envPass
+      else:
+        # If the bot_password has been requested, the file is required to exist
+        # if not overriden in config_private.
+        bot_password_path = os.path.join(BASE_DIR, '.bot_password')
+        Master.bot_password = open(bot_password_path).read().strip('\n\r')
     return Master.bot_password
 
   @staticmethod

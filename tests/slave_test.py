@@ -102,6 +102,8 @@ class FakeBuildmasterServer(SocketServer.TCPServer):
 
 class SlaveTest(unittest.TestCase):
   def setUp(self):
+    os.environ['BUILDBOT_TEST_PASSWORD'] = 'banana'
+
     # Start a TCP server that pretends to be a buildmaster.
     self.server = FakeBuildmasterServer(
         ('localhost', 0), FakeBuildmasterRequestHandler)
@@ -130,6 +132,7 @@ class SlaveTest(unittest.TestCase):
   def tearDown(self):
     shutil.rmtree(self.temp_dir)
     self.server.shutdown()
+    os.environ.pop('BUILDBOT_TEST_PASSWORD', None)
 
   def test_slave_connects(self):
     # Start the slave.

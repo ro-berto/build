@@ -37,26 +37,11 @@ from common import chromium_utils
 
 @contextlib.contextmanager
 def TemporaryMasterPasswords():
-  all_paths = [os.path.join(BASE_DIR, 'site_config', '.bot_password')]
-  all_paths.extend(os.path.join(path, '.apply_issue_password')
-                   for path in chromium_utils.ListMasters())
-  created_paths = []
-  for path in all_paths:
-    if not os.path.exists(path):
-      try:
-        with open(path, 'w') as f:
-          f.write('reindeer flotilla\n')
-        created_paths.append(path)
-      except OSError:
-        pass
   try:
+    os.environ['BUILDBOT_TEST_PASSWORD'] = 'reindeer flotilla'
     yield
   finally:
-    for path in created_paths:
-      try:
-        os.remove(path)
-      except OSError:
-        print 'WARNING: Could not remove %s!' % path
+    os.environ.pop('BUILDBOT_TEST_PASSWORD', None)
 
 
 def ExecuteConfig(canonical_config):
