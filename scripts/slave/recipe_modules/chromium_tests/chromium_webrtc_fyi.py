@@ -130,10 +130,10 @@ AddTestSpec('Android Tests (dbg) (K Nexus5)', 'android',
               'device_os': 'K',
               'os': 'Android',
             })
-AddTestSpec('Android Tests (dbg) (N Nexus5X)', 'android',
+AddTestSpec('Android Tests (dbg) (M Nexus5X)', 'android',
             build_config='Debug',
             swarming={
               'device_type': 'bullhead',
-              'device_os': 'N',
+              'device_os': 'MMB29Q',
               'os': 'Android',
             })

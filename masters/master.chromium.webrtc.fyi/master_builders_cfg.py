@@ -89,7 +89,7 @@ def Update(c):
       'slavebuilddir': 'android_arm64',
     },
     {'name': 'Android Tests (dbg) (K Nexus5)', 'category': 'android'},
-    {'name': 'Android Tests (dbg) (N Nexus5X)', 'category': 'android'},
+    {'name': 'Android Tests (dbg) (M Nexus5X)', 'category': 'android'},
   ]
 
   for spec in specs:
