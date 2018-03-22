@@ -82,6 +82,29 @@ def CommitChecks(input_api, output_api):
     return input_api.os_path.join(input_api.PresubmitLocalPath(), *args)
   tests = []
 
+  # masters_test can be very slow, so only add it if relevant files have been
+  # touched.
+  tests_to_run = []
+  conditional_tests = {
+      'tests/masters_test.py': [
+          r'^masters/.*',
+          r'^scripts/common/.*',
+          r'^scripts/master/.*',
+          r'^third_party/buildbot_8_4p1/.*',
+          r'^third_party/twisted_10_2/.*',
+      ],
+  }
+  affected_files = set([
+      f.LocalPath() for f in input_api.change.AffectedFiles()])
+  for test, regexes in conditional_tests.iteritems():
+    for path in affected_files:
+      if any(re.match(r, path) for r in regexes):
+        tests_to_run.append(test)
+        break
+
+  tests.extend(input_api.canned_checks.GetUnitTests(
+      input_api, output_api, tests_to_run))
+
   whitelist = [r'.+_test\.py$']
   blacklist = [r'masters_test.py$']
   tests.extend(input_api.canned_checks.GetUnitTestsInDirectory(
@@ -113,7 +136,6 @@ def CommitChecks(input_api, output_api):
       input_api.os_path.join(
         'scripts', 'master', 'buildbucket', 'unittests'),
       whitelist))
-
 
   recipe_modules_tests = input_api.glob(
       join('scripts', 'slave', 'recipe_modules', '*', 'unittests'))
@@ -147,32 +169,6 @@ def CommitChecks(input_api, output_api):
   return output
 
 
-def ConditionalChecks(input_api, output_api):
-  """Pre-commit tests only to be run if specific files have changed.
-
-  Typically, this is used to avoid running lengthy tests when possible.
-  """
-  tests_to_run = []
-  conditional_tests = {
-      'tests/masters_test.py': [
-          r'^masters/.*',
-          r'^scripts/common/.*',
-          r'^scripts/master/.*',
-          r'^third_party/buildbot_8_4p1/.*',
-          r'^third_party/twisted_10_2/.*',
-      ],
-  }
-  affected_files = set([
-      f.LocalPath() for f in input_api.change.AffectedFiles()])
-  for test, regexes in conditional_tests.iteritems():
-    for path in affected_files:
-      if any(re.match(r, path) for r in regexes):
-        tests_to_run.append(test)
-        break
-
-  return input_api.RunTests(input_api.canned_checks.GetUnitTests(
-      input_api, output_api, tests_to_run))
-
 def BuildInternalCheck(output, input_api, output_api):
   if output:
     b_i = input_api.os_path.join(input_api.PresubmitLocalPath(), '..',
@@ -204,6 +200,5 @@ def CheckChangeOnUpload(input_api, output_api):
 def CheckChangeOnCommit(input_api, output_api):
   output = CommonChecks(input_api, output_api)
   output.extend(CommitChecks(input_api, output_api))
-  output.extend(ConditionalChecks(input_api, output_api))
   output.extend(BuildInternalCheck(output, input_api, output_api))
   return output
