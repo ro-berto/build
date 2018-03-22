@@ -323,6 +323,7 @@
   * [webrtc/ios_api_framework](#recipes-webrtc_ios_api_framework)
   * [webrtc/libfuzzer](#recipes-webrtc_libfuzzer)
   * [webrtc/more_configs](#recipes-webrtc_more_configs)
+  * [webrtc/noop](#recipes-webrtc_noop)
   * [webrtc/standalone](#recipes-webrtc_standalone)
   * [win_analyze](#recipes-win_analyze)
   * [zip:examples/full](#recipes-zip_examples_full)
@@ -5420,6 +5421,11 @@ The changes are:
 &mdash; **def [BuildSteps](/scripts/slave/recipes/webrtc/more_configs.py#97)(api, name, \*gn_args):**
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/webrtc/more_configs.py#105)(api):**
+### *recipes* / [webrtc/noop](/scripts/slave/recipes/webrtc/noop.py)
+
+[DEPS](/scripts/slave/recipes/webrtc/noop.py#5): [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+
+&mdash; **def [RunSteps](/scripts/slave/recipes/webrtc/noop.py#9)(api):**
 ### *recipes* / [webrtc/standalone](/scripts/slave/recipes/webrtc/standalone.py)
 
 [DEPS](/scripts/slave/recipes/webrtc/standalone.py#7): [archive](#recipe_modules-archive), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [swarming](#recipe_modules-swarming), [test\_utils](#recipe_modules-test_utils), [webrtc](#recipe_modules-webrtc), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
