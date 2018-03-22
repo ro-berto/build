@@ -445,7 +445,8 @@
     "https://build.chromium.org/p/chromium.mac": [
       {
         "categories": [
-          "chromium_tree_closer"
+          "chromium_tree_closer",
+          "experimental_tests"
         ],
         "builders": {
           "ios-device": {
@@ -594,7 +595,8 @@
     "https://build.chromium.org/p/chromium.win": [
       {
         "categories": [
-          "chromium_tree_closer"
+          "chromium_tree_closer",
+          "experimental_tests"
         ],
 
         "comment": [
@@ -985,6 +987,7 @@
         "*"
       ]
     },
+
     "chromium_android": {
       "excluded_steps": [
         "slave_steps"
@@ -994,6 +997,13 @@
       ],
       "sheriff_classes": ["sheriff_android"]
     },
+
+    "experimental_tests": {
+      "excluded_steps": [
+        "* (experimental)"
+      ]
+    },
+
     "infra_tree_closer": {
       "forgiving_optional": [
         "update_scripts",

@@ -160,13 +160,15 @@ def check_builds(master_builds, master_jsons, gatekeeper_config):
         continue
 
       steps = build_json['steps']
-      excluded_steps = set(gatekeeper.get('excluded_steps', []))
-      forgiving_optional = (
-          set(gatekeeper.get('forgiving_optional', [])) - excluded_steps)
+      excluded_steps = gatekeeper.get('excluded_steps', [])
+      forgiving_optional = set(
+          f for f in gatekeeper.get('forgiving_optional', [])
+          if not in_glob_list(f, excluded_steps))
       closing_optional = (
-          (set(gatekeeper.get('closing_optional', [])) | forgiving_optional) -
-          excluded_steps
-      )
+          set(gatekeeper.get('closing_optional', [])) | forgiving_optional)
+      closing_optional = set(
+          c for c in closing_optional
+          if not in_glob_list(c, excluded_steps))
       tree_notify = set(gatekeeper.get('tree_notify', []))
       sheriff_classes = set(gatekeeper.get('sheriff_classes', []))
       status_template = gatekeeper.get(
@@ -188,9 +190,13 @@ def check_builds(master_builds, master_jsons, gatekeeper_config):
       finished_steps = set(s['name'] for s in finished)
 
       if '*' in forgiving_optional:
-        forgiving_optional = (finished_steps - excluded_steps)
+        forgiving_optional = set(
+            f for f in finished_steps
+            if not in_glob_list(f, excluded_steps))
       if '*' in closing_optional:
-        closing_optional = (finished_steps - excluded_steps)
+        closing_optional = set(
+            f for f in finished_steps
+            if not in_glob_list(f, excluded_steps))
 
       failed_steps = finished_steps - successful_steps
       unsatisfied_steps = failed_steps & closing_optional

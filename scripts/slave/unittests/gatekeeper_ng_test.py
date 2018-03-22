@@ -760,6 +760,22 @@ class GatekeeperTest(unittest.TestCase):
     urls = self.call_gatekeeper()
     self.assertNotIn(self.set_status_url, urls)
 
+  def testExcludedStepGlobsDontCloseTree(self):
+    """Test that steps excluded via glob don't call to the status app."""
+    self.argv.extend([m.url for m in self.masters])
+    self.argv.extend(['--skip-build-db-update',
+                      '--no-email-app', '--set-status',
+                      '--password-file', self.status_secret_file])
+
+    self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
+    self.add_gatekeeper_section(self.masters[0].url,
+                                self.masters[0].builders[0].name,
+                                {'closing_optional': ['step1'],
+                                 'excluded_steps': ['ste*']})
+
+    urls = self.call_gatekeeper()
+    self.assertNotIn(self.set_status_url, urls)
+
   def testExcludedBuildersDontCloseTree(self):
     """Test that excluded builders don't call to the status app."""
     self.argv.extend([m.url for m in self.masters])
