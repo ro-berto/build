@@ -37,12 +37,18 @@ PERF_CONFIG_MAPPINGS = {
 _builders = collections.defaultdict(dict)
 
 def AddBuildSpec(name, platform, target_bits=64, build_config='Release',
-                 bot_type='builder'):
+                 build_only=False):
   spec = chromium_webrtc.BuildSpec(
       platform, target_bits, build_config=build_config,
       gclient_config='chromium_webrtc_tot')
   _ConfigureSyncingWebRTCToT(spec)
-  spec['bot_type'] = bot_type
+
+  # Bots with the type 'builder_tester' are still actually only builders. This
+  # is done to avoid the type being 'builder' which means archiving the full
+  # build (~13 GB in case of Android) which is then pulled by actual testers.
+  # But the builds produced by these bots are never used by any testers, so we
+  # skip this.
+  spec['bot_type'] = 'builder_tester' if build_only else 'builder'
 
   SPEC['builders'][name] = spec
   _builders['%s_%s' % (platform, build_config)][target_bits] = name
@@ -78,18 +84,16 @@ def _ConfigureSyncingWebRTCToT(spec):
 
 
 AddBuildSpec('Win Builder', 'win', target_bits=32)
-AddBuildSpec('Win Builder (dbg)', 'win', target_bits=32, build_config='Debug')
+AddBuildSpec('Win Builder (dbg)', 'win', target_bits=32,
+             build_config='Debug', build_only=True)
 AddBuildSpec('Mac Builder', 'mac')
-AddBuildSpec('Mac Builder (dbg)', 'mac', build_config='Debug')
+AddBuildSpec('Mac Builder (dbg)', 'mac',
+             build_config='Debug', build_only=True)
 AddBuildSpec('Linux Builder', 'linux')
-AddBuildSpec('Linux Builder (dbg)', 'linux', build_config='Debug')
+AddBuildSpec('Linux Builder (dbg)', 'linux',
+             build_config='Debug', build_only=True)
 
-# The Release bot is actually only a builder (not builder+tester). It's
-# configured as builder+tester only to skip the archiving of the full build
-# (Release bot builds 'all' while Debug builds only the necessary test APK).
-# That's the only easy way to avoid archiving the full debug build (13 GB).
-AddBuildSpec('Android Builder', 'android', target_bits=32,
-             bot_type='builder_tester')
+AddBuildSpec('Android Builder', 'android', target_bits=32, build_only=True)
 AddBuildSpec('Android Builder (dbg)', 'android', target_bits=32,
              build_config='Debug')
 AddBuildSpec('Android Builder ARM64 (dbg)', 'android', build_config='Debug')
