@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env vpython
 # Copyright 2014 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -9,9 +9,7 @@ import os
 import tempfile
 import unittest
 
-
-# This adjusts sys.path, so it must be imported before the other modules.
-import test_env  # pylint: disable=W0403
+import test_env  # pylint: disable=relative-import
 
 from buildbot.schedulers.basic import AnyBranchScheduler
 

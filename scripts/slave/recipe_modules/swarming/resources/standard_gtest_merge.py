@@ -13,10 +13,6 @@ import traceback
 
 import merge_api
 
-from common import gtest_utils
-from slave import annotation_utils
-from slave import slave_utils
-
 
 MISSING_SHARDS_MSG = r"""Missing results from the following shard(s): %s
 
@@ -34,7 +30,10 @@ def emit_warning(title, log=None):
   print '@@@STEP_WARNINGS@@@'
   print title
   if log:
-    slave_utils.WriteLogLines(title, log.split('\n'))
+    title = title.rstrip()
+    for line in log.splitlines():
+      print '@@@STEP_LOG_LINE@%s@%s@@@' % (title, line.rstrip())
+    print '@@@STEP_LOG_END@%s@@@' % title
 
 
 def merge_shard_results(summary_json, jsons_to_merge):

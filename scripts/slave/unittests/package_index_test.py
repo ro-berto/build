@@ -14,7 +14,7 @@ import shutil
 import tempfile
 import unittest
 
-import test_env  # pylint: disable=W0403,W0611
+import test_env  # pylint: disable=relative-import
 
 from slave.chromium import package_index
 

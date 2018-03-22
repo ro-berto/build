@@ -8,7 +8,7 @@ import os
 import subprocess
 import sys
 
-import test_env  # pylint: disable=W0403,W0611
+import test_env  # pylint: disable=relative-import
 
 import slave.infra_platform
 import slave.robust_tempdir

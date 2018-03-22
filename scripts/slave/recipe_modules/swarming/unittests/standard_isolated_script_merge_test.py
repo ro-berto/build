@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env vpython
 # Copyright 2017 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -11,6 +11,8 @@ import sys
 import tempfile
 import unittest
 
+import mock
+
 import common_merge_script_tests
 
 THIS_DIR = os.path.dirname(__file__)
@@ -22,8 +24,6 @@ import test_env
 sys.path.insert(
     0, os.path.abspath(os.path.join(THIS_DIR, '..', 'resources')))
 import standard_isolated_script_merge
-
-import mock
 
 
 class StandardIsolatedScriptMergeTest(unittest.TestCase):

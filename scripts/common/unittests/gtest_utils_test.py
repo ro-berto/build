@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env vpython
 # Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -10,13 +10,13 @@ import os
 import tempfile
 import unittest
 
-import test_env  # pylint: disable=W0611
+import mock
+
+import test_env
 
 from common import chromium_utils
 from common import find_depot_tools  # pylint: disable=W0611
 from common import gtest_utils
-
-import mock
 
 FAILURES = ['NavigationControllerTest.Reload',
             'NavigationControllerTest/SpdyNetworkTransTest.Constructor/0',

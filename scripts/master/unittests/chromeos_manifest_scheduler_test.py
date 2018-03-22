@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env vpython
 # Copyright 2013 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -8,7 +8,7 @@
 import re
 import unittest
 
-import test_env  # pylint: disable=W0611,W0403
+import test_env  # pylint: disable=relative-import
 
 import buildbot.changes.filter
 from master import chromeos_manifest_scheduler

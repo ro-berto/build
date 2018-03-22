@@ -1,15 +1,14 @@
-#!/usr/bin/env python
+#!/usr/bin/env vpython
 # Copyright 2014 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
-
-import test_env  # pylint: disable=W0611
-from common import find_depot_tools  # pylint: disable=W0611
 
 import os
 import subprocess
 import sys
 import unittest
+
+import mock
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CURR_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -18,17 +17,12 @@ BUILD_DIR = os.path.join(SCRIPTS_DIR, os.pardir)
 SITE_CONFIG_DIR = os.path.join(BUILD_DIR, 'site_config')
 DEPOT_TOOLS_DIR = os.path.join(BUILD_DIR, os.pardir, 'depot_tools')
 
-sys.path.insert(0, SITE_CONFIG_DIR)
-sys.path.insert(0, SCRIPTS_DIR)
-sys.path.insert(0, DEPOT_TOOLS_DIR)
-
-# Trick reboot_tools to accept a dummy master config
-import config_bootstrap
+import test_env
 import slave.reboot_tools
 
-import test_env
-
-import mock
+# Trick reboot_tools to accept a dummy master config
+sys.path.insert(0, SITE_CONFIG_DIR)
+import config_bootstrap
 
 class DummyMasterReboot(config_bootstrap.Master.Master1):
   project_name = 'Dummy Master Reboot'

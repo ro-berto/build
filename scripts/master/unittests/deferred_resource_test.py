@@ -1,23 +1,26 @@
-#!/usr/bin/env python
+#!/usr/bin/env vpython
 # Copyright 2014 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
 """DeferredResource unit tests"""
 
-from contextlib import contextmanager
 import httplib
 import unittest
 
-import test_env  # pylint: disable=W0611,W0403
+from contextlib import contextmanager
+
+import httplib2
+
+from mock import NonCallableMock, Mock, call
+
+import test_env  # pylint: disable=relative-import
 
 from master.deferred_resource import DeferredResource
-from mock import NonCallableMock, Mock, call
 from twisted.internet import reactor
 from twisted.python.threadpool import ThreadPool
 
 import apiclient
-import httplib2
 
 from infra_libs import ts_mon
 

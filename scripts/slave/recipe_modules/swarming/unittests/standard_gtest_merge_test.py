@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env vpython
 # Copyright 2014 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -16,15 +16,9 @@ import common_merge_script_tests
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# For 'test_env'.
-sys.path.insert(
-    0, os.path.abspath(os.path.join(THIS_DIR, '..', '..', '..', 'unittests')))
 # For 'standard_gtest_merge.py'.
 sys.path.insert(
     0, os.path.abspath(os.path.join(THIS_DIR, '..', 'resources')))
-
-# Imported for side effects on sys.path.
-import test_env
 
 import mock
 

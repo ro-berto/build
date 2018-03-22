@@ -14,16 +14,6 @@ import re
 import sys
 
 
-@contextlib.contextmanager
-def pythonpath(path):
-  orig = sys.path
-  try:
-    sys.path = path
-    yield
-  finally:
-    sys.path = orig
-
-
 def GetBlackList(input_api):
   return list(input_api.DEFAULT_BLACK_LIST) + [
       r'.*slave/.*/build.*/.*',
@@ -58,15 +48,17 @@ def CommonChecks(input_api, output_api):
 
   infra_path = input_api.subprocess.check_output(
       ['python', 'scripts/common/env.py', 'print']).split()
-  test_sys_path = infra_path + [
+  orig_path = sys.path
+  try:
+    sys.path = infra_path + [
       # Initially, a separate run was done for unit tests but now that
       # pylint is fetched in memory with setuptools, it seems it caches
       # sys.path so modifications to sys.path aren't kept.
       join('scripts', 'master', 'unittests'),
       join('scripts', 'slave', 'unittests'),
       join('tests'),
-  ] + sys.path
-  with pythonpath(test_sys_path):
+    ] + sys.path
+
     disabled_warnings = [
       'C0301',  # Line too long (NN/80)
       'C0321',  # More than one statement on a single line
@@ -77,6 +69,8 @@ def CommonChecks(input_api, output_api):
         output_api,
         black_list=GetBlackList(input_api),
         disabled_warnings=disabled_warnings))
+  finally:
+    sys.path = orig_path
 
   output.extend(CheckExternalBuildersPylMastersAreInSync(input_api, output_api))
 
@@ -87,9 +81,6 @@ def CommitChecks(input_api, output_api):
   def join(*args):
     return input_api.os_path.join(input_api.PresubmitLocalPath(), *args)
   tests = []
-
-  infra_path = input_api.subprocess.check_output(
-      ['python', 'scripts/common/env.py', 'print']).split()
 
   whitelist = [r'.+_test\.py$']
   blacklist = [r'masters_test.py$']
@@ -133,31 +124,27 @@ def CommitChecks(input_api, output_api):
         path,
         whitelist))
 
-  test_env = os.environ.copy()
-  test_env['PYTHONPATH'] = os.pathsep.join(infra_path)
   tests.extend(input_api.canned_checks.GetUnitTestsInDirectory(
       input_api,
       output_api,
       input_api.os_path.join('slave', 'tests'),
-      whitelist,
-      env=test_env))
+      whitelist))
 
-  with pythonpath(infra_path + sys.path):
-    # Fetch recipe dependencies once in serial so that we don't hit a race
-    # condition where multiple tests are trying to fetch at once.
-    output = input_api.RunTests([input_api.Command(
-        name='recipes fetch',
-        cmd=[input_api.python_executable,
-             input_api.os_path.join('scripts', 'slave', 'recipes.py'), 'fetch'],
-        kwargs={},
-        message=output_api.PresubmitError,
-    )])
-    # Run the tests.
-    output.extend(input_api.RunTests(tests))
+  # Fetch recipe dependencies once in serial so that we don't hit a race
+  # condition where multiple tests are trying to fetch at once.
+  output = input_api.RunTests([input_api.Command(
+      name='recipes fetch',
+      cmd=[input_api.python_executable,
+           input_api.os_path.join('scripts', 'slave', 'recipes.py'), 'fetch'],
+      kwargs={},
+      message=output_api.PresubmitError,
+  )])
+  # Run the tests.
+  output.extend(input_api.RunTests(tests))
 
-    output.extend(input_api.canned_checks.PanProjectChecks(
-        input_api, output_api, excluded_paths=GetBlackList(input_api)))
-    return output
+  output.extend(input_api.canned_checks.PanProjectChecks(
+      input_api, output_api, excluded_paths=GetBlackList(input_api)))
+  return output
 
 
 def ConditionalChecks(input_api, output_api):

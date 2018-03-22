@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env vpython
 # Copyright 2016 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -6,7 +6,6 @@
 """Starts run_slave and verify if it starts successfully.
 """
 
-import mock
 import os
 import re
 import runpy
@@ -14,15 +13,21 @@ import subprocess
 import sys
 import unittest
 
+import mock
 
-RUN_SLAVE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
-sys.path.append(RUN_SLAVE_PATH)
+BASE_DIR = os.path.abspath(
+  os.path.join(os.path.dirname(__file__), '..', '..'))
+
+sys.path.insert(0, os.path.join(BASE_DIR, 'scripts'))
+import common.env
+common.env.Install(with_third_party=True)
+
+RUN_SLAVE_PATH = os.path.join(BASE_DIR, 'slave')
+sys.path.insert(0, RUN_SLAVE_PATH)
 
 import run_slave
 
 # import twisted to mock run()
-_, tw_ver = run_slave.GetThirdPartyVersions(None)
-sys.path.append(os.path.join(RUN_SLAVE_PATH, 'third_party', tw_ver))
 import twisted.scripts.twistd
 
 

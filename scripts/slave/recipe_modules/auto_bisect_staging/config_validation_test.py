@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env vpython
 # Copyright 2016 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -8,13 +8,9 @@ import os
 import sys
 import unittest
 
-root_dir = os.path.abspath(os.path.join(
-    os.path.dirname(__file__), os.path.pardir,
-    os.path.pardir, os.path.pardir, os.path.pardir))
-sys.path.insert(0, os.path.join(root_dir, 'third_party', 'mock-1.0.1'))
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), os.path.pardir))
-
 import mock
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), os.path.pardir))
 
 from auto_bisect_staging import config_validation
 

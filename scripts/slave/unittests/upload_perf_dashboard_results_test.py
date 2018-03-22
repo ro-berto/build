@@ -8,12 +8,13 @@
 import unittest
 import tempfile
 
-import test_env  # pylint: disable=W0403,W0611
+import mock
+
+import test_env  # pylint: disable=relative-import
 
 from common import chromium_utils
 from slave import upload_perf_dashboard_results
 
-import mock
 
 class UploadPerfDashboardResultsTest(unittest.TestCase):
   """Tests related to functions which retrieve perfmastername."""

@@ -6,7 +6,7 @@
 import os
 import unittest
 
-import test_env  # pylint: disable=W0403,W0611
+import test_env  # pylint: disable=relative-import
 
 from slave import robust_tempdir
 

@@ -3,9 +3,9 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import test_env  # pylint: disable=W0403,W0611
-
 import unittest
+
+import test_env  # pylint: disable=relative-import
 
 from slave import chromium_commands
 

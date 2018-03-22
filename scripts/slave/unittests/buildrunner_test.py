@@ -13,7 +13,7 @@ import os
 import sys
 import unittest
 
-import test_env  # pylint: disable=W0403,W0611
+import test_env  # pylint: disable=relative-import
 
 from common import chromium_utils
 

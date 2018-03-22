@@ -16,4 +16,4 @@ DATA_PATH = os.path.join(TESTS_DIR, 'data')
 
 sys.path.insert(0, os.path.join(TESTS_DIR, '../scripts'))
 import common.env
-common.env.Install()
+common.env.Install(with_third_party=True)

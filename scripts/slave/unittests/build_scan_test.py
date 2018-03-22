@@ -6,9 +6,6 @@
 
 """Tests for build_scan.py"""
 
-# Needs to be at the top, otherwise coverage will spit nonsense.
-import utils  # "relative import" pylint: disable=W0403
-
 import json
 import mock
 import os
@@ -17,7 +14,7 @@ import unittest
 import urllib
 import urllib2
 
-import test_env  # pylint: disable=W0403,W0611
+import test_env  # pylint: disable=relative-import
 
 from slave import build_scan
 
@@ -43,5 +40,4 @@ class BuildScanTest(unittest.TestCase):
 
 
 if __name__ == '__main__':
-  with utils.print_coverage(include=['build_scan.py']):
-    unittest.main()
+  unittest.main()

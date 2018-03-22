@@ -1,15 +1,17 @@
-#!/usr/bin/env python
+#!/usr/bin/env vpython
 # Copyright 2014 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
 """Test for common.gerrit's 'time.py'"""
 
-import test_env  # pylint: disable=W0611
 import unittest
 
-from common.gerrit.time import ParseGerritTime, ToGerritTime
 from datetime import datetime
+
+import test_env
+
+from common.gerrit.time import ParseGerritTime, ToGerritTime
 
 
 class GerritTimeTestCase(unittest.TestCase):

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env vpython
 # Copyright (c) 2016 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -13,9 +13,6 @@ import tempfile
 import unittest
 
 import xctest_utils
-
-import test_env
-from common import find_depot_tools  # pylint: disable=W0611
 
 
 TAP_ERRORS = ('Exception: NoMatchingElementException'

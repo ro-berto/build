@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env vpython
 # Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -7,7 +7,7 @@
 
 import unittest
 
-import test_env  # pylint: disable=W0611,W0403
+import test_env  # pylint: disable=relative-import
 
 from master import try_job_base
 

@@ -35,7 +35,6 @@ def Extend(pythonpath, cwd, with_third_party):
       'infra_libs',
       'jinja2',
       'markupsafe',
-      'mock-1.0.1',
       'oauth2client',
       'pyasn1',
       'pyasn1-modules',

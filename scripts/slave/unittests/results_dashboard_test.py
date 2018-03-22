@@ -18,12 +18,12 @@ import unittest
 import urllib
 import urllib2
 
-import test_env  # pylint: disable=W0403,W0611
+import mock
+
+import test_env  # pylint: disable=relative-import
 
 from slave import results_dashboard
 from common import chromium_utils
-
-import mock
 
 class FakeDateTime(object):
   # pylint: disable=R0201

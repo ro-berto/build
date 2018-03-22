@@ -1,4 +1,8 @@
 #!/usr/bin/env vpython
+# Copyright 2018 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
 """Tests for update_scripts.
 
 Note that this is very incomplete test coverage."""
@@ -7,9 +11,10 @@ import os
 import unittest
 import sys
 
-import test_env  # pylint: disable=W0403,W0611
-
 import mock
+
+import test_env  # pylint: disable=relative-import
+
 from slave import update_scripts
 
 class FakeStream(object):

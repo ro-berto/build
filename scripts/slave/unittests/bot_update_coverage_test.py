@@ -10,11 +10,10 @@ import os
 import sys
 import unittest
 
-import test_env  # pylint: disable=W0403,W0611
+import test_env  # pylint: disable=relative-import
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.platform = 'linux2'  # For consistency, ya know?
-import bot_update
+from slave import bot_update
 
 DEFAULT_PARAMS = {
     'solutions': [{

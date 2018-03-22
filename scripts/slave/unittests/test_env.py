@@ -26,11 +26,8 @@ RUNTESTS_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_PATH = os.path.join(RUNTESTS_DIR, 'data')
 BASE_DIR = os.path.abspath(
     os.path.join(RUNTESTS_DIR, os.pardir, os.pardir, os.pardir))
-DEPOT_TOOLS_DIR = os.path.join(BASE_DIR, os.pardir, 'depot_tools')
 
 # Load our common Infra environment.
 sys.path.insert(0, os.path.join(BASE_DIR, 'scripts'))
 import common.env
-common.env.Install(hermetic=False)
-
-from common import find_depot_tools  # pylint: disable=W0611
+common.env.Install(with_third_party=True)

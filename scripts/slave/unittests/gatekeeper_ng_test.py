@@ -11,9 +11,6 @@ close the tree.
 
 """
 
-# Needs to be at the top, otherwise coverage will spit nonsense.
-import utils  # "relative import" pylint: disable=W0403
-
 import StringIO
 import base64
 import contextlib
@@ -31,7 +28,7 @@ import urllib2
 import urlparse
 import zlib
 
-import test_env  # pylint: disable=W0403,W0611
+import test_env  # pylint: disable=relative-import
 
 from slave import gatekeeper_ng
 from slave import gatekeeper_ng_config
@@ -2993,5 +2990,4 @@ class GatekeeperTest(unittest.TestCase):
 
 
 if __name__ == '__main__':
-  with utils.print_coverage(include=['gatekeeper_ng.py']):
-    unittest.main()
+  unittest.main()

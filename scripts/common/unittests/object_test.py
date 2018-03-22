@@ -1,15 +1,16 @@
-#!/usr/bin/env python
+#!/usr/bin/env vpython
 # Copyright 2014 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
 """Tests for common.gerrit's 'object.py'"""
 
-import test_env  # pylint: disable=W0611
 import unittest
+
 from datetime import datetime
 
-# Disable wildcard import warning | pylint: disable=W0401
+import test_env
+
 from common.gerrit.object import GerritObject, LabelInfo, AccountInfo, \
     ApprovalInfo, ReviewInput, ChangeInfo, ChangeMessageInfo, RevisionInfo
 

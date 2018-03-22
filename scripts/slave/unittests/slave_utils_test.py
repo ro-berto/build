@@ -7,9 +7,10 @@ import os
 import sys
 import unittest
 
-import test_env  # pylint: disable=W0403,W0611
-
 import mock
+
+import test_env  # pylint: disable=relative-import
+
 import slave.slave_utils as slave_utils
 from common import chromium_utils
 

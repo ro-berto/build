@@ -18,9 +18,10 @@ import tempfile
 import unittest
 import zlib
 
-import test_env  # pylint: disable=W0403,W0611
-
 import mock
+
+import test_env  # pylint: disable=relative-import
+
 from common import annotator
 from common import chromium_utils
 from common import env

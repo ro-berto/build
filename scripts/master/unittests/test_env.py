@@ -16,4 +16,4 @@ DATA_PATH = os.path.join(RUNTESTS_DIR, 'data')
 
 sys.path.insert(0, os.path.join(RUNTESTS_DIR, '../..'))
 import common.env
-common.env.Install()
+common.env.Install(with_third_party=True)

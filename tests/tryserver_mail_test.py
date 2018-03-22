@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env vpython
 # Copyright 2013 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -10,9 +10,9 @@ import time
 import unittest
 import webbrowser
 
-import test_env
-
 import mock
+
+import test_env
 
 from buildbot.status import results
 from buildbot.status.builder import BuildStatus, BuildStepStatus, BuilderStatus

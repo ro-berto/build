@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env vpython
 # Copyright 2017 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -10,18 +10,13 @@ import sys
 import tempfile
 import unittest
 
+import mock
 
 THIS_DIR = os.path.dirname(__file__)
-
-sys.path.insert(
-    0, os.path.abspath(os.path.join(THIS_DIR, '..', '..', '..', 'unittests')))
-import test_env
 
 RESOURCES_DIR = os.path.abspath(os.path.join(THIS_DIR, '..', 'resources'))
 sys.path.insert(0, RESOURCES_DIR)
 import collect_task
-
-import mock
 
 
 class CollectTaskTest(unittest.TestCase):
