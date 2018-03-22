@@ -42,7 +42,6 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       show_ninja_stats = Single(bool, empty_val=False, required=False),
       goma_hermetic = Single(basestring, required=False),
       goma_failfast = Single(bool, empty_val=False, required=False),
-      goma_connection_retry = Single(bool, empty_val=False, required=False),
       goma_max_active_fail_fallback_tasks = Single(int, empty_val=None, required=False),
       goma_enable_localoutputcache = Single(bool, empty_val=False, required=False),
       goma_enable_global_file_id_cache = Single(bool, empty_val=False, required=False),
@@ -300,7 +299,6 @@ def goma_staging(c):
 @config_ctx()
 def goma_gce(c):
   c.compile_py.goma_failfast = True
-  c.compile_py.goma_connection_retry = True
   c.env.GOMA_SETTINGS_SERVER = (
       'https://cxx-compiler-service.appspot.com/settings')
 

@@ -4,7 +4,6 @@
     "env": {
       "ADB_VENDOR_KEYS": "[START_DIR]/.adb_key",
       "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_COMPILER_PROXY_FORCE_CONNECT_ERRORNEOUS_ADDRESS": "true",
       "GOMA_SETTINGS_SERVER": "https://cxx-compiler-service.appspot.com/settings"
     },
     "name": "test"

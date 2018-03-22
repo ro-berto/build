@@ -126,8 +126,6 @@ class ChromiumApi(recipe_api.RecipeApi):
     if self.c.env.GOMA_SETTINGS_SERVER:
       ret['GOMA_SETTINGS_SERVER'] = \
         self.c.env.GOMA_SETTINGS_SERVER
-    if self.c.compile_py.goma_connection_retry:
-      ret['GOMA_COMPILER_PROXY_FORCE_CONNECT_ERRORNEOUS_ADDRESS'] = 'true'
     if self.c.env.FORCE_MAC_TOOLCHAIN:
       ret['FORCE_MAC_TOOLCHAIN'] = self.c.env.FORCE_MAC_TOOLCHAIN
     return ret
