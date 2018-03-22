@@ -19,7 +19,7 @@ CLIENT_NAME = 'cipd' + infra_platform.exe_suffix()
 
 
 DEFAULT_CIPD_VERSION = 'git_revision:ae28364c740acff97ae118adcb2808b6cb5129c5'
-STAGING_CIPD_VERSION = 'git_revision:ae28364c740acff97ae118adcb2808b6cb5129c5'
+STAGING_CIPD_VERSION = 'git_revision:4d19637ec2c3d1efd8c6a1b05285118b786919e2'
 
 PROD = None
 STAGING = 'staging'
@@ -78,7 +78,7 @@ AUX_BINARY_PACKAGES = {
     STAGING: (
       cipd.CipdPackage(
           name='infra/tools/luci/vpython/${platform}',
-          version='git_revision:e1abc57be62d198b5c2f487bfb2fa2d2eb0e867c'),
+          version='git_revision:4d19637ec2c3d1efd8c6a1b05285118b786919e2'),
 
       cipd.CipdPackage(
           name='infra/tools/git/${platform}',
