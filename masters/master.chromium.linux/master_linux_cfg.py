@@ -38,6 +38,7 @@ def Update(_config, active_master, c):
           'Fuchsia x64',
           'Leak Detection Linux',
           'Ozone Linux',
+          'linux-gcc-rel',
       ]),
   ])
 
