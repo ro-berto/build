@@ -126,6 +126,8 @@ FAKE_BUILDERS = {
         'linux_chromium_rel_ng',
     ],
     'master.tryserver.chromium.angle': [
+        'android_angle_rel_ng',
+        'android_angle_deqp_rel_ng',
         'linux_angle_compile_dbg_ng',
         'linux_angle_dbg_ng',
         'linux_angle_deqp_rel_ng',
