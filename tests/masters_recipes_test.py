@@ -97,6 +97,7 @@ SUPPRESSIONS = {
 FAKE_BUILDERS = {
     'master.chromium.linux': [
         # These have been migrated to LUCI.
+        'Cast Linux',
         'Linux Builder',
         'Linux Builder (dbg)',
         'Linux Tests',
@@ -119,6 +120,7 @@ FAKE_BUILDERS = {
     ],
     'master.tryserver.chromium.linux': [
         # These have been migrated to LUCI.
+        'cast_shell_linux',
         'linux-blink-heap-verification-try',
         'linux_chromium_compile_dbg_ng',
         'linux_chromium_compile_rel_ng',

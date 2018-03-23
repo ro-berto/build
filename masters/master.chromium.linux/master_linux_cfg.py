@@ -29,7 +29,6 @@ def Update(_config, active_master, c):
                             treeStableTimer=60,
                             builderNames=[
           'Linux Builder (dbg)(32)',
-          'Cast Linux',
           'Cast Audio Linux',
           'Deterministic Linux',
           'Fuchsia ARM64 Cast Audio',
@@ -48,7 +47,6 @@ def Update(_config, active_master, c):
   specs = [
     {'name': 'Linux Builder (dbg)(32)'},
     {'name': 'Linux Tests (dbg)(1)(32)'},
-    {'name': 'Cast Linux'},
     {'name': 'Cast Audio Linux'},
     {'name': 'Deterministic Linux',
      'recipe': 'swarming/deterministic_build'},
