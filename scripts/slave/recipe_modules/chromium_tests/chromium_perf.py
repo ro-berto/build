@@ -214,9 +214,7 @@ _AddIsolatedTestSpec('Win 7 Nvidia GPU Perf', 'chromium-rel-win7-gpu-nvidia',
                      'win')
 
 
-_AddIsolatedTestSpec('Mac 10.11 Perf', 'chromium-rel-mac11', 'mac')
 _AddIsolatedTestSpec('Mac 10.12 Perf', 'chromium-rel-mac12', 'mac')
-_AddIsolatedTestSpec('Mac Retina Perf', 'chromium-rel-mac-retina', 'mac')
 _AddIsolatedTestSpec('Mac Pro 10.11 Perf', 'chromium-rel-mac11-pro', 'mac')
 _AddIsolatedTestSpec('Mac Air 10.11 Perf', 'chromium-rel-mac11-air', 'mac')
 
